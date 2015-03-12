@@ -62,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var mpClassDa = new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId);
+                var mpClassDa = new MarkingPeriodClassDataAccess(uow);
                 mpClassDa.Insert(markingPeriodClasses);
                 uow.Commit();
             }
@@ -175,7 +175,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId).Delete(markingPeriodClasses);
+                new MarkingPeriodClassDataAccess(uow).Delete(markingPeriodClasses);
                 uow.Commit();
             }
         }

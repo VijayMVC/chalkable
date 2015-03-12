@@ -31,12 +31,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<AlphaGrade> alphaGrades)
         {
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
-
-            Storage.AlphaGradeStorage.Delete(ids);
+            Storage.AlphaGradeStorage.Delete(alphaGrades);
         }
     }
 }

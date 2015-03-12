@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -10,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         IList<GradeLevel> GetGradeLevels();
         void Add(IList<GradeLevel> gradeLevels);
-        void Delete(IList<int> ids);
+        void Delete(IList<GradeLevel> gradeLevels);
         void Edit(IList<GradeLevel> gradeLevels);
     }
     public class GradeLevelService : SchoolServiceBase, IGradeLevelService
@@ -21,40 +22,25 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<GradeLevel> GetGradeLevels()
         {
-            using (var uow = Read())
-            {
-                var da = new GradeLevelDataAccess(uow);
-                return da.GetAll();
-            }
+            return DoRead(u => new DataAccessBase<GradeLevel>(u).GetAll());
         }
         
         public void Add(IList<GradeLevel> gradeLevels)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            DoUpdate(uow => new GradeLevelDataAccess(uow).Insert(gradeLevels));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<GradeLevel>(u).Insert(gradeLevels));
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<GradeLevel> gradeLevels)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new GradeLevelDataAccess(uow).Delete(ids);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<GradeLevel>(u).Delete(gradeLevels));
         }
 
         public void Edit(IList<GradeLevel> gradeLevels)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new GradeLevelDataAccess(uow).Update(gradeLevels);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<GradeLevel>(u).Update(gradeLevels));
         }
     }
 }

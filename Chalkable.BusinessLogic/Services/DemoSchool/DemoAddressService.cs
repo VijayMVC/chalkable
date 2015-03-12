@@ -26,11 +26,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.AddressStorage.Update(addressInfos);
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<Address> addresses)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            Storage.AddressStorage.Delete(ids);
+            Storage.AddressStorage.Delete(addresses);
             
         }
 

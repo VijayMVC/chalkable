@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void Add(IList<Address> addresses);
         void Edit(IList<Address> addresses);
-        void Delete(IList<int> ids);
+        void Delete(IList<Address> addresses);
         IList<Address> GetAddress();
     }
 
@@ -24,31 +24,26 @@ namespace Chalkable.BusinessLogic.Services.School
         public void Add(IList<Address> addresses)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new AddressDataAccess(u).Insert(addresses));
+            DoUpdate(u => new DataAccessBase<Address>(u).Insert(addresses));
         }
 
         public void Edit(IList<Address> addresses)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u=>new AddressDataAccess(u).Update(addresses));
+            DoUpdate(u => new DataAccessBase<Address>(u).Update(addresses));
         }
 
         public IList<Address> GetAddress()
         {
             if (!BaseSecurity.IsAdminOrTeacher(Context))
                 throw new ChalkableSecurityException();
-
-            using (var uow = Read())
-            {
-                var da = new AddressDataAccess(uow);
-                return da.GetAll();
-            }
+            return DoRead(u => new DataAccessBase<Address>(u).GetAll());
         }
-        
-        public void Delete(IList<int> ids)
+
+        public void Delete(IList<Address> addresses)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new AddressDataAccess(u).Delete(ids));
+            DoUpdate(u => new DataAccessBase<Address>(u).Delete(addresses));
         }
     }
 }

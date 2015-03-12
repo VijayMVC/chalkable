@@ -24,10 +24,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.AlternateScoreStorage.Update(alternateScores);
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<AlternateScore> alternateScores)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            Storage.AlternateScoreStorage.Delete(ids);
+            Storage.AlternateScoreStorage.Delete(alternateScores);
         }
 
         public IList<AlternateScore> GetAlternateScores()

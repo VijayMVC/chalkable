@@ -16,38 +16,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        public Room AddRoom(int id, int schoolId, string roomNumber, string description, string size, int? capacity, string phoneNumber)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            var room = new Room
-            {
-                Id = id,
-                SchoolRef = schoolId,
-                Capacity = capacity,
-                Description = description,
-                PhoneNumber = phoneNumber,
-                RoomNumber = roomNumber,
-                Size = size,
-            };
-            Storage.RoomStorage.Add(room);
-            return room;
-
-        }
-
         public void AddRooms(IList<Room> rooms)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             Storage.RoomStorage.AddRooms(rooms);
-        }
-
-        public Room EditRoom(int id, string roomNumber, string description, string size, int? capacity, string phoneNumber)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            return Storage.RoomStorage.Edit(id, roomNumber, description, size, capacity, phoneNumber);
-
         }
 
         public void EditRooms(IList<Room> rooms)
@@ -57,11 +30,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.RoomStorage.Update(rooms);
         }
 
-        public void DeleteRooms(IList<int> ids)
+        public void DeleteRooms(IList<Room> rooms)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            Storage.RoomStorage.Delete(ids);
+            Storage.RoomStorage.Delete(rooms);
         }
 
         public PaginatedList<Room> GetRooms(int start = 0, int count = Int32.MaxValue)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
@@ -62,12 +63,13 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private AnnouncementDataAccess CreateAnnoucnementDataAccess(UnitOfWork unitOfWork)
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             if(BaseSecurity.IsAdminViewer(Context))
                 throw new NotImplementedException();
             if(Context.Role == CoreRoles.TEACHER_ROLE)
-                return new AnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolLocalId);
+                return new AnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolLocalId.Value);
             if(Context.Role == CoreRoles.STUDENT_ROLE)
-                return new AnnouncementForStudentDataAccess(unitOfWork, Context.SchoolLocalId);
+                return new AnnouncementForStudentDataAccess(unitOfWork, Context.SchoolLocalId.Value);
             throw new ChalkableException("Unsupported role for announcements");
         }
 
@@ -293,6 +295,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AnnouncementDetails CreateAnnouncement(ClassAnnouncementType classAnnType, int classId, DateTime expiresDate)
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
@@ -303,7 +306,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var annDa = CreateAnnoucnementDataAccess(uow);
                 var res = annDa.Create(classAnnType.Id, classId, Context.NowSchoolTime, expiresDate, Context.PersonId.Value);
                 uow.Commit();
-                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolYearTime);
+                var sy = new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime, Context.SchoolLocalId.Value);
                 annDa.ReorderAnnouncements(sy.Id, classAnnType.Id, res.ClassRef);
                 res = GetDetails(annDa, res.Id);// annDa.GetDetails(res.Id, Context.PersonId.Value, Context.RoleId);
                 if (res.ClassAnnouncementTypeRef.HasValue)
@@ -571,12 +574,13 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void SubmitAnnouncement(int announcementId, int recipientId)
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
                 var res = Submit(da, uow, announcementId, recipientId);
 
-                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(res.Expires);
+                var sy = new SchoolYearDataAccess(uow).GetByDate(res.Expires, Context.SchoolLocalId.Value);
                 if(res.ClassAnnouncementTypeRef.HasValue)
                     da.ReorderAnnouncements(sy.Id, res.ClassAnnouncementTypeRef.Value, recipientId);
                 uow.Commit();

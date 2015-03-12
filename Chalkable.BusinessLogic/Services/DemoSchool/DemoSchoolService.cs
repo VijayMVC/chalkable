@@ -67,9 +67,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }).ToList(), Context.DistrictId.Value);
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<Data.School.Model.School> schools)
         {
-            Storage.SchoolStorage.Delete(ids);
+            Storage.SchoolStorage.Delete(schools);
         }
 
         public IList<Data.School.Model.School> GetSchools()
@@ -87,9 +87,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.SchoolOptionStorage.Update(schoolOptions);
         }
 
-        public void DeleteSchoolOptions(IList<int> ids)
+        public void DeleteSchoolOptions(IList<SchoolOption> schoolOptions)
         {
-            Storage.SchoolOptionStorage.Delete(ids);
+            Storage.SchoolOptionStorage.Delete(schoolOptions);
         }
 
         public SchoolOption GetSchoolOption()

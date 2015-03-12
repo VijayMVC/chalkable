@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -14,7 +9,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void Add(IList<ClassroomOption> classroomOptions);
         void Edit(IList<ClassroomOption> classroomOptions);
-        void Delete(IList<int> classroomOptionsIds);
+        void Delete(IList<ClassroomOption> classroomOptions);
         ClassroomOption GetClassOption(int classId);
     }
 
@@ -26,39 +21,25 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<ClassroomOption> classroomOptions)
         {
-            Modify(da=>da.Insert(classroomOptions));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u=>new DataAccessBase<ClassroomOption>(u).Insert(classroomOptions));
         }
 
         public void Edit(IList<ClassroomOption> classroomOptions)
         {
-            Modify(da => da.Update(classroomOptions));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<ClassroomOption>(u).Update(classroomOptions));
         }
 
-        public void Delete(IList<int> classroomOptionsIds)
+        public void Delete(IList<ClassroomOption> classroomOptions)
         {
-            Modify(da => da.Delete(classroomOptionsIds));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<ClassroomOption>(u).Update(classroomOptions));
         }
 
         public ClassroomOption GetClassOption(int classId)
         {
-            using (var uow = Read())
-            {
-                return new ClassroomOptionDataAccess(uow).GetByIdOrNull(classId);
-            }
+            return DoRead(u => new DataAccessBase<ClassroomOption, int>(u).GetByIdOrNull(classId));
         }
-
-        private void Modify(Action<ClassroomOptionDataAccess> modifyMethods)
-        {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                var da = new ClassroomOptionDataAccess(uow);
-                modifyMethods(da);
-                uow.Commit();
-            }
-        }
-
     }
 }

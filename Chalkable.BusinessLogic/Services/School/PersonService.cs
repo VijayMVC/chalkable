@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -37,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Read())
             {
-                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+                var da = new PersonDataAccess(uow);
                 return da.GetAll();
             }
         }
@@ -50,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
-                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+                var da = new PersonDataAccess(uow);
                 da.Insert(persons);                
                 uow.Commit();
             }
@@ -60,13 +59,14 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var uow = Read())
             {
-                return new PersonDataAccess(uow, null).GetById(id);
+                return new PersonDataAccess(uow).GetById(id);
             }
         }
 
         public PersonDetails GetPersonDetails(int id)
         {
-            return DoRead(uow => new PersonDataAccess(uow, Context.SchoolLocalId).GetPersonDetails(id));
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            return DoRead(uow => new PersonDataAccess(uow).GetPersonDetails(id, Context.SchoolLocalId.Value));
         }
 
         public void EditEmailForCurrentUser(string email, out string error)
@@ -111,7 +111,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+                var da = new PersonDataAccess(uow);
                 var person = GetPerson(id);
                 //TODO: change school status 
                 person.Active = true;
@@ -129,7 +129,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
-                new PersonDataAccess(uow, null).Delete(persons);
+                new PersonDataAccess(uow).Delete(persons);
                 uow.Commit();
             }
         }
@@ -150,7 +150,7 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.SchoolLocalId.HasValue);
             using (var uow = Read())
             {
-                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+                var da = new PersonDataAccess(uow);
                 return da.SearchPersons(Context.SchoolLocalId.Value, filter, orderByFirstName, start, count);
             }
         }
@@ -161,7 +161,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             DoUpdate(uow =>
             {
-                var da = new PersonDataAccess(uow, Context.SchoolLocalId);
+                var da = new PersonDataAccess(uow);
                 var p = da.GetById(id);
                 if (p.FirstLoginDate.HasValue) return;
                 p.FirstLoginDate = Context.NowSchoolTime;
@@ -172,7 +172,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void UpdateForImport(IList<Person> persons)
         {
-            DoUpdate(uow => new PersonDataAccess(uow, Context.SchoolLocalId).UpdateForImport(persons));
+            DoUpdate(uow => new PersonDataAccess(uow).UpdateForImport(persons));
         }
         
     }

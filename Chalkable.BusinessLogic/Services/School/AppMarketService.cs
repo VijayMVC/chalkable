@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using Chalkable.BusinessLogic.Model;
@@ -152,7 +153,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 if (gradelevelids != null)
                 {
-                    var gradeLevels = new GradeLevelDataAccess(uow).GetAll()
+                    var gradeLevels = new DataAccessBase<GradeLevel>(uow).GetAll()
                         .Where(x => app.GradeLevels.Any(y => y.GradeLevel == x.Number))
                         .Where(x => gradelevelids.Contains(x.Id));
                     var da = new ApplicationInstallActionGradeLevelDataAccess(uow);
@@ -363,10 +364,12 @@ namespace Chalkable.BusinessLogic.Services.School
         private IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Application app, int? personId, IList<int> roleIds,
                                                                  IList<int> classIds, IList<Guid> departmentIds, IList<int> gradeLevelIds)
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolYearTime.Date);
+                var sy = new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime.Date, Context.SchoolLocalId.Value);
                 return da.GetPersonsForApplicationInstall(app.Id, Context.PersonId.Value, personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
             }
@@ -375,11 +378,12 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> roleIds, IList<int> classIds,
                                                           IList<Guid> departmentIds, IList<int> gradeLevelIds)
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                var sy = new SchoolYearDataAccess(uow, Context.SchoolLocalId).GetByDate(Context.NowSchoolYearTime.Date);
+                var sy = new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime.Date, Context.SchoolLocalId.Value);
                 return da.GetPersonsForApplicationInstallCount(applicationId, Context.PersonId ?? 0, personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
             }

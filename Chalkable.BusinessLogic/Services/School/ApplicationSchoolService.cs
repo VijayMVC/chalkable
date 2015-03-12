@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
@@ -35,12 +36,13 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<int> GetAssignedUserIds(Guid appId, int? announcementAppId)
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             var res = new List<int>();
             using (var uow = Read())
             {
                 if (announcementAppId.HasValue)
                 {
-                    var anDa = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId);
+                    var anDa = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value);
                     var da = new AnnouncementApplicationDataAccess(uow);
                     var announcementApplication = da.GetById(announcementAppId.Value);
                     var ann = anDa.GetById(announcementApplication.AnnouncementRef);
@@ -104,13 +106,15 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void AttachAppToAnnouncement(int announcementAppId)
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
             using (var uow = Update())
             {
                 var da = new AnnouncementApplicationDataAccess(uow);
                 var aa = da.GetById(announcementAppId);
                 if(!CanAddToAnnouncement(aa.ApplicationRef))
                     throw new ChalkableSecurityException("Application is not installed yet");
-                var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId)
+                var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value)
                     .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.PersonId.Value);
                 if (!ann.IsOwner)
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
@@ -122,6 +126,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private bool CanAddToAnnouncement(Guid appId)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             var assessmentId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
             var appInstall = ServiceLocator.AppMarketService.GetInstallationForPerson(appId, Context.PersonId.Value);
             return assessmentId == appId  || (appInstall != null && appInstall.Active);

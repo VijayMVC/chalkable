@@ -7,14 +7,14 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class SchoolYearDataAccess : BaseSchoolDataAccess<SchoolYear>
+    public class SchoolYearDataAccess : DataAccessBase<SchoolYear, int>
     {
-        public SchoolYearDataAccess(UnitOfWork unitOfWork, int? schoolId)
-            : base(unitOfWork, schoolId)
+        public SchoolYearDataAccess(UnitOfWork unitOfWork)
+            : base(unitOfWork)
         {
         }
 
-        public SchoolYear GetByDate(DateTime date)
+        public SchoolYear GetByDate(DateTime date, int schoolId)
         {
             var conds = new AndQueryCondition
                 {
@@ -24,10 +24,14 @@ namespace Chalkable.Data.School.DataAccess
             return SelectOneOrNull<SchoolYear>(conds);
         }
 
-        public SchoolYear GetLast(DateTime tillDate)
+        public SchoolYear GetLast(DateTime tillDate, int schoolId)
         {
-            var conds = new AndQueryCondition { { SchoolYear.START_DATE_FIELD, tillDate, ConditionRelation.LessEqual } };
-            var q = Orm.SimpleSelect<SchoolYear>(FilterBySchool(conds));
+            var conds = new AndQueryCondition
+            {
+                { SchoolYear.START_DATE_FIELD, tillDate, ConditionRelation.LessEqual },
+                { SchoolYear.SCHOOL_REF_FIELD, schoolId, ConditionRelation.Equal }
+            };
+            var q = Orm.SimpleSelect<SchoolYear>(conds);
             q.Sql.AppendFormat("order by {0}  desc", SchoolYear.END_DATE_FIELD);
             return ReadOneOrNull<SchoolYear>(q);
         }

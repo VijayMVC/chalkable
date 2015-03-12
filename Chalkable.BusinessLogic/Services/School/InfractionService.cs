@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common;
-using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common.Orm;
-using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -13,8 +9,8 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void Add(IList<Infraction> infractions);
         void Edit(IList<Infraction> infractions);
-        void Delete(IList<int> ids);
-        IList<Infraction> GetInfractions(bool onlyActive = true);
+        void Delete(IList<Infraction> infractions);
+        IList<Infraction> GetInfractions();
     }
 
     public class InfractionService : SchoolServiceBase, IInfractionService
@@ -25,48 +21,25 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<Infraction> infractions)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                new InfractionDataAccess(uow).Insert(infractions);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<Infraction>(u).Insert(infractions));
         }
 
         public void Edit(IList<Infraction> infractions)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new InfractionDataAccess(uow).Update(infractions);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<Infraction>(u).Update(infractions));
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<Infraction> infractions)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                new InfractionDataAccess(uow).Delete(ids);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<Infraction>(u).Update(infractions));
         }
 
-        public IList<Infraction> GetInfractions(bool onlyActive = true)
+        public IList<Infraction> GetInfractions()
         {
-            using (var uow = Read())
-            {
-                var conds = new AndQueryCondition();
-                if(onlyActive)
-                    conds.Add(Infraction.IS_ACTIVE_FIELD, 1, ConditionRelation.Equal);
-                return new InfractionDataAccess(uow).GetAll(conds);
-            }
+            return DoRead(u => new DataAccessBase<Infraction>(u).GetAll());
         }
     }
 }

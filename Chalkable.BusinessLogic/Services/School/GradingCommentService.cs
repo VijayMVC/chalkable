@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -12,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void Add(IList<GradingComment> gradingComments);
         void Edit(IList<GradingComment> gradingComments);
-        void Delete(IList<int> gradingCommentsIds);
+        void Delete(IList<GradingComment> gradingComments);
         IList<GradingComment> GetGradingComments();
     }
 
@@ -24,38 +22,25 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<GradingComment> gradingComments)
         {
-            Modify(da => da.Insert(gradingComments));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u=>new DataAccessBase<GradingComment>(u).Insert(gradingComments));
         }
 
         public void Edit(IList<GradingComment> gradingComments)
         {
-            Modify(da => da.Update(gradingComments));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<GradingComment>(u).Update(gradingComments));
         }
 
-        public void Delete(IList<int> gradingCommentsIds)
+        public void Delete(IList<GradingComment> gradingComments)
         {
-            Modify(da => da.Delete(gradingCommentsIds));
-        }
-
-        private void Modify(Action<GradingCommentDataAccess> modifyMethods)
-        {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                var da = new GradingCommentDataAccess(uow, Context.SchoolLocalId);
-                modifyMethods(da);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<GradingComment>(u).Delete(gradingComments));
         }
 
         public IList<GradingComment> GetGradingComments()
         {
-            using (var uow = Read())
-            {
-               return new GradingCommentDataAccess(uow, Context.SchoolLocalId).GetAll();
-            }
+            return DoRead(u => new DataAccessBase<GradingComment>(u).GetAll());
         }
     }
 }

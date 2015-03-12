@@ -11,10 +11,12 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
-    public abstract class AnnouncementDataAccess : BaseSchoolDataAccess<Announcement>
+    public abstract class AnnouncementDataAccess : DataAccessBase<Announcement, int>
     {
-        protected AnnouncementDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
+        private int schoolId;
+        protected AnnouncementDataAccess(UnitOfWork unitOfWork, int schoolId) : base(unitOfWork)
         {
+            this.schoolId = schoolId;
         }
 
 
@@ -200,7 +202,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public Announcement GetAnnouncement(int id, int roleId, int callerId)
         {
             var dbQuery = BuildSimpleAnnouncementQuery(callerId);
-            FilterBySchool(new AndQueryCondition{{Announcement.ID_FIELD, id}}).BuildSqlWhere(dbQuery, "Announcement");
+            (new AndQueryCondition { { Announcement.ID_FIELD, id } }).BuildSqlWhere(dbQuery, "Announcement");
             BuildConditionForGetSimpleAnnouncement(dbQuery, roleId, callerId);
             return ReadOneOrNull<Announcement>(dbQuery);
         }
@@ -211,7 +213,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             var conds = new AndQueryCondition { {Announcement.STATE_FIELD, AnnouncementState.Draft}};
             var dbQuery = BuildSimpleAnnouncementQuery(personId);
-            FilterBySchool(conds).BuildSqlWhere(dbQuery, "Announcement");
+            conds.BuildSqlWhere(dbQuery, "Announcement");
             dbQuery.Sql.AppendFormat(" and Class.[{0}] in (select [{1}].[{2}] from [{1}] where [{1}].[{3}] =@{4})"
                 , Class.ID_FIELD, "ClassTeacher", ClassTeacher.CLASS_REF_FIELD, ClassTeacher.PERSON_REF_FIELD , "personId");
             dbQuery.Parameters.Add("personId", personId);

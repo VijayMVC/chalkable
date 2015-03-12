@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -20,22 +20,22 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<BellSchedule> bellSchedules)
         {
-            DoUpdate(u=>new BellScheduleDataAccess(u, null).Insert(bellSchedules));
+            DoUpdate(u => new DataAccessBase<BellSchedule>(u).Insert(bellSchedules));
         }
 
         public void Edit(IList<BellSchedule> bellSchedules)
         {
-            DoUpdate(u => new BellScheduleDataAccess(u, null).Update(bellSchedules));
+            DoUpdate(u => new DataAccessBase<BellSchedule>(u).Update(bellSchedules));
         }
 
         public void Delete(IList<BellSchedule> bellSchedules)
         {
-            DoUpdate(u => new BellScheduleDataAccess(u, null).Delete(bellSchedules));
+            DoUpdate(u => new DataAccessBase<BellSchedule>(u).Delete(bellSchedules));
         }
 
         public IList<BellSchedule> GetAll()
         {
-            return DoRead(u => new BellScheduleDataAccess(u, null).GetAll());
+            return DoRead(u => new DataAccessBase<BellSchedule>(u).GetAll());
         }
     }
 }

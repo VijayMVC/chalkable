@@ -120,6 +120,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void DeleteAttachment(int announcementAttachmentId)
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             using (var uow = Update())
             {
                 var da = new AnnouncementAttachmentDataAccess(uow);
@@ -134,7 +135,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     if(!Context.PersonId.HasValue)
                         throw new UnassignedUserException();
-                    var ann = (new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId))
+                    var ann = (new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value))
                         .GetAnnouncement(annAtt.AnnouncementRef, Context.RoleId, Context.PersonId.Value);
                     if (ann.SisActivityId.HasValue)
                     {
@@ -153,11 +154,12 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             using (var uow = Read())
             {
                 if (CoreRoles.TEACHER_ROLE == Context.Role)
                 {
-                    var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId)
+                    var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value)
                         .GetAnnouncement(announcementId, Context.RoleId, Context.PersonId.Value);
                     Trace.Assert(ann.SisActivityId.HasValue);
                     return MapStiAttsToAnnAtts(GetActivityAttachments(ann.SisActivityId.Value));

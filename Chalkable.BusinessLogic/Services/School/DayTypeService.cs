@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -21,23 +20,20 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<DayType> dayTypes)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            DoUpdate(u=>new DayTypeDataAccess(u).Insert(dayTypes));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u=>new DataAccessBase<DayType>(u).Insert(dayTypes));
         }
 
         public void Edit(IList<DayType> dayTypes)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            DoUpdate(u => new DayTypeDataAccess(u).Update(dayTypes));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<DayType>(u).Update(dayTypes));
         }
 
         public void Delete(IList<DayType> dayTypes)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            DoUpdate(u => new DayTypeDataAccess(u).Delete(dayTypes));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<DayType>(u).Delete(dayTypes));
         }
     }
 }

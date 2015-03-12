@@ -27,11 +27,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.GradeLevelStorage.Add(gradeLevels);
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<GradeLevel> gradeLevels)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            Storage.GradeLevelStorage.Delete(ids);
+            Storage.GradeLevelStorage.Delete(gradeLevels);
         }
 
         public void Edit(IList<GradeLevel> gradeLevels)

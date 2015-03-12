@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -32,30 +30,18 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<Staff> staffs)
         {
-            ModifyStaff(da => da.Insert(staffs));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new StaffDataAccess(u).Insert(staffs));
         }
         public void Edit(IList<Staff> staffs)
         {
-            ModifyStaff(da => da.Update(staffs));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new StaffDataAccess(u).Update(staffs));
         }
         public void Delete(IList<Staff> staffs)
         {
-            ModifyStaff(da=>da.Delete(staffs));
-        }
-
-        private void ModifyStaff(Action<StaffDataAccess> action)
-        {
-            Modify(uow => action(new StaffDataAccess(uow)));
-        }
-        private void ModifyStaffSchool(Action<StaffSchoolDataAccess> action)
-        {
-            Modify(uow => action(new StaffSchoolDataAccess(uow, Context.SchoolLocalId)));
-        }
-        private void Modify(Action<UnitOfWork> modifyAction)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            DoUpdate(modifyAction);
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new StaffDataAccess(u).Delete(staffs));
         }
 
         public Staff GetStaff(int staffId)
@@ -70,22 +56,25 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void AddStaffSchools(IList<StaffSchool> staffSchools)
         {
-            ModifyStaffSchool(da => da.Insert(staffSchools));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<StaffSchool>(u).Insert(staffSchools));
         }
 
         public void EditStaffSchools(IList<StaffSchool> staffSchools)
         {
-            ModifyStaffSchool(da => da.Update(staffSchools));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<StaffSchool>(u).Update(staffSchools));
         }
 
         public void DeleteStaffSchools(IList<StaffSchool> staffSchools)
         {
-            ModifyStaffSchool(da => da.Delete(staffSchools));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<StaffSchool>(u).Delete(staffSchools));
         }
 
         public IList<StaffSchool> GetStaffSchools()
         {
-            return DoRead(uow => new StaffSchoolDataAccess(uow, Context.SchoolLocalId).GetAll());
+            return DoRead(uow => new DataAccessBase<StaffSchool>(uow).GetAll());
         }
         
         public PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName,

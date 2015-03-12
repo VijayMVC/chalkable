@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
@@ -42,47 +41,36 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void AddStudents(IList<Student> students)
         {
-            ModifyStudet(da => da.Insert(students));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new StudentDataAccess(u).Insert(students));
         }
 
         public void EditStudents(IList<Student> students)
         {
-            ModifyStudet(da => da.Update(students));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new StudentDataAccess(u).Update(students));
         }
 
         public void DeleteStudents(IList<Student> students)
         {
-            ModifyStudet(da => da.Delete(students));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new StudentDataAccess(u).Delete(students));
         }
-        private void ModifyStudet(Action<StudentDataAccess> action)
-        {
-            Modify(uow => action(new StudentDataAccess(uow)));
-        }
-        private void ModifyStudentSchool(Action<StudentSchoolDataAccess> action)
-        {
-            Modify(uow => action(new StudentSchoolDataAccess(uow, Context.SchoolLocalId)));
-        }
-        private void Modify(Action<UnitOfWork> modifyAction)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                modifyAction(uow);
-                uow.Commit();
-            }
-        }
+
         public void AddStudentSchools(IList<StudentSchool> studentSchools)
         {
-            ModifyStudentSchool(da => da.Insert(studentSchools));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<StudentSchool>(u).Insert(studentSchools));
         }
         public void EditStudentSchools(IList<StudentSchool> studentSchools)
         {
-            ModifyStudentSchool(da => da.Update(studentSchools));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<StudentSchool>(u).Update(studentSchools));
         }
         public void DeleteStudentSchools(IList<StudentSchool> studentSchools)
         {
-            ModifyStudentSchool(da => da.Delete(studentSchools));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<StudentSchool>(u).Delete(studentSchools));
         }
 
         public StudentDetails GetById(int id, int schoolYearId)
@@ -112,12 +100,13 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public StudentSummaryInfo GetStudentSummaryInfo(int studentId)
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(syId, studentId);
             var student = ServiceLocator.StudentService.GetById(studentId, syId);
             var infractions = ServiceLocator.InfractionService.GetInfractions();
             var activitiesIds = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();
-            var anns = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId).GetByActivitiesIds(activitiesIds));
+            var anns = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value).GetByActivitiesIds(activitiesIds));
             var res = StudentSummaryInfo.Create(student, nowDashboard, infractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
         }
@@ -157,6 +146,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId)
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             var date = Context.NowSchoolYearTime;
             var student = GetById(studentId, schoolYearId);
             var classes = ServiceLocator.ClassService.GetStudentClasses(schoolYearId, studentId).ToList();
@@ -183,7 +173,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         if (activity == null) continue;
                         importanActivitiesIds.Add(activity.Id);
                     }
-                    announcements = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId).GetByActivitiesIds(importanActivitiesIds));
+                    announcements = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value).GetByActivitiesIds(importanActivitiesIds));
                 }
             }
             return StudentExplorerInfo.Create(student, classes, mostRecentAverages, inowStandardScores, announcements, standards);
