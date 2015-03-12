@@ -98,7 +98,14 @@ namespace Chalkable.Web.Controllers
         public ActionResult ResetPassword(string email)
         {
             var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
-            return Json(serviceLocator.UserService.ResetPassword(email));
+            /*try
+            {*/
+                return Json(serviceLocator.UserService.ResetPassword(email));
+            /*}
+            catch (ChalkableException e)
+            {
+                return Json(e);
+            }*/
         }
    
         private ActionResult AfterConfirmAction(UserContext context)

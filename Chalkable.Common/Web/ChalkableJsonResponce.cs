@@ -14,6 +14,8 @@ namespace Chalkable.Common.Web
             Success = true;
             if (data is ChalkableException)
             {
+                var e = data as ChalkableException;
+                Data = ExceptionViewData.Create(e, e.InnerException);
                 Success = false;
             }
         }
