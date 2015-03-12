@@ -126,6 +126,8 @@ namespace Chalkable.Common
             }
         }
 
+        public static string HomeRedirectUrl { get { return Get("home-redirect-url"); } }
+
         private static string GetWebConfig(string field)
         {
             return ConfigurationManager.AppSettings[field];

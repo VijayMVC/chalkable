@@ -30,6 +30,11 @@ namespace Chalkable.Web.Controllers
 
         private const string DEMO_PICTURE_DISTRICT_REF = "99a2b309-b2f2-451d-a733-55ffb9548245";
 
+        public ActionResult HomeRedirect()
+        {
+            return Redirect(Settings.HomeRedirectUrl);
+        }
+
         public ActionResult Index()
         {
             return View();

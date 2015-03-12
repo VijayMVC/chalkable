@@ -29,6 +29,8 @@
       <Setting name="api.explorer.scope" value="https://qa.chalkable.com/" />
       <!--tracking-->
       <Setting name="mixpanel-token" value=""/>
+      <!-- other settings -->
+      <Setting name="home-redirect-url" value="/Home/Index"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />

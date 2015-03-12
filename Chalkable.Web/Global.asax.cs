@@ -1,31 +1,19 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Security.Principal;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
-using System.Web.Security;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Web.Authentication;
-using Chalkable.Web.Models;
 using Chalkable.Web.Models.Binders;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.Diagnostics;
-using Microsoft.WindowsAzure.Diagnostics.Management;
-using Microsoft.WindowsAzure.ServiceRuntime;
-using Microsoft.WindowsAzure.Storage;
-using LogLevel = Microsoft.WindowsAzure.Diagnostics.LogLevel;
 
 
 namespace Chalkable.Web
 {
     // Note: For instructions on enabling IIS6 or IIS7 classic mode, 
     // visit http://go.microsoft.com/?LinkId=9394801
-    public class MvcApplication : System.Web.HttpApplication
+    public class MvcApplication : HttpApplication
     {
         protected void Application_Start()
         {
