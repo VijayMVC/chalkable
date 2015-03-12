@@ -7,6 +7,8 @@ using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Models.Binders;
+using Chalkable.Web.Tools;
+using Microsoft.Web.Mvc.Controls;
 
 
 namespace Chalkable.Web
@@ -97,8 +99,9 @@ namespace Chalkable.Web
                 return;
 
             var currentDomain = httpRequest.ServerVariables["SERVER_NAME"];
-            if (currentDomain.Equals(ensureDomain))
+            if (currentDomain.Equals(ensureDomain) || httpRequest.IsApiRequest() || httpRequest.IsAjaxRequest())
                 return;
+
             httpResponse.Redirect(
                 String.Format("http{0}://{1}{2}{3}",
                               httpRequest.IsSecureConnection ? "s" : "",
