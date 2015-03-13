@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Model
         public IList<ClassAttendanceSummary> Attendances { get; set; } 
 
         public static StudentSummaryInfo Create(StudentDetails student, NowDashboard nowDashboard
-            , IList<Data.School.Model.Infraction> infractions, IList<AnnouncementComplex> anns, IMapper mapper)
+            , IList<Data.School.Model.Infraction> infractions, IList<AnnouncementComplex> anns, IMapper<StudentAnnouncement, Score> mapper)
         {
             var res = new StudentSummaryInfo
                 {

@@ -1,24 +1,17 @@
-﻿using System;
-using Chalkable.Common.Exceptions;
-
-namespace Chalkable.BusinessLogic.Mapping.ModelMappers
+﻿namespace Chalkable.BusinessLogic.Mapping.ModelMappers
 {
-    public interface IMapper
+    public interface IMapper<in TReturn, in TSource>
     {
-        void Map(Object returnObj, Object sourceObj);
+        void Map(TReturn returnObj, TSource sourceObj);
     }
 
-    public abstract class BaseMapper<TReturn, TSource> : IMapper
+    public abstract class BaseMapper<TReturn, TSource> : IMapper<TReturn, TSource>
         where TReturn : class
         where TSource : class
     {
-        public void Map(object returnObj, object sourceObj)
+        public void Map(TReturn returnObj, TSource sourceObj)
         {
-            var obj1 = returnObj as TReturn;
-            var obj2 = sourceObj as TSource;
-            if (obj1 == null || obj2 == null)
-                throw new ChalkableException("Invalid param type");
-            InnerMap(obj1, obj2);
+            InnerMap(returnObj, sourceObj);
         }
         protected abstract void InnerMap(TReturn returnObj, TSource sourceObj);
     }

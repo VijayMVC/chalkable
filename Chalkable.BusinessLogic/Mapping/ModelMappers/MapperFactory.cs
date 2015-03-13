@@ -9,7 +9,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
 {
     public class MapperFactory
     {
-        private static IDictionary<Pair<Type, Type>, IMapper> _customMappers;
+        private static IDictionary<Pair<Type, Type>, Object> _customMappers;
 
         static MapperFactory()
         {
@@ -18,7 +18,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
 
         private static void BuildMapperDictionary()
         {
-            _customMappers = new Dictionary<Pair<Type, Type>, IMapper>
+            _customMappers = new Dictionary<Pair<Type, Type>, Object>
                     {
                         {new Pair<Type, Type>(typeof(Announcement), typeof(Activity)), new ActivityToAnnouncementMapper()},
                         {new Pair<Type, Type>(typeof(AnnouncementComplex), typeof(Activity)), new ActivityToAnnouncementMapper()},
@@ -36,12 +36,12 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                         {new Pair<Type, Type>(typeof(DisciplineReferral), typeof(ClassDiscipline)), new ClassDisciplineToDisciplineReferralMapper()}
                     };
         }
-        public static IMapper GetMapper<TReturn, TSource>()
+        public static IMapper<TReturn, TSource> GetMapper<TReturn, TSource>()
         {
             var typesObj = new Pair<Type, Type>(typeof(TReturn), typeof(TSource));
             if (!_customMappers.ContainsKey(typesObj))
                 throw new ChalkableException("There are no mapper with such source and return types");
-            return _customMappers[typesObj];
+            return _customMappers[typesObj] as IMapper<TReturn, TSource>;
         }
     }
 }

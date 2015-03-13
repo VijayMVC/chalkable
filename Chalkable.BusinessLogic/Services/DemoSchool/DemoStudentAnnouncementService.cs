@@ -60,7 +60,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var oldScore = Storage.StiActivityScoreStorage.GetScore(announcementId, studentId);
             var studentAnnouncement = new StudentAnnouncement();
 
-            MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(studentAnnouncement, oldScore);
+            MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(studentAnnouncement, oldScore);
             studentAnnouncement.AnnouncementId = oldScore.ActivityId;
 
             if (numericScore >= 0 && value != null)
