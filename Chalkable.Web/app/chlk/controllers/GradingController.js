@@ -110,8 +110,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.Permissions([
-                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES,
-                [chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
+                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES//,
+                //[chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.ClassId]],

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
@@ -190,7 +191,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             Gradebook stiGradeBook = null;
             Trace.WriteLine("GradebookConnector.Calculate" + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
-            if(needsReCalculate)
+            if(needsReCalculate && GradebookSecurity.CanReCalculateGradebook(Context))
                 stiGradeBook = ConnectorLocator.GradebookConnector.Calculate(classId, gradingPeriod.Id);
             if (!needsReCalculate || standardId.HasValue || classAnnouncementType.HasValue)
             {
