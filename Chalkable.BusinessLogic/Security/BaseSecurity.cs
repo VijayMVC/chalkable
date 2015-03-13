@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -111,6 +113,11 @@ namespace Chalkable.BusinessLogic.Security
         {
             if (!IsSysAdminOrCurrentUser(userId, context))
                 throw new ChalkableSecurityException();
+        }
+
+        public static bool HasClaim(string claim, UserContext context)
+        {
+            return ClaimInfo.HasPermission(context.Claims, new List<string> {claim});
         }
     }
 }
