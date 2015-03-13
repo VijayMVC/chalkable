@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -15,8 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Standard AddStandard(int id, string name, string description, int standardSubjectId, int? parentStandardId, int? lowerGradeLevelId, int? upperGradeLevelId, bool isActive);
         void AddStandards(IList<Standard> standards);
         void EditStandard(IList<Standard> standards);
-        void DeleteStandard(int id);
-        void DeleteStandards(IList<int> ids);
+        void DeleteStandards(IList<Standard> standards);
         Standard GetStandardById(int id);
         Standard GetStandardByABId(Guid id);
         IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true);
@@ -71,17 +68,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
         
-        public void DeleteStandard(int id)
-        {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new StandardDataAccess(uow).Delete(id);
-                uow.Commit();
-            }
-        }
-
         public Standard GetStandardById(int id)
         {
             using (var uow = Read())
@@ -141,13 +127,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 return classStandards;
             }
         }
-        public void DeleteStandards(IList<int> ids)
+        public void DeleteStandards(IList<Standard> standards)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new StandardDataAccess(uow).Delete(ids);
+                new StandardDataAccess(uow).Delete(standards);
                 uow.Commit();
             }
         }

@@ -146,16 +146,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                    && standard.LowerGradeLevelRef > standard.UpperGradeLevelRef;
         }
 
-        public void DeleteStandard(int id)
+        public void DeleteStandards(IList<Standard> standards)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            Storage.StandardStorage.Delete(id);
-        }
-
-        public void DeleteStandards(IList<int> ids)
-        {
-            Storage.StandardStorage.Delete(ids);
+            Storage.StandardStorage.Delete(standards);
         }
 
         public Standard GetStandardById(int id)

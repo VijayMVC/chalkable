@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
-using System.Globalization;
 using System.Linq;
-using System.Text;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
@@ -13,9 +11,9 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class PersonDataAccess : BaseSchoolDataAccess<Person>
+    public class PersonDataAccess : DataAccessBase<Person, int>
     {
-        public PersonDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
+        public PersonDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
         
@@ -49,18 +47,7 @@ namespace Chalkable.Data.School.DataAccess
             return new DbQuery(queries);
         }
 
-        public void Delete(IList<Person> persons)
-        {
-            SimpleDelete(persons);
-
-        }
-
-        protected override QueryCondition FilterBySchool(QueryCondition queryCondition)
-        {
-            return queryCondition;
-        }
-
-        public PersonDetails GetPersonDetails(int personId)
+        public PersonDetails GetPersonDetails(int personId, int schoolId)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -125,7 +112,7 @@ namespace Chalkable.Data.School.DataAccess
                     roleId = CoreRoles.TEACHER_ROLE.Id;
                     return staff.Id;
                 }
-                var person = new PersonDataAccess(uow, null)
+                var person = new PersonDataAccess(uow)
                     .GetAll(new AndQueryCondition {{Person.USER_ID_FIELD, userId}}).FirstOrDefault();
                 if (person != null)
                 {

@@ -249,13 +249,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
             return announcement;
         }
-
-        //TODO: security check 
-        public IList<AnnouncementRecipient> GetAnnouncementRecipients(int announcementId)
-        {
-            return Storage.AnnouncementRecipientStorage.GetList(announcementId);
-        }
-
+        
         public void UpdateAnnouncementGradingStyle(int announcementId, GradingStyleEnum gradingStyle)
         {
             throw new NotImplementedException();

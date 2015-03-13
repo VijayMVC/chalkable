@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void Add(IList<Class> classes);
         void Edit(IList<Class> classes); 
-        void Delete(IList<int> ids);
+        void Delete(IList<Class> classes);
 
         void AddStudents(IList<ClassPerson> classPersons);
         void EditStudents(IList<ClassPerson> classPersons);
@@ -62,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                var mpClassDa = new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId);
+                var mpClassDa = new MarkingPeriodClassDataAccess(uow);
                 mpClassDa.Insert(markingPeriodClasses);
                 uow.Commit();
             }
@@ -164,13 +164,9 @@ namespace Chalkable.BusinessLogic.Services.School
             } 
         }
         
-        public void Delete(IList<int> ids)
+        public void Delete(IList<Class> classes)
         {
-            using (var uow = Update())
-            {
-                new ClassDataAccess(uow).Delete(ids);
-                uow.Commit();
-            }
+            DoUpdate(uow => new ClassDataAccess(uow).Delete(classes));
         }
 
         public void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses)
@@ -179,7 +175,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new MarkingPeriodClassDataAccess(uow, Context.SchoolLocalId).Delete(markingPeriodClasses);
+                new MarkingPeriodClassDataAccess(uow).Delete(markingPeriodClasses);
                 uow.Commit();
             }
         }

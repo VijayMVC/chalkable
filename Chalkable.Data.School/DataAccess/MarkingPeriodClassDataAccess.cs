@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -7,19 +8,13 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class MarkingPeriodClassDataAccess : BaseSchoolDataAccess<MarkingPeriodClass>
+    public class MarkingPeriodClassDataAccess : DataAccessBase<MarkingPeriodClass>
     {
 
-        public MarkingPeriodClassDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork, schoolId)
+        public MarkingPeriodClassDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
         
-        //TODO: build generel method for list deleting 
-        public void Delete(IList<MarkingPeriodClass> markingPeriodClasses)
-        {
-            SimpleDelete<MarkingPeriodClass>(markingPeriodClasses);
-        }
-       
         public void Delete(MarkingPeriodClassQuery query)
         {
             SimpleDelete(BuildConditions(query));
@@ -46,7 +41,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             if (markingPeriodIds.Count == 0)
                 return false;
-            var mpIdsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
+            var mpIdsString = markingPeriodIds.Select(x => "'" + x.ToString(CultureInfo.InvariantCulture) + "'").JoinString(",");
             var query = new DbQuery();
             query.Sql.Append(string.Format(@"select * from MarkingPeriodClass where MarkingPeriodRef in ({0})", mpIdsString));
             return Exists(query);

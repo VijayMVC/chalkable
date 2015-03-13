@@ -13,19 +13,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public DemoDayTypeService(IServiceLocatorSchool serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
         {
         }
-
-
-        public IList<DayType> GetSections(int schoolYearId)
-        {
-            return Storage.DayTypeStorage.GetDateTypes(schoolYearId);
-            
-        }
-
-        //TODO : filter by school 
-        public DayType GetSectionById(int id)
-        {
-            return Storage.DayTypeStorage.GetById(id);
-        }
         
         public void Add(IList<DayType> dayTypes)
         {
@@ -41,13 +28,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.DayTypeStorage.Update(dayTypes);
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<DayType> dayTypes)
         {
-            foreach (var id in ids)
-            {
-                var dateType = Storage.DayTypeStorage.GetById(id);
-                Storage.DayTypeStorage.Delete(dateType);
-            }
+            Storage.DayTypeStorage.Delete(dayTypes);
         }
     }
 }

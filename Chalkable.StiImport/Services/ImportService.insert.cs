@@ -352,21 +352,30 @@ namespace Chalkable.StiImport.Services
 
         private void InsertGradeLevels()
         {
-            var sisGradeLevels = context.GetSyncResult<GradeLevel>().All;
-            foreach (var gradeLevel in sisGradeLevels)
-            {
-                ServiceLocatorSchool.GradeLevelService.AddGradeLevel(gradeLevel.GradeLevelID, gradeLevel.Name, gradeLevel.Sequence);
-            }
+            var gradeLevels = context.GetSyncResult<GradeLevel>().All.
+                Select(x=>new Data.School.Model.GradeLevel
+                {
+                    Id = x.GradeLevelID,
+                    Description = x.Description,
+                    Name = x.Name,
+                    Number = x.Sequence
+                }).ToList();
+            ServiceLocatorSchool.GradeLevelService.Add(gradeLevels);
         }
 
         private void InsertSchoolYears()
         {
-            var sessions = context.GetSyncResult<AcadSession>().All;
-            foreach (var session in sessions)
-            {
-                ServiceLocatorSchool.SchoolYearService.Add(session.AcadSessionID, session.SchoolID, session.Name,
-                                                           session.Description, session.StartDate, session.EndDate);
-            }
+            var schoolYears = context.GetSyncResult<AcadSession>().All.
+                Select(x=>new SchoolYear
+                {
+                    Description = x.Description,
+                    EndDate = x.EndDate,
+                    Id = x.AcadSessionID,
+                    Name = x.Name,
+                    SchoolRef = x.SchoolID,
+                    StartDate = x.StartDate
+                }).ToList();
+            ServiceLocatorSchool.SchoolYearService.Add(schoolYears);
         }
 
         private void InsertStudentSchoolYears()
@@ -502,9 +511,8 @@ namespace Chalkable.StiImport.Services
         private void InsertCourses()
         {
             var departmenPairs = PrepareChalkableDepartmentKeywords();
-            var courses = context.GetSyncResult<Course>().All.ToList();
-            var d = courses.ToDictionary(x => x.CourseID);
-            courses = TopologicSort(x => x.CourseID, x => x.SectionOfCourseID, d).ToList();
+            var courses = context.GetSyncResult<Course>().All.ToList()
+                .OrderBy(x=>x.SYS_CHANGE_VERSION);
             var classes = new List<Class>();
             foreach (var course in courses)
             {
@@ -557,7 +565,9 @@ namespace Chalkable.StiImport.Services
 
         private void InsertStandards()
         {
-            var sts = context.GetSyncResult<Standard>().All.Select(x => new Data.School.Model.Standard
+            var sts = context.GetSyncResult<Standard>().All.ToList()
+                .OrderBy(x=>x.SYS_CHANGE_VERSION)
+                .Select(x => new Data.School.Model.Standard
             {
                 Description = x.Description,
                 Id = x.StandardID,
@@ -569,9 +579,7 @@ namespace Chalkable.StiImport.Services
                 UpperGradeLevelRef = x.UpperGradeLevelID,
                 AcademicBenchmarkId = x.AcademicBenchmarkId
             }).ToList();
-            var toInsert = sts.ToDictionary(x=>x.Id);
-            var sorted = TopologicSort(x => x.Id, x => x.ParentStandardRef, toInsert);
-            ServiceLocatorSchool.StandardService.AddStandards(sorted);
+            ServiceLocatorSchool.StandardService.AddStandards(sts);
         }
 
         private void InsertClassStandard()

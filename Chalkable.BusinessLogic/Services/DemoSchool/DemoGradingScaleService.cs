@@ -23,9 +23,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.GradingScaleStorage.Update(gradingScales);
         }
 
-        public void DeleteGradingScales(IList<int> gradingScalesIds)
+        public void DeleteGradingScales(IList<GradingScale> gradingScales)
         {
-            Storage.GradingScaleStorage.Delete(gradingScalesIds);
+            Storage.GradingScaleStorage.Delete(gradingScales);
         }
 
         public void AddGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges)
@@ -38,9 +38,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.GradingScaleRangeStorage.Update(gradingScaleRanges);
         }
 
-        public void DeleteGradingScaleRanges(IList<GradingScaleRange> gradingScaleAlphaGradeIds)
+        public void DeleteGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges)
         {
-            Storage.GradingScaleRangeStorage.Delete(gradingScaleAlphaGradeIds);
+            Storage.GradingScaleRangeStorage.Delete(gradingScaleRanges);
         }
     }
 }

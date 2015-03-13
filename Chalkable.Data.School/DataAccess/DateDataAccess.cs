@@ -6,18 +6,15 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class DateDataAccess : BaseSchoolDataAccess<Date>
+    public class DateDataAccess : DataAccessBase<Date, int>
     {
-        public DateDataAccess(UnitOfWork unitOfWork, int? schoolid) : base(unitOfWork, schoolid)
+        public DateDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
 
-        public void Delete(DateQuery query)
+        public void Delete(IList<Date> dates)
         {
-            var q = new DbQuery();
-            q.Sql.Append("delete from [Date] ");
-            q = BuildConditionQuery(q, query);
-            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+            SimpleDelete(dates);
         }
 
         private DbQuery BuildConditionQuery(DbQuery dbQuery, DateQuery query)
@@ -54,21 +51,6 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public Date GetDate(DateQuery query)
-        {
-            return GetDate(query, ReadOne<Date>);
-        }
-        public Date GetDateOrNull(DateQuery query)
-        {
-            return GetDate(query, ReadOneOrNull<Date>);
-        }
-        private Date GetDate(DateQuery query, Func<DbQuery, bool, Date> acion)
-        {
-            var q = new DbQuery();
-            q.Sql.Append("select * from [Date]");
-            q = BuildConditionQuery(q, query);
-            return acion(q, false);
-        }
         public IList<Date> GetDates(DateQuery query)
         {
             var q = new DbQuery();
@@ -78,23 +60,6 @@ namespace Chalkable.Data.School.DataAccess
 
             q = new DbQuery(string.Format("select * from ({0})x order by x.{1}", q.Sql, Date.DATE_TIME_FIELD), q.Parameters);
             return ReadMany<Date>(q);
-        }
-
-        public bool Exists(DateQuery query)
-        {
-            var dbQuery = new DbQuery();
-            dbQuery.Sql.Append("select * from [Date] ");
-            dbQuery = BuildConditionQuery(dbQuery, query);
-            return Exists(dbQuery);
-        }
-
-        public bool Exists(IList<int> markingPeriodIds)
-        {
-            throw new NotImplementedException();
-            //var sql = @"select * from [Date] where MarkingPeriodRef in ({0})";
-            //var mpIdsString = markingPeriodIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
-            //sql = string.Format(sql, mpIdsString);
-            //return Exists(new DbQuery(sql, new Dictionary<string, object>()));
         }
     }
 

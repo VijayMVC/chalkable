@@ -14,23 +14,9 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<Standard> standards)
         {
-            if (ids  != null && ids.Count > 0)
-            {
-                SimpleDelete<Standard>(ids.Select(x => new Standard { Id = x }).ToList());         
-            }
-        }
-
-        public override void Delete(int key)
-        {
-            var q = new DbQuery(new List<DbQuery>
-                {
-                    Orm.SimpleDelete<AnnouncementStandard>(new AndQueryCondition { {AnnouncementStandard.STANDARD_REF_FIELD, key} }),
-                    Orm.SimpleDelete<ClassStandard>(new AndQueryCondition {{ClassStandard.STANDARD_REF_FIELD, key}}),
-                    Orm.SimpleDelete<Standard>(new AndQueryCondition {{Standard.ID_FIELD, key}})
-                });
-            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+            SimpleDelete(standards);
         }
 
         public Standard GetStandardByABId(Guid id)

@@ -203,7 +203,6 @@
     <Compile Include="Controllers\GradingPeriodController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PeriodController.cs" />
-    <Compile Include="Controllers\GradingStyleController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MarkingPeriodController.cs" />
     <Compile Include="Controllers\PersonControllers\StudentController.cs" />
@@ -230,7 +229,6 @@
     <Compile Include="Logic\ApplicationLogic.cs" />
     <Compile Include="Logic\AttachmentLogic.cs" />
     <Compile Include="Logic\ClassLogic.cs" />
-    <Compile Include="Logic\GradingStyleLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AddressViewData.cs" />
     <Compile Include="Models\AdminFeedViewData.cs" />
@@ -293,7 +291,6 @@
     <Compile Include="Models\ClassesViewData\ClassTitlesViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassViewData.cs" />
     <Compile Include="Models\ClassPeriodViewData.cs" />
-    <Compile Include="Models\AnnouncementsViewData\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\CommonCoreStandardViewData.cs" />
     <Compile Include="Models\AppTesterViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
@@ -317,7 +314,6 @@
     <Compile Include="Models\GradingStandardGridViewData.cs" />
     <Compile Include="Models\GradingStudentClassSummaryViewData.cs" />
     <Compile Include="Models\GradingStudentSummaryViewData.cs" />
-    <Compile Include="Models\GradingStyleViewData.cs" />
     <Compile Include="Models\GradingTeacherSummaryViewData.cs" />
     <Compile Include="Models\ItemGradigStatViewData.cs" />
     <Compile Include="Models\NotificationsByDateViewData.cs" />

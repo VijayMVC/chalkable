@@ -16,28 +16,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        public Date GetCalendarDateByDate(DateTime date)
-        {
-            return Storage.DateStorage.GetDateOrNull(new DateQuery {FromDate = date, ToDate = date});
-        }
 
         public DateTime GetDbDateTime()
         {
             return Storage.DateStorage.GetDbDateTime();
         }
-
-        public IList<Date> GetDays(int markingPeriodId, bool schoolDaysOnly, DateTime? fromDate = null, DateTime? tillDate = null, int count = Int32.MaxValue)
-        {
-            return Storage.DateStorage.GetDates(new DateQuery
-            {
-                MarkingPeriodId = markingPeriodId,
-                SchoolDaysOnly = schoolDaysOnly,
-                FromDate = fromDate,
-                ToDate = tillDate,
-                Count = count
-            });
-        }
-
+        
         public IList<Date> GetLastDays(int schoolYearId, bool schoolDaysOnly, DateTime? fromDate, DateTime? tillDate, int count = Int32.MaxValue)
         {
             return Storage.DateStorage.GetDates(new DateQuery
@@ -74,26 +58,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.DateStorage.Update(dates);
         }
 
-        public void Delete(DateTime date)
+        public void Delete(IList<Date> dates)
         {
-            Delete(new DateQuery { FromDate = date, ToDate = date});
-        }
-
-        public void Delete(IList<DateTime> dates)
-        {
-            foreach (var date in dates)
-            {
-                Delete(date);
-            }
-        }
-
-        private void Delete(DateQuery query)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            Storage.DateStorage.Delete(query);
-            
+            Storage.DateStorage.Delete(dates);
         }
     }
 }

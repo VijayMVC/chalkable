@@ -6,6 +6,7 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -16,12 +17,12 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(Data.School.Model.School school);
         void Add(IList<Data.School.Model.School> schools);
         void Edit(IList<Data.School.Model.School> schools);
-        void Delete(IList<int> ids);
+        void Delete(IList<Data.School.Model.School> schools);
         IList<Data.School.Model.School> GetSchools();
 
         void AddSchoolOptions(IList<SchoolOption> schoolOptions);
         void EditSchoolOptions(IList<SchoolOption> schoolOptions);
-        void DeleteSchoolOptions(IList<int> ids);
+        void DeleteSchoolOptions(IList<SchoolOption> schoolOptions);
         SchoolOption GetSchoolOption();
         StartupData GetStartupData();
     }
@@ -70,9 +71,10 @@ namespace Chalkable.BusinessLogic.Services.School
             ModifySchool(da => da.Update(schools), (iSchoolS, districtId) => iSchoolS.Edit(schoolInfos, districtId));
         }
 
-        public void Delete(IList<int> ids)
+        public void Delete(IList<Data.School.Model.School> schools)
         {
-            ModifySchool(da => da.Delete(ids), (schoolS, districtId) => schoolS.Delete(ids, districtId));
+            var ids = schools.Select(x => x.Id).ToList();
+            ModifySchool(da => da.Delete(schools), (schoolS, districtId) => schoolS.Delete(ids, districtId));
         }
 
         private void ModifySchool(Action<SchoolDataAccess> modifySchool, Action<Master.ISchoolService, Guid> modifyMasterSchool)
@@ -92,37 +94,25 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void AddSchoolOptions(IList<SchoolOption> schoolOptions)
         {
-            ModifySchoolOptions(da=>da.Insert(schoolOptions));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u=>new DataAccessBase<SchoolOption>(u).Insert(schoolOptions));
         }
         public void EditSchoolOptions(IList<SchoolOption> schoolOptions)
         {
-            ModifySchoolOptions(da => da.Update(schoolOptions));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<SchoolOption>(u).Update(schoolOptions));
         }
-        public void DeleteSchoolOptions(IList<int> ids)
+        public void DeleteSchoolOptions(IList<SchoolOption> schoolOptions)
         {
-            ModifySchoolOptions(da=>da.Delete(ids));
-        }
-        private void ModifySchoolOptions(Action<SchoolOptionDataAccess> modify)
-        {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                var da = new SchoolOptionDataAccess(uow);
-                modify(da);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<SchoolOption>(u).Delete(schoolOptions));
         }
 
         public SchoolOption GetSchoolOption()
         {
             if(!Context.SchoolLocalId.HasValue)
                 throw new UnassignedUserException();
-
-            using (var uow = Read())
-            {
-                return new SchoolOptionDataAccess(uow).GetByIdOrNull(Context.SchoolLocalId.Value);
-            }
+            return DoRead(u => new DataAccessBase<SchoolOption, int>(u).GetByIdOrNull(Context.SchoolLocalId.Value));
         }
 
         public StartupData GetStartupData()

@@ -10,7 +10,7 @@ using Chalkable.Data.Common.Orm;
 
 namespace Chalkable.Data.Common
 {
-    public class DataAccessBase<TEntity, TParam> where TEntity : new()
+    public class DataAccessBase<TEntity> where TEntity : new()
     {
         protected const string FILTER_FORMAT = "%{0}%";
         private const string ALL_COUNT_FIELD = "AllCount";
@@ -196,13 +196,13 @@ namespace Chalkable.Data.Common
 
         protected void SimpleDelete<T>(QueryCondition conds)
         {
-            var q = Orm.Orm.SimpleDelete<T>(FilterConditions(conds));
+            var q = Orm.Orm.SimpleDelete<T>(conds);
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
         
         protected void SimpleDelete(QueryCondition conds)
         {
-            var q = Orm.Orm.SimpleDelete<TEntity>(FilterConditions(conds));
+            var q = Orm.Orm.SimpleDelete<TEntity>(conds);
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
@@ -232,12 +232,12 @@ namespace Chalkable.Data.Common
 
         protected T SelectOne<T>(QueryCondition conditions) where T : new() 
         {
-            var command = Orm.Orm.SimpleSelect<T>(FilterConditions(conditions), 1);
+            var command = Orm.Orm.SimpleSelect<T>(conditions, 1);
             return ReadOne<T>(command);
         }
         protected T SelectOneOrNull<T>(QueryCondition conditions) where T : new()
         {
-            var command = Orm.Orm.SimpleSelect<T>(FilterConditions(conditions), 1);
+            var command = Orm.Orm.SimpleSelect<T>(conditions, 1);
             return ReadOneOrNull<T>(command);
         }
 
@@ -247,7 +247,7 @@ namespace Chalkable.Data.Common
         }
         protected IList<T> SelectMany<T>(QueryCondition conditions) where T : new()
         {
-            var q = Orm.Orm.SimpleSelect<T>(FilterConditions(conditions));
+            var q = Orm.Orm.SimpleSelect<T>(conditions);
             return ReadMany<T>(q);
         }
 
@@ -260,7 +260,7 @@ namespace Chalkable.Data.Common
         protected PaginatedList<T> PaginatedSelect<T>(QueryCondition conditions, string orderByColumn,
                                                             int start, int count, Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc) where T : new()
         {
-            var q = Orm.Orm.PaginationSelect<T>(FilterConditions(conditions), orderByColumn, orderType, start, count);
+            var q = Orm.Orm.PaginationSelect<T>(conditions, orderByColumn, orderType, start, count);
             return ReadPaginatedResult<T>(q, start, count);
         }
 
@@ -317,7 +317,7 @@ namespace Chalkable.Data.Common
 
         protected bool Exists<T>(QueryCondition conditions) where T : new()
         {
-            var q = Orm.Orm.CountSelect<T>(FilterConditions(conditions), ALL_COUNT_FIELD);
+            var q = Orm.Orm.CountSelect<T>(conditions, ALL_COUNT_FIELD);
             return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, ALL_COUNT_FIELD) > 0);
         }
 
@@ -363,6 +363,18 @@ namespace Chalkable.Data.Common
             SimpleUpdate(entities);
         }
 
+        public virtual void Delete(IList<TEntity> entities)
+        {
+            SimpleDelete(entities);
+        }
+    }
+
+    public class DataAccessBase<TEntity, TParam> : DataAccessBase<TEntity> where TEntity : new()
+    {
+        public DataAccessBase(UnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+
         public virtual void Delete(TParam key)
         {
             SimpleDelete(BuildCondsByKey(key));
@@ -380,12 +392,7 @@ namespace Chalkable.Data.Common
         private QueryCondition BuildCondsByKey(TParam key)
         {
             var primaryKeyFields = Orm.Orm.GetPrimaryKeyFields(typeof(TEntity));
-            return new AndQueryCondition {{primaryKeyFields.First().Name, key}};
-        }
-
-        protected virtual QueryCondition FilterConditions(QueryCondition condition)
-        {
-            return condition;
+            return new AndQueryCondition { { primaryKeyFields.First().Name, key } };
         }
     }
 }

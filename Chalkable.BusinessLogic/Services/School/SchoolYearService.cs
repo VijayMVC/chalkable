@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -10,14 +11,10 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface ISchoolYearService
     {
-        SchoolYear Add(int id, int schoolId, string name, string description, DateTime? startDate, DateTime? endDate);
-        IList<SchoolYear> AddSchoolYears(IList<SchoolYear> schoolYears); 
-        SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate);
+        IList<SchoolYear> Add(IList<SchoolYear> schoolYears); 
         IList<SchoolYear> Edit(IList<SchoolYear> schoolYears); 
         SchoolYear GetSchoolYearById(int id);
         PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue);
-        void AssignStudent(int schoolYearId, int personId, int gradeLevelId);
-        void Delete(int schoolYearId);
         void Delete(IList<int> schoolYearIds);
         SchoolYear GetCurrentSchoolYear();
         IList<SchoolYear> GetSortedYears();
@@ -33,134 +30,42 @@ namespace Chalkable.BusinessLogic.Services.School
         public SchoolYearService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
         }
-
-
-        //TODO: needs test 
-        public SchoolYear Add(int id, int schoolId, string name, string description, DateTime? startDate, DateTime? endDate)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
-                var schoolYear = new SchoolYear
-                    {
-                        Id = id,
-                        Description = description,
-                        Name = name,
-                        StartDate = startDate,
-                        EndDate = endDate,
-                        SchoolRef = schoolId
-                    };
-                
-                da.Insert(schoolYear);
-                uow.Commit();
-                return schoolYear;
-            }
-        }
         
-        private bool IsOverlaped(DateTime startDate, DateTime endDate, SchoolYearDataAccess dataAccess, SchoolYear schoolYear = null)
-        {
-            //var id = schoolYear != null ? schoolYear.Id : (int?) null;
-            //return startDate >= endDate || (dataAccess.IsOverlaped(startDate, endDate, id));
-            return false;//TODO: isn't supported in INOW
-        }
-
-        public SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
-                var schoolYear = da.GetById(id);
-
-                if(IsOverlaped(startDate, endDate, da, schoolYear))
-                    throw new ChalkableException(ChlkResources.ERR_SCHOOL_YEAR_OVERLAPPING_DATA);
-                if (schoolYear.Name != name && da.Exists(name))
-                    throw new ChalkableException(ChlkResources.ERR_SCHOOL_YEAR_ALREADY_EXISTS);
-
-                schoolYear.Name = name;
-                schoolYear.Description = description;
-                schoolYear.StartDate = startDate;
-                schoolYear.EndDate = endDate;
-                da.Update(schoolYear);
-                uow.Commit();
-                return schoolYear;
-            }
-        }
-
         public SchoolYear GetSchoolYearById(int id)
         {
-            using (var uow = Read())
-            {
-                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
-                return da.GetById(id);
-            }
+            return DoRead(u => new SchoolYearDataAccess(u).GetById(id));
         }
 
         public PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue)
         {
-            using (var uow = Read())
-            {
-                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
-                return da.GetPage(start, count);
-            }
-        }
-
-        //todo : add enrollmentStatus param 
-        public void AssignStudent(int schoolYearId, int personId, int gradeLevelId)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                var da = new StudentSchoolYearDataAccess(uow);
-                da.Insert(new StudentSchoolYear
-                    {
-                        GradeLevelRef = gradeLevelId,
-                        SchoolYearRef = schoolYearId,
-                        StudentRef = personId
-                    });
-                uow.Commit();
-            }
+            return DoRead(u => new SchoolYearDataAccess(u).GetPage(start, count));
         }
 
         public void AssignStudent(IList<StudentSchoolYear> studentAssignments)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                var da = new StudentSchoolYearDataAccess(uow);
-                da.Insert(studentAssignments);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<StudentSchoolYear>(u).Insert(studentAssignments));
         }
-
-        public void Delete(int schoolYearId)
-        {
-            Delete(new List<int> {schoolYearId});
-        }
-
+        
         public SchoolYear GetCurrentSchoolYear()
         {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             using (var uow = Read())
             {
-                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
+                var da = new SchoolYearDataAccess(uow);
                 if (Context.SchoolYearId.HasValue)
                     return da.GetById(Context.SchoolYearId.Value);
                 var nowDate = Context.NowSchoolYearTime.Date;
-                var res = da.GetByDate(nowDate);
-                return res ?? da.GetLast(nowDate);
+                var res = da.GetByDate(nowDate, Context.SchoolLocalId.Value);
+                return res ?? da.GetLast(nowDate, Context.SchoolLocalId.Value);
             }
         }
+
         public IList<SchoolYear> GetSortedYears()
         {
             using (var uow = Read())
             {
-                var da = new SchoolYearDataAccess(uow, Context.SchoolLocalId);
+                var da = new SchoolYearDataAccess(uow);
                 return da.GetAll();
             }
         }
@@ -171,19 +76,19 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Read())
             {
-                var da = new StudentSchoolYearDataAccess(uow);
+                var da = new DataAccessBase<StudentSchoolYear>(uow);
                 return da.GetAll();
             }
         }
 
 
-        public IList<SchoolYear> AddSchoolYears(IList<SchoolYear> schoolYears)
+        public IList<SchoolYear> Add(IList<SchoolYear> schoolYears)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new SchoolYearDataAccess(uow, Context.SchoolLocalId).Insert(schoolYears);
+                new SchoolYearDataAccess(uow).Insert(schoolYears);
                 uow.Commit();
                 return schoolYears;
             }
@@ -195,7 +100,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new SchoolYearDataAccess(uow, Context.SchoolLocalId).Delete(schoolYearIds);
+                new SchoolYearDataAccess(uow).Delete(schoolYearIds);
                 uow.Commit();
             }
         }
@@ -207,7 +112,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new SchoolYearDataAccess(uow, Context.SchoolLocalId).Update(schoolYears);
+                new SchoolYearDataAccess(uow).Update(schoolYears);
                 uow.Commit();
                 return schoolYears;
             }
@@ -219,7 +124,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new StudentSchoolYearDataAccess(uow).Delete(studentSchoolYears);
+                new DataAccessBase<StudentSchoolYear>(uow).Delete(studentSchoolYears);
                 uow.Commit();
             }
         }
@@ -230,7 +135,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
-                new StudentSchoolYearDataAccess(uow).Update(studentSchoolYears);
+                new DataAccessBase<StudentSchoolYear>(uow).Update(studentSchoolYears);
                 uow.Commit();
             }
         }

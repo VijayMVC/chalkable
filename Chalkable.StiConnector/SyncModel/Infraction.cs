@@ -1,6 +1,6 @@
 namespace Chalkable.StiConnector.SyncModel
 {
-    public class Infraction
+    public class Infraction : SyncModel
     {
         public int InfractionID { get; set; }
         public string Code { get; set; }

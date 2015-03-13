@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Net;
@@ -14,7 +15,7 @@ namespace Chalkable.StiConnector.Connectors
         {
         }
 
-        public object GetDiff(Type type, int? fromVersion)
+        public object GetDiff(Type type, long? fromVersion)
         {
             var client = InitWebClient();
             try
@@ -37,8 +38,11 @@ namespace Chalkable.StiConnector.Connectors
                     }
                     else
                         reader = new StreamReader(ms);
+
                     var serializer = new JsonSerializer();
                     var jsonReader = new JsonTextReader(reader);
+                    
+                    
                     var resType = (typeof(SyncResult<>)).MakeGenericType(new[] { type });
                     var res = serializer.Deserialize(jsonReader, resType);
                     if (unzipped != null)

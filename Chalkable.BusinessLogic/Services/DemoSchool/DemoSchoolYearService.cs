@@ -37,41 +37,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.SchoolYearStorage.GetCurrentSchoolYear();
         }
 
-        public SchoolYear Add(int id, int schoolId, string name, string description, DateTime? startDate, DateTime? endDate)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            var schoolYear = new SchoolYear
-            {
-                Id = id,
-                Description = description,
-                Name = name,
-                StartDate = startDate,
-                EndDate = endDate,
-                SchoolRef = schoolId
-            };
-            Storage.SchoolYearStorage.Add(schoolYear);
-            return schoolYear;
-        }
-
-        public IList<SchoolYear> AddSchoolYears(IList<SchoolYear> schoolYears)
+        public IList<SchoolYear> Add(IList<SchoolYear> schoolYears)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
             Storage.SchoolYearStorage.Add(schoolYears);
             return schoolYears;
-        }
-
-        public SchoolYear Edit(int id, string name, string description, DateTime startDate, DateTime endDate)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            var schoolYear = Storage.SchoolYearStorage.GetById(id);
-            if (schoolYear.Name != name && Storage.SchoolYearStorage.Exists(name))
-                throw new ChalkableException(ChlkResources.ERR_SCHOOL_YEAR_ALREADY_EXISTS);
-            return Storage.SchoolYearStorage.Edit(id, name, description, startDate, endDate);
         }
 
         public IList<SchoolYear> Edit(IList<SchoolYear> schoolYears)
@@ -85,19 +57,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             return Storage.SchoolYearStorage.GetById(id);
         }
-
-        public void AssignStudent(int schoolYearId, int personId, int gradeLevelId)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.StudentSchoolYearStorage.Add(new StudentSchoolYear
-            {
-                GradeLevelRef = gradeLevelId,
-                SchoolYearRef = schoolYearId,
-                StudentRef = personId
-            });
-        }
-
+        
         public void AssignStudent(IList<StudentSchoolYear> studentAssignments)
         {
             if (!BaseSecurity.IsDistrict(Context))
@@ -114,15 +74,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
-
-        public void Delete(int schoolYearId)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            Storage.SchoolYearStorage.Delete(schoolYearId);
-        }
-
+        
         public IList<SchoolYear> GetSortedYears()
         {
             return Storage.SchoolYearStorage.GetAll();

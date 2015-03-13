@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -12,11 +9,11 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void AddGradingScales(IList<GradingScale> gradingScales);
         void EditGradingScales(IList<GradingScale> gradingScales);
-        void DeleteGradingScales(IList<int> gradingScalesIds);
+        void DeleteGradingScales(IList<GradingScale> gradingScales);
 
         void AddGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges);
         void EditGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges);
-        void DeleteGradingScaleRanges(IList<GradingScaleRange> gradingScaleAlphaGradeIds);
+        void DeleteGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges);
 
     }
 
@@ -28,53 +25,39 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void AddGradingScales(IList<GradingScale> gradingScales)
         {
-            ModifyGradingScale(da => da.Insert(gradingScales));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<GradingScale>(u).Insert(gradingScales));
         }
 
         public void EditGradingScales(IList<GradingScale> gradingScales)
         {
-            ModifyGradingScale(da => da.Update(gradingScales));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<GradingScale>(u).Update(gradingScales));
         }
 
-        public void DeleteGradingScales(IList<int> gradingScalesIds)
+        public void DeleteGradingScales(IList<GradingScale> gradingScales)
         {
-            ModifyGradingScale(da => da.Delete(gradingScalesIds));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<GradingScale>(u).Delete(gradingScales));
         }
 
         public void AddGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges)
         {
-            ModifyGradingScaleRange(da => da.Insert(gradingScaleRanges));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<GradingScaleRange>(u).Insert(gradingScaleRanges));
         }
 
         public void EditGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges)
         {
-            ModifyGradingScaleRange(da => da.Update(gradingScaleRanges));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<GradingScaleRange>(u).Update(gradingScaleRanges));
         }
 
-        public void DeleteGradingScaleRanges(IList<GradingScaleRange> gradingScaleAlphaGradeIds)
+        public void DeleteGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges)
         {
-            ModifyGradingScaleRange(da => da.Delete(gradingScaleAlphaGradeIds));
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<GradingScaleRange>(u).Delete(gradingScaleRanges));
         }
-
-        private void ModifyGradingScale(Action<GradingScaleDataAccess> modifyMethod)
-        {
-            Modify(uow => modifyMethod(new GradingScaleDataAccess(uow, Context.SchoolLocalId)));
-        }
-        private void ModifyGradingScaleRange(Action<GradingScaleRangeDataAccess> modifyMethod)
-        {
-            Modify(uow => modifyMethod(new GradingScaleRangeDataAccess(uow)));
-        }
-        private void Modify(Action<UnitOfWork> modifyMethod)
-        {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                modifyMethod(uow);
-                uow.Commit();
-            }
-        } 
         
-
     }
 }

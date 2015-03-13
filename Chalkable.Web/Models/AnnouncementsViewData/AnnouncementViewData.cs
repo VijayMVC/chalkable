@@ -109,4 +109,10 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             return res;
         } 
     }
+
+    public class CreateAnnouncementViewData
+    {
+        public AnnouncementViewData Announcement { get; set; }
+        public bool IsDraft { get; set; }
+    }
 }

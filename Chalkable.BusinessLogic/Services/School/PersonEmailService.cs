@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Contexts;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -28,47 +23,27 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void AddPersonsEmails(IList<PersonEmail> personEmails)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                new PersonEmailDataAccess(uow).Insert(personEmails);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<PersonEmail>(u).Insert(personEmails));
         }
 
         public void UpdatePersonsEmails(IList<PersonEmail> personEmails)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                new PersonEmailDataAccess(uow).Update(personEmails);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<PersonEmail>(u).Update(personEmails));
         }
 
         public void DeletePersonsEmails(IList<PersonEmail> personEmails)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                new PersonEmailDataAccess(uow).Delete(personEmails);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<PersonEmail>(u).Delete(personEmails));
         }
 
         public PersonEmail GetPersonEmail(int personId)
         {
-            using (var uow = Read())
-            {
-                return new PersonEmailDataAccess(uow)
-                    .GetAll(new AndQueryCondition {{PersonEmail.PERSON_REF_FIELD, personId}}).FirstOrDefault();
-            }
+            var res = DoRead(u => new DataAccessBase<PersonEmail>(u)
+                    .GetAll(new AndQueryCondition { { PersonEmail.PERSON_REF_FIELD, personId } }));
+            return res.FirstOrDefault();
         }
     }
 }

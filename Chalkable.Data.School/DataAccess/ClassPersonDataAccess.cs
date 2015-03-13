@@ -35,16 +35,6 @@ namespace Chalkable.Data.School.DataAccess
             return Exists<ClassPerson>(BuildConditioins(query));
         }
 
-        public ClassPerson GetClassPerson(ClassPersonQuery query)
-        {
-            return SelectOne<ClassPerson>(BuildConditioins(query));
-        }
-
-        public ClassPerson GetClassPersonOrNull(ClassPersonQuery query)
-        {
-            return SelectOneOrNull<ClassPerson>(BuildConditioins(query));
-        }
-
         public IList<ClassPerson> GetClassPersons(ClassPersonQuery query)
         {
             return SelectMany<ClassPerson>(BuildConditioins(query));
