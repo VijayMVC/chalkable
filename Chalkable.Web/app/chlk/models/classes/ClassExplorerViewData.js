@@ -16,12 +16,15 @@ NAMESPACE('chlk.models.classes', function(){
 
             chlk.models.id.ClassId, 'id',
 
+            ArrayOf(chlk.models.id.SchoolPersonId), 'teachersIds',
+
             OVERRIDE, Object, function getClazz(){
                 return this;
             },
 
             VOID, function deserialize(raw){
                 this.id = SJX.fromValue(raw.id, chlk.models.id.ClassId);
+                this.teachersIds = SJX.fromArrayOfValues(raw.teachersids, chlk.models.id.SchoolPersonId);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.StandardForClassExplorer);
             }
     ]);

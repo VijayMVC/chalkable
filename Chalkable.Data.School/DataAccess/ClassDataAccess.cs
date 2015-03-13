@@ -83,6 +83,12 @@ namespace Chalkable.Data.School.DataAccess
             {
                 classComplex.MarkingPeriodClasses = markingPeriodClasses.Where(x => x.ClassRef == classComplex.Id).ToList();
             }
+            reader.NextResult();
+            var classTeachers = reader.ReadList<ClassTeacher>();
+            foreach (var classDetailse in classes)
+            {
+                classDetailse.ClassTeachers = classTeachers.Where(cTeacher => cTeacher.ClassRef == classDetailse.Id).ToList();
+            }
             return classes;
         }
 

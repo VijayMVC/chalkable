@@ -83,3 +83,4 @@ where (a.Name like '%Youtube%' or a.Name like '%Khan%')
 							and ApplicationStandard.StandardRef = ccs.Id)
 	 
 GO
+

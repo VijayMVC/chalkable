@@ -33,7 +33,8 @@ namespace Chalkable.Web.Models.ClassesViewData
         public Guid? DepartmentId { get; set; }
         public ShortPersonViewData Teacher { get; set; }
         public IList<int> MarkingPeriodsId { get; set; }
-        
+        public IList<int> TeachersIds { get; set; } 
+
         protected ClassViewData(ClassDetails classComplex) : base(classComplex)
         {
             DepartmentId = classComplex.ChalkableDepartmentRef;
@@ -43,6 +44,7 @@ namespace Chalkable.Web.Models.ClassesViewData
                 Teacher.DisplayName = classComplex.PrimaryTeacher.DisplayName();
             }
             MarkingPeriodsId = classComplex.MarkingPeriodClasses.Select(x => x.MarkingPeriodRef).ToList();
+            TeachersIds = classComplex.ClassTeachers.Select(x => x.PersonRef).ToList();
         }
         
         public static ClassViewData Create(ClassDetails classComplex)
