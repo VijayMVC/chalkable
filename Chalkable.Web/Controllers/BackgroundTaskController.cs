@@ -10,10 +10,11 @@ namespace Chalkable.Web.Controllers
     public class BackgroundTaskController : ChalkableController
     {
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult GetTasks(int? start, int? count, int? state)
+        public ActionResult GetTasks(int? start, int? count, int? state, int? type, Guid? districtId, bool allDistricts = true)
         {
-            BackgroundTaskStateEnum? st = (BackgroundTaskStateEnum?)state;
-            var tasks = MasterLocator.BackgroundTaskService.Find(null, st, null, true, start ?? 0, count ?? 10);
+            var st = (BackgroundTaskStateEnum?)state;
+            var tp = (BackgroundTaskTypeEnum?) type;
+            var tasks = MasterLocator.BackgroundTaskService.Find(districtId, st, tp, allDistricts, start ?? 0, count ?? 10);
             return Json(tasks.Transform(BackgroundTaskViewData.Create));
         }
 
