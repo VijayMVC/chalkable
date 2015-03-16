@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = new SyncVersionDataAccess(uow);
-                IList<SyncVersion> list = versions.Select(version => new SyncVersion {TableName = version.Key, Version = version.Value}).ToList();
+                IList<SyncVersion> list = versions.Select(version => new SyncVersion {TableName = version.Key, Version = (int)version.Value}).ToList();
                 da.DeleteAll();
                 da.Insert(list);
                 uow.Commit();

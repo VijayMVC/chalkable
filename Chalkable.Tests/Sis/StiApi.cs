@@ -12,69 +12,83 @@ using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
 using NUnit.Framework;
+using GradingComment = Chalkable.StiConnector.SyncModel.GradingComment;
 using ScheduledTimeSlot = Chalkable.StiConnector.SyncModel.ScheduledTimeSlot;
+using UserSchool = Chalkable.StiConnector.SyncModel.UserSchool;
 
 namespace Chalkable.Tests.Sis
 {
     public class StiApi : TestBase
     {
-        //[Test]
-        //public void ReportTest()
-        //{
-        //    var cl = ConnectorLocator.Create("administrator", "Ee9E(#UQe/5(G$U", "http://sandbox.sti-k12.com/chalkable/");
-        //    var obj = new ReportConnector.ProgressReportParams
-        //    {
-        //        AcadSessionId = 18,
-        //        GradingPeriodId = 31,
-        //        IdToPrint = 1,
-        //        SectionId = 576,
-        //        StudentIds = new[] { 126 }
-        //    };
-        //    var r = cl.ReportConnector.ProgressReport(obj);
-        //    Assert.NotNull(r);
-        //}
-
         [Test]
         public void SyncTest()
         {
-            //var cl = ConnectorLocator.Create("Chalkable", "8Ha8At0Gp", "https://365970.stiinformationnow.com/API/");
+            var did = Guid.Parse("840d8256-2e12-4edf-a5e4-f58ed7d71f63");
 
-            //var items2 = (cl.SyncConnector.GetDiff(typeof(TimeSlot), 26960989) as SyncResult<TimeSlot>);
-            //var items = (cl.SyncConnector.GetDiff(typeof(Course), null) as SyncResult<Course>).All.Where(x=>x.CourseID == 1194 || x.CourseID == 3688).ToList();
-
-            //1194
-
-
-            //3688
-            //ScheduledTimeSlot
-            IList<District> districts;
-            using (var muow =
-                new UnitOfWork(
-                    "Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!",
-                    false))
-            {
-                var dda = new DistrictDataAccess(muow);
-                districts = dda.GetAll();
-            }
-
-            foreach (var district in districts)
-            {
-                var cs =
-                    string.Format("Data Source=yqdubo97gg.database.windows.net;Initial Catalog={0};UID=chalkableadmin;Pwd=Hellowebapps1!", district.Name);
-                IList<Class> classes;
-                using (var uow = new UnitOfWork(cs, false))
-                {
-                    var da = new ClassDataAccess(uow);
-                    classes = da.GetAll();
-                }
-
-                var cl = ConnectorLocator.Create(district.SisUserName, district.SisPassword, district.SisUrl);
-                var items = (cl.SyncConnector.GetDiff(typeof(Course), null) as SyncResult<Course>)
-                    .All.ToList();
-                if (classes.Count != items.Count)
-                    Debug.WriteLine("{0} - {1} {2}", classes.Count, items.Count, district.Id);
-            }
             
+            District d;
+            using (UnitOfWork u = new UnitOfWork("Data Source=yqdubo97gg.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!", false))
+            {
+                d = (new DistrictDataAccess(u)).GetById(did);
+            }
+
+            var dConnStr = string.Format("Data Source=yqdubo97gg.database.windows.net;Initial Catalog={0};UID=chalkableadmin;Pwd=Hellowebapps1!",
+                    did);
+            using (UnitOfWork u = new UnitOfWork(dConnStr, false))
+            {
+                var version =
+                    new SyncVersionDataAccess(u).GetAll().First(x => x.TableName.ToLower() == "course").Version;
+
+                var cl = ConnectorLocator.Create(d.SisUserName, d.SisPassword, d.SisUrl);
+                var items = (cl.SyncConnector.GetDiff(typeof(Course), version) as SyncResult<Course>);
+                var toDelete = items.Deleted.Select(x => x.CourseID);
+
+                var all = new HashSet<int>(new ClassDataAccess(u).GetAll().Select(x=>x.Id));
+
+                IList<Class> classes = new List<Class>();
+                foreach (var i in toDelete)
+                {
+                    if (!all.Contains(i))
+                    {
+                        Debug.WriteLine("({0}, 'fake{0}'),", i);
+                        var c = new Class
+                        {
+                            Id = i,
+                            Name = "fake" + i
+                        };
+                        classes.Add(c);
+                    }
+                        
+                }
+                
+                new ClassDataAccess(u).Insert(classes);
+            }
+        }
+
+        [Test]
+        public void SyncTest2()
+        {
+            var cl = ConnectorLocator.Create("Chalkable", "1iA0wL7zJ", "https://api-houstonco.asc.edu/api/");
+            var items = (cl.SyncConnector.GetDiff(typeof(UserSchool), 11699459) as SyncResult<UserSchool>);
+            foreach (var gradingComment in items.All)
+            {
+                Debug.WriteLine("{0} {1} {2} {3}", gradingComment.SchoolID, gradingComment.UserID, gradingComment.DistrictGuid
+                    , gradingComment.SYS_CHANGE_VERSION);
+            }
+
+            Debug.WriteLine("--------------------");
+            foreach (var gradingComment in items.Updated)
+            {
+                Debug.WriteLine("{0} {1} {2} {3}", gradingComment.SchoolID, gradingComment.UserID, gradingComment.DistrictGuid
+                    , gradingComment.SYS_CHANGE_VERSION);
+            }
+
+            Debug.WriteLine("--------------------");
+            foreach (var gradingComment in items.Deleted)
+            {
+                Debug.WriteLine("{0} {1} {2} {3}", gradingComment.SchoolID, gradingComment.UserID, gradingComment.DistrictGuid
+                    , gradingComment.SYS_CHANGE_VERSION);
+            }
         }
 
         [Test]
