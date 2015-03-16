@@ -574,24 +574,37 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DEVELOPER,
             chlk.models.common.RoleEnum.SYSADMIN
         ])],
         [[chlk.models.id.AppId, String]],
-        function tryDeleteApplicationAction(id, appName) {
+        function tryDeleteApplicationSysAdminAction(id, appName) {
+            return this.tryDeleteApplication_(id, appName)
+                .then(function() {
+                    return this.Redirect('apps', 'list', [])
+                }, this);
+        },
+
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DEVELOPER,
+        ])],
+        [[chlk.models.id.AppId, String]],
+        function tryDeleteApplicationDeveloperAction(id, appName) {
+                this.tryDeleteApplication_(id, appName)
+                .then(function(){
+                    return this.BackgroundNavigate('apps', 'general', []); }, this)
+                .thenBreak();
+            return this.UpdateView(chlk.activities.apps.AppGeneralInfoPage, result);
+        },
+
+        ria.async.Future, function tryDeleteApplication_(id, appName){
             var msgText = "You are about to delete application. This can not be undone!!!\n\nPlease type application name to confirm.",
                 buttons = [{text: 'DELETE', clazz: 'negative-button', value: 'ok'}, {text: 'Cancel'}];
-
-            var result = this.ShowMsgBox(msgText, "whoa.", buttons, null, false, 'text', "")
+            return this.ShowMsgBox(msgText, "whoa.", buttons, null, false, 'text', "")
                 .then(function (mrResult) {
                     return appName == mrResult ? mrResult : ria.async.BREAK; })
                 .thenCall(this.appsService.deleteApp, [id])
                 .attach(this.validateResponse_())
-                .then(function(){
-                    return this.BackgroundNavigate('apps', 'general', []); }, this)
-                .thenBreak();
-
-            return this.UpdateView(chlk.activities.apps.AppGeneralInfoPage, result);
         },
 
 
