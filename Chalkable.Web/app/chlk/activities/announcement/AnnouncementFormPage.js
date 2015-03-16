@@ -78,6 +78,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     this.onPrepareTemplate_(suggestedAppsTpl, model, msg_);
                     suggestedAppsTpl.assign(suggestedAppsListData);
                     suggestedAppsTpl.renderTo(suggestedAppsNode);
+                    this.dom.find('.add-standards').find('.title').setText(Msg.Click_to_add_more);
                 }
             },
 

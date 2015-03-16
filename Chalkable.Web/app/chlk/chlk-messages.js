@@ -336,6 +336,7 @@ var Msg = {
     Class_Ranking: 'Class Ranking',
     Classmates: 'Classmates',
     Click_to_add_standard: 'CLICK TO ADD STANDARDS',
+    Click_to_add_more: 'CLICK TO ADD MORE',
     Click_to_complete_transaction: 'Click the button to complete the transaction',
     Click_post_to_save: 'Click \"Post\" to save attendance.',
     Code_examples: 'Code examples',
