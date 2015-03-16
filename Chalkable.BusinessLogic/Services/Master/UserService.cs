@@ -208,7 +208,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                     SaveSisToken(user, uow, ref iNowConnector);
                 }
-                catch (HttpException ex)
+                catch (HttpException)
                 {
                     return null;
                 }

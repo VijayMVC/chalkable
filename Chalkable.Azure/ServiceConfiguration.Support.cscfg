@@ -58,6 +58,7 @@
       <!-- other settings -->
       <Setting name="TaskProcessorDelay" value="5000" />
       <Setting name="DbBackupServiceUrl" value="https://sn1prod-dacsvc.azure.com/DACWebService.svc" />
+      <Setting name="PictureProcessorCount" value="1" />
       <!--tracking-->
       <Setting name="mixpanel-token" value=""/>
     </ConfigurationSettings>

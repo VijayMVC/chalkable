@@ -24,13 +24,10 @@ namespace Chalkable.Web.Controllers
         private const string CONTENT_LENGTH = "Content-Length";
 
         [HttpPost]
-        public ActionResult SignUp(string email, string password, string confirmPassword)
+        public ActionResult SignUp(string email, string password)
         {
             if (!PasswordTools.IsSecurePassword(password))
                 return Json(new ChalkableException("Your password is not secure enough"));
-
-            if (password != confirmPassword)
-                return Json(new ChalkableException("Your password and confirmation doesn't match"));
 
             var sysLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
             if (sysLocator.UserService.GetByLogin(email) != null)

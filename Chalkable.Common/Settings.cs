@@ -104,6 +104,7 @@ namespace Chalkable.Common
 
         public static int TaskProcessorDelay { get { return Int32.Parse(Get("TaskProcessorDelay")); } }
         public static string DbBackupServiceUrl { get { return Get("DbBackupServiceUrl"); } }
+        public static int PictureProcessorCount { get { return Int32.Parse(Get("PictureProcessorCount")); } }
 
         public static ProducerConfigSection GetProducerConfig(string sectionName)
         {

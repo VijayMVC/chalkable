@@ -249,19 +249,26 @@ namespace Chalkable.StiImport.Services
 
         private void ProcessPictures()
         {
-            IList<int> ids = new List<int>();
-            const int personsPerTask = 5000;
-            for (int i = 0; i < personsForImportPictures.Count; i++ )
+            if (Settings.PictureProcessorCount > 0)
             {
-                ids.Add(personsForImportPictures[i].PersonID);
-                if (ids.Count >= personsPerTask || ids.Count > 0 && i + 1 == personsForImportPictures.Count)
+                IList<int> ids = new List<int>();
+                const int personsPerTask = 5000;
+                var random = new Random((int)(DateTime.Now.Ticks % 1000000000));
+                for (int i = 0; i < personsForImportPictures.Count; i++)
                 {
-                    var data = new PictureImportTaskData(districtId, ids);
-                    var domain = String.Format("picture processing for {0} at {1}", districtId, DateTime.UtcNow.Ticks);
-                    ServiceLocatorMaster.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.PictureImport, DateTime.UtcNow, districtId, data.ToString(), domain);
-                    ids.Clear();
-                }
+                    ids.Add(personsForImportPictures[i].PersonID);
+                    if (ids.Count >= personsPerTask || ids.Count > 0 && i + 1 == personsForImportPictures.Count)
+                    {
+                        var data = new PictureImportTaskData(districtId, ids);
+                        var domain = String.Format("picture processing {0}", random.Next(Settings.PictureProcessorCount));
+
+                        ServiceLocatorMaster.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.PictureImport, DateTime.UtcNow, districtId, data.ToString(), domain);
+                        ids.Clear();
+                    }
+                }    
             }
+            else
+                Log.LogWarning("picture Processing is disabled");
         }
 
         public void DownloadSyncData()

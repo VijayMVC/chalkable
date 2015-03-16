@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -72,6 +73,9 @@ namespace Chalkable.Web
 
         private static void EnsureCorrectDomain(HttpRequest httpRequest, HttpResponse httpResponse)
         {
+            if (string.IsNullOrEmpty(httpRequest.HttpMethod) || httpRequest.HttpMethod.ToLowerInvariant() != "get")
+                return;
+
             var ensureDomain = Settings.Domain;
             if (String.IsNullOrWhiteSpace(ensureDomain))
                 return;

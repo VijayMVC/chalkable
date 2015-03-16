@@ -18,47 +18,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public DemoGradingStatisticService(IServiceLocatorSchool serviceLocator, DemoStorage storage): base(serviceLocator, storage)
         {
         }
-
-        public IList<StudentGradeAvgPerMPC> GetStudentsGradePerMPC(int teacherId, IList<int> markingPeriodIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<StudentGradeAvgPerClass> GetStudentsGradePerClass(int teacherId, int schoolYearId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<MarkingPeriodClassGradeAvg> GetClassGradeAvgPerMP(int classId, int schoolYearId, List<int> markingPeriodIds, int? teacherId, int? studentId = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<StudentGradeAvgPerDate> GetStudentGradePerDate(int studentId, int markingPeriodId, int? classId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<StudentClassGradeStats> GetStudentClassGradeStats(int markingPeriodId, int classId, int? studentId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<DepartmentGradeAvg> GetDepartmentGradeAvgPerMp(int markingPeriodId, IList<int> gradeLevelIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<ClassPersonGradingStats> GetFullGradingStats(int markingPeriodId, int studentId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<StudentGradingRank> GetStudentGradingRanks(int schoolYearId, int? studentId, int? gradeLevelId, int? classId)
-        {
-            throw new NotImplementedException();
-        }
-
+        
 
         public ChalkableGradeBook GetGradeBook(int classId, GradingPeriod gradingPeriod, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
         {

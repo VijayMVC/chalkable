@@ -73,6 +73,7 @@
       <!-- other settings -->
       <Setting name="TaskProcessorDelay"/>
       <Setting name="DbBackupServiceUrl"/>
+      <Setting name="PictureProcessorCount"/>
       <!--tracking-->
       <Setting name="mixpanel-token"/>
     </ConfigurationSettings>

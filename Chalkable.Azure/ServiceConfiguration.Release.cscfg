@@ -57,8 +57,9 @@
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="j3OCyBJiVl0AXklP/jAAaHQsDHaL7ARTeBROVWe6nL4=" />
       <!-- other settings -->
-      <Setting name="TaskProcessorDelay" value="5000" />
+      <Setting name="TaskProcessorDelay" value="2000" />
       <Setting name="DbBackupServiceUrl" value="https://sn1prod-dacsvc.azure.com/DACWebService.svc" />
+      <Setting name="PictureProcessorCount" value="1" />
       <!--tracking-->
       <Setting name="mixpanel-token" value="2f0bfa09aa5390f4aa43c423b1f080f9"/>
     </ConfigurationSettings>
@@ -83,7 +84,7 @@
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="j3OCyBJiVl0AXklP/jAAaHQsDHaL7ARTeBROVWe6nL4=" />
       <!-- Task settings -->
-      <Setting name="TaskProducer.SisImportProducer.Interval" value="300" />
+      <Setting name="TaskProducer.SisImportProducer.Interval" value="180" />
       <Setting name="TaskProducer.SisImportProducer.IntervalStart" value="0" />
       <Setting name="TaskProducer.SisImportProducer.IntervalEnd" value="86400" />
       <Setting name="TaskProducer.CleanupManager.Interval" value="600" />

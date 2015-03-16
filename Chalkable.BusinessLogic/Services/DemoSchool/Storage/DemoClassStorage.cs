@@ -114,7 +114,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
             classes = classes.Where(x => res.All(y => y.Id != x.Id)).OrderBy(x => x.Name).ToList();
 
-            return res.Concat(classes).ToList();
+
+            var l = res.Concat(classes);
+            var classDetailses = l as IList<ClassDetails> ?? l.ToList();
+            foreach (var cls in classDetailses)
+            {
+                cls.ClassTeachers = Storage.ClassTeacherStorage.GetClassTeachers(cls.Id, null);
+            }
+            return classDetailses.ToList();
         }
     }
 }

@@ -101,7 +101,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                    throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 return res;
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 throw new ChalkableException(String.Format(ChlkResources.ERR_CANT_DELETE_ANNOUNCEMENT_APPLICATION, announcementAppId));
             }
