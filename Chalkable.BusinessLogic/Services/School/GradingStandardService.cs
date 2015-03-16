@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -22,16 +23,14 @@ namespace Chalkable.BusinessLogic.Services.School
         public GradingStandardService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
         }
-
         public IList<GradingStandardInfo> GetGradingStandards(int classId, int? gradingPeriodId, bool reCalculateStandards = true)
         {
-            if (reCalculateStandards) 
+            if (reCalculateStandards && GradebookSecurity.CanReCalculateGradebook(Context)) 
                 ConnectorLocator.GradebookConnector.Calculate(classId);
             var standardScores = ConnectorLocator.StandardScoreConnector.GetStandardScores(classId, null, gradingPeriodId);
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
             return GradingStandardInfo.Create(standardScores, standards);
         }
-        
         public GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int gradingPeriodId, int? alphaGradeId, string note)
         {
             var standardScore = new StandardScore
@@ -46,10 +45,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var res = ConnectorLocator.StandardScoreConnector.Update(classId, studentId, standardId, gradingPeriodId, standardScore);
             var standard = ServiceLocator.StandardService.GetStandardById(standardId);
             return GradingStandardInfo.Create(res, standard);
-        }
-
-
-        
+        }       
     }
 
 

@@ -745,11 +745,6 @@ NAMESPACE('chlk.activities.grading', function () {
                     this.hideGradingPopUp();
                     var value = (input.getValue() || '').toLowerCase();
                     var isAvg = node.hasClass('avg-form');
-                    if(value == 'dropped' || value == 'exempt'){
-                        var gradeValue = (input.getData('grade-value') || '').toLowerCase();
-                        gradeValue = (gradeValue == 'exempt') ? '' : input.getData('grade-value');
-                        input.setValue(gradeValue);
-                    }
 
                     var activeCell = node.parent('.grade-value');
                     this.dom.find('.autocomplete-list:visible').hide();
@@ -776,6 +771,12 @@ NAMESPACE('chlk.activities.grading', function () {
                     if(p){
                         event.preventDefault();
                         return false;
+                    }
+
+                    if(value == 'dropped' || value == 'exempt'){
+                        var gradeValue = (input.getData('grade-value') || '').toLowerCase();
+                        gradeValue = (gradeValue == 'exempt') ? '' : input.getData('grade-value');
+                        input.setValue(gradeValue);
                     }
 
                     if(!node.getData('able-drop')){

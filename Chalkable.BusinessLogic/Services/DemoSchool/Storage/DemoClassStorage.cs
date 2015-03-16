@@ -76,6 +76,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (clsDetails.PrimaryTeacherRef.HasValue)
                 clsDetails.PrimaryTeacher = Storage.PersonStorage.GetById(clsDetails.PrimaryTeacherRef.Value);
             clsDetails.MarkingPeriodClasses = markingPeriodClasses.Where(x => x.ClassRef == clsDetails.Id).ToList();
+            var classTeachers = Storage.ClassTeacherStorage.GetClassTeachers(clsDetails.Id, null);
+            clsDetails.ClassTeachers = classTeachers;
             return clsDetails;
         }
 
