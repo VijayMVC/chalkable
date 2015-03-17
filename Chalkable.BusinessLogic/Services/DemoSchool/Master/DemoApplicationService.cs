@@ -92,11 +92,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public IList<AppPermissionType> GetPermisions(string applicationUrl)
         {
-            using (var uow = Read())
-            {
-                var app = new ApplicationDataAccess(uow).GetDraftApplicationByUrl(applicationUrl);
-                return app.Permissions.Select(x => x.Permission).ToList();
-            }
+            var app = GetApplicationByUrl(applicationUrl);
+            return app.Permissions.Select(x => x.Permission).ToList();
         }
 
         public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true)
@@ -149,7 +146,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             using (var uow = Read())
             {
-                return new ApplicationDataAccess(uow).GetDraftApplicationByUrl(url);
+                var da = new ApplicationDataAccess(uow);
+                return url == Settings.ApiExplorerClientId 
+                    ? da.GetLiveApplicationByUrl(url) 
+                    : da.GetDraftApplicationByUrl(url);
             }
         }
 
