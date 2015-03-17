@@ -1,5 +1,6 @@
 ﻿using System;
 using Chalkable.Common;
+using Chalkable.Common.Web;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using School = Chalkable.Data.Master.Model.School;
@@ -26,11 +27,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
             SchoolLocalId = school.LocalId;
             SchoolName = school.Name;
-
             DistrictId = district.Id;
-
-
-
             DistrictTimeZone = DateTimeTools.WindowsToIana(district.TimeZone);
             DistrictName = district.Name;
         }

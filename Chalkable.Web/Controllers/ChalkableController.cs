@@ -34,16 +34,27 @@ namespace Chalkable.Web.Controllers
             {
                 filterContext.Result = new JsonResult();
             }
-            else
-                base.OnActionExecuting(filterContext);
+            else base.OnActionExecuting(filterContext);
         }
 
         public ActionResult Json(object data, int serializationDepth = 10)
         {
-            var response = (data is IPaginatedList) ? new ChalkableJsonPaginatedResponse((IPaginatedList)data) 
-                                                        : new ChalkableJsonResponce(data);
-            return new ChalkableJsonResult(false) { Data = response, SerializationDepth = serializationDepth };
+            var response = (data is IPaginatedList) 
+                    ? new ChalkableJsonPaginatedResponse((IPaginatedList)data) 
+                    : new ChalkableJsonResponce(data);
+            return new ChalkableJsonResult(HideSensitiveData())
+                {
+                    Data = response, 
+                    SerializationDepth = serializationDepth
+                };
         }
+
+        private bool HideSensitiveData()
+        {
+            return Context.IsOAuthUser && (!Context.IsInternalApp 
+                || (Context.OAuthApplication == Settings.ApiExplorerClientId));
+        }
+
 
         public ActionResult Json(object data, string contentType, int serializationDepth = 10)
         {

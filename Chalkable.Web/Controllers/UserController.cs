@@ -23,7 +23,6 @@ namespace Chalkable.Web.Controllers
                 MasterLocator.UserTrackingService.LoggedInFromINow(context.Login);
                 return RedirectToHome(context.Role); 
             }
-               
             return Redirect<HomeController>(x => x.Index());
         }
         
