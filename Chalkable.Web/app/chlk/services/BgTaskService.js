@@ -13,11 +13,14 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.BgTaskService*/
     CLASS(
         'BgTaskService', EXTENDS(chlk.services.BaseService), [
-            [[Number, Number]],
-            ria.async.Future, function getTasks(pageIndex_, state_) {
+            [[Number, Number, Number, chlk.models.id.DistrictId, Boolean]],
+            ria.async.Future, function getTasks(pageIndex_, state_, type_, districtId_, allDistricts_) {
                 return this.getPaginatedList('BackgroundTask/GetTasks.json', chlk.models.bgtasks.BgTask, {
                     start: pageIndex_,
-                    state: state_
+                    state: state_,
+                    type: type_,
+                    districtId: districtId_ && districtId_.valueOf(),
+                    allDistricts: allDistricts_
                 });
             },
             [[chlk.models.id.BgTaskId, Number, Number]],

@@ -9,10 +9,11 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.DistrictService */
     CLASS(
         'DistrictService', EXTENDS(chlk.services.BaseService), [
-            [[Number]],
-            ria.async.Future, function getDistricts(pageIndex_) {
+            [[Number, Number]],
+            ria.async.Future, function getDistricts(pageIndex_, count_) {
                 return this.getPaginatedList('District/List.json', chlk.models.district.District, {
-                    start: pageIndex_|0
+                    start: pageIndex_|0,
+                    count: count_
                 });
             },
 

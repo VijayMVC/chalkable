@@ -4,7 +4,7 @@ REQUIRE('chlk.models.id.BgTaskId');
 
 NAMESPACE('chlk.models.bgtasks', function () {
     "use strict";
-    /** @class chlk.models.bgtasks.BgTaskLogListViewData*/
+    /** @class chlk.models.bgtasks.BgTasksLogListViewData*/
     CLASS(
         'BgTasksLogListViewData', [
             chlk.models.common.PaginatedList, 'items',

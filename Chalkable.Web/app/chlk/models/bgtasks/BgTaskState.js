@@ -16,7 +16,9 @@ NAMESPACE('chlk.models.bgtasks', function () {
     CLASS(
         'BgTaskState', IMPLEMENTS(ria.serialize.IDeserializable),  [
             chlk.models.bgtasks.BgTaskStateEnum, 'typeId',
-            function $(){
+
+            [[chlk.models.bgtasks.BgTaskStateEnum]],
+            function $(typeId_){
                 BASE();
                 this._types = {};
                 this._types[chlk.models.bgtasks.BgTaskStateEnum.CREATED] = "Created";
@@ -24,6 +26,8 @@ NAMESPACE('chlk.models.bgtasks', function () {
                 this._types[chlk.models.bgtasks.BgTaskStateEnum.PROCESSED] = "Processed";
                 this._types[chlk.models.bgtasks.BgTaskStateEnum.CANCELED] = "Canceled";
                 this._types[chlk.models.bgtasks.BgTaskStateEnum.FAILED] = "Failed";
+                if(typeId_)
+                    this.setTypeId(typeId_)
             },
             String, function toString(){
                 return this._types[this.getTypeId()]  || ('Unknown value: ' + this.getTypeId().toString());

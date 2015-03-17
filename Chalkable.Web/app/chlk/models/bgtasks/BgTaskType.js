@@ -23,7 +23,9 @@ NAMESPACE('chlk.models.bgtasks', function () {
     CLASS(
         'BgTaskType', IMPLEMENTS(ria.serialize.IDeserializable),  [
             chlk.models.bgtasks.BgTaskTypeEnum, 'typeId',
-            function $(){
+
+            [[chlk.models.bgtasks.BgTaskTypeEnum]],
+            function $(typeId_){
               BASE();
               this._types = {};
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.CREATE_EMPTY_SCHOOL] = "Create empty school";
@@ -37,6 +39,8 @@ NAMESPACE('chlk.models.bgtasks', function () {
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.ATTENDANCE_NOTIFICATION] = "Attendance Notification";
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.TEACHER_ATTENDANCE_NOTIFICATION] = "Teacher Attendance Notification";
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.RE_SYNC] = "Re Sync";
+               if(typeId_)
+                   this.setTypeId(typeId_);
             },
             String, function toString(){
                 return this._types[this.getTypeId()];
