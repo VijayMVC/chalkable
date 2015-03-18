@@ -21,7 +21,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public Standard GetStandardByABId(Guid id)
         {
-            return SelectOne<Standard>(new AndQueryCondition
+            return SelectOneOrNull<Standard>(new AndQueryCondition
                 {
                     {Standard.ACADEMIC_BENCHMARK_ID_FIELD, id}
                 });

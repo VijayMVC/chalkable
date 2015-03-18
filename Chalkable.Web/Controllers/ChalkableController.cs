@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
@@ -42,6 +43,10 @@ namespace Chalkable.Web.Controllers
             var response = (data is IPaginatedList) 
                     ? new ChalkableJsonPaginatedResponse((IPaginatedList)data) 
                     : new ChalkableJsonResponce(data);
+
+            if (data is ChalkableException)
+                Response.StatusCode = (int)HttpStatusCode.OK;
+
             return new ChalkableJsonResult(HideSensitiveData())
                 {
                     Data = response, 

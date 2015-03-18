@@ -130,13 +130,6 @@ NAMESPACE('chlk.services', function () {
                     classId: classId_ ? classId_.valueOf() : null,
                     classAnnouncementTypeId: classAnnouncementTypeId_,
                     expiresDate: expiresDate_ ? expiresDate_.valueOf() : null
-                }).catchException(ria.ajax.AjaxException, function (ex) {
-                    if (ex.getStatus() == 500) {
-                        var res = JSON.parse(ex.getResponse());
-                        if(res.exceptiontype == 'NoClassAnnouncementTypeException')
-                            throw chlk.services.NoClassAnnouncementTypeException(ex);
-                    }
-                    throw ex;
                 });
             },
 

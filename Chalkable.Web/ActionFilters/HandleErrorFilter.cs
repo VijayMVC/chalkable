@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Common.Web;
 using Chalkable.Web.ActionResults;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Controllers;
@@ -74,9 +75,13 @@ namespace Chalkable.Web.ActionFilters
                 filterContext.HttpContext.Response.SuppressFormsAuthenticationRedirect = true;
             }
             else
-                filterContext.HttpContext.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+                filterContext.HttpContext.Response.StatusCode = (int) HttpStatusCode.OK;
 
-            var jsonResponse = ExceptionViewData.Create(filterContext.Exception, filterContext.Exception.InnerException);
+            var jsonResponse = new ChalkableJsonResponce(ExceptionViewData.Create(filterContext.Exception, filterContext.Exception.InnerException))
+            {
+                Success = false
+            };
+
             var jsonresult = new ChalkableJsonResult(false)
             {
                 Data = jsonResponse,

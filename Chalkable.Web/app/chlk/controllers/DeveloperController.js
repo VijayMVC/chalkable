@@ -112,8 +112,15 @@ NAMESPACE('chlk.controllers', function (){
                 var methodName = data.methodName;
                 var apiFormId = data.apiFormId;
                 var methodCallType = data.callType;
-                var apiCallData = chlk.models.api.ApiCallRequestData.$create(controllerName, methodName, data, methodCallType);
                 var fakeResponse = data.response;
+
+                delete data.controllerName;
+                delete data.methodName;
+                delete data.apiFormId;
+                delete data.callType;
+                delete data.response;
+
+                var apiCallData = chlk.models.api.ApiCallRequestData.$create(controllerName, methodName, data, methodCallType);
                 var result = fakeResponse !== ""
                     ? ria.async.DeferredData(chlk.models.api.ApiResponse.$create(apiFormId, JSON.parse(fakeResponse)))
                     : this.apiService
@@ -122,6 +129,7 @@ NAMESPACE('chlk.controllers', function (){
                         .then(function(data){
                             return chlk.models.api.ApiResponse.$create(apiFormId, data);
                         });
+                
                 return this.UpdateView(chlk.activities.developer.ApiExplorerPage, result);
             },
 

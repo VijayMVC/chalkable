@@ -20,12 +20,20 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Student", Preference.API_DESCR_SET_PRACTICE_GRADE, true, CallType.Post, new []{ AppPermissionType.Practice })]
         public ActionResult SetPracticeGrade(Guid id, string score)
         {
+            if (string.IsNullOrWhiteSpace(score))
+                throw new ChalkableException("Parameter score is required");
+
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
+
             var standard = SchoolLocator.StandardService.GetStandardByABId(id);
+            if (standard == null)
+                throw new ChalkableException("Standard not found");
+
             var app = MasterLocator.ApplicationService.GetApplicationByUrl(Context.OAuthApplication);
             if (!HasInstalledApp(app.Id, Context.PersonId.Value))
                 throw new ChalkableSecurityException("Current studented has no installed app");
+
             SchoolLocator.PracticeGradeService.Add(standard.Id, Context.PersonId.Value, app.Id, score);
             return Json(true);
         }
