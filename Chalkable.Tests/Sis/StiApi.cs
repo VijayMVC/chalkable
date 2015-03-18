@@ -23,7 +23,7 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void SyncTest()
         {
-            var did = Guid.Parse("840d8256-2e12-4edf-a5e4-f58ed7d71f63");
+            var did = Guid.Parse("b80a223d-24fb-40c8-a0c0-56083fc8ea6d");
 
             
             District d;
@@ -68,26 +68,23 @@ namespace Chalkable.Tests.Sis
         [Test]
         public void SyncTest2()
         {
-            var cl = ConnectorLocator.Create("Chalkable", "1iA0wL7zJ", "https://api-houstonco.asc.edu/api/");
-            var items = (cl.SyncConnector.GetDiff(typeof(UserSchool), 11699459) as SyncResult<UserSchool>);
-            foreach (var gradingComment in items.All)
+            var cl = ConnectorLocator.Create("Chalkable", "qP8vI4rL2", "https://inowhome.madison.k12.al.us/api/");
+            var items = (cl.SyncConnector.GetDiff(typeof(ScheduledSection), 30474638) as SyncResult<ScheduledSection>);
+            foreach (var item in items.All)
             {
-                Debug.WriteLine("{0} {1} {2} {3}", gradingComment.SchoolID, gradingComment.UserID, gradingComment.DistrictGuid
-                    , gradingComment.SYS_CHANGE_VERSION);
+                Debug.WriteLine("{0} {1} {2} {3}", item.SectionID, item.TimeSlotID, item.DayTypeID, item.SYS_CHANGE_VERSION);
             }
 
             Debug.WriteLine("--------------------");
-            foreach (var gradingComment in items.Updated)
+            foreach (var item in items.Updated)
             {
-                Debug.WriteLine("{0} {1} {2} {3}", gradingComment.SchoolID, gradingComment.UserID, gradingComment.DistrictGuid
-                    , gradingComment.SYS_CHANGE_VERSION);
+                Debug.WriteLine("{0} {1} {2} {3}", item.SectionID, item.TimeSlotID, item.DayTypeID, item.SYS_CHANGE_VERSION);
             }
 
             Debug.WriteLine("--------------------");
-            foreach (var gradingComment in items.Deleted)
+            foreach (var item in items.Deleted)
             {
-                Debug.WriteLine("{0} {1} {2} {3}", gradingComment.SchoolID, gradingComment.UserID, gradingComment.DistrictGuid
-                    , gradingComment.SYS_CHANGE_VERSION);
+                Debug.WriteLine("{0} {1} {2} {3}", item.SectionID, item.TimeSlotID, item.DayTypeID, item.SYS_CHANGE_VERSION);
             }
         }
 
