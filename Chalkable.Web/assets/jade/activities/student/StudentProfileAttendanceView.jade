@@ -17,7 +17,7 @@ calendar = self.getAttendanceCalendar()
 .profile-calendar.student-attendance-view
     .loader-container
         .loader
-        +UserProfileTopBar(self, 'attendance')
+        +UserProfileTopBar(self, self.getSummaryInfo(), 'attendance')
         .profile-info.attendance-view
             .summary-info
                 .person-info.standard-short-info

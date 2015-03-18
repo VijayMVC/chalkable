@@ -18,7 +18,7 @@ personId = summaryInfo.getId()
 .profile-calendar.student-discipline-view
     .loader-container
         .loader
-        +UserProfileTopBar(self, 'discipline')
+        +UserProfileTopBar(self, self.getSummaryInfo(), 'discipline')
         .profile-info.discipline-view
             .summary-info
                 +ShortPersonInfoSection(schedule, 64)

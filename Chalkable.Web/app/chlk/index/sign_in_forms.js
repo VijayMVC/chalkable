@@ -38,17 +38,17 @@ $(document).ready(function () {
             var hideLoader = true;
             if (!response || !response.data) {
                 alert('Our Server is not responding. Please try again soon');
-            } else if (response.success == true) {
+            } else if ((response.success || response.Success) == true) {
                 form.off('submit.logon');
-                var role = response.data.role.toLowerCase();
+                var role = (response.data.role || response.data.Role).toLowerCase();
                 if (role == "admingrade" || role == "adminview" || role == "adminedit")
                     role = "admin";
                 window.location.href = WEB_SITE_ROOT + 'Home/' + role + '.aspx';
                 hideLoader = false;
-            } else if (response.data.exceptiontype == 'ChalkableSisNotFoundException') {
+            } else if ((response.data.exceptiontype || response.data.Exceptiontype) == 'ChalkableSisNotFoundException') {
                 alert('Your iNow Server is not responding. Please try again soon');
             } else {
-                var text = response.data.message || '';
+                var text = response.data.message || response.data.Message || '';
                 if (text != '')
                     $('#email').validationEngine('showPrompt', text, 'red', 'topRight', false);
                 else

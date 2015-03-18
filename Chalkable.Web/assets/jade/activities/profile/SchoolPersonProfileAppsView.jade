@@ -1,7 +1,7 @@
 user = self.getUser()
 .loader-container
     .loader
-    +UserProfileTopBar(self, 'apps')
+    +UserProfileTopBar(self, self.getUser(), 'apps')
     .profile-info.apps-view
         .summary-info
             .person-info.standard-short-info
