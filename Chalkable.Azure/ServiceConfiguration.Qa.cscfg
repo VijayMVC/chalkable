@@ -30,7 +30,7 @@
       <!--tracking-->
       <Setting name="mixpanel-token" value=""/>
       <!-- other settings -->
-      <Setting name="home-redirect-url" value="/Home/Index"/>
+      <Setting name="home-redirect-url" value="https://home.qa.chalkable.com/"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
