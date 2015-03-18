@@ -5,7 +5,7 @@
     if isStudent
         +ProfileTopBar(self, 'daySchedule')
     else
-        +UserProfileTopBar(self, 'daySchedule')
+        +UserProfileTopBar(self, self.getUser(), 'daySchedule')
 
     #top-panel
         #avatar-photo-conainer.left-block.panel-block

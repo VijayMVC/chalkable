@@ -6,7 +6,8 @@ mixin ProfileTopBar(tplObj, pressedActionName)
             block
 
 //requires: tplObj instanceOf chlk.templates.profile.BaseProfileTpl
-mixin UserProfileTopBar(tplObj, pressedActionName)
+mixin UserProfileTopBar(tplObj, user, pressedActionName)
     +ProfileTopBar(tplObj, pressedActionName)
-        .right
-            +ActionLink('settings', 'dashboard').settings Settings
+        if user.getId() == tplObj.getCurrentUser().getId()
+            .right
+                +ActionLink('settings', 'dashboard').settings Settings

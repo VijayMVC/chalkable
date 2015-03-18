@@ -1,7 +1,7 @@
 user = self.getUser()
 .loader-container
     .loader
-    +UserProfileTopBar(self, 'grading')
+    +UserProfileTopBar(self, self.getUser(), 'grading')
     .profile-info.grading-view
         .summary-info
             .person-info.standard-short-info
