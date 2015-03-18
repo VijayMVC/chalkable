@@ -4,16 +4,13 @@ REQUIRE('chlk.lib.ajax.ChlkJsonGetTask');
 REQUIRE('chlk.lib.ajax.UploadFileTask');
 REQUIRE('chlk.models.common.PaginatedList');
 
+REQUIRE('chlk.lib.exception.DataException');
+REQUIRE('chlk.lib.exception.ChalkableException');
+REQUIRE('chlk.lib.exception.ChalkableSisException');
+REQUIRE('chlk.lib.exception.NoClassAnnouncementTypeException');
+
 NAMESPACE('chlk.services', function () {
     "use strict";
-
-    /** @class chlk.services.DataException */
-    EXCEPTION(
-        'DataException', [
-            function $(msg, inner_) {
-                BASE(msg, inner_);
-            }
-        ]);
 
     // Single instance
     var Serializer = new chlk.lib.serialize.ChlkJsonSerializer;
@@ -57,7 +54,36 @@ NAMESPACE('chlk.services', function () {
                 return result;
             },
 
+            function getResponseProcessor_(clazz_) {
+                return function (response) {
+                    var res, dt;
 
+                    if (response.success != true) {
+                        var exceptionType = response.data.exceptiontype;
+                        switch (exceptionType) {
+                            case 'ChalkableSisException':
+                                throw chlk.lib.exception.ChalkableSisException(response.data.message);
+                            case 'ChalkableException':
+                                throw chlk.lib.exception.ChalkableException(response.data.message);
+                            case 'NoAnnouncementException':
+                                throw chlk.lib.exception.NoAnnouncementException();
+                            case 'NoClassAnnouncementTypeException':
+                                throw chlk.lib.exception.NoClassAnnouncementTypeException();
+                            default:
+                                _DEBUG && console.error(exceptionType, response.data.message, response.stacktrace);
+                                throw chlk.lib.exception.DataException(exceptionType + ': ' + response.data.message);
+                        }
+                    }
+
+                    if (!clazz_)
+                        return response.data || null;
+
+                    dt = getDate().getTime();
+                    res = Serializer.deserialize(response.data, clazz_);
+                    _DEBUG && console.info('deserialize time', getDate().getTime() - dt);
+                    return res;
+                }
+            },
 
             [[String, Object, Object, Boolean]],
             ria.async.Future, function get(uri, clazz_, gParams_, async_) {
@@ -66,24 +92,7 @@ NAMESPACE('chlk.services', function () {
                     .requestHeaders(this.prepareDefaultHeaders({}))
                     .disableCache()
                     .run()
-                    .then(function (data) {
-                        var res, dt;
-                        if (!clazz_)
-                            return data.data || null;
-                        dt = getDate().getTime();
-                        if(async_){
-                            res = Serializer.deserializeAsync(data.data, clazz_);
-                            res.then(function(model){
-                                _DEBUG && console.info('deserialize time', getDate().getTime() - dt);
-                                return model;
-                            });
-                            return res;
-                        }
-                        res = Serializer.deserialize(data.data, clazz_);
-                        _DEBUG && console.info('deserialize time', getDate().getTime() - dt);
-                        return res;
-//                        throw(new Exception(handler.getMessage()));
-                    }, this);
+                    .then(this.getResponseProcessor_(clazz_));
             },
 
             [[String, Object, Object, Object]],
@@ -92,11 +101,7 @@ NAMESPACE('chlk.services', function () {
                     .params(gParams_ || {})
                     .requestHeaders(this.prepareDefaultHeaders({}))
                     .run()
-                    .then(function (data) {
-                        if (!clazz_)
-                            return data.data || null;
-                        return Serializer.deserialize(data.data, clazz_);
-                    }, this);
+                    .then(this.getResponseProcessor_(clazz_));
             },
 
             [[String, Object, Object]],
@@ -105,11 +110,7 @@ NAMESPACE('chlk.services', function () {
                     .params(gParams)
                     .requestHeaders(this.prepareDefaultHeaders({"Content-Type": "application/json; charset=utf-8"}))
                     .run()
-                    .then(function (data) {
-                        if (!clazz)
-                            return data.data || null;
-                        return Serializer.deserialize(data.data, clazz);
-                    }, this);
+                    .then(this.getResponseProcessor_(clazz));
             },
 
            [[String, Function]],
@@ -129,25 +130,7 @@ NAMESPACE('chlk.services', function () {
                         "Content-Type": "application/json; charset=utf-8",
                         "Authorization": "Bearer:" + token
                     }))
-                    .run()
-                    .then(function (data) {
-                        var result = {};
-                        if (!data.success){
-                            result = {
-                                message: data.data.message
-                            };
-                        }
-                        else{
-                            result = data;
-                        }
-                        return result;
-                    })
-                    .catchError(function (error) {
-                        if(error instanceof ria.ajax.AjaxException && error.getStatus() == 500){
-                            return JSON.parse(error.getResponse());
-                        }
-                        throw error;
-                    }, this);
+                    .run();
             },
 
             [[String, Object, Object]],

@@ -41,15 +41,15 @@ namespace Chalkable.Web.Controllers
         public ActionResult LogOn(string userName, string password, bool remember)
         {
             if(string.IsNullOrEmpty(userName))
-                return Json(new { Success = false, ErrorMessage = "Enter your email", UserName = userName }, JsonRequestBehavior.AllowGet);
+                return Json(new ChalkableException("Enter your email"));
+
             string error = null;
             var context = LogOn(remember, us => us.Login(userName, password, out error));
-            if (context != null)
-            {
-                MasterLocator.UserTrackingService.LoggedInFromChalkable(context.Login);
-                return Json(new { Success = true, data = new { Role = context.Role.LoweredName } }, JsonRequestBehavior.AllowGet);
-            }
-            return Json(new { Success = false, ErrorMessage = error, UserName = userName }, JsonRequestBehavior.AllowGet);
+            if (context == null)
+                return Json(new ChalkableException(error ?? ""));
+            
+            MasterLocator.UserTrackingService.LoggedInFromChalkable(context.Login);
+            return Json(new { Role = context.Role.LoweredName });            
         }
 
         public ActionResult LogOut()

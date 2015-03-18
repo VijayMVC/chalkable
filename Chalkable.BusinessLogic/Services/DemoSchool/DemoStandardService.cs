@@ -235,7 +235,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public Standard GetStandardByABId(Guid id)
         {
-            return Storage.StandardStorage.GetAll().First(x => x.AcademicBenchmarkId == id);
+            return Storage.StandardStorage.GetAll().FirstOrDefault(x => x.AcademicBenchmarkId == id);
         }
 
 

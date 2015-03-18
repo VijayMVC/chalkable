@@ -88,13 +88,24 @@ NAMESPACE('chlk.controllers', function (){
                    .catchException(chlk.lib.exception.NotAuthorizedException, function (exception) {
                        document.location.href = WEB_SITE_ROOT;
                    })
+                   .catchException(chlk.lib.exception.ChalkableException, function(exception){
+                       return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                           .thenBreak();
+                   }, this)
+                   .catchException(chlk.lib.exception.ChalkableSisException, function(exception){
+                       return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                           .thenBreak();
+                   }, this)
                    .catchException(chlk.lib.exception.AppErrorException, function(exception){
                        return this.redirectToErrorPage_(exception.toString(), 'error', 'appError', []);
                    }, this)
                    .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(exception){
+                       return this.redirectToErrorPage_(exception.toString(), 'error', 'viewAnnouncementError', []);
+                   }, this)
+                   .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(exception){
                        return this.redirectToErrorPage_(exception.toString(), 'error', 'createAnnouncementError', []);
                    }, this)
-                   .catchException(chlk.lib.exception.InvalidPictureException, function(exception){
+                   .catchException(chlk.lib.exception.InvalidPictureException, function(exception) {
                        return this.ShowMsgBox('You need to upload valid picture for you app', 'Error', [{
                            text: 'Ok'
                        }], 'center'), null;
@@ -105,23 +116,7 @@ NAMESPACE('chlk.controllers', function (){
 
            [[Object]],
            function handleServerError(error){
-               setTimeout(function(){
-                   this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
-               }.bind(this), 1);
-
-               if(error.getStatus && error.getStatus() == 500){
-                    var response = JSON.parse(error.getResponse());
-                    if(response.exceptiontype == 'ChalkableSisException'){
-                        return this.ShowMsgBox(response.message, 'oops',[{
-                                text: Msg.GOT_IT.toUpperCase()
-                            }])
-                            .thenBreak();
-                    }
-                    if(response.exceptiontype == 'NoAnnouncementException')
-                       return this.redirectToErrorPage_(error.toString(), 'error', 'viewAnnouncementError', []);
-                    if(response.exceptiontype == 'NoClassAnnouncementTypeException')
-                       return this.redirectToErrorPage_(error.toString(), 'error', 'createAnnouncementError', []);
-               }
+               this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
                return this.redirectToErrorPage_(error.toString(), 'error', 'error404', []);
            },
 
