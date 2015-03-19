@@ -381,8 +381,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 var ada = new AnnouncementAttachmentDataAccess(uow);
                 ada.Insert(toInsert);
-                res.AnnouncementAttachments = ada.GetPaginatedList(res.Id, Context.PersonId.Value, Context.RoleId, 0,
-                                                                   int.MaxValue);
+                res.AnnouncementAttachments = ada.GetPaginatedList(res.Id, Context.PersonId.Value, Context.RoleId, 0, int.MaxValue);
             }
         }
 

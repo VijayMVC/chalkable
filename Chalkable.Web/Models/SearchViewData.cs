@@ -6,6 +6,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Web.Logic;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models
@@ -90,22 +91,24 @@ namespace Chalkable.Web.Models
     public class AttachmentSearchViewData : SearchViewData
     {
         public int AnnouncementId { get; set; }
-        public static SearchViewData Create(AnnouncementAttachment attachment)
+        public string AttachmentThumbnailUrl { get; set; }
+       
+        public static SearchViewData Create(AnnouncementAttachmentInfo info)
         {
             return new AttachmentSearchViewData
             {
-                Id = attachment.Id.ToString(),
-                Description = attachment.Name,
-                AnnouncementId = attachment.AnnouncementRef,
-                SearchType = (int)SearchTypeEnum.Attachments
+                Id = info.Attachment.Id.ToString(),
+                Description = info.Attachment.Name,
+                AnnouncementId = info.Attachment.AnnouncementRef,
+                SearchType = (int)SearchTypeEnum.Attachments,
+                AttachmentThumbnailUrl = info.DownloadThumbnailUrl
             };
         }
     }
 
     public class ClassSearchViewData : SearchViewData
     {
-        public Guid? DepartmentId { get; set; }
-        //public  Course { get; set; }
+        public Guid? DepartmentId { get; set; } 
         public static SearchViewData Create(ClassDetails cClass)
         {
             return new ClassSearchViewData
@@ -114,7 +117,6 @@ namespace Chalkable.Web.Models
                 Description = cClass.Name,
                 DepartmentId = cClass.ChalkableDepartmentRef,
                 SearchType = (int)SearchTypeEnum.Classes,
-                //Course = CourseViewData.Create(cClass.Course)
             };
         }
     }
@@ -187,7 +189,7 @@ namespace Chalkable.Web.Models
 
         public override IList<SearchViewData> Build(Object searchRes)
         {
-            var attachment = searchRes as IList<AnnouncementAttachment>;
+            var attachment = searchRes as IList<AnnouncementAttachmentInfo>;
             if (attachment == null || (SearchTypeEnum)searchType != SearchTypeEnum.Attachments)
                 throw new ChalkableException(ChlkResources.ERR_INVALID_SEARCH_VIEW_BUILDER);
 

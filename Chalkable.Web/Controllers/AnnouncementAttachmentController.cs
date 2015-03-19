@@ -125,7 +125,7 @@ namespace Chalkable.Web.Controllers
             EnsureAnnouncementExsists(announcementId);
 
             var announcementAttachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(announcementId, start ?? 0, count ?? 10, false);
-            var attachmentsInfo = AttachmentLogic.PrepareAttachmentsInfo(announcementAttachments);
+            var attachmentsInfo = AttachmentLogic.PrepareAttachmentsInfo(announcementAttachments, MasterLocator.CrocodocService);
             var res = AnnouncementAttachmentViewData.Create(attachmentsInfo, SchoolLocator.Context.PersonId ?? 0);
             return Json(res);
         }

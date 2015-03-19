@@ -27,7 +27,7 @@ namespace Chalkable.Web.Controllers
         protected AnnouncementViewData PrepareFullAnnouncementViewDataForRead(AnnouncementDetails ann)
         {
             var teachersIds = SchoolLocator.ClassService.GetClassTeachers(ann.ClassRef, null).Select(x => x.PersonRef).ToList();
-            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, teachersIds);
+            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, teachersIds);
             var annView = (AnnouncementDetailedViewData)PrepareAnnouncmentViewData(ann, attInfo);
             if (ann.State == AnnouncementState.Created)
             {
@@ -67,7 +67,7 @@ namespace Chalkable.Web.Controllers
         protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann)
         {
             var teachersIds = SchoolLocator.ClassService.GetClassTeachers(ann.ClassRef, null).Select(x => x.PersonRef).ToList();
-            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, teachersIds);             
+            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, teachersIds);             
             return PrepareAnnouncmentViewData(ann, attInfo);
         }
 
