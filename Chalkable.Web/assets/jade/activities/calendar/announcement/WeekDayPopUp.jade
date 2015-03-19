@@ -26,7 +26,8 @@
                             div
                                 +TooltipWithOverflow(item.getTitle()).item-title
     if !self.getUserRole().isStudent() && period.isTeaching() !== false
-        +ActionButton('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || period.getClassId() || '').ann-button.plus-ann New item
+        -var classId = (self.getSelectedClassId() && self.getSelectedClassId().valueOf()) || (period.getClassId() && period.getClassId().valueOf())
+        +ActionButton('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, classId || '').ann-button.plus-ann New item
 
 
 
