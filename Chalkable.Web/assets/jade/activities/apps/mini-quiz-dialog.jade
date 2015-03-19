@@ -29,7 +29,7 @@ mixin App_(app)
     .x-window-body
         h2.practice: span Practice
         .iframe-wrap
-            if self.getApplicationInfo()
+            if self.getApplicationInfo() && self.getCurrentStandard().getAcademicBenchmarkId()
                 iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&code=' + encodeURIComponent(self.getAuthorizationCode()) + '&' + self.getCurrentStandard().getUrlComponents() + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin))
             else
                 .banner Practice is not possible
