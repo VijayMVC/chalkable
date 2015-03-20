@@ -103,7 +103,7 @@ $(document).ready(function () {
             } else if (response.data.exceptiontype == 'ChalkableException') {
                 showFormBanner(form, response.data.message, true);
             } else {
-                showFormBanner(form, 'Please check your inbox, we sent you password recovery email.', true);
+                showFormBanner(form, 'We just sent you a password recovery email. Please check your inbox.', true);
             }
 
             form.find('[type=submit]')
