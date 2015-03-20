@@ -81,6 +81,7 @@ NAMESPACE('chlk.controllers', function (){
                                 new chlk.models.bgtasks.BgTaskType(chlk.models.bgtasks.BgTaskTypeEnum.PROCESS_REMINDERS),
                                 new chlk.models.bgtasks.BgTaskType(chlk.models.bgtasks.BgTaskTypeEnum.ATTENDANCE_NOTIFICATION),
                                 new chlk.models.bgtasks.BgTaskType(chlk.models.bgtasks.BgTaskTypeEnum.TEACHER_ATTENDANCE_NOTIFICATION),
+                                new chlk.models.bgtasks.BgTaskType(chlk.models.bgtasks.BgTaskTypeEnum.PICTURE_IMPORT),
                                 new chlk.models.bgtasks.BgTaskType(chlk.models.bgtasks.BgTaskTypeEnum.RE_SYNC),
                             ];
                             return new chlk.models.bgtasks.BgTasksListViewData(res[0], res[1].getItems(), states, types, state_, type_, districtId_, allDistricts_);
