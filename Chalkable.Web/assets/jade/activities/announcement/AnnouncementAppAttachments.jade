@@ -40,7 +40,7 @@ if self.needButtons
             +ActionButton('announcement', self.getState() ? 'attachApp' : 'attachAppOnCreate', self.getId(), self.getClassId(), self.getStandardsUrlComponents())#add-application.simple-gray-button Attach App
             br
             if self.getAssessmentApplicationId()
-                +ActionButton('apps', 'tryToAttach', self.getId(), self.getAssessmentApplicationId(), self.getStandardsUrlComponents())#add-assesment.simple-gray-button Assessment
+                +ActionButton('apps', 'tryToAttachFromAnnouncement', self.getId(), self.getAssessmentApplicationId(), self.getStandardsUrlComponents())#add-assesment.simple-gray-button Assessment
         .simple-gray-button.file Attach File
             +FileUpload('announcement', self.getState() ? 'uploadAttachment' : 'uploadAttachmentOnCreate', [self.getId().valueOf()])#add-attachment.simple-gray-button
 each item, i in items

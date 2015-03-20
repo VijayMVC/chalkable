@@ -63,6 +63,7 @@ NAMESPACE('chlk.controllers', function (){
             },
 
 
+            [chlk.controllers.SidebarButton('add-new')],
             [[Object]],
             function closeCurrentAppAction(data){
                 this.getView().getCurrent().close();

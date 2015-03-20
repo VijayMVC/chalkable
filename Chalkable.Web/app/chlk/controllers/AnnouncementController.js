@@ -758,7 +758,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.saveAnnouncementTeacherAction(announcement, announcementForm);
         },
 
-        [chlk.controllers.SidebarButton('add-new')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.announcement.Announcement]],
         function saveOnCreateAction(model){
             return this.saveAction(model);
