@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Model
@@ -12,13 +9,13 @@ namespace Chalkable.BusinessLogic.Model
         public const string VIEW_LOOKUP = "View Lookup";
         public const string VIEW_CLASSROOM = "View Classroom";
         public const string VIEW_CLASSROOM_ADMIN = "View Classroom (Admin)";
-
+        public const string MAINTAIN_CLASSROOM = "Maintain Classroom";
+        public const string MAINTAIN_CLASSROOM_ADMIN = "Maintain Classroom (Admin)";
         public const string VIEW_HEALTH_CONDITION = "View Health Condition";
         public const string VIEW_MEDICAL = "View Medical";
 
         public string Type { get; set; }
         public IEnumerable<string> Values { get; set; }
-
 
         public static IList<ClaimInfo> Create(IList<Claim> claims)
         {
@@ -28,7 +25,6 @@ namespace Chalkable.BusinessLogic.Model
                     Values = claim.Values
                 }).ToList();
         } 
-
         public static bool HasPermission(IList<ClaimInfo> claimInfos, IList<string> claimsValues)
         {
             return claimInfos.Any(claim => claimsValues.All(value => claim.Values.Contains(value)));

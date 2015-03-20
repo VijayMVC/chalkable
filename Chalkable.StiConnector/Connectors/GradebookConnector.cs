@@ -1,13 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.StiConnector.Connectors.Model;
-using Newtonsoft.Json;
 
 namespace Chalkable.StiConnector.Connectors
 {

@@ -35,12 +35,11 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             Gradebook stiGradeBook = null;
             Trace.WriteLine("GradebookConnector.Calculate" + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
-            if(needsReCalculate && GradebookSecurity.CanReCalculateGradebook(Context))
+            if (needsReCalculate && GradebookSecurity.CanReCalculateGradebook(Context))
                 stiGradeBook = ConnectorLocator.GradebookConnector.Calculate(classId, gradingPeriod.Id);
-            if (!needsReCalculate || standardId.HasValue || classAnnouncementType.HasValue)
+            else
             {
-                stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId, classAnnouncementType
-                , gradingPeriod.Id, standardId);
+                stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId, classAnnouncementType, gradingPeriod.Id, standardId);     
             }
             Trace.WriteLine("GetGradeBooks" + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             return GetGradeBooks(classId, gradingPeriod, stiGradeBook);
