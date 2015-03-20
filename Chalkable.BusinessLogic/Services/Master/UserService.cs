@@ -461,7 +461,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     ServiceLocator.EmailService.SendResettedPasswordToDeveloper(developer, key);
                 }
                 else if (user.SisUserId.HasValue)
-                    throw new ChalkableException("Please use iNOW to reset your password");
+                    throw new ChalkableException(string.Format(@"Please use <a href=""{0}"" target=""_blank"">InformationNOW</a> to reset your password", user.District.SisRedirectUrl));
                 else
                     throw new ChalkableException("Please contact system administrator to reset your password");
 
