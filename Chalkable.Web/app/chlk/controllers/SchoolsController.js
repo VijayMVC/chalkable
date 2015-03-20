@@ -224,7 +224,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.DistrictId, chlk.models.id.SchoolId]],
         function upgradeSchools_(distrcitId, schoolId){
-            this.ShowPromptBox('Pleace choose upgrade till date', ''
+            this.ShowPromptBox('Please choose upgrade till date', ''
                 , (new chlk.models.common.ChlkDate()).toStandardFormat()
                 , null, 'datepicker')
                 .then(function(selectedDate){
