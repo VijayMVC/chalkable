@@ -8,7 +8,7 @@ mixin AppIconLink_(announcementId, app, iconTooltip)
             if app.needToInstall()
                 +ActionButton('appmarket', 'details', app.getId()) Install
             else
-                +ActionButton('apps', 'tryToAttach', announcementId, appId, self.getAppUrlAppend()) Attach
+                +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, appId, self.getAppUrlAppend()) Attach
 
 teacherId = self.teacherId.valueOf()
 announcementId = self.announcementId.valueOf()

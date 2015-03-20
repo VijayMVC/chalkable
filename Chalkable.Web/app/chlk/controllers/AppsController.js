@@ -489,6 +489,15 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
+        [chlk.controllers.SidebarButton('add-new')],
+        [chlk.controllers.StudyCenterEnabled()],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, String]],
+        function tryToAttachFromAnnouncementTeacherAction(announcementId, appId, appUrlAppend_) {
+            return this.tryToAttachTeacherAction(announcementId, appId, appUrlAppend_);
+        },
 
         [chlk.controllers.StudyCenterEnabled()],
         [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId, Boolean, chlk.models.id.SchoolPersonId, String]],
