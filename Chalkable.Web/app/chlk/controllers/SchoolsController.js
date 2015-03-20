@@ -224,7 +224,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.DistrictId, chlk.models.id.SchoolId]],
         function upgradeSchools_(distrcitId, schoolId){
-            this.ShowPromptBox('Pleace choose upgrade till date', ''
+            this.ShowPromptBox('Please choose upgrade till date', ''
                 , (new chlk.models.common.ChlkDate()).toStandardFormat()
                 , null, 'datepicker')
                 .then(function(selectedDate){
@@ -235,7 +235,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.DistrictId, chlk.models.id.SchoolId]],
         function downgradeSchools_(distrcitId, schoolId){
-            this.ShowConfirmBox('Do you realy want to downGrade current school or district', '')
+            this.ShowConfirmBox('Do you really want to downgrade current school or district?', '')
                 .then(function(data){
                    return this.upgradeDownGradeSchools_(distrcitId, schoolId, null);
                 }, this);
