@@ -496,5 +496,39 @@ namespace Chalkable.Web.Logic.ApiExplorer
         }
 
 
+        public static IList<string> GenerateControllerDescriptionsKeys()
+        {
+            var apis = GetApi();
+            var controllers = new List<ChalkableApiControllerDescription>();
+            IList<string> keys = new List<string>();
+            foreach (var api in apis.Values)
+            {
+                controllers.AddRange(api.Where(x => controllers.All(y => y.Name != x.Name)));
+            }
+            foreach (var controller in controllers)
+            {
+                foreach (var method in controller.Methods)
+                {
+                    keys.Add(BuildMethodDescriptionKey(controller.Name, method.Name));
+                    foreach (var parameter in method.Parameters)
+                    {
+                        keys.Add(BuildParametherDescriptionKey(controller.Name, method.Name, parameter.Name));
+                    }
+                }
+            }
+            return keys;
+        } 
+
+
+        private static string BuildMethodDescriptionKey(string controllerName, string methodName)
+        {
+            return string.Format("{0}_{1}", controllerName, methodName);
+        }
+
+        private static string BuildParametherDescriptionKey(string controller, string method, string parameter)
+        {
+            return string.Format("{0}_{1}_{2}", controller, method, parameter);
+        }
+
     }
 }
