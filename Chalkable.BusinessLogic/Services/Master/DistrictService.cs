@@ -56,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         FailDelta = 0,
                         IsDemoDistrict = false,
                         SyncFrequency = SYNC_FREQUENCY,
-                        MaxSyncFrequency = 3600
+                        MaxSyncFrequency = MAX_SYNC_FREQUENCY
                     };
                 da.Insert(res);
                 uow.Commit();
