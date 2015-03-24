@@ -114,6 +114,7 @@ mixin DisplayTotalPoints(model)
                             row-index=i
                             data-able-drop-student-score= announcement.isAbleDropStudentScore(),
                             data-able-exempt-student-score= announcement.isAbleExemptStudentScore(),
+                            data-auto-dropped= info.isAutomaticalyDropped(),
                             data-gradable= gradable,
                             data-max-score= maxScore,
                             data-canputonlyzero= canPutOnlyZeroScore.toString(),

@@ -177,7 +177,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     popUpTpl = new chlk.templates.grading.GradingPopUpTpl();
                     popUpTpl.options({
                         ableDropStudentScore: this.getBooleanValue_(cell.getData('able-drop-student-score')),
-                        ableExemptStudentScore: this.getBooleanValue_(cell.getData('able-exempt-student-score'))
+                        ableExemptStudentScore: this.getBooleanValue_(cell.getData('able-exempt-student-score')),
+                        autoDropped: this.getBooleanValue_(cell.getData('auto-dropped'))
                     });
                 }
 

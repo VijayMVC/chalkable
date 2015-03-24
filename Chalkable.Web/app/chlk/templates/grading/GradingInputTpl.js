@@ -14,6 +14,8 @@ NAMESPACE('chlk.templates.grading', function () {
 
             Boolean, 'notAblePutScore',
 
+            Boolean, 'autoDropped',
+
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'announcementId',
 
