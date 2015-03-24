@@ -95,6 +95,16 @@ namespace Chalkable.Web
             if (currentDomain.Equals(ensureDomain) || httpRequest.IsApiRequest() || httpRequest.IsAjaxRequest())
                 return;
 
+            if (httpRequest.Url.PathAndQuery == "/")
+            {
+                var homeRedirect = Settings.HomeRedirectUrl;
+                if (!string.IsNullOrEmpty(homeRedirect))
+                {
+                    httpResponse.Redirect(homeRedirect);
+                    return;
+                }
+            }
+
             httpResponse.Redirect(
                 String.Format("http{0}://{1}{2}{3}",
                               httpRequest.IsSecureConnection ? "s" : "",

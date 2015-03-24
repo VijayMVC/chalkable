@@ -34,6 +34,7 @@
   </PropertyGroup>
   <!-- Items for the project -->
   <ItemGroup>
+    <ServiceConfiguration Include="ServiceConfiguration.Sales.cscfg" />
     <ServiceDefinition Include="ServiceDefinition.csdef" />
     <ServiceConfiguration Include="ServiceConfiguration.LocalStaging.cscfg" />
     <ServiceConfiguration Include="ServiceConfiguration.LocalQA.cscfg" />
