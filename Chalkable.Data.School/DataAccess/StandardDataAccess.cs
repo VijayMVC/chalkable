@@ -103,6 +103,38 @@ namespace Chalkable.Data.School.DataAccess
             dbQuery.Sql.Append(")");
             return ReadMany<Standard>(dbQuery);
         }
+
+        public IList<StandardTreeItem> GetStandardParentsSubTree(int standardId)
+        {
+            var parameters = new Dictionary<string, object> {{"@standardId", standardId}};
+            using (var reader = ExecuteStoredProcedureReader("spGetStandardParentsWithChilds", parameters))
+            {
+                var res = new List<StandardTreeItem>();
+                IList<int> parentIds = new List<int>();
+                while (reader.Read())
+                {
+                   parentIds.Add(SqlTools.ReadInt32(reader, "id"));
+                }
+                parentIds = parentIds.Reverse().ToList();
+                if (parentIds.Count > 0)
+                {
+                    reader.NextResult();
+                    var parentChilds = reader.ReadList<StandardTreeItem>();
+                    var parentWithChilds = parentChilds.First(x => x.Id == parentIds[0]);
+                    res.AddRange(parentChilds.Where(x => !x.ParentStandardRef.HasValue && x.Id != parentWithChilds.Id).ToList());
+                    var currentParent = parentWithChilds;
+                    for (int i = 1; i < parentIds.Count; i++)
+                    {
+                        currentParent.StandardChildren = parentChilds.Where(x => x.ParentStandardRef == currentParent.Id).ToList();
+                        currentParent = currentParent.StandardChildren.FirstOrDefault(x => x.Id == parentIds[i]);
+                        if(currentParent == null) break;
+                    }
+                    res.Add(parentWithChilds);
+                }
+                return res;
+            }
+        }
+
     }
 
     public class StandardSubjectDataAccess : DataAccessBase<StandardSubject, int>
