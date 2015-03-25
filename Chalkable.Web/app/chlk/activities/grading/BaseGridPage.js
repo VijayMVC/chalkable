@@ -206,6 +206,12 @@ NAMESPACE('chlk.activities.grading', function () {
 
             /* Comments */
 
+            [ria.mvc.DomEventBind('focus', '.comment-value')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function commentFocus(node, event){
+                this.hideGradingPopUp();
+            },
+
             [ria.mvc.DomEventBind('keyup', '.comment-value')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function commentKeyUp(node, event, options_){
