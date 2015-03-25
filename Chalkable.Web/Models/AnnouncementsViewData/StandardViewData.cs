@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
@@ -35,11 +36,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             return new StandardViewData(standard);
         }
 
-        public static StandardViewData Create(StandardDetailsInfo standardDetailsInfo)
-        {
-            return Create(standardDetailsInfo.Standard);
-        }
-
         public static IList<StandardViewData> Create(IList<Standard> standards)
         {
             return standards.Select(Create).ToList();
@@ -47,6 +43,23 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public static IList<StandardViewData> Create(IList<AnnouncementStandardDetails> standardDetailses)
         {
             return standardDetailses.Select(x => Create(x.Standard)).ToList();
+        }
+    }
+
+    public class StandardTreeItemViewData : StandardViewData
+    {
+        public IList<StandardTreeItemViewData> StandardChildren { get; set; }
+
+        protected StandardTreeItemViewData(StandardTreeItem standard) : base(standard)
+        {
+                StandardChildren = standard.StandardChildren != null 
+                    ?  Create(standard.StandardChildren)
+                    : new List<StandardTreeItemViewData>();
+        }
+
+        public static IList<StandardTreeItemViewData> Create(IList<StandardTreeItem> standards)
+        {
+            return standards.Select(s => new StandardTreeItemViewData(s)).ToList();
         }
     }
 }

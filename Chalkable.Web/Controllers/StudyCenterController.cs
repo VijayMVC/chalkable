@@ -40,7 +40,7 @@ namespace Chalkable.Web.Controllers
 
         private bool HasInstalledApp(Guid applicationId, int studentId)
         {
-            var practiceAppId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
+            var practiceAppId = MasterLocator.ApplicationService.GetPracticeGradeId();
             return practiceAppId == applicationId
                    || SchoolLocator.AppMarketService.GetInstallationForPerson(applicationId, studentId) != null;
         }

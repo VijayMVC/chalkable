@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
@@ -29,5 +30,11 @@ namespace Chalkable.Data.School.Model
 
         [NotDbFieldAttr]
         public string CCStandardCode { get; set; }
+    }
+
+
+    public class StandardTreeItem : Standard
+    {
+        public IList<StandardTreeItem> StandardChildren { get; set; }
     }
 }

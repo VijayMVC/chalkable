@@ -31,6 +31,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteClassStandards(IList<ClassStandard> classStandards);
         IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId);
 
+
+        IList<StandardTreeItem> GetStandardParentsSubTree(int standardId);
     }
     public class StandardService : SchoolServiceBase, IStandardService
     {
@@ -236,6 +238,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 return res;
             }
+        }
+
+
+        public IList<StandardTreeItem> GetStandardParentsSubTree(int standardId)
+        {
+            return DoRead(uow => new StandardDataAccess(uow).GetStandardParentsSubTree(standardId));
         }
     }
 }
