@@ -12,7 +12,9 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             OVERRIDE, chlk.models.people.User, function getCurrentUser(){
                 return this.getModel().getCurrentUser();
-            }
+            },
+
+            Boolean, 'moreClicked'
 
         ])
 });
