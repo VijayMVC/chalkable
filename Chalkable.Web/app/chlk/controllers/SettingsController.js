@@ -5,7 +5,7 @@ REQUIRE('chlk.activities.settings.PreferencesPage');
 REQUIRE('chlk.activities.settings.StudentPage');
 REQUIRE('chlk.models.settings.Dashboard');
 REQUIRE('chlk.models.settings.Preference');
-REQUIRE('chlk.services.SettingsService');
+REQUIRE('chlk.services.PreferenceService');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -14,7 +14,7 @@ NAMESPACE('chlk.controllers', function (){
         'SettingsController', EXTENDS(chlk.controllers.BaseController), [
 
             [ria.mvc.Inject],
-            chlk.services.SettingsService, 'settingsService',
+            chlk.services.PreferenceService, 'preferenceService',
 
             [ria.mvc.Inject],
             chlk.services.ApplicationService, 'appsService',
@@ -40,11 +40,26 @@ NAMESPACE('chlk.controllers', function (){
                 chlk.models.common.RoleEnum.SYSADMIN
             ])],
             [chlk.controllers.SidebarButton('settings')],
-            function preferencesAction() {
-                 var result = this.settingsService
-                     .getPreferences()
-                     .attach(this.validateResponse_());
-                 return this.PushView(chlk.activities.settings.PreferencesPage, result);
+            [[chlk.models.settings.PreferenceCategoryEnum]],
+            function preferencesAction(category_) {
+                var category_ = category_ || chlk.models.settings.PreferenceCategoryEnum.COMMON;
+                var result = this.preferenceService
+                    .getPreferences(category_)
+                    .attach(this.validateResponse_())
+                    .then(function(preferences){
+                        return this.preparePreferencesList_(category_, preferences);
+                    }, this);
+                return this.PushOrUpdateView(chlk.activities.settings.PreferencesPage, result);
+            },
+
+            [[chlk.models.settings.PreferenceCategoryEnum, ArrayOf(chlk.models.settings.Preference)]],
+            chlk.models.settings.PreferencesList, function preparePreferencesList_(categoryId, preferences){
+                var category = null;
+                if(categoryId){
+                    category = new chlk.models.settings.PreferenceCategory(categoryId);
+                }
+                var categories = this.preferenceService.getPreferencesCategories();
+                return new chlk.models.settings.PreferencesList(preferences, categories, category);
             },
 
             [chlk.controllers.AccessForRoles([
@@ -53,11 +68,15 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('settings')],
             [[chlk.models.settings.Preference]],
             function setPreferenceAction(model) {
-                var result = this.settingsService.setPreference(
+                var result = this.preferenceService.setPreference(
                     model.getKey(),
                     model.getValue(),
                     model.isPublicPreference()
-                );
+                )
+                .then(function(preferences){
+                    preferences = preferences.filter(function(item){return item.getCategory() == model.getCategory();});
+                    return this.preparePreferencesList_(model.getCategory(), preferences);
+                }, this);
                 return this.UpdateView(chlk.activities.settings.PreferencesPage, result);
             },
 
