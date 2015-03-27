@@ -12,5 +12,7 @@
                             +LoadingImage(src=pictureUrl, id="loading-image-" + i)
                             .title= app.getName()
                             +ActionButton('apps', 'openSuggestedApp', app.getId(), self.getClassId(), self.getAnnouncementId(), self.getStandardsUrlComponents()) Open
+                if !self.getSuggestedApps().length
+                    .no-items-text These standards doesn't have an App
     else
         .title No recommended apps
