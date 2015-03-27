@@ -27,6 +27,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
 
         public bool ReadOnly { get; set; }
         public string ReadOnlyReason { get; set; }
+        public bool IsDailyAttendancePeriod { get; set; }
 
         public static ClassAttendanceViewData Create(ClassAttendanceDetails attendance, AttendanceReason reason)
         {
@@ -42,7 +43,8 @@ namespace Chalkable.Web.Models.AttendancesViewData
                     IsPosted = attendance.IsPosted,
                     AbsentPreviousDay = attendance.AbsentPreviousDay,
                     ReadOnly = attendance.ReadOnly,
-                    ReadOnlyReason = attendance.ReadOnlyReason
+                    ReadOnlyReason = attendance.ReadOnlyReason,
+                    IsDailyAttendancePeriod = attendance.IsDailyAttendancePeriod
                 };
             if (reason != null)
                 res.AttendanceReason = AttendanceReasonViewData.Create(reason);

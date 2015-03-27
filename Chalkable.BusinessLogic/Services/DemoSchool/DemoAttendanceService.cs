@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void SetClassAttendances(DateTime date, int classId, IList<ClassAttendance> items)
         {
-            var dataStr = date.ToString("yyyy-MM-dd");
+            var dataStr = date.ToString(Constants.DATE_FORMAT);
             var sa = new SectionAttendance
             {
                 Date = dataStr,
@@ -117,10 +117,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var markingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
             if (markingPeriod == null)
-            {
-                throw new ChalkableException("No marking period is scheduled for this date");
-            }
-
+                throw new NoMarkingPeriodException("No marking period is scheduled for this date");
+          
             var sa = Storage.StiAttendanceStorage.GetSectionAttendance(date, classId);
             if (sa != null)
             {
@@ -154,101 +152,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime dateTime)
         {
             return new List<ClassDetails>();
-        }
-
-        public IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null)
-        {
-            throw new NotImplementedException();
-        }
-
-        public StudentDailyAttendance SetDailyAttendance(DateTime date, Guid personId, int? timeIn, int? timeOut)
-        {
-            throw new NotImplementedException();
-        }
-
-        public StudentDailyAttendance GetDailyAttendance(DateTime date, Guid personId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<StudentDailyAttendance> GetDailyAttendances(DateTime date)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ClassAttendanceDetails GetClassAttendanceDetailsById(Guid classAttendanceId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<ClassAttendanceDetails> GetClassAttendanceDetails(Guid? schoolYearId, Guid? markingPeriodId, Guid? classId, Guid? personId, string level, DateTime date)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ClassAttendanceDetails SwipeCard(Guid personId, DateTime dateTime, Guid classPeriodId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int PossibleAttendanceCount(Guid markingPeriodId, Guid classId, DateTime? tillDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDictionary<string, int> CalcAttendanceTotalPerTypeForStudent(Guid studentId, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<PersonAttendanceTotalPerType> CalcAttendanceTotalPerTypeForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDictionary<Guid, int> CalcAttendanceTotalForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate, string level)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDictionary<DateTime, int> GetStudentCountAbsentFromDay(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Guid> GetStudentsAbsentFromDay(DateTime date, IList<Guid> gradeLevelsIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<StudentCountAbsentFromPeriod> GetStudentCountAbsentFromPeriod(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelsIds, int fromPeriodOrder, int toPeriodOrder)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<StudentAbsentFromPeriod> GetStudentsAbsentFromPeriod(DateTime date, IList<Guid> gradeLevelsIds, int periodOrder)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDictionary<int, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerPeriod(DateTime fromDate, DateTime toDate, int fromPeriodOrder, int toPeriodOrder, string level, IList<Guid> gradeLevelsIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDictionary<DateTime, IList<AttendanceTotalPerType>> CalcAttendanceTotalPerDate(DateTime fromDate, DateTime toDate, string level, IList<Guid> gradeLevelsIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ProcessClassAttendance(DateTime date)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void NotAssignedAttendanceProcess()
-        {
-            throw new NotImplementedException();
         }
     }
 }
