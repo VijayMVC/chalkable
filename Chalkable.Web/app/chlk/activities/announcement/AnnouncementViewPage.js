@@ -798,7 +798,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(node.getValue() && node.getValue().trim()) popUp.hide();
                     else popUp.show();
 
-                    if (ria.dom.Keys.ENTER.valueOf() == event.which){
+                    var value = (node.getValue() || '').trim();
+
+                    if (ria.dom.Keys.ENTER.valueOf() == event.which && value){
                         node.parent('form').trigger('submit');
                         node.parent('.small-pop-up').hide();
                     }
