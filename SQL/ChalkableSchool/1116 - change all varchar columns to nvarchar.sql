@@ -1,85 +1,269 @@
-declare @script nvarchar(max) = ''
+ALTER TABLE [Address]
+	ALTER COLUMN [AddressNumber] NCHAR(15) NOT NULL
 
-set @script = (
+ALTER TABLE [Address]
+	ALTER COLUMN [PostalCode] NCHAR(10) NOT NULL
 
-SELECT ' alter table [' + o.Name + '] ' 
-				 + ' alter column [' + c.Name + '] ' + (case 
-										   when y.name = 'varchar' or y.name = 'nvarchar' then ' nvarchar(' +  (case when c.max_length = -1 or c.max_length > 4000  then 'max' else cast(c.max_length  as nvarchar(max)) end) + ')' 
-										   when y.name = 'char' or y.name = 'nchar' then ' nchar(' +  (case when c.max_length = -1 then 'max' else cast(c.max_length  as nvarchar(max)) end) + ')' 
-										   else '' end)
-				 + (case when c.is_nullable = 1 then ' null' else ' not null ' end)
-				 + ' '
-		 
-FROM     sys.columns c 
-         JOIN sys.objects o ON o.object_id = c.object_id 
-		 JOIN sys.types y ON y.system_type_id = c.system_type_id
-where (y.name = 'varchar' or y.name = 'char') and o.type = 'U' 
-	and not exists (
-				 select * from information_schema.table_constraints tc
-				 left JOIN information_schema.key_column_usage kcu on kcu.Constraint_Name = tc.Constraint_Name 
-				 where c.Name = kcu.Column_name and tc.constraint_type = 'UNIQUE' and tc.table_name = o.name
-			   )
-ORDER BY o.Name, c.column_id
-FOR XML PATH(''))
+ALTER TABLE [AlphaGrade]
+	ALTER COLUMN [Name] NVARCHAR(5) NOT NULL
 
+ALTER TABLE [AlphaGrade]
+	ALTER COLUMN [Description] NVARCHAR(255) NOT NULL
 
-set @script = @script + (SELECT 
-		' alter table [' + o.Name + '] ' + ' drop constraint [' + tc.Constraint_Name + '] ' +
-		' alter table [' + o.Name + '] ' 
-				 + ' alter column [' + c.Name + '] ' + (case 
-										   when y.name = 'varchar' or y.name = 'nvarchar' then ' nvarchar(' +  (case when c.max_length = -1 or c.max_length > 4000  then 'max' else cast(c.max_length  as nvarchar(max)) end) + ')' 
-										   when y.name = 'char' or y.name = 'nchar' then ' nchar(' +  (case when c.max_length = -1 then 'max' else cast(c.max_length  as nvarchar(max)) end) + ')' 
-										   else '' end)
-				 + (case when c.is_nullable = 1 then ' null' else ' not null ' end)
-				 + ' ' +
-		' alter table [' + o.Name + '] ' + ' add constraint [' + tc.Constraint_Name + '] unique (' 
-		+ (
-			select kcu.column_name + (case when COUNT(*) OVER (PARTITION BY kcu.table_name)  > kcu.ordinal_position then ',' else '' end)
-		    from information_schema.key_column_usage kcu
-			where kcu.Constraint_Name = tc.Constraint_Name 
-			order by kcu.ordinal_position
-			for xml path('')
-		   )
-		+ ')'
-		 
-FROM     sys.columns c 
-         JOIN sys.objects o ON o.object_id = c.object_id 
-		 JOIN sys.types y ON y.system_type_id = c.system_type_id
-		 JOIN information_schema.table_constraints tc on tc.Table_name = o.Name
-where (y.name = 'varchar' or y.name = 'char') and o.type = 'U' and tc.constraint_type = 'UNIQUE'
-	and exists (
-				  select * from information_schema.key_column_usage kcu
-				  where c.Name = kcu.Column_name and kcu.Constraint_Name = tc.Constraint_Name 
-			   )
-ORDER BY o.Name, c.column_id
-FOR XML PATH(''))
+ALTER TABLE [AlternateScore]
+	ALTER COLUMN [Name] NVARCHAR(3) NOT NULL
 
+ALTER TABLE [AlternateScore]
+	ALTER COLUMN [Description] NVARCHAR(255) NOT NULL
 
+ALTER TABLE [GradingComment]
+	ALTER COLUMN [Comment] NVARCHAR(50) NOT NULL
 
-set @script = @script + (SELECT 'drop type [dbo].[' + substring(t.name, 4, len(t.name) - 12) + '] ' +
-	   'create type [' +  substring(t.name, 4, len(t.name) - 12) + '] as table ( '+
-			(select '[' + c.name + ']' + (case 
-										   when y.name = 'varchar' or y.name = 'nvarchar' then ' nvarchar(' +  (case when c.max_length = -1 or c.max_length > 4000 then 'max' else cast(c.max_length  as nvarchar(max)) end) + ')' 
-										   when y.name = 'char' or y.name = 'nchar' then ' nchar(' +  (case when c.max_length = -1 then 'max' else cast(c.max_length  as nvarchar(max)) end) + ')' 
-										   when y.name = 'decimal' then ' [decimal](' + cast(c.[precision] as nvarchar) + ',' + cast(c.scale as nvarchar) + ')' 
-										   else ' [' +  y.name + ']' end) 
-				  + ' ' + (case when c.is_nullable = 1 then ' null ' else ' not null ' end)
-				  + (case when c.column_id = (select count(*) from sys.columns c  where c.object_id = t.object_id) then '' else ', ' end)
-		  from sys.columns c 
-		  JOIN sys.types y ON y.system_type_id = c.system_type_id
-		  where c.object_id = t.object_id and y.name <> 'sysname'
-		  order by c.column_id
-		  FOR XML PATH ('')) +
-	   ') ' 
-FROM  sys.objects t   
-where t.type = 'TT' and t.object_id in (select c.object_id from  sys.columns c 
-										JOIN sys.types y ON y.system_type_id = c.system_type_id
-										where y.name = 'varchar' or y.name = 'char')
-for xml path(''))
+ALTER TABLE [GradingScale]
+	ALTER COLUMN [Description] NVARCHAR(255) NOT NULL
 
+ALTER TABLE [Infraction]
+	ALTER COLUMN [Description] NVARCHAR(255) NOT NULL
 
-select @script
-execute(@script)
+ALTER TABLE [Infraction]
+	ALTER COLUMN [StateCode] NVARCHAR(10) NOT NULL
 
+ALTER TABLE [Infraction]
+	ALTER COLUMN [SIFCode] NVARCHAR(10) NOT NULL
 
- 
+ALTER TABLE [Infraction]
+	ALTER COLUMN [NCESCode] NVARCHAR(10) NOT NULL
+
+ALTER TABLE [ScheduledTimeSlot]
+	ALTER COLUMN [Description] NVARCHAR(255) NOT NULL
+
+ALTER TABLE [ScheduledTimeSlotVariation]
+	ALTER COLUMN [Description] NVARCHAR(255) NOT NULL
+
+ALTER TABLE [SchoolOption]
+	ALTER COLUMN [TimeZoneName] NVARCHAR(32) NULL
+
+ALTER TABLE [Standard]
+	ALTER COLUMN [Name] NVARCHAR(100) NOT NULL
+
+ALTER TABLE [Standard]
+	ALTER COLUMN [Description] NVARCHAR(max) NOT NULL
+
+ALTER TABLE [StandardSubject]
+	ALTER COLUMN [Name] NVARCHAR(100) NOT NULL
+
+ALTER TABLE [StandardSubject]
+	ALTER COLUMN [Description] NVARCHAR(200) NOT NULL
+
+ALTER TABLE [Student]
+	ALTER COLUMN [SpecialInstructions] NVARCHAR(max) NOT NULL
+
+ALTER TABLE [GradingComment]
+	DROP CONSTRAINT [UQ_GradingComment_SchoolRef_Code]
+
+ALTER TABLE [GradingComment]
+	ALTER COLUMN [Code] NVARCHAR(5) NOT NULL
+
+ALTER TABLE [GradingComment] ADD CONSTRAINT [UQ_GradingComment_SchoolRef_Code] UNIQUE (
+	SchoolRef
+	,Code
+	)
+
+ALTER TABLE [GradingScale]
+	DROP CONSTRAINT [UQ_GradingScale_SchoolRef_Name]
+
+ALTER TABLE [GradingScale]
+	ALTER COLUMN [Name] NVARCHAR(20) NOT NULL
+
+ALTER TABLE [GradingScale] ADD CONSTRAINT [UQ_GradingScale_SchoolRef_Name] UNIQUE (
+	SchoolRef
+	,NAME
+	)
+
+ALTER TABLE [Infraction]
+	DROP CONSTRAINT [UQ_Infraction_Code]
+
+ALTER TABLE [Infraction]
+	ALTER COLUMN [Code] NVARCHAR(5) NOT NULL
+
+ALTER TABLE [Infraction] ADD CONSTRAINT [UQ_Infraction_Code] UNIQUE (Code)
+
+ALTER TABLE [Infraction]
+	DROP CONSTRAINT [UQ_Infraction_Name]
+
+ALTER TABLE [Infraction]
+	ALTER COLUMN [Name] NVARCHAR(50) NOT NULL
+
+ALTER TABLE [Infraction] ADD CONSTRAINT [UQ_Infraction_Name] UNIQUE (NAME)
+
+ALTER TABLE [ScheduledTimeSlotVariation]
+	DROP CONSTRAINT [UQ_BellSchedule_TimeSlot_Name]
+
+ALTER TABLE [ScheduledTimeSlotVariation]
+	ALTER COLUMN [Name] NVARCHAR(50) NOT NULL
+
+ALTER TABLE [ScheduledTimeSlotVariation] ADD CONSTRAINT [UQ_BellSchedule_TimeSlot_Name] UNIQUE (
+	BellScheduleRef
+	,PeriodRef
+	,NAME
+	)
+
+DROP type [dbo].[TGradingComment]
+
+CREATE type [TGradingComment] AS TABLE (
+	[Id] [int] NOT NULL
+	,[SchoolRef] [int] NOT NULL
+	,[Code] NVARCHAR(5) NOT NULL
+	,[Comment] NVARCHAR(50) NOT NULL
+	)
+
+DROP type [dbo].[TGradingScale]
+
+CREATE type [TGradingScale] AS TABLE (
+	[Id] [int] NOT NULL
+	,[SchoolRef] [int] NOT NULL
+	,[Name] NVARCHAR(20) NOT NULL
+	,[Description] NVARCHAR(255) NOT NULL
+	,[HomeGradeToDisplay] [int] NULL
+	)
+
+DROP type [dbo].[TInfraction]
+
+CREATE type [TInfraction] AS TABLE (
+	[Id] [int] NOT NULL
+	,[Code] NVARCHAR(5) NOT NULL
+	,[Name] NVARCHAR(50) NOT NULL
+	,[Description] NVARCHAR(255) NOT NULL
+	,[Demerits] [tinyint] NOT NULL
+	,[StateCode] NVARCHAR(10) NOT NULL
+	,[SIFCode] NVARCHAR(10) NOT NULL
+	,[NCESCode] NVARCHAR(10) NOT NULL
+	,[IsActive] [bit] NOT NULL
+	,[IsSystem] [bit] NOT NULL
+	)
+
+DROP type [dbo].[TScheduledTimeSlot]
+
+CREATE type [TScheduledTimeSlot] AS TABLE (
+	[BellScheduleRef] [int] NOT NULL
+	,[PeriodRef] [int] NOT NULL
+	,[StartTime] [int] NULL
+	,[EndTime] [int] NULL
+	,[Description] NVARCHAR(255) NOT NULL
+	,[IsDailyAttendancePeriod] [bit] NOT NULL
+	)
+
+DROP type [dbo].[TStudent]
+
+CREATE type [TStudent] AS TABLE (
+	[Id] [int] NOT NULL
+	,[FirstName] NVARCHAR(510) NOT NULL
+	,[LastName] NVARCHAR(510) NOT NULL
+	,[BirthDate] [datetime2] NULL
+	,[Gender] NVARCHAR(510) NULL
+	,[HasMedicalAlert] [bit] NOT NULL
+	,[IsAllowedInetAccess] [bit] NOT NULL
+	,[SpecialInstructions] NVARCHAR(max) NOT NULL
+	,[SpEdStatus] NVARCHAR(512) NULL
+	,[PhotoModifiedDate] [datetime2] NULL
+	,[UserId] [int] NOT NULL
+	)
+
+DROP type [dbo].[TSchoolOption]
+
+CREATE type [TSchoolOption] AS TABLE (
+	[Id] [int] NOT NULL
+	,[AllowSectionAverageModification] [bit] NOT NULL
+	,[EarliestPaymentDate] [datetime2] NULL
+	,[NextReceiptNumber] [int] NULL
+	,[DefaultCombinationIndex] [int] NULL
+	,[TimeZoneName] NVARCHAR(32) NULL
+	,[BaseHoursOffset] [int] NULL
+	,[BaseMinutesOffset] [int] NULL
+	,[ObservesDst] [bit] NULL
+	,[AllowScoreEntryForUnexcused] [bit] NOT NULL
+	,[DisciplineOverwritesAttendance] [bit] NOT NULL
+	,[AllowDualEnrollment] [bit] NOT NULL
+	,[CompleteStudentScheduleDefinition] NVARCHAR(2) NOT NULL
+	,[AveragingMethod] NVARCHAR(2) NOT NULL
+	,[CategoryAveraging] [bit] NOT NULL
+	,[StandardsGradingScaleRef] [int] NULL
+	,[StandardsCalculationMethod] NVARCHAR(2) NOT NULL
+	,[StandardsCalculationRule] NVARCHAR(2) NOT NULL
+	,[StandardsCalculationWeightMaximumValues] [bit] NOT NULL
+	,[LockCategories] [bit] NOT NULL
+	,[IncludeReportCardCommentsInGradebook] [bit] NOT NULL
+	,[MergeRostersForAttendance] [bit] NOT NULL
+	)
+
+DROP type [dbo].[TStandardSubject]
+
+CREATE type [TStandardSubject] AS TABLE (
+	[Id] [int] NOT NULL
+	,[Name] NVARCHAR(100) NOT NULL
+	,[Description] NVARCHAR(200) NOT NULL
+	,[AdoptionYear] [int] NULL
+	,[IsActive] [bit] NOT NULL
+	)
+
+DROP type [dbo].[TScheduledTimeSlotVariation]
+
+CREATE type [TScheduledTimeSlotVariation] AS TABLE (
+	[Id] [int] NOT NULL
+	,[BellScheduleRef] [int] NOT NULL
+	,[PeriodRef] [int] NOT NULL
+	,[Name] NVARCHAR(50) NOT NULL
+	,[Description] NVARCHAR(255) NOT NULL
+	,[StartTime] [int] NOT NULL
+	,[EndTime] [int] NOT NULL
+	)
+
+DROP type [dbo].[TStandard]
+
+CREATE type [TStandard] AS TABLE (
+	[Id] [int] NOT NULL
+	,[ParentStandardRef] [int] NULL
+	,[Name] NVARCHAR(100) NOT NULL
+	,[Description] NVARCHAR(max) NOT NULL
+	,[StandardSubjectRef] [int] NOT NULL
+	,[LowerGradeLevelRef] [int] NULL
+	,[UpperGradeLevelRef] [int] NULL
+	,[IsActive] [bit] NOT NULL
+	,[AcademicBenchmarkId] [uniqueidentifier] NULL
+	)
+
+DROP type [dbo].[TAddress]
+
+CREATE type [TAddress] AS TABLE (
+	[Id] [int] NOT NULL
+	,[AddressNumber] NCHAR(15) NOT NULL
+	,[StreetNumber] NVARCHAR(20) NOT NULL
+	,[AddressLine1] NVARCHAR(150) NOT NULL
+	,[AddressLine2] NVARCHAR(150) NOT NULL
+	,[City] NVARCHAR(100) NOT NULL
+	,[State] NVARCHAR(10) NOT NULL
+	,[PostalCode] NCHAR(10) NOT NULL
+	,[Country] NVARCHAR(120) NOT NULL
+	,[CountyId] [int] NULL
+	,[Latitude] [decimal](10, 7) NULL
+	,[Longitude] [decimal](10, 7) NULL
+	)
+
+DROP type [dbo].[TAlphaGrade]
+
+CREATE type [TAlphaGrade] AS TABLE (
+	[Id] [int] NOT NULL
+	,[SchoolRef] [int] NOT NULL
+	,[Name] NVARCHAR(5) NOT NULL
+	,[Description] NVARCHAR(255) NOT NULL
+	)
+
+DROP type [dbo].[TAlternateScore]
+
+CREATE type [TAlternateScore] AS TABLE (
+	[Id] [int] NOT NULL
+	,[Name] NVARCHAR(3) NOT NULL
+	,[Description] NVARCHAR(255) NOT NULL
+	,[IncludeInAverage] [bit] NOT NULL
+	,[PercentOfMaximumScore] [decimal](6, 2) NULL
+)

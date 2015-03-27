@@ -37,7 +37,7 @@
     </Certificates>
   </Role>
   <Role name="Chalkable.BackgroundTaskProcessor">
-    <Instances count="2" />
+    <Instances count="1" />
     <ConfigurationSettings>
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablesales;AccountKey=nvwRlYL0345AdCT75axxjvW7zbHZg18Fu2ouzVTIw7QUPG/OJyWt3MVt9xUkiDObiaF8J+UWngeBdOch+ammUA==" />
       <!-- DB Settings -->
