@@ -74,7 +74,7 @@ set @script = @script + (SELECT 'drop type [dbo].[' + substring(t.name, 4, len(t
 FROM  sys.objects t   
 where t.type = 'TT' and t.object_id in (select c.object_id from  sys.columns c 
 										JOIN sys.types y ON y.system_type_id = c.system_type_id
-										where (y.name = 'varchar' or y.name = 'char') and lower(c.name) <> lower('code'))
+										where y.name = 'varchar' or y.name = 'char')
 for xml path(''))
 
 
