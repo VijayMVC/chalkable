@@ -231,7 +231,6 @@
     <Compile Include="Logic\ClassLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AddressViewData.cs" />
-    <Compile Include="Models\AdminFeedViewData.cs" />
     <Compile Include="Models\AlphaGradeViewData.cs" />
     <Compile Include="Models\AlternateScoreViewData.cs" />
     <Compile Include="Models\AnnouncementAttachmentViewData.cs" />
@@ -257,11 +256,8 @@
     <Compile Include="Models\ApplicationsViewData\ApplicationTotalPriceViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationUpdateInputModel.cs" />
     <Compile Include="Models\ApplicationsViewData\InstalledApplicationViewData.cs" />
-    <Compile Include="Models\AttendancesViewData\AdminAttendanceSummaryViewData.cs" />
     <Compile Include="Models\AttendancesViewData\AttendanceReasonViewData.cs" />
-    <Compile Include="Models\AttendancesViewData\AttendanceStatsViewData.cs" />
     <Compile Include="Models\AttendancesViewData\AttendanceSummaryViewData.cs" />
-    <Compile Include="Models\AttendancesViewData\StudentAttendanceDetailedViewData.cs" />
     <Compile Include="Models\BackgroundTaskLogViewData.cs" />
     <Compile Include="Models\BackgroundTaskViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\BaseApplicationViewData.cs" />
@@ -355,8 +351,6 @@
     <Compile Include="Models\StorageMonitorViewData.cs" />
     <Compile Include="Models\StudentAnnouncementViewData.cs" />
     <Compile Include="Models\HoverBoxesViewData.cs" />
-    <Compile Include="Models\AttendancesViewData\StudentAttendanceSummaryViewData.cs" />
-    <Compile Include="Models\AttendancesViewData\StudentAttendanceViewData.cs" />
     <Compile Include="Models\SysAdminViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\ApiRequestExtensions.cs" />
