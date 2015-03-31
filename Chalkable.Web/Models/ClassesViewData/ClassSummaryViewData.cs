@@ -37,7 +37,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         }
 
         public static ClassSummaryViewData Create(ClassDetails c, Room currentRoom, IList<StudentDetails> students,
-             IList<AnnouncementByDateViewData> announcementByDates, IList<ClassAttendanceDetails> attendances
+             IList<AnnouncementByDateViewData> announcementByDates, IList<StudentClassAttendance> attendances
             , int posibleAbsent, IList<ClassDisciplineDetails> disciplines, IList<Infraction> disciplineTypes
             , IList<MarkingPeriodClassGradeAvg> classGradeStatsPerMp)
         {

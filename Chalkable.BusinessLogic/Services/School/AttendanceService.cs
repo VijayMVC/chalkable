@@ -12,8 +12,8 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAttendanceService
     {
-        IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId);
-        void SetClassAttendances(DateTime date, int classId, IList<ClassAttendance> items);
+        ClassAttendanceDetails GetClassAttendance(DateTime date, int classId);
+        void SetClassAttendances(DateTime date, int classId, IList<StudentClassAttendance> studentAttendances);
         SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId);
         void UpdateSeatingChart(int classId, int markingPeriodId, SeatingChartInfo seatingChart);
         AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod);
@@ -26,45 +26,30 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public void SetClassAttendances(DateTime date, int classId, IList<ClassAttendance> items)
+        public void SetClassAttendances(DateTime date, int classId, IList<StudentClassAttendance> studentAttendances)
         {
-            var dataStr = date.ToString("yyyy-MM-dd");
+            var dataStr = date.ToString(Constants.DATE_FORMAT);
             var sa = new SectionAttendance
             {
                 Date = dataStr,
                 SectionId = classId,
                 StudentAttendance = new List<StudentSectionAttendance>()
             };
-            foreach (var item in items)
-            {
-
-                sa.StudentAttendance.Add(new StudentSectionAttendance
+            sa.StudentAttendance = studentAttendances.Select(sca => new StudentSectionAttendance
                 {
-                    Category = item.Category,
+                    Category = sca.Category,
                     Date = dataStr,
-                    ClassroomLevel = LevelToClassRoomLevel(item.Level),
-                    ReasonId = (short)(item.AttendanceReasonRef.HasValue ? item.AttendanceReasonRef.Value : 0),
+                    ClassroomLevel = LevelToClassRoomLevel(sca.Level),
+                    ReasonId = (short) (sca.AttendanceReasonId.HasValue ? sca.AttendanceReasonId.Value : 0),
                     SectionId = classId,
-                    StudentId = item.PersonRef,
-                });
-            }
+                    StudentId = sca.StudentId,
+                }).ToList();
             if (!Context.SchoolYearId.HasValue)
                 throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
             ConnectorLocator.AttendanceConnector.SetSectionAttendance(Context.SchoolYearId.Value, date, classId, sa);
         }
 
-        private string LevelToClassRoomLevel(string level)
-        {
-            if (level == null)
-                return "Present";
-            if (level == "T")
-                return "Tardy";
-            if (level == "A" || level == "AO")
-                return "Absent";
-            return "Missing";
-        }
-
-        public IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId)
+        public ClassAttendanceDetails GetClassAttendance(DateTime date, int classId)
         {
             var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
             if (mp == null)
@@ -78,44 +63,65 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
                 var persons = ServiceLocator.StudentService.GetClassStudents(classId, mp.Id);
-                var attendances = new List<ClassAttendanceDetails>();
+
+                var res = new ClassAttendanceDetails
+                    {
+                        Class = clazz,
+                        Date = date,
+                        IsDailyAttendancePeriod = sa.IsDailyAttendancePeriod,
+                        ClassId = sa.SectionId,
+                        IsPosted = sa.IsPosted,
+                        MergeRosters = sa.MergeRosters,
+                        ReadOnly = sa.ReadOnly,
+                        ReadOnlyReason = sa.ReadOnlyReason,
+                        StudentAttendances = new List<StudentClassAttendance>()
+                    };
+
                 foreach (var ssa in sa.StudentAttendance)
                 {
                     var student = persons.FirstOrDefault(x => x.Id == ssa.StudentId);
                     if (student != null)
                     {
-                        attendances.Add(new ClassAttendanceDetails
+                        res.StudentAttendances.Add(new StudentClassAttendance
                         {
-                            ClassRef = ssa.SectionId,
-                            AttendanceReasonRef = ssa.ReasonId,
+                            ClassId = ssa.SectionId,
+                            AttendanceReasonId = ssa.ReasonId,
                             Date = date,
-                            PersonRef = ssa.StudentId,
+                            StudentId = ssa.StudentId,
                             Level = ClassroomLevelToLevelCvt(ssa.ClassroomLevel),
-                            Class = clazz,
                             Student = student,
                             Category = ssa.Category,
-                            IsPosted = sa.IsPosted,
                             AbsentPreviousDay = ssa.AbsentPreviousDay,
-                            ReadOnly = sa.ReadOnly,
-                            ReadOnlyReason = sa.ReadOnlyReason,
-                            IsDailyAttendancePeriod = sa.IsDailyAttendancePeriod
+                            ReadOnly = ssa.ReadOnly,
+                            ReadOnlyReason = ssa.ReadOnlyReason,
                         });
                     }
                 }
-                return attendances;    
+                return res;    
             }
             return null;
+        }
+
+        private string LevelToClassRoomLevel(string level)
+        {
+            if (level == null)
+                return StudentClassAttendance.PRESENT;
+            if (StudentClassAttendance.IsLateLevel(level))
+                return StudentClassAttendance.TARDY;
+            if (level == "A" || level == "AO")
+                return StudentClassAttendance.ABSENT;
+            return StudentClassAttendance.MISSING;
         }
 
         private static string ClassroomLevelToLevelCvt(string classroomLevel)
         {
             switch (classroomLevel)
             {
-                case "Present":
+                case StudentClassAttendance.PRESENT:
                     return null;
-                case "Absent":
+                case StudentClassAttendance.ABSENT:
                     return "A";
-                case "Tardy":
+                case StudentClassAttendance.TARDY:
                     return "T";
                 default:
                     return "H";

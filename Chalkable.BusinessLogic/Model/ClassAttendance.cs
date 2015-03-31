@@ -6,16 +6,39 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Model
 {
+
     public class ClassAttendance
     {
-        public int PersonRef { get; set; }
-        public int ClassRef { get; set; }
-        public int? AttendanceReasonRef { get; set; }
+        public DateTime Date { get; set; }
+        public bool IsDailyAttendancePeriod { get; set; }
+        public bool IsPosted { get; set; }
+        public bool MergeRosters { get; set; }
+        public bool ReadOnly { get; set; }
+        public string ReadOnlyReason { get; set; }
+        public int ClassId { get; set; }
+        public IList<StudentClassAttendance> StudentAttendances { get; set; }
+    }
+
+    public class ClassAttendanceDetails : ClassAttendance
+    {
+        public Class Class { get; set; }
+    }
+
+    public class StudentClassAttendance
+    {
+        public const string MISSING = "Missing";
+        public const string ABSENT = "Absent";
+        public const string PRESENT = "Present";
+        public const string TARDY = "Tardy";
+        public const string EXCUSED_CATEGORY = "E";
+
+        public int StudentId { get; set; }
+        public int ClassId { get; set; }
+        public int? AttendanceReasonId { get; set; }
         public string Description { get; set; }
         public string Level { get; set; }
         public string Category { get; set; }
         public DateTime Date { get; set; }
-        public DateTime LastModified { get; set; }
         public bool AbsentPreviousDay { get; set; }
 
         public bool ReadOnly { get; set; }
@@ -23,60 +46,45 @@ namespace Chalkable.BusinessLogic.Model
 
         public static bool IsLateLevel(string level)
         {
-            return level == "T";
+            return LateLevels.Contains(level);
         }
-
         public static bool IsAbsentLevel(string level)
         {
-            return level == "A"
-                       || level == "AO"
-                       || level == "H"
-                       || level == "HO";
+            return AbsentLevels.Contains(level);
         }
-
         public static bool IsAbsentOrLateLevel(string level)
         {
             return IsLateLevel(level) || IsAbsentLevel(level);
         }
-
         public bool IsAbsent
         {
             get { return IsAbsentLevel(Level); }
         }
-
         public bool IsLate
         {
             get { return IsLateLevel(Level); }
         }
-
         public bool IsAbsentOrLate
         {
             get { return IsAbsentOrLateLevel(Level); }
         }
-
         public bool IsExcused
         {
-            get { return Category == "E"; }
+            get { return Category == EXCUSED_CATEGORY; }
         }
 
         public static readonly string[] AbsentLevels = {"A", "AO", "H", "HO"};
         public static readonly string[] LateLevels = { "T"};
-    }
 
-
-    public class ClassAttendanceDetails : ClassAttendance
-    {
         public StudentDetails Student { get; set; }
-        public Class Class { get; set; }
-        public bool IsPosted { get; set; }
-        public bool IsDailyAttendancePeriod { get; set; }
     }
-
+   
     public class AttendanceTotalPerType
     {
         public const string TOTAL_FIELD = "Total";
-        public int Total { get; set; }
         public const string ATTENDANCE_TYPE_FIELD = "AttendanceType";
+       
+        public int Total { get; set; }
         public string Level { get; set; }
     }
     public class PersonAttendanceTotalPerType : AttendanceTotalPerType

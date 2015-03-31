@@ -18,7 +18,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         }
 
-        public void SetClassAttendances(DateTime date, int classId, IList<ClassAttendance> items)
+        public void SetClassAttendances(DateTime date, int classId, IList<StudentClassAttendance> studentAttendances)
         {
             var dataStr = date.ToString(Constants.DATE_FORMAT);
             var sa = new SectionAttendance
@@ -27,20 +27,66 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 SectionId = classId,
                 StudentAttendance = new List<StudentSectionAttendance>()
             };
-            foreach (var item in items)
-            {
-                sa.StudentAttendance.Add(new StudentSectionAttendance
+            sa.StudentAttendance = studentAttendances.Select(sca => new StudentSectionAttendance
                 {
-                    Category = item.Category,
+                    Category = sca.Category,
                     Date = dataStr,
-                    ClassroomLevel = LevelToClassRoomLevel(item.Level),
-                    Level = item.Level,
-                    ReasonId = (short?)item.AttendanceReasonRef,
+                    ClassroomLevel = LevelToClassRoomLevel(sca.Level),
+                    Level = sca.Level,
+                    ReasonId = (short)(sca.AttendanceReasonId.HasValue ? sca.AttendanceReasonId.Value : 0),
                     SectionId = classId,
-                    StudentId = item.PersonRef
-                });
-            }
+                    StudentId = sca.StudentId,
+                }).ToList();
             Storage.StiAttendanceStorage.SetSectionAttendance(date, classId, sa);
+        }
+
+        public ClassAttendanceDetails GetClassAttendance(DateTime date, int classId)
+        {
+            var markingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
+            if (markingPeriod == null)
+                throw new NoMarkingPeriodException("No marking period is scheduled for this date");
+
+            var sa = Storage.StiAttendanceStorage.GetSectionAttendance(date, classId);
+            if (sa != null)
+            {
+                var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
+                var persons = ServiceLocator.StudentService.GetClassStudents(classId, markingPeriod.Id);
+                var res = new ClassAttendanceDetails
+                {
+                    Class = clazz,
+                    Date = date,
+                    IsDailyAttendancePeriod = sa.IsDailyAttendancePeriod,
+                    ClassId = sa.SectionId,
+                    IsPosted = sa.IsPosted,
+                    MergeRosters = sa.MergeRosters,
+                    ReadOnly = sa.ReadOnly,
+                    ReadOnlyReason = sa.ReadOnlyReason,
+                    StudentAttendances = new List<StudentClassAttendance>()
+                };
+
+                foreach (var ssa in sa.StudentAttendance)
+                {
+                    var student = persons.FirstOrDefault(x => x.Id == ssa.StudentId);
+                    if (student != null)
+                    {
+                        res.StudentAttendances.Add(new StudentClassAttendance
+                        {
+                            ClassId = ssa.SectionId,
+                            AttendanceReasonId = ssa.ReasonId,
+                            Date = date,
+                            StudentId = ssa.StudentId,
+                            Level = ssa.Level,
+                            Student = student,
+                            Category = ssa.Category,
+                            AbsentPreviousDay = ssa.AbsentPreviousDay,
+                            ReadOnly = ssa.ReadOnly,
+                            ReadOnlyReason = ssa.ReadOnlyReason,
+                        });
+                    }
+                }
+                return res;    
+            }
+            return null;
         }
 
         public SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId)
@@ -105,49 +151,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private string LevelToClassRoomLevel(string level)
         {
             if (level == null)
-                return "Present";
-            if (level == "T")
-                return "Tardy";
+                return StudentClassAttendance.PRESENT;
+            if (StudentClassAttendance.IsLateLevel(level))
+                return StudentClassAttendance.TARDY;
             if (level == "A" || level == "AO")
-                return "Absent";
-            return "Missing";
+                return StudentClassAttendance.ABSENT;
+            return StudentClassAttendance.MISSING;
         }
 
-        public IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId)
-        {
-            var markingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
-            if (markingPeriod == null)
-                throw new NoMarkingPeriodException("No marking period is scheduled for this date");
-          
-            var sa = Storage.StiAttendanceStorage.GetSectionAttendance(date, classId);
-            if (sa != null)
-            {
-                var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);
-                var persons = ServiceLocator.StudentService.GetClassStudents(classId, markingPeriod.Id);
-                var attendances = new List<ClassAttendanceDetails>();
-                foreach (var ssa in sa.StudentAttendance)
-                {
-                    var student = persons.FirstOrDefault(x => x.Id == ssa.StudentId);
-                    if (student != null)
-                    {
-                        attendances.Add(new ClassAttendanceDetails
-                        {
-                            ClassRef = ssa.SectionId,
-                            AttendanceReasonRef = ssa.ReasonId,
-                            Date = date,
-                            PersonRef = ssa.StudentId,
-                            Level = ssa.Level,
-                            Class = clazz,
-                            Student = student,
-                            Category = ssa.Category,
-                            IsPosted = sa.IsPosted
-                        });
-                    }
-                }
-                return attendances;    
-            }
-            return null;
-        }
 
         public IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime dateTime)
         {

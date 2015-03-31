@@ -7,7 +7,8 @@ using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.AttendancesViewData
 {
-    public class ClassAttendanceViewData
+    //TODO: delete this model after removing old version api method 
+    public class StudentClassAttendanceOldViewData
     {
         public int Id { get; set; }
         public int PersonId { get; set; }
@@ -29,19 +30,19 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public string ReadOnlyReason { get; set; }
         public bool IsDailyAttendancePeriod { get; set; }
 
-        public static ClassAttendanceViewData Create(ClassAttendanceDetails attendance, AttendanceReason reason)
+        public static StudentClassAttendanceOldViewData Create(ClassAttendanceDetails attendance, StudentClassAttendance studentAttendance, AttendanceReason reason)
         {
-            var res = new ClassAttendanceViewData
+            var res = new StudentClassAttendanceOldViewData
                 {
-                    PersonId = attendance.PersonRef,
+                    PersonId = studentAttendance.StudentId,
                     ClassId = attendance.Class.Id,
                     ClassName = attendance.Class.Name,
-                    Date = attendance.Date,
-                    AttendanceReasonId = attendance.AttendanceReasonRef,
-                    Student = StudentViewData.Create(attendance.Student),
-                    Level = attendance.Level,
+                    Date = studentAttendance.Date,
+                    AttendanceReasonId = studentAttendance.AttendanceReasonId,
+                    Student = StudentViewData.Create(studentAttendance.Student),
+                    Level = studentAttendance.Level,
                     IsPosted = attendance.IsPosted,
-                    AbsentPreviousDay = attendance.AbsentPreviousDay,
+                    AbsentPreviousDay = studentAttendance.AbsentPreviousDay,
                     ReadOnly = attendance.ReadOnly,
                     ReadOnlyReason = attendance.ReadOnlyReason,
                     IsDailyAttendancePeriod = attendance.IsDailyAttendancePeriod
@@ -51,14 +52,68 @@ namespace Chalkable.Web.Models.AttendancesViewData
             return res;
         }
 
-        public static IList<ClassAttendanceViewData> Create(IList<ClassAttendanceDetails> attendances, IList<AttendanceReason> attendanceReasones = null)
+        public static IList<StudentClassAttendanceOldViewData> Create(ClassAttendanceDetails attendance, IList<AttendanceReason> attendanceReasones = null)
         {
-            var res = new List<ClassAttendanceViewData>();
-            foreach (var attendance in attendances)
+            var res = new List<StudentClassAttendanceOldViewData>();
+            if (attendance != null && attendance.StudentAttendances.Count > 0)
+            {
+                foreach (var studentAtt in attendance.StudentAttendances)
+                {
+                    AttendanceReason reason;
+                    if (attendanceReasones != null && attendanceReasones.Count > 0 && studentAtt.AttendanceReasonId.HasValue)
+                        reason = attendanceReasones.First(x => x.Id == studentAtt.AttendanceReasonId);
+                    else reason = null;
+                    res.Add(Create(attendance, studentAtt, reason));
+                }    
+            }
+            return res;
+        }
+    }
+
+
+    
+    //New attendance structure models , for new api version
+
+    public class StudentClassAttendanceViewData
+    {
+        public int StudentId { get; set; }
+        public int ClassId { get; set; }
+        public DateTime Date { get; set; }
+        public string Level { get; set; }
+        public StudentViewData Student { get; set; }
+        public int? AttendanceReasonId { get; set; }
+        public AttendanceReasonViewData AttendanceReason { get; set; }
+        public bool ReadOnly { get; set; }
+        public string ReadOnlyReason { get; set; }
+        public bool AbsentPreviousDay { get; set; }
+
+        public static StudentClassAttendanceViewData Create(StudentClassAttendance studentAttendance, AttendanceReason attendanceReason)
+        {
+            var res = new StudentClassAttendanceViewData
+                {
+                    StudentId = studentAttendance.StudentId,
+                    ClassId = studentAttendance.ClassId,
+                    AbsentPreviousDay = studentAttendance.AbsentPreviousDay,
+                    AttendanceReasonId = studentAttendance.AttendanceReasonId,
+                    Student = StudentViewData.Create(studentAttendance.Student),
+                    ReadOnly = studentAttendance.ReadOnly,
+                    ReadOnlyReason = studentAttendance.ReadOnlyReason,
+                    Date = studentAttendance.Date,
+                    Level = studentAttendance.Level
+                };
+            if (attendanceReason != null)
+                res.AttendanceReason = AttendanceReasonViewData.Create(attendanceReason);
+            return res;
+        }
+
+        public static IList<StudentClassAttendanceViewData> Create(IList<StudentClassAttendance> studentAttendances, IList<AttendanceReason> attendanceReasons = null)
+        {
+            var res = new List<StudentClassAttendanceViewData>();
+            foreach (var attendance in studentAttendances)
             {
                 AttendanceReason reason;
-                if (attendanceReasones != null && attendanceReasones.Count > 0 && attendance.AttendanceReasonRef.HasValue)
-                    reason = attendanceReasones.First(x => x.Id == attendance.AttendanceReasonRef);
+                if (attendanceReasons != null && attendanceReasons.Count > 0 && attendance.AttendanceReasonId.HasValue)
+                    reason = attendanceReasons.First(x => x.Id == attendance.AttendanceReasonId);
                 else reason = null;
                 res.Add(Create(attendance, reason));
             }
@@ -66,7 +121,49 @@ namespace Chalkable.Web.Models.AttendancesViewData
         }
     }
 
+    public class ClassAttendanceViewData
+    {
+        public DateTime Date { get; set; }
+        public int TeacherId { get; set; }
+        public int ClassId { get; set; }
+        public string ClassName { get; set; }
+        public bool IsPosted { get; set; }
+        
+        public bool ReadOnly { get; set; }
+        public string ReadOnlyReason { get; set; }
+        public bool IsDailyAttendancePeriod { get; set; }
 
+        public IList<StudentClassAttendanceViewData> StudentAttendances { get; set; }
+
+        public static ClassAttendanceViewData Create(int classId, DateTime date)
+        {
+            return new ClassAttendanceViewData
+                {
+                    ClassId = classId,
+                    Date = date,
+                    StudentAttendances = new List<StudentClassAttendanceViewData>()
+                };
+        }
+
+        public static ClassAttendanceViewData Create(ClassAttendanceDetails classAttendance, IList<AttendanceReason> attendanceReasons)
+        {
+            var res = new ClassAttendanceViewData
+                {
+                    ClassId = classAttendance.Class.Id,
+                    ClassName = classAttendance.Class.Name,
+                    Date = classAttendance.Date,
+                    IsPosted = classAttendance.IsPosted,
+                    ReadOnly = classAttendance.ReadOnly,
+                    ReadOnlyReason = classAttendance.ReadOnlyReason,
+                    IsDailyAttendancePeriod = classAttendance.IsDailyAttendancePeriod,
+                    StudentAttendances = StudentClassAttendanceViewData.Create(classAttendance.StudentAttendances, attendanceReasons)
+                };
+            return res;
+        }
+    }
+
+
+ 
     //int personId, int classId, DateTime date, string level, int? attendanceReasonId
     public class SetClassAttendanceViewData
     {
