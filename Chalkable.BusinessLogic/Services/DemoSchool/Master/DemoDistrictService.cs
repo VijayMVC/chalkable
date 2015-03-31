@@ -7,14 +7,40 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
-  
+
+    public class DemoDistrictStorage : BaseDemoGuidStorage<District>
+    {
+        public DemoDistrictStorage()
+            : base(x => x.Id)
+        {
+        }
+
+        public District GetByIdOrNull(Guid id)
+        {
+            return data.ContainsKey(id) ? data[id] : null;
+        }
+
+        
+
+        public void AddDistrict(UserContext userContext)
+        {
+            if (!userContext.DistrictId.HasValue)
+                throw new Exception("Context doesn't have valid district id");
+            var districtId = userContext.DistrictId.Value;
+            data.Add(districtId, DemoDistrictService.CreateDemoDistrict(districtId));
+        }
+    }
+
     public class DemoDistrictService : DemoMasterServiceBase, IDistrictService
     {
         public const int DEMO_EXPIRE_HOURS = 3;
 
-        public DemoDistrictService(IServiceLocatorMaster serviceLocator, DemoStorage storage)
-            : base(serviceLocator, storage)
+        private DemoDistrictStorage DistrictStorage { get; set; }
+
+        public DemoDistrictService(IServiceLocatorMaster serviceLocator)
+            : base(serviceLocator)
         {
+            DistrictStorage = new DemoDistrictStorage();
         }
 
         public District Create(string name, string dbName, string sisUrl, string sisUserName, string sisPassword, string timeZone)
@@ -38,7 +64,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue)
+        public PaginatedList<District> GetDistricts(int start = 0, int count = Int32.MaxValue)
         {
             throw new NotImplementedException();
         }
@@ -60,12 +86,23 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         
         public District GetByIdOrNull(Guid id)
         {
-            return Storage.DistrictStorage.GetByIdOrNull(id);
+            return DistrictStorage.GetByIdOrNull(id);
         }
  
         public bool IsOnline(Guid id)
         {
             return true;
+        }
+
+        public static District CreateDemoDistrict(Guid id)
+        {
+            return new District
+            {
+                Id = id,
+                IsDemoDistrict = true,
+                Name = "Demo District",
+                TimeZone = "Central Standard Time"
+            };
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 {
     public class DemoStiDisciplineStorage:BaseDemoIntStorage<DisciplineReferral>
     {
-        public DemoStiDisciplineStorage(DemoStorage storage) : base(storage, x => x.Id, true)
+        public DemoStiDisciplineStorage() : base(x => x.Id, true)
         {
         }
 

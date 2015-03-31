@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
+using Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -13,11 +14,30 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoStudentAnnouncementStorage : BaseDemoIntStorage<StudentAnnouncement>
+    {
+        public DemoStudentAnnouncementStorage()
+            : base(null, true)
+        {
+        }
+
+        public void Update(int announcementId, bool drop)
+        {
+            var sa = data.Where(x => x.Value.AnnouncementId == announcementId).Select(x => x.Key).First();
+            data[sa].ScoreDropped = drop;
+        }
+
+        
+    }
 
     public class DemoStudentAnnouncementService : DemoSchoolServiceBase, IStudentAnnouncementService
     {
-        public DemoStudentAnnouncementService(IServiceLocatorSchool serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+        private DemoStudentAnnouncementStorage StudentAnnouncementStorage { get; set; }
+        private DemoStiActivityScoreStorage ActivityScoreStorage { get; set; }
+        public DemoStudentAnnouncementService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+            StudentAnnouncementStorage = new DemoStudentAnnouncementStorage();
+            ActivityScoreStorage = new DemoStiActivityScoreStorage();
         }
 
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, 
@@ -29,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             if (!string.IsNullOrEmpty(value) && value.Trim() != "")
                 exempt = false;
-            else 
+            else
                 value = null;
 
             decimal numericScore;
@@ -37,11 +57,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             if (value != null && !isDecimal)
             {
-                var numScore = Storage.AlphaGradeStorage.GetAll()
+                var numScore = ServiceLocator.AlphaGradeService.GetAlphaGrades()
                     .FirstOrDefault(x => String.Equals(x.Name, value, StringComparison.InvariantCultureIgnoreCase));
                 if (numScore != null)
                 {
-                    var gradingScaleRange = Storage.GradingScaleRangeStorage
+                    var gradingScaleRange = StorageLocator.GradingScaleRangeStorage
                         .GetAll()
                         .FirstOrDefault(x => x.AlphaGradeRef == numScore.Id);
 
@@ -50,14 +70,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                         numericScore = gradingScaleRange.AveragingEquivalent;
                         value = numScore.Name;
                     }
-                        
                 }
             }
 
-
             var gradeComment = comment != null && !string.IsNullOrWhiteSpace(comment) ? comment.Trim() : "";
 
-            var oldScore = Storage.StiActivityScoreStorage.GetScore(announcementId, studentId);
+            var oldScore = ActivityScoreStorage.GetScore(announcementId, studentId);
             var studentAnnouncement = new StudentAnnouncement();
 
             MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(studentAnnouncement, oldScore);
@@ -85,19 +103,69 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             studentAnnouncement.Late = late;
             studentAnnouncement.Incomplete = incomplete;
             studentAnnouncement.ExtraCredit = extraCredits;
-            
+
             var score = new Score();
             MapperFactory.GetMapper<Score, StudentAnnouncement>().Map(score, studentAnnouncement);
-            score = Storage.StiActivityScoreStorage.UpdateScore(score.ActivityId, score.StudentId, score);
+            score = ActivityScoreStorage.UpdateScore(score.ActivityId, score.StudentId, score);
             score.ActivityDate = ann.Expires;
             score.ActivityName = ann.Title;
             MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(studentAnnouncement, score);
 
             if (studentAnnouncement.AlternateScoreId.HasValue)
-                studentAnnouncement.AlternateScore = ServiceLocator.AlternateScoreService.GetAlternateScore(studentAnnouncement.AlternateScoreId.Value);
+                studentAnnouncement.AlternateScore = StorageLocator.AlternateScoreStorage.GetAlternateScore(studentAnnouncement.AlternateScoreId.Value);
             if (ann.VisibleForStudent && !string.IsNullOrWhiteSpace(value))
                 ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToStudent(announcementId, studentAnnouncement.StudentId);
             return studentAnnouncement;
+        }
+
+        public IList<StudentAnnouncementDetails> GetAll(int announcementId)
+        {
+            return StudentAnnouncementStorage.GetAll().Where(x => x.AnnouncementId == announcementId).Select(x =>
+            {
+                var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+
+                var student = ServiceLocator.StudentService.GetById(x.StudentId, Context.SchoolYearId.Value);
+                var details = new StudentDetails
+                {
+                    BirthDate = student.BirthDate,
+                    FirstName = student.FirstName,
+                    Gender = student.Gender,
+                    HasMedicalAlert = student.HasMedicalAlert,
+                    Id = student.Id,
+                    IsAllowedInetAccess = student.IsAllowedInetAccess,
+                    IsWithdrawn = null,
+                    LastName = student.LastName,
+                    PhotoModifiedDate = null,
+                    SpecialInstructions = student.SpecialInstructions,
+                    SpEdStatus = student.SpEdStatus,
+                    UserId = student.UserId
+                };
+
+                return new StudentAnnouncementDetails
+                {
+                    AnnouncementId = x.AnnouncementId,
+                    AbsenceCategory = x.AbsenceCategory,
+                    Absent = x.Absent,
+                    ActivityId = x.ActivityId,
+                    AlphaGradeId = x.AlphaGradeId,
+                    AlternateScoreId = x.AlternateScoreId,
+                    Comment = x.Comment,
+                    ScoreDropped = x.ScoreDropped,
+                    Exempt = x.Exempt,
+                    ExtraCredit = x.ExtraCredit,
+                    Incomplete = x.Incomplete,
+                    ClassId = ann.ClassRef,
+                    Late = x.Late,
+                    NumericScore = x.NumericScore,
+                    OverMaxScore = x.OverMaxScore,
+                    ScoreValue = x.ScoreValue,
+                    Student = details,
+                    StudentId = x.StudentId,
+                    Withdrawn = x.Withdrawn
+                };
+
+            }).ToList();
+
         }
 
         public IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId)
@@ -114,12 +182,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 IList<StudentDetails> persons = new List<StudentDetails>();
                 if (CoreRoles.STUDENT_ROLE == Context.Role)
                 {
-                    scores.Add(Storage.StiActivityScoreStorage.GetScore(ann.SisActivityId.Value, Context.PersonId.Value));
+                    scores.Add(ActivityScoreStorage.GetScore(ann.SisActivityId.Value, Context.PersonId.Value));
                     persons.Add(ServiceLocator.StudentService.GetById(Context.PersonId.Value, Context.SchoolYearId.Value));
                 }
                 else
                 {
-                    scores = Storage.StiActivityScoreStorage.GetSores(ann.SisActivityId.Value);
+                    scores = ActivityScoreStorage.GetSores(ann.SisActivityId.Value);
                     persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef, mp.Id);
                 }
                 var res = new List<StudentAnnouncementDetails>();
@@ -135,55 +203,45 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     res.Add(stAnn);
                 }
                 return res;
-
             }
             throw new ChalkableException("Current announcement is not in Inow ");
-
         }
 
         public AutoGrade SetAutoGrade(int announcementApplicationId, int? recepientId, string value)
         {
-            var annApp = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
-            var autoGrade = Storage.AutoGradeStorage.GetAll()
-                                   .FirstOrDefault(x => x.AnnouncementApplicationRef == announcementApplicationId
-                                                        && x.StudentRef == recepientId);
+            var annApp = ServiceLocator.AnnouncementAttachmentService.GetAnnouncementApplication(announcementApplicationId);
+            var autoGrade = StorageLocator.AutoGradeStorage.GetAutoGrade(announcementApplicationId, recepientId);
+
             if (autoGrade == null)
             {
                 autoGrade = new AutoGrade
-                    {
-                        AnnouncementApplicationRef = announcementApplicationId,
-                        StudentRef = recepientId ?? Context.PersonId ?? 0,
-                        AnnouncementApplication = annApp,
-                        Date = Context.NowSchoolYearTime,
-                        Grade = value,
-                    };
-                Storage.AutoGradeStorage.Add(autoGrade);
+                {
+                    AnnouncementApplicationRef = announcementApplicationId,
+                    StudentRef = recepientId ?? Context.PersonId ?? 0,
+                    AnnouncementApplication = annApp,
+                    Date = Context.NowSchoolYearTime,
+                    Grade = value,
+                };
+                StorageLocator.AutoGradeStorage.Add(autoGrade);
             }
             else
             {
                 autoGrade.Grade = value;
                 autoGrade.Date = Context.NowSchoolYearTime;
-                Storage.AutoGradeStorage.SetAutoGrade(autoGrade);
+                StorageLocator.AutoGradeStorage.SetAutoGrade(autoGrade);
             }
             return autoGrade;
+
         }
 
         public IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId)
         {
-            var annApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId);
-            return Storage.AutoGradeStorage.GetAll()
-                       .Where(x => annApps.Any(y => y.Id == x.AnnouncementApplicationRef))
-                       .ToList();
+            return ServiceLocator.AutoGradeStorage.GetAutoGradesByAnnouncementId(announcementId);
         }
 
         public IList<AutoGrade> GetAutoGrades(int announcementApplicationId)
         {
-            var autogrades =
-                Storage.AutoGradeStorage.GetAll()
-                    .Where(x => x.AnnouncementApplication.Id == announcementApplicationId)
-                    .Select(x => x)
-                    .ToList();
-            return autogrades;
+            return StorageLocator.AutoGradeStorage.GetAutoGrades(announcementApplicationId);
         }
     }
 }

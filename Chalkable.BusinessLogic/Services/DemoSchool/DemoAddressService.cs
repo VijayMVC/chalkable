@@ -7,38 +7,42 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoAddressStorage : BaseDemoIntStorage<Address>
+    {
+        public DemoAddressStorage()
+            : base(x => x.Id)
+        {
+        }
+    }
+
     public class DemoAddressService : DemoSchoolServiceBase, IAddressService
     {
-        public DemoAddressService(IServiceLocatorSchool serviceLocator, DemoStorage storage)
-            : base(serviceLocator, storage)
+        private DemoAddressStorage AddressStorage { get; set; }
+        public DemoAddressService(IServiceLocatorSchool serviceLocator)
+            : base(serviceLocator)
         {
+            AddressStorage = new DemoAddressStorage();
         }
       
         public void Add(IList<Address> addresses)
         {
-            BaseSecurity.EnsureSysAdmin(Context);
-            Storage.AddressStorage.Add(addresses);
+            AddressStorage.Add(addresses);
         }
 
         public void Edit(IList<Address> addressInfos)
         {
-            BaseSecurity.EnsureSysAdmin(Context);
-            Storage.AddressStorage.Update(addressInfos);
+            AddressStorage.Update(addressInfos);
         }
 
         public void Delete(IList<Address> addresses)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.AddressStorage.Delete(addresses);
+            AddressStorage.Delete(addresses);
             
         }
 
         public IList<Address> GetAddress()
         {
-            if (!BaseSecurity.IsAdminOrTeacher(Context))
-                throw new ChalkableSecurityException();
-            return Storage.AddressStorage.GetAll();
+            return AddressStorage.GetAll();
         }
     }
 }

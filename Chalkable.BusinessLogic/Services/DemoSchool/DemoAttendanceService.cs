@@ -4,18 +4,216 @@ using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
+using Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoStiSeatingChartStorage : BaseDemoIntStorage<KeyValuePair<int, SeatingChart>>
+    {
+        public DemoStiSeatingChartStorage()
+            : base(null, true)
+        {
+
+        }
+
+        public SeatingChart GetChart(int classId, int markingPeriodId)
+        {
+            return data.First(x => x.Value.Key == markingPeriodId && x.Value.Value.SectionId == classId).Value.Value;
+        }
+
+        public void UpdateChart(int classId, int markingPeriodId, SeatingChart seatingChart)
+        {
+            if (data.Count(x => x.Value.Key == markingPeriodId && x.Value.Value.SectionId == classId) == 0)
+            {
+                Add(new KeyValuePair<int, SeatingChart>(markingPeriodId, seatingChart));
+            }
+            var item = data.First(x => x.Value.Value.SectionId == classId && x.Value.Key == markingPeriodId).Key;
+            data[item] = new KeyValuePair<int, SeatingChart>(markingPeriodId, seatingChart);
+        }
+    }
+
+    public class DemoStiAttendanceStorage : BaseDemoIntStorage<SectionAttendance>
+    {
+        public DemoStiAttendanceStorage()
+            : base(null, true)
+        {
+        }
+
+        public SectionAttendance GetSectionAttendance(DateTime date, int classId)
+        {
+            var ds = date.ToString("yyyy-MM-dd");
+            if (data.Count(x => x.Value.SectionId == classId && x.Value.Date == ds) == 0)
+            {
+                GenerateSectionAttendanceForClass(classId, date, date);
+            }
+            return data.First(x => x.Value.SectionId == classId && x.Value.Date == ds).Value;
+        }
+
+        public void SetSectionAttendance(DateTime date, int classId, SectionAttendance sa)
+        {
+            var ds = date.ToString("yyyy-MM-dd");
+            if (data.Count(x => x.Value.SectionId == classId && x.Value.Date == ds) == 0)
+            {
+                data.Add(GetNextFreeId(), sa);
+            }
+            var item = data.First(x => x.Value.SectionId == classId && x.Value.Date == ds).Key;
+            sa.IsPosted = true;
+            data[item] = sa;
+        }
+
+
+        public void GenerateSectionAttendanceForClass(int classId, DateTime startDate, DateTime endDate)
+        {
+            var classRoomLevels = new string[] { "Absent", "Missing", "Tardy", "Present" };
+            var random = new Random();
+            for (var start = startDate; start <= endDate; start = start.AddDays(1))
+            {
+                var ds = start.ToString("yyyy-MM-dd");
+                var sa = new SectionAttendance()
+                {
+                    SectionId = classId,
+                    Date = ds,
+                    StudentAttendance = StorageLocator.ClassPersonStorage.GetClassPersons(new ClassPersonQuery()
+                    {
+                        ClassId = classId
+                    }).Select(x => x.PersonRef).Distinct().Select(x => new StudentSectionAttendance()
+                    {
+                        Date = ds,
+                        SectionId = classId,
+                        StudentId = x,
+                        ClassroomLevel = classRoomLevels[random.Next(0, 4)]
+                    }).ToList()
+                };
+                data.Add(GetNextFreeId(), sa);
+            }
+        }
+
+
+        private SectionAttendanceSummary GetSaSummary(int classId, DateTime startDate, DateTime endDate)
+        {
+            var sectionAttendanceSummary = new SectionAttendanceSummary();
+            sectionAttendanceSummary.SectionId = classId;
+
+            var days = new List<DailySectionAttendanceSummary>();
+
+            var absenceCount = new Dictionary<int, int>();
+            var tardiesCount = new Dictionary<int, int>();
+
+            var studentIds = StorageLocator.PersonStorage.GetPersons(new PersonQuery()
+            {
+                TeacherId = Context.PersonId
+            }).Persons.Select(x => x.Id);
+
+            foreach (var studentId in studentIds)
+            {
+                absenceCount.Add(studentId, 0);
+                tardiesCount.Add(studentId, 0);
+            }
+
+            for (var start = startDate; start < endDate; start = start.AddDays(1))
+            {
+                var day = new DailySectionAttendanceSummary();
+                var attendance = StorageLocator.StiAttendanceStorage.GetSectionAttendance(start, classId);
+
+                day.Absences = attendance.StudentAttendance.Count(x => x.ClassroomLevel == "Absent");
+                day.Tardies = attendance.StudentAttendance.Count(x => x.ClassroomLevel == "Tardy");
+                day.Date = start;
+                day.SectionId = classId;
+                days.Add(day);
+
+                foreach (var studentId in studentIds)
+                {
+                    absenceCount[studentId] += attendance.StudentAttendance.Count(x => x.ClassroomLevel == "Absent" && x.StudentId == studentId);
+                    tardiesCount[studentId] += attendance.StudentAttendance.Count(x => x.ClassroomLevel == "Tardy" && x.StudentId == studentId);
+                }
+            }
+            sectionAttendanceSummary.Days = days;
+            sectionAttendanceSummary.Students = studentIds.Select(x => new StudentSectionAttendanceSummary
+            {
+                SectionId = classId,
+                StudentId = x,
+                Absences = absenceCount[x],
+                Tardies = tardiesCount[x]
+            });
+
+            return sectionAttendanceSummary;
+        }
+
+        public IList<SectionAttendanceSummary> GetSectionAttendanceSummary(List<int> classesIds, DateTime startDate, DateTime endDate)
+        {
+            return classesIds.Select(classId => GetSaSummary(classId, startDate, endDate)).ToList();
+        }
+
+
+        public IList<SectionAttendanceSummary> GetSectionAttendanceSummary(int studentId, DateTime startDate, DateTime endDate)
+        {
+            var classesIds = StorageLocator.ClassPersonStorage.GetClassPersons(new ClassPersonQuery
+            {
+                PersonId = studentId
+            }).Select(x => x.ClassRef).Distinct().ToList();
+
+            return classesIds.Select(classId => GetSaSummary(classId, startDate, endDate)).ToList();
+        }
+    }
+
+    public class DemoStiActivityStorage : BaseDemoIntStorage<Activity>
+    {
+        public DemoStiActivityStorage()
+            : base(x => x.Id, true)
+        {
+        }
+
+        public Activity CreateActivity(int classId, Activity activity)
+        {
+            activity.SectionId = classId;
+            activity.Id = GetNextFreeId();
+            data.Add(activity.Id, activity);
+            return activity;
+        }
+
+        public void CopyActivity(int sisActivityId, IList<int> classIds)
+        {
+            var activity = GetById(sisActivityId);
+
+            var classIdsFiltered = classIds.Where(x => x != activity.SectionId).ToList();
+
+            foreach (var classId in classIdsFiltered)
+            {
+                activity.Id = GetNextFreeId();
+                activity.SectionId = classId;
+
+                if (activity.Attachments == null)
+                    activity.Attachments = new List<ActivityAttachment>();
+
+                foreach (var attachment in activity.Attachments)
+                {
+                    attachment.ActivityId = activity.Id;
+                }
+                data.Add(activity.Id, activity);
+            }
+        }
+
+        public IEnumerable<Activity> GetAll(int sectionId)
+        {
+            return data.Where(x => x.Value.SectionId == sectionId).Select(x => x.Value).ToList();
+        }
+    }
+
+
     public class DemoAttendanceService : DemoSchoolServiceBase, IAttendanceService
     {
-        public DemoAttendanceService(IServiceLocatorSchool serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+        private DemoStiSeatingChartStorage SeatingChartStorage { get; set; }
+        private DemoStiAttendanceStorage AttendanceStorage { get; set; }
+        public DemoAttendanceService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+            SeatingChartStorage = new DemoStiSeatingChartStorage();
+            AttendanceStorage = new DemoStiAttendanceStorage();
         }
 
         public void SetClassAttendances(DateTime date, int classId, IList<ClassAttendance> items)
@@ -40,12 +238,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     StudentId = item.PersonRef
                 });
             }
-            Storage.StiAttendanceStorage.SetSectionAttendance(date, classId, sa);
+            AttendanceStorage.SetSectionAttendance(date, classId, sa);
         }
 
         public SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId)
         {
-            var seatingChart = Storage.StiSeatingChartStorage.GetChart(classId, markingPeriodId);
+            var seatingChart = SeatingChartStorage.GetChart(classId, markingPeriodId);
             return SeatingChartInfo.Create(seatingChart);
         }
 
@@ -78,7 +276,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }
             }
             seatingChart.Seats = stiSeats;
-            Storage.StiSeatingChartStorage.UpdateChart(classId, markingPeriodId, seatingChart);
+            SeatingChartStorage.UpdateChart(classId, markingPeriodId, seatingChart);
         }
 
         public AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod)
@@ -87,7 +285,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var classes = ServiceLocator.ClassService.GetTeacherClasses(gradingPeriod.SchoolYearRef, teacherId, gradingPeriod.MarkingPeriodRef);
             var classesIds = classes.Select(x => x.Id).ToList();
             var students = ServiceLocator.StudentService.GetTeacherStudents(teacherId, Context.SchoolYearId.Value);
-            var sectionsAttendanceSummary = Storage.StiAttendanceStorage.GetSectionAttendanceSummary(classesIds, gradingPeriod.StartDate, gradingPeriod.EndDate);
+            var sectionsAttendanceSummary = AttendanceStorage.GetSectionAttendanceSummary(classesIds, gradingPeriod.StartDate, gradingPeriod.EndDate);
             var res = new AttendanceSummary();
             var dailySectionAttendances = new List<DailySectionAttendanceSummary>();
             var studentAtts = new List<StudentSectionAttendanceSummary>();
@@ -102,7 +300,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
-        private string LevelToClassRoomLevel(string level)
+        private static string LevelToClassRoomLevel(string level)
         {
             if (level == null)
                 return "Present";
@@ -121,7 +319,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new ChalkableException("No marking period is scheduled for this date");
             }
 
-            var sa = Storage.StiAttendanceStorage.GetSectionAttendance(date, classId);
+            var sa = AttendanceStorage.GetSectionAttendance(date, classId);
             if (sa != null)
             {
                 var clazz = ServiceLocator.ClassService.GetClassDetailsById(classId);

@@ -52,55 +52,53 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IUserSchoolService userSchoolService;
         private IPracticeGradeService practiceGradeService;
 
-
-        public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster, DemoStorage storage)
+        public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
         {
-            storage.SchoolLocator = this;
             this.serviceLocatorMaster = serviceLocatorMaster;
-            notificationService = new DemoNotificationService(this, storage);
-            appMarketService = new DemoAppMarketService(this, storage);
-            announcementService = new DemoAnnouncementService(this, storage);
-            personService = new DemoPersonService(this, storage);
-            schoolYearService = new DemoSchoolYearService(this, storage);
-            markingPeriodService = new DemoMarkingPeriodService(this, storage);
-            addressService = new DemoAddressService(this, storage);
-            gradeLevelService = new DemoGradeLevelService(this, storage);
-            classService = new DemoClassService(this, storage);
-            announcementQnAService = new DemoAnnouncementQnAService(this, storage);
-            announcementAttachmentService = new DemoAnnouncementAttachmentService(this, storage);
-            phoneService = new DemoPhoneService(this, storage);
-            privateMessageService = new DemoPrivateMessageService(this, storage);
-            roomService = new DemoRoomService(this, storage);
-            periodService = new DemoPeriodService(this, storage);
-            calendarDateService = new DemoCalendarDateService(this, storage);
-            dayTypeService = new DemoDayTypeService(this, storage);
-            classPeriodService = new DemoClassPeriodService(this, storage);
-            attendanceReasonService = new DemoAttendanceReasonService(this, storage);
-            attendanceService = new DemoAttendanceService(this, storage);
-            studentParentService = new DemoStudentParentService(this, storage);
-            studentAnnouncementService = new DemoStudentAnnouncementService(this , storage);
-            applicationSchoolService = new DemoApplicationSchoolService(this, storage);
-            disciplineService = new DemoDisciplineService(this, storage);
-            gradingStatisticService = new DemoGradingStatisticService(this, storage);
-            schoolService = new DemoSchoolService(this, storage);
-            schoolPersonService = new DemoSchoolPersonService(this, storage);
-            standardService = new DemoStandardService(this, storage);
-            alphaGradeService = new DemoAlphaGradeService(this, storage);
-            alternateScoreService = new DemoAlternateScoreService(this, storage);
-            gradingPeriodService = new DemoGradingPeriodService(this, storage);
-            classAnnouncementTypeService = new DemoClassAnnouncementTypeService(this, storage);
-            gradingStandardService = new DemoGradingStandardService(this, storage);
-            InfractionService = new DemoInfractionService(this, storage);
-            StorageBlobService = new DemoStorageBlobService(this ,storage);            
-            gradingCommentService = new DemoGradingCommentService(this, storage);
-            gradingScaleService = new DemoGradingScaleService(this, storage);
-            classroomOptionService = new DemoClassroomOptionService(this, storage);
-            personEmailService = new DemoPersonEmailService(this, storage);
-            studentService = new DemoStudentService(this, storage);
-            staffService = new DemoStaffService(this, storage);
-            userSchoolService = new DemoUserSchoolService(this, storage);
-            practiceGradeService = new DemoPracticeGradeService(this, storage);
+            notificationService = new DemoNotificationService(this);
+            appMarketService = new DemoAppMarketService(this);
+            announcementService = new DemoAnnouncementService(this);
+            personService = new DemoPersonService(this);
+            schoolYearService = new DemoSchoolYearService(this);
+            markingPeriodService = new DemoMarkingPeriodService(this);
+            addressService = new DemoAddressService(this);
+            gradeLevelService = new DemoGradeLevelService(this);
+            classService = new DemoClassService(this);
+            announcementQnAService = new DemoAnnouncementQnAService(this);
+            announcementAttachmentService = new DemoAnnouncementAttachmentService(this);
+            phoneService = new DemoPhoneService(this);
+            privateMessageService = new DemoPrivateMessageService(this);
+            roomService = new DemoRoomService(this);
+            periodService = new DemoPeriodService(this);
+            calendarDateService = new DemoCalendarDateService(this);
+            dayTypeService = new DemoDayTypeService(this);
+            classPeriodService = new DemoClassPeriodService(this);
+            attendanceReasonService = new DemoAttendanceReasonService(this);
+            attendanceService = new DemoAttendanceService(this);
+            studentParentService = new DemoStudentParentService(this);
+            studentAnnouncementService = new DemoStudentAnnouncementService(this);
+            applicationSchoolService = new DemoApplicationSchoolService(this);
+            disciplineService = new DemoDisciplineService(this);
+            gradingStatisticService = new DemoGradingStatisticService(this);
+            schoolService = new DemoSchoolService(this);
+            schoolPersonService = new DemoSchoolPersonService(this);
+            standardService = new DemoStandardService(this);
+            alphaGradeService = new DemoAlphaGradeService(this);
+            alternateScoreService = new DemoAlternateScoreService(this);
+            gradingPeriodService = new DemoGradingPeriodService(this);
+            classAnnouncementTypeService = new DemoClassAnnouncementTypeService(this);
+            gradingStandardService = new DemoGradingStandardService(this);
+            InfractionService = new DemoInfractionService(this);
+            StorageBlobService = new DemoStorageBlobService(this);            
+            gradingCommentService = new DemoGradingCommentService(this);
+            gradingScaleService = new DemoGradingScaleService(this);
+            classroomOptionService = new DemoClassroomOptionService(this);
+            personEmailService = new DemoPersonEmailService(this);
+            studentService = new DemoStudentService(this);
+            staffService = new DemoStaffService(this);
+            userSchoolService = new DemoUserSchoolService(this);
+            practiceGradeService = new DemoPracticeGradeService(this);
         }
 
 

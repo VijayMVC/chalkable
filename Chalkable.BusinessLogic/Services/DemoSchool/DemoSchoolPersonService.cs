@@ -10,16 +10,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
     public class DemoSchoolPersonService : DemoSchoolServiceBase, ISchoolPersonService
     {
-        public DemoSchoolPersonService(IServiceLocatorSchool serviceLocator, DemoStorage storage)
-            : base(serviceLocator, storage)
+        private DemoSchoolPersonStorage SchoolPersonStorage { get; set; }
+        public DemoSchoolPersonService(IServiceLocatorSchool serviceLocator)
+            : base(serviceLocator)
         {
+            SchoolPersonStorage = new DemoSchoolPersonStorage();
         }
 
         public IList<SchoolPerson> GetAll()
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            return Storage.SchoolPersonStorage.GetAll();
+            return SchoolPersonStorage.GetAll();
         }
     }
 }

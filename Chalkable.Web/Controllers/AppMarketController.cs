@@ -88,36 +88,6 @@ namespace Chalkable.Web.Controllers
             return res;
         }
 
-        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        //public ActionResult ListInstalled(int personId, int? classId, string filter, int? start, int? count, bool? forAttach)
-        //{
-        //    var st = start ?? 0;
-        //    var cnt = count ?? 9;
-
-        //    var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
-        //    var installedApp = MasterLocator.ApplicationService.GetApplicationsByIds(
-        //            appInstallations.Select(x => x.ApplicationRef).Distinct().ToList());
-        //    if (forAttach.HasValue && forAttach.Value)
-        //        installedApp = installedApp.Where(x => x.CanAttach).ToList();
-
-        //    if (classId.HasValue)
-        //    {
-        //        var classPersons = SchoolLocator.ClassService.GetClassPersons(null, classId, null, null);
-        //    }
-
-        //    var hasMyAppDic = installedApp.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
-
-        //    var res = InstalledApplicationViewData.Create(appInstallations, personId, installedApp, hasMyAppDic);
-        //    if (!string.IsNullOrEmpty(filter))
-        //        res = res.Where(x => x.Name.ToLower().Contains(filter)).ToList();
-            
-        //    var totalCount = res.Count;
-        //    res = res.Skip(st).Take(cnt).ToList();
-        //    var appsList = new PaginatedList<InstalledApplicationViewData>(res, st/cnt, cnt, totalCount);
-        //    return Json(appsList);
-        //}
-
-
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher, Student")]
         public ActionResult Install(Guid applicationId, int? personId, IntList classids, IntList roleIds, GuidList departmentids, IntList gradelevelids)
         {

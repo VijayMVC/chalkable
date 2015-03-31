@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
+using Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
@@ -14,15 +15,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
     public class DemoDisciplineService : DemoSchoolServiceBase, IDisciplineService
     {
-        public DemoDisciplineService(IServiceLocatorSchool serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+        private DemoStiDisciplineStorage StiDisciplineStorage { get; set; }
+        public DemoDisciplineService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+            StiDisciplineStorage =new DemoStiDisciplineStorage();
         }
 
         public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int classId, DateTime date)
         {
             var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date);
             if (mp == null) return null;
-            var disciplineRefferals = Storage.StiDisciplineStorage.GetList(classId, date);
+            var disciplineRefferals = StiDisciplineStorage.GetList(classId, date);
             var options = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
             if (disciplineRefferals != null)
             {
@@ -64,10 +67,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             MapperFactory.GetMapper<DisciplineReferral, ClassDiscipline>().Map(stiDiscipline, classDiscipline);
 
             if (classDiscipline.Id.HasValue)
-                Storage.StiDisciplineStorage.Update(stiDiscipline);
+                StiDisciplineStorage.Update(stiDiscipline);
             else
             {
-                stiDiscipline = Storage.StiDisciplineStorage.Create(stiDiscipline);
+                stiDiscipline = StiDisciplineStorage.Create(stiDiscipline);
                 MapperFactory.GetMapper<ClassDiscipline, DisciplineReferral>().Map(classDiscipline, stiDiscipline);
             }
             return new ClassDisciplineDetails

@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Linq.Expressions;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti;
 using Chalkable.BusinessLogic.Services.School;
@@ -16,212 +14,28 @@ using Infraction = Chalkable.Data.School.Model.Infraction;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-    public class DemoStorage
-    {
-        public DemoPrivateMessageStorage PrivateMessageStore { get; private set; }
-        public DemoSchoolYearStorage SchoolYearStorage { get; private set; }
-        public DemoStudentSchoolYearStorage StudentSchoolYearStorage { get; private set; }
-        public DemoAddressStorage AddressStorage { get; private set; }
-        public DemoAlphaGradeStorage AlphaGradeStorage { get; private set; }
-        public DemoAlternateScoreStorage AlternateScoreStorage { get; private set; }
-        public DemoStudentParentStorage StudentParentStorage { get; private set; }
-        public DemoStandardStorage StandardStorage { get; private set; }
-        public DemoStandardSubjectStorage StandardSubjectStorage { get; private set; }
-        public DemoClassStandardStorage ClassStandardStorage { get; private set; }
-        public DemoSchoolStorage SchoolStorage { get; private set; }
-        public DemoSchoolPersonStorage SchoolPersonStorage { get; private set; }
-        public DemoRoomStorage RoomStorage { get; private set; }
-        public DemoClassPeriodStorage ClassPeriodStorage { get; private set; }
-        public DemoPrivateMessageStorage PrivateMessageStorage { get; private set; }
-        public DemoPhoneStorage PhoneStorage { get; private set; }
-        public DemoPersonStorage PersonStorage { get; private set; }
-        public DemoPeriodStorage PeriodStorage { get; private set; }
-        public DemoMarkingPeriodStorage MarkingPeriodStorage { get; private set; }
-        public DemoMarkingPeriodClassStorage MarkingPeriodClassStorage { get; private set; }
-        public DemoGradingPeriodStorage GradingPeriodStorage { get; private set; }
-        public DemoGradeLevelStorage GradeLevelStorage { get; private set; }
-        public DemoSchoolGradeLevelStorage SchoolGradeLevelStorage { get; private set; }
-        public DemoDayTypeStorage DayTypeStorage { get; private set; }
-        public DemoClassStorage ClassStorage { get; private set; }
-        public DemoClassPersonStorage ClassPersonStorage { get; private set; }
-        public DemoClassTeacherStorage ClassTeacherStorage { get; private set; }
-        public DemoClassAnnouncementTypeStorage ClassAnnouncementTypeStorage { get; private set; }
-        public DemoCategoryStorage CategoryStorage { get; private set; }
-        public DemoDateStorage DateStorage { get; private set; }
-        public DemoChalkableDepartmentStorage ChalkableDepartmentStorage { get; private set; }
-        public DemoMasterSchoolStorage MasterSchoolStorage { get; private set; }
-        public DemoStudentAnnouncementStorage StudentAnnouncementStorage { get; private set; }
-        public DemoAnnouncementAttachmentStorage AnnouncementAttachmentStorage { get; private set; }
-        public DemoAttendanceReasonStorage AttendanceReasonStorage { get; private set; }
-        public DemoAttendanceLevelReasonStorage AttendanceLevelReasonStorage { get; private set; }
-        public DemoApplicationRatingStorage ApplicationRatingStorage { get; private set; }
-        public DemoNotificationStorage NotificationStorage { get; private set; }
-        public DemoApplicationInstallStorage ApplicationInstallStorage { get; private set; }
-        public IDemoAnnouncementStorage AnnouncementStorage { get; private set; }
-        public DemoAnnouncementQnAStorage AnnouncementQnAStorage { get; private set; }
-        public DemoAnnouncementRecipientStorage AnnouncementRecipientStorage { get; private set; }
-        public DemoAnnouncementStandardStorage AnnouncementStandardStorage { get; private set; }
-        public DemoDistrictStorage DistrictStorage { get; private set; }
-        public DemoApplicationInstallActionStorage ApplicationInstallActionStorage { get; private set; }
-        public DemoApplicationInstallActionClassesStorage ApplicationInstallActionClassesStorage { get; private set; }
 
-        public DemoApplicationInstallActionGradeLevelStorage ApplicationInstallActionGradeLevelStorage { get;
-            private set; }
+public class DemoStorageLocator 
+{
 
-        public DemoApplicationInstallActionDepartmentStorage ApplicationInstallActionDepartmentStorage { get;
-            private set; }
+        public bool IsInitialized { get; private set; }
 
-        public DemoApplicationInstallActionRoleStorage ApplicationInstallActionRoleStorage { get; private set; }
-        public DemoAnnouncementApplicationStorage AnnouncementApplicationStorage { get; private set; }
-        public DemoInfractionStorage InfractionStorage { get; private set; }
-        public DemoBlobStorage BlobStorage { get; private set; }
-        public DemoGradingScaleStorage GradingScaleStorage { get; private set; }
-        public DemoGradingScaleRangeStorage GradingScaleRangeStorage { get; private set; }
-        public DemoClassRoomOptionStorage ClassRoomOptionStorage { get; private set; }
-        public DemoSchoolOptionStorage SchoolOptionStorage { get; private set; }
-        public DemoAnnouncementCompleteStorage AnnouncementCompleteStorage { get; private set; }
-
-        public DemoStiDisciplineStorage StiDisciplineStorage { get; private set; }
-        public DemoStiStandardScoreStorage StiStandardScoreStorage { get; private set; }
-        public DemoStiGradeBookStorage StiGradeBookStorage { get; private set; }
-        public DemoStiAttendanceStorage StiAttendanceStorage { get; private set; }
-        public DemoStiSeatingChartStorage StiSeatingChartStorage { get; private set; }
-        public DemoStiActivityScoreStorage StiActivityScoreStorage { get; private set; }
-        public DemoStiInfractionStorage StiInfractionStorage { get; private set; }
-        public DemoStiActivityStorage StiActivityStorage { get; private set; }
-
-        public DemoStudentHealthConditionStorage StudentHealthConditionStorage { get; private set; }
-
-        public DemoPersonEmailStorage PersonEmailStorage { get; private set; }
-        public DemoPersonBalanceStorage PersonBalanceStorage { get; private set; }
-        public DemoStudentStorage StudentStorage { get; private set; }
-        public DemoStaffStorage StaffStorage { get; private set; }
-        public DemoStudentSchoolStorage StudentSchoolStorage { get; private set; }
-        public DemoStaffSchoolStorage StaffSchoolStorage { get; private set; }
-
-        public DemoScheduledTimeSlotStorage ScheduledTimeSlotStorage { get; private set; }
-        public DemoAutoGradeStorage AutoGradeStorage { get; private set; }
-        public DemoUserStorage UserStorage { get; private set; }
-        public DemoPracticeGradeStorage PracticeGradeStorage { get; private set; }
-
-        public UserContext Context { get; private set; }
-        public IServiceLocatorSchool SchoolLocator { get; set; }
-
-        public void UpdateContext(UserContext context)
+        private void Setup(UserContext context)
         {
-            Context = context;
-            CreateAnnouncementStorage(context);
-        }
-
-        private void CreateAnnouncementStorage(UserContext context)
-        {
-            if (AnnouncementStorage == null)
-            {
-                AnnouncementStorage = new DemoAnnouncementStorage(this);
-            }
-            if (BaseSecurity.IsAdminViewer(context))
-                AnnouncementStorage.SetAnnouncementProcessor(new AdminAnnouncementProcessor());
-            if (context.Role == CoreRoles.TEACHER_ROLE)
-                AnnouncementStorage.SetAnnouncementProcessor(new TeacherAnnouncementProcessor(this));
-            if (context.Role == CoreRoles.STUDENT_ROLE)
-                AnnouncementStorage.SetAnnouncementProcessor(new StudentAnnouncementProcessor(this));
-        }
-
-        public DemoStorage(UserContext context)
-        {
-            Context = context;
-            PrivateMessageStore = new DemoPrivateMessageStorage(this);
-            SchoolYearStorage = new DemoSchoolYearStorage(this);
-            InfractionStorage = new DemoInfractionStorage(this);
-            AddressStorage = new DemoAddressStorage(this);
-            AlphaGradeStorage = new DemoAlphaGradeStorage(this);
-            AlternateScoreStorage = new DemoAlternateScoreStorage(this);
-            StudentParentStorage = new DemoStudentParentStorage(this);
-            StandardStorage = new DemoStandardStorage(this);
-            StandardSubjectStorage = new DemoStandardSubjectStorage(this);
-            ClassStandardStorage = new DemoClassStandardStorage(this);
-            SchoolStorage = new DemoSchoolStorage(this);
-            SchoolPersonStorage = new DemoSchoolPersonStorage(this);
-            RoomStorage = new DemoRoomStorage(this);
-            ClassPeriodStorage = new DemoClassPeriodStorage(this);
-            PrivateMessageStorage = new DemoPrivateMessageStorage(this);
-            PhoneStorage = new DemoPhoneStorage(this);
-            PersonStorage = new DemoPersonStorage(this);
-            PeriodStorage = new DemoPeriodStorage(this);
-            MarkingPeriodStorage = new DemoMarkingPeriodStorage(this);
-            MarkingPeriodClassStorage = new DemoMarkingPeriodClassStorage(this);
-            GradingPeriodStorage = new DemoGradingPeriodStorage(this);
-            GradeLevelStorage = new DemoGradeLevelStorage(this);
-            SchoolGradeLevelStorage = new DemoSchoolGradeLevelStorage(this);
-            DayTypeStorage = new DemoDayTypeStorage(this);
-            ClassStorage = new DemoClassStorage(this);
-            ClassPersonStorage = new DemoClassPersonStorage(this);
-            ClassTeacherStorage = new DemoClassTeacherStorage(this);
-            ClassAnnouncementTypeStorage = new DemoClassAnnouncementTypeStorage(this);
-            CategoryStorage = new DemoCategoryStorage(this);
-            DateStorage = new DemoDateStorage(this);
-            ChalkableDepartmentStorage = new DemoChalkableDepartmentStorage(this);
-            MasterSchoolStorage = new DemoMasterSchoolStorage(this);
-            StudentAnnouncementStorage = new DemoStudentAnnouncementStorage(this);
-            AnnouncementAttachmentStorage = new DemoAnnouncementAttachmentStorage(this);
-            AttendanceReasonStorage = new DemoAttendanceReasonStorage(this);
-            AttendanceLevelReasonStorage = new DemoAttendanceLevelReasonStorage(this);
-            ApplicationRatingStorage = new DemoApplicationRatingStorage(this);
-            NotificationStorage = new DemoNotificationStorage(this);
-            ApplicationInstallStorage = new DemoApplicationInstallStorage(this);
-            AnnouncementQnAStorage = new DemoAnnouncementQnAStorage(this);
-            AnnouncementRecipientStorage = new DemoAnnouncementRecipientStorage(this);
-            AnnouncementStandardStorage = new DemoAnnouncementStandardStorage(this);
-            DistrictStorage = new DemoDistrictStorage(this);
-            ApplicationInstallActionStorage = new DemoApplicationInstallActionStorage(this);
-            ApplicationInstallActionClassesStorage = new DemoApplicationInstallActionClassesStorage(this);
-            ApplicationInstallActionGradeLevelStorage = new DemoApplicationInstallActionGradeLevelStorage(this);
-            ApplicationInstallActionDepartmentStorage = new DemoApplicationInstallActionDepartmentStorage(this);
-            ApplicationInstallActionRoleStorage = new DemoApplicationInstallActionRoleStorage(this);
-            StudentSchoolYearStorage = new DemoStudentSchoolYearStorage(this);
-            AnnouncementApplicationStorage = new DemoAnnouncementApplicationStorage(this);
-            BlobStorage = new DemoBlobStorage(this);
-            ClassRoomOptionStorage = new DemoClassRoomOptionStorage(this);
-            SchoolOptionStorage = new DemoSchoolOptionStorage(this);
-            AnnouncementCompleteStorage = new DemoAnnouncementCompleteStorage(this);
-            StudentHealthConditionStorage = new DemoStudentHealthConditionStorage(this);
-
-            GradingScaleRangeStorage = new DemoGradingScaleRangeStorage(this);
-            GradingScaleStorage = new DemoGradingScaleStorage(this);
-            StiDisciplineStorage = new DemoStiDisciplineStorage(this);
-            StiStandardScoreStorage = new DemoStiStandardScoreStorage(this);
-            StiGradeBookStorage = new DemoStiGradeBookStorage(this);
-            StiAttendanceStorage = new DemoStiAttendanceStorage(this);
-            StiSeatingChartStorage = new DemoStiSeatingChartStorage(this);
-            StiActivityScoreStorage = new DemoStiActivityScoreStorage(this);
-            StiInfractionStorage = new DemoStiInfractionStorage(this);
-            StiActivityStorage = new DemoStiActivityStorage(this);
-
-            PersonEmailStorage = new DemoPersonEmailStorage(this);
-            PersonBalanceStorage = new DemoPersonBalanceStorage(this);
-            StudentStorage = new DemoStudentStorage(this);
-            StaffSchoolStorage = new DemoStaffSchoolStorage(this);
-            StaffStorage = new DemoStaffStorage(this);
-            StudentSchoolStorage = new DemoStudentSchoolStorage(this);
-            ScheduledTimeSlotStorage = new DemoScheduledTimeSlotStorage(this);
-            AutoGradeStorage = new DemoAutoGradeStorage(this);
-            UserStorage = new DemoUserStorage(this);
-            PracticeGradeStorage = new DemoPracticeGradeStorage(this);
-
-            CreateAnnouncementStorage(Context);
-            Setup();
-        }
-
-        
-
-        private void Setup()
-        {
-            PrepareGeneralData();
+            if (IsInitialized) 
+                return;
+            PrepareGeneralData(context);
             AddTeacher();
             PrepareStudents();
             AddStudentsToClasses();
             AddClasses();
             AddAttendances();
+            IsInitialized = true;
+        }
+
+        public DemoStorageLocator(UserContext context)
+        {   
+            Setup(context);
         }
 
         private void AddAttendances()
@@ -258,13 +72,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         }
 
-
         private void AddClasses()
         {
-            AddClass(DemoSchoolConstants.AlgebraClassId, "Algebra", DemoSchoolConstants.GradeLevel12, "MA103.01");
-            AddClass(DemoSchoolConstants.GeometryClassId, "Geometry", DemoSchoolConstants.GradeLevel12, "MA201.01");
-            AddClass(DemoSchoolConstants.PhysicsClassId, "Physics", DemoSchoolConstants.GradeLevel12, "SC103.G");
-            AddClass(DemoSchoolConstants.PreCalculusClassId, "Pre-Calculus", DemoSchoolConstants.GradeLevel12, "MA203.11");
+            AddClass(DemoSchoolConstants.AlgebraClassId, "Algebra", "MA103.01");
+            AddClass(DemoSchoolConstants.GeometryClassId, "Geometry", "MA201.01");
+            AddClass(DemoSchoolConstants.PhysicsClassId, "Physics", "SC103.G");
+            AddClass(DemoSchoolConstants.PreCalculusClassId, "Pre-Calculus", "MA203.11");
             
         }
 
@@ -275,8 +88,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         private void PrepareStudents()
         {
-            if (!Context.DistrictId.HasValue) throw new Exception("District id is null");
-
             AddStudent(DemoSchoolConstants.Student1,"KAYE", "BURGESS", "F", DemoSchoolConstants.GradeLevel12, new DateTime(1998, 11, 27));
             AddStudentAddress(DemoSchoolConstants.Student1, new Address());
 
@@ -507,11 +318,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
         }
 
-        private void PrepareGeneralData()
+        private void PrepareGeneralData(UserContext context)
         {
-            MasterSchoolStorage.AddMasterSchool(Context.DistrictId);
+            MasterSchoolStorage.AddMasterSchool(context.DistrictId);
             DateStorage.AddDates();
-            DistrictStorage.AddDistrict();
+            DistrictStorage.AddDistrict(context);
             AddPeriods();
             AddMarkingPeriods();
             AddDayTypes();
@@ -1601,11 +1412,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         private void AddSchoolYear()
         {
-            var currentDate = DateTime.Now;
-            SchoolYearStorage.Add(DemoSchoolConstants.CurrentSchoolYearId, DemoSchoolConstants.SchoolId,
-                "Current School Year", "",
-                new DateTime(currentDate.Year, 1, 1),
-                new DateTime(currentDate.Year, 12, 31));
+            SchoolYearStorage.Add(DemoSchoolYearService.GetDemoSchoolYear());
         }
 
         private void AddStandards()
@@ -1806,7 +1613,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             InfractionStorage.Add(infractions);
         }
 
-        private void AddClass(int id, string name, int gradeLevelRef, string classNumber)
+        private void AddClass(int id, string name, string classNumber)
         {
             ClassStorage.Add(new Class
             {
@@ -1890,7 +1697,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AddSeatingChartForClass(DemoSchoolConstants.SecondMarkingPeriodId, id);
 
         }
-
         
         private void AddSeatingChartForClass(int mpId, int classId)
         {

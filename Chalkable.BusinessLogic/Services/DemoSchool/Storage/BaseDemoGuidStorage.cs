@@ -5,8 +5,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
     public abstract class BaseDemoGuidStorage<TValue>: BaseDemoStorage<Guid, TValue> where TValue: new()
     {
-        protected BaseDemoGuidStorage(DemoStorage storage, Func<TValue, Guid> keyField, bool autoIncrement = false)
-            : base(storage, keyField, autoIncrement)
+        protected BaseDemoGuidStorage(Func<TValue, Guid> keyField, bool autoIncrement = false)
+            : base(keyField, autoIncrement)
         {
         }
 

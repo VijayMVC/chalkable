@@ -1,12 +1,13 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoAutoGradeStorage:BaseDemoIntStorage<AutoGrade>
     {
-        public DemoAutoGradeStorage(DemoStorage storage)
-            : base(storage, null, true)
+        public DemoAutoGradeStorage()
+            : base(null, true)
         {
         }
 
@@ -17,6 +18,25 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 x => x.Value.AnnouncementApplicationRef == autograde.AnnouncementApplicationRef && autograde.StudentRef == x.Value.StudentRef);
 
             data[item.Key] = autograde;
+        }
+
+        public IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId)
+        {
+            var annApps = StorageLocator.AnnouncementApplicationStorage.GetAnnouncementApplicationsByAnnId(announcementId);
+            return GetAll()
+                       .Where(x => annApps.Any(y => y.Id == x.AnnouncementApplicationRef))
+                       .ToList();
+        }
+
+        public AutoGrade GetAutoGrade(int announcementApplicationId, int? recipientId = null)
+        {
+            return GetAll().FirstOrDefault(x => x.AnnouncementApplicationRef == announcementApplicationId
+                                                        && (!recipientId.HasValue || x.StudentRef == recipientId));
+        }
+
+        public IList<AutoGrade> GetAutoGrades(int announcementApplicationId)
+        {
+            return GetAll().Where(x => x.AnnouncementApplicationRef == announcementApplicationId).ToList();
         }
     }
 }

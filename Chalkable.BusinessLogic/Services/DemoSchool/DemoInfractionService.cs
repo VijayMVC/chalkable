@@ -1,65 +1,75 @@
-﻿using System.Collections.Generic;
-using Chalkable.BusinessLogic.Security;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoInfractionStorage : BaseDemoIntStorage<Infraction>
+    {
+        public DemoInfractionStorage()
+            : base(x => x.Id, true)
+        {
+        }
+
+        public IList<Infraction> GetAll(bool onlyActive)
+        {
+            var infractions = data.Select(x => x.Value);
+            if (onlyActive)
+                infractions = infractions.Where(x => x.IsActive);
+            return infractions.ToList();
+        }
+    }
+
     public class DemoInfractionService : DemoSchoolServiceBase, IInfractionService
     {
-        public DemoInfractionService(IServiceLocatorSchool serviceLocator, DemoStorage storage)
-            : base(serviceLocator, storage)
+        private DemoInfractionStorage InfractionStorage { get; set; }
+        public DemoInfractionService(IServiceLocatorSchool serviceLocator)
+            : base(serviceLocator)
         {
+            InfractionStorage = new DemoInfractionStorage();
         }
 
         public void AddList(IList<Infraction> infractions)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            Storage.InfractionStorage.Add(infractions);
+            InfractionStorage.Add(infractions);
         }
 
         public void EditList(IList<Infraction> infractions)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-
-            Storage.InfractionStorage.Update(infractions);
+            throw new NotImplementedException();
         }
 
         public void DeleteList(IList<Infraction> infractions)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-
-            Storage.InfractionStorage.Delete(infractions);
+            throw new NotImplementedException();
         }
 
         public IList<Infraction> GetDisciplineTypes()
         {
-            return Storage.InfractionStorage.GetAll();
+            return InfractionStorage.GetAll();
         }
 
         public void Add(IList<Infraction> infractions)
         {
-            Storage.InfractionStorage.Add(infractions);
+            InfractionStorage.Add(infractions);
         }
 
         public void Edit(IList<Infraction> infractions)
         {
-            Storage.InfractionStorage.Update(infractions);
+            InfractionStorage.Update(infractions);
         }
 
         public void Delete(IList<Infraction> infractions)
         {
-            Storage.InfractionStorage.Delete(infractions);
+            throw new NotImplementedException();
         }
 
         public IList<Infraction> GetInfractions()
         {
-            return Storage.InfractionStorage.GetAll();
+            throw new NotImplementedException();
         }
     }
 }

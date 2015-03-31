@@ -1,16 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoClassTeacherStorage : BaseDemoIntStorage<ClassTeacher>
     {
-        public DemoClassTeacherStorage(DemoStorage storage) : base(storage, null, true)
+        public DemoClassTeacherStorage() : base( null, true)
         {
         }
 

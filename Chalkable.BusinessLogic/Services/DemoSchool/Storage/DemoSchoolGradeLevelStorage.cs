@@ -1,13 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoSchoolGradeLevelStorage:BaseDemoIntStorage<SchoolGradeLevel>
     {
-        public DemoSchoolGradeLevelStorage(DemoStorage storage) : base(storage, null, true)
+        public DemoSchoolGradeLevelStorage() : base(null, true)
         {
         }
         

@@ -2,25 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Chalkable.BusinessLogic.Services.School;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
-
-    public abstract class BaseDemoStorage<TKey, TValue> where TKey: struct where TValue:new()
+    public interface IBaseDemoStorage
     {
-        protected DemoStorage Storage { get; private set; }
+        void Setup(DemoStorageLocator storageLocator, UserContext context);
+    }
+
+    public abstract class BaseDemoStorage<TKey, TValue>:IBaseDemoStorage where TKey: struct where TValue:new()
+    {
+        protected DemoStorageLocator StorageLocator { get; private set; }
+        protected UserContext Context { get; private set; }
 
         protected Dictionary<TKey, TValue> data = new Dictionary<TKey, TValue>();
 
         protected TKey Index = default(TKey);
-        private bool IsAutoIncrement;
+        private readonly bool IsAutoIncrement;
 
         protected Func<TValue, TKey> KeyFieldAction { get; private set; }
 
         public bool IsEmpty()
         {
             return data.Count == 0;
+        }
+
+        public virtual void Setup(DemoStorageLocator storageLocator, UserContext context)
+        {
+            StorageLocator = storageLocator;
+            Context = context;
         }
 
         public Dictionary<TKey, TValue> GetData()
@@ -70,9 +80,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
 
 
-        protected BaseDemoStorage(DemoStorage storage, Func<TValue, TKey> keyField, bool autoIncrement = false)
+        protected BaseDemoStorage(Func<TValue, TKey> keyField, bool autoIncrement = false)
         {
-            Storage = storage;
             KeyFieldAction = keyField;
             IsAutoIncrement = autoIncrement;
         }

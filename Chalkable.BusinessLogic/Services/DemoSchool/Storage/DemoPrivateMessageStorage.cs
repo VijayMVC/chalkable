@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using Chalkable.Common;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoPrivateMessageStorage:BaseDemoIntStorage<PrivateMessage>
     {
-        public DemoPrivateMessageStorage(DemoStorage storage) : base(storage, x => x.Id, true)
+        public DemoPrivateMessageStorage() : base(x => x.Id, true)
         {
         }
 
@@ -33,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
 
                 var fromPersonIds = msgs.Select(x => x.FromPersonRef);
-                var persons = fromPersonIds.Select(fromPersonId => Storage.PersonStorage.GetById(fromPersonId)).ToList();
+                var persons = fromPersonIds.Select(fromPersonId => StorageLocator.PersonStorage.GetById(fromPersonId)).ToList();
 
                 var fromPersonIdsFiltered = roles.Count > 0
                     ? persons.Where(x => roles.Contains(x.RoleRef)).Select(x => x.Id).ToList()
@@ -45,7 +41,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             {
                 var toPersonIds = msgs.Select(x => x.ToPersonRef);
 
-                var persons = toPersonIds.Select(toPersonId => Storage.PersonStorage.GetById(toPersonId)).ToList();
+                var persons = toPersonIds.Select(toPersonId => StorageLocator.PersonStorage.GetById(toPersonId)).ToList();
 
                 var toPersonIdsFiltered = roles.Count > 0 
                     ? persons.Where(x => roles.Contains(x.RoleRef)).Select(x => x.Id).ToList()
@@ -69,8 +65,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 DeletedBySender = x.DeletedBySender,
                 FromPersonRef = x.FromPersonRef,
                 Read = x.Read,
-                Recipient = Storage.PersonStorage.GetById(x.ToPersonRef),
-                Sender = Storage.PersonStorage.GetById(x.FromPersonRef),
+                Recipient = StorageLocator.PersonStorage.GetById(x.ToPersonRef),
+                Sender = StorageLocator.PersonStorage.GetById(x.FromPersonRef),
                 Sent = x.Sent,
                 Subject = x.Subject,
                 ToPersonRef = x.ToPersonRef
@@ -116,8 +112,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 Subject = msg.Subject
             };
 
-            msgDetails.Sender = Storage.PersonStorage.GetById(msgDetails.FromPersonRef);
-            msgDetails.Recipient = Storage.PersonStorage.GetById(msgDetails.ToPersonRef);
+            msgDetails.Sender = StorageLocator.PersonStorage.GetById(msgDetails.FromPersonRef);
+            msgDetails.Recipient = StorageLocator.PersonStorage.GetById(msgDetails.ToPersonRef);
             return msgDetails;
         }
 

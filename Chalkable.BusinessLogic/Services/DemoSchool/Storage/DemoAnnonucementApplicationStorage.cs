@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.Data.School.DataAccess;
+using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoAnnouncementApplicationStorage:BaseDemoIntStorage<AnnouncementApplication>
     {
-        public DemoAnnouncementApplicationStorage(DemoStorage storage)
-            : base(storage, x => x.Id, true)
+        public DemoAnnouncementApplicationStorage()
+            : base(x => x.Id, true)
         {
         }
 
@@ -36,18 +37,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             announcementApplications = announcementApplications.Where(x =>
             {
-
-                var announcement =
-                    Storage.AnnouncementStorage.GetById(
-                        x.AnnouncementRef);
-
-                return Storage.ApplicationInstallStorage.Exists(x.ApplicationRef, personId)
+                var announcement = StorageLocator.AnnouncementStorage.GetAnnouncementById(x.AnnouncementRef);
+                return StorageLocator.ApplicationInstallStorage.Exists(x.ApplicationRef, personId)
                        && announcement.PrimaryTeacherRef == personId
-                       || Storage.ClassPersonStorage.Exists(new ClassPersonQuery
-                       {
-                           ClassId = announcement.ClassRef,
-                           PersonId = personId
-                       });
+                       || StorageLocator.ClassPersonStorage.ClassPersonExists(announcement.ClassRef, personId);
             });
             return announcementApplications.ToList();
         }
@@ -56,6 +49,55 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             var announcementAttachments = GetAll(announcementId, false);
             Delete(announcementAttachments);
+        }
+
+        public AnnouncementApplication GetAnnouncementApplication(int announcementAppId)
+        {
+            
+        }
+
+        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds, bool onlyActive = false)
+        {
+            var res = GetAll()
+                       .Where(x => announcementIds.Contains(x.AnnouncementRef));
+            if (onlyActive)
+                res = res.Where(x => x.Active);
+            return res.ToList();
+        }
+
+        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false)
+        {
+            return GetAnnouncementApplicationsByAnnIds(new List<int> {announcementId}, onlyActive);
+        }
+
+        public void AttachAppToAnnouncement(int announcementAppId)
+        {
+            var aa = GetAnnouncementApplication(announcementAppId);
+            var ann = StorageLocator.AnnouncementStorage.GetTeacherStorage()
+                .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.PersonId.Value);
+            var c = StorageLocator.ClassStorage.GetById(ann.ClassRef);
+            if (Context.PersonId != c.PrimaryTeacherRef)
+                throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
+            aa.Active = true;
+            Update(aa);
+        }
+
+        public Announcement RemoveFromAnnouncement(int announcementAppId)
+        {
+            try
+            {
+                var aa = StorageLocator.AnnouncementApplicationStorage.GetAnnouncementApplication(announcementAppId);
+                StorageLocator.AnnouncementApplicationStorage.Delete(announcementAppId);
+                var res = StorageLocator.AnnouncementStorage.GetAnnouncementById(aa.AnnouncementRef);
+                var c = StorageLocator.ClassStorage.GetById(res.ClassRef);
+                if (Context.PersonId != c.PrimaryTeacherRef)
+                    throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
+                return res;
+            }
+            catch (Exception)
+            {
+                throw new ChalkableException(String.Format(ChlkResources.ERR_CANT_DELETE_ANNOUNCEMENT_APPLICATION, announcementAppId));
+            }
         }
     }
 }

@@ -100,23 +100,30 @@ namespace Chalkable.BusinessLogic.Services
 
         private static IServiceLocatorSchool CreateDemoSchoolLocator(UserContext context)
         {
-            //district ref not user id
-            bool firstTimeCreated = false;
-            if (HttpRuntime.Cache[context.DistrictId.ToString()] == null)
+            var demoDistrictId = context.DistrictId.ToString();
+            var firstTime = HttpRuntime.Cache[demoDistrictId] == null;
+            DemoStorageLocator storageLocator = null;
+            
+            
+            
+            
+            if (firstTime)
             {
-                HttpRuntime.Cache.Add(context.DistrictId.ToString(), new DemoStorage(context), null,
-                    DateTime.Now.AddHours(3), Cache.NoSlidingExpiration, CacheItemPriority.Normal, null);
-                firstTimeCreated = true;
+                HttpRuntime.Cache.Add(demoDistrictId, new DemoStorageLocator(context), null,
+                    DateTime.Now.AddHours(3), 
+                    Cache.NoSlidingExpiration, 
+                    CacheItemPriority.Normal, null);
             }
-            var storage = (DemoStorage)HttpRuntime.Cache[context.DistrictId.ToString()];
-            storage.UpdateContext(context);
-            var masterLocator = new DemoServiceLocatorMaster(context, storage);
-            var res = new DemoServiceLocatorSchool(masterLocator, storage);
-            if (firstTimeCreated)
+            storageLocator = (DemoStorageLocator)HttpRuntime.Cache[demoDistrictId];
+            storageLocator.Update(context);
+            var masterLocator = new DemoServiceLocatorMaster(context, storageLocator);
+            var resSchoolLocator = new DemoServiceLocatorSchool(masterLocator, storageLocator);
+            if (firstTime)
             {
-                ((DemoStandardService)res.StandardService).SetupDefaultData();   
+                ((DemoStandardService)resSchoolLocator.StandardService).SetupDefaultData(); 
             }
-            return res;
+
+            return resSchoolLocator;
         }
     }
 }

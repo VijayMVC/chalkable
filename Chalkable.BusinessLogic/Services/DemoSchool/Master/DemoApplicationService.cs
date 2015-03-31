@@ -13,10 +13,28 @@ using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
-   
+    public class DemoApplicationRatingStorage : BaseDemoGuidStorage<ApplicationRating>
+    {
+        public DemoApplicationRatingStorage()
+            : base(x => x.Id)
+        {
+        }
+
+        public bool Exists(Guid applicationId, Guid userId)
+        {
+            return data.Count(x => x.Value.ApplicationRef == applicationId && x.Value.UserRef == userId) == 1;
+        }
+
+        public IList<ApplicationRating> GetAll(Guid applicationId)
+        {
+            return data.Where(x => x.Value.ApplicationRef == applicationId).Select(x => x.Value).ToList();
+        }
+    }
+
     public class DemoApplicationService : DemoMasterServiceBase, IApplicationService
     {
-        public DemoApplicationService(IServiceLocatorMaster serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+        private DemoApplicationRatingStorage ApplicationRatingStorage { get; set; }
+        public DemoApplicationService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
         }
 
@@ -26,7 +44,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 throw new ChalkableException("User can send only one review per application");
 
             var user = DemoUserService.CreateDemoUser(Context.DistrictId.Value, Context.UserId, Context.Login);
-            user.FullName = Storage.PersonStorage.GetById(Context.PersonId.Value).FullName();
+            user.FullName = ServiceLocator.Person.GetPerson(Context.PersonId.Value).FullName();
             ServiceLocator.UserService.Add(new List<User>{user});
 
             var appRating = new ApplicationRating
@@ -38,13 +56,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 UserRef = Context.UserId,
                 User = user
             };
-            Storage.ApplicationRatingStorage.Add(appRating);
+            ApplicationRatingStorage.Add(appRating);
             return appRating;
         }
 
         public IList<ApplicationRating> GetRatings(Guid applicationId)
         {
-            return Storage.ApplicationRatingStorage.GetAll(applicationId);
+            return ApplicationRatingStorage.GetAll(applicationId);
         }
 
         public PaginatedList<Application> GetApplications(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = Int32.MaxValue)
@@ -87,7 +105,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public bool ReviewExists(Guid applicationId)
         {
-            return Storage.ApplicationRatingStorage.Exists(applicationId, Context.UserId);
+            return ApplicationRatingStorage.Exists(applicationId, Context.UserId);
         }
 
         public IList<AppPermissionType> GetPermisions(string applicationUrl)

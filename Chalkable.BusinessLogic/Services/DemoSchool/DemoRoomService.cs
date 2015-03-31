@@ -1,57 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.BusinessLogic.Security;
+using System.Linq;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
-    
+    public class DemoRoomStorage : BaseDemoIntStorage<Room>
+    {
+        public DemoRoomStorage()
+            : base(x => x.Id)
+        {
+        }
+    }
+
     public class DemoRoomService : DemoSchoolServiceBase, IRoomService
     {
-        public DemoRoomService(IServiceLocatorSchool serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+        private DemoRoomStorage RoomStorage { get; set; }
+        public DemoRoomService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+            RoomStorage = new DemoRoomStorage();
         }
 
         public void AddRooms(IList<Room> rooms)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.RoomStorage.AddRooms(rooms);
+            RoomStorage.Add(rooms);
         }
 
         public void EditRooms(IList<Room> rooms)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.RoomStorage.Update(rooms);
+            RoomStorage.Update(rooms);
         }
 
         public void DeleteRooms(IList<Room> rooms)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.RoomStorage.Delete(rooms);
+            throw new NotImplementedException();
         }
 
         public PaginatedList<Room> GetRooms(int start = 0, int count = Int32.MaxValue)
         {
-            return Storage.RoomStorage.GetAll(start, count);
-            
+            return GetAll(start, count);
+        }
+
+        private PaginatedList<Room> GetAll(int start, int count)
+        {
+            var rooms = RoomStorage.GetData().Select(x => x.Value).ToList().Skip(start).Take(count);
+            return new PaginatedList<Room>(rooms, start / count, count, RoomStorage.GetData().Count);
         }
 
         public Room WhereIsPerson(int personId, DateTime dateTime)
         {
             var c = ServiceLocator.ClassPeriodService.CurrentClassForTeacher(personId, dateTime);
-            return c.RoomRef.HasValue ? GetRoomById(c.RoomRef.Value) : null;
+            return c.RoomRef.HasValue ? RoomStorage.GetById(c.RoomRef.Value) : null;
         }
 
         public Room GetRoomById(int id)
         {
-            return Storage.RoomStorage.GetById(id);
+            return RoomStorage.GetById(id);
         }
     }
 }

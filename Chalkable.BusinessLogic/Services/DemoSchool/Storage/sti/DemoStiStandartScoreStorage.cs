@@ -6,8 +6,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 {
     public class DemoStiStandardScoreStorage:BaseDemoIntStorage<StandardScore>
     {
-        public DemoStiStandardScoreStorage(DemoStorage storage)
-            : base(storage, null, true)
+        public DemoStiStandardScoreStorage()
+            : base(null, true)
         {
         }
 

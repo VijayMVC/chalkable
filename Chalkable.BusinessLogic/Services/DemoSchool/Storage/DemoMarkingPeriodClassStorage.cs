@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -9,7 +7,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoMarkingPeriodClassStorage:BaseDemoIntStorage<MarkingPeriodClass>
     {
-        public DemoMarkingPeriodClassStorage(DemoStorage storage) : base(storage, null, true)
+        public DemoMarkingPeriodClassStorage() : base(null, true)
         {
         }
 
@@ -68,6 +66,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         {
             return GetMarkingPeriodClasses(new MarkingPeriodClassQuery
             {
+                ClassId = classId
+            });
+        }
+
+        public MarkingPeriodClass GetMarkingPeriodClass(int classId, int markingPeriodId)
+        {
+            return GetMarkingPeriodClassOrNull(new MarkingPeriodClassQuery
+            {
+                MarkingPeriodId = markingPeriodId,
                 ClassId = classId
             });
         }

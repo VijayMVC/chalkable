@@ -8,10 +8,37 @@ using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
+    public class DemoPersonBalance
+    {
+        public decimal Balance { get; set; }
+        public int PersonId { get; set; }
+    }
+    public class DemoPersonBalanceStorage : BaseDemoIntStorage<DemoPersonBalance>
+    {
+        public DemoPersonBalanceStorage()
+            : base(x => x.PersonId, false)
+        {
+        }
+
+        public void AddPersonBalance(DemoPersonBalance balance)
+        {
+            Add(balance);
+        }
+
+        public void UpdatePersonBalance(int personId, decimal balance)
+        {
+            if (data.ContainsKey(personId))
+            {
+                data[personId].Balance = balance;
+            }
+        }
+    }
     public class DemoFundService : DemoMasterServiceBase, IFundService
     {
-        public DemoFundService(IServiceLocatorMaster serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+        private DemoPersonBalanceStorage PersonBalanceStorage { get; set; }
+        public DemoFundService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
+            PersonBalanceStorage = new DemoPersonBalanceStorage();
         }
 
         public decimal GetSchoolReserve(Guid schoolId)
@@ -56,12 +83,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public decimal GetUserBalance(int userId, bool? privateMoney = null)
         {
-            return Storage.PersonBalanceStorage.GetById(userId).Balance;
+            return PersonBalanceStorage.GetById(userId).Balance;
         }
 
         public void UpdateUserBalance(int userId, decimal newBalance)
         {
-            Storage.PersonBalanceStorage.UpdatePersonBalance(userId, newBalance);
+            PersonBalanceStorage.UpdatePersonBalance(userId, newBalance);
         }
 
         public decimal GetClassBalance(Guid classId)

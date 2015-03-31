@@ -5,15 +5,29 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
+    public class DemoChalkableDepartmentStorage : BaseDemoGuidStorage<ChalkableDepartment>
+    {
+        public DemoChalkableDepartmentStorage()
+            : base(x => x.Id)
+        {
+        }
+
+        public ChalkableDepartment GetByIdOrNull(Guid id)
+        {
+            return data.ContainsKey(id) ? data[id] : null;
+        }
+    }
+
     public class DemoChalkableDepartmentService : DemoMasterServiceBase, IChalkableDepartmentService
     {
-        public DemoChalkableDepartmentService(IServiceLocatorMaster serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+        private DemoChalkableDepartmentStorage ChalkableDepartmentStorage { get; set; }
+        public DemoChalkableDepartmentService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
+            ChalkableDepartmentStorage = new DemoChalkableDepartmentStorage();
         }
 
         public ChalkableDepartment Add(string name, IList<string> keywords, byte[] icon)
@@ -28,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 Name = name
             };
 
-            Storage.ChalkableDepartmentStorage.Add(res);
+            ChalkableDepartmentStorage.Add(res);
             ServiceLocator.DepartmentIconService.UploadPicture(res.Id, icon);
             return res;
         }
@@ -38,10 +52,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
 
-            var res = Storage.ChalkableDepartmentStorage.GetById(id);
+            var res = ChalkableDepartmentStorage.GetById(id);
             res.Keywords = keywords.JoinString(",");
             res.Name = name;
-            Storage.ChalkableDepartmentStorage.Update(res);
+            ChalkableDepartmentStorage.Update(res);
             ServiceLocator.DepartmentIconService.UploadPicture(id, icon);
             return res;
         }
@@ -50,17 +64,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
-            Storage.ChalkableDepartmentStorage.Delete(id);
+            ChalkableDepartmentStorage.Delete(id);
             ServiceLocator.DepartmentIconService.DeletePicture(id);
         }
 
         public IList<ChalkableDepartment> GetChalkableDepartments()
         {
-            return Storage.ChalkableDepartmentStorage.GetAll();
+            return ChalkableDepartmentStorage.GetAll();
         }
         public ChalkableDepartment GetChalkableDepartmentById(Guid id)
         {
-            return Storage.ChalkableDepartmentStorage.GetByIdOrNull(id);
+            return ChalkableDepartmentStorage.GetByIdOrNull(id);
         }
     }
 }

@@ -7,7 +7,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoAnnouncementStandardStorage:BaseDemoIntStorage<AnnouncementStandard>
     {
-        public DemoAnnouncementStandardStorage(DemoStorage storage) : base(storage, null, true)
+        public DemoAnnouncementStandardStorage() : base(null, true)
         {
         }
 
@@ -25,6 +25,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public IList<AnnouncementStandard> GetAll(int announcementId)
         {
             return data.Where(x => x.Value.AnnouncementRef == announcementId).Select(x => x.Value).ToList();
+        }
+
+        public IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId)
+        {
+            return GetAll(announcementId).Select(x => new AnnouncementStandardDetails
+            {
+                AnnouncementRef = x.AnnouncementRef,
+                StandardRef = x.StandardRef,
+                Standard = StorageLocator.StandardStorage.GetById(x.StandardRef)
+            }).ToList();
         }
     }
 }

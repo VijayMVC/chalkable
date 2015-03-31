@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -8,7 +7,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoClassPersonStorage:BaseDemoIntStorage<ClassPerson>
     {
-        public DemoClassPersonStorage(DemoStorage storage) : base(storage, null, true)
+        public DemoClassPersonStorage() : base(null, true)
         {
         }
 
@@ -36,6 +35,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
             return (classPersonQuery.ClassId.HasValue || classPersonQuery.MarkingPeriodId.HasValue ||
                     classPersonQuery.PersonId.HasValue) && classPersonsList.Count > 0;
+        }
+
+        public bool Exists(int? classId, int? personId)
+        {
+            return Exists(new ClassPersonQuery
+            {
+                ClassId = classId,
+                PersonId = personId
+            });
+        }
+
+        public IEnumerable<ClassPerson> GetClassPersons(int classId)
+        {
+            return GetClassPersons(new ClassPersonQuery{ClassId = classId});
         }
 
         public IEnumerable<ClassPerson> GetClassPersons(ClassPersonQuery classPersonQuery)
