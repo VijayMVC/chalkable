@@ -7,8 +7,11 @@ if !self.userRole.isStudent()
     -var rating = currentUserRating ? currentUserRating.getRating() : 0;
     BUTTON.write-review-btn.right= !currentUserRating ? Msg.Write_a_review : Msg.Edit_review
     .rating-large
+        -var avgRating = appRating.getAverage()
         span.review-link User Rating:
-        +Rating("appRating", appRating.getAverage(), false).all
+        +Rating("appRating", avgRating, false).all
+        if avgRating
+            .rating-avg-title=avgRating.toFixed(2)
     .add-review.x-hidden
         +ActionForm('appmarket', 'writeReview')#submit-review-form
             +Hidden('appId', app.getId().valueOf())
