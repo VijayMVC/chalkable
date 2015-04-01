@@ -334,9 +334,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         throw new NoAnnouncementException();
                     }
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
-                    var chlkAnnType =
-                        ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(
-                            res.ClassAnnouncementTypeName);
+                    var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(res.ClassAnnouncementTypeName);
                     res.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?) null;
                     InsertMissingAttachments(res, uow);
                 }
