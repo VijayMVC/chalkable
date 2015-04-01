@@ -43,6 +43,12 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'studentAttendanceReadOnly',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'studentAttendanceReadOnlyReason',
+
             Boolean, 'needPresent',
 
             String, function getSubmitFormActionName(){

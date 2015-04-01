@@ -81,6 +81,7 @@ namespace Chalkable.Web.Controllers
                 IList<AttendanceReason> attendanceReason = SchoolLocator.AttendanceReasonService.List();
                 var res = ClassAttendanceViewData.Create(attendance, attendanceReason);
                 res.StudentAttendances = res.StudentAttendances.OrderBy(x => x.Student.LastName).ToList();
+                return Json(res);
             }
             return Json(ClassAttendanceViewData.Create(classId, date.Value));
         }
