@@ -1,6 +1,6 @@
 mixin PracticeScoreWithPreviousScores_(lastScore, previousScores)
      -var res=previousScores && previousScores.length && previousScores.length > 0 ? previousScores.join(',') : '';
-     +PracticeScore_(lastScore)(data-tooltip=res)
+     +PracticeScore_((parseInt(lastScore, 10) && lastScore.indexOf('%') == -1) ? lastScore + '%' : lastScore)(data-tooltip=res)
 
 mixin PracticeScore_(score)
     div(attributes)= score != undefined ? score : '-'
