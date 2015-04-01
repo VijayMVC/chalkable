@@ -69,19 +69,6 @@ namespace Chalkable.Web.Controllers
             return Json(result, 8);
         }
 
-        public ActionResult GetRequiredMethodCallsFor(string query, bool isMethod, string role)
-        {
-            var list = ChalkableApiExplorerLogic.IsValidApiRole(role) ? ApiPathfinder.GetRequiredMethodCallsFor(query, isMethod, role) 
-                                                                      : new List<ApiExplorerDropdownItemViewData>();
-            return Json(list);
-        }
-        public ActionResult MethodParamList(string query, string role)
-        {
-            var list = ChalkableApiExplorerLogic.IsValidApiRole(role) ? ApiPathfinder.GetParamsListByQuery(query, role)
-                                                                      : new List<ApiExplorerDropdownItemViewData>();
-            return Json(list);
-        }
-
         public ActionResult DeveloperDocs()
         {
             return View();
