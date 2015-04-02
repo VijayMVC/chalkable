@@ -330,7 +330,7 @@ NAMESPACE('chlk.controllers', function (){
             }
             var result = this.announcementService
                 .addAnnouncement(classId_, announcementTypeId_, date_)
-                .catchException(chlk.services.NoClassAnnouncementTypeException, function(ex){
+                .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(ex){
                     return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
                     throw error;
                 }, this)
