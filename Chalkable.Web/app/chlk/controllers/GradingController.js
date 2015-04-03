@@ -222,7 +222,9 @@ NAMESPACE('chlk.controllers', function (){
                         newModel.setSchoolOptions(schoolOptions);
                         var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM)
                             || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN);
+                        var canEditAvg = canEdit || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES);
                         newModel.setAbleEdit(canEdit);
+                        newModel.setAbleEditAvg(canEditAvg);
                         return newModel;
                     }, this)
                     .attach(this.validateResponse_());
@@ -307,13 +309,16 @@ NAMESPACE('chlk.controllers', function (){
                         if(model.getCurrentGradingGrid()){
                             var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM)
                                 || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN);
+                            var canEditAvg = canEdit || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES);
                             model.getCurrentGradingGrid().setSchoolOptions(schoolOptions);
                             model.getCurrentGradingGrid().setAbleEdit(canEdit);
+                            model.getCurrentGradingGrid().setAbleEditAvg(canEditAvg);
                             var students = model.getCurrentGradingGrid().getStudents().map(function (item){return item.getStudentInfo()});
                             this.getContext().getSession().set(ChlkSessionConstants.STUDENTS_FOR_REPORT, students);
 
                             studentIds = students.map(function(item){return item.getId().valueOf()});
                         }
+
                         model.setAbleEdit(canEdit);
 
                         return model;
@@ -365,6 +370,8 @@ NAMESPACE('chlk.controllers', function (){
                             model.getCurrentGradingGrid().setGradable(alphaGrades && (alphaGrades.length || false) && canEdit);
                         }
                         model.setAbleEdit(canEdit);
+                        model.setAblePostStandards(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM)
+                            || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN));
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassStandardsGridPage, result);

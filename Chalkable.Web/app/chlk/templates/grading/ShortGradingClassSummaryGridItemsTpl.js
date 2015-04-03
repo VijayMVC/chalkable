@@ -35,6 +35,9 @@ NAMESPACE('chlk.templates.grading', function () {
             Boolean, 'ableEdit',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'ableEditAvg',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'autoUpdate',
 
             [ria.templates.ModelPropertyBind],

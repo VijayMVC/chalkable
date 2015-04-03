@@ -17,6 +17,8 @@ NAMESPACE('chlk.models.grading', function () {
             [ria.serialize.SerializeProperty('currentstandardgradinggrid')],
             chlk.models.grading.GradingClassSummaryGridItems.OF(chlk.models.standard.StandardGradings), 'currentGradingGrid',
 
-            ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades'
+            ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
+
+            Boolean, 'ablePostStandards'
         ]);
 });

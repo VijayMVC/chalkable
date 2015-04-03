@@ -42,6 +42,7 @@ NAMESPACE('chlk.models.grading', function () {
                 this.standardId = SJX.fromValue(raw.standardId, chlk.models.id.StandardId);
                 this.categoryId = SJX.fromValue(raw.categoryId, chlk.models.id.AnnouncementTypeGradingId);
                 this.ableEdit = SJX.fromValue(raw.ableEdit, Boolean);
+                this.ableEditAvg = SJX.fromValue(raw.ableEditAvg, Boolean);
                 this.avg = SJX.fromValue(raw.avg, Number);
                 this.rowIndex = SJX.fromValue(raw.rowIndex, Number);
                 this.autoUpdate = SJX.fromValue(raw.autoUpdate, Boolean);
@@ -67,6 +68,7 @@ NAMESPACE('chlk.models.grading', function () {
             chlk.models.id.StandardId, 'standardId',
             chlk.models.id.AnnouncementTypeGradingId, 'categoryId',
             Boolean, 'ableEdit',
+            Boolean, 'ableEditAvg',
             Number, 'avg',
             Number, 'rowIndex',
             Boolean, 'autoUpdate',
