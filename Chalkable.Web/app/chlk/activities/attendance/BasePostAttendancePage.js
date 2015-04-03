@@ -58,11 +58,16 @@ NAMESPACE('chlk.activities.attendance', function () {
                 new ria.dom.Dom('.leave-button').on('click', function(){
                     that._needPopUp = false;
                     that.removeLeavePopUp();
+                    that.leaveClick_(node);
                     node.trigger('click');
                 });
                 new ria.dom.Dom('.go-back').on('click', function(){
                     that.removeLeavePopUp();
                 });
+            },
+
+            function leaveClick_(node){
+
             },
 
             function removeLeavePopUp(){

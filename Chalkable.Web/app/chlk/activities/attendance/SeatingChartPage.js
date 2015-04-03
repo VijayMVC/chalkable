@@ -515,6 +515,11 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             },
 
+            OVERRIDE, function leaveClick_(node){
+                BASE(node);
+                needChartPopUp = false;
+            },
+
             OVERRIDE, VOID, function onStop_() {
                 BASE();
                 this.stopDragging(true);
