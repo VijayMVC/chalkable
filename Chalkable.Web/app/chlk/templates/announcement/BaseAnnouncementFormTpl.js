@@ -26,9 +26,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             Array, 'classScheduleDateRanges',
 
-            chlk.models.standard.StandardsListViewData, function prepareStandardsListData() {
+            chlk.models.standard.StandardTreeItem, function prepareStandardsListData() {
                 var ann = this.announcement;
-                return new chlk.models.standard.StandardsListViewData(
+                return new chlk.models.standard.StandardTreeItem(
                     null, ann.getClassId(),
                     null, ann.getStandards(),
                     ann.getId()

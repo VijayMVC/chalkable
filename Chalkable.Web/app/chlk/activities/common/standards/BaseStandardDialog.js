@@ -31,18 +31,23 @@ NAMESPACE('chlk.activities.common.standards', function(){
             Boolean, function cellClick(node, event){
                 if(node.hasClass('active'))
                     return false;
-                var standardIds = this.getStandardIds_();
                 var prevColumn = node.parent('.column').find('.column-cell.active');
                 prevColumn.removeClass('active');
-
                 node.addClass('active');
+                var childNodes = node.parent('td').find('~ td');
+                childNodes.remove();
+
+                this.afterCellActivate_(node);
+                return true;
+            },
+
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function afterCellActivate_(node){
+                var standardIds = this.getStandardIds_();
                 var id = node.getData('id') || '';
                 var idIndex = id ? standardIds.indexOf(id.toString()) : - 1;
                 var btnAddContainer = this.dom.find('.add-standard-btn');
                 var btn = btnAddContainer.find('button');
-
-                var childNodes = node.parent('td').find('~ td');
-                childNodes.remove();
 
                 if(idIndex == -1 && id != ''){
                     this.dom.find('input[name=tmpStandardId]').setValue(id);
@@ -57,7 +62,6 @@ NAMESPACE('chlk.activities.common.standards', function(){
                     btnAddContainer.removeAttr('disabled');
                     btn.removeAttr('disabled');
                 }
-                return true;
             },
 
             [ria.mvc.DomEventBind('click', '.add-standard-btn')],

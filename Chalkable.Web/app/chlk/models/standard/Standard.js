@@ -2,6 +2,7 @@ REQUIRE('ria.serialize.SJX');
 REQUIRE('ria.serialize.IDeserializable');
 REQUIRE('chlk.models.id.StandardId');
 REQUIRE('chlk.models.id.AnnouncementId');
+REQUIRE('chlk.models.id.StandardSubjectId');
 
 NAMESPACE('chlk.models.standard', function () {
     "use strict";
@@ -19,6 +20,7 @@ NAMESPACE('chlk.models.standard', function () {
                 this.grade = SJX.fromValue(raw.grade, String);
                 this.commonCoreStandardCode = SJX.fromValue(raw.ccstandardcode, String);
                 this.academicBenchmarkId = SJX.fromValue(raw.academicbenchmarkid, String);
+                this.subjectId = SJX.fromValue(raw.standardsubjectid, chlk.models.id.StandardSubjectId);
             },
 
             String, 'academicBenchmarkId',
@@ -28,6 +30,7 @@ NAMESPACE('chlk.models.standard', function () {
             chlk.models.id.StandardId, 'standardId',
             String, 'grade',
             String, 'commonCoreStandardCode',
+            chlk.models.id.StandardSubjectId, 'subjectId',
 
             [[chlk.models.id.StandardId, String, String, String]],
             function $(standardId_, name_, grade_, ccStandardCode_){

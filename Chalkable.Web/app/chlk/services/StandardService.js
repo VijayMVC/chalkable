@@ -45,10 +45,25 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.ClassId, String]],
+            ria.async.Future, function searchStandardsByClassId(classId, filter) {
+                return this.get('Standard/SearchStandards.json', ArrayOf(chlk.models.standard.Standard), {
+                    filter: filter,
+                    classId: classId && classId.valueOf()
+                });
+            },
+
             [[String]],
             ria.async.Future, function searchStandards(filter) {
                 return this.get('Standard/SearchStandards.json', ArrayOf(chlk.models.standard.Standard), {
                     filter: filter
+                });
+            },
+
+            [[chlk.models.id.StandardId]],
+            ria.async.Future, function getStandardParentsSubTree(standardId){
+                return this.get('Standard/GetStandardParentsSubTree', ArrayOf(chlk.models.standard.StandardTreeItem)  ,{
+                    standardId: standardId && standardId.valueOf()
                 });
             },
 
