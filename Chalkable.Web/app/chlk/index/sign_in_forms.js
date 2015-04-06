@@ -98,8 +98,10 @@ $(document).ready(function () {
         var handler = function (responseObj) {
             var response = responseObj.responseJSON || responseObj;
 
-            if (!response || !response.data) {
+            if (!response || response.data == null) {
                 showFormBanner(form, 'Our Server is not responding. Please try again soon', false);
+            } else if (response.success == true && response.data == false) {
+                $('#email3').validationEngine('showPrompt', 'Email is not associated with any account', 'red', 'topRight', false);
             } else if (response.data.exceptiontype == 'ChalkableException') {
                 showFormBanner(form, response.data.message, true);
             } else {
