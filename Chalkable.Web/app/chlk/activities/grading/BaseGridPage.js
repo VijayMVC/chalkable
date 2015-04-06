@@ -311,7 +311,7 @@ NAMESPACE('chlk.activities.grading', function () {
             VOID, function addCommentBtnClick(node, event){
                 var cell = this.dom.find('.active-cell');
                 var commentInput = cell.find('.comment-value');
-                var comment = node.parent('.popup-bubble').find('textarea').getValue();
+                var comment = (node.parent('.popup-bubble').find('textarea').getValue() || '').trim();
                 commentInput.setValue(comment).setData('comment', comment);
                 node.parent('.popup-bubble.comment').hide();
                 setTimeout(function(){
