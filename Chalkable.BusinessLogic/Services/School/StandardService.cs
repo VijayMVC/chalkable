@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId);
 
 
-        IList<StandardTreeItem> GetStandardParentsSubTree(int standardId);
+        StandardTreePath GetStandardParentsSubTree(int standardId);
     }
     public class StandardService : SchoolServiceBase, IStandardService
     {
@@ -247,7 +247,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public IList<StandardTreeItem> GetStandardParentsSubTree(int standardId)
+        public StandardTreePath GetStandardParentsSubTree(int standardId)
         {
             return DoRead(uow => new StandardDataAccess(uow).GetStandardParentsSubTree(standardId));
         }

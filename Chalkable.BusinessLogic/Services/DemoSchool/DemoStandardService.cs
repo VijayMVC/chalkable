@@ -24,7 +24,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var masterLocator = ServiceLocator.ServiceLocatorMaster;
             var ccStandardCategories = masterLocator.CommonCoreStandardService.GetCCStandardCategories();
-            var subjectId = GetStandardSubjects(null).Max(x => x.Id);
+            ClearStandardsData();
+            var subjectId = 1;
             var subjectIdsDic = ccStandardCategories.ToDictionary(x => x.Id, x =>
                 {
                     subjectId++;
@@ -33,6 +34,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             InsertDefaultSubjects(subjectIdsDic, ccStandardCategories);
             InsertDefaultStandards(subjectIdsDic);
             InsertDefaultClassStandards();
+        }
+
+        private void ClearStandardsData()
+        {
+           Storage.ClassStandardStorage.Delete(Storage.ClassStandardStorage.GetAll());
+           Storage.StandardStorage.Delete(Storage.StandardStorage.GetAll());
+           Storage.StandardSubjectStorage.Delete(Storage.StandardSubjectStorage.GetAll());
         }
 
         private void InsertDefaultSubjects(IDictionary<Guid, int> subjectIdsDic
@@ -52,7 +60,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var masterLocator = ServiceLocator.ServiceLocatorMaster;
             var abToccMapper = masterLocator.CommonCoreStandardService.GetAbToCCMapper();
-            var standardId = GetStandards(null, null, null).Max(x => x.Id);
+            var standardId = 0;//GetStandards(null, null, null).Max(x => x.Id);
             IDictionary<Guid, int> ccStandardsIdsDic = new Dictionary<Guid, int>();
             var ccStandards = new List<CommonCoreStandard>();
             foreach (var ccStandard in abToccMapper.Values)
@@ -259,9 +267,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return standards;
         }
 
-        public IList<StandardTreeItem> GetStandardParentsSubTree(int standardId)
+        public StandardTreePath GetStandardParentsSubTree(int standardId)
         {
-            return Storage.StandardStorage.GetStandardParentsSubTree(standardId);
+             return Storage.StandardStorage.GetStandardParentsSubTree(standardId);
         }
     }
 }

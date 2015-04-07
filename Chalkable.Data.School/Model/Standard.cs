@@ -33,8 +33,18 @@ namespace Chalkable.Data.School.Model
     }
 
 
-    public class StandardTreeItem : Standard
+    public class StandardTreeNode : Standard
     {
-        public IList<StandardTreeItem> StandardChildren { get; set; }
+        public StandardTreeNode Parent { get; set; }
+        public IList<StandardTreeNode> Children { get; set; }
+
+        //public IList<Standard> Children { get; set; }
+        //public IList<Standard> Path { get; set; }
+    }
+
+    public class StandardTreePath
+    {
+        public IList<Standard> AllStandards { get; set; }
+        public IList<Standard> Path { get; set; } 
     }
 }

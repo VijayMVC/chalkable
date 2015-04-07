@@ -45,56 +45,40 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             for (var i = 0; i < words.Length; i++)
             {
                 var word = words[i];
-                res = res.Union(standards.Where(s => (!string.IsNullOrEmpty(s.Name) && word.IndexOf(s.Name, StringComparison.OrdinalIgnoreCase) >= 0)
-                                           || (!string.IsNullOrEmpty(s.CCStandardCode) && word.IndexOf(s.CCStandardCode, StringComparison.OrdinalIgnoreCase) >= 0)
-                                           || (!string.IsNullOrEmpty(s.Description) && word.IndexOf(s.Description, StringComparison.OrdinalIgnoreCase) >= 0)
+                res = res.Union(standards.Where(s => (!string.IsNullOrEmpty(s.Name) && s.Name.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
+                                           || (!string.IsNullOrEmpty(s.CCStandardCode) && s.Name.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
+                                           || (!string.IsNullOrEmpty(s.Description) && s.Name.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
                                 ));
             }
             return res.ToList();
         }
 
-        public IList<StandardTreeItem> GetStandardParentsSubTree(int standardId)
+        public StandardTreePath GetStandardParentsSubTree(int standardId)
         {
-            var currentStandard = GetById(standardId);
-            var lastParent = GetParentWithChilds(currentStandard);
-            var lastParents = GetData().Where(x => x.Value.StandardSubjectRef == lastParent.StandardSubjectRef
-                                                   && x.Value.Id != lastParent.Id && !x.Value.ParentStandardRef.HasValue)
-                                       .Select(s => CreateStandardTreeItem(s.Value)).ToList();
-            var res = new List<StandardTreeItem> {lastParent};
-            res.AddRange(lastParents);
+            int? currentParentId = standardId;
+            Standard currentStandard;
+            var allStandards = new List<Standard>();
+            var standards = GetData().Select(x => x.Value).ToList();
+            var res = new StandardTreePath
+                {
+                    AllStandards = new List<Standard>(),
+                    Path = new List<Standard>()
+                };
+            var lastChild = standards.Where(x => x.ParentStandardRef == currentParentId).ToList();
+            allStandards.AddRange(lastChild);
+            while (currentParentId.HasValue)
+            {
+                currentStandard = GetById(currentParentId.Value);
+                currentParentId = currentStandard.ParentStandardRef;
+                allStandards.AddRange(currentParentId.HasValue
+                                          ? standards.Where(x => x.ParentStandardRef == currentParentId).ToList()
+                                          : standards.Where(x => !x.ParentStandardRef.HasValue && x.StandardSubjectRef == currentStandard.StandardSubjectRef).ToList());
+                res.Path.Add(currentStandard);
+            }
+            res.Path = res.Path.Reverse().ToList(); 
+            res.AllStandards = allStandards;
             return res;
         }
-
-        private StandardTreeItem GetParentWithChilds(Standard child)
-        {
-            if (!child.ParentStandardRef.HasValue)
-                return child as StandardTreeItem ?? CreateStandardTreeItem(child);  
-
-            var parent = GetById(child.ParentStandardRef.Value);
-            var res = CreateStandardTreeItem(parent);
-            res.StandardChildren = GetData()
-                                          .Where(x => x.Value.ParentStandardRef == parent.Id)
-                                          .Select(x => CreateStandardTreeItem(x.Value)).ToList();
-            return GetParentWithChilds(res);
-        }
-
-        private StandardTreeItem CreateStandardTreeItem(Standard standard)
-        {
-            return new StandardTreeItem
-            {
-                Id = standard.Id,
-                AcademicBenchmarkId = standard.AcademicBenchmarkId,
-                CCStandardCode = standard.CCStandardCode,
-                Description = standard.Description,
-                IsActive = standard.IsActive,
-                LowerGradeLevelRef = standard.LowerGradeLevelRef,
-                Name = standard.Name,
-                ParentStandardRef = standard.ParentStandardRef,
-                StandardChildren = new List<StandardTreeItem>(),
-                StandardSubjectRef = standard.StandardSubjectRef
-            };
-        }
-
 
     }
 }

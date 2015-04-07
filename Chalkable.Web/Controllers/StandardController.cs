@@ -32,9 +32,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetStandardParentsSubTree(int standardId)
         {
-            var subTree = SchoolLocator.StandardService.GetStandardParentsSubTree(standardId);
-            var res = StandardTreeItemViewData.Create(subTree);
-            return Json(res, 6);
+            var res = SchoolLocator.StandardService.GetStandardParentsSubTree(standardId);
+            return Json(StandardsTableViewData.Create(res), 6);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]

@@ -6,7 +6,7 @@ NAMESPACE('chlk.templates.standard', function(){
     /**@class chlk.templates.standard.StandardsListTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/StandardsColumns.jade')],
-        [ria.templates.ModelBind(chlk.models.standard.StandardTreeItem)],
+        [ria.templates.ModelBind(chlk.models.standard.StandardsTableViewData)],
         'StandardsListTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
@@ -22,18 +22,19 @@ NAMESPACE('chlk.templates.standard', function(){
             chlk.models.id.AnnouncementId, 'announcementId',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.standard.Standard), 'standardChildren',
+            chlk.models.standard.StandardsTable, 'standardsTable',
 
-            [[ArrayOf(chlk.models.standard.Standard)]],
-            chlk.models.standard.StandardTreeItem, function getStandardWithChildren(standards){
-                //if(standards instanceof  ArrayOf(chlk.models.standard.Standard)){
-                    var stWithChild = standards.filter(function(item){
-                        return item.getStandardChildren && item.hasChildren();
-                    });
-                    if(stWithChild.length > 0)
-                        return stWithChild[0];
-                //}
-                return null;
-            }
+            //
+            //[[ArrayOf(chlk.models.standard.Standard)]],
+            //chlk.models.standard.StandardTreeItem, function getStandardWithChildren(standards){
+            //    //if(standards instanceof  ArrayOf(chlk.models.standard.Standard)){
+            //        var stWithChild = standards.filter(function(item){
+            //            return item.getStandardChildren && item.hasChildren();
+            //        });
+            //        if(stWithChild.length > 0)
+            //            return stWithChild[0];
+            //    //}
+            //    return null;
+            //}
     ]);
 });

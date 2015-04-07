@@ -1012,9 +1012,10 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.ClassId, chlk.models.id.StandardSubjectId, String, chlk.models.id.StandardId]],
         function showStandardsByCategoryAction(classId, subjectId, description_, standardId_){
-            var res = this.standardService.getStandards(classId, subjectId, standardId_)
+            var res = this.standardService.getStandardColumn(classId, subjectId, standardId_)
                 .then(function(standards){
-                    return new chlk.models.standard.StandardTreeItem(description_, classId, subjectId, standards);
+                    var standardTable = new chlk.models.standard.StandardsTable.$createOneColumnTable(standards);
+                    return new chlk.models.standard.StandardsTableViewData(description_, classId, subjectId, standardTable);
                 })
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res);
@@ -1024,16 +1025,28 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.standard.GetStandardTreePostData]],
         function getStandardTreeAction(data){
             var res = this.standardService.getStandardParentsSubTree(data.getStandardId())
-                .then(function(standardsTreeItems){
-                    var subjectId = standardsTreeItems.length > 0 ? standardsTreeItems[0].getSubjectId() : null;
-                    var res = new chlk.models.standard.StandardTreeItem(null, data.getClassId(), subjectId, standardsTreeItems);
-                    var leafs = res.getLastLeafs().filter(function(item){return item.getStandardId() == data.getStandardId(); });
-                    if(leafs.length > 0){
-                        leafs[0].setStandardChildren([
-                            new chlk.models.standard.StandardTreeItem(leafs[0].getDescription(), data.getClassId(), subjectId, [], data.getAnnouncementId())
-                        ]);
+                .then(function(standardsTable){
+                    //var subjectId = standardsTreeItems.length > 0 ? standardsTreeItems[0].getSubjectId() : null;
+                    //var res = new chlk.models.standard.StandardTreeItem(null, data.getClassId(), subjectId, standardsTreeItems);
+                    //var leafs = res.getLastLeafs().filter(function(item){return item.getStandardId() == data.getStandardId(); });
+                    //if(leafs.length > 0){
+                    //    leafs[0].setStandardChildren([
+                    //        new chlk.models.standard.StandardTreeItem(leafs[0].getDescription(), data.getClassId(), subjectId, [], data.getAnnouncementId())
+                    //    ]);
+                    //}
+                    //return res;
+                    var description, subjectId;
+                    if(standardsTable && standardsTable.getStandardsColumns() && standardsTable.getStandardsColumns().length > 0){
+                        var columns = standardsTable.getStandardsColumns();
+                        var subjectId = columns[0][0].getSubjectId();
+                        var lastSelected = columns[columns.length - 1].filter(function (s){return s.isSelected();});
+                        if(lastSelected.length > 0){
+                            description = lastSelected[0].getDescription();
+                            standardsTable.addColumn([]);
+                        }
                     }
-                    return res;
+                    var res = new chlk.models.standard.StandardsTableViewData(description, data.getClassId(), subjectId, standardsTable, data.getAnnouncementId());
+                    return res
                 }, this)
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res, 'rebuild-standard-tree');

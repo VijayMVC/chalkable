@@ -1,29 +1,20 @@
-mixin StandardColumn(tplObj, selectedStandardItem)
-    standards = selectedStandardItem.getStandardChildren() || []
+mixin StandardColumn(tplObj, standards)
     -console.log(standards.length)
     if standards.length > 0
-        -var stWithChild = tplObj.getStandardWithChildren(standards)
         td.name-td
             .standards-names.column
                 each standard in standards
-                    +ActionLink('announcement', 'showStandardsByCategory', selectedStandardItem.getClassId(), selectedStandardItem.getSubjectId(), standard.getDescription(), standard.getStandardId())(
+                    +ActionLink('announcement', 'showStandardsByCategory', tplObj.getClassId(), tplObj.getSubjectId(), standard.getDescription(), standard.getStandardId())(
                     data-id=standard.getStandardId(),
-                    class= stWithChild && stWithChild.getStandardId() ==  standard.getStandardId() ? 'active' : ''
+                    class= standard.isSelected() ? 'active' : ''
                     ).standard-name.column-cell
                         .name(data-tooltip=standard.getName(), data-tooltip-type="overflow")=standard.getName()
                         .right-triangle
-        if stWithChild
-            -var children = stWithChild.getStandardChildren();
-            if children[0].getStandardId() || children.length > 1
-                +StandardColumn(tplObj, stWithChild)
-            else
-                td
-                    .standards-description=children[0].getDescription()
-        else
-            td
-                .standards-description
+
     else
         td
-            .standards-description=selectedStandardItem.getDescription()
+           .standards-description=tplObj.getDescription()
 
-+StandardColumn(self, self.getModel())
+
+each standardsList in self.getStandardsTable().getStandardsColumns()
+    +StandardColumn(self, standardsList)
