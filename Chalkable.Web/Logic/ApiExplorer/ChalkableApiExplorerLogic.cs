@@ -20,7 +20,6 @@ using Newtonsoft.Json.Linq;
 
 namespace Chalkable.Web.Logic.ApiExplorer
 {
-
     public static class ChalkableApiExplorerLogic
     {
 
@@ -273,7 +272,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
         }
 
 
-        public static IList<string> GenerateControllerDescriptionsKeys()
+        public static IList<string> GenerateControllerDescriptionKeys()
         {
             var controllers = BuildControllerList();
             IList<string> keys = new List<string>();

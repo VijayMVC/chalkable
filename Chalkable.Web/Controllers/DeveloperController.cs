@@ -43,6 +43,7 @@ namespace Chalkable.Web.Controllers
             return RedirectToAction("Info");
         }
 
+
         public ActionResult Info()
         {
             return View();
@@ -50,12 +51,15 @@ namespace Chalkable.Web.Controllers
 
         public ActionResult ListApi()
         {
+            Trace.WriteLine("#123 Developer/ListApi start");
             var result = new List<ApiExplorerViewData>();
+
             var descriptions = ChalkableApiExplorerLogic.GetApi();
 
             foreach (var description in descriptions)
             {
                 var roleName = description.Key.ToLowerInvariant();
+                Trace.WriteLine("#123 Developer/GetAccessToken for role", roleName);
                 if (ChalkableApiExplorerLogic.IsValidApiRole(roleName))
                 {
                     var context = MasterLocator.UserService.DemoLogin(roleName, Context.UserId.ToString());
@@ -63,6 +67,7 @@ namespace Chalkable.Web.Controllers
                     var viewData = ApiExplorerViewData.Create(description.Value, token, description.Key);
                     result.Add(viewData);
                 }
+                    
             }
             return Json(result, 8);
         }
