@@ -1,5 +1,5 @@
 REQUIRE('chlk.templates.ChlkTemplate');
-REQUIRE('chlk.models.standard.StandardTreeItem');
+REQUIRE('chlk.models.standard.StandardsTableViewData');
 
 NAMESPACE('chlk.templates.standard', function(){
 
@@ -23,18 +23,5 @@ NAMESPACE('chlk.templates.standard', function(){
 
             [ria.templates.ModelPropertyBind],
             chlk.models.standard.StandardsTable, 'standardsTable',
-
-            //
-            //[[ArrayOf(chlk.models.standard.Standard)]],
-            //chlk.models.standard.StandardTreeItem, function getStandardWithChildren(standards){
-            //    //if(standards instanceof  ArrayOf(chlk.models.standard.Standard)){
-            //        var stWithChild = standards.filter(function(item){
-            //            return item.getStandardChildren && item.hasChildren();
-            //        });
-            //        if(stWithChild.length > 0)
-            //            return stWithChild[0];
-            //    //}
-            //    return null;
-            //}
     ]);
 });

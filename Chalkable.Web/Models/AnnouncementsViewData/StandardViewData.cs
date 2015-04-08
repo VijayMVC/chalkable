@@ -90,21 +90,4 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             return res;
         }
     }
-
-    public class StandardTreeItemViewData : StandardViewData
-    {
-        public IList<StandardTreeItemViewData> StandardChildren { get; set; }
-
-        protected StandardTreeItemViewData(StandardTreeNode standard) : base(standard)
-        {
-                StandardChildren = standard.Children != null 
-                    ?  Create(standard.Children)
-                    : new List<StandardTreeItemViewData>();
-        }
-
-        public static IList<StandardTreeItemViewData> Create(IList<StandardTreeNode> standards)
-        {
-            return standards.Select(s => new StandardTreeItemViewData(s)).ToList();
-        }
-    }
 }

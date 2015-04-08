@@ -36,7 +36,7 @@ REQUIRE('chlk.models.announcement.AddStandardViewData');
 REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.standard.StandardsListViewData');
 REQUIRE('chlk.models.announcement.AddDuplicateAnnouncementViewData');
-REQUIRE('chlk.models.standard.StandardTreeItem');
+REQUIRE('chlk.models.standard.StandardsTableViewData');
 REQUIRE('chlk.models.standard.GetStandardTreePostData');
 
 REQUIRE('chlk.lib.exception.AppErrorException');
@@ -1026,15 +1026,6 @@ NAMESPACE('chlk.controllers', function (){
         function getStandardTreeAction(data){
             var res = this.standardService.getStandardParentsSubTree(data.getStandardId())
                 .then(function(standardsTable){
-                    //var subjectId = standardsTreeItems.length > 0 ? standardsTreeItems[0].getSubjectId() : null;
-                    //var res = new chlk.models.standard.StandardTreeItem(null, data.getClassId(), subjectId, standardsTreeItems);
-                    //var leafs = res.getLastLeafs().filter(function(item){return item.getStandardId() == data.getStandardId(); });
-                    //if(leafs.length > 0){
-                    //    leafs[0].setStandardChildren([
-                    //        new chlk.models.standard.StandardTreeItem(leafs[0].getDescription(), data.getClassId(), subjectId, [], data.getAnnouncementId())
-                    //    ]);
-                    //}
-                    //return res;
                     var description, subjectId;
                     if(standardsTable && standardsTable.getStandardsColumns() && standardsTable.getStandardsColumns().length > 0){
                         var columns = standardsTable.getStandardsColumns();
@@ -1051,18 +1042,6 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res, 'rebuild-standard-tree');
         },
-
-
-        //ArrayOf(chlk.models.standard.StandardsListViewData), function buildStandardsListView(standardsTreeItems, standardsListViewArray, subjectId, classId, description_){
-        //    var res = standardsListViewArray || [];
-        //    if(standardsTreeItems.length > 0)
-        //        standardsListViewArray.push(new chlk.models.standard.StandardTreeItem(description_, classId, subjectId, standardsTreeItems))
-        //    var  itemsWithChildren = standardsTreeItems.filter(function(item){return item.getStandardChildren().length > 0;});
-        //    if(itemsWithChildren.length > 0){
-        //       var res = this.buildStandardsListView(itemsWithChildren[0].getStandardChildren(), res, subjectId, classId, itemsWithChildren[0].getDescription())
-        //    }
-        //    return res;
-        //},
 
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.standard.Standard]],

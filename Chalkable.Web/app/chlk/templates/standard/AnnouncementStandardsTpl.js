@@ -1,11 +1,13 @@
 REQUIRE('chlk.templates.standard.StandardsListTpl');
+REQUIRE('chlk.models.standard.StandardsListViewData');
+
 
 NAMESPACE('chlk.templates.standard', function(){
 
     /**@class chlk.templates.standard.AnnouncementStandardsTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementStandards.jade')],
-        [ria.templates.ModelBind(chlk.models.standard.StandardTreeItem)],
+        [ria.templates.ModelBind(chlk.models.standard.StandardsListViewData)],
         'AnnouncementStandardsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
@@ -21,7 +23,7 @@ NAMESPACE('chlk.templates.standard', function(){
             chlk.models.id.AnnouncementId, 'announcementId',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.standard.Standard), 'standardChildren',
+            ArrayOf(chlk.models.standard.Standard), 'itemStandards',
 
             Boolean, 'ableToRemoveStandard'
         ]);

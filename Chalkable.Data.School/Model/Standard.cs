@@ -12,13 +12,12 @@ namespace Chalkable.Data.School.Model
         public const string UPPER_GRADE_LEVEL_REF_FIELD = "UpperGradeLevelRef";
         public const string PARENT_STANDARD_REF_FIELD = "ParentStandardRef";
         public const string ACADEMIC_BENCHMARK_ID_FIELD = "AcademicBenchmarkId";
-
         public const string NAME_FIELD = "Name";
         public const string DESCRIPTION_FIELD = "Description";
+        public const string IS_ACTIVE_FIELD = "IsActive";
 
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
-
         public int? ParentStandardRef { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -27,21 +26,10 @@ namespace Chalkable.Data.School.Model
         public int? UpperGradeLevelRef { get; set; }
         public bool IsActive { get; set; }
         public Guid? AcademicBenchmarkId { get; set; }
-
         [NotDbFieldAttr]
         public string CCStandardCode { get; set; }
     }
-
-
-    public class StandardTreeNode : Standard
-    {
-        public StandardTreeNode Parent { get; set; }
-        public IList<StandardTreeNode> Children { get; set; }
-
-        //public IList<Standard> Children { get; set; }
-        //public IList<Standard> Path { get; set; }
-    }
-
+    
     public class StandardTreePath
     {
         public IList<Standard> AllStandards { get; set; }
