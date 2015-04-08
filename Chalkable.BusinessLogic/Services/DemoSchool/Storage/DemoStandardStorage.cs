@@ -25,6 +25,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (!query.AllStandards || query.ParentStandardId.HasValue)
                 standards = standards.Where(x => x.ParentStandardRef == query.ParentStandardId);
 
+            if (query.ActiveOnly)
+                standards = standards.Where(x => x.IsActive).ToList();
+
             if (query.ClassId.HasValue)
             {
                 var classStandarts = Storage.ClassStandardStorage.GetAll(query.ClassId).Select(x => x.StandardRef);
@@ -40,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (words.Length == 0)
                 return new List<Standard>();
 
-            var standards = data.Select(x => x.Value).ToList();
+            var standards = data.Where(x=>x.Value.IsActive).Select(x => x.Value).ToList();
             var res = (new List<Standard>()).AsEnumerable();
             for (var i = 0; i < words.Length; i++)
             {
@@ -58,24 +61,28 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             int? currentParentId = standardId;
             Standard currentStandard;
             var allStandards = new List<Standard>();
+            IList<Standard> path = new List<Standard>();
             var standards = GetData().Select(x => x.Value).ToList();
+            var lastChild = standards.Where(x => x.ParentStandardRef == currentParentId && x.IsActive).ToList();
+            allStandards.AddRange(lastChild);
             var res = new StandardTreePath
                 {
                     AllStandards = new List<Standard>(),
                     Path = new List<Standard>()
                 };
-            var lastChild = standards.Where(x => x.ParentStandardRef == currentParentId).ToList();
-            allStandards.AddRange(lastChild);
             while (currentParentId.HasValue)
             {
                 currentStandard = GetById(currentParentId.Value);
+                if (!currentStandard.IsActive) 
+                    return res;
+                
                 currentParentId = currentStandard.ParentStandardRef;
                 allStandards.AddRange(currentParentId.HasValue
-                                          ? standards.Where(x => x.ParentStandardRef == currentParentId).ToList()
-                                          : standards.Where(x => !x.ParentStandardRef.HasValue && x.StandardSubjectRef == currentStandard.StandardSubjectRef).ToList());
-                res.Path.Add(currentStandard);
+                                          ? standards.Where(x => x.ParentStandardRef == currentParentId && x.IsActive).ToList()
+                                          : standards.Where(x => !x.ParentStandardRef.HasValue && x.StandardSubjectRef == currentStandard.StandardSubjectRef && x.IsActive).ToList());
+                path.Add(currentStandard);
             }
-            res.Path = res.Path.Reverse().ToList(); 
+            res.Path = path.Reverse().ToList(); 
             res.AllStandards = allStandards;
             return res;
         }
