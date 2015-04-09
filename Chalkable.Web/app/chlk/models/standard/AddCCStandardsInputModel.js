@@ -19,6 +19,9 @@ NAMESPACE('chlk.models.standard', function(){
                 : [];
         },
 
-        String, 'standardsIdsStr'
+        String, 'standardsIdsStr',
+
+        [ria.serialize.SerializeProperty('standardid')],
+        chlk.models.id.CommonCoreStandardId, 'standardId'
     ]);
 });
