@@ -36,14 +36,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             return standards.ToList();
         }
 
-        public IList<Standard> SearchStandards(string filter)
+        public IList<Standard> SearchStandards(string filter, bool activeOnly = false)
         {
             if (string.IsNullOrEmpty(filter)) return new List<Standard>();
             var words = filter.ToLower().Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (words.Length == 0)
                 return new List<Standard>();
 
-            var standards = data.Where(x=>x.Value.IsActive).Select(x => x.Value).ToList();
+            var standards = (activeOnly ?  data.Where(x=>x.Value.IsActive) : data).Select(x => x.Value).ToList();
             var res = (new List<Standard>()).AsEnumerable();
             for (var i = 0; i < words.Length; i++)
             {

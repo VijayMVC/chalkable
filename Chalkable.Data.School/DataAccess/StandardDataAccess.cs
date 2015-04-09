@@ -81,14 +81,17 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<Standard>(dbQuery);
         }
 
-        public IList<Standard> SearchStandards(string filter)
+        public IList<Standard> SearchStandards(string filter, bool activeOnly = false)
         {
             if (string.IsNullOrEmpty(filter)) return new List<Standard>();
             var words = filter.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (words.Length == 0)
                 return new List<Standard>();
 
-            var dbQuery = Orm.SimpleSelect<Standard>(new AndQueryCondition{{Standard.IS_ACTIVE_FIELD, true}});
+            var conds = new AndQueryCondition();
+            if(activeOnly)
+                conds.Add(Standard.IS_ACTIVE_FIELD, true);
+            var dbQuery = Orm.SimpleSelect<Standard>(conds);
             dbQuery.Sql.Append(" and (");
             for (int i = 0; i < words.Length; i++)
             {

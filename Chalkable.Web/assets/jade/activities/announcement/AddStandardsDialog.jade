@@ -3,7 +3,7 @@
     +Hidden('announcementid', self.getAnnouncementId())
     +Hidden('standardid', null)
     +Hidden('standardIds', self.getStandardIds().join(',')).standard-ids
-    +SearchBox(chlk.services.StandardService, "searchStandardsByClassId", chlk.templates.standard.StandardAutoCompleteTpl, self.getClassId())(
+    +SearchBox(chlk.services.StandardService, "searchStandardsByClassId", chlk.templates.standard.StandardAutoCompleteTpl, self.getClassId(), true)(
         name="filter", placeholder="Find a Standard"
     ).search-standard
     .standards-list-container

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
-using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
@@ -17,7 +15,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public int StandardSubjectId { get; set; }
         public string CCStandardCode { get; set; }
         public Guid? AcademicBenchmarkId { get; set; }
-        
+        public bool IsActive { get; set; }
+
         protected StandardViewData(){}
 
         protected StandardViewData(Standard standard)
@@ -29,6 +28,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             StandardSubjectId = standard.StandardSubjectRef;
             AcademicBenchmarkId = standard.AcademicBenchmarkId;
             CCStandardCode = standard.CCStandardCode;
+            IsActive = standard.IsActive;
         }
         
         public static StandardViewData Create(Standard standard)

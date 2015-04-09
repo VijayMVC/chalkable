@@ -164,14 +164,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return Storage.StandardStorage.GetById(id);
         }
 
-        public IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true)
+        public IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true, bool activeOnly = false)
         {
             var res = Storage.StandardStorage.GetStandarts(new StandardQuery
             {
                 ClassId = classId,
                 GradeLavelId = gradeLevelId,
                 StandardSubjectId = subjectId,
-                ParentStandardId = parentStandardId
+                ParentStandardId = parentStandardId,
+                ActiveOnly = activeOnly
             });
             return res;
         }
@@ -253,17 +254,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 return new List<Standard>();
             var standards = Storage.StandardStorage.GetAll().Where(s=>standardIds.Contains(s.Id)).ToList();
             return standards;
-        }     
+        }
 
-        public IList<Standard> GetStandards(string filter, int? classId)
+        public IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false)
         {
-           var standards =  Storage.StandardStorage.SearchStandards(filter);
-
-                if (classId.HasValue)
-                {
-                    var standardsByClass = GetStandards(classId, null, null, null, false);
-                    standards = standards.Where(s => standardsByClass.Any(s2 => s2.Id == s.Id)).ToList();
-                }
+            var standards = Storage.StandardStorage.SearchStandards(filter, activeOnly);
+            if (classId.HasValue)
+            {
+                var standardsByClass = GetStandards(classId, null, null, null, false, activeOnly);
+                standards = standards.Where(s => standardsByClass.Any(s2 => s2.Id == s.Id)).ToList();
+            }
             return standards;
         }
 

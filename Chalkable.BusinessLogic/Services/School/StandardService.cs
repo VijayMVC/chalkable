@@ -16,10 +16,10 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteStandards(IList<Standard> standards);
         Standard GetStandardById(int id);
         Standard GetStandardByABId(Guid id);
-        IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true);
+        IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true, bool activeOnly = false);
         
         IList<Standard> GetStandards(IList<int> standardIds);
-        IList<Standard> GetStandards(string filter, int? classId); 
+        IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false); 
 
 
         IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards); 
@@ -78,7 +78,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true)
+        public IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true, bool activeOnly = false)
         {
             using (var uow = Read())
             {
@@ -88,7 +88,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         GradeLavelId = gradeLevelId,
                         StandardSubjectId = subjectId,
                         ParentStandardId = parentStandardId,
-                        AllStandards = allStandards
+                        AllStandards = allStandards,
+                        ActiveOnly = activeOnly
                     });
                 return PrepareStandards(res);
             }
@@ -201,7 +202,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return PrepareStandards(standards);
         }
 
-        public IList<Standard> GetStandards(string filter, int? classId)
+        public IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false)
         {
             var commonCoreStandards = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService.GetStandards(filter);
             commonCoreStandards = commonCoreStandards.Where(x => x.AcademicBenchmarkId.HasValue).ToList();
@@ -209,13 +210,13 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new StandardDataAccess(uow);
-                standards = da.SearchStandards(filter);
+                standards = da.SearchStandards(filter, activeOnly);
                 if (commonCoreStandards.Count > 0)
                    standards = standards.Union(da.GetStandardsByABIds(commonCoreStandards.Select(x => x.AcademicBenchmarkId.Value).ToList())).ToList();
                 
                 if (classId.HasValue)
                 {
-                    var standardsByClass = da.GetStandards(new StandardQuery {ClassId = classId});
+                    var standardsByClass = da.GetStandards(new StandardQuery {ClassId = classId, ActiveOnly = activeOnly});
                     standards = standards.Where(s => standardsByClass.Any(s2 => s2.Id == s.Id)).ToList();
                 }
             }

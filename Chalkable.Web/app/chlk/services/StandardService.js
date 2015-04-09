@@ -37,7 +37,8 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Standard/GetStandards.json', ArrayOf(chlk.models.standard.StandardTableItem), {
                     classId: classId_ && classId_.valueOf(),
                     subjectId: subjectId_ && subjectId_.valueOf(),
-                    parentStandardId: standardId_ && standardId_.valueOf()
+                    parentStandardId: standardId_ && standardId_.valueOf(),
+                    activeOnly : true
                 });
             },
 
@@ -54,18 +55,20 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, String]],
-            ria.async.Future, function searchStandardsByClassId(classId, filter) {
+            [[chlk.models.id.ClassId, String, Boolean]],
+            ria.async.Future, function searchStandardsByClassId(classId, filter, activeOnly_) {
                 return this.get('Standard/SearchStandards.json', ArrayOf(chlk.models.standard.Standard), {
                     filter: filter,
-                    classId: classId && classId.valueOf()
+                    classId: classId && classId.valueOf(),
+                    activeOnly: activeOnly_
                 });
             },
 
-            [[String]],
-            ria.async.Future, function searchStandards(filter) {
+            [[String, Boolean]],
+            ria.async.Future, function searchStandards(filter, activeOnly_) {
                 return this.get('Standard/SearchStandards.json', ArrayOf(chlk.models.standard.Standard), {
-                    filter: filter
+                    filter: filter,
+                    activeOnly: activeOnly_
                 });
             },
 
