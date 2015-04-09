@@ -32,7 +32,7 @@ NAMESPACE('chlk.models.standard', function () {
             String, 'commonCoreStandardCode',
             chlk.models.id.StandardSubjectId, 'subjectId',
 
-            String, function displayNameOrDescription(){
+            String, function displayTitle(){
                 var name = this.getName();
                 if(name && (!name.trim || name.trim() != '')) return name;
                 return this.getDescription();
