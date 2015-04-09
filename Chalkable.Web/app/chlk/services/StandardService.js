@@ -55,12 +55,12 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, String, Boolean]],
-            ria.async.Future, function searchStandardsByClassId(classId, filter, activeOnly_) {
+            [[chlk.models.id.ClassId, Boolean, String]],
+            ria.async.Future, function searchStandardsByClassId(classId, activeOnly, filter) {
                 return this.get('Standard/SearchStandards.json', ArrayOf(chlk.models.standard.Standard), {
                     filter: filter,
                     classId: classId && classId.valueOf(),
-                    activeOnly: activeOnly_
+                    activeOnly: activeOnly
                 });
             },
 
