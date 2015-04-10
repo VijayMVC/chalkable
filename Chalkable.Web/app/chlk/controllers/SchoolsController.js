@@ -190,7 +190,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         function tryToUpgradeSchoolsSysAdminAction(){
-            var res = this.districtService.getDistricts()
+            var res = this.districtService.getDistricts(0, Number.MAX_SAFE_INTEGER)
                 .attach(this.validateResponse_())
                 .then(function(data){
                     return new chlk.models.school.UpgradeDistrictsViewData(data, null);
