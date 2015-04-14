@@ -10,13 +10,6 @@ namespace Chalkable.StiConnector.Connectors
         {
         }
 
-        public byte[] ProgressReport(ProgressReportParams ps)
-        {
-            var url = string.Format(BaseUrl + "reports/progress");
-            var res = Download(url, ps);
-            return res;
-        }
-
         public IList<StudentProgressReportComment> GetProgressReportComments(int sectionId, int? gradingPeriodId = null)
         {
             var url = string.Format(BaseUrl + "chalkable/sections/{0}/progressreportcomments", sectionId);
@@ -32,40 +25,59 @@ namespace Chalkable.StiConnector.Connectors
             Put(url, comments);
         }
 
+        public byte[] ProgressReport(ProgressReportParams ps)
+        {
+            return Download(BaseUrl + "reports/progress", ps);
+        }
+
         public byte[] GradebookReport(GradebookReportParams ps)
         {
-            var url = string.Format(BaseUrl + "reports/gradebook");
-            return Download(url, ps);
+            return Download(BaseUrl + "reports/gradebook", ps);
         }
 
         public byte[] WorksheetReport(WorksheetReportParams ps)
         {
-            var url = string.Format(BaseUrl + "reports/worksheet");
-            return Download(url, ps);
+            return Download(BaseUrl + "reports/worksheet", ps);
         }
 
         public byte[] ComprehensiveProgressReport(ComprehensiveProgressParams ps)
         {
-            var url = string.Format(BaseUrl + "reports/ComprehensiveProgress");
-            return Download(url, ps);
+            return Download(BaseUrl + "reports/ComprehensiveProgress", ps);
         }
 
         public byte[] MissingAssignmentsReport(MissingAssignmentsParams ps)
         {
-            var url = string.Format(BaseUrl + "reports/missingassignments");
-            return Download(url, ps);
+            return Download(BaseUrl + "reports/missingassignments", ps);
         }
 
         public byte[] BirthdayReport(BirthdayReportParams ps)
         {
-            var url = BaseUrl + "reports/birthday";
-            return Download(url, ps);
+            return Download(BaseUrl + "reports/birthday", ps);
         }
 
         public byte[] AttendnaceRegisterReport(AttendanceRegisterReportParams ps)
         {
-            var url = BaseUrl + "reports/attendanceregister";
-            return Download(url, ps);
+            return Download(BaseUrl + "reports/attendanceregister", ps);
+        }
+
+        public byte[] AttendanceProfileReport(AttendnaceProfileReportParams ps)
+        {
+            return Download(BaseUrl + "reports/attendanceprofile", ps);
+        }
+
+        public byte[] GradeVerificationReport(GradeVerificationReportParams ps)
+        {
+            return Download(BaseUrl + "reports/gradeverification", ps);
+        }
+
+        public byte[] LessonPlanReport(LessonPlanReportParams ps)
+        {
+            return Download(BaseUrl + "reports/lessonplan", ps);
+        }
+
+        public byte[] SeatingChartReport(SeatingChartReportPrams ps)
+        {
+            return Download(BaseUrl + "reports/seatingchart", ps);
         }
     }
 }

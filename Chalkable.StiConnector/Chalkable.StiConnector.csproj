@@ -119,12 +119,16 @@
     <Compile Include="Connectors\Model\AttendanceSummaryDashboard.cs" />
     <Compile Include="Connectors\Model\AverageDashboard.cs" />
     <Compile Include="Connectors\Model\Reports\AttendanceRegisterReportParams.cs" />
+    <Compile Include="Connectors\Model\Reports\AttendnaceProfileReportParams.cs" />
     <Compile Include="Connectors\Model\Reports\BirthdayReportParams.cs" />
     <Compile Include="Connectors\Model\ClassroomOption.cs" />
     <Compile Include="Connectors\Model\Reports\ComprehensiveProgressParams.cs" />
     <Compile Include="Connectors\Model\DailyAbsenceSummary.cs" />
     <Compile Include="Connectors\Model\DisciplineReferral.cs" />
+    <Compile Include="Connectors\Model\Reports\GradeVerificationReportParams.cs" />
+    <Compile Include="Connectors\Model\Reports\LessonPlanReportParams.cs" />
     <Compile Include="Connectors\Model\Reports\MissingAssignmentsParams.cs" />
+    <Compile Include="Connectors\Model\Reports\SeatingChartReportPrams.cs" />
     <Compile Include="Connectors\Model\SectionAbsenceSummary.cs" />
     <Compile Include="Connectors\Model\StudentExplorerDashboard.cs" />
     <Compile Include="Connectors\Model\Gradebook.cs" />
