@@ -1,0 +1,4 @@
+actions = {currentAction: 'disciplineMonth'}
+params = [self.getMinDate().format('mm-dd-yy'), self.getMaxDate().format('mm-dd-yy'), self.getStudentId()]
+div
+    +Calendar(self, chlk.templates.calendar.discipline.StudentDisciplineCalendarBodyTpl, self.getModel(), 'students', actions, params).student-discipline-calendar
