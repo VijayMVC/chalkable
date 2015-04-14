@@ -115,11 +115,15 @@
     <Compile Include="Connectors\Model\ActivityAttachment.cs" />
     <Compile Include="Connectors\Model\ActivityCategory.cs" />
     <Compile Include="Connectors\Model\ActivityStandard.cs" />
+    <Compile Include="Connectors\Model\AttendanceDetailDashboard.cs" />
+    <Compile Include="Connectors\Model\AttendanceSummaryDashboard.cs" />
     <Compile Include="Connectors\Model\AverageDashboard.cs" />
     <Compile Include="Connectors\Model\ClassroomOption.cs" />
     <Compile Include="Connectors\Model\ComprehensiveProgressParams.cs" />
+    <Compile Include="Connectors\Model\DailyAbsenceSummary.cs" />
     <Compile Include="Connectors\Model\DisciplineReferral.cs" />
     <Compile Include="Connectors\Model\MissingAssignmentsParams.cs" />
+    <Compile Include="Connectors\Model\SectionAbsenceSummary.cs" />
     <Compile Include="Connectors\Model\StudentExplorerDashboard.cs" />
     <Compile Include="Connectors\Model\Gradebook.cs" />
     <Compile Include="Connectors\Model\GradebookReportParams.cs" />

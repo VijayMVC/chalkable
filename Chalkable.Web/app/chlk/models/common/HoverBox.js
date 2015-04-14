@@ -20,6 +20,5 @@ NAMESPACE('chlk.models.common', function () {
             Boolean, 'passing',
             ArrayOf(THoverItem), 'hover'
 
-//         [ria.serialize.SerializeProperty('ispassing')],
         ]);
 });

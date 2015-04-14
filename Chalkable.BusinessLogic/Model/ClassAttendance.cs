@@ -79,31 +79,7 @@ namespace Chalkable.BusinessLogic.Model
         public StudentDetails Student { get; set; }
     }
    
-    public class AttendanceTotalPerType
-    {
-        public const string TOTAL_FIELD = "Total";
-        public const string ATTENDANCE_TYPE_FIELD = "AttendanceType";
-       
-        public int Total { get; set; }
-        public string Level { get; set; }
-    }
-    public class PersonAttendanceTotalPerType : AttendanceTotalPerType
-    {
-        public int PersonId { get; set; }
-    }
-    public class StudentAbsentFromPeriod
-    {
-        public DateTime Date { get; set; }
-        public int PersonId { get; set; }
-        public int PeriodOrder { get; set; }
-    }
-    public class StudentCountAbsentFromPeriod
-    {
-        public DateTime Date { get; set; }
-        public int StudentCount { get; set; }
-        public int PeriodOrder { get; set; }
-    }
-
+    
     public class AttendanceSummary
     {
         public IList<ClassDailyAttendanceSummary> ClassesDaysStat { get; set; }
