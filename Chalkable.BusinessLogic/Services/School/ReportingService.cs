@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -9,15 +10,15 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IReportingService
     {
+        IList<StudentCommentInfo> GetProgressReportComments(int classId, int gradingPeriodId);
+        void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment);
+
         byte[] GetGradebookReport(GradebookReportInputModel gradebookReportInput);
         byte[] GetWorksheetReport(WorksheetReportInputModel worksheetReportInput);
         byte[] GetProgressReport(ProgressReportInputModel inputModel);
-
         byte[] GetComprehensiveProgressReport(ComprehensiveProgressInputModel comprehensiveProgressInput);
         byte[] GetMissingAssignmentsReport(MissingAssignmentsInputModel missingAssignmentsInput);
-        
-        IList<StudentCommentInfo> GetProgressReportComments(int classId, int gradingPeriodId);
-        void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment);
+        byte[] GetBirthdayReport(BirthdayReportInputModel birthdayReportInput);
     }
 
     public class ReportingService : SisConnectedService, IReportingService
@@ -26,10 +27,44 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
+        public IList<StudentCommentInfo> GetProgressReportComments(int classId, int gradingPeriodId)
+        {
+            var inowReportComments = ConnectorLocator.ReportConnector.GetProgressReportComments(classId, gradingPeriodId);
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
+            int markingPeriodId = gp.MarkingPeriodRef;
+            var students = ServiceLocator.StudentService.GetClassStudents(classId, markingPeriodId);
+            var res = new List<StudentCommentInfo>();
+            foreach (var student in students)
+            {
+                var studentComment = inowReportComments.FirstOrDefault(sc => sc.StudentId == student.Id);
+                if (studentComment == null) continue;
+                res.Add(new StudentCommentInfo
+                {
+                    Student = student,
+                    Comment = studentComment.Comment
+                });
+            }
+            return res;
+        }
+
+        public void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment)
+        {
+            var inowStudentReportComments = new List<StudentProgressReportComment>
+                {
+                    new StudentProgressReportComment
+                        {
+                            Comment = comment,
+                            GradingPeriodId = gradingPeriodId,
+                            SectionId = classId,
+                            StudentId = studentId
+                        }
+                };
+            ConnectorLocator.ReportConnector.UpdateProgressReportComment(classId, inowStudentReportComments);
+        }
+
         public byte[] GetGradebookReport(GradebookReportInputModel inputModel)
         {
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
-            //var students = ServiceLocator.StudentService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef);
             var stiModel = new GradebookReportParams
                 {
                     AcadSessionId = gp.SchoolYearRef,
@@ -46,9 +81,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     IdToPrint = inputModel.IdToPrint,
                     ReportType = inputModel.ReportType,
                     GradingPeriodId = inputModel.GradingPeriodId,
-                    SectionId = inputModel.ClassId,
-                    //StudentIds = inputModel.StudentIds != null ? inputModel.StudentIds.ToArray() : null
-                    //StudentIds = students.Select(x=>x.Id).ToArray()
+                    SectionId = inputModel.ClassId
                 };
             if (inputModel.StudentIds == null)
             {
@@ -72,7 +105,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
 
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
-            //var students = ServiceLocator.StudentService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef);
             var stiModel = new WorksheetReportParams
                 {
                     ActivityIds = activityIds,
@@ -91,7 +123,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     Title5 = inputModel.Title5,
                     SectionId = inputModel.ClassId,
                     GradingPeriodId = inputModel.GradingPeriodId,
-                 //   StudentIds = inputModel.StudentIds != null ? inputModel.StudentIds.ToArray() : null //students.Select(x=>x.Id).ToArray()
                 };
             if (inputModel.StudentIds == null)
             {
@@ -105,7 +136,6 @@ namespace Chalkable.BusinessLogic.Services.School
             stiModel.AcadSessionId = gp.SchoolYearRef;
             return ConnectorLocator.ReportConnector.WorksheetReport(stiModel);
         }
-
 
         public byte[] GetProgressReport(ProgressReportInputModel inputModel)
         {
@@ -150,43 +180,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 };
             return ConnectorLocator.ReportConnector.ProgressReport(stiModel);
         }
-
-
-        public IList<StudentCommentInfo> GetProgressReportComments(int classId, int gradingPeriodId)
-        {
-            var inowReportComments = ConnectorLocator.ReportConnector.GetProgressReportComments(classId, gradingPeriodId);
-            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
-            int markingPeriodId = gp.MarkingPeriodRef;
-            var students = ServiceLocator.StudentService.GetClassStudents(classId, markingPeriodId);
-            var res = new List<StudentCommentInfo>();
-            foreach (var student in students)
-            {
-                var studentComment = inowReportComments.FirstOrDefault(sc => sc.StudentId == student.Id);
-                if(studentComment == null) continue;
-                res.Add(new StudentCommentInfo
-                {
-                    Student = student,
-                    Comment = studentComment.Comment
-                });
-            }
-            return res;
-        }
-
-        public void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment)
-        {
-            var inowStudentReportComments = new List<StudentProgressReportComment>
-                {
-                    new StudentProgressReportComment
-                        {
-                            Comment = comment,
-                            GradingPeriodId = gradingPeriodId,
-                            SectionId = classId,
-                            StudentId = studentId
-                        }
-                };
-            ConnectorLocator.ReportConnector.UpdateProgressReportComment(classId, inowStudentReportComments);
-        }
-
 
         public byte[] GetComprehensiveProgressReport(ComprehensiveProgressInputModel comprehensiveProgressInput)
         {
@@ -251,182 +244,25 @@ namespace Chalkable.BusinessLogic.Services.School
             else stiModel.StudentIds = missingAssignmentsInput.StudentIds.ToArray();
             return ConnectorLocator.ReportConnector.MissingAssignmentsReport(stiModel);
         }
-    }
 
-    public class BaseReportInputModel
-    {
-        public virtual int IdToPrint { get; set; }
-        public ReportingFormat FormatTyped
+        public byte[] GetBirthdayReport(BirthdayReportInputModel inputModel)
         {
-            get { return (ReportingFormat)Format; }
-            set { Format = (int) value; }
-        }
-        public virtual int Format { get; set; }
-        public virtual int GradingPeriodId { get; set; }
-        public virtual int ClassId { get; set; }
-        public IntList StudentIds { get; set; }
-    }
-
-    public class GradebookReportInputModel : BaseReportInputModel
-    {
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-
-        public int ReportType { get; set; }
-        public int OrderBy { get; set; }
-        public int GroupBy { get; set; }
-
-        public bool IncludeNonGradedActivities { get; set; }
-        public bool IncludeWithdrawnStudents { get; set; }
-
-        public bool DisplayLetterGrade { get; set; }
-        public bool DisplayStudentAverage { get; set; }
-        public bool DisplayTotalPoints { get; set; }
-        public bool SuppressStudentName { get; set; }
-    }
-
-    public class WorksheetReportInputModel : BaseReportInputModel
-    {
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-
-        public IntList AnnouncementIds { get; set; }
-        public string Title1 { get; set; }
-        public string Title2 { get; set; }
-        public string Title3 { get; set; }
-        public string Title4 { get; set; }
-        public string Title5 { get; set; }
-        public string Header { get; set; }
-        public bool PrintAverage { get; set; }
-        public bool PrintLetterGrade { get; set; }
-        public bool PrintScores { get; set; }
-        public bool PrintStudent { get; set; }
-    }
-
-    public class ProgressReportInputModel : BaseReportInputModel
-    {
-        public IntList AbsenceReasonIds { get; set; }
-        public bool AdditionalMailings { get; set; }
-        
-        public int DailyAttendanceDisplayMethod { get; set; }
-        public bool DisplayCategoryAverages { get; set; }
-        public bool DisplayClassAverages { get; set; }
-        public bool DisplayLetterGrade { get; set; }
-        public bool DisplayPeriodAttendance { get; set; }
-        public bool DisplaySignatureLine { get; set; }
-        public bool DisplayStudentComments { get; set; }
-        public bool DisplayStudentMailingAddress { get; set; }
-        public bool DisplayTotalPoints { get; set; }
-        public bool GoGreen { get; set; }
-        
-        public decimal? MaxCategoryClassAverage { get; set; }
-        public decimal? MaxStandardAverage { get; set; }
-        public decimal? MinCategoryClassAverage { get; set; }
-        public decimal? MinStandardAverage { get; set; }
-        public bool PrintFromHomePortal { get; set; }
-
-        public string ClassComment { get; set; }
-        public IList<StudentCommentInputModel> StudentComments { get; set; }
-    }
-
-    public class MissingAssignmentsInputModel: BaseReportInputModel
-    {
-        public IntList AlternateScoreIds { get; set; }
-        public bool AlternateScoresOnly { get; set; }
-        public bool ConsiderZerosAsMissingGrades { get; set; }
-        public DateTime EndDate { get; set; }
-        public DateTime StartDate { get; set; }
-      
-        public bool IncludeWithdrawn { get; set; }
-        public bool OnePerPage { get; set; }
-        public int OrderBy { get; set; }
-        public bool SuppressStudentName { get; set; }
-
-    }
-
-    public class ComprehensiveProgressInputModel : BaseReportInputModel
-    {
-        public IntList GradingPeriodIds { get; set; }
-        public IntList AbsenceReasonIds { get; set; }
-        public DateTime? EndDate { get; set; }
-        public DateTime? StartDate { get; set; }
-        
-        public decimal? MaxStandardAverage { get; set; }
-        public decimal? MinStandardAverage { get; set; }
-
-        public bool AdditionalMailings { get; set; }
-        public bool ClassAverageOnly { get; set; }
-        public bool DisplayCategoryAverages { get; set; }
-        public bool DisplayClassAverage { get; set; }
-        public int DailyAttendanceDisplayMethod { get; set; }
-        public bool DisplayPeriodAttendance { get; set; }
-        public bool DisplaySignatureLine { get; set; }
-        public bool DisplayStudentComment { get; set; }
-        public bool DisplayStudentMailingAddress { get; set; }
-        public bool DisplayTotalPoints { get; set; }
-        public bool IncludePicture { get; set; }
-        public bool IncludeWithdrawn { get; set; }
-        
-        
-        public int? StudentFilterId { get; set; }
-        public bool GoGreen { get; set; }
-        public int OrderBy { get; set; }
-        public bool WindowEnvelope { get; set; }
-        
-
-
-        public override int GradingPeriodId
-        {
-            get
-            {
-                if (GradingPeriodIds != null && GradingPeriodIds.Count > 0)
-                    return GradingPeriodIds.First();
-                return base.GradingPeriodId;
-            }
-            set
-            {
-                base.GradingPeriodId = value;
-            }
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var ps = new BirthdayReportParams
+                {
+                    AcadSessionId = gp.SchoolYearRef,
+                    EndDate = inputModel.EndDate,
+                    StartDate = inputModel.StartDate,
+                    EndMonth = inputModel.EndMonth,
+                    StartMonth = inputModel.StartMonth,
+                    GroupBy = inputModel.GroupBy,
+                    Header = inputModel.Header,
+                    IncludePhoto = inputModel.IncludePhoto,
+                    IncludeWithdrawn = inputModel.IncludeWithdrawn,
+                    SectionId = inputModel.ClassId
+                };
+            return ConnectorLocator.ReportConnector.BirthdayReport(ps);
         }
     }
 
-    public class StudentCommentInputModel
-    {
-        public int StudentId { get; set; }
-        public string Comment { get; set; }
-    }
-
-    public enum ReportingFormat
-    {
-        Pdf = 0,
-        Csv = 1,
-        Excel = 2,
-        Html = 3,
-        Tiff = 4,
-        Xml = 5
-    }
-    public static class ReportingFormatExtension
-    {
-        private const string EXT_XLS = "xls";
-        private const string EXT_PDF = "pdf";
-        private const string EXT_TIFF = "tiff";
-        private const string EXT_CSV = "csv";
-        private const string EXT_XML = "xml";
-        private const string EXT_HTML = "html";
-        
-        public static string AsFileExtension(this ReportingFormat format)
-        {
-            switch (format)
-            {
-                case ReportingFormat.Pdf: return EXT_PDF;
-                case ReportingFormat.Csv: return EXT_CSV;
-                case ReportingFormat.Excel: return EXT_XLS;
-                case ReportingFormat.Tiff: return EXT_TIFF;
-                case ReportingFormat.Html: return EXT_HTML;
-                case ReportingFormat.Xml: return EXT_XML;
-                default:
-                    throw new Exception(ChlkResources.ERR_INVALID_REPORT_FORMAT);
-            }
-        }
-    }
 }

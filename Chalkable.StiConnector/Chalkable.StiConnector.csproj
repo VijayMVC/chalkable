@@ -118,6 +118,7 @@
     <Compile Include="Connectors\Model\AttendanceDetailDashboard.cs" />
     <Compile Include="Connectors\Model\AttendanceSummaryDashboard.cs" />
     <Compile Include="Connectors\Model\AverageDashboard.cs" />
+    <Compile Include="Connectors\Model\BirthdayReportParams.cs" />
     <Compile Include="Connectors\Model\ClassroomOption.cs" />
     <Compile Include="Connectors\Model\ComprehensiveProgressParams.cs" />
     <Compile Include="Connectors\Model\DailyAbsenceSummary.cs" />

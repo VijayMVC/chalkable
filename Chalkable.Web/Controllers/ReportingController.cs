@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common;
+using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -14,9 +12,6 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class ReportingController : ChalkableController
     {
-        private const string headerFormat = "inline; filename={0}";
-        private const string CONTENT_DISPOSITION = "Content-Disposition";
-
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult GradeBookReport(GradebookReportInputModel gradebookReportInput)
         {
@@ -46,6 +41,12 @@ namespace Chalkable.Web.Controllers
         {
             progressReportInput.StudentComments = JsonConvert.DeserializeObject<IList<StudentCommentInputModel>>(studentComments);
             return Report(progressReportInput, SchoolLocator.ReportService.GetProgressReport, "ProgressReport");
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult BirthdayReport(BirthdayReportInputModel birthdayReportInputModel)
+        {
+            return Report(birthdayReportInputModel, SchoolLocator.ReportService.GetBirthdayReport, "BirthdayReport");
         }
 
         private ActionResult Report<TReport>(TReport reportInputModel

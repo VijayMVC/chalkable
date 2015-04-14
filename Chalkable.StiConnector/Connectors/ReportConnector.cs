@@ -61,5 +61,11 @@ namespace Chalkable.StiConnector.Connectors
             var url = string.Format(BaseUrl + "reports/missingassignments");
             return Download(url, ps);
         }
+
+        public byte[] BirthdayReport(BirthdayReportParams ps)
+        {
+            var url = BaseUrl + "reports/birthday";
+            return Download(url, ps);
+        }
     }
 }
