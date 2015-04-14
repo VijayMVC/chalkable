@@ -3,6 +3,7 @@ REQUIRE('ria.async.Future');
 REQUIRE('ria.async.Observable');
 REQUIRE('chlk.models.reports.SubmitComprehensiveProgressViewData');
 REQUIRE('chlk.models.reports.SubmitMissingAssignmentsReportViewData');
+REQUIRE('chlk.models.reports.SubmitBirthdayReportViewData');
 
 
 NAMESPACE('chlk.services', function () {
@@ -53,6 +54,27 @@ NAMESPACE('chlk.services', function () {
                 includeNonGradedActivities: includeNonGradedActivities_,
                 suppressStudentName: suppressStudentName_,
                 studentIds: studentIds_
+            });
+        },
+
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.BirthdayGroupByMethod, chlk.models.reports.ReportFormatEnum,
+            chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Number, Number, Number, Boolean, Boolean, Boolean, Boolean]],
+        String, function submitBirthdayReport(classId, gradingPeriodId, groupBy, format, startDate_, endDate_, startMonth_, endMonth_,
+                                                    appendOrOverwrite_, includeWithdrawn_, includePhoto_, saveToFilter_, saveAsDefault_) {
+            return this.getUrl('Reporting/BirthdayReport.json', {
+                classId: classId.valueOf(),
+                gradingPeriodId: gradingPeriodId.valueOf(),
+                groupBy: groupBy.valueOf(),
+                format: format.valueOf(),
+                startDate: startDate_ && startDate_.toStandardFormat(),
+                endDate: endDate_ && endDate_.toStandardFormat(),
+                startMonth: startMonth_,
+                endMonth: endMonth_,
+                appendOrOverwrite: appendOrOverwrite_,
+                includeWithdrawn: includeWithdrawn_,
+                includePhoto: includePhoto_,
+                saveToFilter: saveToFilter_,
+                saveAsDefault: saveAsDefault_
             });
         },
 
