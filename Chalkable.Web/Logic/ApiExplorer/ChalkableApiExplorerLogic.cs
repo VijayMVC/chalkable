@@ -35,9 +35,9 @@ namespace Chalkable.Web.Logic.ApiExplorer
         }
 
         private static Dictionary<string, IList<ChalkableApiControllerDescription>> descriptions;
-        private static IList<ChalkableApiControllerDescription> controllerList; 
+        private static IDictionary<string, ChalkableApiControllerDescription> controllerList; 
         private static Dictionary<string, Dictionary<string, string>> fakeResponses;
-        private static HashSet<string> rolesList; 
+        private static HashSet<string> roles; 
 
         private static bool IsChalkableController(Type t)
         {
@@ -62,12 +62,48 @@ namespace Chalkable.Web.Logic.ApiExplorer
         private static void PrepareControllerMap()
         {//write method for paramatrized type that builds info about controller action, description, default params
             RegisterApiMethodDefaults<ClassController>(x => x.List(1, 1, 1, null, null));
-            RegisterApiMethodDefaults<ClassController>(x => x.List(1, 1, 1, null, null));
         }
 
-        private static void RegisterApiMethodDefaults<T>(Action<T> func) where T: ChalkableController
+        private static ChalkableApiControllerDescription RegisterApiMethodDefaults<T>(Expression<Action<T>> expr) where T: ChalkableController
         {
-            
+            var body = expr.Body as MethodCallExpression;
+            var arguments = body.Arguments;
+            var controllerName = expr.Parameters[0].Type.ToString()
+                .Split('.')
+                .First(x => x.EndsWith(CONTROLLER))
+                .Replace(CONTROLLER, "");
+
+            var argValues = new List<String>();
+            foreach (var arg in arguments)
+            {
+                var expValue = "";
+                var exp = arg as UnaryExpression;
+                if (exp != null)
+                {
+                    expValue = exp.Operand.ToString();
+                }
+                argValues.Add(expValue);
+            }
+
+            var controllerDescriptionViewData = controllerList[controllerName];
+
+            //get view data from map
+
+
+            var i = 0;
+            foreach (var method in controllerDescriptionViewData.Methods)
+            {
+                foreach (var param in method.Parameters)
+                {
+                    if (argValues.Count > 0)
+                    {
+                        param.Value = argValues[i];    
+                    }
+                    ++i;
+                }
+            }
+
+            return controllerDescriptionViewData;
         }
 
         private static bool IsNullableType(ParameterInfo param)
@@ -84,25 +120,15 @@ namespace Chalkable.Web.Logic.ApiExplorer
         private static void BuildApiExplorerDescriptions()
         {
             var controllers = BuildControllerList();
-            var chalkableApiControllerDescriptions = controllers as IList<ChalkableApiControllerDescription> ?? controllers.ToList();
+            var chalkableApiControllerDescriptions = controllers.Select(x => x.Value).ToList();
 
-            foreach (var controller in chalkableApiControllerDescriptions)
-            {
-                foreach (var method in controller.Methods)
-                {
-                    method.Description = PreferenceService.Get(method.Description).Value;
-                    foreach (var param in method.Parameters)
-                    {
-                        param.Description = PreferenceService.Get(param.Description).Value;
-                    }
-                }
-            }
-            BuildFakeResponses(rolesList);
+            
+            BuildFakeResponses(roles);
 
             descriptions = new Dictionary<string, IList<ChalkableApiControllerDescription>>();
 
             
-            foreach (var role in rolesList)
+            foreach (var role in roles)
             {
                 foreach (var controllerDescr in chalkableApiControllerDescriptions)
                 {
@@ -123,7 +149,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
             }            
         }
 
-        public static IEnumerable<ChalkableApiControllerDescription> BuildControllerList()
+        public static IDictionary<string, ChalkableApiControllerDescription> BuildControllerList()
         {
             if (controllerList != null)
                 return controllerList;
@@ -134,8 +160,8 @@ namespace Chalkable.Web.Logic.ApiExplorer
                     .Single(assembly => assembly.GetName().Name == ASSEMBLY_FILE);
             var controllers = asm.GetExportedTypes().Where(IsChalkableController);
 
-            rolesList = new HashSet<string>();
-            controllerList = new List<ChalkableApiControllerDescription>();
+            roles = new HashSet<string>();
+            controllerList = new Dictionary<string, ChalkableApiControllerDescription>();
 
             foreach (var controller in controllers)
             {
@@ -183,7 +209,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
                     foreach (var role in avRoles)
                     {
                         if (IsValidApiRole(role))
-                            rolesList.Add(role);
+                            roles.Add(role);
                     }
 
                     var methodKey = BuildMethodDescriptionKey(controllerName, method.Name);
@@ -197,12 +223,15 @@ namespace Chalkable.Web.Logic.ApiExplorer
                         AvailableForRoles = avRoles
                     });
                 }
-                controllerList.Add(new ChalkableApiControllerDescription
+                controllerList.Add(controllerName, new ChalkableApiControllerDescription
                 {
                     Name = controllerName,
                     Methods = mList
                 });
             }
+
+            PrepareControllerMap();
+
             return controllerList;
         }
 
@@ -271,12 +300,11 @@ namespace Chalkable.Web.Logic.ApiExplorer
             return descriptions;
         }
 
-
         public static IList<string> GenerateControllerDescriptionKeys()
         {
             var controllers = BuildControllerList();
             IList<string> keys = new List<string>();
-            foreach (var controller in controllers)
+            foreach (var controller in controllers.Values)
             {
                 foreach (var method in controller.Methods)
                 {
@@ -289,7 +317,6 @@ namespace Chalkable.Web.Logic.ApiExplorer
             }
             return keys;
         } 
-
 
         private static string BuildMethodDescriptionKey(string controllerName, string methodName)
         {

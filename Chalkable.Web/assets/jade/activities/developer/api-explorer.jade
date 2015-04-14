@@ -43,7 +43,8 @@ mixin ApiCallForm(controllerInfo, role)
                                                             input(type="text",
                                                                 data-param-type = methodParam.getParamType().valueOf(),
                                                                 data-formid = apiFormId,
-                                                                name = methodParam.getName()).value-field(class = methodParam.isOptional() ? "optional" : undefined)
+                                                                name = methodParam.getName()).value-field(class = methodParam.isOptional() ? "optional" : undefined,
+                                                                value = methodParam.getValue() || "")
                                                         td.param-description=methodParam.getDescription()
                                     else
                                         .no-params No parameters required
