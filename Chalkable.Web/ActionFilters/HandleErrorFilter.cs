@@ -75,7 +75,11 @@ namespace Chalkable.Web.ActionFilters
                 filterContext.HttpContext.Response.SuppressFormsAuthenticationRedirect = true;
             }
             else
+            {
                 filterContext.HttpContext.Response.StatusCode = (int) HttpStatusCode.OK;
+            }
+
+            filterContext.HttpContext.Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(filterContext.HttpContext.Response.StatusCode);
 
             var jsonResponse = new ChalkableJsonResponce(ExceptionViewData.Create(filterContext.Exception, filterContext.Exception.InnerException))
             {
