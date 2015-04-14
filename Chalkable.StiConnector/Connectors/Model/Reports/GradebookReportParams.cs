@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Chalkable.StiConnector.Connectors.Model
+namespace Chalkable.StiConnector.Connectors.Model.Reports
 {
 
     public class GradebookReportParams
