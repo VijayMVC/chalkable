@@ -1,0 +1,7 @@
+.profile-page.view-mode
+    h2.page-title=Msg.Student_profile
+    +ProfileTopBar(self, 'info')
+    +ProfileInfoView(self.getUser())
+        //todo parent section
+    +ProfileInfoForm('students', self.getUser())
+

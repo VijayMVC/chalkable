@@ -1,0 +1,47 @@
+﻿using System;
+using Chalkable.Data.School.Model;
+
+namespace Chalkable.BusinessLogic.Model
+{
+    public class AnnouncementInfo
+    {
+        public int AnnouncementId { get; set; }
+        public string Subject { get; set; }
+        public string Title { get; set; }
+        public string Content { get; set; }
+        public DateTime? ExpiresDate { get; set; }
+        public int? ClassAnnouncementTypeId { get; set; }
+
+        public decimal? MaxScore { get; set; }
+        public decimal? WeightAddition { get; set; }
+        public decimal? WeightMultiplier { get; set; }
+        public bool CanDropStudentScore { get; set; }
+        public bool HideFromStudents { get; set; }
+
+
+        public AnnouncementInfo()
+        {
+            MaxScore = 100;
+            WeightAddition = 0;
+            WeightMultiplier = 1;
+        }
+
+        public static AnnouncementInfo Create(Announcement announcement)
+        {
+            return new AnnouncementInfo
+                {
+                    ClassAnnouncementTypeId = announcement.ClassAnnouncementTypeRef,
+                    AnnouncementId = announcement.Id,
+                    Content = announcement.Content,
+                    ExpiresDate = announcement.Expires,
+                    Subject = announcement.Subject,
+                    MaxScore = announcement.MaxScore,
+                    WeightAddition = announcement.WeightAddition,
+                    WeightMultiplier = announcement.WeightMultiplier,
+                    CanDropStudentScore = announcement.MayBeDropped,
+                    HideFromStudents = !announcement.VisibleForStudent,
+                    Title = announcement.Title
+                };
+        }
+    }
+}
