@@ -1,8 +1,13 @@
-Create procedure spGetStandardParentsWithChilds @standardId int
+ALTER procedure [dbo].[spGetStandardParentsWithChilds] @standardId int
 as
 declare @parentsIds table (id int)
 declare @parentChildsIds [TStandard]
 declare @parentId int = @standardId, @currentStandardId int, @subjectId int
+
+insert into @parentChildsIds
+select * from [Standard]
+where ParentStandardRef = @standardId
+
 while @parentId is not null
 begin
 	select @currentStandardId = Id, @parentId = ParentStandardRef, @subjectId = StandardSubjectRef
@@ -27,4 +32,7 @@ begin
 end
 select * from @parentsIds
 select * from @parentChildsIds
-Go
+
+GO
+
+

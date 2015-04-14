@@ -36,6 +36,7 @@ NAMESPACE('chlk.activities.announcement', function(){
                 row.empty();
                 tpl.renderTo(row);
                 var firstColumn = ria.dom.Dom(columns[0]);
+                firstColumn.find('.standard-name').forEach(function(node){ node.removeClass('active')});
                 firstColumn.prependTo(row);
                 if(model.getSubjectId()){
                     var subjectId = model.getSubjectId().valueOf();
@@ -43,7 +44,6 @@ NAMESPACE('chlk.activities.announcement', function(){
                         .filter(function(item){ return item.getData('subject-id') == subjectId; });
                     subjectNode.addClass('active');
                 }
-
                 columns = this.dom.find('.standards-row').find('.name-td').valueOf();
                 var lastColumn = ria.dom.Dom(columns[columns.length - 1]);
                 this.afterCellActivate_(lastColumn.find('.standard-name.active'));

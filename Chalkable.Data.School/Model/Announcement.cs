@@ -21,9 +21,9 @@ namespace Chalkable.Data.School.Model
         public const string CLASS_ANNOUNCEMENT_TYPE_REF_FIELD = "ClassAnnouncementTypeRef";
         public const string TITLE_FIELD = "Title";
         public const string SIS_ACTIVITY_ID_FIELD = "SisActivityId";
-        
         public const string PRIMARY_TEACHER_REF_FIELD = "PrimaryTeacherRef";
-        
+        public const string SCHOOL_REF_FIELD = "SchoolRef";
+
         [PrimaryKeyFieldAttr]
         [IdentityFieldAttr]
         public int Id { get; set; }

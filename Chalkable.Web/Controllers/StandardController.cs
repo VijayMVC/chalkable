@@ -15,26 +15,25 @@ namespace Chalkable.Web.Controllers
     {
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult SearchStandards(string filter, int? classId)
+        public ActionResult SearchStandards(string filter, int? classId, bool? activeOnly)
         {
-            var stadnards = SchoolLocator.StandardService.GetStandards(filter, classId);
+            var stadnards = SchoolLocator.StandardService.GetStandards(filter, classId, activeOnly ?? false);
             return Json(stadnards.Select(StandardViewData.Create).ToList());
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult GetStandards(int? classId, int? subjectId, int? gradeLevelId, int? parentStandardId, bool? allStandards)
+        public ActionResult GetStandards(int? classId, int? subjectId, int? gradeLevelId, int? parentStandardId, bool? allStandards, bool? activeOnly)
         {
             var standards = SchoolLocator.StandardService.GetStandards(classId, gradeLevelId
-                , subjectId, parentStandardId, allStandards ?? false);
+                , subjectId, parentStandardId, allStandards ?? false, activeOnly ?? false);
             return Json(standards.Select(StandardViewData.Create).ToList());
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult GetStandardParentsSubTree(int standardId)
         {
-            var subTree = SchoolLocator.StandardService.GetStandardParentsSubTree(standardId);
-            var res = StandardTreeItemViewData.Create(subTree);
-            return Json(res, 6);
+            var res = SchoolLocator.StandardService.GetStandardParentsSubTree(standardId);
+            return Json(StandardsTableViewData.Create(res), 6);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]

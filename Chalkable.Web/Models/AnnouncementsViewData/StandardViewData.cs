@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
-using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
@@ -17,7 +15,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public int StandardSubjectId { get; set; }
         public string CCStandardCode { get; set; }
         public Guid? AcademicBenchmarkId { get; set; }
-        
+        public bool IsActive { get; set; }
+
         protected StandardViewData(){}
 
         protected StandardViewData(Standard standard)
@@ -29,6 +28,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             StandardSubjectId = standard.StandardSubjectRef;
             AcademicBenchmarkId = standard.AcademicBenchmarkId;
             CCStandardCode = standard.CCStandardCode;
+            IsActive = standard.IsActive;
         }
         
         public static StandardViewData Create(Standard standard)
@@ -46,20 +46,48 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         }
     }
 
-    public class StandardTreeItemViewData : StandardViewData
-    {
-        public IList<StandardTreeItemViewData> StandardChildren { get; set; }
 
-        protected StandardTreeItemViewData(StandardTreeItem standard) : base(standard)
+    public class StandardTableItemViewData : StandardViewData
+    {
+        public bool IsSelected { get; set; }
+        public int Row { get; set; }
+        public int Column { get; set; }
+
+        protected StandardTableItemViewData(Standard standard, bool isSelected, int row, int column)
+            : base(standard)
         {
-                StandardChildren = standard.StandardChildren != null 
-                    ?  Create(standard.StandardChildren)
-                    : new List<StandardTreeItemViewData>();
+            IsSelected = isSelected;
+            Row = row;
+            Column = column;
         }
 
-        public static IList<StandardTreeItemViewData> Create(IList<StandardTreeItem> standards)
+        public static StandardTableItemViewData Create(Standard standard, bool isSelected, int row, int column)
         {
-            return standards.Select(s => new StandardTreeItemViewData(s)).ToList();
+            return new StandardTableItemViewData(standard, isSelected, row, column);
+        }
+    }
+
+    public class StandardsTableViewData
+    {
+        public IList<IList<StandardTableItemViewData>> StandardsColumns { get; set; } 
+        public static StandardsTableViewData Create(StandardTreePath standardTreePath)
+        {
+            var res = new StandardsTableViewData {StandardsColumns = new List<IList<StandardTableItemViewData>>()};
+            var column = 0;
+            if (standardTreePath.AllStandards.Count > 0 && standardTreePath.Path.Count > 0)
+            {
+                for (var i = 0; i < standardTreePath.Path.Count + 1; i++)
+                {
+                    var row = 0;
+                    var standardsColumn = i == 0
+                                        ? standardTreePath.AllStandards.Where(s => !s.ParentStandardRef.HasValue).ToList() 
+                                        : standardTreePath.AllStandards.Where(s => s.ParentStandardRef == standardTreePath.Path[i - 1].Id).ToList();
+                    res.StandardsColumns.Add(standardsColumn.Select(s => StandardTableItemViewData.Create(s, i < standardTreePath.Path.Count && s.Id == standardTreePath.Path[i].Id, ++row, column)).ToList());
+                    column++;         
+                }
+
+            }
+            return res;
         }
     }
 }

@@ -32,6 +32,12 @@ NAMESPACE('chlk.models.standard', function () {
             String, 'commonCoreStandardCode',
             chlk.models.id.StandardSubjectId, 'subjectId',
 
+            String, function displayTitle(){
+                var name = this.getName();
+                if(name && (!name.trim || name.trim() != '')) return name;
+                return this.getDescription();
+            },
+
             [[chlk.models.id.StandardId, String, String, String]],
             function $(standardId_, name_, grade_, ccStandardCode_){
                 BASE();

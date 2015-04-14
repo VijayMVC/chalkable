@@ -23,7 +23,7 @@ NAMESPACE('chlk.controllers', function (){
         [[Number]],
         function listAction(pageIndex_) {
             var result = this.districtService
-                .getDistricts(pageIndex_|0)
+                .getDistricts(pageIndex_|0, 100)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.district.DistrictListPage, result);
         },
@@ -31,7 +31,7 @@ NAMESPACE('chlk.controllers', function (){
         [[Number]],
         function listSysAdminAction(pageIndex_) {
             var result = this.districtService
-                .getDistricts(pageIndex_|0)
+                .getDistricts(pageIndex_|0, 100)
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.district.DistrictListPage, result);
         },
@@ -40,7 +40,7 @@ NAMESPACE('chlk.controllers', function (){
         [[Number]],
         function pageAction(pageIndex) {
             var result = this.districtService
-                .getDistricts(pageIndex)
+                .getDistricts(pageIndex, 100)
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.district.DistrictListPage, result);
         },
@@ -65,7 +65,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function (data) {
                     return this.districtService
-                        .getDistricts(0)
+                        .getDistricts(0, 100)
                         .attach(this.validateResponse_());
                 }, this);
             return this.UpdateView(chlk.activities.district.DistrictListPage, result);

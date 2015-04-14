@@ -59,7 +59,7 @@ NAMESPACE('chlk.controllers', function (){
                 var result =
                     ria.async.wait(
                         this.bgTaskService.getTasks(pageIndex_ | 0, 50, state_, type_, districtId_, allDistricts_),
-                        this.districtService.getDistricts(0, 10000)
+                        this.districtService.getDistricts(0)
                     )
                     .attach(this.validateResponse_())
                     .then(function(res){

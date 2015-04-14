@@ -29,7 +29,7 @@ namespace Chalkable.Data.School.DataAccess
         }
         public IList<Standard> GetStandardsByABIds(IList<Guid> ids)
         {
-            var dbQuery = Orm.SimpleSelect<Standard>(new AndQueryCondition());
+            var dbQuery = Orm.SimpleSelect<Standard>(new AndQueryCondition ());
             var idsStr = ids.Select(x => string.Format("'{0}'", x)).JoinString(",");
             dbQuery.Sql.AppendFormat(" and [{0}] in ({1})", Standard.ACADEMIC_BENCHMARK_ID_FIELD, idsStr);
             return ReadMany<Standard>(dbQuery);
@@ -55,6 +55,8 @@ namespace Chalkable.Data.School.DataAccess
             }
             if (query.ParentStandardId.HasValue)
                 condition.Add(Standard.PARENT_STANDARD_REF_FIELD, query.ParentStandardId);
+            if(query.ActiveOnly)
+                condition.Add(Standard.IS_ACTIVE_FIELD, true);
 
             var dbQuery = new DbQuery();
             dbQuery.Sql.Append(@"select [Standard].* from [Standard]");
@@ -79,14 +81,17 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<Standard>(dbQuery);
         }
 
-        public IList<Standard> SearchStandards(string filter)
+        public IList<Standard> SearchStandards(string filter, bool activeOnly = false)
         {
             if (string.IsNullOrEmpty(filter)) return new List<Standard>();
             var words = filter.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
             if (words.Length == 0)
                 return new List<Standard>();
 
-            var dbQuery = Orm.SimpleSelect<Standard>(new AndQueryCondition());
+            var conds = new AndQueryCondition();
+            if(activeOnly)
+                conds.Add(Standard.IS_ACTIVE_FIELD, true);
+            var dbQuery = Orm.SimpleSelect<Standard>(conds);
             dbQuery.Sql.Append(" and (");
             for (int i = 0; i < words.Length; i++)
             {
@@ -110,12 +115,13 @@ namespace Chalkable.Data.School.DataAccess
                                  , Class.COURSE_REF_FIELD, classIdParamName);
         }
 
-        public IList<StandardTreeItem> GetStandardParentsSubTree(int standardId)
+        public StandardTreePath GetStandardParentsSubTree(int standardId)
         {
             var parameters = new Dictionary<string, object> { { "@standardId", standardId } };
             using (var reader = ExecuteStoredProcedureReader("spGetStandardParentsWithChilds", parameters))
             {
-                var res = new List<StandardTreeItem>();
+                IList<Standard> standards = new List<Standard>();
+                IList<Standard> path = new List<Standard>();
                 IList<int> parentIds = new List<int>();
                 while (reader.Read())
                 {
@@ -125,20 +131,13 @@ namespace Chalkable.Data.School.DataAccess
                 if (parentIds.Count > 0)
                 {
                     reader.NextResult();
-                    var parentChilds = reader.ReadList<StandardTreeItem>();
-                    var parentWithChilds = parentChilds.First(x => x.Id == parentIds[0]);
-                    res.Add(parentWithChilds);
-                    res.AddRange(parentChilds.Where(x => !x.ParentStandardRef.HasValue && x.Id != parentWithChilds.Id).ToList());
-                    var currentParent = parentWithChilds;
-                    for (int i = 1; i < parentIds.Count; i++)
+                    standards = reader.ReadList<Standard>();
+                    foreach (var parentId in parentIds)
                     {
-                        currentParent.StandardChildren = parentChilds.Where(x => x.ParentStandardRef == currentParent.Id).ToList();
-                        currentParent = currentParent.StandardChildren.FirstOrDefault(x => x.Id == parentIds[i]);
-                        if (currentParent == null) break;
+                        path.Add(standards.First(s => s.Id == parentId));
                     }
-
-                }
-                return res;
+               }
+               return new StandardTreePath { AllStandards = standards, Path = path.ToList() };
             }
         }
 
@@ -265,5 +264,11 @@ namespace Chalkable.Data.School.DataAccess
         public int? StandardSubjectId { get; set; }
         public int? ParentStandardId { get; set; }
         public bool AllStandards { get; set; }
+        public bool ActiveOnly { get; set; }
+
+        public StandardQuery()
+        {
+            ActiveOnly = true;
+        }
     }
 }

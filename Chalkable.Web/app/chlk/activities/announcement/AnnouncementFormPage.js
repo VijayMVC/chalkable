@@ -45,7 +45,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, 'update-standards-and-suggested-apps', '', ria.mvc.PartialUpdateRuleActions.Replace)],
             [[Object, Object, String]],
             VOID, function updateStandardsAndSuggestedApps(tpl, model, msg_) {
-                var standardsData = new chlk.models.standard.StandardTreeItem(
+                var standardsData = new chlk.models.standard.StandardsListViewData(
                     null, model.getClassId(),
                     null, model.getStandards(),
                     model.getId()

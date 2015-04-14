@@ -56,7 +56,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult List(int? start, int? count)
         {
             start = start ?? 0;
-            count = count ?? 100;
+            count = count ?? int.MaxValue;
             var districts = MasterLocator.DistrictService.GetDistrictsSyncStatus(start.Value, count.Value);
             return Json(districts.Transform(DistrictSyncStatusViewData.Create));
         }
