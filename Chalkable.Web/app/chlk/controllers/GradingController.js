@@ -27,6 +27,7 @@ REQUIRE('chlk.activities.reports.ProgressReportDialog');
 REQUIRE('chlk.activities.reports.ComprehensiveProgressReportDialog');
 REQUIRE('chlk.activities.reports.MissingAssignmentsReportDialog');
 REQUIRE('chlk.activities.reports.BirthdayReportDialog');
+REQUIRE('chlk.activities.reports.SeatingChartReportDialog');
 
 REQUIRE('chlk.models.grading.GradingSummaryGridSubmitViewData');
 
@@ -572,6 +573,26 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.reports.BirthdayReportDialog, res);
             },
 
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            function seatingChartReportAction(gradingPeriodId, classId, startDate, endDate){
+                if (this.isDemoSchool())
+                    return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                var res = new ria.async.DeferredData(new chlk.models.reports.BaseReportViewData(classId, gradingPeriodId, startDate, endDate));
+                return this.ShadeView(chlk.activities.reports.SeatingChartReportDialog, res);
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            function gradeVerificationReportAction(gradingPeriodId, classId, startDate, endDate){
+
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            function lessonPlanReportAction(gradingPeriodId, classId, startDate, endDate){
+
+            },
 
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],

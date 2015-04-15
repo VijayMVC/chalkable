@@ -78,6 +78,15 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, Boolean]],
+        String, function submitSeatingChartReport(classId, gradingPeriodId, displayStudentPhoto_) {
+            return this.getUrl('Reporting/SeatingChartReport.json', {
+                classId: classId.valueOf(),
+                gradingPeriodId: gradingPeriodId.valueOf(),
+                saveAsDefault: displayStudentPhoto_
+            });
+        },
+
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.reports.StudentIdentifierEnum,
             String, String, String, String, String, String, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, String]],
         String, function submitWorksheetReport(classId, gradingPeriodId, startDate, endDate, idToPrint, announcementIds, title1, title2, title3,
