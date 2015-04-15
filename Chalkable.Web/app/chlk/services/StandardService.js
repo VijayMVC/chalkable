@@ -32,6 +32,16 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.ClassId, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId]],
+            ria.async.Future, function getStandardColumn(classId_, subjectId_, standardId_){
+                return this.get('Standard/GetStandards.json', ArrayOf(chlk.models.standard.StandardTableItem), {
+                    classId: classId_ && classId_.valueOf(),
+                    subjectId: subjectId_ && subjectId_.valueOf(),
+                    parentStandardId: standardId_ && standardId_.valueOf(),
+                    activeOnly : true
+                });
+            },
+
             [[ArrayOf(chlk.models.id.StandardId)]],
             ria.async.Future, function getStandardsList(ids) {
                 return this.get('Standard/GetStandardsByIds.json', ArrayOf(chlk.models.standard.Standard), {
@@ -45,10 +55,27 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String]],
-            ria.async.Future, function searchStandards(filter) {
+            [[chlk.models.id.ClassId, Boolean, String]],
+            ria.async.Future, function searchStandardsByClassId(classId, activeOnly, filter) {
                 return this.get('Standard/SearchStandards.json', ArrayOf(chlk.models.standard.Standard), {
-                    filter: filter
+                    filter: filter,
+                    classId: classId && classId.valueOf(),
+                    activeOnly: activeOnly
+                });
+            },
+
+            [[String, Boolean]],
+            ria.async.Future, function searchStandards(filter, activeOnly_) {
+                return this.get('Standard/SearchStandards.json', ArrayOf(chlk.models.standard.Standard), {
+                    filter: filter,
+                    activeOnly: activeOnly_
+                });
+            },
+
+            [[chlk.models.id.StandardId]],
+            ria.async.Future, function getStandardParentsSubTree(standardId){
+                return this.get('Standard/GetStandardParentsSubTree', chlk.models.standard.StandardsTable  ,{
+                    standardId: standardId && standardId.valueOf()
                 });
             },
 

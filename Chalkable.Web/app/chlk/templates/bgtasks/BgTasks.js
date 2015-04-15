@@ -34,6 +34,11 @@ NAMESPACE('chlk.templates.bgtasks', function () {
             Boolean, 'allDistricts',
 
 
+            String, function getTasksIds(){
+                var tasksIds = this.getBgTasks().getItems().map(function(item){return item.getId().valueOf();});
+                return tasksIds.join(',');
+            },
+
             Array, function prepareDistrictsSelectModel(){
                 var districtId = this.getDistrictId();
                 var allDistricts = this.isAllDistricts();

@@ -3,9 +3,9 @@ if showPostQuestion || self.getAnnouncementQnAs().length
     +CloseOpen('Chat')
         .content.silver-panel
             -var isTeacher=self.getUserRole().isTeacher()
-            each item in self.getAnnouncementQnAs()
+            each item, i in self.getAnnouncementQnAs()
                 -questionMsg = item.getQuestion().getMessage()
-                .table.row
+                .table.row(class = ((i > 0) && !self.isMoreClicked() && isTeacher) ? 'hidden-item' : '')
                     .avatar-block-left
                         +PersonImg(item.getQuestion().getPerson(), 47)
                     .qna
@@ -28,7 +28,7 @@ if showPostQuestion || self.getAnnouncementQnAs().length
 
                 -var answered = (item.getState() == chlk.models.announcement.QnAState.ANSWERED)
                 if answered || isTeacher
-                    .table.row
+                    .table.row(class = ((i > 0) && !self.isMoreClicked() && isTeacher) ? 'hidden-item' : '')
                         -var hideEdit = answered || !self.isAnnOwner()
                         -var answerMsg=''
                         .avatar-block-left
@@ -45,7 +45,7 @@ if showPostQuestion || self.getAnnouncementQnAs().length
                                         -var isAnswerOwner = item.getAnswer().getPerson().getId() == self.getCurrentUser().getId()
                                         h3= item.getAnswer().getPerson().getFirstName()
                                         p(style="display: " + (hideEdit ? "block" : "none")).edit-answer-text= answerMsg
-                                    input(type="text",name="answer", value=answerMsg, style="display: " + (hideEdit ? "none" : "block"), class="validate[required]", placeholder="Answer").edit-answer-input
+                                    input(type="text",name="answer", value=answerMsg, style="display: " + (hideEdit ? "none" : "block"), class="validate[required]", placeholder="Answer the question").edit-answer-input
                                 if item.getAnswer()
                                     span.edit-btn-block
                                         = self.convertWith(item.getAnswer().getCreated(), chlk.converters.dateTime.DateTimeTextConverter)
@@ -53,8 +53,10 @@ if showPostQuestion || self.getAnnouncementQnAs().length
                                         if answered && self.isAnnOwner() && isAnswerOwner
                                             a(href='javascript:', name='edit-answer-link').edit-answer-link=Msg.Edit
                                 br
-                                +Button()(type="submit").edit-answer-btn.blue-button.submit-btn= Msg.Update.toUpperCase()
+                                +Button()(type="submit").edit-answer-btn.blue-button.submit-btn= (answerMsg ? Msg.Update.toUpperCase() : 'ANSWER')
 
+            if self.getAnnouncementQnAs().length > 1 && !self.isMoreClicked() && isTeacher
+                .show-more Show more
 
             if showPostQuestion
                 .table.row

@@ -21,6 +21,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Create(int? classAnnouncementTypeId, int? classId, DateTime? expiresDate)
         {
+            //TODO : need to refactor all announcemnt cerate , edit logic later))
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
           
@@ -56,10 +57,11 @@ namespace Chalkable.Web.Controllers
                 var annExpiredDate = expiresDate.HasValue ? expiresDate.Value : 
                                     Context.SchoolYearEndDate.HasValue ? Context.SchoolYearEndDate.Value : 
                                     DateTime.MaxValue;
+                
                 var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(classAnnType, classId.Value, annExpiredDate);
-
+                
                 // annExporedDate was assigned to have a correct announcements orderings, lets clear it if not user-provided
-                if (!expiresDate.HasValue)
+                if (!expiresDate.HasValue && annDetails.Expires == annExpiredDate)
                     annDetails.Expires = DateTime.MinValue;
 
                 Debug.Assert(Context.PersonId.HasValue);
@@ -132,8 +134,7 @@ namespace Chalkable.Web.Controllers
             return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student",
-            Preference.API_DESCR_ANNOUNCEMENT_READ, true, CallType.Get, new[] {AppPermissionType.Announcement})]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] {AppPermissionType.Announcement})]
         public ActionResult Read(int announcementId)
         {
             var res = PrepareFullAnnouncementViewData(announcementId, true);

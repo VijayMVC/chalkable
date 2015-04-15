@@ -45,7 +45,10 @@ namespace Chalkable.Web.Controllers
                     : new ChalkableJsonResponce(data);
 
             if (data is ChalkableException)
-                Response.StatusCode = (int)HttpStatusCode.OK;
+            {
+                Response.StatusCode = (int) HttpStatusCode.OK;
+                Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
+            }
 
             return new ChalkableJsonResult(HideSensitiveData())
                 {
@@ -56,7 +59,7 @@ namespace Chalkable.Web.Controllers
 
         private bool HideSensitiveData()
         {
-            return Context.IsOAuthUser && (!Context.IsInternalApp 
+            return Context!= null && Context.IsOAuthUser && (!Context.IsInternalApp 
                 || (Context.OAuthApplication == Settings.ApiExplorerClientId));
         }
 

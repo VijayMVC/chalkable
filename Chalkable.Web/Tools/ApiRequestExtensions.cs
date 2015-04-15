@@ -1,10 +1,16 @@
 ﻿using System;
+using System.Globalization;
 using System.Web;
 
 namespace Chalkable.Web.Tools
 {
     public static class ApiRequestExtensions
     {
+        private static bool IsBearer(string s)
+        {
+            return s.StartsWith("Bearer", true, CultureInfo.InvariantCulture);
+        }
+
         public static bool IsApiRequest(this HttpRequestBase request)
         {
             if (request == null)
@@ -13,7 +19,7 @@ namespace Chalkable.Web.Tools
             }
 
             var authorization = request.Headers != null ? request.Headers["Authorization"] : null;
-            return (authorization ?? "").StartsWith("Bearer:");
+            return IsBearer(authorization ?? "");
         }
 
         public static bool IsApiRequest(this HttpRequest request)
@@ -24,7 +30,7 @@ namespace Chalkable.Web.Tools
             }
 
             var authorization = request.Headers != null ? request.Headers["Authorization"] : null;
-            return (authorization ?? "").StartsWith("Bearer:");
+            return IsBearer(authorization ?? "");
         }
 
         public static bool IsAjaxRequest(this HttpRequest request)

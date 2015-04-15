@@ -4,8 +4,8 @@ NAMESPACE('chlk.lib.exception', function () {
     /** @class chlk.lib.exception.NoAnnouncementException */
     EXCEPTION(
         'NoAnnouncementException', [
-            function $(e_) {
-                BASE('Announcement not found', e_);
+            function $(msg_, e_) {
+                BASE(msg_ || 'Announcement is not found', e_);
             }
         ]);
 });

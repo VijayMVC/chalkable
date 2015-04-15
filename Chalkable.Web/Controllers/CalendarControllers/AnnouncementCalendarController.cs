@@ -19,7 +19,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
     [RequireHttps, TraceControllerFilter]
     public class AnnouncementCalendarController : CalendarController
     {
-         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_LIST, true, CallType.Get, new[] { AppPermissionType.Announcement })]
+         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
         public ActionResult List(DateTime? date, int? classId, int? personId)
          {
              if (!SchoolLocator.Context.PersonId.HasValue)
@@ -52,7 +52,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              return Json(AnnouncementShortViewData.Create(anns));
          }
 
-         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_ANNOUNCEMENT_WEEK, true, CallType.Get, new[] { AppPermissionType.Announcement })]
+         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
          public ActionResult Week(DateTime? date, int? classId, int? personId)
          {
 
@@ -60,7 +60,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              return Json(res, 8);
          }
 
-         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_CALENDAR_ANNOUNCEMENT_DAY, true, CallType.Get, new[] { AppPermissionType.Schedule })]
+         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Schedule })]
          public ActionResult Day(DateTime? date, int? personId)
          {
              var res = BuildDayAnnCalendar(SchoolLocator, date, null, personId, GetCurrentSchoolYearId());

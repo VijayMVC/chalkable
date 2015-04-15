@@ -1,7 +1,7 @@
 user = self.getUser()
 .profile-page
     h2.page-title=Msg.Profile
-    +UserProfileTopBar(self, 'details')
+    +UserProfileTopBar(self, self.getUser(), 'details')
     .summary-view
         #top-panel
             #avatar-photo-conainer.left-block.panel-block

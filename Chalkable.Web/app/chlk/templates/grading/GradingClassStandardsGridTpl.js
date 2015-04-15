@@ -18,6 +18,9 @@ NAMESPACE('chlk.templates.grading', function () {
             chlk.models.grading.GradingClassSummaryGridItems.OF(chlk.models.standard.StandardGradings), 'currentGradingGrid',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'ableEdit'
+            Boolean, 'ableEdit',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ablePostStandards'
         ]);
 });

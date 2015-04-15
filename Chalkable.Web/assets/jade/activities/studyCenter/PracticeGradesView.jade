@@ -3,7 +3,7 @@ mixin PracticeScoreWithPreviousScores_(lastScore, previousScores)
      +PracticeScore_(lastScore)(data-tooltip=res)
 
 mixin PracticeScore_(score)
-    div(attributes)= score != undefined ? score : '-'
+    div(attributes)= score != undefined ? (score.indexOf('%') == -1 ? score + '%' : score) : '-'
 
 mixin GradebookScore_(numericSore, alphaGradeName)
     -var score= numericSore && alphaGradeName ? alphaGradeName + ' (' + numericSore + ')' : (numericSore ? numericSore : alphaGradeName);

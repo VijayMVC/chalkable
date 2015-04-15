@@ -20,11 +20,6 @@ namespace Chalkable.Web.Models
         public int Order { get; set; }
         public bool IsTeacherAttachment { get; set; }
 
-        private const string PDF_EXT = ".pdf";
-        private const string CROCODOC_API_URL_FORMAT = "download/document?uuid={0}&pdf={1}&annotated={2}&token={3}";
-        private const string CROCODOC_THUMBNAIL_URL_FORMAT = "download/thumbnail?token={0}&uuid={1}&size={2}x{3}";
-        private const string TRUE = "true";
-
         public static AnnouncementAttachmentViewData Create(AnnouncementAttachment attachment, bool isOwner, bool isTeacherAttachment)
         {
             return new AnnouncementAttachmentViewData
@@ -43,30 +38,14 @@ namespace Chalkable.Web.Models
         public static AnnouncementAttachmentViewData Create(AnnouncementAttachmentInfo announcementAttachment, bool isOwner)
         {
             var res = Create(announcementAttachment.Attachment, isOwner, announcementAttachment.IsTeacherAttachment);
-
-            if (!(string.IsNullOrEmpty(announcementAttachment.Token) || string.IsNullOrEmpty(announcementAttachment.StorageUrl)
-                || string.IsNullOrEmpty(announcementAttachment.Attachment.Uuid)))
-            {
-                var ispdf = IsPdf(announcementAttachment.Attachment);
-                res.Url = string.Format(announcementAttachment.CrocodocApiUrl + CROCODOC_API_URL_FORMAT,
-                                        announcementAttachment.Attachment.Uuid, ispdf, TRUE, announcementAttachment.Token);
-
-                res.ThumbnailUrl = string.Format(announcementAttachment.CrocodocApiUrl + CROCODOC_THUMBNAIL_URL_FORMAT, announcementAttachment.Token,
-                                                 announcementAttachment.Attachment.Uuid, announcementAttachment.DocWidth, announcementAttachment.DocHeigth);
-            }
+            res.Url = announcementAttachment.DownloadDocumentUrl;
+            res.ThumbnailUrl = announcementAttachment.DownloadThumbnailUrl;
             return res;
         }
-
         public static IList<AnnouncementAttachmentViewData> Create(IList<AnnouncementAttachmentInfo> announcementAttachments, int personId)
         {
             var res = announcementAttachments.Select(x => Create(x, x.Attachment.PersonRef == personId));
             return res.ToList();
-        }
-
-
-        private static bool IsPdf(AnnouncementAttachment announcementAttachment)
-        {
-            return PDF_EXT == (Path.GetExtension(announcementAttachment.Name) ?? string.Empty).ToLower();
         }
     }
 }

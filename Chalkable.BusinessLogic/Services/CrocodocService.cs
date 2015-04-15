@@ -20,6 +20,11 @@ namespace Chalkable.BusinessLogic.Services
         DocumentUploadResponse UploadDocument(string fileName, byte[] fileContent);
         StartSessionResponse StartViewSession(StartViewSessionRequestModel model);
         bool IsDocument(string fileName);
+        string GetToken();
+        string GetStrorageUrl();
+        string GetCrocodocApiUrl();
+        string BuildDownloadDocumentUrl(string uuid, string docName);
+        string BuildDownloadhumbnailUrl(string uuid, int docWith, int docHeigth);
     }
 
     public class CrocodocService : ICrocodocService
@@ -32,6 +37,12 @@ namespace Chalkable.BusinessLogic.Services
         private const string SESSION_CREATE = "session/create";
         private const string DOCUMENT_UPLOAD = "document/upload";
 
+        private const string PDF_EXT = ".pdf";
+        private const string TRUE = "true";
+
+        private const string CROCODOC_API_URL_FORMAT = "download/document?uuid={0}&pdf={1}&annotated={2}&token={3}";
+        private const string CROCODOC_THUMBNAIL_URL_FORMAT = "download/thumbnail?token={0}&uuid={1}&size={2}x{3}";
+        
         public DocumentUploadResponse UploadDocument(string fileName, byte[] fileContent)
         {
             if(!IsDocument(fileName))
@@ -48,13 +59,13 @@ namespace Chalkable.BusinessLogic.Services
             var wc = new WebClient();
             var nameValue = new NameValueCollection
                 {
-                    {TOKEN, Token},
+                    {TOKEN, GetToken()},
                     {UUID, model.Uuid},
                     {EDITABLE, model.CanAnnotate.ToString().ToLower()},
                     {USER, string.Format("{0},{1}", model.PersonId, model.PersonName)},
                     {ADMIN, model.IsOwner.ToString().ToLower()}
                 };
-            var str = Encoding.ASCII.GetString(wc.UploadValues(UrlTools.UrlCombine(CrocodocApiUrl, SESSION_CREATE), nameValue));
+            var str = Encoding.ASCII.GetString(wc.UploadValues(UrlTools.UrlCombine(GetCrocodocApiUrl(), SESSION_CREATE), nameValue));
             return Deserialize<StartSessionResponse>(str);
         }
 
@@ -63,32 +74,55 @@ namespace Chalkable.BusinessLogic.Services
             return MimeHelper.GetTypeByName(fileName) == MimeHelper.AttachmenType.Document;
         }
 
+        public string GetToken()
+        {
+            return PreferenceService.Get(Preference.CROCODOC_TOKEN).Value;
+        }
+
+        public string GetStrorageUrl()
+        {
+            return PreferenceService.Get(Preference.CROCODOC_URL).Value;
+        }
+
+        public string GetCrocodocApiUrl()
+        {
+            return PreferenceService.Get(Preference.CROCODOC_API_URL).Value;
+        }
+
+        public string BuildDownloadDocumentUrl(string uuid, string docName)
+        {
+            if (!(CanBuildDownloadApiUrl(uuid))) return null;
+            return string.Format(GetCrocodocApiUrl() + CROCODOC_API_URL_FORMAT, uuid, IsPdf(docName), TRUE, GetToken());
+        }
+
+        public string BuildDownloadhumbnailUrl(string uuid, int docWith, int docHeigth)
+        {
+            if (!(CanBuildDownloadApiUrl(uuid))) return null;
+            return string.Format(GetCrocodocApiUrl() + CROCODOC_THUMBNAIL_URL_FORMAT, GetToken(), uuid, docWith, docHeigth);
+        }
+
+        private bool CanBuildDownloadApiUrl(string uuid)
+        {
+            return !string.IsNullOrEmpty(GetToken()) && !string.IsNullOrEmpty(GetStrorageUrl())
+                && !string.IsNullOrEmpty(uuid);
+        }
+
+        private static bool IsPdf(string docName)
+        {
+            return PDF_EXT == (Path.GetExtension(docName) ?? string.Empty).ToLower();
+        }
         private DocumentUploadResponse UploadFileToCrocodoc(string fileName, byte[] fileContent)
         {
-            var nvc = new NameValueCollection { { TOKEN, Token } };
+            var nvc = new NameValueCollection { { TOKEN, GetToken() } };
             var fileType = MimeHelper.GetContentTypeByName(fileName);
-            return ChalkableHttpFileLoader.HttpUploadFile(UrlTools.UrlCombine(CrocodocApiUrl, DOCUMENT_UPLOAD)
+            return ChalkableHttpFileLoader.HttpUploadFile(UrlTools.UrlCombine(GetCrocodocApiUrl(), DOCUMENT_UPLOAD)
                 , fileName, fileContent, fileType, null, Deserialize<DocumentUploadResponse>, nvc);
         }
 
         private T Deserialize<T>(string response)
         {
             return (new JsonSerializer()).Deserialize<T>(new JsonTextReader(new StringReader(response)));
-        }
-
-        protected string Token
-        {
-            get { return PreferenceService.Get(Preference.CROCODOC_TOKEN).Value; }
-        }
-        protected string StrorageUrl
-        {
-            get { return PreferenceService.Get(Preference.CROCODOC_URL).Value; }
-        }
-        protected string CrocodocApiUrl
-        {
-            get { return PreferenceService.Get(Preference.CROCODOC_API_URL).Value; }
-        }
-        
+        }       
     }
 
 

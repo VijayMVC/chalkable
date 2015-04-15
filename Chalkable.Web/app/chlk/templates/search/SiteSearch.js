@@ -22,8 +22,7 @@ NAMESPACE('chlk.templates.search', function () {
             chlk.models.people.ShortUserInfo, 'personInfo',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'searchType',
-
+            chlk.models.search.SearchTypeEnum, 'searchType',
 
             [ria.templates.ModelPropertyBind],
             Number, 'announcementType',
@@ -39,6 +38,9 @@ NAMESPACE('chlk.templates.search', function () {
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.DepartmentId, 'departmentId',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'documentThumbnailUrl',
 
             function getAttachmentUrl(){
                 return "/AnnouncementAttachment/DownloadAttachment.json?width=47&height=47&needsDownload=false&announcementAttachmentId=" + this.id

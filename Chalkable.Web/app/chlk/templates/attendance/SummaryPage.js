@@ -46,11 +46,21 @@ NAMESPACE('chlk.templates.attendance', function () {
             Object, function getChartOptions(data){
                 var classesInfo = data.getClassesStats();
                 var series = [];
+                var dt = getDate();
+                dt.setMinutes(0);
+                dt.setHours(0);
+                dt.setSeconds(0);
+                dt.setMilliseconds(0);
+                var today = new chlk.models.common.ChlkDate(getDate());
+                var start = today.add(chlk.models.common.ChlkDateEnum.MONTH, -1);
                 classesInfo && classesInfo.forEach(function(type, i){
                     var data = [], sTooltips = {};
                     type.getDayStats().forEach(function(item, i){
-                        var time = item.getDate().getDate().getTime();
-                        data.push([time, item.getStudentCount() || 0]);
+                        var cur = item.getDate().getDate();
+                        if(cur >= start.add(chlk.models.common.ChlkDateEnum.DAY, -1).getDate() && cur <= today.getDate()){
+                            var time = item.getDate().getDate().getTime();
+                            data.push([time, item.getStudentCount() || 0]);
+                        }
                     });
 
                     series.push({
@@ -63,6 +73,11 @@ NAMESPACE('chlk.templates.attendance', function () {
                     });
                 });
 
+                var min = Date.UTC(start.getDate().getFullYear(), start.getDate().getMonth(), start.getDate().getDate()),
+                    max = Date.UTC(today.getDate().getFullYear(), today.getDate().getMonth(), today.getDate().getDate()),
+                    needLabel = ((max - min) / 1000 / 3600 / 24) % 2 == 0;
+                var needFirstLabel = needLabel;
+
                 return {
                     chart: {
                         width: 800,
@@ -70,10 +85,19 @@ NAMESPACE('chlk.templates.attendance', function () {
                     },
                     xAxis: {
                         type: 'datetime',
+                        min: min - 1000 * 60 * 60 * 10,
+                        max: max + 1000 * 60 * 60 * 10,
+                        tickInterval:  24 * 3600 * 1000,
                         labels: {
                             formatter: function() {
-                                return Highcharts.dateFormat('%b %e', this.value);
-                            }
+                                if(this.isFirst)
+                                    needLabel = needFirstLabel;
+                                var res = needLabel ? Highcharts.dateFormat('%b %e', this.value) : '';
+                                needLabel = !needLabel;
+                                return res;
+                            },
+                            step: 1,
+                            rotation: 0
                         }
                     },
 

@@ -49,7 +49,6 @@ NAMESPACE('chlk.activities.announcement', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementView)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementQnAs, 'update-qna', '.questions-and-answers', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.grading.GradingCommentsTpl, chlk.activities.lib.DontShowLoader(), '.row.selected .grading-comments-list', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementForStudentAttachments, 'update-attachments',
             '#attachments-block', ria.mvc.PartialUpdateRuleActions.Replace)],
@@ -66,8 +65,19 @@ NAMESPACE('chlk.activities.announcement', function () {
             Boolean, 'ableToGrade',
             Boolean, 'ableDropStudentScore',
             Boolean, 'ableToExempt',
+            Boolean, 'moreClicked',
 
             Array, 'zeroPercentageScores',
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementQnAs, 'update-qna')],
+            VOID, function updateQnAPart(tpl, model, msg_) {
+                tpl.options({
+                    moreClicked: this.isMoreClicked() || false
+                });
+                var container = this.dom.find('.questions-and-answers');
+                container.empty();
+                tpl.renderTo(container);
+            },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementGradingPartTpl)],
             VOID, function updateGradingPart(tpl, model, msg_) {
@@ -109,6 +119,16 @@ NAMESPACE('chlk.activities.announcement', function () {
                     block.find('.grade-input').setValue(grade);
                 });
                 return false;
+            },
+
+            [ria.mvc.DomEventBind('click', '.show-more')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function showMoreQnAsClick(node, event){
+                node.parent('.questions-and-answers')
+                    .find('.hidden-item')
+                    .removeClass('hidden-item');
+                node.remove();
+                this.setMoreClicked(true);
             },
 
             [ria.mvc.DomEventBind('click', '.decline-auto-grades')],
@@ -313,6 +333,8 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
+
+                this.setMoreClicked(false);
 
                 var allScores = [], zeroPercentageScores = [];
                 if(!this.getRole().isStudent()){
@@ -776,7 +798,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(node.getValue() && node.getValue().trim()) popUp.hide();
                     else popUp.show();
 
-                    if (ria.dom.Keys.ENTER.valueOf() == event.which){
+                    var value = (node.getValue() || '').trim();
+
+                    if (ria.dom.Keys.ENTER.valueOf() == event.which && value){
                         node.parent('form').trigger('submit');
                         node.parent('.small-pop-up').hide();
                     }

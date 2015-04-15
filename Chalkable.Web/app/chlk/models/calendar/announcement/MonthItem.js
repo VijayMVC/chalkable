@@ -36,6 +36,8 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
 
             Array, 'itemsArray',
 
+            Boolean, 'noPlusButton',
+
             chlk.models.id.ClassId, 'selectedClassId'
         ]);
 });

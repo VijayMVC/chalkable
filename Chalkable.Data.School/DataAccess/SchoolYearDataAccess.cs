@@ -19,7 +19,8 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new AndQueryCondition
                 {
                     {SchoolYear.START_DATE_FIELD, date, ConditionRelation.LessEqual},
-                    {SchoolYear.END_DATE_FIELD, date, ConditionRelation.GreaterEqual}
+                    {SchoolYear.END_DATE_FIELD, date, ConditionRelation.GreaterEqual},
+                    {SchoolYear.SCHOOL_REF_FIELD, schoolId},
                 };
             return SelectOneOrNull<SchoolYear>(conds);
         }

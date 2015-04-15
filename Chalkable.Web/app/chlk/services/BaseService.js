@@ -7,6 +7,7 @@ REQUIRE('chlk.models.common.PaginatedList');
 REQUIRE('chlk.lib.exception.DataException');
 REQUIRE('chlk.lib.exception.ChalkableException');
 REQUIRE('chlk.lib.exception.ChalkableSisException');
+REQUIRE('chlk.lib.exception.NoAnnouncementException');
 REQUIRE('chlk.lib.exception.NoClassAnnouncementTypeException');
 
 NAMESPACE('chlk.services', function () {
@@ -66,7 +67,7 @@ NAMESPACE('chlk.services', function () {
                             case 'ChalkableException':
                                 throw chlk.lib.exception.ChalkableException(response.data.message);
                             case 'NoAnnouncementException':
-                                throw chlk.lib.exception.NoAnnouncementException();
+                                throw chlk.lib.exception.NoAnnouncementException(response.data.message);
                             case 'NoClassAnnouncementTypeException':
                                 throw chlk.lib.exception.NoClassAnnouncementTypeException();
                             default:

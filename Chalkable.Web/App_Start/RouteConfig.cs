@@ -15,13 +15,13 @@ namespace Chalkable.Web
 
             routes.MapRoute("Default", // Route name
                             "{controller}/{action}.{format}", // URL with parameters
-                new { controller = "Home", action = "HomeRedirect", format = "aspx" } // Parameter defaults
+                new { controller = "Home", action = "Index", format = "aspx" } // Parameter defaults
             );
 
             routes.MapRoute(
               "Default2", // Route name
               "{controller}/{action}", // URL with parameters
-              new { controller = "Home", action = "HomeRedirect" } // Parameter defaults
+              new { controller = "Home", action = "Index" } // Parameter defaults
             );
         }
     }

@@ -1,5 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplateDialog');
 REQUIRE('chlk.templates.announcement.AddDuplicateAnnouncementTpl');
+REQUIRE('chlk.templates.standard.StandardAutoCompleteTpl');
 
 NAMESPACE('chlk.activities.announcement', function(){
 

@@ -7,5 +7,5 @@ mixin Rating(elemId, value, isEditable)
                 value = item,
                 name = elemId,
                 disabled = !isEditable ? "disabled" : undefined,
-                checked = value == item ? "checked" : undefined)
+                checked = Math.round(value) == item ? "checked" : undefined)
             label(for="#{elemId + item}")

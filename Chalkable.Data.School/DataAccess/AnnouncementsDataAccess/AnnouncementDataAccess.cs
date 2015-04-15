@@ -18,8 +18,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             this.schoolId = schoolId;
         }
-
-
+        
         private const string CREATE_PORCEDURE = "spCreateAnnouncement";
         private const string GET_DETAILS_PROCEDURE = "spGetAnnouncementDetails";
         private const string GET_ANNOUNCEMENT_RECIPIENT_PERSON = "spGetAnnouncementRecipientPersons";
@@ -202,7 +201,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public Announcement GetAnnouncement(int id, int roleId, int callerId)
         {
             var dbQuery = BuildSimpleAnnouncementQuery(callerId);
-            (new AndQueryCondition { { Announcement.ID_FIELD, id } }).BuildSqlWhere(dbQuery, "Announcement");
+            (new AndQueryCondition
+                {
+                    { Announcement.ID_FIELD, id },
+                    { Announcement.SCHOOL_REF_FIELD, schoolId },
+                }).BuildSqlWhere(dbQuery, "Announcement");
             BuildConditionForGetSimpleAnnouncement(dbQuery, roleId, callerId);
             return ReadOneOrNull<Announcement>(dbQuery);
         }
@@ -211,7 +214,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         public Announcement GetLastDraft(int personId)
         {
-            var conds = new AndQueryCondition { {Announcement.STATE_FIELD, AnnouncementState.Draft}};
+            var conds = new AndQueryCondition
+                {
+                    {Announcement.STATE_FIELD, AnnouncementState.Draft},
+                    {Announcement.SCHOOL_REF_FIELD, schoolId}
+                };
             var dbQuery = BuildSimpleAnnouncementQuery(personId);
             conds.BuildSqlWhere(dbQuery, "Announcement");
             dbQuery.Sql.AppendFormat(" and Class.[{0}] in (select [{1}].[{2}] from [{1}] where [{1}].[{3}] =@{4})"
@@ -234,9 +241,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             var conds = new AndQueryCondition
                 {
-                    //{Announcement.PERSON_REF_FIELD, personId},
                     {Announcement.CLASS_REF_FIELD, classId},
-                    {Announcement.CLASS_ANNOUNCEMENT_TYPE_REF_FIELD, classAnnouncementType}
+                    {Announcement.CLASS_ANNOUNCEMENT_TYPE_REF_FIELD, classAnnouncementType},
+                    {Announcement.SCHOOL_REF_FIELD, schoolId}
                 };
             var dbQuery = Orm.OrderedSelect(typeof (Announcement).Name, conds, Announcement.ID_FIELD, Orm.OrderType.Desc, count);
             var anns = ReadMany<Announcement>(dbQuery);
@@ -250,7 +257,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 {
                     {Announcement.TITLE_FIELD, title},
                     {Announcement.CLASS_REF_FIELD, classId},
-                    {Announcement.EXPIRES_FIELD, expiresDate}                    
+                    {Announcement.EXPIRES_FIELD, expiresDate},
+                    {Announcement.SCHOOL_REF_FIELD, schoolId}
                 };
 
             if (excludeAnnouncementId.HasValue)
@@ -279,13 +287,15 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public bool CanAddStandard(int announcementId)
         {
             var dbQuery = new DbQuery();
-            //dbQuery.Sql.Append(string.Format("select [{0}].[{4}] from [{0}] join [{1}] on [{1}].[{2}] = [{0}].[{3}]"
-            //    , "Announcement", "ClassStandard", ClassStandard.CLASS_REF_FIELD, Announcement.CLASS_REF_FIELD, Announcement.ID_FIELD));
             dbQuery.Sql.Append(@"select [Announcement].Id from Announcement 
                                  join Class on Class.Id = Announcement.ClassRef
                                  join ClassStandard  on ClassStandard.ClassRef = Class.Id or ClassStandard.ClassRef = Class.CourseRef ");
-            var conds = new AndQueryCondition {{Announcement.ID_FIELD, announcementId}};
-            conds.BuildSqlWhere(dbQuery, "Announcement");
+            var conds = new AndQueryCondition
+                {
+                    {Announcement.ID_FIELD, announcementId},
+                    {Announcement.SCHOOL_REF_FIELD, schoolId}
+                };
+            conds.BuildSqlWhere(dbQuery, typeof(Announcement).Name);
             return Exists(dbQuery);
         }
     }

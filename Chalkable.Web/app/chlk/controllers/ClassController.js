@@ -60,7 +60,12 @@ NAMESPACE('chlk.controllers', function (){
             function explorerAction(classId){
                 var res = this.classService
                     .getExplorer(classId)
-                    .attach(this.validateResponse_());
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        data.setClaims(this.getUserClaims_());
+                        data.setCurrentRoleId(this.getCurrentRole().getRoleId());
+                        return data;
+                    }, this);
                 return this.PushView(chlk.activities.classes.ClassExplorerPage, res);
             },
 

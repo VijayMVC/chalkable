@@ -1,6 +1,5 @@
 ﻿using System;
 using Chalkable.Common;
-using Chalkable.Common.Web;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using School = Chalkable.Data.Master.Model.School;

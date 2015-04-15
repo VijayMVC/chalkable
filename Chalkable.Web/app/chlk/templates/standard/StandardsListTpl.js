@@ -1,12 +1,12 @@
 REQUIRE('chlk.templates.ChlkTemplate');
-REQUIRE('chlk.models.standard.StandardsListViewData');
+REQUIRE('chlk.models.standard.StandardsTableViewData');
 
 NAMESPACE('chlk.templates.standard', function(){
 
     /**@class chlk.templates.standard.StandardsListTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/StandardsColumns.jade')],
-        [ria.templates.ModelBind(chlk.models.standard.StandardsListViewData)],
+        [ria.templates.ModelBind(chlk.models.standard.StandardsTableViewData)],
         'StandardsListTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
@@ -22,6 +22,6 @@ NAMESPACE('chlk.templates.standard', function(){
             chlk.models.id.AnnouncementId, 'announcementId',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.standard.Standard), 'itemStandards'
+            chlk.models.standard.StandardsTable, 'standardsTable',
     ]);
 });

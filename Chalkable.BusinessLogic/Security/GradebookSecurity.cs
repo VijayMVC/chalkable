@@ -7,8 +7,8 @@ namespace Chalkable.BusinessLogic.Security
     {
         public static bool CanReCalculateGradebook(UserContext context)
         {
-            return BaseSecurity.HasClaim(ClaimInfo.VIEW_CLASSROOM, context)
-                   || BaseSecurity.HasClaim(ClaimInfo.VIEW_CLASSROOM_ADMIN, context);
+            return BaseSecurity.HasClaim(ClaimInfo.MAINTAIN_CLASSROOM, context)
+                   || BaseSecurity.HasClaim(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN, context);
         }
     }
 }

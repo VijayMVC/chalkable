@@ -38,6 +38,9 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
 
                     if (annDetails.AnnouncementAttachments == null)
                         annDetails.AnnouncementAttachments = new List<AnnouncementAttachment>();
+                    annDetails.AnnouncementAttachments = annDetails.AnnouncementAttachments
+                                        .Where(x => !x.SisAttachmentId.HasValue 
+                                                  || activity.Attachments.Any(att=>att.AttachmentId == x.SisAttachmentId)).ToList();
                     foreach (var att in activity.Attachments)
                     {
                         var annAtt = annDetails.AnnouncementAttachments.FirstOrDefault(x => x.SisAttachmentId == att.AttachmentId);

@@ -12,6 +12,7 @@ mixin TasksFilterByDistrictsSelect_(name, items)
 
 .bg-tasks
     style(type="text/css", scoped) .bold { font-weight: 600; }
+
     +ActionForm('backgroundtask', 'list')#bgTasks-list-form
         +Hidden('start', self.bgTasks.getPageIndex())
         +Hidden('totalCount', self.bgTasks.getTotalCount())
@@ -27,6 +28,15 @@ mixin TasksFilterByDistrictsSelect_(name, items)
         .x-form-field
             label  Districts:
             +TasksFilterByDistrictsSelect_('districtId', self.prepareDistrictsSelectModel())#districts-select
+    +ActionForm('backgroundtask', 'tryRerunAll')#rerunAll-form
+        +Hidden('tasksids', self.getTasksIds())
+        +Button()(type='submit').special-button2.submit-btn Rerun All
+    //.action-bar.not-transparent.buttons
+        .container.panel-bg
+            .right
+                +ActionForm('backgroundtask', 'tryRerunAll')#rerunAll-form
+                    +Hidden('tasksids', self.getTasksIds())
+                    +Button()(type='submit').special-button2.submit-btn Rerun All
 
 
     +Grid('backgroundtask', 'page', self.bgTasks, [self.getStateId(), self.getTypeId(), self.getDistrictId(), self.isAllDistricts()]).not-transparent
@@ -53,5 +63,6 @@ mixin TasksFilterByDistrictsSelect_(name, items)
                     .td= item.getTaskType().valueOf()
                     .td.action-links
                         +ActionLink('backgroundtask', 'logsPage', item.getId()).profile
-                        +ActionLink('backgroundtask', 'delete', item.getId()).remove
-
+                        //+ActionLink('backgroundtask', 'tryDelete', item.getId()).remove
+                        +ActionLink('backgroundtask', 'tryCancel', item.getId()).remove
+                        +ActionLink('backgroundtask', 'tryRerun', item.getId()) Rerun

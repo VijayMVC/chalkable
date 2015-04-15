@@ -6,6 +6,8 @@ needDropdown = (value > valuesEnum.PRESENT.valueOf()) && reasons.length;
 reason = needDropdown ? self.getAttendanceReason() : '';
 name = self.getTypeName();
 student = self.getStudent();
+-isReadOnly = self.isStudentAttendanceReadOnly();
+
         //+ActionForm('attendance', 'setAttendance')(class= self.isNeedPresent && self.isNeedPresent() ? 'need-present' : '').student-attendance-form
 div(
     name="attendance",
@@ -26,10 +28,10 @@ div(
         =(value == valuesEnum.NA.valueOf() ? '_______' : name)
     .attendance-combo.buttons
         .buttons-group
-            BUTTON(href="javascript:", type="button", value="leftArrow").left-arrow &lt;
-            .button-like(class=needDropdown ? "with-dropdown" : '').current-attendance=name
-            BUTTON(href="javascript:", type="button", value="rightArrow").right-arrow &gt;
-        if value > valuesEnum.PRESENT.valueOf()
+            BUTTON(href="javascript:", type="button", value="leftArrow", disabled= isReadOnly ? "disabled" : null).left-arrow &lt;
+            .button-like(class=needDropdown ? "with-dropdown" : '', disabled= isReadOnly ? "disabled" : null).current-attendance=name
+            BUTTON(href="javascript:", type="button", value="rightArrow", disabled= isReadOnly ? "disabled" : null).right-arrow &gt;
+        if value > valuesEnum.PRESENT.valueOf() && !isReadOnly
             .combo-list.no-row-click.popup-bubble.top
                 input.combo-input.x-zero
                 .connector

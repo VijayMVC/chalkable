@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
@@ -9,7 +8,7 @@ namespace Chalkable.Web.Models.ClassesViewData
 {
     public class ClassHoverBoxViewData<T> : HoverBoxesViewData<T>
     {
-        public static ClassHoverBoxViewData<ClassAttendanceHoverViewData> Create(IList<ClassAttendanceDetails> attendances, int possibleAbsents)
+        public static ClassHoverBoxViewData<ClassAttendanceHoverViewData> Create(IList<StudentClassAttendance> attendances, int possibleAbsents)
         {
            return new ClassHoverBoxViewData<ClassAttendanceHoverViewData>
                 {
@@ -71,7 +70,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             Total = total;
             Summary = summary;
         }
-        public static IList<ClassAttendanceHoverViewData> Create(IList<ClassAttendanceDetails> attendances)
+        public static IList<ClassAttendanceHoverViewData> Create(IList<StudentClassAttendance> attendances)
         {
             return new List<ClassAttendanceHoverViewData>
                 {

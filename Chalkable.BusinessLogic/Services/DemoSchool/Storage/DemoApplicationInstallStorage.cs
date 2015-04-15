@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Chalkable.Common;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.ApplicationInstall;
 
@@ -10,8 +11,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 {
     public class DemoApplicationInstallStorage:BaseDemoIntStorage<ApplicationInstall>
     {
-        public DemoApplicationInstallStorage()
-            : base(x => x.Id, true)
+        public DemoApplicationInstallStorage(DemoStorage storage)
+            : base(storage, x => x.Id, true)
         {
         }
 
@@ -22,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         public IList<ApplicationInstall> GetInstalledForClass(ClassDetails clazz)
         {
-            var persons = StorageLocator.PersonStorage.GetPersons(new PersonQuery
+            var persons = Storage.PersonStorage.GetPersons(new PersonQuery
             {
                 ClassId = clazz.Id
             }).Persons.Select(x => x.Id);
@@ -42,15 +43,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, int value, int? personId, IList<int> roleIds, IList<Guid> departmentIds, IList<int> gradeLevelIds, IList<int> classIds, int id, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
 
-            var callerRoleId = Context.RoleId;
-            var callerId = Context.PersonId;
+            var callerRoleId = Storage.Context.RoleId;
+            var callerId = Storage.Context.PersonId;
 
             var canInstallForTeacher = hasTeacherMyApps || canAttach;
             var canInstallForStudent = hasStudentMyApps || canAttach;
 
             var canInstall = CanInstall(hasAdminMyApps, hasStudentMyApps, callerRoleId, canInstallForStudent, canInstallForTeacher);
 
-            var schoolId = StorageLocator.SchoolYearStorage.GetById(schoolYearId).SchoolRef;
+            var schoolId = Storage.SchoolYearStorage.GetById(schoolYearId).SchoolRef;
 
             var personsForInstall = new List<KeyValuePair<int, int>>();
 
@@ -59,21 +60,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
                 if (callerRoleId == CoreRoles.STUDENT_ROLE.Id)
                 {
                     var sp =
-                        StorageLocator.SchoolPersonStorage.GetAll()
+                        Storage.SchoolPersonStorage.GetAll()
                             .First(x => x.PersonRef == callerId && x.SchoolRef == schoolId && hasStudentMyApps);
                     personsForInstall.Add(new KeyValuePair<int, int>(sp.PersonRef, sp.RoleRef));
                 }
 
                 if (callerRoleId == CoreRoles.TEACHER_ROLE.Id)
                 {
-                    var classes = StorageLocator.ClassStorage.GetTeacherClasses(schoolYearId, callerId.Value).Select(x=>x.Id);
+                    var classes = Storage.ClassStorage.GetTeacherClasses(schoolYearId, callerId.Value).Select(x=>x.Id);
                     var personRefs =
-                        StorageLocator.ClassPersonStorage.GetAll()
+                        Storage.ClassPersonStorage.GetAll()
                             .Where(x => classes.Contains(x.ClassRef))
                             .Select(x => x.PersonRef);
 
                     var sps =
-                        StorageLocator.SchoolPersonStorage.GetAll()
+                        Storage.SchoolPersonStorage.GetAll()
                             .Where(x => (personRefs.Contains(x.PersonRef) && canInstallForStudent || x.PersonRef == callerId && canInstallForTeacher)
                                 && x.SchoolRef == schoolId);
                     
@@ -82,7 +83,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             }
 
             var installed =
-                StorageLocator.ApplicationInstallStorage.GetAll()
+                Storage.ApplicationInstallStorage.GetAll()
                     .Where(x => x.Active && x.ApplicationRef == applicationId).Select(x => x.PersonRef)
                     .ToList();
 
@@ -131,21 +132,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             var personRefs = personsForInstall.Select(x => x.Key).ToList();
 
 
-            var mpId = StorageLocator.MarkingPeriodStorage.GetMarkingPeriod(Context.NowSchoolTime).Id;
+            var mpId = Storage.MarkingPeriodStorage.GetMarkingPeriod(Storage.Context.NowSchoolTime).Id;
             var filtered =
-                StorageLocator.ClassPersonStorage.GetAll().Where(x =>
+                Storage.ClassPersonStorage.GetAll().Where(x =>
                 {
-                    var cls = StorageLocator.ClassStorage.GetById(x.ClassRef);
+                    var cls = Storage.ClassStorage.GetById(x.ClassRef);
                     return personRefs.Contains(x.PersonRef) && cls.ChalkableDepartmentRef != null &&
                            departmentIds.Contains(cls.ChalkableDepartmentRef.Value) && x.MarkingPeriodRef == mpId;
                 }).Select(x =>
                 {
-                    var chalkableDepartmentRef = StorageLocator.ClassStorage.GetById(x.ClassRef).ChalkableDepartmentRef;
+                    var chalkableDepartmentRef = Storage.ClassStorage.GetById(x.ClassRef).ChalkableDepartmentRef;
                     return chalkableDepartmentRef != null
                         ? new
                         {
                             x.PersonRef,
-                            DepartmentName = StorageLocator.ChalkableDepartmentStorage.GetById(chalkableDepartmentRef.Value).Name
+                            DepartmentName = Storage.ChalkableDepartmentStorage.GetById(chalkableDepartmentRef.Value).Name
                         }
                         : new {x.PersonRef, DepartmentName = ""};
                 });
@@ -164,11 +165,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             if (classIds == null) return;
             var ids = personsForInstall.Select(x => x.Key).ToList();
 
-            var mpId = StorageLocator.MarkingPeriodStorage.GetMarkingPeriod(Context.NowSchoolTime).Id;
+            var mpId = Storage.MarkingPeriodStorage.GetMarkingPeriod(Storage.Context.NowSchoolTime).Id;
             foreach (var classId in classIds)
             {
                 result.AddRange(
-                    StorageLocator.ClassPersonStorage.GetAll()
+                    Storage.ClassPersonStorage.GetAll()
                         .Where(x => x.ClassRef == classId && ids.Contains(x.PersonRef) && x.MarkingPeriodRef == mpId)
                         .Distinct()
                         .Select(x => new PersonsForApplicationInstall
@@ -183,7 +184,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             foreach (var classId in classIds)
             {
                 result.AddRange(
-                    StorageLocator.ClassStorage.GetAll()
+                    Storage.ClassStorage.GetAll()
                         .Where(cls => cls.Id == classId && cls.PrimaryTeacherRef != null && ids.Contains(cls.PrimaryTeacherRef.Value))
                         .Select(x => new PersonsForApplicationInstall
                         {
@@ -231,16 +232,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public IEnumerable<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(Guid applicationId, int schoolYearId, int userId, int roleId)
         {
 
-            var classes = StorageLocator.ClassStorage.GetStudentClasses(schoolYearId, userId, null);
-            var csps = StorageLocator.ClassPersonStorage.GetAll().Where(cp=>classes.Any(c=>c.Id == cp.ClassRef)).ToList();
-            var appInstalls = StorageLocator.ApplicationInstallStorage.GetAll()
+            var classes = Storage.ClassStorage.GetTeacherClasses(schoolYearId, userId);
+            var csps = Storage.ClassPersonStorage.GetAll().Where(cp=>classes.Any(c=>c.Id == cp.ClassRef)).ToList();
+            var appInstalls = Storage.ApplicationInstallStorage.GetAll()
                 .Where(x => x.ApplicationRef == applicationId && x.Active && x.SchoolYearRef == schoolYearId).ToList();
 
             return classes.Select(c => new StudentCountToAppInstallByClass
                 {
                     ClassId = c.Id,
                     ClassName = c.Name,
-                    NotInstalledStudentCount = csps.Count(cp=>cp.ClassRef == c.Id && appInstalls.All(install=>install.PersonRef != cp.PersonRef))
+                    NotInstalledStudentCount = csps.Count(cp=>cp.ClassRef == c.Id && (appInstalls.Count > 0 || appInstalls.All(install=>install.PersonRef != cp.PersonRef)))
                 }).ToList();
 
 

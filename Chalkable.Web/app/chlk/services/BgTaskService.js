@@ -13,14 +13,15 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.BgTaskService*/
     CLASS(
         'BgTaskService', EXTENDS(chlk.services.BaseService), [
-            [[Number, Number, Number, chlk.models.id.DistrictId, Boolean]],
-            ria.async.Future, function getTasks(pageIndex_, state_, type_, districtId_, allDistricts_) {
+            [[Number, Number, Number, Number, chlk.models.id.DistrictId, Boolean]],
+            ria.async.Future, function getTasks(pageIndex_, count_, state_, type_, districtId_, allDistricts_) {
                 return this.getPaginatedList('BackgroundTask/GetTasks.json', chlk.models.bgtasks.BgTask, {
                     start: pageIndex_,
                     state: state_,
                     type: type_,
                     districtId: districtId_ && districtId_.valueOf(),
-                    allDistricts: allDistricts_
+                    allDistricts: allDistricts_,
+                    count: count_
                 });
             },
             [[chlk.models.id.BgTaskId, Number, Number]],
@@ -33,11 +34,22 @@ NAMESPACE('chlk.services', function () {
             },
             [[chlk.models.id.BgTaskId]],
             ria.async.Future, function cancelTask(id) {
-                return this.get('BackgroundTask/Cancel.json', null
-                    , {
-                            taskId: id.valueOf()
-                      }
-                );
-            }
+                return this.post('BackgroundTask/Cancel.json', null , { taskId: id && id.valueOf() });
+            },
+            [[chlk.models.id.BgTaskId]],
+            ria.async.Future, function  rerunTask(id) {
+                return this.post('BackgroundTask/RerunTasks.json', null,
+                    {
+                        taskIds: id && id.valueOf()
+                    });
+            },
+
+            [[ArrayOf(chlk.models.id.BgTaskId)]],
+            ria.async.Future, function  rerunTasks(ids) {
+                return this.post('BackgroundTask/RerunTasks.json', null,
+                    {
+                        taskIds: ids && this.arrayToCsv(ids)
+                    });
+            },
         ])
 });

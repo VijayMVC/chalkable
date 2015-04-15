@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
@@ -20,6 +21,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void Delete(Guid taskId);
         void Cancel(Guid taskId);
         void DeleteOlder(Guid? districtId, DateTime dateTime);
+        void RerunTasks(IList<Guid> taskIds);
     }
     
     public class BackgroundTaskService : MasterServiceBase, IBackgroundTaskService
@@ -179,6 +181,13 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(u => new BackgroundTaskDataAccess(u).DeleteOlder(districtId, dateTime));
+        }
+
+        public void RerunTasks(IList<Guid> taskIds)
+        {
+            if(taskIds.Count == 0) return;
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new BackgroundTaskDataAccess(u).RerunTasks(taskIds));
         }
     }
 }

@@ -16,6 +16,7 @@ namespace Chalkable.Data.Common.Orm
         public const string SIMPLE_JOIN_FORMAT = JOIN + " [{0}] ON [{0}].[{1}] = [{2}].[{3}]";
         public const string ASC = "ASC";
         public const string DESC = "DESC";
+        public const string FULL_COLUMN_NAME_FORMAT = "[{0}].[{1}]";
         
         private const string COMPLEX_RESULT_FORMAT = " [{0}].[{1}] as {0}_{1}";
         private const string ORDER_BY_FORMAT = "ORDER BY [{0}].[{1}] {2}";

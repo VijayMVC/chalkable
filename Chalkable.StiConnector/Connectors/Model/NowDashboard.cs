@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 namespace Chalkable.StiConnector.Connectors.Model
 {
@@ -16,7 +12,6 @@ namespace Chalkable.StiConnector.Connectors.Model
         public IEnumerable<Score> Scores { get; set; }
         public IEnumerable<SectionAbsenceSummary> SectionAttendance { get; set; }
     }
-
     public class ClassRank
     {
         /// <summary>
@@ -44,24 +39,6 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// </summary>
         public string TermName { get; set; }
     }
-
-    public class DailyAbsenceSummary
-    {
-        /// <summary>
-        /// The total sum of the absence values for student
-        /// </summary>
-        public decimal? Absences { get; set; }
-        /// <summary>
-        /// Id of the student
-        /// </summary>
-        public int StudentId { get; set; }
-        /// <summary>
-        /// The number of times a student was tardy
-        /// </summary>
-        public int? Tardies { get; set; }
-
-    }
-
     public class InfractionSummary
     {
         /// <summary>
@@ -76,25 +53,5 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// Id of the student
         /// </summary>
         public int StudentId { get; set; }
-    }
-
-    public class SectionAbsenceSummary
-    {
-        /// <summary>
-        /// The total sum of the absence values for student in a specific section
-        /// </summary>
-        public decimal? Absences { get; set; }
-        /// <summary>
-        /// Id of the section
-        /// </summary>
-        public int SectionId { get; set; }
-        /// <summary>
-        /// Id of the student
-        /// </summary>
-        public int StudentId { get; set; }
-        /// <summary>
-        /// The number of times a student was tardy for the section
-        /// </summary>
-        public int? Tardies { get; set; }
     }
 }

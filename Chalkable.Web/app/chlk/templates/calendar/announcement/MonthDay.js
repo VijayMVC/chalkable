@@ -23,6 +23,9 @@ NAMESPACE('chlk.templates.calendar.announcement', function () {
             ArrayOf(chlk.models.announcement.Announcement), 'items',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.ClassId, 'selectedClassId'
+            chlk.models.id.ClassId, 'selectedClassId',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'noPlusButton'
         ])
 });

@@ -26,6 +26,7 @@ REQUIRE('chlk.activities.reports.WorksheetReportDialog');
 REQUIRE('chlk.activities.reports.ProgressReportDialog');
 REQUIRE('chlk.activities.reports.ComprehensiveProgressReportDialog');
 REQUIRE('chlk.activities.reports.MissingAssignmentsReportDialog');
+REQUIRE('chlk.activities.reports.BirthdayReportDialog');
 
 REQUIRE('chlk.models.grading.GradingSummaryGridSubmitViewData');
 
@@ -34,6 +35,7 @@ REQUIRE('chlk.models.reports.SubmitProgressReportViewData');
 REQUIRE('chlk.models.reports.SubmitWorksheetReportViewData');
 REQUIRE('chlk.models.reports.SubmitComprehensiveProgressViewData');
 REQUIRE('chlk.models.reports.SubmitMissingAssignmentsReportViewData');
+REQUIRE('chlk.models.reports.SubmitBirthdayReportViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -222,7 +224,9 @@ NAMESPACE('chlk.controllers', function (){
                         newModel.setSchoolOptions(schoolOptions);
                         var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM)
                             || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN);
+                        var canEditAvg = canEdit || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES);
                         newModel.setAbleEdit(canEdit);
+                        newModel.setAbleEditAvg(canEditAvg);
                         return newModel;
                     }, this)
                     .attach(this.validateResponse_());
@@ -307,13 +311,16 @@ NAMESPACE('chlk.controllers', function (){
                         if(model.getCurrentGradingGrid()){
                             var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM)
                                 || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN);
+                            var canEditAvg = canEdit || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES);
                             model.getCurrentGradingGrid().setSchoolOptions(schoolOptions);
                             model.getCurrentGradingGrid().setAbleEdit(canEdit);
+                            model.getCurrentGradingGrid().setAbleEditAvg(canEditAvg);
                             var students = model.getCurrentGradingGrid().getStudents().map(function (item){return item.getStudentInfo()});
                             this.getContext().getSession().set(ChlkSessionConstants.STUDENTS_FOR_REPORT, students);
 
                             studentIds = students.map(function(item){return item.getId().valueOf()});
                         }
+
                         model.setAbleEdit(canEdit);
 
                         return model;
@@ -365,6 +372,8 @@ NAMESPACE('chlk.controllers', function (){
                             model.getCurrentGradingGrid().setGradable(alphaGrades && (alphaGrades.length || false) && canEdit);
                         }
                         model.setAbleEdit(canEdit);
+                        model.setAblePostStandards(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM)
+                            || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN));
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassStandardsGridPage, result);
@@ -551,6 +560,21 @@ NAMESPACE('chlk.controllers', function (){
 
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            function birthdayReportAction(gradingPeriodId, classId, startDate, endDate){
+                if (this.isDemoSchool())
+                    return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                var model = new chlk.models.reports.BirthdayReportViewData();
+                model.setGradingPeriodId(gradingPeriodId);
+                model.setClassId(classId);
+                model.setStartDate(startDate);
+                model.setEndDate(endDate);
+                var res = new ria.async.DeferredData(model);
+                return this.ShadeView(chlk.activities.reports.BirthdayReportDialog, res);
+            },
+
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function worksheetReportAction(gradingPeriodId, classId, startDate, endDate){
                 var res = this.getWorksheetReportInfo_(gradingPeriodId, classId, startDate, endDate);
                 return this.ShadeView(chlk.activities.reports.WorksheetReportDialog, res);
@@ -688,6 +712,38 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.getStudentIds()
                 );
                 this.BackgroundCloseView(chlk.activities.reports.GradeBookReportDialog);
+                this.getContext().getDefaultView().submitToIFrame(src);
+                return null;
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.reports.SubmitBirthdayReportViewData]],
+            function submitBirthdayReportAction(reportViewData){
+
+                if (Date.compare(getDate(reportViewData.getStartDate()) , getDate(reportViewData.getEndDate())) > 0){
+                    return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                }
+
+                if (reportViewData.getStartMonth() > reportViewData.getEndMonth()){
+                    return this.ShowAlertBox("Start Month must be less than or equal to End Month", "Error"), null;
+                }
+
+                var src = this.reportingService.submitBirthdayReport(
+                    reportViewData.getClassId(),
+                    reportViewData.getGradingPeriodId(),
+                    reportViewData.getGroupBy(),
+                    reportViewData.getFormat(),
+                    reportViewData.getStartDate(),
+                    reportViewData.getEndDate(),
+                    reportViewData.getStartMonth(),
+                    reportViewData.getEndMonth(),
+                    reportViewData.getAppendOrOverwrite(),
+                    reportViewData.isIncludeWithdrawn(),
+                    reportViewData.isIncludePhoto(),
+                    reportViewData.isSaveToFilter(),
+                    reportViewData.isSaveAsDefault()
+                );
+                this.BackgroundCloseView(chlk.activities.reports.BirthdayReportDialog);
                 this.getContext().getDefaultView().submitToIFrame(src);
                 return null;
             },

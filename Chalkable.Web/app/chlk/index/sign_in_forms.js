@@ -13,6 +13,20 @@ $(document).ready(function () {
         }
     }
 
+    function showFormBanner($form, text, exlusive) {
+        exlusive && $form.find('p:not(.banner)').addClass('hide');
+        $form.find('p.banner').html(text).removeClass('hide');
+    }
+
+    function hideFormBanner($form) {
+        $form.find('p:not(.banner)').removeClass('hide');
+        $form.find('p.banner').addClass('hide');
+    }
+
+    $('.loginContainer').on('click', 'span.close', function (event) {
+        hideFormBanner($(this).parent().parent().find('form'));
+    });
+
     $('form').validationEngine({ scroll: false });
 
     $('form#login-form').on('submit.logon', function () {
@@ -26,6 +40,8 @@ $(document).ready(function () {
             .attr('disabled', true)
             .addClass('working');
 
+        hideFormBanner(form);
+
         var handler = function (responseObj) {
             var response = responseObj.responseJSON || responseObj;
             if (typeof window['mixpanel'] !== "undefined") {
@@ -37,16 +53,16 @@ $(document).ready(function () {
 
             var hideLoader = true;
             if (!response || !response.data) {
-                alert('Our Server is not responding. Please try again soon');
+                showFormBanner(form, 'Our server is not responding. Please try again soon', false);
             } else if (response.success == true) {
                 form.off('submit.logon');
-                var role = response.data.role.toLowerCase();
+                var role = (response.data.role || response.data.Role).toLowerCase();
                 if (role == "admingrade" || role == "adminview" || role == "adminedit")
                     role = "admin";
                 window.location.href = WEB_SITE_ROOT + 'Home/' + role + '.aspx';
                 hideLoader = false;
-            } else if (response.data.exceptiontype == 'ChalkableSisNotFoundException') {
-                alert('Your iNow Server is not responding. Please try again soon');
+            } else if ((response.data.exceptiontype || response.data.Exceptiontype) == 'ChalkableSisNotFoundException') {
+                showFormBanner(form, 'Your InformationNow server is not responding. Please try again soon', false);
             } else {
                 var text = response.data.message || '';
                 if (text != '')
@@ -82,10 +98,14 @@ $(document).ready(function () {
         var handler = function (responseObj) {
             var response = responseObj.responseJSON || responseObj;
 
-            if (!response || !response.data) {
-                alert('Our Server is not responding. Please try again soon');
+            if (!response || response.data == null) {
+                showFormBanner(form, 'Our Server is not responding. Please try again soon', false);
+            } else if (response.success == true && response.data == false) {
+                $('#email3').validationEngine('showPrompt', 'Email is not associated with any account', 'red', 'topRight', false);
             } else if (response.data.exceptiontype == 'ChalkableException') {
-                alert(response.data.message);
+                showFormBanner(form, response.data.message, true);
+            } else {
+                showFormBanner(form, 'We just sent you a password recovery email. Please check your inbox.', true);
             }
 
             form.find('[type=submit]')
@@ -103,6 +123,7 @@ $(document).ready(function () {
             error: handler
         });
 
+        hideFormBanner(form);
         form.find('[type=submit]')
             .attr('disabled', true)
             .addClass('working');
@@ -130,8 +151,8 @@ $(document).ready(function () {
             var R = response.responseJSON || response;
             if (!R || !R.data) {
                 alert('Our Server is not responding. Please try again soon');
-            } else if (R.Success == true || R.success == true) {
-                var role = R.data.Role.toLowerCase();
+            } else if (R.success == true) {
+                var role = R.data.role.toLowerCase();
                 window.location.href = WEB_SITE_ROOT + 'Home/' + role + '.aspx';
             } else {
                 var text = R.data.message || '';

@@ -140,9 +140,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public Application GetApplicationById(Guid id)
         {
-            if (id == Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value))
+            if (id == GetPracticeGradeId())
                 return GetPracticeGradesApplication();
-            if (id == Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value))
+            if (id == GetAssessmentId())
                 return GetAssessmentApplication();
             
             using (var uow = Read())
@@ -209,18 +209,33 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 return new ApplicationDataAccess(uow).GetByIds(ids);
             }
         }
-        
+
         public Application GetPracticeGradesApplication()
         {
-            var appId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
-            return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(appId));
+            var id = GetPracticeGradeId();
+            if (!id.HasValue) return null;
+            return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(id.Value));
         }
 
 
         public Application GetAssessmentApplication()
         {
-            var appId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
-            return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(appId));
+            var id = GetAssessmentId();
+            if (!id.HasValue) return null;
+            return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(id.Value));
+        }
+
+        public Guid? GetPracticeGradeId()
+        {
+            var id = PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value;
+            Guid res;
+            return Guid.TryParse(id, out res) ? res : (Guid?)null;
+        }
+        public Guid? GetAssessmentId()
+        {
+            var id = PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value;
+            Guid res;
+            return Guid.TryParse(id, out res) ? res : (Guid?)null;
         }
     }
 

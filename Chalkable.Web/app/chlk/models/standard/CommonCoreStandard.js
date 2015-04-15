@@ -14,6 +14,12 @@ NAMESPACE('chlk.models.standard', function () {
             String, 'standardCode',
             String, 'description',
 
+            String, function displayTitle(){
+                if(this.standardCode && (!this.standardCode.trim || this.standardCode.trim()))
+                    return this.standardCode;
+                return this.description;
+            },
+
             VOID, function deserialize(raw){
                 this.id = SJX.fromValue(raw.id, chlk.models.id.CommonCoreStandardId);
                 this.parentStandardId = SJX.fromValue(raw.parentstandardid, chlk.models.id.CommonCoreStandardId);

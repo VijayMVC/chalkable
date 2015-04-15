@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
@@ -27,7 +24,7 @@ namespace Chalkable.Web.Controllers
         protected AnnouncementViewData PrepareFullAnnouncementViewDataForRead(AnnouncementDetails ann)
         {
             var teachersIds = SchoolLocator.ClassService.GetClassTeachers(ann.ClassRef, null).Select(x => x.PersonRef).ToList();
-            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, teachersIds);
+            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, teachersIds);
             var annView = (AnnouncementDetailedViewData)PrepareAnnouncmentViewData(ann, attInfo);
             if (ann.State == AnnouncementState.Created)
             {
@@ -67,7 +64,7 @@ namespace Chalkable.Web.Controllers
         protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann)
         {
             var teachersIds = SchoolLocator.ClassService.GetClassTeachers(ann.ClassRef, null).Select(x => x.PersonRef).ToList();
-            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, teachersIds);             
+            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, teachersIds);             
             return PrepareAnnouncmentViewData(ann, attInfo);
         }
 
@@ -81,7 +78,7 @@ namespace Chalkable.Web.Controllers
             var annViewData = AnnouncementDetailedViewData.Create(ann, Context.PersonId.Value, attachments);
             annViewData.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, ann.Id);
             annViewData.ApplicationsCount = annViewData.Applications.Count;
-            annViewData.AssessmentApplicationId = Guid.Parse(PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value);
+            annViewData.AssessmentApplicationId = MasterLocator.ApplicationService.GetAssessmentId();
             if (annViewData.Applications.Count > 0)
             {
                 annViewData.ApplicationName = annViewData.Applications.Count == 1

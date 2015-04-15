@@ -11,16 +11,19 @@
         .x-form-field
             label(for="email") Email:
             br
-            input(type="text",name="email",class="validate[required,custom[email]] email",value=self.getEmail())
+            .input-container
+                input(type="text",name="email",class="validate[required,custom[email]] email",value=self.getEmail()).validate-on-start
             .form-ok
         .x-form-field
             label(for="salutation") Name:
             br
-            input(type="text",name="displayname",value=self.getDisplayName(),readonly)
+            .input-container
+                input(type="text",name="displayname",value=self.getDisplayName(),readonly)
         .x-form-field
             label(for="password") Password:
             br
-            input(type="text",name="password",value='Your iNow password', readonly).password
+            .input-container
+                input(type="text",name="password",value='Your iNow password', readonly).password
         .x-form-field.buttons
             label
             BUTTON(type="submit").content-box.blue-button#confirm-button=Msg.Confirm

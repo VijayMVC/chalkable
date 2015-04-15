@@ -38,7 +38,7 @@
     </Certificates>
   </Role>
   <Role name="Chalkable.BackgroundTaskProcessor">
-    <Instances count="2" />
+    <Instances count="1" />
     <ConfigurationSettings>
       <!-- DB Settings -->
       <Setting name="ChalkableMaster" value="Data Source=l8xb5h5jvf.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />

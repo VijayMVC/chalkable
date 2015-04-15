@@ -135,7 +135,15 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.attendance.SeatingChartTpl, 'savedChart')],
             VOID, function updateSeatingChart(tpl, model, msg_) {
-
+                var button = this.dom.find('.add-remove-students');
+                var addBlock = this.dom.find('.add');
+                if(this.dom.find('.student-block:not(".empty-box")').count()){
+                    button.setHTML(Msg.Edit_students);
+                    addBlock.removeClass('black-arrow').setHTML('');
+                }else{
+                    button.setHTML(Msg.Add_students);
+                    addBlock.addClass('black-arrow').setHTML(Msg.Add_your_students);
+                }
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.attendance.NotTakenAttendanceClassesTpl)],
@@ -505,6 +513,11 @@ NAMESPACE('chlk.activities.attendance', function () {
                         checkPadding();
                 });
 
+            },
+
+            OVERRIDE, function leaveClick_(node){
+                BASE(node);
+                needChartPopUp = false;
             },
 
             OVERRIDE, VOID, function onStop_() {

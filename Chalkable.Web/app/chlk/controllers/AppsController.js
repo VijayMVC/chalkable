@@ -79,10 +79,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.SchoolPersonId, Number, String, Number]],
         function pageAction(developerId_, state_, filter_, start_) {
-//            var result = this.appsService
-//                .getApps(pageIndex_ | 0)
-//                .attach(this.validateResponse_());
-//            return this.UpdateView(chlk.activities.apps.AppsListPage, result);
             return this.getApplications_(start_, developerId_, state_, filter_);
         },
 
@@ -205,16 +201,19 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.standard.AddCCStandardsInputModel]],
         function addStandardsAction(model){
-            var res = this.standardService.getCommonCoreStandardsByIds(model.getStandardsIds())
-                .then(function(standards){
+            var stIds = [model.getStandardId()];
+            var res = this.standardService.getCommonCoreStandardsByIds(stIds)
+                .then(function(data){
                     this.BackgroundCloseView(chlk.activities.apps.AddCCStandardDialog);
-                    return this.addStandards_(model.getStandardsIds(), standards, model.getApplicationId());
+                    var standards = this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []);
+                    data.forEach(function(s){standards.push(s);});
+                    return this.addStandards_(standards, model.getApplicationId());
                 }, this);
             return this.UpdateView(chlk.activities.apps.AppInfoPage, res);
         },
 
-        [[Array, ArrayOf(chlk.models.standard.CommonCoreStandard), chlk.models.id.AppId]],
-            chlk.models.standard.ApplicationStandardsViewData, function addStandards_(standardsIds, standards, appId){
+        [[ArrayOf(chlk.models.standard.CommonCoreStandard), chlk.models.id.AppId]],
+            chlk.models.standard.ApplicationStandardsViewData, function addStandards_(standards, appId){
             this.getContext().getSession().set(ChlkSessionConstants.CC_STANDARDS, standards);
             return new chlk.models.standard.ApplicationStandardsViewData(appId, standards);
         },
@@ -493,6 +492,15 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
+        [chlk.controllers.SidebarButton('add-new')],
+        [chlk.controllers.StudyCenterEnabled()],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, String]],
+        function tryToAttachFromAnnouncementTeacherAction(announcementId, appId, appUrlAppend_) {
+            return this.tryToAttachTeacherAction(announcementId, appId, appUrlAppend_);
+        },
 
         [chlk.controllers.StudyCenterEnabled()],
         [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId, Boolean, chlk.models.id.SchoolPersonId, String]],

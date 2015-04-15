@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -10,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<Infraction> infractions);
         void Edit(IList<Infraction> infractions);
         void Delete(IList<Infraction> infractions);
-        IList<Infraction> GetInfractions();
+        IList<Infraction> GetInfractions(bool onlyActive = false);
     }
 
     public class InfractionService : SchoolServiceBase, IInfractionService
@@ -34,12 +35,15 @@ namespace Chalkable.BusinessLogic.Services.School
         public void Delete(IList<Infraction> infractions)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new DataAccessBase<Infraction>(u).Update(infractions));
+            DoUpdate(u => new DataAccessBase<Infraction>(u).Delete(infractions));
         }
 
-        public IList<Infraction> GetInfractions()
+        public IList<Infraction> GetInfractions(bool onlyActive = false)
         {
-            return DoRead(u => new DataAccessBase<Infraction>(u).GetAll());
+            QueryCondition conds = null;
+            if (onlyActive)
+                conds = new AndQueryCondition {{Infraction.IS_ACTIVE_FIELD, true}};
+            return DoRead(u => new DataAccessBase<Infraction>(u).GetAll(conds));
         }
     }
 }

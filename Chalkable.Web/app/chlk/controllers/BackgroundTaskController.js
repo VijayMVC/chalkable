@@ -8,6 +8,7 @@ REQUIRE('chlk.models.bgtasks.BgTasksListViewData');
 REQUIRE('chlk.models.bgtasks.BgTaskState');
 REQUIRE('chlk.models.bgtasks.BgTaskType');
 REQUIRE('chlk.models.bgtasks.GetBgTasksPostData');
+REQUIRE('chlk.models.bgtasks.RerunTasksPostData');
 
 REQUIRE('chlk.activities.bgtasks.BgTasksListPage');
 REQUIRE('chlk.activities.bgtasks.BgTaskLogListPage');
@@ -57,8 +58,8 @@ NAMESPACE('chlk.controllers', function (){
             function getTasks_(pageIndex_, state_, type_, districtId_, allDistricts_){
                 var result =
                     ria.async.wait(
-                        this.bgTaskService.getTasks(pageIndex_ | 0, state_, type_, districtId_, allDistricts_),
-                        this.districtService.getDistricts(0, 10000)
+                        this.bgTaskService.getTasks(pageIndex_ | 0, 50, state_, type_, districtId_, allDistricts_),
+                        this.districtService.getDistricts(0)
                     )
                     .attach(this.validateResponse_())
                     .then(function(res){
@@ -80,6 +81,7 @@ NAMESPACE('chlk.controllers', function (){
                                 new chlk.models.bgtasks.BgTaskType(chlk.models.bgtasks.BgTaskTypeEnum.PROCESS_REMINDERS),
                                 new chlk.models.bgtasks.BgTaskType(chlk.models.bgtasks.BgTaskTypeEnum.ATTENDANCE_NOTIFICATION),
                                 new chlk.models.bgtasks.BgTaskType(chlk.models.bgtasks.BgTaskTypeEnum.TEACHER_ATTENDANCE_NOTIFICATION),
+                                new chlk.models.bgtasks.BgTaskType(chlk.models.bgtasks.BgTaskTypeEnum.PICTURE_IMPORT),
                                 new chlk.models.bgtasks.BgTaskType(chlk.models.bgtasks.BgTaskTypeEnum.RE_SYNC),
                             ];
                             return new chlk.models.bgtasks.BgTasksListViewData(res[0], res[1].getItems(), states, types, state_, type_, districtId_, allDistricts_);
@@ -109,12 +111,43 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [chlk.controllers.SidebarButton('settings')],
             [[chlk.models.id.BgTaskId]],
-            function deleteAction(id){
-                return this.bgTaskService
-                    .cancelTask(id)
+            ria.async.Future, function tryCancelAction(id){
+                var msgText = "Do you realy want to Cancel this task?";
+                return this.ShowConfirmBox(msgText, "whoa.", null, 'negative-button')
+                    .thenCall(this.bgTaskService.cancelTask, [id])
                     .attach(this.validateResponse_())
-                    .then(function(data){
-                        return this.pageAction();
+                    .then(function() {
+                        return this.Redirect('backgroundtask', 'list', [])
+                    }, this);
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.SYSADMIN
+            ])],
+            [chlk.controllers.SidebarButton('settings')],
+            [[chlk.models.id.BgTaskId]],
+            ria.async.Future, function tryRerunAction(id){
+                var msgText = "Do you realy want to Rerun this task?";
+                return this.ShowConfirmBox(msgText, "whoa.", 'RERUN', 'negative-button')
+                    .thenCall(this.bgTaskService.rerunTask, [id])
+                    .attach(this.validateResponse_())
+                    .then(function() {
+                        return this.Redirect('backgroundtask', 'list', [])
+                    }, this);
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.SYSADMIN
+            ])],
+            [chlk.controllers.SidebarButton('settings')],
+            [[chlk.models.bgtasks.RerunTasksPostData]],
+            ria.async.Future, function tryRerunAllAction(postData){
+                var msgText = "Do you realy want to Rerun All tasks?";
+                return this.ShowConfirmBox(msgText, "whoa.", 'RERUN', 'negative-button')
+                    .thenCall(this.bgTaskService.rerunTasks, [ this.getIdsList(postData.getTasksIdsStr(), chlk.models.id.BgTaskId)])
+                    .attach(this.validateResponse_())
+                    .then(function() {
+                        return this.Redirect('backgroundtask', 'list', [])
                     }, this);
             }
         ])

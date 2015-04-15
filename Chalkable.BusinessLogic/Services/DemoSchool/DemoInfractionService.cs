@@ -67,9 +67,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public IList<Infraction> GetInfractions()
+        public IList<Infraction> GetInfractions(bool activeOnly = false)
         {
-            throw new NotImplementedException();
+            var res = Storage.InfractionStorage.GetAll();
+            if(activeOnly)
+                res = res.Where(x=>x.IsActive).ToList();
+            return res;
         }
     }
 }

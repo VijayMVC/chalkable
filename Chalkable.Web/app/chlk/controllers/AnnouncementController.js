@@ -36,6 +36,8 @@ REQUIRE('chlk.models.announcement.AddStandardViewData');
 REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.standard.StandardsListViewData');
 REQUIRE('chlk.models.announcement.AddDuplicateAnnouncementViewData');
+REQUIRE('chlk.models.standard.StandardsTableViewData');
+REQUIRE('chlk.models.standard.GetStandardTreePostData');
 
 REQUIRE('chlk.lib.exception.AppErrorException');
 
@@ -330,7 +332,7 @@ NAMESPACE('chlk.controllers', function (){
             }
             var result = this.announcementService
                 .addAnnouncement(classId_, announcementTypeId_, date_)
-                .catchException(chlk.services.NoClassAnnouncementTypeException, function(ex){
+                .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(ex){
                     return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
                     throw error;
                 }, this)
@@ -473,6 +475,7 @@ NAMESPACE('chlk.controllers', function (){
         function uploadAttachmentAction(announcementId, files) {
             var result = this.announcementService
                 .uploadAttachment(announcementId, files)
+                .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(announcement){
                     announcement.setNeedButtons(true);
@@ -758,7 +761,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.saveAnnouncementTeacherAction(announcement, announcementForm);
         },
 
-        [chlk.controllers.SidebarButton('add-new')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.announcement.Announcement]],
         function saveOnCreateAction(model){
             return this.saveAction(model);
@@ -1009,12 +1012,35 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.ClassId, chlk.models.id.StandardSubjectId, String, chlk.models.id.StandardId]],
         function showStandardsByCategoryAction(classId, subjectId, description_, standardId_){
-            var res = this.standardService.getStandards(classId, subjectId, standardId_)
+            var res = this.standardService.getStandardColumn(classId, subjectId, standardId_)
                 .then(function(standards){
-                    return new chlk.models.standard.StandardsListViewData(description_, classId, subjectId, standards);
+                    var standardTable = new chlk.models.standard.StandardsTable.$createOneColumnTable(standards);
+                    return new chlk.models.standard.StandardsTableViewData(description_, classId, subjectId, standardTable);
                 })
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res);
+        },
+
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.standard.GetStandardTreePostData]],
+        function getStandardTreeAction(data){
+            var res = this.standardService.getStandardParentsSubTree(data.getStandardId())
+                .then(function(standardsTable){
+                    var description, subjectId;
+                    if(standardsTable && standardsTable.getStandardsColumns() && standardsTable.getStandardsColumns().length > 0){
+                        var columns = standardsTable.getStandardsColumns();
+                        var subjectId = columns[0][0].getSubjectId();
+                        var lastSelected = columns[columns.length - 1].filter(function (s){return s.isSelected();});
+                        if(lastSelected.length > 0){
+                            description = lastSelected[0].getDescription();
+                            standardsTable.addColumn([]);
+                        }
+                    }
+                    var res = new chlk.models.standard.StandardsTableViewData(description, data.getClassId(), subjectId, standardsTable, data.getAnnouncementId());
+                    return res
+                }, this)
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res, 'rebuild-standard-tree');
         },
 
         [chlk.controllers.SidebarButton('add-new')],

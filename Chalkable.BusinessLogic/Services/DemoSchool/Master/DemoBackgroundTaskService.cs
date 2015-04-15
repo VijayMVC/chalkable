@@ -59,5 +59,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             throw new NotImplementedException();
         }
+
+
+        public void RerunTasks(System.Collections.Generic.IList<Guid> taskIds)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

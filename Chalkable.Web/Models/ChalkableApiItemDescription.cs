@@ -3,7 +3,7 @@ using System.Collections.Generic;
 namespace Chalkable.Web.Models
 {
 
-    public enum ParamType
+    public enum ApiMethodParamType
     {
         Undefined = 0,
         Integer = 1,
@@ -15,13 +15,13 @@ namespace Chalkable.Web.Models
         ListOfStringList = 7,
         Date = 8
     }
-    public class Param
+    public class ApiMethodParam
     {
         public string Name { get; set; }
         public string Value { get; set; }
         public string Description { get; set; }
         public bool IsNullable { get; set; }
-        public ParamType ParamType { get; set; }
+        public ApiMethodParamType ParamType { get; set; }
         
     }
     public class ChalkableApiMethodDescription
@@ -30,7 +30,7 @@ namespace Chalkable.Web.Models
         public string Method { get; set; }
         public string Description { get; set; }
         public string Response { get; set; }
-        public List<Param> Parameters { get; set; }
+        public List<ApiMethodParam> Parameters { get; set; }
         public List<string> AvailableForRoles { get; set; }
     }
 

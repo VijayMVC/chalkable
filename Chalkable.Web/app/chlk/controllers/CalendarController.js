@@ -36,11 +36,19 @@ NAMESPACE('chlk.controllers', function (){
                 .getMonthDayInfo(date)
                 .attach(this.validateResponse_())
                 .then(function(model){
+                    var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
+                    var mpStartDate = markingPeriod.getStartDate();
+                    var mpEndDate = markingPeriod.getEndDate();
+                    if(date.getDate() < mpStartDate.getDate() || date.getDate() > mpEndDate.getDate())
+                        if(model.getAnnouncements().length || model.getItems().length)
+                            model.setNoPlusButton(true);
+                        else
+                            return ria.async.BREAK;
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
                     if(classId_)
                         model.setSelectedClassId(classId_);
                     return model;
-                });
+                }, this);
             return this.ShadeView(chlk.activities.calendar.announcement.MonthDayPopUp, result);
         },
 
@@ -65,6 +73,15 @@ NAMESPACE('chlk.controllers', function (){
         function showWeekBarPopUpAction(date, periodClassId_, classId_, periodOrder_) {
             var model = this.calendarService
                 .getWeekDayInfo(date, periodClassId_, periodOrder_);
+
+            var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
+            var mpStartDate = markingPeriod.getStartDate();
+            var mpEndDate = markingPeriod.getEndDate();
+            if(date.getDate() < mpStartDate.getDate() || date.getDate() > mpEndDate.getDate())
+                if(model.getAnnouncements().length)
+                    model.setNoPlusButton(true);
+                else
+                    return null;
 
             Assert(model);
 

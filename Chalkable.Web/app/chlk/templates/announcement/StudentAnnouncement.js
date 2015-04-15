@@ -13,6 +13,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'ablePutOnlyZero',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'automaticalyDropped',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'announcementId',
 
             [ria.templates.ModelPropertyBind],

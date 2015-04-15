@@ -20,7 +20,7 @@ namespace Chalkable.Web.Logic
         {
             var applications = masterLocator.ApplicationService.GetApplications(0, int.MaxValue, null, false);
             var assessmentApp = masterLocator.ApplicationService.GetAssessmentApplication();
-            if(applications.All(x=>x.Id != assessmentApp.Id))
+            if(assessmentApp != null && applications.All(x=>x.Id != assessmentApp.Id))
                 applications.Add(assessmentApp);
             var annApps = schoolLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId, true);
             var installs = schoolLocator.AppMarketService.ListInstalledAppInstalls(schoolLocator.Context.PersonId ?? 0);

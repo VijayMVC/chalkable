@@ -61,6 +61,116 @@ NAMESPACE('chlk.models.attendance', function () {
         }
     ]);
 
+
+    ///** @class chlk.models.attendance.StudentClassAttendance*/
+    //
+    //CLASS(
+    //    'StudentClassAttendance',[
+    //
+    //        function $(){
+    //            BASE();
+    //            this._studentId = null;
+    //            this._student = null;
+    //            this._attendanceTypeMapper = new chlk.models.attendance.AttendanceTypeMapper();
+    //        },
+    //
+    //
+    //        chlk.models.common.ChlkDate, 'date',
+    //
+    //        //todo change number to AttendanceTypeEnum
+    //        Number, 'type',
+    //
+    //        READONLY, String, 'typeName',
+    //
+    //        String, function getTypeName(){
+    //            return chlk.converters.attendance.AttendanceTypeToNameConverter.prototype.convert(this.getType())
+    //        },
+    //
+    //        Number, function getType(){
+    //            return this._attendanceTypeMapper.map(this.getLevel()).valueOf();
+    //        },
+    //        [[Number]],
+    //        VOID, function setType(type){
+    //            if(type > 0){
+    //                var level = this._attendanceTypeMapper.mapBack(new chlk.models.attendance.AttendanceTypeEnum(type));
+    //                this.setLevel(level);
+    //            }
+    //        },
+    //
+    //        String, 'level',
+    //
+    //        chlk.models.people.User, 'student',
+    //
+    //        [[chlk.models.people.User]],
+    //        VOID, function setStudent(student){
+    //            this._student = student;
+    //            if(student)
+    //                this.setStudentId(student.getId());
+    //        },
+    //        chlk.models.people.User, function getStudent(){
+    //            return this._student;
+    //        },
+    //
+    //        [ria.serialize.SerializeProperty('studentid')],
+    //        chlk.models.id.SchoolPersonId, 'studentId',
+    //
+    //        [ria.serialize.SerializeProperty('absentpreviousday')],
+    //        Boolean, 'absentPreviousDay',
+    //
+    //        chlk.models.id.SchoolPersonId, function getStudentId(){
+    //            return this._studentId || (this.getStudent() ? this.getStudent().getId() : null);
+    //        },
+    //        [[chlk.models.id.SchoolPersonId]],
+    //        VOID, function setStudentId(studentId){
+    //            this._studentId = studentId;
+    //        },
+    //
+    //        [ria.serialize.SerializeProperty('attendancereasonid')],
+    //        chlk.models.id.AttendanceReasonId, 'attendanceReasonId',
+    //
+    //        [ria.serialize.SerializeProperty('attendancereason')],
+    //        chlk.models.attendance.AttendanceReason, 'attendanceReason',
+    //
+    //        [ria.serialize.SerializeProperty('classid')],
+    //        chlk.models.id.ClassId, 'classId',
+    //
+    //        String, 'attendanceReasonDescription',
+    //
+    //        [ria.serialize.SerializeProperty('readonly')],
+    //        Boolean, 'readOnly',
+    //        [ria.serialize.SerializeProperty('readonlyreason')],
+    //        String, 'readOnlyReason'
+    //
+    //
+    //    ]);
+    //
+    //
+    ///** @class chlk.models.attendance.ClassAttendance2*/
+    //CLASS(
+    //    'ClassAttendance2',[
+    //
+    //        [ria.serialize.SerializeProperty('studentattendances')],
+    //        ArrayOf(chlk.models.attendance.StudentClassAttendance), 'studentAttendances',
+    //
+    //        [ria.serialize.SerializeProperty('readonly')],
+    //        Boolean, 'readOnly',
+    //        [ria.serialize.SerializeProperty('readonlyreason')],
+    //        String, 'readOnlyReason'
+    //
+    //        [ria.serialize.SerializeProperty('classname')],
+    //        String, 'className',
+    //        [ria.serialize.SerializeProperty('classid')],
+    //        chlk.models.id.ClassId, 'classId',
+    //        ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
+    //
+    //        chlk.models.common.ChlkDate, 'date',
+    //        String, 'submitType',
+    //
+    //        String, 'attendanceReasonDescription',
+    //        [ria.serialize.SerializeProperty('isposted')],
+    //        Boolean, 'posted',
+    //    ]);
+
     /** @class chlk.models.attendance.ClassAttendance*/
     CLASS(
         'ClassAttendance', [
@@ -144,9 +254,15 @@ NAMESPACE('chlk.models.attendance', function () {
             Boolean, 'posted',
 
             [ria.serialize.SerializeProperty('readonly')],
-            Boolean, 'readOnly',
+            Boolean, 'studentAttendanceReadOnly',
 
             [ria.serialize.SerializeProperty('readonlyreason')],
+            String, 'studentAttendanceReadOnlyReason',
+
+            [ria.serialize.SerializeProperty('fullclassreadonly')],
+            Boolean, 'readOnly',
+
+            [ria.serialize.SerializeProperty('fullclassreadonlyreason')],
             String, 'readOnlyReason'
 
             //,

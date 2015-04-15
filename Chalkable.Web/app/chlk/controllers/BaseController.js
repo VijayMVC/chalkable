@@ -21,6 +21,10 @@ NAMESPACE('chlk.controllers', function (){
         [[String]],
         function SidebarButton(clazz) {});
 
+    /** @class chlk.controllers.NotChangedSidebarButton */
+    ANNOTATION(
+        function NotChangedSidebarButton() {});
+
     /** @class chlk.controllers.AccessForRoles */
     ANNOTATION(
         [[ArrayOf(chlk.models.common.RoleEnum)]],
@@ -90,6 +94,10 @@ NAMESPACE('chlk.controllers', function (){
                    })
                    .catchException(chlk.lib.exception.ChalkableException, function(exception){
                        return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                           .thenBreak();
+                   }, this)
+                   .catchException(chlk.lib.exception.NoAnnouncementException, function(exception){
+                       return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase(), controller: 'feed', action: 'doToList' }])
                            .thenBreak();
                    }, this)
                    .catchException(chlk.lib.exception.ChalkableSisException, function(exception){
@@ -347,12 +355,14 @@ NAMESPACE('chlk.controllers', function (){
                var state = this.context.getState(),
                    $sidebar = ria.dom.Dom(SIDEBAR_CONTROLS_ID);
 
-               $sidebar.find('A.' + PRESSED_CLS).removeClass(PRESSED_CLS);
-
                var methodReflector = this.resolveRoleAction_(state);
-               if (methodReflector.isAnnotatedWith(chlk.controllers.SidebarButton) && !this.isNotAblePressSidebarButton()){
-                   var buttonCls = methodReflector.findAnnotation(chlk.controllers.SidebarButton)[0].clazz;
-                   $sidebar.find('A.' + buttonCls).addClass(PRESSED_CLS);
+
+               if(!methodReflector.isAnnotatedWith(chlk.controllers.NotChangedSidebarButton)){
+                   $sidebar.find('A.' + PRESSED_CLS).removeClass(PRESSED_CLS);
+                   if (methodReflector.isAnnotatedWith(chlk.controllers.SidebarButton) && !this.isNotAblePressSidebarButton()){
+                       var buttonCls = methodReflector.findAnnotation(chlk.controllers.SidebarButton)[0].clazz;
+                       $sidebar.find('A.' + buttonCls).addClass(PRESSED_CLS);
+                   }
                }
 
                this.setNotAblePressSidebarButton(false);

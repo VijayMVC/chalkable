@@ -76,10 +76,6 @@ namespace Chalkable.BusinessLogic.Services.School
             string oldEmail = ServiceLocator.ServiceLocatorMaster.UserService.GetById(Context.UserId).Login;
             using (var uow = Update())
             {
-                if (!BaseSecurity.IsAdminOrTeacher(Context))
-                    throw new ChalkableSecurityException(string.Format("User of role {0} can not change password for himself"
-                        , Context.Role.Name));
-
                 if (oldEmail != email)
                 {
                     var newUser = ServiceLocator.ServiceLocatorMaster.UserService.GetByLogin(email);

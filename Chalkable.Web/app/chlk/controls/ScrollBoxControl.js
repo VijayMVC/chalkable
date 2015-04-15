@@ -14,6 +14,7 @@ NAMESPACE('chlk.controls', function () {
             String, 'mustScrollField',
             String, 'startField',
             String, 'pageSizeField',
+            String, 'pageIndexField',
             String, 'actualCountField',
             String, 'totalCountField',
             Number, 'scrollOffset',
@@ -33,6 +34,8 @@ NAMESPACE('chlk.controls', function () {
                 this.setTotalCountField(attributes.totalCountField || 'totalCount');
                 this.setScrollOffset(attributes.scrollOffset || 100);
 
+                this.setPageIndexField(attributes.pageIndexField || 'pageIndex');
+
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         this.update(jQuery('#'+attributes.id));
@@ -51,6 +54,7 @@ NAMESPACE('chlk.controls', function () {
                 var formId = this.getFormId();
                 var scrollField = 'input[name=' + this.getMustScrollField() + ']';
                 var pageSizeField = 'input[name=' + this.getPageSizeField() + ']';
+                var pageIndexField = 'input[name=' + this.getPageIndexField() + ']';
                 var startField = 'input[name=' + this.getStartField() + ']';
                 var totalCountField = 'input[name=' + this.getTotalCountField() + ']';
                 var actualCountField = 'input[name=' + this.getActualCountField() + ']';
@@ -64,10 +68,14 @@ NAMESPACE('chlk.controls', function () {
                         var pageSize = jForm.find(pageSizeField).val() | 0;
                         var totalCount = jForm.find(totalCountField).val() | 0;
                         var actualCount = jForm.find(actualCountField).val() | 0;
+                        var pageIndex = jForm.find(pageIndexField).val() | 0;
 
                         if ((start < totalCount && actualCount == pageSize)){
-                            jForm.find(startField).val(start + pageSize);
+                            jForm.find(startField).val((pageIndex + 1) * pageSize);
+                            jForm.find(pageIndexField).val(pageIndex + 1);
                             jForm.trigger('submit');
+                            jForm.find(startField).val(start);
+                            jForm.find(pageIndexField).val(pageIndex);
                         }
                         else{
                             return false;

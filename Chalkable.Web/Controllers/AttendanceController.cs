@@ -18,18 +18,17 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AttendanceController : ChalkableController
     {
-        //[AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Attendance })]
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult SetAttendance(SetClassAttendanceViewData data)
         {
-            SchoolLocator.AttendanceService.SetClassAttendances(data.Date, data.ClassId, data.Items.Select(x=>new ClassAttendance
-                {
-                    AttendanceReasonRef = x.AttendanceReasonId,
-                    ClassRef = data.ClassId,
-                    Date = data.Date,
-                    PersonRef = x.PersonId,
-                    Level = x.Level
-                }).ToList());
+            SchoolLocator.AttendanceService.SetClassAttendances(data.Date, data.ClassId, data.Items.Select(x => new StudentClassAttendance
+                        {
+                            AttendanceReasonId = x.AttendanceReasonId,
+                            ClassId = data.ClassId,
+                            Date = data.Date,
+                            StudentId = x.PersonId,
+                            Level = x.Level
+                        }).ToList());
             MasterLocator.UserTrackingService.SetAttendance(Context.Login, data.ClassId);
             return Json(true);
         }
@@ -42,7 +41,7 @@ namespace Chalkable.Web.Controllers
             return Json(ClassViewData.Create(notTakenAttendanceClasses));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE_FOR_CLASS, true, CallType.Post, new[] { AppPermissionType.Attendance })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", true, new[] { AppPermissionType.Attendance })]
         public ActionResult SetAttendanceForClass(string level, int? attendanceReasonId, int classId, DateTime date)
         {
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
@@ -52,31 +51,48 @@ namespace Chalkable.Web.Controllers
             }
 
             var persons = SchoolLocator.StudentService.GetClassStudents(classId, mp.Id);
-            SchoolLocator.AttendanceService.SetClassAttendances(date, classId, persons.Select(x => new ClassAttendance
+            SchoolLocator.AttendanceService.SetClassAttendances(date, classId, persons.Select(x => new StudentClassAttendance
             {
-                AttendanceReasonRef = attendanceReasonId,
-                ClassRef = classId,
+                AttendanceReasonId = attendanceReasonId,
+                ClassId = classId,
                 Date = date,
-                PersonRef = x.Id,
+                StudentId = x.Id,
                 Level = level
             }).ToList());
             return Json(true);
         }
         
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_ATTENDANCE_LIST_CLASS_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Schedule, AppPermissionType.Class })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", true, new[] { AppPermissionType.Schedule, AppPermissionType.Class })]
         public ActionResult ClassList(DateTime? date, int classId)
         {
             date = (date ?? SchoolLocator.Context.NowSchoolYearTime).Date;
-            return Json(new PaginatedList<ClassAttendanceViewData>(ClassAttendanceList(date.Value, classId), 0, int.MaxValue));
+            return Json(new PaginatedList<StudentClassAttendanceOldViewData>(ClassAttendanceList(date.Value, classId), 0, int.MaxValue));
         }
-        private IList<ClassAttendanceViewData> ClassAttendanceList(DateTime date, int classId)
+
+        //TODO: add this to as api methods later
+        public ActionResult ClassListNew(DateTime? date, int classId)
         {
-            var listClassAttendance = new List<ClassAttendanceViewData>();
-            var attendances = SchoolLocator.AttendanceService.GetClassAttendances(date, classId);
-            if (attendances != null)
+            date = (date ?? SchoolLocator.Context.NowSchoolYearTime).Date;
+            var attendance = SchoolLocator.AttendanceService.GetClassAttendance(date.Value, classId);
+            if (attendance != null)
             {
                 IList<AttendanceReason> attendanceReason = SchoolLocator.AttendanceReasonService.List();
-                listClassAttendance = ClassAttendanceViewData.Create(attendances, attendanceReason).ToList();
+                var res = ClassAttendanceViewData.Create(attendance, attendanceReason);
+                res.StudentAttendances = res.StudentAttendances.OrderBy(x => x.Student.LastName).ToList();
+                return Json(res);
+            }
+            return Json(ClassAttendanceViewData.Create(classId, date.Value));
+        }
+
+
+        private IList<StudentClassAttendanceOldViewData> ClassAttendanceList(DateTime date, int classId)
+        {
+            var listClassAttendance = new List<StudentClassAttendanceOldViewData>();
+            var attendance = SchoolLocator.AttendanceService.GetClassAttendance(date, classId);
+            if (attendance != null)
+            {
+                IList<AttendanceReason> attendanceReason = SchoolLocator.AttendanceReasonService.List();
+                listClassAttendance = StudentClassAttendanceOldViewData.Create(attendance, attendanceReason).ToList();
                 listClassAttendance.Sort((x, y) => string.CompareOrdinal(x.Student.LastName, y.Student.LastName));
             }
             return listClassAttendance;
@@ -88,7 +104,7 @@ namespace Chalkable.Web.Controllers
             return FakeJson("~/fakeData/getAttendanceForStudent.json");
         }
 
-        [AuthorizationFilter("Teacher", Preference.API_DESCR_ATTENDANCE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Attendance })]
+        [AuthorizationFilter("Teacher", true, new[] { AppPermissionType.Attendance })]
         public ActionResult AttendanceSummary(DateTime? date)
         {
             if (!Context.PersonId.HasValue)
@@ -99,7 +115,7 @@ namespace Chalkable.Web.Controllers
             return Json(TeacherAttendanceSummaryViewData.Create(attendanceSummary));
         }
 
-        [AuthorizationFilter("Teacher", Preference.API_DESCR_ATTENDANCE_SEATING_CHART, true, CallType.Get, new[] { AppPermissionType.Attendance })]
+        [AuthorizationFilter("Teacher", true, new[] { AppPermissionType.Attendance })]
         public ActionResult SeatingChart(DateTime? date, int classId)
         {
             return Json(GetSeatingChart(date, classId));
@@ -118,7 +134,6 @@ namespace Chalkable.Web.Controllers
                     return AttendanceSeatingChartViewData.Create(seatingChart, attendances, students);
                 }    
             }
-            
             return null;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
@@ -29,6 +30,13 @@ namespace Chalkable.Web.Controllers
         public ActionResult Cancel(Guid taskId)
         {
             MasterLocator.BackgroundTaskService.Cancel(taskId);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("SysAdmin")]
+        public ActionResult RerunTasks(GuidList taskIds)
+        {
+            MasterLocator.BackgroundTaskService.RerunTasks(taskIds);
             return Json(true);
         }
     }

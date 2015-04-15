@@ -178,7 +178,14 @@ NAMESPACE('chlk.controls', function () {
                     this.context.getDefaultView()
                         .onActivityRefreshed(function (activity, model) {
                             var form = jQuery('#' + attributes.id);
-                            form.validationEngine('attach');
+                            form.validationEngine('attach', {
+                                onFieldSuccess: function(field){
+                                    field.parent().addClass('validate-ok');
+                                },
+                                onFieldFailure: function(field){
+                                    field.parent().removeClass('validate-ok');
+                                }
+                            });
                         }.bind(this));
                 }
             }

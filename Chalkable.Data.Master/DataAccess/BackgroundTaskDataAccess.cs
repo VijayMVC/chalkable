@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -68,6 +69,19 @@ namespace Chalkable.Data.Master.DataAccess
             q.Add(BackgroundTask.DISTRICT_REF_FIELD_NAME, districtId);
             q.Add(BackgroundTask.COMPLETED_FIELD_NAME, dateTime, ConditionRelation.Less);
             SimpleDelete(q);
+        }
+
+        public void RerunTasks(IList<Guid> taskIds)
+        {
+            var taskIdsStr = taskIds.Select(x => "'" + x.ToString() + "'").JoinString(",");
+            var setParamsDic = new Dictionary<string, object>
+                {
+                    {BackgroundTask.STATE_FIELD_NAME, (int)(BackgroundTaskStateEnum.Created)},
+                    {BackgroundTask.COMPLETED_FIELD_NAME, null},
+                };
+            var q = Orm.SimpleUpdate<BackgroundTask>(setParamsDic, new AndQueryCondition());
+            q.Sql.AppendFormat(" and [{0}] in ({1})", BackgroundTask.ID_FIELD_NAME, taskIdsStr);
+            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
     }
 }

@@ -335,9 +335,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         throw new NoAnnouncementException();
                     }
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
-                    var chlkAnnType =
-                        ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(
-                            res.ClassAnnouncementTypeName);
+                    var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(res.ClassAnnouncementTypeName);
                     res.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?) null;
                     InsertMissingAttachments(res, uow);
                 }
@@ -382,8 +380,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 var ada = new AnnouncementAttachmentDataAccess(uow);
                 ada.Insert(toInsert);
-                res.AnnouncementAttachments = ada.GetPaginatedList(res.Id, Context.PersonId.Value, Context.RoleId, 0,
-                                                                   int.MaxValue);
+                res.AnnouncementAttachments = ada.GetPaginatedList(res.Id, Context.PersonId.Value, Context.RoleId, 0, int.MaxValue);
             }
         }
 

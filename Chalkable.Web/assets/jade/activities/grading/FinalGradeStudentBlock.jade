@@ -30,8 +30,8 @@ div(
                 +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
                 displayValue = avg.displayAvgGradeValue()
                 .grade-triangle
-                div(class = self.isAbleEdit() && self.isAbleEditDirectValue() ? "not-selected" : "").i-b.text-value=displayValue
-                if self.isAbleEdit() && self.isAbleEditDirectValue()
+                div(class = self.isAbleEditDirectValue() ? "not-selected" : "").i-b.text-value=displayValue
+                if self.isAbleEditDirectValue()
                     .i-b.selected.grade-block2
                         .input-container
                             ent = avg.getEnteredAvg()

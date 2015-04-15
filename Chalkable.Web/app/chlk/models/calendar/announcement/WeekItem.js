@@ -25,6 +25,8 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
             [ria.serialize.SerializeProperty('announcementperiods')],
             ArrayOf(chlk.models.announcement.AnnouncementPeriod), 'announcementPeriods',
 
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements'
+            ArrayOf(chlk.models.announcement.Announcement), 'announcements',
+
+            Boolean, 'noPlusButton'
         ]);
 });

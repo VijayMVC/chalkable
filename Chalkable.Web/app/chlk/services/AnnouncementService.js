@@ -23,14 +23,6 @@ REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
 NAMESPACE('chlk.services', function () {
     "use strict";
 
-    /** @class chlk.services.NoClassAnnouncementTypeException */
-    EXCEPTION(
-        'NoClassAnnouncementTypeException', [
-            function $(inner_) {
-                BASE('NoClassAnnouncementTypeException', inner_);
-            }
-        ]);
-
     /** @class chlk.services.AnnouncementService */
     CLASS(
         'AnnouncementService', EXTENDS(chlk.services.BaseService), [

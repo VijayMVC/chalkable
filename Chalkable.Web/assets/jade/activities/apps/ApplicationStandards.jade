@@ -5,7 +5,7 @@
             +Hidden('standards', standardsIdsStr)
             each standard in self.getStandards()
                 button(data-tooltip = standard.getDescription(), type="button").grey-button.same-on-hover
-                    = standard.getStandardCode()
+                    = standard.displayTitle()
                     if !self.isReadOnly()
                         +ActionLink('apps', 'removeStandard', self.getApplicationId(), standard.getId()).remove-standard
         if !self.isReadOnly()

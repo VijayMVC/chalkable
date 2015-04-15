@@ -595,7 +595,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 node.addClass('hovered');
             },
 
-            [ria.mvc.DomEventBind('click', '.autocomplete-item:not(.see-all)')],
+            [ria.mvc.DomEventBind('mousedown', '.autocomplete-item:not(.see-all)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function listItemBtnClick(node, event){
                 var text = node.getHTML().trim();

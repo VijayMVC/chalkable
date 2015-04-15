@@ -1,45 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Chalkable.BusinessLogic.Model;
+﻿using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.AttendancesViewData
 {
-    public class StudentAttendanceSummaryViewData
+    public class StudentAttendanceSummaryViewData : StudentViewData
     {
-        public StudentViewData Student { get; set; }
-        public IList<AttendanceTotalPerTypeViewData> AttendanceTotalPerType { get; set; }
+        public MarkingPeriodViewData MarkingPeriod { get; set; }
+        public StudentAttendanceHoverBox Absences { get; set; }
+        public StudentAttendanceHoverBox Lates { get; set; }
+        public StudentAttendanceHoverBox Presents { get; set; }
 
-        public static IList<StudentAttendanceSummaryViewData> Create(IList<ClassAttendanceDetails> attendances)
+        protected StudentAttendanceSummaryViewData(StudentDetails student) : base(student)
         {
-            var res = new List<StudentAttendanceSummaryViewData>();
-            var personsIds = attendances.GroupBy(x => x.Student.Id).Select(x=>x.Key).ToList();
-            foreach (var personId in personsIds)
-            {
-                var records = attendances.Where(x => x.Student.Id == personId).ToList();
-                var recDic = records.GroupBy(x => x.Level).ToDictionary(x => x.Key, x => x.Count());
-                res.Add(new StudentAttendanceSummaryViewData
-                    {
-                        Student = StudentViewData.Create(records.First().Student),
-                        AttendanceTotalPerType = AttendanceTotalPerTypeViewData.Create(recDic)
-                    });
-            }
-            return res;
         }
+
     }
 
-    public class AttendanceTotalPerTypeViewData
+    public class StudentAttendanceHoverBox : HoverBoxesViewData<StudentAttendnaceHoverBoxItemViewData>
     {
-        public string Level { get; set; }
-        public int AttendanceCount { get; set; }
+        public bool IsPassing { get; set; }
+    }
 
-        public static IList<AttendanceTotalPerTypeViewData> Create(IDictionary<string, int> atteDic)
-        {
-            return atteDic.Select(x => new AttendanceTotalPerTypeViewData
-                {
-                    AttendanceCount = x.Value,
-                    Level = x.Key
-                }).ToList();
-        }
+    public class StudentAttendnaceHoverBoxItemViewData
+    {
+        public int AttendnaceCount { get; set; }
+        public string ClassName { get; set; }
     }
 }

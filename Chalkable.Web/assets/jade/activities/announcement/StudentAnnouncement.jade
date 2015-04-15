@@ -1,9 +1,9 @@
 normalValue = self.getNormalValue()
-itemCls = (self.isDropped() ? 'dropped' :'')
+itemCls = (self.isDropped() || self.isAutomaticalyDropped() ? 'dropped' :'')
 selectedCls = (!self.isReadonly() ? 'not-selected' : '')
 maxScore = self.getMaxScore()
 div(class=self.getModel().getAlertClass(maxScore, true), data-tooltip=self.getModel().getTooltipText(maxScore, true)).alert-flag
-div(class=selectedCls + ' ' + itemCls).i-b.text-value=normalValue
+div(class=selectedCls + ' ' + itemCls).i-b.text-value=(!normalValue && self.isAutomaticalyDropped() ? Msg.Dropped : normalValue)
 div(class="selected " + itemCls, rowIndex=self.getRowIndex(), recId=self.getId()).i-b
     if !self.isReadonly()
         .input-container
@@ -22,6 +22,8 @@ div(class="selected " + itemCls, rowIndex=self.getRowIndex(), recId=self.getId()
             if !self.isAblePutOnlyZero()
                 .grading-input-popup.chlk-pop-up-container.popup-bottom.popup-bubble.top
                     id = self.getServerDate().getTime()
+                    if self.isAutomaticalyDropped()
+                        +LabeledCheckbox('Automatically Dropped', 'autoDropped', true, true).with-value.auto-dropped-checkbox.main-check
                     if self.isAbleDropStudentScore() || self.isDropped()
                         +LabeledCheckbox(Msg.Drop, 'dropped', self.isDropped())(data-value=self.isDropped(), id='dropped-' + id, class = self.isAbleDropStudentScore() ? '' : 'cant-drop').with-value.dropped-checkbox
                     else

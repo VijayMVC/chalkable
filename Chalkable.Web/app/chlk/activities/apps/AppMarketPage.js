@@ -48,7 +48,15 @@ NAMESPACE('chlk.activities.apps', function () {
             function resetScrolling_(){
                 this.dom.find('input[name=scroll]').setValue(0);
                 this.dom.find('input[name=start]').setValue(0);
+                this.dom.find('input[name=pageIndex]').setValue(0);
+            },
 
+            function resetPaginatingData_(model){
+                this.dom.find('input[name=start]').setValue(model.getPageIndex() * model.getPageSize);
+                this.dom.find('input[name=pageIndex]').setValue(model.getPageIndex());
+                this.dom.find('input[name=pageSize]').setValue(model.getPageSize());
+                this.dom.find('input[name=totalCount]').setValue(model.getTotalCount());
+                this.dom.find('input[name=actualCount]').setValue(model.getActualCount());
             },
 
 
@@ -91,6 +99,15 @@ NAMESPACE('chlk.activities.apps', function () {
                 new ria.dom.Dom("input[name=selectedCategories]").setValue(res);
                 this.resetScrolling_();
                 this.dom.find('#app-market-filter').trigger('submit');
-            }
+            },
+
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
+                BASE(model, msg_);
+                if(model instanceof chlk.models.apps.AppMarketViewData){
+                    this.resetPaginatingData_(model.getApps());
+                }
+            },
+
         ]);
 });

@@ -34,7 +34,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[String]],
             function generalServerErrorWithClassesAction(message, withAll_, controller_, action_, params_){
-                var topModel = new chlk.models.classes.ClassesForTopBar(this.classService.getClassesForTopBarSync(withAll_));
+                var topModel = new chlk.models.classes.ClassesForTopBar(this.classService.getClassesForTopBarSync());
                 var res = new ria.async.DeferredData(new chlk.models.common.ServerErrorWithClassesModel.$create(topModel, message, controller_, action_, params_));
                 return this.PushView(chlk.activities.chlkerror.GeneralServerErrorWithClassesPage, res);
             },

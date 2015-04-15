@@ -5,7 +5,7 @@ REQUIRE('chlk.models.id.AnnouncementId');
 
 NAMESPACE('chlk.models.standard', function(){
     /**@class chlk.models.standard.StandardsListViewData*/
-    CLASS('StandardsListViewData', [
+    CLASS('StandardsListViewData',  [
 
         ArrayOf(chlk.models.standard.Standard), 'itemStandards',
 

@@ -36,7 +36,7 @@ mixin StudentAverages(tpl)
             each average,i in studentAvg.getAverages()
                 .dotted-h.grade-value.avg-value-container(
                     row-index=i,
-                    class=((i == tpl.getRowIndex() ? 'active-row ' : '') + (self.isAbleEdit() ? 'gradable' : '')),
+                    class=((i == tpl.getRowIndex() ? 'active-row ' : '') + (self.isAbleEditAvg() ? 'gradable' : '')),
                     data-able-display-alpha-grades=self.isAbleDisplayAlphaGrades(),
                     data-able-round-displayed-averages=self.isRoundDisplayedAverages(),
                     data-average-id=average.getAverageId(),
@@ -114,6 +114,7 @@ mixin DisplayTotalPoints(model)
                             row-index=i
                             data-able-drop-student-score= announcement.isAbleDropStudentScore(),
                             data-able-exempt-student-score= announcement.isAbleExemptStudentScore(),
+                            data-auto-dropped= info.isAutomaticalyDropped(),
                             data-gradable= gradable,
                             data-max-score= maxScore,
                             data-canputonlyzero= canPutOnlyZeroScore.toString(),

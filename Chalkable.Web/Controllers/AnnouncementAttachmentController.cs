@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
@@ -45,6 +46,7 @@ namespace Chalkable.Web.Controllers
             {
                 Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = 500;
+                Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
                 return new ChalkableJsonResult(false)
                 {
                     Data = ExceptionViewData.Create(exception, exception.InnerException),
@@ -89,6 +91,7 @@ namespace Chalkable.Web.Controllers
             if (attContentInfo == null)
             {
                 Response.StatusCode = 404;
+                Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
                 return null;
             }
 
@@ -125,7 +128,7 @@ namespace Chalkable.Web.Controllers
             EnsureAnnouncementExsists(announcementId);
 
             var announcementAttachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(announcementId, start ?? 0, count ?? 10, false);
-            var attachmentsInfo = AttachmentLogic.PrepareAttachmentsInfo(announcementAttachments);
+            var attachmentsInfo = AttachmentLogic.PrepareAttachmentsInfo(announcementAttachments, MasterLocator.CrocodocService);
             var res = AnnouncementAttachmentViewData.Create(attachmentsInfo, SchoolLocator.Context.PersonId ?? 0);
             return Json(res);
         }
@@ -137,6 +140,7 @@ namespace Chalkable.Web.Controllers
             if (att == null)
             {
                 Response.StatusCode = 404;
+                Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
                 return null;
             }
 
@@ -165,6 +169,7 @@ namespace Chalkable.Web.Controllers
             {
                 Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = 500;
+                Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
                 return new ChalkableJsonResult(false)
                 {
                     Data = ExceptionViewData.Create(exception, exception.InnerException),

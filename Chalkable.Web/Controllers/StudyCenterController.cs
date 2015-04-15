@@ -17,7 +17,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class StudyCenterController : ChalkableController
     {
-        [AuthorizationFilter("Student", Preference.API_DESCR_SET_PRACTICE_GRADE, true, CallType.Post, new []{ AppPermissionType.Practice })]
+        [AuthorizationFilter("Student", true, new []{ AppPermissionType.Practice })]
         public ActionResult SetPracticeGrade(Guid id, string score)
         {
             if (string.IsNullOrWhiteSpace(score))
@@ -40,7 +40,7 @@ namespace Chalkable.Web.Controllers
 
         private bool HasInstalledApp(Guid applicationId, int studentId)
         {
-            var practiceAppId = Guid.Parse(PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value);
+            var practiceAppId = MasterLocator.ApplicationService.GetPracticeGradeId();
             return practiceAppId == applicationId
                    || SchoolLocator.AppMarketService.GetInstallationForPerson(applicationId, studentId) != null;
         }

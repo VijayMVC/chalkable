@@ -13,119 +13,19 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
-    public class DemoStandardStorage : BaseDemoIntStorage<Standard>
-    {
-        public DemoStandardStorage()
-            : base(x => x.Id)
-        {
-        }
-
-        public IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true)
-        {
-            var res = GetStandards(new StandardQuery
-            {
-                ClassId = classId,
-                GradeLavelId = gradeLevelId,
-                StandardSubjectId = subjectId,
-                ParentStandardId = parentStandardId
-            });
-            return res;
-        }
-
-
-        public IList<Standard> GetStandards(StandardQuery query)
-        {
-            var standards = data.Select(x => x.Value);
-            if (query.StandardSubjectId.HasValue)
-                standards = standards.Where(x => x.StandardSubjectRef == query.StandardSubjectId);
-            if (query.GradeLavelId.HasValue)
-                standards =
-                    standards.Where(
-                        x => query.GradeLavelId <= x.LowerGradeLevelRef && query.GradeLavelId >= x.UpperGradeLevelRef);
-            if (!query.AllStandards || query.ParentStandardId.HasValue)
-                standards = standards.Where(x => x.ParentStandardRef == query.ParentStandardId);
-
-            if (query.ClassId.HasValue)
-            {
-                var classStandarts = StorageLocator.ClassStandardStorage.GetAll(query.ClassId).Select(x => x.StandardRef);
-                standards = standards.Where(x => classStandarts.Contains(x.Id));
-            }
-            //if (query.CourseId.HasValue)
-            //{
-            //    var classStandarts = Storage.ClasStandardStorage.GetAll(query.CourseId).Select(x => x.StandardRef);
-            //    standards = standards.Where(x => classStandarts.Contains(x.Id));
-            //}
-
-            return standards.ToList();
-        }
-
-
-        public IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId)
-        {
-            var annStandards = StorageLocator.AnnouncementStandardStorage.GetAll().Where(x => x.AnnouncementRef == announcementId);
-            IList<Standard> standards = StorageLocator.StandardStorage.GetAll().Where(x => annStandards.Any(y => y.StandardRef == x.Id)).ToList();
-            return annStandards.Select(announcementStandard =>
-                new AnnouncementStandardDetails
-                {
-                    AnnouncementRef = announcementStandard.AnnouncementRef,
-                    Standard = standards.FirstOrDefault(x => x.Id == announcementStandard.StandardRef),
-                    StandardRef = announcementStandard.StandardRef
-                }).ToList();
-        }
-    }
-
-    public class DemoStandardSubjectStorage : BaseDemoIntStorage<StandardSubject>
-    {
-        public DemoStandardSubjectStorage()
-            : base(x => x.Id)
-        {
-        }
-    }
-
-    public class DemoClassStandardStorage : BaseDemoIntStorage<ClassStandard>
-    {
-        public DemoClassStandardStorage()
-            : base(null, true)
-        {
-        }
-
-        public new void Delete(IList<ClassStandard> classStandards)
-        {
-            foreach (var item in classStandards.Select(classStandard => data.First(
-                x =>
-                    x.Value.ClassRef == classStandard.ClassRef &&
-                    x.Value.StandardRef == classStandard.StandardRef)))
-            {
-                Delete(item.Key);
-            }
-        }
-
-        public IList<ClassStandard> GetAll(int? classId)
-        {
-            var items = data.Select(x => x.Value);
-            if (classId.HasValue)
-                items = items.Where(x => x.ClassRef == classId);
-            return items.ToList();
-        }
-    }
-
+  
     public class DemoStandardService : DemoSchoolServiceBase, IStandardService
     {
-        private DemoStandardSubjectStorage StandardSubjectStorage { get; set; }
-        private DemoStandardStorage StandardStorage { get; set; }
-        private DemoClassStandardStorage ClassStandardStorage { get; set; }
-        public DemoStandardService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
+        public DemoStandardService(IServiceLocatorSchool serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
         {
-            StandardSubjectStorage = new DemoStandardSubjectStorage();
-            StandardStorage = new DemoStandardStorage();
-            ClassStandardStorage = new DemoClassStandardStorage();
         }
 
         public void SetupDefaultData()
         {
             var masterLocator = ServiceLocator.ServiceLocatorMaster;
             var ccStandardCategories = masterLocator.CommonCoreStandardService.GetCCStandardCategories();
-            var subjectId = GetStandardSubjects(null).Max(x => x.Id);
+            ClearStandardsData();
+            var subjectId = 1;
             var subjectIdsDic = ccStandardCategories.ToDictionary(x => x.Id, x =>
                 {
                     subjectId++;
@@ -134,6 +34,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             InsertDefaultSubjects(subjectIdsDic, ccStandardCategories);
             InsertDefaultStandards(subjectIdsDic);
             InsertDefaultClassStandards();
+        }
+
+        private void ClearStandardsData()
+        {
+           Storage.ClassStandardStorage.Delete(Storage.ClassStandardStorage.GetAll());
+           Storage.StandardStorage.Delete(Storage.StandardStorage.GetAll());
+           Storage.StandardSubjectStorage.Delete(Storage.StandardSubjectStorage.GetAll());
         }
 
         private void InsertDefaultSubjects(IDictionary<Guid, int> subjectIdsDic
@@ -146,14 +53,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     IsActive = true
                 }).ToList();
             if (standardSubjects.Count > 0)
-                StandardSubjectStorage.Add(standardSubjects);
+                Storage.StandardSubjectStorage.Add(standardSubjects);
         }
 
         private void InsertDefaultStandards(IDictionary<Guid, int> subjectIdsDic)
         {
             var masterLocator = ServiceLocator.ServiceLocatorMaster;
             var abToccMapper = masterLocator.CommonCoreStandardService.GetAbToCCMapper();
-            var standardId = GetStandards(null, null, null).Max(x => x.Id);
+            var standardId = 0;//GetStandards(null, null, null).Max(x => x.Id);
             IDictionary<Guid, int> ccStandardsIdsDic = new Dictionary<Guid, int>();
             var ccStandards = new List<CommonCoreStandard>();
             foreach (var ccStandard in abToccMapper.Values)
@@ -183,14 +90,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                         });
             }
             if (standards.Count > 0)
-                StandardStorage.Add(standards);
+                Storage.StandardStorage.Add(standards);
         }
 
 
         private void InsertDefaultClassStandards()
         {
-            var standardsIds = StandardStorage.GetData().Keys.ToList();
-            var classStandards = ClassStandardStorage.GetAll();
+            var standardsIds = Storage.StandardStorage.GetData().Keys.ToList();
+            var classStandards = Storage.ClassStandardStorage.GetAll();
             standardsIds = standardsIds.Where(x => classStandards.All(y => y.StandardRef != x)).ToList();
             var classes =  ServiceLocator.ClassService.GetAll();
             var newClassStandards = new List<ClassStandard>();
@@ -202,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     StandardRef = id
                 }).ToList());
             }
-            ClassStandardStorage.Add(newClassStandards);
+            Storage.ClassStandardStorage.Add(newClassStandards);
         }
 
         public Standard AddStandard(int id, string name, string description, int standardSubjectId, int? parentStandardId
@@ -231,14 +138,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (standards.Any(IsInvalidStandardModel))
                 throw new ChalkableException("Invalid params. LowerGradeLevelId can not be greater than upperGradeLevelId");
 
-            StandardStorage.Add(standards);
+            Storage.StandardStorage.Add(standards);
         }
 
         public void EditStandard(IList<Standard> standards)
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            StandardStorage.Update(standards);
+            Storage.StandardStorage.Update(standards);
         }
 
         private bool IsInvalidStandardModel(Standard standard)
@@ -249,18 +156,25 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void DeleteStandards(IList<Standard> standards)
         {
-            StandardStorage.Delete(standards);
+            Storage.StandardStorage.Delete(standards);
         }
 
         public Standard GetStandardById(int id)
         {
-            return StandardStorage.GetById(id);
+            return Storage.StandardStorage.GetById(id);
         }
 
-        public IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true)
+        public IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true, bool activeOnly = false)
         {
-            return StandardStorage.GetStandards(classId, gradeLevelId, subjectId, parentStandardId,
-                allStandards);
+            var res = Storage.StandardStorage.GetStandarts(new StandardQuery
+            {
+                ClassId = classId,
+                GradeLavelId = gradeLevelId,
+                StandardSubjectId = subjectId,
+                ParentStandardId = parentStandardId,
+                ActiveOnly = activeOnly
+            });
+            return res;
         }
 
         public void AddStandardSubjects(IList<StandardSubject> standardSubjects)
@@ -268,7 +182,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if(!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
             if (standardSubjects != null && standardSubjects.Count > 0)
-                StandardSubjectStorage.Add(standardSubjects);
+                Storage.StandardSubjectStorage.Add(standardSubjects);
                 
         }
 
@@ -277,12 +191,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
-            StandardSubjectStorage.Update(standardSubjects);
+            Storage.StandardSubjectStorage.Update(standardSubjects);
         }
 
         public IList<StandardSubject> GetStandardSubjects(int? classId)
         {
-            var res = StandardSubjectStorage.GetAll();
+            var res = Storage.StandardSubjectStorage.GetAll();
             if (classId.HasValue)
             {
                 var standards = GetStandards(classId, null, null);
@@ -295,7 +209,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
-            StandardSubjectStorage.Delete(ids);
+            Storage.StandardSubjectStorage.Delete(ids);
         }
 
         public void DeleteClassStandards(IList<ClassStandard> classStandards)
@@ -303,38 +217,59 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (!BaseSecurity.IsDistrict(Context))
                 throw new ChalkableSecurityException();
 
-            ClassStandardStorage.Delete(classStandards);
+            Storage.ClassStandardStorage.Delete(classStandards);
         }
 
         public IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId)
         {
-            return StandardStorage.GetAnnouncementStandards(announcementId);
+            var annStandards = Storage.AnnouncementStandardStorage.GetAll().Where(x => x.AnnouncementRef == announcementId);
+            IList<Standard> standards = Storage.StandardStorage.GetAll().Where(x => annStandards.Any(y => y.StandardRef == x.Id)).ToList();
+            return annStandards.Select(announcementStandard => 
+                new AnnouncementStandardDetails
+                {
+                    AnnouncementRef = announcementStandard.AnnouncementRef, 
+                    Standard = standards.FirstOrDefault(x => x.Id == announcementStandard.StandardRef), 
+                    StandardRef = announcementStandard.StandardRef
+                }).ToList();
         }
 
         public IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards)
         {
             if(!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
-            return ClassStandardStorage.Add(classStandards);
+            return Storage.ClassStandardStorage.Add(classStandards);
         }
+
 
         public Standard GetStandardByABId(Guid id)
         {
-            return StandardStorage.GetAll().FirstOrDefault(x => x.AcademicBenchmarkId == id);
+            return Storage.StandardStorage.GetAll().FirstOrDefault(x => x.AcademicBenchmarkId == id);
         }
+
+
 
         public IList<Standard> GetStandards(IList<int> standardIds)
         {
             if (standardIds == null || standardIds.Count == 0)
                 return new List<Standard>();
-            var standards = StandardStorage.GetAll().Where(s=>standardIds.Contains(s.Id)).ToList();
+            var standards = Storage.StandardStorage.GetAll().Where(s=>standardIds.Contains(s.Id)).ToList();
             return standards;
         }
 
-        public IList<Standard> GetStandards(string filter)
+        public IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false)
         {
-            throw new NotImplementedException();
+            var standards = Storage.StandardStorage.SearchStandards(filter, activeOnly);
+            if (classId.HasValue)
+            {
+                var standardsByClass = GetStandards(classId, null, null, null, false, activeOnly);
+                standards = standards.Where(s => standardsByClass.Any(s2 => s2.Id == s.Id)).ToList();
+            }
+            return standards;
         }
 
+        public StandardTreePath GetStandardParentsSubTree(int standardId)
+        {
+             return Storage.StandardStorage.GetStandardParentsSubTree(standardId);
+        }
     }
 }

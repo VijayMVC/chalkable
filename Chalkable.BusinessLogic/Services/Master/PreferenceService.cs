@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IList<Preference> List(PreferenceCategoryEnum? category = null);
         IList<Preference> ListPublic();
         Preference Set(string key, object value, bool isPublic);
-
+        void BuildDefaultControllerDescriptions(IList<string> keys);
     }
 
     public class PreferenceService : MasterServiceBase, IPreferenceService
@@ -38,6 +38,35 @@ namespace Chalkable.BusinessLogic.Services.Master
                 }
             }
             
+        }
+
+        public void BuildDefaultControllerDescriptions(IList<string> keys)
+        {
+            SetPreferences(keys.Select(x => new Preference
+            {
+                Key = x,
+                Category = PreferenceCategoryEnum.ControllerDescriptions,
+                Hint = "",
+                Id = Guid.NewGuid(),
+                IsPublic = false,
+                Type = PreferenceTypeEnum.LongText,
+                Value = null
+            }).ToList());
+        }
+
+        private void SetPreferences(IList<Preference> preferences)
+        {
+            using (var uow = Update())
+            {
+                var da = new PreferenceDataAccess(uow);
+                var forInsert = preferences.Where(p => !cache.ContainsKey(p.Key)).ToList();
+                da.Insert(forInsert);
+                foreach (var p in preferences)
+                {
+                   cache.Add(p.Key, p);
+                }
+                uow.Commit();
+            }
         }
 
 

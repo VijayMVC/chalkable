@@ -49,6 +49,10 @@
 			else
 				options = form.data('jqv');
 
+			form.find('.validate-on-start').each(function(){
+				methods._validateField(jQuery(this), options);
+			});
+
 			options.validateAttribute = (form.find("[data-validation-engine*=validate]").length) ? "data-validation-engine" : "class";
 			if (options.binded) {
 
