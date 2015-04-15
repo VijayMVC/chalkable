@@ -335,7 +335,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     IncludeWithdrawn = inputModel.IncludeWithdrawn,
                     IdToPrint = inputModel.IdToPrint,
                     NumberToDisplay = inputModel.NumberToDisplay,
-                    StudentOrder = inputModel.StudentOrder
+                    StudentOrder = inputModel.StudentOrder,
+                    StudentIds = inputModel.StudentIds != null ? inputModel.StudentIds.ToArray() : null
                 };
             return ConnectorLocator.ReportConnector.GradeVerificationReport(ps);
         }
