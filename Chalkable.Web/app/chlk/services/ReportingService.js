@@ -83,7 +83,7 @@ NAMESPACE('chlk.services', function () {
             return this.getUrl('Reporting/SeatingChartReport.json', {
                 classId: classId.valueOf(),
                 gradingPeriodId: gradingPeriodId.valueOf(),
-                saveAsDefault: displayStudentPhoto_
+                displayStudentPhoto: displayStudentPhoto_
             });
         },
 
