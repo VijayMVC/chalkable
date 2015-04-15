@@ -18,7 +18,6 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AttendanceController : ChalkableController
     {
-        //[AuthorizationFilter("AdminGrade, AdminEdit, Teacher", Preference.API_DESCR_ATTENDANCE_SET_ATTENDANCE, true, CallType.Get, new[] { AppPermissionType.Attendance })]
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult SetAttendance(SetClassAttendanceViewData data)
         {
@@ -71,7 +70,6 @@ namespace Chalkable.Web.Controllers
         }
 
         //TODO: add this to as api methods later
-        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_ATTENDANCE_LIST_CLASS_ATTENDANCE, true, CallType.Get, new[] {AppPermissionType.Schedule, AppPermissionType.Class})]
         public ActionResult ClassListNew(DateTime? date, int classId)
         {
             date = (date ?? SchoolLocator.Context.NowSchoolYearTime).Date;

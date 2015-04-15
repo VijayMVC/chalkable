@@ -8,11 +8,14 @@ using System.Reflection;
 using System.Web.Compilation;
 using System.Web.Mvc;
 using System.Xml;
+using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Controllers;
+using Chalkable.Web.Controllers.CalendarControllers;
+using Chalkable.Web.Controllers.PersonControllers;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ChalkableApiExplorerViewData;
 using Newtonsoft.Json;
@@ -60,50 +63,84 @@ namespace Chalkable.Web.Logic.ApiExplorer
         }
 
         private static void PrepareControllerMap()
-        {//write method for paramatrized type that builds info about controller action, description, default params
-            RegisterApiMethodDefaults<ClassController>(x => x.List(1, 1, 1, null, null));
+        {
+            //do this once
+            RegisterApiMethodDefaults<AnnouncementController>(x => x.Read(1));
+            RegisterApiMethodDefaults<ClassController>(x => 
+                x.List(DemoSchoolConstants.CurrentSchoolYearId, DemoSchoolConstants.FirstMarkingPeriodId, DemoSchoolConstants.TeacherId, null, null));
+            RegisterApiMethodDefaults<AnnouncementTypeController>(x => x.List(1));
+            RegisterApiMethodDefaults<ApplicationController>(x => x.GetAnnouncementApplication(1));
+            RegisterApiMethodDefaults<AttendanceController>(x => x.SetAttendanceForClass("A", null, DemoSchoolConstants.AlgebraClassId, DateTime.Now));
+            RegisterApiMethodDefaults<AttendanceController>(x => x.ClassList(null, DemoSchoolConstants.AlgebraClassId));
+            RegisterApiMethodDefaults<AttendanceController>(x => x.SeatingChart(null, DemoSchoolConstants.AlgebraClassId));
+            RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.List(null, DemoSchoolConstants.AlgebraClassId, null));
+            RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.Week(null, DemoSchoolConstants.AlgebraClassId, null));
+            RegisterApiMethodDefaults<DisciplineController>(x => x.StudentDisciplineSummary(DemoSchoolConstants.Student1, DemoSchoolConstants.FirstMarkingPeriodId));
+            RegisterApiMethodDefaults<FeedController>(x => x.List(null, null, null, DemoSchoolConstants.AlgebraClassId));
+            RegisterApiMethodDefaults<GradingController>(x => x.ClassSummary(DemoSchoolConstants.AlgebraClassId));
+            RegisterApiMethodDefaults<GradingController>(x => x.ItemGradingStat(1));
+            RegisterApiMethodDefaults<GradingController>(x => x.ClassSummaryGrids(DemoSchoolConstants.AlgebraClassId));
+            RegisterApiMethodDefaults<MarkingPeriodController>(x => x.List(DemoSchoolConstants.CurrentSchoolYearId, null));
+            RegisterApiMethodDefaults<PeriodController>(x => x.List(DemoSchoolConstants.CurrentSchoolYearId));
+            RegisterApiMethodDefaults<StudentController>(x => x.Summary(DemoSchoolConstants.Student1));
+            RegisterApiMethodDefaults<StudentController>(x => x.Info(DemoSchoolConstants.Student1));
+            RegisterApiMethodDefaults<StudentController>(x => x.Schedule(DemoSchoolConstants.Student1));
+            RegisterApiMethodDefaults<StudentController>(x => x.Schedule(DemoSchoolConstants.Student1));
+            RegisterApiMethodDefaults<TeacherController>(x => x.Summary(DemoSchoolConstants.TeacherId));
+            RegisterApiMethodDefaults<TeacherController>(x => x.GetTeachers("", null, null, DemoSchoolConstants.AlgebraClassId, null, null));
+            RegisterApiMethodDefaults<PrivateMessageController>(x => x.Send(DemoSchoolConstants.Student2, "test msg", "test msg body"));
+            RegisterApiMethodDefaults<SearchController>(x => x.Search("algebra"));
+
         }
 
-        private static ChalkableApiControllerDescription RegisterApiMethodDefaults<T>(Expression<Action<T>> expr) where T: ChalkableController
+        private static void RegisterApiMethodDefaults<T>(Expression<Action<T>> expr) where T: ChalkableController
         {
             var body = expr.Body as MethodCallExpression;
             var arguments = body.Arguments;
+            
             var controllerName = expr.Parameters[0].Type.ToString()
                 .Split('.')
                 .First(x => x.EndsWith(CONTROLLER))
                 .Replace(CONTROLLER, "");
 
+            var methodName = body.Method.Name;
+
             var argValues = new List<String>();
             foreach (var arg in arguments)
             {
                 var expValue = "";
+
                 var exp = arg as UnaryExpression;
                 if (exp != null)
                 {
                     expValue = exp.Operand.ToString();
+                }
+                else
+                {
+                    var constValue = arg as ConstantExpression;
+                    if (constValue != null && constValue.Value != null)
+                        expValue = constValue.Value.ToString();
                 }
                 argValues.Add(expValue);
             }
 
             var controllerDescriptionViewData = controllerList[controllerName];
 
-            //get view data from map
-
-
-            var i = 0;
+            
+            
             foreach (var method in controllerDescriptionViewData.Methods)
             {
+                if (method.Name != methodName) continue;
+                var i = 0;
                 foreach (var param in method.Parameters)
                 {
                     if (argValues.Count > 0)
                     {
-                        param.Value = argValues[i];    
+                        param.Value = argValues[i];
                     }
                     ++i;
                 }
             }
-
-            return controllerDescriptionViewData;
         }
 
         private static bool IsNullableType(ParameterInfo param)
@@ -168,6 +205,8 @@ namespace Chalkable.Web.Logic.ApiExplorer
                 var controllerName = controller.Name.Replace(CONTROLLER, "");
                 var methods = controller.GetMethods(BindingFlags.Public | BindingFlags.Instance);
 
+                var noApiMethods = true;
+
                 var mList = new List<ChalkableApiMethodDescription>();
 
                 foreach (var method in methods)
@@ -222,12 +261,17 @@ namespace Chalkable.Web.Logic.ApiExplorer
                         Parameters = paramsList,
                         AvailableForRoles = avRoles
                     });
+                    noApiMethods = false;
                 }
-                controllerList.Add(controllerName, new ChalkableApiControllerDescription
+
+                if (!noApiMethods)
                 {
-                    Name = controllerName,
-                    Methods = mList
-                });
+                    controllerList.Add(controllerName, new ChalkableApiControllerDescription
+                    {
+                        Name = controllerName,
+                        Methods = mList
+                    });    
+                }
             }
 
             PrepareControllerMap();
