@@ -304,6 +304,12 @@ namespace Chalkable.BusinessLogic.Services.School
                     IncludeUnlisted = inputModel.IncludeUnlisted,
                     Terms = inputModel.MarkingPeriodIds != null ? inputModel.MarkingPeriodIds.ToArray() : null
                 };
+            if (inputModel.StudentIds == null)
+            {
+                var isEnrolled = inputModel.DisplayWithdrawnStudents ? (bool?)null : true;
+                var students = ServiceLocator.StudentService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef, isEnrolled);
+                ps.StudentIds = students.Select(x => x.Id).ToArray();
+            }
             return ConnectorLocator.ReportConnector.AttendanceProfileReport(ps);
         }
 
