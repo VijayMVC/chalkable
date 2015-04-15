@@ -52,7 +52,13 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult AttendanceRegisterReport(AttendanceRegisterInputModel attendanceRegisterInputModel)
         {
-            return Report(attendanceRegisterInputModel, SchoolLocator.ReportService.GetAttendanceRegisterReport, "AttendanceReport");
+            return Report(attendanceRegisterInputModel, SchoolLocator.ReportService.GetAttendanceRegisterReport, "AttendanceRegisterReport");
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult GradeVerificationReport(GradeVerificationInputModel gradeVerificationInputModel)
+        {
+            return Report(gradeVerificationInputModel, SchoolLocator.ReportService.GetGradeVerificationReport, "GradeVerificationReport");
         }
 
         private ActionResult Report<TReport>(TReport reportInputModel

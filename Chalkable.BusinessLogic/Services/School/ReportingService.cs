@@ -21,6 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetMissingAssignmentsReport(MissingAssignmentsInputModel missingAssignmentsInput);
         byte[] GetBirthdayReport(BirthdayReportInputModel birthdayReportInput);
         byte[] GetAttendanceRegisterReport(AttendanceRegisterInputModel inputModel);
+        byte[] GetGradeVerificationReport(GradeVerificationInputModel inputModel);
     }
 
     public class ReportingService : SisConnectedService, IReportingService
@@ -281,6 +282,33 @@ namespace Chalkable.BusinessLogic.Services.School
                     ShowLocalReasonCode = inputModel.ShowLocalReasonCode
                 };
             return ConnectorLocator.ReportConnector.AttendnaceRegisterReport(ps);
+        }
+
+
+        public byte[] GetGradeVerificationReport(GradeVerificationInputModel inputModel)
+        {
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var ps = new GradeVerificationReportParams
+                {
+                    AcadSessionId = gp.SchoolYearRef,
+                    GradeType = inputModel.GradeType,
+                    DistrictName = Context.SisUrl, //TODO: ask Jonathan about this field 
+                    SectionId = inputModel.ClassId,
+                    SectionOrder = inputModel.ClassOrder,
+                    StartSectionNumber = inputModel.StartClassNumber,
+                    EndSectionNumber = inputModel.EndClassNumber,
+                    GradedItemId = inputModel.GradedItemId != null ? inputModel.GradedItemId.ToArray() : null,
+                    GradingPeriodId = new []{gp.Id},
+                    IncludeComments = inputModel.IncludeComments,
+                    IncludeLegend = inputModel.IncludeLegend,
+                    IncludeSignature = inputModel.IncludeSignature,
+                    IncludeNotes = inputModel.IncludeNotes,
+                    IncludeWithdrawn = inputModel.IncludeWithdrawn,
+                    IdToPrint = inputModel.IdToPrint,
+                    NumberToDisplay = inputModel.NumberToDisplay,
+                    StudentOrder = inputModel.StudentOrder
+                };
+            return ConnectorLocator.ReportConnector.GradeVerificationReport(ps);
         }
     }
 
