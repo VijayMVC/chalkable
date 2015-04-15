@@ -17,8 +17,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
         public int GradeType { get; set; }
         public bool IncludeNotes { get; set; }
-        public bool IncludeComments { get; set; }
-        public bool IncludeLegend { get; set; }
+        public bool IncludeCommentsAndLegend { get; set; }
         public bool IncludeSignature { get; set; }
         public bool IncludeWithdrawn { get; set; }
         public int NumberToDisplay { get; set; }
