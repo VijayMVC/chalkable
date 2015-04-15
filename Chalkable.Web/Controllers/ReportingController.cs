@@ -52,7 +52,31 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult AttendanceRegisterReport(AttendanceRegisterInputModel attendanceRegisterInputModel)
         {
-            return Report(attendanceRegisterInputModel, SchoolLocator.ReportService.GetAttendanceRegisterReport, "AttendanceReport");
+            return Report(attendanceRegisterInputModel, SchoolLocator.ReportService.GetAttendanceRegisterReport, "AttendanceRegisterReport");
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult AttendanceProfileReport(AttendanceProfileReportInputModel attendanceProfileReportInputModel)
+        {
+            return Report(attendanceProfileReportInputModel, SchoolLocator.ReportService.GetAttendanceProfileReport, "AttendanceProfileReport");
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult SeatingChartReport(SeatingChartReportInputModel seatingChartReportInputModel)
+        {
+            return Report(seatingChartReportInputModel, SchoolLocator.ReportService.GetSeatingChartReport, "SeatingChartReport");
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult GradeVerificationReport(GradeVerificationInputModel gradeVerificationInputModel)
+        {
+            return Report(gradeVerificationInputModel, SchoolLocator.ReportService.GetGradeVerificationReport, "GradeVerificationReport");
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult LessonPlanReport(LessonPlanReportInputModel lessonPlanReportInputModel)
+        {
+            return Report(lessonPlanReportInputModel, SchoolLocator.ReportService.GetLessonPlanReport, "LessonPlanReport");
         }
 
         private ActionResult Report<TReport>(TReport reportInputModel

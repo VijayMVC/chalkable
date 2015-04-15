@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.Common;
-using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Connectors.Model.Reports;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -21,6 +19,10 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetMissingAssignmentsReport(MissingAssignmentsInputModel missingAssignmentsInput);
         byte[] GetBirthdayReport(BirthdayReportInputModel birthdayReportInput);
         byte[] GetAttendanceRegisterReport(AttendanceRegisterInputModel inputModel);
+        byte[] GetAttendanceProfileReport(AttendanceProfileReportInputModel inputModel);
+        byte[] GetSeatingChartReport(SeatingChartReportInputModel inputModel);
+        byte[] GetGradeVerificationReport(GradeVerificationInputModel inputModel);
+        byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel);
     }
 
     public class ReportingService : SisConnectedService, IReportingService
@@ -281,6 +283,96 @@ namespace Chalkable.BusinessLogic.Services.School
                     ShowLocalReasonCode = inputModel.ShowLocalReasonCode
                 };
             return ConnectorLocator.ReportConnector.AttendnaceRegisterReport(ps);
+        }
+
+        public byte[] GetAttendanceProfileReport(AttendanceProfileReportInputModel inputModel)
+        {
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var ps = new AttendanceProfileReportParams
+                {
+                    AbsenceReasons = inputModel.AbsenceReasons != null ? inputModel.AbsenceReasons.ToArray() : null,
+                    AcadSessionId = gp.SchoolYearRef,
+                    DisplayNote = inputModel.DisplayNote,
+                    DisplayPeriodAbsences = inputModel.DisplayPeriodAbsences,
+                    DisplayReasonTotals = inputModel.DisplayReasonTotals,
+                    DisplayWithdrawnStudents = inputModel.DisplayWithdrawnStudents,
+                    StartDate = inputModel.StartDate,
+                    EndDate = inputModel.EndDate,
+                    GroupBy = inputModel.GroupBy,
+                    SectionId = inputModel.ClassId,
+                    IdToPrint = inputModel.IdToPrint,
+                    IncludeUnlisted = inputModel.IncludeUnlisted,
+                    Terms = inputModel.MarkingPeriodIds != null ? inputModel.MarkingPeriodIds.ToArray() : null
+                };
+            if (inputModel.StudentIds == null)
+            {
+                var isEnrolled = inputModel.DisplayWithdrawnStudents ? (bool?)null : true;
+                var students = ServiceLocator.StudentService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef, isEnrolled);
+                ps.StudentIds = students.Select(x => x.Id).ToArray();
+            }
+            return ConnectorLocator.ReportConnector.AttendanceProfileReport(ps);
+        }
+
+
+        public byte[] GetGradeVerificationReport(GradeVerificationInputModel inputModel)
+        {
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var ps = new GradeVerificationReportParams
+                {
+                    AcadSessionId = gp.SchoolYearRef,
+                    GradeType = inputModel.GradeType,
+                    DistrictName = Context.SisUrl, //TODO: ask Jonathan about this field 
+                    SectionId = inputModel.ClassId,
+                    SectionOrder = inputModel.ClassOrder,
+                    StartSectionNumber = inputModel.StartClassNumber,
+                    EndSectionNumber = inputModel.EndClassNumber,
+                    GradedItemId = inputModel.GradedItemId != null ? inputModel.GradedItemId.ToArray() : null,
+                    GradingPeriodId = new []{gp.Id},
+                    IncludeComments = inputModel.IncludeComments,
+                    IncludeLegend = inputModel.IncludeLegend,
+                    IncludeSignature = inputModel.IncludeSignature,
+                    IncludeNotes = inputModel.IncludeNotes,
+                    IncludeWithdrawn = inputModel.IncludeWithdrawn,
+                    IdToPrint = inputModel.IdToPrint,
+                    NumberToDisplay = inputModel.NumberToDisplay,
+                    StudentOrder = inputModel.StudentOrder
+                };
+            return ConnectorLocator.ReportConnector.GradeVerificationReport(ps);
+        }
+
+
+        public byte[] GetSeatingChartReport(SeatingChartReportInputModel inputModel)
+        {
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var c = ServiceLocator.ClassService.GetById(inputModel.ClassId);
+            var ps = new SeatingChartReportPrams
+                {
+                    AcadSessionId = gp.SchoolYearRef,
+                    CourseId = c.CourseRef.HasValue ? c.CourseRef.Value : c.Id,
+                    TermId = gp.MarkingPeriodRef,
+                    DisplayStudentPhoto = inputModel.DisplayStudentPhoto
+                };
+            return ConnectorLocator.ReportConnector.SeatingChartReport(ps);
+        }
+        
+        public byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel)
+        {
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var ps = new LessonPlanReportParams
+                {
+                    AcadSessionId = gp.SchoolYearRef,
+                    StartDate = inputModel.StartDate,
+                    EndDate = inputModel.EndDate,
+                    IncludeActivities = inputModel.IncludeAnnouncements,
+                    IncludeStandards = inputModel.IncludeStandards,
+                    PublicPrivateText = inputModel.PublicPrivateText,
+                    SectionId = inputModel.ClassId,
+                    SortActivities = inputModel.SortItems,
+                    SortSections = inputModel.SortClasses,
+                    XMLActivityAttribute = inputModel.AnnouncementAttributes != null ? inputModel.AnnouncementAttributes.ToArray() : null,
+                    XMLActivityCategory = inputModel.AnnouncementTypes != null ? inputModel.AnnouncementTypes.ToArray() : null
+                };
+            return ConnectorLocator.ReportConnector.LessonPlanReport(ps);
         }
     }
 
