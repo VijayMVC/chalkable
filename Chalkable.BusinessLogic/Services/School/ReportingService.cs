@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.Common;
-using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model.Reports;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -22,6 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetBirthdayReport(BirthdayReportInputModel birthdayReportInput);
         byte[] GetAttendanceRegisterReport(AttendanceRegisterInputModel inputModel);
         byte[] GetAttendanceProfileReport(AttendanceProfileReportInputModel inputModel);
+        byte[] GetSeatingChartReport(SeatingChartReportInputModel inputModel);
         byte[] GetGradeVerificationReport(GradeVerificationInputModel inputModel);
     }
 
@@ -332,6 +332,21 @@ namespace Chalkable.BusinessLogic.Services.School
                     StudentOrder = inputModel.StudentOrder
                 };
             return ConnectorLocator.ReportConnector.GradeVerificationReport(ps);
+        }
+
+
+        public byte[] GetSeatingChartReport(SeatingChartReportInputModel inputModel)
+        {
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var c = ServiceLocator.ClassService.GetById(inputModel.ClassId);
+            var ps = new SeatingChartReportPrams
+                {
+                    AcadSessionId = gp.SchoolYearRef,
+                    CourseId = c.CourseRef.HasValue ? c.CourseRef.Value : c.Id,
+                    TermId = gp.MarkingPeriodRef,
+                    DisplayStudentPhoto = inputModel.DisplayStudentPhoto
+                };
+            return ConnectorLocator.ReportConnector.SeatingChartReport(ps);
         }
     }
 

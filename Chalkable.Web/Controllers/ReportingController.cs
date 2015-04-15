@@ -62,6 +62,12 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult SeatingChartReport(SeatingChartReportInputModel seatingChartReportInputModel)
+        {
+            return Report(seatingChartReportInputModel, SchoolLocator.ReportService.GetSeatingChartReport, "SeatingChartReport");
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult GradeVerificationReport(GradeVerificationInputModel gradeVerificationInputModel)
         {
             return Report(gradeVerificationInputModel, SchoolLocator.ReportService.GetGradeVerificationReport, "GradeVerificationReport");

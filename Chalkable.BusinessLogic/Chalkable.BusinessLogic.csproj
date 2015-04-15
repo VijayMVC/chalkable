@@ -132,6 +132,7 @@
     <Compile Include="Model\Reports\GradeVerificationInputModel.cs" />
     <Compile Include="Model\Reports\MissingAssignmentsInputModel.cs" />
     <Compile Include="Model\Reports\ProgressReportInputModel.cs" />
+    <Compile Include="Model\Reports\SeatingChartReportInputModel.cs" />
     <Compile Include="Model\Reports\WorksheetReportInputModel.cs" />
     <Compile Include="Model\SeatingChartInfo.cs" />
     <Compile Include="Model\StandardDetailsInfo.cs" />
