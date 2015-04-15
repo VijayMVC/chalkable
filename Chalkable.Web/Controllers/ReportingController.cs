@@ -73,6 +73,12 @@ namespace Chalkable.Web.Controllers
             return Report(gradeVerificationInputModel, SchoolLocator.ReportService.GetGradeVerificationReport, "GradeVerificationReport");
         }
 
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult LessonPlanReport(LessonPlanReportInputModel lessonPlanReportInputModel)
+        {
+            return Report(lessonPlanReportInputModel, SchoolLocator.ReportService.GetLessonPlanReport, "LessonPlanReport");
+        }
+
         private ActionResult Report<TReport>(TReport reportInputModel
             , Func<TReport, byte[]> reportAction, string reportFileName) where TReport : BaseReportInputModel
         {

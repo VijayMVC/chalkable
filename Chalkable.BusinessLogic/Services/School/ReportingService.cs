@@ -3,7 +3,6 @@ using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.Common;
-using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model.Reports;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -23,6 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetAttendanceProfileReport(AttendanceProfileReportInputModel inputModel);
         byte[] GetSeatingChartReport(SeatingChartReportInputModel inputModel);
         byte[] GetGradeVerificationReport(GradeVerificationInputModel inputModel);
+        byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel);
     }
 
     public class ReportingService : SisConnectedService, IReportingService
@@ -347,6 +347,26 @@ namespace Chalkable.BusinessLogic.Services.School
                     DisplayStudentPhoto = inputModel.DisplayStudentPhoto
                 };
             return ConnectorLocator.ReportConnector.SeatingChartReport(ps);
+        }
+        
+        public byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel)
+        {
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var ps = new LessonPlanReportParams
+                {
+                    AcadSessionId = gp.SchoolYearRef,
+                    StartDate = inputModel.StartDate,
+                    EndDate = inputModel.EndDate,
+                    IncludeActivities = inputModel.IncludeAnnouncements,
+                    IncludeStandards = inputModel.IncludeStandards,
+                    PublicPrivateText = inputModel.PublicPrivateText,
+                    SectionId = inputModel.ClassId,
+                    SortActivities = inputModel.SortItems,
+                    SortSections = inputModel.SortClasses,
+                    XMLActivityAttribute = inputModel.AnnouncementAttributes != null ? inputModel.AnnouncementAttributes.ToArray() : null,
+                    XMLActivityCategory = inputModel.AnnouncementTypes != null ? inputModel.AnnouncementTypes.ToArray() : null
+                };
+            return ConnectorLocator.ReportConnector.LessonPlanReport(ps);
         }
     }
 
