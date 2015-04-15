@@ -124,10 +124,12 @@
     <Compile Include="Model\PracticeGradeDetailedInfo.cs" />
     <Compile Include="Model\RecipientInfo.cs" />
     <Compile Include="Model\Reports\AttendanceRegisterInputModel.cs" />
+    <Compile Include="Model\Reports\AttendanceProfileReportInputModel.cs" />
     <Compile Include="Model\Reports\BaseReportInputModel.cs" />
     <Compile Include="Model\Reports\BirthdayReportInputModel.cs" />
     <Compile Include="Model\Reports\ComprehensiveProgressInputModel.cs" />
     <Compile Include="Model\Reports\GradebookReportInputModel.cs" />
+    <Compile Include="Model\Reports\GradeVerificationInputModel.cs" />
     <Compile Include="Model\Reports\MissingAssignmentsInputModel.cs" />
     <Compile Include="Model\Reports\ProgressReportInputModel.cs" />
     <Compile Include="Model\Reports\WorksheetReportInputModel.cs" />

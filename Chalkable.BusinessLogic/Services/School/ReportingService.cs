@@ -21,6 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetMissingAssignmentsReport(MissingAssignmentsInputModel missingAssignmentsInput);
         byte[] GetBirthdayReport(BirthdayReportInputModel birthdayReportInput);
         byte[] GetAttendanceRegisterReport(AttendanceRegisterInputModel inputModel);
+        byte[] GetAttendanceProfileReport(AttendanceProfileReportInputModel inputModel);
         byte[] GetGradeVerificationReport(GradeVerificationInputModel inputModel);
     }
 
@@ -282,6 +283,28 @@ namespace Chalkable.BusinessLogic.Services.School
                     ShowLocalReasonCode = inputModel.ShowLocalReasonCode
                 };
             return ConnectorLocator.ReportConnector.AttendnaceRegisterReport(ps);
+        }
+
+        public byte[] GetAttendanceProfileReport(AttendanceProfileReportInputModel inputModel)
+        {
+            var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
+            var ps = new AttendanceProfileReportParams
+                {
+                    AbsenceReasons = inputModel.AbsenceReasons != null ? inputModel.AbsenceReasons.ToArray() : null,
+                    AcadSessionId = gp.SchoolYearRef,
+                    DisplayNote = inputModel.DisplayNote,
+                    DisplayPeriodAbsences = inputModel.DisplayPeriodAbsences,
+                    DisplayReasonTotals = inputModel.DisplayReasonTotals,
+                    DisplayWithdrawnStudents = inputModel.DisplayWithdrawnStudents,
+                    StartDate = inputModel.StartDate,
+                    EndDate = inputModel.EndDate,
+                    GroupBy = inputModel.GroupBy,
+                    SectionId = inputModel.ClassId,
+                    IdToPrint = inputModel.IdToPrint,
+                    IncludeUnlisted = inputModel.IncludeUnlisted,
+                    Terms = inputModel.MarkingPeriodIds != null ? inputModel.MarkingPeriodIds.ToArray() : null
+                };
+            return ConnectorLocator.ReportConnector.AttendanceProfileReport(ps);
         }
 
 

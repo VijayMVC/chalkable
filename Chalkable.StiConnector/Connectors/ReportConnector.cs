@@ -60,7 +60,7 @@ namespace Chalkable.StiConnector.Connectors
             return Download(BaseUrl + "reports/attendanceregister", ps);
         }
 
-        public byte[] AttendanceProfileReport(AttendnaceProfileReportParams ps)
+        public byte[] AttendanceProfileReport(AttendanceProfileReportParams ps)
         {
             return Download(BaseUrl + "reports/attendanceprofile", ps);
         }
