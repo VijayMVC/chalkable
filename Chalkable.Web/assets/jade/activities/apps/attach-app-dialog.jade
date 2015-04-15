@@ -12,6 +12,7 @@ mixin AppIconLink_(announcementId, app, iconTooltip)
 
 teacherId = self.teacherId.valueOf()
 announcementId = self.announcementId.valueOf()
+classId = self.classId.valueOf()
 .dialog.attach-app
     .x-window-header
         h1 Attach an App
@@ -22,6 +23,6 @@ announcementId = self.announcementId.valueOf()
                 each app in self.apps.getItems()
                     +AppIconLink_(announcementId, app, self.getAppIconToolTip(app))
             .paging
-                +Paginator('announcement', 'attachApp', self.apps, [announcementId, null, self.getAppUrlAppend()])
+                +Paginator('announcement', 'attachApp', self.apps, [announcementId, classId, self.getAppUrlAppend()])
         else
             .no-apps No Apps Installed, try one now in the App Store

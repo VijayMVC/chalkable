@@ -380,7 +380,7 @@ NAMESPACE('chlk.controllers', function (){
                 .getAppsForAttach(userId, classId, mp.getId(), pageIndex_ | 0, null)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, data, appUrlAppend_ || '');
+                    return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, classId, data, appUrlAppend_ || '');
                 });
 
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppDialog, result);
