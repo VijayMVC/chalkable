@@ -4,6 +4,7 @@ REQUIRE('chlk.services.AttendanceService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.MarkingPeriodService');
+REQUIRE('chlk.services.ReportingService');
 
 REQUIRE('chlk.activities.attendance.SummaryPage');
 REQUIRE('chlk.activities.attendance.ClassListPage');
@@ -11,10 +12,12 @@ REQUIRE('chlk.activities.attendance.StudentDayAttendancePopup');
 REQUIRE('chlk.activities.classes.ClassProfileAttendanceListPage');
 REQUIRE('chlk.activities.attendance.SeatingChartPage');
 REQUIRE('chlk.activities.attendance.EditSeatingGridDialog');
+REQUIRE('chlk.activities.reports.SeatingChartAttendanceReportDialog');
 
 REQUIRE('chlk.models.attendance.AttendanceList');
 REQUIRE('chlk.models.attendance.AttendanceStudentBox');
 REQUIRE('chlk.models.attendance.UpdateSeatingChart');
+REQUIRE('chlk.models.reports.SubmitSeatingChartReportViewData');
 REQUIRE('chlk.models.id.ClassId');
 
 REQUIRE('chlk.models.common.ChlkDate');
@@ -34,10 +37,37 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.GradeLevelService, 'gradeLevelService',
 
         [ria.mvc.Inject],
+        chlk.services.ReportingService, 'reportingService',
+
+        [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
 
         [ria.mvc.Inject],
         chlk.services.MarkingPeriodService, 'markingPeriodService',
+
+        [chlk.controllers.SidebarButton('attendance')],
+        [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+        function seatingChartAttendanceReportAction(gradingPeriodId, classId, startDate, endDate){
+            if (this.isDemoSchool())
+                return this.ShowMsgBox('Not available for demo', 'Error'), null;
+            var res = new ria.async.DeferredData(new chlk.models.reports.BaseReportViewData(classId, gradingPeriodId, startDate, endDate));
+            return this.ShadeView(chlk.activities.reports.SeatingChartAttendanceReportDialog, res);
+        },
+
+        [chlk.controllers.SidebarButton('statistic')],
+        [[chlk.models.reports.SubmitSeatingChartReportViewData]],
+        function submitSeatingChartReportAction(reportViewData){
+
+            var src = this.reportingService.submitSeatingChartReport(
+                reportViewData.getClassId(),
+                reportViewData.getGradingPeriodId(),
+                reportViewData.isDisplayStudentPhoto()
+            );
+            this.BackgroundCloseView(chlk.activities.reports.SeatingChartAttendanceReportDialog);
+            this.BackgroundCloseView(chlk.activities.reports.SeatingChartReportDialog);
+            this.getContext().getDefaultView().submitToIFrame(src);
+            return null;
+        },
 
         [chlk.controllers.Permissions([
             [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN]
