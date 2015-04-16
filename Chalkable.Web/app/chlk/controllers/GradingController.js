@@ -28,6 +28,7 @@ REQUIRE('chlk.activities.reports.ComprehensiveProgressReportDialog');
 REQUIRE('chlk.activities.reports.MissingAssignmentsReportDialog');
 REQUIRE('chlk.activities.reports.BirthdayReportDialog');
 REQUIRE('chlk.activities.reports.SeatingChartReportDialog');
+REQUIRE('chlk.activities.reports.GradeVerificationReportDialog');
 
 REQUIRE('chlk.models.grading.GradingSummaryGridSubmitViewData');
 
@@ -37,6 +38,7 @@ REQUIRE('chlk.models.reports.SubmitWorksheetReportViewData');
 REQUIRE('chlk.models.reports.SubmitComprehensiveProgressViewData');
 REQUIRE('chlk.models.reports.SubmitMissingAssignmentsReportViewData');
 REQUIRE('chlk.models.reports.SubmitBirthdayReportViewData');
+REQUIRE('chlk.models.reports.SubmitGradeVerificationReportViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -585,7 +587,17 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function gradeVerificationReportAction(gradingPeriodId, classId, startDate, endDate){
-
+                var res = ria.async.wait([
+                        this.gradingPeriodService.getList(),
+                        this.gradingService.getStudentAverages()
+                    ])
+                    .then(function(data){
+                        var periods = data[0];
+                        var averages = data[1];
+                        var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
+                        return new chlk.models.reports.GradeVerificationReportViewData(periods, averages, students, classId, gradingPeriodId, startDate, endDate);
+                    }, this);
+                return this.ShadeView(chlk.activities.reports.GradeVerificationReportDialog, res);
             },
 
             [chlk.controllers.SidebarButton('statistic')],
@@ -703,6 +715,26 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.getStudentIds()
                 );
                 this.BackgroundCloseView(chlk.activities.reports.ComprehensiveProgressReportDialog);
+                this.getContext().getDefaultView().submitToIFrame(src);
+                return null;
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.reports.SubmitGradeVerificationReportViewData]],
+            function submitGradeVerificationReportAction(reportViewData){
+                var src = this.reportingService.submitGradeVerificationReport(
+                    this.getIdsList(reportViewData.getGradingPeriodIds(), chlk.models.id.GradingPeriodId),
+                    (reportViewData.getStudentAverageIds() || '').split(','),
+                    reportViewData.getClassOrder(),
+                    reportViewData.getGradeType(),
+                    reportViewData.getStudentOrder(),
+                    reportViewData.getNumberToDisplay(),
+                    reportViewData.isIncludeCommentsAndLegends(),
+                    reportViewData.isIncludeSignature(),
+                    reportViewData.isIncludeWithdrawn(),
+                    reportViewData.getStudentIds()
+                );
+                this.BackgroundCloseView(chlk.activities.reports.GradeVerificationReportDialog);
                 this.getContext().getDefaultView().submitToIFrame(src);
                 return null;
             },

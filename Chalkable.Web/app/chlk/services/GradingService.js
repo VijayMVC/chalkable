@@ -44,6 +44,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.SchoolYearId]],
+            ria.async.Future, function getStudentAverages(schoolYearId_) {
+                return ria.async.DeferredData([]);
+            },
+
             [[chlk.models.id.ClassId, chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId, Number, String, Boolean, Object, String]],
             ria.async.Future, function updateStudentAverage(classId, studentId, gradingPeriodId, averageId, averageValue, exempt_, codes, note) {
                 return this.post('Grading/UpdateStudentAverage', chlk.models.grading.ShortStudentAverageInfo, {
