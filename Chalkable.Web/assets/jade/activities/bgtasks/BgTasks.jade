@@ -42,7 +42,7 @@ mixin TasksFilterByDistrictsSelect_(name, items)
     +Grid('backgroundtask', 'page', self.bgTasks, [self.getStateId(), self.getTypeId(), self.getDistrictId(), self.isAllDistricts()]).not-transparent
         +GridHead()
             .th Id
-            .th School Id
+            .th District Id
             .th Created
             .th Scheduled
             .th Started
@@ -54,7 +54,7 @@ mixin TasksFilterByDistrictsSelect_(name, items)
             each item in self.bgTasks.getItems()
                 +GridRow()
                     .td= item.getId().valueOf()
-                    .td= item.getSchoolId() ? item.getSchoolId().valueOf() : "general"
+                    .td= item.getDistrictId() ? item.getDistrictId().valueOf() : "general"
                     .td=item.getCreated().toString('dd/m/yy hh:min:ss')
                     .td=item.getScheduled().toString('dd/m/yy hh:min:ss')
                     .td=item.getStarted() ? item.getStarted().toString('dd/m/yy hh:min:ss') : ""
