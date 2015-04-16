@@ -4,6 +4,7 @@ REQUIRE('ria.async.Observable');
 REQUIRE('chlk.models.reports.SubmitComprehensiveProgressViewData');
 REQUIRE('chlk.models.reports.SubmitMissingAssignmentsReportViewData');
 REQUIRE('chlk.models.reports.SubmitBirthdayReportViewData');
+REQUIRE('chlk.models.reports.SubmitGradeVerificationReportViewData');
 
 
 NAMESPACE('chlk.services', function () {
@@ -186,6 +187,25 @@ NAMESPACE('chlk.services', function () {
                 windowEnvelope: windowEnvelope_,
                 studentFilterId_: studentFilterId_,
                 orderBy: orderBy.valueOf(),
+                studentIds: studentIds_
+            });
+        },
+
+        [[ArrayOf(chlk.models.id.GradingPeriodId), Array, chlk.models.reports.SectionOrder, chlk.models.reports.GradeType, chlk.models.reports.StudentOrder,
+            chlk.models.reports.IdToPrint, Boolean, Boolean, Boolean, String]],
+
+        String, function submitGradeVerificationReport(gradingPeriodIds, studentAverageIds, classOrder, gradeType, studentOrder,
+                numberToDisplay, includeCommentsAndLegends_, includeSignature_, includeWithdrawn_, studentIds_){
+            return this.getUrl('Reporting/GradeVerificationReport.json', {
+                gradingPeriodIds : this.arrayToCsv(gradingPeriodIds),
+                studentAverageIds: this.arrayToCsv(studentAverageIds),
+                classOrder: classOrder.valueOf(),
+                gradeType: gradeType.valueOf(),
+                studentOrder: studentOrder.valueOf(),
+                numberToDisplay: numberToDisplay.valueOf(),
+                includeCommentsAndLegends: includeCommentsAndLegends_,
+                includeSignature: includeSignature_,
+                includeWithdrawn: includeWithdrawn_,
                 studentIds: studentIds_
             });
         },
