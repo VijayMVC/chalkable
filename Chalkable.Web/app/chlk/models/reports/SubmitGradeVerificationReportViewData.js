@@ -24,13 +24,13 @@ NAMESPACE('chlk.models.reports', function () {
         ID_TO_PRINT: 2
     });
 
-    /** @class chlk.models.reports.IdToPrint*/
-    ENUM('IdToPrint',{
-        ALT_STUDENT_ID: 0,
-        SOCIAL_SECURITY_N: 1,
-        STATE_ID_NUMBER: 2,
-        STUDENT_NUMBER: 3
-    });
+    ///** @class chlk.models.reports.IdToPrint*/
+    //ENUM('IdToPrint',{
+    //    ALT_STUDENT_ID: 0,
+    //    SOCIAL_SECURITY_N: 1,
+    //    STATE_ID_NUMBER: 2,
+    //    STUDENT_NUMBER: 3
+    //});
 
     /** @class chlk.models.reports.SubmitGradeVerificationReportViewData*/
     CLASS('SubmitGradeVerificationReportViewData', EXTENDS(chlk.models.reports.BaseSubmitReportViewData), [
@@ -38,7 +38,7 @@ NAMESPACE('chlk.models.reports', function () {
         chlk.models.reports.SectionOrder, 'classOrder',
         chlk.models.reports.GradeType, 'gradeType',
         chlk.models.reports.StudentOrder, 'studentOrder',
-        chlk.models.reports.IdToPrint, 'numberToDisplay',
+        //chlk.models.reports.IdToPrint, 'numberToDisplay',
 
         Boolean, 'includeCommentsAndLegends',
         Boolean, 'includeSignature',

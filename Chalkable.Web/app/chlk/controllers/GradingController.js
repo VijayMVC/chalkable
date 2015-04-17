@@ -723,12 +723,14 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.reports.SubmitGradeVerificationReportViewData]],
             function submitGradeVerificationReportAction(reportViewData){
                 var src = this.reportingService.submitGradeVerificationReport(
+                    reportViewData.getClassId(),
+                    reportViewData.getFormat(),
                     this.getIdsList(reportViewData.getGradingPeriodIds(), chlk.models.id.GradingPeriodId),
                     (reportViewData.getStudentAverageIds() || '').split(','),
                     reportViewData.getClassOrder(),
                     reportViewData.getGradeType(),
                     reportViewData.getStudentOrder(),
-                    reportViewData.getNumberToDisplay(),
+                    reportViewData.getIdToPrint(),
                     reportViewData.isIncludeCommentsAndLegends(),
                     reportViewData.isIncludeSignature(),
                     reportViewData.isIncludeWithdrawn(),

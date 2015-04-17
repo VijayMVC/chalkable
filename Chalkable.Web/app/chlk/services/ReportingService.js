@@ -191,18 +191,21 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
-        [[ArrayOf(chlk.models.id.GradingPeriodId), Array, chlk.models.reports.SectionOrder, chlk.models.reports.GradeType, chlk.models.reports.StudentOrder,
-            chlk.models.reports.IdToPrint, Boolean, Boolean, Boolean, String]],
+        [[chlk.models.id.ClassId, chlk.models.reports.ReportFormatEnum, ArrayOf(chlk.models.id.GradingPeriodId),
+            Array, chlk.models.reports.SectionOrder, chlk.models.reports.GradeType, chlk.models.reports.StudentOrder,
+            chlk.models.reports.StudentIdentifierEnum, Boolean, Boolean, Boolean, String]],
 
-        String, function submitGradeVerificationReport(gradingPeriodIds, studentAverageIds, classOrder, gradeType, studentOrder,
+        String, function submitGradeVerificationReport(classId, format, gradingPeriodIds, studentAverageIds, classOrder, gradeType, studentOrder,
                 numberToDisplay, includeCommentsAndLegends_, includeSignature_, includeWithdrawn_, studentIds_){
             return this.getUrl('Reporting/GradeVerificationReport.json', {
+                classId : classId.valueOf(),
+                format: format.valueOf(),
                 gradingPeriodIds : this.arrayToCsv(gradingPeriodIds),
                 studentAverageIds: this.arrayToCsv(studentAverageIds),
                 classOrder: classOrder.valueOf(),
                 gradeType: gradeType.valueOf(),
                 studentOrder: studentOrder.valueOf(),
-                numberToDisplay: numberToDisplay.valueOf(),
+                idToPrint: numberToDisplay.valueOf(),
                 includeCommentsAndLegends: includeCommentsAndLegends_,
                 includeSignature: includeSignature_,
                 includeWithdrawn: includeWithdrawn_,

@@ -22,5 +22,19 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public bool IncludeWithdrawn { get; set; }
         public int NumberToDisplay { get; set; }
 
+        public override int GradingPeriodId
+        {
+            get
+            {
+                var gpId = base.GradingPeriodId;
+                if (GradingPeriodIds != null && GradingPeriodIds.Count > 0)
+                {
+                    return gpId > 0 && GradingPeriodIds.Contains(gpId) ? gpId : GradingPeriodIds[0];    
+                }
+                return gpId;
+            }
+            set { base.GradingPeriodId = value; }
+        }
+
     }
 }
