@@ -13,6 +13,7 @@ REQUIRE('chlk.activities.classes.ClassProfileAttendanceListPage');
 REQUIRE('chlk.activities.attendance.SeatingChartPage');
 REQUIRE('chlk.activities.attendance.EditSeatingGridDialog');
 REQUIRE('chlk.activities.reports.SeatingChartAttendanceReportDialog');
+REQUIRE('chlk.activities.reports.AttendanceProfileReportDialog');
 
 REQUIRE('chlk.models.attendance.AttendanceList');
 REQUIRE('chlk.models.attendance.AttendanceStudentBox');
@@ -47,11 +48,26 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
-        function seatingChartAttendanceReportAction(gradingPeriodId, classId, startDate, endDate){
+        function seatingChartReportAction(gradingPeriodId, classId, startDate, endDate){
             if (this.isDemoSchool())
                 return this.ShowMsgBox('Not available for demo', 'Error'), null;
             var res = new ria.async.DeferredData(new chlk.models.reports.BaseReportViewData(classId, gradingPeriodId, startDate, endDate));
             return this.ShadeView(chlk.activities.reports.SeatingChartAttendanceReportDialog, res);
+        },
+
+        [chlk.controllers.SidebarButton('attendance')],
+        [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+        function attendanceProfileReportAction(gradingPeriodId, classId, startDate, endDate){
+            if (this.isDemoSchool())
+                return this.ShowMsgBox('Not available for demo', 'Error'), null;
+
+            var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
+            var markingPeriods = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIODS, []);
+            var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
+
+            var res = new ria.async.DeferredData(new chlk.models.reports.AttendanceProfileReportViewData(markingPeriods, reasons, students
+                , classId, gradingPeriodId, startDate, endDate));
+            return this.ShadeView(chlk.activities.reports.AttendanceProfileReportDialog, res);
         },
 
         [chlk.controllers.SidebarButton('statistic')],
@@ -66,6 +82,33 @@ NAMESPACE('chlk.controllers', function (){
             );
             this.BackgroundCloseView(chlk.activities.reports.SeatingChartAttendanceReportDialog);
             this.BackgroundCloseView(chlk.activities.reports.SeatingChartReportDialog);
+            this.getContext().getDefaultView().submitToIFrame(src);
+            return null;
+        },
+
+        [chlk.controllers.SidebarButton('statistic')],
+        [[chlk.models.reports.SubmitAttendanceProfileReportViewData]],
+        function submitAttendanceProfileReportAction(reportViewData){
+
+            var src = this.reportingService.submitAttendanceProfileReport(
+                reportViewData.getClassId(),
+                reportViewData.getGradingPeriodId(),
+                reportViewData.getFormat(),
+                reportViewData.getStartDate(),
+                reportViewData.getEndDate(),
+                reportViewData.getGroupBy(),
+                reportViewData.getIdToPrint(),
+                this.getIdsList(reportViewData.getAbsenceReasons(), chlk.models.id.AttendanceReasonId),
+                this.getIdsList(reportViewData.getTerms(), chlk.models.id.MarkingPeriodId),
+                reportViewData.isDisplayPeriodAbsences(),
+                reportViewData.isDisplayReasonTotals(),
+                reportViewData.isIncludeCheck(),
+                reportViewData.isIncludeUnlisted(),
+                reportViewData.isDisplayNote(),
+                reportViewData.isDisplayWithdrawnStudents(),
+                reportViewData.getStudentIds()
+            );
+            this.BackgroundCloseView(chlk.activities.reports.AttendanceProfileReportDialog);
             this.getContext().getDefaultView().submitToIFrame(src);
             return null;
         },
@@ -331,6 +374,8 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(items){
                     if(!isProfile_){
+                        var students = items.map(function(item){return item.getStudent()});
+                        this.getContext().getSession().set(ChlkSessionConstants.STUDENTS_FOR_REPORT, students);
                         var res = this.attendanceService
                             .getNotTakenAttendanceClasses(date_)
                             .attach(this.validateResponse_())
@@ -343,8 +388,10 @@ NAMESPACE('chlk.controllers', function (){
                     date_ = date_ || new chlk.models.common.ChlkSchoolYearDate();
                     this.getContext().getSession().set(ChlkSessionConstants.ATTENDANCE_DATA, items);
                     var topModel = new chlk.models.classes.ClassesForTopBar(null);
+                    var gp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD, null);
                     var model = new chlk.models.attendance.ClassList(
                         topModel,
+                        gp,
                         classId,
                         items,
                         date_,

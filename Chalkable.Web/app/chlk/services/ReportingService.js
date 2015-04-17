@@ -6,6 +6,7 @@ REQUIRE('chlk.models.reports.SubmitMissingAssignmentsReportViewData');
 REQUIRE('chlk.models.reports.SubmitBirthdayReportViewData');
 REQUIRE('chlk.models.reports.SubmitGradeVerificationReportViewData');
 REQUIRE('chlk.models.reports.SubmitLessonPlanReportViewData');
+REQUIRE('chlk.models.reports.SubmitAttendanceProfileReportViewData');
 
 
 NAMESPACE('chlk.services', function () {
@@ -212,6 +213,32 @@ NAMESPACE('chlk.services', function () {
                 includeSignature: includeSignature_,
                 includeWithdrawn: includeWithdrawn_,
                 studentIds: studentIds_
+            });
+        },
+
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.ReportFormatEnum, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
+            chlk.models.reports.GroupBy, chlk.models.reports.StudentIdentifierEnum, ArrayOf(chlk.models.id.AttendanceReasonId),
+            ArrayOf(chlk.models.id.MarkingPeriodId), Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, String]],
+
+        String, function submitAttendanceProfileReport(classId, gradingPeriodId, format, startDate, endDate, groupBy, idToPrint, absenceReasons, terms, displayPeriodAbsences_,
+                                                       displayReasonTotals_, includeCheck_, includeUnlisted_, displayNote_, displayWithdrawnStudents_, studentIds_){
+            return this.getUrl('Reporting/AttendanceProfileReport.json', {
+                classId : classId.valueOf(),
+                gradingPeriodId: gradingPeriodId.valueOf(),
+                format: format.valueOf(),
+                startDate: startDate.toStandardFormat(),
+                endDate: endDate.toStandardFormat(),
+                studentIds: studentIds_,
+                groupBy: groupBy.valueOf(),
+                idToPrint: idToPrint.valueOf(),
+                absenceReasons : this.arrayToCsv(absenceReasons),
+                terms: this.arrayToCsv(terms),
+                displayPeriodAbsences: displayPeriodAbsences_,
+                displayReasonTotals: displayReasonTotals_,
+                includeCheck: includeCheck_,
+                includeUnlisted: includeUnlisted_,
+                displayNote: displayNote_,
+                displayWithdrawnStudents: displayWithdrawnStudents_
             });
         },
 

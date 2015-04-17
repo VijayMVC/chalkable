@@ -2,6 +2,7 @@ REQUIRE('chlk.models.attendance.ClassAttendance');
 REQUIRE('chlk.models.common.PageWithClasses');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.attendance.AttendanceReason');
+REQUIRE('chlk.models.schoolYear.GradingPeriod');
 
 NAMESPACE('chlk.models.attendance', function () {
     "use strict";
@@ -13,16 +14,20 @@ NAMESPACE('chlk.models.attendance', function () {
 
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
+            chlk.models.schoolYear.GradingPeriod, 'gradingPeriod',
+
             chlk.models.common.ChlkDate, 'date',
 
             Boolean, 'byLastName',
 
             Boolean, 'ableChangeReasons',
 
-            [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId, ArrayOf(chlk.models.attendance.ClassAttendance), chlk.models.common.ChlkDate,
-                Boolean,  ArrayOf(chlk.models.attendance.AttendanceReason), Boolean, Boolean, Boolean]],
-            function $(topData_, selectedId_, items_, date_, byLastName_, reasons_, canRePost_, canSetAttendance_, canChangeReasons_){
+            [[chlk.models.classes.ClassesForTopBar, chlk.models.schoolYear.GradingPeriod, chlk.models.id.ClassId, ArrayOf(chlk.models.attendance.ClassAttendance),
+                chlk.models.common.ChlkDate, Boolean,  ArrayOf(chlk.models.attendance.AttendanceReason), Boolean, Boolean, Boolean]],
+            function $(topData_, gradingPeriod_, selectedId_, items_, date_, byLastName_, reasons_, canRePost_, canSetAttendance_, canChangeReasons_){
                 BASE(topData_, selectedId_);
+                if(gradingPeriod_)
+                    this.setGradingPeriod(gradingPeriod_);
                 if(items_)
                     this.setItems(items_);
                 if(date_)

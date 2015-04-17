@@ -15,9 +15,9 @@ NAMESPACE('chlk.templates.reports', function () {
                 var args = [this.getGradingPeriodId(), this.getClassId(), this.getStartDate().toStandardFormat(), this.getEndDate().toStandardFormat()];
                 var classNames = ['report-button'];
                 return [
-                    new chlk.models.common.ActionLinkModel(controllerName, 'attendanceProfile', 'Attendance Profile', 'attendanceProfile' == pressedAction, args, classNames),
-                    new chlk.models.common.ActionLinkModel(controllerName, 'attendanceRegister', 'Attendance Register', 'attendanceRegister' == pressedAction, args, classNames),
-                    new chlk.models.common.ActionLinkModel(controllerName, 'seatingChart', 'Seating Chart', 'seatingChart' == pressedAction, args, classNames)
+                    new chlk.models.common.ActionLinkModel(controllerName, 'attendanceProfileReport', 'Attendance Profile', 'attendanceProfileReport' == pressedAction, args, classNames),
+                    new chlk.models.common.ActionLinkModel(controllerName, 'attendanceRegisterReport', 'Attendance Register', 'attendanceRegisterReport' == pressedAction, args, classNames),
+                    new chlk.models.common.ActionLinkModel(controllerName, 'seatingChartReport', 'Seating Chart', 'seatingChartReport' == pressedAction, args, classNames)
                 ];
             }
         ])

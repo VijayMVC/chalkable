@@ -12,7 +12,9 @@
     +Hidden('classId', selectedId && selectedId.valueOf())
     items = self.getItems()
     .table
-        .l: +SummaryInfo(self.getPresentStudents().length, items.length)
+        .l
+            +SummaryInfo(self.getPresentStudents().length, items.length)
+            +ActionLink('attendance', 'attendanceProfileReport', self.getGradingPeriod().getId(), self.getTopData().getSelectedItemId(), self.getGradingPeriod().getStartDate().toStandardFormat(), self.getGradingPeriod().getEndDate().toStandardFormat()).report-link
         if self.getItems().length > 0 && self.canPost()
             .l &nbsp;
         .title
