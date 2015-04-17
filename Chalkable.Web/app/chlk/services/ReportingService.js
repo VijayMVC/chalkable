@@ -5,6 +5,7 @@ REQUIRE('chlk.models.reports.SubmitComprehensiveProgressViewData');
 REQUIRE('chlk.models.reports.SubmitMissingAssignmentsReportViewData');
 REQUIRE('chlk.models.reports.SubmitBirthdayReportViewData');
 REQUIRE('chlk.models.reports.SubmitGradeVerificationReportViewData');
+REQUIRE('chlk.models.reports.SubmitLessonPlanReportViewData');
 
 
 NAMESPACE('chlk.services', function () {
@@ -79,11 +80,12 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
-        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, Boolean]],
-        String, function submitSeatingChartReport(classId, gradingPeriodId, displayStudentPhoto_) {
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.ReportFormatEnum, Boolean]],
+        String, function submitSeatingChartReport(classId, gradingPeriodId, format, displayStudentPhoto_) {
             return this.getUrl('Reporting/SeatingChartReport.json', {
                 classId: classId.valueOf(),
                 gradingPeriodId: gradingPeriodId.valueOf(),
+                format: format.valueOf(),
                 displayStudentPhoto: displayStudentPhoto_
             });
         },
@@ -210,6 +212,28 @@ NAMESPACE('chlk.services', function () {
                 includeSignature: includeSignature_,
                 includeWithdrawn: includeWithdrawn_,
                 studentIds: studentIds_
+            });
+        },
+
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.ReportFormatEnum, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
+            chlk.models.reports.SortActivityOptions, chlk.models.reports.SortSectionOptions, chlk.models.reports.PublicPrivateTextOptions, Number, Boolean, Boolean, Array, Array]],
+
+        String, function submitLessonPlanReport(classId, gradingPeriodId, format, startDate, endDate, sortActivities, sortSections, publicPrivateText_, maxCount_,
+                                                includeActivities_, includeStandards_, activityAttribute_, activityCategory_){
+            return this.getUrl('Reporting/LessonPlanReport.json', {
+                classId: classId.valueOf(),
+                gradingPeriodId: gradingPeriodId.valueOf(),
+                format: format.valueOf(),
+                startDate: startDate.toStandardFormat(),
+                endDate: endDate.toStandardFormat(),
+                sortActivities: sortActivities.valueOf(),
+                sortSections: sortSections.valueOf(),
+                publicPrivateText: publicPrivateText_ && publicPrivateText_.valueOf(),
+                maxCount: maxCount_,
+                includeActivities: includeActivities_,
+                includeStandards: includeStandards_,
+                XMLActivityAttribute : this.arrayToCsv(activityAttribute_),
+                XMLActivityCategory: this.arrayToCsv(activityCategory_)
             });
         },
 

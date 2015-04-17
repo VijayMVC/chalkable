@@ -29,6 +29,7 @@ REQUIRE('chlk.activities.reports.MissingAssignmentsReportDialog');
 REQUIRE('chlk.activities.reports.BirthdayReportDialog');
 REQUIRE('chlk.activities.reports.SeatingChartReportDialog');
 REQUIRE('chlk.activities.reports.GradeVerificationReportDialog');
+REQUIRE('chlk.activities.reports.LessonPlanReportDialog');
 
 REQUIRE('chlk.models.grading.GradingSummaryGridSubmitViewData');
 
@@ -603,7 +604,12 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function lessonPlanReportAction(gradingPeriodId, classId, startDate, endDate){
-
+                if (this.isDemoSchool())
+                    return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                var classInfo = this.classService.getClassAnnouncementInfo(classId);
+                var activityCategories = classInfo.getTypesByClass();
+                var res = new ria.async.DeferredData(new chlk.models.reports.LessonPlanReportViewData(activityCategories, [], classId, gradingPeriodId, startDate, endDate));
+                return this.ShadeView(chlk.activities.reports.LessonPlanReportDialog, res);
             },
 
             [chlk.controllers.SidebarButton('statistic')],
@@ -737,6 +743,29 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.getStudentIds()
                 );
                 this.BackgroundCloseView(chlk.activities.reports.GradeVerificationReportDialog);
+                this.getContext().getDefaultView().submitToIFrame(src);
+                return null;
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.reports.SubmitLessonPlanReportViewData]],
+            function submitLessonPlanReportAction(reportViewData){
+                var src = this.reportingService.submitLessonPlanReport(
+                    reportViewData.getClassId(),
+                    reportViewData.getGradingPeriodId(),
+                    reportViewData.getFormat(),
+                    reportViewData.getStartDate(),
+                    reportViewData.getEndDate(),
+                    reportViewData.getSortActivities(),
+                    reportViewData.getSortSections(),
+                    reportViewData.getPublicPrivateText(),
+                    reportViewData.getMaxCount(),
+                    reportViewData.isIncludeActivities(),
+                    reportViewData.isIncludeStandards(),
+                    (reportViewData.getActivityAttribute() || '').split(','),
+                    (reportViewData.getActivityCategory() || '').split(',')
+                );
+                this.BackgroundCloseView(chlk.activities.reports.LessonPlanReportDialog);
                 this.getContext().getDefaultView().submitToIFrame(src);
                 return null;
             },

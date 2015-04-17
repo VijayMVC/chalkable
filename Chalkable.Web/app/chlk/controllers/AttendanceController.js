@@ -61,6 +61,7 @@ NAMESPACE('chlk.controllers', function (){
             var src = this.reportingService.submitSeatingChartReport(
                 reportViewData.getClassId(),
                 reportViewData.getGradingPeriodId(),
+                reportViewData.getFormat(),
                 reportViewData.isDisplayStudentPhoto()
             );
             this.BackgroundCloseView(chlk.activities.reports.SeatingChartAttendanceReportDialog);
