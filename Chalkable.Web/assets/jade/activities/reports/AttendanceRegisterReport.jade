@@ -1,0 +1,61 @@
+mixin ReportCell(value)
+    .cell
+        div(data-tooltip=value, data-tooltip-type="overflow").text=value
+
+.dialog.report-window
+   +ActionForm('attendance', 'submitAttendanceRegisterReport').attendance-register-report-form.no-working.report-form
+      .x-window-header
+         .close.close-btn.dark
+         h1=Msg.Create_Report
+
+      .x-window-body
+         .action-bar: .items: +ActionLinkList(self.buildReportLinksData('attendanceProfileReport'))
+         +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+         +Hidden('classId', self.getClassId().valueOf())
+         +Hidden('absenceReasons', '')#absence-reasons
+         .report-content
+            TABLE.report-table
+               TR
+                  TD.item-2
+                     .grid-container
+                        .grid
+                            .row.header
+                                .cell
+                                    +Checkbox('allchecks', true).all-checkboxes
+                                .cell= Msg.Code
+                                .cell= Msg.Reason
+                            each reason in self.getAttendanceReasons()
+                                .row
+                                    div(data-id=reason.getId().valueOf()).cell
+                                        +Checkbox('announcementId', true)
+                                    +ReportCell(reason.getCode())
+                                    +ReportCell(reason.getName())
+                  TD.item-2
+                     h3=Msg.Reporting_period
+                     +Select('monthId')
+                        +Option(0, 'January', true)
+                        +Option(1, 'February', false)
+                        +Option(2, 'March', false)
+                        +Option(3, 'April', false)
+                        +Option(4, 'May', false)
+                        +Option(5, 'June', false)
+                        +Option(6, 'July', false)
+                        +Option(7, 'August', false)
+                        +Option(8, 'September', false)
+                        +Option(9, 'October', false)
+                        +Option(10, 'November', false)
+                        +Option(11, 'December', false)
+                     h3=Msg.Report_type
+                     +Select('reportType')
+                        +Option(chlk.models.reports.ReportType.BOTH.valueOf(), Msg.Both, true)
+                        +Option(chlk.models.reports.ReportType.DETAIL.valueOf(), Msg.Detail, false)
+                        +Option(chlk.models.reports.ReportType.SUMMARY.valueOf(), Msg.Summary, false)
+                     h3
+                     +LabeledCheckbox(Msg.Show_local_reason_code, 'showLocalReasonCode', false)
+                     h3
+                     +LabeledCheckbox(Msg.Include_tardies, 'includeTardies', false)
+
+      .x-window-footer.report-bottom
+         +ReportFormatSelect()
+         BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
