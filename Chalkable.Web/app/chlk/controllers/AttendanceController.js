@@ -14,6 +14,7 @@ REQUIRE('chlk.activities.attendance.SeatingChartPage');
 REQUIRE('chlk.activities.attendance.EditSeatingGridDialog');
 REQUIRE('chlk.activities.reports.SeatingChartAttendanceReportDialog');
 REQUIRE('chlk.activities.reports.AttendanceProfileReportDialog');
+REQUIRE('chlk.activities.reports.AttendanceRegisterReportDialog');
 
 REQUIRE('chlk.models.attendance.AttendanceList');
 REQUIRE('chlk.models.attendance.AttendanceStudentBox');
@@ -70,6 +71,19 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.reports.AttendanceProfileReportDialog, res);
         },
 
+        [chlk.controllers.SidebarButton('attendance')],
+        [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+        function attendanceRegisterReportAction(gradingPeriodId, classId, startDate, endDate){
+            if (this.isDemoSchool())
+                return this.ShowMsgBox('Not available for demo', 'Error'), null;
+
+            var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
+
+            var res = new ria.async.DeferredData(new chlk.models.reports.AttendanceRegisterReportViewData(reasons
+                , classId, gradingPeriodId, startDate, endDate));
+            return this.ShadeView(chlk.activities.reports.AttendanceRegisterReportDialog, res);
+        },
+
         [chlk.controllers.SidebarButton('statistic')],
         [[chlk.models.reports.SubmitSeatingChartReportViewData]],
         function submitSeatingChartReportAction(reportViewData){
@@ -90,6 +104,10 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.reports.SubmitAttendanceProfileReportViewData]],
         function submitAttendanceProfileReportAction(reportViewData){
 
+            if (!reportViewData.getAbsenceReasons()){
+                return this.ShowAlertBox("Absence Reasons is a required field. Please make sure that you enter data in all required fields", "Error"), null;
+            }
+
             var src = this.reportingService.submitAttendanceProfileReport(
                 reportViewData.getClassId(),
                 reportViewData.getGradingPeriodId(),
@@ -109,6 +127,29 @@ NAMESPACE('chlk.controllers', function (){
                 reportViewData.getStudentIds()
             );
             this.BackgroundCloseView(chlk.activities.reports.AttendanceProfileReportDialog);
+            this.getContext().getDefaultView().submitToIFrame(src);
+            return null;
+        },
+
+        [chlk.controllers.SidebarButton('statistic')],
+        [[chlk.models.reports.SubmitAttendanceRegisterReportViewData]],
+        function submitAttendanceRegisterReportAction(reportViewData){
+
+            if (!reportViewData.getAbsenceReasons()){
+                return this.ShowAlertBox("Absence Reasons is a required field. Please make sure that you enter data in all required fields", "Error"), null;
+            }
+
+            var src = this.reportingService.submitAttendanceRegisterReport(
+                reportViewData.getClassId(),
+                reportViewData.getGradingPeriodId(),
+                reportViewData.getFormat(),
+                reportViewData.getReportType(),
+                this.getIdsList(reportViewData.getAbsenceReasons(), chlk.models.id.AttendanceReasonId),
+                reportViewData.getMonthId(),
+                reportViewData.isShowLocalReasonCode(),
+                reportViewData.isIncludeTardies()
+            );
+            this.BackgroundCloseView(chlk.activities.reports.AttendanceRegisterReportDialog);
             this.getContext().getDefaultView().submitToIFrame(src);
             return null;
         },

@@ -7,6 +7,7 @@ REQUIRE('chlk.models.reports.SubmitBirthdayReportViewData');
 REQUIRE('chlk.models.reports.SubmitGradeVerificationReportViewData');
 REQUIRE('chlk.models.reports.SubmitLessonPlanReportViewData');
 REQUIRE('chlk.models.reports.SubmitAttendanceProfileReportViewData');
+REQUIRE('chlk.models.reports.SubmitAttendanceRegisterReportViewData');
 
 
 NAMESPACE('chlk.services', function () {
@@ -239,6 +240,22 @@ NAMESPACE('chlk.services', function () {
                 includeUnlisted: includeUnlisted_,
                 displayNote: displayNote_,
                 displayWithdrawnStudents: displayWithdrawnStudents_
+            });
+        },
+
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.ReportFormatEnum, chlk.models.reports.ReportType,
+            ArrayOf(chlk.models.id.AttendanceReasonId), Number, Boolean, Boolean]],
+
+        String, function submitAttendanceRegisterReport(classId, gradingPeriodId, format, reportType, absenceReasons, monthId, showLocalReasonCode_, includeTardies_){
+            return this.getUrl('Reporting/AttendanceRegisterReport.json', {
+                classId : classId.valueOf(),
+                gradingPeriodId: gradingPeriodId.valueOf(),
+                format: format.valueOf(),
+                reportType: reportType.valueOf(),
+                AbsenceReasonIds : this.arrayToCsv(absenceReasons),
+                monthId: monthId,
+                showLocalReasonCode: showLocalReasonCode_,
+                includeTardies: includeTardies_
             });
         },
 
