@@ -35,6 +35,11 @@ namespace Chalkable.StiImport.Services
     {
         private void ProcessDelete()
         {
+            Log.LogInfo("delete gradedItems");
+            DeleteGradedItems();
+            Log.LogInfo("delete attendanceMonths");
+            DeleteAttendanceMonthes();
+
             Log.LogInfo("delete schoolsOptions");
             DeleteSchoolsOptions();
             Log.LogInfo("delete grading comments");
@@ -127,6 +132,24 @@ namespace Chalkable.StiImport.Services
             DeleteAddresses();
             Log.LogInfo("delete schools");
             DeleteSchools();
+        }
+
+        private void DeleteAttendanceMonthes()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.AttendanceMonth>().Deleted == null)
+                return;
+            var attendanceMonthes = context.GetSyncResult<StiConnector.SyncModel.AttendanceMonth>().Deleted
+                .Select(x => new Data.School.Model.AttendanceMonth { Id = x.AttendanceMonthID }).ToList();
+            ServiceLocatorSchool.AttendanceMonthService.Delete(attendanceMonthes);
+        }
+
+        private void DeleteGradedItems()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.GradedItem>().Deleted == null)
+                return;
+            var gradedItems = context.GetSyncResult<StiConnector.SyncModel.GradedItem>().Deleted
+                .Select(x => new Data.School.Model.GradedItem { Id = x.GradedItemID }).ToList();
+            ServiceLocatorSchool.GradedItemService.Delete(gradedItems);
         }
 
         private void DeleteGradingComments()

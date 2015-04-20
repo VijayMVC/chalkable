@@ -109,7 +109,10 @@ namespace Chalkable.StiImport.Services
             UpdateGradingComments();
             Log.LogInfo("update schoolsOptions");
             UpdateSchoolsOptions();
+
         }
+
+       
 
         private void UpdateSchools()
         {
@@ -769,6 +772,46 @@ namespace Chalkable.StiImport.Services
                 SchoolRef = x.SchoolID
             }).ToList();
             ServiceLocatorSchool.GradingCommentService.Edit(gc);
+        }
+
+        private void UpdateAttendanceMonthes()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.AttendanceMonth>().Updated == null)
+                return;
+            var attendanceMonthes = context.GetSyncResult<StiConnector.SyncModel.AttendanceMonth>().Updated;
+            var res = attendanceMonthes.Select(x => new Data.School.Model.AttendanceMonth
+            {
+                Id = x.AttendanceMonthID,
+                SchoolYearRef = x.AcadSessionID,
+                Name = x.Name,
+                StartDate = x.StartDate,
+                EndDate = x.EndDate,
+                EndTime = x.EndTime,
+                IsLockedAttendance = x.IsLockedAttendance,
+                IsLockedDiscipline = x.IsLockedDiscipline
+            }).ToList();
+            ServiceLocatorSchool.AttendanceMonthService.Edit(res);
+        }
+
+        private void UpdateGradedItems()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.GradedItem>().Updated == null)
+                return;
+            var gradedItems = context.GetSyncResult<StiConnector.SyncModel.GradedItem>().Updated;
+            var res = gradedItems.Select(x => new Data.School.Model.GradedItem
+            {
+                Id = x.GradedItemID,
+                GradingPeriodRef = x.GradingPeriodID,
+                AllowExemption = x.AllowExemption,
+                AlphaOnly = x.AlphaOnly,
+                AppearsOnReportCard = x.AppearsOnReportCard,
+                AveragingRule = x.AveragingRule,
+                Description = x.Description,
+                Name = x.Name,
+                DetGradeCredit = x.DetGradCredit,
+                DetGradePoints = x.DetGradePoints
+            }).ToList();
+            ServiceLocatorSchool.GradedItemService.Edit(res);
         }
     }
 }

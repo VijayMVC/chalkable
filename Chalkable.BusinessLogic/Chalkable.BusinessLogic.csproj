@@ -163,6 +163,7 @@
     <Compile Include="Services\DemoSchool\DemoAttendanceService.cs" />
     <Compile Include="Services\DemoSchool\DemoAttendanceReasonService.cs" />
     <Compile Include="Services\DemoSchool\DemoDisciplineService.cs" />
+    <Compile Include="Services\DemoSchool\DemoGradedItemService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradeLevelService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingPeriodService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingScaleService.cs" />
@@ -193,6 +194,7 @@
     <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoIntStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoGuidStorage.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoGradedItemStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoPracticeGradeStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoUserStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAutoGradeStorage.cs" />
@@ -332,6 +334,7 @@
     <Compile Include="Services\School\DisciplineService.cs" />
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
+    <Compile Include="Services\School\GradedItemService.cs" />
     <Compile Include="Services\School\GradingCommentService.cs" />
     <Compile Include="Services\School\GradingScaleService.cs" />
     <Compile Include="Services\School\InfractionService.cs" />

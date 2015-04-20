@@ -127,6 +127,10 @@ namespace Chalkable.StiImport.Services
             InsertGradingComments();
             Log.LogInfo("insert schoolsOptions");
             InsertSchoolsOptions();
+            Log.LogInfo("insert gradedItems");
+            InsertGradedItems();
+            Log.LogInfo("insert attendanceMonths");
+            InsertAttendanceMonthes();
         }
 
         private void InsertPersonsEmails()
@@ -844,5 +848,43 @@ namespace Chalkable.StiImport.Services
                 }).ToList();
             ServiceLocatorSchool.GradingCommentService.Add(gc);
         }
+
+
+        private void InsertAttendanceMonthes()
+        {
+            var attendanceMonthes = context.GetSyncResult<StiConnector.SyncModel.AttendanceMonth>().All;
+            var res = attendanceMonthes.Select(x => new Data.School.Model.AttendanceMonth
+            {
+                Id = x.AttendanceMonthID,
+                SchoolYearRef = x.AcadSessionID,
+                Name = x.Name,
+                StartDate = x.StartDate,
+                EndDate = x.EndDate,
+                EndTime = x.EndTime,
+                IsLockedAttendance = x.IsLockedAttendance,
+                IsLockedDiscipline = x.IsLockedDiscipline
+            }).ToList();
+            ServiceLocatorSchool.AttendanceMonthService.Add(res);
+        }
+
+        private void InsertGradedItems()
+        {
+            var gradedItems = context.GetSyncResult<StiConnector.SyncModel.GradedItem>().All;
+            var res = gradedItems.Select(x => new Data.School.Model.GradedItem
+            {
+                Id = x.GradedItemID,
+                GradingPeriodRef = x.GradingPeriodID,
+                AllowExemption = x.AllowExemption,
+                AlphaOnly = x.AlphaOnly,
+                AppearsOnReportCard = x.AppearsOnReportCard,
+                AveragingRule = x.AveragingRule,
+                Description = x.Description,
+                Name = x.Name,
+                DetGradeCredit = x.DetGradCredit,
+                DetGradePoints = x.DetGradePoints
+            }).ToList();
+            ServiceLocatorSchool.GradedItemService.Add(res);
+        }
+
     }
 }

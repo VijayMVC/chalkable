@@ -171,6 +171,7 @@
     <Compile Include="SyncModel\AlternateScore.cs" />
     <Compile Include="SyncModel\AttendanceCalendar.cs" />
     <Compile Include="SyncModel\AttendanceCalendarDay.cs" />
+    <Compile Include="SyncModel\AttendanceMonth.cs" />
     <Compile Include="SyncModel\AttendanceSetting.cs" />
     <Compile Include="SyncModel\BellSchedule.cs" />
     <Compile Include="SyncModel\CalendarDay.cs" />
@@ -184,6 +185,7 @@
     <Compile Include="SyncModel\Enrollment.cs" />
     <Compile Include="SyncModel\Ethnicity.cs" />
     <Compile Include="SyncModel\Gender.cs" />
+    <Compile Include="SyncModel\GradedItem.cs" />
     <Compile Include="SyncModel\GradeLevel.cs" />
     <Compile Include="SyncModel\GradingComment.cs" />
     <Compile Include="SyncModel\GradingPeriod.cs" />
