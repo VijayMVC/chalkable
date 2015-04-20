@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -45,7 +45,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
  
         public static IList<ClassAttendanceStatViewData> Create(IList<ClassDailyAttendanceSummary> classDailyAttendances, AttendanceTypeEnum type)
         {
-            return classDailyAttendances.Select(x => new ClassAttendanceStatViewData()
+            return classDailyAttendances.Select(x => new ClassAttendanceStatViewData
                 {
                     Class = ShortClassViewData.Create(x.Class),
                     DayStats = ShortAttendanceStatViewData.Create(x.DailyAttendances, type)
@@ -104,7 +104,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
             TotalAttendanceCount = statByClassView.Sum(x => x.AttendanceCount);
         }
 
-        public static IList<ShortStudentAttendanceViewData> Create(IList<StudentAttendanceSummary> studentAttendanceSummaries, IList<string> alerts, AttendanceTypeEnum type)
+        public static IList<ShortStudentAttendanceViewData> Create(IList<ShortStudentAttendanceSummary> studentAttendanceSummaries, IList<string> alerts, AttendanceTypeEnum type)
         {
             var res = studentAttendanceSummaries.Select(x => new ShortStudentAttendanceViewData(x.Student, alerts
                 , AttendanceStatByClassViewData.Create(x.ClassAttendanceSummaries, type))).ToList();
@@ -134,9 +134,9 @@ namespace Chalkable.Web.Models.AttendancesViewData
         {
             var attCount = 0;
             if (type == AttendanceTypeEnum.Absent)
-                attCount = (int) studentClassAttendance.Absences;
+                attCount = (int) (studentClassAttendance.Absences ?? 0);
             if (type == AttendanceTypeEnum.Tardies)
-                attCount = studentClassAttendance.Tardies;
+                attCount = studentClassAttendance.Tardies ?? 0;
             return Create(studentClassAttendance.StudentId, studentClassAttendance.Class, attCount);
         }
 

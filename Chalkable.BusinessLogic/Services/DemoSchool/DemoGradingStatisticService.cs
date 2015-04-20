@@ -273,8 +273,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             var attendances = chlkGradeBook.Students.Select(x => new StudentTotalSectionAttendance()
             {
-                Absences= attendance.Students.Where(y => y.StudentId == x.Id).Select(y => y.Absences).FirstOrDefault(),
-                Tardies = attendance.Students.Where(y => y.StudentId == x.Id).Select(y => y.Tardies).FirstOrDefault(),
+                Absences= attendance.Students.Where(y => y.StudentId == x.Id).Select(y => y.Absences ?? 0).FirstOrDefault(),
+                Tardies = attendance.Students.Where(y => y.StudentId == x.Id).Select(y => y.Tardies ?? 0).FirstOrDefault(),
                 StudentId = x.Id,
                 SectionId = classId,
                 DaysPresent = attendance.Students.Count(y => y.StudentId == x.Id && y.Absences == 0)

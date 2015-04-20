@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
-using Chalkable.Data.School.Model;
+using Chalkable.BusinessLogic.Model.Attendances;
+using Chalkable.Web.Models.AttendancesViewData;
 
 namespace Chalkable.Web.Models.CalendarsViewData
 {
-    public class BaseAttendanceMonthCalendarViewData<TAttendanceData> : MonthCalendarViewData
+    public class BaseAttendanceMonthCalendarViewData<TShortAttendanceData> : MonthCalendarViewData
     {
-        public IList<TAttendanceData> Attendances { get; set; }
+        public IList<TShortAttendanceData> Attendances { get; set; }
         protected BaseAttendanceMonthCalendarViewData(DateTime date, bool isCurrentMonth)
             : base(date, isCurrentMonth)
         {
@@ -36,49 +36,44 @@ namespace Chalkable.Web.Models.CalendarsViewData
         public int PeriodOrder { get; set; }
         public int PeriodId { get; set; }
 
-        public static IList<AttendanceForStudentCalendarItemViewData> Create(ClassAttendanceDetails attendance)
-        {
-            return attendance.StudentAttendances.Select(x => Create(x, attendance.Class, 0)).ToList();
-        }
-        public static AttendanceForStudentCalendarItemViewData Create(StudentClassAttendance attendances, Class cClass, int count)
+        public static AttendanceForStudentCalendarItemViewData Create(StudentPeriodAttendance attendance, int count)
         {
             return new AttendanceForStudentCalendarItemViewData
             {
-                PersonId = attendances.Student.Id,
-                AttendanceType = attendances.Level,
-                ClassName = cClass.Name,
-                //PeriodId = attendances.PeriodRef,//TODO: no data in INOW?
-                //PeriodOrder = attendances.ClassPeriod.Period.Order,
-                TeacherId = cClass.PrimaryTeacherRef,
+                PersonId = attendance.Student.Id,
+                AttendanceType = attendance.Level,
+                ClassName = attendance.Class.Name,
+                PeriodId = attendance.Period.Id,
+                PeriodOrder = attendance.Period.Order,
+                TeacherId = attendance.Class.PrimaryTeacherRef,
                 Count = count
             };
         }
     }
-    
+   
     public class AttendanceForStudentCalendarViewData : BaseAttendanceMonthCalendarViewData<AttendanceForStudentCalendarItemViewData>
     {
         public int MoreCount { get; set; }
         public const int NON_PRESENT_COUNT = 5;
         public const int ATTENDANCE_COUNT = 4;
-        public bool IsExcused { get; set; }
-        public bool IsAbsent { get; set; }
         public bool ShowGroupedData { get; set; }
-        public int PersonId { get; set; }
-
+        public bool IsAbsent { get; set; }
+        public bool IsExcused { get; set; }
+        public StudentDateAttendanceViewData StudentAttendance { get; set; }
+        
         protected AttendanceForStudentCalendarViewData(DateTime date, bool isCurrentMonth)
             : base(date, isCurrentMonth)
         {
         }
 
-
-        public static AttendanceForStudentCalendarViewData Create(DateTime date, bool isCurrentMonth, int personId
-            , ClassAttendanceDetails classAttendance)
+        
+        public static AttendanceForStudentCalendarViewData Create(DateTime date, bool isCurrentMonth, int personId, IList<StudentAttendanceDetails> studentAttendances)
         {
-            var attendances = classAttendance.StudentAttendances;
-            attendances = attendances.Where(x => x.Date == date && x.Level != null).ToList();
 
             var moreCount = 0;
             IList<AttendanceForStudentCalendarItemViewData> itemAttendances;
+            var studentAttendance = studentAttendances.FirstOrDefault(att => att.Date == date);
+            var attendances = studentAttendance != null ? studentAttendance.StudentPeriodAttendances : new List<StudentPeriodAttendance>();
             var count = attendances.Count(x => x.IsAbsentOrLate);
             var showGroupedData = count > NON_PRESENT_COUNT;
             if (showGroupedData)
@@ -87,9 +82,10 @@ namespace Chalkable.Web.Models.CalendarsViewData
                     .GroupBy(x => x.Level)
                     .ToDictionary(x => x.Key, x => x.ToList())
                     .OrderByDescending(x => x.Value.Count)
-                    .Select(x => AttendanceForStudentCalendarItemViewData.Create(x.Value.First(), classAttendance.Class, x.Value.Count)).ToList();
+                    .Select(x => AttendanceForStudentCalendarItemViewData.Create(x.Value.First(), x.Value.Count))
+                    .ToList();
             }
-            else itemAttendances = AttendanceForStudentCalendarItemViewData.Create(classAttendance);
+            else itemAttendances = attendances.Select(x=>AttendanceForStudentCalendarItemViewData.Create(x,1)).ToList();
 
             if (itemAttendances.Count > ATTENDANCE_COUNT)
             {
@@ -100,17 +96,15 @@ namespace Chalkable.Web.Models.CalendarsViewData
                 itemAttendances = itemAttendances.Take(ATTENDANCE_COUNT).ToList();
             }
             var res = new AttendanceForStudentCalendarViewData(date, isCurrentMonth)
-            {
-                IsAbsent = attendances.Count > 0 && attendances.All(x => x.IsExcused),
-                IsExcused = attendances.Count > 0 && attendances.All(x => x.IsExcused),
-                Attendances = itemAttendances,
-                MoreCount = moreCount,
-                ShowGroupedData = showGroupedData,
-                PersonId = personId
-            };
+                {
+                    IsAbsent = studentAttendance != null && studentAttendance.IsAbsent,
+                    IsExcused = studentAttendance != null && studentAttendance.IsExcused,
+                    Attendances = itemAttendances,
+                    MoreCount = moreCount,
+                    ShowGroupedData = showGroupedData,
+                };
             return res;
         }
-
 
     }
 

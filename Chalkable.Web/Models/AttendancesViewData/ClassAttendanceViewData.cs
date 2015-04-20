@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -93,20 +93,22 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public string ReadOnlyReason { get; set; }
         public bool AbsentPreviousDay { get; set; }
 
+        protected StudentClassAttendanceViewData(StudentClassAttendance studentAttendance)
+        {
+            StudentId = studentAttendance.StudentId;
+            ClassId = studentAttendance.ClassId;
+            AbsentPreviousDay = studentAttendance.AbsentPreviousDay;
+            AttendanceReasonId = studentAttendance.AttendanceReasonId;
+            Student = StudentViewData.Create(studentAttendance.Student);
+            ReadOnly = studentAttendance.ReadOnly;
+            ReadOnlyReason = studentAttendance.ReadOnlyReason;
+            Date = studentAttendance.Date;
+            Level = studentAttendance.Level;
+        }
+
         public static StudentClassAttendanceViewData Create(StudentClassAttendance studentAttendance, AttendanceReason attendanceReason)
         {
-            var res = new StudentClassAttendanceViewData
-                {
-                    StudentId = studentAttendance.StudentId,
-                    ClassId = studentAttendance.ClassId,
-                    AbsentPreviousDay = studentAttendance.AbsentPreviousDay,
-                    AttendanceReasonId = studentAttendance.AttendanceReasonId,
-                    Student = StudentViewData.Create(studentAttendance.Student),
-                    ReadOnly = studentAttendance.ReadOnly,
-                    ReadOnlyReason = studentAttendance.ReadOnlyReason,
-                    Date = studentAttendance.Date,
-                    Level = studentAttendance.Level
-                };
+            var res = new StudentClassAttendanceViewData(studentAttendance);
             if (attendanceReason != null)
                 res.AttendanceReason = AttendanceReasonViewData.Create(attendanceReason);
             return res;
@@ -134,7 +136,6 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public int ClassId { get; set; }
         public string ClassName { get; set; }
         public bool IsPosted { get; set; }
-        
         public bool ReadOnly { get; set; }
         public string ReadOnlyReason { get; set; }
         public bool IsDailyAttendancePeriod { get; set; }

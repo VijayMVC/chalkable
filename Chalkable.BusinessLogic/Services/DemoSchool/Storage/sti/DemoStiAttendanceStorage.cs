@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Connectors.Model.Attendances;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 {
@@ -68,7 +69,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
             var sectionAttendanceSummary = new SectionAttendanceSummary();
             sectionAttendanceSummary.SectionId = classId;
 
-            var days = new List<DailySectionAttendanceSummary>();
+            var days = new List<DailySectionAbsenceSummary>();
 
             var absenceCount = new Dictionary<int, int>();
             var tardiesCount = new Dictionary<int, int>();
@@ -86,7 +87,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
 
             for (var start = startDate; start < endDate; start = start.AddDays(1))
             {
-                var day = new DailySectionAttendanceSummary();
+                var day = new DailySectionAbsenceSummary();
                 var attendance = Storage.StiAttendanceStorage.GetSectionAttendance(start, classId);
 
                 day.Absences = attendance.StudentAttendance.Count(x => x.ClassroomLevel == "Absent");
@@ -102,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti
                 }
             }
             sectionAttendanceSummary.Days = days;
-            sectionAttendanceSummary.Students = studentIds.Select(x => new StudentSectionAttendanceSummary
+            sectionAttendanceSummary.Students = studentIds.Select(x => new StudentSectionAbsenceSummary
             {
                 SectionId = classId,
                 StudentId = x,
