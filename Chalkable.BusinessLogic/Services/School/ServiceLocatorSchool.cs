@@ -53,6 +53,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IUserSchoolService UserSchoolService { get; }
         IBellScheduleService BellScheduleService { get; }
         IPracticeGradeService PracticeGradeService { get; }
+        IAttendanceMonthService AttendanceMonthService { get; }
+        IGradedItemService GradedItemService { get; }
         IDbService SchoolDbService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -105,6 +107,8 @@ namespace Chalkable.BusinessLogic.Services.School
         private IStaffService staffService;
         private IBellScheduleService bellScheduleService;
         private IPracticeGradeService practiceGradeService;
+        private IAttendanceMonthService attendanceMonthService;
+        private IGradedItemService gradedItemService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -157,6 +161,8 @@ namespace Chalkable.BusinessLogic.Services.School
             userSchoolService = new UserSchoolService(this);
             bellScheduleService = new BellScheduleService(this);
             practiceGradeService = new PracticeGradeService(this);
+            attendanceMonthService = new AttendanceMonthService(this);
+            gradedItemService = new GradedItemService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -206,6 +212,8 @@ namespace Chalkable.BusinessLogic.Services.School
         public IUserSchoolService UserSchoolService { get { return userSchoolService; } }
         public IBellScheduleService BellScheduleService { get { return bellScheduleService; } }
         public IPracticeGradeService PracticeGradeService { get { return practiceGradeService; } }
+        public IAttendanceMonthService AttendanceMonthService { get { return attendanceMonthService; } }
+        public IGradedItemService GradedItemService { get { return gradedItemService; } }
         public IDbService SchoolDbService
         {
             get { return schoolDbService; }
@@ -214,7 +222,5 @@ namespace Chalkable.BusinessLogic.Services.School
 
 
 
-
-        
     }
 }

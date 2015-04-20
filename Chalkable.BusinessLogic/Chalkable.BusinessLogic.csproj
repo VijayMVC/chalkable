@@ -153,6 +153,7 @@
     <Compile Include="Services\DbService.cs" />
     <Compile Include="Services\DemoSchool\DemoApplicationSchoolService.cs" />
     <Compile Include="Services\DemoSchool\DemoAppMarketService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAttendanceMonthService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassroomOptionService.cs" />
     <Compile Include="Services\DemoSchool\DemoDayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassService.cs" />
@@ -188,6 +189,7 @@
     <Compile Include="Services\DemoSchool\DemoStorageBlobService.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoUserService.cs" />
     <Compile Include="Services\DemoSchool\Models\AnnouncementComplete.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAttendanceMonthStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoIntStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoGuidStorage.cs" />
@@ -295,6 +297,7 @@
     <Compile Include="Services\School\AnnouncementAttachmentService.cs" />
     <Compile Include="Services\School\AnnouncementQnAService.cs" />
     <Compile Include="Services\School\AnnouncementService.cs" />
+    <Compile Include="Services\School\AttendanceMonthService.cs" />
     <Compile Include="Services\School\BellScheduleService.cs" />
     <Compile Include="Services\School\ClassAnnouncementTypeService.cs" />
     <Compile Include="Services\School\ApplicationSchoolService.cs" />

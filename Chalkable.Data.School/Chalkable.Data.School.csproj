@@ -105,6 +105,7 @@
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionDepartment.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionGradeLevel.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionRole.cs" />
+    <Compile Include="Model\AttendanceMonth.cs" />
     <Compile Include="Model\AttendanceReason.cs" />
     <Compile Include="Model\AutoGrade.cs" />
     <Compile Include="Model\BellSchedule.cs" />

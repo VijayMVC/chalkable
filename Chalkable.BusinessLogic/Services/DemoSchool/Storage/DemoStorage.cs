@@ -103,6 +103,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoAutoGradeStorage AutoGradeStorage { get; private set; }
         public DemoUserStorage UserStorage { get; private set; }
         public DemoPracticeGradeStorage PracticeGradeStorage { get; private set; }
+        public DemoAttendanceMonthStorage AttendanceMonthStorage { get; private set; }
+        public DemoGradedItemStorage GradedItemStorage { get; private set; }
+
 
         public UserContext Context { get; private set; }
         public IServiceLocatorSchool SchoolLocator { get; set; }
@@ -207,7 +210,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AutoGradeStorage = new DemoAutoGradeStorage(this);
             UserStorage = new DemoUserStorage(this);
             PracticeGradeStorage = new DemoPracticeGradeStorage(this);
-
+            AttendanceMonthStorage = new DemoAttendanceMonthStorage(this);
+            GradedItemStorage = new DemoGradedItemStorage(this);
             CreateAnnouncementStorage(Context);
             Setup();
         }
@@ -258,6 +262,91 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
 
         }
 
+        private void AddAttendanceMonthes()
+        {
+            var sy = SchoolYearStorage.GetCurrentSchoolYear();
+            if (sy != null)
+            {
+                var attendanceMonthes = new List<AttendanceMonth>
+                {
+                    new AttendanceMonth
+                        {
+                            Id = 1,
+                            SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
+                            Name = "August",
+                            StartDate = sy.StartDate ?? DateTime.Now.Date,
+                            EndDate = sy.EndDate ?? DateTime.Now.Date,
+                            EndTime = sy.EndDate ?? DateTime.Now,
+                            IsLockedAttendance = false,
+                            IsLockedDiscipline = false
+                        }
+                };
+                AttendanceMonthStorage.Add(attendanceMonthes);
+            }
+
+        }
+
+        private void AddGradedItems()
+        {
+            var items = new List<GradedItem>
+                {
+                    new GradedItem
+                        {
+                            Id = 1,
+                            GradingPeriodRef = DemoSchoolConstants.GradingPeriodQ1,
+                            Name = "GradedItemQ1",
+                            Description = "GradedItemQ1",
+                            AllowExemption = true,
+                            AlphaOnly = false,
+                            AppearsOnReportCard = true,
+                            AveragingRule = '1',
+                            DetGradeCredit = true,
+                            DetGradePoints = true
+                        },
+                    new GradedItem
+                        {
+                            Id = 2,
+                            GradingPeriodRef = DemoSchoolConstants.GradingPeriodQ2,
+                            Name = "GradedItemQ2",
+                            Description = "GradedItemQ2",
+                            AllowExemption = true,
+                            AlphaOnly = false,
+                            AppearsOnReportCard = true,
+                            AveragingRule = '2',
+                            DetGradeCredit = true,
+                            DetGradePoints = true
+                        },
+                    new GradedItem
+                        {
+                            Id = 3,
+                            GradingPeriodRef = DemoSchoolConstants.GradingPeriodQ3,
+                            Name = "GradedItemQ3",
+                            Description = "GradedItemQ3",
+                            AllowExemption = true,
+                            AlphaOnly = false,
+                            AppearsOnReportCard = true,
+                            AveragingRule = '3',
+                            DetGradeCredit = true,
+                            DetGradePoints = true
+                        },
+                    new GradedItem
+                        {
+                            Id = 4,
+                            GradingPeriodRef = DemoSchoolConstants.GradingPeriodQ4,
+                            Name = "GradedItemQ4",
+                            Description = "GradedItemQ4",
+                            AllowExemption = true,
+                            AlphaOnly = false,
+                            AppearsOnReportCard = true,
+                            AveragingRule = '4',
+                            DetGradeCredit = true,
+                            DetGradePoints = true
+                        },
+
+
+                };
+            GradedItemStorage.Add(items);
+        }
 
         private void AddClasses()
         {
@@ -528,6 +617,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AddAttendanceLevelReasons();
             AddAttendanceReasons();
             AddInfractions();
+            AddAttendanceMonthes();
+            AddGradedItems();
         }
 
         private void AddMarkingPeriods()
