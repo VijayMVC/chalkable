@@ -302,6 +302,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     SectionId = inputModel.ClassId,
                     IdToPrint = inputModel.IdToPrint,
                     IncludeUnlisted = inputModel.IncludeUnlisted,
+                    IncludeCheckInCheckOut = inputModel.IncludeCheckInCheckOut,
                     Terms = inputModel.MarkingPeriodIds != null ? inputModel.MarkingPeriodIds.ToArray() : null
                 };
             if (inputModel.StudentIds == null)
