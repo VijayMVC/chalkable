@@ -78,9 +78,11 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShowMsgBox('Not available for demo', 'Error'), null;
 
             var reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []);
+            var res = this.attendanceService.getAttendanceMonths()
+                .then(function(items){
+                    return new chlk.models.reports.AttendanceRegisterReportViewData(reasons, items, classId, gradingPeriodId, startDate, endDate)
+                });
 
-            var res = new ria.async.DeferredData(new chlk.models.reports.AttendanceRegisterReportViewData(reasons
-                , classId, gradingPeriodId, startDate, endDate));
             return this.ShadeView(chlk.activities.reports.AttendanceRegisterReportDialog, res);
         },
 

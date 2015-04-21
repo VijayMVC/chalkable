@@ -24,6 +24,10 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Attendance/AttendanceSummary.json', chlk.models.attendance.AttendanceSummary, {});
             },
 
+            ria.async.Future, function getAttendanceMonths() {
+                return this.get('Attendance/AttendanceMonthesList.json', ArrayOf(chlk.models.common.NameId), {});
+            },
+
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],
             ria.async.Future, function getClassList(classId, date_, byLastName_) {
                 return this.get('Attendance/ClassList.json', ArrayOf(chlk.models.attendance.ClassAttendance), {

@@ -590,7 +590,7 @@ NAMESPACE('chlk.controllers', function (){
             function gradeVerificationReportAction(gradingPeriodId, classId, startDate, endDate){
                 var res = ria.async.wait([
                         this.gradingPeriodService.getList(),
-                        this.gradingService.getStudentAverages()
+                        this.gradingService.getStudentAverages(gradingPeriodId)
                     ])
                     .then(function(data){
                         var periods = data[0];
@@ -608,7 +608,10 @@ NAMESPACE('chlk.controllers', function (){
                     return this.ShowMsgBox('Not available for demo', 'Error'), null;
                 var classInfo = this.classService.getClassAnnouncementInfo(classId);
                 var activityCategories = classInfo.getTypesByClass();
-                var res = new ria.async.DeferredData(new chlk.models.reports.LessonPlanReportViewData(activityCategories, [], classId, gradingPeriodId, startDate, endDate));
+                var res = this.announcementService.getAnnouncementAttributes(true)
+                    .then(function(items){
+                        return new chlk.models.reports.LessonPlanReportViewData(activityCategories, items, classId, gradingPeriodId, startDate, endDate);
+                    });
                 return this.ShadeView(chlk.activities.reports.LessonPlanReportDialog, res);
             },
 

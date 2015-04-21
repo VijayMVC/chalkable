@@ -44,9 +44,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.SchoolYearId]],
-            ria.async.Future, function getStudentAverages(schoolYearId_) {
-                return ria.async.DeferredData([]);
+            [[chlk.models.id.GradingPeriodId]],
+            ria.async.Future, function getStudentAverages(gradingPeriodId) {
+                return this.get('Grading/GradedItemsList', ArrayOf(chlk.models.grading.GradedItemViewData), {
+                    gradingPeriodId: gradingPeriodId.valueOf()
+                });
             },
 
             [[chlk.models.id.ClassId, chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId, Number, String, Boolean, Object, String]],
