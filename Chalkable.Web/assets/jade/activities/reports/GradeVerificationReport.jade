@@ -5,7 +5,7 @@
          h1=Msg.Create_Report
 
       .x-window-body
-         .action-bar: .items: +ActionLinkList(self.buildReportLinksData('comprehensiveProgressReport'))
+         .action-bar: .items: +ActionLinkList(self.buildReportLinksData('gradeVerificationReport'))
          +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
          +Hidden('classId', self.getClassId().valueOf())
          +Hidden('studentIds', '')#student-ids-value
@@ -21,9 +21,9 @@
                            +Option(gp.getId().valueOf(), gp.getName(), true)
                   TD.item-3
                      h3=Msg.Graded_Item(true)
-                     +Select('gradingPeriod')(multiple)#grading-period-select
+                     +Select('studentAverage')(multiple)#student-averages-select
                         each sa in self.getStudentAverages()
-                           +Option(sa.getAverageId().valueOf(), sa.getAverageName(), true)
+                           +Option(sa.getId().valueOf(), sa.getName(), true)
                   TD.item-3
                TR
                   TD.item-3

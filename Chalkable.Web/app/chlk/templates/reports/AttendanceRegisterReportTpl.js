@@ -9,6 +9,9 @@ NAMESPACE('chlk.templates.reports', function () {
         [ria.templates.ModelBind(chlk.models.reports.AttendanceRegisterReportViewData)],
         'AttendanceRegisterReportTpl', EXTENDS(chlk.templates.reports.BaseAttendanceReportTpl), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.attendance.AttendanceReason), 'attendanceReasons'
+            ArrayOf(chlk.models.attendance.AttendanceReason), 'attendanceReasons',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.common.NameId), 'attendanceMonths'
         ])
 });

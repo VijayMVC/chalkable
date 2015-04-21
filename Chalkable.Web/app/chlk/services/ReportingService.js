@@ -236,7 +236,7 @@ NAMESPACE('chlk.services', function () {
                 terms: this.arrayToCsv(terms),
                 displayPeriodAbsences: displayPeriodAbsences_,
                 displayReasonTotals: displayReasonTotals_,
-                includeCheck: includeCheck_,
+                includeCheckInCheckOut: includeCheck_,
                 includeUnlisted: includeUnlisted_,
                 displayNote: displayNote_,
                 displayWithdrawnStudents: displayWithdrawnStudents_
