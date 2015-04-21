@@ -151,6 +151,7 @@
     <Compile Include="Security\UserSecurity.cs" />
     <Compile Include="Services\CrocodocService.cs" />
     <Compile Include="Services\DbService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAnnouncementAttributeService.cs" />
     <Compile Include="Services\DemoSchool\DemoApplicationSchoolService.cs" />
     <Compile Include="Services\DemoSchool\DemoAppMarketService.cs" />
     <Compile Include="Services\DemoSchool\DemoAttendanceMonthService.cs" />
@@ -190,6 +191,7 @@
     <Compile Include="Services\DemoSchool\DemoStorageBlobService.cs" />
     <Compile Include="Services\DemoSchool\Master\DemoUserService.cs" />
     <Compile Include="Services\DemoSchool\Models\AnnouncementComplete.cs" />
+    <Compile Include="Services\DemoSchool\Storage\DemoAnnouncementAttributeStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\DemoAttendanceMonthStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoStorage.cs" />
     <Compile Include="Services\DemoSchool\Storage\BaseDemoIntStorage.cs" />
@@ -297,6 +299,7 @@
     <Compile Include="Services\School\AlphaGradeService.cs" />
     <Compile Include="Services\School\AlternateScoreService.cs" />
     <Compile Include="Services\School\AnnouncementAttachmentService.cs" />
+    <Compile Include="Services\School\AnnouncementAttributeService.cs" />
     <Compile Include="Services\School\AnnouncementQnAService.cs" />
     <Compile Include="Services\School\AnnouncementService.cs" />
     <Compile Include="Services\School\AttendanceMonthService.cs" />

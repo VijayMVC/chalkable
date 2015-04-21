@@ -105,7 +105,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoPracticeGradeStorage PracticeGradeStorage { get; private set; }
         public DemoAttendanceMonthStorage AttendanceMonthStorage { get; private set; }
         public DemoGradedItemStorage GradedItemStorage { get; private set; }
-
+        public DemoAnnouncementAttributeStorage AnnouncementAttributeStorage { get; private set; }
 
         public UserContext Context { get; private set; }
         public IServiceLocatorSchool SchoolLocator { get; set; }
@@ -212,6 +212,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             PracticeGradeStorage = new DemoPracticeGradeStorage(this);
             AttendanceMonthStorage = new DemoAttendanceMonthStorage(this);
             GradedItemStorage = new DemoGradedItemStorage(this);
+            AnnouncementAttachmentStorage = new DemoAnnouncementAttachmentStorage(this);
             CreateAnnouncementStorage(Context);
             Setup();
         }
@@ -260,6 +261,42 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             });
 
 
+        }
+
+        private void AddAnnouncementAttributes()
+        {
+            var announcementAttributes = new List<AnnouncementAttribute>
+                {
+                    new AnnouncementAttribute
+                        {
+                            Code = "OBJ",
+                            Name = "Objectives",
+                            Description = "Objectives",
+                            StateCode = "",
+                        },
+                    new AnnouncementAttribute
+                        {
+                            Code = "RES",
+                            Name = "Resources",
+                            Description = "Resources",
+                            StateCode = "",
+                        },
+                    new AnnouncementAttribute
+                        {
+                            Code = "CMT",
+                            Name = "Comments",
+                            Description = "Comments",
+                            StateCode = "",
+                        },
+                    new AnnouncementAttribute
+                        {
+                            Code = "CHALK",
+                            Name = "Attachments",
+                            Description = "Attachments",
+                            StateCode = "CHALK",
+                        },
+                };
+            AnnouncementAttributeStorage.Add(announcementAttributes);
         }
 
         private void AddAttendanceMonthes()
@@ -619,6 +656,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AddInfractions();
             AddAttendanceMonthes();
             AddGradedItems();
+            AddAnnouncementAttributes();
         }
 
         private void AddMarkingPeriods()

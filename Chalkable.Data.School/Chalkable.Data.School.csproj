@@ -96,6 +96,7 @@
     <Compile Include="Model\Announcement.cs" />
     <Compile Include="Model\AnnouncementApplication.cs" />
     <Compile Include="Model\AnnouncementAttachment.cs" />
+    <Compile Include="Model\AnnouncementAttribute.cs" />
     <Compile Include="Model\AnnouncementQnA.cs" />
     <Compile Include="Model\AnnouncementRecipient.cs" />
     <Compile Include="Model\AnnouncementStandard.cs" />

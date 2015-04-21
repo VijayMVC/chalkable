@@ -165,6 +165,7 @@
     <Compile Include="SyncModel\AbsenceLevelReason.cs" />
     <Compile Include="SyncModel\AbsenceReason.cs" />
     <Compile Include="SyncModel\AcadSession.cs" />
+    <Compile Include="SyncModel\ActivityAttribute.cs" />
     <Compile Include="SyncModel\ActivityCategory.cs" />
     <Compile Include="SyncModel\Address.cs" />
     <Compile Include="SyncModel\AlphaGrade.cs" />
