@@ -102,7 +102,9 @@ namespace Chalkable.Web.Logic
             count = count ?? 3;
             var studentCountPerApp = schooLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
             var installedAppsIds = studentCountPerApp.Select(x => x.Key).Distinct().ToList();
-            var applications = masterLocator.ApplicationService.GetSuggestedApplications(abIds, installedAppsIds, start.Value, count.Value);
+            var applications = masterLocator.ApplicationService.GetSuggestedApplications(abIds, installedAppsIds, 0, int.MaxValue);
+            applications = applications.Where(a => a.CanAttach).ToList()
+                                        .Skip(start.Value).Take(count.Value).ToList();
             var classSize = schooLocator.ClassService.GetClassPersons(null, classId, true, markingPeriodId).Count;
             foreach (var application in applications)
             {
