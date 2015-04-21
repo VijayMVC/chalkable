@@ -1,0 +1,27 @@
+
++AddStandardDialog(self.getAnnouncementTypeName() + ' STANDARDS', 'announcement', 'addStandards')
+    +Hidden('announcementid', self.getAnnouncementId())
+    +Hidden('standardid', null)
+    +Hidden('standardIds', self.getStandardIds().join(',')).standard-ids
+    +SearchBox(chlk.services.StandardService, "searchStandardsByClassId", chlk.templates.standard.StandardAutoCompleteTpl, self.getClassId(), true)(
+        name="filter", placeholder="Find a Standard"
+    ).search-standard
+    .standards-list-container
+        standardSubjects = self.getItemStandards() || []
+        table
+            tr.standards-row
+                td.name-td
+                    .standards-names.column
+                        each subject in standardSubjects
+                            +ActionLink('announcement', 'showStandardsByCategory', self.getClassId(), subject.getId(), subject.getDescription())(
+                            data-subject-id = subject.getId()
+                            ).standard-name.column-cell
+                                .name(data-tooltip=subject.getName(), data-tooltip-type="overflow")=subject.getName()
+                                .right-triangle
+                td
+                    .standards-description
+
++ActionForm('announcement', 'getStandardTree')#get-standardt-tree-form.x-hidden
+    +Hidden('announcementid', self.getAnnouncementId())
+    +Hidden('standardid', null)
+    +Hidden('classid', self.getClassId())
