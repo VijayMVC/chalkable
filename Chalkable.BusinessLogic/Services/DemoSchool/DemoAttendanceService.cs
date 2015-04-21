@@ -146,7 +146,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
             res.ClassesDaysStat = ClassDailyAttendanceSummary.Create(dailySectionAttendances, classes);
             studentAtts = studentAtts.Where(x => classesIds.Contains(x.SectionId)).ToList();
-            res.Students = ShortStudentAttendanceSummary.Create(studentAtts, students, classes);
+            res.Students = StudentAttendanceSummary.Create(studentAtts, students, classes);
             return res;
         }
 
@@ -167,12 +167,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return new List<ClassDetails>();
         }
 
-        public IList<StudentAttendanceDetails> GetStudentAttendanceDetailsByDateRange(int studentId, DateTime startDate, DateTime endDate)
+        public IList<StudentDateAttendance> GetStudentAttendancesByDateRange(int studentId, DateTime startDate, DateTime endDate)
         {
             throw new NotImplementedException();
         }
 
-        public FullStudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? markingPeriodId)
+        public StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? markingPeriodId)
         {
             throw new NotImplementedException();
         }

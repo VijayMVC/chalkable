@@ -104,7 +104,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
             TotalAttendanceCount = statByClassView.Sum(x => x.AttendanceCount);
         }
 
-        public static IList<ShortStudentAttendanceViewData> Create(IList<ShortStudentAttendanceSummary> studentAttendanceSummaries, IList<string> alerts, AttendanceTypeEnum type)
+        public static IList<ShortStudentAttendanceViewData> Create(IList<StudentAttendanceSummary> studentAttendanceSummaries, IList<string> alerts, AttendanceTypeEnum type)
         {
             var res = studentAttendanceSummaries.Select(x => new ShortStudentAttendanceViewData(x.Student, alerts
                 , AttendanceStatByClassViewData.Create(x.ClassAttendanceSummaries, type))).ToList();

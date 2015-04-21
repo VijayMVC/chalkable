@@ -67,7 +67,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
         }
 
         
-        public static AttendanceForStudentCalendarViewData Create(DateTime date, bool isCurrentMonth, int personId, IList<StudentAttendanceDetails> studentAttendances)
+        public static AttendanceForStudentCalendarViewData Create(DateTime date, bool isCurrentMonth, int personId, IList<StudentDateAttendance> studentAttendances)
         {
 
             var moreCount = 0;

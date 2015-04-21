@@ -15,7 +15,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
                 throw new UnassignedUserException();
             DateTime start, end;
             MonthCalendar(ref date, out start, out end);
-            var studentAttendances = SchoolLocator.AttendanceService.GetStudentAttendanceDetailsByDateRange(studentId, start, end);
+            var studentAttendances = SchoolLocator.AttendanceService.GetStudentAttendancesByDateRange(studentId, start, end);
             var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => AttendanceForStudentCalendarViewData.Create(time, b, Context.PersonId.Value, studentAttendances));
             return Json(res, 6);
         }

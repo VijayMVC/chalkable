@@ -15,7 +15,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public int? ArrivalTime { get; set; }
         public IList<StudentPeriodAttendanceViewData> PeriodAttendances { get; set; }
 
-        public static StudentDateAttendanceViewData Create(StudentAttendanceDetails attendance)
+        public static StudentDateAttendanceViewData Create(StudentDateAttendance attendance)
         {
             var res = new StudentDateAttendanceViewData
             {

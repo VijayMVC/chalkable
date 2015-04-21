@@ -9,7 +9,7 @@ namespace Chalkable.BusinessLogic.Model.Attendances
     public class AttendanceSummary
     {
         public IList<ClassDailyAttendanceSummary> ClassesDaysStat { get; set; }
-        public IList<ShortStudentAttendanceSummary> Students { get; set; }
+        public IList<StudentAttendanceSummary> Students { get; set; }
     }
 
     public class DailyAttendanceSummary
@@ -56,20 +56,21 @@ namespace Chalkable.BusinessLogic.Model.Attendances
         }
     }
 
-    public class ShortStudentAttendanceSummary
+    public class StudentAttendanceSummary
     {
         public StudentDetails Student { get; set; }
+        public StudentDailyAttendanceSummary DailyAttendanceSummary { get; set; }
         public IList<StudentClassAttendanceSummary> ClassAttendanceSummaries { get; set; }
-
-        public static IList<ShortStudentAttendanceSummary> Create(IList<StudentSectionAbsenceSummary> studentSectionAttendances, IList<StudentDetails> students, IList<ClassDetails> classes)
+ 
+        public static IList<StudentAttendanceSummary> Create(IList<StudentSectionAbsenceSummary> studentSectionAttendances, IList<StudentDetails> students, IList<ClassDetails> classes)
         {
             var stSectionAttsDic = studentSectionAttendances.GroupBy(x => x.StudentId).ToDictionary(x => x.Key, x => x.ToList());
-            var res = new List<ShortStudentAttendanceSummary>();
+            var res = new List<StudentAttendanceSummary>();
             foreach (var stSectionAtts in stSectionAttsDic)
             {
                 var student = students.FirstOrDefault(x => x.Id == stSectionAtts.Key);
                 if (student == null) continue;
-                res.Add(new ShortStudentAttendanceSummary
+                res.Add(new StudentAttendanceSummary
                 {
                     Student = student,
                     ClassAttendanceSummaries = StudentClassAttendanceSummary.Create(stSectionAtts.Value, classes)
@@ -79,29 +80,26 @@ namespace Chalkable.BusinessLogic.Model.Attendances
         }
     }
 
-
-    public class FullStudentAttendanceSummary : ShortStudentAttendanceSummary
-    {
-        public StudentDailyAttendanceSummary DailyAttendanceSummary { get; set; }
-
-        //public static FullStudentAttendanceSummary Create(StudentAttendanceSummaryDashboard studentAttendanceSummary, StudentDetails student, IList<ClassDetails> classDetailses)
-        //{
-        //    return new FullStudentAttendanceSummary
-        //        {
-        //            Student = student,
-        //            DailyAttendanceSummary = StudentDailyAttendanceSummary.Create(studentAttendanceSummary.DailyAttendance),
-        //            ClassAttendanceSummaries = StudentClassAttendanceSummary.Create(studentAttendanceSummary.PeriodAttendance.ToList(), classDetailses)
-        //        };
-        //}
-        
-    }
-
     public class StudentDailyAttendanceSummary
     {
         public int? Tardies { get; set; }
         public decimal? Absences { get; set; }
         public int StudentId { get; set; }
         public decimal? Presents { get; set; }
+        public decimal TotalAttendanceCount
+        {
+            get
+            {
+                decimal sum = 0;
+                if (Absences.HasValue)
+                    sum += Absences.Value;
+                if (Tardies.HasValue)
+                    sum += Tardies.Value;
+                if (Presents.HasValue)
+                    sum += Presents.Value;
+                return sum;
+            }
+        }
 
         public static StudentDailyAttendanceSummary Create(StudentDailyAbsenceSummary absenceSummary)
         {

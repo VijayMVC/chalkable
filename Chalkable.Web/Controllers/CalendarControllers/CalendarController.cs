@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
-using Chalkable.Web.ActionFilters;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Web.Models.CalendarsViewData;
 
 namespace Chalkable.Web.Controllers.CalendarControllers
@@ -61,5 +59,6 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             } while (start <= end);
             return res;
         }
+
     }
 }

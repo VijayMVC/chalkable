@@ -5,7 +5,7 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Model.Attendances
 {
-    public class StudentAttendanceDetails
+    public class StudentDateAttendance
     {
         public StudentDetails Student { get; set; }
         public DateTime Date { get; set; }

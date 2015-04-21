@@ -115,7 +115,8 @@
     <Compile Include="Model\Attendances\AttendanceSummary.cs" />
     <Compile Include="Model\Attendances\ClassAttendanceSummaryInfo.cs" />
     <Compile Include="Model\Attendances\DailyAbsenceSummaryInfo.cs" />
-    <Compile Include="Model\Attendances\StudentAttendanceDetails.cs" />
+    <Compile Include="Model\Attendances\StudentDateAttendance.cs" />
+    <Compile Include="Model\Attendances\StudentAttendanceDetailsInfo.cs" />
     <Compile Include="Model\Attendances\StudentClassAttendance.cs" />
     <Compile Include="Model\Attendances\StudentClassAttendanceSummary.cs" />
     <Compile Include="Model\Attendances\StudentDailyAttendance.cs" />
