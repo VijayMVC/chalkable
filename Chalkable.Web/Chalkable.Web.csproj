@@ -235,6 +235,7 @@
     <Compile Include="Models\AlternateScoreViewData.cs" />
     <Compile Include="Models\AnnouncementAttachmentViewData.cs" />
     <Compile Include="Models\AnnouncementQnAViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\AnnouncementAttributeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementDetailedViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementGradeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />

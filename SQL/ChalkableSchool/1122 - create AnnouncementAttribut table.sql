@@ -1,4 +1,4 @@
-create table AnnoucnementAttribute
+create table AnnouncementAttribute
 (
 	Id int not null primary key,
 	Code nvarchar(5) not null,
@@ -12,10 +12,10 @@ create table AnnoucnementAttribute
 )
 Go
 
-alter table AnnoucnementAttribute
-add constraint QA_AnnoucnementAttribute_Code unique([Code])
+alter table AnnouncementAttribute
+add constraint QA_AnnouncementAttribute_Code unique([Code])
 go
 
-alter table AnnoucnementAttribute
-add constraint QA_AnnoucnementAttribute_Name unique([Name])
+alter table AnnouncementAttribute
+add constraint QA_AnnouncementAttribute_Name unique([Name])
 go

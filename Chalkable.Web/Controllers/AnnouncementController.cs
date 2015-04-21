@@ -225,6 +225,13 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.AnnouncementService.RemoveStandard(announcementId, standardId);
             return Json(PrepareFullAnnouncementViewData(announcementId));
         }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult AnnouncementAttributesList(bool? activeOnly)
+        {
+            var res = SchoolLocator.AnnouncementAttributeService.GetList(activeOnly);
+            return Json(AnnouncementAttributeViewData.Create(res));
+        }
     }
 
 }
