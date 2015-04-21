@@ -243,16 +243,17 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
-        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.ReportFormatEnum, chlk.models.reports.ReportType,
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.ReportFormatEnum, chlk.models.reports.StudentIdentifierEnum, chlk.models.reports.ReportType,
             ArrayOf(chlk.models.id.AttendanceReasonId), Number, Boolean, Boolean]],
 
-        String, function submitAttendanceRegisterReport(classId, gradingPeriodId, format, reportType, absenceReasons, monthId, showLocalReasonCode_, includeTardies_){
+        String, function submitAttendanceRegisterReport(classId, gradingPeriodId, format, reportType, idToPrint, absenceReasons, monthId, showLocalReasonCode_, includeTardies_){
             return this.getUrl('Reporting/AttendanceRegisterReport.json', {
                 classId : classId.valueOf(),
                 gradingPeriodId: gradingPeriodId.valueOf(),
                 format: format.valueOf(),
                 reportType: reportType.valueOf(),
-                AbsenceReasonIds : this.arrayToCsv(absenceReasons),
+                idToPrint: idToPrint.valueOf(),
+                absenceReasonIds : this.arrayToCsv(absenceReasons),
                 monthId: monthId,
                 showLocalReasonCode: showLocalReasonCode_,
                 includeTardies: includeTardies_

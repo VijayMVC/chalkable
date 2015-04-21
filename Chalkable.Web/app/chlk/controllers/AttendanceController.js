@@ -143,6 +143,7 @@ NAMESPACE('chlk.controllers', function (){
                 reportViewData.getClassId(),
                 reportViewData.getGradingPeriodId(),
                 reportViewData.getFormat(),
+                reportViewData.getIdToPrint(),
                 reportViewData.getReportType(),
                 this.getIdsList(reportViewData.getAbsenceReasons(), chlk.models.id.AttendanceReasonId),
                 reportViewData.getMonthId(),
