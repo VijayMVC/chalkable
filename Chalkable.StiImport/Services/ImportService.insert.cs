@@ -127,8 +127,11 @@ namespace Chalkable.StiImport.Services
             InsertGradingComments();
             Log.LogInfo("insert schoolsOptions");
             InsertSchoolsOptions();
-            Log.LogInfo("insert gradedItems");
-            InsertGradedItems();
+
+            //todo: waiting till gradedItem sync will support on inow
+            //Log.LogInfo("insert gradedItems");
+            //InsertGradedItems();
+
             Log.LogInfo("insert attendanceMonths");
             InsertAttendanceMonthes();
         }

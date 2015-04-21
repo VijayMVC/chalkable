@@ -35,8 +35,10 @@ namespace Chalkable.StiImport.Services
     {
         private void ProcessDelete()
         {
-            Log.LogInfo("delete gradedItems");
-            DeleteGradedItems();
+            //todo: waiting till gradedItem sync will support on inow
+            //Log.LogInfo("delete gradedItems");
+            //DeleteGradedItems();
+
             Log.LogInfo("delete attendanceMonths");
             DeleteAttendanceMonthes();
 

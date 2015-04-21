@@ -110,6 +110,8 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("update schoolsOptions");
             UpdateSchoolsOptions();
 
+            Log.LogInfo("update attendanceMonth");
+            UpdateAttendanceMonthes();
         }
 
        
