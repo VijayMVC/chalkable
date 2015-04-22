@@ -118,6 +118,7 @@
     <Compile Include="Model\ClassroomOption.cs" />
     <Compile Include="Model\ClassStandard.cs" />
     <Compile Include="Model\ClassTeacher.cs" />
+    <Compile Include="Model\ContactRelationship.cs" />
     <Compile Include="Model\Date.cs" />
     <Compile Include="Model\GradedItem.cs" />
     <Compile Include="Model\GradingComment.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Model\StartupData.cs" />
     <Compile Include="Model\Student.cs" />
     <Compile Include="Model\StudentAnnouncement.cs" />
+    <Compile Include="Model\StudentContact.cs" />
     <Compile Include="Model\StudentDailyAttendance.cs" />
     <Compile Include="Model\StudentSchool.cs" />
     <Compile Include="Model\StudentSchoolYear.cs" />

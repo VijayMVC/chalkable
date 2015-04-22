@@ -156,6 +156,7 @@
     <Compile Include="Services\DemoSchool\DemoAppMarketService.cs" />
     <Compile Include="Services\DemoSchool\DemoAttendanceMonthService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassroomOptionService.cs" />
+    <Compile Include="Services\DemoSchool\DemoContactService.cs" />
     <Compile Include="Services\DemoSchool\DemoDayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassPeriodService.cs" />
@@ -366,6 +367,7 @@
     <Compile Include="Services\School\StaffService.cs" />
     <Compile Include="Services\School\StandardService.cs" />
     <Compile Include="Services\School\StudentAnnouncementService.cs" />
+    <Compile Include="Services\School\ContactService.cs" />
     <Compile Include="Services\School\StudentParentService.cs" />
     <Compile Include="Services\School\StudentService.cs" />
     <Compile Include="Services\School\SyncService.cs" />

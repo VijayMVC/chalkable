@@ -54,6 +54,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IAttendanceMonthService attendanceMonthService;
         private IGradedItemService gradedItemService;
         private IAnnouncementAttributeService announcementAttributeService;
+        private IContactService contactService;
 
         public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster, DemoStorage storage)
             : base(serviceLocatorMaster.Context)
@@ -106,6 +107,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             attendanceMonthService = new DemoAttendanceMonthService(this, storage);
             gradedItemService = new DemoGradedItemService(this, storage);
             announcementAttributeService = new DemoAnnouncementAttributeService(this, storage);
+            contactService = new DemoContactService(this, storage);
         }
 
 
@@ -160,6 +162,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IAttendanceMonthService AttendanceMonthService { get { return attendanceMonthService; } }
         public IGradedItemService GradedItemService { get { return gradedItemService; } }
         public IAnnouncementAttributeService AnnouncementAttributeService { get { return announcementAttributeService; } }
+        public IContactService ContactService { get { return contactService; } }
         public IDbService SchoolDbService
         {
             get
@@ -167,12 +170,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new NotImplementedException();
             }
         }
-
-
-
-
-
-
     }
 
 }
