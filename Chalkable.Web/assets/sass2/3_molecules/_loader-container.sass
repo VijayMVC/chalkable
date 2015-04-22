@@ -1,0 +1,81 @@
+.loader-container
+  position: relative
+
+.loader
+  display: none
+  position: absolute
+  top: 0px
+  left: 0
+  bottom: 0
+  right: 0
+  background: image-url("images2/loaders/circular-grey.gif") center center no-repeat transparentize(#fff, .5)
+  z-index: 999
+
+.partial-update
+  position: relative
+
+  &:after, .dialog:after
+    content: ' '
+    position: absolute
+    top: 0
+    left: 0
+    bottom: 0
+    right: 0
+    background: image-url("images2/loaders/circular-grey.gif") center center no-repeat transparentize(#fff, .5)
+    z-index: 999
+
+.partial-update-partial-update-inner
+  &:after
+    content: ' '
+    position: absolute
+    top: 0px
+    left: 0
+    bottom: 0
+    right: 0
+    background: rgba(255,255,255,0.3) url(../content/images2/loaders/circular-grey.gif) center center no-repeat
+    z-index: 2
+
+.activity-model-wait, .loading
+  .loader
+    display: block
+
+    .loader
+      display: none
+
+.activity-model-wait
+  top: 0
+  left: 0
+  z-index: 1000
+  background: image-url("images2/loaders/horizontal.gif") center center no-repeat
+
+  &.under-overlay
+    z-index: 999
+
+  >DIV
+    display: none
+
+.loading-page, .activity-model-wait
+  position: absolute
+  bottom: 0
+  right: 0
+
+.loading-page
+  background: image-url("images2/loaders/horizontal.gif") center center no-repeat
+  top: -27px
+  left: 32px
+  z-index: 999
+
+.dialog-model-wait
+  background: image-url("images2/loaders/horizontal.gif") center center no-repeat
+  position: fixed !important
+  top: 0
+  bottom: 0
+  left: 0
+  right: 0
+  z-index: 1000
+  pointer-events: none
+
+  >DIV
+    display: none
+
+    
