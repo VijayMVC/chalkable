@@ -103,6 +103,8 @@ namespace Chalkable.Web.Models.CalendarsViewData
                     MoreCount = moreCount,
                     ShowGroupedData = showGroupedData,
                 };
+            if (studentAttendance != null)
+                res.StudentAttendance = StudentDateAttendanceViewData.Create(studentAttendance);
             return res;
         }
 
