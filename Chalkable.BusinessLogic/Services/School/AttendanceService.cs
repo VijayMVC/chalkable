@@ -293,7 +293,8 @@ namespace Chalkable.BusinessLogic.Services.School
                         Period = periods.FirstOrDefault(period => period.Id == x.TimeSlotId),
                         Class = classes.FirstOrDefault(c=>c.Id == x.SectionId)
                     }).ToList();
-               res.Add(item);
+                res.Add(item);
+                currentDate = currentDate.AddDays(1);
             }
             return res;
         }

@@ -50,7 +50,7 @@ namespace Chalkable.StiConnector.Connectors
                 nvc.Add("startDate", startDate.Value.ToString(Constants.DATE_FORMAT));
             if (endDate.HasValue)
                 nvc.Add("endDate", endDate.Value.ToString(Constants.DATE_FORMAT));
-            var url = string.Format("{0} chalkable/{1}/students/{2}/dashboard/attendance/detail", BaseUrl, acadSessionId, studentId);
+            var url = string.Format("{0}chalkable/{1}/students/{2}/dashboard/attendance/detail", BaseUrl, acadSessionId, studentId);
             return Call<StudentAttendanceDetailDashboard>(url, nvc);
         }
 

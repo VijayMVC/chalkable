@@ -31,15 +31,20 @@ namespace Chalkable.BusinessLogic.Model.Attendances
     public class StudentClassAttendanceSummary : ShortStudentClassAttendanceSummary
     {       
         public Class Class { get; set; }
-        protected StudentClassAttendanceSummary(StudentSectionAbsenceSummary studentSectionAbsence, Class @class)
+        protected StudentClassAttendanceSummary(StudentSectionAbsenceSummary studentSectionAbsence, Class cClass)
             : base(studentSectionAbsence)
         {
-            Class = @class;
+            Class = cClass;
         }
 
         public static IList<StudentClassAttendanceSummary> Create(IList<StudentSectionAbsenceSummary> studentSectionAttendances, IList<ClassDetails> classes)
         {
-            return studentSectionAttendances.Select(x => new StudentClassAttendanceSummary(x, classes.FirstOrDefault(c=>c.Id == x.SectionId))).ToList();
+            return studentSectionAttendances.Select(x =>
+                {
+                    var cClass = classes.FirstOrDefault(c => c.Id == x.SectionId);
+                    return cClass == null ? null : new StudentClassAttendanceSummary(x, cClass);
+                })
+                .Where(x=> x != null).ToList();
         }
     }
 }
