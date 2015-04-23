@@ -109,12 +109,18 @@ namespace Chalkable.StiImport.Services
             UpdateGradingComments();
             Log.LogInfo("update schoolsOptions");
             UpdateSchoolsOptions();
-
             Log.LogInfo("update attendanceMonth");
             UpdateAttendanceMonthes();
-        }
+            Log.LogInfo("update gradedItems");
+            UpdateGradedItems();
+            Log.LogInfo("update announcementAttribues");
+            UpdateAnnouncementAttribues();
+            Log.LogInfo("update contactRelationship");
+            UpdateContactRelationships();
+            Log.LogInfo("update studentContacts");
+            UpdateStudentContacts();
 
-       
+        }
 
         private void UpdateSchools()
         {
@@ -814,6 +820,71 @@ namespace Chalkable.StiImport.Services
                 DetGradePoints = x.DetGradePoints
             }).ToList();
             ServiceLocatorSchool.GradedItemService.Edit(res);
+        }
+
+        private void UpdateAnnouncementAttribues()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.ActivityAttribute>().Updated == null)
+                return;
+            var announcementAttributes = context.GetSyncResult<StiConnector.SyncModel.ActivityAttribute>().Updated.Select(x => new Data.School.Model.AnnouncementAttribute()
+            {
+                Id = x.ActivityAttributeID,
+                Code = x.Code,
+                Name = x.Name,
+                Description = x.Description,
+                NCESCode = x.NCESCode,
+                SIFCode = x.SIFCode,
+                StateCode = x.StateCode,
+                IsActive = x.IsActive,
+                IsSystem = x.IsSystem
+            }).ToList();
+            ServiceLocatorSchool.AnnouncementAttributeService.Edit(announcementAttributes);
+        }
+
+        private void UpdateContactRelationships()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.ContactRelationship>().Updated == null)
+                return;
+            var contactRelationships = context.GetSyncResult<StiConnector.SyncModel.ContactRelationship>().Updated.Select(x => new Data.School.Model.ContactRelationship()
+            {
+                Id = x.ContactRelationshipID,
+                Name = x.Name,
+                Code = x.Code,
+                Description = x.Description,
+                ReceivesMailings = x.ReceivesMailings,
+                IsFamilyMember = x.IsFamilyMember,
+                IsCustodian = x.IsCustodian,
+                IsEmergencyContact = x.IsEmergencyContact,
+                StateCode = x.StateCode,
+                CanPickUp = x.CanPickUp,
+                NCESCode = x.NCESCode,
+                SIFCode = x.SIFCode,
+                IsActive = x.IsActive,
+                IsSystem = x.IsSystem
+            }).ToList();
+            ServiceLocatorSchool.ContactService.EditContactRelationship(contactRelationships);
+        }
+
+        private void UpdateStudentContacts()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.StudentContact>().Updated == null)
+                return;
+            var studentContacts = context.GetSyncResult<StiConnector.SyncModel.StudentContact>().Updated.Select(x => new Data.School.Model.StudentContact
+            {
+                StudentRef = x.StudentID,
+                ContactRef = x.ContactID,
+                ContactRelationshipRef = x.RelationshipID,
+                Description = x.Description,
+                ReceivesMailings = x.ReceivesMailings,
+                IsFamilyMember = x.IsFamilyMember,
+                IsCustodian = x.IsCustodian,
+                IsEmergencyContact = x.IsEmergencyContact,
+                CanPickUp = x.CanPickUp,
+                IsResponsibleForBill = x.IsResponsibleForBill,
+                ReceivesBill = x.ReceivesBill,
+                StudentVisibleInHome = x.StudentVisibleInHome
+            }).ToList();
+            ServiceLocatorSchool.ContactService.EditStudentContact(studentContacts);
         }
     }
 }

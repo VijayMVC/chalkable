@@ -69,7 +69,10 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(ScheduledTimeSlotVariation));
             RegisterType(typeof(SectionTimeSlotVariation));
             RegisterType(typeof(AttendanceMonth));
-            //RegisterType(typeof(GradedItem)); todo: waiting till gradedItem sync will support on inow
+            RegisterType(typeof(GradedItem));
+            RegisterType(typeof(ActivityAttribute));
+            RegisterType(typeof(ContactRelationship));
+            RegisterType(typeof(StudentContact));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)

@@ -35,13 +35,17 @@ namespace Chalkable.StiImport.Services
     {
         private void ProcessDelete()
         {
-            //todo: waiting till gradedItem sync will support on inow
-            //Log.LogInfo("delete gradedItems");
-            //DeleteGradedItems();
-
+            //TODO: wait for fix student contact from Inow
+            Log.LogInfo("delete studentContacts");
+            DeleteStudentContacts();
+            Log.LogInfo("delete contactRelationship");
+            DeleteContactRelationships();
+            Log.LogInfo("delete AnnouncementAttributes");
+            DeleteAnnouncementAttributes();
+            Log.LogInfo("delete gradedItems");
+            DeleteGradedItems();
             Log.LogInfo("delete attendanceMonths");
             DeleteAttendanceMonthes();
-
             Log.LogInfo("delete schoolsOptions");
             DeleteSchoolsOptions();
             Log.LogInfo("delete grading comments");
@@ -136,6 +140,28 @@ namespace Chalkable.StiImport.Services
             DeleteSchools();
         }
 
+        private void DeleteContactRelationships()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.ContactRelationship>().Deleted == null)
+                return;
+            var contactRelationships = context.GetSyncResult<StiConnector.SyncModel.ContactRelationship>().Deleted
+                .Select(x => new Data.School.Model.ContactRelationship { Id = x.ContactRelationshipID }).ToList();
+            ServiceLocatorSchool.ContactService.DeleteContactRelationship(contactRelationships);
+        }
+
+        private void DeleteStudentContacts()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.StudentContact>().Deleted == null)
+                return;
+            var contacts = context.GetSyncResult<StiConnector.SyncModel.StudentContact>().Deleted
+                .Select(x => new Data.School.Model.StudentContact
+                    {
+                        ContactRef = x.ContactID,
+                        StudentRef = x.StudentID
+                    }).ToList();
+            ServiceLocatorSchool.ContactService.DeleteStudentContact(contacts);
+        }
+
         private void DeleteAttendanceMonthes()
         {
             if (context.GetSyncResult<StiConnector.SyncModel.AttendanceMonth>().Deleted == null)
@@ -143,6 +169,15 @@ namespace Chalkable.StiImport.Services
             var attendanceMonthes = context.GetSyncResult<StiConnector.SyncModel.AttendanceMonth>().Deleted
                 .Select(x => new Data.School.Model.AttendanceMonth { Id = x.AttendanceMonthID }).ToList();
             ServiceLocatorSchool.AttendanceMonthService.Delete(attendanceMonthes);
+        }
+
+        private void DeleteAnnouncementAttributes()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.ActivityAttribute>().Deleted == null)
+                return;
+            var annAttributes = context.GetSyncResult<StiConnector.SyncModel.ActivityAttribute>().Deleted
+                .Select(x => new Data.School.Model.AnnouncementAttribute() { Id = x.ActivityAttributeID }).ToList();
+            ServiceLocatorSchool.AnnouncementAttributeService.Delete(annAttributes);
         }
 
         private void DeleteGradedItems()
@@ -153,7 +188,7 @@ namespace Chalkable.StiImport.Services
                 .Select(x => new Data.School.Model.GradedItem { Id = x.GradedItemID }).ToList();
             ServiceLocatorSchool.GradedItemService.Delete(gradedItems);
         }
-
+        
         private void DeleteGradingComments()
         {
             if (context.GetSyncResult<GradingComment>().Deleted == null)
