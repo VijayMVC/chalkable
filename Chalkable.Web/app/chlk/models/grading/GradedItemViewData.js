@@ -7,6 +7,7 @@ NAMESPACE('chlk.models.grading', function () {
     CLASS('GradedItemViewData', [
         chlk.models.id.GradedItemId, 'id',
         String, 'name',
+        [ria.serialize.SerializeProperty('appearsonreportcard')],
         Boolean, 'appearsOnReportCard'
     ]);
 });

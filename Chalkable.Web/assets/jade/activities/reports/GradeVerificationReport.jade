@@ -23,7 +23,8 @@
                      h3=Msg.Graded_Item(true)
                      +Select('studentAverage')(multiple)#student-averages-select
                         each sa in self.getStudentAverages()
-                           +Option(sa.getId().valueOf(), sa.getName(), true)
+                           if sa.isAppearsOnReportCard()
+                              +Option(sa.getId().valueOf(), sa.getName(), true)
                   TD.item-3
                TR
                   TD.item-3

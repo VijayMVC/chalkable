@@ -12,6 +12,6 @@ NAMESPACE('chlk.templates.reports', function () {
             ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.grading.StudentAverageInfo), 'studentAverages'
+            ArrayOf(chlk.models.grading.GradedItemViewData), 'studentAverages'
         ])
 });
