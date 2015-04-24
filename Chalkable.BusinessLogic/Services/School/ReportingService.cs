@@ -260,7 +260,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     EndMonth = inputModel.EndMonth,
                     StartMonth = inputModel.StartMonth,
                     GroupBy = inputModel.GroupBy,
-                    Header = inputModel.Header,
                     IncludePhoto = inputModel.IncludePhoto,
                     IncludeWithdrawn = inputModel.IncludeWithdrawn,
                     SectionId = inputModel.ClassId
