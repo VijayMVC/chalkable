@@ -106,6 +106,12 @@ namespace Chalkable.Web.Models.AttendancesViewData
             Level = studentAttendance.Level;
         }
 
+        protected StudentClassAttendanceViewData(StudentClassAttendance studentAttendance, AttendanceReason attendanceReason) : this(studentAttendance)
+        {
+            if (attendanceReason != null)
+                AttendanceReason = AttendanceReasonViewData.Create(attendanceReason);
+        }
+
         public static StudentClassAttendanceViewData Create(StudentClassAttendance studentAttendance, AttendanceReason attendanceReason)
         {
             var res = new StudentClassAttendanceViewData(studentAttendance);
