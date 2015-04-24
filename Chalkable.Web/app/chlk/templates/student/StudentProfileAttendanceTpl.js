@@ -19,23 +19,20 @@ NAMESPACE('chlk.templates.student', function(){
             [ria.templates.ModelPropertyBind],
             chlk.models.calendar.attendance.StudentAttendanceMonthCalendar, 'attendanceCalendar',
 
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.schoolYear.MarkingPeriod), 'markingPeriods',
-
 
             [[chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), String]],
             Object ,function buildAttendanceGlanceBoxData(model, boxTitle){
                 var items = [];
-                var hoverItems = model.getHover();
+                var hoverItems = model ? model.getHover() : [];
                 for(var i = 0; i < hoverItems.length; i++){
                     items.push({
                         data: hoverItems[i],
-                        getTotalMethod: hoverItems[i].getValue,
-                        getSummaryMethod: hoverItems[i].getClassName
+                        total: hoverItems[i].getValue(),
+                        summary: hoverItems[i].getClassName()
                     });
                 }
                 return {
-                      value: model.getTitle(),
+                      value: model ? model.getTitle() : '',
                       items: items,
                       title: boxTitle
                 };
@@ -46,7 +43,6 @@ NAMESPACE('chlk.templates.student', function(){
                 return[
                     this.buildAttendanceGlanceBoxData(summary.getAbsentSection(), 'Absent'),
                     this.buildAttendanceGlanceBoxData(summary.getLateSection(), 'Late'),
-                    this.buildAttendanceGlanceBoxData(summary.getExcusedSection(), 'Excused'),
                     this.buildAttendanceGlanceBoxData(summary.getPresentSection(), 'Present')
                 ];
             }

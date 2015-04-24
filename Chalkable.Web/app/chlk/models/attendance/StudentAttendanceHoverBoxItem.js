@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.attendance', function () {
         UNSAFE, FINAL, 'StudentAttendanceHoverBoxItem', IMPLEMENTS(ria.serialize.IDeserializable), [
 
             VOID, function deserialize(raw){
-                this.value = SJX.fromValue(raw.attendancecount, Number);
+                this.value = SJX.fromValue(raw.attendnacecount, Number);
                 this.className = SJX.fromValue(raw.classname, String);
             },
 

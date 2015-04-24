@@ -136,14 +136,6 @@ NAMESPACE('chlk.services', function () {
                     });
             },
 
-            [[chlk.models.id.SchoolPersonId, chlk.models.id.MarkingPeriodId]],
-            ria.async.Future, function getStudentAttendanceSummary(studentId, markingPeriodId){
-                return this.get('Attendance/StudentAttendanceSummary.json', chlk.models.attendance.StudentAttendanceSummary,{
-                    personId: studentId && studentId.valueOf(),
-                    markingPeriodId: markingPeriodId && markingPeriodId.valueOf()
-                });
-            },
-
             ria.async.Future, function getAllAttendanceReasons(){
                 return this.get('AttendanceReason/GetAllReasons.json', ArrayOf(chlk.models.attendance.AttendanceReason),{
                 });

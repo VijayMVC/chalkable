@@ -31,6 +31,8 @@ var ChlkSessionConstants = {
     CREDIT_CARD_DATA: 'creditCardData',
     MY_APPS_CACHED: 'myAppsCached',
     CURRENT_PERSON_BALANCE: 'currentPersonBalance',
+    CURRENT_CALENDAR_MP: 'currentCalendarMp',
+    CURRENT_CALENDAR_ITEMS: 'currentCalendarItems',
     DEV_APPS: 'dev-apps',
     CURRENT_APP_ID: 'currentAppId',
     CURRENT_APP: 'currentApp',

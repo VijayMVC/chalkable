@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.calendar.attendance.AttendanceCalendarMonthItem');
-REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.attendance.DailyAttendance');
 
 NAMESPACE('chlk.models.calendar.attendance', function () {
     "use strict";
@@ -20,7 +20,10 @@ NAMESPACE('chlk.models.calendar.attendance', function () {
             [ria.serialize.SerializeProperty('showgroupeddata')],
             Boolean, 'showGroupedData',
 
-            [ria.serialize.SerializeProperty('personid')],
-            chlk.models.id.SchoolPersonId, 'personId'
+            [ria.serialize.SerializeProperty('studentattendance')],
+            chlk.models.attendance.DailyAttendance, 'studentAttendance'//,
+
+            //[ria.serialize.SerializeProperty('personid')],
+            //chlk.models.id.SchoolPersonId, 'personId'
         ]);
 });
