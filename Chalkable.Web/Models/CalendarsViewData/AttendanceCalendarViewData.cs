@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model.Attendances;
+using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.AttendancesViewData;
 
 namespace Chalkable.Web.Models.CalendarsViewData
@@ -67,7 +68,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
         }
 
         
-        public static AttendanceForStudentCalendarViewData Create(DateTime date, bool isCurrentMonth, int personId, IList<StudentDateAttendance> studentAttendances)
+        public static AttendanceForStudentCalendarViewData Create(DateTime date, bool isCurrentMonth, int personId, IList<StudentDateAttendance> studentAttendances, IList<AttendanceReason> reasons)
         {
 
             var moreCount = 0;
@@ -104,7 +105,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
                     ShowGroupedData = showGroupedData,
                 };
             if (studentAttendance != null)
-                res.StudentAttendance = StudentDateAttendanceViewData.Create(studentAttendance);
+                res.StudentAttendance = StudentDateAttendanceViewData.Create(studentAttendance, reasons);
             return res;
         }
 

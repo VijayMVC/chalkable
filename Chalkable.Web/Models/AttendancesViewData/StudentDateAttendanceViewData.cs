@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Model.Attendances;
+using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.AttendancesViewData
@@ -15,13 +16,13 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public int? ArrivalTime { get; set; }
         public IList<StudentPeriodAttendanceViewData> PeriodAttendances { get; set; }
 
-        public static StudentDateAttendanceViewData Create(StudentDateAttendance attendance)
+        public static StudentDateAttendanceViewData Create(StudentDateAttendance attendance, IList<AttendanceReason> reasons)
         {
             var res = new StudentDateAttendanceViewData
             {
                 Date = attendance.Date,
                 Student = StudentViewData.Create(attendance.Student),
-                PeriodAttendances = StudentPeriodAttendanceViewData.Create(attendance.StudentPeriodAttendances),
+                PeriodAttendances = StudentPeriodAttendanceViewData.Create(attendance.StudentPeriodAttendances, reasons),
 
             };
             if (attendance.CheckInCheckOut != null)

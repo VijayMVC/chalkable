@@ -16,7 +16,8 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             DateTime start, end;
             MonthCalendar(ref date, out start, out end);
             var studentAttendances = SchoolLocator.AttendanceService.GetStudentAttendancesByDateRange(studentId, start, end);
-            var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => AttendanceForStudentCalendarViewData.Create(time, b, Context.PersonId.Value, studentAttendances));
+            var attendanceReasons = SchoolLocator.AttendanceReasonService.GetAll();
+            var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => AttendanceForStudentCalendarViewData.Create(time, b, Context.PersonId.Value, studentAttendances, attendanceReasons));
             return Json(res, 6);
         }
     }
