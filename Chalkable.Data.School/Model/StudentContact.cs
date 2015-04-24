@@ -4,6 +4,10 @@ namespace Chalkable.Data.School.Model
 {
     public class StudentContact
     {
+        public const string CONTACT_RELATIONSHIP_REF_FIELD = "ContactRelationshipRef";
+        public const string CONTACT_REF_FIELD = "ContactRef";
+        public const string STUDENT_REF_FIELD = "StudentRef";
+
         [PrimaryKeyFieldAttr]
         public int StudentRef { get; set; }
         [PrimaryKeyFieldAttr]
@@ -18,5 +22,14 @@ namespace Chalkable.Data.School.Model
 	    public bool IsResponsibleForBill { get; set; }
 	    public bool ReceivesBill { get; set; }
         public bool StudentVisibleInHome { get; set; }
+    }
+
+    public class StudentContactDetails : StudentContact
+    {
+        [DataEntityAttr]
+        public ContactRelationship ContactRelationship { get; set; }
+
+        [DataEntityAttr]
+        public PersonDetails Person { get; set; }
     }
 }

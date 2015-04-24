@@ -40,5 +40,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+        public IList<StudentContactDetails> GetStudentContactDetails(int studentId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

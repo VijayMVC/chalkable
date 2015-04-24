@@ -295,6 +295,7 @@
     <Compile Include="Models\AppTesterViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
     <Compile Include="Models\GradedItemViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentContactViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentExplorerViewData.cs" />
     <Compile Include="Models\PracticeGradeViewData.cs" />
     <Compile Include="Models\ScheduleItemViewData.cs" />

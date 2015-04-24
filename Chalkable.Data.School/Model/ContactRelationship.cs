@@ -4,6 +4,8 @@ namespace Chalkable.Data.School.Model
 {
     public class ContactRelationship
     {
+        public const string ID_FIELD = "Id";
+
         [PrimaryKeyFieldAttr]
     	public int Id { get; set; }
         public string Code { get; set; }

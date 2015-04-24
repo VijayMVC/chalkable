@@ -88,6 +88,7 @@
     <Compile Include="DataAccess\PhoneDataAccess.cs" />
     <Compile Include="DataAccess\PrivateMessageDataAccess.cs" />
     <Compile Include="DataAccess\SchoolYearDataAccess.cs" />
+    <Compile Include="DataAccess\StudentContactDataAccess.cs" />
     <Compile Include="DataAccess\StudentDataAccess.cs" />
     <Compile Include="DataAccess\SyncVersionDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
