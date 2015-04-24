@@ -106,6 +106,10 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.reports.SubmitAttendanceProfileReportViewData]],
         function submitAttendanceProfileReportAction(reportViewData){
 
+            if (Date.compare(getDate(reportViewData.getStartDate()) , getDate(reportViewData.getEndDate())) > 0){
+                    return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                }
+
             if (!reportViewData.getAbsenceReasons()){
                 return this.ShowAlertBox("Absence Reasons is a required field. Please make sure that you enter data in all required fields", "Error"), null;
             }

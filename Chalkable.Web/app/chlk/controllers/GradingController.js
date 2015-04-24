@@ -753,6 +753,10 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitLessonPlanReportViewData]],
             function submitLessonPlanReportAction(reportViewData){
+                if (Date.compare(getDate(reportViewData.getStartDate()) , getDate(reportViewData.getEndDate())) > 0){
+                    return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                }
+
                 var src = this.reportingService.submitLessonPlanReport(
                     reportViewData.getClassId(),
                     reportViewData.getGradingPeriodId(),
