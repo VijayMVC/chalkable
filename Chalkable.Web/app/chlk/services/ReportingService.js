@@ -205,7 +205,7 @@ NAMESPACE('chlk.services', function () {
                 classId : classId.valueOf(),
                 format: format.valueOf(),
                 gradingPeriodIds : this.arrayToCsv(gradingPeriodIds),
-                studentAverageIds: this.arrayToCsv(studentAverageIds),
+                gradeditemid: this.arrayToCsv(studentAverageIds),
                 classOrder: classOrder.valueOf(),
                 gradeType: gradeType.valueOf(),
                 studentOrder: studentOrder.valueOf(),

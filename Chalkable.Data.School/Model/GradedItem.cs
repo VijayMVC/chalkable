@@ -19,7 +19,7 @@ namespace Chalkable.Data.School.Model
         public bool AllowExemption { get; set; }
         public bool DisplayAsAvgInGradebook { get; set; }
         public bool PostRoundedAverage { get; set; }
-        public short Sequence { get; set; }
+        public int Sequence { get; set; }
         public char AveragingRule { get; set; }
     }
 }

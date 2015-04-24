@@ -322,11 +322,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     AcadSessionId = gp.SchoolYearRef,
                     GradeType = inputModel.GradeType,
-                    DistrictName = Context.SisUrl, //TODO: ask Jonathan about this field 
                     SectionId = inputModel.ClassId,
-                    SectionOrder = inputModel.ClassOrder,
-                    StartSectionNumber = inputModel.StartClassNumber,
-                    EndSectionNumber = inputModel.EndClassNumber,
                     GradedItemId = inputModel.GradedItemId != null ? inputModel.GradedItemId.ToArray() : null,
                     GradingPeriodId = new []{gp.Id},
                     IncludeComments = inputModel.IncludeCommentsAndLegend,

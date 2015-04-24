@@ -8,7 +8,7 @@ NAMESPACE('chlk.models.reports', function (){
     CLASS('GradeVerificationReportViewData',  EXTENDS(chlk.models.reports.BaseReportViewData), [
         ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
 
-        ArrayOf(chlk.models.grading.StudentAverageInfo), 'studentAverages',
+        ArrayOf(chlk.models.grading.GradedItemViewData), 'studentAverages',
 
         [[ArrayOf(chlk.models.schoolYear.GradingPeriod), ArrayOf(chlk.models.grading.GradedItemViewData), ArrayOf(chlk.models.people.ShortUserInfo),
             chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
