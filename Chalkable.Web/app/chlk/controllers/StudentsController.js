@@ -201,7 +201,7 @@ NAMESPACE('chlk.controllers', function (){
                                 this.getUserClaims_()
                             );
                         }, this);
-                return this.PushView(chlk.activities.student.StudentProfileAttendancePage, res);
+                return this.PushOrUpdateView(chlk.activities.student.StudentProfileAttendancePage, res);
             },
 
             [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String, String, String, Boolean]],
