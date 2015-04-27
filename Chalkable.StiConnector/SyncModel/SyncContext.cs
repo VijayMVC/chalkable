@@ -68,6 +68,11 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(BellSchedule));
             RegisterType(typeof(ScheduledTimeSlotVariation));
             RegisterType(typeof(SectionTimeSlotVariation));
+            RegisterType(typeof(AttendanceMonth));
+            RegisterType(typeof(GradedItem));
+            RegisterType(typeof(ActivityAttribute));
+            RegisterType(typeof(ContactRelationship));
+            RegisterType(typeof(StudentContact));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)

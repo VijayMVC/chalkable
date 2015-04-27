@@ -154,5 +154,13 @@ namespace Chalkable.Web.Controllers
         {
             return FakeJson("~/fakeData/adminAttendanceSummary.json");
         }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult AttendanceMonthesList()
+        {
+            var syId = GetCurrentSchoolYearId();
+            var res = SchoolLocator.AttendanceMonthService.GetAttendanceMonths(syId);
+            return Json(AttendanceMonthViewData.Create(res));
+        }
     }
 }

@@ -58,10 +58,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IStaffService staffService;
         private IUserSchoolService userSchoolService;
         private IPracticeGradeService practiceGradeService;
+        private IAttendanceMonthService attendanceMonthService;
+        private IGradedItemService gradedItemService;
+        private IAnnouncementAttributeService announcementAttributeService;
+        private IContactService contactService;
 
-        public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
-            : base(serviceLocatorMaster.Context)
-        {
+        public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster, DemoStorage storage)
+         
+               : base(serviceLocatorMaster.Context)        {
+            storage.SchoolLocator = this;
             this.serviceLocatorMaster = serviceLocatorMaster;
             notificationService = new DemoNotificationService(this);
             appMarketService = new DemoAppMarketService(this);
@@ -106,6 +111,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             staffService = new DemoStaffService(this);
             userSchoolService = new DemoUserSchoolService(this);
             practiceGradeService = new DemoPracticeGradeService(this);
+            attendanceMonthService = new DemoAttendanceMonthService(this, storage);
+            gradedItemService = new DemoGradedItemService(this, storage);
+            announcementAttributeService = new DemoAnnouncementAttributeService(this, storage);
+            contactService = new DemoContactService(this, storage);
             Setup(ServiceLocatorMaster.Context);
         }
 
@@ -172,7 +181,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IScheduledTimeSlotService ScheduledTimeSlotService { get{throw new NotImplementedException();} }
         public IBellScheduleService BellScheduleService { get { throw new NotImplementedException(); } }
         public IPracticeGradeService PracticeGradeService{get{ return practiceGradeService; } }
-
+        public IAttendanceMonthService AttendanceMonthService { get { return attendanceMonthService; } }
+        public IGradedItemService GradedItemService { get { return gradedItemService; } }
+        public IAnnouncementAttributeService AnnouncementAttributeService { get { return announcementAttributeService; } }
+        public IContactService ContactService { get { return contactService; } }
         public IDbService SchoolDbService
         {
             get

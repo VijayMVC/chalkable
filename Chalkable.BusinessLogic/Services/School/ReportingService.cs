@@ -260,7 +260,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     EndMonth = inputModel.EndMonth,
                     StartMonth = inputModel.StartMonth,
                     GroupBy = inputModel.GroupBy,
-                    Header = inputModel.Header,
                     IncludePhoto = inputModel.IncludePhoto,
                     IncludeWithdrawn = inputModel.IncludeWithdrawn,
                     SectionId = inputModel.ClassId
@@ -290,19 +289,20 @@ namespace Chalkable.BusinessLogic.Services.School
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
             var ps = new AttendanceProfileReportParams
                 {
-                    AbsenceReasons = inputModel.AbsenceReasons != null ? inputModel.AbsenceReasons.ToArray() : null,
+                    AbsenceReasonIds = inputModel.AbsenceReasons != null ? inputModel.AbsenceReasons.ToArray() : null,
                     AcadSessionId = gp.SchoolYearRef,
-                    DisplayNote = inputModel.DisplayNote,
-                    DisplayPeriodAbsences = inputModel.DisplayPeriodAbsences,
-                    DisplayReasonTotals = inputModel.DisplayReasonTotals,
-                    DisplayWithdrawnStudents = inputModel.DisplayWithdrawnStudents,
+                    IncludeNote = inputModel.DisplayNote,
+                    IncludePeriodAbsences = inputModel.DisplayPeriodAbsences,
+                    IncludeReasonTotals = inputModel.DisplayReasonTotals,
+                    IncludeWithdrawnStudents = inputModel.DisplayWithdrawnStudents,
                     StartDate = inputModel.StartDate,
                     EndDate = inputModel.EndDate,
                     GroupBy = inputModel.GroupBy,
                     SectionId = inputModel.ClassId,
                     IdToPrint = inputModel.IdToPrint,
                     IncludeUnlisted = inputModel.IncludeUnlisted,
-                    Terms = inputModel.MarkingPeriodIds != null ? inputModel.MarkingPeriodIds.ToArray() : null
+                    IncludeCheckInCheckOut = inputModel.IncludeCheckInCheckOut,
+                    TermIds = inputModel.MarkingPeriodIds != null ? inputModel.MarkingPeriodIds.ToArray() : null
                 };
             if (inputModel.StudentIds == null)
             {
@@ -321,20 +321,14 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     AcadSessionId = gp.SchoolYearRef,
                     GradeType = inputModel.GradeType,
-                    DistrictName = Context.SisUrl, //TODO: ask Jonathan about this field 
                     SectionId = inputModel.ClassId,
-                    SectionOrder = inputModel.ClassOrder,
-                    StartSectionNumber = inputModel.StartClassNumber,
-                    EndSectionNumber = inputModel.EndClassNumber,
-                    GradedItemId = inputModel.GradedItemId != null ? inputModel.GradedItemId.ToArray() : null,
-                    GradingPeriodId = new []{gp.Id},
-                    IncludeComments = inputModel.IncludeComments,
-                    IncludeLegend = inputModel.IncludeLegend,
+                    GradedItemIds = inputModel.GradedItemId != null ? inputModel.GradedItemId.ToArray() : null,
+                    GradingPeriodIds = inputModel.GradingPeriodIds != null ? inputModel.GradingPeriodIds.ToArray() : new []{ gp.Id },
+                    IncludeComments = inputModel.IncludeCommentsAndLegend,
                     IncludeSignature = inputModel.IncludeSignature,
                     IncludeNotes = inputModel.IncludeNotes,
                     IncludeWithdrawn = inputModel.IncludeWithdrawn,
                     IdToPrint = inputModel.IdToPrint,
-                    NumberToDisplay = inputModel.NumberToDisplay,
                     StudentOrder = inputModel.StudentOrder,
                     StudentIds = inputModel.StudentIds != null ? inputModel.StudentIds.ToArray() : null
                 };
@@ -349,9 +343,9 @@ namespace Chalkable.BusinessLogic.Services.School
             var ps = new SeatingChartReportPrams
                 {
                     AcadSessionId = gp.SchoolYearRef,
-                    CourseId = c.CourseRef.HasValue ? c.CourseRef.Value : c.Id,
+                    SectionId = c.Id,
                     TermId = gp.MarkingPeriodRef,
-                    DisplayStudentPhoto = inputModel.DisplayStudentPhoto
+                    IncludeStudentPhoto = inputModel.DisplayStudentPhoto
                 };
             return ConnectorLocator.ReportConnector.SeatingChartReport(ps);
         }
@@ -370,8 +364,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     SectionId = inputModel.ClassId,
                     SortActivities = inputModel.SortItems,
                     SortSections = inputModel.SortClasses,
-                    XMLActivityAttribute = inputModel.AnnouncementAttributes != null ? inputModel.AnnouncementAttributes.ToArray() : null,
-                    XMLActivityCategory = inputModel.AnnouncementTypes != null ? inputModel.AnnouncementTypes.ToArray() : null
+                    ActivityAttributeIds = inputModel.AnnouncementAttributes != null ? inputModel.AnnouncementAttributes.ToArray() : null,
+                    ActivityCategoryIds = inputModel.AnnouncementTypes != null ? inputModel.AnnouncementTypes.ToArray() : null
                 };
             return ConnectorLocator.ReportConnector.LessonPlanReport(ps);
         }

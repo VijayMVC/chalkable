@@ -4,36 +4,79 @@ namespace Chalkable.StiConnector.Connectors.Model.Reports
 {
     public class AttendanceProfileReportParams
     {
+        /// <summary>
+        /// Ids of the absence reasons that should be included in the report
+        /// </summary>       
+        public int[] AbsenceReasonIds { get; set; }
+
+        /// <summary>
+        /// Id of the academic session
+        /// </summary>
         public int AcadSessionId { get; set; }
-        public int[] Terms { get; set; }
-        public int? StudentFilterId { get; set; }
-        public int? UserId { get; set; }
 
-        public int[] AbsenceReasons { get; set; }
+        /// <summary>
+        /// Date to end the report
+        /// </summary>
+        public DateTime? EndDate { get; set; }
 
-        public bool DisplayPeriodAbsences { get; set; }
-        public bool DisplayNote { get; set; }
-        public bool DisplayReasonTotals { get; set; }
+        /// <summary>
+        /// Determines how students should be grouped. Options include None = 0, Grade Level = 1, Homeroom = 3
+        /// </summary>
+        public int GroupBy { get; set; }
+
+        /// <summary>
+        /// Indicates which student identifier should print on the report.
+        /// </summary>
+        public int IdToPrint { get; set; }
+
+        /// <summary>
+        /// Indicates whether or not to include check in and check outs 
+        /// </summary>
+        public bool IncludeCheckInCheckOut { get; set; }
+
+        /// <summary>
+        /// Indicates whether or not to include absence note
+        /// </summary>
+        public bool IncludeNote { get; set; }
+
+        /// <summary>
+        /// Indicates whether or not to include period absences
+        /// </summary>
+        public bool IncludePeriodAbsences { get; set; }
+
+        /// <summary>
+        /// Indicates whether or not to include reason totals
+        /// </summary>
+        public bool IncludeReasonTotals { get; set; }
+
+        /// <summary>
+        /// Indicates whether or not to include unlisted student information
+        /// </summary>
         public bool IncludeUnlisted { get; set; }
 
+        /// <summary>
+        /// Indicates whether or not to include withdrawn students
+        /// </summary>
+        public bool IncludeWithdrawnStudents { get; set; }
 
-        ///<summary>
-        /// enum GroupByMethod
-        ///    BlankColumn = 0,
-        ///    GradeLevelSequence = 1,
-        ///    HomeroomName = 3
-        ///</summary>
-        public int GroupBy { get; set; }
-        public int? StudentId { get; set; }
-        public string Header { get; set; }
-
-        public int IdToPrint { get; set; }
-        public bool DisplayWithdrawnStudents { get; set; }
-        public string StudentIdList { get; set; }
+        /// <summary>
+        /// Id of the section
+        /// </summary>
         public int? SectionId { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
-        public int[] StudentIds { get; set; }        
 
+        /// <summary>
+        /// Date to start the report
+        /// </summary>
+        public DateTime? StartDate { get; set; }
+
+        /// <summary>
+        /// List of student ids to run the report for
+        /// </summary>
+        public int[] StudentIds { get; set; }
+
+        /// <summary>
+        /// Ids of the Terms that should be included in the report 
+        /// </summary>
+        public int[] TermIds { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace Chalkable.BackgroundTaskProcessor
 {
     public class DatabaseUpdateTaskHandler : ITaskHandler
     {
+        private const int CMD_TIMEOUT = 15*60;
         public bool Handle(BackgroundTask task, BackgroundTaskService.BackgroundTaskLog log)
         {
             bool res = true;
@@ -26,6 +27,7 @@ namespace Chalkable.BackgroundTaskProcessor
                         using (var uow = new UnitOfWork(Settings.MasterConnectionString, false))
                         {
                             var cmd = uow.GetTextCommandWithParams(updateSql.Sql, new Dictionary<string, object>());
+                            cmd.CommandTimeout = CMD_TIMEOUT;
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -36,6 +38,7 @@ namespace Chalkable.BackgroundTaskProcessor
                             using (var uow = new UnitOfWork(Settings.GetSchoolTemplateConnectionString(dbServer), false))
                             {
                                 var cmd = uow.GetTextCommandWithParams(updateSql.Sql, new Dictionary<string, object>());
+                                cmd.CommandTimeout = CMD_TIMEOUT;
                                 cmd.ExecuteNonQuery();
                             }
                         }
@@ -69,6 +72,7 @@ namespace Chalkable.BackgroundTaskProcessor
             using (var uow = new UnitOfWork(connectionString, false))
             {
                 var cmd = uow.GetTextCommandWithParams(task.Data, new Dictionary<string, object>());
+                cmd.CommandTimeout = CMD_TIMEOUT;
                 cmd.ExecuteNonQuery();
             }
             return string.Empty;

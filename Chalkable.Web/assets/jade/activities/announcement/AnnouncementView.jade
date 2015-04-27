@@ -93,7 +93,7 @@ mixin Glue_()
                         +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
                             userRole = self.getUserRole()
                         )
-            if self.getStandards() && self.getStandards().length > 0
+            if self.getStandards() && self.getStandards().length > 0 && self.getStandards().filter(function(standard){return standard.getAcademicBenchmarkId()}).length
                 +CloseOpen('Practice & Improve')
                     .student-attachments.content
                         .announcement-item.attachment

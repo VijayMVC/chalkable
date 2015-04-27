@@ -4,16 +4,26 @@ namespace Chalkable.StiConnector.Connectors.Model.Reports
 {
     public class LessonPlanReportParams
     {
-        public string DistrictName { get; set; }
-        public string Header { get; set; }
+        /// <summary>
+        /// Start Date of the report
+        /// </summary>
         public DateTime StartDate { get; set; }
+        
+        /// <summary>
+        /// The end date of the report
+        /// </summary>
         public DateTime EndDate { get; set; }
- 
-        //TODO : ask Jonathan about this field
-        public int[] XMLActivityAttribute { get; set; }
-
-        public int[] XMLActivityCategory { get; set; }
-
+        
+        /// <summary>
+        /// Ids of the activity attributes that should be included in the report
+        /// </summary>
+        public int[] ActivityAttributeIds { get; set; }
+        
+        /// <summary>
+        /// Ids of the activity categories that should be included in the report
+        /// </summary>
+        public int[] ActivityCategoryIds { get; set; }
+        
         ///<summary>
         // enum PublicPrivateTextOptions 
         //    Public = 0,
@@ -22,10 +32,18 @@ namespace Chalkable.StiConnector.Connectors.Model.Reports
         /// </summary>
         public int PublicPrivateText { get; set; }
 
-        public int? MaxCount { get; set; } //TODO: ask Jonathan is this minum number of days with plans 
+        /// <summary>
+        /// (optional) Only print sections where the number of days with activities scheduled is greater than the MaxCount.  
+        /// Example. Section A has activities on 4 seperate days.  Section B has activities on 10 seperate days.  
+        /// If the user enters 6, Section B will print.  Section A will not.
+        /// </summary>
+        public int? MaxCount { get; set; }
+
         public bool IncludeActivities { get; set; }
+        /// <summary>
+        /// Id of the section
+        /// </summary>
         public int? SectionId { get; set; }
-        public int? StaffFilterId { get; set; }
         public int AcadSessionId { get; set; }
         
         ///<summary>
@@ -42,8 +60,7 @@ namespace Chalkable.StiConnector.Connectors.Model.Reports
         //    Section = 3
         /// </summary>
         public int SortSections { get; set; }
-
         public int? StaffId { get; set; }   
-        public bool IncludeStandards { get; set; }        
+        public bool IncludeStandards { get; set; }
     }
 }

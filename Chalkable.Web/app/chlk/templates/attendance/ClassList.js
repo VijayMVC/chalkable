@@ -19,6 +19,9 @@ NAMESPACE('chlk.templates.attendance', function () {
             chlk.models.common.ChlkDate, 'date',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.schoolYear.GradingPeriod, 'gradingPeriod',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'byLastName',
 
             [ria.templates.ModelPropertyBind],
