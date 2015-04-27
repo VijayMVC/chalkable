@@ -912,9 +912,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                         node.find('.dropped-hidden').setValue(false);
                     }
                     var commentInput = node.find('.comment-input');
-                    var comment = commentInput.getValue();
+                    var comment = (commentInput.getValue() || '').trim();
+                    commentInput.setValue(comment);
                     commentInput.setData('comment', comment);
-                    node.find('.comment-text').setHTML(comment ? Msg.Commented : Msg.Comment);
+                    node.find('.comment-text').setHTML(comment ? Msg.Commented : Msg.Comment.toString());
                 }
                 return res;
             },
