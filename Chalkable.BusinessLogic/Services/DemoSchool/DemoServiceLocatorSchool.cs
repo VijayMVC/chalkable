@@ -63,10 +63,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IAnnouncementAttributeService announcementAttributeService;
         private IContactService contactService;
 
-        public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster, DemoStorage storage)
-         
-               : base(serviceLocatorMaster.Context)        {
-            storage.SchoolLocator = this;
+        public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster): base(serviceLocatorMaster.Context)        
+        {
             this.serviceLocatorMaster = serviceLocatorMaster;
             notificationService = new DemoNotificationService(this);
             appMarketService = new DemoAppMarketService(this);
@@ -111,10 +109,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             staffService = new DemoStaffService(this);
             userSchoolService = new DemoUserSchoolService(this);
             practiceGradeService = new DemoPracticeGradeService(this);
-            attendanceMonthService = new DemoAttendanceMonthService(this, storage);
-            gradedItemService = new DemoGradedItemService(this, storage);
-            announcementAttributeService = new DemoAnnouncementAttributeService(this, storage);
-            contactService = new DemoContactService(this, storage);
+            attendanceMonthService = new DemoAttendanceMonthService(this);
+            gradedItemService = new DemoGradedItemService(this);
+            announcementAttributeService = new DemoAnnouncementAttributeService(this);
+            contactService = new DemoContactService(this);
             Setup(ServiceLocatorMaster.Context);
         }
 

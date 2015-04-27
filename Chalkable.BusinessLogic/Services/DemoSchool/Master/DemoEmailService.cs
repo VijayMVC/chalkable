@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;

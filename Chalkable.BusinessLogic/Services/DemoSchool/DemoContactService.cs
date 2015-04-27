@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
@@ -8,7 +7,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
     public class DemoContactService : DemoSchoolServiceBase, IContactService
     {
-        public DemoContactService(IServiceLocatorSchool serviceLocator, DemoStorage demoStorage) : base(serviceLocator, demoStorage)
+        public DemoContactService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
         }
         public void AddStudentContact(IList<StudentContact> studentContacts)

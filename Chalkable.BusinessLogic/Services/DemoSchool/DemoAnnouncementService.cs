@@ -15,6 +15,7 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+
     public class AnnouncementComplete
     {
         public int AnnouncementId { get; set; }

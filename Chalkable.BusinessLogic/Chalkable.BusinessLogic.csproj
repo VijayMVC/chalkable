@@ -151,9 +151,12 @@
     <Compile Include="Security\UserSecurity.cs" />
     <Compile Include="Services\CrocodocService.cs" />
     <Compile Include="Services\DbService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAnnouncementAttributeService.cs" />
     <Compile Include="Services\DemoSchool\DemoApplicationSchoolService.cs" />
     <Compile Include="Services\DemoSchool\DemoAppMarketService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAttendanceMonthService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassroomOptionService.cs" />
+    <Compile Include="Services\DemoSchool\DemoContactService.cs" />
     <Compile Include="Services\DemoSchool\DemoDayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassPeriodService.cs" />
@@ -162,6 +165,7 @@
     <Compile Include="Services\DemoSchool\DemoAttendanceService.cs" />
     <Compile Include="Services\DemoSchool\DemoAttendanceReasonService.cs" />
     <Compile Include="Services\DemoSchool\DemoDisciplineService.cs" />
+    <Compile Include="Services\DemoSchool\DemoGradedItemService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradeLevelService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingPeriodService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingScaleService.cs" />
@@ -216,8 +220,10 @@
     <Compile Include="Services\School\AlphaGradeService.cs" />
     <Compile Include="Services\School\AlternateScoreService.cs" />
     <Compile Include="Services\School\AnnouncementAttachmentService.cs" />
+    <Compile Include="Services\School\AnnouncementAttributeService.cs" />
     <Compile Include="Services\School\AnnouncementQnAService.cs" />
     <Compile Include="Services\School\AnnouncementService.cs" />
+    <Compile Include="Services\School\AttendanceMonthService.cs" />
     <Compile Include="Services\School\BellScheduleService.cs" />
     <Compile Include="Services\School\ClassAnnouncementTypeService.cs" />
     <Compile Include="Services\School\ApplicationSchoolService.cs" />
@@ -226,6 +232,7 @@
     <Compile Include="Services\School\AttendanceService.cs" />
     <Compile Include="Services\School\CalendarDateService.cs" />
     <Compile Include="Services\School\ClassroomOptionService.cs" />
+    <Compile Include="Services\School\ContactService.cs" />
     <Compile Include="Services\School\DayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementQnAService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementAttachmentService.cs" />
@@ -249,6 +256,7 @@
     <Compile Include="Services\School\DisciplineService.cs" />
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
+    <Compile Include="Services\School\GradedItemService.cs" />
     <Compile Include="Services\School\GradingCommentService.cs" />
     <Compile Include="Services\School\GradingScaleService.cs" />
     <Compile Include="Services\School\InfractionService.cs" />
