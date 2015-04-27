@@ -3,11 +3,9 @@ using System.Web;
 using System.Web.Caching;
 using Chalkable.BusinessLogic.Services.DemoSchool;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
-using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using CacheItemPriority = System.Web.Caching.CacheItemPriority;
@@ -22,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services
 
     public class ServiceLocator : IServiceLocator
     {
-        public UserContext Context { get; private set; }
+        public UserContext Context { get; protected set; }
 
         private IStorageBlobService storageBlobService;
         public ServiceLocator(UserContext context)
@@ -63,7 +61,7 @@ namespace Chalkable.BusinessLogic.Services
             int roleId;
 
             int personId = schoolUser.User.IsDemoUser
-                ? DemoPersonStorage.GetPersonDataForLogin(schoolUser.User, out roleId)
+                ? DemoPersonService.GetPersonDataForLogin(schoolUser.User, out roleId)
                 : PersonDataAccess.GetPersonDataForLogin(schoolUser.User.District.ServerUrl,
                                                                   schoolUser.DistrictRef, schoolUser.UserRef, out roleId);
             var user = schoolUser.User;
@@ -102,28 +100,19 @@ namespace Chalkable.BusinessLogic.Services
         {
             var demoDistrictId = context.DistrictId.ToString();
             var firstTime = HttpRuntime.Cache[demoDistrictId] == null;
-            DemoStorageLocator storageLocator = null;
-            
-            
-            
-            
             if (firstTime)
             {
-                HttpRuntime.Cache.Add(demoDistrictId, new DemoStorageLocator(context), null,
+                var masterLocator = new DemoServiceLocatorMaster(context);
+                var resSchoolLocator = new DemoServiceLocatorSchool(masterLocator);
+                ((DemoStandardService)resSchoolLocator.StandardService).SetupDefaultData();
+                HttpRuntime.Cache.Add(demoDistrictId, resSchoolLocator, null,
                     DateTime.Now.AddHours(3), 
                     Cache.NoSlidingExpiration, 
                     CacheItemPriority.Normal, null);
             }
-            storageLocator = (DemoStorageLocator)HttpRuntime.Cache[demoDistrictId];
-            storageLocator.Update(context);
-            var masterLocator = new DemoServiceLocatorMaster(context, storageLocator);
-            var resSchoolLocator = new DemoServiceLocatorSchool(masterLocator, storageLocator);
-            if (firstTime)
-            {
-                ((DemoStandardService)resSchoolLocator.StandardService).SetupDefaultData(); 
-            }
-
-            return resSchoolLocator;
+            var locator = (DemoServiceLocatorSchool)HttpRuntime.Cache[demoDistrictId];
+            locator.Update(context);
+            return locator;
         }
     }
 }

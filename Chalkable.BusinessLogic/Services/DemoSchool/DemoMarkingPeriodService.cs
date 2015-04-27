@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -42,18 +42,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return data.Any(x => markingPeriodIds.Contains(x.Key));
         }
 
-        public void DeleteMarkingPeriods(IList<MarkingPeriod> markingPeriods)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Delete(markingPeriods);
-        }
-
-        public void ChangeWeekDays(IList<int> markingPeriodIds, int weekDays)
-        {
-            throw new NotImplementedException();
-        }
-
         public MarkingPeriod GetNextInYear(int markingPeriodId)
         {
             var mp = GetById(markingPeriodId);
@@ -63,49 +51,83 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     .Select(x => x.Value)
                     .First();
         }
+    }
 
-        public MarkingPeriod GetMarkingPeriodByDate(DateTime date, bool useLastExisting)
+    public class DemoMarkingPeriodClassStorage : BaseDemoIntStorage<MarkingPeriodClass>
+    {
+        public DemoMarkingPeriodClassStorage()
+            : base(null, true)
         {
-            var res = GetMarkingPeriod(date);
-            if (res != null)
-                return res;
-            if (useLastExisting)
-                return GetLastMarkingPeriod(date);
-            return null;
         }
 
-        public MarkingPeriod GetLastMarkingPeriod(DateTime? tillDate)
+        public MarkingPeriodClass GetMarkingPeriodClassOrNull(MarkingPeriodClassQuery markingPeriodClassQuery)
         {
-            return GetLast(tillDate ?? Context.NowSchoolTime);
+            return GetMarkingPeriodClasses(markingPeriodClassQuery).FirstOrDefault();
         }
 
-        public IList<MarkingPeriod> Edit(IList<MarkingPeriod> markingPeriods)
+        public void Delete(MarkingPeriodClassQuery markingPeriodClassQuery)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            return Update(markingPeriods);
+            var mpcs = GetMarkingPeriodClasses(markingPeriodClassQuery);
+            foreach (var markingPeriodClass in mpcs)
+            {
+                var item = data.First(x => x.Value == markingPeriodClass);
+                data.Remove(item.Key);
+            }
         }
 
-        public IList<MarkingPeriod> GetMarkingPeriodsByDateRange(DateTime fromDate, DateTime toDate, int? schoolYearId)
+        private IEnumerable<MarkingPeriodClass> GetMarkingPeriodClasses(MarkingPeriodClassQuery markingPeriodClassQuery)
         {
-            var res = GetMarkingPeriods(schoolYearId).AsEnumerable();
-            return res.Where(x => (x.StartDate <= fromDate && x.EndDate >= fromDate)
-                                      || (x.StartDate <= toDate && x.EndDate >= toDate)).ToList();
+            var mpcs = data.Select(x => x.Value);
+
+
+            if (markingPeriodClassQuery.ClassId.HasValue)
+                mpcs = mpcs.Where(x => x.ClassRef == markingPeriodClassQuery.ClassId);
+            if (markingPeriodClassQuery.MarkingPeriodId.HasValue)
+                mpcs = mpcs.Where(x => x.MarkingPeriodRef == markingPeriodClassQuery.MarkingPeriodId);
+
+            return mpcs.ToList();
         }
 
-        public IList<MarkingPeriod> AddMarkingPeriods(IList<MarkingPeriod> markingPeriods)
+        public bool Exists(int? classId, int? markingPeriodId)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            return Add(markingPeriods);
+            var mpc = GetMarkingPeriodClasses(new MarkingPeriodClassQuery
+            {
+                ClassId = classId,
+                MarkingPeriodId = markingPeriodId
+            });
+
+            return mpc.ToList().Count > 0;
         }
 
-        public MarkingPeriod GetMarkingPeriodById(int id)
+        public new void Delete(IList<MarkingPeriodClass> markingPeriodClasses)
         {
-            return GetById(id);
+            foreach (var mpc in markingPeriodClasses)
+            {
+                Delete(new MarkingPeriodClassQuery
+                {
+                    MarkingPeriodId = mpc.MarkingPeriodRef,
+                    ClassId = mpc.ClassRef
+                });
+            }
         }
-    }   
 
+        public IEnumerable<MarkingPeriodClass> GetByClassId(int? classId)
+        {
+            return GetMarkingPeriodClasses(new MarkingPeriodClassQuery
+            {
+                ClassId = classId
+            });
+        }
+
+        public MarkingPeriodClass GetMarkingPeriodClass(int classId, int markingPeriodId)
+        {
+            return GetMarkingPeriodClassOrNull(new MarkingPeriodClassQuery
+            {
+                MarkingPeriodId = markingPeriodId,
+                ClassId = classId
+            });
+        }
+    }
     public class DemoMarkingPeriodService : DemoSchoolServiceBase, IMarkingPeriodService
     {
         private DemoMarkingPeriodStorage MarkingPeriodStorage { get; set; }
@@ -119,22 +141,27 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<MarkingPeriod> Edit(IList<MarkingPeriod> markingPeriods)
         {
-            return MarkingPeriodStorage.Edit(markingPeriods);
+            return MarkingPeriodStorage.Update(markingPeriods);
         }
 
         public MarkingPeriod GetMarkingPeriodById(int id)
         {
-            return MarkingPeriodStorage.GetMarkingPeriodById(id);
+            return MarkingPeriodStorage.GetById(id);
         }
 
         public MarkingPeriod GetLastMarkingPeriod(DateTime? tillDate = null)
         {
-            return MarkingPeriodStorage.GetLastMarkingPeriod(tillDate);
+            return MarkingPeriodStorage.GetLast(tillDate ?? Context.NowSchoolTime);
         }
 
         public MarkingPeriodClass GetMarkingPeriodClass(int classId, int markingPeriodId)
         {
             return MarkingPeriodClassStorage.GetMarkingPeriodClass(classId, markingPeriodId);
+        }
+
+        public IEnumerable<MarkingPeriodClass> GetMarkingPeriodClassById(int classId)
+        {
+            return MarkingPeriodClassStorage.GetByClassId(classId);
         }
 
         public IList<MarkingPeriod> GetMarkingPeriods(int? schoolYearId)
@@ -144,23 +171,34 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public MarkingPeriod GetMarkingPeriodByDate(DateTime date, bool useLastExisting = false)
         {
-            return MarkingPeriodStorage.GetMarkingPeriodByDate(date, useLastExisting);
+            var res = MarkingPeriodStorage.GetMarkingPeriod(date);
+            if (res != null)
+                return res;
+            if (useLastExisting)
+                return GetLastMarkingPeriod(date);
+            return null;
         }
 
         public IList<MarkingPeriod> GetMarkingPeriodsByDateRange(DateTime fromDate, DateTime toDate, int? schoolYearId)
         {
-            return MarkingPeriodStorage.GetMarkingPeriodsByDateRange(fromDate, toDate, schoolYearId);
+            var res = GetMarkingPeriods(schoolYearId).AsEnumerable();
+            return res.Where(x => (x.StartDate <= fromDate && x.EndDate >= fromDate)
+                                      || (x.StartDate <= toDate && x.EndDate >= toDate)).ToList();
         }
         
         public IList<MarkingPeriod> Add(IList<MarkingPeriod> markingPeriods)
         {
-            return MarkingPeriodStorage.AddMarkingPeriods(markingPeriods);
+            return MarkingPeriodStorage.Add(markingPeriods);
         }
 
         public void DeleteMarkingPeriods(IList<MarkingPeriod> markingPeriods)
         {
-            MarkingPeriodStorage.DeleteMarkingPeriods(markingPeriods);
+            throw new NotImplementedException();
         }
 
+        public void AddMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses)
+        {
+            MarkingPeriodClassStorage.Add(markingPeriodClasses);
+        }
     }
 }

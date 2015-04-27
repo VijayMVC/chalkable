@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
@@ -39,6 +38,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public DemoFundService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
             PersonBalanceStorage = new DemoPersonBalanceStorage();
+        }
+
+        public void AddPersonBalance(DemoPersonBalance balance)
+        {
+            PersonBalanceStorage.Add(balance);
         }
 
         public decimal GetSchoolReserve(Guid schoolId)

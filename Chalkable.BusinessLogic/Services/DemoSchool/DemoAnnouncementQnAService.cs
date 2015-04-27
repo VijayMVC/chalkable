@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -16,8 +15,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             : base(x => x.Id, true)
         {
         }
-
-        
     }
 
     public class DemoAnnouncementQnAService :DemoSchoolServiceBase, IAnnouncementQnAService
@@ -108,7 +105,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new UnassignedUserException();
 
             var annQnA = GetAnnouncementQnA(announcementQnAId);
-            // todo: think about security
                 if (!CanEditQuestion(annQnA))
                     throw new ChalkableSecurityException();
 
@@ -181,6 +177,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var query = new AnnouncementQnAQuery {AnnouncementId = announcementId};
             return GetAnnouncmentQnAs(query).AnnouncementQnAs;
+        }
+
+        public void AddQnA(AnnouncementQnAComplex announcementQnAComplex)
+        {
+            AnnouncementQnAStorage.Add(announcementQnAComplex);
         }
     }
 }

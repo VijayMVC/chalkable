@@ -1,8 +1,6 @@
 ﻿using System.Collections.Generic;
-using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
+using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -43,6 +41,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IList<Address> GetAddress()
         {
             return AddressStorage.GetAll();
+        }
+
+        public Address GetAddress(int addressId)
+        {
+            return AddressStorage.GetAll().FirstOrDefault(x => x.Id == addressId);
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
@@ -22,13 +21,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         
 
-        public void AddDistrict(UserContext userContext)
-        {
-            if (!userContext.DistrictId.HasValue)
-                throw new Exception("Context doesn't have valid district id");
-            var districtId = userContext.DistrictId.Value;
-            data.Add(districtId, DemoDistrictService.CreateDemoDistrict(districtId));
-        }
+        
     }
 
     public class DemoDistrictService : DemoMasterServiceBase, IDistrictService
@@ -103,6 +96,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 Name = "Demo District",
                 TimeZone = "Central Standard Time"
             };
+        }
+
+        public void AddDistrict(UserContext userContext)
+        {
+            if (!userContext.DistrictId.HasValue)
+                throw new Exception("Context doesn't have valid district id");
+            var districtId = userContext.DistrictId.Value;
+            var district = DemoDistrictService.CreateDemoDistrict(districtId);
+            DistrictStorage.Add(district);
         }
     }
 }

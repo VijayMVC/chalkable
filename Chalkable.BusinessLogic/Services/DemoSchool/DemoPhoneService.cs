@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
@@ -13,12 +12,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             : base(null, true)
         {
         }
-
-        public IList<Person> GetUsersByPhone(string phone)
-        {
-            
-        }
-
         public Phone GetPhone(int personId, string digitOnlyValue)
         {
             return
@@ -111,7 +104,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         
         public IList<Person> GetUsersByPhone(string phone)
         {
-            return ServiceLocator.PersonService.GetPersonsByPhone(phone);
+            return new List<Person>();
         }
     }
 }

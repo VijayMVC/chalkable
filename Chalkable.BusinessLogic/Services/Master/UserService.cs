@@ -11,7 +11,6 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -252,7 +251,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             var schoolUser = user.SchoolUsers.First();
             var schoolYear = DemoSchoolYearService.GetDemoSchoolYear();
             int roleId;
-            var personId = DemoPersonStorage.GetPersonDataForLogin(schoolUser.User, out roleId);
+            var personId = DemoPersonService.GetPersonDataForLogin(schoolUser.User, out roleId);
             var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, developerId, personId, schoolYear)
             {
                 Claims = ClaimInfo.Create(DemoUserService.GetDemoClaims())

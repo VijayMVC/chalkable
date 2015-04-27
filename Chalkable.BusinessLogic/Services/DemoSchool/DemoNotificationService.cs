@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.BusinessLogic.Services.School.Notifications;
 using Chalkable.Common;
@@ -23,12 +22,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
     public class DemoNotificationService : DemoSchoolServiceBase, INotificationService
     {
-        private NotificationBuilder builder;
-        private DemoNotificationStorage NotificationStorage;
+        private readonly NotificationBuilder builder;
+        private DemoNotificationStorage NotificationStorage { get; set; }
         public DemoNotificationService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
             NotificationStorage = new DemoNotificationStorage();
-            builder = new NotificationBuilder();
+            builder = new NotificationBuilder(serviceLocator);
         }
 
         public int GetUnshownNotificationsCount()

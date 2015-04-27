@@ -37,7 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         public NotificationService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
-            builder = new NotificationBuilder();
+            builder = new NotificationBuilder(serviceLocator);
         }
 
         public int GetUnshownNotificationsCount()

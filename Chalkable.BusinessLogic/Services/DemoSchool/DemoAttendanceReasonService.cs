@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -45,24 +40,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Add(IList<AttendanceReason> reasons)
         {
-            if(!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
+            foreach (var attendanceReason in reasons)
+            {
+                attendanceReason.AttendanceLevelReasons =
+                    AttendanceLevelReasonStorage.GetForAttendanceReason(attendanceReason.Id);
+            }
             AttendanceReasonStorage.Add(reasons);
         }
 
         public void Edit(IList<AttendanceReason> reasons)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
             AttendanceReasonStorage.Update(reasons);
         }
 
         public void Delete(IList<int> ids)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
             AttendanceReasonStorage.Delete(ids);
         }
 
@@ -86,23 +78,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void EditAttendanceLevelReasons(List<AttendanceLevelReason> attendanceLevelReasons)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
             AttendanceLevelReasonStorage.Update(attendanceLevelReasons);
         }
 
         public void DeleteAttendanceLevelReasons(IList<int> ids)
         {
-              if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
             AttendanceLevelReasonStorage.Delete(ids);
         }
 
         public IList<AttendanceReason> GetAll()
         {
             return AttendanceReasonStorage.GetAll();
-            
         }
     }
 }

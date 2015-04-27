@@ -4,12 +4,10 @@ using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Storage;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -117,9 +115,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
             if (CoreRoles.TEACHER_ROLE.Id == query.RoleId)
             {
-
-                var announcementRefs =
-                    StorageLocator.AnnouncementRecipientStorage.GetAll()
+                var announcementRefs = ((DemoAnnouncementService)ServiceLocator.AnnouncementService)
+                    .GetAnnouncementRecipients(null)
                         .Where(x => x.RoleRef == query.RoleId || x.PersonRef == query.CallerId)
                         .Select(x => x.AnnouncementRef);
 
@@ -127,14 +124,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     attachments.Where(
                         x =>
                         {
-                            var announcement = StorageLocator.AnnouncementStorage.GetById(x.AnnouncementRef);
+                            var announcement = ServiceLocator.AnnouncementService.GetAnnouncementById(x.AnnouncementRef);
                             return x.PersonRef == query.CallerId || x.PersonRef == announcement.PrimaryTeacherRef || announcementRefs.Contains(x.AnnouncementRef);
                         });
 
             }
             if (CoreRoles.STUDENT_ROLE.Id == query.RoleId)
             {
-                var classRefs = StorageLocator.ClassPersonStorage.GetAll().Where(x => x.PersonRef == query.CallerId).Select(x => x.ClassRef).ToList();
+                var classRefs = ServiceLocator.ClassService.GetClassPersons(query.CallerId.Value, null).Select(x => x.ClassRef).ToList();
 
                 attachments = attachments.Where(x =>
                 {
@@ -242,6 +239,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 AddAttachment(toAnnouncementId, content, sourceAnnouncementAttachment.Name, "");
             }
             return GetAttachments(toAnnouncementId);
+        }
+
+        public void DeleteAttachments(int id)
+        {
+            var attachments = ServiceLocator.AnnouncementAttachmentService.GetAttachments(id);
+            foreach (var announcementAttachment in attachments)
+            {
+                ServiceLocator.AnnouncementAttachmentService.DeleteAttachment(announcementAttachment.Id);
+            }
         }
     }
 }

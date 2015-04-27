@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -44,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 throw new ChalkableException("User can send only one review per application");
 
             var user = DemoUserService.CreateDemoUser(Context.DistrictId.Value, Context.UserId, Context.Login);
-            user.FullName = ServiceLocator.Person.GetPerson(Context.PersonId.Value).FullName();
+            user.FullName = ""; //ServiceLocator.Personsc.GetPerson(Context.PersonId.Value).FullName();
             ServiceLocator.UserService.Add(new List<User>{user});
 
             var appRating = new ApplicationRating

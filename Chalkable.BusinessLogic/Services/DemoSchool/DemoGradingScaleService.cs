@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
+using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
@@ -60,6 +60,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public void DeleteGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges)
         {
             GradingScaleRangeStorage.Delete(gradingScaleRanges);
+        }
+
+        public GradingScaleRange GetByAlphaGradeId(int alphaGradeId)
+        {
+             return GradingScaleRangeStorage.GetAll().FirstOrDefault(x => x.AlphaGradeRef == alphaGradeId);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -165,9 +164,41 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return SchoolYearStorage.GetAll();
         }
 
+        public IList<StudentSchoolYear> GetStudentAssignments(int personId)
+        {
+            return StudentSchoolYearStorage.GetAll(personId);
+        }
+
+        public IList<StudentSchoolYear> GetStudentAssignments(int? schoolYearId, StudentEnrollmentStatusEnum? enrollmentStatus)
+        {
+            return StudentSchoolYearStorage.GetList(schoolYearId, enrollmentStatus);
+        }
+
         public IList<StudentSchoolYear> GetStudentAssignments()
         {
             return StudentSchoolYearStorage.GetAll();
+        }
+
+        public SchoolYear GetByDate(DateTime date)
+        {
+            return SchoolYearStorage.GetByDate(date);
+        }
+
+        public bool IsStudentEnrolled(int studentId, int schoolYearId)
+        {
+            return StudentSchoolYearStorage.GetData().Any(x => x.Value.StudentRef == studentId
+                                                               && x.Value.SchoolYearRef == schoolYearId &&
+                                                               x.Value.IsEnrolled);
+        }
+
+        public int GetStudentGradeLevel(int studentId)
+        {
+            return StudentSchoolYearStorage.GetAll(studentId).Select(x => x.GradeLevelRef).First();
+        }
+
+        public bool GradeLevelExists(int gradeLevelId, int studentId)
+        {
+            return StudentSchoolYearStorage.Exists(new[] {gradeLevelId}, studentId);
         }
     }
 }

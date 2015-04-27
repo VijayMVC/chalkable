@@ -6,12 +6,10 @@ using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -68,25 +66,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             : base(x => x.Id)
         {
         }
-
-        
-
-        public PersonDetails GetPersonDetails(int personId, int callerId, int callerRoleId)
-        {
-            
-        }
-
-        public Person GetPerson(PersonQuery personQuery)
-        {
-            return GetPersons(personQuery).Persons.First();
-        }
-
-        public IList<Person> GetPersonsByPhone(string phone)
-        {
-            return Storage.PhoneStorage.GetUsersByPhone(phone);
-        }
-
-
     }
 
     public class DemoPersonService : DemoSchoolServiceBase, IPersonService
@@ -109,7 +88,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return new PaginatedList<Person>(persons.ToList(), start / count, count);
         }
 
-        private PersonQueryResult GetPersons(PersonQuery query)
+        public PersonQueryResult GetPersons(PersonQuery query)
         {
             query.CallerId = Context.PersonId;
             query.CallerRoleId = Context.Role.Id;
@@ -127,7 +106,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             if (query.TeacherId.HasValue)
             {
-                var classPersons = ServiceLocator.ClassService.GetClassPersons();
+                var classPersons = ((DemoClassService)ServiceLocator.ClassService).GetClassPersons();
                 var classes = classPersons.Select(x => ServiceLocator.ClassService.GetById(x.ClassRef)).ToList();
                 var clsIds = classes.Where(x => x.PrimaryTeacherRef == query.TeacherId).Select(x => x.Id).ToList();
                 var personIds = classPersons.Where(x => clsIds.Contains(x.ClassRef)).Select(x => x.PersonRef).ToList();
@@ -140,18 +119,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 {
                     if (query.RoleId == CoreRoles.TEACHER_ROLE.Id)
                     {
-                        var teacherRef = Storage.ClassStorage.GetClassDetailsById(query.ClassId.Value).PrimaryTeacherRef;
-
+                        var teacherRef = ServiceLocator.ClassService.GetClassDetailsById(query.ClassId.Value).PrimaryTeacherRef;
                         persons = persons.Where(x => x.Id == teacherRef);
                     }
 
                     if (query.RoleId == CoreRoles.STUDENT_ROLE.Id)
                     {
-                        var personIds = Storage.ClassPersonStorage.GetClassPersons(new ClassPersonQuery
-                        {
-                            ClassId = query.ClassId
-                        }).Select(x => x.PersonRef).ToList();
-
+                        var personIds = ((DemoClassService)ServiceLocator.ClassService)
+                            .GetClassPersons(query.ClassId.Value).Select(x => x.PersonRef).ToList();
                         persons = persons.Where(x => personIds.Contains(x.Id));
                     }
                 }
@@ -159,8 +134,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             if (query.CallerRoleId == CoreRoles.STUDENT_ROLE.Id)
             {
+
                 var studentGradeLevelId =
-                    Storage.StudentSchoolYearStorage.GetAll(query.CallerId.Value).Select(x => x.GradeLevelRef);
+                    ((DemoSchoolYearService) ServiceLocator.SchoolYearService).GetStudentGradeLevel(query.CallerId.Value);
                 persons = persons.Where(x => x.Id == query.CallerId ||
                                              (x.RoleRef == CoreRoles.TEACHER_ROLE.Id ||
                                               x.RoleRef == CoreRoles.ADMIN_GRADE_ROLE.Id ||
@@ -168,8 +144,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                                               x.RoleRef == CoreRoles.ADMIN_VIEW_ROLE.Id)
                                              ||
                                              (x.RoleRef == CoreRoles.STUDENT_ROLE.Id &&
-                                              Storage.StudentSchoolYearStorage.Exists(
-                                                  new List<int>(studentGradeLevelId), x.Id)));
+                                              ((DemoSchoolYearService)ServiceLocator.SchoolYearService).GradeLevelExists(studentGradeLevelId, x.Id)));
             }
 
             if (query.CallerRoleId == CoreRoles.CHECKIN_ROLE.Id)
@@ -306,11 +281,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             });
 
             if (personDetails.AddressRef.HasValue)
-                personDetails.Address = ServiceLocator.AddressService.GetAddress(personDetails.AddressRef.Value);
+                personDetails.Address = ((DemoAddressService)ServiceLocator.AddressService).GetAddress(personDetails.AddressRef.Value);
 
             personDetails.Phones = ServiceLocator.PhoneService.GetPhones(personDetails.Id);
 
-            personDetails.StudentSchoolYears = Storage.StudentSchoolYearStorage.GetAll(personDetails.Id);
+            personDetails.StudentSchoolYears = ((DemoSchoolYearService)ServiceLocator.SchoolYearService).GetStudentAssignments(personDetails.Id);
 
             return personDetails;
         }
@@ -338,7 +313,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<Person> GetAll()
         {
-            throw new NotImplementedException();
+            return PersonStorage.GetAll();
         }
         
         public void ProcessPersonFirstLogin(int id)
@@ -349,6 +324,32 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (person.FirstLoginDate.HasValue) return;
             person.FirstLoginDate = Context.NowSchoolTime;
             PersonStorage.Update(person);
+        }
+
+        public Person GetPerson(PersonQuery personQuery)
+        {
+            return GetPersons(personQuery).Persons.First();
+        }
+
+        public IList<Person> GetPersonsByPhone(string phone)
+        {
+            throw new NotImplementedException();
+        }
+
+        public List<Person> GetByClassId(int classId)
+        {
+            return GetPersons(new PersonQuery
+            {
+                ClassId = classId
+            }).Persons;
+        }
+
+        public List<Person> GetTeacherStudents(int teacherId)
+        {
+            return GetPersons(new PersonQuery
+            {
+                TeacherId = teacherId
+            }).Persons;
         }
     }
 }

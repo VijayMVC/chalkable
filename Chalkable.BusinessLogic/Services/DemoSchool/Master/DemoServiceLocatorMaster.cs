@@ -1,5 +1,4 @@
 ﻿using System;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
@@ -30,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         private IUserTrackingService userTrackingService;
         private ICommonCoreStandardService commonCoreStandardService;
 
-        public DemoServiceLocatorMaster(UserContext context, DemoStorageLocator storageLocator)
+        public DemoServiceLocatorMaster(UserContext context)
             : base(context)
         {
             userService = new DemoUserService(this);

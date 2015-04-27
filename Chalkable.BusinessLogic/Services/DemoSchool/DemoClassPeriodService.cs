@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -20,12 +17,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
     }
 
+    public class DemoScheduledTimeSlotStorage : BaseDemoGuidStorage<ScheduledTimeSlot>
+    {
+        public DemoScheduledTimeSlotStorage() : base(null, true)
+        {
+        }
+    }
+
     public class DemoClassPeriodService : DemoSchoolServiceBase, IClassPeriodService
     {
         private DemoClassPeriodStorage ClassPeriodStorage { get; set; }
+        private DemoScheduledTimeSlotStorage ScheduledTimeSlotStorage { get; set; }
         public DemoClassPeriodService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
             ClassPeriodStorage = new DemoClassPeriodStorage();
+            ScheduledTimeSlotStorage = new DemoScheduledTimeSlotStorage();
         }
         
         public void Add(IList<ClassPeriod> classPeriods)
@@ -42,6 +48,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             return ServiceLocator.ClassService.GetById(DemoSchoolConstants.AlgebraClassId);
 
+        }
+
+        public void AddScheduleTimeSlots(IList<ScheduledTimeSlot> slots)
+        {
+            ScheduledTimeSlotStorage.Add(slots);
         }
 
         private static ScheduleItem CreateScheduleItem(Date date, Period period, ScheduledTimeSlot scheduledTime, Class c, Room room)
@@ -86,27 +97,27 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ScheduleItem> GetSchedule(int schoolYearId, int? teacherId, int? studentId, int? classId, DateTime from, DateTime to)
         {
-            var dates = StorageLocator.DateStorage.GetDates(new DateQuery
+            var dates = ((DemoCalendarDateService)ServiceLocator.CalendarDateService).GetDates(new DateQuery
             {
                 FromDate = from,
                 ToDate = to,
                 SchoolYearId = schoolYearId,
                 SchoolDaysOnly = true
             });
-            var periods = StorageLocator.PeriodStorage.GetPeriods(schoolYearId);
+            var periods = ServiceLocator.PeriodService.GetPeriods(schoolYearId);
             var classes = studentId.HasValue
-                ? StorageLocator.ClassStorage.GetStudentClasses(schoolYearId, studentId.Value, null)
+                ? ServiceLocator.ClassService.GetStudentClasses(schoolYearId, studentId.Value, null)
                 : new List<ClassDetails>();
 
             if (teacherId.HasValue)
             {
-                SER.ClassStorage.GetTeacherClasses(schoolYearId, teacherId.Value, null);
+                ServiceLocator.ClassService.GetTeacherClasses(schoolYearId, teacherId.Value, null);
                 classes = classes.Where(x => x.PrimaryTeacherRef == teacherId).ToList();
             }
 
-            var classsPeriods = GetAll().Where(x => x.Period.SchoolYearRef == schoolYearId).ToList();
-            var rooms = StorageLocator.RoomStorage.GetAll();
-            var scheduleTimeSlots = StorageLocator.ScheduledTimeSlotStorage.GetAll();
+            var classsPeriods = ClassPeriodStorage.GetAll().Where(x => x.Period.SchoolYearRef == schoolYearId).ToList();
+            var rooms = ((DemoRoomService)ServiceLocator.RoomService).GetRooms();
+            var scheduleTimeSlots = ScheduledTimeSlotStorage.GetAll();
 
             var res = new List<ScheduleItem>();
             foreach (var date in dates)

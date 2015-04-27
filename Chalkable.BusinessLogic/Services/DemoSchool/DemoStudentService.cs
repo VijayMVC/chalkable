@@ -4,11 +4,8 @@ using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
-using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -138,8 +135,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
             var classTeachers = ServiceLocator.ClassService.GetClassTeachers(classId, teacherId);
             var markingPeriods = ServiceLocator.MarkingPeriodService.GetMarkingPeriods(schoolYearId);
-            var stSchoolYears = ServiceLocator.SchoolYearService.GetStudentAssignments(schoolYearId, null);
-            var classPersons = StorageLocator.ClassPersonStorage.GetClassPersons(new ClassPersonQuery { ClassId = classId });
+            var stSchoolYears = ((DemoSchoolYearService)ServiceLocator.SchoolYearService).GetStudentAssignments(schoolYearId, null);
+            var classPersons = ((DemoClassService)ServiceLocator.ClassService).GetClassPersons(classId.Value);
             classPersons = classPersons.Where(x => classTeachers.Any(y => y.ClassRef == x.ClassRef)).ToList();
             classPersons = classPersons.Where(x => markingPeriods.Any(y => y.Id == x.MarkingPeriodRef)).ToList();
 
@@ -164,11 +161,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var students = StudentStorage.GetAll();
             var markingPeriods = ServiceLocator.MarkingPeriodService.GetMarkingPeriods(schoolYearId);
-            var classPersons = ServiceLocator.ClassService.GetClassPersons();
-            classPersons = classPersons.Where(x => markingPeriods.Any(mp => mp.Id == x.MarkingPeriodRef)).ToList();
+            var classPersons = ((DemoClassService)ServiceLocator.ClassService).GetClassPersonsByMarkingPeriods(markingPeriods);
 
             students = students.Where(s => classPersons.Any(cp => cp.PersonRef == s.Id)).ToList();
-            var stWithDrawDic = StorageLocator.StudentSchoolYearStorage.GetList(schoolYearId, null)
+            var stWithDrawDic = ((DemoSchoolYearService)ServiceLocator.SchoolYearService).GetStudentAssignments(schoolYearId, null)
                                             .GroupBy(x => x.StudentRef).ToDictionary(x => x.Key, x => !x.First().IsEnrolled);
 
             return PrepareStudentListDetailsData(students, stWithDrawDic);
@@ -177,6 +173,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IList<StudentHealthCondition> GetStudentHealthConditions(int studentId)
         {
             return StudentHealthConditionStorage.GetStudentHealthConditions(studentId);
+        }
+
+        public StudentDetails GetStudentDetails(int studentId, int schoolYearId)
+        {
+            var student = StudentStorage.GetById(studentId);
+            var isEnrolled = ((DemoSchoolYearService)ServiceLocator.SchoolYearService).IsStudentEnrolled(studentId, schoolYearId);
+            return PrepareStudentDetailsData(student, !isEnrolled);
         }
 
         public StudentSummaryInfo GetStudentSummaryInfo(int studentId)
@@ -189,7 +192,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
 
-            var discipline = ServiceLocator.DisciplineService.GetList(DateTime.Today);
+            var discipline = ((DemoDisciplineService)ServiceLocator.DisciplineService).GetList(DateTime.Today);
 
             var infractions = new List<StiConnector.Connectors.Model.Infraction>();
 
@@ -205,14 +208,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                                           into g
                                           select new { Id = g.Key, Count = g.Count() };
 
-            var attendances = ServiceLocator.AttendanceService.GetSectionAttendanceSummary(studentId,
-                DateTime.Today.AddDays(-1), DateTime.Today).Select(sectionAttendanceSummary => new SectionAbsenceSummary
-                {
-                    SectionId = sectionAttendanceSummary.SectionId,
-                    Tardies = sectionAttendanceSummary.Students.Select(x => x.Tardies).Sum(),
-                    Absences = sectionAttendanceSummary.Students.Select(x => x.Absences).Sum(),
-
-                }).ToList();
+            var attendances =
+                ((DemoAttendanceService) ServiceLocator.AttendanceService).GetStudentAbsenceSummary(studentId);
 
             var infractionSummary = infractionSummaries.Select(x => new InfractionSummary
             {
@@ -226,11 +223,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 ClassRank = classRank,
                 Infractions = infractionSummary,
                 SectionAttendance = attendances,
-                Scores = StorageLocator.StiActivityScoreStorage.GetScores(studentId)
+                Scores = ((DemoStudentAnnouncementService)ServiceLocator.StudentAnnouncementService).GetActivityScoresForStudent(studentId)
             };
             var student = GetStudentDetails(studentId, syId);
             var activitiesids = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();
-            var anns = StorageLocator.AnnouncementStorage.GetAnnouncements(new AnnouncementsQuery { SisActivitiesIds = activitiesids }).Announcements;
+            var anns = ((DemoAnnouncementService) ServiceLocator.AnnouncementService).GetByActivitiesIds(activitiesids);
             var res = StudentSummaryInfo.Create(student, nowDashboard, chlkInfractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
         }
@@ -260,7 +257,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     if (activity == null) continue;
                     importantActivitiesIds.Add(activity.Id);
                 }
-                announcements = ServiceLocator.AnnouncementService.GetTeacherAnnouncementService().GetByActivitiesIds(importantActivitiesIds);
+                announcements = ((DemoAnnouncementService)ServiceLocator.AnnouncementService).GetTeacherAnnouncementService()
+                    .GetByActivitiesIds(importantActivitiesIds);
             }
             return StudentExplorerInfo.Create(student, classes, inowStExpolorer.Averages.ToList()
                 , inowStExpolorer.Standards.ToList(), announcements, standards);

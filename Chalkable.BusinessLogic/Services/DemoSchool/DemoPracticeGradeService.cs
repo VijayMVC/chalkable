@@ -3,13 +3,21 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoPracticeGradeStorage : BaseDemoIntStorage<PracticeGrade>
+    {
+        public DemoPracticeGradeStorage()
+            : base(x => x.Id, true)
+        {
+
+        }
+    }
+
     public class DemoPracticeGradeService : DemoSchoolServiceBase, IPracticeGradeService
     {
         private DemoPracticeGradeStorage PracticeGradeStorage { get; set; }
@@ -25,8 +33,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new ChalkableSecurityException();
             var classes = ServiceLocator.ClassService.GetStudentClasses(Context.SchoolYearId.Value, studentId);
 
-
-            var classStandards = StorageLocator.ClassStandardStorage.GetAll().Where(x => x.StandardRef == standardId);
+            var classStandards = ((DemoStandardService) ServiceLocator.StandardService).GetClassStandards(standardId);
 
             if (!classes.Any(c => classStandards.Any(cs => cs.ClassRef == c.Id || cs.ClassRef == c.CourseRef)))
                 throw new ChalkableSecurityException();
@@ -63,7 +70,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (standardId.HasValue)
                 standards = standards.Where(x => x.Id == standardId).ToList();
             var practiceGrades = GetPracticeGrades(studentId, standardId);
-            var standardsScores = StorageLocator.StiStandardScoreStorage.GetStandardScores(classId, null, null);
+            var standardsScores = ((DemoGradingStandardService)ServiceLocator.GradingStandardService).GetStandardScores(classId, null, null);
             var res = new List<PracticeGradesDetailedInfo>();
             foreach (var standard in standards)
             {

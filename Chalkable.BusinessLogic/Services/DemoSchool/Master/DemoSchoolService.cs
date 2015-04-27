@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -22,16 +21,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             return data.ContainsKey(id) ? data[id] : null;
         }
-        
-
-        public void AddMasterSchool(Guid? id)
-        {
-            if (!id.HasValue)
-                throw new ChalkableException("Not valid district id");
-            Add(new List<Data.Master.Model.School> { CreateMasterSchool(id.Value) });
-        }
-
-
     }
 
     public class DemoSchoolService : DemoMasterServiceBase, ISchoolService
@@ -51,6 +40,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public IList<Data.Master.Model.School> GetAll()
         {
             return MasterSchoolStorage.GetAll();
+        }
+
+        public void AddMasterSchool(Guid? id)
+        {
+            if (!id.HasValue)
+                throw new ChalkableException("Not valid district id");
+            Add(new List<Data.Master.Model.School> { CreateMasterSchool(id.Value) });
         }
 
         public void Add(Guid districtId, int localId, string name)

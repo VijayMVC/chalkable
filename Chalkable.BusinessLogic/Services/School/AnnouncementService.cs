@@ -53,7 +53,6 @@ namespace Chalkable.BusinessLogic.Services.School
         void RemoveAllAnnouncementStandards(int standardId);
         IList<AnnouncementStandard> GetAnnouncementStandards(int classId);
         void CopyAnnouncement(int id, IList<int> classIds);
-        IAnnouncementService GetTeacherAnnouncementService();
     }
 
     public class AnnouncementService : SisConnectedService, IAnnouncementService
@@ -834,11 +833,6 @@ namespace Chalkable.BusinessLogic.Services.School
             if(!ann.SisActivityId.HasValue)
                 throw new ChalkableException("Current announcement doesn't have activityId");
             ConnectorLocator.ActivityConnector.CopyActivity(ann.SisActivityId.Value, classIds);
-        }
-
-        public void GetTeacherAnnouncementService()
-        {
-            throw new NotImplementedException();
         }
 
         public void SetAnnouncementsAsComplete(DateTime? toDate, bool complete)

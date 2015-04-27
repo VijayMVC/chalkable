@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
-    public class DemoBlobStorage:IBaseDemoStorage
+    public class DemoBlobStorage
     {
         private readonly Dictionary<string, byte[]> Blobs = new Dictionary<string, byte[]>(); 
 
@@ -21,11 +20,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             Blobs.Remove(key);
         }
-
-        public void Setup(DemoStorageLocator storageLocator, UserContext context)
-        {
-        }
-
         public void AddBlob(string containerAddress, string key, byte[] content)
         {
             Blobs.Add(key, content);

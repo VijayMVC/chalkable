@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
@@ -11,18 +10,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public DemoDayTypeStorage()
             : base(x => x.Id)
         {
-        }
-
-        public IList<DayType> GetDateTypes(int schoolYearId, int? fromNumber = null, int? toNumber = null)
-        {
-            var dayTypes = data.Select(x => x.Value).Where(x => x.SchoolYearRef == schoolYearId);
-
-            if (fromNumber.HasValue)
-                dayTypes = dayTypes.Where(x => x.Number >= fromNumber);
-            if (toNumber.HasValue)
-                dayTypes = dayTypes.Where(x => x.Number <= toNumber);
-
-            return dayTypes.ToList();
         }
 
         public bool Exists(int schoolYearId)
@@ -42,6 +29,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public void Add(IList<DayType> dayTypes)
         {
             DayTypeStorage.Add(dayTypes);
+        }
+
+        public IList<DayType> GetDateTypes(int schoolYearId, int? fromNumber = null, int? toNumber = null)
+        {
+            var dayTypes = DayTypeStorage.GetData().Select(x => x.Value).Where(x => x.SchoolYearRef == schoolYearId);
+
+            if (fromNumber.HasValue)
+                dayTypes = dayTypes.Where(x => x.Number >= fromNumber);
+            if (toNumber.HasValue)
+                dayTypes = dayTypes.Where(x => x.Number <= toNumber);
+
+            return dayTypes.ToList();
         }
 
         public void Edit(IList<DayType> dayTypes)

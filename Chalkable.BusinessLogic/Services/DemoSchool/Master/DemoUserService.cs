@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
@@ -113,7 +112,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             var schoolUsers = new List<SchoolUser>();
 
-            var school = DemoMasterSchoolStorage.CreateMasterSchool(districtRef);
+            var school = DemoSchoolService.CreateMasterSchool(districtRef);
 
             var district = DemoDistrictService.CreateDemoDistrict(districtRef);
 
@@ -127,7 +126,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 Login = login,
                 IsDemoUser = true,
                 District = district,
-                LoginInfo = new UserLoginInfo()
+                LoginInfo = new UserLoginInfo
                 {
                     Id = userId
                 }

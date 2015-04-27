@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
@@ -69,7 +68,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<Infraction> GetInfractions(bool activeOnly = false)
         {
-            var res = Storage.InfractionStorage.GetAll();
+            var res = InfractionStorage.GetAll();
             if(activeOnly)
                 res = res.Where(x=>x.IsActive).ToList();
             return res;

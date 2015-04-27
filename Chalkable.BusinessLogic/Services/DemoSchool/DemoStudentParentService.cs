@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
@@ -18,11 +17,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var studentParent = new StudentParent
             {
                 ParentRef = parentId,
-                StudentRef = studentId,
-                Id = GetNextFreeId()
+                StudentRef = studentId
             };
 
-            data.Add(studentParent.Id, studentParent);
+            return Add(studentParent);
         }
 
         public IList<StudentParentDetails> GetParents(int studentId)
