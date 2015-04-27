@@ -54,6 +54,7 @@
     </Imports>
     <ConfigurationSettings>
       <!-- DB settings -->
+      <Setting name="ChalkableStorage.ConnectionString" />
       <Setting name="ChalkableMaster" />
       <Setting name="ChalkableSchool" />
       <!--<Setting name="ChalkableSchoolTemplate"/>-->
@@ -81,6 +82,7 @@
     </Imports>
     <ConfigurationSettings>
       <!-- DB settings -->
+      <Setting name="ChalkableStorage.ConnectionString" />
       <Setting name="ChalkableMaster" />
       <Setting name="ChalkableSchool" />
       <!--<Setting name="ChalkableSchoolTemplate"/>-->

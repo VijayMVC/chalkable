@@ -4,8 +4,8 @@
     <Instances count="1" />
     <ConfigurationSettings>
       <!-- DB Settings -->
-      <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
       <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />-->
+      <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
       <Setting name="ChalkableMaster" value="Data Source=zbqa56h95p.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
@@ -42,6 +42,8 @@
     <Instances count="1" />
     <ConfigurationSettings>
       <!-- DB Settings -->
+      <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />-->
+      <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
       <Setting name="ChalkableMaster" value="Data Source=zbqa56h95p.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
@@ -67,6 +69,8 @@
     <Instances count="1" />
     <ConfigurationSettings>
       <!-- DB Settings -->
+      <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />-->
+      <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
       <Setting name="ChalkableMaster" value="Data Source=zbqa56h95p.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
