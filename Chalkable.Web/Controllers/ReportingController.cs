@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model.Reports;
+using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -37,9 +39,22 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        public ActionResult ProgressReport(ProgressReportInputModel progressReportInput, string studentComments)
+        public ActionResult ProgressReport(ProgressReportInputModel progressReportInput, StringList studentComments)
         {
-            progressReportInput.StudentComments = JsonConvert.DeserializeObject<IList<StudentCommentInputModel>>(studentComments);
+            if(progressReportInput.StudentIds != null &&(studentComments == null || progressReportInput.StudentIds.Count != studentComments.Count))
+                throw new ChalkableException("Invalid student comments param");
+            if (progressReportInput.StudentIds != null)
+            {
+                progressReportInput.StudentComments = new List<StudentCommentInputModel>();
+                for (int i = 0; i < progressReportInput.StudentIds.Count; i++)
+                {
+                    progressReportInput.StudentComments.Add(new StudentCommentInputModel
+                    {
+                        StudentId = progressReportInput.StudentIds[i],
+                        Comment = studentComments[i]
+                    });
+                }   
+            }
             return Report(progressReportInput, SchoolLocator.ReportService.GetProgressReport, "ProgressReport");
         }
 
