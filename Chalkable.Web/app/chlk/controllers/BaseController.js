@@ -97,8 +97,9 @@ NAMESPACE('chlk.controllers', function (){
                            .thenBreak();
                    }, this)
                    .catchException(chlk.lib.exception.NoAnnouncementException, function(exception){
-                       return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase(), controller: 'feed', action: 'doToList' }])
-                           .thenBreak();
+                       return this.redirectToErrorPage_(exception.toString(), 'error', 'viewAnnouncementError', [])
+                       //return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase(), controller: 'feed', action: 'doToList' }])
+                       //    .thenBreak();
                    }, this)
                    .catchException(chlk.lib.exception.ChalkableSisException, function(exception){
                        return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])

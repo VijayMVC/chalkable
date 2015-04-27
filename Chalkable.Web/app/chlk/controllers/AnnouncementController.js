@@ -447,12 +447,11 @@ NAMESPACE('chlk.controllers', function (){
             this.getView().reset();
             var result = this.announcementService
                 .getAnnouncement(announcementId)
-
                 .attach(this.validateResponse_())
+                .catchError(this.handleNoAnnouncementException_, this)
                 .then(function(announcement){
                     return this.prepareAnnouncementForView(announcement);
                 }, this);
-                //.catchError(this.handleNoAnnouncementException_, this);
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
         },
 
@@ -955,8 +954,8 @@ NAMESPACE('chlk.controllers', function (){
         function askQuestionAction(model) {
             var ann = this.announcementService
                 .askQuestion(model.getAnnouncementId(), model.getQuestion())
-                .catchError(this.handleNoAnnouncementException_, this)
-                .attach(this.validateResponse_());
+                .attach(this.validateResponse_())
+                .catchError(this.handleNoAnnouncementException_, this);
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, ann, 'update-qna');
         },
 
