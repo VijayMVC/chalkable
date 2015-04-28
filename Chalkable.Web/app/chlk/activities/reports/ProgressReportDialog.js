@@ -32,10 +32,7 @@ NAMESPACE('chlk.activities.reports', function(){
                     comment = item.parent('.student-item').find('.student-comment').getValue();
                     id = item.parent('.student-item').find('.student-chk').getValue();
                     if(item.is(':checked'))
-                        commentsArray.push({
-                            studentId:id,
-                            comment: comment
-                        });
+                        commentsArray.push(comment);
                     else
                         if(comment)
                             notSelectedCount++;
@@ -45,7 +42,7 @@ NAMESPACE('chlk.activities.reports', function(){
                 notSelectedNode.setValue(notSelectedCount);
 
                 if(commentsArray.length)
-                    commentsNode.setValue(JSON.stringify(commentsArray));
+                    commentsNode.setValue(commentsArray.join(','));
 
                 var yearToDate = node.find('#year-to-date-chk').checked();
                 var gradingPeriod = node.find('#grading-period-chk').checked();
