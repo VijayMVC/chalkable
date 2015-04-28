@@ -57,6 +57,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IGradedItemService GradedItemService { get; }
         IAnnouncementAttributeService AnnouncementAttributeService { get; }
         IContactService ContactService { get; }
+        ITeacherCommentService TeacherCommentService { get; }
         IDbService SchoolDbService { get; }
     }
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -113,6 +114,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IGradedItemService gradedItemService;
         private IAnnouncementAttributeService announcementAttributeService;
         private IContactService contactService;
+        private ITeacherCommentService teacherCommentService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -169,6 +171,7 @@ namespace Chalkable.BusinessLogic.Services.School
             gradedItemService = new GradedItemService(this);
             announcementAttributeService = new AnnouncementAttributeService(this);
             contactService = new ContactService(this);
+            teacherCommentService = new TeacherCommentService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -222,6 +225,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IGradedItemService GradedItemService { get { return gradedItemService; } }
         public IAnnouncementAttributeService AnnouncementAttributeService { get { return announcementAttributeService; } }
         public IContactService ContactService { get { return contactService; } }
+        public ITeacherCommentService TeacherCommentService { get { return teacherCommentService; } }
 
         public IDbService SchoolDbService
         {

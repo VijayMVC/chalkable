@@ -130,6 +130,7 @@
     <Compile Include="Connectors\Model\Reports\MissingAssignmentsParams.cs" />
     <Compile Include="Connectors\Model\Reports\SeatingChartReportPrams.cs" />
     <Compile Include="Connectors\Model\SectionAbsenceSummary.cs" />
+    <Compile Include="Connectors\Model\SectionCommect.cs" />
     <Compile Include="Connectors\Model\StudentExplorerDashboard.cs" />
     <Compile Include="Connectors\Model\Gradebook.cs" />
     <Compile Include="Connectors\Model\Reports\GradebookReportParams.cs" />
@@ -154,6 +155,7 @@
     <Compile Include="Connectors\Model\Reports\WorksheetReportParams.cs" />
     <Compile Include="Connectors\ReportConnector.cs" />
     <Compile Include="Connectors\SeatingChartConnector.cs" />
+    <Compile Include="Connectors\SectionCommentConnector.cs" />
     <Compile Include="Connectors\SectionStandardConnector.cs" />
     <Compile Include="Connectors\StandardScoreConnector.cs" />
     <Compile Include="Connectors\StudentConnector.cs" />

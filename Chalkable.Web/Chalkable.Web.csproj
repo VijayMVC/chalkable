@@ -218,6 +218,7 @@
     <Compile Include="Controllers\StorageMonitorController.cs" />
     <Compile Include="Controllers\PersonControllers\PersonController.cs" />
     <Compile Include="Controllers\StudyCenterController.cs" />
+    <Compile Include="Controllers\TeacherCommentController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Extensions\StaticContentExtenstion.cs" />
     <Compile Include="Extensions\ViewDataExtension.cs" />
@@ -359,6 +360,7 @@
     <Compile Include="Models\StudentAnnouncementViewData.cs" />
     <Compile Include="Models\HoverBoxesViewData.cs" />
     <Compile Include="Models\SysAdminViewData.cs" />
+    <Compile Include="Models\TeacherCommentViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\ApiRequestExtensions.cs" />
     <Compile Include="Tools\CompilerHelper.cs" />
