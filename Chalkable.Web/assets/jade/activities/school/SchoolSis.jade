@@ -1,0 +1,45 @@
+.school-sis
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('schools', 'details', self.getId()) Now
+                +ActionLink('schools', 'details', self.getId()) Schedule
+                +ActionLink('schools', 'people', self.getId()) People
+                +ActionLink('schools', 'sisInfo', self.getId()).pressed SIS
+    .content
+        .sis-user-info
+            +ActionForm('schools', 'updateSisInfo')
+                .x-form-field
+                    label Url:
+                    input(type="text",name="sisUrl", value=self.sisUrl)
+                .x-form-field
+                    label Name:
+                    input(type="text",name="sisName", value=self.sisName)
+                .x-form-field
+                    label User Name:
+                    input(type="text",name="sisUserName", value=self.sisUserName)
+                .x-form-field
+                    label Password:
+                    input(type="text",name="sisPassword", value=self.sisPassword)
+                +Button()(type="submit").special-button.blue-button.submit-btn Save
+        .sis-sync-info
+            +ActionForm('schools', 'updateSisSyncInfo')
+                .x-form-field
+                    label Attendance sync frequency:
+                    input(type="text",name="attendanceSyncFreq")
+                    +Button.special-button.blue-button.submit-btn Run
+                .x-form-field
+                    label Discipline sync frequency:
+                    input(type="text",name="disciplineSyncFreq")
+                    +Button.special-button.blue-button.submit-btn Run
+                .x-form-field
+                    label Person sync frequency:
+                    input(type="text",name="personSyncFreq")
+                    +Button.special-button.blue-button.submit-btn Run
+                .x-form-field
+                    label Schedule sync frequency:
+                    input(type="text",name="scheduleSyncFreq")
+                    +Button.special-button.blue-button.submit-btn Run
+                +Button()(type="submit").special-button.blue-button.submit-btn Save
+
+
