@@ -845,34 +845,40 @@ NAMESPACE('chlk.controllers', function (){
                 progressReportViewData = progressReportViewData.getClassId() ? progressReportViewData
                     : this.getContext().getSession().get('modelForSubmit', null);
 
-                var src = this.reportingService.submitProgressReport(
-                    progressReportViewData.getClassId(),
-                    progressReportViewData.getIdToPrint(),
-                    progressReportViewData.getFormat(),
+                this.reportingService.setStudentProgressReportComments(progressReportViewData.getClassId(),
                     progressReportViewData.getGradingPeriodId(),
-                    progressReportViewData.getAbsenceReasonIds(),
-                    progressReportViewData.isAdditionalMailings(),
-                    progressReportViewData.getDailyAttendanceDisplayMethod(),
-                    progressReportViewData.isDisplayCategoryAverages(),
-                    progressReportViewData.isDisplayClassAverages(),
-                    progressReportViewData.isDisplayLetterGrade(),
-                    progressReportViewData.isDisplayPeriodAttendance(),
-                    progressReportViewData.isDisplaySignatureLine(),
-                    progressReportViewData.isDisplayStudentComments(),
-                    progressReportViewData.isDisplayStudentMailingAddress(),
-                    progressReportViewData.isDisplayTotalPoints(),
-                    progressReportViewData.isGoGreen(),
-                    progressReportViewData.getMaxCategoryClassAverage(),
-                    progressReportViewData.getMaxStandardAverage(),
-                    progressReportViewData.getMinCategoryClassAverage(),
-                    progressReportViewData.getMinStandardAverage(),
-                    progressReportViewData.isPrintFromHomePortal(),
-                    progressReportViewData.getClassComment(),
-                    progressReportViewData.getStudentIds(),
-                    progressReportViewData.getCommentsList()
-                );
+                    progressReportViewData.getCommentsList())
+                    .then(function(model){
+                        var src = this.reportingService.submitProgressReport(
+                            progressReportViewData.getClassId(),
+                            progressReportViewData.getIdToPrint(),
+                            progressReportViewData.getFormat(),
+                            progressReportViewData.getGradingPeriodId(),
+                            progressReportViewData.getAbsenceReasonIds(),
+                            progressReportViewData.isAdditionalMailings(),
+                            progressReportViewData.getDailyAttendanceDisplayMethod(),
+                            progressReportViewData.isDisplayCategoryAverages(),
+                            progressReportViewData.isDisplayClassAverages(),
+                            progressReportViewData.isDisplayLetterGrade(),
+                            progressReportViewData.isDisplayPeriodAttendance(),
+                            progressReportViewData.isDisplaySignatureLine(),
+                            progressReportViewData.isDisplayStudentComments(),
+                            progressReportViewData.isDisplayStudentMailingAddress(),
+                            progressReportViewData.isDisplayTotalPoints(),
+                            progressReportViewData.isGoGreen(),
+                            progressReportViewData.getMaxCategoryClassAverage(),
+                            progressReportViewData.getMaxStandardAverage(),
+                            progressReportViewData.getMinCategoryClassAverage(),
+                            progressReportViewData.getMinStandardAverage(),
+                            progressReportViewData.isPrintFromHomePortal(),
+                            progressReportViewData.getClassComment(),
+                            progressReportViewData.getStudentIds()
+                        );
+                        this.getContext().getDefaultView().submitToIFrame(src);
+                        return null;
+                    }, this);
+
                 this.BackgroundCloseView(chlk.activities.reports.ProgressReportDialog);
-                this.getContext().getDefaultView().submitToIFrame(src);
                 return null;
             },
 

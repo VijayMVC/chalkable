@@ -125,7 +125,7 @@ NAMESPACE('chlk.services', function () {
         String, function submitProgressReport(classId, idToPrint, format, gradingPeriodId, absenceReasonIds, additionalMailings_, dailyAttendanceDisplayMethod,
                 displayCategoryAverages_, displayClassAverages_, displayLetterGrade_, displayPeriodAttendance_, displaySignatureLine_, displayStudentComments_,
                 displayStudentMailingAddress_, displayTotalPoints_, goGreen_, maxCategoryClassAverage_, maxStandardAverage_, minCategoryClassAverage_,
-                minStandardAverage_, printFromHomePortal_, classComment, studentIds, commentsList) {
+                minStandardAverage_, printFromHomePortal_, classComment, studentIds) {
             return this.getUrl('Reporting/ProgressReport.json', {
                 classId: classId.valueOf(),
                 gradingPeriodId: gradingPeriodId.valueOf(),
@@ -149,8 +149,7 @@ NAMESPACE('chlk.services', function () {
                 minStandardAverage: minStandardAverage_,
                 printFromHomePortal: printFromHomePortal_,
                 classComment: classComment,
-                studentIds: studentIds,
-                studentComments: commentsList
+                studentIds: studentIds
                 //comments:
             });
         },
@@ -313,6 +312,15 @@ NAMESPACE('chlk.services', function () {
                 gradingPeriodId: gradingPeriodId.valueOf(),
                 start: 0,
                 count: 9999
+            });
+        },
+
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, String]],
+        ria.async.Future, function setStudentProgressReportComments(classId, gradingPeriodId, studentComments) {
+            return this.get('Reporting/SetStudentProgressReportComments.json', Boolean, {
+                classId: classId.valueOf(),
+                gradingPeriodId: gradingPeriodId.valueOf(),
+                studentComments: studentComments
             });
         }
     ])
