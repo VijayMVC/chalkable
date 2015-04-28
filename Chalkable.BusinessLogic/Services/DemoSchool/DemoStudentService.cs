@@ -136,7 +136,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var classTeachers = ServiceLocator.ClassService.GetClassTeachers(classId, teacherId);
             var markingPeriods = ServiceLocator.MarkingPeriodService.GetMarkingPeriods(schoolYearId);
             var stSchoolYears = ((DemoSchoolYearService)ServiceLocator.SchoolYearService).GetStudentAssignments(schoolYearId, null);
-            var classPersons = ((DemoClassService)ServiceLocator.ClassService).GetClassPersons(classId.Value);
+            var classPersons = ((DemoClassService)ServiceLocator.ClassService).GetClassPersons(classId);
             classPersons = classPersons.Where(x => classTeachers.Any(y => y.ClassRef == x.ClassRef)).ToList();
             classPersons = classPersons.Where(x => markingPeriods.Any(y => y.Id == x.MarkingPeriodRef)).ToList();
 

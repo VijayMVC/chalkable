@@ -511,7 +511,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 ClassRef = classId,
                 ClassAnnouncementTypeRef = classAnnouncementTypeId,
                 Created = nowLocalDate,
-                Expires = expiresDateTime.HasValue ? expiresDateTime.Value : DateTime.MinValue,
+                Expires = expiresDateTime.HasValue ? expiresDateTime.Value : DateTime.Today,
                 State = AnnouncementState.Draft,
                 GradingStyle = GradingStyleEnum.Numeric100,
                 SchoolRef = Context.SchoolLocalId.Value,
@@ -582,9 +582,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 ? ServiceLocator.PersonService.GetPerson(announcement.PrimaryTeacherRef.Value)
                 : null;
 
-            var studentAnnouncements =
-                ServiceLocator.StudentAnnouncementService.GetStudentAnnouncements(announcement.Id);
-
+            
             return new AnnouncementDetails
             {
                 Id = announcement.Id,
@@ -619,14 +617,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Owner = owner,
                 ApplicationCount = announcementApplications.Count,
                 AttachmentsCount = announcementAttachments.Count,
-                StudentAnnouncements = studentAnnouncements,
                 VisibleForStudent = announcement.VisibleForStudent,
                 MayBeDropped = announcement.MayBeDropped,
                 Order = announcement.Order,
                 ClassAnnouncementTypeName = announcement.ClassAnnouncementTypeName,
                 ChalkableAnnouncementType = announcement.ChalkableAnnouncementType,
                 ClassName = announcement.ClassName,
-                MaxScore = announcement.MaxScore
+                MaxScore = announcement.MaxScore,
+                StudentAnnouncements =
+                    ServiceLocator.StudentAnnouncementService.GetStudentAnnouncements(announcement.Id)
             };
         }
 
