@@ -191,6 +191,7 @@
     <Compile Include="ActionResults\ChalkableJsonResult.cs" />
     <Compile Include="Controllers\ChalkableDepartmentController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
+    <Compile Include="Controllers\ClassroomOptionController.cs" />
     <Compile Include="Controllers\DbMaintenanceController.cs" />
     <Compile Include="Controllers\DemoSchoolController.cs" />
     <Compile Include="Controllers\DeveloperController.cs" />
@@ -293,6 +294,7 @@
     <Compile Include="Models\ClassesViewData\ClassTitlesViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassViewData.cs" />
     <Compile Include="Models\ClassPeriodViewData.cs" />
+    <Compile Include="Models\ClassroomOptionViewData.cs" />
     <Compile Include="Models\CommonCoreStandardViewData.cs" />
     <Compile Include="Models\AppTesterViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />

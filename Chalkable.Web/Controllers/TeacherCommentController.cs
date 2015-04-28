@@ -6,6 +6,7 @@ using Chalkable.Web.Models;
 
 namespace Chalkable.Web.Controllers
 {
+    [RequireHttps, TraceControllerFilter]
     public class TeacherCommentController : ChalkableController
     {
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
