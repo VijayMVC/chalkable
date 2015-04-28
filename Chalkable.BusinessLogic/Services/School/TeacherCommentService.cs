@@ -13,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         TeacherComment AddComment(int teacherId, string comment);
         TeacherComment EditComment(int commentId, int teacherId, string comment);
         void DeleteComment(int commentId, int teacherId);
+        void DeleteComments(IList<int> commentsIds, int teacherId);
         IList<TeacherComment> GetComments(int teacherId);
         
     }
@@ -44,12 +45,20 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void DeleteComment(int commentId, int teacherId)
         {
+            DeleteComments(new List<int>{commentId}, teacherId);
+        }
+
+        public void DeleteComments(IList<int> commentsIds, int teacherId)
+        {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            if(BaseSecurity.IsAdminOrTeacher(Context))
+            if (BaseSecurity.IsAdminOrTeacher(Context))
                 throw new ChalkableSecurityException();
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            ConnectorLocator.SectionCommentConnector.DeleteComment(syId, teacherId, commentId);
+            foreach (var commentId in commentsIds)
+            {
+                ConnectorLocator.SectionCommentConnector.DeleteComment(syId, teacherId, commentId);
+            }
         }
 
         public IList<TeacherComment> GetComments(int teacherId)

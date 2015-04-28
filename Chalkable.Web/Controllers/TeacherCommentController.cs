@@ -1,4 +1,5 @@
 ﻿using System.Web.Mvc;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
@@ -38,6 +39,15 @@ namespace Chalkable.Web.Controllers
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             SchoolLocator.TeacherCommentService.DeleteComment(commentId, Context.PersonId.Value);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult DeleteComments(IntList commentIds)
+        {
+            if (!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            SchoolLocator.TeacherCommentService.DeleteComments(commentIds, Context.PersonId.Value);
             return Json(true);
         }
 

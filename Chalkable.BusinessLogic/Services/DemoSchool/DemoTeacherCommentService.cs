@@ -34,7 +34,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void DeleteComment(int commentId, int teacherId)
         {
-            Storage.TeacherCommentStorage.Delete(commentId);
+            DeleteComments(new List<int> {commentId}, teacherId);
+        }
+
+        public void DeleteComments(IList<int> commentsIds, int teacherId)
+        {
+            foreach (var commentId in commentsIds)
+            {
+                Storage.TeacherCommentStorage.Delete(commentId);
+            }
         }
 
         public IList<TeacherComment> GetComments(int teacherId)

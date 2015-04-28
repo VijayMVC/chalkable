@@ -104,6 +104,7 @@
     <Compile Include="Connectors\ActivityScoreConnector.cs" />
     <Compile Include="Connectors\AttachmentConnector.cs" />
     <Compile Include="Connectors\AttendanceConnector.cs" />
+    <Compile Include="Connectors\ClassroomOptionConnector.cs" />
     <Compile Include="Connectors\ConnectorBase.cs">
       <SubType>Component</SubType>
     </Compile>
