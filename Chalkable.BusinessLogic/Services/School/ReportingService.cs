@@ -11,6 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         IList<StudentCommentInfo> GetProgressReportComments(int classId, int gradingPeriodId);
         void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment);
+        void SetProgressReportComments(int classId, int gradingPeriodId, IList<StudentCommentInputModel> studentComments);
 
         byte[] GetGradebookReport(GradebookReportInputModel gradebookReportInput);
         byte[] GetWorksheetReport(WorksheetReportInputModel worksheetReportInput);
@@ -53,17 +54,22 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void SetProgressReportComment(int classId, int studentId, int gradingPeriodId, string comment)
         {
-            var inowStudentReportComments = new List<StudentProgressReportComment>
-                {
-                    new StudentProgressReportComment
-                        {
-                            Comment = comment,
-                            GradingPeriodId = gradingPeriodId,
-                            SectionId = classId,
-                            StudentId = studentId
-                        }
-                };
-            ConnectorLocator.ReportConnector.UpdateProgressReportComment(classId, inowStudentReportComments);
+            var stComment = new StudentCommentInputModel {Comment = comment, StudentId = studentId};
+            SetProgressReportComments(classId, gradingPeriodId, new List<StudentCommentInputModel> {stComment});
+        }
+        
+        public void SetProgressReportComments(int classId, int gradingPeriodId, IList<StudentCommentInputModel> studentComments)
+        {
+            if (studentComments == null || studentComments.Count <= 0) return;
+            var inowStudentProgressReportComments =
+                studentComments.Select(x => new StudentProgressReportComment
+                    {
+                        Comment = x.Comment,
+                        StudentId = x.StudentId,
+                        GradingPeriodId = gradingPeriodId,
+                        SectionId = classId
+                    }).ToList();
+            ConnectorLocator.ReportConnector.UpdateProgressReportComment(classId, inowStudentProgressReportComments);
         }
 
         public byte[] GetGradebookReport(GradebookReportInputModel inputModel)
@@ -144,18 +150,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public byte[] GetProgressReport(ProgressReportInputModel inputModel)
         {
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
-            if (inputModel.StudentComments != null && inputModel.StudentComments.Count > 0)
-            {
-                var inowStudentProgressReportComments =
-                    inputModel.StudentComments.Select(x => new StudentProgressReportComment
-                        {
-                            Comment = x.Comment,
-                            StudentId = x.StudentId,
-                            GradingPeriodId = inputModel.GradingPeriodId,
-                            SectionId = inputModel.ClassId
-                        }).ToList();
-                ConnectorLocator.ReportConnector.UpdateProgressReportComment(inputModel.ClassId, inowStudentProgressReportComments);
-            }
             var stiModel = new ProgressReportParams
                 {
                     AcadSessionId = gp.SchoolYearRef,
@@ -369,6 +363,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 };
             return ConnectorLocator.ReportConnector.LessonPlanReport(ps);
         }
+
+
     }
 
 }

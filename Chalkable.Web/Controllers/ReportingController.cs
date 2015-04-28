@@ -39,22 +39,22 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        public ActionResult ProgressReport(ProgressReportInputModel progressReportInput, StringList studentComments)
+        public ActionResult ProgressReport(ProgressReportInputModel progressReportInput)
         {
-            if(progressReportInput.StudentIds != null &&(studentComments == null || progressReportInput.StudentIds.Count != studentComments.Count))
-                throw new ChalkableException("Invalid student comments param");
-            if (progressReportInput.StudentIds != null)
-            {
-                progressReportInput.StudentComments = new List<StudentCommentInputModel>();
-                for (int i = 0; i < progressReportInput.StudentIds.Count; i++)
-                {
-                    progressReportInput.StudentComments.Add(new StudentCommentInputModel
-                    {
-                        StudentId = progressReportInput.StudentIds[i],
-                        Comment = studentComments[i]
-                    });
-                }   
-            }
+            //if(progressReportInput.StudentIds != null &&(studentComments == null || progressReportInput.StudentIds.Count != studentComments.Count))
+            //    throw new ChalkableException("Invalid student comments param");
+            //if (progressReportInput.StudentIds != null)
+            //{
+            //    progressReportInput.StudentComments = new List<StudentCommentInputModel>();
+            //    for (int i = 0; i < progressReportInput.StudentIds.Count; i++)
+            //    {
+            //        progressReportInput.StudentComments.Add(new StudentCommentInputModel
+            //        {
+            //            StudentId = progressReportInput.StudentIds[i],
+            //            Comment = studentComments[i]
+            //        });
+            //    }   
+            //}
             return Report(progressReportInput, SchoolLocator.ReportService.GetProgressReport, "ProgressReport");
         }
 
@@ -102,6 +102,14 @@ namespace Chalkable.Web.Controllers
             var fileName = string.Format("{0}.{1}", reportFileName, extension);
             MasterLocator.UserTrackingService.CreatedReport(Context.Login, reportFileName);
             return File(res, MimeHelper.GetContentTypeByExtension(extension), fileName);
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult SetStudentProgressReportComments(int classId, int gradingPeriodId, string studentComments)
+        {
+            var stComments = JsonConvert.DeserializeObject<IList<StudentCommentInputModel>>(studentComments);
+            SchoolLocator.ReportService.SetProgressReportComments(classId, gradingPeriodId, stComments);
+            return Json(true);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
