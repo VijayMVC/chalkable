@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
@@ -42,7 +43,31 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<StudentContactDetails> GetStudentContactDetails(int studentId)
         {
-            throw new NotImplementedException();
+            var stContacts = Storage.StudentContactStorage.GetAll().Where(x => x.StudentRef == studentId).ToList();
+            var res = new List<StudentContactDetails>();
+            foreach (var studentContact in stContacts)
+            {
+                var person = ServiceLocator.PersonService.GetPersonDetails(studentContact.ContactRef);
+                var contactRelationship = Storage.ContactRelationshipStorage.GetById(studentContact.ContactRelationshipRef);
+                res.Add(new StudentContactDetails
+                    {
+                        StudentRef = studentContact.StudentRef,
+                        ContactRef = studentContact.ContactRef,
+                        CanPickUp = studentContact.CanPickUp,
+                        ContactRelationshipRef = studentContact.ContactRelationshipRef,
+                        Description = studentContact.Description,
+                        IsCustodian = studentContact.IsCustodian,
+                        IsEmergencyContact = studentContact.IsEmergencyContact,
+                        IsFamilyMember = studentContact.IsFamilyMember,
+                        IsResponsibleForBill = studentContact.IsResponsibleForBill,
+                        ReceivesBill = studentContact.ReceivesBill,
+                        ReceivesMailings = studentContact.ReceivesMailings,
+                        StudentVisibleInHome = studentContact.StudentVisibleInHome,
+                        ContactRelationship = contactRelationship,
+                        Person = person
+                    });
+            }
+            return res;
         }
     }
 }
