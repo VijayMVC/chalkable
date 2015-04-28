@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Connectors.Model.Attendances;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -18,6 +20,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void UpdateSeatingChart(int classId, int markingPeriodId, SeatingChartInfo seatingChart);
         AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod);
         IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime date);
+        IList<StudentDateAttendance> GetStudentAttendancesByDateRange(int studentId, DateTime startDate, DateTime endDate);
+        StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? markingPeriodId);
     }
 
     public class AttendanceService : SisConnectedService, IAttendanceService
@@ -139,14 +143,12 @@ namespace Chalkable.BusinessLogic.Services.School
                         Students = new List<StudentAttendanceSummary>()
                     };
             }
-
             var classesIds = classes.Select(x => x.Id).ToList();
             var students = ServiceLocator.StudentService.GetTeacherStudents(teacherId, gradingPeriod.SchoolYearRef);
-        
             var sectionsAttendanceSummary = ConnectorLocator.AttendanceConnector.GetSectionAttendanceSummary(classesIds, gradingPeriod.StartDate, gradingPeriod.EndDate);
             var res = new AttendanceSummary();
-            var dailySectionAttendances = new List<DailySectionAttendanceSummary>();
-            var studentAtts = new List<StudentSectionAttendanceSummary>();
+            var dailySectionAttendances = new List<DailySectionAbsenceSummary>();
+            var studentAtts = new List<StudentSectionAbsenceSummary>();
             var sectionStSet = new HashSet<Pair<int, int>>();
             var sectionDaySet = new HashSet<Pair<int, DateTime>>();
             foreach (var sectionAttendanceSummary in sectionsAttendanceSummary)
@@ -171,8 +173,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     }
                 }
             }
-            res.ClassesDaysStat = ClassDailyAttendanceSummary.Create(dailySectionAttendances, classes);
             studentAtts = studentAtts.Where(x => classesIds.Contains(x.SectionId)).ToList();
+            res.ClassesDaysStat = ClassDailyAttendanceSummary.Create(dailySectionAttendances, classes);
             res.Students = StudentAttendanceSummary.Create(studentAtts, students, classes);
             return res;
 
@@ -235,6 +237,83 @@ namespace Chalkable.BusinessLogic.Services.School
             else
                 classes = new List<ClassDetails>();
             return classes;
+        }
+    
+
+        public IList<StudentDateAttendance> GetStudentAttendancesByDateRange(int studentId,  DateTime startDate, DateTime endDate)
+        {
+            var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+            var student = ServiceLocator.StudentService.GetById(studentId, sy.Id);
+            var periods = ServiceLocator.PeriodService.GetPeriods(sy.Id);
+            var classes = ServiceLocator.ClassService.GetClasses(sy.Id, studentId, null);
+            var stiAttendanceDetails = ConnectorLocator.StudentConnector.GetStudentAttendanceDetailDashboard(studentId, sy.Id, startDate, endDate);
+            var res = new List<StudentDateAttendance>();
+            var currentDate = startDate;
+            while (currentDate <= endDate)
+            {
+                var dailyAtt = stiAttendanceDetails.DailyAbsences.FirstOrDefault(x => x.Date.Date == currentDate.Date && x.StudentId == studentId);
+                var periodAttendances = stiAttendanceDetails.PeriodAbsences.Where(x => x.Date.Date == currentDate.Date && x.StudentId == studentId).ToList();
+                var checkIncheckOut = stiAttendanceDetails.CheckInCheckOuts.FirstOrDefault(x => x.Date == currentDate.Date && x.StudentId == studentId);
+                var item = new StudentDateAttendance
+                    {
+                        Date = currentDate.Date,
+                        Student = student
+                    };
+                if (dailyAtt != null)
+                {
+                   item.DailyAttendance = new StudentDailyAttendance
+                       {
+                           StudentId = dailyAtt.StudentId,
+                           AttendanceReasonId = dailyAtt.AbsenceReasonId,
+                           Category = dailyAtt.AbsenceCategory,
+                           Date = dailyAtt.Date,
+                           Level = dailyAtt.AbsenceLevel,
+                       };
+                }
+                if (checkIncheckOut != null)
+                {
+                    item.CheckInCheckOut = new CheckInCheckOut
+                        {
+                            AttendanceReasonId = checkIncheckOut.AbsenceReasonId,
+                            Category = checkIncheckOut.AbsenceCategory,
+                            Note = checkIncheckOut.Note,
+                            Time = checkIncheckOut.Time,
+                            PeriodId = checkIncheckOut.TimeSlotId
+                        };
+                }
+                item.StudentPeriodAttendances = periodAttendances.Select(x => new StudentPeriodAttendance
+                    {
+                        Student = student,
+                        AttendanceReasonId = x.AbsenceReasonId,
+                        Category = x.AbsenceCategory,
+                        ClassId = x.SectionId,
+                        Date = x.Date,
+                        Level = x.AbsenceLevel,
+                        StudentId = studentId,
+                        Period = periods.FirstOrDefault(period => period.Id == x.TimeSlotId),
+                        Class = classes.FirstOrDefault(c=>c.Id == x.SectionId)
+                    }).ToList();
+                res.Add(item);
+                currentDate = currentDate.AddDays(1);
+            }
+            return res;
+        }
+        
+        public StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? markingPeriodId)
+        {
+            var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var student = ServiceLocator.StudentService.GetById(studentId, syId);
+            var stiModel = ConnectorLocator.StudentConnector.GetStudentAttendanceSummary(studentId, syId, markingPeriodId);
+            var classes = ServiceLocator.ClassService.GetStudentClasses(syId, studentId, markingPeriodId);
+            var res = new StudentAttendanceSummary {Student = student};
+            if (stiModel != null)
+            {
+                if (stiModel.DailyAttendance != null)
+                    res.DailyAttendanceSummary = StudentDailyAttendanceSummary.Create(stiModel.DailyAttendance);
+                if (stiModel.PeriodAttendance != null)
+                    res.ClassAttendanceSummaries = StudentClassAttendanceSummary.Create(stiModel.PeriodAttendance.ToList(), classes);
+            }
+            return res;
         }
     }
 }

@@ -161,7 +161,6 @@
     <Compile Include="Model\Student.cs" />
     <Compile Include="Model\StudentAnnouncement.cs" />
     <Compile Include="Model\StudentContact.cs" />
-    <Compile Include="Model\StudentDailyAttendance.cs" />
     <Compile Include="Model\StudentSchool.cs" />
     <Compile Include="Model\StudentSchoolYear.cs" />
     <Compile Include="Model\StudentParent.cs" />

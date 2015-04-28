@@ -1,6 +1,7 @@
-REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.id.DailyAttendanceId');
 REQUIRE('chlk.models.common.ChlkDate');
+REQUIRE('chlk.models.common.ChlkTime');
+REQUIRE('chlk.models.attendance.ClassAttendance');
 
 NAMESPACE('chlk.models.attendance', function () {
     "use strict";
@@ -12,14 +13,16 @@ NAMESPACE('chlk.models.attendance', function () {
 
             chlk.models.common.ChlkDate, 'date',
 
-            [ria.serialize.SerializeProperty('timein')],
-            chlk.models.common.ChlkTime, 'timeIn',
+            [ria.serialize.SerializeProperty('arrivaltime')],
+            chlk.models.common.ChlkTime, 'arrivalTime',
 
-            [ria.serialize.SerializeProperty('timeout')],
-            chlk.models.common.ChlkTime, 'timeOut',
+            [ria.serialize.SerializeProperty('checkintime')],
+            chlk.models.common.ChlkTime, 'checkInTime',
 
-            chlk.models.common.ChlkTime, 'arrival',
+            [ria.serialize.SerializeProperty('ischeckin')],
+            Boolean, 'checkIn',
 
-            chlk.models.people.User, 'Person'
+            [ria.serialize.SerializeProperty('periodattendances')],
+            ArrayOf(chlk.models.attendance.ClassAttendance), 'periodAttendances'
         ]);
 });

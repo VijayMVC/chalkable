@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Connectors.Model.Attendances;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -135,8 +137,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var students = ServiceLocator.StudentService.GetTeacherStudents(teacherId, Context.SchoolYearId.Value);
             var sectionsAttendanceSummary = Storage.StiAttendanceStorage.GetSectionAttendanceSummary(classesIds, gradingPeriod.StartDate, gradingPeriod.EndDate);
             var res = new AttendanceSummary();
-            var dailySectionAttendances = new List<DailySectionAttendanceSummary>();
-            var studentAtts = new List<StudentSectionAttendanceSummary>();
+            var dailySectionAttendances = new List<DailySectionAbsenceSummary>();
+            var studentAtts = new List<StudentSectionAbsenceSummary>();
             foreach (var sectionAttendanceSummary in sectionsAttendanceSummary)
             {
                 dailySectionAttendances.AddRange(sectionAttendanceSummary.Days);
@@ -163,6 +165,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime dateTime)
         {
             return new List<ClassDetails>();
+        }
+
+        public IList<StudentDateAttendance> GetStudentAttendancesByDateRange(int studentId, DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? markingPeriodId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Connectors.Model.Attendances;
 
 namespace Chalkable.StiConnector.Connectors
 {

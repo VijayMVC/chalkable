@@ -91,6 +91,14 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Student/Explorer.json', chlk.models.student.StudentExplorer, {
                     personId: personId.valueOf()
                 });
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.MarkingPeriodId]],
+            ria.async.Future, function getStudentAttendanceSummary(studentId, markingPeriodId){
+                return this.get('Student/AttendanceSummary.json', chlk.models.attendance.StudentAttendanceSummary,{
+                    studentId: studentId && studentId.valueOf(),
+                    markingPeriodId: markingPeriodId && markingPeriodId.valueOf()
+                });
             }
         ])
 });

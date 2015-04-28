@@ -184,6 +184,7 @@
     <Compile Include="Controllers\AnnouncementTypeController.cs" />
     <Compile Include="Controllers\BackgroundTaskController.cs" />
     <Compile Include="Controllers\BaseAnnouncementController.cs" />
+    <Compile Include="Controllers\CalendarControllers\AttendanceCalendarController.cs" />
     <Compile Include="Controllers\CalendarControllers\CalendarController.cs" />
     <Compile Include="Controllers\CalendarControllers\DisciplineCalendarController.cs" />
     <Compile Include="Controllers\CategoryController.cs" />
@@ -246,6 +247,8 @@
     <Compile Include="Models\AttendancesViewData\AttendanceMonthViewData.cs" />
     <Compile Include="Models\AttendancesViewData\ClassAttendanceSummaryViewData.cs" />
     <Compile Include="Models\AttendancesViewData\StudentAttendanceSummaryViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\StudentDateAttendanceViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\StudentPeriodAttendanceViewData.cs" />
     <Compile Include="Models\AutoGradeViewData.cs" />
     <Compile Include="Models\CC_StandardCategoryViewData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />

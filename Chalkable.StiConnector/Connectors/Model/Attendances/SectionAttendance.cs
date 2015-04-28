@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Chalkable.StiConnector.Connectors.Model
+namespace Chalkable.StiConnector.Connectors.Model.Attendances
 {
     public class StudentSectionAttendance
     {

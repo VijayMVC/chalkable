@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
+using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Connectors.Model.Attendances;
 
 namespace Chalkable.BusinessLogic.Model
 {
@@ -16,8 +18,7 @@ namespace Chalkable.BusinessLogic.Model
         public int TotalDisciplineOccurrences { get; set; }
         public IList<InfractionSummaryInfo> InfractionSummaries { get; set; }
         public IList<StudentAnnouncement> StudentAnnouncements { get; set; }
-
-        public IList<ClassAttendanceSummary> Attendances { get; set; } 
+        public IList<ShortStudentClassAttendanceSummary> Attendances { get; set; } 
 
         public static StudentSummaryInfo Create(StudentDetails student, NowDashboard nowDashboard
             , IList<Data.School.Model.Infraction> infractions, IList<AnnouncementComplex> anns, IMapper<StudentAnnouncement, Score> mapper)
@@ -30,11 +31,11 @@ namespace Chalkable.BusinessLogic.Model
                     TotalDisciplineOccurrences = nowDashboard.Infractions.Sum(x=>x.Occurrences),
                     InfractionSummaries = InfractionSummaryInfo.Create(nowDashboard.Infractions.ToList(), infractions),
                     StudentAnnouncements = new List<StudentAnnouncement>(),
-                    Attendances = ClassAttendanceSummary.Create(nowDashboard.SectionAttendance.ToList()),
+                    Attendances = ShortStudentClassAttendanceSummary.Create(nowDashboard.SectionAttendance.ToList()),
                     CurrentAttendanceLevel = nowDashboard.CurrentAttendanceStatus
                 };
             if (nowDashboard.DailyAttendance == null)
-                nowDashboard.DailyAttendance = new DailyAbsenceSummary {Absences = 0, Tardies = 0};
+                nowDashboard.DailyAttendance = new StudentDailyAbsenceSummary{ Absences = 0, Tardies = 0, Presents = 0 };
             res.DailyAttendance = DailyAbsenceSummaryInfo.Create(nowDashboard.DailyAttendance);
 
             var scores = nowDashboard.Scores.Where(x => !string.IsNullOrEmpty(x.ScoreValue)).ToList();
@@ -65,21 +66,6 @@ namespace Chalkable.BusinessLogic.Model
         }
     }
 
-    public class DailyAbsenceSummaryInfo
-    {
-        public decimal? Absences { get; set; }
-        public int? Tardies { get; set; }
-
-        public static DailyAbsenceSummaryInfo Create(DailyAbsenceSummary dailyAbsenceSummary)
-        {
-            return new DailyAbsenceSummaryInfo
-                {
-                    Absences = dailyAbsenceSummary.Absences,
-                    Tardies = dailyAbsenceSummary.Tardies
-                };
-        }
-    }
-
     public class InfractionSummaryInfo
     {
         public int Occurrences { get; set; }
@@ -94,22 +80,5 @@ namespace Chalkable.BusinessLogic.Model
                     Occurrences = x.Occurrences
                 }).ToList();
         } 
-    }
-
-    public class ClassAttendanceSummary
-    {
-        public int ClassId { get; set; }
-        public decimal Absences { get; set; }
-        public int Tardies { get; set; }
-
-        public static IList<ClassAttendanceSummary> Create(IList<SectionAbsenceSummary> absences)
-        {
-            return absences.Select(x => new ClassAttendanceSummary()
-                {
-                    ClassId = x.SectionId,
-                    Absences = x.Absences ?? 0,
-                    Tardies = x.Tardies ?? 0
-                }).ToList();
-        }
     }
 }

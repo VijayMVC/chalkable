@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -45,7 +45,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
  
         public static IList<ClassAttendanceStatViewData> Create(IList<ClassDailyAttendanceSummary> classDailyAttendances, AttendanceTypeEnum type)
         {
-            return classDailyAttendances.Select(x => new ClassAttendanceStatViewData()
+            return classDailyAttendances.Select(x => new ClassAttendanceStatViewData
                 {
                     Class = ShortClassViewData.Create(x.Class),
                     DayStats = ShortAttendanceStatViewData.Create(x.DailyAttendances, type)
@@ -134,9 +134,9 @@ namespace Chalkable.Web.Models.AttendancesViewData
         {
             var attCount = 0;
             if (type == AttendanceTypeEnum.Absent)
-                attCount = (int) studentClassAttendance.Absences;
+                attCount = (int) (studentClassAttendance.Absences ?? 0);
             if (type == AttendanceTypeEnum.Tardies)
-                attCount = studentClassAttendance.Tardies;
+                attCount = studentClassAttendance.Tardies ?? 0;
             return Create(studentClassAttendance.StudentId, studentClassAttendance.Class, attCount);
         }
 

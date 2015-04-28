@@ -1,6 +1,6 @@
-﻿namespace Chalkable.StiConnector.Connectors.Model
+﻿namespace Chalkable.StiConnector.Connectors.Model.Attendances
 {
-    public class SectionAbsenceSummary
+    public class StudentSectionAbsenceSummary
     {
         /// <summary>
         /// The total sum of the absence values for student in a specific section

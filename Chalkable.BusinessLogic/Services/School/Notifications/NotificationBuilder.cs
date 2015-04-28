@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
