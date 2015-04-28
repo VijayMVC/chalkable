@@ -317,7 +317,7 @@ NAMESPACE('chlk.services', function () {
 
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, String]],
         ria.async.Future, function setStudentProgressReportComments(classId, gradingPeriodId, studentComments) {
-            return this.get('Reporting/SetStudentProgressReportComments.json', Boolean, {
+            return this.post('Reporting/SetStudentProgressReportComments.json', Boolean, {
                 classId: classId.valueOf(),
                 gradingPeriodId: gradingPeriodId.valueOf(),
                 studentComments: studentComments
