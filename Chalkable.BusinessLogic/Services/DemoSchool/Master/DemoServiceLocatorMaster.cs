@@ -55,6 +55,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             userTrackingService = new NullTrackingService();
         }
 
+
+        public void Update(UserContext context)
+        {
+            Context = context;
+        }
+
         public IServiceLocatorSchool SchoolServiceLocator(Guid districtId, int? schoolLocalId)
         {
             throw new NotImplementedException();

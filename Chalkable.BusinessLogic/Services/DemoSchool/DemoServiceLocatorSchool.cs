@@ -1780,7 +1780,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Update(UserContext context)
         {
-            base.Context = context;
+            Context = context;
+            ((DemoServiceLocatorMaster)serviceLocatorMaster).Update(context);
+            ((DemoAnnouncementService)AnnouncementService).SetupAnnouncementProcessor(context, this);
         }
     }
 

@@ -27,6 +27,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         private DemoCategoryStorage CategoryStorage { get; set; }
         public DemoCategoryService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
+            CategoryStorage = new DemoCategoryStorage();
         }
 
         public PaginatedList<Category> ListCategories(int start = 0, int count = Int32.MaxValue)

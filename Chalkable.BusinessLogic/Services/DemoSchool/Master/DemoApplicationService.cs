@@ -35,6 +35,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         private DemoApplicationRatingStorage ApplicationRatingStorage { get; set; }
         public DemoApplicationService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
+            ApplicationRatingStorage = new DemoApplicationRatingStorage();
         }
 
         public ApplicationRating WriteReview(Guid applicationId, int rating, string review)

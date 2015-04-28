@@ -37,10 +37,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Add(Data.School.Model.School school)
         {
-            if (Context.Role.Id != CoreRoles.SUPER_ADMIN_ROLE.Id)
-                throw new ChalkableSecurityException();
-            if (!Context.DistrictId.HasValue)
-                throw new UnassignedUserException();
             SchoolStorage.Add(school);
 
             var l = new List<SchoolInfo>
@@ -57,8 +53,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Add(IList<Data.School.Model.School> schools)
         {
-            if (Context.Role.Id != CoreRoles.SUPER_ADMIN_ROLE.Id)
-                throw new ChalkableSecurityException();
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
             
@@ -72,8 +66,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Edit(IList<Data.School.Model.School> schools)
         {
-            if (Context.Role.Id != CoreRoles.SUPER_ADMIN_ROLE.Id)
-                throw new ChalkableSecurityException();
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
 

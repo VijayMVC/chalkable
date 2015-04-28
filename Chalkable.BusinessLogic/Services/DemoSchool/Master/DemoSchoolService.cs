@@ -75,8 +75,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void Add(IList<SchoolInfo> schools, Guid districtId)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
             MasterSchoolStorage.Add(schools.Select(x => new Data.Master.Model.School
             {
                 Name = x.Name,
@@ -103,7 +101,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void Add(IList<Data.Master.Model.School> schools)
         {
-            throw new NotImplementedException();
+            MasterSchoolStorage.Add(schools);
         }
         
         public Data.Master.Model.School GetById(Guid districtRef, int localId)
