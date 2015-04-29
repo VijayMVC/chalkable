@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Storage.sti;
@@ -108,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         public DemoAnnouncementAttributeStorage AnnouncementAttributeStorage { get; private set; }
         public DemoContactRelationshipStorage ContactRelationshipStorage { get; private set; }
         public DemoStudentContactStorage StudentContactStorage { get; private set; }
-
+        public DemoTeacherCommentStorage TeacherCommentStorage { get; private set; }
 
         public UserContext Context { get; private set; }
         public IServiceLocatorSchool SchoolLocator { get; set; }
@@ -218,6 +219,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AnnouncementAttributeStorage = new DemoAnnouncementAttributeStorage(this);
             ContactRelationshipStorage = new DemoContactRelationshipStorage(this);
             StudentContactStorage = new DemoStudentContactStorage(this);
+            TeacherCommentStorage = new DemoTeacherCommentStorage(this);
 
             CreateAnnouncementStorage(Context);
             Setup();
@@ -267,6 +269,32 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             });
 
 
+        }
+
+        private void AddTeacherComments()
+        {
+            var teacherComments = new List<TeacherComment>
+                {
+                    new TeacherComment
+                        {
+                            TeacherId = DemoSchoolConstants.TeacherId,
+                            Comment = "- Assignments incomplete",
+                            IsSystem = false
+                        },
+                    new TeacherComment
+                        {
+                            TeacherId = DemoSchoolConstants.TeacherId,
+                            Comment = "- Can be disruptive in class",
+                            IsSystem = false
+                        },
+                    new TeacherComment
+                        {
+                            TeacherId = DemoSchoolConstants.TeacherId,
+                            Comment = "- Can be passively defiant",
+                            IsSystem = true
+                        }
+                };
+            TeacherCommentStorage.Add(teacherComments);
         }
 
         private void AddAnnouncementAttributes()
@@ -663,6 +691,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
             AddAttendanceMonthes();
             AddGradedItems();
             AddAnnouncementAttributes();
+            AddTeacherComments();
         }
 
         private void AddMarkingPeriods()

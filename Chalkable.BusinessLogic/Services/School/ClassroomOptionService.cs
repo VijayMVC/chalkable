@@ -10,10 +10,11 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<ClassroomOption> classroomOptions);
         void Edit(IList<ClassroomOption> classroomOptions);
         void Delete(IList<ClassroomOption> classroomOptions);
-        ClassroomOption GetClassOption(int classId);
+        ClassroomOption GetClassOption(int classId, bool useInowApi = false);
+        ClassroomOption SetUpClassroomOption(ClassroomOption classroomOption);
     }
 
-    public class ClassroomOptionService : SchoolServiceBase, IClassroomOptionService
+    public class ClassroomOptionService : SisConnectedService, IClassroomOptionService
     {
         public ClassroomOptionService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -37,9 +38,56 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u => new DataAccessBase<ClassroomOption>(u).Update(classroomOptions));
         }
 
-        public ClassroomOption GetClassOption(int classId)
+        public ClassroomOption GetClassOption(int classId, bool useInowApi = false)
         {
+            if (useInowApi)
+                return CreateClassroomOption(ConnectorLocator.ClassroomOptionConnector.GetClassroomOption(classId));
             return DoRead(u => new DataAccessBase<ClassroomOption, int>(u).GetByIdOrNull(classId));
+        }
+
+        public ClassroomOption SetUpClassroomOption(ClassroomOption classroomOption)
+        {
+            var inowClassroomOption = CreateInowClassroomOption(classroomOption);
+            ConnectorLocator.ClassroomOptionConnector.UpdateClassroomOption(inowClassroomOption.SectionId, inowClassroomOption);
+            return classroomOption;
+        }
+
+        private ClassroomOption CreateClassroomOption(StiConnector.Connectors.Model.ClassroomOption stiClassoption)
+        {
+            return new ClassroomOption
+                {
+                    Id = stiClassoption.SectionId,
+                    AveragingMethod = stiClassoption.AveragingMethod,
+                    CategoryAveraging = stiClassoption.CategoryAveraging,
+                    DisplayAlphaGrade = stiClassoption.DisplayAlphaGrades,
+                    DisplayStudentAverage = stiClassoption.DisplayStudentAverage,
+                    DisplayTotalPoints = stiClassoption.DisplayTotalPoints,
+                    IncludeWithdrawnStudents = stiClassoption.IncludeWithdrawnStudents,
+                    StandardsCalculationMethod = stiClassoption.StandardsCalculationMethod,
+                    StandardsCalculationRule = stiClassoption.StandardsCalculationRule,
+                    StandardsCalculationWeightMaximumValues = stiClassoption.StandardsCalculationWeightMaximumValues,
+                    StandardsGradingScaleRef = stiClassoption.StandardsGradingScaleId,
+                    RoundDisplayedAverages = stiClassoption.RoundAverages
+                };
+        }
+
+        private StiConnector.Connectors.Model.ClassroomOption CreateInowClassroomOption(ClassroomOption stiClassoption)
+        {
+            return new StiConnector.Connectors.Model.ClassroomOption
+            {
+                SectionId = stiClassoption.Id,
+                AveragingMethod = stiClassoption.AveragingMethod,
+                CategoryAveraging = stiClassoption.CategoryAveraging,
+                DisplayAlphaGrades = stiClassoption.DisplayAlphaGrade,
+                DisplayStudentAverage = stiClassoption.DisplayStudentAverage,
+                DisplayTotalPoints = stiClassoption.DisplayTotalPoints,
+                IncludeWithdrawnStudents = stiClassoption.IncludeWithdrawnStudents,
+                StandardsCalculationMethod = stiClassoption.StandardsCalculationMethod,
+                StandardsCalculationRule = stiClassoption.StandardsCalculationRule,
+                StandardsCalculationWeightMaximumValues = stiClassoption.StandardsCalculationWeightMaximumValues,
+                StandardsGradingScaleId = stiClassoption.StandardsGradingScaleRef,
+                RoundAverages = stiClassoption.RoundDisplayedAverages
+            };
         }
     }
 }

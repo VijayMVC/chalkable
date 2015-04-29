@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -11,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ClassAnnouncementType AddClassAnnouncmentType(ClassAnnouncementType classAnnouncementType);
         ClassAnnouncementType EditClassAnnouncmentType(ClassAnnouncementType classAnnouncementType);
         void DeleteClassAnnouncmentType(int classAnnouncementTypeId);
-
+        void DeleteClassAnnouncmentTypes(IList<int> classAnnouncementTypeIds);
 
         ClassAnnouncementType GetClassAnnouncementTypeById(int classAnnouncementTypeId);
         IList<ClassAnnouncementType> GetClassAnnouncementTypes(IList<int> classesIds, bool all = true); 
@@ -44,7 +45,14 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void DeleteClassAnnouncmentType(int classAnnouncementTypeId)
         {
-            ConnectorLocator.ActivityCategoryConnnector.Delete(classAnnouncementTypeId);
+            DeleteClassAnnouncmentTypes(new List<int>{classAnnouncementTypeId});
+        }
+        public void DeleteClassAnnouncmentTypes(IList<int> classAnnouncementTypeIds)
+        {
+            foreach (var classAnnouncementTypeId in classAnnouncementTypeIds)
+            {
+                ConnectorLocator.ActivityCategoryConnnector.Delete(classAnnouncementTypeId);
+            }
         }
 
         public ClassAnnouncementType GetClassAnnouncementTypeById(int classAnnouncementTypeId)

@@ -27,7 +27,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Storage.ClassRoomOptionStorage.Delete(classroomOptions);
         }
 
-        public ClassroomOption GetClassOption(int classId)
+        public ClassroomOption SetUpClassroomOption(ClassroomOption classroomOption)
+        {
+            Edit(new List<ClassroomOption> {classroomOption});
+            return GetClassOption(classroomOption.Id);
+        }
+
+        public ClassroomOption GetClassOption(int classId, bool useInowApi = false)
         {
             return Storage.ClassRoomOptionStorage.GetById(classId);
         }

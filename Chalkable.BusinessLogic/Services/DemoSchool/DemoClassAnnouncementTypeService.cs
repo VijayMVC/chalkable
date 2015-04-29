@@ -71,7 +71,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void DeleteClassAnnouncmentType(int classAnnouncementTypeId)
         {
-            Storage.ClassAnnouncementTypeStorage.Delete(classAnnouncementTypeId);
+            DeleteClassAnnouncmentTypes(new List<int> {classAnnouncementTypeId});
+        }
+        public void DeleteClassAnnouncmentTypes(IList<int> classAnnouncementTypeIds)
+        {
+            foreach (var classAnnouncementTypeId in classAnnouncementTypeIds)
+            {
+                Storage.ClassAnnouncementTypeStorage.Delete(classAnnouncementTypeId);
+            }
         }
     }
 }
