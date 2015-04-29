@@ -17,7 +17,17 @@ NAMESPACE('chlk.models.announcement', function () {
             },
 
             Number, 'id',
+
             [ria.serialize.SerializeProperty('classid')],
-            chlk.models.id.ClassId, 'classId'
+            chlk.models.id.ClassId, 'classId',
+
+            [ria.serialize.SerializeProperty('highscorestodrop')],
+            Number, 'highScoresToDrop',
+
+            [ria.serialize.SerializeProperty('lowscorestodrop')],
+            Number, 'lowScoresToDrop',
+
+            [ria.serialize.SerializeProperty('percentage')],
+            Number, 'percentage'
         ]);
 });

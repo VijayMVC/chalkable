@@ -1,29 +1,15 @@
-REQUIRE('chlk.activities.lib.TemplateDialog');
-REQUIRE('chlk.templates.reports.AttendanceRegisterReportTpl');
+REQUIRE('chlk.activities.lib.TemplatePage');
+REQUIRE('chlk.templates.setup.CategoriesSetupTpl');
 
-NAMESPACE('chlk.activities.reports', function(){
+NAMESPACE('chlk.activities.setup', function () {
 
-    /**@class chlk.activities.reports.AttendanceRegisterReportDialog*/
+    var interval;
+
+    /** @class chlk.activities.setup.CategoriesSetupPage*/
     CLASS(
-        [ria.mvc.DomAppendTo('#chlk-dialogs')],
-        [ria.mvc.ActivityGroup('ReportDialog')],
-        [ria.mvc.TemplateBind(chlk.templates.reports.AttendanceRegisterReportTpl)],
-        'AttendanceRegisterReportDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
-
-            [ria.mvc.DomEventBind('submit', '.report-form')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function formSubmit(node, event){
-                var res = [];
-                node.find('.chlk-grid-container')
-                    .find('.row:not(.header)')
-                    .find('input[type=checkbox]').forEach(function(item){
-                        if(item.checked()){
-                            res.push(item.parent('.cell').getData('id'));
-                        }
-                });
-                node.find('[name=absenceReasons]').setValue(res.join(','));
-            },
-
+        [ria.mvc.DomAppendTo('#main')],
+        [ria.mvc.TemplateBind(chlk.templates.setup.CategoriesSetupTpl)],
+        'CategoriesSetupPage', EXTENDS(chlk.activities.lib.TemplatePage), [
             [ria.mvc.DomEventBind('change', '.all-checkboxes')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function allReasonsChange(node, event){

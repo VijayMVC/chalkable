@@ -350,6 +350,33 @@ NAMESPACE('chlk.services', function () {
                 return this.get('AnnouncementType/ListByClasses.json', chlk.models.announcement.ClassAnnouncementType,{
                     classIds: this.arrayToCsv(classIds)
                 });
+            },
+
+            [[chlk.models.id.ClassId, String, String, Number, Number, Boolean, Number]],
+            ria.async.Future, function createAnnouncementTypes(classId, description_, name_, highScoresToDrop_, lowScoresToDrop_, isSystem_, percentage_){
+                return this.get('AnnouncementType/Create.json', chlk.models.announcement.ClassAnnouncementType,{
+                    classId: classId.valueOf(),
+                    description: description_,
+                    name: name_,
+                    highScoresToDrop: highScoresToDrop_,
+                    lowScoresToDrop: lowScoresToDrop_,
+                    isSystem: isSystem_,
+                    percentage: percentage_
+                });
+            },
+
+            [[Number, chlk.models.id.ClassId, String, String, Number, Number, Boolean, Number]],
+            ria.async.Future, function updateAnnouncementTypes(classAnnouncementTypeId, classId, description_, name_, highScoresToDrop_, lowScoresToDrop_, isSystem_, percentage_){
+                return this.get('AnnouncementType/Update.json', chlk.models.announcement.ClassAnnouncementType,{
+                    classAnnouncementTypeId: classAnnouncementTypeId,
+                    classId: classId.valueOf(),
+                    description: description_,
+                    name: name_,
+                    highScoresToDrop: highScoresToDrop_,
+                    lowScoresToDrop: lowScoresToDrop_,
+                    isSystem: isSystem_,
+                    percentage: percentage_
+                });
             }
         ])
 });

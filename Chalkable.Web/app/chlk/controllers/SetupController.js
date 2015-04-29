@@ -11,6 +11,7 @@ REQUIRE('chlk.activities.setup.HelloPage');
 REQUIRE('chlk.activities.setup.VideoPage');
 REQUIRE('chlk.activities.setup.StartPage');
 REQUIRE('chlk.activities.setup.TeacherSettingsPage');
+REQUIRE('chlk.activities.setup.CategoriesSetupPage');
 
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
@@ -48,6 +49,20 @@ NAMESPACE('chlk.controllers', function (){
                 this.getContext().getSession().set(ChlkSessionConstants.FIRST_LOGIN, true);
                 var result = new ria.async.DeferredData(this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON));
                 return this.PushView(chlk.activities.setup.HelloPage, result);
+            },
+
+            [[chlk.models.id.ClassId]],
+            function categoriesSetupAction(classId_){
+                var types;
+                var topData = new chlk.models.classes.ClassesForTopBar(null, classId_);
+
+                if(classId_){
+                    var currentClassInfo = this.classService.getClassAnnouncementInfo(classId_);
+                    types = currentClassInfo ? currentClassInfo.getTypesByClass() : [];
+                }
+
+                var result = new ria.async.DeferredData(new chlk.models.setup.CategoriesSetupViewData(topData, types));
+                return this.PushOrUpdateView(chlk.activities.setup.CategoriesSetupPage, result);
             },
 
             [[chlk.models.id.SchoolPersonId]],
@@ -152,6 +167,16 @@ NAMESPACE('chlk.controllers', function (){
                         this.getView().pop();
                     }, this);
                 return this.ShadeLoader();
+            },
+
+
+            function addCategoryAction(){
+                return null;
+            },
+
+            [[Number]],
+            function editCategoryAction(id){
+                return null;
             }
         ])
 });

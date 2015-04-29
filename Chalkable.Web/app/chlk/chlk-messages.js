@@ -18,6 +18,8 @@ String.format = function() {
 
 function oneOrMany(text, needE){
     var getText = function(many){
+        if(many && text[text.length - 1] == 'y')
+            return text.slice(0, -1) + 'ies';
         return text + (many ? (needE ? 'es' : 's') : '');
     };
 
@@ -60,7 +62,7 @@ var Msg = {
     Browse: 'Browse',
     Cancel: 'Cancel',
     Card: 'Card',
-    Category: 'Category',
+    Category: oneOrMany('Category', true),
     Cell: 'Cell',
     CellPhone: 'CellPhone',
     Check: 'Check',
@@ -160,6 +162,7 @@ var Msg = {
     Parameter: oneOrMany('Parameter'),
     Parent: oneOrMany('Parent'),
     Participation: 'Participation',
+    Percent: 'Percent',
     Period: 'Period',
     Person: oneOrMany('Person'),
     Personal: 'Personal',
@@ -185,6 +188,7 @@ var Msg = {
     Saved: 'Saved',
     Saving: 'Saving',
     Section: 'Section',
+    Setup: 'Setup',
     Schedule: 'Schedule',
     Scheduled: 'Scheduled',
     School: 'School',
@@ -442,6 +446,7 @@ var Msg = {
     How_do_you_grade_students_in: function(courseName){
         return 'How do you grade students in ' + courseName + '?'
     },
+    HS_to_drop: 'HS to drop',
     ID_to_print: 'ID to print',
     Import_Types: 'Import Types',
     Include_activities: 'Include activities',
@@ -453,6 +458,7 @@ var Msg = {
     Install_App: 'Install App',
     Invite_users: 'Invite users',
     IsInternal: 'IsInternal',
+    Is_system: 'Is system',
     Issues_right_now: 'Issues right now',
     Item_Ready_to_be_Graded: 'Item Ready to be Graded',
     Just_me: 'Just me',
@@ -468,6 +474,7 @@ var Msg = {
     Long_Description: 'Long Description',
     Long_description_empty_text : 'Between 500-1500 characters works well',
     Lose_Changes: 'Lose Changes',
+    LS_to_drop: 'LS to drop',
     Mark_all_Present: 'Mark all Present',
     Mark_as_done: 'Mark as done',
     Mark_as_ToDo: 'Mark as To Do',
