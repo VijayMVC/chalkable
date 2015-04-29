@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 
-namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
+namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
-
     public abstract class BaseDemoStorage<TKey, TValue> where TKey: struct where TValue:new()
     {
-        protected DemoStorage Storage { get; private set; }
-
         protected Dictionary<TKey, TValue> data = new Dictionary<TKey, TValue>();
 
         protected TKey Index = default(TKey);
-        private bool IsAutoIncrement;
+        private readonly bool IsAutoIncrement;
 
         protected Func<TValue, TKey> KeyFieldAction { get; private set; }
 
@@ -70,9 +68,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
 
 
-        protected BaseDemoStorage(DemoStorage storage, Func<TValue, TKey> keyField, bool autoIncrement = false)
+        protected BaseDemoStorage(Func<TValue, TKey> keyField, bool autoIncrement = false)
         {
-            Storage = storage;
             KeyFieldAction = keyField;
             IsAutoIncrement = autoIncrement;
         }
@@ -136,6 +133,53 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Storage
         }
 
         
+
+    }
+
+
+    public abstract class BaseDemoGuidStorage<TValue> : BaseDemoStorage<Guid, TValue> where TValue : new()
+    {
+        protected BaseDemoGuidStorage(Func<TValue, Guid> keyField, bool autoIncrement = false)
+            : base(keyField, autoIncrement)
+        {
+        }
+
+        public override Guid GetNextFreeId()
+        {
+            return Guid.NewGuid();
+        }
+    }
+
+    public abstract class BaseDemoIntStorage<TValue> : BaseDemoStorage<int, TValue> where TValue : new()
+    {
+        protected BaseDemoIntStorage(Func<TValue, int> keyField, bool autoIncrement = false)
+            : base(keyField, autoIncrement)
+        {
+            Index = 1;
+        }
+
+        public override int GetNextFreeId()
+        {
+            return Index++;
+        }
+
+
+    }
+
+    public class DemoSchoolServiceBase : SchoolServiceBase
+    {
+        public DemoSchoolServiceBase(IServiceLocatorSchool serviceLocator)
+            : base(serviceLocator)
+        {
+        }
+    }
+
+    public class DemoMasterServiceBase : MasterServiceBase
+    {
+        public DemoMasterServiceBase(IServiceLocatorMaster serviceLocator)
+            : base(serviceLocator)
+        {
+        }
 
     }
 }

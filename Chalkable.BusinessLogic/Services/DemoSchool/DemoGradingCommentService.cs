@@ -1,31 +1,44 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
+﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
-    public class DemoGradingCommentService : BaseDemoIntStorage<GradingComment>, IGradingCommentService
+    public class DemoGradingCommentStorage : BaseDemoIntStorage<GradingComment>
     {
-        public DemoGradingCommentService(IServiceLocator serviceLocator, DemoStorage demoStorage) : base(demoStorage, x => x.Id, true)
+        public DemoGradingCommentStorage()
+            : base(x => x.Id, true)
         {
         }
+    }
 
-        public new void Add(IList<GradingComment> gradingComments)
+    public class DemoGradingCommentService : DemoSchoolServiceBase, IGradingCommentService
+    {
+        private DemoGradingCommentStorage GradingCommentStorage { get; set; }
+        public DemoGradingCommentService(IServiceLocatorSchool schoolLocator) 
+            : base(schoolLocator)
         {
-            base.Add(gradingComments);
+            GradingCommentStorage = new DemoGradingCommentStorage();
+        }
+
+        public void Add(IList<GradingComment> gradingComments)
+        {
+            GradingCommentStorage.Add(gradingComments);
         }
 
         public void Edit(IList<GradingComment> gradingComments)
         {
-            Update(gradingComments);
+            GradingCommentStorage.Update(gradingComments);
+        }
+
+        public void Delete(IList<GradingComment> gradingComments)
+        {
+            GradingCommentStorage.Delete(gradingComments);
         }
 
         public IList<GradingComment> GetGradingComments()
         {
-            return data.Select(x => x.Value).ToList();
+            return GradingCommentStorage.GetAll();
         }
     }
 }

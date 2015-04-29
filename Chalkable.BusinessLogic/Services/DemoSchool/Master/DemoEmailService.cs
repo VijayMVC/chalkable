@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using System.Net.Mail;
 using System.Text;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -16,7 +14,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
     public class DemoEmailService : DemoMasterServiceBase, IEmailService
     {
-        public DemoEmailService(IServiceLocatorMaster serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+        public DemoEmailService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
         }
         private const string confirmUrlFormat = "{0}/Home/Confirm?key={1}";
@@ -51,6 +49,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void SendInviteToPerson(Person person, string confirmationKey, string message, string messageTemplate)
         {
+            
             //var sysEMail = PreferenceService.GetTyped<EmailInfo>(Preference.SYSTEM_EMAIL);
             //var personMail = person.Email;
             //var mail = PrepareDefaultMail(sysEMail);
@@ -71,6 +70,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void SendNotificationToPerson(Person person, string message)
         {
+            
             //if (person.Active)
             //{
             //    var personMail = person.Email;
@@ -93,6 +93,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void SendMailToFriend(string fromMail, string toMail, string message, string subject = null)
         {
+            
             var sysEMail = PreferenceService.GetTyped<EmailInfo>(Preference.SYSTEM_EMAIL);
             var emailfrom = new EmailInfo {Email = fromMail};
             var mailMessage = PrepareDefaultMail(emailfrom);

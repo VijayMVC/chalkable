@@ -1,4 +1,5 @@
 using System;
+using System.Configuration;
 using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Net;
@@ -8,9 +9,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using WindowsAzure.Acs.Oauth2.Protocol.Swt;
 using Chalkable.Common;
 using Microsoft.IdentityModel.Claims;
+using WindowsAzure.Acs.Oauth2.Protocol.Swt;
 
 namespace WindowsAzure.Acs.Oauth2.ResourceServer
 {

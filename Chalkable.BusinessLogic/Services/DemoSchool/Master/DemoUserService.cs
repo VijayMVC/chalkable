@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
@@ -11,11 +10,19 @@ using User = Chalkable.Data.Master.Model.User;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
+    public class DemoUserStorage : BaseDemoGuidStorage<User>
+    {
+        public DemoUserStorage()
+            : base(x => x.Id, false)
+        {
+        }
+    }
 
     public class DemoUserService : DemoMasterServiceBase, IUserService
     {
-        public DemoUserService(IServiceLocatorMaster serviceLocator, DemoStorage storage)
-            : base(serviceLocator, storage)
+        private DemoUserStorage UserStorage { get; set; }
+        public DemoUserService(IServiceLocatorMaster serviceLocator)
+            : base(serviceLocator)
         {
         }
 
@@ -23,8 +30,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             throw new NotImplementedException();
         }
-
-        
 
         public void CreateUserLoginInfos()
         {
@@ -48,7 +53,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void Add(IList<User> users)
         {
-            Storage.UserStorage.Add(users);
+            UserStorage.Add(users);
         }
 
         private const string DEMO_USER_PREFIX = "demo_user_";
@@ -107,9 +112,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             var schoolUsers = new List<SchoolUser>();
 
-            var school = DemoMasterSchoolStorage.CreateMasterSchool(districtRef);
+            var school = DemoSchoolService.CreateMasterSchool(districtRef);
 
-            var district = DemoDistrictStorage.CreateDemoDistrict(districtRef);
+            var district = DemoDistrictService.CreateDemoDistrict(districtRef);
 
             var user = new User
             {
@@ -121,7 +126,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 Login = login,
                 IsDemoUser = true,
                 District = district,
-                LoginInfo = new UserLoginInfo()
+                LoginInfo = new UserLoginInfo
                 {
                     Id = userId
                 }
@@ -175,7 +180,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             throw new NotImplementedException();
         }
-
 
         public UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? schoolYearId)
         {

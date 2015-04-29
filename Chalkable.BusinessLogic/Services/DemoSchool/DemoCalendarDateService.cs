@@ -1,30 +1,64 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
+using System.Linq;
+using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
-    //TODO: needs tests
-    public class DemoCalendarDateService : DemoSchoolServiceBase, ICalendarDateService
+    public class DemoDateStorage : BaseDemoIntStorage<Date>
     {
-        public DemoCalendarDateService(IServiceLocatorSchool serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+        public DemoDateStorage()
+            : base(null, true)
         {
         }
+    }
 
+    public class DemoCalendarDateService : DemoSchoolServiceBase, ICalendarDateService
+    {
+        private DemoDateStorage DateStorage { get; set; }
+        public DemoCalendarDateService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
+        {
+            DateStorage = new DemoDateStorage();
+        }
+
+        private List<Date> GetDatesFiltered(DateQuery query)
+        {
+            var dates = DateStorage.GetData().Select(x => x.Value);
+
+            if (query.SchoolYearId.HasValue)
+                dates = dates.Where(x => x.SchoolYearRef == query.SchoolYearId);
+            if (query.FromDate.HasValue)
+                dates = dates.Where(x => x.Day >= query.FromDate);
+            if (query.ToDate.HasValue)
+                dates = dates.Where(x => x.Day <= query.ToDate);
+            if (query.SchoolDaysOnly)
+                dates = dates.Where(x => x.IsSchoolDay);
+
+
+            if (query.MarkingPeriodId.HasValue)
+            {
+
+                var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(query.MarkingPeriodId.Value);
+                dates = dates.Where(x => mp.StartDate <= x.Day && mp.EndDate >= x.Day);
+            }
+
+            if (query.DayType.HasValue)
+                dates = dates.Where(x => x.DayTypeRef == query.DayType);
+
+            return dates.ToList();
+        }
 
         public DateTime GetDbDateTime()
         {
-            return Storage.DateStorage.GetDbDateTime();
+            return DateTime.Now;
         }
         
         public IList<Date> GetLastDays(int schoolYearId, bool schoolDaysOnly, DateTime? fromDate, DateTime? tillDate, int count = Int32.MaxValue)
         {
-            return Storage.DateStorage.GetDates(new DateQuery
+            return GetDatesFiltered(new DateQuery
             {
                 SchoolYearId = schoolYearId,
                 FromDate = fromDate,
@@ -34,33 +68,61 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             });
         }
 
-        public void Add(IList<Date> days)
+        private void AddMonth(int year, int month)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.DateStorage.Add(days);
+            var daysCount = DateTime.DaysInMonth(year, month);
+
+            for (var i = 0; i < daysCount; ++i)
+            {
+                var typeRef = 0;
+
+                var day = new DateTime(year, month, i + 1);
+
+                if (day.DayOfWeek == DayOfWeek.Thursday || day.DayOfWeek == DayOfWeek.Tuesday)
+                    typeRef = 20;
+                if (day.DayOfWeek == DayOfWeek.Monday)
+                    typeRef = 19;
+                if (day.DayOfWeek == DayOfWeek.Wednesday || day.DayOfWeek == DayOfWeek.Friday)
+                    typeRef = 21;
+
+
+
+                DateStorage.Add(new Date
+                {
+                    Day = day,
+                    SchoolYearRef = DemoSchoolConstants.CurrentSchoolYearId,
+                    IsSchoolDay = day.DayOfWeek != DayOfWeek.Saturday && day.DayOfWeek != DayOfWeek.Sunday,
+                    DayTypeRef = typeRef,
+                    BellScheduleRef = DemoSchoolConstants.BellScheduleId
+                });
+            }
         }
 
-        private void ValidateDate(Date date)
+        public void AddDates()
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            if (!date.IsSchoolDay && date.DayTypeRef.HasValue)
-                throw new ChalkableException("Incorrect parameters data");
-            if (date.DayTypeRef.HasValue && !Storage.DayTypeStorage.Exists(date.SchoolYearRef))
-                throw new ChalkableException("day type is not assigned to current school year");
+            var currentYear = DateTime.Now.Year;
+            for (var i = 1; i <= 12; ++i)
+                AddMonth(currentYear, i);
+        }
+
+        public void Add(IList<Date> days)
+        {
+            DateStorage.Add(days);
         }
 
         public void Edit(IList<Date> dates)
         {
-            foreach (var date in dates)
-                ValidateDate(date);
-            Storage.DateStorage.Update(dates);
+            throw new NotImplementedException();
         }
 
         public void Delete(IList<Date> dates)
         {
-            Storage.DateStorage.Delete(dates);
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<Date> GetDates(DateQuery dateQuery)
+        {
+            return GetDatesFiltered(dateQuery);
         }
     }
 }

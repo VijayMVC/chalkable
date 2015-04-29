@@ -1,6 +1,5 @@
 ﻿using System;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Data.Master.Model;
 
@@ -8,16 +7,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
     public class DemoApplicationUploadService : DemoMasterServiceBase, IApplicationUploadService
     {
-        public DemoApplicationUploadService(IServiceLocatorMaster serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+        public DemoApplicationUploadService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
         }
-
-        private Application EditApplication(Application application, BaseApplicationInfo applicationInfo, bool addToOauth = false,
-                                            ApplicationStateEnum state = ApplicationStateEnum.Draft)
-        {
-            throw new NotImplementedException();
-        }
-  
 
         public Application Create(BaseApplicationInfo appInfo)
         {
