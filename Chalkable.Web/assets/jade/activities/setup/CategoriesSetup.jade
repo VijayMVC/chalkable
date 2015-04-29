@@ -32,7 +32,7 @@ mixin ReportCell(value)
                     each category in self.getCategories()
                         .row
                             div(data-id=category.getId()).cell.category-check-container
-                                +Checkbox('categoryId', false)
+                                +Checkbox('categoryId', false)(disabled = category.isSystem())
                             .cell
                                 +ActionLink('setup', 'addEditCategory', selectedId, category.getId())(data-tooltip=category.getName(), data-tooltip-type="overflow").text=category.getName()
                             +ReportCell(category.getDescription())

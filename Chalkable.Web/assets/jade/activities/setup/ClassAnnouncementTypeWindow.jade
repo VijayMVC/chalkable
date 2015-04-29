@@ -12,10 +12,10 @@
                TR
                   TD.item-2
                      h3=Msg.Name
-                     input(name="name", type="text", value=self.getName())
+                     input(name="name", type="text", value=self.getName(), readonly=self.isSystem())
                   TD.item-2
                      h3=Msg.Description
-                     input(name="description", type="text", value=self.getDescription())
+                     input(name="description", type="text", value=self.getDescription(), readonly=self.isSystem())
                TR
                   TD.item-2
                      h3=Msg.High_score_to_drop

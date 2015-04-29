@@ -28,6 +28,9 @@ NAMESPACE('chlk.templates.setup', function () {
             String, 'name',
 
             [ria.templates.ModelPropertyBind],
-            String, 'description'
+            String, 'description',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'system'
         ])
 });
