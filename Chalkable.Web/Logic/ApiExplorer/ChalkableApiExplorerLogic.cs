@@ -23,6 +23,13 @@ using Newtonsoft.Json.Linq;
 
 namespace Chalkable.Web.Logic.ApiExplorer
 {
+
+    internal enum ApiMethodCallType
+    {
+        Get,
+        Post
+    };
+
     public static class ChalkableApiExplorerLogic
     {
 
@@ -65,35 +72,45 @@ namespace Chalkable.Web.Logic.ApiExplorer
         private static void PrepareControllerMap()
         {
             //do this once
-            RegisterApiMethodDefaults<AnnouncementController>(x => x.Read(1));
+            
+            RegisterApiMethodDefaults<ApplicationController>(x => x.GetAnnouncementApplication(1), ApiMethodCallType.Post);
+            RegisterApiMethodDefaults<AttendanceController>(x => x.SetAttendanceForClass("A", null, DemoSchoolConstants.AlgebraClassId, DateTime.Now),ApiMethodCallType.Post);
+            RegisterApiMethodDefaults<AttendanceController>(x => x.ClassList(null, DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AttendanceController>(x => x.AttendanceSummary(DateTime.Now), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AttendanceController>(x => x.SeatingChart(null, DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AttendanceReasonController>(x => x.List(), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.List(DateTime.Now, DemoSchoolConstants.AlgebraClassId, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.Week(DateTime.Now, DemoSchoolConstants.AlgebraClassId, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.Day(DateTime.Now, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AnnouncementController>(x => x.Read(1), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AnnouncementTypeController>(x => x.List(DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<ClassController>(x => 
-                x.List(DemoSchoolConstants.CurrentSchoolYearId, DemoSchoolConstants.FirstMarkingPeriodId, DemoSchoolConstants.TeacherId, null, null));
-            RegisterApiMethodDefaults<AnnouncementTypeController>(x => x.List(1));
-            RegisterApiMethodDefaults<ApplicationController>(x => x.GetAnnouncementApplication(1));
-            RegisterApiMethodDefaults<AttendanceController>(x => x.SetAttendanceForClass("A", null, DemoSchoolConstants.AlgebraClassId, DateTime.Now));
-            RegisterApiMethodDefaults<AttendanceController>(x => x.ClassList(null, DemoSchoolConstants.AlgebraClassId));
-            RegisterApiMethodDefaults<AttendanceController>(x => x.SeatingChart(null, DemoSchoolConstants.AlgebraClassId));
-            RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.List(null, DemoSchoolConstants.AlgebraClassId, null));
-            RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.Week(null, DemoSchoolConstants.AlgebraClassId, null));
-            RegisterApiMethodDefaults<DisciplineController>(x => x.StudentDisciplineSummary(DemoSchoolConstants.Student1, DemoSchoolConstants.FirstMarkingPeriodId));
-            RegisterApiMethodDefaults<FeedController>(x => x.List(null, null, null, DemoSchoolConstants.AlgebraClassId));
-            RegisterApiMethodDefaults<GradingController>(x => x.ClassSummary(DemoSchoolConstants.AlgebraClassId));
-            RegisterApiMethodDefaults<GradingController>(x => x.ItemGradingStat(1));
-            RegisterApiMethodDefaults<GradingController>(x => x.ClassSummaryGrids(DemoSchoolConstants.AlgebraClassId));
-            RegisterApiMethodDefaults<MarkingPeriodController>(x => x.List(DemoSchoolConstants.CurrentSchoolYearId, null));
-            RegisterApiMethodDefaults<PeriodController>(x => x.List(DemoSchoolConstants.CurrentSchoolYearId));
-            RegisterApiMethodDefaults<StudentController>(x => x.Summary(DemoSchoolConstants.Student1));
-            RegisterApiMethodDefaults<StudentController>(x => x.Info(DemoSchoolConstants.Student1));
-            RegisterApiMethodDefaults<StudentController>(x => x.Schedule(DemoSchoolConstants.Student1));
-            RegisterApiMethodDefaults<StudentController>(x => x.Schedule(DemoSchoolConstants.Student1));
-            RegisterApiMethodDefaults<TeacherController>(x => x.Summary(DemoSchoolConstants.TeacherId));
-            RegisterApiMethodDefaults<TeacherController>(x => x.GetTeachers("", null, null, DemoSchoolConstants.AlgebraClassId, null, null));
-            RegisterApiMethodDefaults<PrivateMessageController>(x => x.Send(DemoSchoolConstants.Student2, "test msg", "test msg body"));
-            RegisterApiMethodDefaults<SearchController>(x => x.Search("algebra"));
+                x.List(DemoSchoolConstants.CurrentSchoolYearId, DemoSchoolConstants.FirstMarkingPeriodId, DemoSchoolConstants.TeacherId, null, null), ApiMethodCallType.Post);
+            RegisterApiMethodDefaults<DisciplineController>(x => x.ClassList(DateTime.Now,DemoSchoolConstants.AlgebraClassId, null, null, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<DisciplineController>(x => x.StudentDisciplineSummary(DemoSchoolConstants.Student1, DemoSchoolConstants.FirstMarkingPeriodId), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<DisciplineTypeController>(x => x.List(null, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<FeedController>(x => x.List(null, null, null, DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<GradingController>(x => x.ClassSummary(DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<GradingController>(x => x.ItemGradingStat(1), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<GradingController>(x => x.ClassSummaryGrids(DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<GradingController>(x => x.SetAutoGrade(1, DemoSchoolConstants.Student1, "A"), ApiMethodCallType.Post);
+            RegisterApiMethodDefaults<PeriodController>(x => x.List(DemoSchoolConstants.CurrentSchoolYearId), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<MarkingPeriodController>(x => x.List(DemoSchoolConstants.CurrentSchoolYearId, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<PersonController>(x => x.Me(),ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<StudentController>(x => x.Info(DemoSchoolConstants.Student1), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<StudentController>(x => x.GetStudents("", null, null, null, DemoSchoolConstants.AlgebraClassId, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<StudentController>(x => x.Summary(DemoSchoolConstants.Student1), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<TeacherController>(x => x.Summary(DemoSchoolConstants.TeacherId), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<TeacherController>(x => x.GetTeachers("", null, null, DemoSchoolConstants.AlgebraClassId, null, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<PrivateMessageController>(x => x.Send(DemoSchoolConstants.Student2, "test msg", "test msg body"), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<StudentController>(x => x.Schedule(DemoSchoolConstants.Student1), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<SearchController>(x => x.Search("algebra"), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<SchoolYearController>(x => x.List(null, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<SchoolYearController>(x => x.CurrentSchoolYear(), ApiMethodCallType.Get);
 
         }
 
-        private static void RegisterApiMethodDefaults<T>(Expression<Action<T>> expr) where T: ChalkableController
+        private static void RegisterApiMethodDefaults<T>(Expression<Action<T>> expr, ApiMethodCallType callType) where T: ChalkableController
         {
             var body = expr.Body as MethodCallExpression;
             var arguments = body.Arguments;
@@ -132,6 +149,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
             {
                 if (method.Name != methodName) continue;
                 var i = 0;
+                method.Method = callType.ToString();
                 foreach (var param in method.Parameters)
                 {
                     if (argValues.Count > 0)
@@ -257,7 +275,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
                     {
                         Name = method.Name,
                         Description = methodKey,
-                        Method = CallType.Get.ToString(),
+                        Method = ApiMethodCallType.Get.ToString(),
                         Parameters = paramsList,
                         AvailableForRoles = avRoles
                     });
