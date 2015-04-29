@@ -127,7 +127,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationByUrl(Context.OAuthApplication);
             
             if(annApp.ApplicationRef != app.Id)
-                throw new ChalkableSecurityException("There is no announcemenApplication with such Id and ApplicationId");
+                throw new ChalkableSecurityException("There is no AnnouncementApplication with such Id and ApplicationId");
 
             if(!annApp.Active)
                 throw new ChalkableSecurityException("This application is not attached to an item");

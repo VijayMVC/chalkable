@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
@@ -42,15 +43,21 @@ namespace Chalkable.BusinessLogic.Services.Master
             BaseSecurity.EnsureSysAdminOrCurrentUser(developerId, Context);
 
             var user = ServiceLocator.UserService.GetById(developerId);
+            var oldEmail = user.Login;
             user.Login = email;
             var developer = GetById(developerId);
             developer.Name = name;
             developer.WebSite = webSite;
             developer.PayPalLogin = paypalLogin;
             DoUpdate(u =>
-            {
-                new DeveloperDataAccess(u).Update(developer);
-                new UserDataAccess(u).Update(user);
+                {
+                    var usda = new UserDataAccess(u);
+                    if (oldEmail != email && usda.GetUser(email, null, null) != null)
+                        throw new ChalkableException("User email already exists");
+                    new DeveloperDataAccess(u).Update(developer);
+                    usda.Update(user);
+                    if (oldEmail != email)
+                        ServiceLocator.EmailService.SendChangeEmailToDeveloper(developer, oldEmail, email);
             });
             developer.User = user;
             return developer;

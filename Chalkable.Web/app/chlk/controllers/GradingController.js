@@ -26,6 +26,10 @@ REQUIRE('chlk.activities.reports.WorksheetReportDialog');
 REQUIRE('chlk.activities.reports.ProgressReportDialog');
 REQUIRE('chlk.activities.reports.ComprehensiveProgressReportDialog');
 REQUIRE('chlk.activities.reports.MissingAssignmentsReportDialog');
+REQUIRE('chlk.activities.reports.BirthdayReportDialog');
+REQUIRE('chlk.activities.reports.SeatingChartReportDialog');
+REQUIRE('chlk.activities.reports.GradeVerificationReportDialog');
+REQUIRE('chlk.activities.reports.LessonPlanReportDialog');
 
 REQUIRE('chlk.models.grading.GradingSummaryGridSubmitViewData');
 
@@ -34,6 +38,8 @@ REQUIRE('chlk.models.reports.SubmitProgressReportViewData');
 REQUIRE('chlk.models.reports.SubmitWorksheetReportViewData');
 REQUIRE('chlk.models.reports.SubmitComprehensiveProgressViewData');
 REQUIRE('chlk.models.reports.SubmitMissingAssignmentsReportViewData');
+REQUIRE('chlk.models.reports.SubmitBirthdayReportViewData');
+REQUIRE('chlk.models.reports.SubmitGradeVerificationReportViewData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -558,6 +564,59 @@ NAMESPACE('chlk.controllers', function (){
 
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            function birthdayReportAction(gradingPeriodId, classId, startDate, endDate){
+                if (this.isDemoSchool())
+                    return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                var model = new chlk.models.reports.BirthdayReportViewData();
+                model.setGradingPeriodId(gradingPeriodId);
+                model.setClassId(classId);
+                model.setStartDate(startDate);
+                model.setEndDate(endDate);
+                var res = new ria.async.DeferredData(model);
+                return this.ShadeView(chlk.activities.reports.BirthdayReportDialog, res);
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            function seatingChartReportAction(gradingPeriodId, classId, startDate, endDate){
+                if (this.isDemoSchool())
+                    return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                var res = new ria.async.DeferredData(new chlk.models.reports.BaseReportViewData(classId, gradingPeriodId, startDate, endDate));
+                return this.ShadeView(chlk.activities.reports.SeatingChartReportDialog, res);
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            function gradeVerificationReportAction(gradingPeriodId, classId, startDate, endDate){
+                var res = ria.async.wait([
+                        this.gradingPeriodService.getList(),
+                        this.gradingService.getStudentAverages(gradingPeriodId)
+                    ])
+                    .then(function(data){
+                        var periods = data[0];
+                        var averages = data[1];
+                        var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
+                        return new chlk.models.reports.GradeVerificationReportViewData(periods, averages, students, classId, gradingPeriodId, startDate, endDate);
+                    }, this);
+                return this.ShadeView(chlk.activities.reports.GradeVerificationReportDialog, res);
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+            function lessonPlanReportAction(gradingPeriodId, classId, startDate, endDate){
+                if (this.isDemoSchool())
+                    return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                var classInfo = this.classService.getClassAnnouncementInfo(classId);
+                var activityCategories = classInfo.getTypesByClass();
+                var res = this.announcementService.getAnnouncementAttributes(true)
+                    .then(function(items){
+                        return new chlk.models.reports.LessonPlanReportViewData(activityCategories, items, classId, gradingPeriodId, startDate, endDate);
+                    });
+                return this.ShadeView(chlk.activities.reports.LessonPlanReportDialog, res);
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function worksheetReportAction(gradingPeriodId, classId, startDate, endDate){
                 var res = this.getWorksheetReportInfo_(gradingPeriodId, classId, startDate, endDate);
                 return this.ShadeView(chlk.activities.reports.WorksheetReportDialog, res);
@@ -670,6 +729,55 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.reports.SubmitGradeVerificationReportViewData]],
+            function submitGradeVerificationReportAction(reportViewData){
+                var src = this.reportingService.submitGradeVerificationReport(
+                    reportViewData.getClassId(),
+                    reportViewData.getFormat(),
+                    this.getIdsList(reportViewData.getGradingPeriodIds(), chlk.models.id.GradingPeriodId),
+                    (reportViewData.getStudentAverageIds() || '').split(','),
+                    reportViewData.getClassOrder(),
+                    reportViewData.getGradeType(),
+                    reportViewData.getStudentOrder(),
+                    reportViewData.getIdToPrint(),
+                    reportViewData.isIncludeCommentsAndLegends(),
+                    reportViewData.isIncludeSignature(),
+                    reportViewData.isIncludeWithdrawn(),
+                    reportViewData.getStudentIds()
+                );
+                this.BackgroundCloseView(chlk.activities.reports.GradeVerificationReportDialog);
+                this.getContext().getDefaultView().submitToIFrame(src);
+                return null;
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.reports.SubmitLessonPlanReportViewData]],
+            function submitLessonPlanReportAction(reportViewData){
+                if (Date.compare(getDate(reportViewData.getStartDate()) , getDate(reportViewData.getEndDate())) > 0){
+                    return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                }
+
+                var src = this.reportingService.submitLessonPlanReport(
+                    reportViewData.getClassId(),
+                    reportViewData.getGradingPeriodId(),
+                    reportViewData.getFormat(),
+                    reportViewData.getStartDate(),
+                    reportViewData.getEndDate(),
+                    reportViewData.getSortActivities(),
+                    reportViewData.getSortSections(),
+                    reportViewData.getPublicPrivateText(),
+                    reportViewData.getMaxCount(),
+                    reportViewData.isIncludeActivities(),
+                    reportViewData.isIncludeStandards(),
+                    (reportViewData.getActivityAttribute() || '').split(','),
+                    (reportViewData.getActivityCategory() || '').split(',')
+                );
+                this.BackgroundCloseView(chlk.activities.reports.LessonPlanReportDialog);
+                this.getContext().getDefaultView().submitToIFrame(src);
+                return null;
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitGradeBookReportViewData]],
             function submitGradeBookReportAction(reportViewData){
 
@@ -700,39 +808,77 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [chlk.controllers.SidebarButton('statistic')],
+            [[chlk.models.reports.SubmitBirthdayReportViewData]],
+            function submitBirthdayReportAction(reportViewData){
+
+                if (Date.compare(getDate(reportViewData.getStartDate()) , getDate(reportViewData.getEndDate())) > 0){
+                    return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                }
+
+                if (reportViewData.getStartMonth() > reportViewData.getEndMonth()){
+                    return this.ShowAlertBox("Start Month must be less than or equal to End Month", "Error"), null;
+                }
+
+                var src = this.reportingService.submitBirthdayReport(
+                    reportViewData.getClassId(),
+                    reportViewData.getGradingPeriodId(),
+                    reportViewData.getGroupBy(),
+                    reportViewData.getFormat(),
+                    reportViewData.getStartDate(),
+                    reportViewData.getEndDate(),
+                    reportViewData.getStartMonth(),
+                    reportViewData.getEndMonth(),
+                    reportViewData.getAppendOrOverwrite(),
+                    reportViewData.isIncludeWithdrawn(),
+                    reportViewData.isIncludePhoto(),
+                    reportViewData.isSaveToFilter(),
+                    reportViewData.isSaveAsDefault()
+                );
+                this.BackgroundCloseView(chlk.activities.reports.BirthdayReportDialog);
+                this.getContext().getDefaultView().submitToIFrame(src);
+                return null;
+            },
+
+            [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitProgressReportViewData]],
             function downloadProgressReportAction(progressReportViewData){
                 progressReportViewData = progressReportViewData.getClassId() ? progressReportViewData
                     : this.getContext().getSession().get('modelForSubmit', null);
 
-                var src = this.reportingService.submitProgressReport(
-                    progressReportViewData.getClassId(),
-                    progressReportViewData.getIdToPrint(),
-                    progressReportViewData.getFormat(),
+                this.reportingService.setStudentProgressReportComments(progressReportViewData.getClassId(),
                     progressReportViewData.getGradingPeriodId(),
-                    progressReportViewData.getAbsenceReasonIds(),
-                    progressReportViewData.isAdditionalMailings(),
-                    progressReportViewData.getDailyAttendanceDisplayMethod(),
-                    progressReportViewData.isDisplayCategoryAverages(),
-                    progressReportViewData.isDisplayClassAverages(),
-                    progressReportViewData.isDisplayLetterGrade(),
-                    progressReportViewData.isDisplayPeriodAttendance(),
-                    progressReportViewData.isDisplaySignatureLine(),
-                    progressReportViewData.isDisplayStudentComments(),
-                    progressReportViewData.isDisplayStudentMailingAddress(),
-                    progressReportViewData.isDisplayTotalPoints(),
-                    progressReportViewData.isGoGreen(),
-                    progressReportViewData.getMaxCategoryClassAverage(),
-                    progressReportViewData.getMaxStandardAverage(),
-                    progressReportViewData.getMinCategoryClassAverage(),
-                    progressReportViewData.getMinStandardAverage(),
-                    progressReportViewData.isPrintFromHomePortal(),
-                    progressReportViewData.getClassComment(),
-                    progressReportViewData.getStudentIds(),
-                    progressReportViewData.getCommentsList()
-                );
+                    progressReportViewData.getCommentsList())
+                    .then(function(model){
+                        var src = this.reportingService.submitProgressReport(
+                            progressReportViewData.getClassId(),
+                            progressReportViewData.getIdToPrint(),
+                            progressReportViewData.getFormat(),
+                            progressReportViewData.getGradingPeriodId(),
+                            progressReportViewData.getAbsenceReasonIds(),
+                            progressReportViewData.isAdditionalMailings(),
+                            progressReportViewData.getDailyAttendanceDisplayMethod(),
+                            progressReportViewData.isDisplayCategoryAverages(),
+                            progressReportViewData.isDisplayClassAverages(),
+                            progressReportViewData.isDisplayLetterGrade(),
+                            progressReportViewData.isDisplayPeriodAttendance(),
+                            progressReportViewData.isDisplaySignatureLine(),
+                            progressReportViewData.isDisplayStudentComments(),
+                            progressReportViewData.isDisplayStudentMailingAddress(),
+                            progressReportViewData.isDisplayTotalPoints(),
+                            progressReportViewData.isGoGreen(),
+                            progressReportViewData.getMaxCategoryClassAverage(),
+                            progressReportViewData.getMaxStandardAverage(),
+                            progressReportViewData.getMinCategoryClassAverage(),
+                            progressReportViewData.getMinStandardAverage(),
+                            progressReportViewData.isPrintFromHomePortal(),
+                            progressReportViewData.getClassComment(),
+                            progressReportViewData.getStudentIds()
+                        );
+                        this.getContext().getDefaultView().submitToIFrame(src);
+                        return null;
+                    }, this);
+
                 this.BackgroundCloseView(chlk.activities.reports.ProgressReportDialog);
-                this.getContext().getDefaultView().submitToIFrame(src);
                 return null;
             },
 

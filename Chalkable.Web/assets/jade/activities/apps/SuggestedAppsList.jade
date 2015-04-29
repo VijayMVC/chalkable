@@ -13,6 +13,6 @@
                             .title= app.getName()
                             +ActionButton('apps', 'openSuggestedApp', app.getId(), self.getClassId(), self.getAnnouncementId(), self.getStandardsUrlComponents()) Open
                 if !self.getSuggestedApps().length
-                    .no-items-text These standards doesn't have an App
+                    .no-items-text There are no recommended apps for the attached standard
     else
         .title No recommended apps

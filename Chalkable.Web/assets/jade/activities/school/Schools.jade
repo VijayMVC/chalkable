@@ -4,7 +4,7 @@
             -districtId = self.getDistrictId() ? self.getDistrictId().valueOf() : null
 
             +ActionLink('schools', 'import', districtId).chlk-add.opacity-button Import schools
-    +Grid('schools', 'page', self.items, [districtId]).not-transparent
+    +Grid('schools', 'page', self.getPaginatedSchools(), [districtId]).not-transparent
         +GridHead()
             .th School Name
             .th ID
@@ -18,6 +18,6 @@
                     .td= item.getId().valueOf()
                     .td= item.getSchoolType()
                     .td= item.getSchoolUrl()
-                    .td.action-links
-                        +ActionLink('schools', 'details', item.getId()).profile
+                    //.td.action-links
+                    //    +ActionLink('schools', 'details', item.getId()).profile
 

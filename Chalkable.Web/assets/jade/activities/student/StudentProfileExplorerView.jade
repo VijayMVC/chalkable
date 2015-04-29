@@ -15,7 +15,7 @@
                 h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
     .explorer-view
         if !classesInfo.length
-            .no-items-text No classes yet
+            .no-items-text=self.showNoClassesMsg()
         .classes-blocks
             each classItem, i in classesInfo
                 .class-block
@@ -44,7 +44,8 @@
                                 .left-block(data-tooltip-type="overflow", data-tooltip=standard.getName())=standard.getName()
                                 -var value = standard.getStandardGrading().getGradeValue()
                                 .right-block
-                                    span(data-tooltip=standard.getStandardGrading().getNumericGrade())=(parseInt(value) ? Math.round(value) : value)
+                                    -var numeric = standard.getStandardGrading().getNumericGrade()
+                                    span(data-tooltip=parseInt(numeric) ? Math.round(numeric) : numeric)=(parseInt(value) ? Math.round(value) : value)
                                     .circle(class=self.getStandardColor(standard))
                         if self.showMoreButton(classItem)
                             .block-item.more-button Show more

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 
-
 namespace Chalkable.StiConnector.Connectors.Model
 {
     public class SectionAttendanceSummary

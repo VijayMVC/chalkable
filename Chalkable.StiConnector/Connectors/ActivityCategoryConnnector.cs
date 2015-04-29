@@ -22,7 +22,7 @@ namespace Chalkable.StiConnector.Connectors
    
             var nvc = new NameValueCollection();
             for (int i = 0; i < sectionIds.Count; i++)
-                nvc.Add(string.Format("sectionIds[{0}]", i), sectionIds[i].ToString());   
+                nvc.Add(string.Format("sectionIds[{0}]", i), sectionIds[i].ToString());
             return Post<IList<ActivityCategory>, int[]>(string.Format("{0}activities/categories", BaseUrl), sectionIds.ToArray());
         }
 

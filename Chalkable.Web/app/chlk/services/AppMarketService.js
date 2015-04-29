@@ -137,14 +137,15 @@ NAMESPACE('chlk.services', function () {
                     })
             },
 
-            [[chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId, String, String, Number]],
-            ria.async.Future, function getSuggestedApps(classId, markingPeriodId, academicBenchmarkIds, start_, count_){
+            [[chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId, String, String, Number, Boolean]],
+            ria.async.Future, function getSuggestedApps(classId, markingPeriodId, academicBenchmarkIds, start_, count_, myAppsOnly_){
                 return this.get('AppMarket/SuggestedApps.json', ArrayOf(chlk.models.apps.ApplicationForAttach),{
                     classId : classId.valueOf(),
                     markingPeriodId: markingPeriodId ? markingPeriodId.valueOf() : this.getContext().getSession().get('markingPeriod').getId().valueOf(),
                     abIds : academicBenchmarkIds,
                     start: start_ | 0,
-                    count: count_ || 9999
+                    count: count_ || 9999,
+                    myAppsOnly: myAppsOnly_
                 });
             },
 

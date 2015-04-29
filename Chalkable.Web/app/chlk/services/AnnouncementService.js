@@ -46,6 +46,14 @@ NAMESPACE('chlk.services', function () {
 
             },
 
+            [[Boolean]],
+            ria.async.Future, function getAnnouncementAttributes(activeOnly_) {
+                return this.get('Announcement/AnnouncementAttributesList.json', ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), {
+                    activeOnly: activeOnly_
+                });
+
+            },
+
             [[chlk.models.id.AnnouncementId, Object]],
             ria.async.Future, function uploadAttachment(announcementId, files) {
                 return this.uploadFiles('AnnouncementAttachment/AddAttachment', files, chlk.models.announcement.Announcement, {

@@ -34,7 +34,11 @@ NAMESPACE('chlk.templates.reports', function () {
                     new chlk.models.common.ActionLinkModel(controllerName, 'worksheetReport', 'Worksheet', 'worksheetReport' == pressedAction, args, classNames),
                     new chlk.models.common.ActionLinkModel(controllerName, 'progressReport', 'Progress', 'progressReport' == pressedAction, args, classNames),
                     new chlk.models.common.ActionLinkModel(controllerName, 'comprehensiveProgressReport', 'Comprehensive Progress', 'comprehensiveProgressReport' == pressedAction, args, classNames),
-                    new chlk.models.common.ActionLinkModel(controllerName, 'missingAssignmentsReport', 'Missing Assignments', 'missingAssignmentsReport' == pressedAction, args, classNames)
+                    new chlk.models.common.ActionLinkModel(controllerName, 'missingAssignmentsReport', 'Missing Assignments', 'missingAssignmentsReport' == pressedAction, args, classNames),
+                    new chlk.models.common.ActionLinkModel(controllerName, 'birthdayReport', 'Birthday Listing', 'birthdayReport' == pressedAction, args, classNames),
+                    new chlk.models.common.ActionLinkModel(controllerName, 'gradeVerificationReport', 'Grade Verification', 'gradeVerificationReport' == pressedAction, args, classNames),
+                    new chlk.models.common.ActionLinkModel(controllerName, 'lessonPlanReport', 'Lesson Plan', 'lessonPlanReport' == pressedAction, args, classNames),
+                    new chlk.models.common.ActionLinkModel(controllerName, 'seatingChartReport', 'Seating Chart', 'seatingChartReport' == pressedAction, args, classNames)
                 ];
             }
         ])

@@ -18,7 +18,7 @@ NAMESPACE('chlk.models.bgtasks', function () {
             chlk.models.bgtasks.BgTaskState, 'taskState',
             [ria.serialize.SerializeProperty('tasktype')],
             chlk.models.bgtasks.BgTaskType, 'taskType',
-            [ria.serialize.SerializeProperty('schoolid')],
-            chlk.models.id.SchoolId, 'schoolId'
+            [ria.serialize.SerializeProperty('districtid')],
+            chlk.models.id.SchoolId, 'districtId'
         ]);
 });

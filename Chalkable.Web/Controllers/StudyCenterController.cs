@@ -31,14 +31,14 @@ namespace Chalkable.Web.Controllers
                 throw new ChalkableException("Standard not found");
 
             var app = MasterLocator.ApplicationService.GetApplicationByUrl(Context.OAuthApplication);
-            if (!HasInstalledApp(app.Id, Context.PersonId.Value))
-                throw new ChalkableSecurityException("Current studented has no installed app");
+            if (!IsPracticeOrInstalledApp(app.Id, Context.PersonId.Value))
+                throw new ChalkableSecurityException("Application is not installed for current student");
 
             SchoolLocator.PracticeGradeService.Add(standard.Id, Context.PersonId.Value, app.Id, score);
             return Json(true);
         }
 
-        private bool HasInstalledApp(Guid applicationId, int studentId)
+        private bool IsPracticeOrInstalledApp(Guid applicationId, int studentId)
         {
             var practiceAppId = MasterLocator.ApplicationService.GetPracticeGradeId();
             return practiceAppId == applicationId

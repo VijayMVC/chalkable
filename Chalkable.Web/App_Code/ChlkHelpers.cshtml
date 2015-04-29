@@ -44,7 +44,7 @@
     if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
     {
         <script type="text/javascript">
-            var _ = window.location.href.toString().match(/http?s:\/\/[^\/]+/);
+            var _ = window.location.href.toString().match(/https?:\/\/[^\/]+/);
 
             if (_ == null) _ = '';
             var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
@@ -52,7 +52,7 @@
     }
     else
     {
-        <script type="text/javascript">var WEB_SITE_ROOT = window.location.href.toString().match(/http?s:\/\/[^\/]+/) + '@Url.Content("~/")';</script>
+        <script type="text/javascript">var WEB_SITE_ROOT = window.location.href.toString().match(/https?:\/\/[^\/]+/) + '@Url.Content("~/")';</script>
     } 
 }
 

@@ -144,7 +144,7 @@ NAMESPACE('chlk.activities.grading', function () {
 
                 (model.getStudentTotalPoints() || [])
                     .forEach(function (item, index) {
-                        var value = (item.getMaxTotalPoint() && item.getTotalPoint()) ? (item.getTotalPoint().toFixed(model.isRoundDisplayedAverages() ? 0 : 2) + '/' + item.getMaxTotalPoint()) : '';
+                        var value = (item.getMaxTotalPoint() && (item.getTotalPoint() || item.getTotalPoint() === 0)) ? (item.getTotalPoint().toFixed(model.isRoundDisplayedAverages() ? 0 : 2) + '/' + item.getMaxTotalPoint()) : '';
                         dom.find('.total-point[data-student-id=' + item.getStudentId().valueOf() + ']').setHTML(value);
                     });
 

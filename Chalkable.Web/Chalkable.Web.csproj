@@ -235,6 +235,7 @@
     <Compile Include="Models\AlternateScoreViewData.cs" />
     <Compile Include="Models\AnnouncementAttachmentViewData.cs" />
     <Compile Include="Models\AnnouncementQnAViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\AnnouncementAttributeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementDetailedViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementGradeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />
@@ -242,6 +243,9 @@
     <Compile Include="Models\AnnouncementsViewData\StandardViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\MiniQuizAppInfoViewData.cs" />
     <Compile Include="Models\AttendanceSeatingChartViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\AttendanceMonthViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\ClassAttendanceSummaryViewData.cs" />
+    <Compile Include="Models\AttendancesViewData\StudentAttendanceSummaryViewData.cs" />
     <Compile Include="Models\AutoGradeViewData.cs" />
     <Compile Include="Models\CC_StandardCategoryViewData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
@@ -290,6 +294,8 @@
     <Compile Include="Models\CommonCoreStandardViewData.cs" />
     <Compile Include="Models\AppTesterViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
+    <Compile Include="Models\GradedItemViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentContactViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentExplorerViewData.cs" />
     <Compile Include="Models\PracticeGradeViewData.cs" />
     <Compile Include="Models\ScheduleItemViewData.cs" />

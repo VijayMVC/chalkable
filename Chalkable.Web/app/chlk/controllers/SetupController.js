@@ -147,6 +147,9 @@ NAMESPACE('chlk.controllers', function (){
                             return this.ShowMsgBox(model.message, ''), null;
                         }
                         return this.BackgroundNavigate('feed', 'list');
+                    }, this)
+                    .complete(function(){
+                        this.getView().pop();
                     }, this);
                 return this.ShadeLoader();
             }
