@@ -32,6 +32,8 @@ NAMESPACE('chlk.models.attendance', function () {
             chlk.models.id.AttendanceReasonId, 'id',
             String, 'name',
 
+            String, 'code',
+
             String, 'description',
             String, function getDescription(){ return this._description || this.getName(); },
             [[String]],
@@ -96,6 +98,7 @@ NAMESPACE('chlk.models.attendance', function () {
             VOID, function deserialize(raw){
                 this.setId(new chlk.models.id.AttendanceReasonId(raw.id));
                 this.setName(raw.name);
+                this.setCode(raw.code);
                 this.setDescription(raw.description);
                 this.setCategory(raw.category);
                 if(raw.attendancelevelreason){

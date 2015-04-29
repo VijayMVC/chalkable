@@ -66,10 +66,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
             res.IsAllowedInetAccess = studentDetailsInfo.IsAllowedInetAccess;
             res.SpecialInstructions = studentDetailsInfo.SpecialInstructions;
             res.SpEdStatus = studentDetailsInfo.SpEdStatus;
-            
-            //parents functionality are not implemanted yet
-            //var studentParents = SchoolLocator.StudentParentService.GetParents(personId);
-            //res.Parents = StudentParentViewData.Create(studentParents);
+
+            //todo : clarify in Zoli ... do we need all contacts or just family members
+            var studentContacts = SchoolLocator.ContactService.GetStudentContactDetails(personId);
+            res.StudentContacts = StudentContactViewData.Create(studentContacts);
             return Json(res, 6);
         }
 

@@ -17,11 +17,24 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
         public int GradeType { get; set; }
         public bool IncludeNotes { get; set; }
-        public bool IncludeComments { get; set; }
-        public bool IncludeLegend { get; set; }
+        public bool IncludeCommentsAndLegend { get; set; }
         public bool IncludeSignature { get; set; }
         public bool IncludeWithdrawn { get; set; }
         public int NumberToDisplay { get; set; }
+
+        public override int GradingPeriodId
+        {
+            get
+            {
+                var gpId = base.GradingPeriodId;
+                if (GradingPeriodIds != null && GradingPeriodIds.Count > 0)
+                {
+                    return gpId > 0 && GradingPeriodIds.Contains(gpId) ? gpId : GradingPeriodIds[0];    
+                }
+                return gpId;
+            }
+            set { base.GradingPeriodId = value; }
+        }
 
     }
 }

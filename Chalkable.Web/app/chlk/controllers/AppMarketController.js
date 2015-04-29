@@ -249,7 +249,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.ClassId, String, String]],
         function getSuggestedAppsAction(classId, academicBenchmarkIds, standardUrlComponents_) {
             var result = this.appMarketService
-                .getSuggestedApps(classId, null, academicBenchmarkIds)
+                .getSuggestedApps(classId, null, academicBenchmarkIds, null, null, true)
                 .attach(this.validateResponse_())
                 .then(function(apps){
                     return new chlk.models.apps.SuggestedAppsList(classId, null, apps, null, standardUrlComponents_)

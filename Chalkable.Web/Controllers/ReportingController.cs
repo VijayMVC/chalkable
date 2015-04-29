@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model.Reports;
+using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -37,9 +39,22 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
-        public ActionResult ProgressReport(ProgressReportInputModel progressReportInput, string studentComments)
+        public ActionResult ProgressReport(ProgressReportInputModel progressReportInput)
         {
-            progressReportInput.StudentComments = JsonConvert.DeserializeObject<IList<StudentCommentInputModel>>(studentComments);
+            //if(progressReportInput.StudentIds != null &&(studentComments == null || progressReportInput.StudentIds.Count != studentComments.Count))
+            //    throw new ChalkableException("Invalid student comments param");
+            //if (progressReportInput.StudentIds != null)
+            //{
+            //    progressReportInput.StudentComments = new List<StudentCommentInputModel>();
+            //    for (int i = 0; i < progressReportInput.StudentIds.Count; i++)
+            //    {
+            //        progressReportInput.StudentComments.Add(new StudentCommentInputModel
+            //        {
+            //            StudentId = progressReportInput.StudentIds[i],
+            //            Comment = studentComments[i]
+            //        });
+            //    }   
+            //}
             return Report(progressReportInput, SchoolLocator.ReportService.GetProgressReport, "ProgressReport");
         }
 
@@ -87,6 +102,14 @@ namespace Chalkable.Web.Controllers
             var fileName = string.Format("{0}.{1}", reportFileName, extension);
             MasterLocator.UserTrackingService.CreatedReport(Context.Login, reportFileName);
             return File(res, MimeHelper.GetContentTypeByExtension(extension), fileName);
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        public ActionResult SetStudentProgressReportComments(int classId, int gradingPeriodId, string studentComments)
+        {
+            var stComments = JsonConvert.DeserializeObject<IList<StudentCommentInputModel>>(studentComments);
+            SchoolLocator.ReportService.SetProgressReportComments(classId, gradingPeriodId, stComments);
+            return Json(true);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]

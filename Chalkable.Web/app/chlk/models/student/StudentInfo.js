@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.people.HealthCondition');
+REQUIRE('chlk.models.student.StudentContact');
 
 NAMESPACE('chlk.models.student', function(){
     "use strict";
@@ -10,11 +11,11 @@ NAMESPACE('chlk.models.student', function(){
 
     CLASS('StudentInfo', EXTENDS(chlk.models.people.User),[
 
-        ArrayOf(chlk.models.people.User), 'parents',
+        ArrayOf(chlk.models.student.StudentContact), 'studentContacts',
 
         OVERRIDE, VOID, function deserialize(raw) {
             BASE(raw);
-            this.parents = SJX.fromArrayOfDeserializables(raw.parents, chlk.models.people.User);
+            this.studentContacts = SJX.fromArrayOfDeserializables(raw.studentcontacts, chlk.models.student.StudentContact);
         }
     ]);
 });

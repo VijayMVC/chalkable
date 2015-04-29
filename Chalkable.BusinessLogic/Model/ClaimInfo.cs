@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Model
         } 
         public static bool HasPermission(IList<ClaimInfo> claimInfos, IList<string> claimsValues)
         {
-            return claimInfos.Any(claim => claimsValues.All(value => claim.Values.Contains(value)));
+            return claimInfos != null && claimInfos.Any(claim => claimsValues.All(value => claim.Values.Contains(value)));
         }
     }
 }

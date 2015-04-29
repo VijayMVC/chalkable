@@ -165,16 +165,19 @@
     <Compile Include="SyncModel\AbsenceLevelReason.cs" />
     <Compile Include="SyncModel\AbsenceReason.cs" />
     <Compile Include="SyncModel\AcadSession.cs" />
+    <Compile Include="SyncModel\ActivityAttribute.cs" />
     <Compile Include="SyncModel\ActivityCategory.cs" />
     <Compile Include="SyncModel\Address.cs" />
     <Compile Include="SyncModel\AlphaGrade.cs" />
     <Compile Include="SyncModel\AlternateScore.cs" />
     <Compile Include="SyncModel\AttendanceCalendar.cs" />
     <Compile Include="SyncModel\AttendanceCalendarDay.cs" />
+    <Compile Include="SyncModel\AttendanceMonth.cs" />
     <Compile Include="SyncModel\AttendanceSetting.cs" />
     <Compile Include="SyncModel\BellSchedule.cs" />
     <Compile Include="SyncModel\CalendarDay.cs" />
     <Compile Include="SyncModel\ClassroomOption.cs" />
+    <Compile Include="SyncModel\ContactRelationship.cs" />
     <Compile Include="SyncModel\Course.cs" />
     <Compile Include="SyncModel\CourseSchool.cs" />
     <Compile Include="SyncModel\CourseStandard.cs" />
@@ -184,6 +187,7 @@
     <Compile Include="SyncModel\Enrollment.cs" />
     <Compile Include="SyncModel\Ethnicity.cs" />
     <Compile Include="SyncModel\Gender.cs" />
+    <Compile Include="SyncModel\GradedItem.cs" />
     <Compile Include="SyncModel\GradeLevel.cs" />
     <Compile Include="SyncModel\GradingComment.cs" />
     <Compile Include="SyncModel\GradingPeriod.cs" />
@@ -219,6 +223,7 @@
     <Compile Include="SyncModel\StudentAcadSession.cs" />
     <Compile Include="SyncModel\StudentAttendanceMinute.cs" />
     <Compile Include="SyncModel\StudentCheckInOut.cs" />
+    <Compile Include="SyncModel\StudentContact.cs" />
     <Compile Include="SyncModel\StudentDailyAbsence.cs" />
     <Compile Include="SyncModel\StudentGradeLevel.cs" />
     <Compile Include="SyncModel\StudentPeriodAbsence.cs" />

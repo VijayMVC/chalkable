@@ -4,6 +4,10 @@ REQUIRE('ria.async.Observable');
 REQUIRE('chlk.models.reports.SubmitComprehensiveProgressViewData');
 REQUIRE('chlk.models.reports.SubmitMissingAssignmentsReportViewData');
 REQUIRE('chlk.models.reports.SubmitBirthdayReportViewData');
+REQUIRE('chlk.models.reports.SubmitGradeVerificationReportViewData');
+REQUIRE('chlk.models.reports.SubmitLessonPlanReportViewData');
+REQUIRE('chlk.models.reports.SubmitAttendanceProfileReportViewData');
+REQUIRE('chlk.models.reports.SubmitAttendanceRegisterReportViewData');
 
 
 NAMESPACE('chlk.services', function () {
@@ -78,6 +82,16 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.ReportFormatEnum, Boolean]],
+        String, function submitSeatingChartReport(classId, gradingPeriodId, format, displayStudentPhoto_) {
+            return this.getUrl('Reporting/SeatingChartReport.json', {
+                classId: classId.valueOf(),
+                gradingPeriodId: gradingPeriodId.valueOf(),
+                format: format.valueOf(),
+                displayStudentPhoto: displayStudentPhoto_
+            });
+        },
+
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.reports.StudentIdentifierEnum,
             String, String, String, String, String, String, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, String]],
         String, function submitWorksheetReport(classId, gradingPeriodId, startDate, endDate, idToPrint, announcementIds, title1, title2, title3,
@@ -111,7 +125,7 @@ NAMESPACE('chlk.services', function () {
         String, function submitProgressReport(classId, idToPrint, format, gradingPeriodId, absenceReasonIds, additionalMailings_, dailyAttendanceDisplayMethod,
                 displayCategoryAverages_, displayClassAverages_, displayLetterGrade_, displayPeriodAttendance_, displaySignatureLine_, displayStudentComments_,
                 displayStudentMailingAddress_, displayTotalPoints_, goGreen_, maxCategoryClassAverage_, maxStandardAverage_, minCategoryClassAverage_,
-                minStandardAverage_, printFromHomePortal_, classComment, studentIds, commentsList) {
+                minStandardAverage_, printFromHomePortal_, classComment, studentIds) {
             return this.getUrl('Reporting/ProgressReport.json', {
                 classId: classId.valueOf(),
                 gradingPeriodId: gradingPeriodId.valueOf(),
@@ -135,8 +149,7 @@ NAMESPACE('chlk.services', function () {
                 minStandardAverage: minStandardAverage_,
                 printFromHomePortal: printFromHomePortal_,
                 classComment: classComment,
-                studentIds: studentIds,
-                studentComments: commentsList
+                studentIds: studentIds
                 //comments:
             });
         },
@@ -181,6 +194,93 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
+        [[chlk.models.id.ClassId, chlk.models.reports.ReportFormatEnum, ArrayOf(chlk.models.id.GradingPeriodId),
+            Array, chlk.models.reports.SectionOrder, chlk.models.reports.GradeType, chlk.models.reports.StudentOrder,
+            chlk.models.reports.StudentIdentifierEnum, Boolean, Boolean, Boolean, String]],
+
+        String, function submitGradeVerificationReport(classId, format, gradingPeriodIds, studentAverageIds, classOrder, gradeType, studentOrder,
+                numberToDisplay, includeCommentsAndLegends_, includeSignature_, includeWithdrawn_, studentIds_){
+            return this.getUrl('Reporting/GradeVerificationReport.json', {
+                classId : classId.valueOf(),
+                format: format.valueOf(),
+                gradingPeriodIds : this.arrayToCsv(gradingPeriodIds),
+                gradeditemid: this.arrayToCsv(studentAverageIds),
+                classOrder: classOrder.valueOf(),
+                gradeType: gradeType.valueOf(),
+                studentOrder: studentOrder.valueOf(),
+                idToPrint: numberToDisplay.valueOf(),
+                includeCommentsAndLegends: includeCommentsAndLegends_,
+                includeSignature: includeSignature_,
+                includeWithdrawn: includeWithdrawn_,
+                studentIds: studentIds_
+            });
+        },
+
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.ReportFormatEnum, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
+            chlk.models.reports.GroupBy, chlk.models.reports.StudentIdentifierEnum, ArrayOf(chlk.models.id.AttendanceReasonId),
+            ArrayOf(chlk.models.id.MarkingPeriodId), Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, String]],
+
+        String, function submitAttendanceProfileReport(classId, gradingPeriodId, format, startDate, endDate, groupBy, idToPrint, absenceReasons, terms, displayPeriodAbsences_,
+                                                       displayReasonTotals_, includeCheck_, includeUnlisted_, displayNote_, displayWithdrawnStudents_, studentIds_){
+            return this.getUrl('Reporting/AttendanceProfileReport.json', {
+                classId : classId.valueOf(),
+                gradingPeriodId: gradingPeriodId.valueOf(),
+                format: format.valueOf(),
+                startDate: startDate.toStandardFormat(),
+                endDate: endDate.toStandardFormat(),
+                studentIds: studentIds_,
+                groupBy: groupBy.valueOf(),
+                idToPrint: idToPrint.valueOf(),
+                absenceReasons : this.arrayToCsv(absenceReasons),
+                markingPeriodIds: this.arrayToCsv(terms),
+                displayPeriodAbsences: displayPeriodAbsences_,
+                displayReasonTotals: displayReasonTotals_,
+                includeCheckInCheckOut: includeCheck_,
+                includeUnlisted: includeUnlisted_,
+                displayNote: displayNote_,
+                displayWithdrawnStudents: displayWithdrawnStudents_
+            });
+        },
+
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.ReportFormatEnum, chlk.models.reports.StudentIdentifierEnum, chlk.models.reports.ReportType,
+            ArrayOf(chlk.models.id.AttendanceReasonId), Number, Boolean, Boolean]],
+
+        String, function submitAttendanceRegisterReport(classId, gradingPeriodId, format, reportType, idToPrint, absenceReasons, monthId, showLocalReasonCode_, includeTardies_){
+            return this.getUrl('Reporting/AttendanceRegisterReport.json', {
+                classId : classId.valueOf(),
+                gradingPeriodId: gradingPeriodId.valueOf(),
+                format: format.valueOf(),
+                reportType: reportType.valueOf(),
+                idToPrint: idToPrint.valueOf(),
+                absenceReasonIds : this.arrayToCsv(absenceReasons),
+                monthId: monthId,
+                showLocalReasonCode: showLocalReasonCode_,
+                includeTardies: includeTardies_
+            });
+        },
+
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.ReportFormatEnum, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
+            chlk.models.reports.SortActivityOptions, chlk.models.reports.SortSectionOptions, chlk.models.reports.PublicPrivateTextOptions, Number, Boolean, Boolean, Array, Array]],
+
+        String, function submitLessonPlanReport(classId, gradingPeriodId, format, startDate, endDate, sortActivities, sortSections, publicPrivateText_, maxCount_,
+                                                includeActivities_, includeStandards_, activityAttribute_, activityCategory_){
+            return this.getUrl('Reporting/LessonPlanReport.json', {
+                classId: classId.valueOf(),
+                gradingPeriodId: gradingPeriodId.valueOf(),
+                format: format.valueOf(),
+                startDate: startDate.toStandardFormat(),
+                endDate: endDate.toStandardFormat(),
+                sortItems: sortActivities.valueOf(),
+                sortClasses: sortSections.valueOf(),
+                publicPrivateText: publicPrivateText_ && publicPrivateText_.valueOf(),
+                maxCount: maxCount_,
+                includeAnnouncements: includeActivities_,
+                includeStandards: includeStandards_,
+                announcementAttributes : this.arrayToCsv(activityAttribute_),
+                announcementTypes: this.arrayToCsv(activityCategory_)
+            });
+        },
+
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.StudentIdentifierEnum,
             chlk.models.reports.ReportFormatEnum, chlk.models.reports.MissingAssignmentsOrderByMethod, chlk.models.common.ChlkDate,
             chlk.models.common.ChlkDate, ArrayOf(chlk.models.id.AlternateScoreId), Boolean, Boolean, Boolean, Boolean, Boolean, String]],
@@ -212,6 +312,15 @@ NAMESPACE('chlk.services', function () {
                 gradingPeriodId: gradingPeriodId.valueOf(),
                 start: 0,
                 count: 9999
+            });
+        },
+
+        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, String]],
+        ria.async.Future, function setStudentProgressReportComments(classId, gradingPeriodId, studentComments) {
+            return this.post('Reporting/SetStudentProgressReportComments.json', Boolean, {
+                classId: classId.valueOf(),
+                gradingPeriodId: gradingPeriodId.valueOf(),
+                studentComments: studentComments
             });
         }
     ])

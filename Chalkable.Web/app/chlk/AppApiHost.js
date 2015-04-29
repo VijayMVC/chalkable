@@ -32,6 +32,7 @@ NAMESPACE('chlk', function(){
         [[Object, String, Object]],
         function addApp(rWindow, rURL, data){
             CHLK_MESSENGER.addApp(rWindow, rURL, data);
+            this.doCallApiReactor_('addAppBegin', {rWindow: rWindow, rURL: rURL, data: data});
         },
 
         [[Object, String, Object]],

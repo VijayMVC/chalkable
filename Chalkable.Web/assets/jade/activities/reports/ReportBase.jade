@@ -12,10 +12,10 @@ mixin ReportDatePicker(header, date, name, minDate, maxDate)
       class="validate[required]"
    )
 
-mixin ReportDatePickers(startDate, endDate)
-   TD.item-3
+mixin ReportDatePickers(startDate, endDate, itemClass_)
+   TD(class = itemClass_ || 'item-3')
       +ReportDatePicker(Msg.Start_date, startDate, 'startDate', startDate, endDate)
-   TD.item-3
+   TD(class = itemClass_ || 'item-3')
       +ReportDatePicker(Msg.End_date, endDate, 'endDate', startDate, endDate)
 
 mixin ReportFormatSelect()

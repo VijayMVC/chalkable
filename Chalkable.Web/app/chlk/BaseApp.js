@@ -221,7 +221,7 @@ NAMESPACE('chlk', function (){
                             if(type == "overflow"){
                                 showTooltip = this.scrollWidth > (node.width() + parseInt(node.css('padding-left'), 10) + parseInt(node.css('padding-right'), 10));
                             }
-                            if(value && showTooltip){
+                            if((value || value === 0) && showTooltip ){
                                 tooltip.show();
                                 tooltip.find('.tooltip-content').html(node.data('tooltip'));
                                 tooltip.css('left', offset.left + (node.width() - tooltip.width())/2)

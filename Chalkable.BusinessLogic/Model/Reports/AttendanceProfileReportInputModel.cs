@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public bool DisplayNote { get; set; }
         public bool DisplayReasonTotals { get; set; }
         public bool IncludeUnlisted { get; set; }
-        
+        public bool IncludeCheckInCheckOut { get; set; }
         ///<summary>
         /// enum GroupByMethod
         ///    BlankColumn = 0,

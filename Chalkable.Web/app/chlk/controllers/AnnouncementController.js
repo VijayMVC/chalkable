@@ -380,7 +380,7 @@ NAMESPACE('chlk.controllers', function (){
                 .getAppsForAttach(userId, classId, mp.getId(), pageIndex_ | 0, null)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, data, appUrlAppend_ || '');
+                    return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, classId, data, appUrlAppend_ || '');
                 });
 
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppDialog, result);
@@ -447,12 +447,11 @@ NAMESPACE('chlk.controllers', function (){
             this.getView().reset();
             var result = this.announcementService
                 .getAnnouncement(announcementId)
-
                 .attach(this.validateResponse_())
+                .catchError(this.handleNoAnnouncementException_, this)
                 .then(function(announcement){
                     return this.prepareAnnouncementForView(announcement);
                 }, this);
-                //.catchError(this.handleNoAnnouncementException_, this);
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
         },
 
@@ -955,8 +954,8 @@ NAMESPACE('chlk.controllers', function (){
         function askQuestionAction(model) {
             var ann = this.announcementService
                 .askQuestion(model.getAnnouncementId(), model.getQuestion())
-                .catchError(this.handleNoAnnouncementException_, this)
-                .attach(this.validateResponse_());
+                .attach(this.validateResponse_())
+                .catchError(this.handleNoAnnouncementException_, this);
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, ann, 'update-qna');
         },
 
