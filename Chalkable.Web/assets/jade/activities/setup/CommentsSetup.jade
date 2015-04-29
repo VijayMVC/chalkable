@@ -1,0 +1,32 @@
+mixin ReportCell(value)
+    .cell
+        div(data-tooltip=value, data-tooltip-type="overflow").text=value
+
+.setup-page
+    h2.page-title=Msg.Setup
+
+    .action-bar
+        .items
+            +ActionLink('setup', 'categoriesSetup')=Msg.Category(true)
+            +ActionLink('setup', 'commentsSetup').pressed=Msg.Comment(true)
+
+    +ActionForm('setup', 'deleteComments')
+        .chlk-grid-container
+            .grid
+                .row.header
+                    .cell
+                        +Checkbox('allchecks', false).all-checkboxes
+                    .cell= Msg.Comment
+                    .cell= Msg.Is_system
+                each comment in self.getComments()
+                    .row
+                        div(data-id=comment.getCommentId()).cell.check-container
+                            +Checkbox('commentyId', false)(disabled = comment.isSystem()).item-check
+                        .cell
+                            +ActionLink('setup', 'addEditComment', comment.getCommentId())(data-tooltip=comment.getComment(), data-tooltip-type="overflow").text=comment.getComment()
+                        .cell
+                            .text #{category.isSystem() ? '+' : ''}
+        +Hidden('ids', '').ids-to-delete
+        .buttons-block
+            +ActionButton('setup', 'addEditComment')(type="button").chlk-button.blue-button=Msg.Add
+            BUTTON(type="submit", disabled='disabled').chlk-button.negative-button.delete-button=Msg.Delete
