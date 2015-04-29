@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
@@ -147,14 +148,20 @@ namespace Chalkable.BusinessLogic.Services.School
         public StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
+            if(!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
             var date = Context.NowSchoolYearTime;
             var student = GetById(studentId, schoolYearId);
             var classes = ServiceLocator.ClassService.GetStudentClasses(schoolYearId, studentId).ToList();
             var classPersons = ServiceLocator.ClassService.GetClassPersons(studentId, true);
             classes = classes.Where(c => classPersons.Any(cp => cp.ClassRef == c.Id)).ToList();
+            if (Context.Role == CoreRoles.TEACHER_ROLE)
+            {
+                var classTeachers = ServiceLocator.ClassService.GetClassTeachers(null, Context.PersonId.Value);
+                classes = classes.Where(c => classTeachers.Any(ct => ct.ClassRef == c.Id)).ToList();
+            }
             var inowStExpolorer = ConnectorLocator.StudentConnector.GetStudentExplorerDashboard(schoolYearId, student.Id, date);
             var standards = ServiceLocator.StandardService.GetStandards(null, null, null);
-
             IList<int> importanActivitiesIds = new List<int>();
             IList<AnnouncementComplex> announcements = new List<AnnouncementComplex>();
             IList<StandardScore> inowStandardScores = new List<StandardScore>();
