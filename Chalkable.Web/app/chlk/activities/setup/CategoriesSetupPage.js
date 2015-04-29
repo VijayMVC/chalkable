@@ -30,6 +30,18 @@ NAMESPACE('chlk.activities.setup', function () {
                             node.attr('data-value', value);
                         }
                     });
+            },
+
+            [ria.mvc.DomEventBind('change', '[type="checkbox"]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function checkboxChange(node, event){
+                var ids = [];
+                this.dom.find('[name=categoryId]').forEach(function(item){
+                    if(item.checked())
+                        ids.push(item.parent('.category-check-container').getData('id'));
+                });
+                this.dom.find('.delete-button').setAttr('disabled', ids.length ? false : 'disabled');
+                this.dom.find('.ids-to-delete').setValue(ids.join(','));
             }
         ]);
 });

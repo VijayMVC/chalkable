@@ -73,12 +73,12 @@ namespace Chalkable.Web.Controllers
             return Json(ClassAnnouncementTypeViewData.Create(res));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        /*[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Delete(int classAnnouncementTypeId)
         {
             SchoolLocator.ClassAnnouncementTypeService.DeleteClassAnnouncmentType(classAnnouncementTypeId);
             return Json(true);
-        }
+        }*/
         
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Delete(IntList classAnnouncementTypeIds)

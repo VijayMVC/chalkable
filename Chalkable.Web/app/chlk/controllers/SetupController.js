@@ -6,12 +6,14 @@ REQUIRE('chlk.services.FinalGradeService');
 REQUIRE('chlk.services.CalendarService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.PreferenceService');
+REQUIRE('chlk.services.AnnouncementService');
 
 REQUIRE('chlk.activities.setup.HelloPage');
 REQUIRE('chlk.activities.setup.VideoPage');
 REQUIRE('chlk.activities.setup.StartPage');
 REQUIRE('chlk.activities.setup.TeacherSettingsPage');
 REQUIRE('chlk.activities.setup.CategoriesSetupPage');
+REQUIRE('chlk.activities.setup.ClassAnnouncementTypeDialog');
 
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
@@ -43,6 +45,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.PreferenceService, 'preferenceService',
+
+            [ria.mvc.Inject],
+            chlk.services.AnnouncementService, 'announcementService',
 
             [[chlk.models.id.SchoolPersonId]],
             function helloAction(personId_){
@@ -169,13 +174,64 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeLoader();
             },
 
+            [[chlk.models.id.ClassId, Number]],
+            function addEditCategoryAction(classId, categoryId_){
+                var model;
+                if(categoryId_){
+                    var currentClassInfo = this.classService.getClassAnnouncementInfo(classId);
+                    var types = currentClassInfo.getTypesByClass();
+                    model = types.filter(function(item){
+                        return item.getId() == categoryId_
+                    })[0];
+                }else{
+                    model = new chlk.models.announcement.ClassAnnouncementType(null, null, classId);
+                }
+                return this.ShadeView(chlk.activities.setup.ClassAnnouncementTypeDialog, new ria.async.DeferredData(model));
+            },
 
-            function addCategoryAction(){
+            [[chlk.models.announcement.ClassAnnouncementType]],
+            function submitClassAnnouncementAction(model){
+                var res;
+                if(model.getId() && model.getId().valueOf())
+                    res = this.announcementService.updateAnnouncementTypes(
+                        model.getClassId(),
+                        model.getDescription(),
+                        model.getName(),
+                        model.getHighScoresToDrop(),
+                        model.getLowScoresToDrop(),
+                        model.isSystem(),
+                        model.getPercentage(),
+                        model.getId()
+                    ).attach(this.validateResponse_());
+                else
+                    res = this.announcementService.createAnnouncementTypes(
+                        model.getClassId(),
+                        model.getDescription(),
+                        model.getName(),
+                        model.getHighScoresToDrop(),
+                        model.getLowScoresToDrop(),
+                        model.isSystem(),
+                        model.getPercentage()
+                    ).attach(this.validateResponse_());
+                res.thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        return this.BackgroundNavigate('setup', 'categoriesSetup', [model.getClassId()]);
+                    }, this);
+                this.BackgroundCloseView(chlk.activities.setup.ClassAnnouncementTypeDialog);
                 return null;
             },
 
-            [[Number]],
-            function editCategoryAction(id){
+            [[chlk.models.announcement.ClassAnnouncementType]],
+            function deleteAnnouncementTypesAction(model){
+                this.ShowConfirmBox('Do You really want to delete ' + (model.getIds().length > 1 ? 'these categories?' : 'this category?'), "whoa.", null, 'negative-button')
+                    .thenCall(this.announcementService.deleteAnnouncementTypes, [model.getIds().split(',')])
+                    .attach(this.validateResponse_())
+                    .thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        return this.BackgroundNavigate('setup', 'categoriesSetup', [model.getClassId()]);
+                    }, this);
                 return null;
             }
         ])

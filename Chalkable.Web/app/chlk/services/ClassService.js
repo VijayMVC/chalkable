@@ -66,10 +66,10 @@ NAMESPACE('chlk.services', function () {
                     .then(function (classAnnTypes){
                         var classesInfoMap = this.getContext().getSession().get(ChlkSessionConstants.CLASSES_INFO, {});
                         for(var i = 0; i < classIds.length; i++){
-                            var classInfo = classesInfoMap[classIds[i]];
+                            var classInfo = classesInfoMap[classIds[i].valueOf()];
                             if(classInfo){
                                 classInfo.setTypesByClass(classAnnTypes.filter(function (annType){
-                                    annType.getClassId() == classIds[i];
+                                    return annType.getClassId() == classIds[i];
                                 }));
                             }
                         }

@@ -347,7 +347,7 @@ NAMESPACE('chlk.services', function () {
 
             [[ArrayOf(chlk.models.id.ClassId)]],
             ria.async.Future, function getClassAnnouncementTypes(classIds){
-                return this.get('AnnouncementType/ListByClasses.json', chlk.models.announcement.ClassAnnouncementType,{
+                return this.get('AnnouncementType/ListByClasses.json', ArrayOf(chlk.models.announcement.ClassAnnouncementType),{
                     classIds: this.arrayToCsv(classIds)
                 });
             },
@@ -365,10 +365,10 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[Number, chlk.models.id.ClassId, String, String, Number, Number, Boolean, Number]],
-            ria.async.Future, function updateAnnouncementTypes(classAnnouncementTypeId, classId, description_, name_, highScoresToDrop_, lowScoresToDrop_, isSystem_, percentage_){
+            [[chlk.models.id.ClassId, String, String, Number, Number, Boolean, Number, Number]],
+            ria.async.Future, function updateAnnouncementTypes(classId, description_, name_, highScoresToDrop_, lowScoresToDrop_, isSystem_, percentage_, classAnnouncementTypeId_){
                 return this.get('AnnouncementType/Update.json', chlk.models.announcement.ClassAnnouncementType,{
-                    classAnnouncementTypeId: classAnnouncementTypeId,
+                    classAnnouncementTypeId: classAnnouncementTypeId_,
                     classId: classId.valueOf(),
                     description: description_,
                     name: name_,
@@ -376,6 +376,13 @@ NAMESPACE('chlk.services', function () {
                     lowScoresToDrop: lowScoresToDrop_,
                     isSystem: isSystem_,
                     percentage: percentage_
+                });
+            },
+
+            [[Array]],
+            ria.async.Future, function deleteAnnouncementTypes(ids){
+                return this.get('AnnouncementType/Delete.json', Boolean,{
+                    classAnnouncementTypeIds: this.arrayToCsv(ids)
                 });
             }
         ])

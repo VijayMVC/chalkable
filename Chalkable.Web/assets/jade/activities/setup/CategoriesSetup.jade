@@ -17,7 +17,7 @@ mixin ReportCell(value)
     if !selectedId || !selectedId.valueOf()
         .choose-class
     else
-        +ActionForm('', '')
+        +ActionForm('setup', 'deleteAnnouncementTypes')
             .chlk-grid-container
                 .grid
                     .row.header
@@ -31,10 +31,10 @@ mixin ReportCell(value)
                         .cell= Msg.Is_system
                     each category in self.getCategories()
                         .row
-                            div(data-id=category.getId()).cell
+                            div(data-id=category.getId()).cell.category-check-container
                                 +Checkbox('categoryId', false)
                             .cell
-                                +ActionLink('setup', 'editCategory', category.getId())(data-tooltip=category.getName(), data-tooltip-type="overflow").text=category.getName()
+                                +ActionLink('setup', 'addEditCategory', selectedId, category.getId())(data-tooltip=category.getName(), data-tooltip-type="overflow").text=category.getName()
                             +ReportCell(category.getDescription())
                             +ReportCell(category.getHighScoresToDrop())
                             +ReportCell(category.getLowScoresToDrop())
@@ -42,7 +42,8 @@ mixin ReportCell(value)
                             .cell
                                 .text #{category.isSystem() ? '+' : ''}
             +Hidden('categoryIds', '').categoty-ids
-            +Hidden('classId', selectedId)
+            +Hidden('classid', selectedId)
+            +Hidden('ids', '').ids-to-delete
             .buttons-block
-                +ActionButton('setup', 'addCategory')(type="button").chlk-button.blue-button=Msg.Add
-                BUTTON(type="submit", disabled='disabled').chlk-button.negative-button=Msg.Delete
+                +ActionButton('setup', 'addEditCategory', selectedId)(type="button").chlk-button.blue-button=Msg.Add
+                BUTTON(type="submit", disabled='disabled').chlk-button.negative-button.delete-button=Msg.Delete
