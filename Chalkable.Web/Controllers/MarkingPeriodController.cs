@@ -11,7 +11,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class MarkingPeriodController : ChalkableController
     {
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_MARKING_PERIOD_LIST, true, CallType.Get, new[] { AppPermissionType.Schedule })]
+        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Schedule })]
         public ActionResult List(int schoolYearId, DateTime? tillDate)
         {
             var res = SchoolLocator.MarkingPeriodService.GetMarkingPeriods(schoolYearId);

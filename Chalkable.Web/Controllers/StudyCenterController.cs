@@ -17,7 +17,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class StudyCenterController : ChalkableController
     {
-        [AuthorizationFilter("Student", Preference.API_DESCR_SET_PRACTICE_GRADE, true, CallType.Post, new []{ AppPermissionType.Practice })]
+        [AuthorizationFilter("Student", true, new []{ AppPermissionType.Practice })]
         public ActionResult SetPracticeGrade(Guid id, string score)
         {
             if (string.IsNullOrWhiteSpace(score))

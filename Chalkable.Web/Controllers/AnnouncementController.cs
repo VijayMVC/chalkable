@@ -134,8 +134,7 @@ namespace Chalkable.Web.Controllers
             return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student",
-            Preference.API_DESCR_ANNOUNCEMENT_READ, true, CallType.Get, new[] {AppPermissionType.Announcement})]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] {AppPermissionType.Announcement})]
         public ActionResult Read(int announcementId)
         {
             var res = PrepareFullAnnouncementViewData(announcementId, true);
