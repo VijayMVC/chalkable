@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
@@ -12,19 +11,128 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoStiGradeBookStorage : BaseDemoIntStorage<Gradebook>
+    {
+        public DemoStiGradeBookStorage()
+            : base(null, true)
+        {
+
+        }
+
+    }
 
     public class DemoGradingStatisticService : DemoSchoolServiceBase, IGradingStatisticService
     {
-        public DemoGradingStatisticService(IServiceLocatorSchool serviceLocator, DemoStorage storage): base(serviceLocator, storage)
+        private DemoStiGradeBookStorage StiGradeBookStorage { get; set; }
+        public DemoGradingStatisticService(IServiceLocatorSchool serviceLocator): base(serviceLocator)
         {
+            StiGradeBookStorage = new DemoStiGradeBookStorage();
         }
-        
 
         public ChalkableGradeBook GetGradeBook(int classId, GradingPeriod gradingPeriod, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
         {
-          
-            var stiGradeBook = Storage.StiGradeBookStorage.GetBySectionAndGradingPeriod(classId, classAnnouncementType, gradingPeriod.Id, standardId);
+            var stiGradeBook = GetBySectionAndGradingPeriod(classId, classAnnouncementType, gradingPeriod.Id, standardId);
             return GetGradeBooks(classId, gradingPeriod, stiGradeBook);
+        }
+
+        public IList<string> GetGradebookComments(int schoolYearId, int teacherId)
+        {
+            return new List<string>();
+        }
+
+        public StudentAverage UpdateStudentAverage(StudentAverage studentAverage)
+        {
+            var gb = GetBySectionAndGradingPeriod(studentAverage.SectionId, null, studentAverage.GradingPeriodId);
+
+            var avgs = gb.StudentAverages.ToList();
+
+            var id = -1;
+
+            for (var i = 0; i < avgs.Count; ++i)
+            {
+                var avg = avgs[i];
+                if (avg.SectionId != studentAverage.SectionId || avg.StudentId != studentAverage.StudentId ||
+                    avg.GradingPeriodId != studentAverage.GradingPeriodId) continue;
+                id = i;
+            }
+
+            if (id == -1)
+            {
+                avgs.Add(studentAverage);
+            }
+            else
+            {
+                avgs[id] = studentAverage;
+            }
+            gb.StudentAverages = avgs;
+
+            return studentAverage;
+        }
+
+        public IEnumerable<SectionGradesSummary> GetSectionGradesSummary(List<int> classesIds, int gradingPeriodId)
+        {
+            var res = new List<SectionGradesSummary>();
+
+            foreach (var classId in classesIds)
+            {
+                var gb = GetBySectionAndGradingPeriod(classId, null, gradingPeriodId);
+                var ss = new SectionGradesSummary()
+                {
+                    SectionId = gb.SectionId
+                };
+                var students = (from studentAvg in gb.Scores
+                                select new StudentSectionGradesSummary
+                                {
+                                    SectionId = gb.SectionId,
+                                    Average = studentAvg.NumericScore,
+                                    Exempt = false,
+                                    StudentId = studentAvg.StudentId
+                                }).ToList();
+                ss.Students = students;
+
+                res.Add(ss);
+            }
+            return res;
+        }
+
+        public Gradebook GetBySectionAndGradingPeriod(int classId, int? classAnnouncementType = null, int? gradingPeriodId = null, int? standardId = null)
+        {
+            var gradeBooks = StiGradeBookStorage.GetData().Select(x => x.Value);
+
+            gradeBooks = gradeBooks.Where(x => x.SectionId == classId);
+
+            if (classAnnouncementType.HasValue)
+            {
+                gradeBooks = gradeBooks.Where(gb => gb.Activities.Count(x => x.CategoryId == classAnnouncementType.Value) > 0);
+            }
+
+            if (standardId.HasValue)
+            {
+                gradeBooks = gradeBooks
+                    .Where(gb => gb.Activities.Count(x => x.Standards != null && x.Standards.Select(y => y.Id).ToList().Contains(standardId.Value)) > 0);
+            }
+
+            if (gradingPeriodId.HasValue)
+            {
+                gradeBooks =
+                    gradeBooks.Where(
+                        x => x.StudentAverages.Select(y => y.GradingPeriodId).ToList().Contains(gradingPeriodId));
+            }
+           
+            var gradeBook = gradeBooks.First();
+            gradeBook.Activities = ((DemoAnnouncementService)ServiceLocator.AnnouncementService).GetActivitiesForClass(classId);
+            var activityIds = gradeBook.Activities.Select(x => x.Id).ToList();
+            gradeBook.Scores = ((DemoStudentAnnouncementService) ServiceLocator.StudentAnnouncementService).GetActivityScores(activityIds);
+
+            if (classAnnouncementType.HasValue)
+            {
+                gradeBook.Activities = gradeBook.Activities.Where(x => x.CategoryId == classAnnouncementType.Value);
+            }
+            if (standardId.HasValue)
+            {
+                gradeBook.Activities = gradeBook.Activities.Where(x => x.Standards != null && x.Standards.Select(y => y.Id).ToList().Contains(standardId.Value));
+            }
+            return gradeBook;
         }
 
         private ChalkableGradeBook GetGradeBooks(int classId, GradingPeriod gradingPeriod, Gradebook gradebook)
@@ -114,7 +222,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<string> GetGradeBookComments(int schoolYearId, int teacherId)
         {
-            return Storage.StiGradeBookStorage.GetGradebookComments(schoolYearId, teacherId);
+            return GetGradebookComments(schoolYearId, teacherId);
         }
 
         public TeacherClassGrading GetClassGradingSummary(int classId, GradingPeriod gradingPeriod)
@@ -132,7 +240,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void PostGradebook(int classId, int? gradingPeriodId)
         {
-            Storage.StiGradeBookStorage.PostGrades(classId, gradingPeriodId);
         }
 
         
@@ -143,9 +250,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 return res.Average(classAnnType => (double)classAnnType.Percentage * classAnnType.Avg.Value / 100);
             return null;
         }
-
-
-
 
         public ChalkableStudentAverage UpdateStudentAverage(int classId, int studentId, int averageId, int? gradingPeriodId, string averageValue,bool exempt, IList<ChalkableStudentAverageComment> comments, string note)
         {
@@ -164,12 +268,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             if (isAlphaGrade)
             {
-                var alphaGrade = Storage.AlphaGradeStorage.GetAll().FirstOrDefault(x => x.Name.ToLowerInvariant() == averageValue);
+                var alphaGrade = ServiceLocator.AlphaGradeService.GetAlphaGrades().FirstOrDefault(x => x.Name.ToLowerInvariant() == averageValue);
                 if (alphaGrade != null)
                 {
-                    var gradingScaleRange = Storage.GradingScaleRangeStorage
-                        .GetAll()
-                        .FirstOrDefault(x => x.AlphaGradeRef == alphaGrade.Id);
+                    var gradingScaleRange = ((DemoGradingScaleService)ServiceLocator.GradingScaleService).GetByAlphaGradeId(alphaGrade.Id);
 
                     if (gradingScaleRange != null)
                         numericScore = gradingScaleRange.AveragingEquivalent;
@@ -178,7 +280,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     studentAverage.EnteredAlphaGradeName = alphaGrade.Name;
                     studentAverage.CalculatedAlphaGradeId = alphaGrade.Id;
                     studentAverage.CalculatedAlphaGradeName = alphaGrade.Name;
-                    
                 }
             }
 
@@ -209,7 +310,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
             if (note != null)
                 studentAverage.ReportCardNote = note;
-            studentAverage = Storage.StiGradeBookStorage.UpdateStudentAverage(studentAverage);
+            studentAverage = UpdateStudentAverage(studentAverage);
             return ChalkableStudentAverage.Create(studentAverage);
         }
 
@@ -220,7 +321,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var classesDetails = ServiceLocator.ClassService.GetTeacherClasses(gradingPeriod.SchoolYearRef, teacherId, gradingPeriod.MarkingPeriodRef);
             var classesIds = classesDetails.Select(x => x.Id).ToList();
 
-            var stiSectionsGrades = Storage.StiGradeBookStorage.GetSectionGradesSummary(classesIds, gradingPeriodId);
+            var stiSectionsGrades = GetSectionGradesSummary(classesIds, gradingPeriodId);
             var students = ServiceLocator.StudentService.GetTeacherStudents(teacherId, Context.SchoolYearId.Value);
             var res = new List<ShortClassGradesSummary>();
             foreach (var sectionGrade in stiSectionsGrades)
@@ -239,7 +340,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private IList<StudentDisciplineSummary> GetStudentDisciplineSummaries(IEnumerable<StudentDetails> students, int classId, DateTime startDate, DateTime endDate)
         {
-            var classDisciplines = Storage.StiDisciplineStorage.GetSectionDisciplineSummary(classId, startDate, endDate);
+            var classDisciplines = ((DemoDisciplineService)ServiceLocator.DisciplineService).GetSectionDisciplineSummary(classId, startDate, endDate);
             var result = new List<StudentDisciplineSummary>();
 
             var studentDetailsList = students as IList<StudentDetails> ?? students.ToList();
@@ -264,11 +365,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return result;
         } 
 
-        private AverageDashboard GetAveragesDashboard(ChalkableGradeBook chlkGradeBook, int classId, int gradingPeriodId)
+        private AverageDashboard GetAveragesDashboard(ChalkableGradeBook chlkGradeBook, int classId)
         {
             var startDate = new DateTime(DateTime.Today.Year, 1, 1);
             var endDate = DateTime.Today;
-            var attendance = Storage.StiAttendanceStorage.GetSectionAttendanceSummary(
+            var attendance = ((DemoAttendanceService)ServiceLocator.AttendanceService).GetSectionAttendanceSummary(
                 new List<int> { classId }, startDate, endDate).First();
 
             var attendances = chlkGradeBook.Students.Select(x => new StudentTotalSectionAttendance()
@@ -291,7 +392,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
         
             var gradeBook = GetGradeBook(classId, gradingPeriod, null, null, false);
-            var averageDashBoard = GetAveragesDashboard(gradeBook, classId, gradingPeriod.Id);
+            var averageDashBoard = GetAveragesDashboard(gradeBook, classId);
             var infractions = ServiceLocator.InfractionService.GetInfractions();
             return new FinalGradeInfo
             {
@@ -306,7 +407,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void PostStandards(int classId, int? gradingPeriodId)
         {
-            Storage.StiGradeBookStorage.PostStandards(classId, gradingPeriodId);
+
+        }
+
+        public void AddGradeBook(Gradebook gradebook)
+        {
+            StiGradeBookStorage.Add(gradebook);
         }
     }
 }

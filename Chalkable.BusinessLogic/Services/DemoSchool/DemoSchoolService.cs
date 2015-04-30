@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -10,20 +9,35 @@ using ISchoolService = Chalkable.BusinessLogic.Services.School.ISchoolService;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoSchoolStorage : BaseDemoIntStorage<Data.School.Model.School>
+    {
+        public DemoSchoolStorage()
+            : base(x => x.Id)
+        {
+        }
+    }
+
+    public class DemoSchoolOptionStorage : BaseDemoIntStorage<SchoolOption>
+    {
+        public DemoSchoolOptionStorage()
+            : base(x => x.Id)
+        {
+        }
+    }
 
     public class DemoSchoolService : DemoSchoolServiceBase, ISchoolService
     {
-        public DemoSchoolService(IServiceLocatorSchool serviceLocator, DemoStorage demoStorage) : base(serviceLocator, demoStorage)
+        private DemoSchoolStorage SchoolStorage { get; set; }
+        private DemoSchoolOptionStorage SchoolOptionStorage { get; set; }
+        public DemoSchoolService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+            SchoolStorage = new DemoSchoolStorage();
+            SchoolOptionStorage = new DemoSchoolOptionStorage();
         }
 
         public void Add(Data.School.Model.School school)
         {
-            if (Context.Role.Id != CoreRoles.SUPER_ADMIN_ROLE.Id)
-                throw new ChalkableSecurityException();
-            if (!Context.DistrictId.HasValue)
-                throw new UnassignedUserException();
-            Storage.SchoolStorage.Add(school);
+            SchoolStorage.Add(school);
 
             var l = new List<SchoolInfo>
                 {
@@ -39,12 +53,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Add(IList<Data.School.Model.School> schools)
         {
-            if (Context.Role.Id != CoreRoles.SUPER_ADMIN_ROLE.Id)
-                throw new ChalkableSecurityException();
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
             
-            Storage.SchoolStorage.Add(schools);
+            SchoolStorage.Add(schools);
             ServiceLocator.ServiceLocatorMaster.SchoolService.Add(schools.Select(x => new SchoolInfo
             {
                 LocalId = x.Id,
@@ -54,12 +66,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Edit(IList<Data.School.Model.School> schools)
         {
-            if (Context.Role.Id != CoreRoles.SUPER_ADMIN_ROLE.Id)
-                throw new ChalkableSecurityException();
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
 
-            Storage.SchoolStorage.Update(schools);
+            SchoolStorage.Update(schools);
             ServiceLocator.ServiceLocatorMaster.SchoolService.Edit(schools.Select(x => new SchoolInfo
             {
                 LocalId = x.Id,
@@ -69,34 +79,34 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Delete(IList<Data.School.Model.School> schools)
         {
-            Storage.SchoolStorage.Delete(schools);
+            SchoolStorage.Delete(schools);
         }
 
         public IList<Data.School.Model.School> GetSchools()
         {
-            return Storage.SchoolStorage.GetAll();
+            return SchoolStorage.GetAll();
         }
 
         public void AddSchoolOptions(IList<SchoolOption> schoolOptions)
         {
-            Storage.SchoolOptionStorage.Add(schoolOptions);
+            SchoolOptionStorage.Add(schoolOptions);
         }
 
         public void EditSchoolOptions(IList<SchoolOption> schoolOptions)
         {
-            Storage.SchoolOptionStorage.Update(schoolOptions);
+            SchoolOptionStorage.Update(schoolOptions);
         }
 
         public void DeleteSchoolOptions(IList<SchoolOption> schoolOptions)
         {
-            Storage.SchoolOptionStorage.Delete(schoolOptions);
+            SchoolOptionStorage.Delete(schoolOptions);
         }
 
         public SchoolOption GetSchoolOption()
         {
             if(!Context.SchoolLocalId.HasValue)
                 throw new UnassignedUserException(); 
-            return Storage.SchoolOptionStorage.GetById(Context.SchoolLocalId.Value);
+            return SchoolOptionStorage.GetById(Context.SchoolLocalId.Value);
         }
 
         public StartupData GetStartupData()
@@ -110,11 +120,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 AttendanceReasons = ServiceLocator.AttendanceReasonService.List(),
                 AlternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores(),
                 MarkingPeriods = ServiceLocator.MarkingPeriodService.GetMarkingPeriods(Context.SchoolYearId),
-                AlphaGrades = Storage.AlphaGradeStorage.GetAll(),
+                AlphaGrades = ServiceLocator.AlphaGradeService.GetAlphaGrades(),
                 GradingComments = ServiceLocator.GradingCommentService.GetGradingComments(),
                 SchoolOption = GetSchoolOption(),
                 Person = ServiceLocator.PersonService.GetPersonDetails(Context.PersonId.Value),
-                Classes = Storage.ClassStorage.GetClassesSortedByPeriod(),
+                Classes = ((DemoClassService)ServiceLocator.ClassService).GetClassesSortedByPeriod(),
                 GradingPeriod = markingPeriod != null && Context.SchoolLocalId.HasValue
                     ? ServiceLocator.GradingPeriodService.GetGradingPeriodDetails(markingPeriod.SchoolYearRef,
                         Context.NowSchoolYearTime.Date)
@@ -126,8 +136,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             foreach (var classDetail in startupData.Classes)
             {
-                alphaGradesForClasses.Add(classDetail.Id, Storage.AlphaGradeStorage.GetForClass(classDetail.Id));
-                alphaGradesForClassStandards.Add(classDetail.Id, Storage.AlphaGradeStorage.GetForClassStandarts(classDetail.Id));
+                alphaGradesForClasses.Add(classDetail.Id, ServiceLocator.AlphaGradeService.GetAlphaGrades());
+                alphaGradesForClassStandards.Add(classDetail.Id, ServiceLocator.AlphaGradeService.GetAlphaGrades());
             }
             startupData.AlphaGradesForClassStandards = alphaGradesForClassStandards;
             startupData.AlphaGradesForClasses = alphaGradesForClasses;

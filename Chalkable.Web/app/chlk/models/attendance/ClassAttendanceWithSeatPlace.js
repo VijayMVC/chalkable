@@ -68,6 +68,7 @@ NAMESPACE('chlk.models.attendance', function () {
                     info.setPosted(raw.info.isposted);
                     info.setClassName(raw.info.classname);
                     info.setClassId(new chlk.models.id.ClassId(raw.info.classid));
+                    info.setStudentAttendanceReadOnly(raw.info.readonly);
                     this.setInfo(info);
                 }
             }

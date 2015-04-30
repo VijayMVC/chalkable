@@ -14,15 +14,8 @@ using Microsoft.IdentityModel.Protocols.WSIdentity;
 
 namespace Chalkable.Web.ActionFilters
 {
-
-    public enum CallType
-    {
-        Get = 0,
-        Post = 1
-    };
     public class AuthorizationFilter : ActionFilterAttribute
     {
-        private CallType callType;
         private AppPermissionType[] permissions;
 
         //TODO: API permissions

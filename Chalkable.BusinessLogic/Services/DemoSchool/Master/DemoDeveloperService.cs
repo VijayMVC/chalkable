@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
-using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
     public class DemoDeveloperService : DemoMasterServiceBase, IDeveloperService
     {
-        public DemoDeveloperService(IServiceLocatorMaster serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+        public DemoDeveloperService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
         }
 
