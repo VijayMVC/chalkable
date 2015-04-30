@@ -15,10 +15,6 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void Delete(IList<Standard> standards)
-        {
-            SimpleDelete(standards);
-        }
 
         public Standard GetStandardByABId(Guid id)
         {
@@ -169,18 +165,6 @@ namespace Chalkable.Data.School.DataAccess
             conds.BuildSqlWhere(dbQuery, classT.Name);
             return ReadMany<StandardSubject>(dbQuery);
         } 
-    }
-
-    public class ClassStandardDataAccess: DataAccessBase<ClassStandard, int>
-    {
-        public ClassStandardDataAccess(UnitOfWork unitOfWork)
-            : base(unitOfWork)
-        {
-        }
-        public void Delete(IList<ClassStandard> classStandards)
-        {
-            SimpleDelete(classStandards);
-        }
     }
 
     public class AnnouncementStandardDataAccess : DataAccessBase<AnnouncementStandard, int>

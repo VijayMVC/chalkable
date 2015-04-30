@@ -227,7 +227,8 @@ NAMESPACE('chlk.activities.attendance', function () {
             [ria.mvc.DomEventBind('click', '.attendance-data')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function studentClick(node, event){
-                if(!this.dom.hasClass('dragging-on') && this.dom.find('.page-content').hasClass('can-post')){
+                var isReadOnly = node.getData('is-read-only');
+                if(!this.dom.hasClass('dragging-on') && !isReadOnly && this.dom.find('.page-content').hasClass('can-post')){
                     var popUp = this.dom.find('.seating-chart-popup');
                     var main = node.parent('.seating-chart-page');
                     var bottom = main.height() + main.offset().top - node.offset().top;

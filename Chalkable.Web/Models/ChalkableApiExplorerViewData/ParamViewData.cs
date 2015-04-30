@@ -11,17 +11,17 @@ namespace Chalkable.Web.Models.ChalkableApiExplorerViewData
         public string Value { get; set; }
         public string Description { get; set; }
         public bool IsNullable { get; set; }
-        public ParamType ParamType { get; set; }
+        public ApiMethodParamType ParamType { get; set; }
 
-        public static ParamViewData Create(Param param)
+        public static ParamViewData Create(ApiMethodParam apiMethodParam)
         {
             return new ParamViewData
             {
-                Name = param.Name,
-                Value = param.Value,
-                Description = param.Description,
-                IsNullable = param.IsNullable,
-                ParamType = param.ParamType
+                Name = apiMethodParam.Name,
+                Value = apiMethodParam.Value,
+                Description = apiMethodParam.Description,
+                IsNullable = apiMethodParam.IsNullable,
+                ParamType = apiMethodParam.ParamType
             };
         }
     }

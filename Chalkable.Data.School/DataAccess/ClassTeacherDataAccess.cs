@@ -11,11 +11,6 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void Delete(IList<ClassTeacher> classTeachers)
-        {
-            SimpleDelete(classTeachers);
-        }
-
         public IList<ClassTeacher> GetClassTeachers(int? classId, int? teacherId)
         {
             return GetAll(BuildConditioins(classId, teacherId));

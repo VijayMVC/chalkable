@@ -1,44 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoPersonEmailStorage : BaseDemoIntStorage<PersonEmail>
+    {
+        public DemoPersonEmailStorage()
+            : base(null, true)
+        {
+        }
+
+    }
+
     public class DemoPersonEmailService : DemoSchoolServiceBase, IPersonEmailService
     {
-        public DemoPersonEmailService(IServiceLocatorSchool serviceLocator, DemoStorage demoStorage) : base(serviceLocator, demoStorage)
+        private DemoPersonEmailStorage PersonEmailStorage { get; set; }
+        public DemoPersonEmailService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+            PersonEmailStorage = new DemoPersonEmailStorage();
+        }
+
+        public static string BuildDemoEmail(int personId, string districtId)
+        {
+            return "demo-user_" + personId + "_" + districtId + "@chalkable.com";
         }
 
         public void AddPersonsEmails(IList<PersonEmail> personEmails)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.PersonEmailStorage.Add(personEmails);
+            PersonEmailStorage.Add(personEmails);
         }
 
         public void UpdatePersonsEmails(IList<PersonEmail> personEmails)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.PersonEmailStorage.Update(personEmails);
+            PersonEmailStorage.Update(personEmails);
         }
 
         public void DeletePersonsEmails(IList<PersonEmail> personEmails)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.PersonEmailStorage.Delete(personEmails);
+            PersonEmailStorage.Delete(personEmails);
         }
 
         public PersonEmail GetPersonEmail(int personId)
         {
-            return Storage.PersonEmailStorage.GetAll().FirstOrDefault(x => x.PersonRef == personId);
+            return PersonEmailStorage.GetAll().FirstOrDefault(x => x.PersonRef == personId);
         }
     }
 }

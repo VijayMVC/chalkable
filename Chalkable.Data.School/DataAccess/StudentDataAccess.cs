@@ -11,12 +11,6 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-
-        public void Delete(IList<Student> students)
-        {
-            SimpleDelete(students);
-        }
-
         public StudentDetails GetDetailsById(int id, int schoolYearId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>

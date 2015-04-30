@@ -73,7 +73,6 @@
     <Compile Include="DataAccess\FundDataAccess.cs" />
     <Compile Include="DataAccess\PreferenceDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
-    <Compile Include="DataAccess\SchoolUserDataAccess.cs" />
     <Compile Include="DataAccess\UserDataAccess.cs" />
     <Compile Include="DataAccess\UserLoginInfoDataAccess.cs" />
     <Compile Include="Model\Application.cs" />

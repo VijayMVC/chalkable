@@ -10,7 +10,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
     [RequireHttps, TraceControllerFilter]
     public class TeacherController : PersonController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_TEACHER_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.User })]
         public ActionResult Summary(int personId)
         {
             var teacher = SchoolLocator.StaffService.GetStaff(personId);
@@ -32,7 +32,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(PrepareScheduleData(StaffViewData.Create(staff)));
         }
         
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_TEACHER_TEACHERS, true, CallType.Get, new[] { AppPermissionType.User })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.User })]
         public ActionResult GetTeachers(string filter, int? start, int? count, int? classId, bool? byLastName, bool? onlyMyTeachers)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);

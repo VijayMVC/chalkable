@@ -1,28 +1,43 @@
 ﻿using System;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
+    public class DemoCategoryStorage : BaseDemoGuidStorage<Category>
+    {
+        public DemoCategoryStorage()
+            : base(x => x.Id)
+        {
+        }
+
+        public PaginatedList<Category> GetPage(int start, int count)
+        {
+            var categories = data.Select(x => x.Value).ToList();
+            return new PaginatedList<Category>(categories, start / count, count, categories.Count);
+        }
+    }
+
     public class DemoCategoryService : DemoMasterServiceBase, ICategoryService
     {
-        public DemoCategoryService(IServiceLocatorMaster serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+        private DemoCategoryStorage CategoryStorage { get; set; }
+        public DemoCategoryService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
+            CategoryStorage = new DemoCategoryStorage();
         }
 
         public PaginatedList<Category> ListCategories(int start = 0, int count = Int32.MaxValue)
         {
-            return Storage.CategoryStorage.GetPage(start, count);
+            return CategoryStorage.GetPage(start, count);
             
         }
         public Category GetById(Guid id)
         {
-            return Storage.CategoryStorage.GetById(id);
+            return CategoryStorage.GetById(id);
         }
 
         public Category Add(string name, string description)
@@ -37,7 +52,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 Description = description
             };
 
-            Storage.CategoryStorage.Add(res);
+            CategoryStorage.Add(res);
             return res;
         }
 
@@ -46,10 +61,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             if(!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
 
-            var res = Storage.CategoryStorage.GetById(id);
+            var res = CategoryStorage.GetById(id);
             res.Description = description;
             res.Name = name;
-            Storage.CategoryStorage.Update(res);
+            CategoryStorage.Update(res);
             return res;
         }
 
@@ -58,7 +73,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
 
-            Storage.CategoryStorage.Delete(id);
+            CategoryStorage.Delete(id);
         }
 
     }

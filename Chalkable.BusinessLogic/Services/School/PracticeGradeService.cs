@@ -32,10 +32,9 @@ namespace Chalkable.BusinessLogic.Services.School
             var classes = ServiceLocator.ClassService.GetStudentClasses(Context.SchoolYearId.Value, studentId);
             using (var uow = Update())
             {
-                var classStandards = new ClassStandardDataAccess(uow).GetAll(new AndQueryCondition
-                    {
-                        {ClassStandard.STANDARD_REF_FIELD, standardId}
-                    });
+                var classStandards = new DataAccessBase<ClassStandard, int>(uow)
+                    .GetAll(new AndQueryCondition { {ClassStandard.STANDARD_REF_FIELD, standardId}});
+
                 if(!classes.Any(c=> classStandards.Any(cs=>cs.ClassRef == c.Id || cs.ClassRef == c.CourseRef)))
                     throw new ChalkableSecurityException();
 

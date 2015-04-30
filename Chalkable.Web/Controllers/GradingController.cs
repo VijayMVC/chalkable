@@ -26,7 +26,7 @@ namespace Chalkable.Web.Controllers
             return Json(GradingTeacherClassSummaryViewData.Create(classesGradesSummary), 6);
         }
 
-        [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
+        [AuthorizationFilter("Teacher", true, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ClassSummary(int classId)
         {
             if (!SchoolLocator.Context.PersonId.HasValue)
@@ -55,7 +55,7 @@ namespace Chalkable.Web.Controllers
             return Json(GradingClassSummaryViewData.Create(res));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_GRADING_CLASS_SUMMARY, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ItemGradingStat(int announcementId)
         {
             var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
@@ -63,7 +63,7 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("Teacher", Preference.API_DESCR_GRADING_CLASS_SUMMARY_GRID, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
+        [AuthorizationFilter("Teacher", true, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ClassSummaryGrids(int classId)
         {
             Trace.WriteLine("GetCurrentSchoolYearId " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
@@ -310,7 +310,7 @@ namespace Chalkable.Web.Controllers
             return Json(StudentAveragesViewData.Create(res));
         }
 
-        [AuthorizationFilter("Teacher, Student", Preference.API_DESCR_SET_AUTO_GRADE, true, CallType.Post, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
+        [AuthorizationFilter("Teacher, Student", true, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         public ActionResult SetAutoGrade(int announcementApplicationId, int? studentId, string gradeValue)
         {
             if (string.IsNullOrWhiteSpace(gradeValue))

@@ -137,7 +137,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             var notifications = new List<Notification>();
             foreach (var person in persons)
             {
-                notifications.Add(builder.BuildAnnouncementNewAttachmentNotification(ann, person));
+                notifications.Add(builder.BuildAnnouncementNewAttachmentNotification(Context.NowSchoolTime, ann, person));
             }
             AddNotifications(notifications);
         }
@@ -154,7 +154,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                     res.RoleRef = CoreRoles.TEACHER_ROLE.Id;
                     return res;
                 });
-            var notification = persons.Select(x => builder.BuildAnnouncementNewAttachmentNotificationToPerson(announcement, x, fromPerson)).ToList();
+            var notification = persons.Select(x => builder.BuildAnnouncementNewAttachmentNotificationToPerson(Context.NowSchoolTime, announcement, x, fromPerson)).ToList();
             AddNotifications(notification);
         }
 
@@ -171,7 +171,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                     return res; 
                 });
             var annQnA = ann.AnnouncementQnAs.First(x => x.Id == announcementQnAId);
-            IList<Notification> notifications = authors.Select(author => builder.BuildAnnouncementQnToAuthorNotifiaction(annQnA, ann, author)).ToList();
+            IList<Notification> notifications = authors.Select(author => builder.BuildAnnouncementQnToAuthorNotifiaction(Context.NowSchoolTime, annQnA, ann, author)).ToList();
             AddNotifications(notifications);
         }
 
@@ -179,7 +179,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var annQnA = ann.AnnouncementQnAs.First(x => x.Id == announcementQnAId);
-            var notification = builder.BuildAnnouncementAnswerToPersonNotifiaction(annQnA, ann);
+            var notification = builder.BuildAnnouncementAnswerToPersonNotifiaction(Context.NowSchoolTime, annQnA, ann);
             AddNotification(notification);
         }
 
@@ -188,7 +188,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             var announcement = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             var recipient = ServiceLocator.PersonService.GetPerson(recipientId);
             recipient.RoleRef = CoreRoles.STUDENT_ROLE.Id;
-            var notification = builder.BuildAnnouncementSetGradeToStudentNotifiaction(announcement, recipient);
+            var notification = builder.BuildAnnouncementSetGradeToStudentNotification(Context.NowSchoolTime, announcement, recipient);
             AddNotification(notification);
         }
 
@@ -213,7 +213,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                     throw new UnassignedUserException();
 
                 var privateMessage = new PrivateMessageDataAccess(uow).GetDetailsById(privateMessageId, Context.PersonId.Value);
-                var notification = builder.BuildPrivateMessageNotification(privateMessage, privateMessage.Sender, privateMessage.Recipient);
+                var notification = builder.BuildPrivateMessageNotification(Context.NowSchoolTime, privateMessage, privateMessage.Sender, privateMessage.Recipient);
                 new NotificationDataAccess(uow).Insert(notification);
                 uow.Commit();
             }
@@ -234,7 +234,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         {
             var markingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId);
             var toSchoolPerson = ServiceLocator.PersonService.GetPerson(toPersonId);
-            var notification = builder.BuildEndMarkingPeriodNotification(markingPeriod, toSchoolPerson, endDays, isNextMpNotExist, isNextMpNotAssignedToClass);
+            var notification = builder.BuildEndMarkingPeriodNotification(Context.NowSchoolTime, markingPeriod, toSchoolPerson, endDays, 
+                isNextMpNotExist, isNextMpNotAssignedToClass);
             AddNotification(notification);
         }
 
@@ -242,7 +243,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         {
             //TODO: think about security
             var toSchoolPerson = ServiceLocator.PersonService.GetPerson(toPersonId);
-            var notification = builder.BuildAttendanceNotificationToAdmin(toSchoolPerson, persons);
+            var notification = builder.BuildAttendanceNotificationToAdmin(Context.NowSchoolTime, toSchoolPerson, persons);
             AddNotification(notification);
         }
 

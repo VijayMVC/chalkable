@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -10,10 +9,49 @@ using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoAnnouncementQnAStorage : BaseDemoIntStorage<AnnouncementQnAComplex>
+    {
+        public DemoAnnouncementQnAStorage()
+            : base(x => x.Id, true)
+        {
+        }
+    }
+
     public class DemoAnnouncementQnAService :DemoSchoolServiceBase, IAnnouncementQnAService
     {
-        public DemoAnnouncementQnAService(IServiceLocatorSchool serviceLocator, DemoStorage storage) : base(serviceLocator ,storage)
+        private DemoAnnouncementQnAStorage AnnouncementQnAStorage { get; set; }
+        public DemoAnnouncementQnAService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+            AnnouncementQnAStorage = new DemoAnnouncementQnAStorage();
+        }
+
+        public AnnouncementQnAQueryResult GetAnnouncementQnA(AnnouncementQnAQuery announcementQnAQuery)
+        {
+            var qnas = AnnouncementQnAStorage.GetData().Select(x => x.Value);
+
+            if (announcementQnAQuery.Id.HasValue)
+                qnas = qnas.Where(x => x.Id == announcementQnAQuery.Id);
+            if (announcementQnAQuery.AskerId.HasValue)
+                qnas = qnas.Where(x => x.AskerRef == announcementQnAQuery.AskerId);
+
+
+            if (announcementQnAQuery.AnnouncementId.HasValue)
+                qnas = qnas.Where(x => x.AnnouncementRef == announcementQnAQuery.AnnouncementId);
+
+            if (announcementQnAQuery.AnswererId.HasValue)
+            {
+                var announcementQnAComplexs = qnas as IList<AnnouncementQnAComplex> ?? qnas.ToList();
+                var announcementIds = announcementQnAComplexs.Select(x => x.AnnouncementRef);
+                var personIds = announcementIds.Select(annId => ServiceLocator.AnnouncementService.GetAnnouncementById(annId))
+                    .Select(announcement => announcement.PrimaryTeacherRef).ToList();
+                qnas = announcementQnAComplexs.Where(x => personIds.Contains(x.AskerRef));
+            }
+
+            return new AnnouncementQnAQueryResult
+            {
+                AnnouncementQnAs = qnas.ToList(),
+                Query = announcementQnAQuery
+            };
         }
 
         public AnnouncementQnA AskQuestion(int announcementId, string question)
@@ -34,11 +72,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Question = question,
                 QuestionTime = Context.NowSchoolTime,
                 State = AnnouncementQnAState.Asked,
-                Asker = Storage.PersonStorage.GetById(Context.PersonId.Value),
-                Answerer = Storage.PersonStorage.GetById(ann.PrimaryTeacherRef.Value)
+                Asker = ServiceLocator.PersonService.GetPersonDetails(Context.PersonId.Value),
+                Answerer = ServiceLocator.PersonService.GetPersonDetails(ann.PrimaryTeacherRef.Value)
             };
-            Storage.AnnouncementQnAStorage.Add(annQnA);
-            annQnA = Storage.AnnouncementQnAStorage.GetAnnouncementQnA(new AnnouncementQnAQuery
+            AnnouncementQnAStorage.Add(annQnA);
+            annQnA = GetAnnouncementQnA(new AnnouncementQnAQuery
             {
                 AnnouncementId = announcementId,
                 CallerId = annQnA.AskerRef
@@ -51,14 +89,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             return BaseSecurity.IsSysAdmin(Context) || announcementQnA.AnswererRef == Context.PersonId
                 || (Context.PersonId.HasValue && Context.Role == CoreRoles.TEACHER_ROLE && string.IsNullOrEmpty(announcementQnA.Answer)
-                       && Storage.ClassTeacherStorage.Exists(announcementQnA.ClassRef, Context.SchoolLocalId.Value));
+                       && ((DemoClassService)ServiceLocator.ClassService).ClassTeacherExists(announcementQnA.ClassRef, Context.SchoolLocalId.Value));
         }
 
         private bool CanEditQuestion(AnnouncementQnAComplex announcementQnA)
         {
             return BaseSecurity.IsSysAdmin(Context) || announcementQnA.AskerRef == Context.PersonId
                 || (Context.PersonId.HasValue && Context.Role == CoreRoles.TEACHER_ROLE
-                    && Storage.ClassTeacherStorage.Exists(announcementQnA.ClassRef, Context.PersonId.Value));
+                    && ((DemoClassService)ServiceLocator.ClassService).ClassTeacherExists(announcementQnA.ClassRef, Context.PersonId.Value));
         }
 
         public AnnouncementQnA Answer(int announcementQnAId, string question, string answer)
@@ -67,7 +105,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new UnassignedUserException();
 
             var annQnA = GetAnnouncementQnA(announcementQnAId);
-            // todo: think about security
                 if (!CanEditQuestion(annQnA))
                     throw new ChalkableSecurityException();
 
@@ -75,14 +112,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             annQnA.Question = question;
             if (Context.Role == CoreRoles.TEACHER_ROLE && (!annQnA.AnswererRef.HasValue || annQnA.AnswererRef == Context.PersonId))
             {
-                var answerer = Storage.PersonStorage.GetById(Context.PersonId.Value);
+                var answerer = ServiceLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
                 annQnA.Answerer = answerer;
                 annQnA.AnswererRef = answerer.Id;
                 annQnA.AnsweredTime = Context.NowSchoolTime;
                 annQnA.Answer = answer;
             }
         
-            Storage.AnnouncementQnAStorage.Update(annQnA);
+            AnnouncementQnAStorage.Update(annQnA);
             ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToStudent(annQnA.Id, annQnA.AnnouncementRef);
             return annQnA;
         }
@@ -95,7 +132,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             annQnA.Answer = answer;
             annQnA.AnsweredTime = Context.NowSchoolTime;
-            Storage.AnnouncementQnAStorage.Update(annQnA);
+            AnnouncementQnAStorage.Update(annQnA);
             return annQnA;
         }
 
@@ -107,21 +144,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             annQnA.Question = question;
             annQnA.QuestionTime = Context.NowSchoolTime;
-            Storage.AnnouncementQnAStorage.Update(annQnA);
+            AnnouncementQnAStorage.Update(annQnA);
             return annQnA;
         }
 
         public void Delete(int announcementQnAId)
         {
             var annQnA = GetAnnouncementQnA(announcementQnAId);
-            Storage.AnnouncementQnAStorage.Delete(annQnA.Id);
+            AnnouncementQnAStorage.Delete(annQnA.Id);
         }
 
         public AnnouncementQnA MarkUnanswered(int announcementQnAId)
         {
             var annQnA = GetAnnouncementQnA(announcementQnAId);
             annQnA.State = AnnouncementQnAState.Unanswered;
-            Storage.AnnouncementQnAStorage.Update(annQnA);
+            AnnouncementQnAStorage.Update(annQnA);
             return annQnA;
         }
 
@@ -133,13 +170,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private AnnouncementQnAQueryResult GetAnnouncmentQnAs(AnnouncementQnAQuery query)
         {
             query.CallerId = Context.PersonId;
-            return Storage.AnnouncementQnAStorage.GetAnnouncementQnA(query);
+            return GetAnnouncementQnA(query);
         }
 
         public IList<AnnouncementQnAComplex> GetAnnouncementQnAs(int announcementId)
         {
             var query = new AnnouncementQnAQuery {AnnouncementId = announcementId};
             return GetAnnouncmentQnAs(query).AnnouncementQnAs;
+        }
+
+        public void AddQnA(AnnouncementQnAComplex announcementQnAComplex)
+        {
+            AnnouncementQnAStorage.Add(announcementQnAComplex);
         }
     }
 }

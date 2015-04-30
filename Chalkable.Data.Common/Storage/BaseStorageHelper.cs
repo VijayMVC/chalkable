@@ -5,7 +5,7 @@ namespace Chalkable.Data.Common.Storage
 {
     public class BaseStorageHelper
     {
-        protected const string CONNECTION_STRING_NAME = "Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString";
+        protected const string CONNECTION_STRING_NAME = "ChalkableStorage.ConnectionString";
         private static CloudStorageAccount defaultStorageAccount;
         private CloudStorageAccount storageAccount;
 

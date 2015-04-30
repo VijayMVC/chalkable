@@ -10,12 +10,7 @@ namespace Chalkable.Data.School.DataAccess
         public ClassPersonDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
-
-        public void Delete(IList<ClassPerson> classPersons)
-        {
-            SimpleDelete(classPersons);
-        }
-
+        
         public QueryCondition BuildConditioins(ClassPersonQuery query)
         {
             var conds = new AndQueryCondition();
