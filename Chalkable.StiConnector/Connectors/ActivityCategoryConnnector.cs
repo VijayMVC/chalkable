@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.StiConnector.Connectors.Model;
 
 
@@ -17,7 +14,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public ActivityCategory Add(ActivityCategory activityCategory)
         {
-           return Post(string.Format("{0}/activitycategories", BaseUrl), activityCategory);
+           return Post(string.Format("{0}activitycategories", BaseUrl), activityCategory);
         }
 
         public void Update(int activityCategoryId, ActivityCategory activityCategory)

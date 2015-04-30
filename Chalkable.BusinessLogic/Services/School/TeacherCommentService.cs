@@ -30,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var stiComment = new SectionComment {Comment = comment, TeacherId = teacherId};
             stiComment = ConnectorLocator.SectionCommentConnector.CreateComment(syId, teacherId, stiComment);
-            return TeacherComment.Create(stiComment);
+            return stiComment != null ? TeacherComment.Create(stiComment) : null;
         }
 
 
@@ -64,7 +64,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<TeacherComment> GetComments(int teacherId)
         {
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            var stiComments = ConnectorLocator.SectionCommentConnector.GetComments(syId, teacherId);
+            var stiComments = ConnectorLocator.SectionCommentConnector.GetComments(syId, teacherId) ?? new List<SectionComment>();
             return stiComments.Select(TeacherComment.Create).ToList();
         }
 
