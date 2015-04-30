@@ -115,7 +115,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             announcementAttributeService = new DemoAnnouncementAttributeService(this);
             contactService = new DemoContactService(this);
             Setup(ServiceLocatorMaster.Context);
-            teacherCommentService = new DemoTeacherCommentService(this, storage);
+            teacherCommentService = new DemoTeacherCommentService(this);
         }
 
         public bool IsInitialized { get; private set; }
