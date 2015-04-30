@@ -34,7 +34,7 @@
       <Setting name="home-redirect-url" value="https://home.qa.chalkable.com/"/>
     </ConfigurationSettings>
     <Certificates>
-      <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
+      <Certificate name="Certificate1" thumbprint="A0EDC440D203C991E3739E5121061E10B03044E7" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <Role name="Chalkable.BackgroundTaskProcessor">
