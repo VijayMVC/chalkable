@@ -193,7 +193,6 @@
     <Compile Include="Services\DemoSchool\Master\DemoUserService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementProcessor.cs" />
     <Compile Include="Services\DemoSchool\BaseDemoStorage.cs" />
-    <Compile Include="Services\DemoSchool\Storage\DemoContactRelationshipStorage.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingStandardService.cs" />
     <Compile Include="Services\DemoSchool\DemoStudentService.cs" />
     <Compile Include="Services\Master\AccessControlService.cs" />
@@ -328,7 +327,9 @@
       <Name>WindowsAzure.Acs.Oauth2</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Services\DemoSchool\Storage\" />
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />

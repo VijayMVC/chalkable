@@ -173,16 +173,16 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(this.getInfoPageClass(), result);
             },
 
-            [[chlk.models.id.SchoolPersonId]],
-            function appsAction(personId){
-                var res = this.personService
-                    .getAppsInfo(personId)
-                    .attach(this.validateResponse_())
-                    .then(function(model){
-                        return new chlk.models.people.UserProfileAppsViewData(this.getCurrentRole(), model);
-                    }, this);
-                return this.PushView(chlk.activities.profile.SchoolPersonAppsPage, res);
-            },
+            //[[chlk.models.id.SchoolPersonId]],
+            //function appsAction(personId){
+            //    var res = this.personService
+            //        .getAppsInfo(personId)
+            //        .attach(this.validateResponse_())
+            //        .then(function(model){
+            //            return new chlk.models.people.UserProfileAppsViewData(this.getCurrentRole(), model);
+            //        }, this);
+            //    return this.PushView(chlk.activities.profile.SchoolPersonAppsPage, res);
+            //},
 
             [[chlk.models.people.User, Object]],
             ria.async.Future, function infoEdit_(model, modelClass){

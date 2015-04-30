@@ -6,6 +6,7 @@ using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.PersonControllers
@@ -100,6 +101,16 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var syId = GetCurrentSchoolYearId();
             var studentExplorerInfo = SchoolLocator.StudentService.GetStudentExplorerInfo(personId, syId);
             return Json(StudentExplorerViewData.Create(studentExplorerInfo));
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult Apps(int studentId, int? start, int? count)
+        {
+            var syId = GetCurrentSchoolYearId();
+            var student = SchoolLocator.StudentService.GetById(studentId, syId);
+            var currentBalance = FundController.GetPersonBalance(MasterLocator, studentId);
+            var apps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, studentId, null, start, count);
+            return Json(StudentAppsViewData.Create(student, currentBalance, apps));
         }
     }
 }
