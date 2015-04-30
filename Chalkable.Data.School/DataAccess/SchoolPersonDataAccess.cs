@@ -36,10 +36,5 @@ namespace Chalkable.Data.School.DataAccess
         {
             return SelectOne<SchoolPerson>(GetSchoolPersonsCondition(personId, roleId, schoolId));
         }
-
-        public void Delete(IList<SchoolPerson> schoolPersons)
-        {
-            SimpleDelete(schoolPersons);
-        }
     }
 }

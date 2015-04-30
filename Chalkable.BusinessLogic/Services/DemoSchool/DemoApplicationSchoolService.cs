@@ -2,20 +2,53 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoAnnouncementApplicationStorage : BaseDemoIntStorage<AnnouncementApplication>
+    {
+        public DemoAnnouncementApplicationStorage()
+            : base(x => x.Id, true)
+        {
+        }
+
+        public IList<AnnouncementApplication> GetAll(int announcementId, Guid applicationId, bool active)
+        {
+            return
+                data.Where(
+                    x =>
+                        x.Value.AnnouncementRef == announcementId && x.Value.ApplicationRef == applicationId &&
+                        x.Value.Active == active).Select(x => x.Value).ToList();
+        }
+
+        public IList<AnnouncementApplication> GetAll(int announcementId, bool onlyActive)
+        {
+            var aa = data.Where(x => x.Value.AnnouncementRef == announcementId).Select(x => x.Value);
+            if (onlyActive)
+                aa = aa.Where(x => x.Active);
+            return aa.ToList();
+        }
+
+        public void DeleteByAnnouncementId(int announcementId)
+        {
+            var announcementAttachments = GetAll(announcementId, false);
+            Delete(announcementAttachments);
+        }
+
+        
+    }
+
     public class DemoApplicationSchoolService : DemoSchoolServiceBase, IApplicationSchoolService
     {
-        public DemoApplicationSchoolService(IServiceLocatorSchool serviceLocator, DemoStorage storage)
-            : base(serviceLocator, storage)
+        private DemoAnnouncementApplicationStorage AnnouncementApplicationStorage { get; set; }
+        public DemoApplicationSchoolService(IServiceLocatorSchool serviceLocator)
+            : base(serviceLocator)
         {
+            AnnouncementApplicationStorage = new DemoAnnouncementApplicationStorage();
         }
 
         public IList<int> GetAssignedUserIds(Guid appId, int? announcementAppId)
@@ -24,20 +57,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (announcementAppId.HasValue)
             {
 
-                var anDa = Storage.AnnouncementStorage.GetTeacherStorage();
-                var announcementApplication = Storage.AnnouncementApplicationStorage.GetById(announcementAppId.Value);
-                var ann = anDa.GetById(announcementApplication.AnnouncementRef);
-                var csp = Storage.ClassPersonStorage
-                        .GetClassPersons(new ClassPersonQuery { ClassId = ann.ClassRef });
+                var anDa = ((DemoAnnouncementService)ServiceLocator.AnnouncementService).GetTeacherAnnouncementService();
+                var announcementApplication = GetAnnouncementApplication(announcementAppId.Value);
+                var ann = anDa.GetAnnouncementById(announcementApplication.AnnouncementRef);
+                var csp = ServiceLocator.ClassService.GetClassPersons(ann.ClassRef, null);
                 res.AddRange(csp.Select(x => x.PersonRef));
-                var c = new DemoClassStorage(Storage).GetById(ann.ClassRef);
+                var c = ServiceLocator.ClassService.GetById(ann.ClassRef);
                 if (Context.PersonId != c.PrimaryTeacherRef)
-                if(c.PrimaryTeacherRef.HasValue) res.Add(c.PrimaryTeacherRef.Value);
+                    if (c.PrimaryTeacherRef.HasValue) res.Add(c.PrimaryTeacherRef.Value);
             }
             else
             {
-
-                var inst = Storage.ApplicationInstallStorage.GetAll(appId, true);
+                var inst = ((DemoAppMarketService)ServiceLocator.AppMarketService).GetAppInstalls(appId, true);
                 res.AddRange(inst.Select(x => x.PersonRef));
             }
             return res;
@@ -45,7 +76,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public AnnouncementApplication AddToAnnouncement(int announcementId, Guid applicationId)
         {
-            
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
             if (!ApplicationSecurity.CanAddToAnnouncement(app, ann, Context))
@@ -57,64 +87,78 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Active = false,
                 Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
             };
-            Storage.AnnouncementApplicationStorage.Add(aa);
-            aa = Storage.AnnouncementApplicationStorage.GetAll(announcementId, applicationId, false).OrderByDescending(x => x.Id).First();
+            AnnouncementApplicationStorage.Add(aa);
+            aa = AnnouncementApplicationStorage.GetAll(announcementId, applicationId, false).OrderByDescending(x => x.Id).First();
             return aa;
         }
 
         public AnnouncementApplication GetAnnouncementApplication(int announcementAppId)
         {
-            return Storage.AnnouncementApplicationStorage.GetById(announcementAppId);
+            return AnnouncementApplicationStorage.GetById(announcementAppId);
         }
 
         public void AttachAppToAnnouncement(int announcementAppId)
         {
-            var aa = Storage.AnnouncementApplicationStorage.GetById(announcementAppId);
-            var ann = Storage.AnnouncementStorage.GetTeacherStorage()
+            var aa = GetAnnouncementApplication(announcementAppId);
+            var ann = ((DemoAnnouncementService)ServiceLocator.AnnouncementService).GetTeacherAnnouncementService()
                 .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.PersonId.Value);
-            var c = Storage.ClassStorage.GetById(ann.ClassRef);
+            var c = ServiceLocator.ClassService.GetById(ann.ClassRef);
             if (Context.PersonId != c.PrimaryTeacherRef)
                 throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
             aa.Active = true;
-            Storage.AnnouncementApplicationStorage.Update(aa);
+            AnnouncementApplicationStorage.Update(aa);
+        }
+
+        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds, bool onlyActive = false)
+        {
+            var res = AnnouncementApplicationStorage.GetAll()
+                       .Where(x => announcementIds.Contains(x.AnnouncementRef));
+            if (onlyActive)
+                res = res.Where(x => x.Active);
+            return res.ToList();
         }
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false)
         {
-            return Storage.AnnouncementApplicationStorage.GetAll(announcementId, onlyActive);
+            return GetAnnouncementApplicationsByAnnIds(new List<int> { announcementId }, onlyActive);
         }
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false)
         {
-            return Storage.AnnouncementApplicationStorage.GetAnnouncementApplicationsByPerson(personId, onlyActive);
+            var announcementApplications = AnnouncementApplicationStorage.GetData().Select(x => x.Value);
+
+            announcementApplications = announcementApplications.Where(x =>
+            {
+                var announcement = ServiceLocator.AnnouncementService.GetAnnouncementById(x.AnnouncementRef);
+                return ((DemoAppMarketService)ServiceLocator.AppMarketService).AppInstallExists(x.ApplicationRef, personId)
+                       && announcement.PrimaryTeacherRef == personId
+                       || ((DemoClassService)ServiceLocator.ClassService).ClassPersonExists(announcement.ClassRef, personId);
+            });
+            return announcementApplications.ToList();
         }
 
         public Announcement RemoveFromAnnouncement(int announcementAppId)
         {
             try
             {
-                var aa = Storage.AnnouncementApplicationStorage.GetById(announcementAppId);
-                Storage.AnnouncementApplicationStorage.Delete(announcementAppId);
+                var aa = AnnouncementApplicationStorage.GetById(announcementAppId);
+                AnnouncementApplicationStorage.Delete(announcementAppId);
                 var res = ServiceLocator.AnnouncementService.GetAnnouncementById(aa.AnnouncementRef);
-                var c = Storage.ClassStorage.GetById(res.ClassRef);
+                var c = ServiceLocator.ClassService.GetById(res.ClassRef);
                 if (Context.PersonId != c.PrimaryTeacherRef)
-                   throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
+                    throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 return res;
             }
-            catch(Exception)
+            catch (Exception)
             {
                 throw new ChalkableException(String.Format(ChlkResources.ERR_CANT_DELETE_ANNOUNCEMENT_APPLICATION, announcementAppId));
             }
         }
 
-
-        public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds, bool onlyActive = false)
+        public void DeleteAnnouncementApplications(int announcementId, bool onlyActive = false)
         {
-            var res = Storage.AnnouncementApplicationStorage.GetAll()
-                       .Where(x => announcementIds.Contains(x.AnnouncementRef));
-            if (onlyActive)
-                res = res.Where(x => x.Active);
-            return res.ToList();
+            var announcementApps = AnnouncementApplicationStorage.GetAll(announcementId, onlyActive);
+            AnnouncementApplicationStorage.Delete(announcementApps);
         }
     }
 }

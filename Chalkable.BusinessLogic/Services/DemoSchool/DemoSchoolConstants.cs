@@ -1,10 +1,7 @@
 ﻿namespace Chalkable.BusinessLogic.Services.DemoSchool.Common
 {
-    class DemoSchoolConstants
+    public class DemoSchoolConstants
     {
-        
-
-
         public const int AlphaGrade_A = 1;
         public const int AlphaGrade_B = 2;
         public const int AlphaGrade_C = 3;

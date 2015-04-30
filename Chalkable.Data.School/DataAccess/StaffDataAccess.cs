@@ -11,11 +11,6 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void Delete(IList<Staff> staffs)
-        {
-            SimpleDelete(staffs);
-        }
-        
         public PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName, int start, int count)
         {
             var ps = new Dictionary<string, object>

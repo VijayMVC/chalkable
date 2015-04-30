@@ -3,8 +3,9 @@
   <Role name="Chalkable.Web">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
       <!-- DB Settings -->
+      <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />-->
+      <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
       <Setting name="ChalkableMaster" value="Data Source=me0buyg8np.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
@@ -29,9 +30,9 @@
       <Setting name="api.explorer.client-name" value="api explorer" />
       <Setting name="api.explorer.scope" value="https://dev.chalkable.com/" />
       <!--tracking-->
-      <Setting name="mixpanel-token" value=""/>
+      <Setting name="mixpanel-token" value="" />
       <!-- other settings -->
-      <Setting name="home-redirect-url" value="/Home/Index"/>
+      <Setting name="home-redirect-url" value="/Home/Index" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
@@ -40,15 +41,16 @@
   <Role name="Chalkable.BackgroundTaskProcessor">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
       <!-- DB Settings -->
+
+      <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />-->
+      <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
       <Setting name="ChalkableMaster" value="Data Source=me0buyg8np.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
       <Setting name="ChalkableSchoolDbServers" value="me0buyg8np.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
-
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="s6L1PpCuOrYHg93h+zszvnbFDSKPIFwwMmWGbfxLc0U=" />
       <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="dev.chalkable.com" />
@@ -60,15 +62,16 @@
       <Setting name="TaskProcessorDelay" value="10000" />
       <Setting name="DbBackupServiceUrl" value="https://bl2prod-dacsvc.azure.com/DACWebService.svc" />
       <Setting name="PictureProcessorCount" value="1" />
-    <!--tracking-->
-      <Setting name="mixpanel-token" value=""/>
+      <!--tracking-->
+      <Setting name="mixpanel-token" value="" />
     </ConfigurationSettings>
   </Role>
   <Role name="Chalkable.BackgroundTaskProducer">
     <Instances count="1" />
     <ConfigurationSettings>
-      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
       <!-- DB Settings -->
+      <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />-->
+      <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
       <Setting name="ChalkableMaster" value="Data Source=me0buyg8np.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
@@ -92,8 +95,8 @@
       <Setting name="TaskProducer.DbBackupProducer.Interval" value="86400" />
       <Setting name="TaskProducer.DbBackupProducer.IntervalStart" value="0" />
       <Setting name="TaskProducer.DbBackupProducer.IntervalEnd" value="86400" />
-    <!--tracking-->
-      <Setting name="mixpanel-token" value=""/>
+      <!--tracking-->
+      <Setting name="mixpanel-token" value="" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

@@ -12,11 +12,6 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void Delete(IList<Date> dates)
-        {
-            SimpleDelete(dates);
-        }
-
         private DbQuery BuildConditionQuery(DbQuery dbQuery, DateQuery query)
         {
             var condition = new AndQueryCondition ();

@@ -1,44 +1,51 @@
 ﻿using System.Collections.Generic;
-using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoAlternateScoreStorage : BaseDemoIntStorage<AlternateScore>
+    {
+        public DemoAlternateScoreStorage()
+            : base(x => x.Id)
+        {
+        }
+    }
+
     public class DemoAlternateScoreService : DemoSchoolServiceBase, IAlternateScoreService
     {
-        public DemoAlternateScoreService(IServiceLocatorSchool serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+
+        public DemoAlternateScoreStorage AlternateScoreStorage { get; set; }
+
+        public DemoAlternateScoreService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+            AlternateScoreStorage = new DemoAlternateScoreStorage();
         }
 
         public void AddAlternateScores(IList<AlternateScore> alternateScores)
         {
-            BaseSecurity.EnsureSysAdmin(Context);
-            Storage.AlternateScoreStorage.Add(alternateScores);
+            AlternateScoreStorage.Add(alternateScores);
         }
 
         public void EditAlternateScores(IList<AlternateScore> alternateScores)
         {
-            BaseSecurity.EnsureSysAdmin(Context);
-            Storage.AlternateScoreStorage.Update(alternateScores);
+            AlternateScoreStorage.Update(alternateScores);
         }
 
         public void Delete(IList<AlternateScore> alternateScores)
         {
-            BaseSecurity.EnsureSysAdmin(Context);
-            Storage.AlternateScoreStorage.Delete(alternateScores);
+            AlternateScoreStorage.Delete(alternateScores);
         }
 
         public IList<AlternateScore> GetAlternateScores()
         {
-            return Storage.AlternateScoreStorage.GetAll();
+            return AlternateScoreStorage.GetAll();
         }
-
 
         public AlternateScore GetAlternateScore(int id)
         {
-            return Storage.AlternateScoreStorage.GetById(id);
+            return AlternateScoreStorage.GetById(id);
+            
         }
     }
 }

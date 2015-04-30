@@ -1,16 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoAttendanceMonthStorage : BaseDemoIntStorage<AttendanceMonth>
+    {
+        public DemoAttendanceMonthStorage()
+            : base(x => x.Id)
+        {
+        }
+    }
+
     public class DemoAttendanceMonthService : DemoSchoolServiceBase, IAttendanceMonthService
     {
-        public DemoAttendanceMonthService(IServiceLocatorSchool serviceLocator, DemoStorage demoStorage) : base(serviceLocator, demoStorage)
+        private DemoAttendanceMonthStorage AttendanceMonthStorage { get; set; }
+        public DemoAttendanceMonthService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+            AttendanceMonthStorage = new DemoAttendanceMonthStorage();
         }
 
         public void Add(IList<AttendanceMonth> attendanceMonths)
@@ -30,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AttendanceMonth> GetAttendanceMonths(int schoolYearId, DateTime? fromDate = null, DateTime? endDate = null)
         {
-            var res = Storage.AttendanceMonthStorage.GetAll().Where(x=>x.SchoolYearRef == schoolYearId);
+            var res = AttendanceMonthStorage.GetAll().Where(x=>x.SchoolYearRef == schoolYearId);
             if (fromDate.HasValue)
                 res = res.Where(x => x.EndDate >= fromDate);
             if (endDate.HasValue)

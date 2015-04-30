@@ -1,18 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
-using Chalkable.Data.Common.Storage;
 using Microsoft.WindowsAzure.Storage.Blob;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoBlobStorage
+    {
+        private readonly Dictionary<string, byte[]> Blobs = new Dictionary<string, byte[]>(); 
+
+        public byte[] GetBlobContent(string containerAddress, string key)
+        {
+            return Blobs.ContainsKey(key) ? Blobs[key] : null;
+        }
+
+        public void DeleteBlob(string containerName, string key)
+        {
+            Blobs.Remove(key);
+        }
+        public void AddBlob(string containerAddress, string key, byte[] content)
+        {
+            Blobs.Add(key, content);
+        }
+    }
+
     public class DemoStorageBlobService : DemoSchoolServiceBase, IStorageBlobService
     {
-        public DemoStorageBlobService(IServiceLocatorSchool serviceLocator, DemoStorage demoStorage) : base(serviceLocator, demoStorage)
+        private DemoBlobStorage BlobStorage { get; set; }
+        public DemoStorageBlobService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+            BlobStorage = new DemoBlobStorage();
         }
 
         public PaginatedList<BlobContainerInfo> GetBlobContainers(int start = 0, int count = int.MaxValue)
@@ -32,12 +51,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void AddBlob(string containerAddress, string key, byte[] content)
         {
-            Storage.BlobStorage.Add(containerAddress, key, content);
+            BlobStorage.AddBlob(containerAddress, key, content);
         }
 
         public byte[] GetBlobContent(string containerAddress, string key)
         {
-            return Storage.BlobStorage.GetBlob(containerAddress, key);
+            return BlobStorage.GetBlobContent(containerAddress, key);
         }
 
         public void DeleteBlob(string blobAddress)
@@ -47,7 +66,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void DeleteBlob(string containerName, string key)
         {
-            Storage.BlobStorage.DeleteBlob(containerName, key);
+            BlobStorage.DeleteBlob(containerName, key);
         }
     }
 }

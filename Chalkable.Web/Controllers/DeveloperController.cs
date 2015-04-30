@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
+using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionFilters;
@@ -54,6 +55,7 @@ namespace Chalkable.Web.Controllers
             var result = new List<ApiExplorerViewData>();
 
             var descriptions = ChalkableApiExplorerLogic.GetApi();
+
             foreach (var description in descriptions)
             {
                 var roleName = description.Key.ToLowerInvariant();
@@ -61,25 +63,25 @@ namespace Chalkable.Web.Controllers
                 if (ChalkableApiExplorerLogic.IsValidApiRole(roleName))
                 {
                     var context = MasterLocator.UserService.DemoLogin(roleName, Context.UserId.ToString());
-                    var token = ChalkableApiExplorerLogic.GetAccessTokenFor(context.Login, context.SchoolYearId, MasterLocator);
-                    result.Add(ApiExplorerViewData.Create(description.Value, token, description.Key));
+                    var token = GetAccessTokenFor(context.Login, context.SchoolYearId);
+                    var viewData = ApiExplorerViewData.Create(description.Value, token, description.Key);
+                    result.Add(viewData);
                 }
                     
             }
             return Json(result, 8);
         }
 
-        public ActionResult GetRequiredMethodCallsFor(string query, bool isMethod, string role)
+        private const string AcsUrlFormat = "https://{0}.accesscontrol.windows.net/v2/OAuth2-13/";
+
+        private string GetAccessTokenFor(string userName, int? schoolYearId)
         {
-            var list = ChalkableApiExplorerLogic.IsValidApiRole(role) ? ApiPathfinder.GetRequiredMethodCallsFor(query, isMethod, role) 
-                                                                      : new List<ApiExplorerDropdownItemViewData>();
-            return Json(list);
-        }
-        public ActionResult MethodParamList(string query, string role)
-        {
-            var list = ChalkableApiExplorerLogic.IsValidApiRole(role) ? ApiPathfinder.GetParamsListByQuery(query, role)
-                                                                      : new List<ApiExplorerDropdownItemViewData>();
-            return Json(list);
+            var clientId = Settings.ApiExplorerClientId;
+            var clientSecret = Settings.ApiExplorerSecret;
+            var redirectUri = Settings.ApiExplorerRedirectUri;
+            var accessTokenUri = string.Format(AcsUrlFormat, Settings.WindowsAzureOAuthServiceNamespace);
+            var scope = Settings.ApiExplorerScope;
+            return MasterLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId, clientSecret, userName, schoolYearId, scope);
         }
 
         public ActionResult DeveloperDocs()
@@ -125,7 +127,7 @@ namespace Chalkable.Web.Controllers
                 case 2: name = BANNER_FILENAME; break;
                 default: name = SCREENSHOT_FILENAME; break;
             }
-            vPath = string.Format(vPath, name);
+            vPath = String.Format(vPath, name);
             var path = HttpContext.Server.MapPath(vPath);
             var resContent = System.IO.File.ReadAllBytes(path);
             const string contentType = ATTACHMENT_CONTENT_TYPE;
@@ -151,7 +153,7 @@ namespace Chalkable.Web.Controllers
                 var timeZoneId = Context.DistrictTimeZone;
                 var ip = RequestHelpers.GetClientIpAddress(Request);
                 MasterLocator.UserTrackingService.IdentifyDeveloper(res.Email, res.DisplayName,
-                    string.IsNullOrEmpty(timeZoneId) ? DateTime.UtcNow : DateTime.UtcNow.ConvertFromUtc(timeZoneId), timeZoneId, ip);
+                    String.IsNullOrEmpty(timeZoneId) ? DateTime.UtcNow : DateTime.UtcNow.ConvertFromUtc(timeZoneId), timeZoneId, ip);
             }
             return Json(DeveloperViewData.Create(res));
         }
@@ -159,7 +161,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Developer")]
         public ActionResult ChangePayPalLogin(Guid developerId, string paypalAddress)
         {
-            if (string.IsNullOrEmpty(paypalAddress))
+            if (String.IsNullOrEmpty(paypalAddress))
                 return Json(new ChalkableException("paypal address field is empty"));
             MasterLocator.DeveloperService.ChangePayPalLogin(developerId, paypalAddress);
             return Json(true);

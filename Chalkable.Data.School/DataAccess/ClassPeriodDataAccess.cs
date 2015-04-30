@@ -13,11 +13,6 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void Delete(IList<ClassPeriod> classPeriods)
-        {
-            SimpleDelete(classPeriods);
-        }
-
         public Class CurrentClassForTeacher(int schoolYearId, int personId, DateTime date, int time)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>

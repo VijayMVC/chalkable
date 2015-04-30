@@ -1,36 +1,61 @@
 ﻿using System.Collections.Generic;
-using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
+using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class DemoDayTypeStorage : BaseDemoIntStorage<DayType>
+    {
+        public DemoDayTypeStorage()
+            : base(x => x.Id)
+        {
+        }
+
+        public bool Exists(int schoolYearId)
+        {
+            return data.Count(x => x.Value.SchoolYearRef == schoolYearId) > 0;
+        }
+    }
 
     public class DemoDayTypeService : DemoSchoolServiceBase, IDayTypeService
     {
-        public DemoDayTypeService(IServiceLocatorSchool serviceLocator, DemoStorage storage) : base(serviceLocator, storage)
+        private DemoDayTypeStorage DayTypeStorage { get; set; }
+        public DemoDayTypeService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+            DayTypeStorage = new DemoDayTypeStorage();
         }
         
         public void Add(IList<DayType> dayTypes)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.DayTypeStorage.Add(dayTypes);
+            DayTypeStorage.Add(dayTypes);
+        }
+
+        public IList<DayType> GetDateTypes(int schoolYearId, int? fromNumber = null, int? toNumber = null)
+        {
+            var dayTypes = DayTypeStorage.GetData().Select(x => x.Value).Where(x => x.SchoolYearRef == schoolYearId);
+
+            if (fromNumber.HasValue)
+                dayTypes = dayTypes.Where(x => x.Number >= fromNumber);
+            if (toNumber.HasValue)
+                dayTypes = dayTypes.Where(x => x.Number <= toNumber);
+
+            return dayTypes.ToList();
         }
 
         public void Edit(IList<DayType> dayTypes)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            Storage.DayTypeStorage.Update(dayTypes);
+            DayTypeStorage.Update(dayTypes);
         }
 
         public void Delete(IList<DayType> dayTypes)
         {
-            Storage.DayTypeStorage.Delete(dayTypes);
+            DayTypeStorage.Delete(dayTypes);
+        }
+
+        public bool Exists(int schoolYearId)
+        {
+            return DayTypeStorage.Exists(schoolYearId);
         }
     }
 }

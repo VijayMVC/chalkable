@@ -12,7 +12,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class SearchController : ChalkableController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_SEARCH_SEARCH, true, CallType.Get, new[] { AppPermissionType.User })]  // - System Admin
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.User })]  // - System Admin
         public ActionResult Search(string query)
         {
             IDictionary<SearchTypeEnum, Object> searchRes = new Dictionary<SearchTypeEnum, Object>();

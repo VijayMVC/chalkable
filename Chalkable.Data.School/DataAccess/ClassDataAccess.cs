@@ -91,11 +91,5 @@ namespace Chalkable.Data.School.DataAccess
             }
             return classes;
         }
-
-        public void Delete(IList<Class> classes)
-        {
-            SimpleDelete(classes);
-        }
-
     }
 }

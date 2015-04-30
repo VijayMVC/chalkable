@@ -58,7 +58,7 @@ namespace Chalkable.Web
             var masterLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
             masterLocator.CommonCoreStandardService.BuildAbToCCMapper();
 
-            var keys = ChalkableApiExplorerLogic.GenerateControllerDescriptionsKeys();
+            var keys = ChalkableApiExplorerLogic.GenerateControllerDescriptionKeys();
             masterLocator.PreferenceService.BuildDefaultControllerDescriptions(keys);
         }
 

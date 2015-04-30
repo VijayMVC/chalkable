@@ -14,43 +14,23 @@ using Microsoft.IdentityModel.Protocols.WSIdentity;
 
 namespace Chalkable.Web.ActionFilters
 {
-
-    public enum CallType
-    {
-        Get = 0,
-        Post = 1
-    };
     public class AuthorizationFilter : ActionFilterAttribute
     {
-        private string[] role;
-        private bool apiAccess;
-        private string description;
-        private CallType callType;
         private AppPermissionType[] permissions;
 
         //TODO: API permissions
 
-        public AuthorizationFilter(string role, string descriptionKey = "", bool apiAccess = false, CallType methodCallType = CallType.Post, AppPermissionType[] permissions = null)
+        public AuthorizationFilter(string roles, bool apiAccess = false, AppPermissionType[] permissions = null)
         {
-            this.callType = methodCallType;
-
-            if (!string.IsNullOrEmpty(descriptionKey))
-            {
-                var info = PreferenceService.Get(descriptionKey);
-                if (info != null) this.description = info.Value;
-            }
-            if (string.IsNullOrEmpty(role))
-                this.role = null;
-            else
-                this.role = role.Split(new [] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
-            this.apiAccess = apiAccess;
+            Roles = string.IsNullOrEmpty(roles) ? null : roles.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
+            this.ApiAccess = apiAccess;
             this.permissions = permissions;
         }
 
         public AuthorizationFilter()
         {
-            role = null;
-            apiAccess = false;
+            Roles = null;
+            ApiAccess = false;
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
@@ -62,7 +42,7 @@ namespace Chalkable.Web.ActionFilters
             var context = controller.MasterLocator != null ? controller.MasterLocator.Context : null;
             if (context != null)
             {
-                var hasApiAccess = apiAccess || context.IsInternalApp;
+                var hasApiAccess = ApiAccess || context.IsInternalApp;
                 if (context.IsOAuthUser)
                 {
                     if (!hasApiAccess)
@@ -93,7 +73,7 @@ namespace Chalkable.Web.ActionFilters
                     }
                 }
 
-                if (role == null)
+                if (Roles == null)
                 {
                     if (filterContext.RequestContext.HttpContext.User != null)
                         allow = filterContext.RequestContext.HttpContext.User.Identity.IsAuthenticated;
@@ -104,7 +84,7 @@ namespace Chalkable.Web.ActionFilters
                         var userName = filterContext.RequestContext.HttpContext.User.Identity.Name;
                         if (userName != null)
                         {
-                            if (role.Any(r => context.Role.LoweredName == r.ToLower()))
+                            if (Roles.Any(r => context.Role.LoweredName == r.ToLower()))
                             {
                                 allow = true;
                             }
@@ -120,11 +100,8 @@ namespace Chalkable.Web.ActionFilters
             base.OnActionExecuting(filterContext);
         }
 
-        public string[] Roles { get { return role; } }
-        public string[] ParamsDescriptions { get { return null; } }
-        public string Description { get { return description; } }
-        public CallType Type { get { return callType; } }
-        public bool ApiAccess { get { return apiAccess; } }
+        public string[] Roles { get; private set; }
+        public bool ApiAccess { get; private set; }
     }
 
 

@@ -15,7 +15,6 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class DisciplineController : ChalkableController
     {
-        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult List(DateTime? date, int? start, int? count)
         {
@@ -31,7 +30,6 @@ namespace Chalkable.Web.Controllers
             //return Json(new PaginatedList<StudentDisciplineSummaryViewData>(list, start.Value / count.Value, count.Value));
         }
 
-        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Summary(DateTime? date, IntList gradeLevelIds)
         {
@@ -47,7 +45,7 @@ namespace Chalkable.Web.Controllers
             //return Json(new PaginatedList<StudentDisciplineSummaryViewData>(list, start.Value / count.Value, count.Value));
         }
 
-        [AuthorizationFilter("Teacher", Preference.API_DESCR_CLASS_DISCIPLINE_LIST, true, CallType.Get, new[] { AppPermissionType.Discipline })]
+        [AuthorizationFilter("Teacher", true, new[] { AppPermissionType.Discipline })]
         public ActionResult ClassList(DateTime? date, int classId, int? start, int? count, bool? byLastName)
         {
             start = start ?? 0;
@@ -96,7 +94,7 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_CLASS_DISCIPLINE_STUDENT_DISCIPLINE_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Discipline })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.User, AppPermissionType.Discipline })]
         public ActionResult StudentDisciplineSummary(int personId, int markingPeriodId)
         {
             return FakeJson("~/fakeData/studentDisciplinesSummary.json");

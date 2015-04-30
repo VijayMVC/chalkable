@@ -15,7 +15,7 @@ namespace Chalkable.Web.Controllers
     public class AnnouncementTypeController : ChalkableController
     {
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_ANNOUNCEMENT_TYPE_LIST, true, CallType.Get, new[] {AppPermissionType.Announcement})]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] {AppPermissionType.Announcement})]
         public ActionResult List(int classId)
         {
             var list = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);

@@ -20,7 +20,7 @@ NAMESPACE('chlk.activities.bgtasks', function () {
             function districtsChange(node, event, data){
                 var allDistricts = !!node.find('option').filter(function(item){
                     return item.getText()== data.selected
-                }).getData('alldistricts');
+                }).getData('allDistricts');
                 this.dom.find('[name="isalldistricts"]').setValue(allDistricts);
                 this.dom.find('#bgTasks-list-form').trigger('submit');
             }
