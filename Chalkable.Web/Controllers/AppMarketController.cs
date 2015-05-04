@@ -33,7 +33,7 @@ namespace Chalkable.Web.Controllers
             var cnt = count ?? 9;
 
             var studentCountPerApp = SchoolLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
-            var installedApp = GetApplications(studentCountPerApp.Select(x => x.Key).Distinct().ToList(), true, null);
+            var installedApp = GetApplications(MasterLocator, studentCountPerApp.Select(x => x.Key).Distinct().ToList(), true, null);
             var res = ApplicationForAttachViewData.Create(installedApp, studentCountPerApp);
             var totalCount = res.Count;
             res = res.Skip(st).Take(cnt).ToList();
@@ -69,21 +69,27 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult ListInstalled(int personId, string filter, int? start, int? count)
         {
+            var apps = GetListInstalledApps(SchoolLocator, MasterLocator, personId, filter, start, count);
+            return Json(apps);
+        }
+
+        public static PaginatedList<InstalledApplicationViewData> GetListInstalledApps(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster masterLocator
+            , int personId, string filter, int? start, int? count)
+        {
             var st = start ?? 0;
             var cnt = count ?? 9;
-            var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
-            var installedApp = GetApplications(appInstallations.Select(x => x.ApplicationRef).Distinct().ToList(), null, null);
-            var hasMyAppDic = installedApp.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
+            var appInstallations = schoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
+            var installedApp = GetApplications(masterLocator, appInstallations.Select(x => x.ApplicationRef).Distinct().ToList(), null, null);
+            var hasMyAppDic = installedApp.ToDictionary(x => x.Id, x => masterLocator.ApplicationService.HasMyApps(x));
             var res = InstalledApplicationViewData.Create(appInstallations, personId, installedApp, hasMyAppDic);
             var totalCount = res.Count;
             res = res.Skip(st).Take(cnt).ToList();
-            var appsList = new PaginatedList<InstalledApplicationViewData>(res, st / cnt, cnt, totalCount);
-            return Json(appsList);
+            return new PaginatedList<InstalledApplicationViewData>(res, st / cnt, cnt, totalCount);
         }
 
-        private IList<Application> GetApplications(IList<Guid> ids, bool? forAttach, string filter)
+        private static IList<Application> GetApplications(IServiceLocatorMaster masterLocator, IList<Guid> ids, bool? forAttach, string filter)
         {
-            var res = MasterLocator.ApplicationService.GetApplicationsByIds(ids);
+            var res = masterLocator.ApplicationService.GetApplicationsByIds(ids);
             if(forAttach.HasValue && forAttach.Value)
                 res = res.Where(x => x.CanAttach).ToList();
             if (!string.IsNullOrEmpty(filter))
