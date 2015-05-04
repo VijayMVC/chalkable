@@ -20,7 +20,7 @@
                      +LabeledCheckbox(Msg.Include_activities, 'includeActivities', false)#include-activities
                   TD.item-2
                      h3
-                     +LabeledCheckbox(Msg.Include_standards, 'includeStandards', false)(disabled = "disabled")
+                     +LabeledCheckbox(Msg.Include_standards, 'includeStandards', false, true).disable-by-activities
                TR
                   TD.item-2
                      h3=Msg.Activity_attribute_text
