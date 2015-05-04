@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.setup', function () {
         [ria.templates.ModelBind(chlk.models.setup.ClassroomOptionSetupViewData)],
         'ClassroomOptionSetupTpl', EXTENDS(chlk.templates.common.PageWithClasses), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.common.NameId), 'scales',
+            ArrayOf(chlk.models.grading.GradingScale), 'scales',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.grading.ClassroomOptionViewData, 'classroomOptions'

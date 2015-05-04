@@ -309,10 +309,16 @@ NAMESPACE('chlk.controllers', function (){
             function classroomOptionSetupAction(classId_){
                 var topData = new chlk.models.classes.ClassesForTopBar(null, classId_);
                 if(classId_)
-                    var res = this.classroomOptionService.getClassroomOption(classId_)
+                    var res =
+                        ria.async.wait([
+                            this.classroomOptionService.getClassroomOption(classId_),
+                            this.gradingService.getGradingScales()
+                        ])
                         .attach(this.validateResponse_())
-                        .then(function(options){
-                            return new chlk.models.setup.ClassroomOptionSetupViewData(topData, [], options);
+                        .then(function(data){
+                            var options = data[0];
+                            var gradingScales = data[1];
+                            return new chlk.models.setup.ClassroomOptionSetupViewData(topData, gradingScales, options);
                         });
                 else
                     res = new ria.async.DeferredData(new chlk.models.setup.ClassroomOptionSetupViewData(topData));

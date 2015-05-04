@@ -289,9 +289,8 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementApplicationId]],
-            ria.async.Future, function getGradingScales(announcementApplicationId){
-                return this.get('Grading/GradingScalesList', ArrayOf(chlk.models.grading.GradingScale), {
+            ria.async.Future, function getGradingScales(){
+                return this.get('Grading/GradingScalesList.json', ArrayOf(chlk.models.grading.GradingScale), {
                 });
             }
 
