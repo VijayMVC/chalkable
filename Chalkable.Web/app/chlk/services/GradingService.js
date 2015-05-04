@@ -11,6 +11,7 @@ REQUIRE('chlk.models.standard.StandardGradings');
 REQUIRE('chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData');
 REQUIRE('chlk.models.grading.ShortGradingClassSummaryGridItems');
 REQUIRE('chlk.models.grading.FinalGradesViewData');
+REQUIRE('chlk.models.grading.GradingScale');
 
 REQUIRE('chlk.models.id.StudentAnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
@@ -286,6 +287,13 @@ NAMESPACE('chlk.services', function () {
                     announcementApplicationId: announcementApplicationId.valueOf(),
                     lastSettedGradeTime: new chlk.models.common.ChlkDate().toString('mm-dd-yy hh:min:ss')
                 });
+            },
+
+            [[chlk.models.id.AnnouncementApplicationId]],
+            ria.async.Future, function getGradingScales(announcementApplicationId){
+                return this.get('Grading/GradingScalesList', ArrayOf(chlk.models.grading.GradingScale), {
+                });
             }
+
         ])
 });

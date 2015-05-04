@@ -8,6 +8,7 @@ REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.PreferenceService');
 REQUIRE('chlk.services.AnnouncementService');
 REQUIRE('chlk.services.TeacherCommentService');
+REQUIRE('chlk.services.GradingService');
 
 REQUIRE('chlk.activities.setup.HelloPage');
 REQUIRE('chlk.activities.setup.VideoPage');
@@ -24,6 +25,7 @@ REQUIRE('chlk.models.setup.TeacherSettings');
 REQUIRE('chlk.models.grading.Final');
 REQUIRE('chlk.models.settings.Preference');
 REQUIRE('chlk.models.grading.AnnouncementTypeFinal');
+REQUIRE('chlk.models.grading.GradingScale');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -41,6 +43,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.TeacherCommentService, 'teacherCommentService',
+
+            [ria.mvc.Inject],
+            chlk.services.GradingService, 'gradingService',
 
             [ria.mvc.Inject],
             chlk.services.FinalGradeService, 'finalGradeService',
