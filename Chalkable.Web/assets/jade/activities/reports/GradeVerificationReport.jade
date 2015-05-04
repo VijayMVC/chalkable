@@ -7,6 +7,7 @@
       .x-window-body
          .action-bar: .items: +ActionLinkList(self.buildReportLinksData('gradeVerificationReport'))
          +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+         +Hidden('gradingPeriod', self.getGradingPeriodId().valueOf())
          +Hidden('classId', self.getClassId().valueOf())
          +Hidden('studentIds', '')#student-ids-value
          +Hidden('studentAverageIds', '')#student-averages-ids
@@ -16,9 +17,9 @@
                TR
                   TD.item-3
                      h3=Msg.Grading_Period
-                     +Select('gradingPeriod')(multiple)#grading-period-select
+                     +Select('gradingPeriod1')(multiple, disabled = 'disabled')#grading-period-select
                         each gp in self.getGradingPeriods()
-                           +Option(gp.getId().valueOf(), gp.getName(), true)
+                           +Option(gp.getId().valueOf(), gp.getName(), gp.getId() == self.getGradingPeriodId())
                   TD.item-3
                      h3=Msg.Graded_Item(true)
                      +Select('studentAverage')(multiple)#student-averages-select
