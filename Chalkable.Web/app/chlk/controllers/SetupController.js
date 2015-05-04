@@ -328,16 +328,19 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.grading.ClassroomOptionViewData]],
             function submitClassroomOptionAction(model){
-                var res = this.classroomOptionService.updateClassroomOption(model.getClassId(), model.getAveragingMethod(),
-                    model.getCategoryAveraging(), model.isIncludeWithdrawnStudents(), model.isDisplayStudentAverage(),
-                    model.isDisplayTotalPoints(), model.isRoundDisplayedAverages(), model.isDisplayAlphaGrade(), model.getStandardsGradingScaleId(),
-                    model.getStandardsCalculationMethod(), model.getStandardsCalculationRule(), model.isStandardsCalculationWeightMaximumValues())
+                var res = ria.async.wait([
+                        this.classroomOptionService.updateClassroomOption(model.getClassId(), model.getAveragingMethod(),
+                            model.isCategoryAveraging(), model.isIncludeWithdrawnStudents(), model.isDisplayStudentAverage(),
+                            model.isDisplayTotalPoints(), model.isRoundDisplayedAverages(), model.isDisplayAlphaGrade(), model.getStandardsGradingScaleId(),
+                            model.getStandardsCalculationMethod(), model.getStandardsCalculationRule(), model.isStandardsCalculationWeightMaximumValues()),
+                        this.gradingService.getGradingScales()
+                    ])
                     .attach(this.validateResponse_())
-                    .then(function(options){
+                    .then(function(data){
                         var topData = new chlk.models.classes.ClassesForTopBar(null, model.getClassId());
-                        return new chlk.models.setup.ClassroomOptionSetupViewData(topData, [], options);
+                        return new chlk.models.setup.ClassroomOptionSetupViewData(topData, data[1], data[0]);
                     });
-                return this.PushOrUpdateView(chlk.activities.setup.ClassroomOptionSetupPage, res);
+                return this.UpdateView(chlk.activities.setup.ClassroomOptionSetupPage, res);
             }
         ])
 });

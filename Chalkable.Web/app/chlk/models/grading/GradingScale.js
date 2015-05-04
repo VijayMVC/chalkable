@@ -1,11 +1,11 @@
-REQUIRE('chlk.models.id.GradingScaleId');
+REQUIRE('chlk.models.id.StandardsGradingScaleId');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
 
     /** @class chlk.models.grading.GradingScale*/
     CLASS('GradingScale', [
-        chlk.models.id.GradingScaleId, 'id',
+        chlk.models.id.StandardsGradingScaleId, 'id',
         String, 'name',
         String, 'description',
         [ria.serialize.SerializeProperty('homegradetodisplay')],

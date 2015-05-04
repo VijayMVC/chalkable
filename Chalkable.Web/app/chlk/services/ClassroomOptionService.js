@@ -22,14 +22,14 @@ NAMESPACE('chlk.services', function () {
                 standardsCalculationMethod_, standardsCalculationRule_, standardsCalculationWeightMaximumValues_) {
                 return this.get('ClassroomOption/Update.json', chlk.models.grading.ClassroomOptionViewData, {
                     classId : classId.valueOf(),
-                    averagingMethod : averagingMethod,
+                    averagingMethod : averagingMethod.replace(' ', ''),
                     categoryAveraging: categoryAveraging_,
                     includeWithdrawnStudents: includeWithdrawnStudents_,
                     displayStudentAverage: displayStudentAverage_,
                     displayTotalPoints: displayTotalPoints_,
                     roundDisplayedAverages: roundDisplayedAverages_,
                     displayAlphaGrade: displayAlphaGrade_,
-                    standardsGradingScaleId: standardsGradingScaleId_,
+                    standardsGradingScaleId: standardsGradingScaleId_ && standardsGradingScaleId_.valueOf(),
                     standardsCalculationMethod: standardsCalculationMethod_,
                     standardsCalculationRule: standardsCalculationRule_,
                     standardsCalculationWeightMaximumValues: standardsCalculationWeightMaximumValues_

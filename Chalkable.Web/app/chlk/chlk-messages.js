@@ -427,6 +427,7 @@ var Msg = {
     GOT_IT: 'Got It',
     GPA: 'GPA',
     GradeLevel: 'GradeLevel',
+    Grade_book: 'Grade book',
     Grade_Book_Report: 'Grade Book Report',
     Grade_Level: 'Grade Level',
     Grade_manually: 'Grade manually',
@@ -597,6 +598,9 @@ var Msg = {
         return 'Step ' + a + ' of ' + b;
     },
     Standard_Calculate_Weight_Maximum_Values: 'Standard calculate weight maximum values',
+    Standards_calculate_method: 'Standards calculate method',
+    Standards_calculate_rule: 'Standards calculate rule',
+    Standards_scale: 'Standards scale',
     Start_by_creating_a_grid: 'Start by creating a grid',
     Start_date: 'Start date',
     State_ID_number: 'State ID number',

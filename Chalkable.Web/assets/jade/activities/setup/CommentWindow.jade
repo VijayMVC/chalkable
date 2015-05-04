@@ -2,7 +2,7 @@
    +ActionForm('setup', 'submitComment').comment-form.no-working.report-form
       .x-window-header
          .close.close-btn.dark
-         h1=self.getCommentId() ? Msg.Edit_comment + ': ' + self.getName() : Msg.Create_comment
+         h1=self.getCommentId() ? Msg.Edit_comment + ': ' + self.getComment() : Msg.Create_comment
 
       .x-window-body
          +Hidden('commentid', self.getCommentId() && self.getCommentId().valueOf())
