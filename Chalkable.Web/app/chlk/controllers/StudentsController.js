@@ -333,6 +333,17 @@ NAMESPACE('chlk.controllers', function (){
                         )
                     }, this);
                 return this.PushView(chlk.activities.student.StudentProfileExplorerPage, res);
-            }
+            },
+
+            [[chlk.models.id.SchoolPersonId]],
+            function appsAction(personId){
+                var res = this.studentService
+                    .getAppsInfo(personId, 0 , 10000)
+                    .attach(this.validateResponse_())
+                    .then(function(model){
+                        return new chlk.models.people.UserProfileAppsViewData(this.getCurrentRole(), model);
+                    }, this);
+                return this.PushView(chlk.activities.profile.SchoolPersonAppsPage, res);
+            },
         ])
 });

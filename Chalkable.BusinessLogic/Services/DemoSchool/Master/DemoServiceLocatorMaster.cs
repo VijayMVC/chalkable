@@ -1,5 +1,4 @@
 ﻿using System;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
@@ -30,20 +29,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         private IUserTrackingService userTrackingService;
         private ICommonCoreStandardService commonCoreStandardService;
 
-        public DemoServiceLocatorMaster(UserContext context, DemoStorage storage)
+        public DemoServiceLocatorMaster(UserContext context)
             : base(context)
         {
-            userService = new DemoUserService(this, storage);
-            schoolService = new DemoSchoolService(this, storage);
-            chalkableDepartmentService = new DemoChalkableDepartmentService(this, storage);
-            categoryService = new DemoCategoryService(this, storage);
-            developerService = new DemoDeveloperService(this, storage);
-            districtService = new DemoDistrictService(this, storage);
-            emailService = new DemoEmailService(this, storage);
-            fundService = new DemoFundService(this, storage);
+            userService = new DemoUserService(this);
+            schoolService = new DemoSchoolService(this);
+            chalkableDepartmentService = new DemoChalkableDepartmentService(this);
+            categoryService = new DemoCategoryService(this);
+            developerService = new DemoDeveloperService(this);
+            districtService = new DemoDistrictService(this);
+            emailService = new DemoEmailService(this);
+            fundService = new DemoFundService(this);
             backgroundTaskService = new DemoBackgroundTaskService(this);
-            applicationService = new DemoApplicationService(this, storage);
-            applicationUploadService = new DemoApplicationUploadService(this, storage);
+            applicationService = new DemoApplicationService(this);
+            applicationUploadService = new DemoApplicationUploadService(this);
 
             preferenceService = new PreferenceService(this);
             personPictureService = new PersonPictureService(this);
@@ -54,6 +53,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             commonCoreStandardService = new CommonCoreStandardService(this);
             dbService = new DbService(Context != null ? Context.MasterConnectionString : null);
             userTrackingService = new NullTrackingService();
+        }
+
+
+        public void Update(UserContext context)
+        {
+            Context = context;
         }
 
         public IServiceLocatorSchool SchoolServiceLocator(Guid districtId, int? schoolLocalId)

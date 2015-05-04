@@ -52,6 +52,12 @@ NAMESPACE('chlk.templates.student', function(){
                 return 'red';
             },
 
+            String, function showNoClassesMsg(){
+                if(this.getUserRole().isTeacher())
+                    return 'No teacher classes yet';
+                return 'No classes yet';
+            },
+
             [[chlk.models.student.StudentClassExplorer]],
             Boolean, function showMoreButton(item){
                 return ((item.getAnnouncement() ? 1 : 0) + item.getStandards().length) > 4

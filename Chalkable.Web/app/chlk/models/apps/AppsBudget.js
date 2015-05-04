@@ -8,6 +8,7 @@ NAMESPACE('chlk.models.apps', function(){
 
         Number, 'balance',
         Number, 'reserve',
+        Number, 'installedAppsCount',
 
         [ria.serialize.SerializeProperty('installedapplications')],
         ArrayOf(chlk.models.apps.InstalledApp), 'installedApps'

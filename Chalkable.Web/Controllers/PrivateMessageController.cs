@@ -27,7 +27,7 @@ namespace Chalkable.Web.Controllers
             return Json(PrivateMessageViewData.Create(res));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_PRIVATE_MESSAGES_SEND, true, CallType.Get, new[] { AppPermissionType.Message })]
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Message })]
         public ActionResult Send(int personId, string subject, string body)
         {
             var res = SchoolLocator.PrivateMessageService.SendMessage(personId, subject, body);

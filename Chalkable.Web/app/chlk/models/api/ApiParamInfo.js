@@ -8,6 +8,7 @@ NAMESPACE('chlk.models.api', function () {
         'ApiParamInfo', [
             String, 'name',
             String, 'description',
+            String, 'value',
 
             [ria.serialize.SerializeProperty('isnullable')],
             Boolean, 'optional',

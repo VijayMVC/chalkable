@@ -1,46 +1,81 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
+using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
-    //TODO: implementation
+    public class DemoGradingScaleStorage : BaseDemoIntStorage<GradingScale>
+    {
+        public DemoGradingScaleStorage()
+            : base(x => x.Id)
+        {
+        }
+    }
+
+    public class DemoGradingScaleRangeStorage : BaseDemoIntStorage<GradingScaleRange>
+    {
+        public DemoGradingScaleRangeStorage()
+            : base(null, true)
+        {
+        }
+    }
+
     public class DemoGradingScaleService : DemoSchoolServiceBase, IGradingScaleService
     {
-        public DemoGradingScaleService(IServiceLocatorSchool serviceLocator, DemoStorage demoStorage) : base(serviceLocator, demoStorage)
+        private DemoGradingScaleStorage GradingScaleStorage { get; set; }
+        private DemoGradingScaleRangeStorage GradingScaleRangeStorage { get; set; }
+        public DemoGradingScaleService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+            GradingScaleStorage = new DemoGradingScaleStorage();
+            GradingScaleRangeStorage = new DemoGradingScaleRangeStorage();
         }
 
         public void AddGradingScales(IList<GradingScale> gradingScales)
         {
-            Storage.GradingScaleStorage.Add(gradingScales);
+            GradingScaleStorage.Add(gradingScales);
         }
 
         public void EditGradingScales(IList<GradingScale> gradingScales)
         {
-            Storage.GradingScaleStorage.Update(gradingScales);
+            GradingScaleStorage.Update(gradingScales);
         }
 
         public void DeleteGradingScales(IList<GradingScale> gradingScales)
         {
-            Storage.GradingScaleStorage.Delete(gradingScales);
+            GradingScaleStorage.Delete(gradingScales);
         }
 
         public void AddGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges)
         {
-            Storage.GradingScaleRangeStorage.Add(gradingScaleRanges);
+            GradingScaleRangeStorage.Add(gradingScaleRanges);
         }
 
         public void EditGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges)
         {
-            Storage.GradingScaleRangeStorage.Update(gradingScaleRanges);
+            GradingScaleRangeStorage.Update(gradingScaleRanges);
         }
 
         public void DeleteGradingScaleRanges(IList<GradingScaleRange> gradingScaleRanges)
         {
-            Storage.GradingScaleRangeStorage.Delete(gradingScaleRanges);
+            GradingScaleRangeStorage.Delete(gradingScaleRanges);
+        }
+
+        public IList<GradingScale> GetGradingScales(bool onlyAppliedToAlphaGrades = true)
+        {
+            var res = GradingScaleStorage.GetAll();
+            if (onlyAppliedToAlphaGrades)
+            {
+                var gradingScalesRange = GradingScaleRangeStorage.GetAll();
+                res = res.Where(x => gradingScalesRange.Any(y => y.GradingScaleRef == x.Id)).ToList();
+            }
+            return res;
+        }
+
+        public GradingScaleRange GetByAlphaGradeId(int alphaGradeId)
+        {
+             return GradingScaleRangeStorage.GetAll().FirstOrDefault(x => x.AlphaGradeRef == alphaGradeId);
         }
     }
 }

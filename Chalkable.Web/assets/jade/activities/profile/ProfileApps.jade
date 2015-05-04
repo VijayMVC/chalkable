@@ -7,7 +7,7 @@ mixin CounterBox(title, value, editable, controller, action)
 mixin AppIcon(app, chlkTplObj)
     .app-list-item
         .icon
-            -var appPictureUrl = self.getPictureURL(app.getBigPictureId(), 170, 110)
+            -var appPictureUrl = chlkTplObj.getPictureURL(app.getBigPictureId(), 170, 110)
             +LoadingImage(src=appPictureUrl)
         .description
             .name=app.getName()
@@ -21,6 +21,6 @@ mixin AppsBudgetPanel(appsBudget, chlkTplObj)
     .apps-budget-info
         h2
             .budget-info
-                +CounterBox('Balance', appsBudget.getBalance(), true)
-                +CounterBox('School reserve', appsBudget.getReserve(), true)
+                +CounterBox('Balance', appsBudget.getBalance() || 0, true)
+                +CounterBox('School reserve', appsBudget.getReserve() || 0, true)
         +AppsList(appsBudget.getInstalledApps(), chlkTplObj)

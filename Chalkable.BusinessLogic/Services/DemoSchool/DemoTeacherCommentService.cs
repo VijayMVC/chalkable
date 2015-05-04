@@ -1,20 +1,29 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
+    public class TeacherCommentStorage : BaseDemoIntStorage<TeacherComment>
+    {
+        public TeacherCommentStorage() : base(x=>x.CommentId, true)
+        {
+        }
+    }
+
     public class DemoTeacherCommentService : DemoSchoolServiceBase, ITeacherCommentService
     {
-        public DemoTeacherCommentService(IServiceLocatorSchool serviceLocator, DemoStorage demoStorage) : base(serviceLocator, demoStorage)
+        private TeacherCommentStorage TeacherCommentStorage { get; set; }
+
+        public DemoTeacherCommentService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+            TeacherCommentStorage = new TeacherCommentStorage();
         }
 
         public TeacherComment AddComment(int teacherId, string comment)
         {
-           return Storage.TeacherCommentStorage.Add(new TeacherComment
+           return TeacherCommentStorage.Add(new TeacherComment
                 {
                     Comment = comment,
                     TeacherId = teacherId,
@@ -23,13 +32,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public TeacherComment EditComment(int commentId, int teacherId, string comment)
         {
-            Storage.TeacherCommentStorage.Update(new TeacherComment
+            TeacherCommentStorage.Update(new TeacherComment
             {
                 CommentId = commentId,
                 Comment = comment,
                 TeacherId = teacherId,
             });
-            return Storage.TeacherCommentStorage.GetById(commentId);
+            return TeacherCommentStorage.GetById(commentId);
         }
 
         public void DeleteComment(int commentId, int teacherId)
@@ -41,13 +50,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             foreach (var commentId in commentsIds)
             {
-                Storage.TeacherCommentStorage.Delete(commentId);
+                TeacherCommentStorage.Delete(commentId);
             }
         }
 
         public IList<TeacherComment> GetComments(int teacherId)
         {
-            return Storage.TeacherCommentStorage.GetAll().Where(x => x.TeacherId == teacherId).ToList();
+            return TeacherCommentStorage.GetAll().Where(x => x.TeacherId == teacherId).ToList();
         }
     }
 }

@@ -45,21 +45,18 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<Class> classes)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                var da = new ClassDataAccess(uow);
-                da.Insert(classes);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureDistrict(Context);
+            DoUpdate(u => new ClassDataAccess(u).Insert(classes));
+        }
+        public void Edit(IList<Class> classes)
+        {
+            BaseSecurity.EnsureDistrict(Context);
+            DoUpdate(u => new ClassDataAccess(u).Update(classes));
         }
         
         public void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
+            BaseSecurity.EnsureDistrict(Context);
             using (var uow = Update())
             {
                 var mpClassDa = new MarkingPeriodClassDataAccess(uow);
@@ -67,55 +64,23 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
             }
         }
-
-        public void Edit(IList<Class> classes)
-        {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-         
-            using (var uow = Update())
-            {
-
-                new ClassDataAccess(uow).Update(classes);
-                uow.Commit();
-            }
-        }
-
+        
         public void AddStudents(IList<ClassPerson> classPersons)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                var classPersonDa = new ClassPersonDataAccess(uow);
-                classPersonDa.Insert(classPersons);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureDistrict(Context);
+            DoUpdate(u => new ClassPersonDataAccess(u).Insert(classPersons));
         }
 
         public void EditStudents(IList<ClassPerson> classPersons)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-
-            using (var uow = Update())
-            {
-                var classPersonDa = new ClassPersonDataAccess(uow);
-                classPersonDa.Update(classPersons);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureDistrict(Context);
+            DoUpdate(u => new ClassPersonDataAccess(u).Update(classPersons));
         }
 
         public void DeleteStudent(IList<ClassPerson> classPersons)
         {
-            if (!BaseSecurity.IsDistrict(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new ClassPersonDataAccess(uow).Delete(classPersons);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureDistrict(Context);
+            DoUpdate(u => new ClassPersonDataAccess(u).Delete(classPersons));
         }
 
         public IList<ClassDetails> GetTeacherClasses(int schoolYearId, int teacherId, int? markingPeriodId = null)
@@ -155,13 +120,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<Class> GetAll()
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Read())
-            {
-                return new ClassDataAccess(uow)
-                    .GetAll();
-            } 
+            BaseSecurity.EnsureSysAdmin(Context);
+            return DoRead(u => new ClassDataAccess(u).GetAll());
         }
         
         public void Delete(IList<Class> classes)
@@ -171,57 +131,32 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new MarkingPeriodClassDataAccess(uow).Delete(markingPeriodClasses);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u=> new MarkingPeriodClassDataAccess(u).Delete(markingPeriodClasses));
         }
 
         public void AddTeachers(IList<ClassTeacher> classTeachers)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new ClassTeacherDataAccess(uow).Insert(classTeachers);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new ClassTeacherDataAccess(u).Insert(classTeachers));
         }
 
         public void EditTeachers(IList<ClassTeacher> classTeachers)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new ClassTeacherDataAccess(uow).Update(classTeachers);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new ClassTeacherDataAccess(u).Update(classTeachers));
         }
 
         public void DeleteTeachers(IList<ClassTeacher> classTeachers)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new ClassTeacherDataAccess(uow).Delete(classTeachers);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new ClassTeacherDataAccess(u).Delete(classTeachers));
         }
-
 
         public IList<ClassTeacher> GetClassTeachers(int? classId, int? teacherId)
         {
-            using (var uow = Read())
-            {
-                return new ClassTeacherDataAccess(uow).GetClassTeachers(classId, teacherId);
-            }
+            return DoRead(u => new ClassTeacherDataAccess(u).GetClassTeachers(classId, teacherId));
         }
-
 
         public IList<ClassPerson> GetClassPersons(int personId, bool? isEnrolled)
         {

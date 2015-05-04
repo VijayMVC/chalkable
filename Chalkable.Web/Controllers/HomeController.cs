@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
+using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.Common;
@@ -118,8 +118,8 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.IS_DEMO_DISTRICT] = true;
             if (Context.DistrictId.HasValue)
             {
-                var district = DemoDistrictStorage.CreateDemoDistrict(Context.DistrictId.Value);
-                var school = DemoMasterSchoolStorage.CreateMasterSchool(Context.DistrictId.Value);
+                var district = DemoDistrictService.CreateDemoDistrict(Context.DistrictId.Value);
+                var school = DemoSchoolService.CreateMasterSchool(Context.DistrictId.Value);
                 school.District = district;
                 PrepareJsonData(ShortSchoolViewData.Create(school), ViewConstants.SCHOOL);
             }

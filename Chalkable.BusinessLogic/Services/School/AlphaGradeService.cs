@@ -10,6 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void AddAlphaGrades(IList<AlphaGrade> alphaGrades);
         void EditAlphaGrades(IList<AlphaGrade> alphaGrades);
         void Delete(IList<AlphaGrade> alphaGrades);
+        IList<AlphaGrade> GetAlphaGrades();
     }
 
     public class AlphaGradeService : SchoolServiceBase, IAlphaGradeService
@@ -28,6 +29,11 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(u => new DataAccessBase<AlphaGrade>(u).Delete(alphaGrades));
+        }
+
+        public IList<AlphaGrade> GetAlphaGrades()
+        {
+            throw new System.NotImplementedException();
         }
 
         public void EditAlphaGrades(IList<AlphaGrade> alphaGrades)

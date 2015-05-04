@@ -31,19 +31,17 @@ namespace Chalkable.Data.School.DataAccess
 
         public Phone GetPhone(int personId, string digitOnlyValue)
         {
-            var conds = new AndQueryCondition();
-            conds.Add(Phone.PERSON_REF_FIELD, personId);
-            conds.Add(Phone.DIGIT_ONLY_VALUE_FIELD, digitOnlyValue);
+            var conds = new AndQueryCondition
+                {
+                    {Phone.PERSON_REF_FIELD, personId},
+                    {Phone.DIGIT_ONLY_VALUE_FIELD, digitOnlyValue}
+                };
             return GetAll(conds).First();
         }
 
         public void Delete(Phone phone)
         {
             SimpleDelete(phone);
-        }
-        public void Delete(IList<Phone> phones)
-        {
-            SimpleDelete(phones);
         }
     }
 }

@@ -58,17 +58,16 @@ namespace Chalkable.Web.Models.AttendancesViewData
             return res;
         }
 
-        public static IList<StudentClassAttendanceOldViewData> Create(ClassAttendanceDetails attendance, IList<AttendanceReason> attendanceReasones = null)
+        public static IList<StudentClassAttendanceOldViewData> Create(ClassAttendanceDetails attendance, IList<AttendanceReason> attendanceReasons = null)
         {
             var res = new List<StudentClassAttendanceOldViewData>();
             if (attendance != null && attendance.StudentAttendances.Count > 0)
             {
                 foreach (var studentAtt in attendance.StudentAttendances)
                 {
-                    AttendanceReason reason;
-                    if (attendanceReasones != null && attendanceReasones.Count > 0 && studentAtt.AttendanceReasonId.HasValue)
-                        reason = attendanceReasones.First(x => x.Id == studentAtt.AttendanceReasonId);
-                    else reason = null;
+                    AttendanceReason reason = null;
+                    if (attendanceReasons != null && attendanceReasons.Count > 0 && studentAtt.AttendanceReasonId.HasValue)
+                        reason = attendanceReasons.FirstOrDefault(x => x.Id == studentAtt.AttendanceReasonId);
                     res.Add(Create(attendance, studentAtt, reason));
                 }    
             }

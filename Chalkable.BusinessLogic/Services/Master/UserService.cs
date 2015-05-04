@@ -8,9 +8,9 @@ using System.Text;
 using System.Web;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.DemoSchool;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -248,13 +248,10 @@ namespace Chalkable.BusinessLogic.Services.Master
             Guid? developerId = null;
             var developer = new DeveloperDataAccess(uow).GetDeveloper(user.District.Id);
             if (developer != null) developerId = developer.Id;
-            SchoolUser schoolUser;
-            Data.School.Model.SchoolYear schoolYear;
-            var schoolL = ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers[0]);
-            PrepareSchoolData(schoolL, user, schoolYearId, null, out schoolYear, out schoolUser);
-
+            var schoolUser = user.SchoolUsers.First();
+            var schoolYear = DemoSchoolYearService.GetDemoSchoolYear();
             int roleId;
-            int personId = DemoPersonStorage.GetPersonDataForLogin(schoolUser.User, out roleId);
+            var personId = DemoPersonService.GetPersonDataForLogin(schoolUser.User, out roleId);
             var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, developerId, personId, schoolYear)
             {
                 Claims = ClaimInfo.Create(DemoUserService.GetDemoClaims())
@@ -279,7 +276,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             var user = developer.User;
             user.DistrictRef = developer.DistrictRef;
             user.LoginInfo = new UserLoginInfo {Id = user.Id};
-            user.District = DemoDistrictStorage.CreateDemoDistrict(developer.DistrictRef.Value);
+            user.District = DemoDistrictService.CreateDemoDistrict(developer.DistrictRef.Value);
             return new UserContext(user, CoreRoles.DEVELOPER_ROLE, user.District, null, developer.Id, null);
         }
 
@@ -346,32 +343,17 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public User GetById(Guid id)
         {
-            using (var uow = Read())
-            {
-                var da = new UserDataAccess(uow);
-                var res = da.GetUser(null, null, id);
-                return res;
-            }
+            return DoRead(u => new UserDataAccess(u).GetUser(null, null, id));
         }
 
         public void AddSchoolUsers(IList<SchoolUser> schoolUsers)
         {
-            using (var uow = Update())
-            {
-                var schoolUserDa = new SchoolUserDataAccess(uow);
-                schoolUserDa.Insert(schoolUsers);
-                uow.Commit();
-            }
+            DoUpdate(u => new DataAccessBase<SchoolUser, Guid>(u).Insert(schoolUsers));
         }
 
         public void DeleteSchoolUsers(IList<SchoolUser> schoolUsers)
         {
-            using (var uow = Update())
-            {
-                var schoolUserDa = new SchoolUserDataAccess(uow);
-                schoolUserDa.Delete(schoolUsers);
-                uow.Commit();
-            }
+            DoUpdate(u => new DataAccessBase<SchoolUser, Guid>(u).Delete(schoolUsers));
         }
 
         public void ChangePassword(string login, string newPassword)
@@ -428,19 +410,14 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-
         public User GetSysAdmin()
         {
-            using (var uow = Read())
-            {
-                return new UserDataAccess(uow).GetSysAdmin();
-            }
+            return DoRead(u => new UserDataAccess(u).GetSysAdmin());
         }
 
         public void DeleteUsers(IList<int> localIds, Guid districtId)
         {
-            if(!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
+            BaseSecurity.EnsureSysAdmin(Context);
             using (var uow = Update())
             {
                 new UserDataAccess(uow).Delete(localIds, districtId);
