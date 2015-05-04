@@ -62,6 +62,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             GradingScaleRangeStorage.Delete(gradingScaleRanges);
         }
 
+        public IList<GradingScale> GetGradingScales(bool onlyAppliedToAlphaGrades = true)
+        {
+            var res = GradingScaleStorage.GetAll();
+            if (onlyAppliedToAlphaGrades)
+            {
+                var gradingScalesRange = GradingScaleRangeStorage.GetAll();
+                res = res.Where(x => gradingScalesRange.Any(y => y.GradingScaleRef == x.Id)).ToList();
+            }
+            return res;
+        }
+
         public GradingScaleRange GetByAlphaGradeId(int alphaGradeId)
         {
              return GradingScaleRangeStorage.GetAll().FirstOrDefault(x => x.AlphaGradeRef == alphaGradeId);
