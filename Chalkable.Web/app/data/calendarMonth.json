@@ -1,0 +1,839 @@
+{"data": [
+    {
+        "day": 30,
+        "iscurrentmonth": false,
+        "issunday": true,
+        "date": "2013-06-30",
+        "schedulesection": null,
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 1,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-01",
+        "schedulesection": {
+            "id": 269046,
+            "markingperiodid": 3386,
+            "name": "Friday",
+            "number": 5
+        },
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 2,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-02",
+        "schedulesection": {
+            "id": 269122,
+            "markingperiodid": 3386,
+            "name": "Satureday",
+            "number": 6
+        },
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 3,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-03",
+        "schedulesection": {
+            "id": 268666,
+            "markingperiodid": 3386,
+            "name": "Sunday",
+            "number": 0
+        },
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 4,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-04",
+        "schedulesection": {
+            "id": 268742,
+            "markingperiodid": 3386,
+            "name": "Monday",
+            "number": 1
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102185,
+                "title": "Subject",
+                "typeid": 2,
+                "typename": "HW",
+                "author": "Bryan Fisher",
+                "classname": "English 9A",
+                "classid": 104230,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 5,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-05",
+        "schedulesection": {
+            "id": 268818,
+            "markingperiodid": 3386,
+            "name": "Tuesday",
+            "number": 2
+        },
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 6,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-06",
+        "schedulesection": null,
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 7,
+        "iscurrentmonth": true,
+        "issunday": true,
+        "date": "2013-07-07",
+        "schedulesection": null,
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 8,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-08",
+        "schedulesection": {
+            "id": 268894,
+            "markingperiodid": 3386,
+            "name": "Wednesday",
+            "number": 3
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 101584,
+                "title": "Subject",
+                "typeid": 8,
+                "typename": "Midterm",
+                "author": "Bryan Fisher",
+                "classname": "Spanish 10A",
+                "classid": 104251,
+                "courseid": 1187083
+            }
+        ]
+    },
+    {
+        "day": 9,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-09",
+        "schedulesection": {
+            "id": 268970,
+            "markingperiodid": 3386,
+            "name": "Thursday",
+            "number": 4
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102095,
+                "title": "Subject",
+                "typeid": 8,
+                "typename": "Midterm",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 10,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-10",
+        "schedulesection": {
+            "id": 269046,
+            "markingperiodid": 3386,
+            "name": "Friday",
+            "number": 5
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102127,
+                "title": "Subject",
+                "typeid": 5,
+                "typename": "Test",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 11,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-11",
+        "schedulesection": {
+            "id": 269122,
+            "markingperiodid": 3386,
+            "name": "Satureday",
+            "number": 6
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102173,
+                "title": "Subject",
+                "typeid": 5,
+                "typename": "Test",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 12,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-12",
+        "schedulesection": {
+            "id": 268666,
+            "markingperiodid": 3386,
+            "name": "Sunday",
+            "number": 0
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102182,
+                "title": "Subject",
+                "typeid": 5,
+                "typename": "Test",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            },
+            {
+                "id": 102176,
+                "title": "Subject",
+                "typeid": 5,
+                "typename": "Test",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            },
+            {
+                "id": 102172,
+                "title": "Subject",
+                "typeid": 5,
+                "typename": "Test",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            },
+            {
+                "id": 102171,
+                "title": "Subject",
+                "typeid": 5,
+                "typename": "Test",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            },
+            {
+                "id": 102170,
+                "title": "Subject",
+                "typeid": 5,
+                "typename": "Test",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            },
+            {
+                "id": 102169,
+                "title": "Subject",
+                "typeid": 5,
+                "typename": "Test",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            },
+            {
+                "id": 102168,
+                "title": "Subject",
+                "typeid": 5,
+                "typename": "Test",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            },
+            {
+                "id": 102166,
+                "title": "Subject",
+                "typeid": 5,
+                "typename": "Test",
+                "author": "Bryan Fisher",
+                "classname": "English 9A",
+                "classid": 104230,
+                "courseid": 1187079
+            },
+            {
+                "id": 102165,
+                "title": "Subject",
+                "typeid": 4,
+                "typename": "Quiz",
+                "author": "Bryan Fisher",
+                "classname": "English 9A",
+                "classid": 104230,
+                "courseid": 1187079
+            },
+            {
+                "id": 102164,
+                "title": "Subject",
+                "typeid": 2,
+                "typename": "HW",
+                "author": "Bryan Fisher",
+                "classname": "English 9A",
+                "classid": 104230,
+                "courseid": 1187079
+            },
+            {
+                "id": 102163,
+                "title": "Subject",
+                "typeid": 2,
+                "typename": "HW",
+                "author": "Bryan Fisher",
+                "classname": "English 9A",
+                "classid": 104230,
+                "courseid": 1187079
+            },
+            {
+                "id": 102162,
+                "title": "Subject",
+                "typeid": 3,
+                "typename": "Essay",
+                "author": "Bryan Fisher",
+                "classname": "English 9A",
+                "classid": 104230,
+                "courseid": 1187079
+            },
+            {
+                "id": 102160,
+                "title": "Subject",
+                "typeid": 8,
+                "typename": "Midterm",
+                "author": "Bryan Fisher",
+                "classname": "English 9A",
+                "classid": 104230,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 13,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-13",
+        "schedulesection": null,
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 14,
+        "iscurrentmonth": true,
+        "issunday": true,
+        "date": "2013-07-14",
+        "schedulesection": null,
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 15,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-15",
+        "schedulesection": {
+            "id": 269046,
+            "markingperiodid": 3386,
+            "name": "Friday",
+            "number": 5
+        },
+        "announcements": [
+            {
+                "id": 102195,
+                "title": "15-7-2013",
+                "typeid": 11,
+                "typename": "Admin",
+                "author": "Roderick Eckhardt",
+                "classname": null,
+                "classid": null,
+                "courseid": null
+            },
+            {
+                "id": 102193,
+                "title": "15-7-2013",
+                "typeid": 1,
+                "typename": "Announcement",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            }
+        ],
+        "items": [
+            {
+                "id": 102207,
+                "title": "Subject",
+                "typeid": 7,
+                "typename": "Final",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            },
+            {
+                "id": 102206,
+                "title": "Subject",
+                "typeid": 7,
+                "typename": "Final",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            },
+            {
+                "id": 102202,
+                "title": "Subject",
+                "typeid": 7,
+                "typename": "Final",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 16,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-16",
+        "schedulesection": {
+            "id": 268818,
+            "markingperiodid": 3386,
+            "name": "Tuesday",
+            "number": 2
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102330,
+                "title": "Subject",
+                "typeid": 8,
+                "typename": "Midterm",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 17,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-17",
+        "schedulesection": {
+            "id": 268894,
+            "markingperiodid": 3386,
+            "name": "Wednesday",
+            "number": 3
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102332,
+                "title": "Subject",
+                "typeid": 6,
+                "typename": "Project",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            },
+            {
+                "id": 102209,
+                "title": "Subject",
+                "typeid": 7,
+                "typename": "Final",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 18,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-18",
+        "schedulesection": {
+            "id": 268970,
+            "markingperiodid": 3386,
+            "name": "Thursday",
+            "number": 4
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102339,
+                "title": "Subject",
+                "typeid": 7,
+                "typename": "Final",
+                "author": "Bryan Fisher",
+                "classname": "AP English",
+                "classid": 104233,
+                "courseid": 1187079
+            },
+            {
+                "id": 102337,
+                "title": "Subject",
+                "typeid": 7,
+                "typename": "Final",
+                "author": "Bryan Fisher",
+                "classname": "AP English",
+                "classid": 104233,
+                "courseid": 1187079
+            },
+            {
+                "id": 102336,
+                "title": "Subject",
+                "typeid": 7,
+                "typename": "Final",
+                "author": "Bryan Fisher",
+                "classname": "AP English",
+                "classid": 104233,
+                "courseid": 1187079
+            },
+            {
+                "id": 102335,
+                "title": "Subject",
+                "typeid": 7,
+                "typename": "Final",
+                "author": "Bryan Fisher",
+                "classname": "AP English",
+                "classid": 104233,
+                "courseid": 1187079
+            },
+            {
+                "id": 102334,
+                "title": "Subject",
+                "typeid": 7,
+                "typename": "Final",
+                "author": "Bryan Fisher",
+                "classname": "AP English",
+                "classid": 104233,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 19,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-19",
+        "schedulesection": {
+            "id": 269046,
+            "markingperiodid": 3386,
+            "name": "Friday",
+            "number": 5
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102333,
+                "title": "Subject",
+                "typeid": 6,
+                "typename": "Project",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            },
+            {
+                "id": 102184,
+                "title": "Subject",
+                "typeid": 5,
+                "typename": "Test",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 20,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-20",
+        "schedulesection": null,
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 21,
+        "iscurrentmonth": true,
+        "issunday": true,
+        "date": "2013-07-21",
+        "schedulesection": null,
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 22,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-22",
+        "schedulesection": {
+            "id": 269122,
+            "markingperiodid": 3386,
+            "name": "Satureday",
+            "number": 6
+        },
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 23,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-23",
+        "schedulesection": {
+            "id": 268666,
+            "markingperiodid": 3386,
+            "name": "Sunday",
+            "number": 0
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102343,
+                "title": "Subject",
+                "typeid": 7,
+                "typename": "Final",
+                "author": "Bryan Fisher",
+                "classname": "AP English",
+                "classid": 104233,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 24,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-24",
+        "schedulesection": {
+            "id": 268742,
+            "markingperiodid": 3386,
+            "name": "Monday",
+            "number": 1
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102342,
+                "title": "Subject",
+                "typeid": 7,
+                "typename": "Final",
+                "author": "Bryan Fisher",
+                "classname": "AP English",
+                "classid": 104233,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 25,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-25",
+        "schedulesection": {
+            "id": 268818,
+            "markingperiodid": 3386,
+            "name": "Tuesday",
+            "number": 2
+        },
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 26,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-26",
+        "schedulesection": {
+            "id": 268894,
+            "markingperiodid": 3386,
+            "name": "Wednesday",
+            "number": 3
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102183,
+                "title": "Subject",
+                "typeid": 6,
+                "typename": "Project",
+                "author": "Bryan Fisher",
+                "classname": "English 10",
+                "classid": 104231,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 27,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-27",
+        "schedulesection": null,
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 28,
+        "iscurrentmonth": true,
+        "issunday": true,
+        "date": "2013-07-28",
+        "schedulesection": null,
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 29,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-29",
+        "schedulesection": {
+            "id": 268970,
+            "markingperiodid": 3386,
+            "name": "Thursday",
+            "number": 4
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102341,
+                "title": "Subject",
+                "typeid": 7,
+                "typename": "Final",
+                "author": "Bryan Fisher",
+                "classname": "AP English",
+                "classid": 104233,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 30,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-30",
+        "schedulesection": {
+            "id": 269046,
+            "markingperiodid": 3386,
+            "name": "Friday",
+            "number": 5
+        },
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 31,
+        "iscurrentmonth": true,
+        "issunday": false,
+        "date": "2013-07-31",
+        "schedulesection": {
+            "id": 269122,
+            "markingperiodid": 3386,
+            "name": "Satureday",
+            "number": 6
+        },
+        "announcements": [],
+        "items": [
+            {
+                "id": 102340,
+                "title": "Subject",
+                "typeid": 7,
+                "typename": "Final",
+                "author": "Bryan Fisher",
+                "classname": "AP English",
+                "classid": 104233,
+                "courseid": 1187079
+            }
+        ]
+    },
+    {
+        "day": 1,
+        "iscurrentmonth": false,
+        "issunday": false,
+        "date": "2013-08-01",
+        "schedulesection": {
+            "id": 268666,
+            "markingperiodid": 3386,
+            "name": "Sunday",
+            "number": 0
+        },
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 2,
+        "iscurrentmonth": false,
+        "issunday": false,
+        "date": "2013-08-02",
+        "schedulesection": {
+            "id": 268742,
+            "markingperiodid": 3386,
+            "name": "Monday",
+            "number": 1
+        },
+        "announcements": [],
+        "items": []
+    },
+    {
+        "day": 3,
+        "iscurrentmonth": false,
+        "issunday": false,
+        "date": "2013-08-03",
+        "schedulesection": null,
+        "announcements": [],
+        "items": []
+    }
+], "success": true}
