@@ -1,6 +1,6 @@
 mixin AppAttachmentBlock_(item, pictureHref)
     .wrapper
-        .title= item.getName()
+        .title(data-tooltip=item.getName(), data-tooltip-type="overflow")= item.getName()
         +LoadingImage(src=pictureHref)
         block
 
@@ -65,7 +65,7 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
                         if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
                             .wrapper
                                 A(href=attachment.getUrl()).download-link Download
-                                .title=attachment.getName()
+                                .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")=attachment.getName()
                         else
                             +AppAttachmentBlock_(attachment, attachment.getThumbnailUrl(), i).announcement-item.attachment
                                 +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getAnnouncementId()) Open

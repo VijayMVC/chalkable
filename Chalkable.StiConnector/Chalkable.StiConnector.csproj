@@ -119,6 +119,10 @@
     <Compile Include="Connectors\Model\AttendanceDetailDashboard.cs" />
     <Compile Include="Connectors\Model\AttendanceSummaryDashboard.cs" />
     <Compile Include="Connectors\Model\AverageDashboard.cs" />
+    <Compile Include="Connectors\Model\ClassRank.cs" />
+    <Compile Include="Connectors\Model\DisciplineDetailDashboard.cs" />
+    <Compile Include="Connectors\Model\DisciplineSummaryDashboard.cs" />
+    <Compile Include="Connectors\Model\InfractionSummary.cs" />
     <Compile Include="Connectors\Model\Reports\AttendanceRegisterReportParams.cs" />
     <Compile Include="Connectors\Model\Reports\AttendanceProfileReportParams.cs" />
     <Compile Include="Connectors\Model\Reports\BirthdayReportParams.cs" />

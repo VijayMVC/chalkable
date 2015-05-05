@@ -10,7 +10,7 @@
                             if !app.needToInstall()
                                 div(data-tooltip='Attach').attach-icon
                             +LoadingImage(src=pictureUrl, id="loading-image-" + i)
-                            .title= app.getName()
+                            .title(data-tooltip=app.getName(), data-tooltip-type="overflow")= app.getName()
                             +ActionButton('apps', 'openSuggestedApp', app.getId(), self.getClassId(), self.getAnnouncementId(), self.getStandardsUrlComponents()) Open
                 if !self.getSuggestedApps().length
                     .no-items-text There are no recommended apps for the attached standard

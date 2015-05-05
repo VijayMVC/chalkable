@@ -44,7 +44,16 @@ NAMESPACE('chlk.activities.grading', function () {
             },
 
             function afterCellShow(parent){
-                parent.parent('.marking-period-container').find('.comment-button').show();
+                var button = parent.parent('.marking-period-container').find('.comment-button');
+                var gradeId = parent.find('[name=gradeid]').getValue(), showComment;
+                this.getAllScores().forEach(function(score){
+                    if(score[1].valueOf() == gradeId)
+                        showComment = true;
+                });
+                if(showComment)
+                    button.show();
+                else
+                    button.hide();
             },
 
             OVERRIDE, function beforeFormSubmit_(form, value, model, isAvg_){
@@ -92,7 +101,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     new chlk.models.id.GradingPeriodId(node.getData('gradingperiodid')),
                     new chlk.models.id.SchoolPersonId(node.getData('studentid')),
                     new chlk.models.id.ClassId(node.getData('classid')),
-                    comment
+                    comment,
+                    new chlk.models.id.GradeId(node.getData('gradeid'))
                 );
 
                 return model;

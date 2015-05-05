@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.DisciplinesViewData;
 
@@ -17,7 +16,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
     public class DisciplineMonthCalendarViewData : MonthCalendarViewData
     {
         public IList<DisciplineView> Disciplines { get; set; }
-        public IList<DisciplineTypeCalendarItemViewData> DisciplineTypes { get; set; }
+        //public IList<DisciplineTypeCalendarItemViewData> DisciplineTypes { get; set; }
         public int MoreCount { get; set; }
         public const int DISCIPLINE_COUNT = 3;
 
@@ -49,11 +48,11 @@ namespace Chalkable.Web.Models.CalendarsViewData
             if (sortedDisciplineTypes.Count > DISCIPLINE_COUNT)
             {
                 moreCount = sortedDisciplineTypes.Skip(DISCIPLINE_COUNT).Sum(x => x.Count);
-                sortedDisciplineTypes = sortedDisciplineTypes.Take(DISCIPLINE_COUNT).ToList();
+                //sortedDisciplineTypes = sortedDisciplineTypes.Take(DISCIPLINE_COUNT).ToList();
             }
             return new DisciplineMonthCalendarViewData(date, isCurrentMonth)
             {
-                DisciplineTypes = sortedDisciplineTypes,
+                //DisciplineTypes = sortedDisciplineTypes,
                 Disciplines = dscViewDataList,
                 MoreCount = moreCount,
             };
