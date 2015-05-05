@@ -15,7 +15,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public int MaxPeriodNumber { get; set; }
         public IList<ClassViewData> ClassesSection { get; set; }
         public StudentHoverBoxViewData<TotalAbsencesPerClassViewData> AttendanceBox { get; set; }
-        public StudentHoverBoxViewData<DisciplineTotalPerTypeViewData> DisciplineBox { get; set; }
+        public StudentHoverBoxViewData<DisciplineTypeSummaryViewData> DisciplineBox { get; set; }
         public StudentHoverBoxViewData<StudentSummeryGradeViewData> GradesBox { get; set; }
         public StudentHoverBoxViewData<StudentSummeryRankViewData> RanksBox { get; set; }
         public IList<StudentHealthConditionViewData> HealthConditions { get; set; }
@@ -41,7 +41,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 {
                     ClassesSection = ClassViewData.Create(classes),
                     AttendanceBox = StudentHoverBoxViewData<TotalAbsencesPerClassViewData>.Create(studentSummary.DailyAttendance, studentSummary.Attendances, classes),
-                    DisciplineBox = StudentHoverBoxViewData<DisciplineTotalPerTypeViewData>.Create(studentSummary.InfractionSummaries, studentSummary.TotalDisciplineOccurrences),
+                    DisciplineBox = StudentHoverBoxViewData<DisciplineTypeSummaryViewData>.Create(studentSummary.InfractionSummaries, studentSummary.TotalDisciplineOccurrences),
                     GradesBox = StudentHoverBoxViewData<StudentSummeryGradeViewData>.Create(studentSummary.StudentAnnouncements),
                     RanksBox = studentSummary.ClassRank != null ? StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(studentSummary.ClassRank) : null,
                 };
@@ -67,11 +67,11 @@ namespace Chalkable.Web.Models.PersonViewDatas
             return res;
         }
 
-        public static StudentHoverBoxViewData<DisciplineTotalPerTypeViewData> Create(IList<InfractionSummaryInfo> infractionSummaryInfos, int totalDisciplineOccurrences)
+        public static StudentHoverBoxViewData<DisciplineTypeSummaryViewData> Create(IList<InfractionSummaryInfo> infractionSummaryInfos, int totalDisciplineOccurrences)
         {
-            var res = new StudentHoverBoxViewData<DisciplineTotalPerTypeViewData>
+            var res = new StudentHoverBoxViewData<DisciplineTypeSummaryViewData>
                 {
-                    Hover = DisciplineTotalPerTypeViewData.Create(infractionSummaryInfos).OrderByDescending(x => x.Total).ToList(),
+                    Hover = DisciplineTypeSummaryViewData.Create(infractionSummaryInfos).OrderByDescending(x => x.Total).ToList(),
                     Title = totalDisciplineOccurrences.ToString(CultureInfo.InvariantCulture)
                 };
             return res;
@@ -108,22 +108,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
     public class StudentSummeryRankViewData
     {
-    }
-
-    public class DisciplineTotalPerTypeViewData
-    {
-        public DisciplineTypeViewData DisciplineType { get; set; }
-        public int Total { get; set; }
-
-        public static IList<DisciplineTotalPerTypeViewData> Create(
-            IList<InfractionSummaryInfo> disciplineTotalPerTypes)
-        {
-           return disciplineTotalPerTypes.Select(x => new DisciplineTotalPerTypeViewData
-                {
-                    DisciplineType = DisciplineTypeViewData.Create(x.Infraction),
-                    Total = x.Occurrences
-                }).ToList();
-        }
     }
 
     public class TotalAbsencesPerClassViewData

@@ -3,10 +3,9 @@ using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Models.ApplicationsViewData;
+using Chalkable.Web.Models.DisciplinesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.PersonControllers
@@ -113,5 +112,17 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(StudentAppsViewData.Create(student, currentBalance, apps));
         }
 
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult DisciplineSummary(int studentId, int? gradingPeriodId)
+        {
+            var syId = GetCurrentSchoolYearId();
+            var student = SchoolLocator.StudentService.GetById(studentId, syId);
+            var gp = gradingPeriodId.HasValue
+                         ? SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value)
+                         : SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime.Date);
+            var infractionSummaries = SchoolLocator.DisciplineService.GetStudentInfractionSummary(studentId, gradingPeriodId);
+            var res = StudentDisciplineSummaryViewData.Create(student, infractionSummaries, gp);
+            return Json(res);
+        }
     }
 }
