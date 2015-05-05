@@ -5,8 +5,7 @@ namespace Chalkable.Web.Models
     public class ClassroomOptionViewData
     {
         public int ClassId { get; set; }
-        public string AveragingMethod { get; set; }
-        public bool CategoryAveraging { get; set; }
+        public int AveragingMethod { get; set; }
         public bool IncludeWithdrawnStudents { get; set; }
         public bool DisplayStudentAverage { get; set; }
         public bool DisplayTotalPoints { get; set; }
@@ -22,8 +21,7 @@ namespace Chalkable.Web.Models
             return new ClassroomOptionViewData
             {
                 ClassId = classroomOption.Id,
-                AveragingMethod = classroomOption.AveragingMethod,
-                CategoryAveraging = classroomOption.CategoryAveraging,
+                AveragingMethod = (int)classroomOption.AveragingMethodType,
                 DisplayAlphaGrade = classroomOption.DisplayAlphaGrade,
                 DisplayStudentAverage = classroomOption.DisplayStudentAverage,
                 DisplayTotalPoints = classroomOption.DisplayTotalPoints,

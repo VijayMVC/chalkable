@@ -14,8 +14,7 @@ namespace Chalkable.Web.Controllers
             var classroomOption = new ClassroomOption
                 {
                     Id = inputModel.ClassId,
-                    AveragingMethod = inputModel.AveragingMethod,
-                    CategoryAveraging = inputModel.CategoryAveraging,
+                    AveragingMethodType = (AveragingMethodTypeEnum)inputModel.AveragingMethod,
                     DisplayAlphaGrade = inputModel.DisplayAlphaGrade,
                     DisplayStudentAverage = inputModel.DisplayStudentAverage,
                     DisplayTotalPoints = inputModel.DisplayTotalPoints,
