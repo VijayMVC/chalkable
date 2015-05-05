@@ -62,6 +62,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.apps.AppCategory);
                 this.internalScore = SJX.fromValue(raw.internalscore, Number);
                 this.internalDescription = SJX.fromValue(raw.internaldescription, String);
+                this.advancedApp = SJX.fromValue(raw.advancedapp, String);
                 if(raw.liveapplication)
                     this.liveApplication = SJX.fromDeserializable(raw.liveapplication, SELF);
             },
@@ -69,6 +70,7 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.id.AppId, 'id',
             String, 'message',
             Boolean, 'internal',
+            Boolean, 'advancedApp',
             String, 'name',
             String, 'url',
             String, 'videoDemoUrl',

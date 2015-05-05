@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Linq.Expressions;
@@ -74,19 +75,19 @@ namespace Chalkable.Web.Logic.ApiExplorer
             //do this once
             
             RegisterApiMethodDefaults<ApplicationController>(x => x.GetAnnouncementApplication(1), ApiMethodCallType.Post);
-            RegisterApiMethodDefaults<AttendanceController>(x => x.SetAttendanceForClass("A", null, DemoSchoolConstants.AlgebraClassId, DateTime.Now),ApiMethodCallType.Post);
+            RegisterApiMethodDefaults<AttendanceController>(x => x.SetAttendanceForClass("A", null, DemoSchoolConstants.AlgebraClassId, DateTime.Today),ApiMethodCallType.Post);
             RegisterApiMethodDefaults<AttendanceController>(x => x.ClassList(null, DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
-            RegisterApiMethodDefaults<AttendanceController>(x => x.AttendanceSummary(DateTime.Now), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AttendanceController>(x => x.AttendanceSummary(DateTime.Today), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AttendanceController>(x => x.SeatingChart(null, DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AttendanceReasonController>(x => x.List(), ApiMethodCallType.Get);
-            RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.List(DateTime.Now, DemoSchoolConstants.AlgebraClassId, null), ApiMethodCallType.Get);
-            RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.Week(DateTime.Now, DemoSchoolConstants.AlgebraClassId, null), ApiMethodCallType.Get);
-            RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.Day(DateTime.Now, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.List(DateTime.Today, DemoSchoolConstants.AlgebraClassId, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.Week(DateTime.Today, DemoSchoolConstants.AlgebraClassId, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.Day(DateTime.Today, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AnnouncementController>(x => x.Read(1), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AnnouncementTypeController>(x => x.List(DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<ClassController>(x => 
                 x.List(DemoSchoolConstants.CurrentSchoolYearId, DemoSchoolConstants.FirstMarkingPeriodId, DemoSchoolConstants.TeacherId, null, null), ApiMethodCallType.Post);
-            RegisterApiMethodDefaults<DisciplineController>(x => x.ClassList(DateTime.Now,DemoSchoolConstants.AlgebraClassId, null, null, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<DisciplineController>(x => x.ClassList(DateTime.Today, DemoSchoolConstants.AlgebraClassId, null, null, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<DisciplineController>(x => x.StudentDisciplineSummary(DemoSchoolConstants.Student1, DemoSchoolConstants.FirstMarkingPeriodId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<DisciplineTypeController>(x => x.List(null, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<FeedController>(x => x.List(null, null, null, DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
@@ -126,7 +127,6 @@ namespace Chalkable.Web.Logic.ApiExplorer
             foreach (var arg in arguments)
             {
                 var expValue = "";
-
                 var exp = arg as UnaryExpression;
                 if (exp != null)
                 {
@@ -138,6 +138,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
                     if (constValue != null && constValue.Value != null)
                         expValue = constValue.Value.ToString();
                 }
+                if (expValue == "DateTime.Today") expValue = DateTime.Today.ToString(CultureInfo.InvariantCulture);
                 argValues.Add(expValue);
             }
 
