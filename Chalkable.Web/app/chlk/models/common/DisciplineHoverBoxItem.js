@@ -13,8 +13,8 @@ NAMESPACE('chlk.models.common', function () {
             chlk.models.common.NameId, 'disciplineType',
 
             VOID, function deserialize(raw){
-                this.total = SJX.fromValue(raw.total, Number);
-                this.disciplineType = SJX.fromDeserializable(raw.disciplinetype, chlk.models.common.NameId);
+                this.total = SJX.fromValue(raw.count, Number);
+                this.disciplineType = SJX.fromDeserializable(raw.type, chlk.models.common.NameId);
             }
     ]);
 });
