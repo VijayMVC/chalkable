@@ -60,7 +60,7 @@ NAMESPACE('chlk.controllers', function (){
             function addMeAction(data){
                 this.appResponded_();
                 if (data.appReady) {
-                    return simpleAttachAction(data);
+                    return this.simpleAppAttachAction(data);
                 }
                 return this.appIsNotReadyForClose_();
             },
