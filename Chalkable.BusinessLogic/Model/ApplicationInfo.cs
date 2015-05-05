@@ -70,9 +70,10 @@ namespace Chalkable.BusinessLogic.Model
         public string VideoDemoUrl { get; set; }
         public Guid? SmallPictureId { get; set; }
         public Guid? BigPictureId { get; set; }
+        public bool AdvancedApp { get; set; }
 
         public static ShortApplicationInfo Create(string name, string url, string shortDescription
-            , string description, string videoDemoUrl, Guid? smallPictureId, Guid? bigPictureId)
+            , string description, string videoDemoUrl, bool advancedApp, Guid? smallPictureId, Guid? bigPictureId)
         {
             return new ShortApplicationInfo
             {
@@ -83,6 +84,7 @@ namespace Chalkable.BusinessLogic.Model
                 VideoDemoUrl = videoDemoUrl,
                 SmallPictureId = smallPictureId,
                 BigPictureId = bigPictureId,
+                AdvancedApp = advancedApp
             };
         }
 
@@ -98,6 +100,7 @@ namespace Chalkable.BusinessLogic.Model
                 SmallPictureId = application.SmallPictureRef,
                 VideoDemoUrl = application.VideoUrl,
                 Url = application.Url,
+                AdvancedApp = application.IsAdvanced
             };
         }
     }

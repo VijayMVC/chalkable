@@ -31,12 +31,28 @@ NAMESPACE('chlk', function(){
 
         [[Object, String, Object]],
         function addApp(rWindow, rURL, data){
-            CHLK_MESSENGER.addApp(rWindow, rURL, data);
+            if (data.simpleApp && data.simpleApp == true){
+                if (data.attach == false)
+                    this.closeApp(data);
+                else
+                    this.doCallApiReactor_('simpleAppAttach', data);
+            }
+            else{
+                CHLK_MESSENGER.addApp(rWindow, rURL, data);
+                this.doCallApiReactor_('addAppBegin', {rWindow: rWindow, rURL: rURL, data: data});
+            }
         },
 
         [[Object, String, Object]],
         function closeApp(data){
-            CHLK_MESSENGER.closeMe(data);
+            if (data.simpleApp && data.simpleApp == true){
+                if (data.attach == false)
+                    this.doCallApiReactor_('closeCurrentApp', data);
+                else
+                    this.doCallApiReactor_('closeMe', data);
+            }
+            else
+                CHLK_MESSENGER.closeMe(data);
         },
 
         function messengerCallback_(e){
