@@ -50,6 +50,7 @@ NAMESPACE('chlk.models.apps', function () {
                 }
 
                 if (appData_){
+                    this.setAdvancedApp(appData_.isAdvancedApp());
                     this.setPersonal(appData_.isPersonal());
                     this.setAppAccess(appData_.getAppAccess());
                 }
