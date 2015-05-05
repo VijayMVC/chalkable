@@ -298,6 +298,7 @@
     <Compile Include="Models\CommonCoreStandardViewData.cs" />
     <Compile Include="Models\AppTesterViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
+    <Compile Include="Models\DisciplinesViewData\DisciplineTypeSummaryViewData.cs" />
     <Compile Include="Models\GradedItemViewData.cs" />
     <Compile Include="Models\GradingScaleViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentAppsViewData.cs" />
@@ -310,7 +311,6 @@
     <Compile Include="Models\DisciplinesViewData\ClassDisciplineInputModel.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineTypeViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineView.cs" />
-    <Compile Include="Models\DisciplinesViewData\StudentDisciplineDetailedViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\StudentDisciplineSummaryViewData.cs" />
     <Compile Include="Models\DistrictViewData.cs" />
     <Compile Include="Models\FinalGradeViewData.cs" />

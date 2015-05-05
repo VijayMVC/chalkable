@@ -76,7 +76,7 @@ namespace Chalkable.Web.Models
                 var disciplines = finalGrade.Disciplines.Where(x => x.StudentId == student.Id).ToList();
                 studentFinalGrade.Disciplines = disciplines.Select(x => new DisciplineTypeSummaryViewData
                     {
-                        Count = x.Occurrences,
+                        Total = x.Occurrences,
                         Type = DisciplineTypeViewData.Create(x.Infraction)
                     }).ToList();
                 res.Add(studentFinalGrade);

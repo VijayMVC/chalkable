@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
@@ -15,7 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(int classId, DateTime date);
         ClassDisciplineDetails SetClassDiscipline(ClassDiscipline classDiscipline);
         IList<ClassDisciplineDetails> GetDisciplineByDateRange(int studentId, DateTime? start, DateTime? end);
-        IList<StudentDisciplineSummary> GetStudentDisciplineSummary(int studentId, int? gradingPeriodId);
+        IList<InfractionSummaryInfo> GetStudentInfractionSummary(int studentId, int? gradingPeriodId);
     }
 
     public class DisciplineService : SisConnectedService, IDisciplineService
@@ -129,16 +130,12 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
         
-        public IList<StudentDisciplineSummary> GetStudentDisciplineSummary(int studentId, int? gradingPeriodId)
+        public IList<InfractionSummaryInfo> GetStudentInfractionSummary(int studentId, int? gradingPeriodId)
         {
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var stiDisciplineSummary = ConnectorLocator.StudentConnector.GetStudentDisciplineSummary(studentId, syId, gradingPeriodId);
-            return stiDisciplineSummary.Infractions.Select(x => new StudentDisciplineSummary
-                {
-                    InfractionId = x.InfractionId,
-                    Occurrences = x.Occurrences,
-                    StudentId = x.StudentId
-                }).ToList();
+            var infractions = ServiceLocator.InfractionService.GetInfractions(true);
+            return InfractionSummaryInfo.Create(stiDisciplineSummary.Infractions.ToList(), infractions);
         }
     }
 }
