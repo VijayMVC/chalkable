@@ -52,9 +52,28 @@ namespace Chalkable.StiConnector.Connectors
                 nvc.Add("startDate", startDate.Value.ToString(Constants.DATE_FORMAT));
             if (endDate.HasValue)
                 nvc.Add("endDate", endDate.Value.ToString(Constants.DATE_FORMAT));
-            var url = string.Format("{0} chalkable/{1}/students/{2}/dashboard/attendance/detail", BaseUrl, acadSessionId, studentId);
+            var url = string.Format("{0}chalkable/{1}/students/{2}/dashboard/attendance/detail", BaseUrl, acadSessionId, studentId);
             return Call<AttendanceSummaryDashboard>(url, nvc);
         }
 
+        public DisciplineSummaryDashboard GetStudentDisciplineSummary(int studentId, int acadSessionId, int? gradingPeriodId)
+        {
+            var nvc = new NameValueCollection();
+            if (gradingPeriodId.HasValue)
+                nvc.Add("gradingPeriodId", gradingPeriodId.Value.ToString());
+            var url = string.Format("{0}chalkable/{1}/students/{2}/dashboard/discipline/summary", BaseUrl, acadSessionId, studentId);
+            return Call<DisciplineSummaryDashboard>(url, nvc);
+        }
+
+        public DisciplineDetailDashboard GetStudentDisciplineDetailDashboard(int studentId, int acadSessionId, DateTime? startDate, DateTime? endDate)
+        {
+            var nvc = new NameValueCollection();
+            if (startDate.HasValue)
+                nvc.Add("startDate", startDate.Value.ToString(Constants.DATE_FORMAT));
+            if (endDate.HasValue)
+                nvc.Add("endDate", endDate.Value.ToString(Constants.DATE_FORMAT));
+            var url = string.Format("{0}chalkable/{1}/students/{2}/dashboard/discipline/detail", BaseUrl, acadSessionId, studentId);
+            return Call<DisciplineDetailDashboard>(url, nvc);
+        }
     }
 }

@@ -3,7 +3,7 @@ mixin AppIconLink_(announcementId, app, iconTooltip)
     .announcement-item.application(data-tooltip=iconTooltip)
         .wrapper
             +LoadingImage(src=app.getBannerPictureUrl(), id="loading-image-" + appId)
-            .title= app.getName()
+            .title(data-tooltip=app.getName(), data-tooltip-type="overflow")= app.getName()
             .shortdesc= app.getShortDescription()
             if app.needToInstall()
                 +ActionButton('appmarket', 'details', app.getId()) Install

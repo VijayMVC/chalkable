@@ -112,5 +112,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var apps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, studentId, null, start, count);
             return Json(StudentAppsViewData.Create(student, currentBalance, apps));
         }
+
     }
 }

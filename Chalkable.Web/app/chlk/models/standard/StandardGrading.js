@@ -32,8 +32,8 @@ NAMESPACE('chlk.models.standard', function () {
                 this.numericGrade = SJX.fromValue(raw.numericgrade, Number);
             },
 
-            [[String, chlk.models.id.StandardId, chlk.models.id.GradingPeriodId, chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, String]],
-            function $(gradeValue_, standardId_, gradingPeriodId_, studentId_, classId_, comment_){
+            [[String, chlk.models.id.StandardId, chlk.models.id.GradingPeriodId, chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, String, chlk.models.id.GradeId]],
+            function $(gradeValue_, standardId_, gradingPeriodId_, studentId_, classId_, comment_, gradeId_){
                 BASE();
                 if(gradeValue_)
                     this.gradeValue = gradeValue_;
@@ -47,6 +47,8 @@ NAMESPACE('chlk.models.standard', function () {
                     this.classId = classId_;
                 if(comment_)
                     this.comment = comment_;
+                if(gradeId_)
+                    this.gradeId = gradeId_;
             }
         ]);
 });
