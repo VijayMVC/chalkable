@@ -1,0 +1,61 @@
+.dialog.report-window
+   +ActionForm('grading', 'submitLessonPlanReport').lesson-plan-report-form.no-working.report-form
+      .x-window-header
+         .close.close-btn.dark
+         h1=Msg.Create_Report
+
+      .x-window-body
+         .action-bar: .items: +ActionLinkList(self.buildReportLinksData('lessonPlanReport'))
+         +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+         +Hidden('classId', self.getClassId().valueOf())
+         +Hidden('activityCategory', '')#activity-categories
+         +Hidden('activityAttribute', '')#activity-attributes
+         .report-content
+            TABLE.report-table
+               TR
+                  +ReportDatePickers(self.getStartDate(), self.getEndDate(), 'item-2')
+               TR
+                  TD.item-2
+                     h3
+                     +LabeledCheckbox(Msg.Include_activities, 'includeActivities', false)#include-activities
+                  TD.item-2
+                     h3
+                     +LabeledCheckbox(Msg.Include_standards, 'includeStandards', false, true).disable-by-activities
+               TR
+                  TD.item-2
+                     h3=Msg.Activity_attribute_text
+                     +Select('publicPrivateText')(disabled = "disabled")#public-private.disable-by-activities
+                        +Option(chlk.models.reports.PublicPrivateTextOptions.PUBLIC.valueOf(), Msg.Public, true)
+                        +Option(chlk.models.reports.PublicPrivateTextOptions.PRIVATE.valueOf(), Msg.Private, false)
+                        +Option(chlk.models.reports.PublicPrivateTextOptions.BOTH.valueOf(), Msg.Public_and_private, false)
+                  TD.item-2
+                     h3=Msg.Minimum_number_of_days_with_plans
+                     input(name="maxCount", type="number")
+                  TR
+                     TD.item-2
+                        h3=Msg.Activity_attributes
+                        +Select('activityAttributes')(multiple, disabled = "disabled")#activity-attributes-select.disable-by-activities
+                           each aa in self.getActivityAttributes()
+                              +Option(aa.getId().valueOf(), aa.getName(), true)
+                     TD.item-2
+                        h3=Msg.Activity_categories
+                        +Select('activityCategories')(multiple, disabled = "disabled")#activity-categories-select.disable-by-activities
+                           each ac in self.getActivityCategories()
+                              +Option(ac.getId().valueOf(), ac.getName(), true)
+               TR
+                  TD.item-2
+                     h3=Msg.Sort_activities
+                     +Select('sortActivities')
+                        +Option(chlk.models.reports.SortActivityOptions.DATE.valueOf(), Msg.Date + '/' + Msg.Category, true)
+                        +Option(chlk.models.reports.SortActivityOptions.CATEGORY.valueOf(), Msg.Category + '/' + Msg.Date, false)
+                  TD.item-2
+                     h3=Msg.Sort_sections
+                     +Select('sortSections')
+                        +Option(chlk.models.reports.SortSectionOptions.TEACHER_SECTION.valueOf(), Msg.Teacher + '/' + Msg.Section, false)
+                        +Option(chlk.models.reports.SortSectionOptions.TEACHER_COURSE.valueOf(), Msg.Teacher + '/' + Msg.Course, false)
+                        +Option(chlk.models.reports.SortSectionOptions.TEACHER_PERIOD.valueOf(), Msg.Teacher + '/' + Msg.Period, true)
+                        +Option(chlk.models.reports.SortSectionOptions.SECTION.valueOf(), Msg.Section, false)
+      .x-window-footer.report-bottom
+         +ReportFormatSelect()
+         BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
