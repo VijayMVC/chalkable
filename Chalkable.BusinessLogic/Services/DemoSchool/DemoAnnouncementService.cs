@@ -497,7 +497,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var cls = ServiceLocator.ClassService.GetById(classId);
             var announcement = new AnnouncementComplex
             {
-                ClassAnnouncementTypeName = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementType(classAnnouncementTypeId.Value).Name,
+                ClassAnnouncementTypeName = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypeById(classAnnouncementTypeId.Value).Name,
                 ChalkableAnnouncementType = classAnnouncementTypeId,
                 PrimaryTeacherName = person.FullName(),
                 ClassName = cls.Name,

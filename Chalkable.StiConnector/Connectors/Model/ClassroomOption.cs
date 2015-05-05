@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Chalkable.StiConnector.Connectors.Model
+﻿namespace Chalkable.StiConnector.Connectors.Model
 {
     public class ClassroomOption
     {
@@ -67,5 +61,6 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// Indicates whether or not to weight the max value when calculating standards
         /// </summary>
         public bool StandardsCalculationWeightMaximumValues { get; set; }
+
     }
 }

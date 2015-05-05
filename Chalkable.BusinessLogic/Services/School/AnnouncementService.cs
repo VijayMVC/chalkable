@@ -340,7 +340,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 else if(res.ClassAnnouncementTypeRef.HasValue)
                 {
-                    var classAnnType = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementType(res.ClassAnnouncementTypeRef.Value);
+                    var classAnnType = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypeById(res.ClassAnnouncementTypeRef.Value);
                     res.ClassAnnouncementTypeName = classAnnType.Name;
                     res.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
                 }
@@ -519,7 +519,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
                 else if (res.ClassAnnouncementTypeRef.HasValue)
                 {
-                    var classAnnType = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementType(res.ClassAnnouncementTypeRef.Value);
+                    var classAnnType = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypeById(res.ClassAnnouncementTypeRef.Value);
                     res.ClassAnnouncementTypeName = classAnnType.Name;
                     res.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
                 }

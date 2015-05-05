@@ -75,9 +75,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public ClassAnnouncementType GetClassAnnouncementType(int id)
+        public ClassAnnouncementType GetClassAnnouncementTypeById(int classAnnouncementTypeId)
         {
-            return ClassAnnouncementTypeStorage.GetById(id);
+            return ClassAnnouncementTypeStorage.GetById(classAnnouncementTypeId);
         }
 
         public ChalkableAnnouncementType GetChalkableAnnouncementTypeByAnnTypeName(string classAnnouncementTypeName)
@@ -86,6 +86,29 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                      ? null
                      : ChalkableAnnouncementType.All.FirstOrDefault(x => x.Keywords.Split(',').Any(y => classAnnouncementTypeName.ToLower().Contains(y)));
 
+        }
+
+        public ClassAnnouncementType AddClassAnnouncmentType(ClassAnnouncementType classAnnouncementType)
+        {
+           return  ClassAnnouncementTypeStorage.Add(classAnnouncementType);
+        }
+
+        public ClassAnnouncementType EditClassAnnouncmentType(ClassAnnouncementType classAnnouncementType)
+        {
+            ClassAnnouncementTypeStorage.Update(classAnnouncementType);
+            return GetClassAnnouncementTypeById(classAnnouncementType.Id);
+        }
+
+        public void DeleteClassAnnouncmentType(int classAnnouncementTypeId)
+        {
+            DeleteClassAnnouncmentTypes(new List<int> {classAnnouncementTypeId});
+        }
+        public void DeleteClassAnnouncmentTypes(IList<int> classAnnouncementTypeIds)
+        {
+            foreach (var classAnnouncementTypeId in classAnnouncementTypeIds)
+            {
+                ClassAnnouncementTypeStorage.Delete(classAnnouncementTypeId);
+            }
         }
     }
 }

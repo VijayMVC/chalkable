@@ -9,7 +9,7 @@ NAMESPACE('chlk.activities.reports', function(){
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.ActivityGroup('ReportDialog')],
         [ria.mvc.TemplateBind(chlk.templates.reports.WorksheetReportTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.reports.WorksheetReportGridTpl, 'grid', '.grid-container', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.reports.WorksheetReportGridTpl, 'grid', '.chlk-grid-container', ria.mvc.PartialUpdateRuleActions.Replace)],
         'WorksheetReportDialog', EXTENDS(chlk.activities.reports.BaseReportWithStudentsDialog),[
             [ria.mvc.DomEventBind('change', '.report-date-picker')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -22,7 +22,7 @@ NAMESPACE('chlk.activities.reports', function(){
             VOID, function allAnnouncementsChange(node, event){
                 var value = node.checked(), jNode;
                 jQuery(node.valueOf()).parents('form')
-                    .find('.grid-container')
+                    .find('.chlk-grid-container')
                     .find('.row:not(.header)')
                     .find('[type=checkbox]')
                     .each(function(index, item){
@@ -48,7 +48,7 @@ NAMESPACE('chlk.activities.reports', function(){
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formSubmit(node, event){
                 var res = [];
-                node.find('.grid-container')
+                node.find('.chlk-grid-container')
                     .find('.row:not(.header)')
                     .find('input[type=checkbox]').forEach(function(item){
                         if(item.checked()){

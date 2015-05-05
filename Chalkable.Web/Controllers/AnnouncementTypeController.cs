@@ -39,6 +39,54 @@ namespace Chalkable.Web.Controllers
             return Json(ClassAnnouncementTypeViewData.Create(res), 3);
         }
 
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult Create(ClassAnnouncementTypeInputData inputData)
+        {
+            var res = SchoolLocator.ClassAnnouncementTypeService.AddClassAnnouncmentType(new ClassAnnouncementType
+                {
+                    ClassRef = inputData.ClassId,
+                    Description = inputData.Description,
+                    Name = inputData.Name,
+                    HighScoresToDrop = inputData.HighScoresToDrop,
+                    LowScoresToDrop = inputData.LowScoresToDrop,
+                    IsSystem = inputData.IsSystem,
+                    Percentage = inputData.Percentage
+                });
+            return Json(ClassAnnouncementTypeViewData.Create(res));
+        }
+
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult Update(int classAnnouncementTypeId, ClassAnnouncementTypeInputData inputData)
+        {
+            var res = SchoolLocator.ClassAnnouncementTypeService.EditClassAnnouncmentType(new ClassAnnouncementType
+            {
+                Id = classAnnouncementTypeId,
+                ClassRef = inputData.ClassId,
+                Description = inputData.Description,
+                Name = inputData.Name,
+                HighScoresToDrop = inputData.HighScoresToDrop,
+                LowScoresToDrop = inputData.LowScoresToDrop,
+                IsSystem = inputData.IsSystem,
+                Percentage = inputData.Percentage
+            });
+            return Json(ClassAnnouncementTypeViewData.Create(res));
+        }
+
+        /*[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult Delete(int classAnnouncementTypeId)
+        {
+            SchoolLocator.ClassAnnouncementTypeService.DeleteClassAnnouncmentType(classAnnouncementTypeId);
+            return Json(true);
+        }*/
+        
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        public ActionResult Delete(IntList classAnnouncementTypeIds)
+        {
+            SchoolLocator.ClassAnnouncementTypeService.DeleteClassAnnouncmentTypes(classAnnouncementTypeIds);
+            return Json(true);
+        }
+
         public static IList<ClassAnnouncementType> GetTypesByClass(IServiceLocatorSchool serviceLocator, int classId)
         {
             var classAnnTypes = serviceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId, false).ToList();

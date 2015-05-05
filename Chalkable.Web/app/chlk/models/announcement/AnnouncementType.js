@@ -42,7 +42,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'announcementTypeId',
 
             [ria.serialize.SerializeProperty('issystem')],
-            Boolean, 'isSystem',
+            Boolean, 'system',
             String, 'name'
         ]);
 });

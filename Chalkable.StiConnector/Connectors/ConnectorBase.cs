@@ -23,6 +23,8 @@ namespace Chalkable.StiConnector.Connectors
         {
             HttpWebRequest request = base.GetWebRequest(address) as HttpWebRequest;
             request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+            //request.KeepAlive = false;
+            request.ProtocolVersion = HttpVersion.Version10;
             return request;
         }
     }

@@ -731,11 +731,15 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitGradeVerificationReportViewData]],
             function submitGradeVerificationReportAction(reportViewData){
+                if (!reportViewData.getStudentAverageIds()){
+                    return this.ShowAlertBox("You should select at least one graded item", "Error"), null;
+                }
+
                 var src = this.reportingService.submitGradeVerificationReport(
                     reportViewData.getClassId(),
                     reportViewData.getFormat(),
                     this.getIdsList(reportViewData.getGradingPeriodIds(), chlk.models.id.GradingPeriodId),
-                    (reportViewData.getStudentAverageIds() || '').split(','),
+                    reportViewData.getStudentAverageIds().split(','),
                     reportViewData.getClassOrder(),
                     reportViewData.getGradeType(),
                     reportViewData.getStudentOrder(),
@@ -757,6 +761,14 @@ NAMESPACE('chlk.controllers', function (){
                     return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                 }
 
+                if (reportViewData.isIncludeActivities() && !reportViewData.getActivityAttribute()){
+                    return this.ShowAlertBox("You should select at least one activity attribute", "Error"), null;
+                }
+
+                if (reportViewData.isIncludeActivities() && !reportViewData.getActivityCategory()){
+                    return this.ShowAlertBox("You should select at least one activity category", "Error"), null;
+                }
+
                 var src = this.reportingService.submitLessonPlanReport(
                     reportViewData.getClassId(),
                     reportViewData.getGradingPeriodId(),
@@ -769,8 +781,8 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.getMaxCount(),
                     reportViewData.isIncludeActivities(),
                     reportViewData.isIncludeStandards(),
-                    (reportViewData.getActivityAttribute() || '').split(','),
-                    (reportViewData.getActivityCategory() || '').split(',')
+                    reportViewData.getActivityAttribute().split(','),
+                    reportViewData.getActivityCategory().split(',')
                 );
                 this.BackgroundCloseView(chlk.activities.reports.LessonPlanReportDialog);
                 this.getContext().getDefaultView().submitToIFrame(src);

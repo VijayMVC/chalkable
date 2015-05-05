@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -8,7 +9,12 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IClassAnnouncementTypeService
     {
-        ClassAnnouncementType GetClassAnnouncementType(int id);
+        ClassAnnouncementType AddClassAnnouncmentType(ClassAnnouncementType classAnnouncementType);
+        ClassAnnouncementType EditClassAnnouncmentType(ClassAnnouncementType classAnnouncementType);
+        void DeleteClassAnnouncmentType(int classAnnouncementTypeId);
+        void DeleteClassAnnouncmentTypes(IList<int> classAnnouncementTypeIds);
+
+        ClassAnnouncementType GetClassAnnouncementTypeById(int classAnnouncementTypeId);
         IList<ClassAnnouncementType> GetClassAnnouncementTypes(IList<int> classesIds, bool all = true); 
         IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true);
         ChalkableAnnouncementType GetChalkableAnnouncementTypeByAnnTypeName(string classAnnouncementTypeName);
@@ -20,6 +26,41 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         public ClassClassAnnouncementTypeService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
+        }
+
+
+        public ClassAnnouncementType AddClassAnnouncmentType(ClassAnnouncementType classAnnouncementType)
+        {
+            var activityCategory = BuildActivityCategory(classAnnouncementType);
+            activityCategory = ConnectorLocator.ActivityCategoryConnnector.Add(activityCategory);
+            return BuildClassAnnouncementType(activityCategory);
+        }
+
+        public ClassAnnouncementType EditClassAnnouncmentType(ClassAnnouncementType classAnnouncementType)
+        {
+            var activityCategory = BuildActivityCategory(classAnnouncementType);
+            ConnectorLocator.ActivityCategoryConnnector.Update(activityCategory.Id, activityCategory);
+            return BuildClassAnnouncementType(activityCategory);
+        }
+
+        public void DeleteClassAnnouncmentType(int classAnnouncementTypeId)
+        {
+            DeleteClassAnnouncmentTypes(new List<int>{classAnnouncementTypeId});
+        }
+        public void DeleteClassAnnouncmentTypes(IList<int> classAnnouncementTypeIds)
+        {
+            foreach (var classAnnouncementTypeId in classAnnouncementTypeIds)
+            {
+                ConnectorLocator.ActivityCategoryConnnector.Delete(classAnnouncementTypeId);
+            }
+        }
+
+        public ClassAnnouncementType GetClassAnnouncementTypeById(int classAnnouncementTypeId)
+        {
+            var activityCategory = ConnectorLocator.ActivityCategoryConnnector.GetById(classAnnouncementTypeId);
+            if (activityCategory == null)
+                return null;
+            return BuildClassAnnouncementTypes(new List<ActivityCategory> { activityCategory }).First();
         }
 
         public IList<ClassAnnouncementType> GetClassAnnouncementTypes(int classId, bool all = true)
@@ -35,15 +76,6 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public ClassAnnouncementType GetClassAnnouncementType(int id)
-        {
-            var activityCategory = ConnectorLocator.ActivityCategoryConnnector.GetById(id);
-            if (activityCategory == null)
-                return null;
-
-            return BuildClassAnnouncementTypes(new List<ActivityCategory> {activityCategory}).First();
-        }
-
         public ChalkableAnnouncementType GetChalkableAnnouncementTypeByAnnTypeName(string classAnnouncementTypeName)
         {
             return string.IsNullOrEmpty(classAnnouncementTypeName)
@@ -51,26 +83,46 @@ namespace Chalkable.BusinessLogic.Services.School
                     : ChalkableAnnouncementType.All.FirstOrDefault(x => x.Keywords.Split(',').Any(y => classAnnouncementTypeName.ToLower().Contains(y)));
         }
 
-        private IList<ClassAnnouncementType> BuildClassAnnouncementTypes(IList<ActivityCategory> activityCategories)
+        private ActivityCategory BuildActivityCategory(ClassAnnouncementType classAnnouncementType)
         {
-            var announcementTypes = activityCategories.Select(x => new ClassAnnouncementType
+            return new ActivityCategory
             {
-                Id = x.Id,
-                ClassRef = x.SectionId,
-                Description = x.Description,
-                Gradable = true,
-                Name = x.Name,
-                Percentage = (x.Percentage ?? 0)
-            }).ToList();
-            foreach (var classAnnouncementType in announcementTypes)
-            {
-                var ct = GetChalkableAnnouncementTypeByAnnTypeName(classAnnouncementType.Name);
-                if (ct != null)
-                    classAnnouncementType.ChalkableAnnouncementTypeRef = ct.Id;
-            }
-            return announcementTypes;
+                Id = classAnnouncementType.Id,
+                Name = classAnnouncementType.Name,
+                Description = classAnnouncementType.Description,
+                HighScoresToDrop = (byte)classAnnouncementType.HighScoresToDrop,
+                LowScoresToDrop = (byte)classAnnouncementType.LowScoresToDrop,
+                Percentage = classAnnouncementType.Percentage,
+                SectionId = classAnnouncementType.ClassRef,
+                IsSystem = classAnnouncementType.IsSystem
+            };
         }
 
+        private ClassAnnouncementType BuildClassAnnouncementType(ActivityCategory activityCategory)
+        {
+            var res = new ClassAnnouncementType
+                {
+                    Id = activityCategory.Id,
+                    ClassRef = activityCategory.SectionId,
+                    Description = activityCategory.Description,
+                    Gradable = true,
+                    Name = activityCategory.Name,
+                    Percentage = (activityCategory.Percentage ?? 0),
+                    LowScoresToDrop = activityCategory.LowScoresToDrop,
+                    HighScoresToDrop = activityCategory.HighScoresToDrop,
+                    IsSystem = activityCategory.IsSystem
+                };
+            var ct = GetChalkableAnnouncementTypeByAnnTypeName(res.Name);
+            if (ct != null)
+                res.ChalkableAnnouncementTypeRef = ct.Id;
+            return res;
+        }
+
+        private IList<ClassAnnouncementType> BuildClassAnnouncementTypes(IEnumerable<ActivityCategory> activityCategories)
+        {
+            return activityCategories.Select(BuildClassAnnouncementType).ToList();
+        }
+        
         public IList<GradedClassAnnouncementType> CalculateAnnouncementTypeAvg(int classId, IList<AnnouncementDetails> announcementDetailses)
         {
             var classAnnTypes = GetClassAnnouncementTypes(classId);
@@ -93,6 +145,5 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return res;
         }
-
     }
 }

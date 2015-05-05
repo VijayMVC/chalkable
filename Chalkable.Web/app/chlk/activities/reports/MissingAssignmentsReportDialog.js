@@ -14,9 +14,8 @@ NAMESPACE('chlk.activities.reports', function(){
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formSubmit(node, event){
                 var alternateScoresNode = node.find('#alternate-scores'),
-                    alternateScoresIds = node.find('.alternate-scores-select').getValue();
-                if(alternateScoresIds && alternateScoresIds.length > 0)
-                    alternateScoresNode.setValue(alternateScoresIds.join(','));
+                    alternateScoresIds = node.find('.alternate-scores-select').getValue() || [];
+                alternateScoresNode.setValue(alternateScoresIds.join(','));
             }
         ]);
 });
