@@ -4,7 +4,7 @@ mixin ToolbarButton(btn, announcementAppId, announcementId, advancedApp)
     cls = btn.getCls()
     -attributes['data-announcement-app-id'] = announcementAppId ? announcementAppId : undefined
     -attributes['data-announcement-id'] = announcementId ? announcementId: undefined
-    -attributes['data-advanced-app'] = advancedApp ? advancedApp: undefined
+    -attributes['data-advanced-app'] = advancedApp ? 'true' : 'false'
     if btn.getController()
         +ActionLinkWithPrepend(btn.getController(), btn.getAction(), btn.getParams())(class= cls, id= btn.getId(), target= btnTarget)=btn.getTitle()
     else
