@@ -20,8 +20,7 @@ NAMESPACE('chlk.activities.reports', function(){
                         valuesArray.push(item.getData('id'));
                 });
 
-                if(valuesArray.length)
-                    studentIdsNode.setValue(valuesArray.join(','));
+                studentIdsNode.setValue(valuesArray.join(','));
             },
 
             [ria.mvc.DomEventBind('change', '#select-all')],

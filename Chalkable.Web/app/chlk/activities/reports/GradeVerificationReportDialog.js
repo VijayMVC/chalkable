@@ -15,12 +15,10 @@ NAMESPACE('chlk.activities.reports', function(){
             VOID, function formSubmit(node, event){
                 var gpNode = node.find('#grading-period-ids'),
                     saNode = node.find('#student-averages-ids'),
-                    gpArray = node.find('#grading-period-select').getValue(),
-                    saArray = node.find('#student-averages-select').getValue();
-                if(gpArray && gpArray.length)
-                    gpNode.setValue(gpArray.join(','));
-                if(saArray && saArray.length)
-                    saNode.setValue(saArray.join(','));
+                    gpArray = node.find('#grading-period-select').getValue() || [],
+                    saArray = node.find('#student-averages-select').getValue() || [];
+                gpNode.setValue(gpArray.join(','));
+                saNode.setValue(saArray.join(','));
             }
         ]);
 });

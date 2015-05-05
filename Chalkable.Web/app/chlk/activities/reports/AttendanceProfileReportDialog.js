@@ -14,9 +14,8 @@ NAMESPACE('chlk.activities.reports', function(){
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formSubmit(node, event){
                 var tNode = node.find('#terms-ids'),
-                    tArray = node.find('#terms-select').getValue();
-                if(tArray && tArray.length)
-                    tNode.setValue(tArray.join(','));
+                    tArray = node.find('#terms-select').getValue() || [];
+                tNode.setValue(tArray.join(','));
 
                 var res = [];
                 node.find('.chlk-grid-container')
