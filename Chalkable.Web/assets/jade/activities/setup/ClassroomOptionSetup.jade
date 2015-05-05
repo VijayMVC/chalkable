@@ -31,15 +31,15 @@
                     TD
                         h3=Msg.Averaging_method
                         fieldset.method.editable
-                            each item in ['Points', 'Average', 'Category Points', 'Category Average']
+                            each item, i in ['Points', 'Average', 'Category Points', 'Category Average']
                                 -var id = item.replace(' ', '_').toLowerCase()
                                 div
                                     input(
                                         type = "radio",
                                         id = id,
-                                        value = item,
+                                        value = i,
                                         name = 'averagingmethod',
-                                        checked = item == options.getAveragingMethod()
+                                        checked = i == options.getAveragingMethod()
                                     )
                                     label(for=id)=item
                 TR
