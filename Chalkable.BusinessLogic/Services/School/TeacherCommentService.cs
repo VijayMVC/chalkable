@@ -52,7 +52,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            if (BaseSecurity.IsAdminOrTeacher(Context))
+            if (!BaseSecurity.IsAdminOrTeacher(Context))
                 throw new ChalkableSecurityException();
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             foreach (var commentId in commentsIds)
