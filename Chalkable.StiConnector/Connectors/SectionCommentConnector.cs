@@ -16,13 +16,13 @@ namespace Chalkable.StiConnector.Connectors
 
         public void UpdateComment(int acadSessionId, int teacherId, SectionComment sectionComment)
         {
-            var url = BuildBaseUrl(acadSessionId, teacherId) + sectionComment.Id;
+            var url = BuildBaseUrl(acadSessionId, teacherId) + "/" + sectionComment.Id;
             Put(url, sectionComment);
         }
 
         public void DeleteComment(int acadSessionId, int teacherId, int sectionCommentId)
         {
-            Delete(BuildBaseUrl(acadSessionId, teacherId) + sectionCommentId);
+            Delete(BuildBaseUrl(acadSessionId, teacherId) + "/" + sectionCommentId);
         }
 
         public SectionComment GetCommentById(int acadSessionId, int teacherId, int sectionCommentId)
@@ -32,7 +32,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public IList<SectionComment> GetComments(int acadSessionId, int teacherId)
         {
-            return Call<IList<SectionComment>>(BuildBaseUrl(acadSessionId, teacherId));
+            return Call<IList<SectionComment>>(BuildBaseUrl(acadSessionId, teacherId) + "/");
         } 
 
         private string BuildBaseUrl(int acadSessionId, int teacherId)
