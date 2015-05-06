@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
+using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -59,7 +59,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public SectionAttendance GetSectionAttendance(DateTime date, int classId)
         {
-            var ds = date.ToString("yyyy-MM-dd");
+            var ds = date.ToString(Constants.DATE_FORMAT);
             if (AttendanceStorage.GetData().Count(x => x.Value.SectionId == classId && x.Value.Date == ds) == 0)
             {
                 GenerateSectionAttendanceForClass(classId, date, date);
@@ -69,7 +69,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void SetSectionAttendance(DateTime date, int classId, SectionAttendance sa)
         {
-            var ds = date.ToString("yyyy-MM-dd");
+            var ds = date.ToString(Constants.DATE_FORMAT);
             if (AttendanceStorage.GetData().Count(x => x.Value.SectionId == classId && x.Value.Date == ds) == 0)
             {
                 AttendanceStorage.Add(sa);
@@ -82,12 +82,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void GenerateSectionAttendanceForClass(int classId, DateTime startDate, DateTime endDate)
         {
-            var classRoomLevels = new[] { "Absent", "Missing", "Tardy", "Present" };
+            var classRoomLevels = new[] {BaseAttendance.ABSENT, BaseAttendance.MISSING, BaseAttendance.TARDY, BaseAttendance.PRESENT};
             var random = new Random();
             for (var start = startDate; start <= endDate; start = start.AddDays(1))
             {
-                var ds = start.ToString("yyyy-MM-dd");
-                var sa = new SectionAttendance()
+                var ds = start.ToString(Constants.DATE_FORMAT);
+                var sa = new SectionAttendance
                 {
                     SectionId = classId,
                     Date = ds,
@@ -107,10 +107,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private SectionAttendanceSummary GetSaSummary(int classId, DateTime startDate, DateTime endDate)
         {
-            var sectionAttendanceSummary = new SectionAttendanceSummary();
-            sectionAttendanceSummary.SectionId = classId;
+            var sectionAttendanceSummary = new SectionAttendanceSummary {SectionId = classId};
 
-            var days = new List<DailySectionAttendanceSummary>();
+            var days = new List<DailySectionAbsenceSummary>();
 
             var absenceCount = new Dictionary<int, int>();
             var tardiesCount = new Dictionary<int, int>();
@@ -125,23 +124,23 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             for (var start = startDate; start < endDate; start = start.AddDays(1))
             {
-                var day = new DailySectionAttendanceSummary();
+                var day = new DailySectionAbsenceSummary();
                 var attendance = GetSectionAttendance(start, classId);
 
-                day.Absences = attendance.StudentAttendance.Count(x => x.ClassroomLevel == "Absent");
-                day.Tardies = attendance.StudentAttendance.Count(x => x.ClassroomLevel == "Tardy");
+                day.Absences = attendance.StudentAttendance.Count(x => x.ClassroomLevel == BaseAttendance.ABSENT);
+                day.Tardies = attendance.StudentAttendance.Count(x => x.ClassroomLevel == BaseAttendance.TARDY);
                 day.Date = start;
                 day.SectionId = classId;
                 days.Add(day);
 
                 foreach (var studentId in studentIds)
                 {
-                    absenceCount[studentId] += attendance.StudentAttendance.Count(x => x.ClassroomLevel == "Absent" && x.StudentId == studentId);
-                    tardiesCount[studentId] += attendance.StudentAttendance.Count(x => x.ClassroomLevel == "Tardy" && x.StudentId == studentId);
+                    absenceCount[studentId] += attendance.StudentAttendance.Count(x => x.ClassroomLevel == BaseAttendance.ABSENT && x.StudentId == studentId);
+                    tardiesCount[studentId] += attendance.StudentAttendance.Count(x => x.ClassroomLevel == BaseAttendance.TARDY && x.StudentId == studentId);
                 }
             }
             sectionAttendanceSummary.Days = days;
-            sectionAttendanceSummary.Students = studentIds.Select(x => new StudentSectionAttendanceSummary
+            sectionAttendanceSummary.Students = studentIds.Select(x => new StudentSectionAbsenceSummary
             {
                 SectionId = classId,
                 StudentId = x,
@@ -203,7 +202,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var markingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
             if (markingPeriod == null)
-                throw new NoMarkingPeriodException("No marking period is scheduled for this date");
+                throw new NoMarkingPeriodException();
 
             var sa = GetSectionAttendance(date, classId);
             if (sa != null)
@@ -318,12 +317,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private static string LevelToClassRoomLevel(string level)
         {
             if (level == null)
-                return StudentClassAttendance.PRESENT;
-            if (StudentClassAttendance.IsLateLevel(level))
-                return StudentClassAttendance.TARDY;
+                return BaseAttendance.PRESENT;
+            if (BaseAttendance.IsLateLevel(level))
+                return BaseAttendance.TARDY;
             if (level == "A" || level == "AO")
-                return StudentClassAttendance.ABSENT;
-            return StudentClassAttendance.MISSING;
+                return BaseAttendance.ABSENT;
+            return BaseAttendance.MISSING;
         }
 
         public IList<ClassAttendanceDetails> GetClassAttendances(DateTime date, int classId)
@@ -331,7 +330,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var markingPeriod = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
             if (markingPeriod == null)
             {
-                throw new ChalkableException("No marking period is scheduled for this date");
+                throw new NoMarkingPeriodException();
             }
 
             var sa = GetSectionAttendance(date, classId);
