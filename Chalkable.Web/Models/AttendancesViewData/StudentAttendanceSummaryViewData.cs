@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Data.School.Model;
@@ -25,65 +26,43 @@ namespace Chalkable.Web.Models.AttendancesViewData
                     GradingPeriods = GradingPeriodViewData.Create(gradingPeriods)
                 };
             if (currentGradingPeriod != null)
-            {
                 res.CurrentGradingPeriod = GradingPeriodViewData.Create(currentGradingPeriod);
-            }
+            
+            decimal posibleDailyAttendanceCount = 0, dailyLates = 0, dailyAbsents = 0, dailyPresents = 0;
             if (attendanceSummary.DailyAttendanceSummary != null)
             {
-                if (attendanceSummary.DailyAttendanceSummary.Absences.HasValue)
-                    res.Absences = PrepareAbsentBox(attendanceSummary);
-                if (attendanceSummary.DailyAttendanceSummary.Tardies.HasValue)
-                    res.Lates = PrepareLatesBox(attendanceSummary);
-                if (attendanceSummary.DailyAttendanceSummary.Presents.HasValue)
-                    res.Presents = PreparePresentBox(attendanceSummary);   
+                posibleDailyAttendanceCount = attendanceSummary.DailyAttendanceSummary.TotalAttendanceCount;
+                dailyLates = attendanceSummary.DailyAttendanceSummary.Tardies ?? 0;
+                dailyAbsents = attendanceSummary.DailyAttendanceSummary.Absences ?? 0;
+                dailyPresents = attendanceSummary.DailyAttendanceSummary.Presents ?? 0;
             }
-            return res;
-        }
-
-        private static StudentAttendanceHoverBox PrepareAbsentBox(StudentAttendanceSummary attendanceSummary)
-        {
-            var res = new StudentAttendanceHoverBox();
-            var absences = attendanceSummary.DailyAttendanceSummary.Absences.Value;
-            var posibleAbsent = attendanceSummary.DailyAttendanceSummary.TotalAttendanceCount;
-            res.Title = absences.ToString();
-            res.IsPassing = posibleAbsent > 0 && (absences * 100) / posibleAbsent > 5;
-            res.Hover = attendanceSummary.ClassAttendanceSummaries
-                .Select(x => new StudentAttendnaceHoverBoxItemViewData
-                {
-                    AttendnaceCount = x.Absences.HasValue ? (int)x.Absences.Value : 0,
-                    ClassName = x.Class.Name
-                }).ToList();
+            res.Absences = PrepareAttendanceBox(dailyAbsents, posibleDailyAttendanceCount, attendanceSummary.ClassAttendanceSummaries, x => x.Absences);
+            res.Lates = PrepareAttendanceBox(dailyLates, posibleDailyAttendanceCount, attendanceSummary.ClassAttendanceSummaries, x => x.Tardies);
+            res.Presents = PrepareAttendanceBox(dailyPresents, posibleDailyAttendanceCount, attendanceSummary.ClassAttendanceSummaries, x => x.Presents, true);
             return res;
         }
         
-        private static StudentAttendanceHoverBox PrepareLatesBox(StudentAttendanceSummary attendanceSummary)
+        private static StudentAttendanceHoverBox PrepareAttendanceBox(decimal? dailyAttIssuesCount, decimal posibleDailyAttCount
+            , IList<StudentClassAttendanceSummary> classAttendanceSummaries, Func<StudentClassAttendanceSummary, decimal?> getAttendanceIssuesCount, bool isPresentBox = false)
         {
             var res = new StudentAttendanceHoverBox();
-            var tardies = attendanceSummary.DailyAttendanceSummary.Tardies.Value;
-            var posibleTardies = attendanceSummary.DailyAttendanceSummary.TotalAttendanceCount;
-            res.Title = tardies.ToString();
-            res.IsPassing = posibleTardies > 0 && (tardies * 100) / posibleTardies > 10;
-            res.Hover = attendanceSummary.ClassAttendanceSummaries
+            decimal totalAbsences = 0, posibleAbsent = posibleDailyAttCount;
+            if (dailyAttIssuesCount.HasValue)
+                totalAbsences += dailyAttIssuesCount.Value;
+            
+            res.Hover = classAttendanceSummaries
                 .Select(x => new StudentAttendnaceHoverBoxItemViewData
                 {
-                    AttendnaceCount = x.Tardies.HasValue ? x.Tardies.Value : 0,
+                    AttendnaceCount = getAttendanceIssuesCount(x).HasValue ? (int)getAttendanceIssuesCount(x).Value : 0,
                     ClassName = x.Class.Name
                 }).ToList();
-            return res;
-        }
-
-        private static StudentAttendanceHoverBox PreparePresentBox(StudentAttendanceSummary attendanceSummary)
-        {
-            var res = new StudentAttendanceHoverBox();
-            var presentes = attendanceSummary.DailyAttendanceSummary.Presents.Value;
-            res.Title = presentes.ToString();
-            res.IsPassing = true;
-            res.Hover = attendanceSummary.ClassAttendanceSummaries
-                .Select(x => new StudentAttendnaceHoverBoxItemViewData
-                {
-                    AttendnaceCount = x.Presents.HasValue ? (int)x.Presents.Value : 0,
-                    ClassName = x.Class.Name
-                }).ToList();
+            if (classAttendanceSummaries.Count > 0)
+            {
+                totalAbsences += res.Hover.Sum(x => x.AttendnaceCount);
+                posibleAbsent += classAttendanceSummaries.Sum(x => x.PosibleAttendanceCount);
+            }
+            res.Title = totalAbsences.ToString();
+            res.IsPassing = isPresentBox || (posibleAbsent > 0 && (totalAbsences*100)/posibleAbsent > 5);
             return res;
         }
     }

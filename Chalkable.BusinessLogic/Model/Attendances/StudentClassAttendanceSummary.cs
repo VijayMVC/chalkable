@@ -13,6 +13,21 @@ namespace Chalkable.BusinessLogic.Model.Attendances
         public int ClassId { get; set; }
         public decimal? Presents { get; set; }
 
+        public decimal PosibleAttendanceCount
+        {
+            get 
+            { 
+                decimal sum = 0;
+                if (Tardies.HasValue)
+                    sum += Tardies.Value;
+                if (Absences.HasValue)
+                    sum += Absences.Value;
+                if (Presents.HasValue)
+                    sum += Presents.Value;
+                return sum;
+            }
+        }
+
         protected ShortStudentClassAttendanceSummary(StudentSectionAbsenceSummary studentSectionAbsence)
         {
             Tardies = studentSectionAbsence.Tardies;
