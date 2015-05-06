@@ -17,7 +17,6 @@ namespace Chalkable.BusinessLogic.Model.Attendances
         public decimal Absences { get; set; }
         public DateTime Date { get; set; }
         public int Tardies { get; set; }
-
         public static DailyAttendanceSummary Create(DateTime date, int tardies, decimal absences)
         {
             return new DailyAttendanceSummary { Absences = absences, Tardies = tardies, Date = date };
@@ -80,27 +79,9 @@ namespace Chalkable.BusinessLogic.Model.Attendances
         }
     }
 
-    public class StudentDailyAttendanceSummary
+    public class StudentDailyAttendanceSummary : SimpleAttendanceSummary
     {
-        public int? Tardies { get; set; }
-        public decimal? Absences { get; set; }
         public int StudentId { get; set; }
-        public decimal? Presents { get; set; }
-        public decimal TotalAttendanceCount
-        {
-            get
-            {
-                decimal sum = 0;
-                if (Absences.HasValue)
-                    sum += Absences.Value;
-                if (Tardies.HasValue)
-                    sum += Tardies.Value;
-                if (Presents.HasValue)
-                    sum += Presents.Value;
-                return sum;
-            }
-        }
-
         public static StudentDailyAttendanceSummary Create(StudentDailyAbsenceSummary absenceSummary)
         {
             return new StudentDailyAttendanceSummary

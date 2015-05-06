@@ -11,9 +11,9 @@ namespace Chalkable.Web.Models.AttendancesViewData
     {
         public IList<GradingPeriodViewData> GradingPeriods { get; set; }
         public GradingPeriodViewData CurrentGradingPeriod { get; set; }
-        public StudentAttendanceHoverBox Absences { get; set; }
-        public StudentAttendanceHoverBox Lates { get; set; }
-        public StudentAttendanceHoverBox Presents { get; set; }
+        public HoverBoxesViewData<StudentAttendnaceHoverBoxItemViewData> Absences { get; set; }
+        public HoverBoxesViewData<StudentAttendnaceHoverBoxItemViewData> Lates { get; set; }
+        public HoverBoxesViewData<StudentAttendnaceHoverBoxItemViewData> Presents { get; set; }
 
         protected StudentAttendanceSummaryViewData(StudentDetails student) : base(student)
         {
@@ -31,21 +31,21 @@ namespace Chalkable.Web.Models.AttendancesViewData
             decimal posibleDailyAttendanceCount = 0, dailyLates = 0, dailyAbsents = 0, dailyPresents = 0;
             if (attendanceSummary.DailyAttendanceSummary != null)
             {
-                posibleDailyAttendanceCount = attendanceSummary.DailyAttendanceSummary.TotalAttendanceCount;
+                posibleDailyAttendanceCount = attendanceSummary.DailyAttendanceSummary.PosibleAttendanceCount;
                 dailyLates = attendanceSummary.DailyAttendanceSummary.Tardies ?? 0;
                 dailyAbsents = attendanceSummary.DailyAttendanceSummary.Absences ?? 0;
                 dailyPresents = attendanceSummary.DailyAttendanceSummary.Presents ?? 0;
             }
-            res.Absences = PrepareAttendanceBox(dailyAbsents, posibleDailyAttendanceCount, attendanceSummary.ClassAttendanceSummaries, x => x.Absences);
-            res.Lates = PrepareAttendanceBox(dailyLates, posibleDailyAttendanceCount, attendanceSummary.ClassAttendanceSummaries, x => x.Tardies);
-            res.Presents = PrepareAttendanceBox(dailyPresents, posibleDailyAttendanceCount, attendanceSummary.ClassAttendanceSummaries, x => x.Presents, true);
+            res.Absences = PrepareAttendanceBox(dailyAbsents, posibleDailyAttendanceCount, attendanceSummary.ClassAttendanceSummaries, x => x.Absences, 5);
+            res.Lates = PrepareAttendanceBox(dailyLates, posibleDailyAttendanceCount, attendanceSummary.ClassAttendanceSummaries, x => x.Tardies, 10);
+            res.Presents = PrepareAttendanceBox(dailyPresents, posibleDailyAttendanceCount, attendanceSummary.ClassAttendanceSummaries, x => x.Presents, 0, true);
             return res;
         }
-        
-        private static StudentAttendanceHoverBox PrepareAttendanceBox(decimal? dailyAttIssuesCount, decimal posibleDailyAttCount
-            , IList<StudentClassAttendanceSummary> classAttendanceSummaries, Func<StudentClassAttendanceSummary, decimal?> getAttendanceIssuesCount, bool isPresentBox = false)
+
+        private static HoverBoxesViewData<StudentAttendnaceHoverBoxItemViewData> PrepareAttendanceBox(decimal? dailyAttIssuesCount, decimal posibleDailyAttCount
+            , IList<StudentClassAttendanceSummary> classAttendanceSummaries, Func<StudentClassAttendanceSummary, decimal?> getAttendanceIssuesCount, int persents, bool isPresentBox = false)
         {
-            var res = new StudentAttendanceHoverBox();
+            var res = new HoverBoxesViewData<StudentAttendnaceHoverBoxItemViewData>();
             decimal totalAbsences = 0, posibleAbsent = posibleDailyAttCount;
             if (dailyAttIssuesCount.HasValue)
                 totalAbsences += dailyAttIssuesCount.Value;
@@ -62,14 +62,9 @@ namespace Chalkable.Web.Models.AttendancesViewData
                 posibleAbsent += classAttendanceSummaries.Sum(x => x.PosibleAttendanceCount);
             }
             res.Title = totalAbsences.ToString();
-            res.IsPassing = isPresentBox || (posibleAbsent > 0 && (totalAbsences*100)/posibleAbsent > 5);
+            res.IsPassing = isPresentBox || (posibleAbsent > 0 && (totalAbsences * 100) / posibleAbsent < persents);
             return res;
         }
-    }
-
-    public class StudentAttendanceHoverBox : HoverBoxesViewData<StudentAttendnaceHoverBoxItemViewData>
-    {
-        public bool IsPassing { get; set; }
     }
 
     public class StudentAttendnaceHoverBoxItemViewData

@@ -22,6 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime date);
         IList<StudentDateAttendance> GetStudentAttendancesByDateRange(int studentId, DateTime startDate, DateTime endDate);
         StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? gradingPeriodId);
+        ClassAttendanceSummary GetClassAttendanceSummary(int classId, int? gradingPeriodId);
     }
 
     public class AttendanceService : SisConnectedService, IAttendanceService
@@ -314,6 +315,12 @@ namespace Chalkable.BusinessLogic.Services.School
                     res.ClassAttendanceSummaries = StudentClassAttendanceSummary.Create(stiModel.PeriodAttendance.ToList(), classes);
             }
             return res;
+        }
+
+        public ClassAttendanceSummary GetClassAttendanceSummary(int classId, int? gradingPeriodId)
+        {
+            var sectionAbcense = ConnectorLocator.SectionDashboardConnector.GetAttendanceSummaryDashboard(classId, gradingPeriodId);
+            return ClassAttendanceSummary.Create(sectionAbcense.PeriodAttendance);
         }
     }
 }

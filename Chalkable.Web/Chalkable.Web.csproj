@@ -247,7 +247,6 @@
     <Compile Include="Models\ApplicationsViewData\MiniQuizAppInfoViewData.cs" />
     <Compile Include="Models\AttendanceSeatingChartViewData.cs" />
     <Compile Include="Models\AttendancesViewData\AttendanceMonthViewData.cs" />
-    <Compile Include="Models\AttendancesViewData\ClassAttendanceSummaryViewData.cs" />
     <Compile Include="Models\AttendancesViewData\StudentAttendanceSummaryViewData.cs" />
     <Compile Include="Models\AttendancesViewData\StudentDateAttendanceViewData.cs" />
     <Compile Include="Models\AttendancesViewData\StudentPeriodAttendanceViewData.cs" />

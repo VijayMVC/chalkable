@@ -113,7 +113,8 @@
     <Compile Include="Model\ApplicationTotalPriceInfo.cs" />
     <Compile Include="Model\AttachmentContentInfo.cs" />
     <Compile Include="Model\Attendances\AttendanceSummary.cs" />
-    <Compile Include="Model\Attendances\ClassAttendanceSummaryInfo.cs" />
+    <Compile Include="Model\Attendances\SimpleAttendanceSummary.cs" />
+    <Compile Include="Model\Attendances\ClassAttendanceSummary.cs" />
     <Compile Include="Model\Attendances\DailyAbsenceSummaryInfo.cs" />
     <Compile Include="Model\Attendances\StudentDateAttendance.cs" />
     <Compile Include="Model\Attendances\StudentAttendanceDetailsInfo.cs" />

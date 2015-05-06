@@ -47,6 +47,7 @@ namespace Chalkable.StiConnector.Connectors
             StudentConnector = new StudentConnector(this);
             SectionCommentConnector = new SectionCommentConnector(this);
             ClassroomOptionConnector = new ClassroomOptionConnector(this);
+            SectionDashboardConnector = new SectionDashboardConnector(this);
         }
 
         public UsersConnector UsersConnector { get; private set; }
@@ -67,6 +68,7 @@ namespace Chalkable.StiConnector.Connectors
         public StudentConnector StudentConnector { get; private set; }
         public SectionCommentConnector SectionCommentConnector { get; private set; }
         public ClassroomOptionConnector ClassroomOptionConnector { get; private set; }
+        public SectionDashboardConnector SectionDashboardConnector { get; private set; }
 
         public class TokenModel
         {

@@ -42,7 +42,6 @@ namespace Chalkable.Web.Models.DisciplinesViewData
     public class StudentDisciplineBoxViewData : HoverBoxesViewData<StudentDisciplineHoverViewData>
     {
         public string Name { get; set; }
-        public bool IsPassing { get; set; }
         public static StudentDisciplineBoxViewData Create(InfractionSummaryInfo infractionSummary)
         {
             var isPassing = false; //TODO: calc when is passing

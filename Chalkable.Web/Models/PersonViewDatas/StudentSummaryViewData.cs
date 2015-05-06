@@ -57,8 +57,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
     public class StudentHoverBoxViewData<T> : HoverBoxesViewData<T>
     {
-        public bool IsPassing { get; set; }
-        
         public static StudentHoverBoxViewData<StudentSummeryRankViewData> Create(ClassRankInfo rankInfo)
         {
             var res = new StudentHoverBoxViewData<StudentSummeryRankViewData>();

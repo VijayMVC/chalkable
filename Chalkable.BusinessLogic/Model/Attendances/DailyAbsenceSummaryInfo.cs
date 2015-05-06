@@ -2,11 +2,8 @@
 
 namespace Chalkable.BusinessLogic.Model.Attendances
 {
-    public class DailyAbsenceSummaryInfo
+    public class DailyAbsenceSummaryInfo : SimpleAttendanceSummary
     {
-        public decimal? Absences { get; set; }
-        public int? Tardies { get; set; }
-        public decimal? Presents { get; set; }
         public int StudentId { get; set; }
 
         public static DailyAbsenceSummaryInfo Create(StudentDailyAbsenceSummary dailyAbsenceSummary)
