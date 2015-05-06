@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;
@@ -78,7 +79,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         }
 
         public static StudentHoverBoxViewData<TotalAbsencesPerClassViewData> Create(DailyAbsenceSummaryInfo dailyAbsenceSummary
-            , IList<ClassAttendanceSummary> attendances, IList<ClassDetails> classDetailses)
+            , IList<ShortStudentClassAttendanceSummary> attendances, IList<ClassDetails> classDetailses)
         {
             var res = new StudentHoverBoxViewData<TotalAbsencesPerClassViewData>
                 {
@@ -115,7 +116,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public decimal Absences { get; set; }
         public ShortClassViewData Class { get; set; }
 
-        public static IList<TotalAbsencesPerClassViewData> Create(IList<ClassAttendanceSummary> attendances, IList<ClassDetails> classDetailses)
+        public static IList<TotalAbsencesPerClassViewData> Create(IList<ShortStudentClassAttendanceSummary> attendances, IList<ClassDetails> classDetailses)
         {
             var atts = attendances.OrderByDescending(x=>x.Absences);
             var res = new List<TotalAbsencesPerClassViewData>();
@@ -126,7 +127,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 if (c == null) continue;
                 res.Add(new TotalAbsencesPerClassViewData
                 {
-                    Absences = classAttendanceSummary.Absences, // Excluded tardies because of Jonathan Whitehurst's comment on CHLK-3184 
+                    Absences = classAttendanceSummary.Absences ?? 0, // Excluded tardies because of Jonathan Whitehurst's comment on CHLK-3184 
                     Class = ShortClassViewData.Create(c)
                 });
             }

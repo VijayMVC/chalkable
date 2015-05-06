@@ -5,6 +5,7 @@ using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Models.AttendancesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -102,6 +103,17 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(StudentExplorerViewData.Create(studentExplorerInfo));
         }
 
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult AttendanceSummary(int studentId, int? markingPeriodId)
+        {
+            var syid = GetCurrentSchoolYearId();
+            var markingPeriods = SchoolLocator.MarkingPeriodService.GetMarkingPeriods(syid);
+            var currentMp = markingPeriodId.HasValue
+                            ? SchoolLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId.Value)
+                            : SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod(Context.NowSchoolYearTime.Date);
+            var studentSummary = SchoolLocator.AttendanceService.GetStudentAttendanceSummary(studentId, markingPeriodId);
+            return Json(StudentAttendanceSummaryViewData.Create(studentSummary, currentMp, markingPeriods));
+        }
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult Apps(int studentId, int? start, int? count)
         {

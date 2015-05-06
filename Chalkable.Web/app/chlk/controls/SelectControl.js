@@ -16,13 +16,17 @@ NAMESPACE('chlk.controls', function () {
                 node.chosen({disable_search_threshold: attributes.maxLength || 1000}).change(function(){
                     var node = jQuery(this);
                     node.find('option[selected]').attr('selected', false);
-                    node.find('option[value="' + node.val() + '"]').attr('selected', true);
+                    var option = node.find('option[value="' + node.val() + '"]');
+                    option.attr('selected', true);
                     var controller = node.data('controller');
                     if(controller){
                         var action = node.data('action');
                         var paramsArr = node.data('params') || [];
                         var params = paramsArr.slice();
                         params.unshift(node.val());
+                        var additionalParams = option.data('additional-params');
+                        if(additionalParams && additionalParams.length)
+                            params = params.concat(additionalParams);
                         var state = that.context.getState();
                         state.setController(controller);
                         state.setAction(action);

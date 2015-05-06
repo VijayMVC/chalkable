@@ -32,6 +32,7 @@ REQUIRE('chlk.models.student.StudentProfileGradingViewData');
 
 NAMESPACE('chlk.controllers', function (){
     "use strict";
+
     /** @class chlk.controllers.StudentsController */
     CLASS(
         'StudentsController', EXTENDS(chlk.controllers.UserController), [
@@ -182,27 +183,43 @@ NAMESPACE('chlk.controllers', function (){
             function attendanceAction(markingPeriodId_, personId, date_){
                 markingPeriodId_ = this.prepareMarkingPeriodId(markingPeriodId_);
                 var res = ria.async.wait([
-                            this.attendanceService.getStudentAttendanceSummary(personId, markingPeriodId_),
-                            this.attendanceCalendarService.getStudentAttendancePerMonth(personId, date_),
-                            this.markingPeriodService.list(this.getCurrentSchoolYearId()) // todo get markingPeriods from session
+                            this.studentService.getStudentAttendanceSummary(personId, markingPeriodId_),
+                            this.attendanceCalendarService.getStudentAttendancePerMonth(personId, date_)
                         ])
                         .attach(this.validateResponse_())
                         .then(function(result){
-                            var currentMp = result[0].getMarkingPeriod();
-                            var endDate = currentMp.getEndDate();
-                            var startDate = currentMp.getStartDate();
+                            var currentMp = result[0].getCurrentMarkingPeriod();
+                            this.getContext().getSession().set(ChlkSessionConstants.CURRENT_CALENDAR_MP, currentMp);
+                            this.getContext().getSession().set(ChlkSessionConstants.CURRENT_CALENDAR_ITEMS, result[1]);
                             var calendarModel = new chlk.models.calendar.attendance.StudentAttendanceMonthCalendar(
-                                date_, startDate, endDate, result[1], personId
+                                date_, result[1], personId, currentMp
                             );
                             return new chlk.models.student.StudentProfileAttendanceViewData(
                                 this.getCurrentRole(),
                                 result[0],
                                 calendarModel,
-                                result[2],
                                 this.getUserClaims_()
                             );
                         }, this);
-                return this.PushView(chlk.activities.student.StudentProfileAttendancePage, res);
+                return this.PushOrUpdateView(chlk.activities.student.StudentProfileAttendancePage, res);
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String, String, String, Boolean]],
+            function showStudentAttendanceAction(studentId, date, controller_, action_, params_, isNew_) {
+                var items = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_CALENDAR_ITEMS);
+                var item = items.filter(function(day){
+                    return day.getDate().isSameDay(date);
+                })[0];
+                var target = chlk.controls.getActionLinkControlLastNode(),
+                    reasons = this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []),
+                    canRePost = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE),
+                    canSetAttendance = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE)
+                        || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN),
+                    canChangeReasons = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ABSENCE_REASONS)
+                        || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN),
+                    model = new chlk.models.attendance.StudentDayAttendances(target, item, reasons, canRePost, canSetAttendance,
+                        canChangeReasons, controller_, action_, params_);
+                return this.ShadeView(chlk.activities.attendance.StudentDayAttendancePopup, new ria.async.DeferredData(model));
             },
 
             [[chlk.models.id.MarkingPeriodId, chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
@@ -237,15 +254,16 @@ NAMESPACE('chlk.controllers', function (){
                 return markingPeriodId_ && markingPeriodId_.valueOf() ? markingPeriodId_ :  markingPeriod.getId();
             },
 
-            [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId]],
-            function attendanceMonthAction(date_, minDate_, maxDate_, personId){
+            [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
+            function attendanceMonthAction(minDate_, maxDate_, personId, date_){
                 var res = this.attendanceCalendarService.getStudentAttendancePerMonth(personId, date_)
                     .attach(this.validateResponse_())
                     .then(function(data){
+                       var currentMP = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_CALENDAR_MP, null);
                        return new chlk.models.calendar.attendance.StudentAttendanceMonthCalendar(
-                           date_, minDate_, maxDate_, data, personId
+                           date_, data, personId, currentMP
                        )
-                    });
+                    }, this);
                 return this.UpdateView(chlk.activities.student.StudentProfileAttendancePage, res);
             },
 

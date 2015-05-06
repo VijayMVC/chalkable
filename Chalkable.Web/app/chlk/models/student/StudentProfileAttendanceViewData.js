@@ -10,20 +10,17 @@ NAMESPACE('chlk.models.student', function(){
     CLASS('StudentProfileAttendanceViewData',EXTENDS(chlk.models.people.UserProfileViewData.OF(chlk.models.attendance.StudentAttendanceSummary)), [
 
         chlk.models.calendar.attendance.StudentAttendanceMonthCalendar, 'attendanceCalendar',
-        ArrayOf(chlk.models.schoolYear.MarkingPeriod), 'markingPeriods',
 
         chlk.models.attendance.StudentAttendanceSummary, function getSummaryInfo(){return this.getUser();},
 
         [[chlk.models.common.Role,
             chlk.models.attendance.StudentAttendanceSummary
             , chlk.models.calendar.attendance.StudentAttendanceMonthCalendar
-            , ArrayOf(chlk.models.schoolYear.MarkingPeriod)
             , ArrayOf(chlk.models.people.Claim)
         ]],
-        function $(role, summaryInfo, attendanceCalendar, markingPeriods, claims_){
+        function $(role, summaryInfo, attendanceCalendar, claims_){
             BASE(role, summaryInfo, claims_);
             this.setAttendanceCalendar(attendanceCalendar);
-            this.setMarkingPeriods(markingPeriods);
         }
     ]);
 });

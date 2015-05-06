@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services.DemoSchool.Storage;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Connectors.Model.Attendances;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -300,8 +302,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var students = ServiceLocator.StudentService.GetTeacherStudents(teacherId, Context.SchoolYearId.Value);
             var sectionsAttendanceSummary = GetSectionAttendanceSummary(classesIds, gradingPeriod.StartDate, gradingPeriod.EndDate);
             var res = new AttendanceSummary();
-            var dailySectionAttendances = new List<DailySectionAttendanceSummary>();
-            var studentAtts = new List<StudentSectionAttendanceSummary>();
+            var dailySectionAttendances = new List<DailySectionAbsenceSummary>();
+            var studentAtts = new List<StudentSectionAbsenceSummary>();
             foreach (var sectionAttendanceSummary in sectionsAttendanceSummary)
             {
                 dailySectionAttendances.AddRange(sectionAttendanceSummary.Days);
@@ -361,74 +363,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return new List<ClassDetails>();
         }
 
-        public IList<ClassAttendance> SetAttendanceForClass(Guid classPeriodId, DateTime date, string level, Guid? attendanceReasonId = null, int? sisId = null)
+        public IList<StudentDateAttendance> GetStudentAttendancesByDateRange(int studentId, DateTime startDate, DateTime endDate)
         {
             throw new NotImplementedException();
         }
 
-        public StudentDailyAttendance SetDailyAttendance(DateTime date, Guid personId, int? timeIn, int? timeOut)
+        public StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? markingPeriodId)
         {
             throw new NotImplementedException();
         }
 
-        public StudentDailyAttendance GetDailyAttendance(DateTime date, Guid personId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<StudentDailyAttendance> GetDailyAttendances(DateTime date)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ClassAttendanceDetails GetClassAttendanceDetailsById(Guid classAttendanceId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<ClassAttendanceDetails> GetClassAttendanceDetails(Guid? schoolYearId, Guid? markingPeriodId, Guid? classId, Guid? personId, string level, DateTime date)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ClassAttendanceDetails SwipeCard(Guid personId, DateTime dateTime, Guid classPeriodId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public int PossibleAttendanceCount(Guid markingPeriodId, Guid classId, DateTime? tillDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDictionary<string, int> CalcAttendanceTotalPerTypeForStudent(Guid studentId, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDictionary<Guid, int> CalcAttendanceTotalForStudents(IList<Guid> studentsIds, Guid? schoolYearId, Guid? markingPeriodId, DateTime? fromDate, DateTime? toDate, string level)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IDictionary<DateTime, int> GetStudentCountAbsentFromDay(DateTime fromDate, DateTime toDate, IList<Guid> gradeLevelIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<Guid> GetStudentsAbsentFromDay(DateTime date, IList<Guid> gradeLevelsIds)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ProcessClassAttendance(DateTime date)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void NotAssignedAttendanceProcess()
-        {
-            throw new NotImplementedException();
-        }
     }
 }

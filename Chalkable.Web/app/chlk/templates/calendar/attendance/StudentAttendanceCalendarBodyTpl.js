@@ -30,10 +30,17 @@ NAMESPACE('chlk.templates.calendar.attendance', function (){
                 switch (attendanceType){
                     case attTypeEnums.PRESENT.valueOf() : return 'green';
                     case attTypeEnums.ABSENT.valueOf() : return 'red';
-                    case attTypeEnums.EXCUSED.valueOf() : return 'blue';
                     case attTypeEnums.LATE.valueOf() : return 'darkOrange';
                     default : return 'black';
                 }
+            },
+
+            function getItemsGroupped() {
+                var res = [], source = this.calendarItems.slice(0);
+                while (source.length) {
+                    res.push(source.splice(0, 7));
+                }
+                return res;
             }
         ]);
 });

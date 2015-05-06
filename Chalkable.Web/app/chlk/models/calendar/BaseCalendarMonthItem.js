@@ -13,7 +13,11 @@ NAMESPACE('chlk.models.calendar', function () {
             [ria.serialize.SerializeProperty('issunday')],
             Boolean, 'sunday',
 
-            chlk.models.common.ChlkDate, 'date'
+            chlk.models.common.ChlkDate, 'date',
+
+            String, 'todayClassName',
+
+            String, 'className'
 
     ]);
 });

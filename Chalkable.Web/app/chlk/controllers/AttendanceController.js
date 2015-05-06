@@ -221,28 +221,6 @@ NAMESPACE('chlk.controllers', function (){
 
         },
 
-        [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate, String, String, String, Boolean]],
-        function showStudentAttendanceAction(studentId, date_, controller_, action_, params_, isNew_) {
-            var result = this.attendanceService
-                .getStudentAttendance(studentId, date_)
-                .attach(this.validateResponse_())
-                .then(function(model){
-                    model.setTarget(chlk.controls.getActionLinkControlLastNode());
-                    model.setReasons(this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []));
-                    model.setAbleEdit(this.userInRole(chlk.models.common.RoleEnum.TEACHER));
-                    if(controller_)
-                        model.setController(controller_);
-                    if(action_)
-                        model.setAction(action_);
-                    if(params_)
-                        model.setParams(params_);
-                    if(isNew_)
-                        model.setNewStudent(true);
-                    return model;
-                }, this);
-            return this.ShadeView(chlk.activities.attendance.StudentDayAttendancePopup, result);
-        },
-
         [[chlk.models.attendance.AttendanceStudentBox]],
         VOID, function showStudentBoxAction(model) {
             var date = model.getDate() ? model.getDate().format('mm-dd-yy') : '';
@@ -472,6 +450,16 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.attendance.SetClassListAttendance]],
         function setClassAttendanceListFromSeatingChartAction(model){
+            var result = this.attendanceService.setAttendance(model)
+                .attach(this.validateResponse_())
+                .then(function(res){
+                    return new chlk.models.attendance.SeatingChart();
+                }, this);
+            return this.UpdateView(chlk.activities.attendance.SeatingChartPage, result, 'saved');
+        },
+
+        [[chlk.models.attendance.SetClassListAttendance]],
+        function setClassAttendanceListFromPopUpAction(model){
             var result = this.attendanceService.setAttendance(model)
                 .attach(this.validateResponse_())
                 .then(function(res){

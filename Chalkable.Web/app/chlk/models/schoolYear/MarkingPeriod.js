@@ -3,9 +3,12 @@ REQUIRE('chlk.models.id.MarkingPeriodId');
 
 NAMESPACE('chlk.models.schoolYear', function () {
     "use strict";
+
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.schoolYear.MarkingPeriod*/
     CLASS(
-        'MarkingPeriod', [
+        UNSAFE, 'MarkingPeriod', IMPLEMENTS(ria.serialize.IDeserializable), [
             chlk.models.id.MarkingPeriodId, 'id',
             String, 'description',
             [ria.serialize.SerializeProperty('startdate')],
@@ -13,6 +16,15 @@ NAMESPACE('chlk.models.schoolYear', function () {
             [ria.serialize.SerializeProperty('enddate')],
             chlk.models.common.ChlkDate, 'endDate',
             Number, 'weekdays',
-            String, 'name'
+            String, 'name',
+
+            VOID, function deserialize(raw){
+                this.id = SJX.fromValue(raw.id, chlk.models.id.MarkingPeriodId);
+                this.description = SJX.fromValue(raw.description, String);
+                this.startDate = SJX.fromDeserializable(raw.startdate, chlk.models.common.ChlkDate);
+                this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
+                this.weekdays = SJX.fromValue(raw.weekdays, Number);
+                this.name = SJX.fromValue(raw.name, String);
+            }
         ]);
 });
