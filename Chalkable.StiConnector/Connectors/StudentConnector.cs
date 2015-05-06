@@ -10,8 +10,8 @@ namespace Chalkable.StiConnector.Connectors
     public class StudentConnector : ConnectorBase
     {
         private const string GRADING_PERIOD_ID_PARAM = "gradingPeriodId";
-        private const string END_DATE_PARAM = "startDate";
-        private const string START_DATE_PARAM = "endDate";
+        private const string START_DATE_PARAM = "startDate";
+        private const string END_DATE_PARAM = "endDate";
         private const string DATE_PARAM = "date";
 
         public StudentConnector(ConnectorLocator locator) : base(locator)
