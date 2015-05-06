@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School
         AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod);
         IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime date);
         IList<StudentDateAttendance> GetStudentAttendancesByDateRange(int studentId, DateTime startDate, DateTime endDate);
-        StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? markingPeriodId);
+        StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? gradingPeriodId);
     }
 
     public class AttendanceService : SisConnectedService, IAttendanceService
@@ -299,12 +299,12 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
         
-        public StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? markingPeriodId)
+        public StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? gradingPeriodId)
         {
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var student = ServiceLocator.StudentService.GetById(studentId, syId);
-            var stiModel = ConnectorLocator.StudentConnector.GetStudentAttendanceSummary(studentId, syId, markingPeriodId);
-            var classes = ServiceLocator.ClassService.GetStudentClasses(syId, studentId, markingPeriodId);
+            var stiModel = ConnectorLocator.StudentConnector.GetStudentAttendanceSummary(studentId, syId, gradingPeriodId);
+            var classes = ServiceLocator.ClassService.GetStudentClasses(syId, studentId, gradingPeriodId);
             var res = new StudentAttendanceSummary {Student = student};
             if (stiModel != null)
             {

@@ -367,7 +367,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? markingPeriodId)
+        public StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? gradingPeriodId)
         {
             throw new NotImplementedException();
         }

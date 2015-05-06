@@ -8,8 +8,8 @@ namespace Chalkable.Web.Models.AttendancesViewData
 {
     public class StudentAttendanceSummaryViewData : StudentViewData
     {
-        public IList<MarkingPeriodViewData> MarkingPeriods { get; set; }
-        public MarkingPeriodViewData CurrentMarkingPeriod { get; set; }
+        public IList<GradingPeriodViewData> GradingPeriods { get; set; }
+        public GradingPeriodViewData CurrentGradingPeriod { get; set; }
         public StudentAttendanceHoverBox Absences { get; set; }
         public StudentAttendanceHoverBox Lates { get; set; }
         public StudentAttendanceHoverBox Presents { get; set; }
@@ -18,15 +18,15 @@ namespace Chalkable.Web.Models.AttendancesViewData
         {
         }
 
-        public static StudentAttendanceSummaryViewData Create(StudentAttendanceSummary attendanceSummary, MarkingPeriod currentMarkingPeriod, IList<MarkingPeriod> markingPeriods)
+        public static StudentAttendanceSummaryViewData Create(StudentAttendanceSummary attendanceSummary, GradingPeriod currentGradingPeriod, IList<GradingPeriod> gradingPeriods)
         {
             var res = new StudentAttendanceSummaryViewData(attendanceSummary.Student)
                 {
-                    MarkingPeriods = MarkingPeriodViewData.Create(markingPeriods)
+                    GradingPeriods = GradingPeriodViewData.Create(gradingPeriods)
                 };
-            if (currentMarkingPeriod != null)
+            if (currentGradingPeriod != null)
             {
-                res.CurrentMarkingPeriod = MarkingPeriodViewData.Create(currentMarkingPeriod);
+                res.CurrentGradingPeriod = GradingPeriodViewData.Create(currentGradingPeriod);
             }
             if (attendanceSummary.DailyAttendanceSummary != null)
             {

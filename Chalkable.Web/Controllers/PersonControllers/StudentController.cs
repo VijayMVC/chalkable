@@ -104,15 +104,15 @@ namespace Chalkable.Web.Controllers.PersonControllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult AttendanceSummary(int studentId, int? markingPeriodId)
+        public ActionResult AttendanceSummary(int studentId, int? gradingPeriodId)
         {
             var syid = GetCurrentSchoolYearId();
-            var markingPeriods = SchoolLocator.MarkingPeriodService.GetMarkingPeriods(syid);
-            var currentMp = markingPeriodId.HasValue
-                            ? SchoolLocator.MarkingPeriodService.GetMarkingPeriodById(markingPeriodId.Value)
-                            : SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod(Context.NowSchoolYearTime.Date);
-            var studentSummary = SchoolLocator.AttendanceService.GetStudentAttendanceSummary(studentId, markingPeriodId);
-            return Json(StudentAttendanceSummaryViewData.Create(studentSummary, currentMp, markingPeriods));
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syid);
+            var gp = gradingPeriodId.HasValue
+                         ? SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value)
+                         : SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syid, Context.NowSchoolYearTime.Date);
+            var studentSummary = SchoolLocator.AttendanceService.GetStudentAttendanceSummary(studentId, gradingPeriodId);
+            return Json(StudentAttendanceSummaryViewData.Create(studentSummary, gp, gradingPeriods));
         }
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult Apps(int studentId, int? start, int? count)
@@ -129,11 +129,12 @@ namespace Chalkable.Web.Controllers.PersonControllers
         {
             var syId = GetCurrentSchoolYearId();
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
             var gp = gradingPeriodId.HasValue
                          ? SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value)
                          : SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime.Date);
             var infractionSummaries = SchoolLocator.DisciplineService.GetStudentInfractionSummary(studentId, gradingPeriodId);
-            var res = StudentDisciplineSummaryViewData.Create(student, infractionSummaries, gp);
+            var res = StudentDisciplineSummaryViewData.Create(student, infractionSummaries, gp, gradingPeriods);
             return Json(res);
         }
     }
