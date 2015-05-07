@@ -23,6 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<StudentDateAttendance> GetStudentAttendancesByDateRange(int studentId, DateTime startDate, DateTime endDate);
         StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? gradingPeriodId);
         ClassAttendanceSummary GetClassAttendanceSummary(int classId, int? gradingPeriodId);
+        IList<ClassPeriodAttendance> GetClassPeriodAttendances(int classId, DateTime start, DateTime end);
     }
 
     public class AttendanceService : SisConnectedService, IAttendanceService
@@ -110,23 +111,23 @@ namespace Chalkable.BusinessLogic.Services.School
         private string LevelToClassRoomLevel(string level)
         {
             if (level == null)
-                return StudentClassAttendance.PRESENT;
-            if (StudentClassAttendance.IsLateLevel(level))
-                return StudentClassAttendance.TARDY;
+                return BaseAttendance.PRESENT;
+            if (BaseAttendance.IsLateLevel(level))
+                return BaseAttendance.TARDY;
             if (level == "A" || level == "AO")
-                return StudentClassAttendance.ABSENT;
-            return StudentClassAttendance.MISSING;
+                return BaseAttendance.ABSENT;
+            return BaseAttendance.MISSING;
         }
 
         private static string ClassroomLevelToLevelCvt(string classroomLevel)
         {
             switch (classroomLevel)
             {
-                case StudentClassAttendance.PRESENT:
+                case BaseAttendance.PRESENT:
                     return null;
-                case StudentClassAttendance.ABSENT:
+                case BaseAttendance.ABSENT:
                     return "A";
-                case StudentClassAttendance.TARDY:
+                case BaseAttendance.TARDY:
                     return "T";
                 default:
                     return "H";
@@ -321,6 +322,55 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var sectionAbcense = ConnectorLocator.SectionDashboardConnector.GetAttendanceSummaryDashboard(classId, gradingPeriodId);
             return ClassAttendanceSummary.Create(sectionAbcense.PeriodAttendance);
+        }
+
+
+        public IList<ClassPeriodAttendance> GetClassPeriodAttendances(int classId, DateTime start, DateTime end)
+        {
+            var stiAttendances = ConnectorLocator.SectionDashboardConnector.GetAttendanceDetailDashboard(classId, start, end);
+            if (stiAttendances != null)
+            {
+                var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+                var mps = ServiceLocator.MarkingPeriodService.GetMarkingPeriodsByDateRange(start, end, syId);
+                if (mps.Count == 0)
+                    return null;
+                
+                var c = ServiceLocator.ClassService.GetById(classId);
+                var periods = ServiceLocator.PeriodService.GetPeriods(syId);
+                var students = new List<StudentDetails>();
+                students = mps.Select(mp => ServiceLocator.StudentService.GetClassStudents(classId, mp.Id))
+                              .Aggregate(students, (current, items) => current.Union(items).ToList());
+
+                var res = new List<ClassPeriodAttendance>();
+                var currentDate = start;
+                while (currentDate <= end)
+                {
+                    var date = currentDate.Date;
+                    var periodAtts = stiAttendances.PeriodAbsences.Where(x => x.Date == date).ToList();
+                    var item = new ClassPeriodAttendance
+                        {
+                            Class = c,
+                            ClassId = c.Id,
+                            Date = currentDate,
+                            StudentAttendances = periodAtts.Select(x=> new StudentPeriodAttendance
+                                {
+                                    Class = c,
+                                    Student = students.FirstOrDefault(s=>s.Id == x.StudentId),
+                                    AttendanceReasonId = x.AbsenceReasonId,
+                                    Category = x.AbsenceCategory,
+                                    ClassId = x.SectionId,
+                                    Date = x.Date,
+                                    Level = x.AbsenceLevel,
+                                    StudentId = x.StudentId,
+                                    Period = periods.FirstOrDefault(period => period.Id == x.TimeSlotId)
+                                }).Where(x=>x.Student != null).ToList()
+                        };
+                    res.Add(item);
+                    currentDate = currentDate.AddDays(1);
+                }
+                return res;
+            }
+            return null;
         }
     }
 }

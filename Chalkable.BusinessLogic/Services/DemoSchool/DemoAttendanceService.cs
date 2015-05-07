@@ -376,5 +376,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+        public IList<ClassPeriodAttendance> GetClassPeriodAttendances(int classId, DateTime start, DateTime end)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -20,5 +20,17 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => AttendanceForStudentCalendarViewData.Create(time, b, Context.PersonId.Value, studentAttendances, attendanceReasons));
             return Json(res, 6);
         }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult MonthForClass(int classId, DateTime? date)
+        {
+            if (!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            DateTime start, end;
+            MonthCalendar(ref date, out start, out end);
+            var classAttendnances = SchoolLocator.AttendanceService.GetClassPeriodAttendances(classId, start, end);
+            var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => AttendanceForClassCalendarViewData.Create(time, b, Context.PersonId.Value, classAttendnances));
+            return Json(res, 6);
+        }
     }
 }

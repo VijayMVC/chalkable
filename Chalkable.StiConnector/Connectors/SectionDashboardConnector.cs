@@ -15,7 +15,7 @@ namespace Chalkable.StiConnector.Connectors
         {
         }
 
-        public StudentAttendanceDetailDashboard GetAttendanceDetailDashboard(int sectionId, DateTime startDate, DateTime endDate)
+        public SectionAttendanceDetailDashboard GetAttendanceDetailDashboard(int sectionId, DateTime startDate, DateTime endDate)
         {
             var url = string.Format(BaseUrl + "chalkable/sections/{0}/dashboard/attendance/datail", sectionId);
             var nvc = new NameValueCollection
@@ -23,7 +23,7 @@ namespace Chalkable.StiConnector.Connectors
                     {START_DATE_PARAM, startDate.ToString(Constants.DATE_FORMAT)},
                     {END_DATE_PARAM, endDate.ToString(Constants.DATE_FORMAT)}
                 };
-            return Call<StudentAttendanceDetailDashboard>(url, nvc);
+            return Call<SectionAttendanceDetailDashboard>(url, nvc);
         }
 
         public SectionAttendanceSummaryDashboard GetAttendanceSummaryDashboard(int sectionId, int? gradingPeriodId)
