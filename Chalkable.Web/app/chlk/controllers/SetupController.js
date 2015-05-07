@@ -77,8 +77,8 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.Permissions([
                 [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN]
             ])],
-            [[chlk.models.id.ClassId]],
-            function categoriesSetupAction(classId_){
+            [[chlk.models.id.ClassId, Boolean]],
+            function categoriesSetupAction(classId_, update_){
                 var types;
                 var topData = new chlk.models.classes.ClassesForTopBar(null, classId_);
 
@@ -90,7 +90,9 @@ NAMESPACE('chlk.controllers', function (){
                 var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_GRADE_BOOK_CATEGORIES);
 
                 var result = new ria.async.DeferredData(new chlk.models.setup.CategoriesSetupViewData(topData, types, canEdit));
-                return this.PushOrUpdateView(chlk.activities.setup.CategoriesSetupPage, result);
+                if(update_)
+                    return this.UpdateView(chlk.activities.setup.CategoriesSetupPage, result);
+                return this.PushView(chlk.activities.setup.CategoriesSetupPage, result);
             },
 
             [[chlk.models.id.SchoolPersonId]],
@@ -249,7 +251,7 @@ NAMESPACE('chlk.controllers', function (){
                 res.thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        return this.BackgroundNavigate('setup', 'categoriesSetup', [model.getClassId()]);
+                        return this.BackgroundNavigate('setup', 'categoriesSetup', [model.getClassId(), true]);
                     }, this);
                 this.BackgroundCloseView(chlk.activities.setup.ClassAnnouncementTypeDialog);
                 return null;
@@ -266,7 +268,7 @@ NAMESPACE('chlk.controllers', function (){
                     .thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
                     .attach(this.validateResponse_())
                     .then(function(data){
-                        return this.BackgroundNavigate('setup', 'categoriesSetup', [model.getClassId()]);
+                        return this.BackgroundNavigate('setup', 'categoriesSetup', [model.getClassId(), true]);
                     }, this);
                 return null;
             },
