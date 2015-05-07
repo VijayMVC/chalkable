@@ -22,7 +22,7 @@ mixin ReportCell(value)
                 each comment in self.getComments()
                     .row
                         div(data-id=comment.getCommentId()).cell.check-container
-                            +Checkbox('commentyId', false, comment.isSystem() || !self.isAbleEdit()).item-check
+                            +Checkbox('commentyId', false, !comment.isEditable() || !self.isAbleEdit()).item-check
                         .cell
                             +ActionLink('setup', 'addEditComment', comment.getCommentId())(data-tooltip=comment.getComment(), data-tooltip-type="overflow").text=comment.getComment()
                         .cell

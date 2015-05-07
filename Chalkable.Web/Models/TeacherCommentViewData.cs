@@ -6,10 +6,11 @@ namespace Chalkable.Web.Models
 {
     public class TeacherCommentViewData
     {
-        public int CommentId { get; set; }
+        public int? CommentId { get; set; }
         public string Comment { get; set; }
         public bool IsSystem { get; set; }
-        public int TeacherId { get; set; }
+        public int? TeacherId { get; set; }
+        public bool EditableForTeacher { get; set; }
 
         public static TeacherCommentViewData Create(TeacherComment teacherComment)
         {
@@ -18,7 +19,8 @@ namespace Chalkable.Web.Models
                     Comment = teacherComment.Comment,
                     CommentId = teacherComment.CommentId,
                     IsSystem = teacherComment.IsSystem,
-                    TeacherId = teacherComment.TeacherId
+                    TeacherId = teacherComment.TeacherId,
+                    EditableForTeacher = teacherComment.EditableForTeacher
                 };
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace Chalkable.StiConnector.Connectors.Model
 {
-    public class SectionComment
+    public class GradebookCommect
     {
         /// <summary>
         /// The text of the comment
@@ -10,7 +10,7 @@
         /// <summary>
         /// The id of the SectionComment
         /// </summary>
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         /// <summary>
         /// Teachers should only be able to edit comments that aren't system comments. 
@@ -21,6 +21,6 @@
         /// <summary>
         /// The id of the Teacher
         /// </summary>
-        public int TeacherId { get; set; }
+        public int? TeacherId { get; set; }
     }
 }

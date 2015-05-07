@@ -9,12 +9,12 @@ namespace Chalkable.StiConnector.Connectors
         }
 
 
-        public SectionComment CreateComment(int acadSessionId, int teacherId, SectionComment sectionComment)
+        public GradebookCommect CreateComment(int acadSessionId, int teacherId, GradebookCommect sectionComment)
         {
             return Post(BuildBaseUrl(acadSessionId, teacherId), sectionComment);
         }
 
-        public void UpdateComment(int acadSessionId, int teacherId, SectionComment sectionComment)
+        public void UpdateComment(int acadSessionId, int teacherId, GradebookCommect sectionComment)
         {
             var url = BuildBaseUrl(acadSessionId, teacherId) + "/" + sectionComment.Id;
             Put(url, sectionComment);
@@ -25,14 +25,14 @@ namespace Chalkable.StiConnector.Connectors
             Delete(BuildBaseUrl(acadSessionId, teacherId) + "/" + sectionCommentId);
         }
 
-        public SectionComment GetCommentById(int acadSessionId, int teacherId, int sectionCommentId)
+        public GradebookCommect GetCommentById(int acadSessionId, int teacherId, int sectionCommentId)
         {
-            return Call<SectionComment>(BuildBaseUrl(acadSessionId, teacherId) + "/" + sectionCommentId);
+            return Call<GradebookCommect>(BuildBaseUrl(acadSessionId, teacherId) + "/" + sectionCommentId);
         }
 
-        public IList<SectionComment> GetComments(int acadSessionId, int teacherId)
+        public IList<GradebookCommect> GetComments(int acadSessionId, int teacherId)
         {
-            return Call<IList<SectionComment>>(BuildBaseUrl(acadSessionId, teacherId) + "/");
+            return Call<IList<GradebookCommect>>(BuildBaseUrl(acadSessionId, teacherId) + "/");
         } 
 
         private string BuildBaseUrl(int acadSessionId, int teacherId)

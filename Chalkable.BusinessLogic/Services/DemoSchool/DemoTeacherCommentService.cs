@@ -7,7 +7,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
     public class TeacherCommentStorage : BaseDemoIntStorage<TeacherComment>
     {
-        public TeacherCommentStorage() : base(x=>x.CommentId, true)
+        public TeacherCommentStorage() : base(x=> x.CommentId.HasValue ? x.CommentId.Value : 0, true)
         {
         }
     }

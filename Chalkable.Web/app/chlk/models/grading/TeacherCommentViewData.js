@@ -12,6 +12,9 @@ NAMESPACE('chlk.models.grading', function () {
         [ria.serialize.SerializeProperty('teacherid')],
         chlk.models.id.SchoolPersonId, 'teacherId',
 
+        [ria.serialize.SerializeProperty('editableforteacher')],
+        Boolean, 'editable',
+
         [ria.serialize.SerializeProperty('issystem')],
         Boolean, 'system',
 
@@ -20,5 +23,6 @@ NAMESPACE('chlk.models.grading', function () {
         String, 'ids',
 
         Boolean, 'ableEdit'
+
     ]);
 });

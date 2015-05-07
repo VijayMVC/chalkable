@@ -28,7 +28,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             EnsureIsDistrictAdminOrCurrentTeacher(teacherId);
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            var stiComment = new SectionComment {Comment = comment, TeacherId = teacherId};
+            var stiComment = new GradebookCommect {Comment = comment, TeacherId = teacherId};
             stiComment = ConnectorLocator.SectionCommentConnector.CreateComment(syId, teacherId, stiComment);
             return stiComment != null ? TeacherComment.Create(stiComment) : null;
         }
@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             EnsureIsDistrictAdminOrCurrentTeacher(teacherId);
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            var stiComment = new SectionComment {Comment = comment, TeacherId = teacherId, Id = commentId};
+            var stiComment = new GradebookCommect {Comment = comment, TeacherId = teacherId, Id = commentId};
             ConnectorLocator.SectionCommentConnector.UpdateComment(syId, teacherId, stiComment);
             return TeacherComment.Create(stiComment);
         }
@@ -64,7 +64,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<TeacherComment> GetComments(int teacherId)
         {
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            var stiComments = ConnectorLocator.SectionCommentConnector.GetComments(syId, teacherId) ?? new List<SectionComment>();
+            var stiComments = ConnectorLocator.SectionCommentConnector.GetComments(syId, teacherId) ?? new List<GradebookCommect>();
             return stiComments.Select(TeacherComment.Create).ToList();
         }
 
