@@ -197,7 +197,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             using (var uow = Read())
             {
-                return new ApplicationDataAccess(uow).GetSuggestedApplications(abIds, installedAppsIds, start, count);
+                var apps =new  ApplicationDataAccess(uow).GetSuggestedApplications(abIds, installedAppsIds, start, count);
+                apps = apps.Where(x => x.DeveloperRef == Context.DeveloperId.Value).ToList();
+                return apps;
             }
         }
 

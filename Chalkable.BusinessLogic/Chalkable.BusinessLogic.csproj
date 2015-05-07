@@ -340,9 +340,7 @@
       <Name>WindowsAzure.Acs.Oauth2</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Services\DemoSchool\Storage\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />

@@ -65,11 +65,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IList<GradingScale> GetGradingScales(bool onlyAppliedToAlphaGrades = true)
         {
             var res = GradingScaleStorage.GetAll();
-            if (onlyAppliedToAlphaGrades)
-            {
-                var gradingScalesRange = GradingScaleRangeStorage.GetAll();
-                res = res.Where(x => gradingScalesRange.Any(y => y.GradingScaleRef == x.Id)).ToList();
-            }
+            if (!onlyAppliedToAlphaGrades) return res;
+            var gradingScalesRange = GradingScaleRangeStorage.GetAll();
+            res = res.Where(x => gradingScalesRange.Any(y => y.GradingScaleRef == x.Id)).ToList();
             return res;
         }
 

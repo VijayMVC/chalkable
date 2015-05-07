@@ -24,17 +24,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Add(IList<GradedItem> gradedItems)
         {
-            throw new NotImplementedException();
+            GradedItemStorage.Add(gradedItems);
         }
 
         public void Edit(IList<GradedItem> gradedItems)
         {
-            throw new NotImplementedException();
+            GradedItemStorage.Update(gradedItems);
         }
 
         public void Delete(IList<GradedItem> gradedItems)
         {
-            throw new NotImplementedException();
+            GradedItemStorage.Delete(gradedItems);
         }
 
         public IList<GradedItem> GetGradedItems(int gradingPeriodId)
