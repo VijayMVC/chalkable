@@ -114,6 +114,10 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShowAlertBox("Absence Reasons is a required field. Please make sure that you enter data in all required fields", "Error"), null;
             }
 
+            if (!reportViewData.getTerms()){
+                return this.ShowAlertBox("You should select at least one term", "Error"), null;
+            }
+
             var src = this.reportingService.submitAttendanceProfileReport(
                 reportViewData.getClassId(),
                 reportViewData.getGradingPeriodId(),
