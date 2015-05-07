@@ -321,7 +321,7 @@ NAMESPACE('chlk.controllers', function (){
                             model.getCurrentGradingGrid().setAbleEditAvg(canEditAvg);
                             var students = model.getCurrentGradingGrid().getStudents().map(function (item){return item.getStudentInfo()});
                             this.getContext().getSession().set(ChlkSessionConstants.STUDENTS_FOR_REPORT, students);
-
+                            this.getContext().getSession().set(ChlkSessionConstants.INCLUDE_WITHDRAWN_STUDENTS, model.getCurrentGradingGrid().isIncludeWithdrawnStudents());
                             studentIds = students.map(function(item){return item.getId().valueOf()});
                         }
 
@@ -596,7 +596,10 @@ NAMESPACE('chlk.controllers', function (){
                         var periods = data[0];
                         var averages = data[1];
                         var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
-                        return new chlk.models.reports.GradeVerificationReportViewData(periods, averages, students, classId, gradingPeriodId, startDate, endDate);
+                        var includeWithdrawn = this.getContext().getSession().get(ChlkSessionConstants.INCLUDE_WITHDRAWN_STUDENTS);
+                        var res = new chlk.models.reports.GradeVerificationReportViewData(periods, averages, students, classId, gradingPeriodId, startDate, endDate);
+                        res.setIncludeWithdrawnStudents(includeWithdrawn);
+                        return res;
                     }, this);
                 return this.ShadeView(chlk.activities.reports.GradeVerificationReportDialog, res);
             },

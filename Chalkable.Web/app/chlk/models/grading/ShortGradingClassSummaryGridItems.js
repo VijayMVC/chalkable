@@ -55,7 +55,7 @@ NAMESPACE('chlk.models.grading', function () {
                 this.studentAverages = SJX.fromArrayOfDeserializables(raw.totalavarages, chlk.models.grading.StudentAverageInfo);
                 this.studentTotalPoints = SJX.fromArrayOfDeserializables(raw.totalpoints, chlk.models.grading.StudentTotalPoint);
                 this.gradingItems = SJX.fromArrayOfDeserializables(raw.gradingitems, chlk.models.announcement.ShortAnnouncementViewData);
-
+                this.includeWithdrawnStudents = SJX.fromValue(raw.includewithdrawnstudents, Boolean);
                 if (raw.schoolOptions) {
                     this.schoolOptions = chlk.models.school.SchoolOption.$fromRaw(raw.schoolOptions.allowscoreentryforunexcused);
                 }
@@ -76,6 +76,7 @@ NAMESPACE('chlk.models.grading', function () {
             Boolean , 'ableDisplayStudentAverage',
             Boolean , 'ableDisplayTotalPoints',
             Boolean, 'roundDisplayedAverages',
+            Boolean, 'includeWithdrawnStudents',
             ArrayOf(chlk.models.grading.StudentAverageInfo), 'studentAverages',
             ArrayOf(chlk.models.grading.StudentTotalPoint), 'studentTotalPoints',
 
