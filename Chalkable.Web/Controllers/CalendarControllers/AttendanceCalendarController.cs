@@ -29,7 +29,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             DateTime start, end;
             MonthCalendar(ref date, out start, out end);
             var classAttendnances = SchoolLocator.AttendanceService.GetClassPeriodAttendances(classId, start, end);
-            var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => AttendanceForClassCalendarViewData.Create(time, b, Context.PersonId.Value, classAttendnances));
+            var res = PrepareMonthCalendar(start, end, date.Value, (time, b) => AttendanceForClassCalendarViewData.Create(time, b, classId, classAttendnances));
             return Json(res, 6);
         }
     }
