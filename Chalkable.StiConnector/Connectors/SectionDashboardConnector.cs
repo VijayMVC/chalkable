@@ -17,7 +17,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public SectionAttendanceDetailDashboard GetAttendanceDetailDashboard(int sectionId, DateTime startDate, DateTime endDate)
         {
-            var url = string.Format(BaseUrl + "chalkable/sections/{0}/dashboard/attendance/datail", sectionId);
+            var url = string.Format("{0}chalkable/sections/{1}/dashboard/attendance/detail", BaseUrl, sectionId);
             var nvc = new NameValueCollection
                 {
                     {START_DATE_PARAM, startDate.ToString(Constants.DATE_FORMAT)},
