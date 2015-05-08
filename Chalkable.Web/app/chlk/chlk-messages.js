@@ -27,6 +27,10 @@ function oneOrMany(text, needE){
         return text;
     };
 
+    getText.valueOf = function(){
+        return text;
+    };
+
     return getText;
 }
 

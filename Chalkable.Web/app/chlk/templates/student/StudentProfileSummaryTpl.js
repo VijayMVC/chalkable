@@ -68,7 +68,7 @@ NAMESPACE('chlk.templates.student', function () {
                 return this.buildGlanceBoxData_(this.getUser().getDisciplineBox()
                     , function(item){ return item.getTotal()}
                     , function(item){ return item.getDisciplineType().getName()}
-                    , Msg.Discipline);
+                    , Msg.Discipline.toString());
             },
 
             Object, function buildGradesGlanceBoxData(){
