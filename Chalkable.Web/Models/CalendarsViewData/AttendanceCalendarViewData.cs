@@ -122,7 +122,7 @@ namespace Chalkable.Web.Models.CalendarsViewData
 
         public static AttendanceForClassCalendarViewData Create(DateTime date, bool isCurrentMonth, int classId, IList<ClassPeriodAttendance> attendances)
         {
-            var classAtt = attendances.FirstOrDefault(a => a.Date == date);
+            var classAtt = attendances != null ? attendances.FirstOrDefault(a => a.Date == date) : null;
             return new AttendanceForClassCalendarViewData(date, isCurrentMonth)
                 {
                     ClassId = classId,
