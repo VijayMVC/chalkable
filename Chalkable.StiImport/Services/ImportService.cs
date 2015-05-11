@@ -115,29 +115,26 @@ namespace Chalkable.StiImport.Services
                 throw new Exception("District id should be defined for import");
             
             var d = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
-            try
+            connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
+            Log.LogInfo("remove district last sync label");
+            d.LastSync = null;
+            ServiceLocatorMaster.DistrictService.Update(d);
+            Log.LogInfo("performing before restore preparation");
+            ServiceLocatorMaster.DbMaintenanceService.BeforeSisRestore(d.Id);
+            ServiceLocatorSchool.DbMaintenanceService.BeforeSisRestore();
+            Log.LogInfo("download data to restore");
+            DownloadSyncData();
+            Log.LogInfo("do initial sync");
+            DoInitialSync();
+            Log.LogInfo("performing before restore preparation");
+            var logs = ServiceLocatorMaster.DbMaintenanceService.AfterSisRestore(d.Id);
+            ServiceLocatorSchool.DbMaintenanceService.AfterSisRestore();
+            foreach (var restoreLogItem in logs)
             {
-                connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
-                Log.LogInfo("download data to sync");
-                DownloadSyncData();
-                ServiceLocatorMaster.DbMaintenanceService.BeforeSisRestore(d.Id);
-                ServiceLocatorSchool.DbMaintenanceService.BeforeSisRestore();
-                DoRegularSync(true);
-                var logs = ServiceLocatorMaster.DbMaintenanceService.AfterSisRestore(d.Id);
-                ServiceLocatorSchool.DbMaintenanceService.AfterSisRestore();
-                foreach (var restoreLogItem in logs)
-                {
-                    Log.LogWarning(restoreLogItem.Msg);
-                }
-                Log.LogInfo("updating district last sync");
-                UpdateDistrictLastSync(d, true);
+                Log.LogWarning(restoreLogItem.Msg);
             }
-            catch (Exception)
-            {
-                UpdateDistrictLastSync(d, false);
-                throw;
-            }
-
+            Log.LogInfo("updating district last sync");
+            UpdateDistrictLastSync(d, true);
             if (context.GetSyncResult<User>().All.Length > 0)
             {
                 Log.LogInfo("creating user login infos");

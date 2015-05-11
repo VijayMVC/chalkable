@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Master.Model;
 
@@ -17,7 +18,7 @@ namespace Chalkable.Data.Master.DataAccess
             {
                 {"@districtId", districtId}
             };
-            ExecuteStoredProcedure("spBeforeRestore", ps);
+            ExecuteStoredProcedure("spBeforeRestore", ps, Settings.DbUpdateTimeout);
         }
 
         public IList<RestoreLogItem> AfterSisRestore(Guid districtId)
@@ -26,7 +27,7 @@ namespace Chalkable.Data.Master.DataAccess
             {
                 {"@districtId", districtId}
             };
-            return ExecuteStoredProcedureList<RestoreLogItem>("spAfterRestore", ps);
+            return ExecuteStoredProcedureList<RestoreLogItem>("spAfterRestore", ps, Settings.DbUpdateTimeout);
         }
     }
 }

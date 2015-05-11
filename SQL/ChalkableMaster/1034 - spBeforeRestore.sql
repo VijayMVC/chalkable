@@ -1,4 +1,4 @@
-Create Procedure spBeforeRestore
+Create Procedure spBeforeRestore 
 	@districtId uniqueidentifier
 as
 	

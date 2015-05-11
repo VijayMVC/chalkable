@@ -12,6 +12,7 @@
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
       <Setting name="ChalkableSchoolDbServers" value="yqdubo97gg.database.windows.net,qap56j04br.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
+      <Setting name="DbUpdateTimeout" value="3600" />
       <!-- CDN and content settings-->
       <Setting name="Domain" value="classroom.chalkable.com" />
       <Setting name="ScriptsRoot" value="https://az374501.vo.msecnd.net/static-{0}" />
@@ -51,7 +52,7 @@
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
       <Setting name="ChalkableSchoolDbServers" value="yqdubo97gg.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
-
+      <Setting name="DbUpdateTimeout" value="3600" />
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="6ielVZXrxXB3ZrU/4om5/HM5a7GGniMmMriAevxxyQw=" />
       <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="chalkable.com" />
@@ -80,6 +81,7 @@
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
       <Setting name="ChalkableSchoolDbServers" value="yqdubo97gg.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
+      <Setting name="DbUpdateTimeout" value="3600" />
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="6ielVZXrxXB3ZrU/4om5/HM5a7GGniMmMriAevxxyQw=" />
       <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="chalkable.com" />

@@ -21,10 +21,12 @@ namespace Chalkable.Data.Common
             this.unitOfWork = unitOfWork;
         }
 
-        protected void ExecuteStoredProcedure(string name, IDictionary<string, object> parameters)
+        protected void ExecuteStoredProcedure(string name, IDictionary<string, object> parameters, int? timeout = null)
         {
             using (var command = unitOfWork.GetStoredProcedureCommandWithParams(name, parameters))
             {
+                if (timeout.HasValue)
+                    command.CommandTimeout = timeout.Value;
                 command.ExecuteNonQuery();
             }
         }
@@ -307,9 +309,9 @@ namespace Chalkable.Data.Common
             }
         }
 
-        public IList<T> ExecuteStoredProcedureList<T>(string name, IDictionary<string, object> parameters) where T : new()
+        public IList<T> ExecuteStoredProcedureList<T>(string name, IDictionary<string, object> parameters, int? timeout = null) where T : new()
         {
-            using (var reader = ExecuteStoredProcedureReader(name, parameters))
+            using (var reader = ExecuteStoredProcedureReader(name, parameters, timeout))
             {
                 return reader.ReadList<T>();
             }

@@ -65,10 +65,9 @@ namespace Chalkable.Common
             return String.Format(GetSchoolConnectionString("ChalkableSchool"), dbServer, SchoolTemplateDbName);
         }
 
-        public static string SchoolTemplateDbName
-        {
-            get { return Get("ChalkableSchoolTemplateDbName"); }
-        }
+        public static string SchoolTemplateDbName { get { return Get("ChalkableSchoolTemplateDbName"); } }
+
+        public static int DbUpdateTimeout { get { return int.Parse(Get("DbUpdateTimeout")); } }
 
         /* Web settings */
 
