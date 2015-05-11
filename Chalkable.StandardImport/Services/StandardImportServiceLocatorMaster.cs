@@ -4,6 +4,7 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.UserTracking;
+using IDbMaintenanceService = Chalkable.BusinessLogic.Services.Master.IDbMaintenanceService;
 using ISchoolService = Chalkable.BusinessLogic.Services.Master.ISchoolService;
 
 namespace Chalkable.StandardImport.Services
@@ -45,6 +46,7 @@ namespace Chalkable.StandardImport.Services
         public IDbService DbService { get; private set; }
         public IUserTrackingService UserTrackingService { get; private set; }
         public ICommonCoreStandardService CommonCoreStandardService { get; private set; }
+        public IDbMaintenanceService DbMaintenanceService { get; private set; }
     }
     
 }

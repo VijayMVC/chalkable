@@ -30,6 +30,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IDbService DbService { get; }
         IUserTrackingService UserTrackingService { get; }
         ICommonCoreStandardService CommonCoreStandardService { get; }
+        IDbMaintenanceService DbMaintenanceService { get; }
     }
 
     public class ServiceLocatorMaster : ServiceLocator, IServiceLocatorMaster
@@ -51,6 +52,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IDeveloperService developerService;
         private IUserTrackingService userTrackingService;
         private ICommonCoreStandardService commonCoreStandardService;
+        private IDbMaintenanceService dbMaintenanceService;
 
         public ServiceLocatorMaster(UserContext context) : base(context)
         {
@@ -74,6 +76,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             commonCoreStandardService = new CommonCoreStandardService(this);
             DbService = new DbService(Context != null ? Context.MasterConnectionString : null);
             userTrackingService = new MixPanelService(Settings.MixPanelToken);
+            dbMaintenanceService = new DbMaintenanceService(this);
         }
 
         public IUserService UserService { get { return userService; } }
@@ -96,6 +99,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IDbService DbService { get; protected set; }
         public IUserTrackingService UserTrackingService { get { return userTrackingService; } }
         public ICommonCoreStandardService CommonCoreStandardService { get { return commonCoreStandardService; } }
+        public IDbMaintenanceService DbMaintenanceService {get { return dbMaintenanceService; }}
 
 
         public virtual IServiceLocatorSchool SchoolServiceLocator(Guid districtId, int? schoolLocalId)

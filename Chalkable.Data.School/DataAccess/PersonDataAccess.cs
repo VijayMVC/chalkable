@@ -136,5 +136,4 @@ namespace Chalkable.Data.School.DataAccess
             return ExecuteStoredProcedurePaginated<Person>("spSearchPersons", ps, start, count);
         }
     }
-
 }

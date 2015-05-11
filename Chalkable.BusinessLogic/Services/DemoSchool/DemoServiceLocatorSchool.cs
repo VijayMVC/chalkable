@@ -10,6 +10,7 @@ using Chalkable.BusinessLogic.Services.School.Notifications;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
+using IDbMaintenanceService = Chalkable.BusinessLogic.Services.School.IDbMaintenanceService;
 using ISchoolService = Chalkable.BusinessLogic.Services.School.ISchoolService;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -183,13 +184,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IGradedItemService GradedItemService { get { return gradedItemService; } }
         public IAnnouncementAttributeService AnnouncementAttributeService { get { return announcementAttributeService; } }
         public IContactService ContactService { get { return contactService; } }
-        public IDbService SchoolDbService
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public IDbService SchoolDbService { get { throw new NotImplementedException(); } }
+        public IDbMaintenanceService DbMaintenanceService { get { throw new NotImplementedException(); } }
 
         private void AddAttendances()
         {

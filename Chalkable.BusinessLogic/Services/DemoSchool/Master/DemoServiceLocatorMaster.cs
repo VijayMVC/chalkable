@@ -3,6 +3,7 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.UserTracking;
+using IDbMaintenanceService = Chalkable.BusinessLogic.Services.Master.IDbMaintenanceService;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
@@ -97,5 +98,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public IPictureService FundRequestPictureService { get { return fundRequestPictureService; } }
         public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
         public ICommonCoreStandardService CommonCoreStandardService { get { return commonCoreStandardService; } }
+        public IDbMaintenanceService DbMaintenanceService { get{throw new NotImplementedException();} }
     }
 }

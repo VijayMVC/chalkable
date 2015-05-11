@@ -71,6 +71,7 @@
     <Compile Include="DataAccess\ClassTeacherDataAccess.cs" />
     <Compile Include="DataAccess\GradingPeriodDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
+    <Compile Include="DataAccess\DbMaintenanceDataAccess.cs" />
     <Compile Include="DataAccess\ScheduleDataAccess.cs" />
     <Compile Include="DataAccess\ScheduledTimeSlotVariationDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />

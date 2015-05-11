@@ -211,6 +211,7 @@
     <Compile Include="Services\Master\PictureServices\PersonPictureService.cs" />
     <Compile Include="Services\Master\PictureServices\PictureService.cs" />
     <Compile Include="Services\Master\PreferenceService.cs" />
+    <Compile Include="Services\Master\DbMaintenanceService.cs" />
     <Compile Include="Services\Master\SchoolService.cs" />
     <Compile Include="Services\Master\MasterServiceBase.cs" />
     <Compile Include="Services\Master\ServiceLocatorMaster.cs" />
@@ -275,6 +276,7 @@
     <Compile Include="Services\School\PracticeGradeService.cs" />
     <Compile Include="Services\School\PrivateMessageService.cs" />
     <Compile Include="Services\School\ReportingService.cs" />
+    <Compile Include="Services\School\DbMaintenanceService.cs" />
     <Compile Include="Services\School\RoomService.cs" />
     <Compile Include="Services\School\ScheduledTimeSlotService.cs" />
     <Compile Include="Services\School\SchoolPersonService.cs" />

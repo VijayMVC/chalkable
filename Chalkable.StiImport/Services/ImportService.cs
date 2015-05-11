@@ -120,8 +120,15 @@ namespace Chalkable.StiImport.Services
                 connectorLocator = ConnectorLocator.Create(ConnectionInfo.SisUserName, ConnectionInfo.SisPassword, ConnectionInfo.SisUrl);
                 Log.LogInfo("download data to sync");
                 DownloadSyncData();
+                ServiceLocatorMaster.DbMaintenanceService.BeforeSisRestore(d.Id);
+                ServiceLocatorSchool.DbMaintenanceService.BeforeSisRestore();
                 DoRegularSync(true);
-
+                var logs = ServiceLocatorMaster.DbMaintenanceService.AfterSisRestore(d.Id);
+                ServiceLocatorSchool.DbMaintenanceService.AfterSisRestore();
+                foreach (var restoreLogItem in logs)
+                {
+                    Log.LogWarning(restoreLogItem.Msg);
+                }
                 Log.LogInfo("updating district last sync");
                 UpdateDistrictLastSync(d, true);
             }
