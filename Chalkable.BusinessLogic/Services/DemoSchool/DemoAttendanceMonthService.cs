@@ -24,17 +24,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Add(IList<AttendanceMonth> attendanceMonths)
         {
-            throw new NotImplementedException();
+            AttendanceMonthStorage.Add(attendanceMonths);
         }
 
         public void Edit(IList<AttendanceMonth> attendanceMonths)
         {
-            throw new NotImplementedException();
+            AttendanceMonthStorage.Update(attendanceMonths);
         }
 
         public void Delete(IList<AttendanceMonth> attendanceMonths)
         {
-            throw new NotImplementedException();
+            AttendanceMonthStorage.Delete(attendanceMonths);
         }
 
         public IList<AttendanceMonth> GetAttendanceMonths(int schoolYearId, DateTime? fromDate = null, DateTime? endDate = null)

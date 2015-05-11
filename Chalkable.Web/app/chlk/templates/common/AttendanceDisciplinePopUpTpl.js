@@ -3,6 +3,8 @@ REQUIRE('chlk.models.common.AttendanceDisciplinePopUp');
 
 NAMESPACE('chlk.templates.common', function () {
 
+    //OLD FILE
+
     /** @class chlk.templates.common.AttendanceDisciplinePopUpTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/common/InfoMsg.jade')],

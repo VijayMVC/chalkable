@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.StiConnector.Connectors.Model;
 
 
@@ -15,6 +12,23 @@ namespace Chalkable.StiConnector.Connectors
         {
         }
 
+        public ActivityCategory Add(ActivityCategory activityCategory)
+        {
+           return Post(string.Format("{0}activitycategories", BaseUrl), activityCategory);
+        }
+
+        public void Update(int activityCategoryId, ActivityCategory activityCategory)
+        {
+            Put(string.Format("{0}activities/categories/{1}", BaseUrl, activityCategoryId), activityCategory);
+        }
+        public void Delete(int activityCategoryId)
+        {
+            Delete(string.Format("{0}activities/categories/{1}", BaseUrl, activityCategoryId));
+        }
+        public ActivityCategory GetById(int activityCategoryId)
+        {
+            return Call<ActivityCategory>(string.Format("{0}activities/categories/{1}", BaseUrl, activityCategoryId));
+        }
         public IList<ActivityCategory> GetBySectionIds(IList<int> sectionIds)
         {
             if(sectionIds.Count == 1)
@@ -23,12 +37,9 @@ namespace Chalkable.StiConnector.Connectors
             var nvc = new NameValueCollection();
             for (int i = 0; i < sectionIds.Count; i++)
                 nvc.Add(string.Format("sectionIds[{0}]", i), sectionIds[i].ToString());
-            return Post<IList<ActivityCategory>, int[]>(string.Format("{0}activities/categories", BaseUrl), sectionIds.ToArray());
+            return Post<IList<ActivityCategory>, int[]>(string.Format("{0}/sections/activities/categories", BaseUrl), sectionIds.ToArray());
         }
 
-        public ActivityCategory GetById(int activityCategoryId)
-        {
-            return Call<ActivityCategory>(string.Format("{0}activities/categories/{1}", BaseUrl, activityCategoryId));
-        }
-    }
+
+   }
 }

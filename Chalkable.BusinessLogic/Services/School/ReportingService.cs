@@ -359,7 +359,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     SortActivities = inputModel.SortItems,
                     SortSections = inputModel.SortClasses,
                     ActivityAttributeIds = inputModel.AnnouncementAttributes != null ? inputModel.AnnouncementAttributes.ToArray() : null,
-                    ActivityCategoryIds = inputModel.AnnouncementTypes != null ? inputModel.AnnouncementTypes.ToArray() : null
+                    ActivityCategoryIds = inputModel.AnnouncementTypes != null ? inputModel.AnnouncementTypes.ToArray() : null,
+                    MaxCount = inputModel.MaxCount
                 };
             return ConnectorLocator.ReportConnector.LessonPlanReport(ps);
         }

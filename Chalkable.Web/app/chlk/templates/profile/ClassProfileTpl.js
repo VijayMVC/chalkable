@@ -35,7 +35,7 @@ NAMESPACE('chlk.templates.profile', function(){
                 if (isAdminOrTeacher){
 
                     //!isAdminOrTeacher && !this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ATTENDANCE)),
-                    links.push(this.buildActionLinkModelForClass('attendance', 'Attendance', pressedActionName, classId_, true));
+                    links.push(this.buildActionLinkModelForClass('attendance', 'Attendance', pressedActionName, classId_));
                     links.push(this.buildActionLinkModelForClass('apps', 'Apps', pressedActionName, classId_, true));
                     links.push(this.buildActionLinkModelForClass('schedule', 'Schedule', pressedActionName, classId_, true));
                     //!this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_GRADES))

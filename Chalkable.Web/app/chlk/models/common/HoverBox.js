@@ -13,11 +13,13 @@ NAMESPACE('chlk.models.common', function () {
 
             VOID, function deserialize(raw){
                 this.title = SJX.fromValue(raw.title, String);
+                this.name = SJX.fromValue(raw.name, String);
                 this.passing = SJX.fromValue(raw.ispassing, Boolean);
                 this.hover = SJX.fromArrayOfDeserializables(raw.hover, this.getSpecsOf('THoverItem'));
             },
             String, 'title',
             Boolean, 'passing',
+            String, 'name',
             ArrayOf(THoverItem), 'hover'
 
         ]);

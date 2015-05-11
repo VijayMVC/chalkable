@@ -31,6 +31,8 @@ var ChlkSessionConstants = {
     CREDIT_CARD_DATA: 'creditCardData',
     MY_APPS_CACHED: 'myAppsCached',
     CURRENT_PERSON_BALANCE: 'currentPersonBalance',
+    CURRENT_CALENDAR_GP: 'currentCalendarGp',
+    CURRENT_CALENDAR_ITEMS: 'currentCalendarItems',
     DEV_APPS: 'dev-apps',
     CURRENT_APP_ID: 'currentAppId',
     CURRENT_APP: 'currentApp',
@@ -55,5 +57,6 @@ var ChlkSessionConstants = {
     DEMO_SCHOOL_PICTURE_DISTRICT: 'DEMO_SCHOOL_PICTURE_DISTRICT',
     STUDY_CENTER_ENABLED: 'studyCenterEnabled',
     CLASSES_INFO: 'classesInfo',
-    STUDENTS_FOR_REPORT: 'StudentsForReport'
+    STUDENTS_FOR_REPORT: 'StudentsForReport',
+    INCLUDE_WITHDRAWN_STUDENTS: 'IncludeWithdrawnStudents'
 };

@@ -38,8 +38,10 @@ NAMESPACE('chlk.activities.apps', function () {
                 }
                 else {
                     var announcementAppId = this.dom.find('#add-app').getData('announcement-app-id');
+                    var simpleApp = !node.getData('advanced-app');
                     (new chlk.AppApiHost()).closeApp({
-                        announcementAppId: announcementAppId
+                        announcementAppId: announcementAppId,
+                        simpleApp: simpleApp
                     });
                 }
                 return false;
@@ -66,15 +68,19 @@ NAMESPACE('chlk.activities.apps', function () {
                     var node = this.dom.find('#add-app');
                     var announcementAppId = node.getData('announcement-app-id');
                     var announcementId = node.getData('announcement-id');
+                    var simpleApp = !node.getData('advanced-app');
                     data = {
                         attach: true,
                         announcementAppId: announcementAppId,
-                        announcementId: announcementId
+                        announcementId: announcementId,
+                        simpleApp: simpleApp
                     };
 
                 } else if (isSave) {
+                    var node = this.dom.find('#save-app');
+                    var simpleApp = !node.getData('advanced-app');
                     rUrl = this.getFrameUrl('view');
-                    data = {attach: false};
+                    data = {attach: false, simpleApp: simpleApp};
                 }
                 (new chlk.AppApiHost()).addApp(this.getInnerDocument(), rUrl, data);
 

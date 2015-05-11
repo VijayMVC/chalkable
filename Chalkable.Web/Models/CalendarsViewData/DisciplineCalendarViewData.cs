@@ -1,25 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.DisciplinesViewData;
 
 namespace Chalkable.Web.Models.CalendarsViewData
 {
 
-    public class DisciplineTypeCalendarItemViewData : DisciplineTypeViewData
-    {
-        public int Count { get; set; }
-        public int PeriodOrder { get; set; }
-    }
+    
 
     public class DisciplineMonthCalendarViewData : MonthCalendarViewData
     {
+        private class DisciplineTypeCalendarItemViewData : DisciplineTypeViewData
+        {
+            public int Count { get; set; }
+        }
+        
         public IList<DisciplineView> Disciplines { get; set; }
-        public IList<DisciplineTypeCalendarItemViewData> DisciplineTypes { get; set; }
         public int MoreCount { get; set; }
         public const int DISCIPLINE_COUNT = 3;
+        public bool HasDisciplineIssues { get; set; }
 
         protected DisciplineMonthCalendarViewData(DateTime date, bool isCurrentMonth) : base(date, isCurrentMonth)
         {
@@ -49,11 +49,10 @@ namespace Chalkable.Web.Models.CalendarsViewData
             if (sortedDisciplineTypes.Count > DISCIPLINE_COUNT)
             {
                 moreCount = sortedDisciplineTypes.Skip(DISCIPLINE_COUNT).Sum(x => x.Count);
-                sortedDisciplineTypes = sortedDisciplineTypes.Take(DISCIPLINE_COUNT).ToList();
             }
             return new DisciplineMonthCalendarViewData(date, isCurrentMonth)
             {
-                DisciplineTypes = sortedDisciplineTypes,
+                HasDisciplineIssues = sortedDisciplineTypes.Count > 1,
                 Disciplines = dscViewDataList,
                 MoreCount = moreCount,
             };

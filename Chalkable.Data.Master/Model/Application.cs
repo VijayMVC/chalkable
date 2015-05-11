@@ -42,6 +42,10 @@ namespace Chalkable.Data.Master.Model
         public bool HasParentMyApps { get; set; }
         public const string IS_INTERNAL_FIELD = "IsInternal";
         public bool IsInternal { get; set; }
+
+        public const string IS_ADVANCED_FIELD = "IsAdvanced";
+        public bool IsAdvanced { get; set; }
+
         public decimal? PricePerClass { get; set; }
         public decimal? PricePerSchool { get; set; }
         public const string ORIGINAL_REF_FIELD = "OriginalRef";

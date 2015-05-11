@@ -24,6 +24,7 @@ NAMESPACE('chlk.models.apps', function () {
             Boolean, 'parentMyAppsEnabled',
             Boolean, 'attachEnabled',
             Boolean, 'showInGradingViewEnabled',
+            Boolean, 'advancedApp',
 
             Number, 'costPerUser',
             Number, 'costPerSchool',

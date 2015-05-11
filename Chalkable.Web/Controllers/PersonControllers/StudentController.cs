@@ -3,10 +3,10 @@ using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Models.ApplicationsViewData;
+using Chalkable.Web.Models.AttendancesViewData;
+using Chalkable.Web.Models.DisciplinesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.PersonControllers
@@ -46,7 +46,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 currentClass = classes.FirstOrDefault(x => x.Id == studentSummaryInfo.CurrentSectionId.Value);
                 if (currentClass != null && currentClass.RoomRef.HasValue)
                     currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
-
             }
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(schoolPersonId);
             var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList);
@@ -104,6 +103,17 @@ namespace Chalkable.Web.Controllers.PersonControllers
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult AttendanceSummary(int studentId, int? gradingPeriodId)
+        {
+            var syid = GetCurrentSchoolYearId();
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syid);
+            var gp = gradingPeriodId.HasValue
+                         ? SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value)
+                         : SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syid, Context.NowSchoolYearTime.Date);
+            var studentSummary = SchoolLocator.AttendanceService.GetStudentAttendanceSummary(studentId, gradingPeriodId);
+            return Json(StudentAttendanceSummaryViewData.Create(studentSummary, gp, gradingPeriods));
+        }
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
         public ActionResult Apps(int studentId, int? start, int? count)
         {
             var syId = GetCurrentSchoolYearId();
@@ -111,6 +121,20 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var currentBalance = FundController.GetPersonBalance(MasterLocator, studentId);
             var apps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, studentId, null, start, count);
             return Json(StudentAppsViewData.Create(student, currentBalance, apps));
+        }
+
+        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        public ActionResult DisciplineSummary(int studentId, int? gradingPeriodId)
+        {
+            var syId = GetCurrentSchoolYearId();
+            var student = SchoolLocator.StudentService.GetById(studentId, syId);
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
+            var gp = gradingPeriodId.HasValue
+                         ? SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value)
+                         : SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime.Date);
+            var infractionSummaries = SchoolLocator.DisciplineService.GetStudentInfractionSummary(studentId, gradingPeriodId);
+            var res = StudentDisciplineSummaryViewData.Create(student, infractionSummaries, gp, gradingPeriods);
+            return Json(res);
         }
     }
 }

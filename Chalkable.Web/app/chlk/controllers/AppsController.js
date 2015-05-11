@@ -622,13 +622,19 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.apps.AppPostData]],
         function updateDeveloperAction(model){
-            var appAccess = new chlk.models.apps.AppAccess(
+
+
+
+            var appAccess = model.isAdvancedApp() ? new chlk.models.apps.AppAccess(
                 model.isStudentMyAppsEnabled(),
                 model.isTeacherMyAppsEnabled(),
                 model.isAdminMyAppsEnabled(),
                 model.isParentMyAppsEnabled(),
                 model.isAttachEnabled(),
                 model.isShowInGradingViewEnabled()
+
+            ) : new chlk.models.apps.AppAccess(
+                true, true, true, true, true, false
             );
 
              var shortAppData = new chlk.models.apps.ShortAppInfo(
@@ -637,6 +643,7 @@ NAMESPACE('chlk.controllers', function (){
                 model.getVideoDemoUrl(),
                 model.getShortDescription(),
                 model.getLongDescription(),
+                model.isAdvancedApp(),
                 model.getAppIconId(),
                 model.getAppBannerId()
              );

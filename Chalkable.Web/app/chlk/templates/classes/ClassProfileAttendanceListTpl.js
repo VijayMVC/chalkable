@@ -13,13 +13,6 @@ NAMESPACE('chlk.templates.classes', function(){
 
             OVERRIDE, Boolean, function hasLeftRightToolBar(){return false;},
 
-            OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function getLinksDataForLeftSide(){
-                var classId = this.getModel().getTopData().getSelectedItemId();
-                return [
-                    new chlk.models.common.ActionLinkModel('class', 'attendance', 'Back', false, [classId], ['back-btn'])
-                ];
-            },
-
             OVERRIDE, chlk.models.common.ActionLinkModel, function getDataForDatePicker(){
                 var res = BASE();
                 res.getArgs().push(false);

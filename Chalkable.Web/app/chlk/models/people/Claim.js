@@ -37,6 +37,7 @@ NAMESPACE('chlk.models.people', function () {
         MAINTAIN_CLASSROOM_ADMIN: 'Maintain Classroom (Admin)',
         MAINTAIN_GRADE_BOOK_AVERAGING_METHOD: 'Maintain Grade Book Averaging Method',
         MAINTAIN_GRADE_BOOK_CATEGORIES: 'Maintain Grade Book Categories',
+        MAINTAIN_GRADE_BOOK_COMMENTS: 'Maintain Grade Book Comments',
         MAINTAIN_STANDARDS_OPTIONS: 'Maintain Standards Options',
         MAINTAIN_STUDENT_AVERAGES: 'Maintain Student Averages',
         RECONCILE_GRADE_BOOK: 'Reconcile GradeBook',

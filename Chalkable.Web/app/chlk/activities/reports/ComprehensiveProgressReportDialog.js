@@ -17,9 +17,8 @@ NAMESPACE('chlk.activities.reports', function(){
             VOID, function formSubmit(node, event){
 
                 var reasonsNode = node.find('#absence-reasons'),
-                    reasonsArray = node.find('.reasons-select').getValue();
-                if(reasonsArray && reasonsArray.length)
-                    reasonsNode.setValue(reasonsArray.join(','));
+                    reasonsArray = node.find('.reasons-select').getValue() || [];
+                reasonsNode.setValue(reasonsArray.join(','));
 
                 var yearToDate = node.find('#year-to-date-chk').checked();
                 var gradingPeriod = node.find('#grading-period-chk').checked();

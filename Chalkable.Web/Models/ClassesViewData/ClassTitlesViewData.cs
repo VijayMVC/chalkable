@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.ClassesViewData

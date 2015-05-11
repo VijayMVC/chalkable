@@ -10,6 +10,8 @@ NAMESPACE('chlk.models.reports', function (){
 
         ArrayOf(chlk.models.grading.GradedItemViewData), 'studentAverages',
 
+        Boolean, 'includeWithdrawnStudents',
+
         [[ArrayOf(chlk.models.schoolYear.GradingPeriod), ArrayOf(chlk.models.grading.GradedItemViewData), ArrayOf(chlk.models.people.ShortUserInfo),
             chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
         function $(gradingPeriods_, studentAverages_, students_, classId_, gradingPeriodId_, startDate_, endDate_){

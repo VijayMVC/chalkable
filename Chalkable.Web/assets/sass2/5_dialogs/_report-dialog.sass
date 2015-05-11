@@ -4,7 +4,7 @@
 
 .attendance-profile-report-dialog, .attendance-register-report-dialog
   .report-window
-    .grid-container
+    .chlk-grid-container
       width: 300px
       margin-top: 0
       overflow-y: auto
@@ -17,16 +17,40 @@
 
 .attendance-profile-report-dialog
   .report-window
-    .grid-container
+    .chlk-grid-container
       max-height: 309px
 
 .attendance-register-report-dialog
   .report-window
-    .grid-container
+    .chlk-grid-container
       margin-bottom: 20px
       max-height: 335px
 
 .report-window
+  .chlk-grid-container
+    width: 561px
+
+    .grid
+      .row
+        .grade-block
+          margin-top: 27px
+
+        .cell
+          &:nth-child(2)
+            width: 93px
+
+            .text
+              width: 86px
+
+          &:nth-child(3)
+            width: 145px
+
+            .text
+              width: 138px
+
+          &:nth-child(4)
+            .text
+              width: 265px
 
   .x-window-body
     width: 684px
@@ -103,83 +127,6 @@
         width: 170px
         margin: 12px 10px
 
-  .grid-container
-    border-radius: 5px
-    margin-top: 19px
-    overflow: hidden
-    @include box-shadow(0 1px 1px 1px #dfdfdf)
-    width: 561px
-
-    .grid
-      display: table
-      width: 100%
-      border-collapse: collapse
-
-      .row
-        display: table-row
-
-        .grade-block
-          margin-top: 27px
-
-        &:nth-child(2n)
-          background: #fff
-
-        &:nth-child(2n+1)
-          background: #eee
-
-        &.header
-          background: #666
-          color: white
-
-          .cell
-            font: bold 14px/29px Arial
-            padding-top: 1px
-
-        .cell
-          display: table-cell
-          border: 1px solid #cccccc
-          font: bold 14px/25px Arial
-          padding-left: 7px
-          vertical-align: middle
-
-          &:first-child
-            border-left: none
-            padding-top: 3px
-            line-height: 14px
-            width: 20px
-
-          .text
-            overflow: hidden
-            text-overflow: ellipsis
-            white-space: nowrap
-
-          &:nth-child(2)
-            width: 93px
-
-            .text
-              width: 86px
-
-          &:nth-child(3)
-            width: 145px
-
-            .text
-              width: 138px
-
-          &:nth-child(4)
-            .text
-              width: 265px
-
-          &:last-child
-            border-right: none
-
-        &:first-child
-          .cell
-            border-top: none
-
-        &:last-child
-          .cell
-            border-bottom: none
-
   h3
     font: normal 14px Arial
     color: #757575
@@ -252,3 +199,60 @@
 
   .grade-text
     color: #a0a0a0
+
+.chlk-grid-container
+  border-radius: 5px
+  margin-top: 19px
+  overflow: hidden
+  @include box-shadow(0 1px 1px 1px #dfdfdf)
+
+  .grid
+    display: table
+    width: 100%
+    border-collapse: collapse
+
+    .row
+      display: table-row
+
+      &:nth-child(2n)
+        background: #fff
+
+      &:nth-child(2n+1)
+        background: #eee
+
+      &.header
+        background: #666
+        color: white
+
+        .cell
+          font: bold 14px/29px Arial
+          padding-top: 1px
+
+      .cell
+        display: table-cell
+        border: 1px solid #cccccc
+        font: bold 14px/25px Arial
+        padding-left: 7px
+        vertical-align: middle
+
+        &:first-child
+          border-left: none
+          padding-top: 3px
+          line-height: 14px
+          width: 20px
+
+        .text
+          overflow: hidden
+          text-overflow: ellipsis
+          white-space: nowrap
+
+        &:last-child
+          border-right: none
+
+      &:first-child
+        .cell
+          border-top: none
+
+      &:last-child
+        .cell
+          border-bottom: none

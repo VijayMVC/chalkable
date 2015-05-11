@@ -8,6 +8,7 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Connectors.Model.Attendances;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -222,7 +223,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 ClassRank = classRank,
                 Infractions = infractionSummary,
-                SectionAttendance = attendances,
+                //SectionAttendance = attendances,
                 Scores = ((DemoStudentAnnouncementService)ServiceLocator.StudentAnnouncementService).GetActivityScoresForStudent(studentId)
             };
             var student = GetStudentDetails(studentId, syId);

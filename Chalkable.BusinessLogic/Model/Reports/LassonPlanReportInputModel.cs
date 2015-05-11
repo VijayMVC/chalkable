@@ -10,13 +10,13 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
         public IntList AnnouncementAttributes { get; set; }
         public IntList AnnouncementTypes { get; set; }
-
-
+        
         public int PublicPrivateText { get; set; }
         public bool IncludeAnnouncements { get; set; }
         public bool IncludeStandards { get; set; }   
 
         public int SortItems { get; set; }
         public int SortClasses { get; set; }
+        public int? MaxCount { get; set; }
     }
 }

@@ -30,6 +30,14 @@ NAMESPACE('chlk.activities.apps', function () {
 
             },
 
+            [ria.mvc.DomEventBind('change', 'input.advancedApp')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function toggleAdvancedApp(node, event){
+                var advancedStuff = this.dom.find('.advanced');
+                advancedStuff.toggleClass(HIDDEN_CLASS, !node.checked());
+                this.onFormChange(node, event);
+            },
+
             [ria.mvc.DomEventBind('change', 'input.price-checkbox')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleAppPaymentInfo(node, event){

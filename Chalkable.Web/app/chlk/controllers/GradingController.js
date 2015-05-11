@@ -110,11 +110,6 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.grading.TeacherSettingsPage, result);
             },
 
-
-            chlk.models.schoolYear.GradingPeriod, function getCurrentGradingPeriod(){
-                return this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD);
-            },
-
             [chlk.controllers.Permissions([
                 chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES//,
                 //[chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
@@ -321,7 +316,7 @@ NAMESPACE('chlk.controllers', function (){
                             model.getCurrentGradingGrid().setAbleEditAvg(canEditAvg);
                             var students = model.getCurrentGradingGrid().getStudents().map(function (item){return item.getStudentInfo()});
                             this.getContext().getSession().set(ChlkSessionConstants.STUDENTS_FOR_REPORT, students);
-
+                            this.getContext().getSession().set(ChlkSessionConstants.INCLUDE_WITHDRAWN_STUDENTS, model.getCurrentGradingGrid().isIncludeWithdrawnStudents());
                             studentIds = students.map(function(item){return item.getId().valueOf()});
                         }
 
@@ -596,7 +591,10 @@ NAMESPACE('chlk.controllers', function (){
                         var periods = data[0];
                         var averages = data[1];
                         var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
-                        return new chlk.models.reports.GradeVerificationReportViewData(periods, averages, students, classId, gradingPeriodId, startDate, endDate);
+                        var includeWithdrawn = this.getContext().getSession().get(ChlkSessionConstants.INCLUDE_WITHDRAWN_STUDENTS);
+                        var res = new chlk.models.reports.GradeVerificationReportViewData(periods, averages, students, classId, gradingPeriodId, startDate, endDate);
+                        res.setIncludeWithdrawnStudents(includeWithdrawn);
+                        return res;
                     }, this);
                 return this.ShadeView(chlk.activities.reports.GradeVerificationReportDialog, res);
             },
@@ -731,11 +729,15 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitGradeVerificationReportViewData]],
             function submitGradeVerificationReportAction(reportViewData){
+                if (!reportViewData.getStudentAverageIds()){
+                    return this.ShowAlertBox("You should select at least one graded item", "Error"), null;
+                }
+
                 var src = this.reportingService.submitGradeVerificationReport(
                     reportViewData.getClassId(),
                     reportViewData.getFormat(),
                     this.getIdsList(reportViewData.getGradingPeriodIds(), chlk.models.id.GradingPeriodId),
-                    (reportViewData.getStudentAverageIds() || '').split(','),
+                    reportViewData.getStudentAverageIds().split(','),
                     reportViewData.getClassOrder(),
                     reportViewData.getGradeType(),
                     reportViewData.getStudentOrder(),
@@ -757,6 +759,14 @@ NAMESPACE('chlk.controllers', function (){
                     return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                 }
 
+                if (reportViewData.isIncludeActivities() && !reportViewData.getActivityAttribute()){
+                    return this.ShowAlertBox("You should select at least one activity attribute", "Error"), null;
+                }
+
+                if (reportViewData.isIncludeActivities() && !reportViewData.getActivityCategory()){
+                    return this.ShowAlertBox("You should select at least one activity category", "Error"), null;
+                }
+
                 var src = this.reportingService.submitLessonPlanReport(
                     reportViewData.getClassId(),
                     reportViewData.getGradingPeriodId(),
@@ -769,8 +779,8 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.getMaxCount(),
                     reportViewData.isIncludeActivities(),
                     reportViewData.isIncludeStandards(),
-                    (reportViewData.getActivityAttribute() || '').split(','),
-                    (reportViewData.getActivityCategory() || '').split(',')
+                    reportViewData.getActivityAttribute().split(','),
+                    reportViewData.getActivityCategory().split(',')
                 );
                 this.BackgroundCloseView(chlk.activities.reports.LessonPlanReportDialog);
                 this.getContext().getDefaultView().submitToIFrame(src);

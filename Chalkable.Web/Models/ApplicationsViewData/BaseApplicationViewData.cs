@@ -24,6 +24,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public Guid? DeveloperId { get; set; }
         public Guid? LiveAppId { get; set; }
         public bool IsInternal { get; set; }
+        public bool IsAdvanced { get; set; }
         public int? InternalScore { get; set; }
         public string InternalDescription { get; set; }
         public ApplicationAccessViewData ApplicationAccess { get; set; }
@@ -47,6 +48,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             ApplicationPrice = ApplicationPriceViewData.Create(application);
             LiveAppId = application.OriginalRef;
             IsInternal = application.IsInternal;
+            IsAdvanced = application.IsAdvanced;
             InternalScore = application.InternalScore;
             InternalDescription = application.InternalDescription;
             Picturesid = application.Pictures.Select(x => x.Id).ToList();

@@ -183,6 +183,13 @@ NAMESPACE('chlk.models.attendance', function () {
             },
 
             chlk.models.id.ClassAttendanceId, 'id',
+
+            [ria.serialize.SerializeProperty('periodid')],
+            chlk.models.id.PeriodId, 'periodId',
+
+            [ria.serialize.SerializeProperty('periodorder')],
+            Number, 'periodOrder',
+
             chlk.models.common.ChlkDate, 'date',
 
             //todo change number to AttendanceTypeEnum

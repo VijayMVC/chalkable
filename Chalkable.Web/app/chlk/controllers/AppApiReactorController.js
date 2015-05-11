@@ -60,23 +60,29 @@ NAMESPACE('chlk.controllers', function (){
             function addMeAction(data){
                 this.appResponded_();
                 if (data.appReady) {
-                    var announcementAppId = new chlk.models.id.AnnouncementApplicationId(data.announcementAppId);
-                    var announcementId = new chlk.models.id.AnnouncementId(data.announcementId);
-                    return this.appsService
-                        .attachApp(announcementAppId)
-                        .catchError(function(error_){
-                            throw new chlk.lib.exception.AppErrorException(error_);
-                        }, this)
-                        .attach(this.validateResponse_())
-                        .then(function(result){
-                            this.BackgroundCloseView(chlk.activities.apps.AppWrapperDialog);
-                            this.BackgroundCloseView(chlk.activities.apps.AttachAppDialog);
-                            return this.Redirect('announcement', 'addAppAttachment', [result]);
-                        }, this);
+                    return this.simpleAppAttachAction(data);
                 }
-
                 return this.appIsNotReadyForClose_();
             },
+
+            [[Object]],
+            function simpleAppAttachAction(data){
+                var announcementAppId = new chlk.models.id.AnnouncementApplicationId(data.announcementAppId);
+                var announcementId = new chlk.models.id.AnnouncementId(data.announcementId);
+                return this.appsService
+                    .attachApp(announcementAppId)
+                    .catchError(function(error_){
+                        throw new chlk.lib.exception.AppErrorException(error_);
+                    }, this)
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        this.BackgroundCloseView(chlk.activities.apps.AppWrapperDialog);
+                        this.BackgroundCloseView(chlk.activities.apps.AttachAppDialog);
+                        return this.Redirect('announcement', 'addAppAttachment', [result]);
+                    }, this);
+            },
+
+
 
             [[Object]],
             function saveMeAction(data){

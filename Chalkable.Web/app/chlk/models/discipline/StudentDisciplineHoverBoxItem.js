@@ -1,12 +1,18 @@
 NAMESPACE('chlk.models.discipline', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.discipline.StudentDisciplineHoverBoxItem*/
     CLASS(
-        'StudentDisciplineHoverBoxItem', [
-            Number, 'value',
+        UNSAFE, FINAL, 'StudentDisciplineHoverBoxItem', IMPLEMENTS(ria.serialize.IDeserializable), [
 
-            [ria.serialize.SerializeProperty('classname')],
+            VOID, function deserialize(raw){
+                this.value = SJX.fromValue(raw.value, Number);
+                this.className = SJX.fromValue(raw.classname, String);
+            },
+
+            Number, 'value',
             String, 'className'
         ]);
 });

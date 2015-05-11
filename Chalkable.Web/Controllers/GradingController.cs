@@ -326,5 +326,12 @@ namespace Chalkable.Web.Controllers
             var res = SchoolLocator.GradedItemService.GetGradedItems(gradingPeriodId);
             return Json(GradedItemViewData.Create(res), 3);
         }
+
+        [AuthorizationFilter("Teacher, Student")]
+        public ActionResult GradingScalesList()
+        {
+            var res = SchoolLocator.GradingScaleService.GetGradingScales();
+            return Json(GradingScaleViewData.Create(res));
+        }
     }
 }

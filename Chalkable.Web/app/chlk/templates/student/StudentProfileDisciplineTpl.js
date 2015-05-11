@@ -1,11 +1,12 @@
 REQUIRE('chlk.templates.profile.SchoolPersonProfileTpl');
-REQUIRE('chlk.models.student.StudentProfileDisciplineViewData');
 REQUIRE('chlk.templates.calendar.discipline.StudentDisciplineMonthCalendarTpl');
+REQUIRE('chlk.models.student.StudentProfileDisciplineViewData');
 
 NAMESPACE('chlk.templates.student', function(){
     "use strict";
 
     /**@class chlk.templates.student.StudentProfileDisciplineTpl*/
+    ASSET('~/assets/jade/activities/calendar/BaseCalendar.jade')();
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/student/StudentProfileDisciplineView.jade')],
         [ria.templates.ModelBind(chlk.models.student.StudentProfileDisciplineViewData)],
@@ -18,24 +19,11 @@ NAMESPACE('chlk.templates.student', function(){
             [ria.templates.ModelPropertyBind],
             chlk.models.calendar.discipline.StudentDisciplineMonthCalendar, 'disciplineCalendar',
 
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.schoolYear.MarkingPeriod), 'markingPeriods',
 
-
-            [[chlk.models.discipline.StudentDisciplineHoverBox]],
+            [[chlk.models.common.HoverBox.OF(chlk.models.discipline.StudentDisciplineHoverBoxItem)]],
             Object ,function buildDisciplineGlanceBoxData(model){
-                var items = [];
-                var hoverItems = model.getHover();
-                for(var i = 0; i < hoverItems.length; i++){
-                    items.push({
-                        data: hoverItems[i],
-                        getTotalMethod: hoverItems[i].getValue,
-                        getSummaryMethod: hoverItems[i].getClassName
-                    });
-                }
                 return {
                     value: model.getTitle(),
-                    items: items,
                     title: model.getName(),
                     isPassing: model.isPassing()
                 };

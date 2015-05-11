@@ -15,6 +15,10 @@ namespace Chalkable.Data.School.Model
         public decimal Percentage { get; set; }
         public int ClassRef { get; set; }
         public int? ChalkableAnnouncementTypeRef { get; set; }
+
+        public int HighScoresToDrop { get; set; }
+        public int LowScoresToDrop { get; set; }
+        public bool IsSystem { get; set; }
     }
 
     public class GradedClassAnnouncementType : ClassAnnouncementType

@@ -12,9 +12,9 @@ NAMESPACE('chlk.services', function () {
         'AttendanceCalendarService', EXTENDS(chlk.services.BaseService), [
             [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
             ria.async.Future, function getStudentAttendancePerMonth(studentId, date_) {
-                return this.get('AttendanceCalendar/MonthForPerson.json', ArrayOf(chlk.models.calendar.attendance.StudentAttendanceCalendarMonthItem) , {
+                return this.get('AttendanceCalendar/MonthForStudent.json', ArrayOf(chlk.models.calendar.attendance.StudentAttendanceCalendarMonthItem) , {
                     date: date_ && date_.toString('mm-dd-yy'),
-                    personId: studentId && studentId.valueOf()
+                    studentId: studentId && studentId.valueOf()
                 });
             },
 

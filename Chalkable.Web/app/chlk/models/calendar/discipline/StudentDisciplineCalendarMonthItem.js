@@ -1,3 +1,4 @@
+REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.calendar.BaseCalendarMonthItem');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.discipline.DisciplineTypeSummary');
@@ -5,17 +6,25 @@ REQUIRE('chlk.models.discipline.Discipline');
 
 NAMESPACE('chlk.models.calendar.discipline', function () {
     "use strict";
+    var SJX = ria.serialize.SJX;
 
     /** @class chlk.models.calendar.discipline.StudentDisciplineCalendarMonthItem*/
     CLASS(
-        'StudentDisciplineCalendarMonthItem',  EXTENDS(chlk.models.calendar.BaseCalendarMonthItem), [
+        'StudentDisciplineCalendarMonthItem',  EXTENDS(chlk.models.calendar.BaseCalendarMonthItem), IMPLEMENTS(ria.serialize.IDeserializable), [
 
-            [ria.serialize.SerializeProperty('morecount')],
             Number, 'moreCount',
 
             ArrayOf(chlk.models.discipline.Discipline), 'disciplines',
 
-            [ria.serialize.SerializeProperty('disciplinetypes')],
-            ArrayOf(chlk.models.discipline.DisciplineTypeSummary),'disciplineTypes'
+            VOID, function deserialize(raw) {
+                this.day = SJX.fromValue(raw.day, Number);
+                this.currentMonth = SJX.fromValue(raw.currentmonth, Boolean);
+                this.sunday = SJX.fromValue(raw.sunday, Boolean);
+                this.date = SJX.fromDeserializable(raw.date, chlk.models.common.ChlkDate);
+                this.todayClassName = SJX.fromValue(raw.todayclassname, String);
+                this.className = SJX.fromValue(raw.classname, String);
+                this.moreCount = SJX.fromValue(raw.morecount, Number);
+                this.disciplines = SJX.fromArrayOfDeserializables(raw.disciplines, chlk.models.discipline.Discipline);
+            }
     ]);
 });

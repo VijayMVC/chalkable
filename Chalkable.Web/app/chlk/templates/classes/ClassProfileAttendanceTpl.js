@@ -18,6 +18,23 @@ NAMESPACE('chlk.templates.classes', function () {
             },
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.calendar.attendance.ClassAttendanceMonthCalendar, 'monthCalendar'
+            chlk.models.calendar.attendance.ClassAttendanceMonthCalendar, 'monthCalendar',
+
+            [[chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), String]],
+            Object ,function buildAttendanceGlanceBoxData(model, boxTitle){
+                return {
+                      value: model ? model.getTitle() : '',
+                      title: boxTitle
+                };
+            },
+
+            ArrayOf(Object), function buildGlanceBoxesData(){
+                var summary = this.getModel().getClazz();
+                return[
+                    this.buildAttendanceGlanceBoxData(summary.getAbsentSection(), 'Absent'),
+                    this.buildAttendanceGlanceBoxData(summary.getLateSection(), 'Late'),
+                    this.buildAttendanceGlanceBoxData(summary.getPresentSection(), 'Present')
+                ];
+            }
         ]);
 });

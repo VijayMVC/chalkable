@@ -93,6 +93,22 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId]],
+            ria.async.Future, function getStudentAttendanceSummary(studentId, gradingPeriodId) {
+                return this.get('Student/AttendanceSummary.json', chlk.models.attendance.StudentAttendanceSummary, {
+                    studentId: studentId && studentId.valueOf(),
+                    gradingPeriodId: gradingPeriodId && gradingPeriodId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId]],
+            ria.async.Future, function getStudentDisciplineSummary(personId, gradingPeriodId){
+                return this.get('Student/DisciplineSummary.json', chlk.models.discipline.StudentDisciplineSummary ,{
+                    studentId: personId && personId.valueOf(),
+                    gradingPeriodId: gradingPeriodId && gradingPeriodId.valueOf()
+                });
+            },
+
             [[chlk.models.id.SchoolPersonId, Number, Number]],
             ria.async.Future, function getAppsInfo(studentId, start_, count_){
                 return this.get('Student/Apps.json', chlk.models.people.PersonApps, {

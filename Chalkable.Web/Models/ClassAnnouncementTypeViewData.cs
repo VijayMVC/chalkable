@@ -16,6 +16,9 @@ namespace Chalkable.Web.Models
         public decimal Percentage { get; set; }
         public bool Gradable { get; set; }
 
+        public int HighScoresToDrop { get; set; }
+        public int LowScoresToDrop { get; set; }
+
         protected ClassAnnouncementTypeViewData(ClassAnnouncementType announcementType)
         {
             Id = announcementType.Id;
@@ -26,6 +29,8 @@ namespace Chalkable.Web.Models
             Percentage = announcementType.Percentage;
             Gradable = announcementType.Gradable;
             ClassId = announcementType.ClassRef;
+            HighScoresToDrop = announcementType.HighScoresToDrop;
+            LowScoresToDrop = announcementType.LowScoresToDrop;
         }
 
         public static ClassAnnouncementTypeViewData Create(ClassAnnouncementType announcementType)

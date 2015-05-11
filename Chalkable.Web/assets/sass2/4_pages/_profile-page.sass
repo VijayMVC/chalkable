@@ -1,5 +1,22 @@
+.student-profile-discipline-page
+  #top-panel
+    white-space: nowrap
+    
+  table
+    table-layout: fixed
+    width: 100%
+    
+    td:first-child
+      width: 350px
+
+    td:last-child
+      overflow-x: auto
+
 .profile-page
   font-family: "Open Sans", sanf-serif
+
+  .mp-select
+    width: 100px
 
   &.view-mode
     .info-edit
@@ -12,6 +29,9 @@
   #top-panel
     margin-bottom: 84px
     margin-top: 48px
+
+    .left-panels, .right-panels
+      display: inline-block
 
   .class-image
     width: 140px

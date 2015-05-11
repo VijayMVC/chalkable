@@ -15,12 +15,10 @@ NAMESPACE('chlk.activities.reports', function(){
             VOID, function formSubmit(node, event){
                 var gpNode = node.find('#activity-categories'),
                     saNode = node.find('#activity-attributes'),
-                    gpArray = node.find('#activity-categories-select').getValue(),
-                    saArray = node.find('#activity-attributes-select').getValue();
-                if(gpArray && gpArray.length)
-                    gpNode.setValue(gpArray.join(','));
-                if(saArray && saArray.length)
-                    saNode.setValue(saArray.join(','));
+                    gpArray = node.find('#activity-categories-select').getValue() || [],
+                    saArray = node.find('#activity-attributes-select').getValue() || [];
+                gpNode.setValue(gpArray.join(','));
+                saNode.setValue(saArray.join(','));
             },
 
             [ria.mvc.DomEventBind('change', '#include-activities')],

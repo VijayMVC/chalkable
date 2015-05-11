@@ -25,17 +25,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Add(IList<AnnouncementAttribute> announcementAttributes)
         {
-            throw new NotImplementedException();
+            AnnouncementAttributeStorage.Add(announcementAttributes);
         }
 
         public void Edit(IList<AnnouncementAttribute> announcementAttributes)
         {
-            throw new NotImplementedException();
+            AnnouncementAttributeStorage.Update(announcementAttributes);
         }
 
         public void Delete(IList<AnnouncementAttribute> announcementAttributes)
         {
-            throw new NotImplementedException();
+            AnnouncementAttributeStorage.Delete(announcementAttributes);
         }
 
         public IList<AnnouncementAttribute> GetList(bool? activeOnly)

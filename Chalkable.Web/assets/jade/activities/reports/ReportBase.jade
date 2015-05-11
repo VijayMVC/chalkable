@@ -1,13 +1,13 @@
 mixin ReportDatePicker(header, date, name, minDate, maxDate)
    if header && header != ''
       h3=header
-   +DatePicker(name, date || new chlk.models.common.ChlkDate())(
+   +DatePicker(name, date)(
       data-options={
          showOtherMonths: true,
          selectOtherMonths: true,
          calendarCls: 'for-dialog',
-         minDate: minDate.getDate(),
-         maxDate: maxDate.getDate()
+         minDate: minDate && minDate.getDate(),
+         maxDate: maxDate && maxDate.getDate()
       },
       class="validate[required]"
    )

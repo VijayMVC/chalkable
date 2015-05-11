@@ -35,10 +35,6 @@ NAMESPACE('chlk.templates.attendance', function () {
                 return new chlk.models.common.ActionLinkModel('attendance', action, title, isPressed_, args_);
             },
 
-            ArrayOf(chlk.models.common.ActionLinkModel), function getLinksDataForLeftSide(){
-                return [];
-            },
-
             ArrayOf(Object), function getAdditionalParams(){return [];},
 
             Object, function getItemClassType(){return chlk.templates.attendance.ClassAttendanceTpl;},

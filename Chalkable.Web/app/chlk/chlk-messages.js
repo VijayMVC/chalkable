@@ -18,10 +18,16 @@ String.format = function() {
 
 function oneOrMany(text, needE){
     var getText = function(many){
+        if(many && text[text.length - 1] == 'y')
+            return text.slice(0, -1) + 'ies';
         return text + (many ? (needE ? 'es' : 's') : '');
     };
 
     getText.toString = function(){
+        return text;
+    };
+
+    getText.valueOf = function(){
         return text;
     };
 
@@ -52,15 +58,17 @@ var Msg = {
     Avg: 'Avg',
     Attachment: oneOrMany('Attachment'),
     Attendance: 'Attendance',
+    Back: 'Back',
     Balance: 'Balance',
     Banner: 'Banner',
     Birthday: 'Birthday',
     Both: 'Both',
     Box: oneOrMany('Box', true),
     Browse: 'Browse',
+    Calendar: 'Calendar',
     Cancel: 'Cancel',
     Card: 'Card',
-    Category: 'Category',
+    Category: oneOrMany('Category', true),
     Cell: 'Cell',
     CellPhone: 'CellPhone',
     Check: 'Check',
@@ -92,7 +100,7 @@ var Msg = {
     Detail: oneOrMany('Detail'),
     Direct: 'Direct',
     Discard: 'Discard',
-    Discipline: 'Discipline',
+    Discipline: oneOrMany('Discipline'),
     Done: 'Done',
     Download: 'Download',
     Drop: 'Drop',
@@ -160,6 +168,8 @@ var Msg = {
     Parameter: oneOrMany('Parameter'),
     Parent: oneOrMany('Parent'),
     Participation: 'Participation',
+    Percent: 'Percent',
+    Percentage: 'Percentage',
     Period: 'Period',
     Person: oneOrMany('Person'),
     Personal: 'Personal',
@@ -185,6 +195,7 @@ var Msg = {
     Saved: 'Saved',
     Saving: 'Saving',
     Section: 'Section',
+    Setup: 'Setup',
     Schedule: 'Schedule',
     Scheduled: 'Scheduled',
     School: 'School',
@@ -312,6 +323,7 @@ var Msg = {
     Attendance_today: 'Attendance today',
     Auto_grade: 'Auto-grade',
     Auto_Emails: 'Auto Emails',
+    Averaging_method: 'Averaging method',
     Can_Teachers_launch_app: function(app){
         return 'Can Teachers launch <span style="max-width: 123px;" class="application-name">' + (app || 'application') + ' in My Apps?';
     },
@@ -342,6 +354,7 @@ var Msg = {
     Class_average: 'Class average',
     Class_Average_Only: 'Class Average Only',
     Class_cost: 'Class cost',
+    Class_name: 'Class name',
     Class_size: 'Class size',
     Class_flat_rate: 'Class flat rate',
     Class_flat_rate_check: 'Is there a flat rate for whole class purchases?',
@@ -360,6 +373,8 @@ var Msg = {
     Comprehensive_Progress_Report : 'Comprehensive Progress Report',
     Count_Zeros_as_Missing: 'Count Zeros as Missing',
     Create_AutoEmail: 'Create AutoEmail',
+    Create_category: 'Create category',
+    Create_comment: 'Create comment',
     Create_grid: 'Create grid',
     Create_Report: 'Create Report',
     Daily_attendance: 'Daily attendance',
@@ -399,6 +414,8 @@ var Msg = {
     Due_tomorrow: 'Due tomorrow',
     Due_yesterday: 'Due yesterday',
     Edit_Average: 'Edit Average',
+    Edit_category: 'Edit category',
+    Edit_comment: 'Edit comment',
     Edit_students: 'Edit students',
     Edit_grid: 'Edit grid',
     Edit_the_student_grid: 'Edit the student grid',
@@ -417,6 +434,7 @@ var Msg = {
     GOT_IT: 'Got It',
     GPA: 'GPA',
     GradeLevel: 'GradeLevel',
+    Grade_book: 'Grade book',
     Grade_Book_Report: 'Grade Book Report',
     Grade_Level: 'Grade Level',
     Grade_manually: 'Grade manually',
@@ -431,6 +449,7 @@ var Msg = {
     Group_by: 'Group by',
     Home_info: 'Home info',
     Hide_from_Students: 'Hide from Students',
+    High_score_to_drop: 'High score to drop',
     Highest_rated: 'Highest rated',
     hours_ago: function(hrs){
         if(hrs == 1)
@@ -442,17 +461,20 @@ var Msg = {
     How_do_you_grade_students_in: function(courseName){
         return 'How do you grade students in ' + courseName + '?'
     },
+    HS_to_drop: 'HS to drop',
     ID_to_print: 'ID to print',
     Import_Types: 'Import Types',
     Include_activities: 'Include activities',
     Include_standards: 'Include standards',
     Include_students: 'Include students',
     Include_tardies: 'Include tardies',
+    Include_withdrawn_students: 'Include withdrawn students',
     Info_this_app_uses: 'Info this app uses:',
     Insert_title: 'Insert title',
     Install_App: 'Install App',
     Invite_users: 'Invite users',
     IsInternal: 'IsInternal',
+    Is_system: 'Is system',
     Issues_right_now: 'Issues right now',
     Item_Ready_to_be_Graded: 'Item Ready to be Graded',
     Just_me: 'Just me',
@@ -468,6 +490,8 @@ var Msg = {
     Long_Description: 'Long Description',
     Long_description_empty_text : 'Between 500-1500 characters works well',
     Lose_Changes: 'Lose Changes',
+    Low_score_to_drop: 'Low score to drop',
+    LS_to_drop: 'LS to drop',
     Mark_all_Present: 'Mark all Present',
     Mark_as_done: 'Mark as done',
     Mark_as_ToDo: 'Mark as To Do',
@@ -538,6 +562,7 @@ var Msg = {
     Right_now: 'Right now',
     Room_number: 'Room number',
     Room_shortcut: 'RM',
+    Round_displayed_averages: 'Round displayed averages',
     Save_as_default: 'Save as default',
     Save_to_Working_filter: 'Save to working filter',
     Search_api: 'Search for an api method or parameter to view its call tree...',
@@ -579,6 +604,10 @@ var Msg = {
     Step_of: function(a,b){
         return 'Step ' + a + ' of ' + b;
     },
+    Standard_Calculate_Weight_Maximum_Values: 'Standard calculate weight maximum values',
+    Standards_calculate_method: 'Standards calculate method',
+    Standards_calculate_rule: 'Standards calculate rule',
+    Standards_scale: 'Standards scale',
     Start_by_creating_a_grid: 'Start by creating a grid',
     Start_date: 'Start date',
     State_ID_number: 'State ID number',

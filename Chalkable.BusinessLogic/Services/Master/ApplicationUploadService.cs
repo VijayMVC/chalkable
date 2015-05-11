@@ -61,6 +61,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             application.BigPictureRef = applicationInfo.ShortApplicationInfo.BigPictureId;
             application.Description = applicationInfo.ShortApplicationInfo.Description;
             application.VideoUrl = applicationInfo.ShortApplicationInfo.VideoDemoUrl;
+            application.IsAdvanced = applicationInfo.ShortApplicationInfo.AdvancedApp;
             
             application.Price = applicationInfo.ApplicationPrices.Price;
             application.PricePerClass = applicationInfo.ApplicationPrices.PricePerClass;

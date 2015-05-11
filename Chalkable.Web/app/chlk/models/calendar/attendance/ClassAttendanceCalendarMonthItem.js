@@ -9,6 +9,9 @@ NAMESPACE('chlk.models.calendar.attendance', function () {
         'ClassAttendanceCalendarMonthItem', EXTENDS(chlk.models.calendar.attendance.AttendanceCalendarMonthItem), [
 
             [ria.serialize.SerializeProperty('classid')],
-            chlk.models.id.ClassId, 'classId'
+            chlk.models.id.ClassId, 'classId',
+
+            [ria.serialize.SerializeProperty('hasattendanceissues')],
+            Boolean, 'withAttendanceIssues'
     ]);
 });

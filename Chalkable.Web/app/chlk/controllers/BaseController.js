@@ -271,6 +271,10 @@ NAMESPACE('chlk.controllers', function (){
                return this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
            },
 
+           chlk.models.schoolYear.GradingPeriod, function getCurrentGradingPeriod(){
+               return this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD);
+           },
+
            chlk.models.schoolYear.MarkingPeriod, function getNextMarkingPeriodId(){
                return this.getContext().getSession().get(ChlkSessionConstants.NEXT_MARKING_PERIOD);
            },

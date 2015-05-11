@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
@@ -120,34 +121,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             };
         }
 
-        public ClassDiscipline SetClassDiscipline(int classPersonId, int classPeriodId, DateTime date, ISet<int> disciplineTypes, string description)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteClassDiscipline(int classPersonId, int classPeriodId, DateTime date)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<ClassDisciplineDetails> GetClassDisciplineDetails(int schoolYearId, int personId, DateTime start, DateTime end, bool needsAllData = false)
-        {
-            throw new NotImplementedException();
-        }
-        
-        public IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudent(int studentId, int? markingPeriodId, int? schoolYearId, DateTime? fromDate, DateTime? toDate)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IList<DisciplineTotalPerType> CalcDisciplineTypeTotalForStudents(IList<int> studentIds, int? markingPeriodId, int? schoolYearId, DateTime? fromDate, DateTime? toDate)
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<DisciplineReferral> GetList(DateTime today)
         {
             return DisciplineStorage.GetList(today);
+        }
+        
+        public IList<ClassDisciplineDetails> GetDisciplineByDateRange(int studentId, DateTime? start, DateTime? end)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<InfractionSummaryInfo> GetStudentInfractionSummary(int studentId, int? gradingPeriodId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

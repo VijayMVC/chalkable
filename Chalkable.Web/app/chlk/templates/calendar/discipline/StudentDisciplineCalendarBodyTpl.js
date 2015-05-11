@@ -31,6 +31,14 @@ NAMESPACE('chlk.templates.calendar.discipline', function (){
                     , this.getStudentId().valueOf()]);
                 var params = [this.getStudentId(), item.getDate().toStandardFormat(), 'students', 'disciplineMonth', jsonParam];
                 return new chlk.models.common.ActionLinkModel('discipline', 'showStudentDayDisciplines', null, null, params);
+            },
+
+            function getItemsGroupped() {
+                var res = [], source = this.calendarItems.slice(0);
+                while (source.length) {
+                    res.push(source.splice(0, 7));
+                }
+                return res;
             }
         ]);
 });

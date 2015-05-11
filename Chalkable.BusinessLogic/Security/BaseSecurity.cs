@@ -70,7 +70,7 @@ namespace Chalkable.BusinessLogic.Security
         {
             return IsAdminViewer(context) || context.Role == CoreRoles.TEACHER_ROLE;
         }
-
+        
         public static void EnsureAdminOrTeacher(UserContext context)
         {
             if (!IsAdminOrTeacher(context))

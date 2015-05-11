@@ -9,6 +9,7 @@ NAMESPACE('chlk.activities.classes', function () {
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('profile')],
         [ria.mvc.TemplateBind(chlk.templates.classes.ClassProfileAttendanceTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.calendar.attendance.ClassAttendanceMonthCalendarTpl, '', '.calendar-section', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.calendar.attendance.ClassAttendanceMonthCalendarTpl, '', '.calendar-panel', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfileAttendanceTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         'ClassProfileAttendancePage', EXTENDS(chlk.activities.lib.TemplatePage), [ ]);
 });

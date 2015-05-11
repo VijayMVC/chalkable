@@ -63,6 +63,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IGradedItemService gradedItemService;
         private IAnnouncementAttributeService announcementAttributeService;
         private IContactService contactService;
+        private ITeacherCommentService teacherCommentService;
 
         public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster): base(serviceLocatorMaster.Context)        
         {
@@ -115,6 +116,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             announcementAttributeService = new DemoAnnouncementAttributeService(this);
             contactService = new DemoContactService(this);
             Setup(ServiceLocatorMaster.Context);
+            teacherCommentService = new DemoTeacherCommentService(this);
         }
 
         public bool IsInitialized { get; private set; }
@@ -185,6 +187,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IAnnouncementAttributeService AnnouncementAttributeService { get { return announcementAttributeService; } }
         public IContactService ContactService { get { return contactService; } }
         public IDbService SchoolDbService { get { throw new NotImplementedException(); } }
+        public ITeacherCommentService TeacherCommentService { get { return teacherCommentService; } }
         public IDbMaintenanceService DbMaintenanceService { get { throw new NotImplementedException(); } }
 
         private void AddAttendances()

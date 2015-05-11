@@ -11,9 +11,9 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
-    public class DemoStiGradeBookStorage : BaseDemoIntStorage<Gradebook>
+    public class DemoGradeBookStorage : BaseDemoIntStorage<Gradebook>
     {
-        public DemoStiGradeBookStorage()
+        public DemoGradeBookStorage()
             : base(null, true)
         {
 
@@ -23,10 +23,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
     public class DemoGradingStatisticService : DemoSchoolServiceBase, IGradingStatisticService
     {
-        private DemoStiGradeBookStorage StiGradeBookStorage { get; set; }
+        private DemoGradeBookStorage GradeBookStorage { get; set; }
         public DemoGradingStatisticService(IServiceLocatorSchool serviceLocator): base(serviceLocator)
         {
-            StiGradeBookStorage = new DemoStiGradeBookStorage();
+            GradeBookStorage = new DemoGradeBookStorage();
         }
 
         public ChalkableGradeBook GetGradeBook(int classId, GradingPeriod gradingPeriod, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
@@ -97,7 +97,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public Gradebook GetBySectionAndGradingPeriod(int classId, int? classAnnouncementType = null, int? gradingPeriodId = null, int? standardId = null)
         {
-            var gradeBooks = StiGradeBookStorage.GetData().Select(x => x.Value);
+            var gradeBooks = GradeBookStorage.GetData().Select(x => x.Value);
 
             gradeBooks = gradeBooks.Where(x => x.SectionId == classId);
 
@@ -374,8 +374,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             var attendances = chlkGradeBook.Students.Select(x => new StudentTotalSectionAttendance()
             {
-                Absences= attendance.Students.Where(y => y.StudentId == x.Id).Select(y => y.Absences).FirstOrDefault(),
-                Tardies = attendance.Students.Where(y => y.StudentId == x.Id).Select(y => y.Tardies).FirstOrDefault(),
+                Absences= attendance.Students.Where(y => y.StudentId == x.Id).Select(y => y.Absences ?? 0).FirstOrDefault(),
+                Tardies = attendance.Students.Where(y => y.StudentId == x.Id).Select(y => y.Tardies ?? 0).FirstOrDefault(),
                 StudentId = x.Id,
                 SectionId = classId,
                 DaysPresent = attendance.Students.Count(y => y.StudentId == x.Id && y.Absences == 0)
@@ -412,7 +412,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void AddGradeBook(Gradebook gradebook)
         {
-            StiGradeBookStorage.Add(gradebook);
+            GradeBookStorage.Add(gradebook);
         }
     }
 }

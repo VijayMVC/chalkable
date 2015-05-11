@@ -33,32 +33,32 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
         public void AddStudentContact(IList<StudentContact> studentContacts)
         {
-            throw new NotImplementedException();
+            StudentContactStorage.Add(studentContacts);
         }
 
         public void EditStudentContact(IList<StudentContact> studentContacts)
         {
-            throw new NotImplementedException();
+            StudentContactStorage.Update(studentContacts);
         }
 
         public void DeleteStudentContact(IList<StudentContact> studentContacts)
         {
-            throw new NotImplementedException();
+            StudentContactStorage.Delete(studentContacts);
         }
 
         public void AddContactRelationship(IList<ContactRelationship> contactRelationships)
         {
-            throw new NotImplementedException();
+            ContactRelationshipStorage.Add(contactRelationships);
         }
 
         public void EditContactRelationship(IList<ContactRelationship> contactRelationships)
         {
-            throw new NotImplementedException();
+            ContactRelationshipStorage.Update(contactRelationships);
         }
 
         public void DeleteContactRelationship(IList<ContactRelationship> contactRelationships)
         {
-            throw new NotImplementedException();
+            ContactRelationshipStorage.Delete(contactRelationships);
         }
 
         public IList<StudentContactDetails> GetStudentContactDetails(int studentId)

@@ -1,26 +1,33 @@
 REQUIRE('chlk.models.people.ShortUserInfo');
-REQUIRE('chlk.models.schoolYear.MarkingPeriod');
+REQUIRE('chlk.models.schoolYear.GradingPeriod');
 REQUIRE('chlk.models.attendance.StudentAttendanceHoverBoxItem');
 
 NAMESPACE('chlk.models.attendance', function(){
    "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /**@class chlk.models.attendance.StudentAttendanceSummary*/
-    CLASS('StudentAttendanceSummary', EXTENDS(chlk.models.people.ShortUserInfo),[
+    CLASS(
+        UNSAFE, 'StudentAttendanceSummary', EXTENDS(chlk.models.people.ShortUserInfo), IMPLEMENTS(ria.serialize.IDeserializable),[
 
-        [ria.serialize.SerializeProperty('markingperiod')],
-        chlk.models.schoolYear.MarkingPeriod, 'markingPeriod',
+            ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
 
-        [ria.serialize.SerializeProperty('absentsection')],
-        chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'absentSection',
+            chlk.models.schoolYear.GradingPeriod, 'currentGradingPeriod',
 
-        [ria.serialize.SerializeProperty('latesection')],
-        chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'lateSection',
+            chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'absentSection',
 
-        [ria.serialize.SerializeProperty('excusedsection')],
-        chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'excusedSection',
+            chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'lateSection',
 
-        [ria.serialize.SerializeProperty('presentsection')],
-        chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'presentSection'
+            chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'presentSection',
+
+            OVERRIDE, VOID, function deserialize(raw){
+                BASE(raw);
+                this.gradingPeriods = SJX.fromArrayOfDeserializables(raw.gradingperiods, chlk.models.schoolYear.GradingPeriod);
+                this.currentGradingPeriod = SJX.fromDeserializable(raw.currentgradingperiod, chlk.models.schoolYear.GradingPeriod);
+                this.absentSection = SJX.fromDeserializable(raw.absences, chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem));
+                this.lateSection = SJX.fromDeserializable(raw.lates, chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem));
+                this.presentSection = SJX.fromDeserializable(raw.presents, chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem));
+            }
     ]);
 });

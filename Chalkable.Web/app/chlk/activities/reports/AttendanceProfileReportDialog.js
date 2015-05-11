@@ -14,12 +14,11 @@ NAMESPACE('chlk.activities.reports', function(){
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formSubmit(node, event){
                 var tNode = node.find('#terms-ids'),
-                    tArray = node.find('#terms-select').getValue();
-                if(tArray && tArray.length)
-                    tNode.setValue(tArray.join(','));
+                    tArray = node.find('#terms-select').getValue() || [];
+                tNode.setValue(tArray.join(','));
 
                 var res = [];
-                node.find('.grid-container')
+                node.find('.chlk-grid-container')
                     .find('.row:not(.header)')
                     .find('input[type=checkbox]').forEach(function(item){
                         if(item.checked()){
@@ -34,7 +33,7 @@ NAMESPACE('chlk.activities.reports', function(){
             VOID, function allReasonsChange(node, event){
                 var value = node.checked(), jNode;
                 jQuery(node.valueOf()).parents('form')
-                    .find('.grid-container')
+                    .find('.chlk-grid-container')
                     .find('.row:not(.header)')
                     .find('[type=checkbox]')
                     .each(function(index, item){

@@ -15,8 +15,19 @@ NAMESPACE('chlk.models.calendar.attendance', function(){
             , ArrayOf(chlk.models.calendar.attendance.ClassAttendanceCalendarMonthItem)
             , chlk.models.id.ClassId, ArrayOf(chlk.models.people.Claim)
         ]],
-        function $(date_, minDate_, maxDate_, calendarItems_, classId_, claims_){
+        function $(date_, minDate_, maxDate_, calendarItems_, classId_){
             BASE(date_, minDate_, maxDate_);
+            if(minDate_ && maxDate_){
+                var endDate = maxDate_;
+                var startDate = minDate_;
+                var today = new chlk.models.common.ChlkSchoolYearDate();
+                calendarItems_.forEach(function(day){
+                    var date = day.getDate().getDate();
+                    day.setTodayClassName((today.format('mm-dd-yy') == day.getDate().format('mm-dd-yy')) ? 'today' : '');
+                    day.setClassName((day.isCurrentMonth() && date >= startDate.getDate() &&
+                        date <= endDate.getDate()) ? '' : 'not-current-month');
+                });
+            }
             if(calendarItems_)
                 this.setCalendarItems(calendarItems_);
             if(classId_)

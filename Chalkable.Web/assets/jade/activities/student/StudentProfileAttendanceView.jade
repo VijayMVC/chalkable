@@ -1,34 +1,30 @@
-mixin MarkingPeriodSelect(markingPeriods, studentId, currentMp)
-    +Select('markingPeriodSelect', 'students', 'attendance', studentId.valueOf())
-        each mp,i in markingPeriods
-            +Option(mp.getId().valueOf(), mp.getName(), mp.getId() == currentMp.getId())
+-var user = self.getUser()
+-var currentGp = user.getCurrentGradingPeriod()
 
+.profile-page
+    h2.page-title=Msg.Student_profile
 
-mixin AttendanceSection(data)
-    boxesData = data.buildGlanceBoxesData()
-    .glance-container
-        each boxData in boxesData
-            +GlanceBox(null, null, boxData, null, null)
+    +ProfileTopBar(self, 'attendance')
+    .summary-view
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(user, 140, true)
+            #info-panel.central-block.panel-block
+                displayName =user.getDisplayName() || user.getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+                +Select('markingPeriodSelect', 'students', 'attendance', [user.getId().valueOf()]).mp-select
+                    each gp,i in user.getGradingPeriods()
+                        +Option(gp.getId().valueOf(), gp.getName(), gp.getId() == currentGp.getId())(data-additional-params = [gp.getStartDate().format('mm-dd-yy')])
+            #glance-block-panel.right-block.panel-block
+                .glance-container
+                    -var boxesData = self.buildGlanceBoxesData()
+                    .glance-container
+                        each boxData in boxesData
+                            +GlanceBox(null, null, boxData, null, null)
+        .calendar-panel
+            +RenderWith(self.getAttendanceCalendar(), chlk.templates.calendar.attendance.StudentAttendanceMonthCalendarTpl)(
+                userRole = self.getUserRole()
+            )
 
-summaryInfo = self.getSummaryInfo()
-personId = summaryInfo.getId()
-actions = {currentAction: 'attendanceMonth'}
-calendar = self.getAttendanceCalendar()
-.profile-calendar.student-attendance-view
-    .loader-container
-        .loader
-        +UserProfileTopBar(self, self.getSummaryInfo(), 'attendance')
-        .profile-info.attendance-view
-            .summary-info
-                .person-info.standard-short-info
-                    .avarar-container.standard-small-container
-                        .img-container
-                            +PersonImg(summaryInfo, 64, true)
-                    h1.profile-person-name=summaryInfo.getDisplayName()
-                h2.mp-conteiner.profile-drop-down-container
-                    +MarkingPeriodSelect(self.getMarkingPeriods(), personId, summaryInfo.getMarkingPeriod())
-                .glance-section.attendance-info
-                    +AttendanceSection(self)
-            #attendance-calendar-info.calendar-info
-                +RenderWith(self.getAttendanceCalendar(), chlk.templates.calendar.attendance.StudentAttendanceMonthCalendarTpl)
 

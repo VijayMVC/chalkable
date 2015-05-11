@@ -1,30 +1,31 @@
-mixin ToolbarButton(btn, announcementAppId, announcementId)
+mixin ToolbarButton(btn, announcementAppId, announcementId, advancedApp)
     btnTarget = btn.isTargetBlank() ? "_blank" : undefined
     url = btn.getUrl() ? btn.getUrl() : "javascript:void(0)"
     cls = btn.getCls()
     -attributes['data-announcement-app-id'] = announcementAppId ? announcementAppId : undefined
     -attributes['data-announcement-id'] = announcementId ? announcementId: undefined
+    -attributes['data-advanced-app'] = advancedApp ? 'true' : 'false'
     if btn.getController()
         +ActionLinkWithPrepend(btn.getController(), btn.getAction(), btn.getParams())(class= cls, id= btn.getId(), target= btnTarget)=btn.getTitle()
     else
         a(class= cls, id= btn.getId(), href= url, target= btnTarget)(attributes)=btn.getTitle()
 
 
-mixin Toolbar(buttons, announcementAppId, announcementId)
+mixin Toolbar(buttons, announcementAppId, announcementId, advancedApp)
     leftButtons = buttons.filter(function(item){return !item.isRight()})
     rightButtons = buttons.filter(function(item){return item.isRight()})
     .toolbar
         each btn in leftButtons
-            +ToolbarButton(btn, announcementAppId, announcementId)
+            +ToolbarButton(btn, announcementAppId, announcementId, advancedApp)
     .toolbar.right-toolbar
         each btn in rightButtons
-            +ToolbarButton(btn, announcementAppId, announcementId)
+            +ToolbarButton(btn, announcementAppId, announcementId, advancedApp)
     .x-close-btn.close
 
-mixin AttachmentDialog(url, buttons, announcementId, announcementAppId, type)
+mixin AttachmentDialog(url, buttons, announcementId, announcementAppId, type, advancedApp)
     .base-attachment-dialog
         .x-window-header
-            +Toolbar(buttons, announcementAppId, announcementId)
+            +Toolbar(buttons, announcementAppId, announcementId, advancedApp)
         if type == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE
             .iframe-wrap.picture-wrap
                 .picture-container
@@ -41,7 +42,7 @@ mixin AttachmentDialog(url, buttons, announcementId, announcementAppId, type)
 mixin AttachmentDialogMsg(title, text)
     .base-attachment-dialog.permission-error-dialog
         .x-window-header
-            +Toolbar([], null, null)
+            +Toolbar([], null, null, null)
         .iframe-wrap
             .error-msg-block
                 h2.error-title=title

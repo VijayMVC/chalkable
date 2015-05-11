@@ -7,6 +7,9 @@ namespace Chalkable.Data.School.Model
         public const string ID_FIELD = "Id";
         public const string STANDARD_GRADING_SCALE_REF_FIELD = "StandardsGradingScaleRef";
 
+        public const string AVERAGE_METHOD_POINTS = "Points";
+        public const string AVERAGE_METHOD_AVERAGE = "Average";
+
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string DefaultActivitySortOrder { get; set; }
@@ -27,5 +30,39 @@ namespace Chalkable.Data.School.Model
 	    public string DefaultStudentSortOrder { get; set; }
 	    public int SeatingChartRows { get; set; }
 	    public int SeatingChartColumns { get; set; }
+
+        [NotDbFieldAttr]
+        public AveragingMethodTypeEnum AveragingMethodType
+        {
+            get
+            {
+                if (CategoryAveraging)
+                    return AVERAGE_METHOD_AVERAGE == AveragingMethod
+                               ? AveragingMethodTypeEnum.CategoryAverage
+                               : AveragingMethodTypeEnum.CategoryPoints;
+                return AVERAGE_METHOD_AVERAGE == AveragingMethod
+                           ? AveragingMethodTypeEnum.Average
+                           : AveragingMethodTypeEnum.Points;
+
+            }
+            set
+            {
+                CategoryAveraging = value == AveragingMethodTypeEnum.CategoryAverage
+                                    || value == AveragingMethodTypeEnum.CategoryPoints;
+                AveragingMethod = value == AveragingMethodTypeEnum.CategoryPoints
+                                  || value == AveragingMethodTypeEnum.Points
+                                      ? AVERAGE_METHOD_POINTS 
+                                      : AVERAGE_METHOD_AVERAGE;
+            }
+        }
     }
+
+    public enum AveragingMethodTypeEnum
+    {
+        Points = 0,
+        Average = 1,
+        CategoryPoints = 2,
+        CategoryAverage = 3
+    }
+
 }

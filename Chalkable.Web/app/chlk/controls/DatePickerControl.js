@@ -23,20 +23,20 @@ NAMESPACE('chlk.controls', function () {
             },
 
             [[String, Object, Object]],
-            Object, function processAttrs(name, value, attrs) {
-                attrs.id = attrs.id || ria.dom.Dom.GID();
-                attrs.name = name;
-                if (value){
-                   if(!value.format)
-                        value = chlk.models.common.ChlkDate(getDate(value));
-                    attrs.value = value.format('mm/dd/yy');
+            Object, function processAttrs(name, value_, attrs_) {
+                attrs_.id = attrs_.id || ria.dom.Dom.GID();
+                attrs_.name = name;
+                if (value_){
+                   if(!value_.format)
+                        value_ = chlk.models.common.ChlkDate(getDate(value_));
+                    attrs_.value = value_.format('mm/dd/yy');
                 }
 
-                var options = attrs['data-options'];
-                var controller = attrs['data-controller'];
+                var options = attrs_['data-options'];
+                var controller = attrs_['data-controller'];
                 if(controller){
-                    var action = attrs['data-action'];
-                    var params = attrs['data-params'] || [];
+                    var action = attrs_['data-action'];
+                    var params = attrs_['data-params'] || [];
                     var that = this;
                     options.onSelect = function (dateText, inst) {
                         var date = new chlk.models.common.ChlkSchoolYearDate.$createServerTime(new Date(dateText));
@@ -72,15 +72,15 @@ NAMESPACE('chlk.controls', function () {
                     }
                 }
 
-                this.queueReanimation_(attrs.id, options, value);
+                this.queueReanimation_(attrs_.id, options, value_);
 
-                return attrs;
+                return attrs_;
             },
 
-            function updateDatePicker(node, value, options_, noClearValue_){
+            function updateDatePicker(node, value_, options_, noClearValue_){
                 var options = options_ || node.getData('options'), that = this;
-                this.reanimate_(node, options, value);
-                if(!value && !noClearValue_)
+                this.reanimate_(node, options, value_);
+                if(!value_ && !noClearValue_)
                     node.setValue('');
                 node.off('change.datepiker');
                 node.on('change.datepiker', function(node, event){
@@ -98,19 +98,19 @@ NAMESPACE('chlk.controls', function () {
                 })
             },
 
-            VOID, function queueReanimation_(id, options, value) {
+            VOID, function queueReanimation_(id, options, value_) {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var node = ria.dom.Dom('#' + id);
                         node.setData('options', options);
-                        this.updateDatePicker(node, value, options);
+                        this.updateDatePicker(node, value_, options);
                     }.bind(this));
             },
 
             [[ria.dom.Dom, Object, Object]],
-            VOID, function reanimate_(node, options, value) {
+            VOID, function reanimate_(node, options, value_) {
                 var defaultOptions = {dateFormat: "mm/dd/yy"};
-                node.datepicker(ria.__API.extendWithDefault(options,defaultOptions), value && value.getDate());
+                node.datepicker(ria.__API.extendWithDefault(options,defaultOptions), value_ && value_.getDate());
                 node.setData('control', this);
             }
         ]);
