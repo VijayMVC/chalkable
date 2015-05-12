@@ -57,10 +57,10 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
-        public ActionResult ClassSchedule(int classId, DateTime? day)
+        public ActionResult ClassSchedule(int classId, DateTime? date)
         {
             var clazz = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var schedule = AnnouncementCalendarController.BuildDayAnnCalendar(SchoolLocator, day, classId, null, GetCurrentSchoolYearId());
+            var schedule = AnnouncementCalendarController.BuildDayAnnCalendar(SchoolLocator, date, classId, null, GetCurrentSchoolYearId());
             return Json(ClassScheduleViewData.Create(clazz, schedule), 13);
         }
         
