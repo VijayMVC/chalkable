@@ -74,7 +74,7 @@ NAMESPACE('chlk.templates.attendance', function () {
                     columns: this.getColumns(),
                     rows: this.getRows(),
                     classId: this.getTopData().getSelectedItemId().valueOf()
-                }, seatsList = [];
+                }, seatingList = [];
                 this.getSeatingList() && this.getSeatingList().forEach(function(items){
                     var seatings = [];
                     items.forEach(function(item){
@@ -85,9 +85,9 @@ NAMESPACE('chlk.templates.attendance', function () {
                             index: item.getIndex()
                         })
                     });
-                    seatsList.push(seatings);
+                    seatingList.push(seatings);
                 });
-                res.seatsList = seatsList;
+                res.seatingList = seatingList;
                 return JSON.stringify(res);
             },
 
