@@ -44,8 +44,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var res = new List<GradingStandardInfo>();
             foreach (var standardScore in standardScores)
             {
-                var standard = standards.First(x => x.Id == standardScore.StandardId);
-                res.Add(GradingStandardInfo.Create(standardScore, standard));
+                var standard = standards.FirstOrDefault(x => x.Id == standardScore.StandardId);
+                if (standard != null)
+                    res.Add(GradingStandardInfo.Create(standardScore, standard));
             }
             return res;
         }
