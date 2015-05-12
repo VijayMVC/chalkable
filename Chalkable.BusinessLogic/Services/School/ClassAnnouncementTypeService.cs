@@ -120,7 +120,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private IList<ClassAnnouncementType> BuildClassAnnouncementTypes(IEnumerable<ActivityCategory> activityCategories)
         {
-            return activityCategories.Select(BuildClassAnnouncementType).ToList();
+            return activityCategories != null 
+                ? activityCategories.Select(BuildClassAnnouncementType).ToList() 
+                : new List<ClassAnnouncementType>();
         }
         
         public IList<GradedClassAnnouncementType> CalculateAnnouncementTypeAvg(int classId, IList<AnnouncementDetails> announcementDetailses)
