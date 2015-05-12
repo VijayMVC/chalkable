@@ -783,7 +783,15 @@ namespace Chalkable.StiImport.Services
                     Name = x.Name,
                     NCESCode = x.NCESCode,
                     SIFCode = x.SIFCode,
-                    StateCode = x.StateCode
+                    StateCode = x.StateCode,
+                  
+                    // The VisibleInClassroom property was added to Inow after the Infraction table was synced. 
+                    // At the time that this release of Chalkable goes out, some Inow apis will have this new 
+                    // column and some won't.  We need to take this into account and make the sync model property
+                    // a nullable bool.  When null, we should assume the value is true so that the infraction will
+                    // be displayed in the UI
+                    VisibleInClassroom = x.VisibleInClassroom.HasValue ? x.VisibleInClassroom.Value : true
+                    
                 }).ToList();
             ServiceLocatorSchool.InfractionService.Add(infractions);
         }

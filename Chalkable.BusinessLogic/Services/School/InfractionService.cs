@@ -39,10 +39,11 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         public IList<Infraction> GetInfractions(bool onlyActive = false)
-        {
-            QueryCondition conds = null;
+        {            
+            var conds = new AndQueryCondition();
             if (onlyActive)
-                conds = new AndQueryCondition {{Infraction.IS_ACTIVE_FIELD, true}};
+                conds.Add(Infraction.IS_ACTIVE_FIELD, true);
+            conds.Add(Infraction.VISIBLE_IN_CLASSROOM_FIELD, true );
             return DoRead(u => new DataAccessBase<Infraction>(u).GetAll(conds));
         }
     }
