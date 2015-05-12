@@ -41,6 +41,8 @@ NAMESPACE('chlk.models.attendance', function () {
 
             String, 'category',
 
+            Boolean, 'excused',
+
             [ria.serialize.SerializeProperty('attendancelevelreason')],
             ArrayOf(chlk.models.attendance.AttendanceLevelReason), 'attendanceLevelReasons',
 
@@ -101,6 +103,7 @@ NAMESPACE('chlk.models.attendance', function () {
                 this.setCode(raw.code);
                 this.setDescription(raw.description);
                 this.setCategory(raw.category);
+                this.setExcused(raw.isexcused)
                 if(raw.attendancelevelreason){
                     var attReasonsLevels = [];
                     for(var i = 0; i < raw.attendancelevelreason.length; i++){

@@ -245,7 +245,7 @@ NAMESPACE('chlk.services', function () {
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.ReportFormatEnum, chlk.models.reports.StudentIdentifierEnum, chlk.models.reports.ReportType,
             ArrayOf(chlk.models.id.AttendanceReasonId), Number, Boolean, Boolean]],
 
-        String, function submitAttendanceRegisterReport(classId, gradingPeriodId, format, reportType, idToPrint, absenceReasons, monthId, showLocalReasonCode_, includeTardies_){
+        String, function submitAttendanceRegisterReport(classId, gradingPeriodId, format,  idToPrint, reportType, absenceReasons, monthId, showLocalReasonCode_, includeTardies_){
             return this.getUrl('Reporting/AttendanceRegisterReport.json', {
                 classId : classId.valueOf(),
                 gradingPeriodId: gradingPeriodId.valueOf(),

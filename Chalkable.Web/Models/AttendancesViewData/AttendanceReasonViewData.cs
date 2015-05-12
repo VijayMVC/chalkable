@@ -11,6 +11,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public string Name { get; set; }
         public string Description { get; set; }
         public string Category { get; set; }
+        public bool IsExcused { get; set; }
 
         protected AttendanceReasonViewData(AttendanceReason reason)
         {
@@ -18,6 +19,8 @@ namespace Chalkable.Web.Models.AttendancesViewData
             Name = reason.Name;
             Code = reason.Code;
             Description = reason.Description;
+            Category = reason.Category;
+            IsExcused = reason.IsExcused;
         }
 
         public static AttendanceReasonViewData Create(AttendanceReason reason)

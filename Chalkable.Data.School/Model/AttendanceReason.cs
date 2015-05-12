@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
@@ -18,6 +14,12 @@ namespace Chalkable.Data.School.Model
         public string Category { get; set; }
         public bool IsSystem { get; set; }
         public bool IsActive { get; set; }
+
+        [NotDbFieldAttr]
+        public bool IsExcused
+        {
+            get { return Category == "E"; }
+        }
 
         [NotDbFieldAttr]
         public IList<AttendanceLevelReason> AttendanceLevelReasons { get; set; } 

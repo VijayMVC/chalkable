@@ -1,5 +1,5 @@
 mixin ReportCell(value)
-    .cell
+    .cell(attributes)
         div(data-tooltip=value, data-tooltip-type="overflow").text=value
 
 .dialog.report-window
@@ -19,17 +19,19 @@ mixin ReportCell(value)
                   TD.item-2
                      h3=Msg.Absence_reasons
                      .chlk-grid-container
-                        .grid
+                        .grid.attendance-reason
                             .row.header
                                 .cell
                                     +Checkbox('allchecks', true).all-checkboxes
                                 .cell= Msg.Code
+                                .cell C
                                 .cell= Msg.Reason
                             each reason in self.getAttendanceReasons()
                                 .row
                                     div(data-id=reason.getId().valueOf()).cell
                                         +Checkbox('announcementId', true)
                                     +ReportCell(reason.getCode())
+                                    +ReportCell(reason.getCategory())
                                     +ReportCell(reason.getName())
                   TD.item-2
                      h3=Msg.ID_to_print
