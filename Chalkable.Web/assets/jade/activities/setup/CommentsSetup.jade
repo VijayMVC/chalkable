@@ -20,11 +20,12 @@ mixin ReportCell(value)
                     .cell= Msg.Comment
                     .cell= Msg.Is_system
                 each comment in self.getComments()
+                    -var disabledClick = !comment.isEditable() || !self.isAbleEdit()
                     .row
                         div(data-id=comment.getCommentId()).cell.check-container
-                            +Checkbox('commentyId', false, !comment.isEditable() || !self.isAbleEdit()).item-check
+                            +Checkbox('commentyId', false, disabledClick).item-check
                         .cell
-                            +ActionLink('setup', 'addEditComment', comment.getCommentId())(data-tooltip=comment.getComment(), data-tooltip-type="overflow").text=comment.getComment()
+                            +ActionLink('setup', 'addEditComment', comment.getCommentId())(disabled=disabledClick ? "disabled" : null, data-tooltip=comment.getComment(), data-tooltip-type="overflow").text=comment.getComment()
                         .cell
                             .text #{comment.isSystem() ? '+' : ''}
         +Hidden('ids', '').ids-to-delete
