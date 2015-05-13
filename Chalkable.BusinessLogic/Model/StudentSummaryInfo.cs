@@ -28,7 +28,7 @@ namespace Chalkable.BusinessLogic.Model
                     StudentInfo = student, 
                     ClassRank = nowDashboard.ClassRank != null ? ClassRankInfo.Create(nowDashboard.ClassRank) : null,
                     CurrentSectionId = nowDashboard.CurrentSectionId,
-                    TotalDisciplineOccurrences = nowDashboard.Infractions.Sum(x=>x.Occurrences),
+                    TotalDisciplineOccurrences = nowDashboard.Infractions.Any() ? nowDashboard.Infractions.Sum(x=>x.Occurrences) : 0,
                     InfractionSummaries = InfractionSummaryInfo.Create(nowDashboard.Infractions.ToList(), infractions),
                     StudentAnnouncements = new List<StudentAnnouncement>(),
                     Attendances = ShortStudentClassAttendanceSummary.Create(nowDashboard.SectionAttendance.ToList()),

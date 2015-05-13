@@ -197,7 +197,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             var infractions = new List<StiConnector.Connectors.Model.Infraction>();
 
-            foreach (var disciplineReferral in discipline)
+            foreach (var disciplineReferral in discipline.Where(disciplineReferral => disciplineReferral.Infractions != null))
             {
                 infractions.AddRange(disciplineReferral.Infractions);
             }
@@ -223,7 +223,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 ClassRank = classRank,
                 Infractions = infractionSummary,
-                //SectionAttendance = attendances,
+                SectionAttendance = new List<StudentSectionAbsenceSummary>(), //attendances,
                 Scores = ((DemoStudentAnnouncementService)ServiceLocator.StudentAnnouncementService).GetActivityScoresForStudent(studentId)
             };
             var student = GetStudentDetails(studentId, syId);

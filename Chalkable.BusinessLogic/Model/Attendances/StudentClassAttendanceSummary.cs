@@ -10,6 +10,7 @@ namespace Chalkable.BusinessLogic.Model.Attendances
         public int StudentId { get; set; }
         public int ClassId { get; set; }
 
+        public ShortStudentClassAttendanceSummary(){}
         protected ShortStudentClassAttendanceSummary(StudentSectionAbsenceSummary studentSectionAbsence)
         {
             Tardies = studentSectionAbsence.Tardies;
@@ -28,10 +29,16 @@ namespace Chalkable.BusinessLogic.Model.Attendances
     public class StudentClassAttendanceSummary : ShortStudentClassAttendanceSummary
     {       
         public Class Class { get; set; }
+        public StudentClassAttendanceSummary(){}
         protected StudentClassAttendanceSummary(StudentSectionAbsenceSummary studentSectionAbsence, Class cClass)
             : base(studentSectionAbsence)
         {
             Class = cClass;
+        }
+
+        public static StudentClassAttendanceSummary Create(StudentSectionAbsenceSummary studentSectionAbsence, Class cClass)
+        {
+            return new StudentClassAttendanceSummary(studentSectionAbsence, cClass);
         }
 
         public static IList<StudentClassAttendanceSummary> Create(IList<StudentSectionAbsenceSummary> studentSectionAttendances, IList<ClassDetails> classes)
