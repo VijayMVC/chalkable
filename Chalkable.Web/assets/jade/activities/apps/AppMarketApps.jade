@@ -3,7 +3,7 @@ mixin AppIconLink_(app)
     +ActionLink('appmarket', 'details', appId).application
         .wrapper
             img(src=app.getBannerPictureUrl())
-            .title=app.getName()
+            .title(data-tooltip=app.getName(), data-tooltip-type="overflow")=app.getName()
             .shortdesc=app.getShortDescription()
             +ActionButton('appmarket', 'tryToInstall', appId).blue-button Quick Install
 
