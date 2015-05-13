@@ -379,18 +379,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? gradingPeriodId)
         {
             DateTime startDate, endDate;
-            if (gradingPeriodId.HasValue)
-            {
-                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value);
-                startDate = gp.StartDate;
-                endDate = gp.EndDate;
-            }
-            else
-            {
-                var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-                startDate = sy.StartDate.Value;
-                endDate = sy.EndDate.Value;
-            }
+            PrepareingDateRangeByGPId(gradingPeriodId, out startDate, out endDate);
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var student = ServiceLocator.StudentService.GetById(studentId, syId);      
             var classes = ServiceLocator.ClassService.GetStudentClasses(syId, studentId);
@@ -413,15 +402,76 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
-        
         public ClassAttendanceSummary GetClassAttendanceSummary(int classId, int? gradingPeriodId)
         {
-            throw new NotImplementedException();
+            DateTime startDate, endDate;
+            PrepareingDateRangeByGPId(gradingPeriodId, out startDate, out endDate);
+            var sectionSummary = GetSaSummary(classId, startDate, endDate);
+            return new ClassAttendanceSummary
+                {
+                    ClassId = classId,
+                    Tardies = sectionSummary.Students.Sum(x=>x.Tardies),
+                    Absences = sectionSummary.Students.Sum(x=>x.Absences),
+                    Presents = sectionSummary.Students.Sum(x => x.Presents)
+                };
         }
 
         public IList<ClassPeriodAttendance> GetClassPeriodAttendances(int classId, DateTime start, DateTime end)
         {
-            throw new NotImplementedException();
+            var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var currentDate = start.Date;
+            var res = new List<ClassPeriodAttendance>();
+            var cClass = ServiceLocator.ClassService.GetById(classId);
+            var periods = ServiceLocator.PeriodService.GetPeriods(syId);
+            var schedules = ServiceLocator.ClassPeriodService.GetSchedule(null, null, classId, start, end);
+            while (currentDate < end)
+            {
+                var classAttendance = GetClassAttendance(currentDate.Date, classId);
+                var period = periods.FirstOrDefault(p => schedules.Any(y => y.Day == currentDate && p.Id == y.PeriodId));
+                if(period != null)
+                    res.Add(new ClassPeriodAttendance
+                        {
+                            Class = cClass,
+                            ClassId = classId,
+                            Date = currentDate,
+                            StudentAttendances = classAttendance.StudentAttendances.Select(x => CreateStudentPeriodAttendnace(x, period, cClass)).ToList()
+                        });
+                currentDate = currentDate.AddDays(1);
+            }
+            return res;
+        }
+
+        private StudentPeriodAttendance CreateStudentPeriodAttendnace(StudentClassAttendance studentClassAttendance, Period period, Class cClass)
+        {
+            return new StudentPeriodAttendance
+                {
+                    Level = studentClassAttendance.Level,
+                    AbsentPreviousDay = studentClassAttendance.AbsentPreviousDay,
+                    AttendanceReasonId = studentClassAttendance.AttendanceReasonId,
+                    Category = studentClassAttendance.Category,
+                    Class = cClass,
+                    ClassId = studentClassAttendance.ClassId,
+                    Student = studentClassAttendance.Student,
+                    Date = studentClassAttendance.Date,
+                    StudentId = studentClassAttendance.StudentId,
+                    Period = period
+                };
+        }
+
+        private void PrepareingDateRangeByGPId(int? gradingPeriodId, out DateTime startDate, out DateTime endDate)
+        {
+            if (gradingPeriodId.HasValue)
+            {
+                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value);
+                startDate = gp.StartDate;
+                endDate = gp.EndDate;
+            }
+            else
+            {
+                var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+                startDate = sy.StartDate.Value;
+                endDate = sy.EndDate.Value;
+            }
         }
     }
 }
