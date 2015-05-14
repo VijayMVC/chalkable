@@ -379,7 +379,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? gradingPeriodId)
         {
             DateTime startDate, endDate;
-            PrepareingDateRangeByGPId(gradingPeriodId, out startDate, out endDate);
+            ((DemoGradingPeriodService)ServiceLocator.GradingPeriodService).GetDateRangeByGpID(gradingPeriodId, out startDate, out endDate);
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var student = ServiceLocator.StudentService.GetById(studentId, syId);      
             var classes = ServiceLocator.ClassService.GetStudentClasses(syId, studentId);
@@ -405,7 +405,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public ClassAttendanceSummary GetClassAttendanceSummary(int classId, int? gradingPeriodId)
         {
             DateTime startDate, endDate;
-            PrepareingDateRangeByGPId(gradingPeriodId, out startDate, out endDate);
+            ((DemoGradingPeriodService)ServiceLocator.GradingPeriodService).GetDateRangeByGpID(gradingPeriodId, out startDate, out endDate);
             var sectionSummary = GetSaSummary(classId, startDate, endDate);
             return new ClassAttendanceSummary
                 {
@@ -456,22 +456,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     StudentId = studentClassAttendance.StudentId,
                     Period = period
                 };
-        }
-
-        private void PrepareingDateRangeByGPId(int? gradingPeriodId, out DateTime startDate, out DateTime endDate)
-        {
-            if (gradingPeriodId.HasValue)
-            {
-                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value);
-                startDate = gp.StartDate;
-                endDate = gp.EndDate;
-            }
-            else
-            {
-                var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-                startDate = sy.StartDate.Value;
-                endDate = sy.EndDate.Value;
-            }
         }
     }
 }

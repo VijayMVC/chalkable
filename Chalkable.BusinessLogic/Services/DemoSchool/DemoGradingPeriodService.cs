@@ -105,5 +105,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             return GradingPeriodStorage.GetAll();
         }
+
+        public void GetDateRangeByGpID(int? gradingPeriodId, out DateTime startDate, out DateTime endDate)
+        {
+            if (gradingPeriodId.HasValue)
+            {
+                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value);
+                startDate = gp.StartDate;
+                endDate = gp.EndDate;
+            }
+            else
+            {
+                var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+                startDate = sy.StartDate.Value;
+                endDate = sy.EndDate.Value;
+            }
+        }
     }
 }
