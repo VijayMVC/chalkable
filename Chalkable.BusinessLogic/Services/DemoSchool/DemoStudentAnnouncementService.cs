@@ -184,7 +184,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             var gradeComment = comment != null && !string.IsNullOrWhiteSpace(comment) ? comment.Trim() : "";
 
-            var oldScore = ActivityScoreStorage.GetScore(announcementId, studentId);
+            var oldScore = ActivityScoreStorage.GetScore(ann.SisActivityId.Value, studentId);
             var studentAnnouncement = new StudentAnnouncement();
 
             MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(studentAnnouncement, oldScore);
