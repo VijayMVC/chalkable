@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         IList<ClassDisciplineDetails> GetClassDisciplineDetails(int classId, DateTime date);
         ClassDisciplineDetails SetClassDiscipline(ClassDiscipline classDiscipline);
-        IList<ClassDisciplineDetails> GetDisciplineByDateRange(int studentId, DateTime? start, DateTime? end);
+        IList<ClassDisciplineDetails> GetDisciplineByDateRange(int studentId, DateTime start, DateTime end);
         IList<InfractionSummaryInfo> GetStudentInfractionSummary(int studentId, int? gradingPeriodId);
     }
 
@@ -65,8 +65,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public ClassDisciplineDetails SetClassDiscipline(ClassDiscipline classDiscipline)
         {
-            if(!classDiscipline.ClassId.HasValue)
-                throw new ChalkableException("Invalid classId param");
+            DemandClassId(classDiscipline.ClassId);
             Trace.Assert(Context.SchoolYearId.HasValue);
             
             var stiDiscipline = new DisciplineReferral();
@@ -101,8 +100,14 @@ namespace Chalkable.BusinessLogic.Services.School
                     
                 };
         }
-                
-        public IList<ClassDisciplineDetails> GetDisciplineByDateRange(int studentId, DateTime? start, DateTime? end)
+              
+        private void DemandClassId(int? classId)
+        {
+            if (!classId.HasValue)
+                throw new ChalkableException("Invalid classId param");
+        }
+
+        public IList<ClassDisciplineDetails> GetDisciplineByDateRange(int studentId, DateTime start, DateTime end)
         {
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var student = ServiceLocator.StudentService.GetById(studentId, syId);

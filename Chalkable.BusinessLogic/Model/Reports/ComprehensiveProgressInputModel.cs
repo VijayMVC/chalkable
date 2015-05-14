@@ -47,4 +47,22 @@ namespace Chalkable.BusinessLogic.Model.Reports
             }
         }
     }
+
+    public enum ComprehensiveProgressOrderByMethod
+    {
+        StudentDisplayName = 1,
+        StudentIdentifier = 2,
+        GradeLevel = 3,
+        Homeroom = 4,
+        PostalCode = 5,
+        DistributionPeriod = 6,
+    }
+
+    public enum ProgressAttendanceDisplayMethod
+    {
+        None,
+        Both,
+        GradingPeriod,
+        YearToDate,
+    }
 }

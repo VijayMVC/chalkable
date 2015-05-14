@@ -95,9 +95,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public ClassDisciplineDetails SetClassDiscipline(ClassDiscipline classDiscipline)
         {
-            if (!classDiscipline.ClassId.HasValue)
-                throw new ChalkableException("Invalid classId param");
-
+            DemandClassId(classDiscipline.ClassId);
             var stiDiscipline = new DisciplineReferral();
             MapperFactory.GetMapper<DisciplineReferral, ClassDiscipline>().Map(stiDiscipline, classDiscipline);
 
@@ -121,19 +119,65 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             };
         }
 
+        private void DemandClassId(int? classId)
+        {
+            if (!classId.HasValue)
+                throw new ChalkableException("Invalid classId param");
+        }
+
         public IList<DisciplineReferral> GetList(DateTime today)
         {
             return DisciplineStorage.GetList(today);
         }
         
-        public IList<ClassDisciplineDetails> GetDisciplineByDateRange(int studentId, DateTime? start, DateTime? end)
+        public IList<ClassDisciplineDetails> GetDisciplineByDateRange(int studentId, DateTime start, DateTime end)
         {
-            throw new NotImplementedException();
+            var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var classes = ServiceLocator.ClassService.GetStudentClasses(syId, studentId);
+            var res = new List<ClassDisciplineDetails>();
+            foreach (var cClass in classes)
+            {
+                var currentDate = start.Date;
+                while (currentDate < end)
+                {
+                    var classDiscipline = GetClassDisciplineDetails(cClass.Id, currentDate)
+                                            .FirstOrDefault(d=>d.StudentId == studentId);
+                    if (classDiscipline != null)
+                        res.Add(classDiscipline);
+                    currentDate = currentDate.AddDays(1);
+                }    
+            }
+            return res;
         }
 
         public IList<InfractionSummaryInfo> GetStudentInfractionSummary(int studentId, int? gradingPeriodId)
         {
-            throw new NotImplementedException();
+            DateTime startDate, endDate;
+            ((DemoGradingPeriodService)ServiceLocator.GradingPeriodService).GetDateRangeByGpID(gradingPeriodId, out startDate, out endDate);
+            var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var classes = ServiceLocator.ClassService.GetStudentClasses(syId, studentId);
+            var infractions = ServiceLocator.InfractionService.GetInfractions();
+            IDictionary<int, int> infrcationOccurrencesDic = new Dictionary<int, int>(); 
+            foreach (var classDetailse in classes)
+            {
+                var disciplineReferrals = GetSectionDisciplineSummary(classDetailse.Id, startDate, endDate)
+                        .Where(d => d.StudentId == studentId)
+                        .ToList();
+                foreach (var infraction in disciplineReferrals.SelectMany(dr => dr.Infractions))
+                {
+                    if (!infrcationOccurrencesDic.ContainsKey(infraction.Id))
+                        infrcationOccurrencesDic.Add(infraction.Id, 0);
+                    infrcationOccurrencesDic[infraction.Id]++;
+                }
+            }
+            var res = infrcationOccurrencesDic.Select( x => new InfractionSummaryInfo
+                        {
+                            Occurrences = x.Key,
+                            Infraction = infractions.FirstOrDefault(i => i.Id == x.Key)
+                        }
+                    ).ToList();
+            res.RemoveAll(x => x.Infraction == null);
+            return res;
         }
     }
 }
