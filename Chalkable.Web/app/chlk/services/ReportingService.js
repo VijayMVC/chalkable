@@ -305,6 +305,14 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
+        [[chlk.models.id.GradingPeriodId, chlk.models.id.SchoolPersonId]],
+        String, function submitStudentComprehensiveProgressReport(gradingPeriodId, studentId) {
+            return this.getUrl('Reporting/StudentComprehensiveProgressReport.json', {
+                gradingPeriodId: gradingPeriodId.valueOf(),
+                studentId: studentId.valueOf()
+            });
+        },
+
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
         ria.async.Future, function getStudentReportComments(classId, gradingPeriodId) {
             return this.get('Reporting/GetStudentProgressReportComments.json', ArrayOf(chlk.models.reports.UserForReport), {

@@ -189,6 +189,8 @@ var Msg = {
     Rejected: 'Rejected',
     Remove: 'Remove',
     Reminder: oneOrMany('Reminder'),
+    Report: 'Report',
+    Reports: 'Reports',
     Required: 'Required',
     Room: 'Room',
     Save: 'Save',
