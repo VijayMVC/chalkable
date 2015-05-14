@@ -152,7 +152,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             ActivityScoreStorage.Add(score);
         }
 
-        public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, 
+        public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits,
             string comment, bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
@@ -173,7 +173,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     .FirstOrDefault(x => String.Equals(x.Name, value, StringComparison.InvariantCultureIgnoreCase));
                 if (numScore != null)
                 {
-                    var gradingScaleRange = ((DemoGradingScaleService)ServiceLocator.GradingScaleService).GetByAlphaGradeId(numScore.Id);
+                    var gradingScaleRange =
+                        ((DemoGradingScaleService) ServiceLocator.GradingScaleService).GetByAlphaGradeId(numScore.Id);
                     if (gradingScaleRange != null)
                     {
                         numericScore = gradingScaleRange.AveragingEquivalent;
@@ -193,9 +194,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (numericScore >= 0 && value != null)
             {
                 studentAnnouncement.NumericScore = numericScore;
-                studentAnnouncement.ScoreValue = value.ToString(CultureInfo.InvariantCulture);
+                studentAnnouncement.ScoreValue = isDecimal
+                    ? string.Format("{0:0.00}", numericScore)
+                    : value.ToString(CultureInfo.InvariantCulture);
             }
             else if (value == null)
+            {
+                studentAnnouncement.NumericScore = null;
+                studentAnnouncement.ScoreValue = "";
+            }
+
+            if (value == null && oldScore.ScoreValue != null)
             {
                 studentAnnouncement.NumericScore = null;
                 studentAnnouncement.ScoreValue = "";
