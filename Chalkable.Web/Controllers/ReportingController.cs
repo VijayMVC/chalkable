@@ -50,6 +50,8 @@ namespace Chalkable.Web.Controllers
                     IncludeWithdrawn = false,
                     ClassAverageOnly = false,
                     IncludePicture = false,
+                    OrderBy = (int)ComprehensiveProgressOrderByMethod.StudentDisplayName,
+                    DailyAttendanceDisplayMethod = (int)ProgressAttendanceDisplayMethod.Both,
                     FormatTyped = ReportingFormat.Pdf
                 };
             return ComprehensiveProgressReport(inputModel);
