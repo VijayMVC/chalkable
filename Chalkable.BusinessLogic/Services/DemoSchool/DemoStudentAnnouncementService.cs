@@ -152,7 +152,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             ActivityScoreStorage.Add(score);
         }
 
-        public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, 
+        public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits,
             string comment, bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
             var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
@@ -173,7 +173,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     .FirstOrDefault(x => String.Equals(x.Name, value, StringComparison.InvariantCultureIgnoreCase));
                 if (numScore != null)
                 {
-                    var gradingScaleRange = ((DemoGradingScaleService)ServiceLocator.GradingScaleService).GetByAlphaGradeId(numScore.Id);
+                    var gradingScaleRange =
+                        ((DemoGradingScaleService) ServiceLocator.GradingScaleService).GetByAlphaGradeId(numScore.Id);
                     if (gradingScaleRange != null)
                     {
                         numericScore = gradingScaleRange.AveragingEquivalent;
@@ -184,7 +185,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             var gradeComment = comment != null && !string.IsNullOrWhiteSpace(comment) ? comment.Trim() : "";
 
-            var oldScore = ActivityScoreStorage.GetScore(announcementId, studentId);
+            var oldScore = ActivityScoreStorage.GetScore(ann.SisActivityId.Value, studentId);
             var studentAnnouncement = new StudentAnnouncement();
 
             MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(studentAnnouncement, oldScore);
@@ -193,7 +194,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (numericScore >= 0 && value != null)
             {
                 studentAnnouncement.NumericScore = numericScore;
-                studentAnnouncement.ScoreValue = value.ToString(CultureInfo.InvariantCulture);
+                studentAnnouncement.ScoreValue = isDecimal
+                    ? string.Format("{0:0.00}", numericScore)
+                    : value.ToString(CultureInfo.InvariantCulture);
             }
             else if (value == null)
             {
@@ -201,17 +204,30 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 studentAnnouncement.ScoreValue = "";
             }
 
-            if (studentAnnouncement.NumericScore.HasValue || studentAnnouncement.Late ||
-                studentAnnouncement.Incomplete)
+            if (value == null && oldScore.ScoreValue != null)
             {
-                studentAnnouncement.ScoreDropped = dropped;
-                studentAnnouncement.Comment = gradeComment;
+                studentAnnouncement.NumericScore = null;
+                studentAnnouncement.ScoreValue = "";
             }
 
             studentAnnouncement.Exempt = exempt;
             studentAnnouncement.Late = late;
             studentAnnouncement.Incomplete = incomplete;
             studentAnnouncement.ExtraCredit = extraCredits;
+
+            if (studentAnnouncement.NumericScore.HasValue || studentAnnouncement.Late ||
+                studentAnnouncement.Incomplete)
+            {
+                studentAnnouncement.ScoreDropped = dropped;
+                studentAnnouncement.Comment = gradeComment;
+            }
+            else
+            {
+                studentAnnouncement.ScoreDropped = false;
+            }
+            
+
+            
 
             var score = new Score();
             MapperFactory.GetMapper<Score, StudentAnnouncement>().Map(score, studentAnnouncement);
