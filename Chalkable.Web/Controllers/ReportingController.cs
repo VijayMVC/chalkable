@@ -32,6 +32,28 @@ namespace Chalkable.Web.Controllers
             return Report(comprehensiveProgressInput, SchoolLocator.ReportService.GetComprehensiveProgressReport, "ComprehensiveProgressReport");
         }
 
+        [AuthorizationFilter("Teacher, Student")]
+        public ActionResult StudentComprehensiveProgressReport(int gradingPeriodId, int studentId)
+        {
+            var inputModel = new ComprehensiveProgressInputModel
+                {
+                    GradingPeriodId = gradingPeriodId,
+                    GradingPeriodIds = new IntList {gradingPeriodId},
+                    StudentIds = new IntList {studentId},
+                    DisplayPeriodAttendance = true,
+                    DisplayStudentComment = true,
+                    DisplaySignatureLine = false,
+                    DisplayTotalPoints = true,
+                    DisplayStudentMailingAddress = true,
+                    DisplayClassAverage = false,
+                    DisplayCategoryAverages = true,
+                    IncludeWithdrawn = false,
+                    ClassAverageOnly = false,
+                    IncludePicture = false
+                };
+            return ComprehensiveProgressReport(inputModel);
+        }
+
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult MissingAssignmentsReport(MissingAssignmentsInputModel missingAssignmentsInput)
         {
@@ -41,20 +63,6 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
         public ActionResult ProgressReport(ProgressReportInputModel progressReportInput)
         {
-            //if(progressReportInput.StudentIds != null &&(studentComments == null || progressReportInput.StudentIds.Count != studentComments.Count))
-            //    throw new ChalkableException("Invalid student comments param");
-            //if (progressReportInput.StudentIds != null)
-            //{
-            //    progressReportInput.StudentComments = new List<StudentCommentInputModel>();
-            //    for (int i = 0; i < progressReportInput.StudentIds.Count; i++)
-            //    {
-            //        progressReportInput.StudentComments.Add(new StudentCommentInputModel
-            //        {
-            //            StudentId = progressReportInput.StudentIds[i],
-            //            Comment = studentComments[i]
-            //        });
-            //    }   
-            //}
             return Report(progressReportInput, SchoolLocator.ReportService.GetProgressReport, "ProgressReport");
         }
 
