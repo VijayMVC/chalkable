@@ -2,7 +2,8 @@
    +ActionForm('setup', 'submitComment').comment-form.no-working.report-form
       .x-window-header
          .close.close-btn.dark
-         h1=self.getCommentId() ? Msg.Edit_comment + ': ' + self.getComment() : Msg.Create_comment
+         -var text = self.getCommentId() ? Msg.Edit_comment + ': ' + self.getComment() : Msg.Create_comment
+         h1(data-tooltip=text, data-tooltip-type="overflow", data-tooltip-class="break-word")=text
 
       .x-window-body
          +Hidden('commentid', self.getCommentId() && self.getCommentId().valueOf())
