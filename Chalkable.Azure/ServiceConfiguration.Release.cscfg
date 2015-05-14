@@ -10,7 +10,7 @@
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
-      <Setting name="ChalkableSchoolDbServers" value="yqdubo97gg.database.windows.net,qap56j04br.database.windows.net" />
+      <Setting name="ChalkableSchoolDbServers" value="yqdubo97gg.database.windows.net,qap56j04br.database.windows.net,xk45tx8se0.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <Setting name="DbUpdateTimeout" value="3600" />
       <!-- CDN and content settings-->
@@ -50,7 +50,7 @@
       <!--<Setting name="ChalkableSchoolTemplate" value="Data Source={0};Initial Catalog=ChalkableSchoolTemplate;UID={2};Pwd={3}" />-->
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
-      <Setting name="ChalkableSchoolDbServers" value="yqdubo97gg.database.windows.net" />
+      <Setting name="ChalkableSchoolDbServers" value="yqdubo97gg.database.windows.net,qap56j04br.database.windows.net,xk45tx8se0.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <Setting name="DbUpdateTimeout" value="3600" />
       <!-- OAuth -->
@@ -79,7 +79,7 @@
       <!--<Setting name="ChalkableSchoolTemplate" value="Data Source={0};Initial Catalog=ChalkableSchoolTemplate;UID={2};Pwd={3}" />-->
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
-      <Setting name="ChalkableSchoolDbServers" value="yqdubo97gg.database.windows.net" />
+      <Setting name="ChalkableSchoolDbServers" value="yqdubo97gg.database.windows.net,qap56j04br.database.windows.net,xk45tx8se0.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <Setting name="DbUpdateTimeout" value="3600" />
       <!-- OAuth -->

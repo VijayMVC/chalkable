@@ -234,7 +234,7 @@ namespace Chalkable.StiImport.Services
                     SisUserId = x.UserID,
                     SisUserName = x.UserName,
                     Password = UserService.PasswordMd5(DEF_USER_PASS),
-                    Login = string.Format(USER_EMAIL_FMT, x.UserID, ServiceLocatorSchool.Context.DistrictId),
+                    Login = string.Format(USER_EMAIL_FMT, x.UserID, Guid.NewGuid()),
                     IsSysAdmin = false
                 }).ToList();
             ServiceLocatorMaster.UserService.Add(users);

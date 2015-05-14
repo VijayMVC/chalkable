@@ -124,6 +124,10 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.DbMaintenanceService.BeforeSisRestore();
             Log.LogInfo("download data to restore");
             DownloadSyncData();
+            Log.LogInfo("remove user records");
+            context.GetSyncResult<User>().Inserted = new User[0];
+            context.GetSyncResult<User>().Updated = null;
+            context.GetSyncResult<User>().Deleted = null;
             Log.LogInfo("do initial sync");
             DoInitialSync();
             Log.LogInfo("performing before restore preparation");
@@ -140,7 +144,7 @@ namespace Chalkable.StiImport.Services
                 Log.LogInfo("creating user login infos");
                 ServiceLocatorMaster.UserService.CreateUserLoginInfos();
             }
-            Log.LogInfo("import is completed");   
+            Log.LogInfo("resync after sti DB restore is completed");   
         }
 
         public void Resync(string tableName)
