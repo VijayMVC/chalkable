@@ -49,7 +49,8 @@ namespace Chalkable.Web.Controllers
                     DisplayCategoryAverages = true,
                     IncludeWithdrawn = false,
                     ClassAverageOnly = false,
-                    IncludePicture = false
+                    IncludePicture = false,
+                    FormatTyped = ReportingFormat.Pdf
                 };
             return ComprehensiveProgressReport(inputModel);
         }
