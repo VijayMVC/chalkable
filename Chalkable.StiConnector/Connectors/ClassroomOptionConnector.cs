@@ -10,12 +10,12 @@ namespace Chalkable.StiConnector.Connectors
 
         public void UpdateClassroomOption(int sectionId, ClassroomOption classroomOption)
         {
-            Put(string.Format("{0}sections/{1}/options", BaseUrl, sectionId), classroomOption);
+            Put(string.Format("{0}chalkable/sections/{1}/options", BaseUrl, sectionId), classroomOption);
         }
 
         public ClassroomOption GetClassroomOption(int sectionId)
         {
-            return Call<ClassroomOption>(string.Format("{0}sections/{1}/options", BaseUrl, sectionId));
+            return Call<ClassroomOption>(string.Format("{0}chalkable/sections/{1}/options", BaseUrl, sectionId));
         }
     }
 }

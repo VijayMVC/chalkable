@@ -41,7 +41,10 @@ namespace Chalkable.BusinessLogic.Services.School
         public ClassroomOption GetClassOption(int classId, bool useInowApi = false)
         {
             if (useInowApi)
-                return CreateClassroomOption(ConnectorLocator.ClassroomOptionConnector.GetClassroomOption(classId));
+            {
+                var stiClassrommOption = ConnectorLocator.ClassroomOptionConnector.GetClassroomOption(classId);
+                return stiClassrommOption != null ? CreateClassroomOption(stiClassrommOption) : null;
+            }
             return DoRead(u => new DataAccessBase<ClassroomOption, int>(u).GetByIdOrNull(classId));
         }
 
