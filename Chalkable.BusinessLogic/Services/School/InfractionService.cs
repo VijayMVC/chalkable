@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<Infraction> infractions);
         void Edit(IList<Infraction> infractions);
         void Delete(IList<Infraction> infractions);
-        IList<Infraction> GetInfractions(bool onlyActive = false);
+        IList<Infraction> GetInfractions(bool onlyActive = false, bool onlyVisibleInClassRoom = false);
     }
 
     public class InfractionService : SchoolServiceBase, IInfractionService
@@ -38,12 +38,13 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u => new DataAccessBase<Infraction>(u).Delete(infractions));
         }
 
-        public IList<Infraction> GetInfractions(bool onlyActive = false)
+        public IList<Infraction> GetInfractions(bool onlyActive = false, bool onlyVisibleInClassRoom = false)
         {            
             var conds = new AndQueryCondition();
             if (onlyActive)
                 conds.Add(Infraction.IS_ACTIVE_FIELD, true);
-            conds.Add(Infraction.VISIBLE_IN_CLASSROOM_FIELD, true );
+            if(onlyVisibleInClassRoom)
+                conds.Add(Infraction.VISIBLE_IN_CLASSROOM_FIELD, true );
             return DoRead(u => new DataAccessBase<Infraction>(u).GetAll(conds));
         }
     }

@@ -12,7 +12,7 @@ NAMESPACE('chlk.services', function(){
 
             [[Number, Number]],
             ria.async.Future, function getPaginatedDisciplineTypes(start_, count_){
-                return this.getPaginatedList('DisciplineType/List.json', chlk.models.discipline.DisciplineType, {
+                return this.('DisciplineType/List.json', chlk.models.discipline.DisciplineType, {
                    start: start_ | 0,
                    count: count_ | 10
                 });

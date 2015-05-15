@@ -31,21 +31,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             InfractionStorage = new DemoInfractionStorage();
         }
 
-        public void AddList(IList<Infraction> infractions)
-        {
-            InfractionStorage.Add(infractions);
-        }
-
-        public void EditList(IList<Infraction> infractions)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteList(IList<Infraction> infractions)
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<Infraction> GetDisciplineTypes()
         {
             return InfractionStorage.GetAll();
@@ -63,15 +48,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void Delete(IList<Infraction> infractions)
         {
-            throw new NotImplementedException();
+            InfractionStorage.Delete(infractions);
         }
 
-        public IList<Infraction> GetInfractions(bool activeOnly = false)
+        public IList<Infraction> GetInfractions(bool activeOnly = false, bool onlyVisibleInClassRoom = false)
         {
-            var res = InfractionStorage.GetAll();
+            var res = InfractionStorage.GetAll().AsQueryable();
             if(activeOnly)
-                res = res.Where(x=>x.IsActive).ToList();
-            return res;
+                res = res.Where(x=>x.IsActive);
+            if (onlyVisibleInClassRoom)
+                res = res.Where(x => x.VisibleInClassroom);
+            return res.ToList();
         }
     }
 }

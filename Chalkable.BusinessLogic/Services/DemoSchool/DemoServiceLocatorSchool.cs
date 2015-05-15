@@ -1631,7 +1631,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Description = "Fighting",
                 IsActive = true,
                 IsSystem = false,
-                Name = "Fighting"
+                Name = "Fighting",
+                VisibleInClassroom = true,
             };
 
             var infr2 = new Data.School.Model.Infraction
@@ -1641,7 +1642,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Description = "Disrespect",
                 IsActive = true,
                 IsSystem = false,
-                Name = "Disrespect"
+                Name = "Disrespect",
+                VisibleInClassroom = true,
             };
 
             var infr3 = new Data.School.Model.Infraction
@@ -1651,7 +1653,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Description = "",
                 IsActive = true,
                 IsSystem = false,
-                Name = "D - Cheating on assignment or test"
+                Name = "D - Cheating on assignment or test",
+                VisibleInClassroom = true,
             };
 
             var infr4 = new Data.School.Model.Infraction
@@ -1661,7 +1664,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Description = "",
                 IsActive = true,
                 IsSystem = false,
-                Name = "D - Disrespect to a staff member"
+                Name = "D - Disrespect to a staff member",
+                VisibleInClassroom = true,
             };
 
             var infr5 = new Data.School.Model.Infraction
@@ -1671,7 +1675,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Description = "",
                 IsActive = true,
                 IsSystem = false,
-                Name = "D - Extreme disruption of class"
+                Name = "D - Extreme disruption of class",
+                VisibleInClassroom = true
             };
 
             var infr6 = new Data.School.Model.Infraction
@@ -1681,7 +1686,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Description = "",
                 IsActive = true,
                 IsSystem = false,
-                Name = "D - Uniform violation 3x times in one quarter"
+                Name = "D - Uniform violation 3x times in one quarter",
+                VisibleInClassroom = true
             };
 
             var infr7 = new Data.School.Model.Infraction
@@ -1691,7 +1697,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Description = "",
                 IsActive = true,
                 IsSystem = false,
-                Name = "S - Inappropriate contact with another student"
+                Name = "S - Inappropriate contact with another student",
+                VisibleInClassroom = true
             };
 
             var infr8 = new Data.School.Model.Infraction
@@ -1701,7 +1708,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Description = "",
                 IsActive = true,
                 IsSystem = false,
-                Name = "D - Lying to teacher or staff member"
+                Name = "D - Lying to teacher or staff member",
+                VisibleInClassroom = true
             };
 
             var infr9 = new Data.School.Model.Infraction
@@ -1711,7 +1719,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Description = "",
                 IsActive = true,
                 IsSystem = false,
-                Name = "D - Repeated disobedience or defiance"
+                Name = "D - Repeated disobedience or defiance",
+                VisibleInClassroom = true
             };
 
             var infr10 = new Data.School.Model.Infraction
@@ -1721,7 +1730,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Description = "",
                 IsActive = true,
                 IsSystem = false,
-                Name = "D - Stealing form aonther student or teacher"
+                Name = "D - Stealing form aonther student or teacher",
+                VisibleInClassroom = true
             };
 
             infractions.Add(infr1);
