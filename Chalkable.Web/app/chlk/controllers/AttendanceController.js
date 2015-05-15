@@ -106,7 +106,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.reports.SubmitAttendanceProfileReportViewData]],
         function submitAttendanceProfileReportAction(reportViewData){
 
-            if (Date.compare(getDate(reportViewData.getStartDate()) , getDate(reportViewData.getEndDate())) > 0){
+            if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
                     return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
                 }
 
