@@ -209,7 +209,7 @@ NAMESPACE('chlk.services', function () {
                 gradeType: gradeType.valueOf(),
                 studentOrder: studentOrder.valueOf(),
                 idToPrint: numberToDisplay.valueOf(),
-                includeCommentsAndLegends: includeCommentsAndLegends_,
+                includeCommentsAndLegend: includeCommentsAndLegends_,
                 includeSignature: includeSignature_,
                 includeWithdrawn: includeWithdrawn_,
                 studentIds: studentIds_

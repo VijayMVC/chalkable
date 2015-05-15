@@ -46,7 +46,8 @@
                      h3=Msg.Include
                      +LabeledCheckbox(Msg.Comment(true) + '/' + Msg.Legend, 'includeCommentsAndLegends', false)
                      +LabeledCheckbox(Msg.Signature, 'includeSignature', true)
-                     +LabeledCheckbox(Msg.Withdrawn, 'includeWithdrawn', self.isIncludeWithdrawnStudents(), true)
+                     +LabeledCheckbox(Msg.Withdrawn, 'includeWithdrawnCheckBox', self.isIncludeWithdrawnStudents(), true)
+                     +Hidden('includeWithdrawn', self.isIncludeWithdrawnStudents())
                TR
                   TD.item-3
                      h3=Msg.Student_Order
