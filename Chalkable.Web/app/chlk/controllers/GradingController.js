@@ -1062,11 +1062,14 @@ NAMESPACE('chlk.controllers', function (){
             ria.async.Future, function getComprehensiveProgressReportInfo_(selectedGradingPeriodId, classId, startDate, endDate){
                 var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
                 //var attendanceReasons =
-                return this.attendanceService.getAllAttendanceReasons()
-                    .then(function (attendanceReasons){
-                        return new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
-                            selectedGradingPeriodId, startDate, endDate,  attendanceReasons, students)
-                    });
+                return ria.async.wait([
+                            this.gradingPeriodService.getList(),
+                            this.attendanceService.getAllAttendanceReasons()
+                        ]).then(function (data){
+                            return new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
+                                selectedGradingPeriodId, startDate, endDate, data[0], data[1], students)
+                        });
+
                 //var res = new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
                 //    selectedGradingPeriodId, startDate, endDate,  this.getReasonsForReport_(), students);
                 //return new ria.async.DeferredData(res);

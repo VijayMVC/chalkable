@@ -86,7 +86,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             decimal totalAbsencesCount = 0;
             if (dailyAbsenceSummary != null && dailyAbsenceSummary.Absences.HasValue)
                 totalAbsencesCount += dailyAbsenceSummary.Absences.Value; // Excluded tardies because of Jonathan Whitehurst's comment on CHLK-3184 
-            totalAbsencesCount += res.Hover.Sum(x => x.Absences);
+            //totalAbsencesCount += res.Hover.Sum(x => x.Absences);
             res.Title = totalAbsencesCount.ToString();
             return res;
         }

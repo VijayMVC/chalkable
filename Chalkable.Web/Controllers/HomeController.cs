@@ -29,6 +29,7 @@ namespace Chalkable.Web.Controllers
     {
 
         private const string DEMO_PICTURE_DISTRICT_REF = "99a2b309-b2f2-451d-a733-55ffb9548245";
+        private const string DATE_TIME_FORMAT = "yyyy/MM/dd hh:mm:ss tt";
 
         public ActionResult HomeRedirect()
         {
@@ -59,7 +60,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             PrepareJsonData(AppTesterViewData.Create(appTester), ViewConstants.CURRENT_PERSON);
-            var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss tt");
+            var serverTime = Context.NowSchoolTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
             ViewData[ViewConstants.SERVER_TIME] = serverTime;
             //var ip = RequestHelpers.GetClientIpAddress(Request);
@@ -82,14 +83,28 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             PrepareJsonData(SysAdminViewData.Create(sysUser), ViewConstants.CURRENT_PERSON);
-            var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss tt");
-            ViewData[ViewConstants.SERVER_TIME] = serverTime;
+            ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString(DATE_TIME_FORMAT);
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifySysAdmin(sysUser.Login, "", "", null, ip);
 
             ViewData[ViewConstants.ROLE_NAME] = CoreRoles.SUPER_ADMIN_ROLE.LoweredName;
             return View();
         }
+
+
+        //[AuthorizationFilter("District")]
+        //public ActionResult DistrictAdmin()
+        //{
+        //    var distictAdmin = MasterLocator.UserService.GetById(Context.UserId);
+        //    ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
+        //    ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
+        //    ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString(DATE_TIME_FORMAT);
+        //    ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString(DATE_TIME_FORMAT);
+        //    ViewData[ViewConstants.ROLE_NAME] = CoreRoles.DISTRICT_ROLE.LoweredName;
+        //    PrepareJsonData(UserViewData.Create(distictAdmin), ViewConstants.CURRENT_PERSON);
+        //    //todo : add user tracking for districtadmin identify
+        //    return View();
+        //}
 
         [AuthorizationFilter("Developer")]
         public ActionResult Developer(Guid? currentApplicationId, bool? isPwdReset)
@@ -102,9 +117,8 @@ namespace Chalkable.Web.Controllers
             var applications = MasterLocator.ApplicationService.GetApplications(0, int.MaxValue, false);
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
-            var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss tt");
-            ViewData[ViewConstants.SERVER_TIME] = serverTime;
-            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString("yyyy/MM/dd hh:mm:ss tt");
+            ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString(DATE_TIME_FORMAT);
+            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.NEEDS_TOUR] = false;
             ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
@@ -178,15 +192,13 @@ namespace Chalkable.Web.Controllers
             }
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
             ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
-
             ViewData[ViewConstants.AZURE_PICTURE_URL] = PictureService.GetPicturesRelativeAddress();
             ViewData[ViewConstants.DEMO_AZURE_PICTURE_URL] = PictureService.GeDemoPicturesRelativeAddress();
             ViewData[ViewConstants.CURR_SCHOOL_YEAR_ID] = GetCurrentSchoolYearId();
             ViewData[ViewConstants.VERSION] = CompilerHelper.Version;
             ViewData[ViewConstants.CROCODOC_API_URL] = PreferenceService.Get(Preference.CROCODOC_URL).Value;
-            var serverTime = Context.NowSchoolTime.ToString("yyyy/MM/dd hh:mm:ss tt");
-            ViewData[ViewConstants.SERVER_TIME] = serverTime;
-            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString("yyyy/MM/dd hh:mm:ss tt");
+            ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString(DATE_TIME_FORMAT);
+            ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.STUDY_CENTER_ENABLED] = Context.SCEnabled;
             PrepareJsonData(Context.Claims, ViewConstants.USER_CLAIMS);
 
@@ -205,6 +217,9 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(AlphaGradeViewData.Create(startupData.AlphaGrades), ViewConstants.ALPHA_GRADES);
             PrepareJsonData(AlternateScoreViewData.Create(startupData.AlternateScores), ViewConstants.ALTERNATE_SCORES);
             PrepareJsonData(MarkingPeriodViewData.Create(mps), ViewConstants.MARKING_PERIODS);
+            var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
+            PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);
+           
         }
         
 
@@ -280,16 +295,15 @@ namespace Chalkable.Web.Controllers
             var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(startupData.Classes.Select(x => x.Id).ToList());
             foreach (var classDetails in startupData.Classes)
             {
-                int classId = classDetails.Id;
-                var typesByClasses = classAnnouncementTypes.Where(x => x.ClassRef == classId).ToList();
+                var typesByClasses = classAnnouncementTypes.Where(x => x.ClassRef == classDetails.Id).ToList();
                 classesAdvancedData.Add(new
                 {
-                    ClassId = classId,
+                    ClassId = classDetails.Id,
                     TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses),
                     AlphaGrades = classDetails.GradingScaleRef.HasValue
-                                        ? startupData.AlphaGradesForClasses[classId]
+                                        ? startupData.AlphaGradesForClasses[classDetails.Id]
                                         : allAlphaGrades,
-                    AlphaGradesForStandards = startupData.AlphaGradesForClassStandards[classId]
+                    AlphaGradesForStandards = startupData.AlphaGradesForClassStandards[classDetails.Id]
                 });
             }
             PrepareJsonData(classesAdvancedData, ViewConstants.CLASSES_ADV_DATA);
