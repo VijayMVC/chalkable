@@ -15,8 +15,12 @@
          .report-content
             TABLE.report-table
                TR
-                  +ReportDatePickers(self.getStartDate(), self.getEndDate())
                   TD.item-3
+                     h3=Msg.Grading_Period
+                     +Select('gradingPeriod1')(multiple, disabled = 'disabled')#grading-period-select
+                        each gp in self.getGradingPeriods()
+                           +Option(gp.getId().valueOf(), gp.getName(), gp.getId() == self.getGradingPeriodId())
+                  +ReportDatePickers(self.getStartDate(), self.getEndDate())
                TR
                   TD.item-3
                      h3=Msg.Order_by
