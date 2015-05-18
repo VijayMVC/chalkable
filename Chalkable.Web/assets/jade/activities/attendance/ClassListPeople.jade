@@ -14,7 +14,7 @@
     .table
         .l
             +SummaryInfo(self.getPresentStudents().length, items.length)
-            +ActionLink('attendance', 'attendanceProfileReport', self.getGradingPeriod().getId(), self.getTopData().getSelectedItemId(), self.getGradingPeriod().getStartDate().toStandardFormat(), self.getGradingPeriod().getEndDate().toStandardFormat()).report-link
+            +ActionLink('attendance', 'attendanceProfileReport', self.getGradingPeriod().getId(), self.getTopData().getSelectedItemId()).report-link
         if self.getItems().length > 0 && self.canPost()
             .l &nbsp;
         .title
