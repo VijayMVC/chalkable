@@ -1,0 +1,37 @@
+mixin TooltipWithOverflow(text)
+    -attributes['data-tooltip'] = text
+    -attributes['data-tooltip-type'] = 'overflow'
+    p(attributes)=text
+
+.week-calendar-body
+    -selectedItem = self.getTopData() ? self.getTopData().getSelectedItemId() : ''
+    .day-names
+        each item in self.getItems()
+            .week
+                p=item.getDate().format('DD, M d')
+    .items-table
+        -var wholeDayItems = self.getAnnouncementsOffPeriods();
+        -var hasWholeDayItems = wholeDayItems.some(function (_) { return _.length; });
+        if hasWholeDayItems
+            .item.whole-day
+                each item in wholeDayItems
+                    .cell(class = item.day.getTodayClassName())
+                        each ann in item
+                            +ActionLink('announcement', 'view', ann.getId()).period-item.announcement
+                                .announcement-calendar-item(data-tooltip = ann.getTitle() + ' - ' + ann.getClassName())
+                                    strong= ann.getTitle()
+                                    = ' - ' + ann.getClassName()
+        each item in self.groupAnnouncementsAsTable()
+            .item
+                each calendarDayItem, order in item
+                    -var period = item.period
+                    -var day = calendarDayItem.day
+                    .cell(class = day ? day.getTodayClassName() : null)
+                        if order == 0
+                            A: .period-info= period.getName()
+                        each ann in calendarDayItem
+                            -VALIDATE_ARG('ann', [chlk.models.announcement.Announcement], ann)
+                            +ActionLink('announcement', 'view', ann.getId()).period-item.announcement
+                                .announcement-calendar-item(data-tooltip = ann.getTitle() + ' - ' + ann.getClassName())
+                                    strong= ann.getTitle()
+                                    = ' - ' + ann.getClassName()
