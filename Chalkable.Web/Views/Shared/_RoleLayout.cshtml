@@ -293,6 +293,7 @@
             var DEMO_SCHOOL_PICTURE_DISTRICT = @demoSchoolPictureDistrictRef;
             var districtId = @ViewData.GetJsConstantValueOrNull(ViewConstants.DISTRICT_ID) || '';
             var redirectUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.REDIRECT_URL_KEY) || '';
+            var schoolYear = @ViewData.GetJsJsonObjectOrNull(ViewConstants.SCHOOL_YEAR);
         </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
