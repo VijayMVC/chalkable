@@ -12,7 +12,7 @@ NAMESPACE('chlk.templates.reports', function () {
             [[String]],
             OVERRIDE, ArrayOf(chlk.models.common.ActionLinkModel), function buildReportLinksData(pressedAction){
                 var controllerName = 'attendance';
-                var args = [this.getGradingPeriodId(), this.getClassId(), this.getStartDate().toStandardFormat(), this.getEndDate().toStandardFormat()];
+                var args = [this.getGradingPeriodId(), this.getClassId()];
                 var classNames = ['report-button'];
                 return [
                     new chlk.models.common.ActionLinkModel(controllerName, 'attendanceProfileReport', 'Attendance Profile', 'attendanceProfileReport' == pressedAction, args, classNames),

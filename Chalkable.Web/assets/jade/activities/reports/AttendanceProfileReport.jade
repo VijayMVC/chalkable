@@ -33,7 +33,7 @@ mixin ReportCell(value)
                         +Option(chlk.models.reports.StudentIdentifierEnum.SOCIAL_SECURITY_NUMBER.valueOf(), Msg.Social_Security_N, false)
                         +Option(chlk.models.reports.StudentIdentifierEnum.NONE.valueOf(), Msg.None, false)
                TR
-                  +ReportDatePickers(self.getStartDate(), self.getEndDate(), 'item-2')
+                  +ReportDatePickers(self.getStartDate(), self.getEndDate(), 'item-2', true)
                TR
                   TD.item-2
                      h3=Msg.Include
