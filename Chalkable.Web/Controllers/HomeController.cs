@@ -92,7 +92,7 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("District")]
+        //[AuthorizationFilter("District")]
         public ActionResult DistrictAdmin()
         {
             var distictAdmin = MasterLocator.UserService.GetById(Context.UserId);

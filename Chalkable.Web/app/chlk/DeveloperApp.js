@@ -9,7 +9,7 @@ REQUIRE('chlk.controls.developer.ApiCallListControl');
 
 NAMESPACE('chlk', function (){
 
-    /** @class chlk.TeacherApp */
+    /** @class chlk.DeveloperApp */
     CLASS(
         'DeveloperApp', EXTENDS(chlk.BaseApp), [
             OVERRIDE, ria.mvc.Dispatcher, function initDispatcher_() {

@@ -86,7 +86,7 @@ NAMESPACE('chlk.controls', function () {
                         var classesBar = new ria.dom.Dom('.classes-bar');
                         baseMargin = parseInt(classesBar.find('.group').find('>a').getCss('margin-right'), 10);
                         this.updateClassesBar();
-                        var selectedGroupId = attributes.selectedGroupId || classesBar.find('.group:first-child').grtData('id');
+                        var selectedGroupId = attributes.selectedGroupId || classesBar.find('.group:first-child').getData('id');
                         var group = classesBar.find('.group[data-id=' + attributes.selectedGroupId + ']');
 
                         if(!group.is(':first-child'))

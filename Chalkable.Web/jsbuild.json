@@ -82,9 +82,9 @@
     }],
 
     "dropped": [{
-        "name": "AdminApp",
-        "app": "chlk.AdminApp",
-        "out": "app/AdminApp.compiled.js",
+        "name": "DistrictAdminApp",
+        "app": "chlk.DistrictAdminApp",
+        "out": "app/DistrictAdminApp.compiled.js",
 
         "prepend": [
             "lib/jade.runtime.js"
