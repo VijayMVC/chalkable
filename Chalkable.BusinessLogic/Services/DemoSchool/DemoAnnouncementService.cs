@@ -127,7 +127,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
     }
 
-    public class DemoAnnouncementRecipientStorage : BaseDemoIntStorage<AnnouncementRecipient>
+    public class DemoAnnouncementRecipientStorage : BaseDemoIntStorage<AdminAnnouncementRecipient>
     {
         public DemoAnnouncementRecipientStorage()
             : base(x => x.Id)
@@ -141,15 +141,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             Delete(annRep);
         }
 
-        public IList<AnnouncementRecipient> GetList(int announcementId)
+        public IList<AdminAnnouncementRecipient> GetList(int announcementId)
         {
             return data.Where(x => x.Value.AnnouncementRef == announcementId).Select(x => x.Value).ToList();
         }
 
-        public IList<AnnouncementRecipient> GetList(int announcementId, int? roleId, int? personId, bool toAll = false)
+        public IList<AdminAnnouncementRecipient> GetList(int announcementId, int? roleId, int? personId, bool toAll = false)
         {
             var recipients = data.Select(x => x.Value);
-            return recipients.Where(x => x.ToAll = toAll || x.PersonRef == personId || x.RoleRef == roleId).ToList();
+            return recipients.Where(x => x.ToAll = toAll || x.PersonRef == personId || x.Role == roleId).ToList();
         }
     }
 
@@ -199,12 +199,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return AnnouncementProcessor.GetAnnouncement(AnnouncementStorage.GetData().Select(x => x.Value), announcementId, roleId, userId);
         }
 
-        public IList<AnnouncementRecipient> GetAnnouncementRecipients(int announcementId, int? roleId, int? personId, bool toAll = false)
+        public IList<AdminAnnouncementRecipient> GetAnnouncementRecipients(int announcementId, int? roleId, int? personId, bool toAll = false)
         {
             return AnnouncementRecipientStorage.GetList(announcementId, roleId, personId, toAll);
         }
 
-        public IList<AnnouncementRecipient> GetAnnouncementRecipients(int? announcementId)
+        public IList<AdminAnnouncementRecipient> GetAnnouncementRecipients(int? announcementId)
         {
             return announcementId.HasValue
                 ? AnnouncementRecipientStorage.GetList(announcementId.Value)

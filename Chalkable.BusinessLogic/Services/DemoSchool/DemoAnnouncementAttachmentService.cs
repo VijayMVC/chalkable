@@ -117,7 +117,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 var announcementRefs = ((DemoAnnouncementService)ServiceLocator.AnnouncementService)
                     .GetAnnouncementRecipients(null)
-                        .Where(x => x.RoleRef == query.RoleId || x.PersonRef == query.CallerId)
+                        .Where(x => x.Role == query.RoleId || x.PersonRef == query.CallerId)
                         .Select(x => x.AnnouncementRef);
 
                 attachments =

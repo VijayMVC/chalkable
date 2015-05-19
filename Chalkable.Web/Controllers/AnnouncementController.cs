@@ -17,6 +17,13 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AnnouncementController : AnnouncementBaseController
     {
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult CreateForAdmin(DateTime? expiresDate)
+        {
+
+            throw new NotImplementedException();
+        }
+
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Create(int? classAnnouncementTypeId, int? classId, DateTime? expiresDate)
         {

@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.Data.Common;
+﻿using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
-    public class AnnouncementRecipient
+    public class AdminAnnouncementRecipient
     {
-        public const string ANNOUNCEMENT_REF_FIELD = "announcementRef";
+        public const string ANNOUNCEMENT_REF_FIELD = "AnnouncementRef";
 
         [IdentityFieldAttr]
         [PrimaryKeyFieldAttr]
@@ -17,9 +12,10 @@ namespace Chalkable.Data.School.Model
         public int AnnouncementRef { get; set; }
         
         public bool ToAll { get; set; }
-        public int? RoleRef { get; set; }
+        public int? Role { get; set; }
         public int? GradeLevelRef { get; set; }
         public int? PersonRef { get; set; }
+        public int? SchoolRef { get; set; }
 
         [DataEntityAttr]
         public Person Person { get; set; }
