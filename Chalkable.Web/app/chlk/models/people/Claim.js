@@ -4,7 +4,10 @@ NAMESPACE('chlk.models.people', function () {
     "use strict";
 
     var SJX = ria.serialize.SJX;
-     /**@class chlk.models.people.UserPermissionEnum*/
+
+
+
+    /**@class chlk.models.people.UserPermissionEnum*/
     ENUM('UserPermissionEnum',{
         ACCESS_FUTURE_ACADEMIC_SESSIONS: 'Access Future Academic Sessions',
         ACCESS_PAST_ACADEMIC_SESSIONS: 'Access Past Academic Sessions',
@@ -73,19 +76,136 @@ NAMESPACE('chlk.models.people', function () {
 
         /* report Permissions*/
 
-        ATTENDANCE_PROFILE_REPORT: '000001a',
-        BIRTHDAY_LISTING_REPORT: '000002',
-        LESSON_PLAN_REPORT: '000030',
-        PROGRESS_REPORT: '000031',
-        WORKSHEET_REPORT: '000032',
-        CLASSROOM_ATTENDANCE_REGISTER_REPORT: '000064',
-        SEATING_CHART_REPORT: '000141',
-        COMPREHENSIVE_PROGRESS_REPORT: '000074',
-        GRADE_BOOK_REPORT: '000023',
-        MISSING_ASSIGNMENTS_REPORT: '000087',
-        GRADE_VERIFICATION_REPORT: '000090'
+        ATTENDANCE_PROFILE_REPORT: 'Attendance Profile Report',
+        BIRTHDAY_LISTING_REPORT: 'Birthday Listing Report',
+        LESSON_PLAN_REPORT: 'Lesson Plan Report',
+        PROGRESS_REPORT: 'Progress Report',
+        WORKSHEET_REPORT: 'Worksheet Report',
+        CLASSROOM_ATTENDANCE_REGISTER_REPORT: 'Classroom Attendance Register Report',
+        SEATING_CHART_REPORT: 'Seating Chart Report',
+        COMPREHENSIVE_PROGRESS_REPORT: 'Comprehensive Progress Report',
+        GRADE_BOOK_REPORT: 'Grade Book Report',
+        MISSING_ASSIGNMENTS_REPORT: 'Missing Assignments Report',
+        GRADE_VERIFICATION_REPORT: 'Grade Verification Report'
     });
 
+    var UserPermissionMappeerInstance = null;
+
+    /**@class chlk.models.people.UserPermissionMappeer*/
+
+    CLASS('UserPermissionMappeer', [
+
+        // $$ - instance factory
+        function $$(instance, Clazz, ctor, args) {
+            return UserPermissionMappeerInstance || (UserPermissionMappeerInstance = new ria.__API.init(instance, Clazz, ctor, args));
+        },
+
+        function $(){
+            BASE();
+            this.mapper_ = null;
+            this.userPermissionEnum = chlk.models.people.UserPermissionEnum;
+            this.registerMapper_();
+        },
+
+
+        [[String]],
+        Boolean, function hasKey(key){
+            var res =  this.mapper_[key];
+            return !(res == null || res == undefined);
+        },
+
+        [[String]],
+        chlk.models.people.UserPermissionEnum, function map(key){
+            if(!this.hasKey(key))
+                throw new Exception('Unknown user permission');
+            return this.mapper_[key];
+        },
+
+        VOID, function registerMapper_(){
+            var permissions = this.userPermissionEnum;
+            if(this.mapper_ == null || this.mapper_ == undefined){
+                this.mapper_ = {};
+                this.mapper_[this.userPermissionEnum.ACCESS_FUTURE_ACADEMIC_SESSIONS.valueOf()] = this.userPermissionEnum.ACCESS_FUTURE_ACADEMIC_SESSIONS;
+                this.mapper_[this.userPermissionEnum.ACCESS_PAST_ACADEMIC_SESSIONS.valueOf()] = this.userPermissionEnum.ACCESS_PAST_ACADEMIC_SESSIONS;
+                this.mapper_[this.userPermissionEnum.VIEW_ACADEMIC_SESSION.valueOf()] = this.userPermissionEnum.VIEW_ACADEMIC_SESSION;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_ADDRESS.valueOf()] = this.userPermissionEnum.MAINTAIN_ADDRESS;
+                this.mapper_[this.userPermissionEnum.VIEW_ADDRESS.valueOf()] = this.userPermissionEnum.VIEW_ADDRESS;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_ATTENDANCE.valueOf()] = this.userPermissionEnum.MAINTAIN_ATTENDANCE;
+                this.mapper_[this.userPermissionEnum.VIEW_ATTENDANCE.valueOf()] = this.userPermissionEnum.VIEW_ATTENDANCE;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_CLASSROOM_ABSENCE_REASONS.valueOf()] = this.userPermissionEnum.MAINTAIN_CLASSROOM_ABSENCE_REASONS;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE.valueOf()] = this.userPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN.valueOf()] = this.userPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_CLASSROOM_DISCIPLINE.valueOf()] = this.userPermissionEnum.MAINTAIN_CLASSROOM_DISCIPLINE;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_CLASSROOM_DISCIPLINE_ADMIN.valueOf()] = this.userPermissionEnum.MAINTAIN_CLASSROOM_DISCIPLINE_ADMIN;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_CLASSROOM_GRADES.valueOf()] = this.userPermissionEnum.MAINTAIN_CLASSROOM_GRADES;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT.valueOf()] = this.userPermissionEnum.MAINTAIN_CLASSROOM_LUNCH_COUNT;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_CLASSROOM_ROSTER.valueOf()] = this.userPermissionEnum.MAINTAIN_CLASSROOM_ROSTER;
+                this.mapper_[this.userPermissionEnum.REPOST_CLASSROOM_ATTENDANCE.valueOf()] = this.userPermissionEnum.REPOST_CLASSROOM_ATTENDANCE;
+                this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_ABSENCE_REASONS.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_ABSENCE_REASONS;
+                this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_ATTENDANCE.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_ATTENDANCE;
+                this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN;
+                this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_DISCIPLINE.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_DISCIPLINE;
+                this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN;
+                this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_GRADES.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_GRADES;
+                this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_LUNCH_COUNT.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_LUNCH_COUNT;
+                this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_ROSTER.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_ROSTER;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_DISCIPLINE.valueOf()] = this.userPermissionEnum.MAINTAIN_DISCIPLINE;
+                this.mapper_[this.userPermissionEnum.VIEW_DISCIPLINE.valueOf()] = this.userPermissionEnum.VIEW_DISCIPLINE;
+                this.mapper_[this.userPermissionEnum.CHANGE_ACTIVITY_DATES.valueOf()] = this.userPermissionEnum.CHANGE_ACTIVITY_DATES;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_CLASSROOM.valueOf()] = this.userPermissionEnum.MAINTAIN_CLASSROOM;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_CLASSROOM_ADMIN.valueOf()] = this.userPermissionEnum.MAINTAIN_CLASSROOM_ADMIN;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_GRADE_BOOK_AVERAGING_METHOD.valueOf()] = this.userPermissionEnum.MAINTAIN_GRADE_BOOK_AVERAGING_METHOD;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_GRADE_BOOK_CATEGORIES.valueOf()] = this.userPermissionEnum.MAINTAIN_GRADE_BOOK_CATEGORIES;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_GRADE_BOOK_COMMENTS.valueOf()] = this.userPermissionEnum.MAINTAIN_GRADE_BOOK_COMMENTS;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_STANDARDS_OPTIONS.valueOf()] = this.userPermissionEnum.MAINTAIN_STANDARDS_OPTIONS;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_STUDENT_AVERAGES.valueOf()] = this.userPermissionEnum.MAINTAIN_STUDENT_AVERAGES;
+                this.mapper_[this.userPermissionEnum.RECONCILE_GRADE_BOOK.valueOf()] = this.userPermissionEnum.RECONCILE_GRADE_BOOK;
+                this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM;
+                this.mapper_[this.userPermissionEnum.VIEW_CLASSROOM_ADMIN.valueOf()] = this.userPermissionEnum.VIEW_CLASSROOM_ADMIN;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_GRADING.valueOf()] = this.userPermissionEnum.MAINTAIN_GRADING;
+                this.mapper_[this.userPermissionEnum.VIEW_GRADING.valueOf()] = this.userPermissionEnum.VIEW_GRADING;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_LOOKUP.valueOf()] = this.userPermissionEnum.MAINTAIN_LOOKUP;
+                this.mapper_[this.userPermissionEnum.VIEW_LOOKUP.valueOf()] = this.userPermissionEnum.VIEW_LOOKUP;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_PERSON.valueOf()] = this.userPermissionEnum.MAINTAIN_PERSON;
+                this.mapper_[this.userPermissionEnum.VIEW_PERSON.valueOf()] = this.userPermissionEnum.VIEW_PERSON;
+                this.mapper_[this.userPermissionEnum.VIEW_COURSE.valueOf()] = this.userPermissionEnum.VIEW_COURSE;
+                this.mapper_[this.userPermissionEnum.VIEW_MODEL.valueOf()] = this.userPermissionEnum.VIEW_MODEL;
+                this.mapper_[this.userPermissionEnum.VIEW_SECTION.valueOf()] = this.userPermissionEnum.VIEW_SECTION;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_LOCKER.valueOf()] = this.userPermissionEnum.MAINTAIN_LOCKER;
+                this.mapper_[this.userPermissionEnum.VIEW_LOCKER.valueOf()] = this.userPermissionEnum.VIEW_LOCKER;
+                this.mapper_[this.userPermissionEnum.VIEW_STAFF.valueOf()] = this.userPermissionEnum.VIEW_STAFF;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_STUDENT.valueOf()] = this.userPermissionEnum.MAINTAIN_STUDENT;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_STUDENT_FORM.valueOf()] = this.userPermissionEnum.MAINTAIN_STUDENT_FORM;
+                this.mapper_[this.userPermissionEnum.VIEW_HEALTH_CONDITION.valueOf()] = this.userPermissionEnum.VIEW_HEALTH_CONDITION;
+                this.mapper_[this.userPermissionEnum.VIEW_MEDICAL.valueOf()] = this.userPermissionEnum.VIEW_MEDICAL;
+                this.mapper_[this.userPermissionEnum.VIEW_REGISTRATION.valueOf()] = this.userPermissionEnum.VIEW_REGISTRATION;
+                this.mapper_[this.userPermissionEnum.VIEW_SPECIAL_EDUCATION.valueOf()] = this.userPermissionEnum.VIEW_SPECIAL_EDUCATION;
+                this.mapper_[this.userPermissionEnum.VIEW_SPECIAL_INSTRUCTIONS.valueOf()] = this.userPermissionEnum.VIEW_SPECIAL_INSTRUCTIONS;
+                this.mapper_[this.userPermissionEnum.VIEW_STUDENT.valueOf()] = this.userPermissionEnum.VIEW_STUDENT;
+                this.mapper_[this.userPermissionEnum.VIEW_STUDENT_COMMENDATIONS.valueOf()] = this.userPermissionEnum.VIEW_STUDENT_COMMENDATIONS;
+                this.mapper_[this.userPermissionEnum.VIEW_STUDENT_CUSTOM.valueOf()] = this.userPermissionEnum.VIEW_STUDENT_CUSTOM;
+                this.mapper_[this.userPermissionEnum.VIEW_STUDENT_FORM.valueOf()] = this.userPermissionEnum.VIEW_STUDENT_FORM;
+                this.mapper_[this.userPermissionEnum.VIEW_STUDENT_MISCELLANEOUS.valueOf()] = this.userPermissionEnum.VIEW_STUDENT_MISCELLANEOUS;
+                this.mapper_[this.userPermissionEnum.MAINTAIN_STUDENT_FILTER.valueOf()] = this.userPermissionEnum.MAINTAIN_STUDENT_FILTER;
+                this.mapper_[this.userPermissionEnum.VIEW_STUDENT_FILTER.valueOf()] = this.userPermissionEnum.VIEW_STUDENT_FILTER;
+                this.mapper_[this.userPermissionEnum.VIEW_TRANSCRIPT.valueOf()] = this.userPermissionEnum.VIEW_TRANSCRIPT;
+
+                /*report permissions */
+
+                this.mapper_['000001a'] = this.userPermissionEnum.ATTENDANCE_PROFILE_REPORT;
+                this.mapper_['000002'] = this.userPermissionEnum.BIRTHDAY_LISTING_REPORT;
+                this.mapper_['000030'] = this.userPermissionEnum.LESSON_PLAN_REPORT;
+                this.mapper_['000031'] = this.userPermissionEnum.PROGRESS_REPORT;
+                this.mapper_['000032'] = this.userPermissionEnum.WORKSHEET_REPORT;
+                this.mapper_['000064'] = this.userPermissionEnum.CLASSROOM_ATTENDANCE_REGISTER_REPORT;
+                this.mapper_['000141'] = this.userPermissionEnum.SEATING_CHART_REPORT;
+                this.mapper_['000074'] = this.userPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT;
+                this.mapper_['000023'] = this.userPermissionEnum.GRADE_BOOK_REPORT;
+                this.mapper_['000087'] = this.userPermissionEnum.MISSING_ASSIGNMENTS_REPORT;
+                this.mapper_['000090'] = this.userPermissionEnum.GRADE_VERIFICATION_REPORT;
+            }
+        }
+    ]);
 
 
     /** @class chlk.models.people.Claim*/
@@ -93,17 +213,12 @@ NAMESPACE('chlk.models.people', function () {
         UNSAFE, FINAL, 'Claim', IMPLEMENTS(ria.serialize.IDeserializable),  [
 
         function preparePermisssions_(){
+            var mapper = new chlk.models.people.UserPermissionMappeer();
             if(this.permissions == null){
                 this.permissions = [];
                 var values = this.getValues();
                 this.permissions = values.map(function(value){
-                    var res = null;
-                    for(var k in this._permissionEnum){
-                        if(this._permissionEnum[k].valueOf() == value){
-                            return this._permissionEnum[k];
-                        }
-                    }
-                    return res;
+                    return mapper.hasKey(value) ? mapper.map(value) : null;
                 }.bind(this));
             }
         },
