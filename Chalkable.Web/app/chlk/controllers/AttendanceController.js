@@ -47,6 +47,7 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.MarkingPeriodService, 'markingPeriodService',
 
+        [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.SEATING_CHART_REPORT])],
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId]],
         function seatingChartReportAction(gradingPeriodId, classId){
@@ -57,6 +58,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.reports.SeatingChartAttendanceReportDialog, res);
         },
 
+        [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.ATTENDANCE_PROFILE_REPORT])],
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId]],
         function attendanceProfileReportAction(gradingPeriodId, classId){
@@ -73,6 +75,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.reports.AttendanceProfileReportDialog, res);
         },
 
+        [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.CLASSROOM_ATTENDANCE_REGISTER_REPORT])],
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId]],
         function attendanceRegisterReportAction(gradingPeriodId, classId){
@@ -88,6 +91,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.reports.AttendanceRegisterReportDialog, res);
         },
 
+        [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.SEATING_CHART_REPORT])],
         [chlk.controllers.SidebarButton('statistic')],
         [[chlk.models.reports.SubmitSeatingChartReportViewData]],
         function submitSeatingChartReportAction(reportViewData){
@@ -104,6 +108,7 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
+        [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.ATTENDANCE_PROFILE_REPORT])],
         [chlk.controllers.SidebarButton('statistic')],
         [[chlk.models.reports.SubmitAttendanceProfileReportViewData]],
         function submitAttendanceProfileReportAction(reportViewData){
@@ -143,6 +148,7 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
+        [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.CLASSROOM_ATTENDANCE_REGISTER_REPORT])],
         [chlk.controllers.SidebarButton('statistic')],
         [[chlk.models.reports.SubmitAttendanceRegisterReportViewData]],
         function submitAttendanceRegisterReportAction(reportViewData){

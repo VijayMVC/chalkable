@@ -69,8 +69,24 @@ NAMESPACE('chlk.models.people', function () {
         VIEW_STUDENT_MISCELLANEOUS: 'View Student Miscellaneous',
         MAINTAIN_STUDENT_FILTER: 'Maintain Student Filter',
         VIEW_STUDENT_FILTER: 'View Student Filter',
-        VIEW_TRANSCRIPT: 'View Transcript'
+        VIEW_TRANSCRIPT: 'View Transcript',
+
+        /* report Permissions*/
+
+        ATTENDANCE_PROFILE_REPORT: '000001a',
+        BIRTHDAY_LISTING_REPORT: '000002',
+        LESSON_PLAN_REPORT: '000030',
+        PROGRESS_REPORT: '000031',
+        WORKSHEET_REPORT: '000032',
+        CLASSROOM_ATTENDANCE_REGISTER_REPORT: '000064',
+        SEATING_CHART_REPORT: '000141',
+        COMPREHENSIVE_PROGRESS_REPORT: '000074',
+        GRADE_BOOK_REPORT: '000023',
+        MISSING_ASSIGNMENTS_REPORT: '000087',
+        GRADE_VERIFICATION_REPORT: '000090'
     });
+
+
 
     /** @class chlk.models.people.Claim*/
     CLASS(

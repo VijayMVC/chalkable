@@ -547,6 +547,8 @@ NAMESPACE('chlk.controllers', function (){
                     }, this);
             },
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.GRADE_BOOK_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function gradeBookReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -557,6 +559,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.reports.GradeBookReportDialog, res);
             },
 
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.BIRTHDAY_LISTING_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function birthdayReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -571,6 +574,8 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.reports.BirthdayReportDialog, res);
             },
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.SEATING_CHART_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function seatingChartReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -580,6 +585,8 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.reports.SeatingChartReportDialog, res);
             },
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.GRADE_VERIFICATION_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function gradeVerificationReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -599,6 +606,8 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.reports.GradeVerificationReportDialog, res);
             },
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.LESSON_PLAN_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function lessonPlanReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -613,6 +622,8 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.reports.LessonPlanReportDialog, res);
             },
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.WORKSHEET_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function worksheetReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -620,6 +631,8 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.reports.WorksheetReportDialog, res);
             },
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.PROGRESS_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function progressReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -639,6 +652,8 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.reports.ProgressReportDialog, res);
             },
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function comprehensiveProgressReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -646,6 +661,8 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.reports.ComprehensiveProgressReportDialog, res);
             },
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.MISSING_ASSIGNMENTS_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function missingAssignmentsReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -657,6 +674,8 @@ NAMESPACE('chlk.controllers', function (){
             },
 
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.MISSING_ASSIGNMENTS_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitMissingAssignmentsReportViewData]],
             function submitMissingAssignmentsReportAction(reportViewData){
@@ -686,6 +705,7 @@ NAMESPACE('chlk.controllers', function (){
             },
 
 
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitComprehensiveProgressViewData]],
             function submitComprehensiveProgressReportAction(reportViewData){
@@ -726,6 +746,7 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             },
 
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.GRADE_VERIFICATION_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitGradeVerificationReportViewData]],
             function submitGradeVerificationReportAction(reportViewData){
@@ -752,6 +773,8 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             },
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.LESSON_PLAN_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitLessonPlanReportViewData]],
             function submitLessonPlanReportAction(reportViewData){
@@ -787,6 +810,8 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             },
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.GRADE_BOOK_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitGradeBookReportViewData]],
             function submitGradeBookReportAction(reportViewData){
@@ -817,6 +842,8 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             },
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.BIRTHDAY_LISTING_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitBirthdayReportViewData]],
             function submitBirthdayReportAction(reportViewData){
@@ -892,6 +919,8 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             },
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.PROGRESS_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitProgressReportViewData]],
             function submitProgressReportAction(model){
@@ -913,6 +942,8 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             },
 
+
+            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.WORKSHEET_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitWorksheetReportViewData]],
             function submitWorksheetReportAction(model){
