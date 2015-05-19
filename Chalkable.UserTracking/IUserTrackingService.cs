@@ -8,7 +8,7 @@ namespace Chalkable.UserTracking
         void IdentifySysAdmin(string email, string firstName, string lastName,
             DateTime? firstLoginDate, string ip);
 
-        void IdentifyAdmin(string email, string firstName, string lastName, string schoolName,
+        void IdentifyDistrictAdmin(string email, string firstName, string lastName, string schoolName,
             DateTime? firstLoginDate, string timeZoneId, string role, string ip);
 
         void IdentifyStudent(string email, string firstName, string lastName, string schoolName, 

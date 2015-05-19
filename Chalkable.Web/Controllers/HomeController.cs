@@ -103,7 +103,9 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(GradeLevelViewData.Create(gradeLevel), ViewConstants.GRADE_LEVELS);
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);
-            //todo : add user tracking for districtadmin identify
+            var ip = RequestHelpers.GetClientIpAddress(Request);
+            MasterLocator.UserTrackingService.IdentifyDistrictAdmin(distictAdmin.Login, "", "", 
+                Context.DistrictId.ToString(), null, Context.DistrictTimeZone, Context.Role.Name, ip);
             return View();
         }
 

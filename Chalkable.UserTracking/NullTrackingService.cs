@@ -13,7 +13,7 @@ namespace Chalkable.UserTracking
         {
         }
 
-        public void IdentifyAdmin(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate,
+        public void IdentifyDistrictAdmin(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate,
             string timeZoneId, string role, string ip)
         {
         }
