@@ -17,7 +17,6 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AnnouncementController : AnnouncementBaseController
     {
-
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
         public ActionResult Create(int? classAnnouncementTypeId, int? classId, DateTime? expiresDate)
         {

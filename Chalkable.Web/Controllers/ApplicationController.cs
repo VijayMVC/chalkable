@@ -108,13 +108,13 @@ namespace Chalkable.Web.Controllers
             return Json(ApplicationRatingViewData.Create(appRatings));
         }
 
-        [AuthorizationFilter("District, AdminGrade")]
+        [AuthorizationFilter("DistrictAdmin, AdminGrade")]
         public ActionResult BanApp(Guid applicationId)
         {
             return FakeJson("~/fakeData/bannedAppData.json");
         }
 
-        [AuthorizationFilter("District, AdminGrade")]
+        [AuthorizationFilter("DistrictAdmin, AdminGrade")]
         public ActionResult UnbanApp(Guid applicationId)
         {
             return FakeJson("~/fakeData/unbannedAppData.json");
