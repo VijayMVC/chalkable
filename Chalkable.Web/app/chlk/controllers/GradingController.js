@@ -10,7 +10,6 @@ REQUIRE('chlk.services.GradingPeriodService');
 REQUIRE('chlk.services.StudentService');
 REQUIRE('chlk.services.AttendanceService');
 
-REQUIRE('chlk.activities.grading.TeacherSettingsPage');
 REQUIRE('chlk.activities.grading.GradingClassSummaryPage');
 REQUIRE('chlk.activities.grading.GradingClassStandardsPage');
 REQUIRE('chlk.activities.grading.GradingTeacherClassSummaryPage');
@@ -75,40 +74,6 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.AttendanceService, 'attendanceService',
-
-            //TODO: refactor
-            [chlk.controllers.SidebarButton('statistic')],
-            [[chlk.models.id.ClassId]],
-            function teacherSettingsAction(classId_){
-                var model = new chlk.models.setup.TeacherSettings();
-                var classBarMdl= new chlk.models.classes.ClassesForTopBar(null, classId_, true);
-                model.setTopData(classBarMdl);
-                var result;
-                if(classId_){
-                    result = this.finalGradeService
-                        .getFinalGrades(classId_, false)
-                        .attach(this.validateResponse_())
-                        .then(function(result){
-                            var gradesInfo = result.getFinalGradeAnnType(), sum = 0;
-                            gradesInfo.forEach(function(item, index){
-                                item.setIndex(index);
-                                sum += (item.getValue() || 0);
-                            });
-                            gradesInfo.sort(function(a,b){
-                                return b.getValue() > a.getValue();
-                            });
-                            sum += (result.getAttendance() || 0);
-                            sum += (result.getParticipation() || 0);
-                            sum += (result.getDiscipline() || 0);
-                            model.setPercentsSum(sum);
-                            model.setGradingInfo(result);
-                            return model;
-                        }, this);
-                }else{
-                    result = new ria.async.DeferredData(model);
-                }
-                return this.PushView(chlk.activities.grading.TeacherSettingsPage, result);
-            },
 
             [chlk.controllers.Permissions([
                 chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES//,

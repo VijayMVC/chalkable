@@ -903,9 +903,6 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
         function showDuplicateFormAction(announcementId, selectedClassId){
             var classes = this.classService.getClassesForTopBarSync();
-            classes.forEach(function(item){
-                item.setDisabled(true);
-            });
             var addDupAnnModel = new chlk.models.announcement.AddDuplicateAnnouncementViewData(announcementId
                 , classes, selectedClassId);
             var res = new ria.async.DeferredData(addDupAnnModel);

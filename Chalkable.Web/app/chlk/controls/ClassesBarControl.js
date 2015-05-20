@@ -26,7 +26,7 @@ NAMESPACE('chlk.controls', function () {
                     name: 'All',
                     description: 'All',
                     id: ''
-                }, chlk.models.classes.ClassForTopBar);
+                }, chlk.models.classes.Class);
             },
 
             function prepareModel(model, includeAll) {

@@ -14,7 +14,6 @@ REQUIRE('chlk.services.ClassroomOptionService');
 REQUIRE('chlk.activities.setup.HelloPage');
 REQUIRE('chlk.activities.setup.VideoPage');
 REQUIRE('chlk.activities.setup.StartPage');
-REQUIRE('chlk.activities.setup.TeacherSettingsPage');
 REQUIRE('chlk.activities.setup.CategoriesSetupPage');
 REQUIRE('chlk.activities.setup.ClassAnnouncementTypeDialog');
 REQUIRE('chlk.activities.setup.CommentsSetupPage');
@@ -23,7 +22,6 @@ REQUIRE('chlk.activities.setup.ClassroomOptionSetupPage');
 
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
-REQUIRE('chlk.models.setup.TeacherSettings');
 REQUIRE('chlk.models.grading.Final');
 REQUIRE('chlk.models.settings.Preference');
 REQUIRE('chlk.models.grading.AnnouncementTypeFinal');

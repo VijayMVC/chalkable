@@ -3,7 +3,6 @@ REQUIRE('chlk.templates.attendance.ClassAttendanceTpl');
 REQUIRE('chlk.templates.attendance.ClassList');
 REQUIRE('chlk.templates.common.InfoMsg');
 REQUIRE('chlk.templates.attendance.NotTakenAttendanceClassesTpl');
-REQUIRE('chlk.templates.attendance.TopBar');
 REQUIRE('chlk.templates.attendance.ClassListPeopleTpl');
 
 NAMESPACE('chlk.activities.attendance', function () {

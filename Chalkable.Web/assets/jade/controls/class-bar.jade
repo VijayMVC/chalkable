@@ -15,7 +15,6 @@ mixin doRender_(includeAll, topBarData, controller_, action_, prepend_, disabled
                if controller_
                   +ActionLinkWithPrepend(controller_, action_, params)(
                      class = id == currentClassId ? "pressed " : "",
-                     index=item.getIndex(),
                      data-tooltip=id ? item.getFullClassName() : ''
                   ).class-button.button-link.item
                      if showAlerts_
@@ -25,7 +24,6 @@ mixin doRender_(includeAll, topBarData, controller_, action_, prepend_, disabled
                else
                   BUTTON(
                      classId = id,
-                     index = item.getIndex(),
                      class = id == currentClassId ? "pressed " : "",
                      type = disabled_ ? "button" : "submit",
                      data-default-announcement-type-id = item.getDefaultAnnouncementTypeId(),

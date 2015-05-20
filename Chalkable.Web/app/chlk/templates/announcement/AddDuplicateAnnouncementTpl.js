@@ -1,6 +1,5 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.announcement.AddDuplicateAnnouncementViewData');
-REQUIRE('chlk.templates.classes.TopBar');
 
 NAMESPACE('chlk.templates.announcement', function(){
 
@@ -11,7 +10,7 @@ NAMESPACE('chlk.templates.announcement', function(){
         'AddDuplicateAnnouncementTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.classes.ClassForTopBar), 'classes', //todo: rename
+            ArrayOf(chlk.models.classes.Class), 'classes', //todo: rename
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassId, 'selectedClassId',
             [ria.templates.ModelPropertyBind],

@@ -3,7 +3,6 @@ REQUIRE('chlk.templates.announcement.AnnouncementFormTpl');
 REQUIRE('chlk.templates.announcement.Announcement');
 REQUIRE('chlk.templates.announcement.LastMessages');
 REQUIRE('chlk.templates.announcement.AnnouncementTitleTpl');
-REQUIRE('chlk.templates.classes.TopBar');
 REQUIRE('chlk.templates.SuccessTpl');
 REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
 REQUIRE('chlk.templates.apps.SuggestedAppsListTpl');

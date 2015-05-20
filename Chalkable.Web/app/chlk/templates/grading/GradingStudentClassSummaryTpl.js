@@ -26,7 +26,7 @@ NAMESPACE('chlk.templates.grading', function () {
             chlk.models.grading.GradingClassSummaryPart, 'summaryPart',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.classes.ClassForTopBar, 'clazz',
+            chlk.models.classes.Class, 'clazz',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'announcements',

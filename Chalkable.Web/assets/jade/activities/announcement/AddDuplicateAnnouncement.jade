@@ -7,10 +7,21 @@
             +Hidden('announcementId', self.getAnnouncementId() && self.getAnnouncementId().valueOf())
             +Hidden('selectedIds', '')
             .main-container
-                +LeftRightToolbar(self.getClasses(), chlk.templates.classes.TopBar)(
+                +LeftRightToolbar(self.getClasses())(
                     selectedItemId=selectedClassId && selectedClassId.valueOf(),
                     pressAfterClick=false
                 ).classes-bar
+                    each item in self.getClasses()
+                        BUTTON(
+                            classId=item.getId(),
+                            class=selectedClassId == item.getId()? "pressed " : "",
+                            type="button",
+                            name="submitType",
+                            value="save",
+                            data-tooltip=item.getId() ? item.getFullClassName() : ''
+                        ).item.class-button.validate-skip
+                            +ClassImg(item, 45, 80).avatar
+                            SPAN.text-container= item.getName()
                 .text-container
                     .tooltip-text
                     .note

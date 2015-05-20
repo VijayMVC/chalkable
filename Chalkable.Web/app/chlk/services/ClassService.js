@@ -1,7 +1,7 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('chlk.services.CalendarService');
 REQUIRE('ria.async.Future');
-REQUIRE('chlk.models.classes.ClassForTopBar');
+REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.classes.ClassForWeekMask');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.classes.ClassSummary');
@@ -30,7 +30,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.ClassId]],
-            chlk.models.classes.ClassForTopBar, function getClassById(classId) {
+            chlk.models.classes.Class, function getClassById(classId) {
                 var classes = this.getContext().getSession().get(ChlkSessionConstants.CLASSES_TO_FILTER), res = null;
                 classes.forEach(function(item){
                     if(item.getId() == classId)

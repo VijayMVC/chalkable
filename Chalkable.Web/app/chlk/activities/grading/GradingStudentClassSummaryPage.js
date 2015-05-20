@@ -1,6 +1,5 @@
 REQUIRE('chlk.activities.grading.BaseGradingPage');
 REQUIRE('chlk.templates.grading.GradingStudentClassSummaryTpl');
-REQUIRE('chlk.templates.classes.TopBar');
 
 NAMESPACE('chlk.activities.grading', function () {
 

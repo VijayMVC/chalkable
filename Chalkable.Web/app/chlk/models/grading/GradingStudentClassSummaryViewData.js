@@ -30,7 +30,7 @@ NAMESPACE('chlk.models.grading', function () {
 
             chlk.models.grading.GradingClassSummaryPart, 'summaryPart',
 
-            chlk.models.classes.ClassForTopBar, 'clazz',
+            chlk.models.classes.Class, 'clazz',
 
             ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'announcements'
         ])
