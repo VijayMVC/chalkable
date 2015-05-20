@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementForAdminDataAccess.cs" />
     <Compile Include="DataAccess\AutoGradeDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementApplicationDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementAttachmentDataAccess.cs" />
@@ -100,7 +101,7 @@
     <Compile Include="Model\AnnouncementAttachment.cs" />
     <Compile Include="Model\AnnouncementAttribute.cs" />
     <Compile Include="Model\AnnouncementQnA.cs" />
-    <Compile Include="Model\AnnouncementRecipient.cs" />
+    <Compile Include="Model\AdminAnnouncementRecipient.cs" />
     <Compile Include="Model\AnnouncementStandard.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstall.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallAction.cs" />

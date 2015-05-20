@@ -102,7 +102,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return res;
         }
 
-        public AnnouncementDetails Create(int? classAnnouncementTypeId, int classId, DateTime created, DateTime expiresDate, int personId)
+        public AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime created, DateTime expiresDate, int personId)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -212,7 +212,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         protected abstract void BuildConditionForGetSimpleAnnouncement(DbQuery dbQuery, int role, int callerId);
 
-        public Announcement GetLastDraft(int personId)
+        public virtual Announcement GetLastDraft(int personId)
         {
             var conds = new AndQueryCondition
                 {
