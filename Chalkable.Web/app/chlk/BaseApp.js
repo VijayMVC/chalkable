@@ -182,10 +182,12 @@ NAMESPACE('chlk', function (){
                    defaultValue = "";
 
                var value = window[key];
-                if(keys_)
+                if(keys_ && value){
                     keys_.forEach(function(item){
                         value = value[item];
                     });
+                }
+
                if(value == undefined || value == null)
                   value = defaultValue;
 
