@@ -68,7 +68,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 AnnouncementRef = announcementId,
                 AskerRef = Context.PersonId.Value,
-                ClassRef = ann.ClassRef,
+                ClassRef = ann.ClassRef.Value,
                 Question = question,
                 QuestionTime = Context.NowSchoolTime,
                 State = AnnouncementQnAState.Asked,

@@ -42,9 +42,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             AnnouncementTypeId = announcement.ClassAnnouncementTypeRef;
             AnnouncementTypeName = announcement.ClassAnnouncementTypeName;
             ChalkableAnnouncementTypeId = announcement.ChalkableAnnouncementType;
-            PersonId = announcement.PrimaryTeacherRef;
-            PersonName = announcement.PrimaryTeacherName;
-            PersonGender = announcement.PrimaryTeacherGender;
+            PersonId = announcement.PrimaryTeacherRef ?? announcement.AdminRef;
+            PersonName = !string.IsNullOrEmpty(announcement.PrimaryTeacherName) ? announcement.PrimaryTeacherName : announcement.AdminName;
+            PersonGender = !string.IsNullOrEmpty(announcement.PrimaryTeacherGender) ? announcement.PrimaryTeacherGender : announcement.AdminGender;
             ClassId = announcement.ClassRef;
             ClassName = announcement.ClassName;
             FullClassName = announcement.FullClassName;
@@ -83,7 +83,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             : base(announcement)
         {
             Avg = announcement.Avg;
-            MappedAvg = mapper.Map(announcement.GradingStyle, announcement.Avg);
+            MappedAvg = announcement.GradingStyle.HasValue ? mapper.Map(announcement.GradingStyle.Value, announcement.Avg) : null;
             GradedStudentCount = announcement.GradingStudentsCount;
         }
         public static AnnouncementShortGradeViewData Create(AnnouncementComplex announcement, IGradingStyleMapper mapper, int? studentGrade = null)

@@ -81,8 +81,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                 query.SchoolId = Context.SchoolLocalId.Value;
                 query.PersonId = Context.PersonId;
                 var notifications = new NotificationDataAccess(uow).GetPaginatedNotificationsDetails(query);
-                var classIds = notifications.Where(x => x.AnnouncementRef.HasValue && x.Announcement != null)
-                                   .Select(x => x.Announcement.ClassRef)
+                var classIds = notifications.Where(x => x.AnnouncementRef.HasValue && x.Announcement != null && x.Announcement.ClassRef.HasValue)
+                                   .Select(x => x.Announcement.ClassRef.Value)
                                    .ToList();
                 IList<ClassAnnouncementType> classAnnouncementTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
                 foreach (var notification in notifications)

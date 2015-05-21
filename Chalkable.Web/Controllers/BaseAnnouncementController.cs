@@ -23,7 +23,9 @@ namespace Chalkable.Web.Controllers
 
         protected AnnouncementViewData PrepareFullAnnouncementViewDataForRead(AnnouncementDetails ann)
         {
-            var teachersIds = SchoolLocator.ClassService.GetClassTeachers(ann.ClassRef, null).Select(x => x.PersonRef).ToList();
+            var teachersIds = ann.ClassRef.HasValue
+                ? SchoolLocator.ClassService.GetClassTeachers(ann.ClassRef.Value, null).Select(x => x.PersonRef).ToList()
+                : new List<int>();
             var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, teachersIds);
             var annView = (AnnouncementDetailedViewData)PrepareAnnouncmentViewData(ann, attInfo);
             if (ann.State == AnnouncementState.Created)
@@ -55,15 +57,18 @@ namespace Chalkable.Web.Controllers
                     throw new NoMarkingPeriodException();
                 var abIds = ann.AnnouncementStandards.Where(x => x.Standard.AcademicBenchmarkId.HasValue)
                     .Select(x => x.Standard.AcademicBenchmarkId.Value).ToList();
-                annView.SuggestedApps = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
-                                                          Context.PersonId.Value, ann.ClassRef, abIds, mp.Id);
+                if(ann.ClassRef.HasValue)
+                    annView.SuggestedApps = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
+                                                              Context.PersonId.Value, ann.ClassRef.Value, abIds, mp.Id);
             }
             return annView;
         }
 
         protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann)
         {
-            var teachersIds = SchoolLocator.ClassService.GetClassTeachers(ann.ClassRef, null).Select(x => x.PersonRef).ToList();
+            var teachersIds = ann.ClassRef.HasValue 
+                ? SchoolLocator.ClassService.GetClassTeachers(ann.ClassRef.Value, null).Select(x => x.PersonRef).ToList()
+                : new List<int>();
             var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, teachersIds);             
             return PrepareAnnouncmentViewData(ann, attInfo);
         }
@@ -90,7 +95,7 @@ namespace Chalkable.Web.Controllers
         
         protected IList<ApplicationForAttachViewData> PrepareSuggestedAppsForAnnouncementViewData(AnnouncementDetails announcementDetails)
         {
-            if (announcementDetails.AnnouncementStandards != null && announcementDetails.AnnouncementStandards.Count > 0)
+            if (announcementDetails.AnnouncementStandards != null && announcementDetails.AnnouncementStandards.Count > 0 && announcementDetails.ClassRef.HasValue)
             {
                 var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod(Context.NowSchoolYearTime.Date);
                 if (mp == null)
@@ -98,7 +103,7 @@ namespace Chalkable.Web.Controllers
                 var abIds = announcementDetails.AnnouncementStandards.Where(x => x.Standard.AcademicBenchmarkId.HasValue)
                     .Select(x => x.Standard.AcademicBenchmarkId.Value).ToList();
                 return ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
-                                                          Context.PersonId.Value, announcementDetails.ClassRef, abIds, mp.Id);
+                                                          Context.PersonId.Value, announcementDetails.ClassRef.Value, abIds, mp.Id);
             }
             return new List<ApplicationForAttachViewData>();
         }

@@ -60,9 +60,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 var anDa = ((DemoAnnouncementService)ServiceLocator.AnnouncementService).GetTeacherAnnouncementService();
                 var announcementApplication = GetAnnouncementApplication(announcementAppId.Value);
                 var ann = anDa.GetAnnouncementById(announcementApplication.AnnouncementRef);
-                var csp = ServiceLocator.ClassService.GetClassPersons(ann.ClassRef, null);
+                var csp = ServiceLocator.ClassService.GetClassPersons(ann.ClassRef.Value, null);
                 res.AddRange(csp.Select(x => x.PersonRef));
-                var c = ServiceLocator.ClassService.GetById(ann.ClassRef);
+                var c = ServiceLocator.ClassService.GetById(ann.ClassRef.Value);
                 if (Context.PersonId != c.PrimaryTeacherRef)
                     if (c.PrimaryTeacherRef.HasValue) res.Add(c.PrimaryTeacherRef.Value);
             }
@@ -102,7 +102,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var aa = GetAnnouncementApplication(announcementAppId);
             var ann = ((DemoAnnouncementService)ServiceLocator.AnnouncementService).GetTeacherAnnouncementService()
                 .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.PersonId.Value);
-            var c = ServiceLocator.ClassService.GetById(ann.ClassRef);
+            var c = ServiceLocator.ClassService.GetById(ann.ClassRef.Value);
             if (Context.PersonId != c.PrimaryTeacherRef)
                 throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
             aa.Active = true;
@@ -132,7 +132,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 var announcement = ServiceLocator.AnnouncementService.GetAnnouncementById(x.AnnouncementRef);
                 return ((DemoAppMarketService)ServiceLocator.AppMarketService).AppInstallExists(x.ApplicationRef, personId)
                        && announcement.PrimaryTeacherRef == personId
-                       || ((DemoClassService)ServiceLocator.ClassService).ClassPersonExists(announcement.ClassRef, personId);
+                       || ((DemoClassService)ServiceLocator.ClassService).ClassPersonExists(announcement.ClassRef.Value, personId);
             });
             return announcementApplications.ToList();
         }
@@ -144,7 +144,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 var aa = AnnouncementApplicationStorage.GetById(announcementAppId);
                 AnnouncementApplicationStorage.Delete(announcementAppId);
                 var res = ServiceLocator.AnnouncementService.GetAnnouncementById(aa.AnnouncementRef);
-                var c = ServiceLocator.ClassService.GetById(res.ClassRef);
+                var c = ServiceLocator.ClassService.GetById(res.ClassRef.Value);
                 if (Context.PersonId != c.PrimaryTeacherRef)
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 return res;

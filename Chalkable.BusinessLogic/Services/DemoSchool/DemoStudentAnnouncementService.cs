@@ -184,10 +184,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
 
             var gradeComment = comment != null && !string.IsNullOrWhiteSpace(comment) ? comment.Trim() : "";
-
             var oldScore = ActivityScoreStorage.GetScore(ann.SisActivityId.Value, studentId);
             var studentAnnouncement = new StudentAnnouncement();
-
             MapperFactory.GetMapper<StudentAnnouncement, Score>().Map(studentAnnouncement, oldScore);
             studentAnnouncement.AnnouncementId = oldScore.ActivityId;
 
@@ -209,7 +207,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 studentAnnouncement.NumericScore = null;
                 studentAnnouncement.ScoreValue = "";
             }
-
             studentAnnouncement.Exempt = exempt;
             studentAnnouncement.Late = late;
             studentAnnouncement.Incomplete = incomplete;
@@ -225,10 +222,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 studentAnnouncement.ScoreDropped = false;
             }
-            
-
-            
-
             var score = new Score();
             MapperFactory.GetMapper<Score, StudentAnnouncement>().Map(score, studentAnnouncement);
             score = ActivityScoreStorage.UpdateScore(score.ActivityId, score.StudentId, score);
@@ -279,7 +272,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     Exempt = x.Exempt,
                     ExtraCredit = x.ExtraCredit,
                     Incomplete = x.Incomplete,
-                    ClassId = ann.ClassRef,
+                    ClassId = ann.ClassRef.Value,
                     Late = x.Late,
                     NumericScore = x.NumericScore,
                     OverMaxScore = x.OverMaxScore,
@@ -324,14 +317,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 else
                 {
                     scores = ActivityScoreStorage.GetSores(ann.SisActivityId.Value);
-                    persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef, mp.Id);
+                    persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef.Value, mp.Id);
                 }
                 var res = new List<StudentAnnouncementDetails>();
                 foreach (var score in scores)
                 {
                     var stAnn = new StudentAnnouncementDetails
                     {
-                        ClassId = ann.ClassRef,
+                        ClassId = ann.ClassRef.Value,
                         Student = persons.First(x => x.Id == score.StudentId),
                         AnnouncementId = ann.Id
                     };
