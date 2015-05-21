@@ -16,7 +16,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class ClassController : ChalkableController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Class })]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Class })]
         public ActionResult List(int? schoolYearId, int? markingPeriodId, int? personId, int? start, int? count)//TODO: remove pagination from there
         {
             IList<ClassDetails> res;
@@ -34,7 +34,7 @@ namespace Chalkable.Web.Controllers
             return Json(pl.Transform(ClassViewData.Create));
         }
 
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult ClassInfo(int classId)
         {
             var classData = SchoolLocator.ClassService.GetClassDetailsById(classId);
@@ -47,7 +47,7 @@ namespace Chalkable.Web.Controllers
             return Json(ClassInfoViewData.Create(classData, room, department));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult ClassGrading(int classId)
         {
             var classData = SchoolLocator.ClassService.GetClassDetailsById(classId);
@@ -56,7 +56,7 @@ namespace Chalkable.Web.Controllers
             return Json(ClassGradingViewData.Create(classData, gradingPerMp), 8);
         }
 
-        [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("System Admin, DistrictAdmin, Teacher, Student")]
         public ActionResult ClassSchedule(int classId, DateTime? date)
         {
             var clazz = SchoolLocator.ClassService.GetClassDetailsById(classId);
@@ -64,7 +64,7 @@ namespace Chalkable.Web.Controllers
             return Json(ClassScheduleViewData.Create(clazz, schedule), 13);
         }
         
-        [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("System Admin, DistrictAdmin, Teacher, Student")]
         public ActionResult ClassAttendance(int classId)
         {
             var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
@@ -72,7 +72,7 @@ namespace Chalkable.Web.Controllers
             return Json(ClassAttendanceSummaryViewData.Create(c, attendanceSummary));
         }
 
-        [AuthorizationFilter("System Admin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("System Admin, DistrictAdmin, Teacher, Student")]
         public ActionResult Explorer(int classId)
         {
             var c = SchoolLocator.ClassService.GetClassDetailsById(classId);

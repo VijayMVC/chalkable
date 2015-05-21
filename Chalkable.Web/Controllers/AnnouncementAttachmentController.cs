@@ -20,7 +20,7 @@ namespace Chalkable.Web.Controllers
         private const string CONTENT_DISPOSITION = "Content-Disposition";       
         private const string HTML_CONTENT_TYPE = "text/html";
 
-        [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult AddAttachment(int announcementId)
         {
             try
@@ -62,7 +62,7 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
         }
 
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult CloneAttachment(int originalAttachmentId, int announcementId)
         {
             EnsureAnnouncementExsists(announcementId);
@@ -84,7 +84,7 @@ namespace Chalkable.Web.Controllers
             return Json(res, 6);
         }
 
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult DownloadAttachment(int announcementAttachmentId, bool? needsDownload, int? width, int? height)
         {
             var attContentInfo = SchoolLocator.AnnouncementAttachmentService.GetAttachmentContent(announcementAttachmentId);
@@ -110,7 +110,7 @@ namespace Chalkable.Web.Controllers
             return File(content, contentTypeName, attName);
         }
 
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult DeleteAttachment(int announcementAttachmentId, int announcementId)
         {
             EnsureAnnouncementExsists(announcementId);
@@ -122,7 +122,7 @@ namespace Chalkable.Web.Controllers
             var res = PrepareFullAnnouncementViewData(announcementId);
             return Json(res, 6);
         }
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult GetAttachments(int announcementId, int? start, int? count)
         {
             EnsureAnnouncementExsists(announcementId);
@@ -133,7 +133,7 @@ namespace Chalkable.Web.Controllers
             return Json(res);
         }
 
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult StartViewSession(int announcementAttachmentId)
         {
             var att = SchoolLocator.AnnouncementAttachmentService.GetAttachmentById(announcementAttachmentId);

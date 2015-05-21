@@ -28,7 +28,7 @@ namespace Chalkable.Web.Controllers
             var context = LogOn(false, userService => userService.DemoLogin(rolename, prefix));
             if (context == null)
                 return Json(new ChalkableException(string.Format(ChlkResources.USER_NOT_FOUND_IN_DEMO_SCHOOL, rolename, prefix)));
-            if (rolename.ToLower() == CoreRoles.ADMIN_GRADE_ROLE.LoweredName) throw new NotImplementedException();
+            if (rolename.ToLower() == CoreRoles.DISTRICT_ADMIN_ROLE.LoweredName) return Redirect<HomeController>(c=>c.DistrictAdmin());
             if (rolename.ToLower() == CoreRoles.TEACHER_ROLE.LoweredName) return Redirect<HomeController>(c => c.Teacher());
             if (rolename.ToLower() == CoreRoles.STUDENT_ROLE.LoweredName) return Redirect<HomeController>(c => c.Student());
             

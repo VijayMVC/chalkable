@@ -15,7 +15,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class DisciplineController : ChalkableController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult List(DateTime? date, int? start, int? count)
         {
             return FakeJson("~/fakeData/disciplineList.json");
@@ -30,7 +30,7 @@ namespace Chalkable.Web.Controllers
             //return Json(new PaginatedList<StudentDisciplineSummaryViewData>(list, start.Value / count.Value, count.Value));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Summary(DateTime? date, IntList gradeLevelIds)
         {
             return FakeJson("~/fakeData/adminDisciplines.json");
@@ -64,7 +64,7 @@ namespace Chalkable.Web.Controllers
             return Json(new PaginatedList<DisciplineView>(res, start.Value / count.Value, count.Value));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult SetClassDiscipline(ClassDisciplineInputModel discipline)
         {
             if (!Context.PersonId.HasValue)
@@ -94,7 +94,7 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.User, AppPermissionType.Discipline })]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User, AppPermissionType.Discipline })]
         public ActionResult StudentDisciplineSummary(int personId, int markingPeriodId)
         {
             return FakeJson("~/fakeData/studentDisciplinesSummary.json");

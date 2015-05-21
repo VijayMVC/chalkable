@@ -52,7 +52,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            if (!BaseSecurity.IsAdminOrTeacher(Context))
+            if (!BaseSecurity.IsDistrictOrTeacher(Context))
                 throw new ChalkableSecurityException();
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             foreach (var commentId in commentsIds)
@@ -70,7 +70,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private void EnsureIsDistrictAdminOrCurrentTeacher(int teacherId)
         {
-            if (!(BaseSecurity.IsDistrict(Context) || (Context.Role == CoreRoles.TEACHER_ROLE && Context.PersonId == teacherId)))
+            if (!(BaseSecurity.IsDistrictAdmin(Context) || (Context.Role == CoreRoles.TEACHER_ROLE && Context.PersonId == teacherId)))
                 throw new ChalkableSecurityException();
         }
     }

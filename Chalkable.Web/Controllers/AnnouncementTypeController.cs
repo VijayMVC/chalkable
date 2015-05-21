@@ -15,7 +15,7 @@ namespace Chalkable.Web.Controllers
     public class AnnouncementTypeController : ChalkableController
     {
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] {AppPermissionType.Announcement})]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] {AppPermissionType.Announcement})]
         public ActionResult List(int classId)
         {
             var list = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
@@ -23,14 +23,14 @@ namespace Chalkable.Web.Controllers
             return Json(res, 3);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult ListByClasses(IntList classIds)
         {
             var list = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
             return Json(ClassAnnouncementTypeViewData.Create(list), 3);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult ListByClass(int classId)
         {
             if (!SchoolLocator.Context.PersonId.HasValue)
@@ -39,7 +39,7 @@ namespace Chalkable.Web.Controllers
             return Json(ClassAnnouncementTypeViewData.Create(res), 3);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Create(ClassAnnouncementTypeInputData inputData)
         {
             var res = SchoolLocator.ClassAnnouncementTypeService.AddClassAnnouncmentType(new ClassAnnouncementType
@@ -56,7 +56,7 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Update(int classAnnouncementTypeId, ClassAnnouncementTypeInputData inputData)
         {
             var res = SchoolLocator.ClassAnnouncementTypeService.EditClassAnnouncmentType(new ClassAnnouncementType
@@ -73,14 +73,14 @@ namespace Chalkable.Web.Controllers
             return Json(ClassAnnouncementTypeViewData.Create(res));
         }
 
-        /*[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        /*[AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Delete(int classAnnouncementTypeId)
         {
             SchoolLocator.ClassAnnouncementTypeService.DeleteClassAnnouncmentType(classAnnouncementTypeId);
             return Json(true);
         }*/
         
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Delete(IntList classAnnouncementTypeIds)
         {
             SchoolLocator.ClassAnnouncementTypeService.DeleteClassAnnouncmentTypes(classAnnouncementTypeIds);

@@ -24,12 +24,9 @@ namespace Chalkable.Common
         public static CoreRole TEACHER_ROLE = new CoreRole(2, "Teacher", "Teacher");
         public static CoreRole STUDENT_ROLE = new CoreRole(3, "Student", "Student");
         public static CoreRole PARENT_ROLE = new CoreRole(4, "Parent", "Parent");
-        public static CoreRole ADMIN_GRADE_ROLE = new CoreRole(5, "AdminGrade", "School Administrator");
         public static CoreRole CHECKIN_ROLE = new CoreRole(6, "Checkin", "Checkin");
-        public static CoreRole ADMIN_EDIT_ROLE = new CoreRole(7, "AdminEdit", "School Administrator for Edit");
-        public static CoreRole ADMIN_VIEW_ROLE = new CoreRole(8, "AdminView", "Administrator for View");
         public static CoreRole DEVELOPER_ROLE = new CoreRole(9, "Developer", "Chalkable Developer");
-        public static CoreRole DISTRICT_ROLE = new CoreRole(10, "DistrictAdmin", "DistrictAdmin");
+        public static CoreRole DISTRICT_ADMIN_ROLE = new CoreRole(10, "DistrictAdmin", "DistrictAdmin");
         public static CoreRole APP_TESTER_ROLE = new CoreRole(11, "AppTester", "Application Tester");
 
         private static Dictionary<string, CoreRole> roles = new Dictionary<string, CoreRole>
@@ -38,13 +35,10 @@ namespace Chalkable.Common
                                                                      {TEACHER_ROLE.LoweredName, TEACHER_ROLE},
                                                                      {STUDENT_ROLE.LoweredName, STUDENT_ROLE},
                                                                      {PARENT_ROLE.LoweredName, PARENT_ROLE},
-                                                                     {ADMIN_GRADE_ROLE.LoweredName, ADMIN_GRADE_ROLE},
                                                                      {CHECKIN_ROLE.LoweredName, CHECKIN_ROLE},
-                                                                     {ADMIN_EDIT_ROLE.LoweredName, ADMIN_EDIT_ROLE},
-                                                                     {ADMIN_VIEW_ROLE.LoweredName, ADMIN_VIEW_ROLE},
                                                                      {DEVELOPER_ROLE.LoweredName, DEVELOPER_ROLE},
                                                                      {APP_TESTER_ROLE.LoweredName, APP_TESTER_ROLE},
-                                                                     {DISTRICT_ROLE.LoweredName, DISTRICT_ROLE}
+                                                                     {DISTRICT_ADMIN_ROLE.LoweredName, DISTRICT_ADMIN_ROLE}
                                                                 };
 
 

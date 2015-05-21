@@ -19,7 +19,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AttendanceController : ChalkableController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult SetAttendance(SetClassAttendanceViewData data)
         {
             SchoolLocator.AttendanceService.SetClassAttendances(data.Date, data.ClassId, data.Items.Select(x => new StudentClassAttendance
@@ -34,7 +34,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
         //TODO: implement this method later
-        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult NotTakenAttendanceClasses(DateTime? date)
         {
             date = (date ?? SchoolLocator.Context.NowSchoolYearTime);
@@ -42,7 +42,7 @@ namespace Chalkable.Web.Controllers
             return Json(ClassViewData.Create(notTakenAttendanceClasses));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher", true, new[] { AppPermissionType.Attendance })]
+        [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Attendance })]
         public ActionResult SetAttendanceForClass(string level, int? attendanceReasonId, int classId, DateTime date)
         {
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
@@ -63,7 +63,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
         
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", true, new[] { AppPermissionType.Schedule, AppPermissionType.Class })]
+        [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Schedule, AppPermissionType.Class })]
         public ActionResult ClassList(DateTime? date, int classId)
         {
             date = (date ?? SchoolLocator.Context.NowSchoolYearTime).Date;
@@ -99,7 +99,7 @@ namespace Chalkable.Web.Controllers
             return listClassAttendance;
         } 
         
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult GetAttendanceForStudent(DateTime? datetime, int studentId)
         {
             return FakeJson("~/fakeData/getAttendanceForStudent.json");
@@ -149,7 +149,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
+        [AuthorizationFilter("DistrictAdmin")]
         public ActionResult AdminAttendanceSummary(bool renderNow, bool renderDay, bool renderMp, IntList gradeLevelsIds, 
             DateTime? nowDateTime, Guid? fromMarkingPeriodId, Guid? toMarkingPeriodId, DateTime? startDate, DateTime? endDate)
         {

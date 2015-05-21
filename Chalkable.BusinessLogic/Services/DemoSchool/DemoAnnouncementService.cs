@@ -186,7 +186,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void SetupAnnouncementProcessor(UserContext context, IServiceLocatorSchool locator)
         {
-            if (BaseSecurity.IsAdminViewer(context))
+            if (BaseSecurity.IsDistrictAdmin(context))
                 SetAnnouncementProcessor(new AdminAnnouncementProcessor(locator));
             if (Context.Role == CoreRoles.TEACHER_ROLE)
                 SetAnnouncementProcessor(new TeacherAnnouncementProcessor(locator));
@@ -472,7 +472,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     ((DemoApplicationSchoolService)ServiceLocator.ApplicationSchoolService).DeleteAnnouncementApplications(ann.Id);
                 }
             }
-            if (BaseSecurity.IsAdminViewer(Context))
+            if (BaseSecurity.IsDistrictAdmin(Context))
                 throw new NotImplementedException();
 
             ann.Expires = announcement.ExpiresDate.HasValue ? announcement.ExpiresDate.Value : DateTime.Today.AddDays(1);

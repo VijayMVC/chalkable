@@ -114,32 +114,32 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void DeleteClassStandards(IList<ClassStandard> classStandards)
         {
-            BaseSecurity.EnsureDistrict(Context);
+            BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new DataAccessBase<ClassStandard, int>(u).Delete(classStandards));
         }
 
         public void DeleteStandards(IList<Standard> standards)
         {
-            BaseSecurity.EnsureDistrict(Context);
+            BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new StandardDataAccess(u).Delete(standards));
         }
 
         public void EditStandard(IList<Standard> standards)
         {
-            BaseSecurity.EnsureDistrict(Context);
+            BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new StandardDataAccess(u).Update(standards));      
         }
         
         public void EditStandardSubjects(IList<StandardSubject> standardSubjects)
         {
-            BaseSecurity.EnsureDistrict(Context);
+            BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new StandardSubjectDataAccess(u).Update(standardSubjects));      
         }
 
 
         public void DeleteStandardSubjects(IList<int> ids)
         {
-            BaseSecurity.EnsureDistrict(Context);
+            BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new StandardSubjectDataAccess(u).Delete(ids));      
         }
 

@@ -40,9 +40,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
             return
                 loweredRoleName != CoreRoles.SUPER_ADMIN_ROLE.LoweredName &&
                 loweredRoleName != CoreRoles.CHECKIN_ROLE.LoweredName &&
-                loweredRoleName != CoreRoles.ADMIN_GRADE_ROLE.LoweredName &&
-                loweredRoleName != CoreRoles.ADMIN_VIEW_ROLE.LoweredName &&
-                loweredRoleName != CoreRoles.ADMIN_EDIT_ROLE.LoweredName;
+                loweredRoleName != CoreRoles.DISTRICT_ADMIN_ROLE.LoweredName;
         }
 
         private static Dictionary<string, IList<ChalkableApiControllerDescription>> descriptions;

@@ -259,10 +259,8 @@ namespace Chalkable.Web.Controllers
         {
             if (role == CoreRoles.SUPER_ADMIN_ROLE)
                 return Redirect<HomeController>(x => x.SysAdmin());
-            if(role == CoreRoles.ADMIN_GRADE_ROLE 
-                || role == CoreRoles.ADMIN_EDIT_ROLE 
-                || role == CoreRoles.ADMIN_VIEW_ROLE)
-                throw new NotImplementedException();
+            if (role == CoreRoles.DISTRICT_ADMIN_ROLE)
+                return Redirect<HomeController>(x => x.DistrictAdmin());
             if (role == CoreRoles.TEACHER_ROLE)
                 return Redirect<HomeController>(x => x.Teacher());
             if (role == CoreRoles.STUDENT_ROLE)

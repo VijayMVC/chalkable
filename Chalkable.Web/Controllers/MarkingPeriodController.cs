@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 
@@ -11,7 +10,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class MarkingPeriodController : ChalkableController
     {
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Schedule })]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Schedule })]
         public ActionResult List(int schoolYearId, DateTime? tillDate)
         {
             var res = SchoolLocator.MarkingPeriodService.GetMarkingPeriods(schoolYearId);

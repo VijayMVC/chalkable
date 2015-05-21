@@ -127,8 +127,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             var url = UrlTools.UrlCombine(baseUrl, "/Home/") + "{0}";
             if (person.RoleRef == CoreRoles.SUPER_ADMIN_ROLE.Id)
                 return string.Format(url, ROLE_SYSADMIN);
-            if (person.RoleRef == CoreRoles.ADMIN_EDIT_ROLE.Id || person.RoleRef == CoreRoles.ADMIN_VIEW_ROLE.Id
-               || person.RoleRef == CoreRoles.ADMIN_GRADE_ROLE.Id)
+            if (person.RoleRef == CoreRoles.DISTRICT_ADMIN_ROLE.Id)
             {
                 return string.Format(url, ROLE_ADMIN);
             }

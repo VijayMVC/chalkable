@@ -125,7 +125,7 @@ namespace Chalkable.BusinessLogic.Services
 
         public void SwitchSchool(Guid districtId, string schoolName, string schoolTimeZoneId, int? schoolLocalId, string districtServerUrl, Guid? developerId)
         {
-            if (Role != CoreRoles.SUPER_ADMIN_ROLE && !(Role == CoreRoles.DISTRICT_ROLE && districtId == DistrictId))
+            if (Role != CoreRoles.SUPER_ADMIN_ROLE && !(Role == CoreRoles.DISTRICT_ADMIN_ROLE && districtId == DistrictId))
                 throw new ChalkableSecurityException(ChlkResources.ERR_SWITCH_SCHOOL_INVALID_RIGTHS);
             DistrictServerUrl = districtServerUrl;
             DistrictTimeZone = schoolTimeZoneId;

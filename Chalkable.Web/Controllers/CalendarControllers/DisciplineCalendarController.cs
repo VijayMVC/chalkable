@@ -9,7 +9,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
     [RequireHttps, TraceControllerFilter]
     public class DisciplineCalendarController : CalendarController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult MonthForStudent(int studentId, DateTime? date)
         {
             if(!Context.PersonId.HasValue)

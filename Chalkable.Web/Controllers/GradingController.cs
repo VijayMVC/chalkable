@@ -55,7 +55,7 @@ namespace Chalkable.Web.Controllers
             return Json(GradingClassSummaryViewData.Create(res));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
         public ActionResult ItemGradingStat(int announcementId)
         {
             var studentAnns = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(announcementId);
@@ -222,14 +222,14 @@ namespace Chalkable.Web.Controllers
         }
 
         
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult StudentSummary(int studentId, int? classId)
         {
             var res = new GradingStudentSummaryViewData {Announcements = GetGradedItems()};
             return Json(res);
         }
      
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult RecentlyGradedItems(int? start, int? count, int? classId)
         {
             return Json(GetGradedItems(start, count, classId));
@@ -240,7 +240,7 @@ namespace Chalkable.Web.Controllers
             return FeedController.GetAnnouncementForFeedList(SchoolLocator, start, count, null, classId, false, true);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult StudentClassSummary(int studentId, int classId)
         {
             //var gradingStats = SchoolLocator.GradingStatisticService.GetStudentClassGradeStats(mp.Id, classId, studentId);

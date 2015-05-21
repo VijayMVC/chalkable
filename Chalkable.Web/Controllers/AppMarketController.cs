@@ -18,7 +18,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AppMarketController : ChalkableController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult List(GuidList categoriesIds, IntList gradeLevelsIds, string filter, int? filterMode, int? sortingMode, int? start, int? count)
         {
             var apps = MasterLocator.ApplicationService.GetApplications(categoriesIds, gradeLevelsIds, filter
@@ -26,7 +26,7 @@ namespace Chalkable.Web.Controllers
             return Json(apps.Transform(BaseApplicationViewData.Create));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult ListInstalledForAttach(int personId, int classId, int markingPeriodId, int? start, int? count)
         {
             var st = start ?? 0;
@@ -40,7 +40,7 @@ namespace Chalkable.Web.Controllers
             return Json(new PaginatedList<ApplicationForAttachViewData>(res, st / cnt, cnt, totalCount));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult SuggestedApps(int classId, GuidList abIds, int markingPeriodId, int? start, int? count, bool? myAppsOnly)
         {
             if(!Context.PersonId.HasValue)
@@ -58,7 +58,7 @@ namespace Chalkable.Web.Controllers
             return Json(res);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult SuggestedAppsForAttach(int classId, GuidList abIds, int markingPeriodId, int? start, int? count)
         {
             if (!Context.PersonId.HasValue)
@@ -66,7 +66,7 @@ namespace Chalkable.Web.Controllers
             return Json(ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, Context.PersonId.Value, classId, abIds, markingPeriodId, start, count));
         }
         
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult ListInstalled(int personId, string filter, int? start, int? count)
         {
             var apps = GetListInstalledApps(SchoolLocator, MasterLocator, personId, filter, start, count);
@@ -97,7 +97,7 @@ namespace Chalkable.Web.Controllers
             return res;
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Install(Guid applicationId, int? personId, IntList classids, IntList roleIds, GuidList departmentids, IntList gradelevelids)
         {
             var schoolyearId = GetCurrentSchoolYearId();
@@ -128,14 +128,14 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
         
-        [AuthorizationFilter("AdminGrade, AdminEdit, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Uninstall(IntList applicationInstallIds)
         {
             SchoolLocator.AppMarketService.Uninstall(applicationInstallIds);
             return Json(true);
         }
 
-        [AuthorizationFilter("SysAdmin, Developer, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher, Student")]
         public ActionResult Read(Guid applicationId)
         {
             var application = MasterLocator.ApplicationService.GetApplicationById(applicationId);
@@ -150,7 +150,7 @@ namespace Chalkable.Web.Controllers
             return Json(res);
         }
         
-        [AuthorizationFilter("SysAdmin, Developer, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher, Student")]
         public ActionResult GetApplicationTotalPrice(Guid applicationid, int? personId, IntList classids, IntList roleids, GuidList departments, IntList gradelevelids)
         {
             var app = MasterLocator.ApplicationService.GetApplicationById(applicationid);

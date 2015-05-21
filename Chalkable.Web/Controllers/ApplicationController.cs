@@ -108,13 +108,13 @@ namespace Chalkable.Web.Controllers
             return Json(ApplicationRatingViewData.Create(appRatings));
         }
 
-        [AuthorizationFilter("DistrictAdmin, AdminGrade")]
+        [AuthorizationFilter("DistrictAdmin, DistrictAdmin")]
         public ActionResult BanApp(Guid applicationId)
         {
             return FakeJson("~/fakeData/bannedAppData.json");
         }
 
-        [AuthorizationFilter("DistrictAdmin, AdminGrade")]
+        [AuthorizationFilter("DistrictAdmin, DistrictAdmin")]
         public ActionResult UnbanApp(Guid applicationId)
         {
             return FakeJson("~/fakeData/unbannedAppData.json");
@@ -173,7 +173,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult AddToAnnouncement(int announcementId, Guid applicationId)
         {
             if (!Context.PersonId.HasValue)
@@ -185,7 +185,7 @@ namespace Chalkable.Web.Controllers
             return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.PersonId));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult RemoveFromAnnouncement(int announcementApplicationId)
         {
             var ann = SchoolLocator.ApplicationSchoolService.RemoveFromAnnouncement(announcementApplicationId);
@@ -193,7 +193,7 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Attach(int announcementApplicationId)
         {
             SchoolLocator.ApplicationSchoolService.AttachAppToAnnouncement(announcementApplicationId);
@@ -201,7 +201,7 @@ namespace Chalkable.Web.Controllers
             return Json(PrepareFullAnnouncementViewData(aa.AnnouncementRef));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
         public ActionResult GetAnnouncementApplication(int announcementApplicationId)
         {
             var res = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);

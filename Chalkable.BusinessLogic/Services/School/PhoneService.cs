@@ -70,7 +70,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public Phone Edit(string digitOnlyValue, int personId, string value, PhoneType type, bool isPrimary)
         {
-            if (!(BaseSecurity.IsDistrict(Context)))
+            if (!(BaseSecurity.IsDistrictAdmin(Context)))
                 throw new ChalkableSecurityException(); 
             using (var uow = Update())
             {
@@ -106,7 +106,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<Phone> AddPhones(IList<Phone> phones)
         {
-            if (!(BaseSecurity.IsDistrict(Context)))
+            if (!(BaseSecurity.IsDistrictAdmin(Context)))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -118,7 +118,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(IList<Phone> phones)
         {
-            if (!(BaseSecurity.IsDistrict(Context)))
+            if (!(BaseSecurity.IsDistrictAdmin(Context)))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -131,7 +131,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<Phone> EditPhones(IList<Phone> phones)
         {
-            if (!(BaseSecurity.IsDistrict(Context)))
+            if (!(BaseSecurity.IsDistrictAdmin(Context)))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {

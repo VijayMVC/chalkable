@@ -49,14 +49,14 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<Date> days)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             DoUpdate(u => new DateDataAccess(u).Insert(days));
         }
         
         public void Edit(IList<Date> dates)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             DoUpdate(u => new DateDataAccess(u).Update(dates));
         }

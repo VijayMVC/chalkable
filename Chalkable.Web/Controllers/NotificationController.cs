@@ -12,14 +12,14 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class NotificationController : ChalkableController
     {
-        [AuthorizationFilter("Super Admin,AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("Super Admin,DistrictAdmin, Teacher, Student")]
         public ActionResult List(int? start, int? count)
         {
             var listN = SchoolLocator.NotificationService.GetNotifications(start ?? 0, count ?? 10);
             return Json(listN.Transform(NotificationViewData.Create));
         }
 
-        [AuthorizationFilter("Super Admin,AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("Super Admin,DistrictAdmin, Teacher, Student")]
         public ActionResult MarkAsShown(int id)
         {
             SchoolLocator.NotificationService.MarkAsShown(new[] { id });
@@ -27,7 +27,7 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        [AuthorizationFilter("Super Admin,AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("Super Admin,DistrictAdmin, Teacher, Student")]
         public ActionResult ListByDays(int? start, int? count)
         {
             var dayCount = count ?? 7;
@@ -39,14 +39,14 @@ namespace Chalkable.Web.Controllers
             return Json(new PaginatedList<NotificationsByDateViewData>(NotificationsByDateViewData.Create(dictionary), str, dayCount, resCount));
         }
 
-        [AuthorizationFilter("Super Admin,AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("Super Admin,DistrictAdmin, Teacher, Student")]
         public ActionResult GetUnShownCount()
         {
             var cnt = SchoolLocator.NotificationService.GetUnshownNotificationsCount();
             return Json(cnt);
         }
 
-        [AuthorizationFilter("Super Admin,AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("Super Admin,DistrictAdmin, Teacher, Student")]
         public ActionResult MarkAllAsShown()
         {
             var notifications = SchoolLocator.NotificationService.GetUnshownNotifications();

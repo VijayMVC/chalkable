@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public void Add(IList<GradingPeriod> gradingPeriods)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -50,7 +50,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Edit(IList<GradingPeriod> gradingPeriods)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             
             using (var uow = Update())
@@ -62,7 +62,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(IList<int> ids)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())

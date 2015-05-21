@@ -256,9 +256,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                              (callerRoleId == CoreRoles.TEACHER_ROLE.Id &&
                               (canInstallForStudent || canInstallForTeacher))
                              ||
-                             ((callerRoleId == CoreRoles.ADMIN_EDIT_ROLE.Id ||
-                               callerRoleId == CoreRoles.ADMIN_GRADE_ROLE.Id ||
-                               callerRoleId == CoreRoles.ADMIN_VIEW_ROLE.Id)
+                             ((callerRoleId == CoreRoles.DISTRICT_ADMIN_ROLE.Id)
                               && (hasAdminMyApps || canInstallForStudent || canInstallForTeacher));
             return canInstall;
         }
@@ -453,7 +451,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 ApplicationInstallActionClassesStorage.Add(appInstallAcClasses);
             }
 
-            if (BaseSecurity.IsAdminViewer(Context))
+            if (BaseSecurity.IsDistrictAdmin(Context))
             {
                 if (gradelevelids != null)
                 {
@@ -516,7 +514,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<ApplicationInstall> GetInstallations(Guid applicationId, int personId, bool owners = true)
         {
-            if (!BaseSecurity.IsAdminViewer(Context) && Context.PersonId != personId)
+            if (!BaseSecurity.IsDistrictAdmin(Context) && Context.PersonId != personId)
                 throw new ChalkableSecurityException();
 
             return ApplicationInstallStorage.GetAll(applicationId, personId, true, owners);
@@ -580,7 +578,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(int schoolYearId, Guid applicationId)
         {
-            if (!BaseSecurity.IsAdminOrTeacher(Context))
+            if (!BaseSecurity.IsDistrictOrTeacher(Context))
                 throw new ChalkableSecurityException();
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
             var res = new List<StudentCountToAppInstallByClass>();
@@ -611,7 +609,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (app.Price != 0)
             {
                 var totalCount = applicationInstallCount.GroupBy(x => x.PersonId).Select(x => x.Key).Count();
-                if (BaseSecurity.IsAdminViewer(Context))
+                if (BaseSecurity.IsDistrictAdmin(Context))
                 {
                     totalPrice = app.Price * totalCount;
                     return totalPrice > app.PricePerSchool && isForAll && app.PricePerSchool.HasValue ? app.PricePerSchool.Value : totalPrice;

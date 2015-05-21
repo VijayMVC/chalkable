@@ -8,7 +8,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class GradingPeriodController : ChalkableController
     {
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult List(int? schoolYearId)
         {
             schoolYearId = schoolYearId ?? GetCurrentSchoolYearId();

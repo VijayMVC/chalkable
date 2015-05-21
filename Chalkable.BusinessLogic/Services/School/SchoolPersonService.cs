@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<SchoolPerson> GetAll()
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Read())
             {

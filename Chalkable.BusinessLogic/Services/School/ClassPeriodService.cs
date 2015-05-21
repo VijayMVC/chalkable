@@ -24,14 +24,14 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public void Add(IList<ClassPeriod> classPeriods)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             DoUpdate(u => new ClassPeriodDataAccess(u).Insert(classPeriods));
         }
 
         public void Delete(IList<ClassPeriod> classPeriods)
         {
-            if(!BaseSecurity.IsDistrict(Context))
+            if(!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())

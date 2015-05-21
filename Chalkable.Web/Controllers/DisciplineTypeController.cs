@@ -9,7 +9,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class DisciplineTypeController : ChalkableController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher", true, new[] { AppPermissionType.Discipline })]
+        [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Discipline })]
         public ActionResult List(int? start, int? count)
         {
             var res = SchoolLocator.InfractionService.GetInfractions(true, true).OrderBy(x => x.Name).ToList();

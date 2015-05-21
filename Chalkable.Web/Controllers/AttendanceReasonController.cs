@@ -9,7 +9,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AttendanceReasonController : ChalkableController
     {
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher", true, new[] {AppPermissionType.Attendance})]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher", true, new[] {AppPermissionType.Attendance})]
         public ActionResult List()
         {
             return Json(AttendanceReasonViewData.Create(SchoolLocator.AttendanceReasonService.List()));

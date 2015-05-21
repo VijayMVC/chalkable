@@ -20,7 +20,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class FundController : ChalkableController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView")]
+        [AuthorizationFilter("DistrictAdmin")]
         public ActionResult GetAppBudgetBalance()
         {
             return FakeJson("~/fakeData/appBudget.json");
@@ -33,7 +33,7 @@ namespace Chalkable.Web.Controllers
         }
 
         //TODO: implementation for those methods 
-        [AuthorizationFilter("Teacher, Student, AdminGrade, AdminEdit, AdminView")]
+        [AuthorizationFilter("Teacher, Student, DistrictAdmin")]
         public ActionResult GetPersonBudgetBalance(int personId)
         {
             return Json(new { balance = GetPersonBalance(MasterLocator, personId)});

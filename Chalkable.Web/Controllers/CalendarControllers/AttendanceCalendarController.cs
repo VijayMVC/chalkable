@@ -8,7 +8,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
 {
     public class AttendanceCalendarController : CalendarController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult MonthForStudent(int studentId, DateTime? date)
         {
             if(!Context.PersonId.HasValue)
@@ -21,7 +21,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             return Json(res, 6);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult MonthForClass(int classId, DateTime? date)
         {
             if (!Context.PersonId.HasValue)

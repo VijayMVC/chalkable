@@ -16,7 +16,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
     [RequireHttps, TraceControllerFilter]
     public class PersonController : UserController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.User })]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User })]
         public ActionResult Me()
         {
             if (!Context.PersonId.HasValue)
@@ -66,18 +66,18 @@ namespace Chalkable.Web.Controllers.PersonControllers
 
         private bool CanGetInfo(int personId)
         {
-            return BaseSecurity.IsAdminOrTeacher(SchoolLocator.Context)
+            return BaseSecurity.IsDistrictOrTeacher(SchoolLocator.Context)
                    || SchoolLocator.Context.PersonId == personId;
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult GetPersons(int? start, int? count, string filter)
         {
             var res = SchoolLocator.PersonService.SearchPersons(filter, true, start ?? 0, count ?? 30);
             return Json(res.Transform(ShortPersonViewData.Create));
         }
         
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult UpdateInfo(int personId, string email)
         {
             if (personId != Context.PersonId)

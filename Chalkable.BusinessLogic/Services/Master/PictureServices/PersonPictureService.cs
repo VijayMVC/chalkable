@@ -26,13 +26,13 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
 
         public void UploadPicture(Guid districtId, int personId, byte[] content)
         {
-            if (!(BaseSecurity.IsAdminEditor(Context)))
+            if (!(BaseSecurity.IsDistrictAdmin(Context)))
                 throw new ChalkableSecurityException();
             base.UploadPicture(GenerateKeyForBlob(districtId, personId), content);
         }
         public void DeletePicture(Guid districtId, int personId)
         {
-            if (!(BaseSecurity.IsAdminEditor(Context)))
+            if (!(BaseSecurity.IsDistrictAdmin(Context)))
                 throw new ChalkableSecurityException();
             base.DeletePicture(GenerateKeyForBlob(districtId, personId));
         }

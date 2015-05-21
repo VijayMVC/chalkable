@@ -91,12 +91,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void DeleteMarkingPeriods(IList<MarkingPeriod> markingPeriods)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
             {
-                if (!BaseSecurity.IsDistrict(Context))
+                if (!BaseSecurity.IsDistrictAdmin(Context))
                     throw new ChalkableSecurityException();
                 new MarkingPeriodDataAccess(uow).DeleteMarkingPeriods(markingPeriods);
                 uow.Commit();
@@ -105,7 +105,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<MarkingPeriod> Add(IList<MarkingPeriod> markingPeriods)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -118,7 +118,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<MarkingPeriod> Edit(IList<MarkingPeriod> markingPeriods)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {

@@ -139,9 +139,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     ((DemoSchoolYearService) ServiceLocator.SchoolYearService).GetStudentGradeLevel(query.CallerId.Value);
                 persons = persons.Where(x => x.Id == query.CallerId ||
                                              (x.RoleRef == CoreRoles.TEACHER_ROLE.Id ||
-                                              x.RoleRef == CoreRoles.ADMIN_GRADE_ROLE.Id ||
-                                              x.RoleRef == CoreRoles.ADMIN_EDIT_ROLE.Id ||
-                                              x.RoleRef == CoreRoles.ADMIN_VIEW_ROLE.Id)
+                                              x.RoleRef == CoreRoles.DISTRICT_ADMIN_ROLE.Id)
                                              ||
                                              (x.RoleRef == CoreRoles.STUDENT_ROLE.Id &&
                                               ((DemoSchoolYearService)ServiceLocator.SchoolYearService).GradeLevelExists(studentGradeLevelId, x.Id)));
@@ -214,18 +212,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 {
                     DemoUserService.BuildDemoUserName(CoreRoles.STUDENT_ROLE.LoweredName, prefix), 
                     new KeyValuePair<int, int>(DemoSchoolConstants.Student1, CoreRoles.STUDENT_ROLE.Id)
-                },
-                {
-                    DemoUserService.BuildDemoUserName(CoreRoles.ADMIN_GRADE_ROLE.LoweredName, prefix), 
-                    new KeyValuePair<int, int>(DemoSchoolConstants.AdminGradeId, CoreRoles.ADMIN_GRADE_ROLE.Id)
-                },
-                {
-                    DemoUserService.BuildDemoUserName(CoreRoles.ADMIN_EDIT_ROLE.LoweredName, prefix), 
-                    new KeyValuePair<int, int>(DemoSchoolConstants.AdminEditId, CoreRoles.ADMIN_EDIT_ROLE.Id)
-                },
-                {
-                    DemoUserService.BuildDemoUserName(CoreRoles.ADMIN_VIEW_ROLE.LoweredName, prefix), 
-                    new KeyValuePair<int, int>(DemoSchoolConstants.AdminViewId, CoreRoles.ADMIN_VIEW_ROLE.Id)
                 }
             };
             var res = localIds[user.Login];
@@ -304,7 +290,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void ActivatePerson(int id)
         {
-            if (BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context))
+            if (BaseSecurity.IsDistrictAdminOrCurrentPerson(id, Context))
                 throw new ChalkableSecurityException();
             var person = GetPerson(id);
             person.Active = true;
@@ -318,7 +304,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         
         public void ProcessPersonFirstLogin(int id)
         {
-            if (BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context))
+            if (BaseSecurity.IsDistrictAdminOrCurrentPerson(id, Context))
                 throw new ChalkableSecurityException();
             var person = GetPerson(id);
             if (person.FirstLoginDate.HasValue) return;

@@ -106,8 +106,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 return attachments.ToList();
             }
-            if (CoreRoles.ADMIN_EDIT_ROLE.Id == query.RoleId || CoreRoles.ADMIN_GRADE_ROLE.Id == query.RoleId ||
-                CoreRoles.ADMIN_VIEW_ROLE.Id == query.RoleId)
+            if (CoreRoles.DISTRICT_ADMIN_ROLE.Id == query.RoleId)
             {
 
                 attachments = attachments.Where(x => x.PersonRef == query.CallerId);

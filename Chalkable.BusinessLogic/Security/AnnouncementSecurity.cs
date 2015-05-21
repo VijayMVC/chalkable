@@ -8,7 +8,7 @@ namespace Chalkable.BusinessLogic.Security
     {
         public static bool CanCreateAnnouncement(UserContext context)
         {
-            return BaseSecurity.IsAdminViewer(context) || context.Role  == CoreRoles.TEACHER_ROLE;
+            return BaseSecurity.IsDistrictAdmin(context) || context.Role  == CoreRoles.TEACHER_ROLE;
         }
 
         public static bool CanModifyAnnouncement(Announcement announcement, UserContext context)

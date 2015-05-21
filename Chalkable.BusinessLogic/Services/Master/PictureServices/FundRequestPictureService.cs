@@ -12,7 +12,7 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
         }
         public override void UploadPicture(Guid id, byte[] content)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             if (content != null)
                 base.UploadPicture(id, content);

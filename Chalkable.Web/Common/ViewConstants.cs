@@ -24,10 +24,8 @@
         
         public const string STUDENT_ROLE = "StudentRole";
         public const string TEACHER_ROLE = "TeacherRole";
-        public const string ADMIN_GRADE_ROLE = "AdminGradeRole";
-        public const string ADMIN_EDIT_ROLE = "AdminEditRole";
-        public const string ADMIN_VIEW_ROLE = "AdminViewRole";
-
+        public const string DISTRICT_ADMIN_ROLE = "DistrictAdminRole";
+        
         public const string AZURE_PICTURE_URL = "AzurePictureUrl";
         public const string DEMO_AZURE_PICTURE_URL = "DemoAzurePictureUrl";
 

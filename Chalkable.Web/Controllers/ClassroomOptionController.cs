@@ -8,7 +8,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class ClassroomOptionController : ChalkableController
     {
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher")]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher")]
         public ActionResult Update(ClassroomOptionViewData inputModel)
         {
             var classroomOption = new ClassroomOption
@@ -29,7 +29,7 @@ namespace Chalkable.Web.Controllers
             return Json(ClassroomOptionViewData.Create(classroomOption));
         }
 
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, AdminView, Teacher")]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher")]
         public ActionResult Get(int classId)
         {
             var classroomOption = SchoolLocator.ClassroomOptionService.GetClassOption(classId, true);

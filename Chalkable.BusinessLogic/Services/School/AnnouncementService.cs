@@ -69,7 +69,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new AnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolLocalId.Value);
             if(Context.Role == CoreRoles.STUDENT_ROLE)
                 return new AnnouncementForStudentDataAccess(unitOfWork, Context.SchoolLocalId.Value);
-            if(Context.Role == CoreRoles.DISTRICT_ROLE)
+            if(Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE)
                 return new AnnouncementForAdminDataAccess(unitOfWork, Context.SchoolLocalId.Value);
             throw new ChalkableException("Unsupported role for announcements");
         }
@@ -324,7 +324,7 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.SchoolLocalId.HasValue);
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
 
             using (var uow = Update())
@@ -494,7 +494,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         new AnnouncementApplicationDataAccess(uow).DeleteByAnnouncementId(ann.Id);
                     }
                 }
-                if (BaseSecurity.IsAdminViewer(Context))
+                if (BaseSecurity.IsDistrictAdmin(Context))
                     throw new NotImplementedException();
 
                 if(announcement.ExpiresDate.HasValue)

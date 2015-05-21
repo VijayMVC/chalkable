@@ -289,8 +289,8 @@
             var alternateScores = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.ALTERNATE_SCORES));
             var gradingComments = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADING_COMMMENTS));
             var studyCenterEnabled = '@ViewData.GetJsConstantValueOrNull(ViewConstants.STUDY_CENTER_ENABLED)';
-            var DEMO_SCHOOL = @isDemoSchool.ToString().ToLowerInvariant();
-            var DEMO_SCHOOL_PICTURE_DISTRICT = @demoSchoolPictureDistrictRef;
+            var DEMO_SCHOOL = '@isDemoSchool.ToString().ToLowerInvariant()';
+            var DEMO_SCHOOL_PICTURE_DISTRICT = '@demoSchoolPictureDistrictRef';
             var districtId = @ViewData.GetJsConstantValueOrNull(ViewConstants.DISTRICT_ID) || '';
             var redirectUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.REDIRECT_URL_KEY) || '';
             var schoolYear = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.SCHOOL_YEAR));
@@ -322,7 +322,7 @@
     {
         <script type="text/javascript">
             var role = currentChlkPerson.role.name;
-            if (role.toLowerCase() == "admingrade" || role.toLowerCase() == "adminview" || role.toLowerCase() == "adminedit")
+            if (role.toLowerCase() == "districtadmin")
                 role = "Admin";
             var roleAppScript = '@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot' + '/app/' + role + 'App.compiled.js';
             (function(appUrl) {

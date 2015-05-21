@@ -86,8 +86,7 @@ namespace Chalkable.Data.School.DataAccess
             {
                 return res;
             }
-            if (CoreRoles.ADMIN_EDIT_ROLE.Id == roleId || CoreRoles.ADMIN_GRADE_ROLE.Id == roleId ||
-                CoreRoles.ADMIN_VIEW_ROLE.Id == roleId)
+            if (CoreRoles.DISTRICT_ADMIN_ROLE.Id == roleId)
             {
                 res.Sql.Append("and AnnouncementAttachment.PersonRef =@callerId");
                 return res;

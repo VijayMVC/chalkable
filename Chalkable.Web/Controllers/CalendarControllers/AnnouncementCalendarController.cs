@@ -19,7 +19,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
     [RequireHttps, TraceControllerFilter]
     public class AnnouncementCalendarController : CalendarController
     {
-         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
+         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
         public ActionResult List(DateTime? date, int? classId, int? personId)
          {
              if (!SchoolLocator.Context.PersonId.HasValue)
@@ -44,7 +44,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
                  AnnouncementMonthCalendarViewData.Create(dateTime, isCurrentMonth, announcements, days)));
          }
 
-         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
          public ActionResult ListByDateRange(DateTime? startDate, DateTime? endDate, int? classId)
          {
              var query = new AnnouncementsQuery {FromDate = startDate, ToDate = endDate, ClassId = classId};
@@ -52,7 +52,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              return Json(AnnouncementShortViewData.Create(anns));
          }
 
-         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
+         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
          public ActionResult Week(DateTime? date, int? classId, int? personId)
          {
 
@@ -60,7 +60,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              return Json(res, 8);
          }
 
-         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Schedule })]
+         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Schedule })]
          public ActionResult Day(DateTime? date, int? personId)
          {
              var res = BuildDayAnnCalendar(SchoolLocator, date, null, personId, GetCurrentSchoolYearId());

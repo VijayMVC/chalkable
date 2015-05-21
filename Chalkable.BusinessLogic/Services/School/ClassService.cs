@@ -45,18 +45,18 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<Class> classes)
         {
-            BaseSecurity.EnsureDistrict(Context);
+            BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new ClassDataAccess(u).Insert(classes));
         }
         public void Edit(IList<Class> classes)
         {
-            BaseSecurity.EnsureDistrict(Context);
+            BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new ClassDataAccess(u).Update(classes));
         }
         
         public void AssignClassToMarkingPeriod(IList<MarkingPeriodClass> markingPeriodClasses)
         {
-            BaseSecurity.EnsureDistrict(Context);
+            BaseSecurity.EnsureDistrictAdmin(Context);
             using (var uow = Update())
             {
                 var mpClassDa = new MarkingPeriodClassDataAccess(uow);
@@ -67,19 +67,19 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public void AddStudents(IList<ClassPerson> classPersons)
         {
-            BaseSecurity.EnsureDistrict(Context);
+            BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new ClassPersonDataAccess(u).Insert(classPersons));
         }
 
         public void EditStudents(IList<ClassPerson> classPersons)
         {
-            BaseSecurity.EnsureDistrict(Context);
+            BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new ClassPersonDataAccess(u).Update(classPersons));
         }
 
         public void DeleteStudent(IList<ClassPerson> classPersons)
         {
-            BaseSecurity.EnsureDistrict(Context);
+            BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new ClassPersonDataAccess(u).Delete(classPersons));
         }
 

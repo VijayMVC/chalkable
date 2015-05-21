@@ -34,13 +34,11 @@ namespace Chalkable.Web.Logic
             bool isPersonForInstall = schoolLocator.AppMarketService.IsPersonForInstall(application.Id);
             
             res.Add(InstalledForPersonsGroupViewData.Create(InstalledForPersonsGroupViewData.GroupTypeEnum.All, null, "All", !isPersonForInstall));
-            if (BaseSecurity.IsAdminViewer(maseterLocator.Context))
+            if (BaseSecurity.IsDistrictAdmin(maseterLocator.Context))
             {
                 var roles = new List<CoreRole>
                     {
-                        CoreRoles.ADMIN_GRADE_ROLE,
-                        CoreRoles.ADMIN_EDIT_ROLE,
-                        CoreRoles.ADMIN_VIEW_ROLE,
+                        CoreRoles.DISTRICT_ADMIN_ROLE,
                         CoreRoles.TEACHER_ROLE,
                         CoreRoles.STUDENT_ROLE
                     };

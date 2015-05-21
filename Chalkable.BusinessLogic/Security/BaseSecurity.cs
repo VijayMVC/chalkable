@@ -22,86 +22,48 @@ namespace Chalkable.BusinessLogic.Security
                 throw new ChalkableSecurityException();
         }
 
-        public static bool IsDistrict(UserContext context)
+        public static bool IsDistrictAdmin(UserContext context)
         {
-            return IsSysAdmin(context) || context.Role == CoreRoles.DISTRICT_ROLE;
+            return IsSysAdmin(context) || context.Role == CoreRoles.DISTRICT_ADMIN_ROLE;
         }
 
-        public static void EnsureDistrict(UserContext context)
+        public static void EnsureDistrictAdmin(UserContext context)
         {
-            if (!IsDistrict(context))
+            if (!IsDistrictAdmin(context))
                 throw new ChalkableSecurityException();
         }
         
-        public static bool IsAdminGrader(UserContext context)
+        public static bool IsDistrictOrTeacher(UserContext context)
         {
-            return IsDistrict(context) || context.Role ==  CoreRoles.ADMIN_GRADE_ROLE;
-        }
-
-        public static void EnsureAdminGrader(UserContext context)
-        {
-            if (!IsAdminGrader(context))
-                throw new ChalkableSecurityException();
-        }
-
-        public static bool IsAdminEditor(UserContext context)
-        {
-            return IsAdminGrader(context) || context.Role == CoreRoles.ADMIN_EDIT_ROLE;
-        }
-
-        public static void EnsureAdminEditor(UserContext context)
-        {
-            if (!IsAdminEditor(context))
-                throw new ChalkableSecurityException();
-        }
-
-        public static bool IsAdminViewer(UserContext context)
-        {
-            return IsAdminEditor(context) || context.Role == CoreRoles.ADMIN_VIEW_ROLE;
-        }
-
-        public static void EnsureAdminViewer(UserContext context)
-        {
-            if (!IsAdminViewer(context))
-                throw new ChalkableSecurityException();
-        }
-
-        public static bool IsAdminOrTeacher(UserContext context)
-        {
-            return IsAdminViewer(context) || context.Role == CoreRoles.TEACHER_ROLE;
+            return IsDistrictAdmin(context) || context.Role == CoreRoles.TEACHER_ROLE;
         }
         
         public static void EnsureAdminOrTeacher(UserContext context)
         {
-            if (!IsAdminOrTeacher(context))
+            if (!IsDistrictOrTeacher(context))
                 throw new ChalkableSecurityException();
         }
 
-        public static bool IsAdminEditorOrClassTeacher(Class c, UserContext context)
+        public static bool IsDistrictAdminOrClassTeacher(Class c, UserContext context)
         {
-            return IsAdminEditor(context) || (context.Role == CoreRoles.TEACHER_ROLE && context.PersonId == c.PrimaryTeacherRef);
-        }
-
-        public static bool IsAdminViewerOrClassTeacher(Class c, UserContext context)
-        {
-            return IsAdminViewer(context) || (context.Role == CoreRoles.TEACHER_ROLE && context.PersonId == c.PrimaryTeacherRef);
+            return IsDistrictAdmin(context) || (context.Role == CoreRoles.TEACHER_ROLE && context.PersonId == c.PrimaryTeacherRef);
         }
 
         public static bool HasChalkableRole(UserContext context)
         {
-            return IsAdminOrTeacher(context) || context.Role == CoreRoles.STUDENT_ROLE
+            return IsDistrictOrTeacher(context) || context.Role == CoreRoles.STUDENT_ROLE
                    || context.Role == CoreRoles.PARENT_ROLE || context.Role == CoreRoles.DEVELOPER_ROLE
                    || context.Role == CoreRoles.CHECKIN_ROLE;
         }
 
-        public static bool IsAdminEditorOrCurrentPerson(int personId, UserContext context)
+        public static bool IsDistrictAdminOrCurrentPerson(int personId, UserContext context)
         {
-            return IsAdminEditor(context) || context.PersonId == personId;
+            return IsDistrictAdmin(context) || context.PersonId == personId;
         }
 
-        public static bool IsAdminTeacherOrExactStudent(User user, UserContext context)
+        public static bool IsDistrictAdminTeacherOrExactStudent(User user, UserContext context)
         {
-            return IsAdminOrTeacher(context) || user.Id == context.UserId;
+            return IsDistrictOrTeacher(context) || user.Id == context.UserId;
         }
 
         public static bool IsSysAdminOrCurrentUser(Guid userId, UserContext context)

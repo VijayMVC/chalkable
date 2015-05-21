@@ -186,7 +186,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public bool HasMyApps(Application application)
         {
-            if (BaseSecurity.IsAdminViewer(ServiceLocator.Context))
+            if (BaseSecurity.IsDistrictAdmin(ServiceLocator.Context))
                 return application.HasAdminMyApps;
             if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id)
                 return application.HasTeacherMyApps;

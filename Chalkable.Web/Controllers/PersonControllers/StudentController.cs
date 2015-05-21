@@ -14,8 +14,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
     [RequireHttps, TraceControllerFilter]
     public class StudentController : PersonController
     {
-        //[AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", Preference.API_DESCR_STUDENT_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Attendance, AppPermissionType.Discipline, AppPermissionType.Grade })]
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        //[AuthorizationFilter("DistrictAdmin, Teacher, Student", Preference.API_DESCR_STUDENT_SUMMARY, true, CallType.Get, new[] { AppPermissionType.User, AppPermissionType.Attendance, AppPermissionType.Discipline, AppPermissionType.Grade })]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Summary(int schoolPersonId)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -54,7 +54,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
 
         }
         
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.User })]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User })]
         public ActionResult Info(int personId)
         {
             var syId = GetCurrentSchoolYearId();
@@ -73,14 +73,14 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res, 6);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Schedule(int personId)
         {
             var student = SchoolLocator.StudentService.GetById(personId, GetCurrentSchoolYearId());
             return Json(PrepareScheduleData(StudentViewData.Create(student)));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.User })]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User })]
         public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, int? classId, bool? byLastName)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
@@ -94,7 +94,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res.Transform(StudentViewData.Create));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Explorer(int personId)
         {
             var syId = GetCurrentSchoolYearId();
@@ -102,7 +102,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(StudentExplorerViewData.Create(studentExplorerInfo));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult AttendanceSummary(int studentId, int? gradingPeriodId)
         {
             var syid = GetCurrentSchoolYearId();
@@ -113,7 +113,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var studentSummary = SchoolLocator.AttendanceService.GetStudentAttendanceSummary(studentId, gradingPeriodId);
             return Json(StudentAttendanceSummaryViewData.Create(studentSummary, gp, gradingPeriods));
         }
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Apps(int studentId, int? start, int? count)
         {
             var syId = GetCurrentSchoolYearId();
@@ -123,7 +123,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(StudentAppsViewData.Create(student, currentBalance, apps));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult DisciplineSummary(int studentId, int? gradingPeriodId)
         {
             var syId = GetCurrentSchoolYearId();

@@ -13,14 +13,14 @@ namespace Chalkable.Web.Controllers
     public class StandardController : ChalkableController
     {
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult SearchStandards(string filter, int? classId, bool? activeOnly)
         {
             var stadnards = SchoolLocator.StandardService.GetStandards(filter, classId, activeOnly ?? false);
             return Json(stadnards.Select(StandardViewData.Create).ToList());
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult GetStandards(int? classId, int? subjectId, int? gradeLevelId, int? parentStandardId, bool? allStandards, bool? activeOnly)
         {
             var standards = SchoolLocator.StandardService.GetStandards(classId, gradeLevelId
@@ -28,14 +28,14 @@ namespace Chalkable.Web.Controllers
             return Json(standards.Select(StandardViewData.Create).ToList());
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult GetStandardParentsSubTree(int standardId)
         {
             var res = SchoolLocator.StandardService.GetStandardParentsSubTree(standardId);
             return Json(StandardsTableViewData.Create(res), 6);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult GetStandardsByIds(IntList ids)
         {
             var standards = SchoolLocator.StandardService
@@ -45,7 +45,7 @@ namespace Chalkable.Web.Controllers
             return Json(standards.Select(StandardViewData.Create));
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult GetStandardSubject(int? classId)
         {
             var subjects = SchoolLocator.StandardService.GetStandardSubjects(classId);

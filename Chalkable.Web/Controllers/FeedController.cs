@@ -16,13 +16,13 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class FeedController : ChalkableController
     {
-        [AuthorizationFilter("DistrictAdmin, AdminGrade, AdminEdit, AdminView, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
         public ActionResult List(int? start, int? count, bool? complete, int? classId)
         {
-            return Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId, BaseSecurity.IsAdminViewer(SchoolLocator.Context)));
+            return Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId, BaseSecurity.IsDistrictAdmin(SchoolLocator.Context)));
         }
 
-        [AuthorizationFilter("DistrictAdmin, AdminGrade, AdminEdit, AdminView")]
+        [AuthorizationFilter("DistrictAdmin")]
         public ActionResult Admin(IntList gradeLevelIds)
         {
             return FakeJson("~/fakeData/adminFeed.json");

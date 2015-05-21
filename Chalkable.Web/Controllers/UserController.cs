@@ -26,7 +26,7 @@ namespace Chalkable.Web.Controllers
             return Redirect<HomeController>(x => x.Index());
         }
         
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult RedirectToINow()
         {
             if (!Context.DistrictId.HasValue)
@@ -64,7 +64,7 @@ namespace Chalkable.Web.Controllers
             return Confirm(key, AfterConfirmAction);
         }
 
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult ActivateUser(string newUserEmail)
         {
             if (!Context.PersonId.HasValue)

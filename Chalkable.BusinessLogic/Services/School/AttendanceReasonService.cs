@@ -30,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<AttendanceReason> reasons)
         {
-            if(!BaseSecurity.IsDistrict(Context))
+            if(!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -91,7 +91,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Edit(IList<AttendanceReason> reasons)
         {
-            if(!BaseSecurity.IsDistrict(Context))
+            if(!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -103,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void EditAttendanceLevelReasons(List<AttendanceLevelReason> attendanceLevelReasons)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -115,7 +115,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void DeleteAttendanceLevelReasons(IList<int> ids)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {

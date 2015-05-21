@@ -72,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<StudentSchoolYear> GetStudentAssignments()
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Read())
             {
@@ -84,7 +84,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<SchoolYear> Add(IList<SchoolYear> schoolYears)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -96,7 +96,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(IList<int> schoolYearIds)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
@@ -108,7 +108,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<SchoolYear> Edit(IList<SchoolYear> schoolYears)
         {
-            if (!BaseSecurity.IsDistrict(Context))
+            if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {

@@ -7,7 +7,7 @@ namespace Chalkable.Web.Controllers
 {
     public class PeriodController : ChalkableController
     {
-        [AuthorizationFilter("SysAdmin, AdminGrade, AdminEdit, Teacher", true, new[] { AppPermissionType.Schedule })]
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher", true, new[] { AppPermissionType.Schedule })]
         public ActionResult List(int schoolYearId)
         {
             var res = SchoolLocator.PeriodService.GetPeriods(schoolYearId);

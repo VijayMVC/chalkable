@@ -9,7 +9,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class TeacherCommentController : ChalkableController
     {
-        [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult CommentsList(int teacherId)
         {
             var res = SchoolLocator.TeacherCommentService.GetComments(teacherId);

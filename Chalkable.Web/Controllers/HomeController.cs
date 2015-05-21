@@ -97,7 +97,7 @@ namespace Chalkable.Web.Controllers
         {
             var distictAdmin = MasterLocator.UserService.GetById(Context.UserId);
             PrepareCommonViewData();
-            ViewData[ViewConstants.ROLE_NAME] = CoreRoles.DISTRICT_ROLE.LoweredName;
+            ViewData[ViewConstants.ROLE_NAME] = CoreRoles.DISTRICT_ADMIN_ROLE.LoweredName;
             PrepareJsonData(UserViewData.Create(distictAdmin), ViewConstants.CURRENT_PERSON);
             var gradeLevel = SchoolLocator.GradeLevelService.GetGradeLevels();
             PrepareJsonData(GradeLevelViewData.Create(gradeLevel), ViewConstants.GRADE_LEVELS);
@@ -127,9 +127,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
             ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
             ViewData[ViewConstants.TEACHER_ROLE] = CoreRoles.TEACHER_ROLE.Name;
-            ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
-            ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
-            ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
+            ViewData[ViewConstants.DISTRICT_ADMIN_ROLE] = CoreRoles.DISTRICT_ADMIN_ROLE.Name;
             ViewData[ViewConstants.DISTRICT_ID] = Context.UserId.ToString();
             ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
             ViewData[ViewConstants.IS_DEMO_DISTRICT] = true;
@@ -180,9 +178,7 @@ namespace Chalkable.Web.Controllers
                 {
                     ViewData[ViewConstants.STUDENT_ROLE] = CoreRoles.STUDENT_ROLE.Name;
                     ViewData[ViewConstants.TEACHER_ROLE] = CoreRoles.TEACHER_ROLE.Name;
-                    ViewData[ViewConstants.ADMIN_GRADE_ROLE] = CoreRoles.ADMIN_GRADE_ROLE.Name;
-                    ViewData[ViewConstants.ADMIN_EDIT_ROLE] = CoreRoles.ADMIN_EDIT_ROLE.Name;
-                    ViewData[ViewConstants.ADMIN_VIEW_ROLE] = CoreRoles.ADMIN_VIEW_ROLE.Name;
+                    ViewData[ViewConstants.DISTRICT_ADMIN_ROLE] = CoreRoles.DISTRICT_ADMIN_ROLE.Name;
 
                     ViewData[ViewConstants.DEMO_PICTURE_DISTRICT_REF] = DEMO_PICTURE_DISTRICT_REF;
                     ViewData[ViewConstants.IS_DEMO_DISTRICT] = true;

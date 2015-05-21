@@ -110,10 +110,10 @@ namespace Chalkable.Data.School.DataAccess
                 if (staff != null)
                 {
                     roleId = CoreRoles.TEACHER_ROLE.Id;
-#if DEBUG
-                    if (staff.Id == 8502) // if is regulare teacher (teacher@chalkable.com)
-                        roleId = CoreRoles.DISTRICT_ROLE.Id;
-#endif
+//#if DEBUG
+//                    if (staff.Id == 8502) // if is regulare teacher (teacher@chalkable.com)
+//                        roleId = CoreRoles.DISTRICT_ADMIN_ROLE.Id;
+//#endif
                     return staff.Id;
                 }
                 var person = new PersonDataAccess(uow)

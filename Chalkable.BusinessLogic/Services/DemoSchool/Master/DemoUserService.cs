@@ -84,10 +84,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             var userRoles = new Dictionary<string, string>
             {
                 {PreferenceService.Get("demoschool" + CoreRoles.TEACHER_ROLE.LoweredName).Value, CoreRoles.TEACHER_ROLE.LoweredName},
-                {PreferenceService.Get("demoschool" + CoreRoles.STUDENT_ROLE.LoweredName).Value,CoreRoles.STUDENT_ROLE.LoweredName},
-                {PreferenceService.Get("demoschool" + CoreRoles.ADMIN_GRADE_ROLE.LoweredName).Value,CoreRoles.ADMIN_GRADE_ROLE.LoweredName},
-                {PreferenceService.Get("demoschool" + CoreRoles.ADMIN_EDIT_ROLE.LoweredName).Value, CoreRoles.ADMIN_EDIT_ROLE.LoweredName},
-                {PreferenceService.Get("demoschool" + CoreRoles.ADMIN_VIEW_ROLE.LoweredName).Value, CoreRoles.ADMIN_VIEW_ROLE.LoweredName},
+                {PreferenceService.Get("demoschool" + CoreRoles.STUDENT_ROLE.LoweredName).Value,CoreRoles.STUDENT_ROLE.LoweredName}
             };
 
             var userLogin = login.Substring(login.IndexOf(DEMO_USER_PREFIX, StringComparison.InvariantCultureIgnoreCase));

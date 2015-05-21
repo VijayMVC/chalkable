@@ -43,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Add(IList<Person> persons)
         {
-            if (!BaseSecurity.IsAdminEditor(Context))
+            if (!BaseSecurity.IsSysAdmin(Context))
                 throw new ChalkableSecurityException();
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
@@ -103,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public void ActivatePerson(int id)
         {
-            if(!BaseSecurity.IsAdminEditorOrCurrentPerson(id, Context))
+            if(!BaseSecurity.IsDistrictAdminOrCurrentPerson(id, Context))
                 throw new ChalkableSecurityException();
             using (var uow = Update())
             {
