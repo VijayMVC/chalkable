@@ -106,7 +106,12 @@ namespace Chalkable.Data.School.Model
 
         public string DefaultTitle
         {
-            get { return string.Format("{0} {1}", ClassAnnouncementTypeName, Order); }
+            get
+            {
+                return !string.IsNullOrEmpty(ClassAnnouncementTypeName)
+                    ? string.Format("{0} {1}", ClassAnnouncementTypeName, Order)
+                    : null;
+            }
         }
 
         public bool Gradable

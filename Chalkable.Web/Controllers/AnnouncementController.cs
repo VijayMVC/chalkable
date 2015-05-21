@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
@@ -141,7 +142,7 @@ namespace Chalkable.Web.Controllers
             return Json(res, 6);
         }
 
-        private AnnouncementDetails Save(AnnouncementInfo announcementInfo, int? classId)
+        private AnnouncementDetails Save(AnnouncementInfo announcementInfo, int? classId, IList<RecipientInfo> recipientInfos = null)
         {
             // get announcement to ensure it exists
             SchoolLocator.AnnouncementService.GetAnnouncementById(announcementInfo.AnnouncementId);
@@ -176,11 +177,12 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult SaveAnnouncement(AnnouncementInfo announcementInfo, int? classId)
+        public ActionResult SaveAnnouncement(AnnouncementInfo announcementInfo, int? classId, ListOfStringList annRecipients)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            var ann = Save(announcementInfo, classId);
+            var recipients = annRecipients != null ? RecipientInfo.Create(annRecipients) : null;
+            var ann = Save(announcementInfo, classId, recipients);
             return Json(PrepareAnnouncmentViewDataForEdit(ann));
         }
         
@@ -190,17 +192,37 @@ namespace Chalkable.Web.Controllers
             var res = Save(announcement, classId);
             SchoolLocator.AnnouncementService.SubmitAnnouncement(res.Id, classId);
             SchoolLocator.AnnouncementService.DeleteAnnouncements(classId, res.ClassAnnouncementTypeRef, AnnouncementState.Draft);
-            MasterLocator.UserTrackingService.CreatedNewItem(Context.Login, res.ClassAnnouncementTypeName, res.ClassName, res.ApplicationCount, res.AttachmentsCount);
-            if (res.ApplicationCount > 0)
+            TrackNewItemCreate(res);
+            return Json(true, 5);
+        }
+
+        private void TrackNewItemCreate(AnnouncementDetails ann)
+        {
+            MasterLocator.UserTrackingService.CreatedNewItem(Context.Login, ann.ClassAnnouncementTypeName, ann.ClassName, ann.ApplicationCount, ann.AttachmentsCount);   
+            if (ann.ApplicationCount > 0)
             {
-                var apps = res.AnnouncementApplications.Select(x => x.Id.ToString()).ToList();
+                var apps = ann.AnnouncementApplications.Select(x => x.Id.ToString()).ToList();
                 MasterLocator.UserTrackingService.AttachedApp(Context.Login, apps);
             }
-            if (res.AttachmentsCount > 0)
+            if (ann.AttachmentsCount > 0)
             {
-                var docs = res.AnnouncementAttachments.Select(x => x.Name).ToList();
+                var docs = ann.AnnouncementAttachments.Select(x => x.Name).ToList();
                 MasterLocator.UserTrackingService.AttachedDocument(Context.Login, docs);
             }
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult SubmitForAdmin(AnnouncementInfo announcement, ListOfStringList annRecipients, DateTime expiresDate)
+        {
+            if (!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            if (annRecipients.Count == 0)
+                throw new ChalkableException("Announcement Recipient param is empty. You can sumbit announcement without selected recipients");
+            var recipientInfos = RecipientInfo.Create(annRecipients);
+            var res = Save(announcement, null, recipientInfos);
+            SchoolLocator.AnnouncementService.SubmitForAdmin(res.Id);
+            SchoolLocator.AnnouncementService.DeleteAnnouncements(Context.PersonId.Value);
+            TrackNewItemCreate(res);
             return Json(true, 5);
         }
 

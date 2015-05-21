@@ -9,15 +9,17 @@ namespace Chalkable.BusinessLogic.Model
         public int? RoleId { get; set; }
         public int? GradeLevelId { get; set; }
         public int? PersonId { get; set; }
+        public int? SchoolId { get; set; }
 
-        public static RecipientInfo Create(bool toAll, int? roleId, int? gradeLevelId, int? personId)
+        public static RecipientInfo Create(bool toAll, int? roleId, int? gradeLevelId, int? personId, int? schoolId)
         {
             var res = new RecipientInfo
             {
                 ToAll = toAll,
                 RoleId = roleId,
                 GradeLevelId = gradeLevelId,
-                PersonId = personId
+                PersonId = personId,
+                SchoolId = schoolId
             };
             return res;
         }
@@ -28,7 +30,8 @@ namespace Chalkable.BusinessLogic.Model
                 ToAll = int.Parse(recipient[0]) == 1,
                 RoleId = int.Parse(recipient[1]) == -1 ? (int?)null : int.Parse(recipient[1]),
                 GradeLevelId = (string.IsNullOrEmpty(recipient[2]) || recipient[2] == "-1") ? (int?)null : int.Parse(recipient[2]),
-                PersonId = (string.IsNullOrEmpty(recipient[3]) || recipient[3] == "-1") ? (int?)null : int.Parse(recipient[3])
+                PersonId = (string.IsNullOrEmpty(recipient[3]) || recipient[3] == "-1") ? (int?)null : int.Parse(recipient[3]),
+                SchoolId = (string.IsNullOrEmpty(recipient[4]) || recipient[4] == "-1") ? (int?)null : int.Parse(recipient[4]),
             };
             return res;
         }

@@ -590,14 +590,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     res.SisActivityId = activity.Id;
                 }
             }
-            res.GradingStyle = GradingStyleEnum.Numeric100;
-            //TODO : add gradingStyle to ClassAnnouncementtype
-            //if (res.ClassAnnouncementTypeRef.HasValue)
-            //{
-            //    var classAnnType = new ClassAnnouncementTypeDataAccess(unitOfWork).GetById(res.ClassAnnouncementTypeRef.Value);
-            //    classAnnType. 
-            //}
-           
+            res.GradingStyle = GradingStyleEnum.Numeric100;          
             dataAccess.Update(res);
             return res;
         }
@@ -619,6 +612,7 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public void SubmitForAdmin(int announcementId)
         {
+            BaseSecurity.EnsureDistrictAdmin(Context);
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
