@@ -77,16 +77,22 @@ NAMESPACE('chlk.models.people', function () {
         /* report Permissions*/
 
         ATTENDANCE_PROFILE_REPORT: 'Attendance Profile Report',
+        ATTENDANCE_PROFILE_REPORT_CLASSROOM: 'Attendance Profile Report Classroom',
         BIRTHDAY_LISTING_REPORT: 'Birthday Listing Report',
+        BIRTHDAY_LISTING_REPORT_CLASSROOM: 'Birthday Listing Report Classroom',
         LESSON_PLAN_REPORT: 'Lesson Plan Report',
+        LESSON_PLAN_REPORT_CLASSROOM: 'Lesson Plan Report Classroom',
         PROGRESS_REPORT: 'Progress Report',
         WORKSHEET_REPORT: 'Worksheet Report',
         CLASSROOM_ATTENDANCE_REGISTER_REPORT: 'Classroom Attendance Register Report',
         SEATING_CHART_REPORT: 'Seating Chart Report',
         COMPREHENSIVE_PROGRESS_REPORT: 'Comprehensive Progress Report',
+        COMPREHENSIVE_PROGRESS_REPORT_CLASSROOM: 'Comprehensive Progress Report Classroom',
         GRADE_BOOK_REPORT: 'Grade Book Report',
+        GRADE_BOOK_REPORT_CLASSROOM: 'Grade Book Report Classroom',
         MISSING_ASSIGNMENTS_REPORT: 'Missing Assignments Report',
-        GRADE_VERIFICATION_REPORT: 'Grade Verification Report'
+        GRADE_VERIFICATION_REPORT: 'Grade Verification Report',
+        GRADE_VERIFICATION_REPORT_CLASSROOM: 'Grade Verification Report Classroom'
     });
 
     var UserPermissionMappeerInstance = null;
@@ -193,16 +199,22 @@ NAMESPACE('chlk.models.people', function () {
                 /*report permissions */
 
                 this.mapper_['000001a'] = this.userPermissionEnum.ATTENDANCE_PROFILE_REPORT;
+                this.mapper_['000001a_Classroom'] = this.userPermissionEnum.ATTENDANCE_PROFILE_REPORT_CLASSROOM;
                 this.mapper_['000002'] = this.userPermissionEnum.BIRTHDAY_LISTING_REPORT;
+                this.mapper_['000002_Classroom'] = this.userPermissionEnum.BIRTHDAY_LISTING_REPORT_CLASSROOM;
                 this.mapper_['000030'] = this.userPermissionEnum.LESSON_PLAN_REPORT;
+                this.mapper_['000030_Classroom'] = this.userPermissionEnum.LESSON_PLAN_REPORT_CLASSROOM;
                 this.mapper_['000031'] = this.userPermissionEnum.PROGRESS_REPORT;
                 this.mapper_['000032'] = this.userPermissionEnum.WORKSHEET_REPORT;
                 this.mapper_['000064'] = this.userPermissionEnum.CLASSROOM_ATTENDANCE_REGISTER_REPORT;
                 this.mapper_['000141'] = this.userPermissionEnum.SEATING_CHART_REPORT;
                 this.mapper_['000074'] = this.userPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT;
+                this.mapper_['000074_Classroom'] = this.userPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT_CLASSROOM;
                 this.mapper_['000023'] = this.userPermissionEnum.GRADE_BOOK_REPORT;
+                this.mapper_['000023_Classroom'] = this.userPermissionEnum.GRADE_BOOK_REPORT_CLASSROOM;
                 this.mapper_['000087'] = this.userPermissionEnum.MISSING_ASSIGNMENTS_REPORT;
                 this.mapper_['000090'] = this.userPermissionEnum.GRADE_VERIFICATION_REPORT;
+                this.mapper_['000090_Classroom'] = this.userPermissionEnum.GRADE_VERIFICATION_REPORT_CLASSROOM;
             }
         }
     ]);

@@ -11,9 +11,9 @@ NAMESPACE('chlk.models.reports', function (){
         ArrayOf(chlk.models.attendance.AttendanceReason), 'attendanceReasons',
 
         [[ArrayOf(chlk.models.schoolYear.MarkingPeriod), ArrayOf(chlk.models.attendance.AttendanceReason), ArrayOf(chlk.models.people.ShortUserInfo),
-            chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
-        function $(markingPeriods_, attendanceReasons_, students_, classId_, gradingPeriodId_, startDate_, endDate_){
-            BASE(classId_, gradingPeriodId_, startDate_, endDate_, students_);
+            chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean]],
+        function $(markingPeriods_, attendanceReasons_, students_, classId_, gradingPeriodId_, startDate_, endDate_, ableDownload_){
+            BASE(classId_, gradingPeriodId_, startDate_, endDate_, students_, ableDownload_);
             if(markingPeriods_)
                 this.setMarkingPeriods(markingPeriods_);
             if(attendanceReasons_)

@@ -547,46 +547,45 @@ NAMESPACE('chlk.controllers', function (){
                     }, this);
             },
 
-
-            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.GRADE_BOOK_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function gradeBookReportAction(gradingPeriodId, classId, startDate, endDate){
                 if (this.isDemoSchool())
                     return this.ShowMsgBox('Not available for demo', 'Error'), null;
                 var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
-                var res = new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate, students));
+                var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.GRADE_BOOK_REPORT) ||
+                    this.hasUserPermission_(chlk.models.people.UserPermissionEnum.GRADE_BOOK_REPORT_CLASSROOM);
+                var res = new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate, students, null, ableDownload));
                 return this.ShadeView(chlk.activities.reports.GradeBookReportDialog, res);
             },
 
-            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.BIRTHDAY_LISTING_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function birthdayReportAction(gradingPeriodId, classId, startDate, endDate){
                 if (this.isDemoSchool())
                     return this.ShowMsgBox('Not available for demo', 'Error'), null;
+                var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.BIRTHDAY_LISTING_REPORT) ||
+                    this.hasUserPermission_(chlk.models.people.UserPermissionEnum.BIRTHDAY_LISTING_REPORT_CLASSROOM);
                 var model = new chlk.models.reports.BirthdayReportViewData();
                 model.setGradingPeriodId(gradingPeriodId);
                 model.setClassId(classId);
                 model.setStartDate(startDate);
                 model.setEndDate(endDate);
+                model.setAbleDownload(ableDownload);
                 var res = new ria.async.DeferredData(model);
                 return this.ShadeView(chlk.activities.reports.BirthdayReportDialog, res);
             },
 
-
-            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.SEATING_CHART_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function seatingChartReportAction(gradingPeriodId, classId, startDate, endDate){
                 if (this.isDemoSchool())
                     return this.ShowMsgBox('Not available for demo', 'Error'), null;
-                var res = new ria.async.DeferredData(new chlk.models.reports.BaseReportViewData(classId, gradingPeriodId, startDate, endDate));
+                var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.SEATING_CHART_REPORT);
+                var res = new ria.async.DeferredData(new chlk.models.reports.BaseReportViewData(classId, gradingPeriodId, startDate, endDate, null, ableDownload));
                 return this.ShadeView(chlk.activities.reports.SeatingChartReportDialog, res);
             },
 
-
-            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.GRADE_VERIFICATION_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function gradeVerificationReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -599,15 +598,15 @@ NAMESPACE('chlk.controllers', function (){
                         var averages = data[1];
                         var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
                         var includeWithdrawn = this.getContext().getSession().get(ChlkSessionConstants.INCLUDE_WITHDRAWN_STUDENTS);
-                        var res = new chlk.models.reports.GradeVerificationReportViewData(periods, averages, students, classId, gradingPeriodId, startDate, endDate);
+                        var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.GRADE_VERIFICATION_REPORT) ||
+                            this.hasUserPermission_(chlk.models.people.UserPermissionEnum.GRADE_VERIFICATION_REPORT_CLASSROOM);
+                        var res = new chlk.models.reports.GradeVerificationReportViewData(periods, averages, students, classId, gradingPeriodId, startDate, endDate, ableDownload);
                         res.setIncludeWithdrawnStudents(includeWithdrawn);
                         return res;
                     }, this);
                 return this.ShadeView(chlk.activities.reports.GradeVerificationReportDialog, res);
             },
 
-
-            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.LESSON_PLAN_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function lessonPlanReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -617,13 +616,13 @@ NAMESPACE('chlk.controllers', function (){
                 var activityCategories = classInfo.getTypesByClass();
                 var res = this.announcementService.getAnnouncementAttributes(true)
                     .then(function(items){
-                        return new chlk.models.reports.LessonPlanReportViewData(activityCategories, items, classId, gradingPeriodId, startDate, endDate);
-                    });
+                        var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.LESSON_PLAN_REPORT) ||
+                            this.hasUserPermission_(chlk.models.people.UserPermissionEnum.LESSON_PLAN_REPORT_CLASSROOM);
+                        return new chlk.models.reports.LessonPlanReportViewData(activityCategories, items, classId, gradingPeriodId, startDate, endDate, ableDownload);
+                    }, this);
                 return this.ShadeView(chlk.activities.reports.LessonPlanReportDialog, res);
             },
 
-
-            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.WORKSHEET_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function worksheetReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -631,8 +630,6 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.reports.WorksheetReportDialog, res);
             },
 
-
-            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.PROGRESS_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function progressReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -647,13 +644,12 @@ NAMESPACE('chlk.controllers', function (){
                         studentIds.forEach(function(id){
                             res.push(students.filter(function(student){return student.getId().valueOf() == id})[0]);
                         });
-                        return new chlk.models.reports.SubmitProgressReportViewData(attendanceReasons, res, gradingPeriodId, classId, startDate, endDate);
+                        var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.PROGRESS_REPORT);
+                        return new chlk.models.reports.SubmitProgressReportViewData(attendanceReasons, res, gradingPeriodId, classId, startDate, endDate, ableDownload);
                     }, this);
                 return this.ShadeView(chlk.activities.reports.ProgressReportDialog, res);
             },
 
-
-            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function comprehensiveProgressReportAction(gradingPeriodId, classId, startDate, endDate){
@@ -661,15 +657,14 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.reports.ComprehensiveProgressReportDialog, res);
             },
 
-
-            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.MISSING_ASSIGNMENTS_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function missingAssignmentsReportAction(gradingPeriodId, classId, startDate, endDate){
                 var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
                 var alternateScores = this.getContext().getSession().get(ChlkSessionConstants.ALTERNATE_SCORES, []);
+                var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MISSING_ASSIGNMENTS_REPORT);
                 var model = new chlk.models.reports.SubmitMissingAssignmentsReportViewData(classId,
-                    gradingPeriodId, startDate, endDate, students, alternateScores);
+                    gradingPeriodId, startDate, endDate, students, alternateScores, ableDownload);
                 return this.ShadeView(chlk.activities.reports.MissingAssignmentsReportDialog, new ria.async.DeferredData(model));
             },
 
@@ -1083,7 +1078,9 @@ NAMESPACE('chlk.controllers', function (){
                 var res = this.calendarService.listByDateRange(startDate, endDate, classId)
                     .then(function(announcements){
                         var students = this.getContext().getSession().get(ChlkSessionConstants.STUDENTS_FOR_REPORT, []);
-                        return new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData(gradingPeriodId, classId, startDate, endDate, students, announcements));
+                        var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.WORKSHEET_REPORT);
+                        return new ria.async.DeferredData(new chlk.models.reports.GradeBookReportViewData(gradingPeriodId, classId,
+                            startDate, endDate, students, announcements, ableDownload));
                     }, this);
                 return res;
             },
@@ -1096,9 +1093,11 @@ NAMESPACE('chlk.controllers', function (){
                             this.gradingPeriodService.getList(),
                             this.attendanceService.getAllAttendanceReasons()
                         ]).then(function (data){
+                            var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT) ||
+                                this.hasUserPermission_(chlk.models.people.UserPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT_CLASSROOM);
                             return new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
-                                selectedGradingPeriodId, startDate, endDate, data[0], data[1], students)
-                        });
+                                selectedGradingPeriodId, startDate, endDate, data[0], data[1], students, ableDownload)
+                        }, this);
 
                 //var res = new chlk.models.reports.SubmitComprehensiveProgressViewData(classId,
                 //    selectedGradingPeriodId, startDate, endDate,  this.getReasonsForReport_(), students);

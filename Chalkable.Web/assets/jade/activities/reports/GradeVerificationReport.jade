@@ -13,6 +13,8 @@
          +Hidden('studentAverageIds', '')#student-averages-ids
          +Hidden('gradingPeriodIds', '')#grading-period-ids
          .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
             TABLE.report-table
                TR
                   TD.item-3
@@ -67,5 +69,5 @@
 
       .x-window-footer.report-bottom
          +ReportFormatSelect()
-         BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
          BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

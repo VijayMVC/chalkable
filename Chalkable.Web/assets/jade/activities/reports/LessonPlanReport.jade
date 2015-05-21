@@ -11,6 +11,8 @@
          +Hidden('activityCategory', '')#activity-categories
          +Hidden('activityAttribute', '')#activity-attributes
          .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
             TABLE.report-table
                TR
                   +ReportDatePickers(self.getStartDate(), self.getEndDate(), 'item-2')
@@ -51,5 +53,5 @@
                   TD.item-2
       .x-window-footer.report-bottom
          +ReportFormatSelect()
-         BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
          BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
