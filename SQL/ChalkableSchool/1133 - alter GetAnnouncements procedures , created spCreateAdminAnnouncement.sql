@@ -166,7 +166,7 @@ declare @announcementTb table
 	Content nvarchar(max),
 	[Subject] nvarchar(max),
 	[Title] nvarchar(max),
-	GradingStyle int null,
+	GradingStyle int not null,
 	Dropped bit not null,
 	ClassAnnouncementTypeRef int null,
 	SchoolRef int null,
@@ -333,7 +333,7 @@ where AnnouncementApplicationRef IN (SELECT AnnouncementApplication.Id from Anno
 /*DELETE AnnouncementApplication*/
 delete from AnnouncementApplication where AnnouncementRef IN (SELECT Id FROM Announcement
 where AdminRef = @personId AND [State] = 0)
-/*DELETE AnnouncementRecipient*/
+/*DELETE AdminAnnouncementRecipient*/
 delete from AdminAnnouncementRecipient
 where AnnouncementRef in (Select id from announcement 
 where AdminRef = @personId AND [State] = 0)
@@ -353,7 +353,7 @@ end
 else begin
 	/*INSERT TO ANNOUNCEMENT*/
 	insert into Announcement (Created, Expires, ClassAnnouncementTypeRef, [State],GradingStyle,[Order], ClassRef, Dropped, SchoolRef, MayBeDropped, VisibleForStudent, AdminRef)
-	values(@created, @expires, null, @state, null, 1, null, 0, null, 0, 1, @personId);
+	values(@created, @expires, null, @state, 0, 1, null, 0, null, 0, 1, @personId);
 	set @announcementId = SCOPE_IDENTITY()
 
 	/*GET CONTENT FROM PREV ANNOUNCEMENT*/

@@ -33,7 +33,7 @@ namespace Chalkable.Data.School.Model
         public DateTime Expires { get; set; }
         public int? ClassAnnouncementTypeRef { get; set; }
         public AnnouncementState State { get; set; }
-        public GradingStyleEnum? GradingStyle { get; set; }
+        public GradingStyleEnum GradingStyle { get; set; }
         public string Subject { get; set; }
         public int? ClassRef { get; set; }
         public int Order { get; set; }

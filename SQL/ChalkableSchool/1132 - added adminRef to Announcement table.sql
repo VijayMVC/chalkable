@@ -15,5 +15,5 @@ alter table Announcement
 alter column ClassAnnouncementTypeRef int null 
 go 
 alter table Announcement
-alter column GradingStyle int null
+alter column GradingStyle int not null
 go 
