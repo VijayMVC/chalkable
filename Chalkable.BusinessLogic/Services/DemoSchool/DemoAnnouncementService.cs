@@ -254,8 +254,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             query.RoleId = Context.Role.Id;
             query.PersonId = Context.PersonId;
             query.Now = Context.NowSchoolTime.Date;
-            if (Context.PersonId == null)
-                throw new ChalkableException("User local id is null");
+            if (!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
             var announcements = AnnouncementStorage.GetData().Select(x => x.Value);
             if (query.Id.HasValue) 
                 announcements = announcements.Where(x => x.Id == query.Id);
@@ -281,8 +281,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             foreach (var announcementComplex in announcements)
             {
                 var complete = AnnouncementCompleteStorage.GetComplete(announcementComplex.Id, Context.PersonId.Value);
-                var cls = ServiceLocator.ClassService.GetById(announcementComplex.ClassRef);
-                announcementComplex.FullClassName = cls.Name + " " + cls.ClassNumber;
+                if (announcementComplex.ClassRef.HasValue)
+                {
+                    var cls = ServiceLocator.ClassService.GetById(announcementComplex.ClassRef.Value);
+                    announcementComplex.FullClassName = cls.Name + " " + cls.ClassNumber;    
+                }
                 announcementComplex.Complete = complete.HasValue && complete.Value;
             }
             if (query.OwnedOnly)
@@ -577,7 +580,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var isComplete = AnnouncementCompleteStorage.GetComplete(announcement.Id,
                 Context.PersonId.Value);
 
-            var cls = ServiceLocator.ClassService.GetClassDetailsById(announcement.ClassRef);
+            var cls = announcement.ClassRef.HasValue 
+                ? ServiceLocator.ClassService.GetClassDetailsById(announcement.ClassRef.Value)
+                : null;
             var owner = announcement.PrimaryTeacherRef.HasValue
                 ? ServiceLocator.PersonService.GetPerson(announcement.PrimaryTeacherRef.Value)
                 : null;
@@ -599,7 +604,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 PrimaryTeacherName = announcement.PrimaryTeacherName,
                 SchoolRef = announcement.SchoolRef,
                 ClassRef = announcement.ClassRef,
-                FullClassName = cls.Name + " " + cls.ClassNumber,
+                FullClassName = cls != null ?  cls.Name + " " + cls.ClassNumber : null,
                 PrimaryTeacherGender = announcement.PrimaryTeacherGender,
                 ClassAnnouncementTypeRef = announcement.ClassAnnouncementTypeRef,
                 Created = announcement.Created,
@@ -867,14 +872,18 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public bool CanAddStandard(int announcementId)
         {
             var announcement = GetAnnouncementById(announcementId);
-            var cls = ServiceLocator.ClassService.GetClassDetailsById(announcement.ClassRef);
+            if (!announcement.ClassRef.HasValue) 
+                return false;
+            var cls = ServiceLocator.ClassService.GetClassDetailsById(announcement.ClassRef.Value);
             return ((DemoStandardService)ServiceLocator.StandardService).ClassStandardsExist(cls);
         }
 
         public Announcement EditTitle(int announcementId, string title)
         {
             var ann = GetAnnouncementById(announcementId);
-            return EditTitle(ann, title, (da, t) => da.Exists(t, ann.ClassRef, ann.Expires, announcementId));
+            if(!ann.ClassRef.HasValue)
+                throw new NotImplementedException(); //TODO: implement if is admin announcement
+            return EditTitle(ann, title, (da, t) => da.Exists(t, ann.ClassRef.Value, ann.Expires, announcementId));
         }
 
         private Announcement EditTitle(Announcement announcement, string title, Func<DemoAnnouncementStorage, string, bool> existsTitleAction)
@@ -887,7 +896,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
                 if (string.IsNullOrEmpty(title))
                     throw new ChalkableException("Title parameter is empty");
-                var c = ServiceLocator.ClassService.GetById(announcement.ClassRef);
+                if (!announcement.ClassRef.HasValue)
+                    throw new NotImplementedException(); //TODO: implement if is admin announcement
+
+                var c = ServiceLocator.ClassService.GetById(announcement.ClassRef.Value);
                 if (c.PrimaryTeacherRef != Context.PersonId)
                     throw new ChalkableSecurityException();
                 if (existsTitleAction(AnnouncementStorage, title))
@@ -1097,6 +1109,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IEnumerable<Activity> GetActivitiesForClass(int classId)
         {
             return ActivityStorage.GetAll().Where(x => x.SectionId == classId);
+        }
+
+        public AnnouncementDetails CreateAdminAnnouncement(DateTime expiresDate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -45,7 +45,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private bool CanAttach(Announcement ann)
         {
             return AnnouncementSecurity.CanModifyAnnouncement(ann, Context)
-                || ((DemoClassService)ServiceLocator.ClassService).ClassPersonExists(ann.ClassRef, Context.PersonId);
+                || ((DemoClassService)ServiceLocator.ClassService).ClassPersonExists(ann.ClassRef.Value, Context.PersonId);
         }
 
         public Announcement AddAttachment(int announcementId, byte[] content, string name, string uuid)
@@ -136,7 +136,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 attachments = attachments.Where(x =>
                 {
                     var classRef = ServiceLocator.AnnouncementService.GetAnnouncementById(x.AnnouncementRef).ClassRef;
-                    return (x.PersonRef == query.CallerId || classRefs.Contains(classRef));
+                    return (x.PersonRef == query.CallerId || classRefs.Contains(classRef.Value));
                 });
                 return attachments.ToList();
             }

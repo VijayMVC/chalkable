@@ -13,8 +13,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
     public abstract class AnnouncementDataAccess : DataAccessBase<Announcement, int>
     {
-        private int schoolId;
-        protected AnnouncementDataAccess(UnitOfWork unitOfWork, int schoolId) : base(unitOfWork)
+        private int? schoolId;
+        protected AnnouncementDataAccess(UnitOfWork unitOfWork, int? schoolId) : base(unitOfWork)
         {
             this.schoolId = schoolId;
         }
@@ -44,7 +44,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         private const string SCHOOL_ID = "schoolId";
 
-        private AnnouncementDetails BuildGetDetailsResult(SqlDataReader reader)
+        protected AnnouncementDetails BuildGetDetailsResult(SqlDataReader reader)
         {
             var announcement = reader.ReadOrNull<AnnouncementDetails>();
             if (announcement != null)
@@ -61,7 +61,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     announcement.Owner = PersonDataAccess.ReadPersonData(reader);
                 reader.NextResult();
                 announcement.AnnouncementStandards = reader.ReadList<AnnouncementStandardDetails>();
-                announcement.StudentAnnouncements = reader.ReadList<StudentAnnouncementDetails>();
+                reader.NextResult();
+                announcement.AnnouncementRecipients = reader.ReadList<AdminAnnouncementRecipient>();
+                announcement.StudentAnnouncements = new List<StudentAnnouncementDetails>();
             }
             return announcement;
         }
@@ -102,7 +104,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return res;
         }
 
-        public AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime created, DateTime expiresDate, int personId)
+        public virtual AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime created, DateTime expiresDate, int personId)
         {
             var parameters = new Dictionary<string, object>
                 {
@@ -320,6 +322,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public IList<int> SisActivitiesIds { get; set; }
 
         public bool? Graded { get; set; }
+        public IList<int> GradeLevelsIds { get; set; } 
 
         public AnnouncementsQuery()
         {

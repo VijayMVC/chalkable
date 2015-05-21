@@ -133,7 +133,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     var stAnn = new StudentAnnouncementDetails
                     {
                         AnnouncementId = ann.Id,
-                        ClassId = ann.ClassRef,
+                        ClassId = ann.ClassRef.Value,
                         Student = student,
                     };
                     MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);

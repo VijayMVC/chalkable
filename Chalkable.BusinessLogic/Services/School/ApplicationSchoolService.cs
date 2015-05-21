@@ -46,13 +46,21 @@ namespace Chalkable.BusinessLogic.Services.School
                     var da = new AnnouncementApplicationDataAccess(uow);
                     var announcementApplication = da.GetById(announcementAppId.Value);
                     var ann = anDa.GetById(announcementApplication.AnnouncementRef);
+                    if (ann.ClassRef.HasValue)
+                    {
                         var csp = new ClassPersonDataAccess(uow)
                             .GetClassPersons(new ClassPersonQuery { ClassId = ann.ClassRef });
-                        res.AddRange(csp.Select(x=>x.PersonRef));
+                        res.AddRange(csp.Select(x => x.PersonRef));
 
-                    //TODO: think about this
-                    var teacherId = new ClassDataAccess(uow).GetById(ann.ClassRef).PrimaryTeacherRef; 
-                    if(teacherId.HasValue) res.Add(teacherId.Value);
+                        //TODO: think about this
+                        var teacherId = new ClassDataAccess(uow).GetById(ann.ClassRef.Value).PrimaryTeacherRef;
+                        if (teacherId.HasValue) res.Add(teacherId.Value);   
+                    }
+                    else if (ann.AdminRef.HasValue)
+                    {
+                        //TODO: implement if is admin announcement
+                        throw new NotImplementedException();
+                    }
                 }
                 else
                 {

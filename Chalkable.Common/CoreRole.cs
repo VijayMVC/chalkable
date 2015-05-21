@@ -43,7 +43,8 @@ namespace Chalkable.Common
                                                                      {ADMIN_EDIT_ROLE.LoweredName, ADMIN_EDIT_ROLE},
                                                                      {ADMIN_VIEW_ROLE.LoweredName, ADMIN_VIEW_ROLE},
                                                                      {DEVELOPER_ROLE.LoweredName, DEVELOPER_ROLE},
-                                                                     {APP_TESTER_ROLE.LoweredName, APP_TESTER_ROLE}
+                                                                     {APP_TESTER_ROLE.LoweredName, APP_TESTER_ROLE},
+                                                                     {DISTRICT_ROLE.LoweredName, DISTRICT_ROLE}
                                                                 };
 
 

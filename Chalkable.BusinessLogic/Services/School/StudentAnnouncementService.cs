@@ -85,14 +85,14 @@ namespace Chalkable.BusinessLogic.Services.School
                 else
                 {
                     scores = ConnectorLocator.ActivityScoreConnector.GetSores(ann.SisActivityId.Value);
-                    var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(ann.ClassRef);
+                    var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(ann.ClassRef.Value);
                     bool? enrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
                     var mp = ServiceLocator.MarkingPeriodService.GetLastMarkingPeriod(ann.Expires);
                     if (mp == null)
                     {
                         throw new ChalkableException("No marking period is scheduled at announcements expiery date.");
                     }
-                    persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef, mp.Id, enrolled);
+                    persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef.Value, mp.Id, enrolled);
                 }
                 var res = new List<StudentAnnouncementDetails>();
                 var alternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores();
@@ -103,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     {
                         var stAnn = new StudentAnnouncementDetails
                             {
-                                ClassId = ann.ClassRef,
+                                ClassId = ann.ClassRef.Value,
                                 Student = student,
                                 AnnouncementId = ann.Id
                             };

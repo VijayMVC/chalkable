@@ -20,8 +20,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult CreateForAdmin(DateTime? expiresDate)
         {
-
-            throw new NotImplementedException();
+            var annDetails = SchoolLocator.AnnouncementService.CreateAdminAnnouncement(GenerateDefaultExpiresDate(expiresDate));
+            return Json(PrepareCreateAnnouncementViewData(annDetails));
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
@@ -60,10 +60,7 @@ namespace Chalkable.Web.Controllers
 
             if (classId.HasValue && classAnnType != null)
             {
-                var annExpiredDate = expiresDate.HasValue ? expiresDate.Value : 
-                                    Context.SchoolYearEndDate.HasValue ? Context.SchoolYearEndDate.Value : 
-                                    DateTime.MaxValue;
-                
+                var annExpiredDate = GenerateDefaultExpiresDate(expiresDate);
                 var annDetails = SchoolLocator.AnnouncementService.CreateAnnouncement(classAnnType, classId.Value, annExpiredDate);
                 
                 // annExporedDate was assigned to have a correct announcements orderings, lets clear it if not user-provided
@@ -71,14 +68,25 @@ namespace Chalkable.Web.Controllers
                     annDetails.Expires = DateTime.MinValue;
 
                 Debug.Assert(Context.PersonId.HasValue);
-                return Json(new CreateAnnouncementViewData
+                return Json(PrepareCreateAnnouncementViewData(annDetails));
+            }
+            return Json(null, 7);
+        }
+
+        private CreateAnnouncementViewData PrepareCreateAnnouncementViewData(AnnouncementDetails annDetails)
+        {
+            return new CreateAnnouncementViewData
                 {
                     Announcement = PrepareAnnouncmentViewDataForEdit(annDetails),
                     IsDraft = annDetails.IsDraft,
-                });
-            }
-
-            return Json(null, 7);
+                };
+        }
+        
+        private DateTime GenerateDefaultExpiresDate(DateTime? expiresDate)
+        {
+            return expiresDate.HasValue ? expiresDate.Value :
+                                    Context.SchoolYearEndDate.HasValue ? Context.SchoolYearEndDate.Value :
+                                    DateTime.MaxValue;
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, AdminView, Teacher")]
@@ -105,7 +113,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult EditTitle(int announcementId, string title)
         {
             var ann = SchoolLocator.AnnouncementService.GetAnnouncementById(announcementId);
-            if (!Exists(title, ann.ClassRef, ann.Expires, announcementId))
+            if (ann.ClassRef.HasValue && !Exists(title, ann.ClassRef.Value, ann.Expires, announcementId))
             {
                 SchoolLocator.AnnouncementService.EditTitle(announcementId, title);
                 return Json(true);

@@ -79,7 +79,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     .Where(x => x.GradeLevelRef != null && gradeLevelRefs.Contains(x.GradeLevelRef.Value))
                     .Select(x => x.AnnouncementRef);
 
-            return announcements.Where(x => x.Id == announcementId && classRefs.Contains(x.ClassRef) || annRecipients.Contains(x.Id))
+            return announcements.Where(x => x.Id == announcementId && classRefs.Contains(x.ClassRef.Value) || annRecipients.Contains(x.Id))
                   .Select(x => x)
                   .First();
         }

@@ -23,6 +23,7 @@ namespace Chalkable.Data.School.Model
         public const string SIS_ACTIVITY_ID_FIELD = "SisActivityId";
         public const string PRIMARY_TEACHER_REF_FIELD = "PrimaryTeacherRef";
         public const string SCHOOL_REF_FIELD = "SchoolRef";
+        public const string ADMIN_REF_FIELD = "AdminRef";
 
         [PrimaryKeyFieldAttr]
         [IdentityFieldAttr]
@@ -34,7 +35,7 @@ namespace Chalkable.Data.School.Model
         public AnnouncementState State { get; set; }
         public GradingStyleEnum GradingStyle { get; set; }
         public string Subject { get; set; }
-        public int ClassRef { get; set; }
+        public int? ClassRef { get; set; }
         public int Order { get; set; }
         public bool Dropped { get; set; }
 
@@ -49,7 +50,7 @@ namespace Chalkable.Data.School.Model
         public bool IsScored { get; set; }
         public bool VisibleForStudent { get; set; }
 
-        public int SchoolRef { get; set; }
+        public int? SchoolRef { get; set; }
 
         public virtual string Title { get; set; }
 
@@ -59,6 +60,14 @@ namespace Chalkable.Data.School.Model
         public bool IsOwner { get; set; }
         [NotDbFieldAttr]
         public bool Complete { get; set; }
+
+        public int? AdminRef { get; set; }
+        
+        [NotDbFieldAttr]
+        public bool IsAdminAnnouncement
+        {
+            get { return AdminRef.HasValue; }
+        }
     }
 
 
@@ -68,7 +77,9 @@ namespace Chalkable.Data.School.Model
         public int? ChalkableAnnouncementType { get; set; }
         public string PrimaryTeacherGender { get; set; }
         public string PrimaryTeacherName { get; set; }
-   
+        public string AdminName { get; set; }
+        public string AdminGender { get; set; }
+
         public string ClassName { get; set; }
         public string FullClassName { get; set; }
         public Guid? DepartmentId { get; set; }
@@ -81,8 +92,7 @@ namespace Chalkable.Data.School.Model
         public int GradingStudentsCount { get; set; }
         public int? Avg { get; set; }
         public int ApplicationCount { get; set; }
-
-       
+        
         public bool IsDraft
         {
             get { return State == AnnouncementState.Draft; }
@@ -116,7 +126,8 @@ namespace Chalkable.Data.School.Model
         public IList<AnnouncementAttachment> AnnouncementAttachments { get; set; }
         public IList<AnnouncementQnAComplex> AnnouncementQnAs { get; set; } 
         public Person Owner { get; set; }
-        public IList<AnnouncementStandardDetails> AnnouncementStandards { get; set; } 
+        public IList<AnnouncementStandardDetails> AnnouncementStandards { get; set; }
+        public IList<AdminAnnouncementRecipient> AnnouncementRecipients { get; set; }
     }
 
 

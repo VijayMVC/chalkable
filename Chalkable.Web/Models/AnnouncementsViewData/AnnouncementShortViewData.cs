@@ -42,9 +42,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             AnnouncementTypeId = announcement.ClassAnnouncementTypeRef;
             AnnouncementTypeName = announcement.ClassAnnouncementTypeName;
             ChalkableAnnouncementTypeId = announcement.ChalkableAnnouncementType;
-            PersonId = announcement.PrimaryTeacherRef;
-            PersonName = announcement.PrimaryTeacherName;
-            PersonGender = announcement.PrimaryTeacherGender;
+            PersonId = announcement.PrimaryTeacherRef ?? announcement.AdminRef;
+            PersonName = !string.IsNullOrEmpty(announcement.PrimaryTeacherName) ? announcement.PrimaryTeacherName : announcement.AdminName;
+            PersonGender = !string.IsNullOrEmpty(announcement.PrimaryTeacherGender) ? announcement.PrimaryTeacherGender : announcement.AdminGender;
             ClassId = announcement.ClassRef;
             ClassName = announcement.ClassName;
             FullClassName = announcement.FullClassName;

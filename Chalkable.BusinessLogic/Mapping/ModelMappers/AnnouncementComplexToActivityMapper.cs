@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -12,6 +10,9 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
     {
         protected override void InnerMap(Activity activity, AnnouncementComplex ann)
         {
+            if(!ann.ClassRef.HasValue)
+                throw new ChalkableException("Can't map announcement to activity that is not assigned to class");
+
             activity.Date = ann.Expires;
             activity.CategoryId = ann.ClassAnnouncementTypeRef;
             activity.IsDropped = ann.Dropped;
@@ -25,7 +26,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             activity.Unit = string.Empty;
             activity.MayBeExempt = ann.MayBeExempt;
             activity.IsScored = ann.IsScored;
-            activity.SectionId = ann.ClassRef;
+            activity.SectionId = ann.ClassRef.Value;
             activity.Complete = ann.Complete;
             var annDetails = ann as AnnouncementDetails;
             if (annDetails != null)

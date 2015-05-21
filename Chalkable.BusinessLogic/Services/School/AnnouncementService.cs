@@ -19,6 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IAnnouncementService
     {
         AnnouncementDetails CreateAnnouncement(ClassAnnouncementType classAnnType, int classId, DateTime expiresDate);
+        AnnouncementDetails CreateAdminAnnouncement(DateTime expiresDate);
         AnnouncementDetails GetAnnouncementDetails(int announcementId);
         void DeleteAnnouncement(int announcementId);
         void DeleteAnnouncements(int classId, int? announcementType, AnnouncementState state);
@@ -64,12 +65,12 @@ namespace Chalkable.BusinessLogic.Services.School
         private AnnouncementDataAccess CreateAnnoucnementDataAccess(UnitOfWork unitOfWork)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
-            if(BaseSecurity.IsAdminViewer(Context))
-                throw new NotImplementedException();
             if(Context.Role == CoreRoles.TEACHER_ROLE)
                 return new AnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolLocalId.Value);
             if(Context.Role == CoreRoles.STUDENT_ROLE)
                 return new AnnouncementForStudentDataAccess(unitOfWork, Context.SchoolLocalId.Value);
+            if(Context.Role == CoreRoles.DISTRICT_ROLE)
+                return new AnnouncementForAdminDataAccess(unitOfWork, Context.SchoolLocalId.Value);
             throw new ChalkableException("Unsupported role for announcements");
         }
 
@@ -200,7 +201,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!Context.SchoolYearId.HasValue)
                 throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
             if (!Context.PersonId.HasValue)
-                throw new ChalkableException("Current User is has no inow id");
+                throw new UnassignedUserException("Current User is has no inow id");
             var end = count + start;
             start = start + 1;
             if (Context.Role == CoreRoles.STUDENT_ROLE)
@@ -252,7 +253,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 classPersons = classPersons.Where(x => markingPeriods.Any(y => y.Id == x.MarkingPeriodRef)).ToList();
                 anns = anns.Where(x => classPersons.Any(cp => cp.ClassRef == x.ClassRef)).ToList();
             }
-            var classesIds = anns.GroupBy(x => x.ClassRef).Select(x => x.Key).ToList();
+            var classesIds = anns.Where(x=>x.ClassRef.HasValue).GroupBy(x => x.ClassRef.Value).Select(x => x.Key).ToList();
             var classAnnTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classesIds);
             foreach (var ann in anns)
             {
@@ -307,7 +308,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var res = annDa.Create(classAnnType.Id, classId, Context.NowSchoolTime, expiresDate, Context.PersonId.Value);
                 uow.Commit();
                 var sy = new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime, Context.SchoolLocalId.Value);
-                annDa.ReorderAnnouncements(sy.Id, classAnnType.Id, res.ClassRef);
+                annDa.ReorderAnnouncements(sy.Id, classAnnType.Id, res.ClassRef.Value);
                 res = GetDetails(annDa, res.Id);// annDa.GetDetails(res.Id, Context.PersonId.Value, Context.RoleId);
                 if (res.ClassAnnouncementTypeRef.HasValue)
                 {
@@ -317,6 +318,24 @@ namespace Chalkable.BusinessLogic.Services.School
                 return res;
             }
         }
+
+        public AnnouncementDetails CreateAdminAnnouncement(DateTime expiresDate)
+        {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            if (!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            if (!BaseSecurity.IsDistrict(Context))
+                throw new ChalkableSecurityException();
+
+            using (var uow = Update())
+            {
+                var res = CreateAnnoucnementDataAccess(uow)
+                    .Create(null, null, Context.NowSchoolTime, expiresDate, Context.PersonId.Value);
+                uow.Commit();
+                return res;
+            }
+        }
+
 
         public AnnouncementDetails GetAnnouncementDetails(int announcementId)
         {
@@ -433,8 +452,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 if(!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
                     throw new ChalkableSecurityException();
                 
-                //var stAnnDa = new StudentAnnouncementDataAccess(uow);
-                //stAnnDa.Update(announcementId, drop);
                 ann.Dropped = drop;
                 da.Update(ann);
                 uow.Commit();
@@ -491,8 +508,8 @@ namespace Chalkable.BusinessLogic.Services.School
                             , new AndQueryCondition{{Class.ID_FIELD, ann.ClassRef}}, true);
 
                 // Should do reording to ensure correct Anno Title
-                if (ann.ClassAnnouncementTypeRef.HasValue && Context.SchoolYearId.HasValue)
-                    da.ReorderAnnouncements(Context.SchoolYearId.Value, ann.ClassAnnouncementTypeRef.Value, ann.ClassRef);
+                if (ann.ClassAnnouncementTypeRef.HasValue && Context.SchoolYearId.HasValue && ann.ClassRef.HasValue)
+                    da.ReorderAnnouncements(Context.SchoolYearId.Value, ann.ClassAnnouncementTypeRef.Value, ann.ClassRef.Value);
 
                 var res = GetDetails(da, announcement.AnnouncementId);// da.GetDetails(announcement.AnnouncementId, Context.PersonId.Value, Context.RoleId);
                 if (res.State == AnnouncementState.Created && res.SisActivityId.HasValue)
@@ -664,7 +681,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (ann.State != AnnouncementState.Created)
                 throw new ChalkableException("Not created item can't be starred");
             if (!ann.SisActivityId.HasValue)
-                throw new ChalkableException("there are not such item in Inow");
+                throw new ChalkableException("There are no such item in Inow");
             ConnectorLocator.ActivityConnector.CompleteActivity(ann.SisActivityId.Value, complete);
         }
 
@@ -718,7 +735,9 @@ namespace Chalkable.BusinessLogic.Services.School
         public Announcement EditTitle(int announcementId, string title)
         {
             var ann = GetAnnouncementById(announcementId);
-            return EditTitle(ann, title, (da, t) => da.Exists(t, ann.ClassRef, ann.Expires, announcementId));
+            if(!ann.ClassRef.HasValue)
+                throw new NotImplementedException(); //TODO: implement for non class announcement
+            return EditTitle(ann, title, (da, t) => da.Exists(t, ann.ClassRef.Value, ann.Expires, announcementId));
         }
 
         private Announcement EditTitle(Announcement announcement, string title, Func<AnnouncementDataAccess, string, bool> existsTitleAction)

@@ -29,7 +29,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         {
             res.Avg = announcement.Avg;
             res.AvgNumeric = announcement.Avg;
-            res.GradingStyle = (int)announcement.GradingStyle;
+            res.GradingStyle = (int)(announcement.GradingStyle);
             if (studentAnnouncements != null && studentAnnouncements.Count > 0)
             {
                 if (studentAnnouncements.Count == 1)
