@@ -16,6 +16,8 @@ mixin ReportCell(value)
          +Hidden('absenceReasons', '')#absence-reasons
          +Hidden('terms', '')#terms-ids
          .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
             TABLE.report-table
                TR
                   TD.item-2
@@ -72,5 +74,5 @@ mixin ReportCell(value)
 
       .x-window-footer.report-bottom
          +ReportFormatSelect()
-         BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
          BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
