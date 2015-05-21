@@ -260,9 +260,9 @@ NAMESPACE('chlk.services', function () {
         },
 
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.ReportFormatEnum, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
-            chlk.models.reports.SortActivityOptions, chlk.models.reports.SortSectionOptions, chlk.models.reports.PublicPrivateTextOptions, Number, Boolean, Boolean, Array, Array]],
+            chlk.models.reports.SortActivityOptions, chlk.models.reports.PublicPrivateTextOptions, Number, Boolean, Boolean, Array, Array]],
 
-        String, function submitLessonPlanReport(classId, gradingPeriodId, format, startDate, endDate, sortActivities, sortSections, publicPrivateText_, maxCount_,
+        String, function submitLessonPlanReport(classId, gradingPeriodId, format, startDate, endDate, sortActivities, publicPrivateText_, maxCount_,
                                                 includeActivities_, includeStandards_, activityAttribute_, activityCategory_){
             return this.getUrl('Reporting/LessonPlanReport.json', {
                 classId: classId.valueOf(),
@@ -271,7 +271,6 @@ NAMESPACE('chlk.services', function () {
                 startDate: startDate.toStandardFormat(),
                 endDate: endDate.toStandardFormat(),
                 sortItems: sortActivities.valueOf(),
-                sortClasses: sortSections.valueOf(),
                 publicPrivateText: publicPrivateText_ && publicPrivateText_.valueOf(),
                 maxCount: maxCount_,
                 includeAnnouncements: includeActivities_,

@@ -797,7 +797,6 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.getStartDate(),
                     reportViewData.getEndDate(),
                     reportViewData.getSortActivities(),
-                    reportViewData.getSortSections(),
                     reportViewData.getPublicPrivateText(),
                     reportViewData.getMaxCount(),
                     reportViewData.isIncludeActivities(),
