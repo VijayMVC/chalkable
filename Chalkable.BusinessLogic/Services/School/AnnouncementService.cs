@@ -33,6 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void SubmitForAdmin(int announcementId);
 
         Announcement GetAnnouncementById(int id);
+        IList<AnnouncementComplex> GetAdminAnnouncements(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? start, int? count, bool ownerOnly = false); 
         IList<AnnouncementComplex> GetAnnouncements(int count, bool gradedOnly);
         IList<AnnouncementComplex> GetAnnouncements(int start, int count, bool onlyOwners = false);
         IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false, bool? graded = null);
@@ -86,6 +87,21 @@ namespace Chalkable.BusinessLogic.Services.School
                 var res = da.GetAnnouncements(query);
                 return res;
             }
+        }
+
+        public IList<AnnouncementComplex> GetAdminAnnouncements(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? start, int? count,
+                                           bool ownedOnly = false)
+        {
+            return GetAnnouncements(new AnnouncementsQuery
+                {
+                    GradeLevelsIds = gradeLevels,
+                    FromDate = fromDate,
+                    ToDate = toDate,
+                    Start = start ?? 0,
+                    Count = count ?? int.MaxValue,
+                    OwnedOnly = ownedOnly, 
+                    Complete = complete
+                }).Announcements;
         }
 
         public IList<AnnouncementComplex> GetAnnouncements(int count, bool gradedOnly)

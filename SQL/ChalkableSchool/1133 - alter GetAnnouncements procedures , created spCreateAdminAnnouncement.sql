@@ -371,5 +371,8 @@ exec spGetAnnouncementDetails @announcementId, @personId, @callerRole, null
 commit
 go 
 
+
+
+
 drop table AnnouncementRecipient
 go

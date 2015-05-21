@@ -45,6 +45,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {START_PARAM, query.Start },
                     {COUNT_PARAM, query.Count },
                     {NOW_PARAM, query.Now },
+                    {PERSON_ID_PARAM, query.PersonId},
                     {GRADE_LEVELS_IDS_PARAM, query.GradeLevelsIds != null ? query.GradeLevelsIds.Select(x => x.ToString()).JoinString(",") : null},
                 };
             using (var reader = ExecuteStoredProcedureReader(GET_ADMIN_ANNOUNCEMENT_PROCEDURE, parameters))

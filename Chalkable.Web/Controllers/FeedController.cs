@@ -19,30 +19,35 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
         public ActionResult List(int? start, int? count, bool? complete, int? classId)
         {
-            return Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId, BaseSecurity.IsDistrictAdmin(SchoolLocator.Context)));
+            var graded = !BaseSecurity.IsDistrictAdmin(SchoolLocator.Context);
+            return Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId, true, graded));
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult Admin(IntList gradeLevelIds)
+        public ActionResult DistrictAdminFeed(IntList gradeLevelIds, bool? complete, int? start, int? count)
         {
-            return FakeJson("~/fakeData/adminFeed.json");
+            var announcements = SchoolLocator.AnnouncementService.GetAdminAnnouncements(complete, gradeLevelIds, null, null, start ?? 0, count ?? 10, true);
+            return Json(GetAnnouncementForFeedList(SchoolLocator, announcements));
         }
 
         public static IList<AnnouncementViewData> GetAnnouncementForFeedList(IServiceLocatorSchool schoolL, int? start, int? count
             , bool? complete, int? classId, bool ownerOnly =false, bool? graded = null)
         {
-            var isDemoUser = DemoUserService.IsDemoUser(schoolL.Context);
-
             start = start ?? 0;
-            count = count ?? (isDemoUser ? int.MaxValue : 10);
+            count = count ?? (DemoUserService.IsDemoUser(schoolL.Context) ? int.MaxValue : 10);
             var list = schoolL.AnnouncementService.GetAnnouncements(complete, start.Value, count.Value, classId, null, ownerOnly, graded);
-            if (isDemoUser)
-                list = list.Where(x => x.State == AnnouncementState.Created).Take(10).ToList();
-            var annsIdsWithApp = list.Where(x => x.ApplicationCount == 1).Select(x => x.Id).ToList();
+            return GetAnnouncementForFeedList(schoolL, list);
+        }
+
+        private static IList<AnnouncementViewData> GetAnnouncementForFeedList(IServiceLocatorSchool schoolL, IList<AnnouncementComplex> announcements)
+        {
+            if (DemoUserService.IsDemoUser(schoolL.Context))
+                announcements = announcements.Where(x => x.State == AnnouncementState.Created).Take(10).ToList();
+            var annsIdsWithApp = announcements.Where(x => x.ApplicationCount == 1).Select(x => x.Id).ToList();
             var annApps = schoolL.ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(annsIdsWithApp, true);
             var apps = schoolL.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(annApps.Select(x => x.ApplicationRef).ToList());
             annApps = annApps.Where(x => apps.Any(a => a.Id == x.ApplicationRef)).ToList();
-            return AnnouncementViewData.Create(list, annApps, apps);
+            return AnnouncementViewData.Create(announcements, annApps, apps);
         }
     }
 }

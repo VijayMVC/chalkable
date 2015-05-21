@@ -1115,5 +1115,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+
+        public IList<AnnouncementComplex> GetAdminAnnouncements(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? start, int? count, bool ownerOnly = false)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
