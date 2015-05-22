@@ -60,6 +60,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementForAdminDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\ClassAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\AutoGradeDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementApplicationDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementAttachmentDataAccess.cs" />

@@ -136,7 +136,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     if(!Context.PersonId.HasValue)
                         throw new UnassignedUserException();
                     var ann = (new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value))
-                        .GetAnnouncement(annAtt.AnnouncementRef, Context.RoleId, Context.PersonId.Value);
+                        .GetAnnouncement(annAtt.AnnouncementRef, Context.PersonId.Value);
                     if (ann.SisActivityId.HasValue)
                     {
                         var atts = ConnectorLocator.ActivityAttachmentsConnector.GetAttachments(ann.SisActivityId.Value);
@@ -160,7 +160,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (CoreRoles.TEACHER_ROLE == Context.Role)
                 {
                     var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value)
-                        .GetAnnouncement(announcementId, Context.RoleId, Context.PersonId.Value);
+                        .GetAnnouncement(announcementId, Context.PersonId.Value);
                     Trace.Assert(ann.SisActivityId.HasValue);
                     return MapStiAttsToAnnAtts(GetActivityAttachments(ann.SisActivityId.Value));
                 }

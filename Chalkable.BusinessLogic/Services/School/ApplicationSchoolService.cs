@@ -123,7 +123,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if(!CanAddToAnnouncement(aa.ApplicationRef))
                     throw new ChalkableSecurityException("Application is not installed yet");
                 var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value)
-                    .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.PersonId.Value);
+                    .GetAnnouncement(aa.AnnouncementRef, Context.PersonId.Value);
                 if (!ann.IsOwner)
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 aa.Active = true;

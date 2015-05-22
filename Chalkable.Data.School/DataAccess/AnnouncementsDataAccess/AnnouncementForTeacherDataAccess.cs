@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
-    public class AnnouncementForTeacherDataAccess : AnnouncementDataAccess
+    public class AnnouncementForTeacherDataAccess : ClassAnnouncementDataAccess
     {
         public AnnouncementForTeacherDataAccess(UnitOfWork unitOfWork, int schoolId) : base(unitOfWork, schoolId)
         {
@@ -13,6 +13,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private const string GET_TEACHER_ANNOUNCEMENTS = "spGetTeacherAnnouncements";
         private const string GRADED_ONLY_PARAM = "gradedOnly";
         private const string ALL_SCHOOL_ITEMS_PARAM = "allSchoolItems";
+        private const string SIS_ACTIVITIES_IDS_PARAM = "sisActivitiesIds";
 
         public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
@@ -20,16 +21,14 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 {
                     {GRADED_ONLY_PARAM, query.GradedOnly},
                     {ALL_SCHOOL_ITEMS_PARAM, query.AllSchoolItems},
-                    {"@sisActivitiesIds", query.SisActivitiesIds != null ? query.SisActivitiesIds.Select(x => x.ToString()).JoinString(",") : null}
+                    {SIS_ACTIVITIES_IDS_PARAM, query.SisActivitiesIds != null ? query.SisActivitiesIds.Select(x => x.ToString()).JoinString(",") : null}
                 };
             return GetAnnouncementsComplex(GET_TEACHER_ANNOUNCEMENTS, parameters, query);
         }
-        protected override void BuildConditionForGetSimpleAnnouncement(Common.Orm.DbQuery dbQuery, int role, int callerId)
+        protected override void BuildConditionForGetSimpleAnnouncement(Common.Orm.DbQuery dbQuery, int callerId)
         {
-            dbQuery.Sql.Append(" and ");
-            dbQuery.Sql.Append(@" (Announcement.ClassRef in (select ClassTeacher.ClassRef from ClassTeacher where ClassTeacher.PersonRef = @callerId))");
+            dbQuery.Sql.Append(@" and (Announcement.ClassRef in (select ClassTeacher.ClassRef from ClassTeacher where ClassTeacher.PersonRef = @callerId))");
             dbQuery.Parameters.Add("callerId", callerId);
-            dbQuery.Parameters.Add("@roleId", role);
         }
     }
 }

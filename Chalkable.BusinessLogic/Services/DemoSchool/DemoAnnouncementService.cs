@@ -435,17 +435,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
-      
-        public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null)
+
+        public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<RecipientInfo> recipientInfos = null)
         {
 
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             
             var ann = GetAnnouncement(announcement.AnnouncementId, Context.RoleId, Context.PersonId.Value);
-          
-            if (!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
-                throw new ChalkableSecurityException();
+            AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
 
             ann.Content = announcement.Content;
             ann.Subject = announcement.Subject;

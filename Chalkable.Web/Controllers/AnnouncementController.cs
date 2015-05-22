@@ -146,7 +146,7 @@ namespace Chalkable.Web.Controllers
         {
             // get announcement to ensure it exists
             SchoolLocator.AnnouncementService.GetAnnouncementById(announcementInfo.AnnouncementId);
-            return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId);
+            return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId, recipientInfos);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
@@ -217,7 +217,7 @@ namespace Chalkable.Web.Controllers
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             if (annRecipients.Count == 0)
-                throw new ChalkableException("Announcement Recipient param is empty. You can sumbit announcement without selected recipients");
+                throw new ChalkableException("Announcement Recipient param is empty. You can't sumbit announcement without selected recipients");
             var recipientInfos = RecipientInfo.Create(annRecipients);
             var res = Save(announcement, null, recipientInfos);
             SchoolLocator.AnnouncementService.SubmitForAdmin(res.Id);

@@ -190,6 +190,13 @@ namespace Chalkable.Data.School.DataAccess
                 });
         }
         
+        public void DeleteNotAssignedToClass(int announcementId, int classId)
+        {
+            var annCond = new AndQueryCondition {{AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, announcementId}};
+            var classCond = new AndQueryCondition {{Class.ID_FIELD, classId}};
+            Delete(annCond, classCond, true);
+        }
+
         public void Delete(QueryCondition annCondition, QueryCondition classCondition, bool notInClassStandard)
         {
             var cStandardDbQuery = BuildClassStandardQuery(new List<string> {ClassStandard.STANDARD_REF_FIELD}, classCondition);
