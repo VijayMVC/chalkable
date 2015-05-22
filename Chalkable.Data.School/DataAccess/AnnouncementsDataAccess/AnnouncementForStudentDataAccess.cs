@@ -5,7 +5,7 @@ using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
-    public class AnnouncementForStudentDataAccess : AnnouncementDataAccess
+    public class AnnouncementForStudentDataAccess : ClassAnnouncementDataAccess
     {
         public AnnouncementForStudentDataAccess(UnitOfWork unitOfWork, int schoolId) : base(unitOfWork, schoolId)
         {
@@ -24,12 +24,10 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 };
             return GetAnnouncementsComplex(GET_STUDENT_ANNOUNCEMENTS, parameters, query);
         }
-        protected override void BuildConditionForGetSimpleAnnouncement(Common.Orm.DbQuery dbQuery, int role, int callerId)
+        protected override void BuildConditionForGetSimpleAnnouncement(Common.Orm.DbQuery dbQuery, int callerId)
         {
             dbQuery.Sql.Append(@" and (Announcement.ClassRef in (select cp.ClassRef from ClassPerson cp where cp.PersonRef = @callerId))");
-
             dbQuery.Parameters.Add("callerId", callerId);
-            dbQuery.Parameters.Add("@roleId", role);
         }
     }
 }
