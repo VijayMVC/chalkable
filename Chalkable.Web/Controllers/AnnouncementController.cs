@@ -146,7 +146,7 @@ namespace Chalkable.Web.Controllers
         {
             // get announcement to ensure it exists
             SchoolLocator.AnnouncementService.GetAnnouncementById(announcementInfo.AnnouncementId);
-            return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId);
+            return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId, recipientInfos);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]

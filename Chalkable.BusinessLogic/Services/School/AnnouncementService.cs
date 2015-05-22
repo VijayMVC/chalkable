@@ -477,7 +477,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 AnnouncementDetails res = null;
                 if (BaseSecurity.IsDistrictAdmin(Context))
                 {
-                    ann = UpdateAdminAnnouncement(ann, announcement, recipientInfos, uow);
+                    ann = UpdateAdminAnnouncement(ann, announcement, recipientInfos, uow, da);
                     res = da.GetDetails(ann.Id, Context.PersonId.Value, Context.RoleId);
                 }
                 if (CoreRoles.TEACHER_ROLE == Context.Role)
@@ -561,9 +561,10 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         private Announcement UpdateAdminAnnouncement(Announcement ann, AnnouncementInfo inputAnnData
-            , IEnumerable<RecipientInfo> recipientInfos, UnitOfWork uow)
+            , IEnumerable<RecipientInfo> recipientInfos, UnitOfWork uow, AnnouncementDataAccess annDa)
         {
             ann = SetShortAnnouncementData(ann, inputAnnData.Content, inputAnnData.Subject, inputAnnData.ExpiresDate);
+            annDa.Update(ann);
             if (recipientInfos != null)
             {
                 var da = new DataAccessBase<AdminAnnouncementRecipient, int>(uow);
