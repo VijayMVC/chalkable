@@ -76,7 +76,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var annRecipients =
                 ((DemoAnnouncementService) ServiceLocator.AnnouncementService).GetAnnouncementRecipients(
                     announcementId, roleId, userId, true)
-                    .Where(x => x.GradeLevelRef != null && gradeLevelRefs.Contains(x.GradeLevelRef.Value))
+                   // .Where(x => x.GradeLevelRef != null && gradeLevelRefs.Contains(x.GradeLevelRef.Value))
                     .Select(x => x.AnnouncementRef);
 
             return announcements.Where(x => x.Id == announcementId && classRefs.Contains(x.ClassRef.Value) || annRecipients.Contains(x.Id))

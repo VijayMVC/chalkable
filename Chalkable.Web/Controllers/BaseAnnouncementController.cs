@@ -90,6 +90,9 @@ namespace Chalkable.Web.Controllers
                                   ? annViewData.Applications.First().Name
                                   : annViewData.Applications.Count.ToString();
             }
+            
+            if (ann.AnnouncementRecipients != null && ann.AnnouncementRecipients.Count > 0)
+                annViewData.Recipients = AdminAnnouncementRecipientViewData.Create(ann.AnnouncementRecipients);
             return annViewData;
         }
         

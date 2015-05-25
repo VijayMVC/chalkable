@@ -92,7 +92,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 reader.NextResult();
                 announcement.AnnouncementStandards = reader.ReadList<AnnouncementStandardDetails>();
                 reader.NextResult();
-                announcement.AnnouncementRecipients = reader.ReadList<AdminAnnouncementRecipient>();
+                announcement.AnnouncementRecipients = reader.ReadList<AdminAnnouncementRecipient>(true);
                 announcement.StudentAnnouncements = new List<StudentAnnouncementDetails>();
             }
             return announcement;

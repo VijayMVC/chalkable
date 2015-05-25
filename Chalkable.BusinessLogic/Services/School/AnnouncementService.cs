@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Announcement EditTitle(int announcementId, string title);
         bool Exists(string title, int classId, DateTime expiresDate, int? excludeAnnouncementId);
 
-        AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<RecipientInfo> recipientInfos = null);
+        AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<int> groupsIds = null);
         void SubmitAnnouncement(int announcementId, int recipientId);
         void SubmitForAdmin(int announcementId);
 
@@ -465,7 +465,7 @@ namespace Chalkable.BusinessLogic.Services.School
             throw new NotImplementedException();
         }
 
-        public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<RecipientInfo> recipientInfos = null)
+        public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<int> groupsIds = null)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
@@ -477,7 +477,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 AnnouncementDetails res = null;
                 if (BaseSecurity.IsDistrictAdmin(Context))
                 {
-                    ann = UpdateAdminAnnouncement(ann, announcement, recipientInfos, uow, da);
+                    ann = UpdateAdminAnnouncement(ann, announcement, groupsIds, uow, da);
                     res = da.GetDetails(ann.Id, Context.PersonId.Value, Context.RoleId);
                 }
                 if (CoreRoles.TEACHER_ROLE == Context.Role)
@@ -561,27 +561,20 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         private Announcement UpdateAdminAnnouncement(Announcement ann, AnnouncementInfo inputAnnData
-            , IEnumerable<RecipientInfo> recipientInfos, UnitOfWork uow, AnnouncementDataAccess annDa)
+            , IEnumerable<int> groupsIds, UnitOfWork uow, AnnouncementDataAccess annDa)
         {
             ann = SetShortAnnouncementData(ann, inputAnnData.Content, inputAnnData.Subject, inputAnnData.ExpiresDate);
             annDa.Update(ann);
-            if (recipientInfos != null)
+            if (groupsIds != null)
             {
                 var da = new DataAccessBase<AdminAnnouncementRecipient, int>(uow);
                 da.Delete(ann.Id);
-                var annRecipients = new List<AdminAnnouncementRecipient>();
-                foreach (var recipientInfo in recipientInfos)
-                {
-                    annRecipients.Add(new AdminAnnouncementRecipient
-                        {
-                            AnnouncementRef = ann.Id,
-                            ToAll = recipientInfo.ToAll,
-                            Role = recipientInfo.ToAll ? null : recipientInfo.RoleId,
-                            GradeLevelRef = recipientInfo.ToAll ? null : recipientInfo.GradeLevelId,
-                            PersonRef = recipientInfo.ToAll ? null : recipientInfo.PersonId,
-                            SchoolRef = recipientInfo.ToAll ? null : recipientInfo.SchoolId
-                        });
-                }
+                groupsIds = groupsIds.Distinct();
+                var annRecipients = groupsIds.Select(gId => new AdminAnnouncementRecipient
+                    {
+                        AnnouncementRef = ann.Id,
+                        GroupRef = gId
+                    }).ToList();
                 da.Insert(annRecipients);
             }
             return ann;

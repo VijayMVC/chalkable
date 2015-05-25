@@ -12,8 +12,6 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('isdraft')],
             Boolean, 'isDraft',
 
-            Array, 'recipients',
-
             function $(announcement_){
                 BASE();
                 if(announcement_)

@@ -128,6 +128,7 @@
     <Compile Include="Model\GradingComment.cs" />
     <Compile Include="Model\GradingScale.cs" />
     <Compile Include="Model\GradingScaleRange.cs" />
+    <Compile Include="Model\Group.cs" />
     <Compile Include="Model\Infraction.cs" />
     <Compile Include="Model\GradeLevel.cs" />
     <Compile Include="Model\GradingPeriod.cs" />

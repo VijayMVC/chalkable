@@ -437,7 +437,7 @@ NAMESPACE('chlk.controllers', function (){
                     });
                 });
             }
-            if(!this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
+            if(this.userInRole(chlk.models.common.RoleEnum.TEACHER)){
                 var classInfo = this.classService.getClassAnnouncementInfo(announcement.getClassId());
                 var alphaGrades = classInfo ? classInfo.getAlphaGrades() : [];
                 var alternateScores = this.getContext().getSession().get(ChlkSessionConstants.ALTERNATE_SCORES, []);

@@ -12,8 +12,5 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementCreate)],
         'AdminAnnouncementFormTpl', EXTENDS(chlk.templates.announcement.BaseAnnouncementFormTpl), [
 
-            [ria.templates.ModelPropertyBind],
-            Array, 'recipients'
-
         ]);
 });

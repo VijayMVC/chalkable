@@ -148,8 +148,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AdminAnnouncementRecipient> GetList(int announcementId, int? roleId, int? personId, bool toAll = false)
         {
+            //TODO rewrites impl
             var recipients = data.Select(x => x.Value);
-            return recipients.Where(x => x.ToAll = toAll || x.PersonRef == personId || x.Role == roleId).ToList();
+            return recipients.ToList();
         }
     }
 
@@ -436,7 +437,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<RecipientInfo> recipientInfos = null)
+        public AnnouncementDetails EditAnnouncement(AnnouncementInfo announcement, int? classId = null, IList<int> groupsIds = null)
         {
 
             if (!Context.PersonId.HasValue)
@@ -799,18 +800,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<Person> GetAnnouncementRecipientPersons(int announcementId)
         {
-            var ann = GetAnnouncementById(announcementId);
-            if (ann.State == AnnouncementState.Draft)
-                throw new ChalkableException(ChlkResources.ERR_NO_RECIPIENTS_IN_DRAFT_STATE);
+            //TODO : implement this later
+            throw new NotImplementedException();
+            //var ann = GetAnnouncementById(announcementId);
+            //if (ann.State == AnnouncementState.Draft)
+            //    throw new ChalkableException(ChlkResources.ERR_NO_RECIPIENTS_IN_DRAFT_STATE);
             
-            var annRecipients = AnnouncementRecipientStorage.GetList(announcementId);
-            var result = new List<Person>();
-            foreach (var announcementRecipient in annRecipients)
-            {
-                if (announcementRecipient.PersonRef.HasValue)
-                    result.Add(ServiceLocator.PersonService.GetPerson(announcementRecipient.PersonRef ?? 0));
-            }
-            return result;
+            //var annRecipients = AnnouncementRecipientStorage.GetList(announcementId);
+            //var result = new List<Person>();
+            //foreach (var announcementRecipient in annRecipients)
+            //{
+            //    if (announcementRecipient.PersonRef.HasValue)
+            //        result.Add(ServiceLocator.PersonService.GetPerson(announcementRecipient.PersonRef ?? 0));
+            //}
+            //return result;
         }
 
         public IList<string> GetLastFieldValues(int personId, int classId, int classAnnouncementType)

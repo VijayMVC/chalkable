@@ -4,11 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -142,11 +140,11 @@ namespace Chalkable.Web.Controllers
             return Json(res, 6);
         }
 
-        private AnnouncementDetails Save(AnnouncementInfo announcementInfo, int? classId, IList<RecipientInfo> recipientInfos = null)
+        private AnnouncementDetails Save(AnnouncementInfo announcementInfo, int? classId, IList<int> groupsIds = null)
         {
             // get announcement to ensure it exists
             SchoolLocator.AnnouncementService.GetAnnouncementById(announcementInfo.AnnouncementId);
-            return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId, recipientInfos);
+            return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId, groupsIds);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
@@ -177,19 +175,18 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult SaveAnnouncement(AnnouncementInfo announcementInfo, int? classId, ListOfStringList annRecipients)
+        public ActionResult SaveAnnouncement(AnnouncementInfo announcementInfo, int? classId, IntList groupsIds)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            var recipients = annRecipients != null ? RecipientInfo.Create(annRecipients) : null;
-            var ann = Save(announcementInfo, classId, recipients);
+            var ann = Save(announcementInfo, classId, groupsIds);
             return Json(PrepareAnnouncmentViewDataForEdit(ann));
         }
         
         [AuthorizationFilter("Teacher")]
         public ActionResult SubmitAnnouncement(AnnouncementInfo announcement, int classId)
         {
-            var res = Save(announcement, classId);
+            var res = Save(announcement, classId, null);
             SchoolLocator.AnnouncementService.SubmitAnnouncement(res.Id, classId);
             SchoolLocator.AnnouncementService.DeleteAnnouncements(classId, res.ClassAnnouncementTypeRef, AnnouncementState.Draft);
             TrackNewItemCreate(res);
@@ -212,14 +209,13 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult SubmitForAdmin(AnnouncementInfo announcement, ListOfStringList annRecipients, DateTime expiresDate)
+        public ActionResult SubmitForAdmin(AnnouncementInfo announcement, IntList groupsIds, DateTime expiresDate)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            if (annRecipients.Count == 0)
+            if (groupsIds.Count == 0)
                 throw new ChalkableException("Announcement Recipient param is empty. You can't sumbit announcement without selected recipients");
-            var recipientInfos = RecipientInfo.Create(annRecipients);
-            var res = Save(announcement, null, recipientInfos);
+            var res = Save(announcement, null, groupsIds);
             SchoolLocator.AnnouncementService.SubmitForAdmin(res.Id);
             SchoolLocator.AnnouncementService.DeleteAnnouncements(Context.PersonId.Value);
             TrackNewItemCreate(res);

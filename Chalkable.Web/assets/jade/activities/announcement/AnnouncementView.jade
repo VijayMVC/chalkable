@@ -17,7 +17,7 @@ mixin Glue_()
     = glue.apply(null, arguments) 
 
 .announcement-view.not-transparent
-    -var isAdminAnnouncement = self.getAnnouncementTypeId() == chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf()
+    -var isAdminAnnouncement = self.isAdminAnnouncement()
     -var isReadonly = !self.isAbleToGrade()
     -var studentAnnouncements = false
     -var studentAnnouncementsInfo = self.getStudentAnnouncements()

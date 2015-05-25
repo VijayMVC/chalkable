@@ -16,6 +16,8 @@ REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.apps.ApplicationForAttach');
 
+REQUIRE('chlk.models.announcement.AdminAnnouncementRecipient');
+
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
 
@@ -81,7 +83,6 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
                 this.chalkableAnnouncementType = SJX.fromValue(raw.chalkableannouncementtypeid, Number);
                 this.setChalkableAnnouncementType(this.chalkableAnnouncementType);
-                this.setAdminAnnouncement(SJX.fromValue(raw.adminannouncement, Boolean));
                 this.applications = SJX.fromArrayOfDeserializables(raw.applications, chlk.models.apps.AppAttachment);
                 this.gradeViewApps = SJX.fromArrayOfDeserializables(raw.gradeviewapps, chlk.models.apps.AppAttachment);
                 this.attachments = SJX.fromValue(raw.attachments, String);
@@ -103,6 +104,9 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.suggestedApps = SJX.fromArrayOfDeserializables(raw.suggestedapps, chlk.models.apps.ApplicationForAttach);
                 this.shortClassName = SJX.fromValue(raw.classname, String);
                 this.assessmentApplicationId = SJX.fromValue(raw.assessmentapplicationid, chlk.models.id.AppId);
+
+                this.recipients = SJX.fromArrayOfDeserializables(raw.recipients, chlk.models.announcement.AdminAnnouncementRecipient);
+                this.adminAnnouncement = SJX.fromValue(raw.isadminannouncement, Boolean);
 
                 if(this.autoGradeApps && this.autoGradeApps.length){
                     var autoGradeApps = [];
@@ -186,7 +190,6 @@ NAMESPACE('chlk.models.announcement', function () {
 
             VOID, function setClassId(classId){
                 this.classId = classId;
-                this.setAdminAnnouncement(!classId);
             },
             Number, 'chalkableAnnouncementType',
 
@@ -197,11 +200,6 @@ NAMESPACE('chlk.models.announcement', function () {
             },
             Number, function getChalkableAnnouncementType(){ return this._chalkableAnnouncementType;},
 
-            Boolean, 'adminAnnouncement',
-            Boolean, function setAdminAnnouncement(isAdminAnnouncement){
-                if(isAdminAnnouncement === null)
-                    this.adminAnnouncement = !this.classId;
-            },
 
             READONLY, Boolean, 'standartAnnouncement',
             Boolean, function isStandartAnnouncement(){
@@ -228,6 +226,10 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'needDeleteButton',
             String, 'annRecipients',
             Boolean, 'ableEdit',
+            ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
+
+            Boolean, 'adminAnnouncement',
+
             chlk.models.id.AppId, 'assessmentApplicationId',
 
             function prepareExpiresDateText(){
