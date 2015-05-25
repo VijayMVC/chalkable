@@ -92,19 +92,22 @@ namespace Chalkable.Web.Controllers
         }
 
 
-        //[AuthorizationFilter("DistrictAdmin")]
+        [AuthorizationFilter("DistrictAdmin")]
         public ActionResult DistrictAdmin()
         {
-            var distictAdmin = MasterLocator.UserService.GetById(Context.UserId);
+            if (!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+
+            var distictAdmin = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
             PrepareCommonViewData();
             ViewData[ViewConstants.ROLE_NAME] = CoreRoles.DISTRICT_ADMIN_ROLE.LoweredName;
-            PrepareJsonData(UserViewData.Create(distictAdmin), ViewConstants.CURRENT_PERSON);
+            PrepareJsonData(PersonViewData.Create(distictAdmin), ViewConstants.CURRENT_PERSON);
             var gradeLevel = SchoolLocator.GradeLevelService.GetGradeLevels();
             PrepareJsonData(GradeLevelViewData.Create(gradeLevel), ViewConstants.GRADE_LEVELS);
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MasterLocator.UserTrackingService.IdentifyDistrictAdmin(distictAdmin.Login, "", "", 
+            MasterLocator.UserTrackingService.IdentifyDistrictAdmin(distictAdmin.Email, "", "", 
                 Context.DistrictId.ToString(), null, Context.DistrictTimeZone, Context.Role.Name, ip);
             return View();
         }
