@@ -12,27 +12,13 @@ NAMESPACE('chlk.templates.announcement', function () {
 
     /** @class chlk.templates.announcement.BaseAnnouncementFormTpl*/
     CLASS(
-        [ria.templates.ModelBind(chlk.models.announcement.AnnouncementForm)],
+        [ria.templates.ModelBind(chlk.models.announcement.AnnouncementCreate)],
         'BaseAnnouncementFormTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.Announcement, 'announcement',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'selectedTypeId',
+            Boolean, 'isDraft'
 
-            [ria.templates.ModelPropertyBind],
-            Boolean, 'isDraft',
-
-            [ria.templates.ModelPropertyBind],
-            Array, 'classScheduleDateRanges',
-
-            chlk.models.standard.StandardsListViewData, function prepareStandardsListData() {
-                var ann = this.announcement;
-                return new chlk.models.standard.StandardsListViewData(
-                    null, ann.getClassId(),
-                    null, ann.getStandards(),
-                    ann.getId()
-                );
-            }
         ]);
 });

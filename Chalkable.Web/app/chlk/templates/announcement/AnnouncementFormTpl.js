@@ -20,6 +20,21 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.classes.ClassForWeekMask, 'classInfo',
 
+            [ria.templates.ModelPropertyBind],
+            Number, 'selectedTypeId',
+
+            [ria.templates.ModelPropertyBind],
+            Array, 'classScheduleDateRanges',
+
+            chlk.models.standard.StandardsListViewData, function prepareStandardsListData() {
+                var ann = this.announcement;
+                return new chlk.models.standard.StandardsListViewData(
+                    null, ann.getClassId(),
+                    null, ann.getStandards(),
+                    ann.getId()
+                );
+            },
+
             chlk.models.apps.SuggestedAppsList, function prepareSuggestedAppListData(){
                 var ann = this.getAnnouncement();
                 if(!ann) return null;
