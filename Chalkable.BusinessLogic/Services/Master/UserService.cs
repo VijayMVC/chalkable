@@ -156,9 +156,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Update(IsolationLevel.ReadUncommitted))
             {
-                var district = new DistrictDataAccess(uow)
-                    .GetAll(new AndQueryCondition{{District.ID_FIELD, sisDistrictId}})
-                    .First();
+                var district = new DistrictDataAccess(uow).GetById(sisDistrictId);
                 var sisUrl = district.SisUrl;
                 var iNowCl = new ConnectorLocator(token, sisUrl, tokenExpiresTime);
                 var iNowUser = iNowCl.UsersConnector.GetMe();

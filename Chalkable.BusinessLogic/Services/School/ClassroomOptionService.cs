@@ -35,7 +35,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public void Delete(IList<ClassroomOption> classroomOptions)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new DataAccessBase<ClassroomOption>(u).Update(classroomOptions));
+            DoUpdate(u => new DataAccessBase<ClassroomOption>(u).Delete(classroomOptions));
         }
 
         public ClassroomOption GetClassOption(int classId, bool useInowApi = false)
