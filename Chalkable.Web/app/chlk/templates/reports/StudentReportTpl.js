@@ -18,12 +18,16 @@ NAMESPACE('chlk.templates.reports', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ableDownload',
+
             ArrayOf(chlk.models.common.ActionLinkModel), function buildReportLinksData(pressedAction){
                 var controllerName = 'reporting';
                 var args = [];
                 var classNames = ['report-button'];
                 return [
-                    new chlk.models.common.ActionLinkModel(controllerName, 'studentComprehensiveProgressReport', 'Comprehensive Progress', 'studentComprehensiveProgressReport' == pressedAction, args, classNames),
+                    new chlk.models.common.ActionLinkModel(controllerName, 'studentComprehensiveProgressReport',
+                        'Comprehensive Progress', 'studentComprehensiveProgressReport' == pressedAction, args, classNames),
                 ];
             }
         ])

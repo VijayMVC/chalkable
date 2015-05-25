@@ -13,13 +13,17 @@ NAMESPACE('chlk.models.reports', function () {
 
         chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
-        [[ArrayOf(chlk.models.schoolYear.GradingPeriod), chlk.models.id.SchoolPersonId]],
-        function $(gradingPeriods_, studentId_){
+        Boolean, 'ableDownload',
+
+        [[ArrayOf(chlk.models.schoolYear.GradingPeriod), chlk.models.id.SchoolPersonId, Boolean]],
+        function $(gradingPeriods_, studentId_, ableDownload_){
             BASE();
             if(gradingPeriods_)
                 this.setGradingPeriods(gradingPeriods_);
             if(studentId_)
                 this.setStudentId(studentId_);
+            if (ableDownload_)
+                this.setAbleDownload(ableDownload_);
         }
 
     ]);
