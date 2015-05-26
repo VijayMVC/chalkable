@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
@@ -35,46 +36,39 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             StudentGroupStorage = new DemoStudentGroupStorage();
         }
 
-        //TODO: security 
         public void AddGroup(string name)
         {
-            GroupStorage.Add(new Group {Name = name});
+            if(!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            BaseSecurity.IsDistrictAdmin(Context); // only admin can create group ... think do we need this for demo 
+            GroupStorage.Add(new Group {Name = name, OwnerRef = Context.PersonId.Value});
         }
 
         public void DeleteGroup(int groupId)
         {
+            EnsureInGroupModifyPermission(GroupStorage.GetById(groupId));
             GroupStorage.Delete(groupId);
         }
 
         public void AssignStudentsToGroup(int groupId, IList<int> studentIds)
         {
-            if (studentIds == null || studentIds.Count == 0)
-                throw new ChalkableException("Invalid param studentids. Studentids param is empty");
-            var studentGroups = studentIds.Select(studentId => new StudentGroup
-            {
-                GroupRef = groupId,
-                StudentRef = studentId
-            }).ToList();
-            StudentGroupStorage.Add(studentGroups);
+            DemandStudentIdsParam(studentIds);
+            EnsureInGroupModifyPermission(GroupStorage.GetById(groupId));
+            StudentGroupStorage.Add(BuildStudentGroups(groupId, studentIds));
         }
 
         public void UnassignStudentsFromGroup(int groupId, IList<int> studentIds)
         {
-            if (studentIds == null || studentIds.Count == 0)
-                throw new ChalkableException("Invalid param studentids. Studentids param is empty");
-            var studentGroups = studentIds.Select(studentId => new StudentGroup
-            {
-                GroupRef = groupId,
-                StudentRef = studentId
-            }).ToList();
-            StudentGroupStorage.Delete(studentGroups);
+            DemandStudentIdsParam(studentIds);
+            EnsureInGroupModifyPermission(GroupStorage.GetById(groupId));
+            StudentGroupStorage.Delete(BuildStudentGroups(groupId, studentIds));
         }
 
         public IList<GroupDetails> GetGroupsDetails(int ownerId)
         {
             var groups = GroupStorage.GetAll().Where(g => g.OwnerRef == ownerId).ToList();
             var studentGroups = StudentGroupStorage.GetAll().ToList();
-            var students = new DemoStudentStorage().GetAll();
+            var students = new DemoStudentStorage().GetAll().Select(x=>DemoStudentService.BuildStudentDetailsData(x, null)).ToList();
             var res = new List<GroupDetails>();
             foreach (var demoGroup in groups)
             {
@@ -88,6 +82,25 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     });
             }
             return res;
+        }
+
+        private void DemandStudentIdsParam(IList<int> studentIds)
+        {
+            if (studentIds == null || studentIds.Count == 0)
+                throw new ChalkableException("Invalid param studentids. Studentids param is empty");
+        }
+        private void EnsureInGroupModifyPermission(Group gGroup)
+        {
+            if (gGroup.OwnerRef != Context.PersonId)
+                throw new ChalkableException("Only owner can modify group");
+        }
+        private IList<StudentGroup> BuildStudentGroups(int groupId, IList<int> studentIds)
+        {
+            return studentIds.Select(studentId => new StudentGroup
+            {
+                GroupRef = groupId,
+                StudentRef = studentId
+            }).ToList();
         }
     }
 }

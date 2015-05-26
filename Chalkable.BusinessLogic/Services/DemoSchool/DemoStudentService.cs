@@ -89,16 +89,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var student = StudentStorage.GetById(id);
             var isEnrolled = ServiceLocator.SchoolYearService.GetStudentAssignments().Any(x => x.StudentRef == id
                                           && x.SchoolYearRef == schoolYearId && x.IsEnrolled);
-            return PrepareStudentDetailsData(student, !isEnrolled);
+            return BuildStudentDetailsData(student, !isEnrolled);
         }
 
 
         private IList<StudentDetails> PrepareStudentListDetailsData(IEnumerable<Student> students, IDictionary<int, bool> stWithDrawDic)
         {
-            return students.Select(s => PrepareStudentDetailsData(s, stWithDrawDic.ContainsKey(s.Id) ? stWithDrawDic[s.Id] : default(bool?))).ToList();
+            return students.Select(s => BuildStudentDetailsData(s, stWithDrawDic.ContainsKey(s.Id) ? stWithDrawDic[s.Id] : default(bool?))).ToList();
         }
 
-        private StudentDetails PrepareStudentDetailsData(Student student, bool? isWithdrawn)
+        public static StudentDetails BuildStudentDetailsData(Student student, bool? isWithdrawn)
         {
             return new StudentDetails
             {
@@ -180,7 +180,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             var student = StudentStorage.GetById(studentId);
             var isEnrolled = ((DemoSchoolYearService)ServiceLocator.SchoolYearService).IsStudentEnrolled(studentId, schoolYearId);
-            return PrepareStudentDetailsData(student, !isEnrolled);
+            return BuildStudentDetailsData(student, !isEnrolled);
         }
 
         public StudentSummaryInfo GetStudentSummaryInfo(int studentId)

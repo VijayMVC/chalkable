@@ -13,7 +13,7 @@ namespace Chalkable.Data.Common.Orm
 
         public const string SELECT_FORMAT = "SELECT {0} FROM [{1}] ";
         public const string JOIN = "JOIN";
-        public const string SIMPLE_JOIN_FORMAT = JOIN + " [{0}] ON [{0}].[{1}] = [{2}].[{3}]";
+        public const string SIMPLE_JOIN_FORMAT = JOIN + " [{0}] ON [{0}].[{1}] = [{2}].[{3}] ";
         public const string ASC = "ASC";
         public const string DESC = "DESC";
         public const string FULL_COLUMN_NAME_FORMAT = "[{0}].[{1}]";

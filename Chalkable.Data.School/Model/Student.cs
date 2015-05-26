@@ -5,6 +5,7 @@ namespace Chalkable.Data.School.Model
 {
     public class Student
     {
+        public const string ID_FIELD = "Id";
         public const string USER_ID_FIELD = "UserId";
 
         [PrimaryKeyFieldAttr]
