@@ -5,12 +5,21 @@ create table [Group]
 )
 go
 
+alter table [Group]
+add OwnerRef int not null constraint FK_Group_Person foreign key references Person(Id)
+go
+
 create table StudentGroup
 (
 	GroupRef int not null constraint FK_StudentGroup_Group foreign key references [Group](Id),
 	StudentRef int not null constraint FK_StudentGroup_Student foreign key references Student(Id)
 )
 go
+
+alter table StudentGroup
+add constraint PK_StudentGroup primary key (GroupRef,StudentRef)
+go
+
 
 delete from AdminAnnouncementRecipient
 go
