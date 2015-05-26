@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -12,10 +9,10 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IGroupService
     {
         void AddGroup(string name);
+        Group EditGroup(int groupId, string name);
         void DeleteGroup(int groupId);
-        void AssignStudentsToGroup(int groupId, IList<int> studentIds);
-        void UnassignStudentsFromGroup(int groupId, IList<int> studentIds);
-
+        void UpdateStudentGroups(int groupId, IList<int> studentIds);
+        
         IList<GroupDetails> GetGroupsDetails(int ownerId);
     }
 
@@ -33,6 +30,19 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u => new GroupDataAccess(u).Insert(new Group { Name = name, OwnerRef  = Context.PersonId.Value}));
         }
 
+        public Group EditGroup(int groupId, string name)
+        {
+            using (var uow = Update())
+            {
+                var da = new GroupDataAccess(uow);
+                var group = da.GetById(groupId);
+                EnsureInGroupModifyPermission(group);
+                group.Name = name;
+                uow.Commit();
+                return group;
+            }
+        }
+
         public void DeleteGroup(int groupId)
         {
             DoUpdate(u =>
@@ -43,50 +53,24 @@ namespace Chalkable.BusinessLogic.Services.School
                 });
         }
 
-        public void AssignStudentsToGroup(int groupId, IList<int> studentIds)
+        public void UpdateStudentGroups(int groupId, IList<int> studentIds)
         {
-            DemandStudentIdsParam(studentIds);
-            var studentGroups = BuildStudentGroups(groupId, studentIds);
             DoUpdate(u =>
                 {
                     EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                    new DataAccessBase<StudentGroup, int>(u).Insert(studentGroups);
+                    new StudentGroupDataAccess(u).ReCreateStudentGroups(groupId, studentIds ?? new List<int>());
                 });
-        }
-
-        public void UnassignStudentsFromGroup(int groupId, IList<int> studentIds)
-        {
-            DemandStudentIdsParam(studentIds);
-            var studentGroups = BuildStudentGroups(groupId, studentIds);
-            DoUpdate(u =>
-            {
-                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                new DataAccessBase<StudentGroup, int>(u).Insert(studentGroups);
-            });
         }
 
         public IList<GroupDetails> GetGroupsDetails(int ownerId)
         {
             return DoRead(u => new GroupDataAccess(u).GetGroupsDetails(ownerId));
         }
-        
-        private void DemandStudentIdsParam(IList<int> studentIds)
-        {
-            if (studentIds == null || studentIds.Count == 0)
-                throw new ChalkableException("Invalid param studentids. Studentids param is empty");
-        }
+
         private void EnsureInGroupModifyPermission(Group gGroup)
         {
             if (gGroup.OwnerRef != Context.PersonId)
                 throw new ChalkableException("Only owner can modify group");
-        }
-        private IList<StudentGroup> BuildStudentGroups(int groupId, IList<int> studentIds)
-        {
-            return studentIds.Select(studentId => new StudentGroup
-            {
-                GroupRef = groupId,
-                StudentRef = studentId
-            }).ToList();
         }
     }
 }

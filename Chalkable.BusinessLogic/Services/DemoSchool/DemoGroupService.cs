@@ -102,5 +102,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 StudentRef = studentId
             }).ToList();
         }
+        
+        public Group EditGroup(int groupId, string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UpdateStudentGroups(int groupId, IList<int> studentIds)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
