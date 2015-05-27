@@ -14,6 +14,17 @@ NAMESPACE('chlk.activities.announcement', function () {
         'AdminAnnouncementFormPage', EXTENDS(chlk.activities.announcement.BaseAnnouncementFormPage), [
 
 
+
+            [ria.mvc.DomEventBind('click', '.add-recipients .title')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function addRecipientsClick(node, event){
+                jQuery(node.parent('.add-recipients').find('.add-recipients-btn').valueOf()).click();
+            },
+
+
+
+
+
             [[Object, String]],
             OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
                 BASE(model, msg_);

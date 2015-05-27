@@ -1,4 +1,5 @@
 REQUIRE('chlk.templates.announcement.BaseAnnouncementFormTpl');
+REQUIRE('chlk.templates.announcement.AdminAnnouncementRecipientsTpl');
 REQUIRE('chlk.models.announcement.AnnouncementCreate');
 
 NAMESPACE('chlk.templates.announcement', function () {

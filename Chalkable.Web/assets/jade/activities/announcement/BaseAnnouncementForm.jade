@@ -12,7 +12,6 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
     +Hidden('classid', classId)
     +Hidden('order', announcement.getOrder()).order-value
     +Hidden('announcementtypename', announcement.getAnnouncementTypeName())
-    +Hidden('annrecipients', announcement.getAnnRecipients() || '0|2|-1|-1')
 
     //+AnnouncementFormDescriptionBlock(announcement)
     typesEnum = chlk.models.announcement.AnnouncementTypeEnum
@@ -30,7 +29,16 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
         .left-block(class=needStandardsBlock ? 'with-standards' : '')
             .left-block-container
                 if isAdmin
-                    +Select('recipientsCombo')(multiple)#recipients-select
+                    -var recipients = announcement.getRecipients() || []
+                    .add-recipients-container
+                        .add-recipients
+                            .recipients-list
+                                +RenderWith(announcement, chlk.templates.announcement.AdminAnnouncementRecipientsTpl)(
+                                    userRole = userRole
+                                    studyCenterEnabled = self.isStudyCenterEnabled()
+                                )
+                            .title=recipients.length > 0 ? Msg.Click_to_add_more : 'Click to add group'
+                            +ActionLink('announcement', 'showGroups', announcement.getId()).add-recipients-btn.x-hidden
                 +TextArea(name="content", placeholder=isAnnouncement ? "Message" : "Assignment")= announcement.getContent()
                 if needStandardsBlock
                     .add-standards-container

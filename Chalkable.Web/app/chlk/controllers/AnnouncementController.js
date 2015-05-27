@@ -1117,6 +1117,19 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, res, 'update-standards-and-suggested-apps');
+        },
+
+        [[chlk.models.id.AnnouncementId]],
+        function showGroupsAction(announcementId){
+            var groupsIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []);
+            //TODO implementetion
+        },
+
+
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.AnnouncementId, chlk.models.id.GroupId]],
+        function removeRecipientAction(announcementId, recipientId){
+            //TODO implementetion
         }
     ])
 });
