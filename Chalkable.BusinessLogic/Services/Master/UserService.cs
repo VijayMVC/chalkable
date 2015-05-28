@@ -227,10 +227,13 @@ namespace Chalkable.BusinessLogic.Services.Master
                 int roleId;
                 int personId = PersonDataAccess.GetPersonDataForLogin(user.District.ServerUrl, user.DistrictRef.Value,
                                                                       user.SisUserId.Value, out roleId);
-                if (roleId == CoreRoles.TEACHER_ROLE.Id && iNowUser.Claims.All(x => x.Values.All(y => y != "Access Chalkable")))
-                    return null;
-                var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, null, personId, schoolYear);
+                if (roleId == CoreRoles.TEACHER_ROLE.Id && iNowUser.Claims.All(x =>
+                        x.Values.All(y => y != ClaimInfo.MAINTAIN_CLASSROOM && y != ClaimInfo.MAINTAIN_CLASSROOM_ADMIN)))
+                {
+                    throw new ChalkableException(string.Format("Teacher have no ({0} , {1}) login to Chalkable", ClaimInfo.MAINTAIN_CLASSROOM, ClaimInfo.MAINTAIN_CLASSROOM_ADMIN));
+                }
                 
+                var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, null, personId, schoolYear);
                 res.Claims = ClaimInfo.Create(iNowUser.Claims);
                 return res;
             }
