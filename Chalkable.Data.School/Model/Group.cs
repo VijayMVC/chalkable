@@ -38,4 +38,38 @@ namespace Chalkable.Data.School.Model
         [DataEntityAttr]
         public StudentDetails Student { get; set; }
     }
+
+
+    public class GroupExplorer
+    {
+        public Group Group { get; set; }
+        public IList<School> Schools { get; set; }
+        public IList<GradeLevel> GradeLevels { get; set; }
+        public IList<GroupMember> GroupMembers { get; set; }
+    }
+
+    public class GroupMember
+    {
+        public int GroupRef { get; set; }
+        public int SchoolRef { get; set; }
+        public int GradeLevelRef { get; set; }
+        public int SchoolYearRef { get; set; }
+
+        public int StudentsInSchool { get; set; }
+        public int StudentsGroupInSchool { get; set; }
+        public int StudentsInGradeLevel { get; set; }
+        public int StudentsGroupInGradeLevel { get; set; }
+    }
+
+    public class StudentForGroup : StudentDetails
+    {
+        [DataEntityAttr]
+        public StudentGroup StudentGroup { get; set; }
+
+        [NotDbFieldAttr]
+        public bool AssignedToGroup
+        {
+            get { return StudentGroup != null; }
+        }
+    }
 }

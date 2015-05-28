@@ -1,4 +1,6 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Linq;
+using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionFilters;
@@ -13,8 +15,8 @@ namespace Chalkable.Web.Controllers
         {
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            var groups = SchoolLocator.GroupService.GetGroupsDetails(Context.PersonId.Value);
-            return Json(GroupViewData.Create(groups));
+            var groups = SchoolLocator.GroupService.GetGroups(Context.PersonId.Value);
+            return Json(groups.Select(GroupViewData.Create).ToList());
         }
 
         [AuthorizationFilter("DistrictAdmin")]
@@ -44,6 +46,13 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.GroupService.UpdateStudentGroups(groupId, studentIds);
             return Json(true);
         }
-        
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult GroupExplorer()
+        {
+            var schools = SchoolLocator.SchoolService.GetSchools();
+            var gradeLevels = SchoolLocator.GradeLevelService.GetGradeLevels();
+            throw new NotImplementedException();
+        }
     }
 }

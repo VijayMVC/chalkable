@@ -14,6 +14,53 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+        private const string SP_GET_GROUP_EXPLORER_DATA =  "spGetGroupExplorerData";
+        private const string GROUP_ID_PARAM = "groupId";
+        private const string OWNER_ID_PARAM = "ownerId";
+        private const string CURRENT_DATE_PARAM = "currentDate";
+        
+        public GroupExplorer GetGroupExplorerData(int groupId, int ownerId, DateTime currentDate)
+        {
+            var parameters = new Dictionary<string, object>
+                {
+                    {GROUP_ID_PARAM, groupId},
+                    {OWNER_ID_PARAM, OWNER_ID_PARAM},
+                    {CURRENT_DATE_PARAM, currentDate}
+                };
+            using (var reader = ExecuteStoredProcedureReader(SP_GET_GROUP_EXPLORER_DATA, parameters))
+            {
+                var res = new GroupExplorer();
+                reader.Read();
+                res.Group = reader.Read<Group>();
+                reader.NextResult();
+                res.Schools = reader.ReadList<Model.School>();
+                reader.NextResult();
+                res.GradeLevels = reader.ReadList<GradeLevel>();
+                reader.NextResult();
+                res.GroupMembers = reader.ReadList<GroupMember>();
+                return res;
+            }
+        }
+
+        private const string SP_SEARCH_STUDENTS_FOR_GROUP = "spSearchStudentsForGroup";
+        private const string SCHOOL_YEAR_ID_PARAM = "schoolYearId";
+        private const string GRADE_LEVEL_ID_PARAM = "gradeLevelId";
+        private const string CLASSES_IDS_PARAM = "classesIds";
+        private const string COURSES_IDS_PARAM = "coursesIds";
+
+        public IList<StudentForGroup> GetStudentForGroup(int groupId, int schoolYearId, int gradeLevelId, IList<int> classesIds, IList<int> coursesIds)
+        {
+            var parametes = new Dictionary<string, object>
+                {
+                    {GROUP_ID_PARAM, groupId},
+                    {SCHOOL_YEAR_ID_PARAM, schoolYearId},
+                    {GRADE_LEVEL_ID_PARAM, gradeLevelId},
+                    {CLASSES_IDS_PARAM, classesIds},
+                    {COURSES_IDS_PARAM, coursesIds}
+                };
+            return ExecuteStoredProcedureList<StudentForGroup>(SP_SEARCH_STUDENTS_FOR_GROUP, parametes);
+        }
+
         public IList<GroupDetails> GetGroupsDetails(int ownerId)
         {
             var groupType = typeof (Group);

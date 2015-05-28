@@ -112,5 +112,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+
+        public IList<Group> GetGroups(int ownerId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

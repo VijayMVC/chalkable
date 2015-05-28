@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -14,6 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void UpdateStudentGroups(int groupId, IList<int> studentIds);
         
         IList<GroupDetails> GetGroupsDetails(int ownerId);
+        IList<Group> GetGroups(int ownerId);
     }
 
     public class GroupService : SchoolServiceBase, IGroupService
@@ -71,6 +73,12 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (gGroup.OwnerRef != Context.PersonId)
                 throw new ChalkableException("Only owner can modify group");
+        }
+
+        public IList<Group> GetGroups(int ownerId)
+        {
+            return DoRead(u => new GroupDataAccess(u)
+                    .GetAll(new AndQueryCondition {{Group.OWNER_REF_FIELD, ownerId}}));
         }
     }
 }
