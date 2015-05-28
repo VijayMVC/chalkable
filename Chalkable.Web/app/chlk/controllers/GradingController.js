@@ -842,9 +842,12 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.reports.SubmitBirthdayReportViewData]],
             function submitBirthdayReportAction(reportViewData){
 
-                if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
-                    return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                if (reportViewData.getStartDate() && reportViewData.getEndDate()){
+                    if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
+                        return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+                    }
                 }
+
 
                 if (reportViewData.getStartMonth() > reportViewData.getEndMonth()){
                     return this.ShowAlertBox("Start Month must be less than or equal to End Month", "Error"), null;
