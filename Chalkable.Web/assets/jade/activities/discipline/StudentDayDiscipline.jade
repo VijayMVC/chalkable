@@ -1,0 +1,26 @@
+-var studentDiscipline = self.getItem()
+.calendar-popup.popup-bubble.top.discipline-popup.profile-calendar-popup
+    +ActionForm('attendance', 'setClassAttendanceListFromPopUp')
+        +Hidden('classIds', '')
+        +Hidden('attendanceTypes', '')
+        +Hidden('attReasons', '')
+        +Hidden('controller', self.getController())
+        +Hidden('action', self.getAction())
+        +Hidden('params', self.getParams())
+        .top-container
+            h1=Msg.Discipline
+        if studentDiscipline.getDisciplines().length
+            table.discipline-table
+                tr
+                    th=Msg.Class
+                    th=Msg.Discipline(true)
+                    th=Msg.Description
+                each item in studentDiscipline.getDisciplines()
+                    tr
+                        td.class-name-td=item.getClassName()
+                        td.disciplines-td
+                            TEXTAREA.disciplines-text(readonly="readonly")=item.getDisciplineTypes().map(function(item){return item.getName()}).join(', ')
+                            //+Select('disciplines')(multiple, disabled = "disabled")
+                                each disc in item.getDisciplineTypes()
+                                   +Option(disc.getId().valueOf(), disc.getName(), true)
+                        td(class=item.getDescription().toLowerCase()).discipline-description-td=item.getDescription()
