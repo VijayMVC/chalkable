@@ -306,7 +306,8 @@
     <Compile Include="Models\DisciplinesViewData\DisciplineTypeSummaryViewData.cs" />
     <Compile Include="Models\GradedItemViewData.cs" />
     <Compile Include="Models\GradingScaleViewData.cs" />
-    <Compile Include="Models\GroupViewData.cs" />
+    <Compile Include="Models\GroupsViewData\GroupExplorerViewData.cs" />
+    <Compile Include="Models\GroupsViewData\GroupViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentAppsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentContactViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentExplorerViewData.cs" />
@@ -369,6 +370,7 @@
     <Compile Include="Models\StorageMonitorViewData.cs" />
     <Compile Include="Models\StudentAnnouncementViewData.cs" />
     <Compile Include="Models\HoverBoxesViewData.cs" />
+    <Compile Include="Models\GroupsViewData\StudentForGroupViewData.cs" />
     <Compile Include="Models\SysAdminViewData.cs" />
     <Compile Include="Models\TeacherCommentViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

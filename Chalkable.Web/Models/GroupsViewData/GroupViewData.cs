@@ -3,9 +3,8 @@ using System.Linq;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
-namespace Chalkable.Web.Models
+namespace Chalkable.Web.Models.GroupsViewData
 {
-
     public class GroupViewData
     {
         public int Id { get; set; }

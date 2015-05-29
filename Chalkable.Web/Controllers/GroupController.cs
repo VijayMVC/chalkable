@@ -1,10 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Models;
+using Chalkable.Web.Models.GroupsViewData;
 
 namespace Chalkable.Web.Controllers
 {
@@ -19,13 +18,18 @@ namespace Chalkable.Web.Controllers
             return Json(groups.Select(GroupViewData.Create).ToList());
         }
 
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult GroupExplorer(int groupId)
+        {
+            var res = SchoolLocator.GroupService.GetGroupExplorerInfo(groupId);
+            return Json(GroupExplorerViewData.Create(res));
+        }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult GroupExplorer()
+        public ActionResult GetStudentsForGroup(int groupId, int schoolYearId, int gradeLevelId, IntList classesIds, IntList coursesIds)
         {
-            var schools = SchoolLocator.SchoolService.GetSchools();
-            var gradeLevels = SchoolLocator.GradeLevelService.GetGradeLevels();
-            throw new NotImplementedException();
+            var students = SchoolLocator.GroupService.GetStudentsForGroup(groupId, schoolYearId, gradeLevelId, classesIds, coursesIds);
+            return Json(StudentForGroupViewData.Create(students));
         }
 
         [AuthorizationFilter("DistrictAdmin")]
@@ -48,9 +52,7 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.GroupService.DeleteGroup(groupId);
             return GroupsList();
         }
-
-
-
+        
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult AssignStudents(int groupId, IntList studentIds)
         {
@@ -107,6 +109,5 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.GroupService.UnassignAllSchools(groupId);
             return Json(true);
         }
-
     }
 }

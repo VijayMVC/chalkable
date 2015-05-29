@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -55,8 +56,8 @@ namespace Chalkable.Data.School.DataAccess
                     {GROUP_ID_PARAM, groupId},
                     {SCHOOL_YEAR_ID_PARAM, schoolYearId},
                     {GRADE_LEVEL_ID_PARAM, gradeLevelId},
-                    {CLASSES_IDS_PARAM, classesIds},
-                    {COURSES_IDS_PARAM, coursesIds}
+                    {CLASSES_IDS_PARAM, classesIds != null ? classesIds.Select(x=>x.ToString()).JoinString(",") : null},
+                    {COURSES_IDS_PARAM, coursesIds != null ? coursesIds.Select(x=>x.ToString()).JoinString(",") : null}
                 };
             return ExecuteStoredProcedureList<StudentForGroup>(SP_SEARCH_STUDENTS_FOR_GROUP, parametes);
         }
