@@ -128,63 +128,7 @@
 		</div>
 	</footer>
 
-	<div id="login">
-		<div id="makeLogin" class="loginContainer">
-			<header>
-				<h1>Login</h1>
-				<span class="close"></span>
-			</header>
-
-		    <form id="login-form" action="@Url.Content("~/User/LogOn")" method="post">
-                <p class="hide banner"></p>
-		        <p>
-		            <label for="email">Email</label>
-		            <input type="email" name="UserName" id="email" class="validate[required,custom[email]]">
-		        </p>
-
-		        <p>
-		            <label for="password">Password</label>
-		            <input type="password" name="Password" id="password" class="pw field-password validate[required]">
-		            <input type="hidden" name="remember" value="false">
-		        </p>
-
-		        <p>			        
-		            <button type="submit">LOGIN</button>
-		        </p>
-		        <p class="forgotPassword">
-		            <a href="#">Forgot your password?</a>
-		        </p>
-		    </form>
-			<footer>
-				<p>iNow user? You'll have to log into iNow to set up your Chalkable account. Sign into iNow and click the Chalkable link on the top right corner.</p>
-			</footer>
-		</div>
-
-		<div id="resetPassword" class="loginContainer hide">
-			<header>
-				<h1>Reset password</h1>
-				<span class="close"></span>
-			</header>
-
-		    <form id="reset-form" action="@Url.Content("~/User/ResetPassword")" method="post">
-                <p class="hide banner"></p>
-		        <p>
-		            <label for="email">Email</label>
-		            <input type="email" name="email" id="email3" class="validate[required,custom[email]]">
-		        </p>
-
-		        <p>
-		            <button type="submit">SUBMIT</button>
-		        </p>
-		        <p class="forgotPassword">
-		            <a href="#">Back to login</a>
-		        </p>
-		    </form>
-			<footer>
-				<p>Check out your email. We just sent you an email with a link to reset your password.</p>
-			</footer>
-		</div>
-	</div>
+	@ChlkHelpers.LoginForm(Url)
 
 <script type="text/javascript">
     var _ = window.location.href.toString().match(/https?:\/\/[^\/]+/);

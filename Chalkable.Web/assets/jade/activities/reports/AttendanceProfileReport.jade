@@ -16,6 +16,8 @@ mixin ReportCell(value)
          +Hidden('absenceReasons', '')#absence-reasons
          +Hidden('terms', '')#terms-ids
          .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
             TABLE.report-table
                TR
                   TD.item-2
@@ -33,7 +35,7 @@ mixin ReportCell(value)
                         +Option(chlk.models.reports.StudentIdentifierEnum.SOCIAL_SECURITY_NUMBER.valueOf(), Msg.Social_Security_N, false)
                         +Option(chlk.models.reports.StudentIdentifierEnum.NONE.valueOf(), Msg.None, false)
                TR
-                  +ReportDatePickers(self.getStartDate(), self.getEndDate(), 'item-2')
+                  +ReportDatePickers(self.getStartDate(), self.getEndDate(), 'item-2', true)
                TR
                   TD.item-2
                      h3=Msg.Include
@@ -72,5 +74,5 @@ mixin ReportCell(value)
 
       .x-window-footer.report-bottom
          +ReportFormatSelect()
-         BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
          BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

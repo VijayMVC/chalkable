@@ -81,5 +81,10 @@ namespace Chalkable.BusinessLogic.Security
         {
             return ClaimInfo.HasPermission(context.Claims, new List<string> {claim});
         }
+
+        public static bool IsAppTester(UserContext context)
+        {
+            return context.Role == CoreRoles.APP_TESTER_ROLE;
+        }
     }
 }

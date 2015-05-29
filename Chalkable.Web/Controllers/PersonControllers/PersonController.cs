@@ -46,7 +46,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 else
                     throw new NotImplementedException();
             }
-                
             return PersonScheduleViewData.Create(person, classes);
         }
 

@@ -1,5 +1,6 @@
 var ChlkSessionConstants = {
     FIRST_LOGIN: 'firstLogin',
+    SCHOOL_YEAR:'schoolYear',
     USER_ROLE: 'role',
     SITE_ROOT: 'siteRoot',
     MARKING_PERIOD: 'markingPeriod',

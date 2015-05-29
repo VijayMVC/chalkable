@@ -24,6 +24,8 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetSeatingChartReport(SeatingChartReportInputModel inputModel);
         byte[] GetGradeVerificationReport(GradeVerificationInputModel inputModel);
         byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel);
+
+        byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
     }
 
     public class ReportingService : SisConnectedService, IReportingService
@@ -367,7 +369,16 @@ namespace Chalkable.BusinessLogic.Services.School
             return ConnectorLocator.ReportConnector.LessonPlanReport(ps);
         }
 
-
+        public byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId)
+        {
+            var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var ps = new StudentComprehensiveProgressParams
+                {
+                    AcadSessionId = syId,
+                    GradingPeriodIds = new[] { gradingPeriodId }
+                };
+            return ConnectorLocator.ReportConnector.StudentComprehensiveProgressReport(studentId, ps);
+        }
     }
 
 }

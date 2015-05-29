@@ -35,10 +35,10 @@ NAMESPACE('chlk.templates.profile', function(){
 
                 links.push(this.buildActionLinkModelForClass('info', 'Info', pressedActionName, classId_));
 
-                if (isAdminOrTeacher){
 
-                    //!isAdminOrTeacher && !this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ATTENDANCE)),
-                    links.push(this.buildActionLinkModelForClass('attendance', 'Attendance', pressedActionName, classId_));
+
+                if (isAdminOrTeacher){
+                    links.push(this.buildActionLinkModelForClass('attendance', 'Attendance', pressedActionName, classId_, !this.canViewAttendance_(teacherIds)));
                     links.push(this.buildActionLinkModelForClass('apps', 'Apps', pressedActionName, classId_, true));
                     links.push(this.buildActionLinkModelForClass('schedule', 'Schedule', pressedActionName, classId_, !this.canViewSchedule_()));
                     //!this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_GRADES))
@@ -51,6 +51,16 @@ NAMESPACE('chlk.templates.profile', function(){
             Boolean, function canViewSchedule_(){
                 var res = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM);
                 return res && this.isAssignedToClass() || this.getUserRole().isStudent();
+            },
+
+            [[ArrayOf(chlk.models.id.SchoolPersonId)]],
+            Boolean, function canViewAttendance_(teacherIds){
+                var currentUserId = this.getCurrentUser().getId();
+                var permissionEnum = chlk.models.people.UserPermissionEnum;
+                var canViewAttendance = this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN)
+                    || (this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ATTENDANCE)
+                    && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
+                return canViewAttendance;
             },
 
             [[ArrayOf(chlk.models.id.SchoolPersonId)]],

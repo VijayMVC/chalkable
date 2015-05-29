@@ -13,9 +13,9 @@ NAMESPACE('chlk.models.reports', function (){
         Boolean, 'includeWithdrawnStudents',
 
         [[ArrayOf(chlk.models.schoolYear.GradingPeriod), ArrayOf(chlk.models.grading.GradedItemViewData), ArrayOf(chlk.models.people.ShortUserInfo),
-            chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
-        function $(gradingPeriods_, studentAverages_, students_, classId_, gradingPeriodId_, startDate_, endDate_){
-            BASE(classId_, gradingPeriodId_, startDate_, endDate_, students_);
+            chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean]],
+        function $(gradingPeriods_, studentAverages_, students_, classId_, gradingPeriodId_, startDate_, endDate_, ableDownload_){
+            BASE(classId_, gradingPeriodId_, startDate_, endDate_, students_, ableDownload_);
             if(gradingPeriods_)
                 this.setGradingPeriods(gradingPeriods_);
             if(studentAverages_)

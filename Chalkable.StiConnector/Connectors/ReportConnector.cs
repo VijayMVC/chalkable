@@ -45,6 +45,12 @@ namespace Chalkable.StiConnector.Connectors
             return Download(BaseUrl + "reports/ComprehensiveProgress", ps);
         }
 
+        public byte[] StudentComprehensiveProgressReport(int studentId, StudentComprehensiveProgressParams ps)
+        {
+            var url = string.Format("{0}students/{1}/reports/comprehensiveprogress", BaseUrl, studentId);
+            return Download(url, ps);
+        }
+
         public byte[] MissingAssignmentsReport(MissingAssignmentsParams ps)
         {
             return Download(BaseUrl + "reports/missingassignments", ps);

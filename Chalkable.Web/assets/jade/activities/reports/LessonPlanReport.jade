@@ -11,6 +11,8 @@
          +Hidden('activityCategory', '')#activity-categories
          +Hidden('activityAttribute', '')#activity-attributes
          .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
             TABLE.report-table
                TR
                   +ReportDatePickers(self.getStartDate(), self.getEndDate(), 'item-2')
@@ -49,13 +51,7 @@
                         +Option(chlk.models.reports.SortActivityOptions.DATE.valueOf(), Msg.Date + '/' + Msg.Category, true)
                         +Option(chlk.models.reports.SortActivityOptions.CATEGORY.valueOf(), Msg.Category + '/' + Msg.Date, false)
                   TD.item-2
-                     h3=Msg.Sort_sections
-                     +Select('sortSections')
-                        +Option(chlk.models.reports.SortSectionOptions.TEACHER_SECTION.valueOf(), Msg.Teacher + '/' + Msg.Section, false)
-                        +Option(chlk.models.reports.SortSectionOptions.TEACHER_COURSE.valueOf(), Msg.Teacher + '/' + Msg.Course, false)
-                        +Option(chlk.models.reports.SortSectionOptions.TEACHER_PERIOD.valueOf(), Msg.Teacher + '/' + Msg.Period, true)
-                        +Option(chlk.models.reports.SortSectionOptions.SECTION.valueOf(), Msg.Section, false)
       .x-window-footer.report-bottom
          +ReportFormatSelect()
-         BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
          BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

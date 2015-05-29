@@ -13,6 +13,8 @@
          +Hidden('studentAverageIds', '')#student-averages-ids
          +Hidden('gradingPeriodIds', '')#grading-period-ids
          .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
             TABLE.report-table
                TR
                   TD.item-3
@@ -28,14 +30,6 @@
                               +Option(sa.getId().valueOf(), sa.getName(), true)
                   TD.item-3
                TR
-                  TD.item-3
-                     h3=Msg.Section_Order
-                     +Select('classOrder')
-                        +Option(chlk.models.reports.SectionOrder.FULL_SECTION_NUMBER.valueOf(), Msg.Section_Number, false)
-                        +Option(chlk.models.reports.SectionOrder.PERIOD_SECTION_NUMBER.valueOf(), Msg.Period + '/' + Msg.Section_Number, false)
-                        +Option(chlk.models.reports.SectionOrder.PERIOD_TEACHER.valueOf(), Msg.Period + '/' + Msg.Teacher, false)
-                        +Option(chlk.models.reports.SectionOrder.TEACHER_SECTION_NUMBER.valueOf(), Msg.Teacher + '/' + Msg.Section_Number, true)
-                        +Option(chlk.models.reports.SectionOrder.TEACHER_PERIOD.valueOf(), Msg.Teacher + '/' + Msg.Period, false)
                   TD.item-3
                      h3=Msg.Grade_Type
                      +Select('gradeType')
@@ -67,5 +61,5 @@
 
       .x-window-footer.report-bottom
          +ReportFormatSelect()
-         BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
          BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
