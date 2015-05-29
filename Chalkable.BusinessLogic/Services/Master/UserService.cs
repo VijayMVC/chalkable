@@ -225,12 +225,11 @@ namespace Chalkable.BusinessLogic.Services.Master
                 if (iNowUser == null)
                     iNowUser = iNowConnector.UsersConnector.GetMe();
                 int roleId;
-                int personId = PersonDataAccess.GetPersonDataForLogin(user.District.ServerUrl, user.DistrictRef.Value,
-                                                                      user.SisUserId.Value, out roleId);
-                if (roleId == CoreRoles.TEACHER_ROLE.Id && iNowUser.Claims.All(x =>
-                        x.Values.All(y => y != ClaimInfo.MAINTAIN_CLASSROOM && y != ClaimInfo.MAINTAIN_CLASSROOM_ADMIN)))
+                int personId = PersonDataAccess.GetPersonDataForLogin(user.District.ServerUrl, user.DistrictRef.Value, user.SisUserId.Value, out roleId);
+                if (roleId == CoreRoles.TEACHER_ROLE.Id && !TeacherHasAccessToChalkable(iNowUser))
                 {
-                    throw new ChalkableException(string.Format("Teacher have no ({0} , {1}) login to Chalkable", ClaimInfo.MAINTAIN_CLASSROOM, ClaimInfo.MAINTAIN_CLASSROOM_ADMIN));
+                    throw new ChalkableException(string.Format("Teacher have required no ({0} , {1}) permission for login to Chalkable"
+                        , ClaimInfo.MAINTAIN_CLASSROOM, ClaimInfo.MAINTAIN_CLASSROOM_ADMIN));
                 }
                 
                 var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, null, personId, schoolYear);
@@ -238,6 +237,11 @@ namespace Chalkable.BusinessLogic.Services.Master
                 return res;
             }
             throw new UnknownRoleException();
+        }
+
+        private bool TeacherHasAccessToChalkable(StiConnector.Connectors.Model.User inowUser)
+        {
+            return inowUser.Claims.Any(x => x.Values.Any(y => y == ClaimInfo.MAINTAIN_CLASSROOM || y == ClaimInfo.MAINTAIN_CLASSROOM_ADMIN));
         }
 
         private UserContext DemoUserLogin(User user, UnitOfWork uow, int? schoolYearId = null)
