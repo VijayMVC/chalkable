@@ -19,6 +19,15 @@ namespace Chalkable.Web.Controllers
             return Json(groups.Select(GroupViewData.Create).ToList());
         }
 
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult GroupExplorer()
+        {
+            var schools = SchoolLocator.SchoolService.GetSchools();
+            var gradeLevels = SchoolLocator.GradeLevelService.GetGradeLevels();
+            throw new NotImplementedException();
+        }
+
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult CreateGroup(string name)
         {
@@ -40,19 +49,64 @@ namespace Chalkable.Web.Controllers
             return GroupsList();
         }
 
+
+
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult AssignStudentToGroup(int groupId, IntList studentIds)
+        public ActionResult AssignStudents(int groupId, IntList studentIds)
         {
-            SchoolLocator.GroupService.UpdateStudentGroups(groupId, studentIds);
+            SchoolLocator.GroupService.AssignStudents(groupId, studentIds);
             return Json(true);
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult GroupExplorer()
+        public ActionResult UnassignStudents(int groupId, IntList studentIds)
         {
-            var schools = SchoolLocator.SchoolService.GetSchools();
-            var gradeLevels = SchoolLocator.GradeLevelService.GetGradeLevels();
-            throw new NotImplementedException();
+            SchoolLocator.GroupService.UnssignStudents(groupId, studentIds);
+            return Json(true);
         }
+
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult AssignSchoolGradeLevel(int groupId, int schoolYearId, int gradeLevelId)
+        {
+            SchoolLocator.GroupService.AssignGradeLevel(groupId, schoolYearId, gradeLevelId);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult UnassignSchoolGradeLevel(int groupId, int schoolYearId, int gradeLevelId)
+        {
+            SchoolLocator.GroupService.UnssignGradeLevel(groupId, schoolYearId, gradeLevelId);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult AssignSchool(int groupId, int schoolYearId)
+        {
+            SchoolLocator.GroupService.AssignStudentsBySchoolYear(groupId, schoolYearId);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult UnassignSchool(int groupId, int schoolYearId)
+        {
+            SchoolLocator.GroupService.UnssignStudentsBySchoolYear(groupId, schoolYearId);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult AssignAllShools(int groupId)
+        {
+            SchoolLocator.GroupService.AssignAllSchools(groupId);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult UnassignAllShools(int groupId)
+        {
+            SchoolLocator.GroupService.UnassignAllSchools(groupId);
+            return Json(true);
+        }
+
     }
 }

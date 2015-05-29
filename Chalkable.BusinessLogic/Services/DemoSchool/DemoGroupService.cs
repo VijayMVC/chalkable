@@ -105,16 +105,101 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         
         public Group EditGroup(int groupId, string name)
         {
-            throw new NotImplementedException();
+            if(string.IsNullOrEmpty(name))
+                throw new ChalkableException("Invalid name param. Name parameter is empty");
+            var group = GroupStorage.GetById(groupId);
+            EnsureInGroupModifyPermission(group);
+            group.Name = name;
+            GroupStorage.Update(group);
+            return group;
         }
 
-        public void UpdateStudentGroups(int groupId, IList<int> studentIds)
+        
+        public IList<Group> GetGroups(int ownerId)
+        {
+            return GroupStorage.GetAll().Where(x => x.OwnerRef == ownerId).ToList();
+        }
+        
+        public IList<StudentForGroup> GetStudentsForGroup(int groupId, int schoolYearId, int gradeLevelId, IList<int> classesIds, IList<int> coursesIds)
+        {
+            var studentGroups = StudentGroupStorage.GetAll().Where(x => x.GroupRef == groupId).ToList();
+            var students = new DemoStudentStorage().GetAll();
+            var studentSchoolYears = new DemoStudentSchoolYearStorage().GetAll().Where(x => x.SchoolYearRef == schoolYearId && x.GradeLevelRef == gradeLevelId).ToList();
+            students = students.Where(x => studentSchoolYears.Any(y => y.StudentRef == x.Id)).ToList();
+            if ((classesIds != null && classesIds.Count > 0) || (coursesIds != null && coursesIds.Count > 0))
+            {
+                var classes = new List<Class>();
+                var classStorage = new DemoClassStorage();
+                if (classesIds != null && classesIds.Count > 0)
+                    classes = classes.Union(classStorage.GetAll().Where(c => coursesIds.Contains(c.Id))).ToList();
+                if (coursesIds != null)
+                    classes = classes.Union(classStorage.GetAll().Where(c => c.CourseRef.HasValue && coursesIds.Contains(c.CourseRef.Value))).ToList();
+                classes = classes.Distinct().ToList();
+
+                var classPersons = new DemoClassPersonStorage().GetAll();
+                students = students.Where(s => classPersons.Any(cp => classes.Any(c => c.Id == cp.ClassRef) && cp.PersonRef == s.Id)).ToList();
+            }
+            return students.Select(student => new StudentForGroup
+                {
+                    Id = student.Id,
+                    FirstName = student.FirstName,
+                    LastName = student.LastName,
+                    BirthDate = student.BirthDate,
+                    Gender = student.Gender,
+                    HasMedicalAlert = student.HasMedicalAlert,
+                    IsAllowedInetAccess = student.IsAllowedInetAccess,
+                    PhotoModifiedDate = student.PhotoModifiedDate,
+                    SpecialInstructions = student.SpecialInstructions,
+                    SpEdStatus = student.SpEdStatus,
+                    UserId = student.UserId,
+                    StudentGroup = studentGroups.FirstOrDefault(x => x.StudentRef == student.Id)
+                }).ToList();
+        }
+
+        public GroupExplorer GetGroupExplorerInfo(int groupId)
         {
             throw new NotImplementedException();
         }
 
 
-        public IList<Group> GetGroups(int ownerId)
+        public void AssignStudents(int groupId, IList<int> studentIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AssignGradeLevel(int groupId, int schoolYearId, int gradeLevelId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void AssignStudentsBySchoolYear(int groupId, int schoolYearId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnssignStudents(int groupId, IList<int> studentIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnssignGradeLevel(int groupId, int schoolYearId, int gradeLevelId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnssignStudentsBySchoolYear(int groupId, int schoolYearId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void AssignAllSchools(int groupId)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public void UnassignAllSchools(int groupId)
         {
             throw new NotImplementedException();
         }

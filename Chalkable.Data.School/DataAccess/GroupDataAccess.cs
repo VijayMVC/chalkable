@@ -94,21 +94,4 @@ namespace Chalkable.Data.School.DataAccess
                 }).ToList();
         } 
     }
-
-
-    public class StudentGroupDataAccess: DataAccessBase<StudentGroup, int>
-    {
-        public StudentGroupDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
-        {
-        }
-
-        public void ReCreateStudentGroups(int groupId, IList<int> studentIds)
-        { 
-            var deleteQuery = Orm.SimpleDelete<StudentGroup>(new AndQueryCondition {{StudentGroup.GROUP_REF_FIELD, groupId}});
-            var studentGroups = studentIds.Select(x => new StudentGroup {StudentRef = x, GroupRef = groupId}).ToList();
-            var insertQuery = Orm.SimpleInsert<IList<StudentGroup>>(studentGroups);
-            var dbQuery = new DbQuery(new List<DbQuery> {deleteQuery, insertQuery});
-            ExecuteNonQueryParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters);
-        }
-    }
 }

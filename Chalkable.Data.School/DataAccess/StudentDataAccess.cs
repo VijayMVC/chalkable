@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -64,5 +66,17 @@ namespace Chalkable.Data.School.DataAccess
             };
             return ExecuteStoredProcedurePaginated<StudentDetails>("spSearchStudents", ps, start, count);
         }
+
+        public IList<int> GetEnrollmentStudentsIds(int schoolYearId, int? gradeLevelId)
+        {
+            var conds = new AndQueryCondition
+                {
+                    {StudentSchoolYear.SCHOOL_YEAR_REF_FIELD, schoolYearId},
+                    {StudentSchoolYear.ENROLLMENT_STATUS_FIELD, 0}
+                };
+            if(gradeLevelId.HasValue)
+                conds.Add(StudentSchoolYear.GRADE_LEVEL_REF_FIELD, gradeLevelId);
+            return SelectMany<StudentSchoolYear>(conds).Select(x => x.StudentRef).ToList();
+        } 
     }
 }
