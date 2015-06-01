@@ -15,11 +15,6 @@ namespace Chalkable.Data.School.Model
         public int OwnerRef { get; set; }
     }
 
-    public class GroupDetails : Group
-    {
-        public IList<StudentDetails> Students { get; set; }
-    }
-
     public class StudentGroup
     {
         public const string GROUP_REF_FIELD = "GroupRef";

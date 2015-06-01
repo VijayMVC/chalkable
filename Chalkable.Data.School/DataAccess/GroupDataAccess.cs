@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -61,11 +60,18 @@ namespace Chalkable.Data.School.DataAccess
                 };
             return ExecuteStoredProcedureList<StudentForGroup>(SP_SEARCH_STUDENTS_FOR_GROUP, parametes);
         }
-
+        
+        private const string SP_ASSIGN_ALL_TO_GROUP = "spAssigAllToGroup";
+        private const string NOW_PARAM = "now";
 
         public void AssignAllStudentsToGroup(int groupId, DateTime now)
         {
-            throw new NotImplementedException();
+            var parameter = new Dictionary<string, object>
+                {
+                    {GROUP_ID_PARAM, groupId},
+                    {NOW_PARAM, now}
+                };
+            ExecuteStoredProcedure(SP_ASSIGN_ALL_TO_GROUP, parameter);
         }
 
         public void UnassignAllStudentsFromGroup(int groupId)

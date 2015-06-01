@@ -21,18 +21,4 @@ namespace Chalkable.Web.Models.GroupsViewData
             return new GroupViewData(gGroup);
         }
     }
-
-    public class GroupDetailViewData : GroupViewData
-    {
-        public IList<StudentViewData> Students { get; set; }
- 
-        protected GroupDetailViewData(GroupDetails groupDetails) : base(groupDetails)
-        {
-            Students = groupDetails.Students.Select(StudentViewData.Create).ToList();
-        }
-        public static GroupViewData Create(GroupDetails groupDetails)
-        {
-            return new GroupDetailViewData(groupDetails);
-        }
-    }
 }
