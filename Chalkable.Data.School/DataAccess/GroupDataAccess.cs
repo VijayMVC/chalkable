@@ -25,7 +25,7 @@ namespace Chalkable.Data.School.DataAccess
             var parameters = new Dictionary<string, object>
                 {
                     {GROUP_ID_PARAM, groupId},
-                    {OWNER_ID_PARAM, OWNER_ID_PARAM},
+                    {OWNER_ID_PARAM, ownerId},
                     {CURRENT_DATE_PARAM, currentDate}
                 };
             using (var reader = ExecuteStoredProcedureReader(SP_GET_GROUP_EXPLORER_DATA, parameters))
