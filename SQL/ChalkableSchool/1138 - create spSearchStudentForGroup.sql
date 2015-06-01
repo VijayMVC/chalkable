@@ -1,4 +1,4 @@
-create procedure spSearchStudentsForGroup @groupId int, @schoolYearId int, @gradeLevelId int, @classesIds nvarchar(max), @coursesIds nvarchar(max)
+ALTER procedure [dbo].[spSearchStudentsForGroup] @groupId int, @schoolYearId int, @gradeLevelId int, @classesIds nvarchar(max), @coursesIds nvarchar(max)
 as
 
 declare @classesIdsT table(value int);	
@@ -17,8 +17,6 @@ begin
 	select cast(s as int) from dbo.split(',', @classesIds)
 end
 
-select * from @classesIdsT
-
 select Student.*,
 	   StudentGroup.*
 from Student
@@ -29,4 +27,7 @@ where StudentSchoolYear.SchoolYearRef = @schoolYearId and StudentSchoolYear.Grad
 	  and (@classesIds is null or @coursesIds is null or exists(select * from ClassPerson 
 										 join @classesIdsT c on c.value = ClassPerson.ClassRef
 										 where ClassPerson.PersonRef = Student.Id))
+
 GO
+
+
