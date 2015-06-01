@@ -188,6 +188,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                 return null;
             if (user.IsSysAdmin)
                 return new UserContext(user, CoreRoles.SUPER_ADMIN_ROLE, user.District, null, null, null);
+            if (user.IsDistrictRegistrator)
+                return new UserContext(user, CoreRoles.DISTRICT_REGISTRATOR_ROLE, user.District, null, null, null);
             if (user.IsDeveloper)
                 return DeveloperLogin(user);
             if (user.IsAppTester)

@@ -32,6 +32,7 @@ namespace Chalkable.Data.Master.Model
         public bool IsDeveloper { get; set; }
 
         public bool IsAppTester { get; set; }
+        public bool IsDistrictRegistrator { get; set; }
         public string ConfirmationKey { get; set; }
         public string SisUserName { get; set; }
         public int? SisUserId { get; set; }
