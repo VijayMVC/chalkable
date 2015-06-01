@@ -64,26 +64,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             StudentGroupStorage.Delete(BuildStudentGroups(groupId, studentIds));
         }
 
-        public IList<GroupDetails> GetGroupsDetails(int ownerId)
-        {
-            var groups = GroupStorage.GetAll().Where(g => g.OwnerRef == ownerId).ToList();
-            var studentGroups = StudentGroupStorage.GetAll().ToList();
-            var students = new DemoStudentStorage().GetAll().Select(x=>DemoStudentService.BuildStudentDetailsData(x, null)).ToList();
-            var res = new List<GroupDetails>();
-            foreach (var demoGroup in groups)
-            {
-                var studentForGroup = students.Where(s => studentGroups.Any(sg => sg.StudentRef == s.Id && sg.GroupRef == demoGroup.Id)).ToList();
-                res.Add(new GroupDetails
-                    {
-                        Id = demoGroup.Id,
-                        Name = demoGroup.Name,
-                        OwnerRef = demoGroup.OwnerRef,
-                        Students = studentForGroup
-                    });
-            }
-            return res;
-        }
-
         private void DemandStudentIdsParam(IList<int> studentIds)
         {
             if (studentIds == null || studentIds.Count == 0)
@@ -192,14 +172,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-
-        public void AssignAllSchools(int groupId)
+        public void AssignAll(int groupId)
         {
             throw new NotImplementedException();
         }
 
 
-        public void UnassignAllSchools(int groupId)
+        public void UnassignAll(int groupId)
         {
             throw new NotImplementedException();
         }

@@ -99,14 +99,14 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult AssignAllShools(int groupId)
         {
-            SchoolLocator.GroupService.AssignAllSchools(groupId);
+            SchoolLocator.GroupService.AssignAll(groupId);
             return Json(true);
         }
 
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult UnassignAllShools(int groupId)
         {
-            SchoolLocator.GroupService.UnassignAllSchools(groupId);
+            SchoolLocator.GroupService.UnassignAll(groupId);
             return Json(true);
         }
     }

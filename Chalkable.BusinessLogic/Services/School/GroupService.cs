@@ -18,16 +18,14 @@ namespace Chalkable.BusinessLogic.Services.School
         void AssignStudents(int groupId, IList<int> studentIds);
         void AssignGradeLevel(int groupId, int schoolYearId, int gradeLevelId);
         void AssignStudentsBySchoolYear(int groupId, int schoolYearId);
-        void AssignAllSchools(int groupId);
+        void AssignAll(int groupId);
 
         void UnssignStudents(int groupId, IList<int> studentIds);
         void UnssignGradeLevel(int groupId, int schoolYearId, int gradeLevelId);
         void UnssignStudentsBySchoolYear(int groupId, int schoolYearId);
-        void UnassignAllSchools(int groupId);
-
-        IList<GroupDetails> GetGroupsDetails(int ownerId);
+        void UnassignAll(int groupId);
+        
         IList<Group> GetGroups(int ownerId);
-
         IList<StudentForGroup> GetStudentsForGroup(int groupId, int schoolYearId, int gradeLevelId, IList<int> classesIds, IList<int> coursesIds);
         GroupExplorer GetGroupExplorerInfo(int groupId);
     }
@@ -56,6 +54,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 var group = da.GetById(groupId);
                 EnsureInGroupModifyPermission(group);
                 group.Name = name;
+                da.Update(group);
                 uow.Commit();
                 return group;
             }
@@ -71,11 +70,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 });
         }
 
-
-        public IList<GroupDetails> GetGroupsDetails(int ownerId)
-        {
-            return DoRead(u => new GroupDataAccess(u).GetGroupsDetails(ownerId));
-        }
 
         public IList<Group> GetGroups(int ownerId)
         {
@@ -169,14 +163,25 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public void AssignAllSchools(int groupId)
+        public void AssignAll(int groupId)
         {
-            throw new System.NotImplementedException();
+            DoUpdate(u =>
+            {
+                var da = new GroupDataAccess(u);
+                EnsureInGroupModifyPermission(da.GetById(groupId));
+                da.AssignAllStudentsToGroup(groupId, Context.NowSchoolTime.Date);
+            });
+
         }
 
-        public void UnassignAllSchools(int groupId)
+        public void UnassignAll(int groupId)
         {
-            throw new System.NotImplementedException();
+            DoUpdate(u =>
+                {
+                    var da = new GroupDataAccess(u);
+                    EnsureInGroupModifyPermission(da.GetById(groupId));
+                    da.UnassignAllStudentsFromGroup(groupId);
+                });
         }
     }
 }
