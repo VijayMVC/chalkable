@@ -58,7 +58,7 @@ namespace Chalkable.Data.School.DataAccess
                     {CLASSES_IDS_PARAM, classesIds != null ? classesIds.Select(x=>x.ToString()).JoinString(",") : null},
                     {COURSES_IDS_PARAM, coursesIds != null ? coursesIds.Select(x=>x.ToString()).JoinString(",") : null}
                 };
-            return ExecuteStoredProcedureList<StudentForGroup>(SP_SEARCH_STUDENTS_FOR_GROUP, parametes);
+           return ExecuteStoredProcedureList<StudentForGroup>(SP_SEARCH_STUDENTS_FOR_GROUP, parametes);
         }
         
         private const string SP_ASSIGN_ALL_TO_GROUP = "spAssigAllToGroup";

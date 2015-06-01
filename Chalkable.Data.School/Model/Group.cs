@@ -59,12 +59,12 @@ namespace Chalkable.Data.School.Model
     public class StudentForGroup : StudentDetails
     {
         [DataEntityAttr]
-        public StudentGroup StudentGroup { get; set; }
+        public int? GroupRef { get; set; }
 
         [NotDbFieldAttr]
         public bool AssignedToGroup
         {
-            get { return StudentGroup != null; }
+            get { return GroupRef != null; }
         }
     }
 }

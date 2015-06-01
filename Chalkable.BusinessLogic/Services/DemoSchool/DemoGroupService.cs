@@ -132,7 +132,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     SpecialInstructions = student.SpecialInstructions,
                     SpEdStatus = student.SpEdStatus,
                     UserId = student.UserId,
-                    StudentGroup = studentGroups.FirstOrDefault(x => x.StudentRef == student.Id)
+                    GroupRef = studentGroups.Any(x => x.StudentRef == student.Id) ? studentGroups.First(x=>x.StudentRef == student.Id).GroupRef : (int?)null
                 }).ToList();
         }
 
