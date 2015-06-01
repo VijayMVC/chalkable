@@ -1,4 +1,4 @@
-ALTER procedure [dbo].[spSearchStudentsForGroup] @groupId int, @schoolYearId int, @gradeLevelId int, @classesIds nvarchar(max), @coursesIds nvarchar(max)
+create procedure [dbo].[spSearchStudentsForGroup] @groupId int, @schoolYearId int, @gradeLevelId int, @classesIds nvarchar(max), @coursesIds nvarchar(max)
 as
 
 declare @classesIdsT table(value int);	
