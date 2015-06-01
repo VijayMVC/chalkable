@@ -1084,6 +1084,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
         }
 
+        public void AddGroupsToAnnouncement(int announcementId, IList<int> groupsIds)
+        {
+            var ann = GetAnnouncementById(announcementId);
+            if (groupsIds != null)
+            {
+                var storage = new DemoAnnouncementRecipientStorage();
+                storage.DeleteByAnnouncementId(ann.Id);
+                storage.Add(groupsIds.Select(x => new AdminAnnouncementRecipient
+                    {
+                        AnnouncementRef = ann.Id,
+                        GroupRef = x
+                    }).ToList());
+            }
+        }
+
         public DemoAnnouncementService GetTeacherAnnouncementService()
         {
             var teacherAnnouncementService = new DemoAnnouncementService(ServiceLocator, AnnouncementCompleteStorage,

@@ -175,11 +175,11 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult SaveAnnouncement(AnnouncementInfo announcementInfo, int? classId, IntList groupsIds)
+        public ActionResult SaveAnnouncement(AnnouncementInfo announcementInfo, int? classId)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            var ann = Save(announcementInfo, classId, groupsIds);
+            var ann = Save(announcementInfo, classId);
             return Json(PrepareAnnouncmentViewDataForEdit(ann));
         }
         
@@ -219,6 +219,13 @@ namespace Chalkable.Web.Controllers
             SchoolLocator.AnnouncementService.SubmitForAdmin(res.Id);
             SchoolLocator.AnnouncementService.DeleteAnnouncements(Context.PersonId.Value);
             TrackNewItemCreate(res);
+            return Json(true, 5);
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult AddGroups(int announcementId, IntList groupsIds)
+        {
+            SchoolLocator.AnnouncementService.AddGroupsToAnnouncement(announcementId, groupsIds);
             return Json(true, 5);
         }
 

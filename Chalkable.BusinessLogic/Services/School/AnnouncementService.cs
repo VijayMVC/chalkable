@@ -54,6 +54,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void RemoveAllAnnouncementStandards(int standardId);
         IList<AnnouncementStandard> GetAnnouncementStandards(int classId);
         void CopyAnnouncement(int id, IList<int> classIds);
+
+        void AddGroupsToAnnouncement(int announcementId, IList<int> groupsIds);
     }
 
     public class AnnouncementService : SisConnectedService, IAnnouncementService
@@ -565,19 +567,22 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             ann = SetShortAnnouncementData(ann, inputAnnData.Content, inputAnnData.Subject, inputAnnData.ExpiresDate);
             annDa.Update(ann);
-            if (groupsIds != null)
-            {
-                var da = new DataAccessBase<AdminAnnouncementRecipient, int>(uow);
-                da.Delete(ann.Id);
-                groupsIds = groupsIds.Distinct();
-                var annRecipients = groupsIds.Select(gId => new AdminAnnouncementRecipient
-                    {
-                        AnnouncementRef = ann.Id,
-                        GroupRef = gId
-                    }).ToList();
-                da.Insert(annRecipients);
-            }
+            RecreateAdminAnnouncementRecipients(ann.Id, groupsIds, uow);
             return ann;
+        }
+
+        private void RecreateAdminAnnouncementRecipients(int announcementId, IEnumerable<int> groupsIds, UnitOfWork uow)
+        {
+            if (groupsIds == null) return;
+            var da = new DataAccessBase<AdminAnnouncementRecipient, int>(uow);
+            da.Delete(announcementId);
+            groupsIds = groupsIds.Distinct();
+            var annRecipients = groupsIds.Select(gId => new AdminAnnouncementRecipient
+                {
+                    AnnouncementRef = announcementId,
+                    GroupRef = gId
+                }).ToList();
+            da.Insert(annRecipients);
         }
 
         private Announcement SetShortAnnouncementData(Announcement ann, string content, string subject, DateTime? expires)
@@ -641,7 +646,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = CreateAnnoucnementDataAccess(uow);
                 Submit(da, uow, announcementId, null);
                 uow.Commit();
-                //todo: discuss with Geka ... do we need notification about creating new admin announcement ... if yes then implement this later   
             }
         }
         
@@ -880,6 +884,15 @@ namespace Chalkable.BusinessLogic.Services.School
                 ConnectorLocator.ActivityConnector.CompleteTeacherActivities(syId, Context.PersonId.Value, complete, toDate);
             if(CoreRoles.STUDENT_ROLE == Context.Role)
                 ConnectorLocator.ActivityConnector.CompleteStudentActivities(syId, Context.PersonId.Value, complete, toDate);
+        }
+
+
+        public void AddGroupsToAnnouncement(int announcementId, IList<int> groupsIds)
+        {
+            if (!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            var ann = GetAnnouncementById(announcementId); //security check
+            DoUpdate(u => RecreateAdminAnnouncementRecipients(ann.Id, groupsIds, u));
         }
     }
 }
