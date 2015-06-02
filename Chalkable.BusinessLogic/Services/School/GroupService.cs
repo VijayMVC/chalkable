@@ -100,30 +100,11 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u =>
             {
                 EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                new DataAccessBase<StudentGroup>(u).Delete(BuildStudentGroups(groupId, studentIds));
+                var da = new StudentGroupDataAccess(u);
+                var studentGroups = da.GetAll(new AndQueryCondition {{StudentGroup.GROUP_REF_FIELD, groupId}});
+                studentIds = studentIds.Where(id => studentGroups.All(sg => sg.StudentRef != id)).ToList();
+                da.Insert(BuildStudentGroups(groupId, studentIds));
             });
-        }
-
-        public void AssignGradeLevel(int groupId, int schoolYearId, int gradeLevelId)
-        {
-            using (var u = Update())
-            {
-                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                var studentIds = new StudentDataAccess(u).GetEnrollmentStudentsIds(schoolYearId, gradeLevelId);
-                new DataAccessBase<StudentGroup>(u).Delete(BuildStudentGroups(groupId, studentIds));
-                u.Commit();
-            }
-        }
-
-        public void AssignStudentsBySchoolYear(int groupId, int schoolYearId)
-        {
-            using (var u = Update())
-            {
-                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                var studentIds = new StudentDataAccess(u).GetEnrollmentStudentsIds(schoolYearId, null);
-                new DataAccessBase<StudentGroup>(u).Delete(BuildStudentGroups(groupId, studentIds));
-                u.Commit();
-            }
         }
 
         public void UnssignStudents(int groupId, IList<int> studentIds)
@@ -131,30 +112,44 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u =>
             {
                 EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                new DataAccessBase<StudentGroup>(u).Delete(BuildStudentGroups(groupId, studentIds));
+                new StudentGroupDataAccess(u).Delete(BuildStudentGroups(groupId, studentIds));
+            });
+        }
+
+        public void AssignGradeLevel(int groupId, int schoolYearId, int gradeLevelId)
+        {
+            DoUpdate(u =>
+            {
+                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
+                new StudentGroupDataAccess(u).AssignStudentsBySchoolYear(groupId, schoolYearId, gradeLevelId);
+            });
+        }
+
+        public void AssignStudentsBySchoolYear(int groupId, int schoolYearId)
+        {
+            DoUpdate(u =>
+            {
+                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
+                new StudentGroupDataAccess(u).AssignStudentsBySchoolYear(groupId, schoolYearId, null);
             });
         }
 
         public void UnssignGradeLevel(int groupId, int schoolYearId, int gradeLevelId)
         {
-            using (var u = Update())
+            DoUpdate(u =>
             {
                 EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                var studentIds = new StudentDataAccess(u).GetEnrollmentStudentsIds(schoolYearId, gradeLevelId);
-                new DataAccessBase<StudentGroup>(u).Delete(BuildStudentGroups(groupId, studentIds));
-                u.Commit();
-            }
+                new StudentGroupDataAccess(u).UnassignStudentsBySchoolYear(groupId, schoolYearId, gradeLevelId);
+            });
         }
 
         public void UnssignStudentsBySchoolYear(int groupId, int schoolYearId)
         {
-            using (var u = Update())
+            DoUpdate(u =>
             {
                 EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
-                var studentIds = new StudentDataAccess(u).GetEnrollmentStudentsIds(schoolYearId, null);
-                new DataAccessBase<StudentGroup>(u).Delete(BuildStudentGroups(groupId, studentIds));
-                u.Commit();
-            }
+                new StudentGroupDataAccess(u).UnassignStudentsBySchoolYear(groupId, schoolYearId, null);
+            });
         }
 
         private IList<StudentGroup> BuildStudentGroups(int groupId, IEnumerable<int> studentIds)
@@ -167,9 +162,8 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             DoUpdate(u =>
             {
-                var da = new GroupDataAccess(u);
-                EnsureInGroupModifyPermission(da.GetById(groupId));
-                da.AssignAllStudentsToGroup(groupId, Context.NowSchoolTime.Date);
+                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
+                new StudentGroupDataAccess(u).AssignAllStudentsToGroup(groupId, Context.NowSchoolTime.Date);
             });
 
         }
@@ -177,11 +171,10 @@ namespace Chalkable.BusinessLogic.Services.School
         public void UnassignAll(int groupId)
         {
             DoUpdate(u =>
-                {
-                    var da = new GroupDataAccess(u);
-                    EnsureInGroupModifyPermission(da.GetById(groupId));
-                    da.UnassignAllStudentsFromGroup(groupId);
-                });
+            {
+                EnsureInGroupModifyPermission(new GroupDataAccess(u).GetById(groupId));
+                new StudentGroupDataAccess(u).UnassignAllStudentsFromGroup(groupId);
+            });
         }
     }
 }

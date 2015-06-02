@@ -38,9 +38,14 @@ namespace Chalkable.Data.School.Model
     public class GroupExplorer
     {
         public Group Group { get; set; }
-        public IList<School> Schools { get; set; }
+        public IList<SchoolForGroup> Schools { get; set; }
         public IList<GradeLevel> GradeLevels { get; set; }
         public IList<GroupMember> GroupMembers { get; set; }
+    }
+
+    public class SchoolForGroup : School
+    {
+        public int SchoolYearRef { get; set; }
     }
 
     public class GroupMember
@@ -58,7 +63,6 @@ namespace Chalkable.Data.School.Model
 
     public class StudentForGroup : StudentDetails
     {
-        [DataEntityAttr]
         public int? GroupRef { get; set; }
 
         [NotDbFieldAttr]

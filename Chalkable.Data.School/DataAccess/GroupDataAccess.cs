@@ -33,11 +33,11 @@ namespace Chalkable.Data.School.DataAccess
                 reader.Read();
                 res.Group = reader.Read<Group>();
                 reader.NextResult();
-                res.Schools = reader.ReadList<Model.School>();
+                res.Schools = reader.ReadList<SchoolForGroup>();
                 reader.NextResult();
                 res.GradeLevels = reader.ReadList<GradeLevel>();
                 reader.NextResult();
-                res.GroupMembers = reader.ReadList<GroupMember>();
+                res.GroupMembers = reader.ReadList<GroupMember>().Where(x => x.StudentsGroupInGradeLevel > 0).ToList();
                 return res;
             }
         }
@@ -60,9 +60,18 @@ namespace Chalkable.Data.School.DataAccess
                 };
            return ExecuteStoredProcedureList<StudentForGroup>(SP_SEARCH_STUDENTS_FOR_GROUP, parametes);
         }
+    }
+
+
+    public class StudentGroupDataAccess : DataAccessBase<StudentGroup, int>
+    {
+        public StudentGroupDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
         
         private const string SP_ASSIGN_ALL_TO_GROUP = "spAssigAllToGroup";
         private const string NOW_PARAM = "now";
+        private const string GROUP_ID_PARAM = "groupId";
 
         public void AssignAllStudentsToGroup(int groupId, DateTime now)
         {
@@ -78,5 +87,42 @@ namespace Chalkable.Data.School.DataAccess
         {
             SimpleDelete<StudentGroup>(new AndQueryCondition {{StudentGroup.GROUP_REF_FIELD, groupId}});
         } 
+
+        public void AssignStudentsBySchoolYear(int groupId, int schoolYearId, int? gradeLevelId)
+        {
+            var query = new DbQuery();
+            query.Sql.AppendFormat("insert into [{0}] ", typeof (StudentGroup).Name)
+                 .AppendFormat(@"select @groupId, StudentRef from [{0}] ", typeof (StudentSchoolYear).Name);
+            var conds = BuildCondsForStudentSchoolYearSelect(schoolYearId, gradeLevelId);
+           conds.BuildSqlWhere(query, typeof(StudentSchoolYear).Name);
+            query.Sql.AppendFormat(" and StudentRef not in (select StudentRef from StudentGroup where GroupRef =@groupId)");
+            query.Parameters.Add("groupId", groupId);
+            ExecuteNonQueryParametrized(query.Sql.ToString(), query.Parameters);
+        }
+
+        public void UnassignStudentsBySchoolYear(int groupId, int schoolYearId, int? gradeLevelId)
+        {
+            var query = Orm.SimpleDelete<StudentGroup>(new AndQueryCondition {{StudentGroup.GROUP_REF_FIELD, groupId}});
+            var ssyQuery = new DbQuery();
+            ssyQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, StudentSchoolYear.STUDENT_FIELD_REF_FIELD, typeof (StudentSchoolYear).Name);
+
+            BuildCondsForStudentSchoolYearSelect(schoolYearId, gradeLevelId).BuildSqlWhere(ssyQuery, typeof (StudentSchoolYear).Name);
+
+            query.Sql.AppendFormat(" and [{0}] in ({1})", StudentGroup.STUDENT_REF_FIELD, ssyQuery.Sql);
+            query.AddParameters(ssyQuery.Parameters);
+            ExecuteNonQueryParametrized(query.Sql.ToString(), query.Parameters);
+        }
+
+        private QueryCondition BuildCondsForStudentSchoolYearSelect(int schoolYearId, int? gradeLevelId)
+        {
+            var conds = new AndQueryCondition
+                {
+                    {StudentSchoolYear.SCHOOL_YEAR_REF_FIELD, schoolYearId},
+                    {StudentSchoolYear.ENROLLMENT_STATUS_FIELD, 0}
+                };
+            if (gradeLevelId.HasValue)
+                conds.Add(StudentSchoolYear.GRADE_LEVEL_REF_FIELD, gradeLevelId);
+            return conds;
+        }
     }
 }
