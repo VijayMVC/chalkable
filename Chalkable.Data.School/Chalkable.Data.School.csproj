@@ -59,6 +59,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\AdminAnnouncementDataDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementForAdminDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\ClassAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\AutoGradeDataAccess.cs" />
@@ -96,6 +97,7 @@
     <Compile Include="DataAccess\StudentDataAccess.cs" />
     <Compile Include="DataAccess\SyncVersionDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
+    <Compile Include="Model\AdminAnnouncementData.cs" />
     <Compile Include="Model\AlphaGrade.cs" />
     <Compile Include="Model\AlternateScore.cs" />
     <Compile Include="Model\Announcement.cs" />

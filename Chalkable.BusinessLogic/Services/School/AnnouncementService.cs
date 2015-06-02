@@ -8,6 +8,7 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
@@ -644,6 +645,10 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var da = CreateAnnoucnementDataAccess(uow);
+                var annRecipients = new DataAccessBase<AdminAnnouncementRecipient>(uow)
+                    .GetAll(new AndQueryCondition{{AdminAnnouncementRecipient.ANNOUNCEMENT_REF_FIELD, announcementId}});
+                if(annRecipients.Count == 0)
+                    throw new ChalkableException("Admin Announcement has no groups. You can't sumbit admin announcement without selected groups");
                 Submit(da, uow, announcementId, null);
                 uow.Commit();
             }
@@ -718,12 +723,16 @@ namespace Chalkable.BusinessLogic.Services.School
             var ann = GetAnnouncementById(id);
             if (ann.State != AnnouncementState.Created)
                 throw new ChalkableException("Not created item can't be starred");
+            
+            if (ann.IsAdminAnnouncement)
+            {
+                DoUpdate(u=> new AdminAnnouncementDataDataAccess(u)
+                    .UpdateAdminAnnouncementData(ann.Id, Context.PersonId.Value, complete));
+                return;
+            }
+            
             if (!ann.SisActivityId.HasValue)
                 throw new ChalkableException("There are no such item in Inow");
-            
-            if (BaseSecurity.IsDistrictAdmin(Context))
-                throw new NotImplementedException();
-            
             ConnectorLocator.ActivityConnector.CompleteActivity(ann.SisActivityId.Value, complete);
         }
 

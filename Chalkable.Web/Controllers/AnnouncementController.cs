@@ -140,11 +140,11 @@ namespace Chalkable.Web.Controllers
             return Json(res, 6);
         }
 
-        private AnnouncementDetails Save(AnnouncementInfo announcementInfo, int? classId, IList<int> groupsIds = null)
+        private AnnouncementDetails Save(AnnouncementInfo announcementInfo, int? classId)
         {
             // get announcement to ensure it exists
             SchoolLocator.AnnouncementService.GetAnnouncementById(announcementInfo.AnnouncementId);
-            return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId, groupsIds);
+            return SchoolLocator.AnnouncementService.EditAnnouncement(announcementInfo, classId);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
@@ -186,7 +186,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher")]
         public ActionResult SubmitAnnouncement(AnnouncementInfo announcement, int classId)
         {
-            var res = Save(announcement, classId, null);
+            var res = Save(announcement, classId);
             SchoolLocator.AnnouncementService.SubmitAnnouncement(res.Id, classId);
             SchoolLocator.AnnouncementService.DeleteAnnouncements(classId, res.ClassAnnouncementTypeRef, AnnouncementState.Draft);
             TrackNewItemCreate(res);
@@ -209,13 +209,12 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult SubmitForAdmin(AnnouncementInfo announcement, IntList groupsIds, DateTime expiresDate)
+        public ActionResult SubmitForAdmin(AnnouncementInfo announcement, DateTime expiresDate)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            if (groupsIds.Count == 0)
-                throw new ChalkableException("Announcement Recipient param is empty. You can't sumbit announcement without selected recipients");
-            var res = Save(announcement, null, groupsIds);
+
+            var res = Save(announcement, null);
             SchoolLocator.AnnouncementService.SubmitForAdmin(res.Id);
             SchoolLocator.AnnouncementService.DeleteAnnouncements(Context.PersonId.Value);
             TrackNewItemCreate(res);
