@@ -101,6 +101,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.annRecipients = SJX.fromValue(raw.annrecipients, String);
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
                 this.submitType = SJX.fromValue(raw.submitType, String);
+                this.groupIds = SJX.fromValue(raw.groupIds, String);
                 this.suggestedApps = SJX.fromArrayOfDeserializables(raw.suggestedapps, chlk.models.apps.ApplicationForAttach);
                 this.shortClassName = SJX.fromValue(raw.classname, String);
                 this.assessmentApplicationId = SJX.fromValue(raw.assessmentapplicationid, chlk.models.id.AppId);
@@ -154,6 +155,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Object, 'clazz',
             String, 'className',
             String, 'shortClassName',
+            String, 'groupIds',
 
             chlk.models.id.DepartmentId, 'departmentId',
             Number, 'gradesSummary',

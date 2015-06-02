@@ -207,7 +207,7 @@ NAMESPACE('chlk.services', function () {
                     attachments: attachments_,
                     applications: applications_,
                     expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
-                    annRecipients: recipients_
+                    groupIds: recipients_
                 });
             },
 

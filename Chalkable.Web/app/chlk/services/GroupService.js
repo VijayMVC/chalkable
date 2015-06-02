@@ -4,6 +4,7 @@ REQUIRE('chlk.models.id.SchoolYearId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 
 REQUIRE('chlk.models.group.StudentForGroup');
+REQUIRE('chlk.models.group.Group');
 
 NAMESPACE('chlk.services', function () {
     "use strict";

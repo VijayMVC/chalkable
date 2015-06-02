@@ -11,12 +11,10 @@ NAMESPACE('chlk.models.group', function(){
 
         chlk.models.id.GroupId, 'id',
         String, 'name',
-        ArrayOf(chlk.models.people.User), 'students',
 
         VOID, function deserialize(raw){
-            this.id = SJX.fromValue(raw.id, chlk.models.id.GradeId);
+            this.id = SJX.fromValue(raw.id, chlk.models.id.GroupId);
             this.name = SJX.fromValue(raw.name, String);
-            this.students = SJX.fromArrayOfDeserializables(raw.students, chlk.models.people.User);
         }
     ]);
 });

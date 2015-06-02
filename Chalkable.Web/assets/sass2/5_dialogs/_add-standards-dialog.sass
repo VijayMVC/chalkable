@@ -1,4 +1,22 @@
 .add-standards-dialog, .add-ccstandard-dialog
+  .column-cell
+    border-bottom: 1px solid #d7d7d7
+
+  .right-triangle
+    border-left-color: #fff
+
+  .name
+    display: table-cell
+
+.announcement-groups-dialog
+  .column-cell
+    >*
+      vertical-align: middle
+
+  input[type=checkbox].right
+    float: right
+
+.add-standards-dialog, .add-ccstandard-dialog, .announcement-groups-dialog
   .add-standards
     min-height: 470px
     width: 980px
@@ -16,11 +34,12 @@
     line-height: 38px
     height: 42px
     padding-top: 10px
+    border-bottom: 1px solid #d7d7d7
     
   .add-standards-form
     //margin-top: 20px
 
-  .standards-list-container
+  .standards-list-container, .groups-container
     min-height: 340px
     background-color: white
     font: normal 12px Arial
@@ -37,7 +56,7 @@
     border-spacing: 0
     height: 100%
 
-    .standards-row
+    .tr
       white-space: nowrap
 
   td
@@ -55,7 +74,6 @@
     height: 33px
     padding: 10px 30px 10px 13px
     text-align: left
-    border-bottom: 1px solid #d7d7d7
     position: relative
     cursor: pointer
     color: #9c9c9c
@@ -75,7 +93,6 @@
     top: 20px
 
   .name
-    display: table-cell
     height: 30px
     vertical-align: middle
     max-width: 210px
@@ -86,9 +103,6 @@
     &.active, &:hover
       color: white
       background: #2f7790
-
-  .right-triangle
-    border-left-color: #fff
               
 
   .buttons-container

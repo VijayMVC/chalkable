@@ -8,6 +8,7 @@ REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.AppMarketService');
 REQUIRE('chlk.services.StandardService');
 REQUIRE('chlk.services.MarkingPeriodService');
+REQUIRE('chlk.services.GroupService');
 
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
@@ -16,6 +17,7 @@ REQUIRE('chlk.activities.apps.AttachAppDialog');
 REQUIRE('chlk.activities.common.attachments.AttachmentDialog');
 REQUIRE('chlk.activities.announcement.AddStandardsDialog');
 REQUIRE('chlk.activities.announcement.AddDuplicateAnnouncementDialog');
+REQUIRE('chlk.activities.announcement.AnnouncementGroupsDialog');
 
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.LastMessages');
@@ -75,6 +77,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.StandardService, 'standardService',
+
+        [ria.mvc.Inject],
+        chlk.services.GroupService, 'groupService',
 
         [ria.mvc.Inject],
         chlk.services.MarkingPeriodService, 'markingPeriodService',
@@ -320,6 +325,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     var announcement = model.getAnnouncement();
+                    this.getContext().getSession().set(ChlkSessionConstants.GROUPS_IDS, (announcement.getRecipients() || []).map(function(item){return item.getGroupId()}));
                     if(date_){
                         announcement.setExpiresDate(date_);
                     }
@@ -803,7 +809,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.getAttachments(),
                     model.getApplicationsIds(),
                     model.getMarkingPeriodId(),
-                    model.getAnnRecipients()
+                    model.getGroupIds()
                 )
                 .attach(this.validateResponse_());
 
@@ -1040,12 +1046,13 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, ann, 'update-qna');
         },
 
-        [chlk.controllers.SidebarButton('add-new')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
         function showStandardsOnCreateAction(typeName, announcementId, classId){
             return this.showStandardsAction(typeName, announcementId, classId);
         },
 
+        [chlk.controllers.NotChangedSidebarButton()],
         [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
         function showStandardsAction(typeName, announcementId, classId){
             var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []);
@@ -1057,7 +1064,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.announcement.AddStandardsDialog, res);
         },
 
-        [chlk.controllers.SidebarButton('add-new')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.ClassId, chlk.models.id.StandardSubjectId, String, chlk.models.id.StandardId]],
         function showStandardsByCategoryAction(classId, subjectId, description_, standardId_){
             var res = this.standardService.getStandardColumn(classId, subjectId, standardId_)
@@ -1069,7 +1076,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res);
         },
 
-        [chlk.controllers.SidebarButton('add-new')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.standard.GetStandardTreePostData]],
         function getStandardTreeAction(data){
             var res = this.standardService.getStandardParentsSubTree(data.getStandardId())
@@ -1091,7 +1098,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res, 'rebuild-standard-tree');
         },
 
-        [chlk.controllers.SidebarButton('add-new')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.standard.Standard]],
         function addStandardsAction(model){
             var res = this.announcementService.addStandard(model.getAnnouncementId(), model.getStandardId())
@@ -1106,7 +1113,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, res, 'update-standards-and-suggested-apps');
         },
 
-        [chlk.controllers.SidebarButton('add-new')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.AnnouncementId, chlk.models.id.StandardId]],
         function removeStandardAction(announcementId, standardId){
             var res = this.announcementService.removeStandard(announcementId, standardId)
@@ -1119,14 +1126,51 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, res, 'update-standards-and-suggested-apps');
         },
 
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.AnnouncementId]],
         function showGroupsAction(announcementId){
             var groupsIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []);
-            //TODO implementetion
+            var res = this.groupService.list()
+                .then(function(groups){
+                    return new chlk.models.group.AnnouncementGroupsViewData(groups, groupsIds, announcementId);
+                })
+                .attach(this.validateResponse_());
+
+            return this.ShadeView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
         },
 
 
-        [chlk.controllers.SidebarButton('add-new')],
+        [chlk.controllers.NotChangedSidebarButton()],
+        [[chlk.models.announcement.Announcement]],
+        function saveGroupsToAnnouncementAction(model){
+            this.getContext().getSession().set(ChlkSessionConstants.GROUPS_IDS, model.getGroupIds() ? model.getGroupIds().split(',').map(function(item){return new chlk.models.id.GroupId(item)}) : []);
+            this.BackgroundCloseView(chlk.activities.announcement.AnnouncementGroupsDialog);
+            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, new ria.async.DeferredData(model), chlk.activities.lib.DontShowLoader());
+        },
+
+
+        [chlk.controllers.NotChangedSidebarButton()],
+        [[chlk.models.id.GroupId]],
+        function showGroupMembersAction(groupId){
+            var res = this.groupService.groupExplorer(groupId)
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
+        },
+
+
+        [chlk.controllers.NotChangedSidebarButton()],
+        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId]],
+        function showGradeLevelMembersAction(groupId, schoolYearId, gradeLevelId){
+            var res = this.groupService.studentForGroup(groupId, schoolYearId, gradeLevelId)
+                .then(function(students){
+                    return new chlk.models.group.StudentsForGroupViewData(groupId, students);
+                })
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
+        },
+
+
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.AnnouncementId, chlk.models.id.GroupId]],
         function removeRecipientAction(announcementId, recipientId){
             //TODO implementetion

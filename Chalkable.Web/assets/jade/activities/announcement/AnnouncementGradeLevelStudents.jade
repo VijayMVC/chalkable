@@ -1,0 +1,10 @@
+h1.column-cell=Msg.Students
+    +Button.special-button2.edit-button=Msg.Filter
+.column-cell
+    +Checkbox('allStudents', false).all-students-check
+    SPAN All Students
+.students
+    each student in self.getStudents()
+        .column-cell
+            SPAN.name=student.getFullName()
+            +Checkbox('student', student.isAssignedToGroup())(data-id=student.getId().valueOf()).right.student-check

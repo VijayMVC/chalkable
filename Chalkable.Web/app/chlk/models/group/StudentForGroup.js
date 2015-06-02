@@ -5,7 +5,7 @@ NAMESPACE('chlk.models.group', function(){
     var SJX = ria.serialize.SJX;
     /** @class chlk.models.group.StudentForGroup*/
 
-    CLASS('StudentForGroup', chlk.models.people.User, [
+    CLASS('StudentForGroup', EXTENDS(chlk.models.people.User), [
 
         Boolean, 'assignedToGroup',
 

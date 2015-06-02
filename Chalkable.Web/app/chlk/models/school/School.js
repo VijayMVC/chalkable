@@ -4,34 +4,55 @@ REQUIRE('chlk.models.id.SchoolId');
 
 NAMESPACE('chlk.models.school', function () {
     "use strict";
+
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.school.School*/
     CLASS(
-        'School', [
+        'School', IMPLEMENTS(ria.serialize.IDeserializable), [
             chlk.models.id.SchoolId, 'id',
+
             String, 'name',
-            [ria.serialize.SerializeProperty('localid')],
+
             Number, 'localId',
-            [ria.serialize.SerializeProperty('ncesid')],
+
             Number, 'ncesId',
-            [ria.serialize.SerializeProperty('schooltype')],
+
             String, 'schoolType',
-            [ria.serialize.SerializeProperty('schoolurl')],
+
             String, 'schoolUrl',
-            [ria.serialize.SerializeProperty('sendemailnotofications')],
+
             Boolean,'sendEmailNotifications',
-            [ria.serialize.SerializeProperty('timezoneid')],
+
             String, 'timezoneId',
+
             ArrayOf(chlk.models.school.Timezone), 'timezones',
-            [ria.serialize.SerializeProperty('districtid')],
+
             chlk.models.id.DistrictId, 'districtId',
 
-            [ria.serialize.SerializeProperty('studycenterenabledtill')],
+            chlk.models.id.SchoolYearId, 'schoolYearId',
+
             chlk.models.common.ChlkDate, 'studyCenterEnabledTill',
 
             READONLY, Boolean, 'upgraded',
             Boolean, function isUpgraded(){
                 var upgradedDate = this.getStudyCenterEnabledTill();
                 return upgradedDate && upgradedDate.toStandardFormat() >=  (new chlk.models.common.ChlkDate()).toStandardFormat();
+            },
+
+            VOID, function deserialize(raw){
+                this.id = SJX.fromValue(raw.id, chlk.models.id.SchoolId);
+                this.name = SJX.fromValue(raw.name, String);
+                this.localId = SJX.fromValue(raw.localid, Number);
+                this.ncesId = SJX.fromValue(raw.ncesid, Number);
+                this.schoolType = SJX.fromValue(raw.schooltype, String);
+                this.schoolUrl = SJX.fromValue(raw.schoolurl, String);
+                this.sendEmailNotifications = SJX.fromValue(raw.sendemailnotofications, Boolean);
+                this.timezoneId = SJX.fromValue(raw.timezoneid, String);
+                this.timezones = SJX.fromArrayOfDeserializables(raw.timezones, chlk.models.school.Timezone);
+                this.districtId = SJX.fromValue(raw.districtid, chlk.models.id.DistrictId);
+                this.schoolYearId = SJX.fromValue(raw.schoolyearid, chlk.models.id.SchoolYearId);
+                this.studyCenterEnabledTill = SJX.fromDeserializable(raw.studycenterenabledtill, chlk.models.common.ChlkDate);
             }
         ]);
 });

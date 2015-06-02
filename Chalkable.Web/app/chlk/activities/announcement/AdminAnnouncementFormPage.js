@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.announcement.LastMessages');
+REQUIRE('chlk.templates.announcement.Announcement');
 REQUIRE('chlk.templates.announcement.AdminAnnouncementFormTpl');
 
 REQUIRE('chlk.activities.announcement.BaseAnnouncementFormPage');
@@ -13,17 +13,16 @@ NAMESPACE('chlk.activities.announcement', function () {
         [chlk.activities.lib.PageClass('new-item')],
         'AdminAnnouncementFormPage', EXTENDS(chlk.activities.announcement.BaseAnnouncementFormPage), [
 
-
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, chlk.activities.lib.DontShowLoader())],
+            VOID, function addGroups(tpl, model, msg_) {
+                this.dom.find('.group-ids').setValue(model.getGroupIds());
+            },
 
             [ria.mvc.DomEventBind('click', '.add-recipients .title')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function addRecipientsClick(node, event){
                 jQuery(node.parent('.add-recipients').find('.add-recipients-btn').valueOf()).click();
             },
-
-
-
-
 
             [[Object, String]],
             OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
@@ -67,24 +66,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     .setData('tooltip', Msg.Existing_title_tooltip)
             },
 
-
-            [ria.mvc.DomEventBind('change', '#expiresdate')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function expiresDateChange(node, event){
-                var block = this.dom.find('.title-block-container'),
-                    value = node.getValue();
-                if(value){
-                    if(!block.hasClass('with-date'))
-                        block.addClass('was-empty');
-                    else{
-                        block.removeClass('was-empty');
-                    }
-                    block.addClass('with-date');
-                }
-                else
-                    block.removeClass('with-date').removeClass('was-empty');
-            },
-
             [ria.mvc.DomEventBind('click', '.submit-announcement.disabled button')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function disabledSubmitClick(node, event){
@@ -109,9 +90,8 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             OVERRIDE, VOID, function onStop_() {
                 BASE();
-                new ria.dom.Dom().off('click.title');
                 new ria.dom.Dom().off('click.save', '.class-button[type=submit]');
             }
         ]);
 
-})
+});

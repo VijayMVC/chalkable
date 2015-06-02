@@ -1,6 +1,7 @@
 REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.group.Group');
-
+REQUIRE('chlk.models.school.School');
+REQUIRE('chlk.models.common.NameId');
 
 NAMESPACE('chlk.models.group', function(){
 
@@ -38,7 +39,7 @@ NAMESPACE('chlk.models.group', function(){
             this.group =  SJX.fromDeserializable(raw.group, chlk.models.group.Group);
             this.gradeLevels = SJX.fromArrayOfDeserializables(raw.gradelevels, chlk.models.common.NameId);
             this.schools = SJX.fromArrayOfDeserializables(raw.schools, chlk.models.school.School);
-            this.groupMembers = SJX.fromArrayOfDeserializables(raw.groupmembers, chlk.models.group.GroupMember);
+            this.groupMembers = SJX.fromArrayOfDeserializables(raw.members, chlk.models.group.GroupMember);
         }
     ]);
 });
