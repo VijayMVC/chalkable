@@ -12,7 +12,7 @@
                TR
                   TD.item-1
                      h3=Msg.Comment
-                     input(name="comment", type="text", value=self.getComment(), readonly=(self.isSystem() || !self.isAbleEdit()))
+                     input(name="comment", type="text", value=self.getComment(), readonly=(self.isSystem() || !self.isAbleEdit()), class="validate[required]")
 
       .x-window-footer.report-bottom
          BUTTON(type="submit", disabled=!self.isAbleEdit()).chlk-button.blue-button=Msg.OK
