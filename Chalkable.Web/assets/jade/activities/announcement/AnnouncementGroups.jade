@@ -4,6 +4,7 @@
 
     +ActionForm('announcement', 'saveGroupsToAnnouncement')
         +Hidden('groupIds', self.getGroupIds().map(function(item){return item.valueOf()}).join(',')).group-ids
+        +Hidden('id', self.getAnnouncementId())
         .groups-container
             table
                 tr

@@ -808,8 +808,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.getExpiresDate(),
                     model.getAttachments(),
                     model.getApplicationsIds(),
-                    model.getMarkingPeriodId(),
-                    model.getGroupIds()
+                    model.getMarkingPeriodId()
                 )
                 .attach(this.validateResponse_());
 
@@ -1143,9 +1142,14 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.announcement.Announcement]],
         function saveGroupsToAnnouncementAction(model){
+            this.announcementService.addGroupsToAnnouncement(model.getId(), model.getGroupIds())
+                .then(function(){
+                    this.BackgroundCloseView(chlk.activities.announcement.AnnouncementGroupsDialog);
+                }, this)
+                .attach(this.validateResponse_());
             this.getContext().getSession().set(ChlkSessionConstants.GROUPS_IDS, model.getGroupIds() ? model.getGroupIds().split(',').map(function(item){return new chlk.models.id.GroupId(item)}) : []);
-            this.BackgroundCloseView(chlk.activities.announcement.AnnouncementGroupsDialog);
-            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, new ria.async.DeferredData(model), chlk.activities.lib.DontShowLoader());
+
+            return this.ShadeLoader();
         },
 
 

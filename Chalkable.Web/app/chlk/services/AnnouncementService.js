@@ -198,16 +198,23 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, String, chlk.models.common.ChlkDate, String, String, chlk.models.id.MarkingPeriodId, String]],
-            ria.async.Future, function submitAdminAnnouncement(id, content_, expiresdate_, attachments_, applications_, markingPeriodId_, recipients_) {
+            [[chlk.models.id.AnnouncementId, String, chlk.models.common.ChlkDate, String, String, chlk.models.id.MarkingPeriodId]],
+            ria.async.Future, function submitAdminAnnouncement(id, content_, expiresdate_, attachments_, applications_, markingPeriodId_) {
                 return this.post('Announcement/SubmitForAdmin.json', Boolean, {
                     announcementid:id.valueOf(),
                     markingperiodid: markingPeriodId_ ? markingPeriodId_.valueOf() : null,
                     content: content_,
                     attachments: attachments_,
                     applications: applications_,
-                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
-                    groupIds: recipients_
+                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId, String]],
+            ria.async.Future, function addGroupsToAnnouncement(id, groupIds_) {
+                return this.post('Announcement/AddGroups.json', Boolean, {
+                    announcementid:id.valueOf(),
+                    groupids: groupIds_
                 });
             },
 
