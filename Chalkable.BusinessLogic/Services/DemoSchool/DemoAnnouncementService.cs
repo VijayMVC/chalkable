@@ -772,7 +772,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public void SetComplete(int announcementId, bool complete)
         {
             if (!Context.PersonId.HasValue)
-                throw new Exception("User local id doesn't have a valid value");
+                throw new UnassignedUserException("User local id doesn't have a valid value");
 
             AnnouncementCompleteStorage.SetComplete(new AnnouncementComplete
             {
@@ -1084,7 +1084,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
         }
 
-        public void AddGroupsToAnnouncement(int announcementId, IList<int> groupsIds)
+        public void SubmitGroupsToAnnouncement(int announcementId, IList<int> groupsIds)
         {
             var ann = GetAnnouncementById(announcementId);
             if (groupsIds != null)

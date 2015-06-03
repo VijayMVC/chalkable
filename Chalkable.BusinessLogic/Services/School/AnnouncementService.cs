@@ -34,8 +34,6 @@ namespace Chalkable.BusinessLogic.Services.School
 
         Announcement GetAnnouncementById(int id);
         IList<AnnouncementComplex> GetAdminAnnouncements(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? start, int? count, bool ownerOnly = false); 
-        IList<AnnouncementComplex> GetAnnouncements(int count, bool gradedOnly);
-        IList<AnnouncementComplex> GetAnnouncements(int start, int count, bool onlyOwners = false);
         IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false, bool? graded = null);
         IList<AnnouncementComplex> GetAnnouncements(DateTime fromDate, DateTime toDate, bool onlyOwners = false, int? classId = null);
         IList<AnnouncementComplex> GetAnnouncements(string filter);
@@ -56,7 +54,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementStandard> GetAnnouncementStandards(int classId);
         void CopyAnnouncement(int id, IList<int> classIds);
 
-        void AddGroupsToAnnouncement(int announcementId, IList<int> groupsIds);
+        void SubmitGroupsToAnnouncement(int announcementId, IList<int> groupsIds);
     }
 
     public class AnnouncementService : SisConnectedService, IAnnouncementService
@@ -105,17 +103,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     Complete = complete
                 }).Announcements;
         }
-
-        public IList<AnnouncementComplex> GetAnnouncements(int count, bool gradedOnly)
-        {
-            return GetAnnouncements(new AnnouncementsQuery {Count = count, GradedOnly = gradedOnly}).Announcements;
-        }
-
-        public IList<AnnouncementComplex> GetAnnouncements(int start, int count, bool onlyOwners = false)
-        {
-            return GetAnnouncements(false, start, count, null, null, onlyOwners);
-        }
-
+        
         public IList<AnnouncementComplex> GetAnnouncements(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false, bool? graded = null)
         {
             var q = new AnnouncementsQuery
@@ -888,15 +876,27 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             if(BaseSecurity.IsDistrictAdmin(Context))
-                throw new NotImplementedException();
+                CompleteAdminAnnouncement(Context.PersonId.Value, complete, toDate);
             if(CoreRoles.TEACHER_ROLE == Context.Role)
                 ConnectorLocator.ActivityConnector.CompleteTeacherActivities(syId, Context.PersonId.Value, complete, toDate);
             if(CoreRoles.STUDENT_ROLE == Context.Role)
                 ConnectorLocator.ActivityConnector.CompleteStudentActivities(syId, Context.PersonId.Value, complete, toDate);
         }
 
+        private void CompleteAdminAnnouncement(int personId, bool complete, DateTime? toDate)
+        {
+            DoUpdate(u =>
+                {
+                    var anns = CreateAnnoucnementDataAccess(u)
+                        .GetAnnouncements(new AnnouncementsQuery {PersonId = personId, ToDate = toDate})
+                        .Announcements;
+                    var da = new AdminAnnouncementDataDataAccess(u);
+                    foreach (var ann in anns)
+                        da.UpdateAdminAnnouncementData(ann.Id, personId, complete);
+                });
+        }
 
-        public void AddGroupsToAnnouncement(int announcementId, IList<int> groupsIds)
+        public void SubmitGroupsToAnnouncement(int announcementId, IList<int> groupsIds)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
