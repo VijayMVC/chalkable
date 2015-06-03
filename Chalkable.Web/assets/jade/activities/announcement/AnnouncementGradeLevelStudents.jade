@@ -1,0 +1,12 @@
+h1.column-cell=Msg.Students
+    +Button.special-button2.edit-button=Msg.Filter
+.column-cell
+    +ActionCheckbox('allStudents', self.isAllStudentsChecked(), false, 'announcement', 'assignAllStudents', 'unAssignAllStudents',
+        [self.getGroupId(), self.getGradeLevelId(), self.getSchoolYearId(), self.getAllStudentIds()]).all-students-check
+    SPAN All Students
+.students
+    each student in self.getStudents()
+        .column-cell
+            SPAN.name=student.getFullName()
+            +ActionCheckbox('student', student.isAssignedToGroup(), false, 'announcement', 'assignStudent', 'unAssignStudent',
+                [self.getGroupId(), student.getId()])(data-id=student.getId().valueOf()).right.student-check
