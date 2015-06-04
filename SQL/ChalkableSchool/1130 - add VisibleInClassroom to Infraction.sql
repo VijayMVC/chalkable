@@ -2,7 +2,7 @@ IF NOT EXISTS(SELECT * FROM sys.columns WHERE Name = N'VisibleInClassroom' AND O
 BEGIN
 ALTER TABLE dbo.Infraction
 	ADD VisibleInClassroom BIT NOT NULL
-		CONSTRAINT DF_Infraction_VisibleInClassroom DEFAULT (0)
+		CONSTRAINT DF_Infraction_VisibleInClassroom DEFAULT (1)
 END
 GO
 
