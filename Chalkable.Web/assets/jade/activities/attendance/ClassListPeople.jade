@@ -12,7 +12,7 @@
     +Hidden('classId', selectedId && selectedId.valueOf())
     items = self.getItems()
     .table
-        .l
+        .l(class=self.getReadOnlyReason() ? "wide" : undefined)
             +SummaryInfo(self.getPresentStudents().length, items.length)
             +ActionLink('attendance', 'attendanceProfileReport', self.getGradingPeriod().getId(), self.getTopData().getSelectedItemId()).report-link
         if self.getItems().length > 0 && self.canPost()
