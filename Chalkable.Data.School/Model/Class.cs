@@ -18,7 +18,6 @@ namespace Chalkable.Data.School.Model
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public int CourseTypeRef { get; set; }
         public Guid? ChalkableDepartmentRef { get; set; }
         public int? SchoolYearRef { get; set; }
         public int? PrimaryTeacherRef { get; set; }
@@ -26,6 +25,7 @@ namespace Chalkable.Data.School.Model
         public int? MaxGradeLevelRef { get; set; }
         public int? RoomRef { get; set; }
         public int? CourseRef { get; set; }
+        public int CourseTypeRef { get; set; }
         public int? GradingScaleRef { get; set; }
         public string ClassNumber { get; set; }
     }
