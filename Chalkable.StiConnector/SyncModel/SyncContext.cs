@@ -73,6 +73,7 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(ActivityAttribute));
             RegisterType(typeof(ContactRelationship));
             RegisterType(typeof(StudentContact));
+            RegisterType(typeof(CourseType));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)

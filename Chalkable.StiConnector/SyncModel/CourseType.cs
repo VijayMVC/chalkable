@@ -2,7 +2,7 @@ using System;
 
 namespace Chalkable.StiConnector.SyncModel
 {
-    public class CourseType
+    public class CourseType : SyncModel
     {
         public short CourseTypeID { get; set; }
         public string Code { get; set; }

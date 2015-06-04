@@ -168,6 +168,7 @@
     <Compile Include="Services\DemoSchool\DemoAttendanceMonthService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassroomOptionService.cs" />
     <Compile Include="Services\DemoSchool\DemoContactService.cs" />
+    <Compile Include="Services\DemoSchool\DemoCourseTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoDayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassService.cs" />
     <Compile Include="Services\DemoSchool\DemoClassPeriodService.cs" />
@@ -247,6 +248,7 @@
     <Compile Include="Services\School\CalendarDateService.cs" />
     <Compile Include="Services\School\ClassroomOptionService.cs" />
     <Compile Include="Services\School\ContactService.cs" />
+    <Compile Include="Services\School\CourseTypeService.cs" />
     <Compile Include="Services\School\DayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementQnAService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementAttachmentService.cs" />

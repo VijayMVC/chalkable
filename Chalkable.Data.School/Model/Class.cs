@@ -11,12 +11,14 @@ namespace Chalkable.Data.School.Model
         public const string PRIMARY_TEACHER_REF_FIELD = "PrimaryTeacherRef";
         public const string ROOM_REF_FIELD = "RoomRef";
         public const string COURSE_REF_FIELD = "CourseRef";
+        public const string COURSE_TYPE_REF_FIELD = "CourseTypeRef";
         public const string GRADING_SCALE_REF_FIELD = "GradingScaleRef";
 
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
+        public int CourseTypeRef { get; set; }
         public Guid? ChalkableDepartmentRef { get; set; }
         public int? SchoolYearRef { get; set; }
         public int? PrimaryTeacherRef { get; set; }

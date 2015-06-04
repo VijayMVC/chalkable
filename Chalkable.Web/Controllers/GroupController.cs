@@ -32,6 +32,7 @@ namespace Chalkable.Web.Controllers
             return Json(StudentForGroupViewData.Create(students));
         }
 
+        
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult CreateGroup(string name)
         {
