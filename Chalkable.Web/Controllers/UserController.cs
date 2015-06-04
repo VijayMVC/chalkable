@@ -96,6 +96,9 @@ namespace Chalkable.Web.Controllers
         
         public ActionResult ResetPassword(string email)
         {
+            if (string.IsNullOrWhiteSpace(email))
+                return Json(false);
+
             var serviceLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
             /*try
             {*/
