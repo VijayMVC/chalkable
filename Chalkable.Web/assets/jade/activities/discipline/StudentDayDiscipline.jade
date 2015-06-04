@@ -10,17 +10,14 @@
         .top-container
             h1=Msg.Discipline
         if studentDiscipline.getDisciplines().length
-            table.discipline-table
-                tr
-                    th=Msg.Class
-                    th=Msg.Discipline(true)
-                    th=Msg.Description
+            .discipline-table
+                .row
+                    span=Msg.Class
+                    span=Msg.Discipline(true)
+                    span=Msg.Description
                 each item in studentDiscipline.getDisciplines()
-                    tr
-                        td.class-name-td=item.getClassName()
-                        td.disciplines-td
+                    .row
+                        .class-name-td=item.getClassName()
+                        .disciplines-td
                             TEXTAREA.disciplines-text(readonly="readonly")=item.getDisciplineTypes().map(function(item){return item.getName()}).join(', ')
-                            //+Select('disciplines')(multiple, disabled = "disabled")
-                                each disc in item.getDisciplineTypes()
-                                   +Option(disc.getId().valueOf(), disc.getName(), true)
-                        td(class=item.getDescription().toLowerCase()).discipline-description-td=item.getDescription()
+                        div(data-tooltip-type="overflow", data-tooltip=item.getDescription().toLowerCase()).discipline-description-td=item.getDescription()
