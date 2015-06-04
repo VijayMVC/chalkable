@@ -331,8 +331,14 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [[chlk.models.grading.TeacherCommentViewData]],
             function deleteCommentsAction(model){
-                this.ShowConfirmBox('Do You really want to delete ' + (model.getIds().length > 1 ? 'these comments?' : 'this comment?'), "whoa.", null, 'negative-button')
-                    .thenCall(this.teacherCommentService.deleteComments, [model.getIds().split(',')])
+
+
+                var commentIds = (model.getIds() || []).split(',').filter(function(item){
+                    return item != '';
+                });
+
+                this.ShowConfirmBox('Do You really want to delete ' + (commentIds.length > 1 ? 'these comments?' : 'this comment?'), "whoa.", null, 'negative-button')
+                    .thenCall(this.teacherCommentService.deleteComments, [commentIds])
                     .attach(this.validateResponse_())
                     .then(function(data){
                         return this.BackgroundNavigate('setup', 'commentsSetup', []);

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -55,8 +56,14 @@ namespace Chalkable.BusinessLogic.Services.Master
                 this.flushSize = flushSize;
             }
 
+            private const int MAX_MSG_LEN = (1 << 16) - 1;
             public void Log(int level, string message)
             {
+                if (message.Length > MAX_MSG_LEN)
+                {
+                    message = message.Substring(0, MAX_MSG_LEN);
+                    Trace.TraceWarning("Log massage was truncated");
+                }
                 var now = DateTime.UtcNow;
                 items.Add(new BackgroundTaskLogItem
                     {
@@ -99,9 +106,19 @@ namespace Chalkable.BusinessLogic.Services.Master
 
             public void Flush()
             {
-                var helper = new TableHelper<BackgroundTaskLogItem>();
-                helper.Save(Items);
-                items.Clear();
+                try
+                {
+                    var helper = new TableHelper<BackgroundTaskLogItem>();
+                    helper.Save(Items);
+                    items.Clear();
+                }
+                catch (Exception ex)
+                {
+                    Trace.TraceError("Exception durring the logging process");
+                    Trace.TraceError(ex.Message);
+                    Trace.TraceError(ex.StackTrace);
+                }
+                
             }
 
             public void Dispose()

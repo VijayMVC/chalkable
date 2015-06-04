@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword, string timeZone)
         {
-            BaseSecurity.EnsureSysAdmin(Context);
+            BaseSecurity.EnsureSysAdminOrDistrictRegistrator(Context);
             string server;
             District res;
             using (var uow = Update())

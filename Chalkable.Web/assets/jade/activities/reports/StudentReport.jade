@@ -7,6 +7,8 @@
       .x-window-body
          .action-bar: .items: +ActionLinkList(self.buildReportLinksData('studentComprehensiveProgressReport'))
          .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
             TABLE.report-table.student-report
                TR
                   TD.item-1
@@ -15,5 +17,5 @@
                         each gp,i in self.getGradingPeriods()
                            +Option(gp.getId(), gp.getName(), i == 0)
       .x-window-footer.report-bottom
-         BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
          BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

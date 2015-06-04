@@ -127,14 +127,14 @@ namespace Chalkable.Web.Controllers
             return Json(res);
         }
 
-        [AuthorizationFilter("SysAdmin")]
+        [AuthorizationFilter("SysAdmin, AppTester")]
         public ActionResult Approve(Guid applicationId)
         {
             var res = MasterLocator.ApplicationUploadService.ApproveReject(applicationId, true);
             return Json(res);
         }
 
-        [AuthorizationFilter("SysAdmin")]
+        [AuthorizationFilter("SysAdmin, AppTester")]
         public ActionResult Decline(Guid applicationId)
         {
             var res = MasterLocator.ApplicationUploadService.ApproveReject(applicationId, false);

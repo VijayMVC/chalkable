@@ -11,6 +11,8 @@
             +Hidden('classId', self.getClassId().valueOf())
             +Hidden('studentIds', '')#student-ids-value
             .report-content
+                if !self.isAbleDownload()
+                    .error=Msg.Report_No_Access_Msg
                 TABLE.report-table
                     TR
                         +ReportDatePickers(self.getStartDate(), self.getEndDate())
@@ -43,5 +45,5 @@
                     +StudentsBlock(self.getStudents())
         .x-window-footer.report-bottom
             +ReportFormatSelect()
-            BUTTON(type="submit", name="submitType", value="submit").chlk-button.blue-button=Msg.Download
+            BUTTON(type="submit", disabled=!self.isAbleDownload(), name="submitType", value="submit").chlk-button.blue-button=Msg.Download
             BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

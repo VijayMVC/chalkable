@@ -16,6 +16,9 @@ NAMESPACE('chlk.templates.reports', function () {
             chlk.models.id.ClassId, 'classId',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'ableDownload',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'startDate',
 
             [ria.templates.ModelPropertyBind],

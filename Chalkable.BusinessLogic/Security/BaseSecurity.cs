@@ -22,9 +22,21 @@ namespace Chalkable.BusinessLogic.Security
                 throw new ChalkableSecurityException();
         }
 
+
         public static bool IsDistrict(UserContext context)
         {
             return IsSysAdmin(context) || context.Role == CoreRoles.DISTRICT_ROLE;
+        }
+
+        public static void EnsureSysAdminOrDistrictRegistrator(UserContext context)
+        {
+            if (!IsSysAdmin(context) &&  !IsDistrictRegistrator(context))
+                throw new ChalkableSecurityException();
+        }
+
+        public static bool IsDistrictRegistrator(UserContext context)
+        {
+            return context.Role == CoreRoles.DISTRICT_REGISTRATOR_ROLE;
         }
 
         public static void EnsureDistrict(UserContext context)
@@ -118,6 +130,11 @@ namespace Chalkable.BusinessLogic.Security
         public static bool HasClaim(string claim, UserContext context)
         {
             return ClaimInfo.HasPermission(context.Claims, new List<string> {claim});
+        }
+
+        public static bool IsAppTester(UserContext context)
+        {
+            return context.Role == CoreRoles.APP_TESTER_ROLE;
         }
     }
 }

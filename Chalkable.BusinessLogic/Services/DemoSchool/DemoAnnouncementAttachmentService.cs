@@ -118,11 +118,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 var announcementRefs = ((DemoAnnouncementService)ServiceLocator.AnnouncementService)
                     .GetAnnouncementRecipients(null)
                         .Where(x => x.RoleRef == query.RoleId || x.PersonRef == query.CallerId)
-                        .Select(x => x.AnnouncementRef);
+                        .Select(x => x.AnnouncementRef).ToList();
 
-                attachments =
-                    attachments.Where(
-                        x =>
+                if (announcementRefs.Count > 0)
+                    attachments = attachments.Where(x =>
                         {
                             var announcement = ServiceLocator.AnnouncementService.GetAnnouncementById(x.AnnouncementRef);
                             return x.PersonRef == query.CallerId || x.PersonRef == announcement.PrimaryTeacherRef || announcementRefs.Contains(x.AnnouncementRef);

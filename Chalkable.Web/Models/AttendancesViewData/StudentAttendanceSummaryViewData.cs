@@ -56,11 +56,6 @@ namespace Chalkable.Web.Models.AttendancesViewData
                     AttendnaceCount = getAttendanceIssuesCount(x).HasValue ? (int)getAttendanceIssuesCount(x).Value : 0,
                     ClassName = x.Class.Name
                 }).ToList();
-            if (classAttendanceSummaries.Count > 0)
-            {
-                totalAbsences += res.Hover.Sum(x => x.AttendnaceCount);
-                posibleAbsent += classAttendanceSummaries.Sum(x => x.PosibleAttendanceCount);
-            }
             res.Title = totalAbsences.ToString();
             res.IsPassing = isPresentBox || (posibleAbsent > 0 && (totalAbsences * 100) / posibleAbsent < persents);
             return res;

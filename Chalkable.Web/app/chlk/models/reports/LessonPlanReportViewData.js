@@ -11,9 +11,9 @@ NAMESPACE('chlk.models.reports', function (){
         Array, 'activityAttributes',
 
         [[ArrayOf(chlk.models.announcement.ClassAnnouncementType), ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData),
-            chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
-        function $(activityCategories_, activityAttributes_, classId_, gradingPeriodId_, startDate_, endDate_){
-            BASE(classId_, gradingPeriodId_, startDate_, endDate_);
+            chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean]],
+        function $(activityCategories_, activityAttributes_, classId_, gradingPeriodId_, startDate_, endDate_, ableDownload_){
+            BASE(classId_, gradingPeriodId_, startDate_, endDate_, null, ableDownload_);
             if(activityCategories_)
                 this.setActivityCategories(activityCategories_);
             if(activityAttributes_)

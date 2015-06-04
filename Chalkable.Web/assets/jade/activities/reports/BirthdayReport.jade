@@ -10,6 +10,8 @@
          +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
          +Hidden('classId', self.getClassId().valueOf())
          .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
             TABLE.report-table
                TR
                   TD.item-3
@@ -17,7 +19,7 @@
                      +Select('reportFor')#report-for
                         +Option(1, 'Date / Range of dates', true)
                         +Option(2, 'Month / Range of months', false)
-                  +ReportDatePickers()
+                  +OptionalReportDatePickers()
                TR
                   TD.item-3
                   TD.item-3
@@ -78,5 +80,5 @@
                      +LabeledCheckbox('Save as default format', 'saveAsDefault', false)
       .x-window-footer.report-bottom
          +ReportFormatSelect()
-         BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
          BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

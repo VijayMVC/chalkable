@@ -9,10 +9,9 @@ NAMESPACE('chlk.models.reports', function (){
 
         ArrayOf(chlk.models.common.NameId), 'attendanceMonths',
 
-        [[ArrayOf(chlk.models.attendance.AttendanceReason), ArrayOf(chlk.models.common.NameId), chlk.models.id.ClassId, chlk.models.id.GradingPeriodId,
-            chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
-        function $(attendanceReasons_, attendanceMonths_, classId_, gradingPeriodId_, startDate_, endDate_){
-            BASE(classId_, gradingPeriodId_, startDate_, endDate_);
+        [[ArrayOf(chlk.models.attendance.AttendanceReason), ArrayOf(chlk.models.common.NameId), chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, Boolean]],
+        function $(attendanceReasons_, attendanceMonths_, classId_, gradingPeriodId_, ableDownload_){
+            BASE(classId_, gradingPeriodId_, null, null, null, ableDownload_);
             if(attendanceReasons_)
                 this.setAttendanceReasons(attendanceReasons_);
             if(attendanceMonths_)

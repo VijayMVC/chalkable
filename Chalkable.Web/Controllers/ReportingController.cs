@@ -35,26 +35,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher, Student")]
         public ActionResult StudentComprehensiveProgressReport(int gradingPeriodId, int studentId)
         {
-            var inputModel = new ComprehensiveProgressInputModel
-                {
-                    GradingPeriodId = gradingPeriodId,
-                    GradingPeriodIds = new IntList {gradingPeriodId},
-                    StudentIds = new IntList {studentId},
-                    DisplayPeriodAttendance = true,
-                    DisplayStudentComment = true,
-                    DisplaySignatureLine = false,
-                    DisplayTotalPoints = true,
-                    DisplayStudentMailingAddress = true,
-                    DisplayClassAverage = false,
-                    DisplayCategoryAverages = true,
-                    IncludeWithdrawn = false,
-                    ClassAverageOnly = false,
-                    IncludePicture = false,
-                    OrderBy = (int)ComprehensiveProgressOrderByMethod.StudentDisplayName,
-                    DailyAttendanceDisplayMethod = (int)ProgressAttendanceDisplayMethod.Both,
-                    FormatTyped = ReportingFormat.Pdf
-                };
-            return ComprehensiveProgressReport(inputModel);
+            var report = SchoolLocator.ReportService.GetStudentComprehensiveReport(studentId, gradingPeriodId);
+            return DownloadReportFile(report, "StudentComprehensiveProgressReport", ReportingFormat.Pdf);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]
@@ -109,10 +91,14 @@ namespace Chalkable.Web.Controllers
             , Func<TReport, byte[]> reportAction, string reportFileName) where TReport : BaseReportInputModel
         {
             var res = reportAction(reportInputModel);
-            var extension = reportInputModel.FormatTyped.AsFileExtension();
+            return DownloadReportFile(res, reportFileName, reportInputModel.FormatTyped);
+        }
+        private ActionResult DownloadReportFile(byte[] report, string reportFileName, ReportingFormat formatType)
+        {
+            var extension = formatType.AsFileExtension();
             var fileName = string.Format("{0}.{1}", reportFileName, extension);
             MasterLocator.UserTrackingService.CreatedReport(Context.Login, reportFileName);
-            return File(res, MimeHelper.GetContentTypeByExtension(extension), fileName);
+            return File(report, MimeHelper.GetContentTypeByExtension(extension), fileName);
         }
 
         [AuthorizationFilter("AdminGrade, AdminEdit, Teacher")]

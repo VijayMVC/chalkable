@@ -20,10 +20,12 @@ NAMESPACE('chlk.controllers', function (){
         function studentComprehensiveProgressReportAction(){
             if (this.isDemoSchool())
                 return this.ShowMsgBox('Not available for demo', 'Error'), null;
+
             var res = this.gradingPeriodService.getList()
                 .then(function(data){
-                    return new chlk.models.reports.SubmitStudentReportViewData(data);
-                });
+                    var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT);
+                    return new chlk.models.reports.SubmitStudentReportViewData(data, this.getCurrentPerson().getId(), ableDownload);
+                }, this);
 
             return this.ShadeView(chlk.activities.reports.StudentReportDialog, res);
         },

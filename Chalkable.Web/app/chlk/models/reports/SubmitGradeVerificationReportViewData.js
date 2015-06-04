@@ -35,7 +35,6 @@ NAMESPACE('chlk.models.reports', function () {
     /** @class chlk.models.reports.SubmitGradeVerificationReportViewData*/
     CLASS('SubmitGradeVerificationReportViewData', EXTENDS(chlk.models.reports.BaseSubmitReportViewData), [
 
-        chlk.models.reports.SectionOrder, 'classOrder',
         chlk.models.reports.GradeType, 'gradeType',
         chlk.models.reports.StudentOrder, 'studentOrder',
         //chlk.models.reports.IdToPrint, 'numberToDisplay',

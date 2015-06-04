@@ -2,12 +2,13 @@ mixin PracticeScoreWithPreviousScores_(lastScore, previousScores)
      -var res=previousScores && previousScores.length && previousScores.length > 0 ? previousScores.join(',') : '';
      +PracticeScore_(lastScore)(data-tooltip=res)
 
-mixin PracticeScore_(score)
-    div(attributes)= score != undefined ? (score.indexOf('%') == -1 ? score + '%' : score) : '-'
+mixin PracticeScore_(score, percentage)
+    showPercent = percentage != undefined ?  percentage : true
+    div(attributes)= score != undefined ? (score.indexOf('%') == -1 && showPercent ? score + '%' : score) : '-'
 
 mixin GradebookScore_(numericSore, alphaGradeName)
     -var score= numericSore && alphaGradeName ? alphaGradeName + ' (' + numericSore + ')' : (numericSore ? numericSore : alphaGradeName);
-    +PracticeScore_(score)
+    +PracticeScore_(score, false)
 
 .profile-page.grades-page
     +ClassesToolBar(self.getTopData(), 'studycenter', 'practice')

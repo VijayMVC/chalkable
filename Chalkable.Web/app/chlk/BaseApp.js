@@ -44,6 +44,7 @@ REQUIRE('chlk.models.grading.GradeLevel');
 REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.common.AlertInfo');
 REQUIRE('chlk.models.schoolYear.MarkingPeriod');
+REQUIRE('chlk.models.schoolYear.Year');
 REQUIRE('chlk.models.attendance.AttendanceReason');
 REQUIRE('chlk.models.id.SchoolYearId');
 REQUIRE('chlk.models.people.Claim');
@@ -107,6 +108,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
                 this.saveInSession(session, ChlkSessionConstants.MARKING_PERIODS, ArrayOf(chlk.models.schoolYear.MarkingPeriod));
                 this.saveInSession(session, ChlkSessionConstants.GRADING_PERIOD, chlk.models.schoolYear.GradingPeriod);
+                this.saveInSession(session, ChlkSessionConstants.SCHOOL_YEAR, chlk.models.schoolYear.Year, null);
                 this.saveInSession(session, ChlkSessionConstants.NEXT_MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
                 this.saveInSession(session, ChlkSessionConstants.FINALIZED_CLASS_IDS);
                 this.saveInSession(session, ChlkSessionConstants.CURRENT_CHLK_PERSON, chlk.models.people.User, ChlkSessionConstants.CURRENT_PERSON);
@@ -114,7 +116,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, 'WEB_SITE_ROOT', null, 'webSiteRoot');
                 this.saveInSession(session, ChlkSessionConstants.AZURE_PICTURE_URL);
                 this.saveInSession(session, ChlkSessionConstants.DEMO_AZURE_PICTURE_URL);
-                this.saveInSession(session, ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, chlk.models.id.SchoolYearId);
+                this.saveInSession(session, ChlkSessionConstants.SCHOOL_YEAR, chlk.models.id.SchoolYearId, ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, ['id']);
                 this.saveInSession(session, ChlkSessionConstants.ATTENDANCE_REASONS, ArrayOf(chlk.models.attendance.AttendanceReason));
                 this.saveInSession(session, ChlkSessionConstants.USER_CLAIMS, ArrayOf(chlk.models.people.Claim));
                 this.saveInSession(session, ChlkSessionConstants.ALPHA_GRADES, ArrayOf(chlk.models.grading.AlphaGrade));
@@ -128,7 +130,6 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.DEMO_SCHOOL_PICTURE_DISTRICT, chlk.models.id.SchoolId);
                 this.saveInSession(session, ChlkSessionConstants.CLASSES_TO_FILTER, ArrayOf(chlk.models.classes.ClassForTopBar));
                 this.saveInSession(session, ChlkSessionConstants.STUDY_CENTER_ENABLED, Boolean);
-
 
                 this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
 
@@ -170,8 +171,8 @@ NAMESPACE('chlk', function (){
                 session.set(key, resObj);
             },
 
-            [[ria.mvc.ISession, String, Object, String]],
-            function saveInSession(session, key, cls_, destKey_){
+            [[ria.mvc.ISession, String, Object, String, ArrayOf(String)]],
+            function saveInSession(session, key, cls_, destKey_, keys_){
                var serializer = new chlk.lib.serialize.ChlkJsonSerializer();
 
                var defaultValue = {};
@@ -181,6 +182,12 @@ NAMESPACE('chlk', function (){
                    defaultValue = "";
 
                var value = window[key];
+                if(keys_ && value){
+                    keys_.forEach(function(item){
+                        value = value[item];
+                    });
+                }
+
                if(value == undefined || value == null)
                   value = defaultValue;
 

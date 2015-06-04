@@ -13,10 +13,16 @@
          +Hidden('gradingPeriodIds', self.getGradingPeriodId().valueOf().toString())#grading-periods
          +Hidden('dailyAttendanceDisplayMethod', chlk.models.reports.AttendanceDisplayMethodEnum.NONE.valueOf())#daily-attendance-display-method
          .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
             TABLE.report-table
                TR
-                  +ReportDatePickers(self.getStartDate(), self.getEndDate())
                   TD.item-3
+                     h3=Msg.Grading_Period
+                     +Select('gradingPeriod1')(multiple, disabled = 'disabled')#grading-period-select
+                        each gp in self.getGradingPeriods()
+                           +Option(gp.getId().valueOf(), gp.getName(), gp.getId() == self.getGradingPeriodId())
+                  +ReportDatePickers(self.getStartDate(), self.getEndDate())
                TR
                   TD.item-3
                      h3=Msg.Order_by
@@ -69,5 +75,5 @@
 
       .x-window-footer.report-bottom
          +ReportFormatSelect()
-         BUTTON(type="submit").chlk-button.blue-button=Msg.Download
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
          BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel

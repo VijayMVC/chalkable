@@ -190,7 +190,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public bool ApproveReject(Guid applicationId, bool isApprove)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
+            if (!BaseSecurity.IsSysAdmin(Context) && !BaseSecurity.IsAppTester(Context))
                 throw new ChalkableSecurityException();
             Application application;
             using (var uow = Read())

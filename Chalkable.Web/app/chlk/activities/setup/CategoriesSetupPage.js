@@ -15,7 +15,7 @@ NAMESPACE('chlk.activities.setup', function () {
                 jQuery(node.valueOf()).parents('form')
                     .find('.chlk-grid-container')
                     .find('.row:not(.header)')
-                    .find('[type=checkbox]')
+                    .find('[type=checkbox]:not(:disabled)')
                     .each(function(index, item){
                         jNode = jQuery(this);
                         if(!!item.getAttribute('checked') != !!value){

@@ -1,4 +1,4 @@
-mixin ReportDatePicker(header, date, name, minDate, maxDate)
+mixin ReportDatePicker(header, date, name, minDate, maxDate, optional)
    if header && header != ''
       h3=header
    +DatePicker(name, date)(
@@ -9,14 +9,17 @@ mixin ReportDatePicker(header, date, name, minDate, maxDate)
          minDate: minDate && minDate.getDate(),
          maxDate: maxDate && maxDate.getDate()
       },
-      class="validate[required]"
+      class=optional ? undefined : "validate[required]"
    )
 
-mixin ReportDatePickers(startDate, endDate, itemClass_)
+mixin ReportDatePickers(startDate, endDate, itemClass_, needLimitation_, optional)
    TD(class = itemClass_ || 'item-3')
-      +ReportDatePicker(Msg.Start_date, startDate, 'startDate', startDate, endDate)
+      +ReportDatePicker(Msg.Start_date, startDate, 'startDate', needLimitation_ && startDate, needLimitation_ && endDate, optional)
    TD(class = itemClass_ || 'item-3')
-      +ReportDatePicker(Msg.End_date, endDate, 'endDate', startDate, endDate)
+      +ReportDatePicker(Msg.End_date, endDate, 'endDate', needLimitation_ && startDate, needLimitation_ && endDate, optional)
+
+mixin OptionalReportDatePickers()
+   +ReportDatePickers(null, null, null, null, true)
 
 mixin ReportFormatSelect()
    +Select('format').format

@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.id.SchoolYearId');
+REQUIRE('chlk.models.common.ChlkDate');
 
 NAMESPACE('chlk.models.schoolYear', function () {
     "use strict";
@@ -7,10 +8,11 @@ NAMESPACE('chlk.models.schoolYear', function () {
         'Year', [
             chlk.models.id.SchoolYearId, 'id',
             String, 'description',
+            String, 'name',
             [ria.serialize.SerializeProperty('startdate')],
-            String, 'startDate',
+            chlk.models.common.ChlkDate, 'startDate',
             [ria.serialize.SerializeProperty('enddate')],
-            String, 'endDate',
+            chlk.models.common.ChlkDate, 'endDate',
             [ria.serialize.SerializeProperty('iscurrent')],
             Boolean, 'isCurrent',
             [ria.serialize.SerializeProperty('numberofmarkingperiod')],

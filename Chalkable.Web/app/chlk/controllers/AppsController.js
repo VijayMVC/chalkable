@@ -393,10 +393,11 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.SYSADMIN
+            chlk.models.common.RoleEnum.SYSADMIN,
+            chlk.models.common.RoleEnum.APPTESTER
         ])],
         [[chlk.models.id.AppId]],
-        function approveSysAdminAction(appId) {
+        function approveAction(appId) {
             this.appsService
                 .approveApp(appId)
                 .attach(this.validateResponse_())
@@ -405,10 +406,11 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.SYSADMIN
+            chlk.models.common.RoleEnum.SYSADMIN,
+            chlk.models.common.RoleEnum.APPTESTER
         ])],
         [[chlk.models.id.AppId]],
-        function declineSysAdminAction(appId) {
+        function declineAction(appId) {
             this.appsService
                 .declineApp(appId)
                 .attach(this.validateResponse_())
