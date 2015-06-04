@@ -564,7 +564,8 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if (groupsIds == null) return;
             var da = new DataAccessBase<AdminAnnouncementRecipient, int>(uow);
-            da.Delete(announcementId);
+            var annsRecipients = da.GetAll(new AndQueryCondition {{AdminAnnouncementRecipient.ANNOUNCEMENT_REF_FIELD, announcementId}});
+            da.Delete(annsRecipients);
             groupsIds = groupsIds.Distinct();
             var annRecipients = groupsIds.Select(gId => new AdminAnnouncementRecipient
                 {

@@ -222,7 +222,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult AddGroups(int announcementId, IntList groupsIds)
+        public ActionResult SubmitGroupsToAnnouncement(int announcementId, IntList groupsIds)
         {
             SchoolLocator.AnnouncementService.SubmitGroupsToAnnouncement(announcementId, groupsIds);
             return Json(true, 5);
