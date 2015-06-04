@@ -1,17 +1,25 @@
+mixin AppItem(app, tplObj, index)
+    .app-icon-link.announcement-item.application
+        .wrapper
+            if !app.needToInstall()
+                div(data-tooltip='Attach').attach-icon
+            +LoadingImage(src=app.getBannerPictureUrl(), id="loading-image-" + index)
+            .title= app.getName()
+            +ActionButton('apps', 'openSuggestedApp', app.getId(), tplObj.getClassId(), tplObj.getAnnouncementId(), tplObj.getStandardsUrlComponents()) Open
+
 .suggested-apps-block
     .separator-line
     if self.getSuggestedApps()
         +CloseOpen('Suggested Apps')
             .suggested-apps-container.attachments-and-applications
-                each app, i in self.getSuggestedApps()
-                    .app-icon-link.announcement-item.application
-                        .wrapper
-                            -var pictureUrl = app.getBannerPictureUrl()
-                            if !app.needToInstall()
-                                div(data-tooltip='Attach').attach-icon
-                            +LoadingImage(src=pictureUrl, id="loading-image-" + i)
-                            .title= app.getName()
-                            +ActionButton('apps', 'openSuggestedApp', app.getId(), self.getClassId(), self.getAnnouncementId(), self.getStandardsUrlComponents()) Open
+                +LeftRightToolbar()(
+                    fixedElementMargin=true,
+                    fixedElementWidth=true,
+                    itemsCount=5
+                ).suggester-apps-tb
+                    each app, i in self.getSuggestedApps()
+                        +AppItem(app, self, i)
+
                 if !self.getSuggestedApps().length
                     .no-items-text There are no recommended apps for the attached standard
     else

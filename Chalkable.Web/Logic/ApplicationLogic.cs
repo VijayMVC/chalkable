@@ -94,15 +94,15 @@ namespace Chalkable.Web.Logic
             return res;
         }
 
-
         public static IList<ApplicationForAttachViewData> GetSuggestedAppsForAttach(IServiceLocatorMaster masterLocator, IServiceLocatorSchool schooLocator
             , int personId, int classId, IList<Guid> abIds, int markingPeriodId, int? start = null, int? count = null)
         {
             start = start ?? 0;
-            count = count ?? 3;
+            count = count ?? int.MaxValue;
             var studentCountPerApp = schooLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
             var installedAppsIds = studentCountPerApp.Select(x => x.Key).Distinct().ToList();
             var applications = masterLocator.ApplicationService.GetSuggestedApplications(abIds, installedAppsIds, 0, int.MaxValue);
+            var appsTotalCount = applications.Count;
             applications = applications.Where(a => a.CanAttach).ToList()
                                         .Skip(start.Value).Take(count.Value).ToList();
             var classSize = schooLocator.ClassService.GetClassPersons(null, classId, true, markingPeriodId).Count;
@@ -111,7 +111,8 @@ namespace Chalkable.Web.Logic
                 if (!studentCountPerApp.ContainsKey(application.Id))
                     studentCountPerApp.Add(application.Id, classSize);
             }
-            return ApplicationForAttachViewData.Create(applications, studentCountPerApp);
+            var res = ApplicationForAttachViewData.Create(applications, studentCountPerApp);
+            return new PaginatedList<ApplicationForAttachViewData>(res, start.Value / count.Value, count.Value, appsTotalCount);
         }
 
     }
