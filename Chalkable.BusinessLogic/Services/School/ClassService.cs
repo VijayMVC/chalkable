@@ -20,6 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteTeachers(IList<ClassTeacher> classTeachers);
         void DeleteStudent(IList<ClassPerson> classPersons);
 
+        IList<CourseDetails> GetAdminCourses(int schoolYearId, int gradeLevelId); 
         IList<ClassDetails> GetTeacherClasses(int schoolYearId, int teacherId, int? markingPeriodId = null);
         IList<ClassDetails> GetStudentClasses(int schoolYearId, int studentId, int? markingPeriodId = null);
         IList<ClassDetails> GetClasses(int schoolYearId, int? studentId, int? teacherId, int? markingPeriodId = null); 
@@ -81,6 +82,11 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new ClassPersonDataAccess(u).Delete(classPersons));
+        }
+
+        public IList<CourseDetails> GetAdminCourses(int schoolYearId, int gradeLevelId)
+        {
+            return DoRead(uow => new ClassDataAccess(uow).GetAdminCourses(schoolYearId, gradeLevelId));
         }
 
         public IList<ClassDetails> GetTeacherClasses(int schoolYearId, int teacherId, int? markingPeriodId = null)

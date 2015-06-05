@@ -38,4 +38,9 @@ namespace Chalkable.Data.School.Model
         public IList<ClassTeacher> ClassTeachers { get; set; }
         public int StudentsCount { get; set; }
     }
+
+    public class CourseDetails : Class
+    {
+        public IList<ClassDetails> Classes { get; set; } 
+    }
 }

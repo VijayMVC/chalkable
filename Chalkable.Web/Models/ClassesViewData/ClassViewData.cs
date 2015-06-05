@@ -13,7 +13,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         public string Name { get; set; }
         public string ClassNumber { get; set; }
         public string Description { get; set; }
-
+        
         protected ShortClassViewData(Class cClass)
         {
             Id = cClass.Id;

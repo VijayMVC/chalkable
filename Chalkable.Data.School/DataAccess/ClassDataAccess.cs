@@ -41,6 +41,26 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
+        public IList<CourseDetails> GetAdminCourses(int schoolYearId, int gradeLevelId)
+        {
+            IDictionary<string, object> ps = new Dictionary<string, object>
+            {
+                {"@schoolYearId", schoolYearId},
+                {"@gradeLevelId", gradeLevelId}
+            };
+            using (var reader = ExecuteStoredProcedureReader("spGetAdminCourses", ps))
+            {
+                var courses = reader.ReadList<CourseDetails>();
+                reader.NextResult();
+                var classes = ReadClasses(reader);
+                foreach (var course in courses)
+                {
+                    course.Classes = classes.Where(c => c.CourseRef == course.Id).ToList();
+                }
+                return courses;
+            }
+        } 
+
         public ClassDetails GetClassDetailsById(int id)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>

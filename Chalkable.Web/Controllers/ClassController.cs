@@ -79,5 +79,14 @@ namespace Chalkable.Web.Controllers
             var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId, null, false);
             return Json(ClassExpolorerViewData.Create(c, gradingStandards));
         }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult DetailedCourseTypes(int schoolYearId, int gradeLevelId)
+        {
+            var courses = SchoolLocator.ClassService.GetAdminCourses(schoolYearId, gradeLevelId);
+            var courseTypes = SchoolLocator.CourseTypeService.GetList(true);
+            return Json(CourseTypeDetailsViewData.Create(courses, courseTypes));
+        }
+
     }
 }
