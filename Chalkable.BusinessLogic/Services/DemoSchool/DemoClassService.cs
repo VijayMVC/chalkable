@@ -262,6 +262,33 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public IList<CourseDetails> GetAdminCourses(int schoolYearId, int gradeLevelId)
+        {
+            var classes = ClassStorage.GetAll()
+                          .Where(c => c.SchoolYearRef == schoolYearId
+                                      && c.MinGradeLevelRef <= gradeLevelId && c.MaxGradeLevelRef >= gradeLevelId)
+                          .Select(c => GetClassDetailsById(c.Id)).ToList();
+
+            return  ClassStorage.GetAll().Where(c => !c.CourseRef.HasValue && classes.Any(y => y.CourseRef == c.Id))
+                            .Select(c => new CourseDetails
+                                {
+                                    Id = c.Id,
+                                    Name = c.Name,
+                                    ClassNumber = c.ClassNumber,
+                                    CourseRef = c.CourseRef,
+                                    CourseTypeRef = c.CourseTypeRef,
+                                    Description = c.Description,
+                                    GradingScaleRef = c.GradingScaleRef,
+                                    MinGradeLevelRef = c.MinGradeLevelRef,
+                                    MaxGradeLevelRef = c.MaxGradeLevelRef,
+                                    ChalkableDepartmentRef = c.ChalkableDepartmentRef,
+                                    PrimaryTeacherRef = c.PrimaryTeacherRef,
+                                    RoomRef = c.RoomRef,
+                                    SchoolYearRef = c.SchoolYearRef,
+                                    Classes = classes.Where(x => x.CourseRef == c.Id).ToList()
+                                }).ToList();
+        }
+
         public IList<ClassDetails> GetTeacherClasses(int schoolYearId, int teacherId, int? markingPeriodId = null)
         {
             var res = new List<ClassDetails>();

@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.GroupsViewData;
 
 namespace Chalkable.Web.Controllers
@@ -32,7 +33,6 @@ namespace Chalkable.Web.Controllers
             return Json(StudentForGroupViewData.Create(students));
         }
 
-        
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult CreateGroup(string name)
         {
