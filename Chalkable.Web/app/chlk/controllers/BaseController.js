@@ -102,7 +102,8 @@ NAMESPACE('chlk.controllers', function (){
                        //    .thenBreak();
                    }, this)
                    .catchException(chlk.lib.exception.ChalkableSisException, function(exception){
-                       return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                       var msg = this.mapSisErrorMessage(exception.getMessage());
+                       return this.ShowMsgBox(msg, 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
                            .thenBreak();
                    }, this)
                    .catchException(chlk.lib.exception.AppErrorException, function(exception){
@@ -127,6 +128,16 @@ NAMESPACE('chlk.controllers', function (){
            function handleServerError(error){
                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
                return this.redirectToErrorPage_(error.toString(), 'error', 'error404', []);
+           },
+
+
+           [[String]],
+           String, function mapSisErrorMessage(msg){
+               switch(msg){
+                   case 'ActivityCategory_Delete_InUseForActivity':
+                       return "Your action has not been completed because the current record is being used in other modules.";
+                   default: return msg;
+               }
            },
 
            function BackgroundNavigate(controller, action, args_) {
