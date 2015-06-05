@@ -1,0 +1,27 @@
++DaysPanel()
+    .day-names
+        div
+            p=Msg.Sunday
+        div
+            p=Msg.Monday
+        div
+            p=Msg.Tuesday
+        div
+            p=Msg.Wednesday
+        div
+            p=Msg.Thursday
+        div
+            p=Msg.Friday
+        div
+            p=Msg.Saturday
+
+.month-calendar-body
+    +DaysPanel()
+    .items
+        each item in self.getCalendarItems()
+            +ActionLinkWithModel(self.prepareActionLinkModel(item))(class = self.getStyles()).gradient-cnt.item
+                div
+                    h2.number=item.getDay()
+                    .space
+                    +RenderWith(item, self.getCalendarItemTpl())
+

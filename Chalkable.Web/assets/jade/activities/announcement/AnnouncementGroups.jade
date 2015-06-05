@@ -1,0 +1,31 @@
+.dialog.add-standards
+    .x-window-header
+        h1 Announcement Groups
+
+    +ActionForm('announcement', 'saveGroupsToAnnouncement')
+        +Hidden('groupIds', self.getGroupIds().map(function(item){return item.valueOf()}).join(',')).group-ids
+        +Hidden('id', self.getAnnouncementId())
+        .groups-container
+            table
+                tr
+                    td.name-td
+                        .column.groups
+                            h1.column-cell=Msg.My_Groups
+                                +ActionButton('announcement', 'editGroups')(type="button").special-button2.edit-button=Msg.Edit
+                            each group in self.getGroups()
+                                .column-cell
+                                    +ActionLink('announcement', 'showGroupMembers', group.getId())(data-tooltip=group.getName(), data-tooltip-type="overflow").name=group.getName()
+                                    +Checkbox('group', self.isGroupChecked(group))(data-id=group.getId().valueOf()).right.group-check
+                                    .right-triangle
+                    td.name-td
+                        .column.schools
+                            h1.column-cell=Msg.Schools
+                    td.name-td
+                        .column.students
+                            h1.column-cell=Msg.Students
+                                +Button.special-button2.edit-button=Msg.Filter
+
+        .buttons-container
+            +Button.special-button2.cancel.close Cancel
+            +Button()(type="submit").special-button2.blue-button.add.add-groups Submit
+
