@@ -19,6 +19,7 @@ REQUIRE('chlk.activities.announcement.AddStandardsDialog');
 REQUIRE('chlk.activities.announcement.AddDuplicateAnnouncementDialog');
 REQUIRE('chlk.activities.announcement.AnnouncementGroupsDialog');
 REQUIRE('chlk.activities.announcement.AnnouncementEditGroupsDialog');
+REQUIRE('chlk.activities.announcement.GroupStudentsFilterDialog');
 
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.LastMessages');
@@ -1194,9 +1195,9 @@ NAMESPACE('chlk.controllers', function (){
 
 
         [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId]],
-        function showGradeLevelMembersAction(groupId, schoolYearId, gradeLevelId){
-            var res = this.groupService.studentForGroup(groupId, schoolYearId, gradeLevelId)
+        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId, String]],
+        function showGradeLevelMembersAction(groupId, schoolYearId, gradeLevelId, classIds_){
+            var res = this.groupService.studentForGroup(groupId, schoolYearId, gradeLevelId, classIds_ && this.getIdsList(classIds_, chlk.models.id.ClassId))
                 .then(function(students){
                     return new chlk.models.group.StudentsForGroupViewData(groupId, gradeLevelId, schoolYearId, students);
                 })
@@ -1369,6 +1370,25 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_());
 
             return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
+        },
+
+        [chlk.controllers.NotChangedSidebarButton()],
+        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId]],
+        function selectStudentFiltersAction(groupId, schoolYearId, gradeLevelId){
+            var res = this.classService.detailedCourseTypes(schoolYearId, gradeLevelId)
+                .then(function(courseTypes){
+                    return new chlk.models.announcement.GroupStudentsFilterViewData(groupId, schoolYearId, gradeLevelId, courseTypes)
+                })
+                .attach(this.validateResponse_());
+
+            return this.ShadeView(chlk.activities.announcement.GroupStudentsFilterDialog, res);
+        },
+
+        [chlk.controllers.NotChangedSidebarButton()],
+        [[chlk.models.announcement.GroupStudentsFilterViewData]],
+        function filterStudentsAction(model){
+            this.BackgroundCloseView(chlk.activities.announcement.GroupStudentsFilterDialog);
+            return this.Redirect('announcement', 'showGradeLevelMembers', [model.getGroupId(), model.getSchoolYearId(), model.getGradeLevelId(), model.getClassIds()]);
         },
 
         function afterGroupEdit(groups){

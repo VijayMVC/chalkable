@@ -24,12 +24,14 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId]],
-            ria.async.Future, function studentForGroup(groupId, schoolYearId, gradeLevelId) {
-                return this.get('Group/GetStudentsForGroup.json', ArrayOf(chlk.models.group.StudentForGroup), {
+            [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId, ArrayOf(chlk.models.id.ClassId), ArrayOf(chlk.models.id.CourseId)]],
+            ria.async.Future, function studentForGroup(groupId, schoolYearId, gradeLevelId, classesIds_, coursesIds_) {
+                return this.post('Group/GetStudentsForGroup.json', ArrayOf(chlk.models.group.StudentForGroup), {
                     groupId: groupId && groupId.valueOf(),
                     schoolYearId: schoolYearId && schoolYearId.valueOf(),
-                    gradeLevelId: gradeLevelId && gradeLevelId.valueOf()
+                    gradeLevelId: gradeLevelId && gradeLevelId.valueOf(),
+                    classesIds: classesIds_ && this.arrayToCsv(classesIds_),
+                    coursesIds: coursesIds_ && this.arrayToCsv(coursesIds_)
                 });
             },
 

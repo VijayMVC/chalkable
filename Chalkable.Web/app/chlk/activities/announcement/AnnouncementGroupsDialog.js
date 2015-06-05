@@ -30,6 +30,13 @@ NAMESPACE('chlk.activities.announcement', function(){
                 this.dom.find('.saved-block').fadeIn();
             },
 
+            [ria.mvc.DomEventBind('click', '.name:not(.active)')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function nameClick(node, event){
+                node.parent('td').find('.active').removeClass('active');
+                node.addClass('active');
+            },
+
             [ria.mvc.DomEventBind('change', '.student-check')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function studentCheck(node, event, value_){
@@ -78,7 +85,7 @@ NAMESPACE('chlk.activities.announcement', function(){
             [ria.mvc.PartialUpdateRule(chlk.templates.group.GroupExplorerTpl)],
             VOID, function updateGradeLevels(tpl, model, msg_) {
                 tpl.renderTo(this.dom.find('.column.schools').setHTML(''));
-                this.dom.find('column.students').find('h1.column-cell').siblings().remove();
+                this.dom.find('.column.students').find('h1.column-cell').siblings().remove();
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl)],

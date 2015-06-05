@@ -1,5 +1,5 @@
 h1.column-cell=Msg.Students
-    +Button(type="button").special-button2.edit-button=Msg.Filter
+    +ActionButton('announcement', 'selectStudentFilters', self.getGroupId(), self.getSchoolYearId(), self.getGradeLevelId())(type="button").special-button2.edit-button=Msg.Filter
 .column-cell
     +ActionCheckbox('allStudents', self.isAllStudentsChecked(), false, 'announcement', 'assignAllStudents', 'unAssignAllStudents',
         [self.getGroupId(), self.getGradeLevelId(), self.getSchoolYearId(), self.getAllStudentIds()]).all-students-check
