@@ -314,8 +314,8 @@ namespace Chalkable.Web.Controllers
 
         private bool CanTeacherViewChalkable()
         {
-            return ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM})
-                   || ClaimInfo.HasPermission(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM_ADMIN});
+            return ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM})
+                   || ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM_ADMIN});
         }
     }
 }

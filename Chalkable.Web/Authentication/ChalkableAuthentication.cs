@@ -110,31 +110,40 @@ namespace Chalkable.Web.Authentication
             CleanClaimsCookie(USER_PERMISSION_COOKIE_NAME);
         }
 
-        public static ChalkablePrincipal GetUser()
+        public static bool IsPersistentAuthentication()
+        {
+            var ticket = FormsAuthentication.Decrypt(GetAuthCookieValues()[0]);
+            return ticket != null && ticket.IsPersistent;
+        }
+
+        private static string[] GetAuthCookieValues()
         {
             HttpCookie authCookie = HttpContext.Current.Request.Cookies.Get(COOKIE_NAME_1);
-            if (authCookie != null && !string.IsNullOrEmpty(authCookie.Value))
+            if (!(authCookie != null && !string.IsNullOrEmpty(authCookie.Value))) return null;
+            return authCookie.Value.Split('#');
+        }
+
+        public static ChalkablePrincipal GetUser()
+        {
+            var sl = GetAuthCookieValues();
+            if (sl == null || sl.Length == 0) return null;
+            var ticket = FormsAuthentication.Decrypt(sl[0]);
+            if (ticket == null || ticket.UserData == null)
+                return null;
+            var cntx = UserContext.FromString(ticket.UserData);
+            if (sl.Length > 1)
+                cntx.SisToken = sl[1];
+
+            if (!string.IsNullOrEmpty(cntx.DistrictServerUrl) && !Settings.ChalkableSchoolDbServers.Contains(cntx.DistrictServerUrl))
+                return null;
+
+            var userPermissionData = GetClaimsDataFromCookie(USER_PERMISSION_COOKIE_NAME);
+            if (!string.IsNullOrEmpty(userPermissionData))
             {
-                var sl = authCookie.Value.Split('#');
-                var ticket = FormsAuthentication.Decrypt(sl[0]);
-                if (ticket == null || ticket.UserData == null)
-                    return null;
-                var cntx = UserContext.FromString(ticket.UserData);
-                if (sl.Length > 1)
-                    cntx.SisToken = sl[1];
-
-                if (!string.IsNullOrEmpty(cntx.DistrictServerUrl) && !Settings.ChalkableSchoolDbServers.Contains(cntx.DistrictServerUrl))
-                    return null;
-
-                var userPermissionData = GetClaimsDataFromCookie(USER_PERMISSION_COOKIE_NAME);
-                if (!string.IsNullOrEmpty(userPermissionData))
-                {
-                    var serializer = new JavaScriptSerializer();
-                    cntx.Claims = serializer.Deserialize<IList<ClaimInfo>>(userPermissionData);
-                }
-                return new ChalkablePrincipal(cntx);
+                var serializer = new JavaScriptSerializer();
+                cntx.Claims = serializer.Deserialize<IList<ClaimInfo>>(userPermissionData);
             }
-            return null;
+            return new ChalkablePrincipal(cntx);
         }
     }
 }

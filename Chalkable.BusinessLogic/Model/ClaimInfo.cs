@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Model
         public const string MAINTAIN_CLASSROOM_ADMIN = "Maintain Classroom (Admin)";
         public const string VIEW_HEALTH_CONDITION = "View Health Condition";
         public const string VIEW_MEDICAL = "View Medical";
-        public const string CHALKABLE_ADMIN = "Chalkable Admin";
+        public const string CHALKABLE_ADMIN = "Administer Chalkable";
 
         public string Type { get; set; }
         public IEnumerable<string> Values { get; set; }
@@ -26,9 +26,14 @@ namespace Chalkable.BusinessLogic.Model
                     Values = claim.Values
                 }).ToList();
         } 
-        public static bool HasPermission(IList<ClaimInfo> claimInfos, IList<string> claimsValues)
+        public static bool HasPermissions(IList<ClaimInfo> claimInfos, IList<string> claimsValues)
         {
             return claimInfos != null && claimInfos.Any(claim => claimsValues.All(value => claim.Values.Contains(value)));
+        }
+
+        public static bool HasPermission(IList<ClaimInfo> claimInfos, string permission)
+        {
+            return HasPermissions(claimInfos, new List<string> {permission});
         }
     }
 }

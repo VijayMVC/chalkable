@@ -183,6 +183,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public UserContext SwitchToRole(CoreRole role)
+        {
+            throw new NotImplementedException();
+        }
+
         public static string BuildDemoUserName(string roleName, string prefix)
         {
             return prefix + PreferenceService.Get("demoschool" + roleName.ToLower()).Value;
