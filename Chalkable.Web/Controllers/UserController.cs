@@ -52,6 +52,27 @@ namespace Chalkable.Web.Controllers
             return Json(new { Role = context.Role.LoweredName });            
         }
 
+        [AuthorizationFilter("Teacher")]
+        public ActionResult SwitchToDistrictAdmin()
+        {
+            SwitchToRole(CoreRoles.DISTRICT_ADMIN_ROLE);
+            return Redirect<HomeController>(x => x.DistrictAdmin());
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult SwitchToTeacher()
+        {
+            SwitchToRole(CoreRoles.TEACHER_ROLE);
+            return Redirect<HomeController>(x => x.Teacher());
+        }
+
+        private void SwitchToRole(CoreRole role)
+        {
+            var isPersistentAuth = ChalkableAuthentication.IsPersistentAuthentication();
+            var context = MasterLocator.UserService.SwitchToRole(role);
+            ChalkableAuthentication.SignIn(context, isPersistentAuth);
+        }
+
         public ActionResult LogOut()
         {
             ChalkableAuthentication.SignOut();

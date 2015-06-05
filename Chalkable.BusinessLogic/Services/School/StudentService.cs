@@ -142,8 +142,8 @@ namespace Chalkable.BusinessLogic.Services.School
         private bool CanGetHealthConditions()
         {
             return Context.Role != CoreRoles.STUDENT_ROLE
-                   && (ClaimInfo.HasPermission(Context.Claims, new List<string> { ClaimInfo.VIEW_HEALTH_CONDITION })
-                       || ClaimInfo.HasPermission(Context.Claims, new List<string> { ClaimInfo.VIEW_MEDICAL }));
+                   && (ClaimInfo.HasPermissions(Context.Claims, new List<string> { ClaimInfo.VIEW_HEALTH_CONDITION })
+                       || ClaimInfo.HasPermissions(Context.Claims, new List<string> { ClaimInfo.VIEW_MEDICAL }));
         }
 
 
