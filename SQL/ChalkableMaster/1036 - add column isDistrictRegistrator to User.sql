@@ -33,11 +33,11 @@ CREATE TYPE [TUser] AS TABLE(
 	[IsSysAdmin] [bit] NOT NULL,
 	[IsDeveloper] [bit] NOT NULL,
 	[IsAppTester] [bit] NOT NULL,
+	IsDistrictRegistrator bit Not NULL,
 	[ConfirmationKey] [nvarchar](256) NULL,
 	[SisUserName] [nvarchar](256) NULL,
 	[SisUserId] [int] NULL,
-	[DistrictRef] [uniqueidentifier] NULL,
-	IsDistrictRegistrator bit Not NULL
+	[DistrictRef] [uniqueidentifier] NULL	
 )
 GO
 
