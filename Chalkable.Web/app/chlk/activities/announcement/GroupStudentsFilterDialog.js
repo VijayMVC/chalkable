@@ -29,7 +29,27 @@ NAMESPACE('chlk.activities.announcement', function(){
             [ria.mvc.DomEventBind('change', 'input[type=checkbox]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function checkChange(node, event){
-                node.siblings('.items-container').find('input[type=checkbox]').trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [node.checked()]);
+                //node.siblings('.items-container').find('input[type=checkbox]').trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [node.checked()]);
+
+                var value = node.checked(), jNode;
+                jQuery(node.valueOf()).siblings('.items-container').find('input[type=checkbox]')
+                    .each(function(index, item){
+                        jNode = jQuery(this);
+                        if(!!item.getAttribute('checked') != !!value){
+                            jNode.prop('checked', value);
+                            value ? this.setAttribute('checked', 'checked') : this.removeAttribute('checked');
+                            value && this.setAttribute('checked', 'checked');
+                            var node = jNode.parent().find('.hidden-checkbox');
+                            node.val(value);
+                            node.data('value', value);
+                            node.attr('data-value', value);
+                        }
+                    });
+
+                var parentCheck = node.parent('.items-container').parent('.main-item:eq(0)').find('input[type=checkbox]:eq(0)');
+                if(parentCheck.exists()){
+
+                }
             },
 
             [ria.mvc.DomEventBind('click', '.filter-button')],
