@@ -1,0 +1,29 @@
+.dialog.students-filter
+    .x-window-header
+        h1 Filter Students
+
+    +ActionForm('announcement', 'filterStudents').filter-students-form
+        +Hidden('groupId', self.getGroupId())
+        +Hidden('schoolYearId', self.getSchoolYearId())
+        +Hidden('gradeLevelId', self.getGradeLevelId())
+        +Hidden('classIds', '').class-ids
+
+        each courseType in self.getCourseTypes()
+            .main-item
+                +Checkbox('courseType', false)(data-id=courseType.getCourseTypeId().valueOf()).course-type-check
+                SPAN.name=courseType.getCourseTypeName()
+                .items-container
+                    each course in courseType.getCourses()
+                        .main-item
+                            +Checkbox('course', false)(data-id=course.getId().valueOf()).course-check
+                            SPAN.name=course.getName()
+                            .items-container
+                                each clazz in course.getClasses()
+                                    .main-item
+                                        +Checkbox('course', false)(data-id=clazz.getId().valueOf()).class-check
+                                        SPAN.name=clazz.getClassNumber() + ' ' + clazz.getName()
+
+    .buttons-container
+        BUTTON(type="button").special-button2.add.clear-all.negative-button Clear All
+        BUTTON.special-button2.add.filter-button.green-button=Msg.Save
+

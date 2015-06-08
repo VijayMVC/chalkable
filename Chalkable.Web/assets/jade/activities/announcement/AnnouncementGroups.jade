@@ -11,7 +11,7 @@
                     td.name-td
                         .column.groups
                             h1.column-cell=Msg.My_Groups
-                                +Button.special-button2.edit-button=Msg.Edit
+                                +ActionButton('announcement', 'editGroups')(type="button").special-button2.edit-button=Msg.Edit
                             each group in self.getGroups()
                                 .column-cell
                                     +ActionLink('announcement', 'showGroupMembers', group.getId())(data-tooltip=group.getName(), data-tooltip-type="overflow").name=group.getName()
@@ -23,9 +23,8 @@
                     td.name-td
                         .column.students
                             h1.column-cell=Msg.Students
-                                +Button.special-button2.edit-button=Msg.Filter
 
         .buttons-container
-            +Button.special-button2.cancel.close Cancel
+            +Button.special-button2.cancel.close.negative-button Cancel
             +Button()(type="submit").special-button2.blue-button.add.add-groups Submit
 

@@ -59,11 +59,11 @@ NAMESPACE('chlk.controls', function () {
                 hidden.setValue(value);
                 var parent = node.parent('.slide-checkbox');
                 if(value){
-                    node.setAttr('checked', 'checked');
-                    parent.setAttr('checked', 'checked');
+                    node.setProp('checked', true);
+                    parent.setProp('checked', true);
                 }else{
-                    node.removeAttr('checked');
-                    parent.removeAttr('checked');
+                    node.setProp('checked', false);
+                    parent.setProp('checked', false);
                 }
             },
 

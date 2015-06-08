@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.ChlkTemplate');
+REQUIRE('chlk.templates.group.GroupsListTpl');
 REQUIRE('chlk.models.group.AnnouncementGroupsViewData');
 
 NAMESPACE('chlk.templates.group', function () {
@@ -7,10 +7,7 @@ NAMESPACE('chlk.templates.group', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementGroups.jade')],
         [ria.templates.ModelBind(chlk.models.group.AnnouncementGroupsViewData)],
-        'AnnouncementGroupsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.group.Group), 'groups',
-
+        'AnnouncementGroupsTpl', EXTENDS(chlk.templates.group.GroupsListTpl), [
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.id.GroupId), 'groupIds',
 

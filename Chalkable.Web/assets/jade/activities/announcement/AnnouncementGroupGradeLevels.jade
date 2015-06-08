@@ -3,7 +3,7 @@ h1.column-cell=Msg.Schools
     +ActionCheckbox('allSchools', self.isAllSchoolsChecked(), false, 'announcement', 'assignAllSchools', 'unAssignAllSchool', [self.getGroup().getId()]).all-schools-check
     SPAN All Schools
 each school in self.getSchools()
-    .schools
+    .school-grade-levels
         .column-cell.school-name
             +ActionCheckbox('school', self.isSchoolChecked(school), false, 'announcement', 'assignSchool', 'unAssignSchool', [self.getGroup().getId(), school.getSchoolYearId()]).school-check
             SPAN=school.getName()

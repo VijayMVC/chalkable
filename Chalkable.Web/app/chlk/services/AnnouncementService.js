@@ -212,7 +212,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, String]],
             ria.async.Future, function addGroupsToAnnouncement(id, groupIds_) {
-                return this.post('Announcement/AddGroups.json', Boolean, {
+                return this.post('Announcement/SubmitGroupsToAnnouncement.json', Boolean, {
                     announcementid:id.valueOf(),
                     groupsids: groupIds_
                 });

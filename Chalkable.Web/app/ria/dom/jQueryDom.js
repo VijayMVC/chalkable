@@ -410,6 +410,12 @@ NAMESPACE('ria.dom', function () {
                 return this;
             },
 
+            [[String, Object]],
+            OVERRIDE, ria.dom.Dom, function setProp(name, value) {
+                this._dom.prop(name, value);
+                return this;
+            },
+
 
             [[String]],
             OVERRIDE, ria.dom.Dom, function removeAttr(name) {

@@ -336,7 +336,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.setMoreClicked(false);
 
                 var allScores = [], zeroPercentageScores = [];
-                if(!this.getRole().isStudent()){
+                if(this.getRole().isTeacher()){
                     this.setAbleDropStudentScore(model.isAbleDropStudentScore());
                     this.setAbleToExempt(model.isAbleToExempt());
                     model.getAlternateScores().forEach(function(item){
