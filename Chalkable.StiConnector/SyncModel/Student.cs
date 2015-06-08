@@ -68,7 +68,7 @@ namespace Chalkable.StiConnector.SyncModel
         public DateTime? IEPEndDate { get; set; }
         public DateTime? DateEnrolledInLEA { get; set; }
         public int? ReportingSchoolID { get; set; }
-        public short? FirstYearInUS { get; set; }
+        public DateTime? FirstYearInUS { get; set; }
         public DateTime? USLEPEntryDate { get; set; }
         public DateTime? LEPExitDate { get; set; }
         public bool IntegratedWithSETS { get; set; }
