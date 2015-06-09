@@ -23,7 +23,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
 
         private const string CREATE_PORCEDURE = "spCreateAnnouncement";
-        private const string GET_DETAILS_PROCEDURE = "spGetAnnouncementDetails";
         private const string REORDER_PROCEDURE = "spReorderAnnouncements";
 
         private const string CLASS_ANNOUNCEMENT_TYPE_ID_PARAM = "classAnnouncementTypeId";
@@ -37,8 +36,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         private const string SCHOOL_YEAR_ID_PARAM = "schoolYearId";
         private const string ID_PARAM = "id";
-        private const string CALLER_ID_PARAM = "callerId";
-        private const string CALLER_ROLE_PARAM = "@callerRole";
         private const string ROLE_ID_PARAM = "roleId";
         private const string FROM_DATE_PARAM = "fromDate";
         private const string TO_DATE_PARAM = "toDate";
