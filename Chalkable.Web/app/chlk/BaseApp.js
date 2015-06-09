@@ -335,6 +335,18 @@ NAMESPACE('chlk', function (){
                     });
             },
 
+            function prepareSideBarOptions_(){
+                var isStudyCenterEnabled = this.getContext().getSession().get(ChlkSessionConstants.STUDY_CENTER_ENABLED, false);
+                var LE_Enabled = this.getContext().getSession().get(ChlkSessionConstants.LE_ENABLED, false);
+                var LE_SyncComplete = this.getContext().getSession().get(ChlkSessionConstants.LE_SYNC_COMPLETE, false);
+                var sidebarOptions = {
+                    isAppStoreEnabled: isStudyCenterEnabled,
+                    isLEEnabled: LE_Enabled,
+                    isLESyncComplete: LE_SyncComplete
+                };
+                return sidebarOptions;
+            },
+
             OVERRIDE, VOID, function onStop_() {
                 this.apiHost_.onStop();
             }

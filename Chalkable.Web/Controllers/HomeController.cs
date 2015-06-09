@@ -200,6 +200,8 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.STUDY_CENTER_ENABLED] = Context.SCEnabled;
+            ViewData[ViewConstants.LE_ENABLED] = Context.LEEnabled;
+            ViewData[ViewConstants.LE_SYNC_COMPLETE] = Context.LESyncComplete;
             PrepareJsonData(Context.Claims, ViewConstants.USER_CLAIMS);
 
 

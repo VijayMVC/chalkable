@@ -289,6 +289,9 @@
             var alternateScores = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.ALTERNATE_SCORES));
             var gradingComments = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADING_COMMMENTS));
             var studyCenterEnabled = '@ViewData.GetJsConstantValueOrNull(ViewConstants.STUDY_CENTER_ENABLED)';
+            var leEnabled = '@ViewData.GetJsConstantValueOrNull(ViewConstants.LE_ENABLED)';
+            var leSyncComplete = '@ViewData.GetJsConstantValueOrNull(ViewConstants.LE_SYNC_COMPLETE)';
+            
             var DEMO_SCHOOL = @isDemoSchool.ToString().ToLowerInvariant();
             var DEMO_SCHOOL_PICTURE_DISTRICT = @demoSchoolPictureDistrictRef;
             var districtId = @ViewData.GetJsConstantValueOrNull(ViewConstants.DISTRICT_ID) || '';

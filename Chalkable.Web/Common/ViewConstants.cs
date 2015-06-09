@@ -2,6 +2,8 @@
 {
     public static class ViewConstants
     {
+        public static string LE_ENABLED = "leEnabled";
+        public static string LE_SYNC_COMPLETE = "leSyncComplete";
         public const string IS_DEMO_DISTRICT = "IsDemoDistrict";
         public const string STUDY_CENTER_ENABLED = "StudyCenterEnabled";
         public const string SCHOOL_OPTIONS="SchoolOptions";

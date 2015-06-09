@@ -59,5 +59,7 @@ var ChlkSessionConstants = {
     STUDY_CENTER_ENABLED: 'studyCenterEnabled',
     CLASSES_INFO: 'classesInfo',
     STUDENTS_FOR_REPORT: 'StudentsForReport',
-    INCLUDE_WITHDRAWN_STUDENTS: 'IncludeWithdrawnStudents'
+    INCLUDE_WITHDRAWN_STUDENTS: 'IncludeWithdrawnStudents',
+    LE_ENABLED: 'leEnabled',
+    LE_SYNC_COMPLETE: 'leSyncComplete'
 };

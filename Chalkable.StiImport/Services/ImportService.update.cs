@@ -126,13 +126,15 @@ namespace Chalkable.StiImport.Services
         {
             if (context.GetSyncResult<School>().Updated == null)
                 return;
-            var schools = context.GetSyncResult<School>().Updated.Select(x=>new Data.School.Model.School
+            var schools = context.GetSyncResult<School>().Updated.Select(school =>new Data.School.Model.School
                 {
-                    Id = x.SchoolID,
-                    IsActive = x.IsActive,
-                    IsPrivate = x.IsPrivate,
-                    Name = x.Name,
-                    IsChalkableEnabled = x.IsChalkableEnabled
+                    Id = school.SchoolID,
+                    IsActive = school.IsActive,
+                    IsPrivate = school.IsPrivate,
+                    Name = school.Name,
+                    IsChalkableEnabled = school.IsChalkableEnabled,
+                    IsLEEnabled = school.IsLEEnabled,
+                    IsLESyncComplete = school.IsLESyncComplete
                 }).ToList();
             ServiceLocatorSchool.SchoolService.Edit(schools);
         }

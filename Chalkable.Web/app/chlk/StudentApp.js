@@ -42,10 +42,7 @@ NAMESPACE('chlk', function (){
             },
 
             OVERRIDE, ria.async.Future, function onStart_() {
-                var isStudyCenterEnabled = this.getContext().getSession().get(ChlkSessionConstants.STUDY_CENTER_ENABLED, false);
-                var sidebarOptions = {
-                    isAppStoreEnabled: isStudyCenterEnabled
-                };
+                var sidebarOptions = this.prepareSideBarOptions_();
                 return BASE()
                     .then(function(data){
                         new ria.dom.Dom()

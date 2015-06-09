@@ -10,5 +10,9 @@ namespace Chalkable.Data.School.Model
         public bool IsActive { get; set; }
         public bool IsPrivate { get; set; }
         public bool IsChalkableEnabled{ get; set; }
+        public bool IsLEEnabled { get; set; }
+        public bool IsLESyncComplete { get; set; }
+        
+
     }
 }

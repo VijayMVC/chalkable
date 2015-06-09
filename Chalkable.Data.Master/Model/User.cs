@@ -68,6 +68,8 @@ namespace Chalkable.Data.Master.Model
         [NotDbFieldAttr]
         public District District { get; set; }
         public bool IsChalkableEnabled { get; set; }
+        public bool IsLEEnabled { get; set; }
+        public bool IsLESyncComplete { get; set; }
         public DateTime? StudyCenterEnabledTill { get; set; }
     }
 

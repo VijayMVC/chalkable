@@ -13,6 +13,8 @@ namespace Chalkable.BusinessLogic.Services
 {
     public class UserContext
     {
+        
+
         private class Ignore : Attribute
         {
              
@@ -38,6 +40,8 @@ namespace Chalkable.BusinessLogic.Services
         public string DistrictServerUrl { get; set; }
         public string DistrictTimeZone { get; set; }
         public bool SCEnabled { get; set; }
+        public bool LEEnabled { get; set; }
+        public bool LESyncComplete { get; set; }
 
         public int? SchoolLocalId { get; set; }
         public Guid? DeveloperId { get; set; }
@@ -113,6 +117,8 @@ namespace Chalkable.BusinessLogic.Services
                     SCEnabled = district.IsDemoDistrict ||
                         school.StudyCenterEnabledTill.HasValue &&
                                 school.StudyCenterEnabledTill.Value > NowSchoolTime;
+                    LEEnabled = school.IsLEEnabled;
+                    LESyncComplete = school.IsLESyncComplete;
                 }
                 if (schoolYear != null)
                 {
