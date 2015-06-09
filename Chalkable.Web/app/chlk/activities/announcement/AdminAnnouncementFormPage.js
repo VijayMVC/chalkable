@@ -10,6 +10,7 @@ NAMESPACE('chlk.activities.announcement', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AdminAnnouncementFormTpl)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AdminAnnouncementRecipientsTpl, 'recipients', '.recipients-list', ria.mvc.PartialUpdateRuleActions.Replace)],
         [chlk.activities.lib.PageClass('new-item')],
         'AdminAnnouncementFormPage', EXTENDS(chlk.activities.announcement.BaseAnnouncementFormPage), [
 
