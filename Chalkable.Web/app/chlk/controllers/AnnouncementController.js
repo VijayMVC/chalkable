@@ -1269,7 +1269,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.GroupId]],
-        function assignAllSchools(groupId){
+        function assignAllSchoolsAction(groupId){
             var res = this.groupService.assignAllSchools(groupId)
                 .attach(this.validateResponse_())
                 .thenCall(this.groupService.groupExplorer, [groupId]);
@@ -1278,7 +1278,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.GroupId]],
-        function unAssignAllSchools(groupId){
+        function unAssignAllSchoolsAction(groupId){
             var res = this.groupService.unassignAllSchools(groupId)
                 .attach(this.validateResponse_())
                 .thenCall(this.groupService.groupExplorer, [groupId]);

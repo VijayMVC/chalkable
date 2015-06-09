@@ -1,3 +1,37 @@
+.group-students-filter-dialog, .announcement-edit-groups-dialog, .announcement-groups-dialog
+  .box-checkbox
+    position: relative
+    z-index: 5
+
+    &.disabled
+      opacity: 0.5
+
+    + SPAN
+      margin-left: 5px
+
+  .action-checkbox.right
+    float: right
+
+  input[type=checkbox]
+    cursor: pointer
+
+  .column-cell
+    position: relative
+    height: 30px
+    padding: 5px 13px 5px 12px
+
+    a, span
+      vertical-align: middle
+      display: inline-block
+
+      .text-container
+        font: normal 15px/40px Arial
+        white-space: nowrap
+        max-width: 150px
+        overflow: hidden
+        text-overflow: ellipsis
+
+
 .group-students-filter-dialog, .announcement-edit-groups-dialog
   .dialog
     width: 300px
@@ -12,7 +46,7 @@
     background: #F5F6F3
 
   .items-container
-    margin-left: 20px
+    margin-left: 30px
 
 .announcement-edit-groups-dialog
   .dialog
@@ -52,18 +86,13 @@
     bottom: 0
     padding-left: 12px
 
+    &.internal
+      padding-left: 55px
+
     &:hover, &.active
       background-color: #f7f7f5
       color: #437d97
       border-right: 1px solid #d7d7d7
-
-  .column-cell
-    position: relative
-    height: 30px
-    padding: 5px 13px 5px 12px
-
-    a, span
-      font: normal 15px/40px Arial
 
   .dialog
     min-height: 480px
@@ -81,9 +110,7 @@
       vertical-align: middle
 
   input[type=checkbox].right, .right input[type=checkbox]
-    position: absolute
-    top: 12px
-    right: 12px
+    position: relative
     z-index: 2
 
     &::before

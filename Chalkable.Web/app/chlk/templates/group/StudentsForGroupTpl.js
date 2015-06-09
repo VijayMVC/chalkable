@@ -20,8 +20,16 @@ NAMESPACE('chlk.templates.group', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.id.SchoolYearId, 'schoolYearId',
 
-            function isAllStudentsChecked(){
-                return this.getStudents().filter(function(item){return item.isAssignedToGroup()}).length == this.getStudents().length
+            function getAllStudentsStage(){
+                var len = this.getStudents().filter(function(item){return item.isAssignedToGroup()}).length;
+
+                if(!len)
+                    return 0;
+
+                if(len < this.getStudents().length)
+                    return 1;
+
+                return 2;
             },
 
             function getAllStudentIds(){

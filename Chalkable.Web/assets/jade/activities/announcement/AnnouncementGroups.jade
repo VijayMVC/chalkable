@@ -14,9 +14,10 @@
                                 +ActionButton('announcement', 'editGroups')(type="button").special-button2.edit-button=Msg.Edit
                             each group in self.getGroups()
                                 .column-cell
-                                    +ActionLink('announcement', 'showGroupMembers', group.getId())(data-tooltip=group.getName(), data-tooltip-type="overflow").name=group.getName()
-                                    +Checkbox('group', self.isGroupChecked(group))(data-id=group.getId().valueOf()).right.group-check
-                                    .right-triangle
+                                    +ActionLink('announcement', 'showGroupMembers', group.getId())(data-tooltip=group.getName(), data-tooltip-type="overflow").group-name.name
+                                        .text-container(data-tooltip = group.getName())=group.getName()
+                                    .box-checkbox.right(class = group.isWithStudents() ? '' : 'disabled' )
+                                        +Checkbox('group', self.isGroupChecked(group), !group.isWithStudents())(data-id=group.getId().valueOf()).right.group-check
                     td.name-td
                         .column.schools
                             h1.column-cell=Msg.Schools

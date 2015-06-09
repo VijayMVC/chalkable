@@ -1,12 +1,16 @@
 h1.column-cell=Msg.Students
     +ActionButton('announcement', 'selectStudentFilters', self.getGroupId(), self.getSchoolYearId(), self.getGradeLevelId())(type="button").special-button2.edit-button=Msg.Filter
 .column-cell
-    +ActionCheckbox('allStudents', self.isAllStudentsChecked(), false, 'announcement', 'assignAllStudents', 'unAssignAllStudents',
-        [self.getGroupId(), self.getGradeLevelId(), self.getSchoolYearId(), self.getAllStudentIds()]).all-students-check
-    SPAN All Students
+    -var stage = self.getAllStudentsStage()
+    +ActionCheckbox('allStudents', stage != 0, false, 'announcement', 'assignAllStudents', 'unAssignAllStudents',
+        [self.getGroupId(), self.getGradeLevelId(), self.getSchoolYearId(),
+        self.getAllStudentIds()])(containerCls = 'box-checkbox', class = (stage == 1) ? 'partially-checked' : '').all-students-check
+    SPAN
+        .text-containerAll Students
 .students
     each student in self.getStudents()
         .column-cell
-            SPAN.name=student.getFullName()
+            SPAN.name.internal
+                .text-container=student.getFullName()
             +ActionCheckbox('student', student.isAssignedToGroup(), false, 'announcement', 'assignStudent', 'unAssignStudent',
-                [self.getGroupId(), student.getId()])(data-id=student.getId().valueOf()).right.student-check
+                [self.getGroupId(), student.getId()])(data-id=student.getId().valueOf(), containerCls = 'box-checkbox right').right.student-check
