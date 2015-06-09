@@ -14,6 +14,20 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+
+        public override IList<Group> GetAll(QueryCondition conditions = null)
+        {
+            var query = new DbQuery();
+            var groupTName = typeof (Group).Name;
+            var querySet = string.Format(" [{0}].*, (select count(*) from [{3}] where [{3}].[{4}] = [{1}]) as {2}"
+                                        , groupTName, Group.ID_FIELD, Group.STUDENT_COUNT_FIELD
+                                        , typeof (StudentGroup).Name, StudentGroup.GROUP_REF_FIELD);
+            query.Sql.AppendFormat(Orm.SELECT_FORMAT, querySet, groupTName);
+            if(conditions != null)
+                conditions.BuildSqlWhere(query, groupTName);
+            return ReadMany<Group>(query);
+        }
+
         private const string SP_GET_GROUP_EXPLORER_DATA =  "spGetGroupExplorerData";
         private const string GROUP_ID_PARAM = "groupId";
         private const string OWNER_ID_PARAM = "ownerId";

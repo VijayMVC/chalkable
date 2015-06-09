@@ -7,12 +7,18 @@ namespace Chalkable.Data.School.Model
     {
         public const string ID_FIELD = "Id";
         public const string OWNER_REF_FIELD = "OwnerRef";
+        public const string STUDENT_COUNT_FIELD = "StudentCount";
 
         [IdentityFieldAttr]
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string Name { get; set; }
         public int OwnerRef { get; set; }
+
+        [NotDbFieldAttr]
+        public int StudentCount { get; set; }
+        [NotDbFieldAttr]
+        public bool HasStudents { get { return StudentCount > 0; } }
     }
 
     public class StudentGroup
