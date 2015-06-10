@@ -820,6 +820,12 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.announcement.Announcement]],
+        function saveDistrictAdminAction(model){
+            return this.saveOnCreateDistrictAdminAction(model);
+        },
+
+        [chlk.controllers.NotChangedSidebarButton()],
+        [[chlk.models.announcement.Announcement]],
         function saveOnCreateDistrictAdminAction(model){
             if (model.getSubmitType() == 'saveNoUpdate'){
                 this.setNotAblePressSidebarButton(true);
@@ -856,10 +862,14 @@ NAMESPACE('chlk.controllers', function (){
                     this.cacheAnnouncement(null);
                     this.cacheAnnouncementAttachments(null);
                     this.cacheAnnouncementApplications(null);
-                    return this.BackgroundNavigate('feed', 'list', [null, true]);
+                    if(model.getSubmitType() == 'submitOnEdit')
+                        return this.BackgroundNavigate('announcement', 'view', [model.getId()]);
+                    else{
+                        return this.BackgroundNavigate('feed', 'list', [null, true]);
+                    }
                 }
             }, this);
-            return res;
+            return null;
         },
 
         [[chlk.models.announcement.Announcement]],
@@ -1324,7 +1334,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(students){
                     return new chlk.models.group.StudentsForGroupViewData(groupId, gradeLevelId, schoolYearId, students);
                 });
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res, 'all-students');
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
@@ -1338,7 +1348,7 @@ NAMESPACE('chlk.controllers', function (){
                     return new chlk.models.group.StudentsForGroupViewData(groupId, gradeLevelId, schoolYearId, students);
                 });
 
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res, 'all-students');
         },
 
         [chlk.controllers.NotChangedSidebarButton()],

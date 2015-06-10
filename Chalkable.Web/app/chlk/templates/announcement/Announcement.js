@@ -25,6 +25,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.common.ChlkDate, 'created',
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
 
             [ria.templates.ModelPropertyBind],

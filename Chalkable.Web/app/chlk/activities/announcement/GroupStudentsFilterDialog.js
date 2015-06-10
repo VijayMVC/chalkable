@@ -45,7 +45,7 @@ NAMESPACE('chlk.activities.announcement', function(){
                 var value = node.checked(), that = this;
                 jQuery(node.valueOf()).parents('.column-cell').siblings('.items-container').find('input[type=checkbox]')
                     .each(function(index, item){
-                        if(!!item.getAttribute('checked') != !!value){
+                        if(jQuery(item).is(':checked') != !!value){
                             that.setCheckBoxValue(this, value);
                         }
                     });
