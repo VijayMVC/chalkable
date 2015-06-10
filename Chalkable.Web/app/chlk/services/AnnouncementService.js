@@ -199,11 +199,12 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, String, chlk.models.common.ChlkDate, String, String, chlk.models.id.MarkingPeriodId]],
-            ria.async.Future, function submitAdminAnnouncement(id, content_, expiresdate_, attachments_, applications_, markingPeriodId_) {
+            [[chlk.models.id.AnnouncementId, String, String, chlk.models.common.ChlkDate, String, String, chlk.models.id.MarkingPeriodId]],
+            ria.async.Future, function submitAdminAnnouncement(id, content_, title_, expiresdate_, attachments_, applications_, markingPeriodId_) {
                 return this.post('Announcement/SubmitForAdmin.json', Boolean, {
                     announcementid:id.valueOf(),
                     markingperiodid: markingPeriodId_ ? markingPeriodId_.valueOf() : null,
+                    title: title_,
                     content: content_,
                     attachments: attachments_,
                     applications: applications_,

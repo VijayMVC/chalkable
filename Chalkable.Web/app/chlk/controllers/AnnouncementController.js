@@ -843,6 +843,7 @@ NAMESPACE('chlk.controllers', function (){
                 .submitAdminAnnouncement(
                     model.getId(),
                     model.getContent(),
+                    model.getTitle(),
                     model.getExpiresDate(),
                     model.getAttachments(),
                     model.getApplicationsIds(),
