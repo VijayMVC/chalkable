@@ -60,7 +60,9 @@ namespace Chalkable.BusinessLogic.Services.School
         ITeacherCommentService TeacherCommentService { get; }
         IDbService SchoolDbService { get; }
         IDbMaintenanceService DbMaintenanceService { get; }
+        ISettingsService SettingsService { get;  }
     }
+
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
     {
         private IServiceLocatorMaster serviceLocatorMaster;
@@ -117,6 +119,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IContactService contactService;
         private ITeacherCommentService teacherCommentService;
         private IDbMaintenanceService dbMaintenanceService;
+        private ISettingsService settingsService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -175,6 +178,7 @@ namespace Chalkable.BusinessLogic.Services.School
             contactService = new ContactService(this);
             teacherCommentService = new TeacherCommentService(this);
             dbMaintenanceService = new DbMaintenanceService(this);
+            settingsService = new SettingsService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -230,6 +234,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IContactService ContactService { get { return contactService; } }
         public ITeacherCommentService TeacherCommentService { get { return teacherCommentService; } }
         public IDbMaintenanceService DbMaintenanceService {get { return dbMaintenanceService; }}
+        public ISettingsService SettingsService { get { return settingsService; } }
 
 
         public IDbService SchoolDbService

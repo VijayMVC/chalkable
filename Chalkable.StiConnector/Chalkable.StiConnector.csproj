@@ -249,6 +249,7 @@
     <Compile Include="SyncModel\StudentSchool.cs" />
     <Compile Include="SyncModel\SyncContext.cs" />
     <Compile Include="SyncModel\SyncModel.cs" />
+    <Compile Include="SyncModel\SystemSetting.cs" />
     <Compile Include="SyncModel\Term.cs" />
     <Compile Include="SyncModel\TimeSlot.cs" />
     <Compile Include="SyncModel\User.cs" />
