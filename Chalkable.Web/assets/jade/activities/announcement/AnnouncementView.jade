@@ -34,7 +34,7 @@ mixin Glue_()
         +ActionButton('feed', 'doToList').back-button Back
         .clear-fix
 
-    h2.page-title: +Glue_(self.getAnnouncementTypeName() + (isAdminAnnouncement ? ' ' + Msg.Announcement : ''), self.getClassName())
+    h2.page-title: +Glue_((isAdminAnnouncement ? (self.getTitle() || Msg.Admin_Announcement) : self.getAnnouncementTypeName()), self.getClassName())
     .announcement-details-panel
         .details-container.silver-panel
 
@@ -74,6 +74,14 @@ mixin Glue_()
                                 .standard-list
                                     each standard in self.getStandards()
                                         button(data-tooltip = standard.getDescription()).same-on-hover= standard.getName()
+                                        = ' '
+
+                        if self.getRecipients() && self.getRecipients().length > 0
+                            .standards-container
+                                .title Groups:
+                                .standard-list
+                                    each recipient in self.getRecipients()
+                                        button(data-tooltip = recipient.getGroupName(), data-tooltip-type="overflow").same-on-hover= recipient.getGroupName()
                                         = ' '
 
         -var attachments = self.getAnnouncementAttachments() || []
