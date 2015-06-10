@@ -814,8 +814,8 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.announcement.Announcement]],
         function saveOnCreateAction(model){
-            this.saveAction(model);
-            return this.ShadeLoader();
+            return this.saveAction(model);
+            //return this.ShadeLoader();
         },
 
         [chlk.controllers.NotChangedSidebarButton()],

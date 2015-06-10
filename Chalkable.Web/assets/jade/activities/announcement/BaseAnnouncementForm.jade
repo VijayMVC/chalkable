@@ -12,7 +12,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
     +Hidden('classid', classId)
     +Hidden('order', announcement.getOrder()).order-value
     +Hidden('announcementtypename', announcement.getAnnouncementTypeName())
-    +Hidden('groupIds', announcement.getRecipients().map(function(item){return item.getGroupId()}).join(',')).group-ids
+    +Hidden('groupIds', announcement.getRecipients() && announcement.getRecipients().map(function(item){return item.getGroupId()}).join(',')).group-ids
 
     //+AnnouncementFormDescriptionBlock(announcement)
     typesEnum = chlk.models.announcement.AnnouncementTypeEnum
