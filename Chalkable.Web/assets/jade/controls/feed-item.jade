@@ -20,7 +20,7 @@ mixin FeedItem(item, disabled, isStudentGrading)
         +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), false)(data-tooltip=Msg.Done).star.complete
         +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), true)(data-tooltip= Msg.ToDo).star
         +ActionLink('announcement', 'view', item.getId())(class = disabled ? 'disabled' : '').announcement-link
-            .title: +Glue_((isAdminAnnouncement ? Msg.Admin_Announcement : item.getAnnouncementTypeName()), item.getClassName())
+            .title: +Glue_((isAdminAnnouncement ? (item.getTitle() || Msg.Admin_Announcement) : item.getAnnouncementTypeName()), item.getClassName())
             .date= item.getExpiresDate() ? item.getExpiresDate().toString('m/d/y') : ''
             .attachment
                 .grades

@@ -160,6 +160,7 @@ NAMESPACE('chlk.services', function () {
                 return this.post('Announcement/SaveAnnouncement.json', chlk.models.announcement.Announcement, {
                     announcementId:id.valueOf(),
                     classAnnouncementTypeId:classAnnouncementTypeId_,
+                    title: title_,
                     classId: classId_ ? classId_.valueOf() : null,
                     markingPeriodId:markingPeriodId_ ? markingPeriodId_.valueOf() : null,
                     content: content_,

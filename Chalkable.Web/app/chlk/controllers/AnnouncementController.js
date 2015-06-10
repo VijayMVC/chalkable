@@ -821,6 +821,24 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.announcement.Announcement]],
         function saveOnCreateDistrictAdminAction(model){
+            if (model.getSubmitType() == 'saveNoUpdate'){
+                this.setNotAblePressSidebarButton(true);
+                this.announcementService
+                    .saveAnnouncement(
+                        model.getId(),
+                        null,
+                        null,
+                        model.getTitle(),
+                        model.getContent(),
+                        model.getExpiresDate(),
+                        Array.isArray(model.getAttachments()) ? model.getAttachments().join(',') : model.getAttachments(),
+                        Array.isArray(model.getApplications()) ? model.getApplications().join(',') : model.getApplications(),
+                        model.getMarkingPeriodId()
+                    )
+                    .attach(this.validateResponse_());
+                return null;
+            }
+
             var res = this.announcementService
                 .submitAdminAnnouncement(
                     model.getId(),
