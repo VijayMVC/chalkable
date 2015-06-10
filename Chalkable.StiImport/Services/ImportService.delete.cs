@@ -36,6 +36,8 @@ namespace Chalkable.StiImport.Services
         private void ProcessDelete()
         {
             //TODO: wait for fix student contact from Inow
+            Log.LogInfo("delete systemSettings");
+            DeleteSystemSettings();
             Log.LogInfo("delete studentContacts");
             DeleteStudentContacts();
             Log.LogInfo("delete contactRelationship");
@@ -138,6 +140,22 @@ namespace Chalkable.StiImport.Services
             DeleteAddresses();
             Log.LogInfo("delete schools");
             DeleteSchools();
+        }
+
+        private void DeleteSystemSettings()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.SystemSetting>().Deleted == null)
+                return;
+            var systemSettings =
+                context.GetSyncResult<StiConnector.SyncModel.SystemSetting>()
+                    .Deleted.Select(x => new Data.School.Model.DistrictSettings
+                    {
+                        Category = x.Category,
+                        Setting = x.Setting,
+                        Value = x.Value
+                    }).ToList();
+            ServiceLocatorSchool.SettingsService.Delete(systemSettings);
+
         }
 
         private void DeleteContactRelationships()

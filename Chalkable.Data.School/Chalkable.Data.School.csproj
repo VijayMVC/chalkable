@@ -122,6 +122,7 @@
     <Compile Include="Model\ClassTeacher.cs" />
     <Compile Include="Model\ContactRelationship.cs" />
     <Compile Include="Model\Date.cs" />
+    <Compile Include="Model\DistrictSettings.cs" />
     <Compile Include="Model\GradedItem.cs" />
     <Compile Include="Model\GradingComment.cs" />
     <Compile Include="Model\GradingScale.cs" />

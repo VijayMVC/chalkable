@@ -183,6 +183,7 @@
     <Compile Include="Services\DemoSchool\DemoSchoolConstants.cs" />
     <Compile Include="Services\DemoSchool\DemoPersonEmailService.cs" />
     <Compile Include="Services\DemoSchool\DemoPracticeGradeService.cs" />
+    <Compile Include="Services\DemoSchool\DemoSettingsService.cs" />
     <Compile Include="Services\DemoSchool\DemoStaffService.cs" />
     <Compile Include="Services\DemoSchool\DemoStudentParentService.cs" />
     <Compile Include="Services\DemoSchool\DemoStudentAnnouncementService.cs" />
@@ -296,6 +297,7 @@
     <Compile Include="Services\School\SchoolServiceBase.cs" />
     <Compile Include="Services\School\SchoolYearService.cs" />
     <Compile Include="Services\School\ServiceLocatorSchool.cs" />
+    <Compile Include="Services\School\SettingsService.cs" />
     <Compile Include="Services\School\StaffService.cs" />
     <Compile Include="Services\School\StandardService.cs" />
     <Compile Include="Services\School\StudentAnnouncementService.cs" />

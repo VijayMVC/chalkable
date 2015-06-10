@@ -138,6 +138,20 @@ namespace Chalkable.StiImport.Services
             InsertContactRelationships();
             Log.LogInfo("insert studentContacts");
             InsertStudentContacts();
+            Log.LogInfo("insert systemsettings");
+            InsertSystemSettings();
+        }
+
+        private void InsertSystemSettings()
+        {
+            var systemSettings = context.GetSyncResult<StiConnector.SyncModel.SystemSetting>().All;
+            var sysSettings = systemSettings.Select(x => new Data.School.Model.DistrictSettings
+            {
+                Category = x.Category,
+                Setting = x.Setting,
+                Value = x.Value
+            }).ToList();
+            ServiceLocatorSchool.SettingsService.AddSettings(sysSettings);
         }
 
         private void InsertPersonsEmails()
@@ -967,3 +981,5 @@ namespace Chalkable.StiImport.Services
 
     }
 }
+
+

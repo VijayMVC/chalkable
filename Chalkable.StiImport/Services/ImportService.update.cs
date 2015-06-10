@@ -119,7 +119,23 @@ namespace Chalkable.StiImport.Services
             UpdateContactRelationships();
             Log.LogInfo("update studentContacts");
             UpdateStudentContacts();
+            Log.LogInfo("update systemsettings");
+            UpdateSystemSettings();
 
+        }
+
+        private void UpdateSystemSettings()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.SystemSetting>().Updated == null)
+                return;
+            var systemSettings = context.GetSyncResult<StiConnector.SyncModel.SystemSetting>().All;
+            var sysSettings = systemSettings.Select(x => new Data.School.Model.DistrictSettings
+            {
+                Category = x.Category,
+                Setting = x.Setting,
+                Value = x.Value
+            }).ToList();
+            ServiceLocatorSchool.SettingsService.Edit(sysSettings);
         }
 
         private void UpdateSchools()
