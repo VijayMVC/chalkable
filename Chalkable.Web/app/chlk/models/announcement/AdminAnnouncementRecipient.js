@@ -23,6 +23,17 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.announcementId = SJX.fromValue(raw.announcementid, chlk.models.id.AnnouncementId);
                 this.groupId = SJX.fromValue(raw.groupid, chlk.models.id.GroupId);
                 this.groupName = SJX.fromValue(raw.groupname, String);
+            },
+
+            [[chlk.models.id.AnnouncementId, chlk.models.id.GroupId, String]],
+            function $(announcementId_, groupId_, groupName_){
+                BASE();
+                if(announcementId_)
+                    this.setAnnouncementId(announcementId_);
+                if(groupId_)
+                    this.setGroupId(groupId_);
+                if(groupName_)
+                    this.setGroupName(groupName_);
             }
 
         ]);

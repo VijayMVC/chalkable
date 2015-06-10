@@ -8,7 +8,6 @@ NAMESPACE('chlk.activities.announcement', function(){
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.group.GroupsListTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.group.AnnouncementGroupTpl, null, '.new-group' , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.group.GroupsListTpl, null, null , ria.mvc.PartialUpdateRuleActions.Replace)],
         'AnnouncementEditGroupsDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
 
@@ -16,6 +15,15 @@ NAMESPACE('chlk.activities.announcement', function(){
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function studentCheck(node, event, value_){
                 node.parent('form').trigger('submit');
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.group.AnnouncementGroupTpl)],
+            VOID, function newGroup(tpl, model, msg_) {
+                var newGroup = ria.dom.Dom('.new-group');
+                tpl.renderTo(newGroup.setHTML(''));
+                setTimeout(function(){
+                    newGroup.find('.group-name').trigger('focus');
+                }, 1);
             }
         ]);
 });

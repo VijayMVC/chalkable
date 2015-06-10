@@ -1164,8 +1164,9 @@ NAMESPACE('chlk.controllers', function (){
             var groupsIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []);
             var res = this.groupService.list()
                 .then(function(groups){
+                    this.getContext().getSession().set(ChlkSessionConstants.GROUPS_LIST, groups);
                     return new chlk.models.group.AnnouncementGroupsViewData(groups, groupsIds, announcementId);
-                })
+                }, this)
                 .attach(this.validateResponse_());
 
             return this.ShadeView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
@@ -1174,13 +1175,22 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.announcement.Announcement]],
         function saveGroupsToAnnouncementAction(model){
+            var groups = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_LIST, []);
+            var groupIds = model.getGroupIds() ? model.getGroupIds().split(',') : [];
+            groups = groups.filter(function(item){
+                return groupIds.indexOf(item.getId().valueOf().toString()) > -1
+            });
+            var recipients = groups.map(function(item){
+                return new chlk.models.announcement.AdminAnnouncementRecipient(model.getId(), item.getId(), item.getName());
+            });
+            model.setRecipients(recipients);
             this.announcementService.addGroupsToAnnouncement(model.getId(), model.getGroupIds())
                 .then(function(){
                     this.BackgroundCloseView(chlk.activities.announcement.AnnouncementGroupsDialog);
                 }, this)
                 .attach(this.validateResponse_());
             this.getContext().getSession().set(ChlkSessionConstants.GROUPS_IDS, model.getGroupIds() ? model.getGroupIds().split(',').map(function(item){return new chlk.models.id.GroupId(item)}) : []);
-
+            this.BackgroundUpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, model, 'recipients');
             return this.ShadeLoader();
         },
 
@@ -1269,7 +1279,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.GroupId]],
-        function assignAllSchools(groupId){
+        function assignAllSchoolsAction(groupId){
             var res = this.groupService.assignAllSchools(groupId)
                 .attach(this.validateResponse_())
                 .thenCall(this.groupService.groupExplorer, [groupId]);
@@ -1278,7 +1288,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.GroupId]],
-        function unAssignAllSchools(groupId){
+        function unAssignAllSchoolsAction(groupId){
             var res = this.groupService.unassignAllSchools(groupId)
                 .attach(this.validateResponse_())
                 .thenCall(this.groupService.groupExplorer, [groupId]);

@@ -306,6 +306,12 @@ NAMESPACE('chlk', function (){
                     tooltip.html('');
                 });
 
+                ria.dom.Dom()
+                    .on('click', '.box-checkbox', function($node, event) {
+                        if(event.target.className.indexOf('box-checkbox') > -1)
+                            $node.find('input[type=checkbox]').trigger('click')
+                    });
+
                 ria.dom.Dom('#demo-footer')
                     .on('click', '[data-rolename]', function($node, event) {
                         if(!$node.hasClass('pressed')) {

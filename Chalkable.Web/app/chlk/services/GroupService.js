@@ -112,7 +112,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
             [[chlk.models.id.GroupId]],
-            ria.async.Future, function unassignAllSchool(groupId) {
+            ria.async.Future, function unassignAllSchools(groupId) {
                 return this.post('Group/UnassignAllShools.json', Boolean, {
                     groupId: groupId && groupId.valueOf()
                 });

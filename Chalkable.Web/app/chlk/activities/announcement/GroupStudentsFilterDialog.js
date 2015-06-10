@@ -26,29 +26,60 @@ NAMESPACE('chlk.activities.announcement', function(){
                 this.dom.find('input[type=checkbox]').trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [false]);
             },
 
+            function setCheckBoxValue(node, value){
+                var jNode = jQuery(node);
+                jNode.prop('checked', value);
+                value ? node.setAttribute('checked', 'checked') : node.removeAttribute('checked');
+                value && node.setAttribute('checked', 'checked');
+                var hidden = jNode.parent().find('.hidden-checkbox');
+                hidden.val(value);
+                hidden.data('value', value);
+                hidden.attr('data-value', value);
+            },
+
             [ria.mvc.DomEventBind('change', 'input[type=checkbox]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function checkChange(node, event){
                 //node.siblings('.items-container').find('input[type=checkbox]').trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [node.checked()]);
 
-                var value = node.checked(), jNode;
-                jQuery(node.valueOf()).siblings('.items-container').find('input[type=checkbox]')
+                var value = node.checked(), that = this;
+                jQuery(node.valueOf()).parents('.column-cell').siblings('.items-container').find('input[type=checkbox]')
                     .each(function(index, item){
-                        jNode = jQuery(this);
                         if(!!item.getAttribute('checked') != !!value){
-                            jNode.prop('checked', value);
-                            value ? this.setAttribute('checked', 'checked') : this.removeAttribute('checked');
-                            value && this.setAttribute('checked', 'checked');
-                            var node = jNode.parent().find('.hidden-checkbox');
-                            node.val(value);
-                            node.data('value', value);
-                            node.attr('data-value', value);
+                            that.setCheckBoxValue(this, value);
                         }
                     });
 
-                var parentCheck = node.parent('.items-container').parent('.main-item:eq(0)').find('input[type=checkbox]:eq(0)');
-                if(parentCheck.exists()){
+                var parentCheck = jQuery(node.valueOf()).parents('.items-container:eq(0)').parents('.main-item:eq(0)').find('input[type=checkbox]:eq(0)');
+                while(parentCheck[0]){
+                    var items = parentCheck.parents('.column-cell:eq(0)').siblings('.items-container').find('>DIV.main-item').find('input[type=checkbox]:eq(0)'),
+                        checked = 0, partially = 0;
 
+                    items.each(function(index, item){
+                        var jNode = jQuery(item);
+                        if(jNode.is(':checked')){
+                            if(jNode.hasClass('partially-checked'))
+                                partially++;
+                            else
+                                checked++;
+                        }
+                    });
+
+                    if(!checked && !partially){
+                        this.setCheckBoxValue(parentCheck[0], false);
+                        parentCheck.removeClass('partially-checked');
+                    }else{
+                        if(partially || checked != items.length){
+                            this.setCheckBoxValue(parentCheck[0], true);
+                            parentCheck.addClass('partially-checked');
+                        }else{
+                            this.setCheckBoxValue(parentCheck[0], true);
+                            parentCheck.removeClass('partially-checked');
+                        }
+                    }
+
+
+                    parentCheck = parentCheck.parents('.items-container:eq(0)').parents('.main-item:eq(0)').find('input[type=checkbox]:eq(0)');
                 }
             },
 

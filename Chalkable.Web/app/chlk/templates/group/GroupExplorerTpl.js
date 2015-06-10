@@ -20,21 +20,47 @@ NAMESPACE('chlk.templates.group', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.group.GroupMember), 'groupMembers',
 
-            function isAllSchoolsChecked(){
-                var len = 0;
+            function getAllSchoolsStage(){
+                var len = 0, len2 = 0, stage;
                 this.getSchools().forEach(function(school){
-                    if(this.isSchoolChecked(school))
-                        len++
+                    stage = this.getSchoolStage(school);
+                    if(stage == 2)
+                        len++;
+                    if(stage == 1)
+                        len2++;
                 }, this);
-                return this.getSchools().length == len;
+
+                if(!len && !len2)
+                    return 0;
+
+                if(len2 || len < this.getSchools().length)
+                    return 1;
+
+                return 2;
             },
 
-            function isSchoolChecked(school){
-                return this.getGroupMembers().filter(function(item){return item.getSchoolYearId() == school.getSchoolYearId()}).length == this.getGradeLevels().length
+            function getSchoolStage(school){
+                var len = this.getGroupMembers().filter(function(item){return item.getSchoolYearId() == school.getSchoolYearId()}).length ;
+
+                if(!len)
+                    return 0;
+
+                if(len < this.getGradeLevels().length)
+                    return 1;
+
+                return 2;
             },
 
-            function isGradeLevelChecked(gradeLevel, school){
-                return this.getGroupMembers().filter(function(item){return item.getGradeLevelId().valueOf() == gradeLevel.getId() && item.getSchoolYearId() == school.getSchoolYearId()}).length > 0
+            function getGradeLevelStage(gradeLevel, school){
+                var item = this.getGroupMembers().filter(function(item){return item.getGradeLevelId().valueOf() == gradeLevel.getId() && item.getSchoolYearId() == school.getSchoolYearId()})[0];
+
+                if(!item)
+                    return 0;
+
+                if(item && !item.isIncludeAllStudentsInGradeLevel())
+                    return 1;
+
+                return 2;
             }
         ])
 });

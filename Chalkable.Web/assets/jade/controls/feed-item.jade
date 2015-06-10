@@ -5,7 +5,7 @@ mixin FeedItem(item, disabled, isStudentGrading)
     -VALIDATE_ARG('item', [chlk.models.announcement.FeedAnnouncementViewData, chlk.templates.announcement.AnnouncementView, chlk.models.announcement.Announcement], item)
     -VALIDATE_ARG('disabled_', [Boolean], disabled)
 
-    -var isAdminAnnouncement = item.getAnnouncementTypeId() == chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf()
+    -var isAdminAnnouncement = item.isAdminAnnouncement()
     -var itemClasses = attributes['class'] || []
 
     - itemClasses.push(item.getOwnerAttachmentsCount() > 0 || item.getApplicationsCount() > 0 ? 'has-attachments' : 'no-attachments')
@@ -20,7 +20,7 @@ mixin FeedItem(item, disabled, isStudentGrading)
         +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), false)(data-tooltip=Msg.Done).star.complete
         +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), true)(data-tooltip= Msg.ToDo).star
         +ActionLink('announcement', 'view', item.getId())(class = disabled ? 'disabled' : '').announcement-link
-            .title: +Glue_(item.getAnnouncementTypeName() + (isAdminAnnouncement ? ' ' + Msg.Announcement : ''), item.getClassName())
+            .title: +Glue_((isAdminAnnouncement ? Msg.Admin_Announcement : item.getAnnouncementTypeName()), item.getClassName())
             .date= item.getExpiresDate() ? item.getExpiresDate().toString('m/d/y') : ''
             .attachment
                 .grades

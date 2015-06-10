@@ -57,6 +57,8 @@ NAMESPACE('chlk.models.announcement', function () {
                     || annTypeEnum.ANNOUNCEMENT.valueOf();
             },
             Number, function getChalkableAnnouncementType(){ return this._chalkableAnnouncementType;},
+
+            [ria.serialize.SerializeProperty('isadminannouncement')],
             Boolean, 'adminAnnouncement',
 
             [ria.serialize.SerializeProperty('classid')],
@@ -65,11 +67,6 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.id.ClassId, function setClassId(classId){
                 this.classId = classId;
                 this.setAdminAnnouncement(!classId);
-            },
-
-            Boolean, function setAdminAnnouncement(isAdminAnnouncement){
-                if(isAdminAnnouncement === null)
-                    this.adminAnnouncement = !this.classId;
             },
 
             [ria.serialize.SerializeProperty('announcementtypename')],
