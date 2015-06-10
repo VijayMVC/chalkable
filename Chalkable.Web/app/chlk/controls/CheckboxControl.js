@@ -67,6 +67,13 @@ NAMESPACE('chlk.controls', function () {
                 }
             },
 
+            [ria.mvc.DomEventBind('change', '.checkbox')],
+            [[ria.dom.Dom, ria.dom.Event, Boolean]],
+            VOID, function checkBoxChange(node, event, value_) {
+                if(!node.checked())
+                    node.removeClass('partially-checked');
+            },
+
             [[ria.dom.Dom, Object]],
             VOID, function SET_VALUE(dom, value) {
                 dom.setValue(value);
