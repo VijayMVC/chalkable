@@ -18,14 +18,14 @@ namespace Chalkable.Data.School.Model
         public NotificationType Type { get; set; }
         public string Message { get; set; }
         public bool Shown { get; set; }
-        public DateTime Created { get; set; }
-        public bool WasSend { get; set; }
         public int PersonRef { get; set; }
         public int? AnnouncementRef { get; set; }
         public int? PrivateMessageRef { get; set; }
         public Guid? ApplicationRef { get; set; }
         public int? QuestionPersonRef { get; set; }
+        public DateTime Created { get; set; }
         public int? MarkingPeriodRef { get; set; }
+        public bool WasSend { get; set; }
     }
 
 

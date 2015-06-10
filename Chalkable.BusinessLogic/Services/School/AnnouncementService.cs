@@ -581,6 +581,7 @@ namespace Chalkable.BusinessLogic.Services.School
             , IEnumerable<int> groupsIds, UnitOfWork uow, AnnouncementDataAccess annDa)
         {
             ann = SetShortAnnouncementData(ann, inputAnnData.Content, inputAnnData.Subject, inputAnnData.ExpiresDate);
+            ann.Title = inputAnnData.Title;
             annDa.Update(ann);
             RecreateAdminAnnouncementRecipients(ann.Id, groupsIds, uow);
             return ann;

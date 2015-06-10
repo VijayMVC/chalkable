@@ -110,7 +110,7 @@ namespace Chalkable.Data.School.Model
             {
                 return !string.IsNullOrEmpty(ClassAnnouncementTypeName)
                     ? string.Format("{0} {1}", ClassAnnouncementTypeName, Order)
-                    : null;
+                    : AdminRef.HasValue ? "Admin Announcement" : null;
             }
         }
 
