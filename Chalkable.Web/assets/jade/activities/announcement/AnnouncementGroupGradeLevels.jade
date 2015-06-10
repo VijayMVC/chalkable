@@ -1,0 +1,14 @@
+h1.column-cell=Msg.Schools
+.column-cell
+    +ActionCheckbox('allSchools', self.isAllSchoolsChecked(), false, 'announcement', 'assignAllSchools', 'unAssignAllSchool', [self.getGroup().getId()]).all-schools-check
+    SPAN All Schools
+each school in self.getSchools()
+    .school-grade-levels
+        .column-cell.school-name
+            +ActionCheckbox('school', self.isSchoolChecked(school), false, 'announcement', 'assignSchool', 'unAssignSchool', [self.getGroup().getId(), school.getSchoolYearId()]).school-check
+            SPAN=school.getName()
+        each gradeLevel in self.getGradeLevels()
+            .column-cell.grede-level-name
+                +ActionCheckbox('gradeLevel', self.isGradeLevelChecked(gradeLevel, school), false, 'announcement', 'assignGradeLevel', 'unAssignGradeLevel',
+                    [self.getGroup().getId(), school.getSchoolYearId(), gradeLevel.getId()])(containerCls = 'right').grade-level-check
+                +ActionLink('announcement', 'showGradeLevelMembers', self.getGroup().getId(), school.getSchoolYearId(), gradeLevel.getId())(data-tooltip=gradeLevel.getName(), data-tooltip-type="overflow").name=gradeLevel.getName()
