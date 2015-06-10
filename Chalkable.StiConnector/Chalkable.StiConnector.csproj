@@ -111,6 +111,7 @@
     <Compile Include="Connectors\ConnectorLocator.cs" />
     <Compile Include="Connectors\DisciplineConnector.cs" />
     <Compile Include="Connectors\GradebookConnector.cs" />
+    <Compile Include="Connectors\LearningEarningsConnector.cs" />
     <Compile Include="Connectors\LinkConnector.cs" />
     <Compile Include="Connectors\Model\Activity.cs" />
     <Compile Include="Connectors\Model\ActivityAttachment.cs" />

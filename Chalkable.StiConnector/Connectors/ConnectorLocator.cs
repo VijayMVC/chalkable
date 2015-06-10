@@ -48,6 +48,7 @@ namespace Chalkable.StiConnector.Connectors
             SectionCommentConnector = new SectionCommentConnector(this);
             ClassroomOptionConnector = new ClassroomOptionConnector(this);
             SectionDashboardConnector = new SectionDashboardConnector(this);
+            LearningEarningsConnector = new LearningEarningsConnector(this);
         }
 
         public UsersConnector UsersConnector { get; private set; }
@@ -69,6 +70,7 @@ namespace Chalkable.StiConnector.Connectors
         public SectionCommentConnector SectionCommentConnector { get; private set; }
         public ClassroomOptionConnector ClassroomOptionConnector { get; private set; }
         public SectionDashboardConnector SectionDashboardConnector { get; private set; }
+        public LearningEarningsConnector LearningEarningsConnector { get; private set; }
 
         public class TokenModel
         {
@@ -131,4 +133,6 @@ namespace Chalkable.StiConnector.Connectors
             return new ConnectorLocator(token, baseUrl, expires);
         }
     }
+
+    
 }

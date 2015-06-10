@@ -270,6 +270,10 @@ NAMESPACE('chlk.controllers', function (){
                return this.getContext().getSession().get(ChlkSessionConstants.DEMO_SCHOOL, false);
            },
 
+           Boolean, function isLE_Enabled(){
+               return this.getContext().getSession().get(ChlkSessionConstants.LE_ENABLED, false);
+           },
+
            chlk.models.people.User, function getCurrentPerson(){
                return this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON, null);
            },
