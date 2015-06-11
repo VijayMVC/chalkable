@@ -39,12 +39,9 @@ namespace Chalkable.Common
                                                                      {CHECKIN_ROLE.LoweredName, CHECKIN_ROLE},
                                                                      {DEVELOPER_ROLE.LoweredName, DEVELOPER_ROLE},
                                                                      {APP_TESTER_ROLE.LoweredName, APP_TESTER_ROLE},
-                                                                     {DISTRICT_ADMIN_ROLE.LoweredName, DISTRICT_ADMIN_ROLE}
+                                                                     {DISTRICT_ADMIN_ROLE.LoweredName, DISTRICT_ADMIN_ROLE},
                                                                      {DISTRICT_REGISTRATOR_ROLE.LoweredName, DISTRICT_REGISTRATOR_ROLE}
                                                                 };
-
-        
-
 
         public static CoreRole GetByName(string name)
         {
