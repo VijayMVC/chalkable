@@ -2,4 +2,4 @@
     +Hidden('id', self.getId())
     INPUT(type="text", value = self.getName(), class=self.getId() ? '' : 'temporary', name="name").group-name
     if self.getId()
-        +ActionLink('announcement', 'tryDeleteGroup', self.getId()).close-btn
+        +ActionLink('announcement', 'tryDeleteGroup', self.getId()).delete-btn
