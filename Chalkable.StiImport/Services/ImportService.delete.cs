@@ -148,7 +148,7 @@ namespace Chalkable.StiImport.Services
                 return;
             var systemSettings =
                 context.GetSyncResult<StiConnector.SyncModel.SystemSetting>()
-                    .Deleted.Select(x => new Data.School.Model.DistrictSettings
+                    .Deleted.Select(x => new Data.School.Model.SystemSetting
                     {
                         Category = x.Category,
                         Setting = x.Setting,

@@ -14,10 +14,10 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public interface ISettingsService
     {
-        void AddSettings(IList<DistrictSettings> settings);
-        void Edit(IList<DistrictSettings> settings);
-        DistrictSettings GetSetting(string category, string setting);
-        void Delete(IList<DistrictSettings> settings);
+        void AddSettings(IList<SystemSetting> settings);
+        void Edit(IList<SystemSetting> settings);
+        SystemSetting GetSetting(string category, string setting);
+        void Delete(IList<SystemSetting> settings);
     }
 
     public class SettingsService : SchoolServiceBase, ISettingsService
@@ -26,33 +26,33 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public void AddSettings(IList<DistrictSettings> settings)
+        public void AddSettings(IList<SystemSetting> settings)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new DataAccessBase<DistrictSettings>(u).Insert(settings));
+            DoUpdate(u => new DataAccessBase<SystemSetting>(u).Insert(settings));
         }
 
-        public void Edit(IList<DistrictSettings> settings)
+        public void Edit(IList<SystemSetting> settings)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new DataAccessBase<DistrictSettings>(u).Update(settings));
+            DoUpdate(u => new DataAccessBase<SystemSetting>(u).Update(settings));
         }
 
-        public DistrictSettings GetSetting(string category, string setting)
+        public SystemSetting GetSetting(string category, string setting)
         {
             var conds = new AndQueryCondition
             {
-                {DistrictSettings.CATEGORY_FIELD, category, ConditionRelation.Equal},
-                {DistrictSettings.SETTING_FIELD, setting, ConditionRelation.Equal},
+                {SystemSetting.CATEGORY_FIELD, category, ConditionRelation.Equal},
+                {SystemSetting.SETTING_FIELD, setting, ConditionRelation.Equal},
             };
 
-            return DoRead(u => new DataAccessBase<DistrictSettings>(u).GetAll(conds).First());
+            return DoRead(u => new DataAccessBase<SystemSetting>(u).GetAll(conds).First());
         }
 
-        public void Delete(IList<DistrictSettings> settings)
+        public void Delete(IList<SystemSetting> settings)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new DataAccessBase<DistrictSettings>(u).Delete(settings));
+            DoUpdate(u => new DataAccessBase<SystemSetting>(u).Delete(settings));
         }
     }
 }

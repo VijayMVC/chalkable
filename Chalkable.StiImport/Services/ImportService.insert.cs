@@ -145,7 +145,7 @@ namespace Chalkable.StiImport.Services
         private void InsertSystemSettings()
         {
             var systemSettings = context.GetSyncResult<StiConnector.SyncModel.SystemSetting>().All;
-            var sysSettings = systemSettings.Select(x => new Data.School.Model.DistrictSettings
+            var sysSettings = systemSettings.Select(x => new Data.School.Model.SystemSetting
             {
                 Category = x.Category,
                 Setting = x.Setting,
