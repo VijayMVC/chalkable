@@ -1,0 +1,4 @@
+-var recipients = self.getRecipients() || []
+each recipient in recipients
+      .grey-button.same-on-hover.button-like=recipient.getGroupName()
+            +ActionLink('announcement', 'removeRecipient', recipient.getAnnouncementId(), recipient.getGroupId()).remove-recipient
