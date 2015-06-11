@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
 
 
-    public class DemoSettingsStorage:BaseDemoIntStorage<DistrictSettings>
+    public class DemoSettingsStorage:BaseDemoIntStorage<SystemSetting>
     {
         public DemoSettingsStorage()
             : base(null, true)
@@ -26,22 +26,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             SettingsStorage = new DemoSettingsStorage();
         }
 
-        public void AddSettings(IList<DistrictSettings> settings)
+        public void AddSettings(IList<SystemSetting> settings)
         {
             SettingsStorage.Add(settings);
         }
 
-        public void Edit(IList<DistrictSettings> settings)
+        public void Edit(IList<SystemSetting> settings)
         {
             throw new NotImplementedException();
         }
 
-        public DistrictSettings GetSetting(string category, string setting)
+        public SystemSetting GetSetting(string category, string setting)
         {
             return SettingsStorage.GetAll().First(x => x.Category == category && x.Setting == setting);
         }
 
-        public void Delete(IList<DistrictSettings> settings)
+        public void Delete(IList<SystemSetting> settings)
         {
             throw new NotImplementedException();
         }
