@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.Data.Common;
+﻿using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
 
-        public class DistrictSettings
+        public class SystemSetting
         {
             public const string CATEGORY_FIELD = "Category";
             public const string SETTING_FIELD = "Setting";
