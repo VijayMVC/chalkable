@@ -1431,6 +1431,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         function afterGroupEdit(groups){
+            this.getContext().getSession().set(ChlkSessionConstants.GROUPS_LIST, groups);
             var announcementId = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ID, null);
             var groupsIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []);
             var model = new chlk.models.group.AnnouncementGroupsViewData(groups, groupsIds, announcementId);
