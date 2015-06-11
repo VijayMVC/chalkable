@@ -5,7 +5,7 @@ declare @schoolT table (Id int, Name nvarchar(max), IsActive bit, IsPrivate bit,
 insert into @schoolT
 select * from
 (
-	select School.*,
+	select School.Id, School.Name, School.IsActive, School.IsPrivate, School.IsChalkableEnabled,
 		   (select top 1 Id from SchoolYear 
 			where SchoolYear.SchoolRef = School.Id and StartDate <= @currentDate
 			order by StartDate desc) as SchoolYearId

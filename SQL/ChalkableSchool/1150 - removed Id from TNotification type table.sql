@@ -1,7 +1,5 @@
-
-
-drop TYPE [TNotification]
-go
+Drop TYPE [TNotification]
+GO
 CREATE TYPE [dbo].[TNotification] AS TABLE(
 
 	[Type] [int] NOT NULL,
