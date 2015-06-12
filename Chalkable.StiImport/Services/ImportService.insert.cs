@@ -83,6 +83,8 @@ namespace Chalkable.StiImport.Services
             InsertRooms();
             Log.LogInfo("insert grading scales");
             InsertGradingScales();
+            Log.LogInfo("insert course types");
+            InserCourseTypes();
             Log.LogInfo("insert courses");
             InsertCourses();
             Log.LogInfo("insert class teachers");
@@ -140,6 +142,24 @@ namespace Chalkable.StiImport.Services
             InsertStudentContacts();
             Log.LogInfo("insert systemsettings");
             InsertSystemSettings();
+        }
+
+        private void InserCourseTypes()
+        {
+            var courseTypes = context.GetSyncResult<StiConnector.SyncModel.CourseType>().All;
+            var chalkableCourseTypes = courseTypes.Select(courseType => new Data.School.Model.CourseType
+            {
+                Id = courseType.CourseTypeID,
+                Name = courseType.Name,
+                Description = courseType.Description,
+                Code = courseType.Code,
+                IsActive = courseType.IsActive,
+                IsSystem = courseType.IsSystem,
+                NCESCode = courseType.NCESCode,
+                SIFCode = courseType.SIFCode,
+                StateCode = courseType.StateCode
+            }).ToList();
+            ServiceLocatorSchool.CourseTypeService.Add(chalkableCourseTypes);
         }
 
         private void InsertSystemSettings()

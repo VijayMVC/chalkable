@@ -198,7 +198,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                  NotificationType.Announcement, announcementQnA.Asker, announcement, null, null, 
                                                  null, announcementQnA.Answerer, new
                                                      {
-                                                         AnnouncementTypeName = announcement.ClassAnnouncementTypeName,
+                                                         announcement.AnnouncementTypeName,
                                                          AnnouncementTitle = announcement.Title,
                                                          PersonQuestion = StringTools.BuildShortText(announcementQnA.Question, 40),
                                                          AnswererName = announcementQnA.Answerer.DisplayName()
@@ -211,7 +211,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                                                  NotificationType.Announcement, recipient, announcement, null, null, null, null, 
                                                  new {
                                                          AnnouncementOwner = announcement.Owner,
-                                                         AnnouncementTypeName = announcement.ClassAnnouncementTypeName,
+                                                         announcement.AnnouncementTypeName,
                                                          AnnouncementTitle = announcement.Title,
                                                          AnnouncementOwnerName = announcement.Owner.DisplayName()
                                                      });
