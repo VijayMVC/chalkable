@@ -476,10 +476,11 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.StudyCenterEnabled()],
         [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, String]],
-        function tryToAttachTeacherAction(announcementId, appId, appUrlAppend_) {
+        function tryToAttachAction(announcementId, appId, appUrlAppend_) {
 
             var result = this.appsService
                 .addToAnnouncement(this.getCurrentPerson().getId(), appId, announcementId)
@@ -497,11 +498,12 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [chlk.controllers.StudyCenterEnabled()],
         [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, String]],
-        function tryToAttachFromAnnouncementTeacherAction(announcementId, appId, appUrlAppend_) {
-            return this.tryToAttachTeacherAction(announcementId, appId, appUrlAppend_);
+        function tryToAttachFromAnnouncementAction(announcementId, appId, appUrlAppend_) {
+            return this.tryToAttachAction(announcementId, appId, appUrlAppend_);
         },
 
         [chlk.controllers.StudyCenterEnabled()],
