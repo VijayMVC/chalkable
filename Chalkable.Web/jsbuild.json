@@ -79,9 +79,7 @@
             "jQuery",
             "jade"
         ]
-    }],
-
-    "dropped": [{
+    },{
         "name": "DistrictAdminApp",
         "app": "chlk.DistrictAdminApp",
         "out": "app/DistrictAdminApp.compiled.js",
@@ -94,5 +92,7 @@
             "jQuery",
             "jade"
         ]
-    }]
+    }],
+
+    "dropped": []
 }
