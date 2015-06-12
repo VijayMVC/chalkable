@@ -51,7 +51,7 @@ namespace Chalkable.Data.School.DataAccess
                 reader.NextResult();
                 res.GradeLevels = reader.ReadList<GradeLevel>();
                 reader.NextResult();
-                res.GroupMembers = reader.ReadList<GroupMember>().Where(x => x.StudentsGroupInGradeLevel > 0).ToList();
+                res.GroupMembers = reader.ReadList<GroupMember>().ToList();
                 return res;
             }
         }
