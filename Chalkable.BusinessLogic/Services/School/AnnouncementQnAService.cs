@@ -76,7 +76,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 annQnA.State = AnnouncementQnAState.Answered;
                 annQnA.Question = question;
-                if (Context.Role == CoreRoles.TEACHER_ROLE && (!annQnA.AnswererRef.HasValue || annQnA.AnswererRef == Context.PersonId))
+                if ((Context.Role == CoreRoles.TEACHER_ROLE || BaseSecurity.IsDistrictAdmin(Context)) && (!annQnA.AnswererRef.HasValue || annQnA.AnswererRef == Context.PersonId))
                 {
                     var answerer = new PersonDataAccess(uow).GetById(Context.PersonId.Value);
                     annQnA.Answerer = answerer;
