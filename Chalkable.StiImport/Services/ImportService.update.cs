@@ -69,6 +69,8 @@ namespace Chalkable.StiImport.Services
             UpdateRooms();
             Log.LogInfo("update grading scales");
             UpdateGradingScales();
+            Log.LogInfo("update course types");
+            UpdateCourseTypes();
             Log.LogInfo("update courses");
             UpdateCourses();
             Log.LogInfo("update class teachers");
@@ -122,6 +124,26 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("update systemsettings");
             UpdateSystemSettings();
 
+        }
+
+        private void UpdateCourseTypes()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.CourseType>().Updated == null)
+                return;
+            var stiCourseTypes = context.GetSyncResult<StiConnector.SyncModel.CourseType>().All;
+            var chalkableCourseTypes = stiCourseTypes.Select(courseType => new Data.School.Model.CourseType
+            {
+                Id = courseType.CourseTypeID,
+                Name = courseType.Name,
+                Description = courseType.Description,
+                Code = courseType.Code,
+                IsActive = courseType.IsActive,
+                IsSystem = courseType.IsSystem,
+                NCESCode = courseType.NCESCode,
+                SIFCode = courseType.SIFCode,
+                StateCode = courseType.StateCode
+            }).ToList();
+            ServiceLocatorSchool.CourseTypeService.Edit(chalkableCourseTypes);
         }
 
         private void UpdateSystemSettings()

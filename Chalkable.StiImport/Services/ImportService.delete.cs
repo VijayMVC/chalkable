@@ -90,6 +90,8 @@ namespace Chalkable.StiImport.Services
             DeleteClassTeachers();
             Log.LogInfo("delete courses");
             DeleteCourses();
+            Log.LogInfo("delete course types");
+            DeleteCourseTypes();
             Log.LogInfo("delete grading scales");
             DeleteGradingScales();
             Log.LogInfo("delete rooms");
@@ -140,6 +142,15 @@ namespace Chalkable.StiImport.Services
             DeleteAddresses();
             Log.LogInfo("delete schools");
             DeleteSchools();
+        }
+
+        private void DeleteCourseTypes()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.CourseType>().Deleted == null)
+                return;
+            var courseTypes = context.GetSyncResult<StiConnector.SyncModel.CourseType>().Deleted
+                .Select(x => new Data.School.Model.CourseType { Id = x.CourseTypeID }).ToList();
+            ServiceLocatorSchool.CourseTypeService.Delete(courseTypes);
         }
 
         private void DeleteSystemSettings()

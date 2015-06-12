@@ -210,9 +210,11 @@ namespace Chalkable.BusinessLogic.Services.School
        
         public IList<AnnouncementAttachment> GetAttachments(string filter)
         {
+            if(!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
             using (var uow = Read())
             {
-                var res = new AnnouncementAttachmentDataAccess(uow).GetList(Context.PersonId ?? 0, Context.Role.Id, filter);
+                var res = new AnnouncementAttachmentDataAccess(uow).GetList(Context.PersonId.Value, Context.Role.Id, filter);
                 return res;
             }
         }
