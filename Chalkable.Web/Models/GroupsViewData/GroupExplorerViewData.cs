@@ -24,14 +24,7 @@ namespace Chalkable.Web.Models.GroupsViewData
                             Name = x.Name,
                             SchoolYearId = x.SchoolYearRef
                         }).ToList() ,
-                    Members = groupExplorer.GroupMembers.Select(x => new GroupMemberViewData
-                        {
-                            GradeLevelId = x.GradeLevelRef,
-                            GroupId = x.GroupRef,
-                            SchoolId = x.SchoolRef,
-                            SchoolYearId = x.SchoolYearRef,
-                            IncludeAllStudentsInGradeLevel = x.StudentsGroupInGradeLevel == x.StudentsInGradeLevel
-                        }).ToList()
+                    Members = groupExplorer.GroupMembers.Select(GroupMemberViewData.Create).ToList()
                 };
         }
     }
@@ -46,11 +39,33 @@ namespace Chalkable.Web.Models.GroupsViewData
 
     public class GroupMemberViewData
     {
+        public enum GroupMemberState
+        {
+            NoStudents = 0,
+            HasStudents = 1,
+            HasAllStudents = 2
+        }
+
         public int GroupId { get; set; }
         public int GradeLevelId { get; set; }
         public int SchoolYearId { get; set; }
         public int SchoolId { get; set; }
-        public bool IncludeAllStudentsInGradeLevel { get; set; }
+        public GroupMemberState MemberState { get; set; }
+
+        public static GroupMemberViewData Create(GroupMember groupMember)
+        {
+            var res = new GroupMemberViewData
+                {
+                    GradeLevelId = groupMember.GradeLevelRef,
+                    GroupId = groupMember.GroupRef,
+                    SchoolId = groupMember.SchoolRef,
+                    SchoolYearId = groupMember.SchoolYearRef,
+                    MemberState = groupMember.StudentsGroupInGradeLevel > 0 ? GroupMemberState.HasStudents :  GroupMemberState.NoStudents
+                };
+            if (groupMember.StudentsGroupInGradeLevel == groupMember.StudentsInGradeLevel)
+                res.MemberState = GroupMemberState.HasAllStudents;
+            return res;
+        }
     }
 
 }
