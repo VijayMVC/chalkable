@@ -29,7 +29,7 @@ namespace Chalkable.Data.Master.Model
         public int? MaxSyncFrequency { get; set; }
         public int FailCounter { get; set; }
         public int FailDelta { get; set; }
-        
+        public string StateCode { get; set; }
         [NotDbFieldAttr]
         public bool IsDemoDistrict { get; set; }
     }

@@ -31,7 +31,7 @@ namespace Chalkable.Web.Controllers
                     throw new Exception("The link keys do not match.");
                 if (district == null)
                 {
-                    sl.DistrictService.Create(data.DistrictGuid, name, data.ApiUrl, data.RedirectUrl, data.SisUserName, data.SisPassword, timeZone);
+                    sl.DistrictService.Create(data.DistrictGuid, name, data.ApiUrl, data.RedirectUrl, data.SisUserName, data.SisPassword, timeZone, data.DistrictState);
                 }
                 else
                 {
@@ -44,6 +44,7 @@ namespace Chalkable.Web.Controllers
                     district.SisUserName = data.SisUserName;
                     district.TimeZone = timeZone;
                     district.SisRedirectUrl = data.RedirectUrl;
+                    district.StateCode = data.DistrictState;
                     sl.DistrictService.Update(district);
                 }
                 return Json(true);

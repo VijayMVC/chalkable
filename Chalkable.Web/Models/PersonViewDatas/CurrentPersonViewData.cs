@@ -17,6 +17,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public Guid DistrictId { get; set; }
         public string DistrictTimeZone { get; set; }
         public string DistrictName { get; set; }
+        public string StateCode { get; set; }
 
         protected CurrentPersonViewData(Person person, District district, School school, SchoolYear schoolYear)
             : base(person)
@@ -29,6 +30,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             DistrictId = district.Id;
             DistrictTimeZone = DateTimeTools.WindowsToIana(district.TimeZone);
             DistrictName = district.Name;
+            StateCode = district.StateCode;
         }
 
 
