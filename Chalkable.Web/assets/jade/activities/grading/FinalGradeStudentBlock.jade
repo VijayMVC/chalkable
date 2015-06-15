@@ -81,11 +81,14 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10.sub-row
                             .name=self.getClassAnnouncementTypeName(stat)
                 .clear-right
             .grading-chart-part.relative
-                .chart-bg2
-                .chart-container-1
-                    +Chart()(
-                        data-options = self.getChartOptions()
-                    ).relative.main-chart
+                if self.getStatsByType().length && self.getStatsByType().filter(function(item){return item.getStudentGradingStats().length > 0}).length
+                    .chart-bg2
+                    .chart-container-1
+                        +Chart()(
+                            data-options = self.getChartOptions()
+                        ).relative.main-chart
+                else
+                    .no-items-text No graded items yet
         .center-block
             .attendance-block
                 attendance = self.getAttendance()
