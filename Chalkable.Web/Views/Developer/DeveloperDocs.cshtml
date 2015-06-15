@@ -1,0 +1,1378 @@
+﻿@{
+    ViewBag.Title = "Developer Documentation";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata|Raleway:200">
+
+    <style>
+        #page-header, .olrk-noquirks{
+            display: none;
+        }
+
+        BODY .wrapper.docs {
+            width: auto;
+        }
+
+        .hljs-comment,.hljs-title{color:#8e908c}.hljs-variable,.hljs-attribute,.hljs-tag,.hljs-regexp,.ruby .hljs-constant,.xml .hljs-tag .hljs-title,.xml .hljs-pi,.xml .hljs-doctype,.html .hljs-doctype,.css .hljs-id,.css .hljs-class,.css .hljs-pseudo{color:#c82829}.hljs-number,.hljs-preprocessor,.hljs-pragma,.hljs-built_in,.hljs-literal,.hljs-params,.hljs-constant{color:#f5871f}.ruby .hljs-class .hljs-title,.css .hljs-rules .hljs-attribute{color:#eab700}.hljs-string,.hljs-value,.hljs-inheritance,.hljs-header,.ruby .hljs-symbol,.xml .hljs-cdata{color:#718c00}.css .hljs-hexcolor{color:#3e999f}.hljs-function,.python .hljs-decorator,.python .hljs-title,.ruby .hljs-function .hljs-title,.ruby .hljs-title .hljs-keyword,.perl .hljs-sub,.javascript .hljs-title,.coffeescript .hljs-title{color:#4271ae}.hljs-keyword,.javascript .hljs-function{color:#8959a8}.hljs{display:block;background:white;color:#4d4d4c;padding:.5em}.coffeescript .javascript,.javascript .xml,.tex .hljs-formula,.xml .javascript,.xml .vbscript,.xml .css,.xml .hljs-cdata{opacity:.5}</style><style>body,
+        h4,
+        h5 {
+          font-family: 'Roboto' sans-serif !important;
+        }
+        h1,
+        h2,
+        h3,
+        .aglio {
+          font-family: 'Raleway' sans-serif !important;
+        }
+        h1 a,
+        h2 a,
+        h3 a,
+        h4 a,
+        h5 a {
+          display: none;
+        }
+        h1:hover a,
+        h2:hover a,
+        h3:hover a,
+        h4:hover a,
+        h5:hover a {
+          display: inline;
+        }
+        code {
+          color: #444;
+          background-color: #ddd;
+          font-family: 'Inconsolata' monospace !important;
+        }
+        a[data-target] {
+          cursor: pointer;
+        }
+        h4 {
+          font-size: 100%;
+          font-weight: bold;
+          text-transform: uppercase;
+        }
+        .back-to-top {
+          position: fixed;
+          z-index: 1;
+          bottom: 0px;
+          right: 24px;
+          padding: 4px 8px;
+          background-color: #eee;
+          text-decoration: none !important;
+          border-top: 1px solid rgba(0,0,0,0.1);
+          border-left: 1px solid rgba(0,0,0,0.1);
+          border-right: 1px solid rgba(0,0,0,0.1);
+          border-top-left-radius: 3px;
+          border-top-right-radius: 3px;
+        }
+        .panel {
+          overflow: hidden;
+        }
+        .panel-heading code {
+          color: #c7254e;
+          background-color: transparent;
+          white-space: pre-wrap;
+          white-space: -moz-pre-wrap;
+          white-space: -pre-wrap;
+          white-space: -o-pre-wrap;
+          word-wrap: break-word;
+        }
+        .panel-heading h3 {
+          margin-top: 10px;
+          margin-bottom: 10px;
+        }
+        a.list-group-item {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          overflow: hidden;
+        }
+        a.list-group-item.heading {
+          background-color: #f5f5f5;
+        }
+        .list-group-item.collapse {
+          display: none;
+        }
+        .list-group-item.collapse.in {
+          display: block;
+        }
+        #nav {
+          margin-top: 38px;
+          min-width: 255px;
+          top: 0;
+          bottom: 0;
+          padding-right: 12px;
+          padding-bottom: 12px;
+          overflow-y: auto;
+        }
+
+    </style>
+}
+
+@section ContentSection {
+
+
+<a href="#top" class="text-muted back-to-top"><i class="fa fa-toggle-up"></i>&nbsp;Back to top</a>
+<div class="container"><div class="row"><div class="col-md-3"><nav id="nav" class="hidden-sm hidden-xs affix nav">
+
+
+    <a href="@Url.Content("~/Developer/Info")" class='lg' style="margin: 0 0 10px 0">Back to Developers</a>
+
+
+
+    <div class="list-group"><a href="#access-authorization-and-control" class="list-group-item heading" style="margin-top: 10px;">Access Authorization and Control</a><a href="#access-authorization-and-control-authorization" class="list-group-item"><i class="fa fa-plus-square"></i>&nbsp;Authorization</a></div><div class="list-group"><a href="#using-the-chalkable-api" class="list-group-item heading">Using the Chalkable API</a></div><div class="list-group"><a href="#person" class="list-group-item heading">Person</a><a href="#person-person" class="list-group-item"><i class="fa fa-arrow-circle-down"></i>&nbsp;Person</a></div><div class="list-group"><a href="#announcement" class="list-group-item heading">Announcement</a><a href="#announcement-announcement" class="list-group-item"><i class="fa fa-arrow-circle-down"></i>&nbsp;Announcement</a></div><div class="list-group"><a href="#class" class="list-group-item heading">Class</a><a href="#class-class" class="list-group-item"><i class="fa fa-arrow-circle-down"></i>&nbsp;Class</a></div><div class="list-group"><a href="#javascript" class="list-group-item heading">Javascript</a></div><div class="list-group"><a href="#concepts" class="list-group-item heading">Concepts</a></div><p style="text-align: center"><a href="https://chalkable.com">https://chalkable.com</a></p></nav></div><div class="col-md-9"><div><header><div class="page-header"><h1 id="top">Chalkable API Documentation</h1></div></header><div class="description"><p>This guide describes integrating your web app for use within Chalkable. Your app will be displayed within an iframe
+ and should utilize platform data via the Chalkable API to provide a great experience.</p>
+<p>Integrating your web app with Chalkable gives you the opportunity to be listed in the Chalkable App Store, collect payments,
+and deeply integrate into the core Chalkable experience. Using the API, your app will be able to leverage the Chalkable platform
+ (user info, schedule, grading, attendance, discipline, messaging, notifications, etc) to help you deliver a memorable user experience.</p>
+<p>Apps on Chalkable are web apps that are loaded in an iframe in the context of chalkable.com.</p>
+<h1 id="guide-summary">Guide Summary</h1>
+<p>In this guide we will explain the following concepts:</p>
+<ul>
+<li>Authentication</li>
+<li>Common methods</li>
+<li>JavaScript/iframe postMessage interaction</li>
+<li>Concepts</li>
+</ul>
+<h2 id="media-types">Media Types</h2>
+<p>Where applicable this API uses the JSON media-type to represent resources states and affordances.</p>
+<p>Requests with a message-body are using plain JSON to set or update resource states.</p>
+<h2 id="error-states">Error States</h2>
+<p>The common <a href="https://github.com/for-GET/know-your-http-well/blob/master/status-codes.md">HTTP Response Status Codes</a> are used.</p>
+<h2 id="authentication">Authentication</h2>
+<p>Chalkable’s API uses the OAuth 2.0 protocol for simple, but effective authentication and authorization.
+OAuth 2.0 is much easier to use than previous schemes; developers can start using the Chalkable API immediately.
+The one thing to keep in mind is that <strong>all requests to the API must be made over SSL (https:// not http://)</strong></p>
+</div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="access-authorization-and-control">Access Authorization and Control&nbsp;<a href="#access-authorization-and-control"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>Access and Control of Chalkable API OAuth token.</p>
+<h4 id="access-authorization-and-control-authorization">Authorization&nbsp;<a href="#access-authorization-and-control-authorization"><i class="fa fa-link"></i></a></h4><p>Authorization Resource represents an authorization granted to the user.
+You can <strong>only</strong> access your own authorization, and only through our <strong>Oauth Authentication</strong> implementation.</p>
+<p>The Authorization Resource has the following attributes:</p>
+<ul>
+<li>token_type</li>
+<li>access_token</li>
+<li>expires_in</li>
+<li>refresh_token</li>
+<li>scope</li>
+</ul>
+<p>Where <em>access_token</em> represents an OAuth token and <em>scope</em> is the scope granted for the given authorization.
+At this moment the only available scope is <code>https://www.chalkable.com/</code>.</p>
+<p><strong>Note:</strong> you must make a POST request to our authorization server at:</p>
+<pre><code class="lang-no-highlight">https://chalkable-access-control.accesscontrol.windows.net/v2/OAuth2-13
+</code></pre>
+<p><strong>Also:</strong> note that both “client_id” AND “redirect_uri” must precisely match the application URL you provided in the Developer Portal.</p>
+<section id="access-authorization-and-control-authorization-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Create Authorization</span></div><div style="float:left"><a href="#access-authorization-and-control-authorization-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/  https://chalkable-access-control.accesscontrol.windows.net/v2/OAuth2-13</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#844d8577c64dbb37c19e1d8bd9b561fb" class="pull-right">Toggle</a></li><li id="844d8577c64dbb37c19e1d8bd9b561fb" class="list-group-item panel-collapse collapse"><h5>Body</h5><pre><code>
+      <span class="hljs-symbol">:code</span> =&gt; params[<span class="hljs-symbol">:code</span>],
+      <span class="hljs-symbol">:client_id</span> =&gt; <span class="hljs-constant">APP_CONFIG</span>[<span class="hljs-string">'client_id'</span>],          <span class="hljs-regexp">//</span> <span class="hljs-constant">Your</span> <span class="hljs-constant">App</span> <span class="hljs-constant">URL</span>
+      <span class="hljs-symbol">:client_secret</span> =&gt; <span class="hljs-constant">APP_CONFIG</span>[<span class="hljs-string">'client_secret'</span>],  <span class="hljs-regexp">//</span> <span class="hljs-constant">Your</span> <span class="hljs-constant">API</span> <span class="hljs-constant">KEY</span>
+      <span class="hljs-symbol">:scope</span> =&gt; <span class="hljs-string">'https://chalkable.com'</span>,
+      <span class="hljs-symbol">:redirect_uri</span> =&gt; <span class="hljs-constant">APP_CONFIG</span>[<span class="hljs-string">'client_id'</span>],       <span class="hljs-regexp">//</span> <span class="hljs-constant">Your</span> <span class="hljs-constant">App</span> <span class="hljs-constant">URL</span>
+      <span class="hljs-symbol">:grant_type</span> =&gt; <span class="hljs-string">'authorization_code'</span>
+
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>201</code></strong><a data-toggle="collapse" data-target="#06a29ff2204a3572ec13073039233a81" class="pull-right">Toggle</a></li><li id="06a29ff2204a3572ec13073039233a81" class="list-group-item panel-collapse collapse"><h5>Body</h5><pre><code>    {
+        "<span class="hljs-attribute">token_type</span>": <span class="hljs-value"><span class="hljs-string">"http://schemas.xmlsoap.org/ws/2009/11/swt-token-profile-1.0"</span></span>,
+        "<span class="hljs-attribute">access_token</span>": <span class="hljs-value"><span class="hljs-string">"QWxhZGRpbjpvcGVuIHNlc2FtZQ=="</span></span>,
+        "<span class="hljs-attribute">expires_in</span>": <span class="hljs-value"><span class="hljs-number">86399</span></span>,
+        "<span class="hljs-attribute">refresh_token</span>": <span class="hljs-value"><span class="hljs-string">"td+G+gWGeMJ1Z8Isn0lyRg=="</span></span>,
+        "<span class="hljs-attribute">scope</span>": <span class="hljs-value"><span class="hljs-string">"https://www.chalkable.com/"</span>
+    </span>}
+</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="using-the-chalkable-api">Using the Chalkable API&nbsp;<a href="#using-the-chalkable-api"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>To get started, simply <a href="https://chalkable.com/Developer/Signup">sign up</a>.
+You will immediately gain access to the Developer Portal, where you will obtain an API key. Just provide a URL begin testing your app.</p>
+<p>Below are some common methods used by Chalkable developers.
+You can see a full list of available methods inside the Chalkable Developer Portal, via the “API Explorer” tab.</p>
+<p>All requests must include your access token in the headers.</p>
+<pre><code class="lang-http"><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Bearer: QWxhZGRpbjpvcGVuIHNlc2FtZQ</span>
+</code></pre>
+</div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="person">Person&nbsp;<a href="#person"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>Get the currently logged in user.</p>
+<h4 id="person-person">Person&nbsp;<a href="#person-person"><i class="fa fa-link"></i></a></h4><section id="person-person-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Get Person</span></div><div style="float:left"><a href="#person-person-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/Person/Me.json</code></div></div><div class="panel-body"><p>No params required. Example (access token is for example):</p>
+</div><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#765bc6b53c1ebbba64d84ffd27eebb84" class="pull-right">Toggle</a></li><li id="765bc6b53c1ebbba64d84ffd27eebb84" class="list-group-item panel-collapse collapse"><div class="description"></div><h5>Headers</h5><pre><code><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Bearer: QWxhZGRpbjpvcGVuIHNlc2FtZQ</span><br></code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#b1a422478a8acf6bfda354f725ef2f2a" class="pull-right">Toggle</a></li><li id="b1a422478a8acf6bfda354f725ef2f2a" class="list-group-item panel-collapse collapse"><div class="description"></div><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">Content-Type: application/json; charset=utf-8</span><br></code></pre><h5>Body</h5><pre><code>{
+    "<span class="hljs-attribute">active</span>": <span class="hljs-value"><span class="hljs-literal">true</span></span>,
+    "<span class="hljs-attribute">birthdate</span>": <span class="hljs-value"><span class="hljs-string">"2014-06-10"</span></span>,
+    "<span class="hljs-attribute">displayname</span>": <span class="hljs-value"><span class="hljs-string">"Mr. Stein"</span></span>,
+    "<span class="hljs-attribute">email</span>": <span class="hljs-value"><span class="hljs-string">"user1195_99A2B309-B2F2-451D-A733-55FFB9548245@chalkable.com"</span></span>,
+    "<span class="hljs-attribute">firstname</span>": <span class="hljs-value"><span class="hljs-string">"Rocky"</span></span>,
+    "<span class="hljs-attribute">fullname</span>": <span class="hljs-value"><span class="hljs-string">"Rocky Stein"</span></span>,
+    "<span class="hljs-attribute">gender</span>": <span class="hljs-value"><span class="hljs-string">"M"</span></span>,
+    "<span class="hljs-attribute">hasmedicalalert</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1195</span></span>,
+    "<span class="hljs-attribute">isallowedinetaccess</span>": <span class="hljs-value"><span class="hljs-literal">false</span></span>,
+    "<span class="hljs-attribute">lastname</span>": <span class="hljs-value"><span class="hljs-string">"Stein"</span></span>,
+    "<span class="hljs-attribute">role</span>": <span class="hljs-value">{
+        "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+        "<span class="hljs-attribute">name</span>":<span class="hljs-value">Teacher</span>,
+        "<span class="hljs-attribute">description</span>":<span class="hljs-value">Teacher</span>,
+        "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value">teacher
+    </span>}</span>,
+    "<span class="hljs-attribute">description</span>": <span class="hljs-value"><span class="hljs-string">"Teacher"</span></span>,
+    "<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>,
+    "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Teacher"</span></span>,
+    "<span class="hljs-attribute">namelowered</span>": <span class="hljs-value"><span class="hljs-string">"teacher"</span></span>,
+    "<span class="hljs-attribute">salutation</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+    "<span class="hljs-attribute">specialinstructions</span>": <span class="hljs-value"><span class="hljs-literal">null</span></span>,
+    "<span class="hljs-attribute">spedstatus</span>": <span class="hljs-value"><span class="hljs-literal">null</span>
+
+</span>}
+</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="announcement">Announcement&nbsp;<a href="#announcement"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><h4 id="announcement-announcement">Announcement&nbsp;<a href="#announcement-announcement"><i class="fa fa-link"></i></a></h4><section id="announcement-announcement-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Get new item / announcement data</span></div><div style="float:left"><a href="#announcement-announcement-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/Announcement/Read.json</code></div></div><div class="panel-body"><p>Returns data from the item / announcement that your application was attached to.</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>announcementId</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>ID of the current announcement (item) being viewed. Get it from the “announcementapplicationid” URL param of your iframe.</p>
+</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#0dee97fa9de11dac5535072a158ed3cb" class="pull-right">Toggle</a></li><li id="0dee97fa9de11dac5535072a158ed3cb" class="list-group-item panel-collapse collapse"><div class="description"></div><h5>Headers</h5><pre><code><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Bearer: QWxhZGRpbjpvcGVuIHNlc2FtZQ</span><br></code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#78999b9f9de1e576f7e9f590d11631a6" class="pull-right">Toggle</a></li><li id="78999b9f9de1e576f7e9f590d11631a6" class="list-group-item panel-collapse collapse"><div class="description"></div><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Length</span>: <span class="hljs-string">16344</span><br><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; charset=utf-8</span><br></code></pre><h5>Body</h5><pre><code>{
+   "<span class="hljs-attribute">data</span>":<span class="hljs-value">{
+      "<span class="hljs-attribute">announcementattachments</span>":<span class="hljs-value">[
+         {
+            "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">7</span></span>,
+            "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"04-2013.pdf   "</span></span>,
+            "<span class="hljs-attribute">attacheddate</span>":<span class="hljs-value"><span class="hljs-string">"2014-05-29"</span></span>,
+            "<span class="hljs-attribute">isowner</span>":<span class="hljs-value"><span class="hljs-literal">true</span></span>,
+            "<span class="hljs-attribute">type</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+            "<span class="hljs-attribute">url</span>":<span class="hljs-value"><span class="hljs-string">"https://crocodoc.com/api/v2/download/document?uuid=1776f582-42a2-4c9e-ab73-a6b1ad899ba2&amp;pdf=False&amp;annotated=true&amp;token=xEyUsXCwkjRMsNehL6CL7pyR"</span></span>,
+            "<span class="hljs-attribute">thumbnailurl</span>":<span class="hljs-value"><span class="hljs-string">"https://crocodoc.com/api/v2/download/thumbnail?token=xEyUsXCwkjRMsNehL6CL7pyR&amp;uuid=1776f582-42a2-4c9e-ab73-a6b1ad899ba2&amp;size=110x170"</span></span>,
+            "<span class="hljs-attribute">order</span>":<span class="hljs-value"><span class="hljs-number">1</span>
+         </span>}
+      ]</span>,
+      "<span class="hljs-attribute">announcementqnas</span>":<span class="hljs-value">[
+
+      ]</span>,
+      "<span class="hljs-attribute">applications</span>":<span class="hljs-value">[
+         {
+            "<span class="hljs-attribute">announcementapplicationid</span>":<span class="hljs-value"><span class="hljs-number">22</span></span>,
+            "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+            "<span class="hljs-attribute">currentpersonid</span>":<span class="hljs-value"><span class="hljs-number">4367</span></span>,
+            "<span class="hljs-attribute">active</span>":<span class="hljs-value"><span class="hljs-literal">true</span></span>,
+            "<span class="hljs-attribute">viewurl</span>":<span class="hljs-value"><span class="hljs-string">"http://chlk-login.herokuapp.com/?mode=view&amp;announcementapplicationid=22&amp;applicationinstallid=1084"</span></span>,
+            "<span class="hljs-attribute">editurl</span>":<span class="hljs-value"><span class="hljs-string">"http://chlk-login.herokuapp.com/?mode=edit&amp;announcementapplicationid=22&amp;applicationinstallid=1084"</span></span>,
+            "<span class="hljs-attribute">gradingviewurl</span>":<span class="hljs-value"><span class="hljs-string">"http://chlk-login.herokuapp.com/?mode=gradingview&amp;announcementapplicationid=22&amp;applicationinstallid=1084"</span></span>,
+            "<span class="hljs-attribute">order</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+            "<span class="hljs-attribute">isinstalledforme</span>":<span class="hljs-value"><span class="hljs-literal">true</span></span>,
+            "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-string">"ada8b821-593a-419c-99f8-7ef9d3465b74"</span></span>,
+            "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"heroku_login"</span></span>,
+            "<span class="hljs-attribute">url</span>":<span class="hljs-value"><span class="hljs-string">"http://chlk-login.herokuapp.com/"</span></span>,
+            "<span class="hljs-attribute">videodemourl</span>":<span class="hljs-value"><span class="hljs-string">""</span></span>,
+            "<span class="hljs-attribute">shortdescription</span>":<span class="hljs-value"><span class="hljs-string">"Rails on Heroku example app"</span></span>,
+            "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Rails on Heroku example app"</span></span>,
+            "<span class="hljs-attribute">smallpictureid</span>":<span class="hljs-value"><span class="hljs-string">"4eb5df64-2a08-491e-a514-b651a3085a7b"</span></span>,
+            "<span class="hljs-attribute">bigpictureid</span>":<span class="hljs-value"><span class="hljs-string">"d7101bfc-d6fd-4117-b479-b383597995fa"</span></span>,
+            "<span class="hljs-attribute">myappsurl</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+            "<span class="hljs-attribute">secretkey</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+            "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">5</span></span>,
+            "<span class="hljs-attribute">developerid</span>":<span class="hljs-value"><span class="hljs-string">"e7821cd9-9e91-4fda-abc8-66ad2cb1309d"</span></span>,
+            "<span class="hljs-attribute">liveappid</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+            "<span class="hljs-attribute">isinternal</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+            "<span class="hljs-attribute">applicationaccess</span>":<span class="hljs-value">{
+               "<span class="hljs-attribute">hasstudentmyapps</span>":<span class="hljs-value"><span class="hljs-literal">true</span></span>,
+               "<span class="hljs-attribute">hasteachermyapps</span>":<span class="hljs-value"><span class="hljs-literal">true</span></span>,
+               "<span class="hljs-attribute">hasadminmyapps</span>":<span class="hljs-value"><span class="hljs-literal">true</span></span>,
+               "<span class="hljs-attribute">hasparentmyapps</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">canattach</span>":<span class="hljs-value"><span class="hljs-literal">true</span></span>,
+               "<span class="hljs-attribute">showingradeview</span>":<span class="hljs-value"><span class="hljs-literal">true</span>
+            </span>}</span>,
+            "<span class="hljs-attribute">applicationprice</span>":<span class="hljs-value">{
+               "<span class="hljs-attribute">price</span>":<span class="hljs-value"><span class="hljs-number">0.0000</span></span>,
+               "<span class="hljs-attribute">priceperclass</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">priceperschool</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+            </span>}</span>,
+            "<span class="hljs-attribute">picturesid</span>":<span class="hljs-value">[
+               <span class="hljs-string">"67ce30ad-8f42-4de2-9827-88dbe2c5740b"</span>
+            ]
+         </span>}
+      ]</span>,
+      "<span class="hljs-attribute">standards</span>":<span class="hljs-value">[
+
+      ]</span>,
+      "<span class="hljs-attribute">studentannouncements</span>":<span class="hljs-value">{
+         "<span class="hljs-attribute">items</span>":<span class="hljs-value">[
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2583</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Jane Adkins"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Jane Adkins"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Jane"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Adkins"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"F"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">true</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2583</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2520</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Alan Armstrong"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Alan Armstrong"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Alan"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Armstrong"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"M"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2520</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2544</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Dewitt Cain"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Dewitt Cain"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Dewitt"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Cain"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"M"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">true</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2544</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2664</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Hugh Calhoun"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Hugh Calhoun"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Hugh"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Calhoun"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"M"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-string">"Inactive"</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2664</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">4701</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Molly Cunningham"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Molly Cunningham"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Molly"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Cunningham"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"F"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">4701</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2576</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Ericka Figueroa"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Ericka Figueroa"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Ericka"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Figueroa"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"F"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2576</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2721</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Jillian Fox"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Jillian Fox"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Jillian"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Fox"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"F"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">true</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2721</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2432</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Quinton Gibson"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Quinton Gibson"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Quinton"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Gibson"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"M"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2432</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">5339</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Kimberley Gill"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Kimberley Gill"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Kimberley"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Gill"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"F"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">5339</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2577</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Megan Hood"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Megan Hood"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Megan"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Hood"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"F"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2577</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2631</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Elijah Hurst"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Elijah Hurst"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Elijah"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Hurst"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"M"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2631</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2628</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Marco Lamb"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Marco Lamb"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Marco"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Lamb"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"M"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2628</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2727</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Fredrick Mcfarland"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Fredrick Mcfarland"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Fredrick"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Mcfarland"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"M"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2727</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2688</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Laverne Mcgowan"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Laverne Mcgowan"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Laverne"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Mcgowan"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"M"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">true</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2688</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">7884</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Adeline Mcknight"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Adeline Mcknight"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Adeline"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Mcknight"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"F"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">7884</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2358</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Federico Morton"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Federico Morton"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Federico"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Morton"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"M"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2358</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">7961</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Francisca Ortega"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Francisca Ortega"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Francisca"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Ortega"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"F"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-string">"Inactive"</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">7961</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2689</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Rosetta Owens"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Rosetta Owens"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Rosetta"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Owens"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"F"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2689</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2658</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Diane Ramsey"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Diane Ramsey"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Diane"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Ramsey"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"F"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-string">"Inactive"</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2658</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2669</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Jamar Slater"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Jamar Slater"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Jamar"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Slater"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"M"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2669</span>
+            </span>},
+            {
+               "<span class="hljs-attribute">studentinfo</span>":<span class="hljs-value">{
+                  "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2723</span></span>,
+                  "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Ryan Ware"</span></span>,
+                  "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Ryan Ware"</span></span>,
+                  "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Ryan"</span></span>,
+                  "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Ware"</span></span>,
+                  "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"M"</span></span>,
+                  "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+                     "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+                     "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Student"</span></span>,
+                     "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"student"</span>
+                  </span>}</span>,
+                  "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+                  "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-string">"Special Instructions go here"</span></span>,
+                  "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+               </span>}</span>,
+               "<span class="hljs-attribute">raw</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">attachments</span>":<span class="hljs-value">[
+
+               ]</span>,
+               "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+               "<span class="hljs-attribute">gradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">numericgradevalue</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isincomplete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">islate</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">isunexcusedabsent</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+               "<span class="hljs-attribute">announcementid</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+               "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">extracredits</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+               "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+               "<span class="hljs-attribute">studentid</span>":<span class="hljs-value"><span class="hljs-number">2723</span>
+            </span>}
+         ]</span>,
+         "<span class="hljs-attribute">gradingstyle</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+         "<span class="hljs-attribute">announcmenttitle</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+         "<span class="hljs-attribute">announcementtypeid</span>":<span class="hljs-value"><span class="hljs-number">5473</span></span>,
+         "<span class="hljs-attribute">chalkableannouncementtypeid</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+         "<span class="hljs-attribute">classavg</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+         "<span class="hljs-attribute">classname</span>":<span class="hljs-value"><span class="hljs-string">"Hon/Geometry 210011.004"</span></span>,
+         "<span class="hljs-attribute">courseid</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+         "<span class="hljs-attribute">gradedstudentcount</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+         "<span class="hljs-attribute">gradingstylemapper</span>":<span class="hljs-value">{
+            "<span class="hljs-attribute">gradingabcf</span>":<span class="hljs-value">[
+               <span class="hljs-number">50</span>,
+               <span class="hljs-number">51</span>,
+               <span class="hljs-number">59</span>,
+               <span class="hljs-number">67</span>,
+               <span class="hljs-number">72</span>,
+               <span class="hljs-number">76</span>,
+               <span class="hljs-number">79</span>,
+               <span class="hljs-number">82</span>,
+               <span class="hljs-number">86</span>,
+               <span class="hljs-number">89</span>,
+               <span class="hljs-number">92</span>,
+               <span class="hljs-number">96</span>,
+               <span class="hljs-number">100</span>
+            ]</span>,
+            "<span class="hljs-attribute">gradingcomplete</span>":<span class="hljs-value">[
+               <span class="hljs-number">40</span>,
+               <span class="hljs-number">100</span>
+            ]</span>,
+            "<span class="hljs-attribute">gradingcheck</span>":<span class="hljs-value">[
+               <span class="hljs-number">30</span>,
+               <span class="hljs-number">70</span>,
+               <span class="hljs-number">100</span>
+            ]
+         </span>}
+      </span>}</span>,
+      "<span class="hljs-attribute">autogradeapps</span>":<span class="hljs-value">[
+
+      ]</span>,
+      "<span class="hljs-attribute">owner</span>":<span class="hljs-value">{
+         "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">4367</span></span>,
+         "<span class="hljs-attribute">displayname</span>":<span class="hljs-value"><span class="hljs-string">"Ms. Cooley"</span></span>,
+         "<span class="hljs-attribute">fullname</span>":<span class="hljs-value"><span class="hljs-string">"Maryann Cooley"</span></span>,
+         "<span class="hljs-attribute">firstname</span>":<span class="hljs-value"><span class="hljs-string">"Maryann"</span></span>,
+         "<span class="hljs-attribute">lastname</span>":<span class="hljs-value"><span class="hljs-string">"Cooley"</span></span>,
+         "<span class="hljs-attribute">gender</span>":<span class="hljs-value"><span class="hljs-string">"F"</span></span>,
+         "<span class="hljs-attribute">role</span>":<span class="hljs-value">{
+            "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+            "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Teacher"</span></span>,
+            "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Teacher"</span></span>,
+            "<span class="hljs-attribute">namelowered</span>":<span class="hljs-value"><span class="hljs-string">"teacher"</span>
+         </span>}</span>,
+         "<span class="hljs-attribute">hasmedicalalert</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+         "<span class="hljs-attribute">isallowedinetaccess</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+         "<span class="hljs-attribute">specialinstructions</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+         "<span class="hljs-attribute">spedstatus</span>":<span class="hljs-value"><span class="hljs-literal">null</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">created</span>":<span class="hljs-value"><span class="hljs-string">"5/29/2014 12:00:00 AM"</span></span>,
+      "<span class="hljs-attribute">complete</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">state</span>":<span class="hljs-value"><span class="hljs-number">1</span></span>,
+      "<span class="hljs-attribute">statetyped</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+      "<span class="hljs-attribute">qnacount</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+      "<span class="hljs-attribute">attachmentscount</span>":<span class="hljs-value"><span class="hljs-number">1</span></span>,
+      "<span class="hljs-attribute">ownerattachmentscount</span>":<span class="hljs-value"><span class="hljs-number">1</span></span>,
+      "<span class="hljs-attribute">recipientid</span>":<span class="hljs-value"><span class="hljs-number">4348</span></span>,
+      "<span class="hljs-attribute">content</span>":<span class="hljs-value"><span class="hljs-string">"This is an important item"</span></span>,
+      "<span class="hljs-attribute">shortcontent</span>":<span class="hljs-value"><span class="hljs-string">"This is an important item"</span></span>,
+      "<span class="hljs-attribute">weightmultiplier</span>":<span class="hljs-value"><span class="hljs-number">1.000000</span></span>,
+      "<span class="hljs-attribute">weightaddition</span>":<span class="hljs-value"><span class="hljs-number">0.000000</span></span>,
+      "<span class="hljs-attribute">hidefromstudents</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">canaddstandard</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">grade</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">studentannouncementid</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">studentscount</span>":<span class="hljs-value"><span class="hljs-number">41</span></span>,
+      "<span class="hljs-attribute">studentscountwithattachments</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+      "<span class="hljs-attribute">studentscountwithoutattachments</span>":<span class="hljs-value"><span class="hljs-number">41</span></span>,
+      "<span class="hljs-attribute">gradingstudentscount</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+      "<span class="hljs-attribute">nongradingstudentscount</span>":<span class="hljs-value"><span class="hljs-number">41</span></span>,
+      "<span class="hljs-attribute">comment</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">gradesummary</span>":<span class="hljs-value"><span class="hljs-string">"0/21"</span></span>,
+      "<span class="hljs-attribute">attachmentsummary</span>":<span class="hljs-value"><span class="hljs-string">"0/21"</span></span>,
+      "<span class="hljs-attribute">avg</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">avgnumeric</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">gradingstyle</span>":<span class="hljs-value"><span class="hljs-number">0</span></span>,
+      "<span class="hljs-attribute">applicationscount</span>":<span class="hljs-value"><span class="hljs-number">1</span></span>,
+      "<span class="hljs-attribute">applicationname</span>":<span class="hljs-value"><span class="hljs-string">"heroku_login"</span></span>,
+      "<span class="hljs-attribute">wasannouncementtypegraded</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">showgradingicon</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">1000000484</span></span>,
+      "<span class="hljs-attribute">title</span>":<span class="hljs-value"><span class="hljs-string">"Updating Daily Grades HW"</span></span>,
+      "<span class="hljs-attribute">defaulttitle</span>":<span class="hljs-value"><span class="hljs-string">"Daily Grades 42"</span></span>,
+      "<span class="hljs-attribute">announcementtypename</span>":<span class="hljs-value"><span class="hljs-string">"Daily Grades"</span></span>,
+      "<span class="hljs-attribute">announcementtypeid</span>":<span class="hljs-value"><span class="hljs-number">5473</span></span>,
+      "<span class="hljs-attribute">chalkableannouncementtypeid</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">personid</span>":<span class="hljs-value"><span class="hljs-number">4367</span></span>,
+      "<span class="hljs-attribute">personname</span>":<span class="hljs-value"><span class="hljs-string">"MARYANN COOLEY"</span></span>,
+      "<span class="hljs-attribute">persongender</span>":<span class="hljs-value"><span class="hljs-string">"F"</span></span>,
+      "<span class="hljs-attribute">classid</span>":<span class="hljs-value"><span class="hljs-number">4348</span></span>,
+      "<span class="hljs-attribute">classname</span>":<span class="hljs-value"><span class="hljs-string">"Hon/Geometry 210011.004"</span></span>,
+      "<span class="hljs-attribute">dropped</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">isowner</span>":<span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">expiresdate</span>":<span class="hljs-value"><span class="hljs-string">"2014-05-29"</span></span>,
+      "<span class="hljs-attribute">order</span>":<span class="hljs-value"><span class="hljs-number">42</span></span>,
+      "<span class="hljs-attribute">subject</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">maxscore</span>":<span class="hljs-value"><span class="hljs-number">100.00</span></span>,
+      "<span class="hljs-attribute">candropstudentscore</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">maybeexempt</span>":<span class="hljs-value"><span class="hljs-literal">false</span></span>,
+      "<span class="hljs-attribute">gradable</span>":<span class="hljs-value"><span class="hljs-literal">true</span></span>,
+      "<span class="hljs-attribute">cangrade</span>":<span class="hljs-value"><span class="hljs-literal">true</span>
+   </span>}</span>,
+   "<span class="hljs-attribute">success</span>":<span class="hljs-value"><span class="hljs-literal">true</span>
+</span>}
+</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="class">Class&nbsp;<a href="#class"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><h4 id="class-class">Class&nbsp;<a href="#class-class"><i class="fa fa-link"></i></a></h4><section id="class-class-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Get class list</span></div><div style="float:left"><a href="#class-class-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/Class/List.json</code></div></div><div class="panel-body"><p>Returns a list of classes for the currently logged in user</p>
+</div><ul class="list-group"><li class="list-group-item bg-default"><strong>Parameters</strong></li><li class="list-group-item"><dl class="dl-horizontal"><dt>schoolYearId</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;<p>ID of the current school year (get from /SchoolYear/List.json).</p>
+</dd><dt>start</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;</dd><dt>count</dt><dd><code>integer</code>&nbsp;<span class="required">(required)</span>&nbsp;</dd></dl></li></ul><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#45f2b1f1afae22414b9fafbb57e31d29" class="pull-right">Toggle</a></li><li id="45f2b1f1afae22414b9fafbb57e31d29" class="list-group-item panel-collapse collapse"><div class="description"></div><h5>Headers</h5><pre><code><span class="hljs-attribute">Authorization</span>: <span class="hljs-string">Bearer: QWxhZGRpbjpvcGVuIHNlc2FtZQ</span><br></code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#c793017a7db223821f10095cafbbf470" class="pull-right">Toggle</a></li><li id="c793017a7db223821f10095cafbbf470" class="list-group-item panel-collapse collapse"><div class="description"></div><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Length</span>: <span class="hljs-string">843</span><br><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json; charset=utf-8</span><br></code></pre><h5>Body</h5><pre><code>[
+   {
+      "<span class="hljs-attribute">departmentid</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">gradelevel</span>":<span class="hljs-value">{
+         "<span class="hljs-attribute">number</span>":<span class="hljs-value"><span class="hljs-number">12</span></span>,
+         "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">12</span></span>,
+         "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"12"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">teacher</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">markingperiodsid</span>":<span class="hljs-value">[
+         <span class="hljs-number">1</span>,
+         <span class="hljs-number">2</span>
+      ]</span>,
+      "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">1</span></span>,
+      "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Algebra"</span></span>,
+      "<span class="hljs-attribute">classnumber</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Algebra"</span>
+   </span>},
+   {
+      "<span class="hljs-attribute">departmentid</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">gradelevel</span>":<span class="hljs-value">{
+         "<span class="hljs-attribute">number</span>":<span class="hljs-value"><span class="hljs-number">12</span></span>,
+         "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">12</span></span>,
+         "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"12"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">teacher</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">markingperiodsid</span>":<span class="hljs-value">[
+         <span class="hljs-number">1</span>,
+         <span class="hljs-number">2</span>
+      ]</span>,
+      "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">2</span></span>,
+      "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Geometry"</span></span>,
+      "<span class="hljs-attribute">classnumber</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Geometry"</span>
+   </span>},
+   {
+      "<span class="hljs-attribute">departmentid</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">gradelevel</span>":<span class="hljs-value">{
+         "<span class="hljs-attribute">number</span>":<span class="hljs-value"><span class="hljs-number">12</span></span>,
+         "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">12</span></span>,
+         "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"12"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">teacher</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">markingperiodsid</span>":<span class="hljs-value">[
+         <span class="hljs-number">1</span>,
+         <span class="hljs-number">2</span>
+      ]</span>,
+      "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">3</span></span>,
+      "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Physics"</span></span>,
+      "<span class="hljs-attribute">classnumber</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Physics"</span>
+   </span>},
+   {
+      "<span class="hljs-attribute">departmentid</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">gradelevel</span>":<span class="hljs-value">{
+         "<span class="hljs-attribute">number</span>":<span class="hljs-value"><span class="hljs-number">12</span></span>,
+         "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">12</span></span>,
+         "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"12"</span>
+      </span>}</span>,
+      "<span class="hljs-attribute">teacher</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">markingperiodsid</span>":<span class="hljs-value">[
+         <span class="hljs-number">1</span>,
+         <span class="hljs-number">2</span>
+      ]</span>,
+      "<span class="hljs-attribute">id</span>":<span class="hljs-value"><span class="hljs-number">4</span></span>,
+      "<span class="hljs-attribute">name</span>":<span class="hljs-value"><span class="hljs-string">"Pre-Calculus"</span></span>,
+      "<span class="hljs-attribute">classnumber</span>":<span class="hljs-value"><span class="hljs-literal">null</span></span>,
+      "<span class="hljs-attribute">description</span>":<span class="hljs-value"><span class="hljs-string">"Pre-Calculus"</span>
+   </span>}
+]
+</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="javascript">Javascript&nbsp;<a href="#javascript"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>In this section we will describe in detail the JavaScript interaction between your app and Chalkable.</p>
+<p><strong>IMPORTANT:</strong> You will need to include a link to our Javascript file <a href="https://chalkable.com/Scripts/api/chlk-post-message-api.js">chlk-post-message-api.js</a> in your project. This script takes of the communication between your app inside the iframe and Chalkable, via the postMessage() method.</p>
+<p>As described below, you will be able to access the {CHLK_MESSENGER} object to <em>attach</em> your application to an item.</p>
+<p>We <strong>highly</strong> recommend using the hosted version as it is subject to updates.</p>
+<pre><code><span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"https://chalkable.com/Scripts/api/chlk-post-message-api.js"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+</code></pre><ol>
+<li>A teacher, who has installed your app via the Chalkable App Store, clicks Attach App in a New Item assignment and chooses your app.</li>
+<li>Your App URL is loaded with the edit mode appended, for Example:<pre><code><span class="hljs-tag">&lt;<span class="hljs-title">iframe</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"https://yourEdTechApp.com/home/index?mode=edit&amp;announcementapplicationid=39&amp;applicationinstallid=1717&amp;code=veo6LEX04xeK7LV1EhAQKg%3d%3d"</span><span class="hljs-value">&lt;</span>/<span class="hljs-attribute">iframe</span>&gt;</span>
+</code></pre></li>
+<li>The teacher will use your app’s UI to prepare it to be attached to the assignment.</li>
+<li>Your JavaScript code should register a callback that will be called when the teacher clicks ATTACH or SAVE, depending on which View Mode they are in (see code example below).
+This will let Chalkable know which function of yours to call.</li>
+</ol>
+<pre><code class="lang-javascript">
+    function saveAndClose(){
+
+        //For saving, finalizing and anything else your app might need to do before closing.
+        //Can be called in mode=edit (when teacher clicks ATTACH) or mode=view (when user clicks SAVE)
+        //return true if your app is ready for the iframe to be closed and the app to be attached.
+
+        var form = jQuery(&#39;form&#39;),
+            url = form.attr(&#39;action&#39;),
+            id = form.find(&#39;.tinymce&#39;).attr(&#39;id&#39;),
+            name = form.find(&#39;.tinymce&#39;).attr(&#39;name&#39;),
+            editor = tinyMCE.get(id)&#39;
+            editor.setProgressState(1);
+            var content = editor.getContent();
+            var data = {};
+            data[name] = content;
+
+            jQuery(&#39;.form-field&#39;).each(function(field){
+               data[jQuery(this).attr(&#39;name&#39;)] = jQuery(this).val();
+            });
+
+            data[&#39;content&#39;] = content;
+
+            var options = {
+              url: url,
+              type: &quot;post&quot;,
+              async: false,
+              data: data,
+              success:function(res){
+                  editor.setProgressState(0);
+                  editor.setContent(res.content);
+                  return true;
+              }
+            };
+            jQuery.ajax(options);
+
+        return true;
+
+    }
+
+    CHLK_MESSENGER.addYourself(saveAndClose);
+
+        //Should be called on app start to register a callback for attach and save buttons
+</code></pre>
+</div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="concepts">Concepts&nbsp;<a href="#concepts"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p><strong>App Store:</strong></p>
+<p>The Chalkable App Store is a listing of web apps that are integrated with Chalkable.</p>
+<p><strong>Installing an app:</strong></p>
+<p>Within the Chalkable App Store users can install an app. They can install an app for themselves or another user depending on their role. For example a student can only install apps for themselves, a teacher can install apps for their class, and an admin can install apps for the whole school or a subgroup (Ex. 9th grade, teachers and students who are in a math classes). When an app is installed, the app icon appears for the user on their My Apps page. Depending on the app the icon may also appear on the New Item Attach App screen.</p>
+<p><strong>New Item:</strong></p>
+<p>Teachers use the Chalkable platform to send assignments to their students. Teachers can attach your app directly into these assignments and students can interact with your application.</p>
+<p><strong>Adding an app to a New Item:</strong></p>
+<p>Your app will be embedded into assignments that students will use, simply by clicking the “Attach” button at the top of the frame.
+<em>Remember to include the</em> <a href="https://chalkable.com/Scripts/api/chlk-post-message-api.js">chlk-post-message-api.js</a> <em>script in your app and call it on document ready, as explained above.</em></p>
+<p><strong>App Info:</strong></p>
+<p>The page in your developer account where you submit information about your app to Chalkable. This information includes descriptions, artwork, and definitions of which users will be using the app and what data the app will access.</p>
+<p><strong>Submitting your app:</strong></p>
+<p>Sign up and receive an API key immediately. In our developer portal you can interact with the API Explorer, and when you’re ready you can submit your app by filling out a short form and uploading your icons.</p>
+</div></div></div></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 19 Jun 2014</p><div id="localFile" style="display: none; position: absolute; top: 0; left: 0; width: 100%; color: white; background: red; font-size: 150%; text-align: center; padding: 1em;">This page may not display correctly when opened as a local file. Instead, view it from a web server.
+
+</div><!--outer wrap-->
+
+}
+
+@section BottomScripts {
+        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/all_not_minified.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.waypoints.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.cycle.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.fancybox.js")"></script>
+
+    <script type="text/javascript">
+       
+        jQuery('code').addClass('prettyprint');
+        jQuery('code.remove').removeClass('prettyprint');
+        jQuery('pre.example').addClass('prettyprint linenums');
+
+        prettyPrint();
+
+        jQuery('a.slidee').click(function (o) {
+            o.preventDefault();
+            $('.slider').slideDown('slow', function () {
+                return false;
+            });
+        });
+    </script>
+    <script>(function() {
+      if (location.protocol === 'file:') {
+        document.getElementById('localFile').style.display = 'block';
+      }
+
+    }).call(this);
+    </script><script>(function() {
+      $('table').addClass('table');
+
+    }).call(this);
+    </script>
+    
+
+         
+}
