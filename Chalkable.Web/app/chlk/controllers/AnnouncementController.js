@@ -1269,6 +1269,8 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.GroupId, chlk.models.id.SchoolPersonId]],
         function assignStudentAction(groupId, studentId){
+            if(!studentId)
+                return null;
             var res = this.groupService.assignStudents(groupId, [studentId])
                 .then(function(model){
                     return new chlk.models.Success();
@@ -1280,6 +1282,8 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.GroupId, chlk.models.id.SchoolPersonId]],
         function unAssignStudentAction(groupId, studentId){
+            if(!studentId)
+                return null;
             var res = this.groupService.unassignStudents(groupId, [studentId])
                 .then(function(model){
                     return new chlk.models.Success();
@@ -1335,6 +1339,9 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.GroupId, chlk.models.id.GradeLevelId, chlk.models.id.SchoolYearId, String]],
         function assignAllStudentsAction(groupId, gradeLevelId, schoolYearId, studentIds){
+            if(!studentIds)
+                return null;
+
             var res = this.groupService.assignStudents(groupId, this.getIdsList(studentIds, chlk.models.id.SchoolPersonId))
                 .then(function(model){
                     return new chlk.models.Success();
@@ -1346,6 +1353,9 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.GroupId, chlk.models.id.GradeLevelId, chlk.models.id.SchoolYearId, String]],
         function unAssignAllStudentsAction(groupId, gradeLevelId, schoolYearId, studentIds){
+            if(!studentIds)
+                return null;
+            
             var res = this.groupService.unassignStudents(groupId, this.getIdsList(studentIds, chlk.models.id.SchoolPersonId))
                 .then(function(model){
                     return new chlk.models.Success();
