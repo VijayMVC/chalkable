@@ -277,23 +277,26 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             //TODO : rewrite impl for better performance
             var anns = GetAnnouncements(new AnnouncementsQuery()).Announcements;
-            if (Context.Role == CoreRoles.STUDENT_ROLE)
+            if (!BaseSecurity.IsDistrictAdmin(Context))
             {
-                var classPersons = ServiceLocator.ClassService.GetClassPersons(Context.PersonId.Value, true);
-                var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-                var markingPeriods = ServiceLocator.MarkingPeriodService.GetMarkingPeriods(sy.Id);
-                classPersons = classPersons.Where(x => markingPeriods.Any(y => y.Id == x.MarkingPeriodRef)).ToList();
-                anns = anns.Where(x => classPersons.Any(cp => cp.ClassRef == x.ClassRef)).ToList();
-            }
-            var classesIds = anns.Where(x=>x.ClassRef.HasValue).GroupBy(x => x.ClassRef.Value).Select(x => x.Key).ToList();
-            var classAnnTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classesIds);
-            foreach (var ann in anns)
-            {
-                if (!ann.ClassAnnouncementTypeRef.HasValue) continue;
-                var classAnnType = classAnnTypes.FirstOrDefault(x => x.Id == ann.ClassAnnouncementTypeRef);
-                if (classAnnType == null) continue;
-                ann.ClassAnnouncementTypeName = classAnnType.Name;
-                ann.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
+                if (Context.Role == CoreRoles.STUDENT_ROLE)
+                {
+                    var classPersons = ServiceLocator.ClassService.GetClassPersons(Context.PersonId.Value, true);
+                    var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+                    var markingPeriods = ServiceLocator.MarkingPeriodService.GetMarkingPeriods(sy.Id);
+                    classPersons = classPersons.Where(x => markingPeriods.Any(y => y.Id == x.MarkingPeriodRef)).ToList();
+                    anns = anns.Where(x => classPersons.Any(cp => cp.ClassRef == x.ClassRef)).ToList();
+                }
+                var classesIds = anns.Where(x => x.ClassRef.HasValue).GroupBy(x => x.ClassRef.Value).Select(x => x.Key).ToList();
+                var classAnnTypes = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classesIds);
+                foreach (var ann in anns)
+                {
+                    if (!ann.ClassAnnouncementTypeRef.HasValue) continue;
+                    var classAnnType = classAnnTypes.FirstOrDefault(x => x.Id == ann.ClassAnnouncementTypeRef);
+                    if (classAnnType == null) continue;
+                    ann.ClassAnnouncementTypeName = classAnnType.Name;
+                    ann.ChalkableAnnouncementType = classAnnType.ChalkableAnnouncementTypeRef;
+                }
             }
             IList<AnnouncementComplex> res = new List<AnnouncementComplex>();
             if (!string.IsNullOrEmpty(filter))
@@ -312,10 +315,9 @@ namespace Chalkable.BusinessLogic.Services.School
                     {
                         curretnAnns = anns.Where(x =>
                                          ( x.Subject != null && x.Subject.ToLower().Contains(word))
-                                         || (x.ClassName.ToLower().Contains(word))
+                                         || (!(string.IsNullOrEmpty(x.ClassName)) && (x.ClassName.ToLower().Contains(word))) 
                                          || ("all".Contains(word))
-                                         || string.IsNullOrEmpty(x.ClassAnnouncementTypeName) 
-                                         || x.ClassAnnouncementTypeName.ToLower().Contains(word)
+                                         || (!string.IsNullOrEmpty(x.ClassAnnouncementTypeName) &&  x.ClassAnnouncementTypeName.ToLower().Contains(word))
                                          || x.Title != null && x.Title.ToLower().Contains(word)
                                          || x.Content != null && x.Content.ToLower().Contains(word)
                                          ).ToList();
