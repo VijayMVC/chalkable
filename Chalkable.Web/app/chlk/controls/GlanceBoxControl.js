@@ -28,6 +28,20 @@ NAMESPACE('chlk.controls', function () {
                 return res;
             },
 
+            function getGlanceText(data){
+                var value = data.value;
+                var float = parseFloat(value);
+                if(value && value.indexOf && value.indexOf(',') > -1)
+                    float = parseFloat(value.replace(',', '.'));
+                if(float || float === 0){
+                    if(float == float.toFixed(2))
+                        value = float;
+                    else
+                        value = float.toFixed(2);
+                }
+                return (value || value === 0) ? value : '';
+            },
+
             [ria.mvc.DomEventBind('mouseout', '.glance-box.hover-action-box')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function glanceLeave(node, event) {
