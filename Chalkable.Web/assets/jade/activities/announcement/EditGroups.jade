@@ -1,0 +1,11 @@
+.dialog.edit-groups
+    .x-window-header
+        h1 Edit Groups
+
+    .groups-container
+        each group in self.getGroups()
+            +RenderWith(group, chlk.templates.group.AnnouncementGroupTpl)
+        .new-group
+    .buttons-container
+        +ActionButton('announcement', 'addGroup').special-button2.add.add-group + New Group
+
