@@ -91,6 +91,8 @@ NAMESPACE('chlk.controllers', function (){
         function getAnnouncementFormPageType_(){
             if(this.userInRole(chlk.models.common.RoleEnum.TEACHER))
                 return chlk.activities.announcement.AnnouncementFormPage;
+            if(this.userInRole(chlk.models.common.RoleEnum.DISTRICTADMIN))
+                return chlk.activities.announcement.AdminAnnouncementFormPage;
         },
 
         [[chlk.models.announcement.ShowGradesToStudents]],

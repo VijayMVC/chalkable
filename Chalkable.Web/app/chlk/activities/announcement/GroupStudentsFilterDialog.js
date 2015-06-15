@@ -18,23 +18,36 @@ NAMESPACE('chlk.activities.announcement', function(){
                         ids.push(node.getData('id'));
                 });
                 this.dom.find('.class-ids').setValue(ids.join(','));
+                if(!ids.length)
+                    return false;
             },
 
             [ria.mvc.DomEventBind('click', '.clear-all')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function clearAllClick(node, event){
-                this.dom.find('input[type=checkbox]').trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [false]);
+                this.setCheckBoxValue(this.dom.find('input[type=checkbox]').valueOf(), false);
+                this.dom.find('.filter-button').setProp('disabled', true);
             },
 
             function setCheckBoxValue(node, value){
-                var jNode = jQuery(node);
-                jNode.prop('checked', value);
-                value ? node.setAttribute('checked', 'checked') : node.removeAttribute('checked');
-                value && node.setAttribute('checked', 'checked');
-                var hidden = jNode.parent().find('.hidden-checkbox');
-                hidden.val(value);
-                hidden.data('value', value);
-                hidden.attr('data-value', value);
+                if(Array.isArray(node)){
+                    var that = this;
+                    node.forEach(function(item){that.setCheckBoxValue(item, value)});
+                }else{
+                    var jNode = jQuery(node);
+                    jNode.prop('checked', value);
+                    if(value)
+                        node.setAttribute('checked', 'checked');
+                    else
+                        node.removeAttribute('checked');
+                    value && node.setAttribute('checked', 'checked');
+                    var hidden = jNode.parent().find('.hidden-checkbox');
+                    hidden.val(value);
+                    hidden.data('value', value);
+                    hidden.attr('data-value', value);
+                }
+
+
             },
 
             [ria.mvc.DomEventBind('change', 'input[type=checkbox]')],
@@ -81,6 +94,8 @@ NAMESPACE('chlk.activities.announcement', function(){
 
                     parentCheck = parentCheck.parents('.items-container:eq(0)').parents('.main-item:eq(0)').find('input[type=checkbox]:eq(0)');
                 }
+
+                this.dom.find('.filter-button').setProp('disabled', this.dom.find('input[type=checkbox]:checked').count() == 0);
             },
 
             [ria.mvc.DomEventBind('click', '.filter-button')],
