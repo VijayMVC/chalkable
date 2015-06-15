@@ -27,7 +27,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              DateTime start, end;
              MonthCalendar(ref date, out start, out end);
              var schoolYearId = GetCurrentSchoolYearId();
-             var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, classId);
+             var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, classId, true);
              if (personId.HasValue)
              {
                  int? studentId, teacherId;
