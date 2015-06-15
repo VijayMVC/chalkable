@@ -214,6 +214,9 @@ namespace Chalkable.Web.Controllers
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
 
+            if (string.IsNullOrEmpty(announcement.Title))
+                throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "Announcement Title "));
+            
             var res = Save(announcement, null);
             SchoolLocator.AnnouncementService.SubmitForAdmin(res.Id);
             SchoolLocator.AnnouncementService.DeleteAnnouncements(Context.PersonId.Value);
