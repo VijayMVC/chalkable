@@ -2,6 +2,7 @@
     .x-window-header
         h1 Announcement Groups
             .right.saved-block saved
+        .close.close-btn
 
     +ActionForm('announcement', 'saveGroupsToAnnouncement')
         +Hidden('groupIds', self.getGroupIds().map(function(item){return item.valueOf()}).join(',')).group-ids
