@@ -51,7 +51,7 @@ NAMESPACE('chlk.controls', function () {
                     return '';
                 var ids = currentGradeLevelsId.slice();
                 if(isPressed_)
-                    ids.splice(currentGradeLevelsId.indexOf(id), 1);
+                    ids.splice(currentGradeLevelsId.indexOf(id.toString()), 1);
                 else
                     ids.push(id);
                 return ids.join(',');
