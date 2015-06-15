@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -40,6 +41,9 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
+            if (string.IsNullOrEmpty(name))
+                throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "Name"));
+
             BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new GroupDataAccess(u).Insert(new Group { Name = name, OwnerRef  = Context.PersonId.Value}));
         }
@@ -47,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public Group EditGroup(int groupId, string name)
         {
             if (string.IsNullOrEmpty(name))
-                throw new ChalkableException("Invalid name param. Name parameter is empty");
+                throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "Name"));
             using (var uow = Update())
             {
                 var da = new GroupDataAccess(uow);
@@ -79,7 +83,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private void EnsureInGroupModifyPermission(Group gGroup)
         {
             if (gGroup.OwnerRef != Context.PersonId)
-                throw new ChalkableException("Only owner can modify group");
+                throw new ChalkableSecurityException("Only owner can modify group");
         }
         
         public IList<StudentForGroup> GetStudentsForGroup(int groupId, int schoolYearId, int gradeLevelId, IList<int> classesIds, IList<int> coursesIds)
