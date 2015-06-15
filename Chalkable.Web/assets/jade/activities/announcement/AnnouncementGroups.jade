@@ -27,6 +27,7 @@
                             h1.column-cell=Msg.Students
 
         .buttons-container
+            -console.info(self.getGroupIds(), self.getGroupIds().length)
             +Button.special-button2.cancel.close.negative-button Cancel
-            +Button()(type="submit").special-button2.blue-button.add.add-groups Submit
+            +Button()(type="submit", disabled=(self.getGroupIds().length == 0)).special-button2.blue-button.add.add-groups Submit
 

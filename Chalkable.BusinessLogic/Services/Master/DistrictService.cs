@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IDistrictService
     {
         District GetByIdOrNull(Guid id);
-        District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword, string timeZone);
+        District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword, string timeZone, string stateCode);
         PaginatedList<District> GetDistricts(int start = 0, int count = int.MaxValue);
         PaginatedList<DistrictSyncStatus> GetDistrictsSyncStatus(int start = 0, int count = int.MaxValue);
         void Update(District district);
@@ -30,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        public District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword, string timeZone)
+        public District Create(Guid id, string name, string sisUrl, string sisRedirectUrl, string sisUserName, string sisPassword, string timeZone, string stateCode)
         {
             BaseSecurity.EnsureSysAdminOrDistrictRegistrator(Context);
             string server;
@@ -56,7 +56,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                         FailDelta = 0,
                         IsDemoDistrict = false,
                         SyncFrequency = SYNC_FREQUENCY,
-                        MaxSyncFrequency = MAX_SYNC_FREQUENCY
+                        MaxSyncFrequency = MAX_SYNC_FREQUENCY,
+                        StateCode = stateCode
                     };
                 da.Insert(res);
                 uow.Commit();

@@ -61,9 +61,13 @@ NAMESPACE('chlk.controls', function () {
                 if(value){
                     node.setProp('checked', true);
                     parent.setProp('checked', true);
+                    node.setAttr('checked', true);
+                    parent.setAttr('checked', true);
                 }else{
                     node.setProp('checked', false);
                     parent.setProp('checked', false);
+                    node.removeAttr('checked');
+                    parent.removeAttr('checked');
                 }
             },
 

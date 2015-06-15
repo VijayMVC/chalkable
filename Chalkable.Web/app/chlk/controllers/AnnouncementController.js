@@ -1355,7 +1355,7 @@ NAMESPACE('chlk.controllers', function (){
         function unAssignAllStudentsAction(groupId, gradeLevelId, schoolYearId, studentIds){
             if(!studentIds)
                 return null;
-            
+
             var res = this.groupService.unassignStudents(groupId, this.getIdsList(studentIds, chlk.models.id.SchoolPersonId))
                 .then(function(model){
                     return new chlk.models.Success();

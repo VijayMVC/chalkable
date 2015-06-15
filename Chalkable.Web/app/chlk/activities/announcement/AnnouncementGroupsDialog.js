@@ -122,6 +122,7 @@ NAMESPACE('chlk.activities.announcement', function(){
                     groupCheck.setAttr('disabled', 'disabled');
                     groupCheck.parent('.box-checkbox').addClass('disabled');
                 }
+                this.checkSubmitButton();
             },
 
             [[Object, String]],
@@ -184,6 +185,17 @@ NAMESPACE('chlk.activities.announcement', function(){
                 });
                 currentGradeLevel = this.dom.find('.grade-level-name.active');
                 this.schoolCheck();
+            },
+
+            [ria.mvc.DomEventBind('change', '.group-check')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function groupChange(node, event, value_){
+                this.checkSubmitButton();
+            },
+
+            function checkSubmitButton(){
+                var disabled = this.dom.find('.group-check:checked:not(:disabled)').count() == 0;
+                this.dom.find('.add-groups').setProp('disabled', disabled).removeClass('disabled');
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl)],
