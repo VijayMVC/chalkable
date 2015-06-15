@@ -611,31 +611,27 @@ namespace Chalkable.BusinessLogic.Services.School
             return ann;
         }
 
-        private Announcement Submit(AnnouncementDataAccess dataAccess, UnitOfWork unitOfWork, int announcementId, int? classId)
+        private Announcement Submit(AnnouncementDataAccess dataAccess, UnitOfWork unitOfWork, int announcementId, int classId)
         {
 
             var res = GetAnnouncementDetails(announcementId);
             AnnouncementSecurity.EnsureInModifyAccess(res, Context);
-            var dateNow = Context.NowSchoolTime.Date;
-            if(classId.HasValue)
-                SetClassToAnnouncement(res, classId.Value);
+            SetClassToAnnouncement(res, classId);
             if (res.State == AnnouncementState.Draft)
             {
                 res.State = AnnouncementState.Created;
-                res.Created = dateNow;
+                res.Created = Context.NowSchoolTime.Date;
                 if (string.IsNullOrEmpty(res.Title) || res.DefaultTitle == res.Title)
                     res.Title = res.DefaultTitle;
-                if (classId.HasValue)
-                {
-                    var activity = new Activity();
-                    MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
-                    activity = ConnectorLocator.ActivityConnector.CreateActivity(classId.Value, activity);
-                    if(CreateAnnoucnementDataAccess(unitOfWork).Exists(activity.Id))
-                        throw new ChalkableException("Announcement with such activityId already exists");
-                    res.SisActivityId = activity.Id;
-                }
+
+                var activity = new Activity();
+                MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
+                activity = ConnectorLocator.ActivityConnector.CreateActivity(classId, activity);
+                if(CreateAnnoucnementDataAccess(unitOfWork).Exists(activity.Id))
+                    throw new ChalkableException("Announcement with such activityId already exists");
+                res.SisActivityId = activity.Id;
+                res.GradingStyle = GradingStyleEnum.Numeric100;        
             }
-            res.GradingStyle = GradingStyleEnum.Numeric100;          
             dataAccess.Update(res);
             return res;
         }
@@ -665,7 +661,16 @@ namespace Chalkable.BusinessLogic.Services.School
                     .GetAll(new AndQueryCondition{{AdminAnnouncementRecipient.ANNOUNCEMENT_REF_FIELD, announcementId}});
                 if(annRecipients.Count == 0)
                     throw new ChalkableException("Admin Announcement has no groups. You can't sumbit admin announcement without selected groups");
-                Submit(da, uow, announcementId, null);
+                var ann = da.GetDetails(announcementId, Context.PersonId.Value, Context.RoleId);
+                AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
+                if (string.IsNullOrEmpty(ann.Title))
+                    throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "Announcement Title "));
+                if (ann.State == AnnouncementState.Draft)
+                {
+                    ann.Created = Context.NowSchoolTime;
+                    ann.State = AnnouncementState.Created;
+                }
+                da.Update(ann);
                 uow.Commit();
             }
         }
