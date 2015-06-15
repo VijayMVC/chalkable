@@ -14,6 +14,17 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+        public override void Delete(int key)
+        {
+            var dbQuery = new DbQuery(new List<DbQuery>
+                {
+                    Orm.SimpleDelete<AdminAnnouncementRecipient>(new AndQueryCondition{{AdminAnnouncementRecipient.GROUP_REF_FIELD, key}}),
+                    Orm.SimpleDelete<StudentGroup>(new AndQueryCondition{{StudentGroup.GROUP_REF_FIELD, key}}),
+                    Orm.SimpleDelete<Group>(new AndQueryCondition{{Group.ID_FIELD, key}})
+                });
+            ExecuteNonQueryParametrized(dbQuery.Sql.ToString(), dbQuery.Parameters);
+        }
+
 
         public override IList<Group> GetAll(QueryCondition conditions = null)
         {
