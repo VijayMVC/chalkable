@@ -17,6 +17,12 @@ NAMESPACE('chlk.activities.announcement', function(){
                 node.parent('form').trigger('submit');
             },
 
+            [ria.mvc.DomEventBind('keyup', '.group-name')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function groupNameKeyUp(node, event){
+                this.dom.find('.create-group').setProp('disabled', !node.getValue() || node.getValue().length == 0);
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.group.AnnouncementGroupTpl)],
             VOID, function newGroup(tpl, model, msg_) {
                 var newGroup = ria.dom.Dom('.new-group');

@@ -60,6 +60,11 @@ NAMESPACE('chlk.controllers', function (){
             function studyCenterAccessAction(){
                 var message = 'Current school doesn\'t support applications, study center, profile explorer';
                 return this.generalServerErrorAction(message);
+            },
+
+
+            function learningEarningsDisabledAction(){
+                return this.ShowMsgBox('Learning Earnings link is disabled. Try Again later', 'Error'), null;
             }
     ])
 });

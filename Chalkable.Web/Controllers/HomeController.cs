@@ -8,6 +8,7 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
@@ -200,10 +201,32 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.STUDY_CENTER_ENABLED] = Context.SCEnabled;
-            ViewData[ViewConstants.LE_ENABLED] = Context.LEEnabled;
-            ViewData[ViewConstants.LE_SYNC_COMPLETE] = Context.LESyncComplete;
+
+            var leParams = PrepareLEParams();
+
+            PrepareJsonData(leParams, ViewConstants.LE_PARAMS);
             PrepareJsonData(Context.Claims, ViewConstants.USER_CLAIMS);
 
+        }
+
+        private LEParams PrepareLEParams()
+        {
+            var leLinkSetting = SchoolLocator.SettingsService.GetSetting("LearningEarnings", "LinkStatus");
+            var leUrlSetting = SchoolLocator.SettingsService.GetSetting("LearningEarnings", "Url");
+            var leLinkStatus = leLinkSetting != null && leLinkSetting.Value == "active";
+            var leUrl = leUrlSetting != null ? leUrlSetting.Value : "";
+
+
+
+            var leParams = new LEParams
+            {
+                LEEnabled = Context.LEEnabled,
+                LESyncComplete = Context.LESyncComplete,
+                LELinkStatus = leLinkStatus,
+                LEBaseUrl = leUrl,
+                EnabledForUser = CanAccessLearningEarnings()
+            };
+            return leParams;
         }
 
         private void PrepareCommonViewDataForSchoolPerson(StartupData startupData)
@@ -319,5 +342,34 @@ namespace Chalkable.Web.Controllers
             return ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM})
                    || ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM_ADMIN});
         }
+
+
+        private bool CanAccessLearningEarnings()
+        {
+            return ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.AWARD_LE_CREDITS_CLASSROOM});
+        }
+
+        [AuthorizationFilter("Teacher, Student")]
+        public ActionResult LearningEarnings()
+        {
+            var leParams = PrepareLEParams();
+
+
+            if (!Context.PersonId.HasValue || leParams.LEEnabled && (!leParams.LESyncComplete || !leParams.EnabledForUser))
+                throw new ChalkableSecurityException();
+
+            var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
+
+            var integratedSignOn = leParams.LEEnabled && leParams.LELinkStatus;
+
+            var integratedSignOnUrl = string.Format(leParams.LEBaseUrl + "sti/auth?districtguid={0}&sti_session_variable={1}", Context.DistrictId, Context.SisToken);
+            var nonIntegratedSignOnUrl = string.Format(leParams.LEBaseUrl + "sti/auth?districtguid={0}&schoolid={1}&userid={2}&firstname={3}&lastname={4}",
+                Context.DistrictId, person.SchoolRef, person.UserId, person.FirstName, person.LastName);
+
+            var url = integratedSignOn ? integratedSignOnUrl : nonIntegratedSignOnUrl;
+            return new RedirectResult(url);
+          
+        }
     }
+
 }

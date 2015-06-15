@@ -46,7 +46,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {SystemSetting.SETTING_FIELD, setting, ConditionRelation.Equal},
             };
 
-            return DoRead(u => new DataAccessBase<SystemSetting>(u).GetAll(conds).First());
+            return DoRead(u => new DataAccessBase<SystemSetting>(u).GetAll(conds).FirstOrDefault());
         }
 
         public void Delete(IList<SystemSetting> settings)

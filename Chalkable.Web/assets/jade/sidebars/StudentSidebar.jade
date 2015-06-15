@@ -7,4 +7,8 @@ if self.isAppStoreEnabled
 +ActionLink('calendar', 'month').calendar(title="View Calendar") Calendar
 if self.isAppStoreEnabled
     +ActionLink('studycenter', 'explorer').study-center(title="Study Center") Study Center
+if !self.isLEEnabled || self.isLEEnabled && self.isLinkEnabled
+    a(href="/Home/LearningEarnings", target="blank").apps(title="View Learning Earnings", target="blank") LE
+if self.isLEEnabled && !self.isLinkEnabled
+    +ActionLink('error', 'learningEarningsDisabled').apps(title="View Learning Earnings", target="blank") LE
 +ActionLink('settings', 'dashboardStudent').settings(title="View Settings") Settings

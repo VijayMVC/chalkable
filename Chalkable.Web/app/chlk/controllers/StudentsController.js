@@ -369,14 +369,14 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             [[chlk.models.id.SchoolPersonId]],
-            function appsAction(personId){
+            function appsAction(personId) {
                 var res = this.studentService
-                    .getAppsInfo(personId, 0 , 10000)
+                    .getAppsInfo(personId, 0, 10000)
                     .attach(this.validateResponse_())
-                    .then(function(model){
+                    .then(function (model) {
                         return new chlk.models.people.UserProfileAppsViewData(this.getCurrentRole(), model);
                     }, this);
                 return this.PushView(chlk.activities.profile.SchoolPersonAppsPage, res);
-            },
+            }
         ])
 });

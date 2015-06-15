@@ -3,6 +3,7 @@
 .dialog.students-filter
     .x-window-header
         h1 Filter Students
+        .close.close-btn
 
     +ActionForm('announcement', 'filterStudents').filter-students-form
         +Hidden('groupId', self.getGroupId())

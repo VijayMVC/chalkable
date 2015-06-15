@@ -57,8 +57,10 @@ REQUIRE('chlk.models.schoolYear.GradingPeriod');
 REQUIRE('chlk.models.people.ShortUserInfo');
 REQUIRE('chlk.models.grading.AvgComment');
 REQUIRE('chlk.models.school.SchoolOption');
+REQUIRE('chlk.models.school.LEParams');
 
 REQUIRE('chlk.models.id.SchoolId');
+REQUIRE('chlk.models.id.DistrictId');
 
 
 REQUIRE('chlk.templates.common.AlertsPopUpTpl');
@@ -133,6 +135,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.CLASSES_TO_FILTER, ArrayOf(chlk.models.classes.Class));
                 this.saveInSession(session, ChlkSessionConstants.GRADE_LEVELS, ArrayOf(chlk.models.grading.GradeLevel));
                 this.saveInSession(session, ChlkSessionConstants.STUDY_CENTER_ENABLED, Boolean);
+                this.saveInSession(session, ChlkSessionConstants.LE_PARAMS, chlk.models.school.LEParams);
 
                 this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
 
@@ -346,13 +349,17 @@ NAMESPACE('chlk', function (){
 
             function prepareSideBarOptions_(){
                 var isStudyCenterEnabled = this.getContext().getSession().get(ChlkSessionConstants.STUDY_CENTER_ENABLED, false);
-                var LE_Enabled = this.getContext().getSession().get(ChlkSessionConstants.LE_ENABLED, false);
-                var LE_SyncComplete = this.getContext().getSession().get(ChlkSessionConstants.LE_SYNC_COMPLETE, false);
+
+                var leParams = this.getContext().getSession().get(ChlkSessionConstants.LE_PARAMS, new chlk.models.school.LEParams());
+
                 var sidebarOptions = {
                     isAppStoreEnabled: isStudyCenterEnabled,
-                    isLEEnabled: LE_Enabled,
-                    isLESyncComplete: LE_SyncComplete
+                    isLEEnabled: leParams.isLeEnabled(),
+                    isLinkEnabled: leParams.isLeEnabled() && leParams.isLeSyncComplete()
+                    && leParams.isEnabledForUser() && leParams.isLeLinkStatus()
                 };
+
+
                 return sidebarOptions;
             },
 
