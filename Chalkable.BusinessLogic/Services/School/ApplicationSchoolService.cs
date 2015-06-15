@@ -122,8 +122,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 var aa = da.GetById(announcementAppId);
                 if(!CanAddToAnnouncement(aa.ApplicationRef))
                     throw new ChalkableSecurityException("Application is not installed yet");
-                var ann = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value)
-                    .GetAnnouncement(aa.AnnouncementRef, Context.PersonId.Value);
+
+                var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(aa.AnnouncementRef);
                 if (!ann.IsOwner)
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 aa.Active = true;
@@ -170,12 +170,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     var da = new AnnouncementApplicationDataAccess(uow);
                     var aa = da.GetById(announcementAppId);
-
-                    da.Delete(announcementAppId);
-                    uow.Commit();
                     var res = ServiceLocator.AnnouncementService.GetAnnouncementById(aa.AnnouncementRef);
                     if (!res.IsOwner)
                         throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
+
+                    da.Delete(announcementAppId);
+                    uow.Commit();
                     return res;
                 }
             }
