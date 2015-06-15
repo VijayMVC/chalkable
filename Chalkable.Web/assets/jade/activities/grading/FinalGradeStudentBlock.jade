@@ -155,11 +155,11 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10.sub-row
                         each block in items
                             .disciplines-items-block
                                 each discipline in block
-                                    if discipline.getCount() > 0
-                                        .discipline-item
-                                            .count=discipline.getCount()
-                                            name = discipline.getType().getName()
-                                            div(data-tooltip=name, data-tooltip-type="overflow").description=name
+                                    //if discipline.getCount() > 0
+                                    .discipline-item
+                                        .count=discipline.getCount()
+                                        name = discipline.getType().getName()
+                                        div(data-tooltip=name, data-tooltip-type="overflow").description=name
                         if empty
                             .empty-disciplines=Msg.No_discipline_issues
         .comments-notes-block
