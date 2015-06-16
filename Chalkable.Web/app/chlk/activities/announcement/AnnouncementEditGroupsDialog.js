@@ -26,7 +26,7 @@ NAMESPACE('chlk.activities.announcement', function(){
             [ria.mvc.DomEventBind('blur', '.group-name')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function groupNameBlur(node, event){
-                node.parent('.group-container').find('.create-group').hide();
+                node.parent('.group-container').find('.create-group').fadeOut();
             },
 
             [ria.mvc.DomEventBind('focus', '.group-name')],
