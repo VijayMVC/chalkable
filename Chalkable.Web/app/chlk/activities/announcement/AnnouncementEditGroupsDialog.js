@@ -20,7 +20,25 @@ NAMESPACE('chlk.activities.announcement', function(){
             [ria.mvc.DomEventBind('keyup', '.group-name')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function groupNameKeyUp(node, event){
-                this.dom.find('.create-group').setProp('disabled', !node.getValue() || node.getValue().length == 0);
+                node.parent('.group-container').find('.create-group').setProp('disabled', !node.getValue() || node.getValue() == node.getData('value'));
+            },
+
+            [ria.mvc.DomEventBind('blur', '.group-name')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function groupNameBlur(node, event){
+                node.parent('.group-container').find('.create-group').hide();
+            },
+
+            [ria.mvc.DomEventBind('focus', '.group-name')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function groupNameFocus(node, event){
+                node.parent('.group-container').find('.create-group').show();
+            },
+
+            [ria.mvc.DomEventBind('click', '.delete-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function deleteClick(node, event){
+                node.parent('.group-container').fadeOut();
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.group.AnnouncementGroupTpl)],
