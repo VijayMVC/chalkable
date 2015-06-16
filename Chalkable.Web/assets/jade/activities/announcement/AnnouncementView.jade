@@ -54,15 +54,15 @@ mixin Glue_()
             .table
                 .avatar-block-left
                     if self.getOwner()
-                        if self.getUserRole().isStudent()
-                            a(data-tooltip=self.getOwner().getFullName(),
-                            ).image-container.person-img-container
-                                +PersonImg(self.getOwner(), 47)
-                        else
+                        if self.getUserRole().isTeacher()
                             +ProfileLink(self.getOwner(), 'teacher')(
                                 data-tooltip=self.getOwner().getFullName(),
                             ).image-container.person-img-container
                                 +PersonImg(self.getOwner(), 47)
+                        else
+                            a(data-tooltip=self.getOwner().getFullName()).image-container.person-img-container
+                                +PersonImg(self.getOwner(), 47)
+
                 .description
                     .chat-bubble
                         h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
