@@ -1,0 +1,51 @@
+mixin AnnouncementFormAttachmentItem(attachment, i)
+    .announcement-item.attachment
+        if self.needDeleteButton
+            +ActionLink('announcement', 'deleteAttachment', attachment.getId(), self.getId()).close-btn
+        .wrapper
+            if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
+                A(href=attachment.getUrl()).download-link Download
+                .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
+            else
+                +LoadingImage(src=attachment.getPictureHref(), id="loading-image-" + i)
+                .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
+                +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getId()) Open
+
+mixin AnnouncementFormApplicationItem(app, i)
+    viewUrl = app.getViewUrl()
+    appMode = chlk.models.apps.AppModes.VIEW
+    appUrl = app.getUrl()
+
+    isBanned = app.getBanInfo() && app.getBanInfo().isBanned()
+
+    .announcement-item.application
+        if self.needDeleteButton
+            +ActionLink('announcement', 'deleteApp', app.getId()).close-btn
+        .wrapper
+            +LoadingImage(src=app.getPictureHref(), id="loading-image-" + i)
+            .title(data-tooltip=app.getName(), data-tooltip-type="overflow")= app.getName()
+            +ActionButton('apps', 'viewApp', appUrl, viewUrl, appMode, app.getId(), isBanned, null, self.getStandardsUrlComponents()) Open
+
+attachments = self.getAnnouncementAttachments() || []
+applications = self.getApplications() || []
+typesEnum = chlk.models.announcement.AnnouncementTypeEnum
+isAnnouncement = (self.isStandartAnnouncement() || self.getUserRole().isAdmin())
+items = self.getSortedAppsAndAttachments();
+
++Hidden('attachments', self.getAttachments())
++Hidden('applicationsids', self.getApplicationsIds())
+if self.needButtons
+    #attach-file-area.announcement-item.attach-file-area
+        if self.isStudyCenterEnabled()
+            +ActionButton('announcement', self.getState() ? 'attachApp' : 'attachAppOnCreate', self.getId(), self.getClassId(), self.getStandardsUrlComponents())(type="button")#add-application.simple-gray-button Attach App
+            br
+            if self.getAssessmentApplicationId()
+                +ActionButton('apps', 'tryToAttachFromAnnouncement', self.getId(), self.getAssessmentApplicationId(), self.getStandardsUrlComponents())#add-assesment.simple-gray-button Assessment
+        .simple-gray-button.file Attach File
+            +FileUpload('announcement', self.getState() ? 'uploadAttachment' : 'uploadAttachmentOnCreate', [self.getId().valueOf()])#add-attachment.simple-gray-button
+each item, i in items
+    if item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
+        +AnnouncementFormApplicationItem(item, i)
+    else
+        if item.isTeachersAttachment() || self.getUserRole().isAdmin()
+            +AnnouncementFormAttachmentItem(item, i)
