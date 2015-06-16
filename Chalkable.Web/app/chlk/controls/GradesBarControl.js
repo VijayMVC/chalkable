@@ -20,8 +20,7 @@ NAMESPACE('chlk.controls', function () {
                 allItem = chlk.lib.serialize.ChlkJsonSerializer().deserialize({
                     name: 'All',
                     description: 'All',
-                    id: '',
-                    fullText: 'All'
+                    id: ''
                 }, chlk.models.grading.GradeLevel);
             },
 

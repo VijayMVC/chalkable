@@ -14,7 +14,6 @@ mixin doRender_(includeAll, topBarData, controller_, action_, prepend_)
             class = isPressed ? "pressed-can-click" : ""
          ).button-link.item.grade-button
             SPAN.text-container= item.getName()
-               SPAN.serial= item.getSerialPart()
 
 mixin GradesToolBar(topBarData, controller_, action_, prepend_)
    +doRender_(false, topBarData, controller_, action_, prepend_)(attributes)
