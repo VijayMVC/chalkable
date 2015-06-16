@@ -1243,7 +1243,7 @@ NAMESPACE('chlk.controllers', function (){
                     return new chlk.models.group.StudentsForGroupViewData(groupId, gradeLevelId, schoolYearId, students);
                 })
                 .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res, classIds_ ? 'after-filter' : '');
         },
 
         [chlk.controllers.NotChangedSidebarButton()],

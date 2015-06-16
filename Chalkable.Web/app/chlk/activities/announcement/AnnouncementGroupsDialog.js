@@ -12,8 +12,17 @@ NAMESPACE('chlk.activities.announcement', function(){
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.group.AnnouncementGroupsTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.group.AnnouncementGroupsTpl, null, null , ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.group.StudentsForGroupTpl, null, '.column.students' , ria.mvc.PartialUpdateRuleActions.Replace)],
         'AnnouncementGroupsDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.group.StudentsForGroupTpl)],
+            VOID, function updateStudents(tpl, model, msg_) {
+                tpl.renderTo(this.dom.find('.column.students').setHTML('').removeClass('filtered'));
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.group.StudentsForGroupTpl, 'after-filter')],
+            VOID, function updateStudentsAfterFilter(tpl, model, msg_) {
+                tpl.renderTo(this.dom.find('.column.students').setHTML('').addClass('filtered'));
+            },
 
             [ria.mvc.DomEventBind('click', '.add-groups')],
             [[ria.dom.Dom, ria.dom.Event]],
@@ -44,10 +53,12 @@ NAMESPACE('chlk.activities.announcement', function(){
             VOID, function studentCheck(node, event, value_){
                 var allCheck = this.dom.find('.all-students-check');
                 this.prepareCheckBoxes(this.dom.find('.student-check'), allCheck);
-                this.updateGradeLevel();
             },
 
             function updateGradeLevel(){
+                if(this.dom.find('.column.students').hasClass('filtered'))
+                    return false;
+
                 var allCheck = this.dom.find('.all-students-check');
                 var gradeLevelCheck = this.dom.find('.grade-level-name.active').parent().find('input[type=checkbox]');
                 if(allCheck.checked() != gradeLevelCheck.checked())
