@@ -3,7 +3,6 @@ mixin doRender_(includeAll, topBarData, controller_, action_, prepend_)
    -var currentGradeLevelsId = gradeLevelsText ? gradeLevelsText.split(',') : []
    -var data = self.prepareModel(topBarData, includeAll)
    -attributes.currentGradeLevelsId = currentGradeLevelsId
-   -attributes.fixedElementMargin = true
    -attributes.fixedElementWidth = true
    +LeftRightToolbar()(attributes).grades-bar
       each item in data

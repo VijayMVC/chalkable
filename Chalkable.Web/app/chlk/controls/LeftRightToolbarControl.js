@@ -110,7 +110,7 @@ NAMESPACE('chlk.controls', function () {
                             toolbar.setData('currentCount', count);
 
                             if(configs.fixedElementWidth){
-                                if(additionalMargin > 0)
+                                if(additionalMargin > 0 || parseInt(elements.getCss('margin-right')) > baseMargin)
                                     thirdContainer.find('>*:not(:last-child)').setCss('margin-right', baseMargin + additionalMargin);
                             }else
                                 thirdContainer.find('>*').setCss('width', elWidthWithoutBorders + additionalMargin)
