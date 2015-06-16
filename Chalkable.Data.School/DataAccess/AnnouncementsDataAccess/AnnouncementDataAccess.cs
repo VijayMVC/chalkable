@@ -156,6 +156,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public bool? Graded { get; set; }
         public IList<int> GradeLevelsIds { get; set; }
         public bool AdminOnly { get; set; }
+        public int? StudentId { get; set; }
+
         public AnnouncementsQuery()
         {
             Start = 0;

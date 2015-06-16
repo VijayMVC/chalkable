@@ -125,17 +125,15 @@ NAMESPACE('chlk.services', function () {
             },
 
             Boolean, function userIsAdmin(){
-                return this.userInRole(chlk.models.common.RoleEnum.ADMINEDIT) ||
-                    this.userInRole(chlk.models.common.RoleEnum.ADMINGRADE) ||
-                    this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW);
+                return this.userInRole(chlk.models.common.RoleEnum.DISTRICTADMIN);
             },
 
             [[ArrayOf(chlk.models.calendar.announcement.MonthItem), chlk.models.common.ChlkDate]],
             chlk.models.calendar.announcement.Month, function prepareMonthData(days, date_){
-                var isAdmin = false;
-                var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
-                var mpStartDate = markingPeriod.getStartDate();
-                var mpEndDate = markingPeriod.getEndDate();
+                var isAdmin = this.userIsAdmin();
+                var dateRangeObj = this.getDefaultCalendarDateRange_();
+                var mpStartDate = dateRangeObj.startDate;
+                var mpEndDate = dateRangeObj.endDate;
                 days.forEach(function(day){
                     var itemsArray = [], itemsObject = {};
                     var items = day.getItems();
@@ -262,19 +260,34 @@ NAMESPACE('chlk.services', function () {
                 endArray.forEach(function (item){pushEmptyPeriods(item, 0, item.getAnnouncementPeriods(), data[index]);});
                 var res = startArray.concat(data).concat(endArray);
                 this.getContext().getSession().set(ChlkSessionConstants.WEEK_CALENDAR_DATA, res);
-                var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
-                var startDate = markingPeriod.getStartDate();
-                var endDate = markingPeriod.getEndDate();
+                var dateRangeObj = this.getDefaultCalendarDateRange_();
+                var startDate = dateRangeObj.startDate;
+                var endDate = dateRangeObj.endDate;
                 return new chlk.models.calendar.announcement.Week(date_, startDate, endDate, res);
                 //return res;
             },
 
             [[ArrayOf(chlk.models.calendar.announcement.DayItem), chlk.models.common.ChlkDate]],
             chlk.models.calendar.announcement.Day, function prepareDayData(days, date_){
-                var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
-                var startDate = markingPeriod.getStartDate();
-                var endDate = markingPeriod.getEndDate();
+                var dateRangeObj = this.getDefaultCalendarDateRange_();
+                var startDate = dateRangeObj.startDate;
+                var endDate = dateRangeObj.endDate;
                 return new chlk.models.calendar.announcement.Day(date_, startDate, endDate, days);
+            },
+
+            Object, function getDefaultCalendarDateRange_(){
+                var res = [];
+                if(this.userIsAdmin()){
+                    var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR);
+                    res.startDate = schoolYear.getStartDate();
+                    res.endDate = schoolYear.getEndDate();
+                }
+                else {
+                    var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
+                    res.startDate = markingPeriod.getStartDate();
+                    res.endDate = markingPeriod.getEndDate();
+                }
+                return res;
             }
         ])
 });

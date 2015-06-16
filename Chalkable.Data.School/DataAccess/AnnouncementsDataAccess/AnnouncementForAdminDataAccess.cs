@@ -33,6 +33,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private const string NOW_PARAM = "now";
         private const string GRADE_LEVELS_IDS_PARAM = "gradeLevelsIds";
         private const string COMPLETE = "complete";
+        private const string STUDENT_ID = "studentId";
 
         public override AnnouncementDetails Create(int? classAnnouncementTypeId, int? classId, DateTime created, DateTime expiresDate, int personId)
         {
@@ -63,7 +64,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {NOW_PARAM, query.Now },
                     {PERSON_ID_PARAM, query.PersonId},
                     {GRADE_LEVELS_IDS_PARAM, query.GradeLevelsIds != null ? query.GradeLevelsIds.Select(x => x.ToString()).JoinString(",") : null},
-                    {COMPLETE, query.Complete}
+                    {COMPLETE, query.Complete},
+                    {STUDENT_ID, query.StudentId}
                 };
             using (var reader = ExecuteStoredProcedureReader(GET_ADMIN_ANNOUNCEMENT_PROCEDURE, parameters))
             {

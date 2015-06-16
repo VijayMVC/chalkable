@@ -33,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void SubmitForAdmin(int announcementId);
 
         Announcement GetAnnouncementById(int id);
-        IList<AnnouncementComplex> GetAdminAnnouncements(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? start, int? count, bool ownerOnly = false); 
+        IList<AnnouncementComplex> GetAdminAnnouncements(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? start, int? count, bool ownerOnly = false, int? studentId = null); 
         IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, int start, int count, int? classId, int? markingPeriodId = null, bool ownerOnly = false, bool? graded = null);
         IList<AnnouncementComplex> GetAnnouncements(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, bool includeAdminAnnouncement = false);
         IList<AnnouncementComplex> GetAnnouncements(string filter);
@@ -90,7 +90,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         public IList<AnnouncementComplex> GetAdminAnnouncements(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? start, int? count,
-                                           bool ownedOnly = false)
+                                           bool ownedOnly = false, int? studentId = null)
         {
             return GetAnnouncements(new AnnouncementsQuery
                 {
@@ -100,7 +100,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     Start = start ?? 0,
                     Count = count ?? int.MaxValue,
                     OwnedOnly = ownedOnly, 
-                    Complete = complete
+                    Complete = complete,
+                    StudentId = studentId
                 }).Announcements;
         }
 
@@ -139,18 +140,21 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<AnnouncementComplex> GetAnnouncements(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, bool includeAdminAnnouncement = false)
         {
-            var q = new AnnouncementsQuery
+            var res = new List<AnnouncementComplex>();
+            if (!BaseSecurity.IsDistrictAdmin(Context))
+            {
+                var q = new AnnouncementsQuery
                 {
                     FromDate = fromDate.HasValue ? fromDate.Value.Date : (DateTime?)null,
                     ToDate = toDate.HasValue ? toDate.Value.Date : (DateTime?)null,
                     ClassId = classId
                 };
-            var res = GetAnnouncementsComplex(q);
-            if (Context.Role == CoreRoles.STUDENT_ROLE && includeAdminAnnouncement)
+                res.AddRange(GetAnnouncementsComplex(q));
+            }
+            if (Context.Role == CoreRoles.STUDENT_ROLE && includeAdminAnnouncement && !classId.HasValue)
             {
                 var adminAnnouncements = GetAnnouncements(new AnnouncementsQuery { FromDate = fromDate, ToDate = toDate, AdminOnly = true }).Announcements;
                 res = res.Concat(adminAnnouncements).OrderBy(x => x.Expires).ToList();
-
             }
             return res;
         }

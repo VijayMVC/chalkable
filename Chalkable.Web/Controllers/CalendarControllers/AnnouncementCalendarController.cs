@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -27,11 +28,13 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              DateTime start, end;
              MonthCalendar(ref date, out start, out end);
              var schoolYearId = GetCurrentSchoolYearId();
-             var announcements = SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, classId, true);
+             int? studentId, teacherId;
+             PrepareUsersIdsForCalendar(SchoolLocator, personId, out teacherId, out studentId);
+             var announcements = BaseSecurity.IsDistrictAdmin(Context)
+                    ? SchoolLocator.AnnouncementService.GetAdminAnnouncements(null, null, start, end, 0, int.MaxValue, true, studentId)
+                    : SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, classId, true);
              if (personId.HasValue)
              {
-                 int? studentId, teacherId;
-                 PrepareUsersIdsForCalendar(SchoolLocator, personId, out teacherId, out studentId);
                  var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
                  announcements = announcements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
              }
@@ -76,10 +79,12 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              int? teacherId, studentId;
              PrepareUsersIdsForCalendar(locator, personId, out teacherId, out studentId);
              var res = new List<AnnouncementCalendarWeekViewData>();
-             var announcements = locator.AnnouncementService.GetAnnouncements(start, end, false, classId);
+             var announcements = BaseSecurity.IsDistrictAdmin(locator.Context) 
+                 ? locator.AnnouncementService.GetAdminAnnouncements(null, null, start, end, 0, int.MaxValue, true, studentId)
+                 : locator.AnnouncementService.GetAnnouncements(start, end, false, classId, true);
              var schedule = locator.ClassPeriodService.GetSchedule(teacherId, studentId, classId, start, end);
              var classes = locator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
-             announcements = announcements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
+             announcements = announcements.Where(a => a.IsAdminAnnouncement ||  classes.Any(c => c.Id == a.ClassRef)).ToList();
              for (var d = start; d <= end; d = d.AddDays(1))
              {
                  var currentDayAnns = announcements.Where(x => x.Expires.Date == d).ToList();

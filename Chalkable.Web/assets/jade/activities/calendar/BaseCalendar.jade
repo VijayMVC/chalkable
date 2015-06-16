@@ -8,6 +8,8 @@ mixin Calendar(data, bodyTpl, bodyModel, controller, actions, params)
     -var currentAction = actions.currentAction
     -var todayAction = actions.todayAction || actions.currentAction
     if actions.day && actions.week && actions.month
+        -console.log('currentdate')
+        -console.log(bodyModel.getCurrentDate())
         -var newParams = params.concat([bodyModel.getCurrentDate().format('mm-dd-yy')])
         .action-bar
             .items

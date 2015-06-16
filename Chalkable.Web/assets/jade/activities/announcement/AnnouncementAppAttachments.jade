@@ -28,8 +28,6 @@ mixin AnnouncementFormApplicationItem(app, i)
 
 attachments = self.getAnnouncementAttachments() || []
 applications = self.getApplications() || []
-typesEnum = chlk.models.announcement.AnnouncementTypeEnum
-isAnnouncement = (self.isStandartAnnouncement() || self.getUserRole().isAdmin())
 items = self.getSortedAppsAndAttachments();
 
 +Hidden('attachments', self.getAttachments())
@@ -37,8 +35,9 @@ items = self.getSortedAppsAndAttachments();
 if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
         if self.isStudyCenterEnabled()
-            +ActionButton('announcement', self.getState() ? 'attachApp' : 'attachAppOnCreate', self.getId(), self.getClassId(), self.getStandardsUrlComponents())(type="button")#add-application.simple-gray-button Attach App
-            br
+            if  !self.isAdminAnnouncement()
+                +ActionButton('announcement', self.getState() ? 'attachApp' : 'attachAppOnCreate', self.getId(), self.getClassId(), self.getStandardsUrlComponents())(type="button")#add-application.simple-gray-button Attach App
+                br
             if self.getAssessmentApplicationId()
                 +ActionButton('apps', 'tryToAttachFromAnnouncement', self.getId(), self.getAssessmentApplicationId(), self.getStandardsUrlComponents())#add-assesment.simple-gray-button Assessment
         .simple-gray-button.file Attach File

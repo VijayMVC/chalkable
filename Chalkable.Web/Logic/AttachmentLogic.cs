@@ -7,7 +7,7 @@ namespace Chalkable.Web.Logic
 {
     public static class AttachmentLogic
     {
-        public static IList<AnnouncementAttachmentInfo> PrepareAttachmentsInfo(IList<AnnouncementAttachment> announcementAttachments, ICrocodocService crocodocService, IList<int> teachersIds = null)
+        public static IList<AnnouncementAttachmentInfo> PrepareAttachmentsInfo(IList<AnnouncementAttachment> announcementAttachments, ICrocodocService crocodocService, IList<int> itemOwnerIds = null)
         {
             int docWidth = AnnouncementAttachment.DOCUMENT_DEFAULT_WIDTH,
                 docHeight = AnnouncementAttachment.DOCUMENT_DEFAULT_HEIGHT;
@@ -16,7 +16,7 @@ namespace Chalkable.Web.Logic
                     Attachment = annAtt, 
                     DocWidth = docWidth, 
                     DocHeigth = docHeight, 
-                    IsTeacherAttachment = teachersIds != null && teachersIds.Contains(annAtt.PersonRef), 
+                    IsTeacherAttachment = itemOwnerIds != null && itemOwnerIds.Contains(annAtt.PersonRef), 
                     DownloadDocumentUrl = crocodocService.BuildDownloadDocumentUrl(annAtt.Uuid, annAtt.Name), 
                     DownloadThumbnailUrl = crocodocService.BuildDownloadhumbnailUrl(annAtt.Uuid, docWidth, docHeight)
                 }).ToList();
