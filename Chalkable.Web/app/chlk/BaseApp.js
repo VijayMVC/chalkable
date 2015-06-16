@@ -136,6 +136,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.GRADE_LEVELS, ArrayOf(chlk.models.grading.GradeLevel));
                 this.saveInSession(session, ChlkSessionConstants.STUDY_CENTER_ENABLED, Boolean);
                 this.saveInSession(session, ChlkSessionConstants.LE_PARAMS, chlk.models.school.LEParams);
+                this.saveInSession(session, ChlkSessionConstants.GRADE_LEVELS, ArrayOf(chlk.models.grading.GradeLevel));
 
                 this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
 
@@ -146,16 +147,6 @@ NAMESPACE('chlk', function (){
                     ria.dom.Dom('#first-login-video').remove();
                 }
 
-                window.gradeLevels = window.gradeLevels || [];
-                window.gradeLevels.forEach(function(item){
-                    var numberPart = parseInt(item.name, 10);
-                    if(numberPart){
-                        item.serialPart = getSerial(numberPart).slice(numberPart.toString().length);
-                        item.name = numberPart;
-                    }
-                    item.fullText = numberPart ? item.name + item.serialPart : item.name.trim();
-                });
-                this.saveInSession(session, ChlkSessionConstants.GRADE_LEVELS, ArrayOf(chlk.models.grading.GradeLevel));
 
                 var siteRoot = window.location.toString().split(window.location.pathname).shift();
                 var serviceRoot = "/";
