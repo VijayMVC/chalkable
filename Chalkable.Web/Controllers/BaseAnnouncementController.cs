@@ -23,10 +23,8 @@ namespace Chalkable.Web.Controllers
 
         protected AnnouncementViewData PrepareFullAnnouncementViewDataForRead(AnnouncementDetails ann)
         {
-            var teachersIds = ann.ClassRef.HasValue
-                ? SchoolLocator.ClassService.GetClassTeachers(ann.ClassRef.Value, null).Select(x => x.PersonRef).ToList()
-                : new List<int>();
-            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, teachersIds);
+            var ownersIds = GetAnnouncementOwnersIds(ann);
+            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, ownersIds);
             var annView = (AnnouncementDetailedViewData)PrepareAnnouncmentViewData(ann, attInfo);
             if (ann.State == AnnouncementState.Created)
             {
@@ -66,10 +64,8 @@ namespace Chalkable.Web.Controllers
 
         protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann)
         {
-            var teachersIds = ann.ClassRef.HasValue 
-                ? SchoolLocator.ClassService.GetClassTeachers(ann.ClassRef.Value, null).Select(x => x.PersonRef).ToList()
-                : new List<int>();
-            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, teachersIds);             
+            var ownersIds = GetAnnouncementOwnersIds(ann);
+            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, ownersIds);             
             return PrepareAnnouncmentViewData(ann, attInfo);
         }
 
@@ -110,5 +106,15 @@ namespace Chalkable.Web.Controllers
             }
             return new List<ApplicationForAttachViewData>();
         }
+
+        private IList<int> GetAnnouncementOwnersIds(AnnouncementDetails ann)
+        {
+            var ownersIds = new List<int>();
+            if (ann.AdminRef.HasValue)
+                ownersIds.Add(ann.AdminRef.Value);
+            if (ann.ClassRef.HasValue)
+                ownersIds = SchoolLocator.ClassService.GetClassTeachers(ann.ClassRef.Value, null).Select(x => x.PersonRef).ToList();
+            return ownersIds;
+        } 
     }
 }

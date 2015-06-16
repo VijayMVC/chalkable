@@ -76,7 +76,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              int? teacherId, studentId;
              PrepareUsersIdsForCalendar(locator, personId, out teacherId, out studentId);
              var res = new List<AnnouncementCalendarWeekViewData>();
-             var announcements = locator.AnnouncementService.GetAnnouncements(start, end, false, classId);
+             var announcements = locator.AnnouncementService.GetAnnouncements(start, end, false, classId, true);
              var schedule = locator.ClassPeriodService.GetSchedule(teacherId, studentId, classId, start, end);
              var classes = locator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
              announcements = announcements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
