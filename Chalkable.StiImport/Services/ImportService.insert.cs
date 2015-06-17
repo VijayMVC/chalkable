@@ -577,7 +577,8 @@ namespace Chalkable.StiImport.Services
                     PrimaryTeacherRef = course.PrimaryTeacherID,
                     RoomRef = course.RoomID,
                     CourseRef = course.SectionOfCourseID,
-                    GradingScaleRef = course.GradingScaleID
+                    GradingScaleRef = course.GradingScaleID,
+                    CourseTypeRef = course.CourseTypeID
                 });
             }
 
