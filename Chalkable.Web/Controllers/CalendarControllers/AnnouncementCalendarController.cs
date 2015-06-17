@@ -30,10 +30,11 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              var schoolYearId = GetCurrentSchoolYearId();
              int? studentId, teacherId;
              PrepareUsersIdsForCalendar(SchoolLocator, personId, out teacherId, out studentId);
-             var announcements = BaseSecurity.IsDistrictAdmin(Context)
+             var isAdmin = BaseSecurity.IsDistrictAdmin(Context);
+             var announcements = isAdmin
                     ? SchoolLocator.AnnouncementService.GetAdminAnnouncements(null, null, start, end, 0, int.MaxValue, true, studentId)
                     : SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, classId, true);
-             if (personId.HasValue)
+             if (personId.HasValue && !isAdmin)
              {
                  var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
                  announcements = announcements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
@@ -100,13 +101,13 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          {
              if (!personId.HasValue)
              {
-                 teacherId = locator.Context.Role == CoreRoles.TEACHER_ROLE ? locator.Context.PersonId : null;
+                 teacherId = locator.Context.Role == CoreRoles.TEACHER_ROLE || locator.Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE ? locator.Context.PersonId : null;
                  studentId = locator.Context.Role == CoreRoles.STUDENT_ROLE ? locator.Context.PersonId : null;
              }
              else
              {
                  var person = locator.PersonService.GetPersonDetails(personId.Value);
-                 teacherId = person.RoleRef == CoreRoles.TEACHER_ROLE.Id ? person.Id : (int?)null;
+                 teacherId = person.RoleRef == CoreRoles.TEACHER_ROLE.Id || person.RoleRef == CoreRoles.DISTRICT_ADMIN_ROLE.Id ? person.Id : (int?)null;
                  studentId = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.Id : (int?)null;
              }
          }

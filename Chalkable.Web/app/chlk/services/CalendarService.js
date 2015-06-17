@@ -131,7 +131,7 @@ NAMESPACE('chlk.services', function () {
             [[ArrayOf(chlk.models.calendar.announcement.MonthItem), chlk.models.common.ChlkDate]],
             chlk.models.calendar.announcement.Month, function prepareMonthData(days, date_){
                 var isAdmin = this.userIsAdmin();
-                var dateRangeObj = this.getDefaultCalendarDateRange_();
+                var dateRangeObj = this.getDefaultCalendarDateRange();
                 var mpStartDate = dateRangeObj.startDate;
                 var mpEndDate = dateRangeObj.endDate;
                 days.forEach(function(day){
@@ -260,7 +260,7 @@ NAMESPACE('chlk.services', function () {
                 endArray.forEach(function (item){pushEmptyPeriods(item, 0, item.getAnnouncementPeriods(), data[index]);});
                 var res = startArray.concat(data).concat(endArray);
                 this.getContext().getSession().set(ChlkSessionConstants.WEEK_CALENDAR_DATA, res);
-                var dateRangeObj = this.getDefaultCalendarDateRange_();
+                var dateRangeObj = this.getDefaultCalendarDateRange();
                 var startDate = dateRangeObj.startDate;
                 var endDate = dateRangeObj.endDate;
                 return new chlk.models.calendar.announcement.Week(date_, startDate, endDate, res);
@@ -269,13 +269,13 @@ NAMESPACE('chlk.services', function () {
 
             [[ArrayOf(chlk.models.calendar.announcement.DayItem), chlk.models.common.ChlkDate]],
             chlk.models.calendar.announcement.Day, function prepareDayData(days, date_){
-                var dateRangeObj = this.getDefaultCalendarDateRange_();
+                var dateRangeObj = this.getDefaultCalendarDateRange();
                 var startDate = dateRangeObj.startDate;
                 var endDate = dateRangeObj.endDate;
                 return new chlk.models.calendar.announcement.Day(date_, startDate, endDate, days);
             },
 
-            Object, function getDefaultCalendarDateRange_(){
+            Object, function getDefaultCalendarDateRange(){
                 var res = [];
                 if(this.userIsAdmin()){
                     var schoolYear = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR);
