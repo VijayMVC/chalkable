@@ -1,0 +1,9 @@
+mixin DemoRoleButton(name, title, notReady)
+    BUTTON.demo-role-button(data-rolename=name)(attributes)= title ? title : name
+
+#roles-buttons
+    +DemoRoleButton('Teacher')
+    +DemoRoleButton('Student')
+    +DemoRoleButton('Admin', null, true).coming
+    +DemoRoleButton('Parent', null, true).coming
+    +DemoRoleButton('District', null, true).coming
