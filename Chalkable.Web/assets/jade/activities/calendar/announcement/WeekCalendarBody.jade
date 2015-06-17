@@ -17,10 +17,10 @@ mixin TooltipWithOverflow(text)
                 each item in wholeDayItems
                     .cell(class = item.day.getTodayClassName())
                         each ann in item
+                            -var annShowText = ann.getTitle() + (ann.getClassName() ? ' - ' + ann.getClassName() : '')
                             +ActionLink('announcement', 'view', ann.getId()).period-item.announcement
-                                .announcement-calendar-item(data-tooltip = ann.getTitle() + ' - ' + ann.getClassName())
-                                    strong= ann.getTitle()
-                                    = ' - ' + ann.getClassName()
+                                .announcement-calendar-item(data-tooltip = annShowText)
+                                    strong=annShowText
         each item in self.groupAnnouncementsAsTable()
             .item
                 each calendarDayItem, order in item

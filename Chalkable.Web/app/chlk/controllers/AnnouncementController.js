@@ -314,8 +314,13 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.common.ChlkDate, Boolean, chlk.models.id.ClassId]],
-        function addViaCalendarAction(date_, noDraft_, classId_){
+        function addViaCalendarTeacherAction(date_, noDraft_, classId_){
             return this.addAction(classId_, null, date_, noDraft_);
+        },
+
+        [[chlk.models.common.ChlkDate, Boolean, chlk.models.id.ClassId]],
+        function addViaCalendarDistrictAdminAction(date_, noDraft_, classId_){
+            return this.addDistrictAdminAction(date_);
         },
 
         [chlk.controllers.Permissions([

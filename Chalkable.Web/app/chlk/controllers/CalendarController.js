@@ -36,10 +36,10 @@ NAMESPACE('chlk.controllers', function (){
                 .getMonthDayInfo(date)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
-                    var mpStartDate = markingPeriod.getStartDate();
-                    var mpEndDate = markingPeriod.getEndDate();
-                    if(date.getDate() < mpStartDate.getDate() || date.getDate() > mpEndDate.getDate())
+                    var dateRangeObj = this.calendarService.getDefaultCalendarDateRange();
+                    var startDate = dateRangeObj.startDate;
+                    var endDate = dateRangeObj.endDate;
+                    if(date.getDate() < startDate.getDate() || date.getDate() > endDate.getDate())
                         if(model.getAnnouncements().length || model.getItems().length)
                             model.setNoPlusButton(true);
                         else

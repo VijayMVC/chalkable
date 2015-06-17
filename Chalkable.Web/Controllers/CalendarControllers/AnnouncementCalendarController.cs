@@ -30,10 +30,11 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              var schoolYearId = GetCurrentSchoolYearId();
              int? studentId, teacherId;
              PrepareUsersIdsForCalendar(SchoolLocator, personId, out teacherId, out studentId);
-             var announcements = BaseSecurity.IsDistrictAdmin(Context)
+             var isAdmin = BaseSecurity.IsDistrictAdmin(Context);
+             var announcements = isAdmin
                     ? SchoolLocator.AnnouncementService.GetAdminAnnouncements(null, null, start, end, 0, int.MaxValue, true, studentId)
                     : SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, classId, true);
-             if (personId.HasValue)
+             if (personId.HasValue && !isAdmin)
              {
                  var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
                  announcements = announcements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
