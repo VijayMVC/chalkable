@@ -139,9 +139,10 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId, String, String, Number, Boolean]],
             ria.async.Future, function getSuggestedApps(classId, markingPeriodId, academicBenchmarkIds, start_, count_, myAppsOnly_){
+                var mp = this.getContext().getSession().get('markingPeriod');
                 return this.get('AppMarket/SuggestedApps.json', ArrayOf(chlk.models.apps.ApplicationForAttach),{
                     classId : classId.valueOf(),
-                    markingPeriodId: markingPeriodId ? markingPeriodId.valueOf() : this.getContext().getSession().get('markingPeriod').getId().valueOf(),
+                    markingPeriodId: markingPeriodId ? markingPeriodId.valueOf() : (mp.getId() ? mp.getId().valueOf() : ''),
                     abIds : academicBenchmarkIds,
                     start: start_ | 0,
                     count: count_ || 9999,
