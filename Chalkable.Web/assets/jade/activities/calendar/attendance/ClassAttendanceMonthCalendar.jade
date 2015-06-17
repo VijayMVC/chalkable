@@ -1,0 +1,4 @@
+actions = {currentAction: 'attendanceMonth'}
+params = [self.getClassId()]
+div
+    +Calendar(self, chlk.templates.calendar.attendance.ClassAttendanceCalendarBodyTpl, self.getModel(), 'class', actions, params).class-attendance-calendar
