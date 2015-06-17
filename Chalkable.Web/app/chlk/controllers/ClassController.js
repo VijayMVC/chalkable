@@ -112,9 +112,14 @@ NAMESPACE('chlk.controllers', function (){
                     )
                     .attach(this.validateResponse_())
                     .then(function(result){
-                        var mp = this.getCurrentGradingPeriod();
+                        var period;
+                        if(this.userIsAdmin()){
+                            period = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR);
+                        }else{
+                            period = this.getCurrentGradingPeriod();
+                        }
                         var attCalendar = new chlk.models.calendar.attendance.ClassAttendanceMonthCalendar(
-                            date_, mp.getStartDate(), mp.getEndDate(), result[1], classId
+                            date_, period.getStartDate(), period.getEndDate(), result[1], classId
                         );
                         return new chlk.models.classes.ClassProfileAttendanceViewData(
                             this.getCurrentRole(), result[0],
