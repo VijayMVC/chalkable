@@ -12,7 +12,7 @@ NAMESPACE('chlk.templates.profile', function(){
 
             function $(){
                 BASE();
-                this._adminContorllerName = 'admins';
+                //this._adminContorllerName = 'districtadmins';
                 this._teacherControllerName = 'teachers';
                 this._studentControllerName = 'students';
             },
@@ -26,12 +26,11 @@ NAMESPACE('chlk.templates.profile', function(){
             String, function getControllerName(){
                 var roleEnums = chlk.models.common.RoleEnum;
                 var roleId = this.getUser().getRole().getId();
-                if(roleId == roleEnums.ADMINGRADE.valueOf()
-                    || roleId == roleEnums.ADMINEDIT.valueOf()
-                    || roleId == roleEnums.ADMINVIEW.valueOf()){
-                    return this._adminContorllerName;
-                }
-                if(roleId == roleEnums.TEACHER.valueOf())
+                //if(roleId == roleEnums.DISTRICTADMIN.valueOf()){
+                //    return this._adminContorllerName;
+                //}
+                if(roleId == roleEnums.TEACHER.valueOf()
+                    || roleId == roleEnums.DISTRICTADMIN.valueOf())
                     return this._teacherControllerName;
                 if(roleId == roleEnums.STUDENT.valueOf())
                     return this._studentControllerName;

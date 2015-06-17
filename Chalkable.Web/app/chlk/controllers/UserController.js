@@ -99,8 +99,7 @@ NAMESPACE('chlk.controllers', function (){
 
                 //todo: rewrite
                 var isAbleToEdit = (model.getId() == currentPerson.getId())
-                    || roleId == chlk.models.common.RoleEnum.ADMINEDIT.valueOf()
-                    || roleId == chlk.models.common.RoleEnum.ADMINGRADE.valueOf();
+                    || roleId == chlk.models.common.RoleEnum.DISTRICTADMIN.valueOf();
                 model.setAbleEdit(isAbleToEdit);
                 if(bDate)
                     model.setBirthDateText(bDate.toString(res).replace(/&#100;/g, 'd'));
@@ -115,16 +114,14 @@ NAMESPACE('chlk.controllers', function (){
             },
 
             Boolean, function isAdminRoleName_(roleName){
-                return roleName === chlk.models.common.RoleNamesEnum.ADMINGRADE.valueOf()
-                    || roleName === chlk.models.common.RoleNamesEnum.ADMINEDIT.valueOf()
-                    || roleName === chlk.models.common.RoleNamesEnum.ADMINVIEW.valueOf();
+                return roleName === chlk.models.common.RoleNamesEnum.DISTRICTADMIN;
             },
 
             [[String]],
             String, function getControllerNameByRole(roleName){
                 var controller = null, loweredRoleName = roleName.toLowerCase();
-                if(this.isAdminRoleName_(loweredRoleName))
-                    controller = "admins";
+                //if(this.isAdminRoleName_(loweredRoleName))
+                //    controller = "admins";
                 if(loweredRoleName == chlk.models.common.RoleNamesEnum.TEACHER.valueOf())
                     controller = "teachers";
                 if(loweredRoleName == chlk.models.common.RoleNamesEnum.STUDENT.valueOf())

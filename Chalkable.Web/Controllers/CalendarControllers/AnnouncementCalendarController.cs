@@ -101,13 +101,13 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          {
              if (!personId.HasValue)
              {
-                 teacherId = locator.Context.Role == CoreRoles.TEACHER_ROLE ? locator.Context.PersonId : null;
+                 teacherId = locator.Context.Role == CoreRoles.TEACHER_ROLE || locator.Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE ? locator.Context.PersonId : null;
                  studentId = locator.Context.Role == CoreRoles.STUDENT_ROLE ? locator.Context.PersonId : null;
              }
              else
              {
                  var person = locator.PersonService.GetPersonDetails(personId.Value);
-                 teacherId = person.RoleRef == CoreRoles.TEACHER_ROLE.Id ? person.Id : (int?)null;
+                 teacherId = person.RoleRef == CoreRoles.TEACHER_ROLE.Id || person.RoleRef == CoreRoles.DISTRICT_ADMIN_ROLE.Id ? person.Id : (int?)null;
                  studentId = person.RoleRef == CoreRoles.STUDENT_ROLE.Id ? person.Id : (int?)null;
              }
          }
