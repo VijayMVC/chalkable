@@ -126,31 +126,11 @@ namespace Chalkable.StiImport.Services
 
         }
 
-        private void UpdateCourseTypes()
-        {
-            if (context.GetSyncResult<StiConnector.SyncModel.CourseType>().Updated == null)
-                return;
-            var stiCourseTypes = context.GetSyncResult<StiConnector.SyncModel.CourseType>().All;
-            var chalkableCourseTypes = stiCourseTypes.Select(courseType => new Data.School.Model.CourseType
-            {
-                Id = courseType.CourseTypeID,
-                Name = courseType.Name,
-                Description = courseType.Description,
-                Code = courseType.Code,
-                IsActive = courseType.IsActive,
-                IsSystem = courseType.IsSystem,
-                NCESCode = courseType.NCESCode,
-                SIFCode = courseType.SIFCode,
-                StateCode = courseType.StateCode
-            }).ToList();
-            ServiceLocatorSchool.CourseTypeService.Edit(chalkableCourseTypes);
-        }
-
         private void UpdateSystemSettings()
         {
             if (context.GetSyncResult<StiConnector.SyncModel.SystemSetting>().Updated == null)
                 return;
-            var systemSettings = context.GetSyncResult<StiConnector.SyncModel.SystemSetting>().All;
+            var systemSettings = context.GetSyncResult<StiConnector.SyncModel.SystemSetting>().Updated;
             var sysSettings = systemSettings.Select(x => new Data.School.Model.SystemSetting
             {
                 Category = x.Category,
@@ -490,6 +470,26 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.RoomService.EditRooms(rooms);
         }
 
+        private void UpdateCourseTypes()
+        {
+            if (context.GetSyncResult<StiConnector.SyncModel.CourseType>().Updated == null)
+                return;
+            var stiCourseTypes = context.GetSyncResult<StiConnector.SyncModel.CourseType>().Updated;
+            var chalkableCourseTypes = stiCourseTypes.Select(courseType => new Data.School.Model.CourseType
+            {
+                Id = courseType.CourseTypeID,
+                Name = courseType.Name,
+                Description = courseType.Description,
+                Code = courseType.Code,
+                IsActive = courseType.IsActive,
+                IsSystem = courseType.IsSystem,
+                NCESCode = courseType.NCESCode,
+                SIFCode = courseType.SIFCode,
+                StateCode = courseType.StateCode
+            }).ToList();
+            ServiceLocatorSchool.CourseTypeService.Edit(chalkableCourseTypes);
+        }
+
         private void UpdateCourses()
         {
             if (context.GetSyncResult<Course>().Updated == null)
@@ -513,7 +513,8 @@ namespace Chalkable.StiImport.Services
                     PrimaryTeacherRef = course.PrimaryTeacherID,
                     RoomRef = course.RoomID,
                     CourseRef = course.SectionOfCourseID,
-                    GradingScaleRef = course.GradingScaleID
+                    GradingScaleRef = course.GradingScaleID,
+                    CourseTypeRef = course.CourseTypeID
                 });   
             }
             ServiceLocatorSchool.ClassService.Edit(classes);

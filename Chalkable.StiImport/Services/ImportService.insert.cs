@@ -144,24 +144,6 @@ namespace Chalkable.StiImport.Services
             InsertSystemSettings();
         }
 
-        private void InserCourseTypes()
-        {
-            var courseTypes = context.GetSyncResult<StiConnector.SyncModel.CourseType>().All;
-            var chalkableCourseTypes = courseTypes.Select(courseType => new Data.School.Model.CourseType
-            {
-                Id = courseType.CourseTypeID,
-                Name = courseType.Name,
-                Description = courseType.Description,
-                Code = courseType.Code,
-                IsActive = courseType.IsActive,
-                IsSystem = courseType.IsSystem,
-                NCESCode = courseType.NCESCode,
-                SIFCode = courseType.SIFCode,
-                StateCode = courseType.StateCode
-            }).ToList();
-            ServiceLocatorSchool.CourseTypeService.Add(chalkableCourseTypes);
-        }
-
         private void InsertSystemSettings()
         {
             var systemSettings = context.GetSyncResult<StiConnector.SyncModel.SystemSetting>().All;
@@ -555,6 +537,24 @@ namespace Chalkable.StiImport.Services
             return closestDep;
         }
 
+        private void InserCourseTypes()
+        {
+            var courseTypes = context.GetSyncResult<StiConnector.SyncModel.CourseType>().All;
+            var chalkableCourseTypes = courseTypes.Select(courseType => new Data.School.Model.CourseType
+            {
+                Id = courseType.CourseTypeID,
+                Name = courseType.Name,
+                Description = courseType.Description,
+                Code = courseType.Code,
+                IsActive = courseType.IsActive,
+                IsSystem = courseType.IsSystem,
+                NCESCode = courseType.NCESCode,
+                SIFCode = courseType.SIFCode,
+                StateCode = courseType.StateCode
+            }).ToList();
+            ServiceLocatorSchool.CourseTypeService.Add(chalkableCourseTypes);
+        }
+
         private void InsertCourses()
         {
             var departmenPairs = PrepareChalkableDepartmentKeywords();
@@ -577,7 +577,8 @@ namespace Chalkable.StiImport.Services
                     PrimaryTeacherRef = course.PrimaryTeacherID,
                     RoomRef = course.RoomID,
                     CourseRef = course.SectionOfCourseID,
-                    GradingScaleRef = course.GradingScaleID
+                    GradingScaleRef = course.GradingScaleID,
+                    CourseTypeRef = course.CourseTypeID
                 });
             }
 
