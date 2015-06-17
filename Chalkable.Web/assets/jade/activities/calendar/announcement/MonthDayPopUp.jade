@@ -22,7 +22,7 @@
                             div
                                 +TooltipWithOverflow(item.getTitle()).item-title
                                 +TooltipWithOverflow(item.getClassName()).classname-under
-    if !self.getUserRole().isStudent() && !self.isNoPlusButton()
+    if self.getUserRole().isTeacher() && !self.isNoPlusButton()
         +ActionButton('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || '').ann-button.plus-ann New item
 
 
