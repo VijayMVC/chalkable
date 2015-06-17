@@ -19,8 +19,8 @@
                 +ActionLink('attendance', 'attendanceProfileReport', self.getGradingPeriod().getId(), self.getTopData().getSelectedItemId()).report-link
         if self.getItems().length > 0 && self.canPost()
             .l &nbsp;
-        .l
-            if self.isLEIntegrated()
+        if self.isLEIntegrated()
+            .le
                 +ActionLink('teachers', 'giveLECredits', self.getTopData().getSelectedItemId()) Open Learning Earnings
         .title
             span.date-text= self.getDate().toString('MM dd, yy')

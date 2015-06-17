@@ -280,7 +280,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<AnnouncementComplex> GetAnnouncements(string filter)
         {
             //TODO : rewrite impl for better performance
-            var anns = GetAnnouncements(new AnnouncementsQuery()).Announcements;
+            var anns = GetAnnouncements(new AnnouncementsQuery{OwnedOnly = true}).Announcements;
             if (!BaseSecurity.IsDistrictAdmin(Context))
             {
                 if (Context.Role == CoreRoles.STUDENT_ROLE)
