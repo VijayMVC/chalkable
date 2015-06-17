@@ -6,9 +6,9 @@
 if self.isAppStoreEnabled
     +ActionLink('appmarket', 'list').apps(title="View Apps") Apps
 if !self.isLEEnabled || self.isLEEnabled && self.isLinkEnabled
-    a(href="/Home/LearningEarnings", target="blank").apps(title="View Learning Earnings", target="blank") LE
+    a(href="/Home/LearningEarnings", target="blank").le(title="View Learning Earnings", target="blank") LE
 if self.isLEEnabled && !self.isLinkEnabled
-    +ActionLink('error', 'learningEarningsDisabled').apps(title="View Learning Earnings", target="blank") LE
+    +ActionLink('error', 'learningEarningsDisabled').le(title="View Learning Earnings", target="blank") LE
 
 +ActionLink('message', 'page', false, true).messages(title="View Messages") Messages
 +ActionLink('students', 'my').people(title="View People") People
