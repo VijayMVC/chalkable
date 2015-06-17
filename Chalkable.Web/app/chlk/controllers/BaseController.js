@@ -275,7 +275,8 @@ NAMESPACE('chlk.controllers', function (){
            Boolean, function userIsAdmin(){
                return this.userInRole(chlk.models.common.RoleEnum.ADMINEDIT) ||
                    this.userInRole(chlk.models.common.RoleEnum.ADMINGRADE) ||
-                   this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW);
+                   this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW) ||
+                   this.userInRole(chlk.models.common.RoleEnum.DISTRICTADMIN);
            },
 
 

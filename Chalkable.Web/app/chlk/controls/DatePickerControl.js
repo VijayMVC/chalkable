@@ -60,7 +60,7 @@ NAMESPACE('chlk.controls', function () {
                     options.maxDate = ranges[ranges.length - 1].end;
                 }
 
-                if(options.inCurrentMp){
+                if(options.inCurrentMp && !this.userIsAdmin() ){
                     var gp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD);
                     options.minDate = gp.getStartDate().getDate();
                     options.maxDate = gp.getEndDate().getDate();

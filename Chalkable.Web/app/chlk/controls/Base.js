@@ -52,6 +52,18 @@ NAMESPACE('chlk.controls', function () {
                 return this.getContext().getSession().get(ChlkSessionConstants.USER_ROLE);
             },
 
+            [[chlk.models.common.RoleEnum]],
+            Boolean, function userInRole(roleId){
+                return this.getUserRole().getRoleId() == roleId;
+            },
+
+            Boolean, function userIsAdmin(){
+                return this.userInRole(chlk.models.common.RoleEnum.ADMINEDIT) ||
+                    this.userInRole(chlk.models.common.RoleEnum.ADMINGRADE) ||
+                    this.userInRole(chlk.models.common.RoleEnum.ADMINVIEW) ||
+                    this.userInRole(chlk.models.common.RoleEnum.DISTRICTADMIN);
+            },
+
             Date, function getServerDate(str_, a_, b_){
                 return chlk.models.common.ChlkDate.GET_SERVER_DATE(str_, a_, b_);
             },

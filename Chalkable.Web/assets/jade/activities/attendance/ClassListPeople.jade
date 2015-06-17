@@ -14,7 +14,9 @@
     .table
         .l(class=self.getReadOnlyReason() ? "wide" : undefined)
             +SummaryInfo(self.getPresentStudents().length, items.length)
-            +ActionLink('attendance', 'attendanceProfileReport', self.getGradingPeriod().getId(), self.getTopData().getSelectedItemId()).report-link
+            -console.info(self)
+            if !self.getUserRole().isAdmin()
+                +ActionLink('attendance', 'attendanceProfileReport', self.getGradingPeriod().getId(), self.getTopData().getSelectedItemId()).report-link
         if self.getItems().length > 0 && self.canPost()
             .l &nbsp;
         if self.isLEIntegrated()
