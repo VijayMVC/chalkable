@@ -106,6 +106,10 @@ namespace Chalkable.Data.School.DataAccess
                                             Announcement.ClassRef in (select cp.ClassRef from ClassPerson cp where cp.PersonRef = @callerId)
                                             and Announcement.ClassRef in (select ct.ClassRef from ClassTeacher ct where ct.PersonRef = AnnouncementAttachment.PersonRef)
                                           )
+                                       or (Announcement.AdminRef is not null and exists(select * from AdminAnnouncementRecipient aar 
+                                                                                        join StudentGroup st on st.GroupRef = aar.GroupRef
+																			            where st.StudentRef = @callerId and aar.AnnouncementRef = Announcement.Id)
+                                          )
                                        )");
                 return res;
             }
