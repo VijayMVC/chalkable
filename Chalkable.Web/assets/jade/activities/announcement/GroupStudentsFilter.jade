@@ -11,6 +11,9 @@
         +Hidden('gradeLevelId', self.getGradeLevelId())
         +Hidden('classIds', '').class-ids
 
+        if !self.getCourseTypes().length
+            .no-items-text.small There are no classes
+
         each courseType in self.getCourseTypes()
             .main-item
                 .column-cell
