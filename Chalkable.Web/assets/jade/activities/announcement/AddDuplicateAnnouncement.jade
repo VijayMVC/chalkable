@@ -21,7 +21,7 @@
                             data-tooltip=item.getId() ? item.getFullClassName() : ''
                         ).item.class-button.validate-skip
                             +ClassImg(item, 45, 80).avatar
-                            SPAN.text-container= item.getName()
+                            SPAN.text-container(data-tooltip=item.getName(), data-tooltip-type="overflow")= item.getName()
                 .text-container
                     .tooltip-text
                     .note

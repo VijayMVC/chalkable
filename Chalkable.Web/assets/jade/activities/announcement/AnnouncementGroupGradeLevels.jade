@@ -12,7 +12,7 @@ each school in self.getSchools()
             +ActionCheckbox('school', schoolStage != 0, false, 'announcement', 'assignSchool', 'unAssignSchool', [self.getGroup().getId(),
                 school.getSchoolYearId()])(containerCls = 'box-checkbox', class = (schoolStage == 1) ? 'partially-checked' : '').school-check
             SPAN
-                .text-container(data-tooltip = school.getName())=school.getName()
+                .text-container(data-tooltip = school.getName(), data-tooltip-type="overflow")=school.getName()
         each gradeLevel in self.getGradeLevels()
             -var gradeLevelStage = self.getGradeLevelStage(gradeLevel, school)
                 if gradeLevelStage > -1
@@ -21,4 +21,4 @@ each school in self.getSchools()
                             [self.getGroup().getId(), school.getSchoolYearId(), gradeLevel.getId()])(containerCls = 'right box-checkbox', class = (gradeLevelStage == 1) ? 'partially-checked' : '').grade-level-check
                         +ActionLink('announcement', 'showGradeLevelMembers', self.getGroup().getId(), school.getSchoolYearId(), gradeLevel.getId())(data-tooltip=gradeLevel.getName(),
                             data-tooltip-type="overflow").grade-level-name.internal.name
-                                .text-container(data-tooltip = gradeLevel.getName())=gradeLevel.getName()
+                                .text-container(data-tooltip = gradeLevel.getName(), data-tooltip-type="overflow")=gradeLevel.getName()

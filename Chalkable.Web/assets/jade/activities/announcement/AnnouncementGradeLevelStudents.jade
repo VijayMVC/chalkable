@@ -12,6 +12,6 @@ if self.getStudents().length
     each student in self.getStudents()
         .column-cell
             SPAN.name.internal
-                .text-container=student.getFullName()
+                .text-container(data-tooltip=student.getFullName(), data-tooltip-type="overflow")=student.getFullName()
             +ActionCheckbox('student', student.isAssignedToGroup(), false, 'announcement', 'assignStudent', 'unAssignStudent',
                 [self.getGroupId(), student.getId()])(data-id=student.getId().valueOf(), containerCls = 'box-checkbox right').right.student-check
