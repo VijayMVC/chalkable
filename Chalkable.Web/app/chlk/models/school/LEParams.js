@@ -26,7 +26,7 @@ NAMESPACE('chlk.models.school', function () {
         Boolean, 'leAccessEnabled',
 
         Boolean, function isLEIntegrated(){
-            return this.isLeEnabled() && this.isLeSyncComplete() && this.issueLECreditsEnabled() && this.isLeLinkStatus();
+            return this.isLeEnabled() && this.isLeSyncComplete() && this.isIssueLECreditsEnabled() && this.isLeLinkStatus();
             //return true;
         },
 
