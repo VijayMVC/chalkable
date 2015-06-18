@@ -1,5 +1,7 @@
+-var canPressStandards = !self.getUserRole().isAdmin()
+
 mixin ExplorerStandardLink(standard, abId, i)
-    if self.getUserRole().isAdmin()
+    if !canPressStandards
         a(
             class = (self.showStandard(i) ? '' : 'hidden-item ') + (abId ? 'with-code ' : '')
         ).block-item.standard
@@ -14,7 +16,7 @@ mixin ExplorerStandardLink(standard, abId, i)
     h2.page-title=Msg.Class_profile
 
     +ProfileTopBar(self, 'explorer')
-    .explorer-view
+    .explorer-view(class=canPressStandards ? 'can-press-standards' : '')
         if !self.getStandards().length
             .no-items-text No standards yet
         .classes-blocks

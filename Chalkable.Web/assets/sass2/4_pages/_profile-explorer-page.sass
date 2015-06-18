@@ -51,6 +51,17 @@
       display: inline-block
       vertical-align: top
 
+  a.standard, a.announcement
+    background: #eaeaea
+    +box-shadow(#fff 0 1px 0 inset)
+
+  &.can-press-standards
+    a.standard, a.announcement
+      cursor: pointer
+      &.pressed
+        background: #fff
+        +box-shadow(none)
+
   .block-item
     border: 1px solid #b4b4b4
     height: 38px
@@ -69,13 +80,6 @@
     &.no-standards-block
       height: 175px
       line-height: 175px
-
-    &.standard, &.announcement
-      cursor: pointer
-
-      &:not(.pressed)
-        background: #eaeaea
-        +box-shadow(#fff 0 1px 0 inset)
 
     .right-block
       font: bold 15px Arial
