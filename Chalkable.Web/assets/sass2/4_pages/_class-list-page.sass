@@ -71,11 +71,19 @@
   .selected .attendance-combo > *
     display: inline-block
 
-  .attendance-option, .attendance-text, .selected .attendance-combo
+  .attendance-option, .attendance-text
     display: inline-block
 
-  .attendance-combo, .selected .attendance-option, .selected .attendance-text
+  .attendance-combo
     display: none
+
+  .can-post
+    .selected
+      .attendance-combo
+        display: inline-block
+
+      .attendance-text, .attendance-option
+        display: none
 
   .attendance-option
     color: #c7c6c3
