@@ -3,8 +3,8 @@ mixin RolesGroupButtonsForMsg(isInbox, keyword, role)
     +ActionButton('message', 'page', true, isInbox, 'parent', keyword)(class= role == 'parent' ? 'pressed' : '') Parent
     +ActionButton('message', 'page', true, isInbox, 'student', keyword)(class= role == 'student' ? 'pressed' : '') Student
     +ActionButton('message', 'page', true, isInbox, 'teacher', keyword)(class= role == 'teacher' ? 'pressed' : '') Teacher
-    +ActionButton('message', 'page', true, isInbox, 'admingrade,adminedit,adminview', keyword)(
-    class= role == 'admingrade,adminedit,adminview' ? 'pressed' : ''
+    +ActionButton('message', 'page', true, isInbox, 'districtadmin', keyword)(
+    class= role == 'districtadmin' ? 'pressed' : ''
     ) Admin
 
 items = self.getMessages().getItems()

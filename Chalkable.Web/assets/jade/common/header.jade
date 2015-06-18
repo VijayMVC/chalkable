@@ -3,7 +3,9 @@ if chlk.templates.search && chlk.templates.search.SiteSearch
         +SearchBox(chlk.services.SearchService, "search", chlk.templates.search.SiteSearch)#siteSearch(
             name="siteSearch"
             clearAfterSelect = true
-            withButton = true)
+            withButton = true,
+            listCls = "site-search"
+        )
         label(for="siteSearch")#search-glass
 
 

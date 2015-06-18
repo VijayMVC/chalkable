@@ -72,9 +72,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 switch (type)
                 {
                     case PrivateMessageType.Income:
-                        return da.GetIncomeMessages(rolesIds, keyword, read, Context.PersonId ?? 0, Context.SchoolLocalId.Value, start, count);
+                        return da.GetIncomeMessages(rolesIds, keyword, read, Context.PersonId.Value, Context.SchoolLocalId.Value, start, count);
                     case PrivateMessageType.Outcome:
-                        return da.GetOutComeMessage(rolesIds, keyword, Context.PersonId ?? 0, Context.SchoolLocalId.Value, start, count);
+                        return da.GetOutComeMessage(rolesIds, keyword, Context.PersonId.Value, Context.SchoolLocalId.Value, start, count);
                     default:
                         throw new ChalkableException(ChlkResources.ERR_PRIVATE_MESSAGE_INVALID_TYPE);
                 }    

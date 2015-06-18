@@ -74,16 +74,17 @@ NAMESPACE('chlk.controllers', function (){
             var model = this.calendarService
                 .getWeekDayInfo(date, periodClassId_, periodOrder_);
 
-            var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
-            var mpStartDate = markingPeriod.getStartDate();
-            var mpEndDate = markingPeriod.getEndDate();
-            if(date.getDate() < mpStartDate.getDate() || date.getDate() > mpEndDate.getDate())
-                if(model.getAnnouncements().length)
-                    model.setNoPlusButton(true);
-                else
-                    return null;
-
-            Assert(model);
+            if(!this.userIsAdmin()){
+                var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
+                var mpStartDate = markingPeriod.getStartDate();
+                var mpEndDate = markingPeriod.getEndDate();
+                if(date.getDate() < mpStartDate.getDate() || date.getDate() > mpEndDate.getDate())
+                    if(model.getAnnouncements().length)
+                        model.setNoPlusButton(true);
+                    else
+                        return null;
+            }
+            //Assert(model);
 
             model.setTarget(chlk.controls.getActionLinkControlLastNode());
             if(periodClassId_ != undefined)

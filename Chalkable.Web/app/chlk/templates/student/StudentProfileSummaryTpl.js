@@ -75,7 +75,7 @@ NAMESPACE('chlk.templates.student', function () {
                 return this.buildGlanceBoxData_(this.getUser().getGradesBox()
                     , function(item){ return item.getGrade()}
                     , function(item){ return item.getAnnouncementTitle()}
-                    , Msg.Recent, null, 'announcement', 'view'
+                    , Msg.Recent, null, this.getUserRole().isAdmin() ? null : 'announcement', this.getUserRole().isAdmin() ? null : 'view'
                     , function(item){ return [item.getAnnouncementId()]});
             },
 

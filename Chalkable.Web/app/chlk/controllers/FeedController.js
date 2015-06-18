@@ -91,10 +91,10 @@ NAMESPACE('chlk.controllers', function (){
         function listDistrictAdminAction(gradeLevels_, postback_, importantOnly_, pageIndex_) {
 
             //todo : think about go to inow part
-            if(!this.canViewFeed()){
+            if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHALKBLE_ADMIN)){
                 var text  = 'It looks like you don\'t have the correct permissions defined in iNow \n' +
-                    '(View Lookup, View Classroom or View Classroom (Admin)).\n' +
-                    'Without those permissions you cannot use Chalkable.  \n' +
+                    '(Chalkable Admin).\n' +
+                    'Without those permissions you cannot use Chalkable Admin POrtal.  \n' +
                     'Please contact your administrator for more information. \n';
                 return this.ShowMsgBox(text, 'Error.', [{
                     text: 'LOG OUT',
@@ -137,8 +137,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [[Boolean, Boolean, String, Number]],
         function getAdminFeedItems(postback_, importantOnly_, gradeLevels_, pageIndex_){
-            return this.feedService
-                .getAdminFeed(pageIndex_ | 0, gradeLevels_, importantOnly_)
+            return this.announcementService
+                .getAnnouncementsForAdmin(pageIndex_ | 0, gradeLevels_, importantOnly_)
                 .attach(this.validateResponse_())
                 .then(function(feedItems){
                     if(!postback_ && importantOnly_ && feedItems.length == 0)

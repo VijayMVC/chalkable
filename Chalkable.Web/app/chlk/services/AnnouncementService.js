@@ -48,9 +48,9 @@ NAMESPACE('chlk.services', function () {
 
             [[Number, String, Boolean]],
             ria.async.Future, function getAnnouncementsForAdmin(pageIndex_, gradeLevels_, importantOnly_) {
-                return this.get('Feed/List.json', ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), {
+                return this.get('Feed/DistrictAdminFeed.json', ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), {
+                    gradeLevelIds : gradeLevels_,
                     start: pageIndex_|0,
-                    gradeLevels: gradeLevels_,
                     complete: importantOnly_ ? false : null
                 });
 

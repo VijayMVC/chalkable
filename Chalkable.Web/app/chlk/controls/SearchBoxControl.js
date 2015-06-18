@@ -191,6 +191,10 @@ NAMESPACE('chlk.controls', function () {
                             ria.dom.Dom('#' + id + '-hidden').setValue(this.value);
                         }
 
+                        var menu = new ria.dom.Dom('.ui-autocomplete.ui-menu');
+                        if(attrs.listCls)
+                            menu.removeClass(attrs.listCls);
+
                         wasButtonClicked = false;
                     },
                     open: function( event, ui ) {

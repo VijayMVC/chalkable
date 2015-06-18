@@ -98,8 +98,7 @@ NAMESPACE('chlk.controllers', function (){
                 var roleId = currentPerson.getRole().getId();
 
                 //todo: rewrite
-                var isAbleToEdit = (model.getId() == currentPerson.getId())
-                    || roleId == chlk.models.common.RoleEnum.DISTRICTADMIN.valueOf();
+                var isAbleToEdit = model.getId() == currentPerson.getId();
                 model.setAbleEdit(isAbleToEdit);
                 if(bDate)
                     model.setBirthDateText(bDate.toString(res).replace(/&#100;/g, 'd'));
