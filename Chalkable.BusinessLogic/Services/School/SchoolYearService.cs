@@ -41,12 +41,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new SchoolYearDataAccess(u).GetPage(start, count));
         }
 
-        public void AssignStudent(IList<StudentSchoolYear> studentAssignments)
-        {
-            BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new DataAccessBase<StudentSchoolYear>(u).Insert(studentAssignments));
-        }
-        
+       
         public SchoolYear GetCurrentSchoolYear()
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
@@ -63,81 +58,53 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<SchoolYear> GetSortedYears()
         {
-            using (var uow = Read())
-            {
-                var da = new SchoolYearDataAccess(uow);
-                return da.GetAll();
-            }
+            return DoRead(u => new SchoolYearDataAccess(u).GetAll());
         }
-
-        public IList<StudentSchoolYear> GetStudentAssignments()
-        {
-            if (!BaseSecurity.IsDistrictAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Read())
-            {
-                var da = new DataAccessBase<StudentSchoolYear>(uow);
-                return da.GetAll();
-            }
-        }
-
 
         public IList<SchoolYear> Add(IList<SchoolYear> schoolYears)
         {
-            if (!BaseSecurity.IsDistrictAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new SchoolYearDataAccess(uow).Insert(schoolYears);
-                uow.Commit();
-                return schoolYears;
-            }
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            DoUpdate(u => new SchoolYearDataAccess(u).Insert(schoolYears));
+            return schoolYears;
         }
 
         public void Delete(IList<int> schoolYearIds)
         {
-            if (!BaseSecurity.IsDistrictAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new SchoolYearDataAccess(uow).Delete(schoolYearIds);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            DoUpdate(u => new SchoolYearDataAccess(u).Delete(schoolYearIds));
         }
 
 
         public IList<SchoolYear> Edit(IList<SchoolYear> schoolYears)
         {
-            if (!BaseSecurity.IsDistrictAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new SchoolYearDataAccess(uow).Update(schoolYears);
-                uow.Commit();
-                return schoolYears;
-            }
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            DoUpdate(u => new SchoolYearDataAccess(u).Update(schoolYears));
+            return schoolYears;
+        }
+        
+        public void AssignStudent(IList<StudentSchoolYear> studentAssignments)
+        {
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<StudentSchoolYear>(u).Insert(studentAssignments));
         }
 
         public void UnassignStudents(IList<StudentSchoolYear> studentSchoolYears)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new DataAccessBase<StudentSchoolYear>(uow).Delete(studentSchoolYears);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<StudentSchoolYear>(u).Delete(studentSchoolYears));
         }
 
         public void EditStudentSchoolYears(IList<StudentSchoolYear> studentSchoolYears)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Update())
-            {
-                new DataAccessBase<StudentSchoolYear>(uow).Update(studentSchoolYears);
-                uow.Commit();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(u => new DataAccessBase<StudentSchoolYear>(u).Update(studentSchoolYears));
         }
+
+        public IList<StudentSchoolYear> GetStudentAssignments()
+        {
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            return DoRead(u => new DataAccessBase<StudentSchoolYear>(u).GetAll());
+        }
+
     }
 }

@@ -402,7 +402,8 @@ namespace Chalkable.StiImport.Services
                     Id = x.AcadSessionID,
                     Name = x.Name,
                     SchoolRef = x.SchoolID,
-                    StartDate = x.StartDate
+                    StartDate = x.StartDate,
+                    ArchiveDate = x.ArchiveDate
                 }).ToList();
             ServiceLocatorSchool.SchoolYearService.Add(schoolYears);
         }

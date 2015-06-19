@@ -46,6 +46,8 @@ namespace Chalkable.Data.School.DataAccess
             return query == null ? new List<AnnouncementAttachment>() : ReadMany<AnnouncementAttachment>(query);
         }
 
+
+        //TODO: refactor this ... probably move this to stored procedure
         private DbQuery BuildGetAttachmentQuery(QueryConditionSet queryCondition, int callerId, int roleId, bool needsAllAttachments = true, string filter = null)
         {
             var res = new DbQuery();

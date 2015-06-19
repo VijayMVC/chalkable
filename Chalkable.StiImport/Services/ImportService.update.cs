@@ -369,7 +369,8 @@ namespace Chalkable.StiImport.Services
                     StartDate = x.StartDate,
                     EndDate = x.EndDate,
                     Name = x.Name,
-                    SchoolRef = x.SchoolID
+                    SchoolRef = x.SchoolID,
+                    ArchiveDate = x.ArchiveDate
                 }).ToList();
             ServiceLocatorSchool.SchoolYearService.Edit(schoolYears);
         }

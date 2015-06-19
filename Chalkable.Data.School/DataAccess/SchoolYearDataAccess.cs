@@ -30,7 +30,8 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new AndQueryCondition
             {
                 { SchoolYear.START_DATE_FIELD, tillDate, ConditionRelation.LessEqual },
-                { SchoolYear.SCHOOL_REF_FIELD, schoolId, ConditionRelation.Equal }
+                { SchoolYear.SCHOOL_REF_FIELD, schoolId, ConditionRelation.Equal },
+                { SchoolYear.ARCHIVE_DATE, null, ConditionRelation.Equal}
             };
             var q = Orm.SimpleSelect<SchoolYear>(conds);
             q.Sql.AppendFormat("order by {0}  desc", SchoolYear.END_DATE_FIELD);
