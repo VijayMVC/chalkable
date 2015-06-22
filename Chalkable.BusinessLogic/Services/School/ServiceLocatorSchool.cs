@@ -63,6 +63,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IDbService SchoolDbService { get; }
         IDbMaintenanceService DbMaintenanceService { get; }
         ISettingsService SettingsService { get;  }
+        ILPGalleryCategoryService LPGalleryCategoryService { get; }
     }
 
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -124,6 +125,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IGroupService groupService;
         private ISettingsService settingsService;
         private ICourseTypeService courseTypeService;
+        private ILPGalleryCategoryService lpGalleryCategoryService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -185,6 +187,7 @@ namespace Chalkable.BusinessLogic.Services.School
             groupService = new GroupService(this);
             courseTypeService = new CourseTypeService(this);
             settingsService = new SettingsService(this);
+            lpGalleryCategoryService = new LPGalleryCategoryService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -243,13 +246,15 @@ namespace Chalkable.BusinessLogic.Services.School
         public ICourseTypeService CourseTypeService { get { return courseTypeService; } }
         public IDbMaintenanceService DbMaintenanceService {get { return dbMaintenanceService; }}
         public ISettingsService SettingsService { get { return settingsService; } }
-
+        public ILPGalleryCategoryService LPGalleryCategoryService { get { return lpGalleryCategoryService; } }
 
         public IDbService SchoolDbService
         {
             get { return schoolDbService; }
             protected set { schoolDbService = value; }
         }
+
+
 
 
 

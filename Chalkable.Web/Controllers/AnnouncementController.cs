@@ -24,6 +24,20 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
+        public ActionResult CreateLessonPlan(int? classId)
+        {
+            if (!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+            throw new NotImplementedException();
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult SaveToGallery(int category)
+        {
+            throw new NotImplementedException();
+        }
+
+        [AuthorizationFilter("Teacher")]
         public ActionResult Create(int? classAnnouncementTypeId, int? classId, DateTime? expiresDate)
         {
             //TODO : need to refactor all announcemnt cerate , edit logic later))

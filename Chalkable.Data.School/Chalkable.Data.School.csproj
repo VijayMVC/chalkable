@@ -128,7 +128,7 @@
     <Compile Include="Model\ContactRelationship.cs" />
     <Compile Include="Model\CourseType.cs" />
     <Compile Include="Model\Date.cs" />
-    <Compile Include="Model\LassonPlanCategory.cs" />
+    <Compile Include="Model\LPGalleryCategory.cs" />
     <Compile Include="Model\SystemSetting.cs" />
     <Compile Include="Model\GradedItem.cs" />
     <Compile Include="Model\GradingComment.cs" />

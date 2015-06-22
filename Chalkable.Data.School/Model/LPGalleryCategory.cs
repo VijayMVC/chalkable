@@ -2,10 +2,12 @@
 
 namespace Chalkable.Data.School.Model
 {
-    public class LassonPlanCategory
+    public class LPGalleryCategory
     {
         [PrimaryKeyFieldAttr]
+        [IdentityFieldAttr]
         public int Id { get; set; }
         public string Name { get; set; }
+        public int OwnerRef { get; set; }
     }
 }

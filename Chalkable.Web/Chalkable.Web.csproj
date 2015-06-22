@@ -204,6 +204,7 @@
     <Compile Include="Controllers\GradingController.cs" />
     <Compile Include="Controllers\GradingPeriodController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
+    <Compile Include="Controllers\LPGalleryCategoryController.cs" />
     <Compile Include="Controllers\NotificationController.cs" />
     <Compile Include="Controllers\PeriodController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -309,6 +310,7 @@
     <Compile Include="Models\GradingScaleViewData.cs" />
     <Compile Include="Models\GroupsViewData\GroupExplorerViewData.cs" />
     <Compile Include="Models\GroupsViewData\GroupViewData.cs" />
+    <Compile Include="Models\LPGalleryCategoryViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentAppsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentContactViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentExplorerViewData.cs" />
