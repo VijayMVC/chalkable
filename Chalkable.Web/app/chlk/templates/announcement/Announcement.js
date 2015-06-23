@@ -67,9 +67,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'applicationsIds',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'attachmentsCount',
-
-            [ria.templates.ModelPropertyBind],
             Number, 'attachmentsSummary',
 
             [ria.templates.ModelPropertyBind],
@@ -179,12 +176,6 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             [ria.templates.ModelPropertyBind],
             Number, 'studentsCount',
-
-            [ria.templates.ModelPropertyBind],
-            Number, 'studentsWithAttachmentsCount',
-
-            [ria.templates.ModelPropertyBind],
-            Number, 'studentsWithoutAttachmentsCount',
 
             [ria.templates.ModelPropertyBind],
             String, 'subject',

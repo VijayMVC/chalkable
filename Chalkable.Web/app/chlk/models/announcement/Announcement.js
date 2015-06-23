@@ -44,8 +44,6 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.classId = SJX.fromValue(Number(raw.classid), chlk.models.id.ClassId);
                 this.applicationName = SJX.fromValue(raw.applicationname, String);
                 this.applicationsCount = SJX.fromValue(raw.applicationscount, Number);
-                this.attachmentsCount = SJX.fromValue(raw.attachmentscount, Number);
-                this.attachmentsSummary = SJX.fromValue(raw.attachmentsummary, Number);
                 this.autoGradeApps = SJX.fromArrayOfValues(raw.autogradeapps, Object);
                 this.avgNumeric = SJX.fromValue(raw.avgnumeric, Number);
                 this.clazz = raw['class'] || null;
@@ -70,8 +68,6 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.studentAnnouncementId = SJX.fromValue(raw.studentannouncementid, chlk.models.id.StudentAnnouncementId);
                 this.studentAnnouncements = SJX.fromDeserializable(raw.studentannouncements, chlk.models.announcement.StudentAnnouncements);
                 this.studentsCount = SJX.fromValue(raw.studentscount, Number);
-                this.studentsWithAttachmentsCount = SJX.fromValue(raw.studentscountwithoutattachments, Number);
-                this.studentsWithoutAttachmentsCount = SJX.fromValue(raw.studentscountwithoutattachments, Number);
                 this.announcementQnAs = SJX.fromArrayOfDeserializables(raw.announcementqnas, chlk.models.announcement.AnnouncementQnA);
                 this.weightMultiplier = SJX.fromValue(raw.weightmultiplier, Number);
                 this.weightAddition = SJX.fromValue(raw.weightaddition, Number);
@@ -148,7 +144,6 @@ NAMESPACE('chlk.models.announcement', function () {
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
             String, 'applicationName',
             Number, 'applicationsCount',
-            Number, 'attachmentsCount',
             Number, 'attachmentsSummary',
             Array, 'autoGradeApps',
             Number ,'avgNumeric',
@@ -162,7 +157,6 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'gradingStudentsCount',
             Number, 'gradingStyle',
             Number, 'nonGradingStudentsCount',
-            Number, 'ownerAttachmentsCount',
             Number, 'qnaCount',
             chlk.models.id.ClassId, 'recipientId',
             String, 'schoolPersonGender',
@@ -178,8 +172,6 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.id.StudentAnnouncementId, 'studentAnnouncementId',
             chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',
             Number, 'studentsCount',
-            Number, 'studentsWithAttachmentsCount',
-            Number, 'studentsWithoutAttachmentsCount',
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
             Number, 'weightMultiplier',
             Number, 'weightAddition',

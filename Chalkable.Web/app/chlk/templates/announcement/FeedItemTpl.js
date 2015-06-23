@@ -57,9 +57,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'applicationName',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'studentsCount',
-
-            [ria.templates.ModelPropertyBind],
-            Number, 'studentsWithAttachmentsCount'
+            Number, 'studentsCount'
         ]);
 });

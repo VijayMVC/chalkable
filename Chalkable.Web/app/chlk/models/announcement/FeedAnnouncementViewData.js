@@ -39,9 +39,6 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('studentscount')],
             Number, 'studentsCount',
 
-            [ria.serialize.SerializeProperty('studentscountwithattachments')],
-            Number, 'studentsWithAttachmentsCount',
-
             VOID, function setAnnouncementTypeId(announcementTypeId){
                 this.announcementTypeId = announcementTypeId;
                 if(!announcementTypeId)
