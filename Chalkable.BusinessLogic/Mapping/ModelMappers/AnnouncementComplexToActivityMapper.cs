@@ -33,23 +33,27 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             {
                 if (annDetails.AnnouncementAttachments != null && annDetails.AnnouncementAttachments.Count > 0)
                 {
-                    if (activity.Attachments == null)
-                        activity.Attachments = new List<ActivityAttachment>();
-                    var newAtts = new List<ActivityAttachment>();
+                    if (activity.Attributes == null)
+                        activity.Attributes = new List<ActivityAttribute>();
+                    var newAtts = new List<ActivityAttribute>();
                     foreach (var annAtt in annDetails.AnnouncementAttachments)
                     {
                         if (annAtt.SisAttachmentId.HasValue)
                         {
-                            var att = activity.Attachments.FirstOrDefault(x => x.AttachmentId == annAtt.SisAttachmentId);
+                            var att = activity.Attributes.FirstOrDefault(x => x.Attachment != null && x.Attachment.AttachmentId == annAtt.SisAttachmentId);
                             if (att == null)
                             {
-                                att = new ActivityAttachment { ActivityId = activity.Id };
+                                att = new ActivityAttribute
+                                    {
+                                        ActivityId = activity.Id,
+                                        Attachment = new StiAttachment()
+                                    };
                                 newAtts.Add(att);
                             }
-                            MapperFactory.GetMapper<ActivityAttachment, AnnouncementAttachment>().Map(att, annAtt);
+                            MapperFactory.GetMapper<StiAttachment, AnnouncementAttachment>().Map(att.Attachment, annAtt);
                         }
                     }
-                    activity.Attachments = activity.Attachments.Concat(newAtts);
+                    activity.Attributes = activity.Attributes.Concat(newAtts);
                 }
                 if (annDetails.AnnouncementStandards != null && annDetails.AnnouncementStandards.Count > 0)
                 {
