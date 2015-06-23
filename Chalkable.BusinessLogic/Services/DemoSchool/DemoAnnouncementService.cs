@@ -55,10 +55,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 activity.Id = GetNextFreeId();
                 activity.SectionId = classId;
 
-                if (activity.Attachments == null)
-                    activity.Attachments = new List<ActivityAttachment>();
+                if (activity.Attributes == null)
+                    activity.Attributes = new List<ActivityAttribute>();
 
-                foreach (var attachment in activity.Attachments)
+                foreach (var attachment in activity.Attributes)
                 {
                     attachment.ActivityId = activity.Id;
                 }
