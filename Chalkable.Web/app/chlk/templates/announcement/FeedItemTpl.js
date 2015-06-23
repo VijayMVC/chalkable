@@ -54,9 +54,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.common.ChlkDate, 'expiresDate',
 
             [ria.templates.ModelPropertyBind],
-            String, 'applicationName',
-
-            [ria.templates.ModelPropertyBind],
-            Number, 'studentsCount'
+            String, 'applicationName'
         ]);
 });

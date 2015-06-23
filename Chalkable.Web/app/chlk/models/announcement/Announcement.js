@@ -50,12 +50,9 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.className = SJX.fromValue(raw.fullclassname, String);
                 this.announcementAttachments = SJX.fromArrayOfDeserializables(raw.announcementattachments, chlk.models.attachment.Attachment);
                 this.departmentId = SJX.fromValue(raw.departmentid, chlk.models.id.DepartmentId);
-                this.gradesSummary = SJX.fromValue(raw.gradesummary, Number);
                 this.gradingStudentsCount = SJX.fromValue(raw.gradingstudentscount, Number);
                 this.gradingStyle = SJX.fromValue(raw.gradingstyle, Number);
-                this.nonGradingStudentsCount = SJX.fromValue(raw.nongradingstudentscount, Number);
                 this.ownerAttachmentsCount = SJX.fromValue(raw.ownerattachmentscount, Number);
-                this.qnaCount = SJX.fromValue(raw.qnacount, Number);
                 this.recipientId = SJX.fromValue(raw.recipientid, chlk.models.id.ClassId);
                 this.schoolPersonGender = SJX.fromValue(raw.schoolpersongender, String);
                 this.schoolPersonName = SJX.fromValue(raw.schoolpersonname, String);
@@ -67,14 +64,12 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.stateTyped = SJX.fromValue(raw.statetyped, Number);
                 this.studentAnnouncementId = SJX.fromValue(raw.studentannouncementid, chlk.models.id.StudentAnnouncementId);
                 this.studentAnnouncements = SJX.fromDeserializable(raw.studentannouncements, chlk.models.announcement.StudentAnnouncements);
-                this.studentsCount = SJX.fromValue(raw.studentscount, Number);
                 this.announcementQnAs = SJX.fromArrayOfDeserializables(raw.announcementqnas, chlk.models.announcement.AnnouncementQnA);
                 this.weightMultiplier = SJX.fromValue(raw.weightmultiplier, Number);
                 this.weightAddition = SJX.fromValue(raw.weightaddition, Number);
                 this.hiddenFromStudents = SJX.fromValue(raw.hidefromstudents, Boolean);
                 this.ableToExempt = SJX.fromValue(raw.maybeexempt, Boolean);
                 this.systemType = SJX.fromValue(raw.systemtype, Number);
-                this.wasAnnouncementTypeGraded = SJX.fromValue(raw.wasannouncementtypegraded, Boolean);
                 this.wasSubmittedToAdmin = SJX.fromValue(raw.wassubmittedtoadmin, Boolean);
                 this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
                 this.chalkableAnnouncementType = SJX.fromValue(raw.chalkableannouncementtypeid, Number);
@@ -156,8 +151,6 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'gradesSummary',
             Number, 'gradingStudentsCount',
             Number, 'gradingStyle',
-            Number, 'nonGradingStudentsCount',
-            Number, 'qnaCount',
             chlk.models.id.ClassId, 'recipientId',
             String, 'schoolPersonGender',
             String, 'schoolPersonName',
@@ -171,14 +164,13 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'stateTyped',
             chlk.models.id.StudentAnnouncementId, 'studentAnnouncementId',
             chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',
-            Number, 'studentsCount',
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
             Number, 'weightMultiplier',
+            Number, 'ownerAttachmentsCount',
             Number, 'weightAddition',
             Boolean, 'hiddenFromStudents',
             Boolean, 'ableToExempt',
             Number, 'systemType',
-            Boolean, 'wasAnnouncementTypeGraded',
             Boolean, 'wasSubmittedToAdmin',
             chlk.models.id.ClassId, 'classId',
 

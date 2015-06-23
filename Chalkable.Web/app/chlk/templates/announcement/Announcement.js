@@ -124,9 +124,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'ableEdit',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'nonGradingStudentsCount',
-
-            [ria.templates.ModelPropertyBind],
             Number, 'order',
 
             [ria.templates.ModelPropertyBind],
@@ -134,9 +131,6 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             [ria.templates.ModelPropertyBind],
             Number, 'ownerAttachmentsCount',
-
-            [ria.templates.ModelPropertyBind],
-            Number, 'qnaCount',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassId, 'recipientId',
@@ -175,9 +169,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'studentsCount',
-
-            [ria.templates.ModelPropertyBind],
             String, 'subject',
 
             [ria.templates.ModelPropertyBind],
@@ -185,9 +176,6 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             [ria.templates.ModelPropertyBind],
             String, 'title',
-
-            [ria.templates.ModelPropertyBind],
-            Boolean, 'wasAnnouncementTypeGraded',
 
             [ria.templates.ModelPropertyBind],
             String, 'submitType',
