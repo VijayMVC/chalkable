@@ -67,16 +67,10 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'applicationsIds',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'attachmentsSummary',
-
-            [ria.templates.ModelPropertyBind],
             Array, 'autoGradeApps',
 
             [ria.templates.ModelPropertyBind],
             Number, 'avg',
-
-            [ria.templates.ModelPropertyBind],
-            Number ,'avgNumeric',
 
             [ria.templates.ModelPropertyBind],
             Object, 'clazz',
@@ -107,9 +101,6 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             [ria.templates.ModelPropertyBind],
             Number, 'grade',
-
-            [ria.templates.ModelPropertyBind],
-            Number, 'gradesSummary',
 
             [ria.templates.ModelPropertyBind],
             Number, 'gradingStudentsCount',

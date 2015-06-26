@@ -1,20 +1,24 @@
 mixin AnnouncementTypeToolBar(types, announcement, typeId)
     if types.length > 8
-        SPAN.type-text #{Msg.Type}:&nbsp;
-        +Select('typeid')#type-select
-            each item in types
-                +Option(item.getId(), item.getName(), typeId==item.getId())(
-                    data-typeid=item.getId(),
-                    data-typename=item.getName()
-                )
-        BUTTON(
-            type = announcement && announcement.getState() ? "button" : "submit",
-            name="submitType",
-            value="save"
-        )#announcement-type-btn.validate-skip.x-hidden
+        .action-bar
+            .items
+                +ActionLink('announcement', 'lessonPlan').item.announcement-type-button Lesson Plan
+                SPAN.type-text #{Msg.Type}:&nbsp;
+                +Select('typeid')#type-select
+                    each item in types
+                        +Option(item.getId(), item.getName(), typeId==item.getId())(
+                            data-typeid=item.getId(),
+                            data-typename=item.getName()
+                        )
+                BUTTON(
+                    type = announcement && announcement.getState() ? "button" : "submit",
+                    name="submitType",
+                    value="save"
+                )#announcement-type-btn.validate-skip.x-hidden
     else
         .action-bar
             .items
+                +ActionLink('announcement', 'lessonPlan').item.announcement-type-button Lesson Plan
                 each item in types
                     a.item.announcement-type-button(
                         class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
@@ -38,7 +42,7 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
     if announcement && announcement.getClassId()
         h2.page-title= announcement.getClassName()
         .loader
-        +ActionForm('announcement', state ? 'save' : 'saveOnCreate')(onlySubmitValidate=true).no-working
+        +ActionForm('announcement', 'save')(onlySubmitValidate=true).no-working
             +ClassesToolBar(topData, null, null, null, announcement.getState())(pressAfterClick=!announcement.getState())
             .not-transparent(class=(classId ? '' : 'x-hidden'))
                 +AnnouncementTypeToolBar(types, announcement, typeId)

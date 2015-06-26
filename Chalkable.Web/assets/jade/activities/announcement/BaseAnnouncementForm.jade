@@ -1,11 +1,11 @@
 //TODO refactor
 mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientId, adminRecipients, userRole, classScheduleDateRanges)
+    +Hidden('lessonPlan', false)
     +Hidden('id', announcement.getId().valueOf())
     +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())#announcement-type-id
     +Hidden('statetyped', announcement.getStateTyped())
     +Hidden('systemtype', announcement.getSystemType())
     +Hidden('personid', announcement.getPersonId().valueOf())
-    +Hidden('gradingstyle', announcement.getGradingStyle())
     +Hidden('markingperiodid', announcement.getCreated())
     +Hidden('state', announcement.getState())
     +Hidden('isedit', !!announcement.getState())(data-isedit = !!announcement.getState()).is-edit

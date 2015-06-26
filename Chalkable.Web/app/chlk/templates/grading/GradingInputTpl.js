@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.grading', function () {
         'GradingInputTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             Boolean, 'ableDropStudentScore',
 
-            Boolean, 'ableExemptStudentScore',
+            Boolean, 'ableToExempt',
 
             Boolean, 'notAblePutScore',
 
