@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             {
                 var annC = ann as AnnouncementComplex;
                 annC.ClassAnnouncementTypeName = activity.CategoryName;
-                annC.AttachmentsCount = activity.Attachments != null ? activity.Attachments.Count() : 0;
+                annC.AttachmentsCount = activity.Attributes != null ? activity.Attributes.Count(x => x.Attachment != null) : 0;
                 //annC.Starred = activity.Starred;
             }
             if (ann is AnnouncementDetails)
@@ -36,25 +36,26 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                 if (annDetails.AnnouncementAttachments == null)
                     annDetails.AnnouncementAttachments = new List<AnnouncementAttachment>();
 
+                var activityAtts = activity.Attributes != null ? activity.Attributes.Where(x => x.Attachment != null).ToList() : new List<ActivityAttribute>();
                 annDetails.AnnouncementAttachments = annDetails.AnnouncementAttachments
                                     .Where(x => !x.SisAttachmentId.HasValue
-                                              || (activity.Attachments != null && activity.Attachments.Any(att => att.AttachmentId == x.SisAttachmentId)))
+                                              || (activityAtts.Any(att => att.Attachment.AttachmentId == x.SisAttachmentId)))
                                     .ToList();
-                if (activity.Attachments != null && activity.Attachments.Any())
+                if (activityAtts.Any())
                 {
-                    foreach (var att in activity.Attachments)
+                    foreach (var att in activityAtts)
                     {
-                        var annAtt = annDetails.AnnouncementAttachments.FirstOrDefault(x => x.SisAttachmentId == att.AttachmentId);
+                        var annAtt = annDetails.AnnouncementAttachments.FirstOrDefault(x => x.SisAttachmentId == att.Attachment.AttachmentId);
                         if (annAtt == null)
                         {
                             annAtt = new AnnouncementAttachment
                             {
                                 AnnouncementRef = annDetails.Id,
-                                SisAttachmentId = att.AttachmentId
+                                SisAttachmentId = att.Attachment.AttachmentId
                             };
                             annDetails.AnnouncementAttachments.Add(annAtt);
                         }
-                        MapperFactory.GetMapper<AnnouncementAttachment, ActivityAttachment>().Map(annAtt, att);
+                        MapperFactory.GetMapper<AnnouncementAttachment, ActivityAttribute>().Map(annAtt, att);
                     }
                 }
                 if (annDetails.AnnouncementStandards == null)

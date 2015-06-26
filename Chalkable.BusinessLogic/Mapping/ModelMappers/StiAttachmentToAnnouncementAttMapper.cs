@@ -1,23 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.Data.School.Model;
+﻿using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Mapping.ModelMappers
 {
-    public class StiAttachmentToAnnouncementAttMapper : BaseMapper<AnnouncementAttachment, StiAttachment>
+    public class StiAttachmentToAnnouncementAttMapper : BaseMapper<AnnouncementAttachment, ActivityAttribute>
     {
-        protected override void InnerMap(AnnouncementAttachment announcementAtt, StiAttachment activityAtt)
+        protected override void InnerMap(AnnouncementAttachment announcementAtt, ActivityAttribute activityAtt)
         {
-            announcementAtt.Name = activityAtt.Name;
-            announcementAtt.SisAttachmentId = activityAtt.AttachmentId;
-            if (activityAtt.CrocoDocId.HasValue)
-                announcementAtt.Uuid = activityAtt.CrocoDocId.Value.ToString();
-            if (activityAtt is ActivityAttachment)
-                announcementAtt.SisActivityId = (activityAtt as ActivityAttachment).ActivityId;
+            if (activityAtt.Attachment != null)
+            {
+                var att = activityAtt.Attachment;
+                announcementAtt.Name = att.Name;
+                announcementAtt.SisAttachmentId = att.AttachmentId;
+                if (att.CrocoDocId.HasValue)
+                    announcementAtt.Uuid = att.CrocoDocId.Value.ToString();
+                announcementAtt.SisActivityId = activityAtt.ActivityId;
+            }
         }
     }
 }
