@@ -58,7 +58,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.standardsIds = SJX.fromArrayOfValues(raw.standardsids, String);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.CommonCoreStandard);
                 this.platforms = SJX.fromArrayOfDeserializables(raw.platforms, chlk.models.apps.AppPlatform);
-                this.banInfo = SJX.fromDeserializable(raw.baninfo, chlk.models.apps.BannedAppData);
+                this.banInfo = SJX.fromDeserializable(raw.baninfo || raw.banInfo, chlk.models.apps.BannedAppData);
                 this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.apps.AppCategory);
                 this.internalScore = SJX.fromValue(raw.internalscore, Number);
                 this.internalDescription = SJX.fromValue(raw.internaldescription, String);

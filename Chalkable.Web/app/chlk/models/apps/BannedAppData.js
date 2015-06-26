@@ -11,8 +11,8 @@ NAMESPACE('chlk.models.apps', function () {
         FINAL, UNSAFE, 'BannedAppData',IMPLEMENTS(ria.serialize.IDeserializable),  [
             VOID, function deserialize(raw){
                 this.bannedBy = SJX.fromDeserializable(raw.bannedby, chlk.models.common.Role);
-                this.banned = SJX.fromValue(data.banned, Boolean);
-                this.unbannable = SJX.fromValue(data.unbannable, Boolean);
+                this.banned = SJX.fromValue(raw.banned, Boolean);
+                this.unbannable = SJX.fromValue(raw.unbannable, Boolean);
             },
 
             chlk.models.common.Role, 'bannedBy',

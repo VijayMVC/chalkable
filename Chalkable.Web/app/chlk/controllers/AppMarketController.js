@@ -544,7 +544,8 @@ NAMESPACE('chlk.controllers', function (){
                 .banApp(appId)
                 .attach(this.validateResponse_())
                 .then(function(res){
-                  return res;
+                    console.info(res);
+                    return res;
                 });
             return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result, 'banApp');
         },
