@@ -1,13 +1,13 @@
 REQUIRE('chlk.activities.lib.TemplateDialog');
-REQUIRE('chlk.templates.apps.AttachAppDialog');
+REQUIRE('chlk.templates.apps.AttachDialogTpl');
 
 NAMESPACE('chlk.activities.apps', function () {
 
-    /** @class chlk.activities.apps.AttachAppDialog*/
+    /** @class chlk.activities.apps.AttachDialog*/
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
-        [ria.mvc.TemplateBind(chlk.templates.apps.AttachAppDialog)],
-        'AttachAppDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
+        [ria.mvc.TemplateBind(chlk.templates.apps.AttachDialogTpl)],
+        'AttachDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
             [ria.mvc.DomEventBind('click', '.app-icon-link')],
             [[ria.dom.Dom, ria.dom.Event]],

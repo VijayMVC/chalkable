@@ -70,19 +70,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
                 };
                 IList<AnnouncementAttachment> atts;
-                if (CoreRoles.TEACHER_ROLE == Context.Role)
-                {
-                    var stiAtts = ConnectorLocator.AttachmentConnector.UploadAttachment(name, content).ToList();
-                    var lastStiAtts = stiAtts.Last();
-                    if(!string.IsNullOrEmpty(uuid))
-                        lastStiAtts.CrocoDocId = Guid.Parse(uuid);
-                    if (ann.SisActivityId.HasValue)
-                    {
-                        var activityAtt = ActivityAttachment.Create(ann.SisActivityId.Value, lastStiAtts, null);
-                        ConnectorLocator.ActivityAttachmentsConnector.CreateActivityAttachments(ann.SisActivityId.Value, activityAtt);
-                    }
-                    annAtt.SisAttachmentId = lastStiAtts.AttachmentId;
-                }
                 var da = new AnnouncementAttachmentDataAccess(uow);
                 da.Insert(annAtt);
                 uow.Commit();

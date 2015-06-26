@@ -52,9 +52,6 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
                                     userRole = userRole
                                     studyCenterEnabled = self.isStudyCenterEnabled()
                                     ableToRemoveStandard=announcement.isAbleToRemoveStandard())
-                            if announcement.isCanAddStandard()
-                                .title=standards.length > 0 ? Msg.Click_to_add_more : Msg.Click_to_add_standard
-                                +ActionLink('announcement', announcement.getState() ? 'showStandards' : 'showStandardsOnCreate', announcement.getAnnouncementTypeName(), announcement.getId(), classId).add-standards-btn.x-hidden
                 if !isAdmin
                     .drawer-icon
             if !isAdmin

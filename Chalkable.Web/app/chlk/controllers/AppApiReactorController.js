@@ -1,7 +1,7 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ApplicationService');
 REQUIRE('chlk.models.common.Button');
-REQUIRE('chlk.activities.apps.AttachAppDialog');
+REQUIRE('chlk.activities.apps.AttachDialog');
 
 
 NAMESPACE('chlk.controllers', function (){
@@ -77,7 +77,7 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(result){
                         this.BackgroundCloseView(chlk.activities.apps.AppWrapperDialog);
-                        this.BackgroundCloseView(chlk.activities.apps.AttachAppDialog);
+                        this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
                         return this.Redirect('announcement', 'addAppAttachment', [result]);
                     }, this);
             },

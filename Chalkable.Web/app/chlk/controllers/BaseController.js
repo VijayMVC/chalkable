@@ -353,6 +353,11 @@ NAMESPACE('chlk.controllers', function (){
                return method;
            },
 
+           Boolean, function isStudyCenterEnabled(){
+               var isStudyCenterEnabled = this.getContext().getSession().get(ChlkSessionConstants.STUDY_CENTER_ENABLED);
+               return isStudyCenterEnabled;
+           },
+
            OVERRIDE, ria.serialize.ISerializer, function initSerializer_(){
                return new chlk.lib.serialize.ChlkJsonSerializer();
            },

@@ -56,3 +56,17 @@ mixin ActionButton(controller, action)
     -attributes['data-link'] = link
     BUTTON.action-button(attributes)
         block
+
+
+
+mixin ActionButtonWithPrepend(controller, action, prependParams)
+    -VALIDATE_ARG('controller', [String], controller)
+    -VALIDATE_ARG('action', [String], action)
+    -VALIDATE_ARG('prependParams', [Array], prependParams)
+    args = ria.__API.clone(arguments)
+    - [].splice.apply(args, [2, 1].concat(prependParams || []))
+    link = self.getLink(args)
+    -attributes.href=attributes.href || self.getHref(ria.__API.clone(arguments))
+    -attributes['data-link'] = link
+    BUTTON.action-button(attributes)
+        block
