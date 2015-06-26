@@ -3,7 +3,6 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
     +Hidden('lessonPlan', false)
     +Hidden('id', announcement.getId().valueOf())
     +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())#announcement-type-id
-    +Hidden('statetyped', announcement.getStateTyped())
     +Hidden('systemtype', announcement.getSystemType())
     +Hidden('personid', announcement.getPersonId().valueOf())
     +Hidden('markingperiodid', announcement.getCreated())

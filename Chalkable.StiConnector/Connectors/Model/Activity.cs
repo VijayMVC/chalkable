@@ -5,7 +5,10 @@ namespace Chalkable.StiConnector.Connectors.Model
 {
     public class Activity
     {
-        public IEnumerable<ActivityAttachment> Attachments { get; set; }
+        /// <summary>
+        /// A list of attributes that are associated with the activity
+        /// </summary>
+        public IEnumerable<ActivityAttribute> Attributes { get; set; }
         public IEnumerable<ActivityStandard> Standards { get; set; }
         public int? CategoryId { get; set; }
         public string CategoryName { get; set; }

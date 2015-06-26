@@ -50,7 +50,6 @@ REQUIRE('chlk.models.schoolYear.Year');
 REQUIRE('chlk.models.attendance.AttendanceReason');
 REQUIRE('chlk.models.id.SchoolYearId');
 REQUIRE('chlk.models.people.Claim');
-REQUIRE('chlk.models.grading.Mapping');
 REQUIRE('chlk.models.grading.AlternateScore');
 REQUIRE('chlk.models.grading.AlphaGrade');
 REQUIRE('chlk.models.schoolYear.GradingPeriod');

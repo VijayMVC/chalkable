@@ -39,7 +39,6 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.groupIds = SJX.fromValue(raw.groupIds, String);
 
                 /*
-                this.recipientId = SJX.fromValue(raw.recipientid, chlk.models.id.ClassId);
                 this.stateTyped = SJX.fromValue(raw.statetyped, Number);
                 this.systemType = SJX.fromValue(raw.systemtype, Number);
                 this.wasSubmittedToAdmin = SJX.fromValue(raw.wassubmittedtoadmin, Boolean);
@@ -89,7 +88,6 @@ NAMESPACE('chlk.models.announcement', function () {
 
             String, 'groupIds',
             /*
-            chlk.models.id.ClassId, 'recipientId',
             Number, 'stateTyped',
             Number, 'systemType',
             Boolean, 'wasSubmittedToAdmin',

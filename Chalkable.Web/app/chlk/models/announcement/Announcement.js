@@ -63,5 +63,37 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'applicationName',
             Boolean, 'showGradingIcon',
             chlk.models.id.AppId, 'assessmentApplicationId'
-        ]);
-});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -7,12 +7,3 @@ div(class="announcement-popup-" + self.getId().valueOf())#chlk-pop-up-container.
         .grading-chart-container.small
             .separator.small-text #{Msg.Class_average}: ...
             .chart-loader
-        if self.isAnnOwner()
-            +ActionButton('grading', 'unDropFromPopup', self.getId())(
-                class=self.isDropped() ? "" : "x-hidden",
-                data-announcementId = self.getId().valueOf()
-            ).dropped.blue-button=Msg.Undrop
-            +ActionButton('grading', 'dropFromPopup', self.getId())(
-                class=self.isDropped() ? "x-hidden" : "",
-                data-announcementId = self.getId().valueOf()
-            ).negative-button=Msg.Drop

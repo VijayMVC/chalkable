@@ -22,9 +22,7 @@ REQUIRE('chlk.activities.setup.ClassroomOptionSetupPage');
 
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.User');
-REQUIRE('chlk.models.grading.Final');
 REQUIRE('chlk.models.settings.Preference');
-REQUIRE('chlk.models.grading.AnnouncementTypeFinal');
 REQUIRE('chlk.models.grading.GradingScale');
 
 NAMESPACE('chlk.controllers', function (){
@@ -116,68 +114,6 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.setup.StartPage, result);
             },
 
-            //TODO: refactor
-            [[chlk.models.grading.Final]],
-            function teacherSettingsEditAction(model){
-                var index = model.getNextClassNumber();
-                var submitType = model.getSubmitType();
-                var backToVideo = index == 1;
-                if(submitType == 'back'){
-                    var action = backToVideo ? 'video' : 'teacherSettings';
-                    var params = backToVideo ? [] : [index - 2];
-                    if(model.isChanged()){
-                        return this.ShowMsgBox('Are you sure you want to go?', null, [{
-                            text: Msg.OK,
-                            controller: 'setup',
-                            action: action,
-                            params: params,
-                            color: chlk.models.common.ButtonColor.RED.valueOf()
-                        }, {
-                            text: Msg.Cancel,
-                            color: chlk.models.common.ButtonColor.GREEN.valueOf()
-                        }], 'center'), null;
-                    }else{
-                        return this.Redirect('setup', action, params);
-                    }
-
-                }else{
-                    if(submitType == "message"){
-                        if(index > 1)
-                            this.ShowMsgBox('To make things easier we copy and\npaste your choices from the last page.\n\n'+
-                                    'Click any number to change it.', 'fyi.', [{
-                                text: Msg.GOT_IT.toUpperCase()
-                            }])
-                    }else{
-                        var finalGradeAnnouncementTypes = [], item, ids = model.getFinalGradeAnnouncementTypeIds().split(','),
-                            percents = model.getPercents().split(','),
-                            dropLowest = model.getDropLowest().split(','),
-                            gradingStyle = model.getGradingStyleByType().split(',');
-                        ids.forEach(function(id, i){
-                            item = {};
-                            item.finalGradeAnnouncementTypeId = id;
-                            item.percentValue = JSON.parse(percents[i]);
-                            item.dropLowest = JSON.parse(dropLowest[i]);
-                            item.gradingStyle =JSON.parse(gradingStyle[i]);
-                            finalGradeAnnouncementTypes.push(item)
-                        });
-
-                        var classes = this.classService.getClassesForTopBarSync();
-
-                        this.finalGradeService.update(model.getId(), model.getParticipation(), model.getAttendance(), model.getDropLowestAttendance(),
-                            model.getDiscipline(), model.getDropLowestDiscipline(), model.getGradingStyle(), finalGradeAnnouncementTypes, model.isNeedsTypesForClasses())
-                            .then(function(model){
-
-                                if(index < classes.length){
-                                    return this.BackgroundNavigate('setup', 'teacherSettings', [index]);
-                                }else{
-                                    return this.BackgroundNavigate('setup', 'start', []);
-                                }
-
-                            }.bind(this));
-                        return this.ShadeLoader();
-                    }
-                }
-            },
             //TODO: refactor
             [[chlk.models.people.User]],
             function infoEditAction(model){

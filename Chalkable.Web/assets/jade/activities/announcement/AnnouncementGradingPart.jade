@@ -5,8 +5,6 @@ mixin AppAttachmentBlock_(item, pictureHref)
         block
 
 studentAnnouncements = self.getItems()
-gradingStyle = self.getGradingStyle()
-getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value, gradingMapping, gradingStyle)}
 
 .silver-panel.student-announcements-top-panel
     +RenderWith(self.getModel(), chlk.templates.announcement.StudentAnnouncementsTpl)(LEIntegrated = self.isLEIntegrated(), classId = self.getClassId())
@@ -18,7 +16,6 @@ getGradeNumber = function(value){return GradingStyler.getGradeNumberValue(value,
         ablePutOnlyZero = !self.getSchoolOptions().isAllowScoreEntryForUnexcused() && item.isUnExcusedAbsent()
         .row(class=(item.getState() == 0 ? 'z-0' : 'z-10') + (self.isGradable() && !readonly ? '' : ' readonly') + (item.needStrikeThrough() ? ' dropped-value' : ''), index=i).fixed-bg
             +Hidden('readonly', readonly)
-            +Hidden('gradingStyle', gradingStyle)
             .top-content(id = "top-content-" + item.getStudentInfo().getId().valueOf())
                 value = item.getGradeValue()
                 lbl = 'A - F'

@@ -11,9 +11,6 @@ NAMESPACE('chlk.models.grading', function () {
             [ria.serialize.SerializeProperty('announcementid')],
             chlk.models.id.AnnouncementId, 'announcementId',
 
-            [ria.serialize.SerializeProperty('gradingstyle')],
-            Number, 'gradingStyle',
-
             [ria.serialize.SerializeProperty('graphpoints')],
             ArrayOf(chlk.models.grading.GraphPoint), 'graphPoints',
 

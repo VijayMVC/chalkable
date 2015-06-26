@@ -32,13 +32,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'gradedStudentCount',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'gradingStyle',
-
-            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.announcement.StudentAnnouncement), 'items',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.grading.Mapping, 'mapping',
 
             [ria.templates.ModelPropertyBind],
             Number, 'selectedIndex',
@@ -67,13 +61,6 @@ NAMESPACE('chlk.templates.announcement', function () {
                 var res = Math.ceil(100 * this.getGradedStudentCount() / this.getItems().length) + '%';
                 return res;
             },
-
-            Object, function getGrade(value){
-                var gradingMapping = this.getMapping();
-                var gradingStyle = this.getGradingStyle();
-                return GradingStyler.getLetterByGrade(value, gradingMapping, gradingStyle)
-            },
-
 
             [[Number]],
             String, function getClassAvg(count_){

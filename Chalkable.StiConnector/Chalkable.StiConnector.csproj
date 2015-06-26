@@ -115,6 +115,7 @@
     <Compile Include="Connectors\LinkConnector.cs" />
     <Compile Include="Connectors\Model\Activity.cs" />
     <Compile Include="Connectors\Model\ActivityAttachment.cs" />
+    <Compile Include="Connectors\Model\ActivityAttribute.cs" />
     <Compile Include="Connectors\Model\ActivityCategory.cs" />
     <Compile Include="Connectors\Model\ActivityStandard.cs" />
     <Compile Include="Connectors\Model\Attendances\DailySectionAbsenceSummary.cs" />

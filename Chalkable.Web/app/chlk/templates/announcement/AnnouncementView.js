@@ -25,9 +25,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
 
-            Number, function getStudentAnnGradingStyle(){return this.getStudentAnnouncements().getGradingStyle();},
-            chlk.models.grading.Mapping, function getMapping(){return this.getStudentAnnouncements().getMapping()},
-
             Boolean, function isStudentGraded(){
                 var grade = this.getGrade();
                 return this.isDropped() || this.isExempt() || grade >= 0;

@@ -424,20 +424,6 @@ NAMESPACE('chlk.controllers', function (){
 
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.AnnouncementId]],
-            function unDropFromPopupAction(announcementId){
-                var result = this.announcementService.unDropAnnouncement(announcementId);
-                return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
-            },
-
-            [chlk.controllers.SidebarButton('statistic')],
-            [[chlk.models.id.AnnouncementId]],
-            function dropFromPopupAction(announcementId){
-                var result = this.announcementService.dropAnnouncement(announcementId);
-                return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
-            },
-
-            [chlk.controllers.SidebarButton('statistic')],
-            [[chlk.models.id.AnnouncementId]],
             function showChartAction(announcementId){
                 var result = this.gradingService.getItemGradingStat(announcementId)
                     .then(function(model){
@@ -475,41 +461,6 @@ NAMESPACE('chlk.controllers', function (){
                 if(finalGrades_)
                     return this.UpdateView(this.getView().getCurrent().getClass(), res, chlk.activities.lib.DontShowLoader());
                 return null;
-            },
-
-            [chlk.controllers.SidebarButton('statistic')],
-            [[chlk.models.grading.Final]],
-            function teacherSettingsEditAction(model){
-                var finalGradeAnnouncementTypes = [], item,
-                    ids = model.getFinalGradeAnnouncementTypeIds().split(','),
-                    percents = model.getPercents().split(','),
-                    dropLowest = model.getDropLowest().split(','),
-                    gradingStyle = model.getGradingStyleByType().split(',');
-                ids.forEach(function(id, i){
-                    item = {};
-                    item.finalGradeAnnouncementTypeId = id;
-                    item.percentValue = JSON.parse(percents[i]);
-                    item.dropLowest = JSON.parse(dropLowest[i]);
-                    item.gradingStyle =JSON.parse(gradingStyle[i]);
-                    finalGradeAnnouncementTypes.push(item)
-                });
-
-                return this.finalGradeService
-                    .update(
-                        model.getId(),
-                        model.getParticipation(),
-                        model.getAttendance(),
-                        model.getDropLowestAttendance(),
-                        model.getDiscipline(),
-                        model.getDropLowestDiscipline(),
-                        model.getGradingStyle(),
-                        finalGradeAnnouncementTypes,
-                        model.isNeedsTypesForClasses()
-                    )
-                    .attach(this.validateResponse_())
-                    .then(function(model){
-                        return this.BackgroundNavigate('grading', 'teacherSettings', []);
-                    }, this);
             },
 
             [chlk.controllers.SidebarButton('statistic')],

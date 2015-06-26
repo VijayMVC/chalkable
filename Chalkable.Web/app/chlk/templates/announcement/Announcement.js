@@ -105,8 +105,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             Number, 'gradingStudentsCount',
 
-            [ria.templates.ModelPropertyBind],
-            Number, 'gradingStyle',
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'annOwner',
@@ -160,7 +158,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',
 
             [ria.templates.ModelPropertyBind],
-            String, 'subject',
 
             [ria.templates.ModelPropertyBind],
             Number, 'systemType',

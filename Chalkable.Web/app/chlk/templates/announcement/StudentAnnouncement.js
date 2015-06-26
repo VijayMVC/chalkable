@@ -44,12 +44,6 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             Boolean, 'readonly',
 
-            Array, 'applicationsInGradeView',
-
-            Number, 'gradingStyle',
-
-            chlk.models.grading.Mapping, 'gradingMapping',
-
             [ria.templates.ModelPropertyBind],
             Boolean, 'late',
 

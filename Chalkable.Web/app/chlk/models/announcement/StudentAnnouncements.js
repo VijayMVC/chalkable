@@ -1,7 +1,6 @@
 REQUIRE('ria.serialize.SJX');
 REQUIRE('ria.serialize.IDeserializable');
 REQUIRE('chlk.models.classes.Class');
-REQUIRE('chlk.models.grading.Mapping');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.id.CourseId');
 REQUIRE('chlk.models.announcement.BaseStudentAnnouncementsViewData');
@@ -26,9 +25,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.className = SJX.fromValue(raw.classname, String);
                 this.courseId = SJX.fromValue(raw.courseid, chlk.models.id.CourseId);
                 this.gradedStudentCount = SJX.fromValue(raw.gradedstudentcount, Number);
-                this.gradingStyle = SJX.fromValue(raw.gradingstyle, Number);
                 this.items = SJX.fromArrayOfDeserializables(raw.items, chlk.models.announcement.StudentAnnouncement);
-                this.mapping = SJX.fromDeserializable(raw.gradingstylemapper, chlk.models.grading.Mapping);
                 this.showToStudents = SJX.fromValue(raw.showtostudents, Boolean);
                 this.currentItem = SJX.fromDeserializable(raw.currentitem, chlk.models.announcement.StudentAnnouncement);
                 this.selectedIndex = SJX.fromValue(raw.selectedindex, Number);
@@ -41,8 +38,6 @@ NAMESPACE('chlk.models.announcement', function () {
 
             String, 'className',
             chlk.models.id.CourseId, 'courseId',
-            Number, 'gradingStyle',
-            chlk.models.grading.Mapping, 'mapping',
             Boolean, 'showToStudents',
             chlk.models.announcement.StudentAnnouncement, 'currentItem',
             Number, 'selectedIndex'
