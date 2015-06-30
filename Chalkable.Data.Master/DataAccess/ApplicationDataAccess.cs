@@ -84,15 +84,18 @@ namespace Chalkable.Data.Master.DataAccess
                 res.Sql.AppendFormat(
                     @"select Application.*, 
                         (select avg(rating) from ApplicationRating where ApplicationRef = Application.Id) as Avg,
-                        ApplicationDistrictOption.{1}
+                        isnull(ApplicationDistrictOption.{1}, 0) as {1}
                     from 
                         Application 
-                        left join ApplicationDistrictOption on Application.Id = ApplicationDistrictOption.ApplicationRef
+                        left join ApplicationDistrictOption on Application.Id = ApplicationDistrictOption.ApplicationRef and ApplicationDistrictOption.{0} = @{0}
                     where 
-                        ApplicationDistrictOption.{0} = @{0}", ApplicationDistrictOption.DISTRICT_REF_FIELD, ApplicationDistrictOption.BAN_FIELD);
+                        1 = 1", ApplicationDistrictOption.DISTRICT_REF_FIELD, ApplicationDistrictOption.BAN_FIELD);
                 res.Parameters.Add(ApplicationDistrictOption.DISTRICT_REF_FIELD, query.DistrictId);
                 if (query.Ban.HasValue)
-                    res.Sql.AppendFormat(" and ApplicationDistrictOption.{0} = @{0}", ApplicationDistrictOption.BAN_FIELD);
+                {
+                    res.Sql.AppendFormat(" and isnull(ApplicationDistrictOption.{0}, 0) = @{0}", ApplicationDistrictOption.BAN_FIELD);
+                    res.Parameters.Add(ApplicationDistrictOption.BAN_FIELD, query.Ban);
+                }
             }
             else
                 res.Sql.Append(@"select Application.*, (select avg(rating) from ApplicationRating where ApplicationRef = Application.Id) as Avg, null as Ban from Application where 1 = 1");
