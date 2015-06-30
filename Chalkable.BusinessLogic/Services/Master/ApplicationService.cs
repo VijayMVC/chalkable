@@ -118,16 +118,20 @@ namespace Chalkable.BusinessLogic.Services.Master
             if (id == GetAssessmentId())
                 return GetAssessmentApplication();
 
+            var q = new ApplicationQuery
+            {
+                Id = id,
+                UserId = Context.UserId,
+                Role = Context.Role.Id,
+                OnlyForInstall = false
+            };
+            if (!BaseSecurity.IsSysAdmin(Context))
+                q.DistrictId = Context.DistrictId;
+
             using (var uow = Read())
             {
                 return new ApplicationDataAccess(uow)
-                    .GetApplication(new ApplicationQuery
-                        {
-                            Id = id,
-                            UserId = Context.UserId,
-                            Role = Context.Role.Id,
-                            OnlyForInstall = false
-                        });
+                    .GetApplication(q);
             }
         }
 
