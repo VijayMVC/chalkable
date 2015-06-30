@@ -19,10 +19,6 @@ NAMESPACE('chlk.models.apps', function () {
             function $(app, installBtnTitle, categories, gradelevels, balance, isInstalled) {
                 BASE(categories, gradelevels, balance);
                 this.setApp(app);
-                if (!app.getBanInfo()) {
-                    app.setBanInfo(new chlk.models.apps.BannedAppData());
-                }
-
                 var webSiteLink = app.getDeveloperInfo().getWebSite() || "";
 
                 if (webSiteLink.indexOf("http") == -1){

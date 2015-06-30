@@ -9,7 +9,6 @@ REQUIRE('chlk.models.apps.AppPlatform');
 REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.apps.ShortAppInfo');
-REQUIRE('chlk.models.apps.BannedAppData');
 REQUIRE('chlk.models.apps.AppPersonRating');
 REQUIRE('chlk.models.apps.ApplicationAuthorization');
 
@@ -292,24 +291,16 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.AppId]],
             ria.async.Future, function banApp(appId){
                 return this
-                    .post('Application/BanApp.json', chlk.models.apps.AppMarketApplication, {
+                    .post('Application/BanApp.json', null, {
                         applicationId: appId.valueOf()
-                    })
-                    .then(function(data){
-                        data.setId(appId);
-                        return data;
                     });
             },
 
             [[chlk.models.id.AppId]],
             ria.async.Future, function unbanApp(appId){
                 return this
-                    .post('Application/UnbanApp.json', chlk.models.apps.AppMarketApplication, {
+                    .post('Application/UnbanApp.json', null, {
                         applicationId: appId.valueOf()
-                    })
-                    .then(function(data){
-                        data.setId(appId);
-                        return data;
                     });
             },
 

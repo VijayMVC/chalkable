@@ -1,4 +1,3 @@
-REQUIRE('chlk.models.apps.BannedAppData');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -38,8 +37,6 @@ NAMESPACE('chlk.models.announcement', function () {
 
             String, 'viewUrl',
 
-            chlk.models.apps.BannedAppData, 'banInfo',
-
             function $(id_, owner_, order_, type_, name_, pictureUrl_, url_, teachersAttachment_, editUrl_, gradingViewUrl_, viewUrl_, banInfo_, openOnStart_){
                 BASE();
                 if(id_)
@@ -64,8 +61,6 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.setGradingViewUrl(gradingViewUrl_);
                 if(viewUrl_)
                     this.setViewUrl(viewUrl_);
-                if (banInfo_)
-                    this.setBanInfo(banInfo_);
                 if (openOnStart_)
                     this.setOpenOnStart(openOnStart_);
             }

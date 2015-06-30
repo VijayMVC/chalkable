@@ -1,11 +1,5 @@
-banInfo = self.getBanInfo()
+btnTitle = self.isBanned() ? "Unban this app" : "Ban this app"
+cls = self.isBanned() ? "ban-app-btn" : "ban-app-btn negative-button"
+action = self.isBanned() ? "unbanApp" : "banApp"
 
-btnTitle = banInfo.isBanned() ? "App is banned" : "Ban this app"
-cls = banInfo.isBanned() ? "ban-app-btn pressed-btn" : "ban-app-btn"
-action = banInfo.isBanned() ? "unbanApp" : "banApp"
-
-    if banInfo.isUnbannable()
-
-        +ActionButton('appmarket', action, self.getId())(class=cls)=btnTitle
-    else
-        .ban-app-btn.pressed=btnTitle
++ActionButton('appmarket', action, self.getId())(class=cls)=btnTitle

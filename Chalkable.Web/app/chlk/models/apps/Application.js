@@ -16,7 +16,6 @@ REQUIRE('chlk.models.apps.AppState');
 REQUIRE('chlk.models.apps.AppScreenShots');
 REQUIRE('chlk.models.common.NameId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
-REQUIRE('chlk.models.apps.BannedAppData');
 REQUIRE('chlk.models.standard.CommonCoreStandard');
 
 NAMESPACE('chlk.models.apps', function () {
@@ -58,7 +57,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.standardsIds = SJX.fromArrayOfValues(raw.standardsids, String);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.CommonCoreStandard);
                 this.platforms = SJX.fromArrayOfDeserializables(raw.platforms, chlk.models.apps.AppPlatform);
-                this.banInfo = SJX.fromDeserializable(raw.baninfo || raw.banInfo, chlk.models.apps.BannedAppData);
+                this.banned = SJX.fromValue(raw.ban, Boolean);
                 this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.apps.AppCategory);
                 this.internalScore = SJX.fromValue(raw.internalscore, Number);
                 this.internalDescription = SJX.fromValue(raw.internaldescription, String);
@@ -97,7 +96,7 @@ NAMESPACE('chlk.models.apps', function () {
             ArrayOf(chlk.models.apps.AppPlatform), 'platforms',
             ArrayOf(chlk.models.id.CommonCoreStandardId), 'standardsIds',
             ArrayOf(chlk.models.standard.CommonCoreStandard), 'standards',
-            chlk.models.apps.BannedAppData, 'banInfo',
+            Boolean, 'banned',
             Number, 'internalScore',
             String, 'internalDescription',
 

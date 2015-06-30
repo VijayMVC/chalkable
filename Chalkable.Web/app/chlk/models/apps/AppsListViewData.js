@@ -14,7 +14,6 @@ REQUIRE('chlk.models.apps.AppState');
 REQUIRE('chlk.models.apps.AppScreenShots');
 REQUIRE('chlk.models.common.NameId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
-REQUIRE('chlk.models.apps.BannedAppData');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";

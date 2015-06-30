@@ -1,5 +1,4 @@
 REQUIRE('chlk.models.apps.AppMarketApplication');
-REQUIRE('chlk.models.apps.BannedAppData');
 REQUIRE('chlk.models.common.PaginatedList');
 
 NAMESPACE('chlk.templates.apps', function () {
@@ -11,7 +10,7 @@ NAMESPACE('chlk.templates.apps', function () {
         'AppMarketBanTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.apps.BannedAppData, 'banInfo',
+            Boolean, 'banned',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AppId, 'id'

@@ -43,7 +43,7 @@ NAMESPACE('chlk.templates.announcement', function () {
                         item.getEditUrl(),
                         item.getGradingViewUrl(),
                         item.getViewUrl(),
-                        item.getBanInfo() || new chlk.models.apps.BannedAppData()
+                        item.isBanned()
                     ));
                 });
                 res.sort(function(a,b){

@@ -543,8 +543,9 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.appsService
                 .banApp(appId)
                 .attach(this.validateResponse_())
-                .then(function(res){
-                    console.info(res);
+                .then(function(data){
+                    var res = new chlk.models.apps.AppMarketApplication;
+                    res.setBanned(true);
                     return res;
                 });
             return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result, 'banApp');
@@ -559,7 +560,9 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.appsService
                 .unbanApp(appId)
                 .attach(this.validateResponse_())
-                .then(function(res){
+                .then(function(data){
+                    var res = new chlk.models.apps.AppMarketApplication;
+                    res.setBanned(false);
                     return res;
                 });
             return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result, 'banApp');
