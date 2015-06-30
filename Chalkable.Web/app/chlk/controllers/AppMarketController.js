@@ -545,6 +545,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(data){
                     var res = new chlk.models.apps.AppMarketApplication;
+                    res.setId(appId);
                     res.setBanned(true);
                     return res;
                 });
@@ -562,6 +563,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(data){
                     var res = new chlk.models.apps.AppMarketApplication;
+                    res.setId(appId);
                     res.setBanned(false);
                     return res;
                 });

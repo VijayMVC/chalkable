@@ -12,6 +12,39 @@ NAMESPACE('chlk.models.apps', function () {
 
     var SJX = ria.serialize.SJX;
 
+    /** @class chlk.models.apps.ApplicationInstallRecord */
+    CLASS(
+        UNSAFE, 'ApplicationInstallRecord', IMPLEMENTS(ria.serialize.IDeserializable), [
+
+            VOID, function deserialize(raw) {
+                this.personId = SJX.fromValue(raw.personid, chlk.models.id.SchoolPersonId);
+                this.firstName = SJX.fromValue(raw.firstname, String);
+                this.lastName = SJX.fromValue(raw.lastname, String);
+
+                this.installedCount = SJX.fromValue(raw.installedcount, Number);
+                this.price = SJX.fromValue(raw.price, Number);
+                this.remains = SJX.fromValue(raw.remains, Number);
+
+                this.schoolId = SJX.fromValue(raw.schoolid, chlk.models.id.SchoolId);
+                this.schoolName = SJX.fromValue(raw.schoolname, String);
+            },
+
+            chlk.models.id.SchoolPersonId, 'personId',
+            String, 'firstName',
+            String, 'lastName',
+
+            Number, 'installedCount',
+            Number, 'price',
+            Number, 'remains',
+
+            chlk.models.id.SchoolId, 'schoolId',
+            String, 'schoolName',
+
+            String, function getFullName() {
+                return [this.firstName, this.lastName].filter(function (_) { return _ }).join(' ');
+            }
+        ]);
+
     /** @class chlk.models.apps.AppMarketApplication*/
     CLASS(
         UNSAFE,  'AppMarketApplication', EXTENDS(chlk.models.apps.Application), IMPLEMENTS(ria.serialize.IDeserializable), [
@@ -27,6 +60,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.personal = SJX.fromValue(raw.personal, Boolean);
                 this.applicationInstallIds = SJX.fromValue(raw.applicationinstallids, String);
                 this.applicationRating = SJX.fromDeserializable(raw.applicationrating, chlk.models.apps.AppRating);
+                this.applicationInstallHistory = SJX.fromArrayOfDeserializables(raw.applicationinstallhistory, chlk.models.apps.ApplicationInstallRecord);
             },
             ArrayOf(chlk.models.apps.AppInstallGroup), 'installedForGroups',
             Boolean, 'installedOnlyForCurrentUser',
@@ -36,8 +70,8 @@ NAMESPACE('chlk.models.apps', function () {
             Boolean, 'personal',
             String,  'applicationInstallIds',
             Boolean, 'alreadyInstalled',
-            chlk.models.apps.AppRating, 'applicationRating'
-
+            chlk.models.apps.AppRating, 'applicationRating',
+            ArrayOf(chlk.models.apps.ApplicationInstallRecord), 'applicationInstallHistory'
         ]);
 
 

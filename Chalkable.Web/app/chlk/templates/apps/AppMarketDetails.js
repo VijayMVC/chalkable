@@ -18,7 +18,6 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'installed',
 
-
             [[Number]],
             function getRoleTypeClass(typeId){
                 var result = "permission-type-none";

@@ -88,3 +88,21 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
         if self.userRole.isAdmin()
             .ban-app
                 +RenderWith(app, chlk.templates.apps.AppMarketBanTpl)
+
+            +CloseOpen('History')
+                .content.table.app-install-history
+                    .table-row.half-header
+                        .desc
+                        .amount: .move-up Amount
+                        .balance: .move-up Balance
+                    each item in self.getApp().getApplicationInstallHistory()
+                        .table-row
+                            .desc
+                                | Installed by &#32;
+                                span= item.getFullName()
+                                | &#32; for &#32;
+                                span= item.getInstalledCount()
+                                | &#32; in &#32;
+                                span= item.getSchoolName()
+                            .amount= item.getPrice() || 'Free'
+                            .balance= item.getRemains()
