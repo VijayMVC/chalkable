@@ -54,6 +54,8 @@ namespace Chalkable.Data.Master.Model
         public string InternalDescription { get; set; }
 
         [NotDbFieldAttr]
+        public bool? Ban { get; set; }
+        [NotDbFieldAttr]
         public IList<ApplicationPicture> Pictures { get; set; }
         [NotDbFieldAttr]
         public Developer Developer { get; set; }
@@ -70,6 +72,7 @@ namespace Chalkable.Data.Master.Model
         public Application LiveApplication { get; set; }
         [NotDbFieldAttr]
         public bool IsLive { get { return State == ApplicationStateEnum.Live; } }
+        
     }
 
     public enum ApplicationStateEnum
@@ -89,38 +92,6 @@ namespace Chalkable.Data.Master.Model
         GradingView,
     }
 
-
-
-    public class Developer
-    {
-        public const string ID_FIELD = "Id";
-        public const string DISTRICT_REF_FIELD = "DistrictRef";
-        
-        [PrimaryKeyFieldAttr]
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string WebSite { get; set; }
-        public Guid? DistrictRef { get; set; }
-        [DataEntityAttr]
-        public User User { get; set; }
-
-        public string PayPalLogin { get; set; }
-
-        [NotDbFieldAttr]
-        public string DisplayName
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(Name) ? Name : Email;
-            }
-        }
-        [NotDbFieldAttr]
-        public string Email
-        {
-            get { return User.Login; }            
-        }
-
-    }
 
     public class ApplicationRating
     {

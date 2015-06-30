@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.ApplicationsViewData
 {
@@ -27,6 +28,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public bool IsAdvanced { get; set; }
         public int? InternalScore { get; set; }
         public string InternalDescription { get; set; }
+        public bool? Ban { get; set; }
         public ApplicationAccessViewData ApplicationAccess { get; set; }
         public ApplicationPriceViewData ApplicationPrice { get; set; }
         public IList<Guid> Picturesid { get; set; }
@@ -54,6 +56,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             Picturesid = application.Pictures.Select(x => x.Id).ToList();
             if (application.LiveApplication != null)
                 LiveApplication = Create(application.LiveApplication);
+            Ban = application.Ban;
         }
 
         public static BaseApplicationViewData Create(Application application)
@@ -106,18 +109,22 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public ApplicationRatingViewData ApplicationRating { get; set; }
         public bool IsInstalledOnlyForMe { get; set; }
         public IList<InstalledForPersonsGroupViewData> InstalledForPersonsGroup { get; set; } 
+        public IList<ApplicationInstallHistoryViewData> ApplicationInstallHistory { get; set; }
 
         protected ApplicationDetailsViewData(Application application,  IList<Category> categories, bool canGetSecretKey) 
             : base(application, categories, canGetSecretKey, null)
         {
         }
-        public static ApplicationDetailsViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories
-            , IList<ApplicationRating> appRatings)
+        public static ApplicationDetailsViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories, IList<ApplicationRating> appRatings
+            , IList<ApplicationInstallHistory> applicationInstallHistory)
         {
-            return new ApplicationDetailsViewData(application, categories, false)
+            var res = new ApplicationDetailsViewData(application, categories, false)
                 {
-                    ApplicationRating = ApplicationRatingViewData.Create(appRatings)
+                    ApplicationRating = ApplicationRatingViewData.Create(appRatings),
                 };
+            if (applicationInstallHistory != null)
+                res.ApplicationInstallHistory = ApplicationInstallHistoryViewData.Create(applicationInstallHistory);
+            return res;
         }
     }
 
@@ -144,6 +151,31 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                 GroupType = groupType,
                 Id = id
             };
+        }
+    }
+
+    public class ApplicationInstallHistoryViewData
+    {
+        public int SchoolId { get; set; }
+        public string SchoolName { get; set; }
+        public int PersonId { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public int InstalledCount { get; set; }
+        public decimal Price { get; set; }
+        public decimal Remains { get; set; }
+
+        public static IList<ApplicationInstallHistoryViewData> Create(IList<ApplicationInstallHistory> history)
+        {
+            return history.Select(x => new ApplicationInstallHistoryViewData
+            {
+                FirstName = x.FirstName,
+                InstalledCount = x.InstalledCount,
+                LastName = x.LastName,
+                PersonId = x.PersonId,
+                SchoolId = x.SchoolId,
+                SchoolName = x.SchoolName
+            }).ToList();
         }
     }
 }

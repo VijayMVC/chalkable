@@ -141,9 +141,11 @@ namespace Chalkable.Web.Controllers
             var application = MasterLocator.ApplicationService.GetApplicationById(applicationId);
             var categories = MasterLocator.CategoryService.ListCategories();
             var appRatings = MasterLocator.ApplicationService.GetRatings(applicationId);
-            
-            
-            var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings);
+
+            IList<ApplicationInstallHistory> history = null;
+            if (Context.Role.Id == CoreRoles.DISTRICT_ADMIN_ROLE.Id)
+                history = SchoolLocator.AppMarketService.GetApplicationInstallationHistory(applicationId);
+            var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings, history);
             var persons = SchoolLocator.AppMarketService.GetPersonsForApplicationInstallCount(application.Id, Context.PersonId, null, null, null, null);
             res.InstalledForPersonsGroup = ApplicationLogic.PrepareInstalledForPersonGroupData(SchoolLocator, MasterLocator, application);
             res.IsInstalledOnlyForMe = persons.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count == 0;

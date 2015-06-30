@@ -15,8 +15,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     {
         IList<AppPermissionType> GetPermisions(string applicationUrl);
         PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true);
-        PaginatedList<Application> GetApplications(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
-
+        
         PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
         
         PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode
@@ -37,6 +36,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         Guid? GetAssessmentId();
 
         IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count);
+        void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban);
     }
 
 
@@ -53,19 +53,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var app = new ApplicationDataAccess(uow).GetLiveApplicationByUrl(applicationUrl);
                 return app.Permissions.Select(x => x.Permission).ToList();
             }
-        }
-
-        public PaginatedList<Application> GetApplications(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue)
-        {
-            var query = new ApplicationQuery
-            {
-                Start = start,
-                Count = count,
-                DeveloperId = developerId,
-                State = state,
-                Filter = filter
-            };
-            return GetApplications(query);
         }
 
         public PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = Int32.MaxValue)
@@ -111,8 +98,14 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 query.UserId = Context.UserId;
                 query.Role = Context.Role.Id;
-                if(!BaseSecurity.IsSysAdmin(Context))
+                if (!BaseSecurity.IsSysAdmin(Context))
+                {
+                    query.DistrictId = Context.DistrictId;
                     query.DeveloperId = Context.DeveloperId;
+                    if (!BaseSecurity.IsDistrictAdmin(Context))
+                        query.Ban = false;
+                }
+                    
                 return new ApplicationDataAccess(uow).GetPaginatedApplications(query);
             }
         }
@@ -209,7 +202,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                     GradeLevels = gradeLevels,
                     Filter = filterWords,
                     Start = start,
-                    Count = count
+                    Count = count,
+                    Live = true
                 };
             filterMode = filterMode ?? AppFilterMode.All;
             sortingMode = sortingMode ?? AppSortingMode.Newest;
@@ -253,6 +247,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             {
                 return new ApplicationDataAccess(uow).GetSuggestedApplications(abIds, installedAppsIds, start, count);
             }
+        }
+
+        public void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban)
+        {
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            DoUpdate(uow => new ApplicationDataAccess(uow).SetDistrictOption(applicationId, districtId, ban));
         }
 
 

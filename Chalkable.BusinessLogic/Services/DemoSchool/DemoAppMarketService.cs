@@ -601,7 +601,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var totalCount = persons.GroupBy(x => x.PersonId).Select(x => x.Key).Count();
             return ApplicationTotalPriceInfo.Create(totalPrice, totalCount);
         }
-
+        
         private decimal GetApplicationTotalPrice(Application app, IEnumerable<PersonsForApplicationInstall> applicationInstallCount, bool isForAll)
         {
 
@@ -688,6 +688,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IList<ApplicationInstall> GetAppInstalls(Guid appId, bool active)
         {
             return ApplicationInstallStorage.GetAll(appId, active);
+        }
+        
+        public IList<ApplicationInstallHistory> GetApplicationInstallationHistory(Guid applicationId)
+        {
+            throw new NotImplementedException();
         }
     }
 }

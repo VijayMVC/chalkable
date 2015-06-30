@@ -137,25 +137,6 @@ namespace Chalkable.Data.School.DataAccess
         }
     }
 
-    public class ApplicationInstallActionDataAccess : DataAccessBase<ApplicationInstallAction, int>
-    {
-        public ApplicationInstallActionDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
-        {
-        }
-
-        public ApplicationInstallAction GetLastAppInstallAction(Guid appId, int ownerId)
-        {
-            var tname = typeof (ApplicationInstallAction).Name;
-            var conds = new AndQueryCondition
-                {
-                    {ApplicationInstallAction.OWNER_REF_FIELD, ownerId},
-                    {ApplicationInstallAction.APPLICATION_REF_FIELD, appId}
-                };
-            var q = Orm.OrderedSelect(tname, conds, ApplicationInstallAction.ID_FIELD, Orm.OrderType.Desc, 1);
-            return ReadOne<ApplicationInstallAction>(q);
-        } 
-    }
-
     public class ApplicationInstallActionClassesDataAccess : DataAccessBase<ApplicationInstallActionClasses, int>
     {
         public ApplicationInstallActionClassesDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)

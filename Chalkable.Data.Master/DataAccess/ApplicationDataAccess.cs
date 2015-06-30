@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -61,43 +62,43 @@ namespace Chalkable.Data.Master.DataAccess
         {
             query.Count = 1;
             var q = BuildGetApplicationsQuery(query);
-            var res = ReadOne<Application>(q);
+            var res = Read(q, r=> {     r.Read();
+                                        return ReadApplication(r);
+                                    });
             LoadApplicationData(res);
             return res;
         }
 
+        private Application ReadApplication(DbDataReader reader)
+        {
+            var res = reader.Read<Application>();
+            res.Ban = SqlTools.ReadBoolNull(reader, ApplicationDistrictOption.BAN_FIELD);
+            return res;
+        }
 
         private DbQuery BuildGetApplicationsQuery(ApplicationQuery query)
         {
             var res = new DbQuery();
-            res.Sql.Append(@"select Application.*, (select avg(rating) from ApplicationRating where ApplicationRef = Application.Id) as Avg from Application where 1 = 1");
-            if (query.Role == CoreRoles.SUPER_ADMIN_ROLE.Id || query.Role == CoreRoles.APP_TESTER_ROLE.Id)
+            if (query.DistrictId.HasValue)
             {
-                //TODO: do nothing
-                if (query.DeveloperId.HasValue)
-                {
-                    res.Sql.Append(string.Format(" and [{0}] = @{0}", Application.DEVELOPER_REF_FIELD));
-                    res.Parameters.Add(Application.DEVELOPER_REF_FIELD, query.DeveloperId);                    
-                }
+                res.Sql.AppendFormat(
+                    @"select Application.*, 
+                        (select avg(rating) from ApplicationRating where ApplicationRef = Application.Id) as Avg,
+                        ApplicationDistrictOption.{1}
+                    from 
+                        Application 
+                        left join ApplicationDistrictOption on Application.Id = ApplicationDistrictOption.ApplicationRef
+                    where 
+                        ApplicationDistrictOption.{0} = @{0}", ApplicationDistrictOption.DISTRICT_REF_FIELD, ApplicationDistrictOption.BAN_FIELD);
+                res.Parameters.Add(ApplicationDistrictOption.DISTRICT_REF_FIELD, query.DistrictId);
+                if (query.Ban.HasValue)
+                    res.Sql.AppendFormat(" and ApplicationDistrictOption.{0} = @{0}", ApplicationDistrictOption.BAN_FIELD);
             }
             else
+                res.Sql.Append(@"select Application.*, (select avg(rating) from ApplicationRating where ApplicationRef = Application.Id) as Avg, null as Ban from Application where 1 = 1");
+            
+            if (query.Role != CoreRoles.SUPER_ADMIN_ROLE.Id && query.Role != CoreRoles.APP_TESTER_ROLE.Id)
             {
-                if (query.Role == CoreRoles.DEVELOPER_ROLE.Id)
-                {
-                    res.Sql.Append(string.Format(" and [{0}] = @{0}", Application.DEVELOPER_REF_FIELD));
-                    res.Parameters.Add(Application.DEVELOPER_REF_FIELD, query.UserId);
-                }
-                else
-                {
-                    query.Live = true;
-                    if (query.DeveloperId.HasValue)
-                    {
-                        query.Live = false;
-                        res.Sql.Append(string.Format(" and [{0}] = @{0}", Application.DEVELOPER_REF_FIELD));
-                        res.Parameters.Add(Application.DEVELOPER_REF_FIELD, query.DeveloperId);
-                    }
-                }
-                
                 if (!query.IncludeInternal)
                 {
                     res.Sql.Append(string.Format(" and [{0}] <> 1", Application.IS_INTERNAL_FIELD));
@@ -109,7 +110,12 @@ namespace Chalkable.Data.Master.DataAccess
                     if (query.Role == CoreRoles.STUDENT_ROLE.Id)
                         res.Sql.Append(string.Format(" and [{0}] = 1", Application.HAS_STUDENT_MY_APPS_FIELD));
                 }
-    
+            }
+
+            if (query.DeveloperId.HasValue)
+            {
+                res.Sql.Append(string.Format(" and [{0}] = @{0}", Application.DEVELOPER_REF_FIELD));
+                res.Parameters.Add(Application.DEVELOPER_REF_FIELD, query.DeveloperId);
             }
             if (query.Id.HasValue)
             {
@@ -214,7 +220,16 @@ namespace Chalkable.Data.Master.DataAccess
         public PaginatedList<Application> GetPaginatedApplications(ApplicationQuery query)
         {
             var q = BuildGetApplicationsQuery(query);
-            var paginatedApps = PaginatedSelect<Application>(q, query.OrderBy, query.Start, query.Count, Orm.OrderType.Desc);
+            q = Orm.PaginationSelect(q, query.OrderBy, Orm.OrderType.Desc, query.Start, query.Count);
+            var paginatedApps = ReadPaginatedResult(q, query.Start, query.Count, r =>
+            {
+                var res = new List<Application>();
+                while (r.Read())
+                {
+                    res.Add(ReadApplication(r));
+                }
+                return res;
+            });
             return PreparePicturesData(paginatedApps) as PaginatedList<Application>;
         }  
 
@@ -363,6 +378,17 @@ namespace Chalkable.Data.Master.DataAccess
             }
             return PreparePicturesData(res);
         }
+
+        public void SetDistrictOption(Guid applicationId, Guid districtId, bool ban)
+        {
+            IDictionary<string, object> ps = new Dictionary<string, object>
+            {
+                {"@applicationId", applicationId},
+                {"@districtId", districtId},
+                {"@ban", ban},
+            };
+            ExecuteStoredProcedure("spSetApplicationDistrictOption", ps);
+        }
     }
 
     public class ApplicationQuery
@@ -375,6 +401,8 @@ namespace Chalkable.Data.Master.DataAccess
         public IList<int> GradeLevels { get; set; }
         public Guid? DeveloperId { get; set; }
         public string OrderBy { get; set; }
+        public Guid? DistrictId { get; set; }
+        public bool? Ban { get; set; }
 
         public int Start { get; set; }
         public int Count { get; set; }

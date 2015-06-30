@@ -33,10 +33,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> roleIds, IList<int> classIds, IList<Guid> departmentIds, IList<int> gradeLevelIds);
         IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(int schoolYearId, Guid applicationId);
-
-
+        
         ApplicationTotalPriceInfo GetApplicationTotalPrice(Guid applicationId, int? schoolPerson, IList<int> roleids, IList<int> classids, IList<int> gradelevelids, IList<Guid> departmentids);
-
+        IList<ApplicationInstallHistory> GetApplicationInstallationHistory(Guid applicationId);
     }
 
     public class AppMarketService : SchoolServiceBase, IAppMarketService
@@ -93,7 +92,7 @@ namespace Chalkable.BusinessLogic.Services.School
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, schoolYearId);
                 var spIds = persons.Select(x => x.PersonId).Distinct().ToList();
                 var schoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
-                var res = RegisterInstallAction(uow, app, personId, roleIds, classIds, departmentIds, gradeLevelIds);
+                var res = RegisterInstallAction(uow, app, personId, roleIds, classIds, departmentIds, gradeLevelIds, schoolYearId);
                 var appInstalls = new List<ApplicationInstall>();
 
                 foreach (var spId in spIds)
@@ -116,14 +115,18 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        private ApplicationInstallAction RegisterInstallAction(UnitOfWork uow, Application app, int? personId, IList<int> roleids, IList<int> classids, IList<Guid> departmentids, IList<int> gradelevelids)
+        private ApplicationInstallAction RegisterInstallAction(UnitOfWork uow, Application app, int? personId, IList<int> roleids, IList<int> classids, IList<Guid> departmentids
+            , IList<int> gradelevelids, int schoolYearId)
         {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
             var res = new ApplicationInstallAction
             {
                 ApplicationRef = app.Id,
                 PersonRef = personId,
                 Description = string.Empty,
-                OwnerRef = Context.PersonId.Value
+                OwnerRef = Context.PersonId.Value,
+                SchoolYearRef = schoolYearId
             };
             var ada = new ApplicationInstallActionDataAccess(uow);
             ada.Insert(res);
@@ -132,8 +135,8 @@ namespace Chalkable.BusinessLogic.Services.School
             descriptionBuilder.AppendFormat(APP_INSTALLED_FOR_FMT, app.Name);
             if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id && classids != null)
             {
-                var teacherClasses = new ClassDataAccess(uow)
-                    .GetAll(new AndQueryCondition { { Class.PRIMARY_TEACHER_REF_FIELD, personId } });
+
+                var teacherClasses = new ClassDataAccess(uow).GetTeacherClasses(Context.SchoolYearId.Value, Context.PersonId.Value, null);
                 teacherClasses = teacherClasses.Where(x => classids.Contains(x.Id)).ToList();
                 var da = new ApplicationInstallActionClassesDataAccess(uow);
                 var appInstallAcClasses = new List<ApplicationInstallActionClasses>();
@@ -323,6 +326,12 @@ namespace Chalkable.BusinessLogic.Services.School
             var totalPrice = GetApplicationTotalPrice(app, persons, isForAll);
             var totalCount = persons.GroupBy(x => x.PersonId).Select(x => x.Key).Count();
             return ApplicationTotalPriceInfo.Create(totalPrice, totalCount);
+        }
+
+        public IList<ApplicationInstallHistory> GetApplicationInstallationHistory(Guid applicationId)
+        {
+            BaseSecurity.EnsureDistrictAdmin(Context);
+            return DoRead(u => new ApplicationInstallActionDataAccess(u).GetApplicationInstallationHistory(applicationId));
         }
 
         private decimal GetApplicationTotalPrice(Application app, IEnumerable<PersonsForApplicationInstall> applicationInstallCount, bool isForAll)

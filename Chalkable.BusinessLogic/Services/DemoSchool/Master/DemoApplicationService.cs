@@ -65,11 +65,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return ApplicationRatingStorage.GetAll(applicationId);
         }
 
-        public PaginatedList<Application> GetApplications(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = Int32.MaxValue)
-        {
-            throw new NotImplementedException();
-        }
-
         public PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0,
                                                      int count = Int32.MaxValue)
         {
@@ -201,6 +196,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 apps = apps.Where(x => x.DeveloperRef == Context.DeveloperId.Value).ToList();
                 return apps;
             }
+        }
+
+        public void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban)
+        {
+            throw new NotImplementedException();
         }
 
 

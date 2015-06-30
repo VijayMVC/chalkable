@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -108,16 +109,20 @@ namespace Chalkable.Web.Controllers
             return Json(ApplicationRatingViewData.Create(appRatings));
         }
 
-        [AuthorizationFilter("DistrictAdmin, DistrictAdmin")]
+        [AuthorizationFilter("DistrictAdmin")]
         public ActionResult BanApp(Guid applicationId)
         {
-            return FakeJson("~/fakeData/bannedAppData.json");
+            Trace.Assert(Context.DistrictId.HasValue);
+            MasterLocator.ApplicationService.SetApplicationDistrictOptions(applicationId, Context.DistrictId.Value, true);
+            return Json(true);
         }
 
-        [AuthorizationFilter("DistrictAdmin, DistrictAdmin")]
+        [AuthorizationFilter("DistrictAdmin")]
         public ActionResult UnbanApp(Guid applicationId)
         {
-            return FakeJson("~/fakeData/unbannedAppData.json");
+            Trace.Assert(Context.DistrictId.HasValue);
+            MasterLocator.ApplicationService.SetApplicationDistrictOptions(applicationId, Context.DistrictId.Value, false);
+            return Json(true);
         }
 
         [AuthorizationFilter("SysAdmin, Developer")]

@@ -263,14 +263,14 @@ namespace Chalkable.Data.Common
                                                             int start, int count, Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc) where T : new()
         {
             var q = Orm.Orm.PaginationSelect<T>(conditions, orderByColumn, orderType, start, count);
-            return ReadPaginatedResult<T>(q, start, count);
+            return ReadPaginatedResult(q, start, count, x => x.ReadList<T>());
         }
 
         protected PaginatedList<T> PaginatedSelect<T>(DbQuery innerSelect, string orderByColumn, int start, int count,
                                                       Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc) where T : new()
         {
             var q = Orm.Orm.PaginationSelect(innerSelect, orderByColumn,orderType, start, count);
-            return ReadPaginatedResult<T>(q, start, count);
+            return ReadPaginatedResult(q, start, count, x => x.ReadList<T>());
         }
 
         protected PaginatedList<T> ReadPaginatedResult<T>(DbQuery dbQuery, int start, int count,
@@ -287,11 +287,6 @@ namespace Chalkable.Data.Common
                 }
                 return new PaginatedList<T>(new List<T>(), start / count, count, 0);
             }
-        }
-
-        protected PaginatedList<T> ReadPaginatedResult<T>(DbQuery dbQuery, int start, int count) where T : new()
-        {
-            return ReadPaginatedResult(dbQuery, start, count, x => x.ReadList<T>());
         }
 
         protected PaginatedList<T> ExecuteStoredProcedurePaginated<T>(string name, IDictionary<string, object> parameters, int start, int count) where T : new()
