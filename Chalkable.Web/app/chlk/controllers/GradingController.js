@@ -530,7 +530,7 @@ NAMESPACE('chlk.controllers', function (){
                     return this.ShowMsgBox('Not available for demo', 'Error'), null;
                 var classInfo = this.classService.getClassAnnouncementInfo(classId);
                 var activityCategories = classInfo.getTypesByClass();
-                var res = this.announcementService.getAnnouncementAttributes(true)
+                var res = this.announcementService.getAnnouncementAttributesSync()
                     .then(function(items){
                         var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.LESSON_PLAN_REPORT) ||
                             this.hasUserPermission_(chlk.models.people.UserPermissionEnum.LESSON_PLAN_REPORT_CLASSROOM);

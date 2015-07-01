@@ -56,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 activity.SectionId = classId;
 
                 if (activity.Attributes == null)
-                    activity.Attributes = new List<ActivityAttribute>();
+                    activity.Attributes = new List<ActivityAssignedAttribute>();
 
                 foreach (var attachment in activity.Attributes)
                 {

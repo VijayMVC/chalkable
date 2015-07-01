@@ -56,12 +56,28 @@ NAMESPACE('chlk.services', function () {
 
             },
 
-            [[Boolean]],
-            ria.async.Future, function getAnnouncementAttributes(activeOnly_) {
-                return this.get('Announcement/AnnouncementAttributesList.json', ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), {
-                    activeOnly: activeOnly_
-                });
+            [[String]],
+            ria.async.Future, function getAnnouncementAttributesSync(query_) {
 
+                var attrs = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ATTRIBUTES, []);
+
+                if (query_){
+                    query_ = query_.toLowerCase();
+                    attrs = attrs.filter(function(item){
+                        return item != null && item.getName().toLowerCase().indexOf(query_) != -1;
+                    });
+                }
+                return new ria.async.DeferredData(attrs);
+            },
+
+            [[String]],
+            ria.async.Future, function getGradeComments(query_) {
+                return this.get('Grading/GetGridComments', ArrayOf(String), {
+                    schoolYearId: this.getContext().getSession().get(ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, null).valueOf()
+                }).then(function(data){
+                    var comments = data || [];
+
+                });
             },
 
             [[chlk.models.id.AnnouncementId, Object]],
@@ -423,6 +439,10 @@ NAMESPACE('chlk.services', function () {
                 return this.get('AnnouncementType/Delete.json', Boolean,{
                     classAnnouncementTypeIds: this.arrayToCsv(ids)
                 });
-            }
+            },
+
+
+
+
         ])
 });

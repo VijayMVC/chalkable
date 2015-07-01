@@ -41,6 +41,8 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'showApps',
 
+            [ria.templates.ModelPropertyBind],
+            String, 'announcementTypeName',
 
             [[chlk.models.apps.ApplicationForAttach]],
             String, function getAppIconToolTip(app){

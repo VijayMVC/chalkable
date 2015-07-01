@@ -193,6 +193,7 @@
     <Compile Include="Controllers\ChalkableDepartmentController.cs" />
     <Compile Include="Controllers\ClassController.cs" />
     <Compile Include="Controllers\ClassroomOptionController.cs" />
+    <Compile Include="Controllers\AnnouncementAttributeController.cs" />
     <Compile Include="Controllers\DbMaintenanceController.cs" />
     <Compile Include="Controllers\DemoSchoolController.cs" />
     <Compile Include="Controllers\DeveloperController.cs" />
@@ -245,6 +246,7 @@
     <Compile Include="Models\AnnouncementsViewData\AnnouncementGradeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementPeriodViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementShortViewData.cs" />
+    <Compile Include="Models\AnnouncementsViewData\AnnouncementAssignedAttributeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\CreateAnnouncementViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\StandardViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\MiniQuizAppInfoViewData.cs" />

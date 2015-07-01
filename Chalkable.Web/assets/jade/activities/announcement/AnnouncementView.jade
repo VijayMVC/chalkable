@@ -93,6 +93,16 @@ mixin Glue_()
                         userRole = self.getUserRole()
                     )
 
+        -var attributesList = self.getModel().getAttributesListViewData()
+        -attributesList.setReadOnly(true)
+
+        if !attributesList.isEmpty()
+            +CloseOpen('Attributes')
+                .content.attributes
+                    +RenderWith(attributesList, chlk.templates.announcement.AnnouncementAttributesTpl)(
+                        userRole = self.getUserRole()
+                    )
+
         if self.getUserRole().isStudent()
             -var myAttachments = (self.getAnnouncementAttachments() || []).filter(function (_) { return _.isOwner(); });
             if self.isGradable() || myAttachments.length

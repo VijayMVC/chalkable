@@ -2,15 +2,16 @@ REQUIRE('ria.serialize.SJX');
 REQUIRE('ria.serialize.IDeserializable');
 REQUIRE('chlk.models.id.AnnouncementAttributeId');
 
-NAMESPACE('chlk.models.announcement', function(){
 
+
+NAMESPACE('chlk.models.announcement', function(){
 
     var SJX = ria.serialize.SJX;
 
-    /**@class chlk.models.announcement.AnnouncementAttributeViewData*/
+    /**@class chlk.models.announcement.AnnouncementAttributeType*/
+    CLASS(
+        UNSAFE, FINAL, 'AnnouncementAttributeType', IMPLEMENTS(ria.serialize.IDeserializable), [
 
-
-    UNSAFE, FINAL, CLASS('AnnouncementAttributeViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
         chlk.models.id.AnnouncementAttributeId, 'id',
 
         String, 'code',
@@ -25,5 +26,6 @@ NAMESPACE('chlk.models.announcement', function(){
             this.name = SJX.fromValue(raw.name, String);
             this.description = SJX.fromValue(raw.description, String);
         }
+
     ]);
 });

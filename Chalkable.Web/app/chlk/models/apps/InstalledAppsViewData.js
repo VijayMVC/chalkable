@@ -13,6 +13,7 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.id.AnnouncementId, 'announcementId',
             chlk.models.id.ClassId, 'classId',
             chlk.models.id.AppId, 'assessmentAppId',
+            String, 'announcementTypeName',
             chlk.models.common.PaginatedList, 'apps',
             String, 'appUrlAppend',
 
@@ -28,9 +29,10 @@ NAMESPACE('chlk.models.apps', function () {
                 String,
                 Boolean,
                 Boolean,
-                chlk.models.id.AppId
+                chlk.models.id.AppId,
+                String
             ]],
-            function $(announcementId, classId, apps, appUrlAppend, studyCenterEnabled, canAddStandard, assessmentAppId){
+            function $(announcementId, classId, apps, appUrlAppend, studyCenterEnabled, canAddStandard, assessmentAppId, announcementTypeName){
                 BASE();
                 this.setAnnouncementId(announcementId);
                 this.setApps(apps);
@@ -38,20 +40,20 @@ NAMESPACE('chlk.models.apps', function () {
                 this.setAppUrlAppend(appUrlAppend);
                 this.setFileCabinetEnabled(true);
                 this.setAttributesEnabled(true);
-                this.setStandardAttachEnabled(canAddStandard)
+                this.setStandardAttachEnabled(canAddStandard);
                 var hasApps = (apps.getItems() || []).length > 0 && studyCenterEnabled;
                 this.setShowApps(hasApps);
                 if (assessmentAppId)
                     this.setAssessmentAppId(assessmentAppId);
-
+                this.setAnnouncementTypeName(announcementTypeName);
             },
 
             [[
-                chlk.models.id.AnnouncementId,
-                chlk.models.id.ClassId,
+                chlk.models.id.AnnouncementId
             ]],
-            function $createForAdmin(announcementId, classId){
+            function $createForAdmin(announcementId){
                 BASE();
+                this.setAnnouncementId(announcementId);
                 this.setAttributesEnabled(true);
                 this.setFileCabinetEnabled(false);
                 this.setStandardAttachEnabled(false);

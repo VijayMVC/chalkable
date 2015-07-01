@@ -506,7 +506,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (CoreRoles.TEACHER_ROLE == Context.Role)
                 {
                     ann = UpdateTeacherAnnouncement(ann, announcement, classId, uow, da);
-                    res = MargeEditAnnResultWithStiData(da, ann);
+                    res = MergeEditAnnResultWithStiData(da, ann);
                 }
                 uow.Commit();
                 return res;
@@ -548,7 +548,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return ann;
         }
 
-        private AnnouncementDetails MargeEditAnnResultWithStiData(AnnouncementDataAccess annDa, Announcement ann)
+        private AnnouncementDetails MergeEditAnnResultWithStiData(AnnouncementDataAccess annDa, Announcement ann)
         {
             var res = GetDetails(annDa, ann.Id);
             if (ann.State == AnnouncementState.Created && ann.SisActivityId.HasValue)

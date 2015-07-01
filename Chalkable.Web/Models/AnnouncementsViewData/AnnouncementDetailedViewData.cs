@@ -10,6 +10,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
     public class AnnouncementDetailedViewData : AnnouncementGradeViewData
     {
         public IList<AnnouncementAttachmentViewData> AnnouncementAttachments { get; set; }
+        public IList<AnnouncementAssignedAttributeViewData>  AnnouncementAttributes { get; set; }
         public IList<AnnouncementQnAViewData> AnnouncementQnAs { get; set; }
         public IList<AnnouncementApplicationViewData> Applications { get; set; }
         public IList<StandardViewData> Standards { get; set; }
@@ -30,6 +31,10 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         {
             if (announcementDetails.AnnouncementQnAs != null)
                 AnnouncementQnAs = AnnouncementQnAViewData.Create(announcementDetails.AnnouncementQnAs);
+
+
+            if (announcementDetails.AnnouncementAttributes != null)
+                AnnouncementAttributes = AnnouncementAssignedAttributeViewData.Create(announcementDetails.AnnouncementAttributes);
 
             if(announcementDetails.Owner != null)
                 Owner = ShortPersonViewData.Create(announcementDetails.Owner);

@@ -1,6 +1,6 @@
 ﻿namespace Chalkable.StiConnector.Connectors.Model
 {
-    public class ActivityAttribute
+    public class ActivityAssignedAttribute
     {
         /// <summary>
         /// The Id of the activity

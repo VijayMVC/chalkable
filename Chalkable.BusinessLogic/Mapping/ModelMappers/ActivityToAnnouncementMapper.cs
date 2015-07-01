@@ -36,28 +36,23 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                 if (annDetails.AnnouncementAttachments == null)
                     annDetails.AnnouncementAttachments = new List<AnnouncementAttachment>();
 
-                var activityAtts = activity.Attributes != null ? activity.Attributes.Where(x => x.Attachment != null).ToList() : new List<ActivityAttribute>();
-                annDetails.AnnouncementAttachments = annDetails.AnnouncementAttachments
-                                    .Where(x => !x.SisAttachmentId.HasValue
-                                              || (activityAtts.Any(att => att.Attachment.AttachmentId == x.SisAttachmentId)))
-                                    .ToList();
-                if (activityAtts.Any())
+
+                if (annDetails.AnnouncementAttributes == null)
+                    annDetails.AnnouncementAttributes = new List<AnnouncementAssignedAttribute>();
+
+                var activityAtts = activity.Attributes != null ? activity.Attributes.ToList() : new List<ActivityAssignedAttribute>();
+
+                foreach (var att in activityAtts)
                 {
-                    foreach (var att in activityAtts)
+                    var annAtt = annDetails.AnnouncementAttributes.FirstOrDefault(x => x.Id == att.Id);
+                    if (annAtt == null)
                     {
-                        var annAtt = annDetails.AnnouncementAttachments.FirstOrDefault(x => x.SisAttachmentId == att.Attachment.AttachmentId);
-                        if (annAtt == null)
-                        {
-                            annAtt = new AnnouncementAttachment
-                            {
-                                AnnouncementRef = annDetails.Id,
-                                SisAttachmentId = att.Attachment.AttachmentId
-                            };
-                            annDetails.AnnouncementAttachments.Add(annAtt);
-                        }
-                        MapperFactory.GetMapper<AnnouncementAttachment, ActivityAttribute>().Map(annAtt, att);
+                        annAtt = new AnnouncementAssignedAttribute();
+                        annDetails.AnnouncementAttributes.Add(annAtt);
                     }
+                    MapperFactory.GetMapper<AnnouncementAssignedAttribute, ActivityAssignedAttribute>().Map(annAtt, att);
                 }
+
                 if (annDetails.AnnouncementStandards == null)
                     annDetails.AnnouncementStandards = new List<AnnouncementStandardDetails>();
                 if (activity.Standards != null && activity.Standards.Any())

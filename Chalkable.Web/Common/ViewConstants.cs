@@ -3,6 +3,7 @@
     public static class ViewConstants
     {
         public static string LE_PARAMS = "leParams";
+        
         public const string IS_DEMO_DISTRICT = "IsDemoDistrict";
         public const string STUDY_CENTER_ENABLED = "StudyCenterEnabled";
         public const string SCHOOL_OPTIONS="SchoolOptions";
@@ -22,6 +23,7 @@
         public const string GRADE_LEVELS = "GradeLevels";
 
         public const string GRADING_COMMMENTS = "GradingComments";
+        public const string ANNOUNCEMENT_ATTRIBUTES = "AnnouncementAttributes";
         
         public const string STUDENT_ROLE = "StudentRole";
         public const string TEACHER_ROLE = "TeacherRole";

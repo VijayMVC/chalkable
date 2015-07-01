@@ -126,6 +126,7 @@
     <Compile Include="Model\ClassStandard.cs" />
     <Compile Include="Model\ClassTeacher.cs" />
     <Compile Include="Model\ContactRelationship.cs" />
+    <Compile Include="Model\AnnouncementAssignedAttribute.cs" />
     <Compile Include="Model\CourseType.cs" />
     <Compile Include="Model\Date.cs" />
     <Compile Include="Model\SystemSetting.cs" />

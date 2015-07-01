@@ -16,6 +16,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Common;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.AttendancesViewData;
 using Chalkable.Web.Models.ClassesViewData;
@@ -106,6 +107,8 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(GradeLevelViewData.Create(gradeLevel), ViewConstants.GRADE_LEVELS);
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);
+            var announcementAttributes = SchoolLocator.AnnouncementAttributeService.GetList(true);
+            PrepareJsonData(AnnouncementAttributeViewData.Create(announcementAttributes), ViewConstants.ANNOUNCEMENT_ATTRIBUTES);
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyDistrictAdmin(distictAdmin.Email, "", "", 
                 Context.DistrictId.ToString(), null, Context.DistrictTimeZone, Context.Role.Name, ip);
@@ -202,6 +205,8 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.STUDY_CENTER_ENABLED] = Context.SCEnabled;
 
+
+
             var leParams = PrepareLEParams();
 
             PrepareJsonData(leParams, ViewConstants.LE_PARAMS);
@@ -245,6 +250,7 @@ namespace Chalkable.Web.Controllers
             }
             PrepareJsonData(AlphaGradeViewData.Create(startupData.AlphaGrades), ViewConstants.ALPHA_GRADES);
             PrepareJsonData(AlternateScoreViewData.Create(startupData.AlternateScores), ViewConstants.ALTERNATE_SCORES);
+
             PrepareJsonData(MarkingPeriodViewData.Create(mps), ViewConstants.MARKING_PERIODS);
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);        
@@ -294,7 +300,12 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(classesList, ViewConstants.CLASSES);
             PrepareClassesAdvancedData(startupData);
             PrepareJsonData(GradingCommentViewData.Create(startupData.GradingComments), ViewConstants.GRADING_COMMMENTS);
+
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(startupData.AttendanceReasons), ViewConstants.ATTENDANCE_REASONS);
+
+            var announcementAttributes = SchoolLocator.AnnouncementAttributeService.GetList(true);
+            PrepareJsonData(AnnouncementAttributeViewData.Create(announcementAttributes), ViewConstants.ANNOUNCEMENT_ATTRIBUTES);
+
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, Context.DistrictId.ToString(), 
                 classNames, person.FirstLoginDate, Context.DistrictTimeZone, ip);

@@ -41,7 +41,8 @@ if self.needButtons
             self.getClassId(),
             self.getStandardsUrlComponents(),
             self.getAssessmentApplicationId(),
-            self.isCanAddStandard()
+            self.isCanAddStandard(),
+            self.getAnnouncementTypeName()
         )(type="button")#add-attachments.simple-gray-button Attach
 each item, i in items
     if item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION

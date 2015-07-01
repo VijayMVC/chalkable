@@ -4,7 +4,8 @@ REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.attachment.Attachment');
-
+REQUIRE('chlk.models.announcement.AnnouncementAttributeType');
+REQUIRE('chlk.models.announcement.AnnouncementAttributeViewData');
 REQUIRE('chlk.models.announcement.AnnouncementType');
 REQUIRE('chlk.models.announcement.StudentAnnouncements');
 REQUIRE('chlk.models.id.ClassId');
@@ -15,7 +16,7 @@ REQUIRE('chlk.models.announcement.AnnouncementQnA');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.apps.ApplicationForAttach');
-
+REQUIRE('chlk.models.announcement.AnnouncementAttributeListViewData');
 REQUIRE('chlk.models.announcement.AdminAnnouncementRecipient');
 
 NAMESPACE('chlk.models.announcement', function () {
@@ -51,6 +52,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.clazz = raw['class'] || null;
                 this.className = SJX.fromValue(raw.fullclassname, String);
                 this.announcementAttachments = SJX.fromArrayOfDeserializables(raw.announcementattachments, chlk.models.attachment.Attachment);
+                this.announcementAttributes = SJX.fromArrayOfDeserializables(raw.announcementattributes, chlk.models.announcement.AnnouncementAttributeViewData);
                 this.departmentId = SJX.fromValue(raw.departmentid, chlk.models.id.DepartmentId);
                 this.gradesSummary = SJX.fromValue(raw.gradesummary, Number);
                 this.gradingStudentsCount = SJX.fromValue(raw.gradingstudentscount, Number);
@@ -144,6 +146,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'canAddStandard',
             Boolean, 'ableToRemoveStandard',
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
+            ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
             String, 'applicationName',
             Number, 'applicationsCount',
             Number, 'attachmentsCount',
@@ -269,7 +272,13 @@ NAMESPACE('chlk.models.announcement', function () {
                 var classAvg = studentAnnouncements.getGradesAvg(count_);
                 studentAnnouncements.setClassAvg(classAvg);
                 return classAvg;
-            }
+            },
 
+            chlk.models.announcement.AnnouncementAttributeListViewData, function getAttributesListViewData(){
+                var attrViewData = chlk.models.announcement.AnnouncementAttributeListViewData();
+                attrViewData.setId(this.getId());
+                attrViewData.setAnnouncementAttributes(this.getAnnouncementAttributes());
+                return attrViewData;
+            }
         ]);
 });

@@ -267,12 +267,6 @@ namespace Chalkable.Web.Controllers
             return Json(PrepareFullAnnouncementViewData(announcementId));
         }
 
-        [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult AnnouncementAttributesList(bool? activeOnly)
-        {
-            var res = SchoolLocator.AnnouncementAttributeService.GetList(activeOnly);
-            return Json(AnnouncementAttributeViewData.Create(res));
-        }
     }
 
 }

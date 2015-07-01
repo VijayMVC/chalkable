@@ -63,5 +63,6 @@ var ChlkSessionConstants = {
     INCLUDE_WITHDRAWN_STUDENTS: 'IncludeWithdrawnStudents',
     GROUPS_IDS: 'GroupsIds',
     GROUPS_LIST: 'GroupsList',
-    LE_PARAMS: 'leParams'
+    LE_PARAMS: 'leParams',
+    ANNOUNCEMENT_ATTRIBUTES: 'announcementAttributes'
 };

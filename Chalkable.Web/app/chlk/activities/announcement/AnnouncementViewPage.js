@@ -1,5 +1,5 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
-
+REQUIRE('chlk.activities.common.InfoByMpPage');
 REQUIRE('chlk.templates.announcement.AnnouncementView');
 REQUIRE('chlk.templates.announcement.StudentAnnouncement');
 REQUIRE('chlk.templates.announcement.AnnouncementForStudentAttachments');
@@ -52,6 +52,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementForStudentAttachments, 'update-attachments',
             '#attachments-block', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementView, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
+        //make base page with accordeon support
         'AnnouncementViewPage', EXTENDS(chlk.activities.lib.TemplatePage), [
             Array, 'applicationsInGradeView',
             Array, 'applications',
@@ -937,6 +938,36 @@ NAMESPACE('chlk.activities.announcement', function () {
                 if(!node.hasClass('disabled-submit') && !node.parent('form').find('.small-pop-up:visible').exists()){
                     node.parent('form').trigger('submit');
                 }
+            },
+
+            [ria.mvc.DomEventBind('click', '.attribute-title')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function collapseClick(node, event){
+                var nodeT = new ria.dom.Dom(event.target);
+                var parent = node.parent('.attribute-item-container');
+
+                var attrData = parent.find('.mp-data');
+                var container = attrData.find('.ann-types-container');
+                jQuery(attrData.valueOf()).animate({
+                    height: parent.hasClass('open') ? 0 : (container.height() + parseInt(container.getCss('margin-bottom'), 10))
+                }, 500);
+
+                if(parent.hasClass('open')){
+                    this.closeBlock(parent);
+                }else{
+                    var item = this.dom.find('.attribute-item-container.open');
+                    jQuery(item.find('.mp-data').valueOf()).animate({
+                        height: 0
+                    }, 500);
+                    this.closeBlock(item);
+                    parent.addClass('open');
+                }
+            },
+
+            function closeBlock(node){
+                setTimeout(function(){
+                    node.removeClass('open');
+                }, 500);
             }
         ]
     );

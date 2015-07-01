@@ -34,8 +34,8 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                 if (annDetails.AnnouncementAttachments != null && annDetails.AnnouncementAttachments.Count > 0)
                 {
                     if (activity.Attributes == null)
-                        activity.Attributes = new List<ActivityAttribute>();
-                    var newAtts = new List<ActivityAttribute>();
+                        activity.Attributes = new List<ActivityAssignedAttribute>();
+                    var newAtts = new List<ActivityAssignedAttribute>();
                     foreach (var annAtt in annDetails.AnnouncementAttachments)
                     {
                         if (annAtt.SisAttachmentId.HasValue)
@@ -43,7 +43,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                             var att = activity.Attributes.FirstOrDefault(x => x.Attachment != null && x.Attachment.AttachmentId == annAtt.SisAttachmentId);
                             if (att == null)
                             {
-                                att = new ActivityAttribute
+                                att = new ActivityAssignedAttribute
                                     {
                                         ActivityId = activity.Id,
                                         Attachment = new StiAttachment()

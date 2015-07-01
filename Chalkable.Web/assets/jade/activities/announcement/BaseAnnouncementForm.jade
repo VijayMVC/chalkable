@@ -99,6 +99,9 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
                             +SlideCheckbox('candropstudentscore', announcement.isAbleDropStudentScore(), false)
                             .question-mark(data-tooltip=Msg.Can_Drop_Student_Score_Tooltip_Message) ?
 
+
+
+
     .apps-attachments-bock.attachments-and-applications
         ann = announcement
         -ann.setNeedButtons(true)
@@ -107,6 +110,14 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
                 userRole = userRole,
                 studyCenterEnabled = self.isStudyCenterEnabled()
             )
+
+    .attributes-block
+        -var attributesList = announcement.getAttributesListViewData();
+        -attributesList.setReadOnly(false)
+        +RenderWith(attributesList, chlk.templates.announcement.AnnouncementAttributesTpl)(
+            userRole = userRole
+        )
+
     if !isAdmin
         .suggested-apps
             if announcement.getStandards() && announcement.getStandards().length > 0 && self.isStudyCenterEnabled()
