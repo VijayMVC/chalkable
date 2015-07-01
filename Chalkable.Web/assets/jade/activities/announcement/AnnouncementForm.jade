@@ -1,8 +1,8 @@
-mixin LessonPlanAnnouncementTypeToolBar(types, announcement, typeId)
+mixin AnnouncementTypeToolBar(types, announcement, typeId)
     if types.length > 8
         .action-bar
             .items
-                +ActionLink('announcement', 'lessonPlan').item.announcement-type-button Lesson Plan
+                +ActionLink('announcement', 'lessonPlan').item.announcement-type-button.no-save Lesson Plan
                 SPAN.type-text #{Msg.Type}:&nbsp;
                 +Select('typeid')#type-select
                     each item in types
@@ -11,14 +11,14 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, typeId)
                             data-typename=item.getName()
                         )
                 BUTTON(
-                    type = announcement && announcement.getState() ? "button" : "submit",
+                    type = announcement && announcement.getState().valueOf() ? "button" : "submit",
                     name="submitType",
                     value="save"
                 )#announcement-type-btn.validate-skip.x-hidden
     else
         .action-bar
             .items
-                +ActionLink('announcement', 'lessonPlan').item.announcement-type-button Lesson Plan
+                +ActionLink('announcement', 'lessonPlan').item.announcement-type-button.no-save Lesson Plan
                 each item in types
                     a.item.announcement-type-button(
                         class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
@@ -35,7 +35,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, typeId)
 -var topItems = topData.getTopItems()
 -var classId = announcement && classAnnouncement.getClassId() ? classAnnouncement.getClassId().valueOf() : null
 -var typeId = self.getSelectedTypeId()
--var state = announcement && announcement.getState()
+-var state = announcement && announcement.getState().valueOf()
 -var types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
 
 .announcement-form.loader-container
@@ -43,12 +43,12 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, typeId)
         h2.page-title= classAnnouncement.getClassName()
         .loader
         +ActionForm('announcement', 'save')(onlySubmitValidate=true).no-working
-            +ClassesToolBar(topData, null, null, null, announcement.getState())(pressAfterClick=!announcement.getState())
+            +ClassesToolBar(topData, null, null, null, state)(pressAfterClick=!state)
             .not-transparent(class=(classId ? '' : 'x-hidden'))
-                +LessonPlanAnnouncementTypeToolBar(types, announcement, typeId)
+                +AnnouncementTypeToolBar(types, announcement, typeId)
             .ann-form-container(class=(state || classId && typeId ? '' : 'x-hidden'))
                 +BaseAnnouncementFormContainer(self, announcement, classId, null, null, self.getUserRole(), self.getClassScheduleDateRanges(), self.getCurrentUser()).announcement-form
-                if announcement.getState()
+                if state
                     .duplicate-btn-container
                         +ActionButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).big-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
             .choose-type(class=(classId && !typeId && !state && types.length ? '' : 'x-hidden'))

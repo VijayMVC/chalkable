@@ -23,7 +23,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.setIsDraft(isDraft || false);
             },
 
-            [[chlk.models.announcement.Announcement]],
+            [[chlk.models.announcement.FeedAnnouncementViewData]],
             function $createFromAnnouncement(announcement){
                 BASE();
                 this.setAnnouncement(announcement);

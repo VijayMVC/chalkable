@@ -19,7 +19,7 @@ NAMESPACE('chlk.models.student', function(){
 
             chlk.models.classes.Class, 'clazz',
             Number, 'avg',
-            chlk.models.announcement.Announcement, 'announcement',
+            chlk.models.announcement.ClassAnnouncementViewData, 'announcement',
             ArrayOf(chlk.models.standard.StandardForExplorer), 'standards',
 
             VOID, function deserialize(raw){

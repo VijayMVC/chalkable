@@ -15,13 +15,7 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
 
             function getAnnouncementsOffPeriods() {
                 return this.items.map(function (day, index) {
-                    var classesTaday = day.getAnnouncementPeriods()
-                        .map(function (_) { return _.getPeriod(); })
-                        .filter(function (_) { return _.getStartTime() && _.getClassName(); })
-                        .map(function (_) { return _.getClassId(); });
-
-                    var result = day.getAnnouncements()
-                        .filter(function (_) { return classesTaday.indexOf(_.getClassId()) < 0 });
+                    var result = day.getAdminAnnouncements();
 
                     result.day = day;
 

@@ -3,6 +3,8 @@ REQUIRE('chlk.templates.announcement.LessonPlanFormTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.templates.announcement.LastMessages');
 REQUIRE('chlk.templates.announcement.AnnouncementTitleTpl');
+REQUIRE('chlk.templates.announcement.LessonPlanSearchTpl');
+REQUIRE('chlk.templates.announcement.LessonPlanAutoCompleteTpl');
 REQUIRE('chlk.templates.SuccessTpl');
 REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
 REQUIRE('chlk.templates.apps.SuggestedAppsListTpl');

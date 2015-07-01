@@ -1,6 +1,6 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
-REQUIRE('chlk.models.announcement.LessonPlanForm');
+REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.AnnouncementView');
 
 REQUIRE('chlk.models.attachment.Attachment');
@@ -78,7 +78,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, chlk.models.id.GalleryCategoryId
+            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, Number
                 , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean]],
             ria.async.Future, function saveLessonPlan(id, classId_, title_, content_, galleryCategoryId_
                 , startDate_, endDate_, hideFromStudent_) {
@@ -94,7 +94,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, chlk.models.id.GalleryCategoryId
+            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, Number
                 , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean]],
             ria.async.Future, function submitLessonPlan(id, classId_, title_, content_, galleryCategoryId_
                 , startDate_, endDate_, hideFromStudent_) {

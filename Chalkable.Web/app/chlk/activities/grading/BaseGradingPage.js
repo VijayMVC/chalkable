@@ -5,7 +5,7 @@ REQUIRE('chlk.templates.grading.AnnouncementForGradingPopup');
 REQUIRE('chlk.templates.grading.ItemGradingStatTpl');
 REQUIRE('chlk.templates.announcement.ShortAnnouncementTpl');
 REQUIRE('chlk.templates.grading.GradingClassSummaryPartTpl');
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 REQUIRE('chlk.activities.common.InfoByMpPage');
 
 NAMESPACE('chlk.activities.grading', function () {

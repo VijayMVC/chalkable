@@ -29,6 +29,8 @@ mixin AnnouncementFormApplicationItem(app, i)
 attachments = self.getAnnouncementAttachments() || []
 applications = self.getApplications() || []
 items = self.getSortedAppsAndAttachments();
+itemWithClass = self.getLessonPlanData() || self.getClassAnnouncementData()
+classId = itemWithClass && itemWithClass.getClassId()
 
 +Hidden('attachments', self.getAttachments())
 +Hidden('applicationsids', self.getApplicationsIds())
@@ -36,7 +38,7 @@ if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
         if self.isStudyCenterEnabled()
             if  !self.getAdminAnnouncementData()
-                +ActionButton('announcement', self.getState() ? 'attachApp' : 'attachAppOnCreate', self.getId(), self.getClassId(), self.getStandardsUrlComponents())(type="button")#add-application.simple-gray-button Attach App
+                +ActionButton('announcement', self.getState() ? 'attachApp' : 'attachAppOnCreate', self.getId(), classId, self.getStandardsUrlComponents())(type="button")#add-application.simple-gray-button Attach App
                 br
             if self.getAssessmentApplicationId()
                 +ActionButton('apps', 'tryToAttachFromAnnouncement', self.getId(), self.getAssessmentApplicationId(), self.getStandardsUrlComponents())#add-assesment.simple-gray-button Assessment

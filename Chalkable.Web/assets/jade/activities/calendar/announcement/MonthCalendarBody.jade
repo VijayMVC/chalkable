@@ -19,15 +19,18 @@
                         class = [item.isSunday() ? 'sunday' : '', item.getClassName(), item.getTodayClassName(), disablePopUp ? 'disabled' : '', itemsArr.length + announcements.length ? 'with-anns' : '']
                     )
                         h2.number=item.getDay()
-                        max = 7
-                        if announcements.length > 0
+                        -var lessonPlan = item.getlessonPlans() && item.getlessonPlans()[0]
+                        if lessonPlan
+                            div(class=item.getDate().getDate() < getDate() || item.getTodayClassName() == 'today' ? 'green' : 'red').lesson-plan-item #{lessonPlan.getShortClassName()} LP
+                        //max = 7
+                        //if announcements.length > 0
                             ul(class=item.getRole()).day-announcements.calendar-items
                                 each announcement,i in announcements
                                     if i < item.getAnnLimit() || announcements.length <= item.getAnnLimit()
                                         li(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").items=announcement.getTitle()
                                 if announcements.length > item.getAnnLimit()
                                     li +#{announcements.length - item.getAnnLimit() + 1} more
-                        ul(class=(announcements.length > 0 ? '' : 'calendar-items')).day-items
+                        //ul(class=(announcements.length > 0 ? '' : 'calendar-items')).day-items
                             announcementsLen = announcements.length > 3 ? 3 : announcements.length;
                             maxLen = max - announcementsLen;
                             each annItem,i in itemsArr

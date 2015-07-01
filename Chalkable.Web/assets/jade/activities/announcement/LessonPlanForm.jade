@@ -1,49 +1,32 @@
-mixin AnnouncementTypeToolBar(types, announcement, lessonPlan)
-    if types.length > 8
-        .action-bar
-            .items
-                +ActionLink('announcement', 'lessonPlan', lessonPlan.getClassId()).item.announcement-type-button Lesson Plan
-                SPAN.type-text #{Msg.Type}:&nbsp;
-                +Select('typeid')#type-select
-                    each item in types
-                        +Option(item.getId(), item.getName(), typeId==item.getId())(
-                            data-typeid=item.getId(),
-                            data-typename=item.getName()
-                        )
-                BUTTON(
-                    type = announcement && announcement.getState() ? "button" : "submit",
-                    name="submitType",
-                    value="save"
-                )#announcement-type-btn.validate-skip.x-hidden
-    else
-        .action-bar
-            .items
-                +ActionLink('announcement', 'lessonPlan', lessonPlan.getClassId()).item.announcement-type-button.pressed Lesson Plan
-                if !announcement.getState()
-                    each item in types
-                        +ActionLink('announcement', 'add', lessonPlan.getClassId(), item.getId()).item.announcement-type-button=item.getName()
+mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
+    .action-bar
+        .items
+            +ActionLink('announcement', 'lessonPlan', lessonPlan.getClassId()).item.announcement-type-button.pressed Lesson Plan
+            if !announcement.getState().valueOf()
+                each item in types
+                    +ActionLink('announcement', 'addClassAnnouncement', lessonPlan.getClassId(), item.getId()).item.announcement-type-button.no-save=item.getName()
 
 -var topData = self.getTopData()
 -var announcement = self.getAnnouncement()
 -var topItems = topData.getTopItems()
 -var lessonPlan = announcement && announcement.getLessonPlanData()
 -var classId = announcement && lessonPlan.getClassId() ? lessonPlan.getClassId().valueOf() : null
--var typeId = self.getSelectedTypeId()
--var state = announcement && announcement.getState()
+-var state = announcement && announcement.getState().valueOf()
 -var types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
+-var userRole = self.getUserRole();
 
 .announcement-form.loader-container
     if announcement && lessonPlan.getClassId()
         h2.page-title= lessonPlan.getClassName()
         .loader
         +ActionForm('announcement', 'onLessonPlanSave')(onlySubmitValidate=true).no-working
-            +ClassesToolBar(topData, null, null, null, announcement.getState())(pressAfterClick=!announcement.getState())
+            +ClassesToolBar(topData, null, null, null, state)(pressAfterClick=!state)
             .not-transparent(class=(classId ? '' : 'x-hidden'))
-                +AnnouncementTypeToolBar(types, announcement, lessonPlan)
-            .ann-form-container(class=(state || classId && typeId ? '' : 'x-hidden'))
+                +LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
+            .ann-form-container(class=(state || classId ? '' : 'x-hidden'))
                 +Hidden('id', announcement.getId().valueOf())
-                +Hidden('isedit', !!announcement.getState())(data-isedit = !!announcement.getState()).is-edit
-                +Hidden('classid', classId)
+                +Hidden('isedit', !!state)(data-isedit = !!state).is-edit
+                +Hidden('classId', classId)
                 +Hidden('type', announcement.getType())
 
                 -var standards = announcement.getStandards() || []
@@ -68,11 +51,11 @@ mixin AnnouncementTypeToolBar(types, announcement, lessonPlan)
                                             ableToRemoveStandard=announcement.isAbleToRemoveStandard())
                                         if announcement.isCanAddStandard()
                                             .title=standards.length > 0 ? Msg.Click_to_add_more : Msg.Click_to_add_standard
-                                            +ActionLink('announcement', announcement.getState() ? 'showStandards' : 'showStandardsOnCreate', Msg.Lesson_Plan, announcement.getId(), classId).add-standards-btn.x-hidden
+                                            +ActionLink('announcement', state ? 'showStandards' : 'showStandardsOnCreate', Msg.Lesson_Plan, announcement.getId(), classId).add-standards-btn.x-hidden
                             .drawer-icon
                         .drop-down-container.popup-bubble.top
                         input(type="submit",id="list-last-button",value="listLast", name="submitType", class='x-hidden validate-skip')
-                        if !announcement.getState()
+                        if !state
                             input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
                     .right-block
                         .date-picker-startdate
@@ -81,7 +64,7 @@ mixin AnnouncementTypeToolBar(types, announcement, lessonPlan)
                             data-options={
                                 showOtherMonths: true,
                                 selectOtherMonths: true,
-                                dateRanges: classScheduleDateRanges
+                                dateRanges: self.getClassScheduleDateRanges()
                             },
                             data-value=lessonPlan.getStartDate() ? lessonPlan.getStartDate().format('mm/dd/yy') : ''
                             placeholder='Due min date',
@@ -94,7 +77,7 @@ mixin AnnouncementTypeToolBar(types, announcement, lessonPlan)
                             data-options={
                                 showOtherMonths: true,
                                 selectOtherMonths: true,
-                                dateRanges: classScheduleDateRanges
+                                dateRanges: self.getClassScheduleDateRanges()
                             },
                             data-value=lessonPlan.getEndDate() ? lessonPlan.getEndDate().format('mm/dd/yy') : ''
                             placeholder='Due max date'
@@ -119,7 +102,7 @@ mixin AnnouncementTypeToolBar(types, announcement, lessonPlan)
                                             +Option(item.getId(), item.getName(), item.getId() == lessonPlan.getGalleryCategoryId().valueOf())
 
                 .apps-attachments-bock.attachments-and-applications
-                ann = announcement
+                    ann = announcement
                     -ann.setNeedButtons(true)
                     -ann.setNeedDeleteButton(true)
                     +RenderWith(ann, chlk.templates.announcement.AnnouncementAppAttachments)(
@@ -133,10 +116,10 @@ mixin AnnouncementTypeToolBar(types, announcement, lessonPlan)
                     +Button()(
                     type="submit",
                     name="submitType",
-                    value=announcement.getState() ? "submitOnEdit" : "submit"
+                    value=state ? "submitOnEdit" : "submit"
                     ).special-button.blue-button.submit-btn.submit-announcement.big-button
-                        =(announcement.getState() ? Msg.Save : Msg.Submit)
-                    if announcement.getState()
+                        =(state ? Msg.Save : Msg.Submit)
+                    if state
                         +ActionLink('announcement', 'delete', announcement.getId(), announcement.getAnnouncementTypeName())
                             +Button()(
                             type="button",
@@ -144,10 +127,6 @@ mixin AnnouncementTypeToolBar(types, announcement, lessonPlan)
                     else
                         +ActionLink('announcement', 'discard').grey-link.not-blue.add-loader-btn=Msg.Discard
 
-                if announcement.getState()
-                    .duplicate-btn-container
-                        +ActionButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).big-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()
-            .choose-type(class=(classId && !typeId && !state && types.length ? '' : 'x-hidden'))
             if !classId
                 if topItems.length
                     .choose-class

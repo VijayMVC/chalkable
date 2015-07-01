@@ -20,12 +20,12 @@ mixin Glue_()
     -var lessonPlan = self.getLessonPlanData()
     -var classAnnouncement = self.getClassAnnouncementData()
     -var adminAnnouncement = self.getAdminAnnouncementData()
-    -var isReadonly = !classAnnouncement.isAbleToGrade()
     -var studentAnnouncements = false
     -var studentAnnouncementsInfo = self.getStudentAnnouncements()
     -var applications = self.getApplications()
     -var gradeViewApps = self.getGradeViewApps()
     -var grade = self.getGrade()
+    -var itemWithExpiresDate = classAnnouncement || adminAnnouncement
     .autocomplete-list.announcement-view
     if studentAnnouncementsInfo
         studentAnnouncements = studentAnnouncementsInfo.getItems()
@@ -73,7 +73,8 @@ mixin Glue_()
 
                 .description
                     .chat-bubble
-                        h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
+                        if itemWithExpiresDate
+                            h2(class=itemWithExpiresDate.getExpiresDateColor())=itemWithExpiresDate.getExpiresDateText()
                         p!= glue(self.getTitle(), self.linkify(self.getContent()))
 
                         if self.getStandards() && self.getStandards().length > 0
@@ -143,7 +144,7 @@ mixin Glue_()
                         +Hidden('maxScore', classAnnouncement.getMaxScore())#max-score
                         +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
                             autoGradeApps = self.getAutoGradeApps(),
-                            readonly = isReadonly,
+                            readonly = !classAnnouncement.isAbleToGrade(),
                             gradeViewApps = self.getGradeViewApps(),
                             applications = self.getApplications(),
                             userRole = self.getUserRole(),

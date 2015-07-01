@@ -7,9 +7,8 @@ NAMESPACE('chlk.templates.announcement', function () {
     /** @class chlk.templates.announcement.LessonPlanFormTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/LessonPlanForm.jade')],
-        [ria.templates.ModelBind(chlk.models.announcement.LessonPlanForm)],
+        [ria.templates.ModelBind(chlk.models.announcement.AnnouncementForm)],
         'LessonPlanFormTpl', EXTENDS(chlk.templates.announcement.AnnouncementFormTpl), [
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.common.NameId), 'categories'
+
         ]);
 });

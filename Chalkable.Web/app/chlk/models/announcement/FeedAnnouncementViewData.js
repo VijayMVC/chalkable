@@ -29,7 +29,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.studentAnnouncements = SJX.fromDeserializable(raw.studentannouncements, chlk.models.announcement.StudentAnnouncements);
                 this.autoGradeApps = SJX.fromArrayOfValues(raw.autogradeapps, Object);
                 this.owner = SJX.fromDeserializable(raw.owner, chlk.models.people.User);
-                this.exempt = SJX.fromDeserializable(raw.exempt, Boolean);
+                this.exempt = SJX.fromValue(raw.exempt, Boolean);
                 this.ableToRemoveStandard = SJX.fromValue(raw.canremovestandard, Boolean);
                 this.suggestedApps = SJX.fromArrayOfDeserializables(raw.suggestedapps, chlk.models.apps.ApplicationForAttach);
                 this.recipients = SJX.fromArrayOfDeserializables(raw.recipients, chlk.models.announcement.AdminAnnouncementRecipient);
@@ -54,6 +54,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.expiresDate = SJX.fromDeserializable(raw.expiresdate, chlk.models.common.ChlkDate);
                 this.startDate = SJX.fromDeserializable(raw.startDate, chlk.models.common.ChlkDate);
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
+                this.classId = SJX.fromValue(raw.classId, chlk.models.id.ClassId);
                 this.ableDropStudentScore = SJX.fromValue(raw.candropstudentscore, Boolean);
                 this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, Number);
                 this.filter = SJX.fromValue(raw.filter, String);
@@ -97,8 +98,6 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'groupIds',
             String, 'attachments',
             String, 'applicationsIds',
-            String, 'expiresDateColor',
-            String, 'expiresDateText',
             String, 'submitType',
             Boolean, 'needButtons',
             Boolean, 'needDeleteButton',
@@ -116,32 +115,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'weightMultiplier',
             Number, 'weightAddition',
             Boolean, 'ableDropStudentScore',
+            chlk.models.id.ClassId, 'classId',
 
-            function prepareExpiresDateText(){
-                var now = getSchoolYearServerDate();
-                var days = 0;
-                var expTxt = "";
-                var expires = this.getExpiresDate();
-                var expiresDate = expires.getDate();
-                var date = expires.format('(D m/d)');
-                this.setExpiresDateColor('blue');
-
-                if(formatDate(now, 'dd-mm-yy') == expires.format('dd-mm-yy')){
-                    this.setExpiresDateColor('blue');
-                    this.setExpiresDateText(Msg.Due_today);
-                }else{
-                    if(now > expires.getDate()){
-                        this.setExpiresDateColor('red');
-                        days = getDateDiffInDays(expiresDate, now);
-                        expTxt = days == 1 ? Msg.Due_yesterday + " " + date : Msg.Due_days_ago(days) + " " + date;
-
-                    }else{
-                        days = getDateDiffInDays(now, expiresDate);
-                        expTxt = days == 1 ? Msg.Due_tomorrow + " " + date : Msg.Due_in_days(days) + " " + date;
-                    }
-                    this.setExpiresDateText(expTxt);
-                }
-            },
             function getTitleModel(){
                 var title = this.getTitle();
                 return new chlk.models.announcement.AnnouncementTitleViewData(title);

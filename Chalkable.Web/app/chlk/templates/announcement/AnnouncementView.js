@@ -10,14 +10,6 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementView.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementView)],
         'AnnouncementView', EXTENDS(chlk.templates.announcement.AnnouncementAppAttachments), [
-            [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.LessonPlanViewData, 'lessonPlanData',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.AdminAnnouncementViewData, 'adminAnnouncementData',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.Announcement, 'classAnnouncementData',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',
@@ -47,13 +39,19 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.people.User, 'owner',
 
             [ria.templates.ModelPropertyBind],
-            String, 'expiresDateColor',
+            chlk.models.announcement.AnnouncementTypeEnum, 'type',
 
             [ria.templates.ModelPropertyBind],
-            String, 'expiresDateText',
+            String, 'content',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'annOwner',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
 
 
 

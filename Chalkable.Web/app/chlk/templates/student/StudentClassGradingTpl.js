@@ -40,7 +40,7 @@ NAMESPACE('chlk.templates.student', function(){
                     title: this.getClassName()
                 }
             },
-            [[chlk.models.announcement.Announcement]],
+            [[chlk.models.announcement.ClassAnnouncementViewData]],
             Object, function prepareItemStyleInfo(item){
                 return {
                     emptyBoxClass : !item.getAvg() ? 'empty-box' : '',
@@ -48,7 +48,7 @@ NAMESPACE('chlk.templates.student', function(){
                 }
             },
 
-            [[chlk.models.grading.ClassPersonGradingItem, chlk.models.announcement.Announcement]],
+            [[chlk.models.grading.ClassPersonGradingItem, chlk.models.announcement.ClassAnnouncementViewData]],
             String, function getItemTitle(itemType, announcement){
                 var res = itemType.getName() + " " + announcement.getOrder();
                 if(announcement.getGrade())

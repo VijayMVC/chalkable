@@ -20,8 +20,6 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.expiresDate = SJX.fromDeserializable(raw.expiresdate, chlk.models.common.ChlkDate);
                 this.defaultTitle = SJX.fromValue(raw.defaulttitle, Boolean);
                 this.setAnnouncementTypeId(SJX.fromValue(raw.announcementtypeid, Number));
-                this.chalkableAnnouncementType = SJX.fromValue(raw.chalkableannouncementtypeid, Number);
-                this.setChalkableAnnouncementType(this.chalkableAnnouncementType);
                 this.classId = SJX.fromValue(Number(raw.classid), chlk.models.id.ClassId);
                 this.shortClassName = SJX.fromValue(raw.classname, String);
                 this.className = SJX.fromValue(raw.fullclassname, String);
@@ -39,7 +37,6 @@ NAMESPACE('chlk.models.announcement', function () {
 
             function $(){
                 BASE();
-                this._chalkableAnnouncementType = null;
                 this.announcementTypeId = null;
                 this.classId = null;
                 this._annTypeEnum = chlk.models.announcement.AnnouncementTypeEnum;
@@ -51,17 +48,7 @@ NAMESPACE('chlk.models.announcement', function () {
             [[Number]],
             VOID, function setAnnouncementTypeId(announcementTypeId){
                 this.announcementTypeId = announcementTypeId;
-                if(!announcementTypeId)
-                    this.setChalkableAnnouncementType(this._annTypeEnum.ANNOUNCEMENT.valueOf())
             },
-            Number, 'chalkableAnnouncementType',
-
-            [[Number]],
-            VOID, function setChalkableAnnouncementType(chalkableAnnouncementType){
-                this._chalkableAnnouncementType = chalkableAnnouncementType
-                    || this._annTypeEnum.ANNOUNCEMENT.valueOf();
-            },
-            Number, function getChalkableAnnouncementType(){ return this._chalkableAnnouncementType;},
             chlk.models.id.ClassId, 'classId',
             String, 'shortClassName',
             String, 'className',
@@ -74,6 +61,37 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'ableToGrade',
             Boolean, 'hiddenFromStudents',
             Number, 'weightMultiplier',
-            Number, 'weightAddition'
+            Number, 'weightAddition',
+            String, 'expiresDateColor',
+            String, 'expiresDateText',
+
+            function prepareExpiresDateText(){
+                var now = getSchoolYearServerDate();
+                var days = 0;
+                var expTxt = "";
+                var expires = this.getExpiresDate();
+                var expiresDate = expires.getDate();
+                var date = expires.format('(D m/d)');
+                this.setExpiresDateColor('blue');
+
+                if(formatDate(now, 'dd-mm-yy') == expires.format('dd-mm-yy')){
+                    this.setExpiresDateColor('blue');
+                    this.setExpiresDateText(Msg.Due_today);
+                }else{
+                    if(now > expires.getDate()){
+                        this.setExpiresDateColor('red');
+                        days = getDateDiffInDays(expiresDate, now);
+                        expTxt = days == 1 ? Msg.Due_yesterday + " " + date : Msg.Due_days_ago(days) + " " + date;
+
+                    }else{
+                        days = getDateDiffInDays(now, expiresDate);
+                        expTxt = days == 1 ? Msg.Due_tomorrow + " " + date : Msg.Due_in_days(days) + " " + date;
+                    }
+                    this.setExpiresDateText(expTxt);
+                }
+            },
+
+
+            Number, 'avg'
         ]);
 });

@@ -336,7 +336,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.setMoreClicked(false);
 
                 var allScores = [], zeroPercentageScores = [], classAnnouncement = model.getClassAnnouncementData();
-                if(this.getRole().isTeacher()){
+                var lessonPlan = model.getLessonPlanData();
+                if(this.getRole().isTeacher() && classAnnouncement){
                     this.setAbleDropStudentScore(classAnnouncement.isAbleDropStudentScore());
                     this.setAbleToExempt(classAnnouncement.isAbleToExempt());
                     model.getAlternateScores().forEach(function(item){
@@ -365,15 +366,20 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
 
                 this.setOwner(model.getOwner());
-                this.setMaxScore(classAnnouncement.getMaxScore());
-                this.setStudentAnnouncements(model.getStudentAnnouncements()
-                    ? model.getStudentAnnouncements().getItems() :[]);
-                this.setApplicationsInGradeView(model.getGradeViewApps());
+                if(classAnnouncement){
+                    this.setMaxScore(classAnnouncement.getMaxScore());
+                    this.setStudentAnnouncements(model.getStudentAnnouncements()
+                        ? model.getStudentAnnouncements().getItems() :[]);
+                    this.setApplicationsInGradeView(model.getGradeViewApps());
+                    this.setGradable(classAnnouncement.isGradable());
+                    this.setAbleToGrade(classAnnouncement.isAbleToGrade());
+                    this.setAutoGradeApps(model.getAutoGradeApps());
+                }
+
+
                 this.setApplications(model.getApplications());
-                this.setAutoGradeApps(model.getAutoGradeApps());
                 this.setAnnouncementId(model.getId());
-                this.setGradable(classAnnouncement.isGradable());
-                this.setAbleToGrade(classAnnouncement.isAbleToGrade());
+
 
                 var moving = new ria.dom.Dom('.moving-wrapper');
                 if(moving.exists()){

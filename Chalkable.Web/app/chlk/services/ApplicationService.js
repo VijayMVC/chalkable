@@ -164,7 +164,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.AnnouncementApplicationId]],
             ria.async.Future, function attachApp(appAnnouncementId) {
               return this
-                  .post('Application/Attach.json', chlk.models.announcement.Announcement, {
+                  .post('Application/Attach.json', chlk.models.announcement.FeedAnnouncementViewData, {
                       announcementApplicationId: appAnnouncementId.valueOf(),
                       announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                   });

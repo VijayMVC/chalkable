@@ -70,7 +70,7 @@ NAMESPACE('chlk.templates.student', function(){
                 return !this.showMoreButton(item) || (announcementsLength + index < 3);
             },
 
-            [[chlk.models.announcement.Announcement]],
+            [[chlk.models.announcement.ClassAnnouncementViewData]],
             String, function getDaysForAnnouncement(announcement){
                 announcement.prepareExpiresDateText();
                 return announcement.getExpiresDateText();

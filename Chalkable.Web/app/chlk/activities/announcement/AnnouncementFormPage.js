@@ -142,7 +142,9 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.DomEventBind('click', '.announcement-type-button:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function typeClick(node, event){
+            function typeClick(node, event){
+                if(node.hasClass('no-save'))
+                    return;
                 node.parent().find('.pressed').removeClass('pressed');
                 node.addClass('pressed');
                 var typeId = node.getData('typeid');

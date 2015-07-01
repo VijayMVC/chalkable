@@ -1,5 +1,5 @@
 REQUIRE('chlk.templates.announcement.ApplicationsAndAttachments');
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.announcement.FeedAnnouncementViewData');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.SchoolPersonId');
@@ -22,6 +22,15 @@ NAMESPACE('chlk.templates.announcement', function () {
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.AdminAnnouncementViewData, 'adminAnnouncementData',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.LessonPlanViewData, 'lessonPlanData',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.ClassAnnouncementViewData, 'classAnnouncementData',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.apps.AppAttachment), 'applications',
 
             [ria.templates.ModelPropertyBind],
@@ -34,7 +43,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             ArrayOf(chlk.models.standard.Standard), 'standards',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'state',
+            chlk.models.announcement.StateEnum, 'state',
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'needButtons',
