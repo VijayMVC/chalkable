@@ -92,7 +92,7 @@ namespace Chalkable.BusinessLogic.Services.School
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, schoolYearId);
                 var spIds = persons.Select(x => x.PersonId).Distinct().ToList();
                 var schoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
-                var res = RegisterInstallAction(uow, app, personId, roleIds, classIds, departmentIds, gradeLevelIds, schoolYearId);
+                var res = RegisterInstallAction(uow, app, personId, roleIds, classIds, departmentIds, gradeLevelIds, schoolYearId, dateTime);
                 var appInstalls = new List<ApplicationInstall>();
 
                 foreach (var spId in spIds)
@@ -116,7 +116,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         private ApplicationInstallAction RegisterInstallAction(UnitOfWork uow, Application app, int? personId, IList<int> roleids, IList<int> classids, IList<Guid> departmentids
-            , IList<int> gradelevelids, int schoolYearId)
+            , IList<int> gradelevelids, int schoolYearId, DateTime dateTime)
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
@@ -126,7 +126,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 PersonRef = personId,
                 Description = string.Empty,
                 OwnerRef = Context.PersonId.Value,
-                SchoolYearRef = schoolYearId
+                SchoolYearRef = schoolYearId,
+                InstallDate = dateTime,
+                OwnerRoleId = Context.RoleId
             };
             var ada = new ApplicationInstallActionDataAccess(uow);
             ada.Insert(res);

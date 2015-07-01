@@ -21,6 +21,8 @@ namespace Chalkable.Data.School.Model.ApplicationInstall
         public Guid ApplicationRef { get; set; }
         public string Description { get; set; }
         public int SchoolYearRef { get; set; }
+        public DateTime InstallDate { get; set; }
+        public int OwnerRoleId { get; set; }
 
         [NotDbFieldAttr]
         public IList<ApplicationInstall> ApplicationInstalls { get; set; } 

@@ -132,11 +132,12 @@ namespace Chalkable.Web.Models.ApplicationsViewData
     {
         public enum GroupTypeEnum
         {
+            All = 0,
             Class = 1,
-            GradeLevel,
-            Department,
-            Role,
-            All,
+            GradeLevel = 2,
+            Department = 3,
+            Role = 4,
+            Group = 5
         }
         public bool IsInstalled { get; set; }
         public GroupTypeEnum GroupType { get; set; }
@@ -161,6 +162,8 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public int PersonId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public int OwnerRoleId { get; set; }
+        public DateTime InstallDate { get; set; }
         public int InstalledCount { get; set; }
         public decimal Price { get; set; }
         public decimal Remains { get; set; }
@@ -174,7 +177,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                 LastName = x.LastName,
                 PersonId = x.PersonId,
                 SchoolId = x.SchoolId,
-                SchoolName = x.SchoolName
+                SchoolName = x.SchoolName,
+                OwnerRoleId = x.OwnerRoleId,
+                InstallDate = x.InstallDate
             }).ToList();
         }
     }
