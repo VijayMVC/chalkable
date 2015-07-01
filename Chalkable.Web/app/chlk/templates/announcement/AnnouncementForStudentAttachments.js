@@ -1,10 +1,20 @@
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.templates.ChlkTemplate');
 
 NAMESPACE('chlk.templates.announcement', function () {
 
     /** @class chlk.templates.announcement.AnnouncementForStudentAttachments*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementStudentAttachments.jade')],
-        [ria.templates.ModelBind(chlk.models.announcement.Announcement)],
-        'AnnouncementForStudentAttachments', EXTENDS(chlk.templates.announcement.Announcement), [])
+        [ria.templates.ModelBind(chlk.models.announcement.FeedAnnouncementViewData)],
+        'AnnouncementForStudentAttachments', EXTENDS(chlk.templates.ChlkTemplate), [
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AnnouncementId, 'id',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.ClassAnnouncementViewData, 'classAnnouncementData'
+
+        ])
 });

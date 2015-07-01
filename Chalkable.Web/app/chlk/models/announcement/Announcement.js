@@ -14,25 +14,11 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.Announcement*/
     CLASS(
         UNSAFE, 'Announcement',
-                EXTENDS(chlk.models.announcement.BaseAnnouncementViewData),
-                IMPLEMENTS(ria.serialize.IDeserializable), [
+        EXTENDS(chlk.models.announcement.BaseAnnouncementViewData),
+        IMPLEMENTS(ria.serialize.IDeserializable), [
 
             OVERRIDE, VOID, function deserialize(raw) {
                 BASE(raw);
-                this.lessonPlanData = SJX.fromDeserializable(raw.lessonplandata, chlk.models.announcement.LessonPlanViewData);
-                this.adminAnnouncementData = SJX.fromDeserializable(raw.adminannouncementdata, chlk.models.announcement.AdminAnnouncementViewData);
-                this.classAnnouncementData = SJX.fromDeserializable(raw.classannouncementdata, chlk.models.announcement.ClassAnnouncementViewData);
-                this.shortContent = SJX.fromValue(raw.shortcontent, String);
-                this.complete = SJX.fromValue(raw.complete, Boolean);
-                this.attachmentsCount = SJX.fromValue(raw.attachmentscount, Number);
-                this.ownerAttachmentsCount = SJX.fromValue(raw.ownerattachmentscount, Number);
-                this.lessonPlanData = SJX.fromDeserializable(raw.lessonplandata, chlk.models.announcement.LessonPlanViewData);
-                this.adminAnnouncementData = SJX.fromDeserializable(raw.adminannouncementdata, chlk.models.announcement.AdminAnnouncementViewData);
-                this.classAnnouncementData = SJX.fromDeserializable(raw.classannouncementdata, chlk.models.announcement.ClassAnnouncementViewData);
-                this.shortContent = SJX.fromValue(raw.shortcontent, String);
-                this.complete = SJX.fromValue(raw.complete, Boolean);
-                this.attachmentsCount = SJX.fromValue(raw.attachmentscount, Number);
-                this.ownerAttachmentsCount = SJX.fromValue(raw.ownerattachmentscount, Number);
                 this.lessonPlanData = SJX.fromDeserializable(raw.lessonplandata, chlk.models.announcement.LessonPlanViewData);
                 this.adminAnnouncementData = SJX.fromDeserializable(raw.adminannouncementdata, chlk.models.announcement.AdminAnnouncementViewData);
                 this.classAnnouncementData = SJX.fromDeserializable(raw.classannouncementdata, chlk.models.announcement.ClassAnnouncementViewData);
@@ -51,7 +37,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             chlk.models.announcement.LessonPlanViewData, 'lessonPlanData',
             chlk.models.announcement.AdminAnnouncementViewData, 'adminAnnouncementData',
-            chlk.models.announcement.Announcement, 'classAnnouncementData',
+            chlk.models.announcement.ClassAnnouncementViewData, 'classAnnouncementData',
             String, 'shortContent',
             Boolean, 'complete',
             Number, 'attachmentsCount',
@@ -63,6 +49,8 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'applicationName',
             Boolean, 'showGradingIcon',
             chlk.models.id.AppId, 'assessmentApplicationId'
+    ])
+});
 
 
 

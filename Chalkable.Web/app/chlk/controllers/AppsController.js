@@ -481,9 +481,9 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, String]],
         function tryToAttachAction(announcementId, appId, appUrlAppend_) {
-
+            var announcementType = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, null);
             var result = this.appsService
-                .addToAnnouncement(this.getCurrentPerson().getId(), appId, announcementId)
+                .addToAnnouncement(this.getCurrentPerson().getId(), appId, announcementId, announcementType)
                 .catchError(function(error_){
                     throw new chlk.lib.exception.AppErrorException(error_);
                 }, this)

@@ -1,6 +1,6 @@
 REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
-REQUIRE('chlk.models.id.GalleryCategoryId');
+REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -21,7 +21,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.shortClassName = SJX.fromValue(raw.classname, String);
                 this.className = SJX.fromValue(raw.fullclassname, String);
                 this.hiddenFromStudents = SJX.fromValue(raw.hidefromstudents, Boolean);
-                this.galleryCategoryId = SJX.fromValue(raw.gallerycategoryid, chlk.models.id.GalleryCategoryId);
+                this.galleryCategoryId = SJX.fromValue(raw.gallerycategoryid, Number);
             },
 
             chlk.models.common.ChlkDate, 'startDate',
@@ -30,6 +30,16 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'shortClassName',
             String, 'className',
             Boolean, 'hiddenFromStudents',
-            chlk.models.id.GalleryCategoryId, 'galleryCategoryId'
+            Number, 'galleryCategoryId',
+
+            function getPercents(){
+                var len = getDateDiffInDays(this.startDate.getDate(), this.endDate.getDate()) + 1;
+                var greenDaysLen = getDateDiffInDays(this.startDate.getDate(), getDate()) + 1;
+                if(greenDaysLen < 1)
+                    return 0;
+                if(greenDaysLen >= len)
+                    return 100;
+                return Math.round(greenDaysLen * 100 / len);
+            }
         ]);
 });

@@ -1,6 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.announcement.BaseAnnouncementFormTpl');
-REQUIRE('chlk.templates.announcement.Announcement');
+REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.templates.announcement.LastMessages');
 
 NAMESPACE('chlk.activities.announcement', function () {

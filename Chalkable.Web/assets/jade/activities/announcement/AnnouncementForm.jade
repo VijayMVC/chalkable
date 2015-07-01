@@ -1,4 +1,4 @@
-mixin AnnouncementTypeToolBar(types, announcement, typeId)
+mixin LessonPlanAnnouncementTypeToolBar(types, announcement, typeId)
     if types.length > 8
         .action-bar
             .items
@@ -31,23 +31,23 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
 
 -var topData = self.getTopData()
 -var announcement = self.getAnnouncement()
+-var classAnnouncement = announcement && announcement.getClassAnnouncementData()
 -var topItems = topData.getTopItems()
--var classId = announcement && announcement.getClassId() ? announcement.getClassId().valueOf() : null
+-var classId = announcement && classAnnouncement.getClassId() ? classAnnouncement.getClassId().valueOf() : null
 -var typeId = self.getSelectedTypeId()
 -var state = announcement && announcement.getState()
--var classes = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
 -var types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
 
 .announcement-form.loader-container
-    if announcement && announcement.getClassId()
-        h2.page-title= announcement.getClassName()
+    if announcement && classAnnouncement.getClassId()
+        h2.page-title= classAnnouncement.getClassName()
         .loader
         +ActionForm('announcement', 'save')(onlySubmitValidate=true).no-working
             +ClassesToolBar(topData, null, null, null, announcement.getState())(pressAfterClick=!announcement.getState())
             .not-transparent(class=(classId ? '' : 'x-hidden'))
-                +AnnouncementTypeToolBar(types, announcement, typeId)
+                +LessonPlanAnnouncementTypeToolBar(types, announcement, typeId)
             .ann-form-container(class=(state || classId && typeId ? '' : 'x-hidden'))
-                +BaseAnnouncementFormContainer(self, announcement, classId, null, null, self.getUserRole(), self.getClassScheduleDateRanges()).announcement-form
+                +BaseAnnouncementFormContainer(self, announcement, classId, null, null, self.getUserRole(), self.getClassScheduleDateRanges(), self.getCurrentUser()).announcement-form
                 if announcement.getState()
                     .duplicate-btn-container
                         +ActionButton('announcement', 'showDuplicateForm', announcement.getId(), topData.getSelectedItemId()).big-button.blue-button.submit-btn=Msg.Duplicate.toUpperCase()

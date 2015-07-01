@@ -12,6 +12,7 @@ REQUIRE('chlk.models.apps.ShortAppInfo');
 REQUIRE('chlk.models.apps.BannedAppData');
 REQUIRE('chlk.models.apps.AppPersonRating');
 REQUIRE('chlk.models.apps.ApplicationAuthorization');
+REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 
 REQUIRE('chlk.models.id.GradeLevelId');
 REQUIRE('chlk.models.id.SchoolPersonId');
@@ -148,7 +149,8 @@ NAMESPACE('chlk.services', function () {
                 return this
                     .post('Application/AddToAnnouncement.json', chlk.models.apps.AppAttachment, {
                         applicationId: appId.valueOf(),
-                        announcementId: announcementId.valueOf()
+                        announcementId: announcementId.valueOf(),
+                        announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                     })
                     .then(function(attachment){
                         return this.getOauthCode(personId, attachment.getUrl())
@@ -163,7 +165,8 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function attachApp(appAnnouncementId) {
               return this
                   .post('Application/Attach.json', chlk.models.announcement.Announcement, {
-                      announcementApplicationId: appAnnouncementId.valueOf()
+                      announcementApplicationId: appAnnouncementId.valueOf(),
+                      announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                   });
             },
 

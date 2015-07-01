@@ -6,7 +6,7 @@ NAMESPACE('chlk.models.grading', function () {
     /** @class chlk.models.grading.GradingStudentSummaryViewData*/
     CLASS(
         'GradingStudentSummaryViewData', EXTENDS(chlk.models.common.PageWithClasses), [
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements',
+            ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements',
 
             [ria.serialize.SerializeProperty('totalavgperdate')],
             ArrayOf(chlk.models.grading.GradingStatsByDateViewData), 'totalAvgPerDate',

@@ -1,5 +1,6 @@
 .calendar-popup.popup-bubble
     -var announcements = self.getAnnouncements()
+    -var lessonPlans = self.getLessonPlans()
     -var period = self.getPeriod()
     -var roomNumber = period.getRoomNumber()
     -var teacherDisplayName = period.getTeacherDisplayName();
@@ -18,13 +19,24 @@
         .day-down #{period.displayPeriodTimeRange()}
         .day-down= self.getDate().format('DD, M d')
     if announcements.length > 0
+        h3 Announcements
         .announcements-list
             .day-announcements
                 each item in announcements
                     .items
-                        +ActionLink('announcement', 'view', item.getId())(class="announcement-type-" + item.getChalkableAnnouncementType()).pop-up-announcement
+                        +ActionLink('announcement', 'view', item.getId()).pop-up-announcement
                             div
                                 +TooltipWithOverflow(item.getTitle()).item-title
+    if lessonPlans.length > 0
+        h3 Lesson Plans
+        .announcements-list
+            .day-announcements
+                each item in announcements
+                    .items
+                        +ActionLink('announcement', 'view', item.getId()).pop-up-announcement
+                            div
+                                +TooltipWithOverflow(item.getTitle()).item-title
+
     if self.getUserRole().isTeacher() && period.isTeaching() !== false
         -var classId = (self.getSelectedClassId() && self.getSelectedClassId().valueOf()) || (period.getClassId() && period.getClassId().valueOf())
         +ActionButton('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, classId || '').ann-button.plus-ann New item

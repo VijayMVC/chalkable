@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.period.ClassPeriod');
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -13,6 +13,6 @@ NAMESPACE('chlk.models.announcement', function () {
             [ria.serialize.SerializeProperty('daynumber')],
             Number, 'dayNumber',
 
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements'
+            ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements'
         ]);
 });

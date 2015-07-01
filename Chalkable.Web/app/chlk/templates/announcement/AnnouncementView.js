@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.announcement.Announcement');
+REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.models.announcement.AnnouncementView');
 REQUIRE('chlk.templates.announcement.AnnouncementQnAs');
 
@@ -9,21 +9,108 @@ NAMESPACE('chlk.templates.announcement', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementView.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementView)],
-        'AnnouncementView', EXTENDS(chlk.templates.announcement.Announcement), [
+        'AnnouncementView', EXTENDS(chlk.templates.announcement.AnnouncementAppAttachments), [
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.LessonPlanViewData, 'lessonPlanData',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.AdminAnnouncementViewData, 'adminAnnouncementData',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.Announcement, 'classAnnouncementData',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.StudentAnnouncements, 'studentAnnouncements',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'grade',
+
+            [ria.templates.ModelPropertyBind],
+            Array, 'autoGradeApps',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ableEdit',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'announcementTypeName',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'title',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'comment',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.people.User, 'owner',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'expiresDateColor',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'expiresDateText',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
+
+
+
+            /*[ria.templates.ModelPropertyBind],
+            Number, 'ownerAttachmentsCount',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'showGradingIcon',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'applicationsCount',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'className',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'announcementTypeId',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'complete',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'gradingStudentsCount',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'chalkableAnnouncementType',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'adminAnnouncement',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ClassId, 'classId',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'shortContent',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.ChlkDate, 'expiresDate',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'applicationName',
+
+             [ria.templates.ModelPropertyBind],
+             Boolean, 'exempt',
+
+             [ria.templates.ModelPropertyBind],
+             ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
+
+             [ria.templates.ModelPropertyBind],
+             ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',*/
+
+
             Number, function getAutoGradeCount(){
                 return (this.getStudentAnnouncements().getItems() || []).filter(function(item){
                     return item.getState() == 0;
                 }).length;
             },
-
-            [ria.templates.ModelPropertyBind],
-            Boolean, 'exempt',
-
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
-
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
 
             Boolean, function isStudentGraded(){
                 var grade = this.getGrade();

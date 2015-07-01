@@ -37,22 +37,28 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.comment = SJX.fromValue(raw.comment, String);
 
                 this.groupIds = SJX.fromValue(raw.groupIds, String);
-
-                /*
-                this.stateTyped = SJX.fromValue(raw.statetyped, Number);
-                this.systemType = SJX.fromValue(raw.systemtype, Number);
-                this.wasSubmittedToAdmin = SJX.fromValue(raw.wassubmittedtoadmin, Boolean);
-                this.gradeViewApps = SJX.fromArrayOfDeserializables(raw.gradeviewapps, chlk.models.apps.AppAttachment);
                 this.attachments = SJX.fromValue(raw.attachments, String);
+                this.gradeViewApps = SJX.fromArrayOfDeserializables(raw.gradeviewapps, chlk.models.apps.AppAttachment);
                 this.applicationsIds = SJX.fromValue(raw.applicationsids, String);
-                this.expiresDateText = SJX.fromValue(raw.expiresdatetext, String);
-                this.currentUser = SJX.fromDeserializable(raw.currentuser, chlk.models.people.User);
-                this.subject = SJX.fromValue(raw.subject, String);
                 this.markingPeriodId = SJX.fromValue(raw.markingperiodid, chlk.models.id.MarkingPeriodId);
-                this.annRecipients = SJX.fromValue(raw.annrecipients, String);
-                this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
+                this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.common.NameId);
+
                 this.submitType = SJX.fromValue(raw.submitType, String);
-                this.adminAnnouncement = SJX.fromValue(raw.isadminannouncement, Boolean);*/
+                this.galleryCategoryId = SJX.fromValue(raw.galleryCategoryId, Number);
+                this.hiddenFromStudents = SJX.fromValue(raw.hidefromstudents, Boolean);
+                this.announcementTypeId = SJX.fromValue(raw.announcementTypeId, Number);
+                this.maxScore = SJX.fromValue(raw.maxscore, Number);
+                this.weightMultiplier = SJX.fromValue(raw.weightmultiplier, Number);
+                this.weightAddition = SJX.fromValue(raw.weightaddition, Number);
+                this.hiddenFromStudents = SJX.fromValue(raw.hidefromstudents, Boolean);
+                this.expiresDate = SJX.fromDeserializable(raw.expiresdate, chlk.models.common.ChlkDate);
+                this.startDate = SJX.fromDeserializable(raw.startDate, chlk.models.common.ChlkDate);
+                this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
+                this.ableDropStudentScore = SJX.fromValue(raw.candropstudentscore, Boolean);
+                this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, Number);
+                this.filter = SJX.fromValue(raw.filter, String);
+
+                this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
 
                 if(this.autoGradeApps && this.autoGradeApps.length){
                     var autoGradeApps = [];
@@ -86,28 +92,30 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'comment',
             ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
 
+            Number, 'announcementTypeId',
+            ArrayOf(chlk.models.common.NameId), 'categories',
             String, 'groupIds',
-            /*
-            Number, 'stateTyped',
-            Number, 'systemType',
-            Boolean, 'wasSubmittedToAdmin',
-            READONLY, Boolean, 'standartAnnouncement',
-            Boolean, function isStandartAnnouncement(){
-                return !this.getAnnouncementTypeId();
-            },
-            ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
             String, 'attachments',
             String, 'applicationsIds',
             String, 'expiresDateColor',
             String, 'expiresDateText',
-            chlk.models.people.User, 'currentUser',
-            String, 'subject',
-            chlk.models.id.MarkingPeriodId, 'markingPeriodId',
             String, 'submitType',
             Boolean, 'needButtons',
             Boolean, 'needDeleteButton',
-            String, 'annRecipients',
-            Boolean, 'adminAnnouncement',*/
+            Boolean, 'ableEdit',
+            chlk.models.id.MarkingPeriodId, 'markingPeriodId',
+            ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
+            Number, 'galleryCategoryId',
+            Number, 'galleryCategoryForSearch',
+            String, 'filter',
+            Boolean, 'hiddenFromStudents',
+            chlk.models.common.ChlkDate, 'expiresDate',
+            chlk.models.common.ChlkDate, 'startDate',
+            chlk.models.common.ChlkDate, 'endDate',
+            Number, 'maxScore',
+            Number, 'weightMultiplier',
+            Number, 'weightAddition',
+            Boolean, 'ableDropStudentScore',
 
             function prepareExpiresDateText(){
                 var now = getSchoolYearServerDate();

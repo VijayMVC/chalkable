@@ -50,6 +50,7 @@ var ChlkSessionConstants = {
     ANNOUNCEMENT_ATTACHMENTS: 'AnnouncementAttachments',
     ANNOUNCEMENT: 'announcement',
     ANNOUNCEMENT_ID: 'announcementId',
+    ANNOUNCEMENT_TYPE: 'announcementType',
     STANDARD_IDS: 'StandardsIds',
     CC_STANDARD_CODES: 'StandardCodes',
     CC_STANDARDS: 'CCStandards',
@@ -63,5 +64,6 @@ var ChlkSessionConstants = {
     INCLUDE_WITHDRAWN_STUDENTS: 'IncludeWithdrawnStudents',
     GROUPS_IDS: 'GroupsIds',
     GROUPS_LIST: 'GroupsList',
-    LE_PARAMS: 'leParams'
+    LE_PARAMS: 'leParams',
+    LESSON_PLAN_CATEGORIES: 'lessonPlanCategories'
 };

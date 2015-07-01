@@ -1,6 +1,6 @@
 REQUIRE('chlk.activities.announcement.BaseAnnouncementFormPage');
 REQUIRE('chlk.templates.announcement.AnnouncementFormTpl');
-REQUIRE('chlk.templates.announcement.Announcement');
+REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.templates.announcement.LastMessages');
 REQUIRE('chlk.templates.announcement.AnnouncementTitleTpl');
 REQUIRE('chlk.templates.SuccessTpl');
@@ -16,7 +16,7 @@ NAMESPACE('chlk.activities.announcement', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementFormTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, 'update-attachments', '.apps-attachments-bock', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, 'update-attachments', '.apps-attachments-bock', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementFormTpl, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.standard.AnnouncementStandardsTpl, '', '.standards-list' , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementTitleTpl, '.title-block-container', null , ria.mvc.PartialUpdateRuleActions.Replace)],
@@ -41,7 +41,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, 'update-standards-and-suggested-apps', '', ria.mvc.PartialUpdateRuleActions.Replace)],
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, 'update-standards-and-suggested-apps', '', ria.mvc.PartialUpdateRuleActions.Replace)],
             [[Object, Object, String]],
             VOID, function updateStandardsAndSuggestedApps(tpl, model, msg_) {
                 var standardsData = new chlk.models.standard.StandardsListViewData(
@@ -206,7 +206,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('.title-text:visible').trigger('click');
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, chlk.activities.lib.DontShowLoader())],
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, chlk.activities.lib.DontShowLoader())],
             VOID, function doSaveTitle(tpl, model, msg_) {
 
             },

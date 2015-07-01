@@ -35,8 +35,8 @@ NAMESPACE('chlk.models.search', function () {
             Number, function getChalkableAnnouncementType(){
                 var res = this.getAnnouncementType();
                 if(res) return res;
-                if(this.isAdminAnnouncement()) return chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf();
-                return chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf();
+                //if(this.isAdminAnnouncement()) return chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf();
+                return null;
             },
 
             VOID, function deserialize(raw) {

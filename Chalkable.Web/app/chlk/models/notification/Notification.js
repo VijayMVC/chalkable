@@ -63,8 +63,9 @@ NAMESPACE('chlk.models.notification', function () {
             Number, function getChalkableAnnouncementType(){
                 var res = this.getAnnouncementType();
                 if(res) return res;
-                if(this.isAdminAnnouncement()) return chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf();
-                return chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf();
+                //if(this.isAdminAnnouncement()) return chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf();
+                //return chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf();
+                return null;
             },
 
             String, function getCreatedTime(){

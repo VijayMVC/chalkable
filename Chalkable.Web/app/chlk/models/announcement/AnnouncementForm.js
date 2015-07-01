@@ -15,7 +15,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Array, 'classScheduleDateRanges',
 
             [[chlk.models.classes.ClassesForTopBar, Boolean]],
-            function $create(classes, isDraft, date_){
+            function $create(classes, isDraft){
                 BASE();
                 if(classes){
                     this.setTopData(classes);

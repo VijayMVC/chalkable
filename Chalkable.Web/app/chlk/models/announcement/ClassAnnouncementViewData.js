@@ -26,7 +26,6 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.shortClassName = SJX.fromValue(raw.classname, String);
                 this.className = SJX.fromValue(raw.fullclassname, String);
                 this.dropped = SJX.fromValue(raw.dropped, Boolean);
-                this.annOwner = SJX.fromValue(raw.isowner, Boolean);
                 this.order = SJX.fromValue(raw.order, Number);
                 this.maxScore = SJX.fromValue(raw.maxscore, Number);
                 this.ableDropStudentScore = SJX.fromValue(raw.candropstudentscore, Boolean);
@@ -53,7 +52,7 @@ NAMESPACE('chlk.models.announcement', function () {
             VOID, function setAnnouncementTypeId(announcementTypeId){
                 this.announcementTypeId = announcementTypeId;
                 if(!announcementTypeId)
-                    this.setChalkableAnnouncementType(this.isAdminAnnouncement() ? this._annTypeEnum.ADMIN.valueOf() : this._annTypeEnum.ANNOUNCEMENT.valueOf())
+                    this.setChalkableAnnouncementType(this._annTypeEnum.ANNOUNCEMENT.valueOf())
             },
             Number, 'chalkableAnnouncementType',
 
@@ -67,7 +66,6 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'shortClassName',
             String, 'className',
             Boolean, 'dropped',
-            Boolean, 'annOwner',
             Number, 'order',
             Number, 'maxScore',
             Boolean, 'ableDropStudentScore',

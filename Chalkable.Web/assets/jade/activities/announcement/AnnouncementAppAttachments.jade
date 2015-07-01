@@ -35,7 +35,7 @@ items = self.getSortedAppsAndAttachments();
 if self.needButtons
     #attach-file-area.announcement-item.attach-file-area
         if self.isStudyCenterEnabled()
-            if  !self.isAdminAnnouncement()
+            if  !self.getAdminAnnouncementData()
                 +ActionButton('announcement', self.getState() ? 'attachApp' : 'attachAppOnCreate', self.getId(), self.getClassId(), self.getStandardsUrlComponents())(type="button")#add-application.simple-gray-button Attach App
                 br
             if self.getAssessmentApplicationId()

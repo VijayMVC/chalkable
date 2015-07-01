@@ -1,28 +1,26 @@
 //TODO refactor
-mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientId, adminRecipients, userRole, classScheduleDateRanges)
-    +Hidden('lessonPlan', false)
+mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientId, adminRecipients, userRole, classScheduleDateRanges, user)
+    -var classAnnouncement = announcement.getClassAnnouncementData()
+    -var adminAnnouncement = announcement.getAdminAnnouncementData()
+    -var announcementItem = classAnnouncement || adminAnnouncement
+
     +Hidden('id', announcement.getId().valueOf())
-    +Hidden('announcementtypeid', announcement.getAnnouncementTypeId())#announcement-type-id
-    +Hidden('systemtype', announcement.getSystemType())
-    +Hidden('personid', announcement.getPersonId().valueOf())
-    +Hidden('markingperiodid', announcement.getCreated())
-    +Hidden('state', announcement.getState())
+    +Hidden('announcementtypeid', classAnnouncement && classAnnouncement.getAnnouncementTypeId())#announcement-type-id
+    +Hidden('personId', user.getId().valueOf())
+    //+Hidden('markingperiodid', announcement.getCreated())
+    //+Hidden('state', announcement.getState())
     +Hidden('isedit', !!announcement.getState())(data-isedit = !!announcement.getState()).is-edit
     +Hidden('classid', classId)
-    +Hidden('order', announcement.getOrder()).order-value
+    +Hidden('type', announcement.getType())
     +Hidden('announcementtypename', announcement.getAnnouncementTypeName())
     +Hidden('groupIds', announcement.getRecipients() && announcement.getRecipients().map(function(item){return item.getGroupId()}).join(',')).group-ids
 
-    //+AnnouncementFormDescriptionBlock(announcement)
-    typesEnum = chlk.models.announcement.AnnouncementTypeEnum
-
-    -var isAnnouncement = announcement.isStandartAnnouncement()
     -var disableDeleteBtn = !!(announcement.getGradingStudentsCount() && announcement.getGradingStudentsCount() > 0)
     -var standards = announcement.getStandards() || []
     -var isAdmin = userRole.isAdmin()
 
     +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
-    div(class=announcement.getExpiresDate() ? 'with-date' : '').title-block-container
+    div(class=announcementItem.getExpiresDate() ? 'with-date' : '').title-block-container
         if isAdmin
             .title-block
                 INPUT(type="text", name="title", placeholder="Title", value=announcement.getTitle(), autocomplete="off", maxlength="30", class='validate[required]')#admin-title
@@ -43,7 +41,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
                                 )
                             .title=recipients.length > 0 ? Msg.Click_to_add_more : 'Click to add group'
                             +ActionLink('announcement', 'showGroups', announcement.getId()).add-recipients-btn.x-hidden
-                +TextArea(name="content", placeholder=isAnnouncement ? "Message" : "Assignment")= announcement.getContent()
+                +TextArea(name="content", placeholder="Assignment")= announcement.getContent()
                 if needStandardsBlock
                     .add-standards-container
                         .add-standards
@@ -65,13 +63,13 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
         .right-block
             .date-picker-container
                 label(for="expiresdate") Due Date
-                +DatePicker('expiresdate', announcement.getExpiresDate())(
+                +DatePicker('expiresdate', announcementItem.getExpiresDate())(
                     data-options={
                         showOtherMonths: true,
                         selectOtherMonths: true,
                         dateRanges: classScheduleDateRanges
                     },
-                    data-value=announcement.getExpiresDate() ? announcement.getExpiresDate().format('mm/dd/yy') : ''
+                    data-value=announcementItem.getExpiresDate() ? announcementItem.getExpiresDate().format('mm/dd/yy') : ''
                     placeholder=Msg.Due_date,
                     class='validate[required]'
                 )#expiresdate
@@ -79,7 +77,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
             if !isAdmin
                 .max-score-container
                     label(for="ann-max-score") Max Score
-                    input#ann-max-score(type="text", name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[custom[number],min[0]]", value=announcement.isGradable() ? announcement.getMaxScore() : '0')
+                    input#ann-max-score(type="text", name="maxscore", placeholder=Msg.Max_score + ' 100', class="validate[custom[number],min[0]]", value=classAnnouncement.isGradable() ? classAnnouncement.getMaxScore() : '0')
                     .question-mark(data-tooltip=Msg.Max_Score_Tooltip_Message) ?
                 .advanced-options
                     A.advanced-options-btn(href="javascript:;")= Msg.Advanced_options
@@ -87,26 +85,26 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
                     .advanced-options-container.x-hidden.popup-bubble.top
                         .weight-multiplier.new-input-container
                             label(for="ann-weightmultiplier")= Msg.Weight_Multiplier
-                            input#ann-weightmultiplier(type="text", name='weightmultiplier', class="validate[required,custom[double],min[0]]", placeholder="1.00", value=announcement.getWeightMultiplier() || 1.00)
+                            input#ann-weightmultiplier(type="text", name='weightmultiplier', class="validate[required,custom[double],min[0]]", placeholder="1.00", value=classAnnouncement.getWeightMultiplier() || 1.00)
                             .question-mark(data-tooltip=Msg.Weight_Multiplier_Tooltip_Message) ?
                         .weight-addition.new-input-container
                             label(for="ann-weightaddition")=Msg.Weight_Addition
-                            input#ann-weightaddition(type="text", name='weightaddition', class="validate[required,custom[double],min[0]]", placeholder="0.00", value=announcement.getWeightAddition() || 0.00)
+                            input#ann-weightaddition(type="text", name='weightaddition', class="validate[required,custom[double],min[0]]", placeholder="0.00", value=classAnnouncement.getWeightAddition() || 0.00)
                             .question-mark(data-tooltip=Msg.Weight_Addition_Tooltip_Message) ?
                         .check-box-container
                             label(for="ann-hidefromstudents")=Msg.Hide_from_Students
-                            +SlideCheckbox('hidefromstudents', announcement.isHiddenFromStudents(), false)
+                            +SlideCheckbox('hidefromstudents', classAnnouncement.isHiddenFromStudents(), false)
                             .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
                         .check-box-container
                             label(for="ann-candropstudentscore")=Msg.Can_drop_student_score
-                            +SlideCheckbox('candropstudentscore', announcement.isAbleDropStudentScore(), false)
+                            +SlideCheckbox('candropstudentscore', classAnnouncement.isAbleDropStudentScore(), false)
                             .question-mark(data-tooltip=Msg.Can_Drop_Student_Score_Tooltip_Message) ?
 
     .apps-attachments-bock.attachments-and-applications
         ann = announcement
         -ann.setNeedButtons(true)
         -ann.setNeedDeleteButton(true)
-            +RenderWith(ann, chlk.templates.announcement.Announcement)(
+            +RenderWith(ann, chlk.templates.announcement.AnnouncementAppAttachments)(
                 userRole = userRole,
                 studyCenterEnabled = self.isStudyCenterEnabled()
             )

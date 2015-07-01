@@ -8,5 +8,8 @@ NAMESPACE('chlk.templates.announcement', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/LessonPlanForm.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.LessonPlanForm)],
-        'LessonPlanFormTpl', EXTENDS(chlk.templates.announcement.AnnouncementFormTpl), []);
+        'LessonPlanFormTpl', EXTENDS(chlk.templates.announcement.AnnouncementFormTpl), [
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.common.NameId), 'categories'
+        ]);
 });
