@@ -53,6 +53,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
 
+            [ria.templates.ModelPropertyBind],
+            Number, 'applicationsCount',
+
 
 
             /*[ria.templates.ModelPropertyBind],
