@@ -9,22 +9,19 @@ NAMESPACE('chlk.models.group', function(){
 
     CLASS('AnnouncementGroupsViewData', EXTENDS(chlk.models.group.GroupsListViewData), IMPLEMENTS(ria.serialize.IDeserializable), [
 
-        ArrayOf(chlk.models.id.GroupId), 'groupIds',
-        chlk.models.id.AnnouncementId, 'announcementId',
+        ArrayOf(chlk.models.id.GroupId), 'selected',
+        String, 'controller',
+        String, 'action',
+        String, 'resultHidden',
+        Object, 'hiddenParams',
 
         OVERRIDE, VOID, function deserialize(raw){
             BASE(raw);
-            this.groupIds = SJX.fromArrayOfValues(raw.groupIds, ArrayOf(chlk.models.id.GroupId));
-            this.announcementId = SJX.fromValue(raw.announcementId, chlk.models.id.AnnouncementId);
-        },
-
-        [[ArrayOf(chlk.models.group.Group), ArrayOf(chlk.models.id.GroupId), chlk.models.id.AnnouncementId]],
-        function $(groups_, groupIds_, announcementId_){
-            BASE(groups_);
-            if(groupIds_)
-                this.setGroupIds(groupIds_);
-            if(announcementId_)
-                this.setAnnouncementId(announcementId_);
+            this.selected = SJX.fromArrayOfValues(raw.selected, chlk.models.id.GroupId) || [];
+            this.controller = SJX.fromValue(raw.controller, String);
+            this.action = SJX.fromValue(raw.action, String);
+            this.resultHidden = SJX.fromValue(raw.resultHidden, String);
+            this.hiddenParams = raw.hiddenParams || null;
         }
     ]);
 });

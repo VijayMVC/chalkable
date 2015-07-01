@@ -58,6 +58,7 @@ devName = app.getDeveloperInfo().getName()
             +Hidden('roles', "")
             +Hidden('currentPerson', "")
             +Hidden('forAll', "")
+            +Hidden('groups', "")
 
             .row
                 .group-header.first User:
@@ -65,7 +66,9 @@ devName = app.getDeveloperInfo().getName()
                     div
                         each item in app.getInstalledForGroups()
                             +InstallItem(item)
+                        if self.userRole.isAdmin()
+                            +Button(type="submit", name="submitActionType", value="manage-groups", data-no-update = "1") Manage groups
             .calculated-price
             .install-info
                 .install-btn
-                    +Button(disabled = true, type="submit").special-button.blue-button Install App
+                    +Button(disabled = true, type="submit", name="submitActionType", value="install").special-button.blue-button Install App

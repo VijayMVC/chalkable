@@ -399,14 +399,21 @@ NAMESPACE('chlk.controllers', function (){
                BASE();
 
                var state = this.context.getState(),
-                   $sidebar = ria.dom.Dom(SIDEBAR_CONTROLS_ID);
+                   $sidebar = ria.dom.Dom(SIDEBAR_CONTROLS_ID),
+                   methodReflector = this.resolveRoleAction_(state),
+                   classReflector = new ria.reflection.ReflectionClass(this.getClass());
 
-               var methodReflector = this.resolveRoleAction_(state);
+               var notChangedSidebarButton = methodReflector.isAnnotatedWith(chlk.controllers.NotChangedSidebarButton)
+                       || (classReflector.isAnnotatedWith(chlk.controllers.NotChangedSidebarButton) &&
+                            !methodReflector.isAnnotatedWith(chlk.controllers.SidebarButton)),
+                   sidebarButton = methodReflector.findAnnotation(chlk.controllers.SidebarButton)[0]
+                       || classReflector.findAnnotation(chlk.controllers.SidebarButton)[0]
+                       || null;
 
-               if(!methodReflector.isAnnotatedWith(chlk.controllers.NotChangedSidebarButton)){
+               if (!notChangedSidebarButton || sidebarButton) {
                    $sidebar.find('A.' + PRESSED_CLS).removeClass(PRESSED_CLS);
-                   if (methodReflector.isAnnotatedWith(chlk.controllers.SidebarButton) && !this.isNotAblePressSidebarButton()){
-                       var buttonCls = methodReflector.findAnnotation(chlk.controllers.SidebarButton)[0].clazz;
+                   if (sidebarButton && !this.isNotAblePressSidebarButton()){
+                       var buttonCls = sidebarButton.clazz;
                        $sidebar.find('A.' + buttonCls).addClass(PRESSED_CLS);
                    }
                }

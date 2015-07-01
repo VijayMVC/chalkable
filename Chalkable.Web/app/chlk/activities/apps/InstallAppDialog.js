@@ -28,7 +28,8 @@ NAMESPACE('chlk.activities.apps', function () {
             VOID, function prepareAppInstallPostData_(){
                 var ids = [{
                     id: chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ,
-                    name: 'classes' }, {
+                    name: 'classes'
+                }, {
                     id:chlk.models.apps.AppInstallGroupTypeEnum.GRADELEVEL,
                     name: 'gradeLevels'
                 }, {
@@ -43,8 +44,10 @@ NAMESPACE('chlk.activities.apps', function () {
                 }, {
                     id: chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
                     name: 'currentPerson'
-                }
-                ];
+                }, {
+                    id: chlk.models.apps.AppInstallGroupTypeEnum.GROUP,
+                    name: 'groups'
+                }];
 
                 for(var i = 0; i < ids.length; ++i){
                     var selectedIds = [];
@@ -73,7 +76,7 @@ NAMESPACE('chlk.activities.apps', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function submitClick(node, event){
                 this.prepareAppInstallPostData_();
-                this.dom.find('input[name=submitActionType]').setValue('install');
+                //this.dom.find('input[name=submitActionType]').setValue('install');
             },
 
             VOID, function enableInstallBtn_(){
@@ -105,8 +108,8 @@ NAMESPACE('chlk.activities.apps', function () {
                         return elem.getAttr('install-group') != node.getAttr('install-group');
                     }).trigger(event, [false]);
                 }else{
-                    this.dom.find('input[install-group=5]').trigger(event, [false]);
-                    this.dom.find('input[install-group=6]').trigger(event, [false]);
+                    this.dom.find('input[install-group=' + chlk.models.apps.AppInstallGroupTypeEnum.ALL.valueOf() + ']').trigger(event, [false]);
+                    this.dom.find('input[install-group=' + chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER.valueOf() + ']').trigger(event, [false]);
                 }
 
                 this.dom.find('input[name=submitActionType]').setValue('getAppPrice');
