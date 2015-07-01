@@ -24,8 +24,10 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
             [ria.serialize.SerializeProperty('schedulesection')],
             chlk.models.schoolYear.ScheduleSection, 'scheduleSection',
 
+            [ria.serialize.SerializeProperty('lessonplans')],
             ArrayOf(chlk.models.announcement.LessonPlanViewData), 'lessonPlans',
 
+            [ria.serialize.SerializeProperty('adminannouncements')],
             ArrayOf(chlk.models.announcement.AdminAnnouncementViewData), 'adminAnnouncements',
 
             ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements',

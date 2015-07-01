@@ -27,6 +27,7 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
             [ria.serialize.SerializeProperty('announcementperiods')],
             ArrayOf(chlk.models.announcement.AnnouncementPeriod), 'announcementPeriods',
 
+            [ria.serialize.SerializeProperty('adminannouncements')],
             ArrayOf(chlk.models.announcement.AdminAnnouncementViewData), 'adminAnnouncements',
 
             Boolean, 'noPlusButton'

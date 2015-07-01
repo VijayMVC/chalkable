@@ -18,6 +18,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             chlk.models.common.ChlkDate, 'date',
 
+            [ria.serialize.SerializeProperty('lessonplans')],
             ArrayOf(chlk.models.announcement.LessonPlanViewData), 'lessonPlans',
 
             ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements',

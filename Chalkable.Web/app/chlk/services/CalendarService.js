@@ -136,7 +136,7 @@ NAMESPACE('chlk.services', function () {
                 var mpEndDate = dateRangeObj.endDate;
                 days.forEach(function(day){
                     var itemsArray = [], itemsObject = {};
-                    var items = day.getItems();
+                    var items = day.getAnnouncements();
                     for (var i = 0; i < items.length; i++){
                         var typeName = items[i].getAnnouncementTypeName();
                         var title = items[i].getTitle();
