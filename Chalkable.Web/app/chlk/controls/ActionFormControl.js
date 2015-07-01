@@ -103,7 +103,8 @@ NAMESPACE('chlk.controls', function () {
 
                 $form.setData('submit-name', $target.getAttr('name'));
                 $form.setData('submit-value', $target.getValue() || $target.getAttr('value'));
-                $form.setData('submit-skip', $target.hasClass('validate-skip'))
+                $form.setData('submit-skip', $target.hasClass('validate-skip'));
+                $form.setData('submit-no-update', $target.getData('no-update'));
             },
 
             [ria.mvc.DomEventBind('submit', 'FORM')],
@@ -136,6 +137,7 @@ NAMESPACE('chlk.controls', function () {
 
                         var name = $target.getData('submit-name');
                         var value = $target.getData('submit-value');
+                        var noWorking = $target.getData('submit-no-update');
 
                         if (name) {
                             params[name] = value;
@@ -143,9 +145,10 @@ NAMESPACE('chlk.controls', function () {
 
                         $target.setData('submit-name', null);
                         $target.setData('submit-value', null);
+                        $target.setData('submit-no-update', null);
                         $target.setData('submit-type', value);
 
-                        if(!$target.hasClass('no-working'))
+                        if(!$target.hasClass('no-working') && !noWorking)
                             $target.addClass('working');
 
                         var isPublic = !!$target.getData('public');

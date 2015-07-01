@@ -305,7 +305,7 @@ NAMESPACE('chlk.controllers', function (){
                     app = this.prepareApplicationInstallGroups_(app);
                     return new chlk.models.apps.AppMarketInstallViewData(app);
                 }, this);
-            return this.ShadeView(chlk.activities.apps.InstallAppDialog, appInfo);
+            return this.ShadeOrUpdateView(chlk.activities.apps.InstallAppDialog, appInfo);
         },
 
         [chlk.controllers.SidebarButton('apps')],
@@ -383,15 +383,34 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('apps')],
+        [[Object]],
+        function updateGroupsAction(data) {
+            this.BackgroundCloseView(chlk.activities.announcement.AnnouncementGroupsDialog);
+            this.BackgroundNavigate('appmarket', 'tryToInstall', [data.id]);
+            return null;
+        },
+
+        [chlk.controllers.SidebarButton('apps')],
         [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.apps.AppInstallPostData]],
         function installAction(appInstallData) {
             switch(appInstallData.getSubmitActionType()){
-                case 'install':{
+                case 'manage-groups':
+                    return this.Redirect('group', 'show', [{
+                        selectedIds: appInstallData.getGroups().split(',').map(chlk.models.id.GroupId),
+                        controller: 'appmarket',
+                        action: 'update-groups',
+                        resultHidden: 'groupIds',
+                        hiddenParams: {
+                            'id': appInstallData.getAppId()
+                        }
+                    }]);
+
+                case 'install':
                     var res = this.install_(appInstallData, 'installComplete', null, 'installFail', null);
                     return this.UpdateView(chlk.activities.apps.InstallAppDialog, res);
-                } break;
-                case 'getAppPrice': {
+
+                case 'getAppPrice':
                     var appInstallArgs = this.prepareAppTotalPriceCallParams_(appInstallData);
 
                     var res;
@@ -400,7 +419,6 @@ NAMESPACE('chlk.controllers', function (){
                     else
                         res = new ria.async.DeferredData(new chlk.models.apps.AppTotalPrice.$createEmpty());
                     return this.UpdateView(chlk.activities.apps.InstallAppDialog, res, 'getAppPrice');
-                } break;
             }
         },
 
@@ -412,6 +430,7 @@ NAMESPACE('chlk.controllers', function (){
                 this.getIdsList(appInstallData.getClasses(), chlk.models.id.AppInstallGroupId),
                 this.getIdsList(appInstallData.getRoles(), chlk.models.id.AppInstallGroupId),
                 this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
+                this.getIdsList(appInstallData.getGroups(), chlk.models.id.AppInstallGroupId),
                 appInstallData.getCurrentPerson()
             ];
         },

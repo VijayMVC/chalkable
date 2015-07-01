@@ -14,6 +14,7 @@ REQUIRE('chlk.controllers.SetupController');
 REQUIRE('chlk.controllers.StudentsController');
 REQUIRE('chlk.controllers.TeachersController');
 REQUIRE('chlk.controllers.DisciplineController');
+REQUIRE('chlk.controllers.GroupController');
 
 REQUIRE('chlk.services.SearchService');
 REQUIRE('chlk.templates.search.SiteSearch');

@@ -8,11 +8,12 @@ NAMESPACE('chlk.models.apps', function () {
     /** @class chlk.models.apps.AppInstallGroupTypeEnum*/
 
     ENUM('AppInstallGroupTypeEnum', {
+        ALL: 0,
         CLAZZ: 1,
         GRADELEVEL: 2,
         DEPARTMENT: 3,
         ROLE: 4,
-        ALL: 5,
+        GROUP: 5,
         CURRENT_USER: 6
     });
 

@@ -11,6 +11,7 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'roles',
             String, 'submitActionType',
             String, 'forAll',
+            String, 'groups',
             chlk.models.id.AppInstallGroupId, 'currentPerson',
 
             Boolean, function isInstallForAll(){
