@@ -115,10 +115,11 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             Boolean, function isStudentGraded(){
                 var grade = this.getGrade();
-                return this.getClassAnnouncementData().isDropped() || this.isExempt() || grade >= 0;
+                return this.getClassAnnouncementData() && (this.getClassAnnouncementData().isDropped() || this.isExempt() || grade >= 0);
             },
 
             String, function displayStudentGradeValue(){
+                if(!this.getClassAnnouncementData()) return '';
                 if(this.getClassAnnouncementData().isDropped()) return Msg.Dropped;
                 if(this.isExempt()) return Msg.Exempt;
                 var grade = this.getGrade();
