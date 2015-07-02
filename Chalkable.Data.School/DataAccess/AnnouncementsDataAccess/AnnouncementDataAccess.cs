@@ -85,6 +85,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 reader.NextResult();
                 announcement.AnnouncementAttachments = reader.ReadList<AnnouncementAttachment>();
                 reader.NextResult();
+                announcement.AnnouncementAttributes = reader.ReadList<AnnouncementAssignedAttribute>();
+                reader.NextResult();
                 announcement.AnnouncementApplications = reader.ReadList<AnnouncementApplication>();
                 reader.NextResult();
                 if(reader.Read())

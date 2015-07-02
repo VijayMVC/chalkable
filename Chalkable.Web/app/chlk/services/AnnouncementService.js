@@ -57,7 +57,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[String]],
-            ria.async.Future, function getAnnouncementAttributesSync(query_) {
+            ria.async.Future, function getAnnouncementAttributeTypesSync(query_) {
 
                 var attrs = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ATTRIBUTES, []);
 
@@ -68,6 +68,10 @@ NAMESPACE('chlk.services', function () {
                     });
                 }
                 return new ria.async.DeferredData(attrs);
+            },
+
+            ArrayOf(chlk.models.announcement.AnnouncementAttributeType), function getAnnouncementAttributeTypesList() {
+                return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ATTRIBUTES, []);
             },
 
             [[String]],
@@ -84,6 +88,23 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function uploadAttachment(announcementId, files) {
                 return this.uploadFiles('AnnouncementAttachment/AddAttachment', files, chlk.models.announcement.Announcement, {
                     announcementId: announcementId.valueOf()
+                });
+            },
+
+
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAttributeTypeId]],
+            ria.async.Future, function addAnnouncementAttribute(announcementId, attributeTypeId){
+                return this.post('AnnouncementAttribute/AddAttribute.json', chlk.models.announcement.Announcement, {
+                    announcementId: announcementId.valueOf(),
+                    attributeTypeId: attributeTypeId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId]],
+            ria.async.Future, function removeAnnouncementAttribute(announcementId, attributeId){
+                return this.post('AnnouncementAttribute/DeleteAttribute.json', chlk.models.announcement.Announcement, {
+                    announcementId: announcementId.valueOf(),
+                    assignedAttributeId: attributeId.valueOf()
                 });
             },
 

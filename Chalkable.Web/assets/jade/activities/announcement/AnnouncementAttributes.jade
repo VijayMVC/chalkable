@@ -7,7 +7,7 @@ mixin AttributeBlock_(attribute, readOnly, index)
                         .attribute-title
                             +SearchBox(chlk.services.AnnouncementService, "getAnnouncementAttributesSync", chlk.templates.announcement.AnnouncementAttributesDropdownTpl)(
                             value=attribute.getName(),
-                            default-value=attribute.getName()
+                            default-value=attribute.getName(),
                             minLength = 0,
                             class="announcement-attr-name", id="announcement-attrs-" + attribute.getId(),
                             listCls = "max-200"
@@ -16,6 +16,7 @@ mixin AttributeBlock_(attribute, readOnly, index)
                                 label(for="attr-hidefromstudents", class="hideLabel") Hide from students
                                 .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
                                 +SlideCheckbox('hidefromstudents', false, false)
+                                +ActionLink('announcement', 'removeAttribute', self.getAnnouncementId(), attribute.getId()).remove-attribute
                     .description
                         textarea(value=attribute.getDescription())
             .right-block

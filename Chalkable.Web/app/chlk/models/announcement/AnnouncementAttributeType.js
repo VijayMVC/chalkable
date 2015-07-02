@@ -1,6 +1,6 @@
 REQUIRE('ria.serialize.SJX');
 REQUIRE('ria.serialize.IDeserializable');
-REQUIRE('chlk.models.id.AnnouncementAttributeId');
+REQUIRE('chlk.models.id.AnnouncementAttributeTypeId');
 
 
 
@@ -12,7 +12,7 @@ NAMESPACE('chlk.models.announcement', function(){
     CLASS(
         UNSAFE, FINAL, 'AnnouncementAttributeType', IMPLEMENTS(ria.serialize.IDeserializable), [
 
-        chlk.models.id.AnnouncementAttributeId, 'id',
+        chlk.models.id.AnnouncementAttributeTypeId, 'id',
 
         String, 'code',
 
@@ -21,7 +21,7 @@ NAMESPACE('chlk.models.announcement', function(){
         String, 'description',
 
         VOID, function deserialize(raw) {
-            this.id = SJX.fromValue(raw.id, chlk.models.id.AnnouncementAttributeId);
+            this.id = SJX.fromValue(raw.id, chlk.models.id.AnnouncementAttributeTypeId);
             this.code = SJX.fromValue(raw.code, String);
             this.name = SJX.fromValue(raw.name, String);
             this.description = SJX.fromValue(raw.description, String);

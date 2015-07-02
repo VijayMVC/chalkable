@@ -123,6 +123,17 @@ NAMESPACE('chlk.controllers', function (){
             this.cacheAnnouncementAttachments(attachments);
         },
 
+        [[chlk.models.announcement.Announcement]],
+        function prepareAttributes(announcement){
+            var attributes = announcement.getAnnouncementAttributes() || [];
+            attributes.forEach(function(item){
+                //this.prepareAttachment(item);//prepare attribute attachment too
+            }, this);
+            announcement.setAnnouncementAttributes(attributes);
+            this.cacheAnnouncementAttributes(attributes);
+        },
+
+
         [[chlk.models.announcement.StudentAnnouncement, Boolean]],
         function setAnnouncementGrade(studentAnnouncement, fromGrid_){
             var result = this.gradingService
@@ -450,16 +461,38 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.AnnouncementId]],
         function addAttributeAction(announcementId) {
+
+            var attributeId = this.announcementService
+                .getAnnouncementAttributeTypesList()[0].getId();
+
             this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
+            var result = this.announcementService
+                .addAnnouncementAttribute(announcementId, attributeId)
+                .catchError(this.handleNoAnnouncementException_, this)
+                .attach(this.validateResponse_())
+                .then(function(announcement){
+                    this.prepareAttributes(announcement);
+                    this.cacheAnnouncement(announcement);
+                    return announcement.getAttributesListViewData();
+                }, this);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result, 'update-attributes');
+        },
 
-            var attrsListViewData = new chlk.models.announcement.AnnouncementAttributeListViewData();
-            attrsListViewData.setId(announcementId);
-
-            var newAttr = new chlk.models.announcement.AnnouncementAttributeViewData();
-
-            attrsListViewData.setAnnouncementAttributes([newAttr]);
-
-            var result = new ria.async.DeferredData(attrsListViewData);
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,  chlk.models.common.RoleEnum.DISTRICTADMIN
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId]],
+        function removeAttributeAction(announcementId, attributeId) {
+            var result = this.announcementService
+                .removeAnnouncementAttribute(announcementId, attributeId)
+                .catchError(this.handleNoAnnouncementException_, this)
+                .attach(this.validateResponse_())
+                .then(function(announcement){
+                    this.prepareAttributes(announcement);
+                    this.cacheAnnouncement(announcement);
+                    return announcement.getAttributesListViewData();
+                }, this);
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result, 'update-attributes');
         },
 
@@ -788,6 +821,15 @@ NAMESPACE('chlk.controllers', function (){
 
         function getCachedAnnouncementAttachments(){
             return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ATTACHMENTS) || [];
+        },
+
+        [[ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData)]],
+        function cacheAnnouncementAttributes(attributes){
+            this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_ASSIGNED_ATTRIBUTES, attributes);
+        },
+
+        function getCachedAnnouncementAttributes(){
+            return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ASSIGNED_ATTRIBUTES) || [];
         },
 
         function getCachedAnnouncementApplications(){

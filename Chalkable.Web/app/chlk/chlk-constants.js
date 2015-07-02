@@ -64,5 +64,6 @@ var ChlkSessionConstants = {
     GROUPS_IDS: 'GroupsIds',
     GROUPS_LIST: 'GroupsList',
     LE_PARAMS: 'leParams',
-    ANNOUNCEMENT_ATTRIBUTES: 'announcementAttributes'
+    ANNOUNCEMENT_ATTRIBUTES: 'announcementAttributes',
+    ANNOUNCEMENT_ASSIGNED_ATTRIBUTES: 'announcementAssignedAttributes'
 };

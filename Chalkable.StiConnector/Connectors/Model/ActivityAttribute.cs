@@ -13,7 +13,7 @@
         public StiAttachment Attachment { get; set; }
 
         /// <summary>
-        /// The id of the Attribute. 
+        /// The id of the Attribute. (type)
         /// </summary>
         public short AttributeId { get; set; }
 

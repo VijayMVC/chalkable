@@ -21,7 +21,7 @@ namespace Chalkable.Web.Controllers
         private const string HTML_CONTENT_TYPE = "text/html";
 
         [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult AddAttribute(int announcementId)
+        public ActionResult AddAttributeAttachment(int announcementId)
         {
             try
             {
@@ -56,6 +56,15 @@ namespace Chalkable.Web.Controllers
             }
         }
 
+        [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult AddAttribute(int announcementId, int attributeTypeId)
+        {
+            EnsureAnnouncementExists(announcementId);
+            var announcement = SchoolLocator.AnnouncementAssignedAttributeService.Add(announcementId, attributeTypeId);
+            AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id);
+            return Json(res, HTML_CONTENT_TYPE, 6);
+        }
+
         private void EnsureAnnouncementExists(int announcementId)
         {
             // get announcement to ensure it exists
@@ -65,6 +74,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult CloneAttribute(int originalAttachmentId, int announcementId)
         {
+            throw new NotImplementedException();
             EnsureAnnouncementExists(announcementId);
 
             var attContentInfo = SchoolLocator.AnnouncementAttachmentService.GetAttachmentContent(originalAttachmentId);
@@ -86,26 +96,24 @@ namespace Chalkable.Web.Controllers
 
        
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
-        public ActionResult DeleteAttribute(int announcementAttachmentId, int announcementId)
+        public ActionResult DeleteAttribute(int announcementId, int assignedAttributeId)
         {
+            
             EnsureAnnouncementExists(announcementId);
-
-            var attachment = SchoolLocator.AnnouncementAttachmentService.GetAttachmentById(announcementAttachmentId);
-            if (attachment != null && attachment.AnnouncementRef == announcementId)
-                SchoolLocator.AnnouncementAttachmentService.DeleteAttachment(announcementAttachmentId);
-
-            var res = PrepareFullAnnouncementViewData(announcementId);
+            var announcement = SchoolLocator.AnnouncementAssignedAttributeService.Delete(announcementId, assignedAttributeId);
+            AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id);
             return Json(res, 6);
-        }
-        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
-        public ActionResult GetAttributes(int announcementId, int? start, int? count)
-        {
-            EnsureAnnouncementExists(announcementId);
 
-            var announcementAttachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(announcementId, start ?? 0, count ?? 10, false);
-            var attachmentsInfo = AttachmentLogic.PrepareAttachmentsInfo(announcementAttachments, MasterLocator.CrocodocService);
-            var res = AnnouncementAttachmentViewData.Create(attachmentsInfo, SchoolLocator.Context.PersonId ?? 0);
-            return Json(res);
+            //check if there is attachment remove it and remove it from inow
+
+            /*
+
+            var attachment = SchoolLocator.AnnouncementAttachmentService.GetAttachmentById(assignedAttributeId);
+            if (attachment != null && attachment.AnnouncementRef == announcementId)
+                //SchoolLocator.AnnouncementAttachmentService.DeleteAttachment(announcementAttachmentId);
+
+            var res = PrepareFullAnnouncementViewData(announcementId);*/
+            //return Json(res, 6);
         }
 
     }

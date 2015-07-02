@@ -164,6 +164,7 @@
     <Compile Include="Security\UserSecurity.cs" />
     <Compile Include="Services\CrocodocService.cs" />
     <Compile Include="Services\DbService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAnnouncementAssignedAttributeService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementAttributeService.cs" />
     <Compile Include="Services\DemoSchool\DemoApplicationSchoolService.cs" />
     <Compile Include="Services\DemoSchool\DemoAppMarketService.cs" />
@@ -251,6 +252,7 @@
     <Compile Include="Services\School\CalendarDateService.cs" />
     <Compile Include="Services\School\ClassroomOptionService.cs" />
     <Compile Include="Services\School\ContactService.cs" />
+    <Compile Include="Services\School\AnnouncementAssignedAttributeService.cs" />
     <Compile Include="Services\School\CourseTypeService.cs" />
     <Compile Include="Services\School\DayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementQnAService.cs" />

@@ -56,6 +56,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IAttendanceMonthService AttendanceMonthService { get; }
         IGradedItemService GradedItemService { get; }
         IAnnouncementAttributeService AnnouncementAttributeService { get; }
+        IAnnouncementAssignedAttributeService AnnouncementAssignedAttributeService { get; }
         IContactService ContactService { get; }
         ITeacherCommentService TeacherCommentService { get; }
         IGroupService GroupService { get; }
@@ -118,6 +119,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IAttendanceMonthService attendanceMonthService;
         private IGradedItemService gradedItemService;
         private IAnnouncementAttributeService announcementAttributeService;
+        private IAnnouncementAssignedAttributeService announcementAssignedAttributeService;
         private IContactService contactService;
         private ITeacherCommentService teacherCommentService;
         private IDbMaintenanceService dbMaintenanceService;
@@ -179,6 +181,7 @@ namespace Chalkable.BusinessLogic.Services.School
             attendanceMonthService = new AttendanceMonthService(this);
             gradedItemService = new GradedItemService(this);
             announcementAttributeService = new AnnouncementAttributeService(this);
+            announcementAssignedAttributeService = new AnnouncementAssignedAttributeService(this);
             contactService = new ContactService(this);
             teacherCommentService = new TeacherCommentService(this);
             dbMaintenanceService = new DbMaintenanceService(this);
@@ -238,12 +241,12 @@ namespace Chalkable.BusinessLogic.Services.School
         public IGradedItemService GradedItemService { get { return gradedItemService; } }
         public IAnnouncementAttributeService AnnouncementAttributeService { get { return announcementAttributeService; } }
         public IContactService ContactService { get { return contactService; } }
+        public IAnnouncementAssignedAttributeService AnnouncementAssignedAttributeService { get { return announcementAssignedAttributeService; } }
         public ITeacherCommentService TeacherCommentService { get { return teacherCommentService; } }
         public IGroupService GroupService { get { return groupService; } }
         public ICourseTypeService CourseTypeService { get { return courseTypeService; } }
         public IDbMaintenanceService DbMaintenanceService {get { return dbMaintenanceService; }}
         public ISettingsService SettingsService { get { return settingsService; } }
-
 
         public IDbService SchoolDbService
         {

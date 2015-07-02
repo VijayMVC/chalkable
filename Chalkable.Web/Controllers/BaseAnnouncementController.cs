@@ -25,7 +25,7 @@ namespace Chalkable.Web.Controllers
         {
             var ownersIds = GetAnnouncementOwnersIds(ann);
             var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, ownersIds);
-            var annView = (AnnouncementDetailedViewData)PrepareAnnouncmentViewData(ann, attInfo);
+            var annView = (AnnouncementDetailedViewData)PrepareAnnouncementViewData(ann, attInfo);
             if (ann.State == AnnouncementState.Created)
             {
                 var stAnnouncements = ann.StudentAnnouncements;
@@ -46,7 +46,7 @@ namespace Chalkable.Web.Controllers
 
         protected AnnouncementViewData PrepareAnnouncmentViewDataForEdit(AnnouncementDetails ann)
         {
-            var annView = (AnnouncementDetailedViewData)PrepareAnnouncmentViewData(ann);
+            var annView = (AnnouncementDetailedViewData)PrepareAnnouncementViewData(ann);
             annView.CanAddStandard = SchoolLocator.AnnouncementService.CanAddStandard(ann.Id);
             if (annView.Standards != null && annView.Standards.Count > 0)
             {
@@ -62,14 +62,14 @@ namespace Chalkable.Web.Controllers
             return annView;
         }
 
-        protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann)
+        protected AnnouncementViewData PrepareAnnouncementViewData(AnnouncementDetails ann)
         {
             var ownersIds = GetAnnouncementOwnersIds(ann);
-            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, ownersIds);             
-            return PrepareAnnouncmentViewData(ann, attInfo);
+            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, ownersIds);
+            return PrepareAnnouncementViewData(ann, attInfo);
         }
 
-        protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann, IList<AnnouncementAttachmentInfo> attachments)
+        protected AnnouncementViewData PrepareAnnouncementViewData(AnnouncementDetails ann, IList<AnnouncementAttachmentInfo> attachments)
         {
             if (ann.SisActivityId.HasValue)
             {

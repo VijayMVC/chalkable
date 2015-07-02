@@ -5,6 +5,7 @@ namespace Chalkable.Data.School.Model
     public class AnnouncementAttribute
     {
         public const string IS_ACTIVE_FIELD = "IsActive";
+        public const string ID_FIELD = "Id";
 
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }

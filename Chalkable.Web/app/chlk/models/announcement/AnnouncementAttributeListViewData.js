@@ -8,7 +8,7 @@ NAMESPACE('chlk.models.announcement', function(){
         ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
         Boolean, 'readOnly',
 
-        chlk.models.id.AnnouncementId, 'id',
+        chlk.models.id.AnnouncementId, 'announcementId',
 
         Boolean, function isEmpty(){
             return (this.getAnnouncementAttributes() || []).length == 0;
