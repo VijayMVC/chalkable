@@ -392,7 +392,7 @@ NAMESPACE('chlk.controllers', function (){
         function addClassAnnouncementAction(classId_, announcementTypeId_, date_, noDraft_) {
             this.getView().reset();
             this.getContext().getSession().set('classInfo', null);
-            this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT);
+            this.cacheAnnouncementType(chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT);
             var classes = this.classService.getClassesForTopBarSync();
             var classesBarData = new chlk.models.classes.ClassesForTopBar(classes), p = false;
             classes.forEach(function(item){
@@ -475,7 +475,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.announcement.AnnouncementForm]],
         function classAnnouncementFromModelAction(model) {
-            this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT);
+            this.cacheAnnouncementType(chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT);
             return this.PushView(this.getAnnouncementFormPageType_(), ria.async.DeferredData(model));
         },
 
@@ -638,6 +638,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .catchError(this.handleNoAnnouncementException_, this)
                 .then(function(announcement){
+                    this.cacheAnnouncementType(announcement.getType());
                     return this.prepareAnnouncementForView(announcement);
                 }, this);
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
