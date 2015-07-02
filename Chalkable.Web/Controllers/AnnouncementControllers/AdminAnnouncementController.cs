@@ -21,8 +21,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult Save(int adminAnnouncementId, string title, string content, DateTime? expiresDate)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            SchoolLocator.AdminAnnouncementService.Edit(adminAnnouncementId, title, content, expiresDate);
-            return Json(true);
+            var res = SchoolLocator.AdminAnnouncementService.Edit(adminAnnouncementId, title, content, expiresDate);
+            return Json(PrepareAnnouncmentViewDataForEdit(res));
         }
 
         [AuthorizationFilter("DistrictAdmin")]

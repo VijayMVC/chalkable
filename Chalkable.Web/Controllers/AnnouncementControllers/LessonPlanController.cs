@@ -32,8 +32,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("Teacher")]
         public ActionResult Save(int lessonPlanId, int classId, string title, string content, int? galleryCategoryId, DateTime? startDate, DateTime? endDate, bool hideFromStudents)
         {
-            SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents);
-            return Json(true);
+            var res = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents);
+            return Json(PrepareAnnouncmentViewDataForEdit(res));
         }
 
         [AuthorizationFilter("Teacher")]
