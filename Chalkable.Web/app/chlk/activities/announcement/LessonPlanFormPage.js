@@ -47,7 +47,17 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function categorySelect(node, event, selected_){
                 node.parent('.category-container').find('#add-to-galelry-btn').trigger('click')
+            },
+
+            OVERRIDE, VOID, function onStart_() {
+                BASE();
+                var that = this;
+                new ria.dom.Dom().on('click', '.create-from-template', function($target, event){
+                    that.setNotSave(true);
+                });
             }
+
+
         ]
     );
 });
