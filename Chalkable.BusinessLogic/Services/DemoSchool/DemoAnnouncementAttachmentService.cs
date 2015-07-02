@@ -86,6 +86,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return ann;
         }
 
+        public void AddAttachmentToBlob(IList<AttachmentContentInfo> attachmentContent)
+        {
+            throw new NotImplementedException();
+        }
+
         public void DeleteAttachment(int announcementAttachmentId)
         {
             var annAtt = AnnouncementAttachmentStorage.GetById(announcementAttachmentId);

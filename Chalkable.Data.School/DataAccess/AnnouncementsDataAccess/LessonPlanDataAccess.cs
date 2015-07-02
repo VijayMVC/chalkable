@@ -253,7 +253,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         protected override DbQuery FilterLessonPlanByCallerId(DbQuery dbQuery, int callerId)
         {
             var callerIdParam = "callerId";
-            dbQuery.Sql.AppendFormat(" and ClassRef in (select ClassRef from ClassTeacher where PersonRef =@{0})", callerIdParam);
+            dbQuery.Sql.AppendFormat(" and ClassRef in (select ClassRef from ClassTeacher where ClassTeacher.PersonRef =@{0})", callerIdParam);
             dbQuery.Parameters.Add(callerIdParam, callerId);
             return dbQuery;
         }
@@ -270,7 +270,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         protected override DbQuery FilterLessonPlanByCallerId(DbQuery dbQuery, int callerId)
         {
             var callerIdParam = "callerId";
-            dbQuery.Sql.AppendFormat(" and ClassRef in (select ClassRef from Class where PersonRef =@{0})", callerIdParam);
+            dbQuery.Sql.AppendFormat(" and ClassRef in (select ClassRef from ClassPerson where ClassPerson.PersonRef =@{0})", callerIdParam);
             dbQuery.Parameters.Add(callerIdParam, callerId);
             return dbQuery;
         }

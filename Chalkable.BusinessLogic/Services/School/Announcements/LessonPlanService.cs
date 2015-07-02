@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -58,19 +59,45 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             using (var u = Update())
             {
                 res = CreateLessonPlanDataAccess(u).CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
-                var templateAttachments = new AnnouncementAttachmentDataAccess(u).GetAll(new AndQueryCondition
-                    {
-                        {AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, lessonPlanTemplateId}
-                    });
-                foreach (var annAtt in templateAttachments)
-                {
-                    var attachmentInfo = ServiceLocator.AnnouncementAttachmentService.GetAttachmentContent(annAtt);
-                    ServiceLocator.AnnouncementAttachmentService.AddAttachment(res.Id, AnnouncementType.LessonPlan, attachmentInfo.Content, annAtt.Name, annAtt.Uuid);
-                }
+                res.AnnouncementAttachments = CopyAttachments(lessonPlanTemplateId, res.Id, u);
                 u.Commit();
             }
-            res.AnnouncementAttachments = ServiceLocator.AnnouncementAttachmentService.GetAttachments(res.Id);
             return res;
+        }
+
+        private IList<AnnouncementAttachment> CopyAttachments(int fromLessonPlanId, int toLessonPlanId, UnitOfWork unitOfWork)
+        {
+            var attachmentsForCopy = new AnnouncementAttachmentDataAccess(unitOfWork)
+                .GetAll(new AndQueryCondition
+                    {
+                        {AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, fromLessonPlanId}
+                    })
+                .Select(x => ServiceLocator.AnnouncementAttachmentService.GetAttachmentContent(x)).ToList();
+            var attContents = attachmentsForCopy.Select(x => new AttachmentContentInfo
+            {
+                Attachment = new AnnouncementAttachment
+                {
+                    AnnouncementRef = toLessonPlanId,
+                    PersonRef = Context.PersonId.Value,
+                    AttachedDate = Context.NowSchoolTime,
+                    Name = x.Attachment.Name,
+                    Order = x.Attachment.Order,
+                    Uuid = x.Attachment.Uuid
+                },
+                Content = x.Content
+            }).ToList();
+
+            var da = new AnnouncementAttachmentDataAccess(unitOfWork);
+            da.Insert(attContents.Select(x => x.Attachment).ToList());
+            var attsIds = da.GetAll(new AndQueryCondition { { AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, toLessonPlanId } })
+                     .OrderByDescending(x => x.Id).Take(attContents.Count).ToList();
+            attsIds = attsIds.OrderBy(x => x.Id).ToList();
+            for (int i = 0; i < attsIds.Count; i++)
+            {
+                attContents[i].Attachment.Id = attsIds[0].Id;
+            }
+            ServiceLocator.AnnouncementAttachmentService.AddAttachmentToBlob(attContents);
+            return attContents.Select(x => x.Attachment).ToList();
         }
 
         public AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content,

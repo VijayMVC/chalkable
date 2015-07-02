@@ -17,6 +17,8 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IAnnouncementAttachmentService
     {
         Announcement AddAttachment(int announcementId, AnnouncementType type, byte[] content, string name, string uuid);
+        void AddAttachmentToBlob(IList<AttachmentContentInfo> attachmentContent);
+        //Announcement AddAttachments(int announcementId, AnnouncementType type, IList<AttachmentContentInfo> attachments);
         void DeleteAttachment(int announcementAttachmentId);
         IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true);
         IList<AnnouncementAttachment> GetAttachments(string filter);
@@ -35,10 +37,34 @@ namespace Chalkable.BusinessLogic.Services.School
         private const string ATTACHMENT_CONTAINER_ADDRESS = "attachmentscontainer";
 
 
-        private bool CanAttach(UnitOfWork uow, Announcement ann)
+        private bool CanAttach(Announcement ann)
         {
             var recipients = ServiceLocator.GetAnnouncementService(ann.Type).GetAnnouncementRecipientPersons(ann.Id);
             return AnnouncementSecurity.CanModifyAnnouncement(ann, Context) || recipients.Any(p => p.Id == Context.PersonId);
+        }
+
+        public Announcement AddAttachments(int announcementId, AnnouncementType type, IList<AttachmentContentInfo> attachments)
+        {
+
+            var annDetails = ServiceLocator.GetAnnouncementService(type).GetAnnouncementDetails(announcementId);
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            if (!CanAttach(annDetails))
+                throw new ChalkableSecurityException();
+
+            using (var uow = Update())
+            {
+                var da = new AnnouncementAttachmentDataAccess(uow);
+                da.Insert(attachments.Select(x=>x.Attachment).ToList());
+                uow.Commit();
+
+                foreach (var attachmentContentInfo in attachments)
+                {
+                    
+                }
+            }
+
+            throw new System.NotImplementedException();
         }
 
         public Announcement AddAttachment(int announcementId, AnnouncementType type, byte[] content, string name, string uuid)
@@ -46,12 +72,10 @@ namespace Chalkable.BusinessLogic.Services.School
             var annDetails = ServiceLocator.GetAnnouncementService(type).GetAnnouncementDetails(announcementId);
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolLocalId.HasValue);
-            
+            if (!CanAttach(annDetails))
+                throw new ChalkableSecurityException();
             using (var uow = Update())
-            {
-                if (!CanAttach(uow, annDetails))
-                    throw new ChalkableSecurityException();
-
+            {               
                 var annAtt = new AnnouncementAttachment
                 {
                     AnnouncementRef = annDetails.Id,
@@ -61,7 +85,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     Uuid = uuid,
                     Order = ServiceLocator.GetAnnouncementService(type).GetNewAnnouncementItemOrder(annDetails)
                 };
-                IList<AnnouncementAttachment> atts;
                 if (CoreRoles.TEACHER_ROLE == Context.Role)
                 {
                     //var stiAtts = ConnectorLocator.AttachmentConnector.UploadAttachment(name, content).ToList();
@@ -79,9 +102,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Insert(annAtt);
                 uow.Commit();
                 
-                atts = da.GetList(Context.PersonId.Value, Context.Role.Id, name);
-                //if(CoreRoles.TEACHER_ROLE != Context.Role)
-                    ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, GenerateKeyForBlob(atts.Last()), content);
+                var lastAtt = da.GetList(Context.PersonId.Value, Context.Role.Id, name).Last();
+                AddAttachmentToBlob(new List<AttachmentContentInfo> { new AttachmentContentInfo {Attachment = lastAtt, Content = content}});
 
                 if (!annDetails.IsDraft)
                 {
@@ -93,6 +115,16 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return annDetails;
         }
+
+
+        public void AddAttachmentToBlob(IList<AttachmentContentInfo> attachmentContent)
+        {
+            foreach (var attachmentContentInfo in attachmentContent)
+            {
+                ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, GenerateKeyForBlob(attachmentContentInfo.Attachment), attachmentContentInfo.Content);                
+            }
+        }
+
 
         private string GenerateKeyForBlob(AnnouncementAttachment announcementAttachment)
         {
