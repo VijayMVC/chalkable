@@ -68,17 +68,13 @@ namespace Chalkable.Data.School.DataAccess
                 });
         }
 
-        public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, int callerId, int? personId, IList<int> roles, IList<Guid> departments
-            , IList<int> gradeLevels, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
+        public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, int callerId, int? personId, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
                 {
                     {"applicationId", applicationId},
                     {"callerId", callerId},
                     {"personId", personId},
-                    {"roleIds", roles.JoinString(",")},
-                    {"departmentIds", departments.JoinString(",")},
-                    {"gradeLevelIds", gradeLevels.JoinString(",")},
                     {"classIds", classes.JoinString(",")},
                     {"callerRoleId", callerRoleId},
 
@@ -94,8 +90,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int callerId, int? personId, IList<int> roles, IList<Guid> departments
-            , IList<int> gradeLevels, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
+        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int callerId, int? personId, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
                 {
@@ -110,9 +105,6 @@ namespace Chalkable.Data.School.DataAccess
                     {"canAttach", canAttach},
                     {"schoolYearId", schoolYearId}
                 };
-            ps.Add("roleIds", roles == null || roles.Count == 0 ? null : roles.JoinString(","));
-            ps.Add("departmentIds", departments == null || departments.Count == 0 ? null : departments.JoinString(","));
-            ps.Add("gradeLevelIds", gradeLevels == null || gradeLevels.Count == 0 ? null : gradeLevels.JoinString(","));
             ps.Add("classIds", classes == null || classes.Count == 0 ? null : classes.JoinString(","));
            
             using (var reader = ExecuteStoredProcedureReader("spGetPersonsForApplicationInstallCount", ps))
