@@ -109,6 +109,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             reader.NextResult();
             announcement.AnnouncementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
             reader.NextResult();
+                announcement.AnnouncementAttributes = reader.ReadList<AnnouncementAssignedAttribute>();
+                reader.NextResult();
             announcement.AnnouncementApplications = reader.ReadList<AnnouncementApplication>();
             reader.NextResult();
             announcement.AnnouncementStandards = reader.ReadList<AnnouncementStandardDetails>();

@@ -1,14 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.DataAccess;
+
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 
@@ -85,6 +89,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     Uuid = uuid,
                     Order = ServiceLocator.GetAnnouncementService(type).GetNewAnnouncementItemOrder(annDetails)
                 };
+
                 if (CoreRoles.TEACHER_ROLE == Context.Role)
                 {
                     //var stiAtts = ConnectorLocator.AttachmentConnector.UploadAttachment(name, content).ToList();

@@ -56,12 +56,32 @@ NAMESPACE('chlk.services', function () {
 
             },
 
-            [[Boolean]],
-            ria.async.Future, function getAnnouncementAttributes(activeOnly_) {
-                return this.get('Announcement/AnnouncementAttributesList.json', ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), {
-                    activeOnly: activeOnly_
-                });
+            [[String]],
+            ria.async.Future, function getAnnouncementAttributeTypesSync(query_) {
 
+                var attrs = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ATTRIBUTES, []);
+
+                if (query_){
+                    query_ = query_.toLowerCase();
+                    attrs = attrs.filter(function(item){
+                        return item != null && item.getName().toLowerCase().indexOf(query_) != -1;
+                    });
+                }
+                return new ria.async.DeferredData(attrs);
+            },
+
+            ArrayOf(chlk.models.announcement.AnnouncementAttributeType), function getAnnouncementAttributeTypesList() {
+                return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ATTRIBUTES, []);
+            },
+
+            [[String]],
+            ria.async.Future, function getGradeComments(query_) {
+                return this.get('Grading/GetGridComments', ArrayOf(String), {
+                    schoolYearId: this.getContext().getSession().get(ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, null).valueOf()
+                }).then(function(data){
+                    var comments = data || [];
+
+                });
             },
 
             [[chlk.models.id.AnnouncementId, Object]],
@@ -69,6 +89,23 @@ NAMESPACE('chlk.services', function () {
                 return this.uploadFiles('AnnouncementAttachment/AddAttachment', files, chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
                     announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
+                });
+            },
+
+
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAttributeTypeId]],
+            ria.async.Future, function addAnnouncementAttribute(announcementId, attributeTypeId){
+                return this.post('AnnouncementAttribute/AddAttribute.json', chlk.models.announcement.Announcement, {
+                    announcementId: announcementId.valueOf(),
+                    attributeTypeId: attributeTypeId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId]],
+            ria.async.Future, function removeAnnouncementAttribute(announcementId, attributeId){
+                return this.post('AnnouncementAttribute/DeleteAttribute.json', chlk.models.announcement.Announcement, {
+                    announcementId: announcementId.valueOf(),
+                    assignedAttributeId: attributeId.valueOf()
                 });
             },
 
@@ -314,6 +351,10 @@ NAMESPACE('chlk.services', function () {
                     classAnnouncementTypeIds: this.arrayToCsv(ids),
                     announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 });
-            }
+            },
+
+
+
+
         ])
 });

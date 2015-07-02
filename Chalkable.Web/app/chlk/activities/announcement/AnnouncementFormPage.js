@@ -5,6 +5,8 @@ REQUIRE('chlk.templates.announcement.LastMessages');
 REQUIRE('chlk.templates.announcement.AnnouncementTitleTpl');
 REQUIRE('chlk.templates.SuccessTpl');
 REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementAttributesTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementAttributesDropdownTpl');
 REQUIRE('chlk.templates.apps.SuggestedAppsListTpl');
 
 NAMESPACE('chlk.activities.announcement', function () {
@@ -17,11 +19,13 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementFormTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, 'update-attachments', '.apps-attachments-bock', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttributesTpl, 'update-attributes', '.attributes-block', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementFormTpl, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.standard.AnnouncementStandardsTpl, '', '.standards-list' , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementTitleTpl, '.title-block-container', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LastMessages, '', '.drop-down-container', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.SuggestedAppsListTpl, '', '.suggested-apps-block', ria.mvc.PartialUpdateRuleActions.Replace)],
+
         [chlk.activities.lib.PageClass('new-item')],
         'AnnouncementFormPage', EXTENDS(chlk.activities.announcement.BaseAnnouncementFormPage), [
 

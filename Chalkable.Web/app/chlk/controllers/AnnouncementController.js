@@ -17,7 +17,7 @@ REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.LessonPlanFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
 REQUIRE('chlk.activities.announcement.AdminAnnouncementFormPage');
-REQUIRE('chlk.activities.apps.AttachAppDialog');
+REQUIRE('chlk.activities.apps.AttachDialog');
 REQUIRE('chlk.activities.common.attachments.AttachmentDialog');
 REQUIRE('chlk.activities.announcement.AddStandardsDialog');
 REQUIRE('chlk.activities.announcement.AddDuplicateAnnouncementDialog');
@@ -139,6 +139,17 @@ NAMESPACE('chlk.controllers', function (){
             announcement.setAttachments(ids.join(','));
             this.cacheAnnouncementAttachments(attachments);
         },
+
+        [[chlk.models.announcement.Announcement]],
+        function prepareAttributes(announcement){
+            var attributes = announcement.getAnnouncementAttributes() || [];
+            attributes.forEach(function(item){
+                //this.prepareAttachment(item);//prepare attribute attachment too
+            }, this);
+            announcement.setAnnouncementAttributes(attributes);
+            this.cacheAnnouncementAttributes(attributes);
+        },
+
 
         [[chlk.models.announcement.StudentAnnouncement, Boolean]],
         function setAnnouncementGrade(studentAnnouncement, fromGrid_){
@@ -540,29 +551,79 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,  chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, Number]],
-        function attachAppOnCreateAction(announcementId, classId, appUrlAppend_, pageIndex_) {
-            return this.attachAppAction(announcementId, classId, appUrlAppend_, pageIndex_);
-        },
-
-
-        [chlk.controllers.StudyCenterEnabled()],
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,  chlk.models.common.RoleEnum.DISTRICTADMIN
-        ])],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, Number]],
-        function attachAppAction(announcementId, classId, appUrlAppend_, pageIndex_) {
+        [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, chlk.models.id.AppId, Boolean, String, Number]],
+        function attachAction(announcementId, classId, appUrlAppend_, assessmentAppId_, canAddStandard, announcementTypeName, pageIndex_) {
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
-            var result = this.appMarketService
+
+            var result = !this.userIsAdmin() ?
+                this.appMarketService
                 .getAppsForAttach(userId, classId, mp.getId(), pageIndex_ | 0, null)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return new chlk.models.apps.InstalledAppsViewData(userId, announcementId, classId, data, appUrlAppend_ || '');
-                });
+                    return new chlk.models.apps.InstalledAppsViewData(announcementId,
+                        classId,
+                        data,
+                        appUrlAppend_ || '',
+                        this.isStudyCenterEnabled(),
+                        canAddStandard,
+                        assessmentAppId_,
+                        announcementTypeName
+                )}, this) : new ria.async.DeferredData(chlk.models.apps.InstalledAppsViewData.$createForAdmin(announcementId));
 
-            return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppDialog, result);
+            return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, result);
         },
+
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,  chlk.models.common.RoleEnum.DISTRICTADMIN
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.AnnouncementId]],
+        function addAttributeAction(announcementId) {
+
+            var attributeId = this.announcementService
+                .getAnnouncementAttributeTypesList()[0].getId();
+
+            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
+            var result = this.announcementService
+                .addAnnouncementAttribute(announcementId, attributeId)
+                .catchError(this.handleNoAnnouncementException_, this)
+                .attach(this.validateResponse_())
+                .then(function(announcement){
+                    this.prepareAttributes(announcement);
+                    this.cacheAnnouncement(announcement);
+                    return announcement.getAttributesListViewData();
+                }, this);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result, 'update-attributes');
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,  chlk.models.common.RoleEnum.DISTRICTADMIN
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId]],
+        function removeAttributeAction(announcementId, attributeId) {
+            var result = this.announcementService
+                .removeAnnouncementAttribute(announcementId, attributeId)
+                .catchError(this.handleNoAnnouncementException_, this)
+                .attach(this.validateResponse_())
+                .then(function(announcement){
+                    this.prepareAttributes(announcement);
+                    this.cacheAnnouncement(announcement);
+                    return announcement.getAttributesListViewData();
+                }, this);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result, 'update-attributes');
+        },
+
+
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.AnnouncementId]],
+        function fileCabinetAction(announcementId) {
+            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
+            return null;
+        },
+
 
         [chlk.controllers.Permissions([
             [chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
@@ -653,15 +714,19 @@ NAMESPACE('chlk.controllers', function (){
             throw error;
         },
 
+
+
+
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.AnnouncementId, Object]],
         function uploadAttachmentOnCreateAction(announcementId, files) {
-            return this.uploadAttachmentAction(announcementId, files);
+            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
+            return this.Redirect('announcement', 'uploadAttachment', [announcementId, files]);
         },
 
         [[chlk.models.id.AnnouncementId, Object]],
-        function uploadAttachmentAction(announcementId, files) {
-            var result = this.announcementService
+        function fetchUploadAttachmentFuture_(announcementId, files) {
+            return this.announcementService
                 .uploadAttachment(announcementId, files)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
@@ -672,7 +737,18 @@ NAMESPACE('chlk.controllers', function (){
                     this.cacheAnnouncement(announcement);
                     return announcement;
                 }, this);
-            return this.UpdateView(this.getView().getCurrent().getClass(), result, 'update-attachments');
+        },
+
+        [[chlk.models.id.AnnouncementId, Object, Object]],
+        function uploadAttachmentAction(announcementId, files) {
+            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage
+                    , this.fetchUploadAttachmentFuture_(announcementId, files), 'update-attachments');
+        },
+
+        [[chlk.models.id.AnnouncementId, Object, Object]],
+        function uploadAttachmentDistrictAdminAction(announcementId, files) {
+            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage
+                    , this.fetchUploadAttachmentFuture_(announcementId, files), 'update-attachments');
         },
 
         [[chlk.models.id.AnnouncementId]],
@@ -902,6 +978,15 @@ NAMESPACE('chlk.controllers', function (){
 
         function getCachedAnnouncementAttachments(){
             return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ATTACHMENTS) || [];
+        },
+
+        [[ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData)]],
+        function cacheAnnouncementAttributes(attributes){
+            this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_ASSIGNED_ATTRIBUTES, attributes);
+        },
+
+        function getCachedAnnouncementAttributes(){
+            return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ASSIGNED_ATTRIBUTES) || [];
         },
 
         function getCachedAnnouncementApplications(){
@@ -1429,18 +1514,12 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.NotChangedSidebarButton()],
         [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
-        function showStandardsOnCreateAction(typeName, announcementId, classId){
-            return this.showStandardsAction(typeName, announcementId, classId);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
         function showStandardsAction(typeName, announcementId, classId){
             var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []);
             var res = this.standardService.getSubjects(classId)
                 .then(function(subjects){
                     return new chlk.models.announcement.AddStandardViewData(typeName, announcementId, classId, subjects, standardIds);
-                })
+                }, this)
                 .attach(this.validateResponse_());
             return this.ShadeView(chlk.activities.announcement.AddStandardsDialog, res);
         },

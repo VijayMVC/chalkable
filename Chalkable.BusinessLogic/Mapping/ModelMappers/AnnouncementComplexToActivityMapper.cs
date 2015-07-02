@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
@@ -31,9 +32,13 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             activity.MayBeDropped = ann.MayBeDropped;
             activity.Description = ann.Content;
             activity.DisplayInHomePortal = ann.VisibleForStudent;
+
             activity.MayBeExempt = ann.MayBeExempt;
             activity.IsScored = ann.IsScored;
             activity.SectionId = ann.ClassRef;
+   
+
+ 
         }
     }
 
@@ -95,3 +100,5 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
         }
     }
 }
+
+

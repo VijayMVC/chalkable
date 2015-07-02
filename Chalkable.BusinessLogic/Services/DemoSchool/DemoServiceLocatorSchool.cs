@@ -68,6 +68,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private ICourseTypeService courseTypeService;
         private ISettingsService settingsService;
         private ILPGalleryCategoryService lpGalleryCategoryService { get; set; }
+        private IAnnouncementAssignedAttributeService announcementAssignedAttributeService;
+
 
         public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster): base(serviceLocatorMaster.Context)        
         {
@@ -124,6 +126,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             groupService = new DemoGroupService(this);
             courseTypeService = new DemoCourseTypeService(this);
             settingsService = new DemoSettingsService(this);
+            announcementAssignedAttributeService = new DemoAnnouncementAssignedAttributeService(this);
             lpGalleryCategoryService = new LPGalleryCategoryService(this);
         }
 
@@ -193,6 +196,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IAttendanceMonthService AttendanceMonthService { get { return attendanceMonthService; } }
         public IGradedItemService GradedItemService { get { return gradedItemService; } }
         public IAnnouncementAttributeService AnnouncementAttributeService { get { return announcementAttributeService; } }
+        public IAnnouncementAssignedAttributeService AnnouncementAssignedAttributeService { get; private set; }
         public IContactService ContactService { get { return contactService; } }
         public IGroupService GroupService { get { return groupService; } }
         public IDbService SchoolDbService { get { throw new NotImplementedException(); } }

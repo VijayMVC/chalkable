@@ -7,13 +7,11 @@ REQUIRE('chlk.models.apps.InstalledAppsViewData');
 
 NAMESPACE('chlk.templates.apps', function () {
 
-    /** @class chlk.templates.apps.AttachAppDialog*/
+    /** @class chlk.templates.apps.AttachDialogTpl*/
     CLASS(
-        [ria.templates.TemplateBind('~/assets/jade/activities/apps/attach-app-dialog.jade')],
+        [ria.templates.TemplateBind('~/assets/jade/activities/apps/attach-dialog.jade')],
         [ria.templates.ModelBind(chlk.models.apps.InstalledAppsViewData)],
-        'AttachAppDialog', EXTENDS(chlk.templates.ChlkTemplate), [
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.SchoolPersonId, 'teacherId',
+        'AttachDialogTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'announcementId',
@@ -26,6 +24,25 @@ NAMESPACE('chlk.templates.apps', function () {
 
             [ria.templates.ModelPropertyBind],
             String, 'appUrlAppend',
+
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AppId, 'assessmentAppId',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'fileCabinetEnabled',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'standardAttachEnabled',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'attributesEnabled',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'showApps',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'announcementTypeName',
 
             [[chlk.models.apps.ApplicationForAttach]],
             String, function getAppIconToolTip(app){

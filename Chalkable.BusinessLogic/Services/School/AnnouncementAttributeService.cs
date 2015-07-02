@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -12,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<AnnouncementAttribute> announcementAttributes);
         void Delete(IList<AnnouncementAttribute> announcementAttributes);
         IList<AnnouncementAttribute> GetList(bool? activeOnly);
+        AnnouncementAttribute GetAttributeById(int attributeId, bool? activeOnly);
     }
 
     public class AnnouncementAttributeService : SchoolServiceBase, IAnnouncementAttributeService
@@ -44,6 +46,23 @@ namespace Chalkable.BusinessLogic.Services.School
             if (activeOnly.HasValue && activeOnly.Value)
                 conds = new AndQueryCondition {{AnnouncementAttribute.IS_ACTIVE_FIELD, true}};
             return DoRead(u => new DataAccessBase<AnnouncementAttribute>(u).GetAll(conds));
+        }
+
+        public AnnouncementAttribute GetAttributeById(int attributeId, bool? activeOnly)
+        {
+            var conds = new AndQueryCondition
+            {
+                {AnnouncementAttribute.ID_FIELD, true}
+            };
+
+            if (activeOnly.HasValue && activeOnly.Value)
+                conds = new AndQueryCondition
+                {
+                    {AnnouncementAttribute.ID_FIELD, true},
+                    { AnnouncementAttribute.IS_ACTIVE_FIELD, true }
+                };
+
+            return DoRead(u => new DataAccessBase<AnnouncementAttribute>(u).GetAll(conds).First());
         }
     }
 }

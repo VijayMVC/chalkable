@@ -45,5 +45,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 res = res.Where(x => x.IsActive).ToList();
             return res;
         }
+
+        public AnnouncementAttribute GetAttributeById(int attributeId, bool? activeOnly)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

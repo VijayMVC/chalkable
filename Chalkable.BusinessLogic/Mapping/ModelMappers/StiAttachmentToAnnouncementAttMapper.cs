@@ -3,9 +3,9 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Mapping.ModelMappers
 {
-    public class StiAttachmentToAnnouncementAttMapper : BaseMapper<AnnouncementAttachment, ActivityAttribute>
+    public class StiAttachmentToAnnouncementAttMapper : BaseMapper<AnnouncementAttachment, ActivityAssignedAttribute>
     {
-        protected override void InnerMap(AnnouncementAttachment announcementAtt, ActivityAttribute activityAtt)
+        protected override void InnerMap(AnnouncementAttachment announcementAtt, ActivityAssignedAttribute activityAtt)
         {
             if (activityAtt.Attachment != null)
             {

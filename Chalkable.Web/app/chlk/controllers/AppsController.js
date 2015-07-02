@@ -503,6 +503,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, String]],
         function tryToAttachFromAnnouncementAction(announcementId, appId, appUrlAppend_) {
+            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
             return this.tryToAttachAction(announcementId, appId, appUrlAppend_);
         },
 

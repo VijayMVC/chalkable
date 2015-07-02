@@ -66,5 +66,7 @@ var ChlkSessionConstants = {
     GROUPS_LIST: 'GroupsList',
     LE_PARAMS: 'leParams',
     LESSON_PLAN_CATEGORIES: 'lessonPlanCategories',
-    LESSON_PLAN_CATEGORY_FOR_SEARCH: 'lessonPlanCategoryForSearch'
+    LESSON_PLAN_CATEGORY_FOR_SEARCH: 'lessonPlanCategoryForSearch',
+    ANNOUNCEMENT_ATTRIBUTES: 'announcementAttributes',
+    ANNOUNCEMENT_ASSIGNED_ATTRIBUTES: 'announcementAssignedAttributes'
 };

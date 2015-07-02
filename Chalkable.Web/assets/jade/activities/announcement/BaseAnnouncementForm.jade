@@ -13,8 +13,10 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
     +Hidden('isedit', !!state)(data-isedit = !!state).is-edit
     +Hidden('classId', classId)
     +Hidden('type', announcement.getType())
+    
     +Hidden('announcementtypename', announcement.getAnnouncementTypeName())
     +Hidden('groupIds', announcement.getRecipients() && announcement.getRecipients().map(function(item){return item.getGroupId()}).join(',')).group-ids
+
 
     -var disableDeleteBtn = !!(announcement.getGradingStudentsCount() && announcement.getGradingStudentsCount() > 0)
     -var standards = announcement.getStandards() || []
@@ -51,9 +53,8 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
                                     userRole = userRole
                                     studyCenterEnabled = self.isStudyCenterEnabled()
                                     ableToRemoveStandard=announcement.isAbleToRemoveStandard())
-                            if announcement.isCanAddStandard()
-                                .title=standards.length > 0 ? Msg.Click_to_add_more : Msg.Click_to_add_standard
-                                +ActionLink('announcement', state ? 'showStandards' : 'showStandardsOnCreate', announcement.getAnnouncementTypeName(), announcement.getId(), classId).add-standards-btn.x-hidden
+
+                              
                 if !isAdmin
                     .drawer-icon
             if !isAdmin
@@ -101,6 +102,9 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
                             +SlideCheckbox('candropstudentscore', classAnnouncement.isAbleDropStudentScore(), false)
                             .question-mark(data-tooltip=Msg.Can_Drop_Student_Score_Tooltip_Message) ?
 
+
+
+
     .apps-attachments-bock.attachments-and-applications
         ann = announcement
         -ann.setNeedButtons(true)
@@ -109,6 +113,14 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
                 userRole = userRole,
                 studyCenterEnabled = self.isStudyCenterEnabled()
             )
+
+    .attributes-block
+        -var attributesList = announcement.getAttributesListViewData();
+        -attributesList.setReadOnly(false)
+        +RenderWith(attributesList, chlk.templates.announcement.AnnouncementAttributesTpl)(
+            userRole = userRole
+        )
+
     if !isAdmin
         .suggested-apps
             if announcement.getStandards() && announcement.getStandards().length > 0 && self.isStudyCenterEnabled()
