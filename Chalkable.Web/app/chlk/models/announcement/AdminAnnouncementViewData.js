@@ -18,6 +18,8 @@ NAMESPACE('chlk.models.announcement', function () {
             },
 
             chlk.models.common.ChlkDate, 'expiresDate',
+            String, 'expiresDateColor',
+            String, 'expiresDateText',
 
             function prepareExpiresDateText(){
                 var now = getSchoolYearServerDate();

@@ -41,7 +41,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.AnnouncementId, String, String, chlk.models.common.ChlkDate]],
             ria.async.Future, function submitAdminAnnouncement(id, content_, title_, expiresdate_) {
                 return this.post('AdminAnnouncement/Submit.json', Boolean, {
-                    announcementid:id.valueOf(),
+                    adminAnnouncementId:id.valueOf(),
                     title: title_,
                     content: content_,
                     expiresdate: expiresdate_ && expiresdate_.toStandardFormat()
@@ -51,7 +51,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.AnnouncementId, String]],
             ria.async.Future, function addGroupsToAnnouncement(id, groupIds_) {
                 return this.post('AdminAnnouncement/SubmitGroupsToAnnouncement.json', Boolean, {
-                    announcementid:id.valueOf(),
+                    adminAnnouncementId:id.valueOf(),
                     groupsids: groupIds_
                 });
             },

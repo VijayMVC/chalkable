@@ -186,7 +186,8 @@ As
 		ana.AnnouncementRef as AnnouncementRef,
 		(case when ca.ClassRef is not null then ca.ClassRef else lp.ClassRef end) as ClassRef,
 		aa.AdminRef as AdminRef,
-		ana.State as [State],
+		
+		ana.[State] as [State],
 		st.Id as AskerId,
 		st.FirstName as AskerFirstName,
 		st.LastName as AskerLastName,

@@ -7,7 +7,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 {
     public class AdminAnnouncementViewData : ShortAnnouncementViewData
     {
-        public DateTime? ExpiresData { get; set; }
+        public DateTime? ExpiresDate { get; set; }
 
         protected AdminAnnouncementViewData(AdminAnnouncement announcement)
             : base(announcement)
@@ -15,7 +15,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             PersonId = announcement.AdminRef;
             PersonName = announcement.AdminName;
             PersonGender = announcement.AdminGender;
-            ExpiresData = announcement.Expires;
+            ExpiresDate = announcement.Expires;
         }
 
         public static AdminAnnouncementViewData Create(AdminAnnouncement announcement)
