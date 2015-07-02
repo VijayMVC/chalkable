@@ -1,0 +1,24 @@
+.month-calendar-body
+    .day-names
+        div: p=Msg.Sunday
+        div: p=Msg.Monday
+        div: p=Msg.Tuesday
+        div: p=Msg.Wednesday
+        div: p=Msg.Thursday
+        div: p=Msg.Friday
+        div: p=Msg.Saturday
+    .items
+        -selectedItem = self.getTopData() ? self.getTopData().getSelectedItemId() : null
+        each line in self.getItemsGroupped()
+            .row
+                each item in line
+                    announcements = item.getAnnouncements()
+                    itemsArr = item.getItemsArray()
+                    disablePopUp = !self.isMainCalendar() || self.getUserRole().isStudent() && !announcements.length && !itemsArr.length
+                    +ActionLink('calendar', 'showMonthDayPopUp', item.getDate().toStandardFormat(), selectedItem)(
+                        class = [item.isSunday() ? 'sunday' : '', item.getClassName(), item.getTodayClassName(), disablePopUp ? 'disabled' : '', itemsArr.length + announcements.length ? 'with-anns' : '']
+                    )
+                        h2.number=item.getDay()
+                        -var lessonPlan = item.getLessonPlans() && item.getLessonPlans()[0]
+                        if lessonPlan
+                            div(class=item.getDate().getDate() < getDate() || item.getTodayClassName() == 'today' ? 'green' : 'red').lesson-plan-item #{lessonPlan.getShortClassName()} LP
