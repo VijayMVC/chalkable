@@ -3,7 +3,8 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
     if types.length > 8
         .action-bar
             .items
-                +ActionLink('announcement', 'lessonPlan', classId).item.announcement-type-button.no-save Lesson Plan
+                if !announcement.getState().valueOf()
+                    +ActionLink('announcement', 'lessonPlan', classId).item.announcement-type-button.no-save Lesson Plan
                 SPAN.type-text #{Msg.Type}:&nbsp;
                 +Select('typeid')#type-select
                     each item in types
@@ -19,7 +20,8 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
     else
         .action-bar
             .items
-                +ActionLink('announcement', 'lessonPlan', classId).item.announcement-type-button.no-save Lesson Plan
+                if !announcement.getState().valueOf()
+                    +ActionLink('announcement', 'lessonPlan', classId).item.announcement-type-button.no-save Lesson Plan
                 each item in types
                     a.item.announcement-type-button(
                         class = "validate-skip " + (typeId==item.getId() ? 'pressed' : ''),
