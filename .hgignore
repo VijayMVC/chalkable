@@ -43,18 +43,12 @@ app/node_modules
 NEW UI
 Chalkable.Web/Content/extjs
 Chalkable.Azure
-Chalkable.BusinessLogic
-Chalkable.Common
 .idea
-Chalkable.Data.Common
-Chalkable.Data.School/DataAccess
-Chalkable.Data.School/Model
 Chalkable.Tests/Services/Master
 Chalkable.Tests/Services
 Chalkable.Web/Content/audio
 screens
 psd
 home page
-SQL
 Chalkable.Web/Scripts/highcharts
 Chalkable.Web/Scripts/extjs
