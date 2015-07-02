@@ -155,7 +155,8 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.SchoolPersonId]],
             ria.async.Future, function deleteDrafts(id) {
                 return this.post('Announcement/DeleteDrafts.json', chlk.models.announcement.FeedAnnouncementViewData, {
-                    personId: id.valueOf()
+                    personId: id.valueOf(),
+                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 });
             },
 
@@ -254,7 +255,8 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function addStandard(announcementId, standardId) {
                 return this.get('Announcement/AddStandard.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
-                    standardId: standardId.valueOf()
+                    standardId: standardId.valueOf(),
+                    type: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 });
             },
 
@@ -262,7 +264,8 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function removeStandard(announcementId, standardId) {
                 return this.get('Announcement/RemoveStandard.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
-                    standardId: standardId.valueOf()
+                    standardId: standardId.valueOf(),
+                    type: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 });
             },
 
@@ -303,7 +306,8 @@ NAMESPACE('chlk.services', function () {
             [[Array]],
             ria.async.Future, function deleteAnnouncementTypes(ids){
                 return this.get('AnnouncementType/Delete.json', Boolean,{
-                    classAnnouncementTypeIds: this.arrayToCsv(ids)
+                    classAnnouncementTypeIds: this.arrayToCsv(ids),
+                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 });
             }
         ])
