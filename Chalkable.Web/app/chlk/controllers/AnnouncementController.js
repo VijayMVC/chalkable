@@ -567,11 +567,11 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.Permissions([
             [chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
         ])],
-        [[chlk.models.id.AnnouncementId]],
-        function editAction(announcementId) {
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function editAction(announcementId, announcementType) {
             this.getContext().getSession().set('classInfo', null);
             var res =  this.announcementService
-                .editAnnouncement(announcementId)
+                .editAnnouncement(announcementId, announcementType)
                 .attach(this.validateResponse_())
                 .then(function(model){
                     var resModel =  this.addEditAction(model, true);
@@ -630,11 +630,11 @@ NAMESPACE('chlk.controllers', function (){
             return announcement;
         },
 
-        [[chlk.models.id.AnnouncementId]],
-        function viewAction(announcementId) {
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function viewAction(announcementId, announcementType_) {
             this.getView().reset();
             var result = this.announcementService
-                .getAnnouncement(announcementId)
+                .getAnnouncement(announcementId, announcementType_)
                 .attach(this.validateResponse_())
                 .catchError(this.handleNoAnnouncementException_, this)
                 .then(function(announcement){
@@ -1008,7 +1008,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.cacheAnnouncementAttachments(null);
                     this.cacheAnnouncementApplications(null);
                     if(model.getSubmitType() == 'submitOnEdit')
-                        return this.BackgroundNavigate('announcement', 'view', [model.getId()]);
+                        return this.BackgroundNavigate('announcement', 'view', [model.getId(), chlk.models.announcement.AnnouncementTypeEnum.ADMIN]);
                     else{
                         return this.BackgroundNavigate('feed', 'list', [null, true]);
                     }
@@ -1055,7 +1055,9 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             if (submitType == 'changeCategory'){
-                return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, ria.async.DeferredData(model), 'search');
+                this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, model.getGalleryCategoryForSearch());
+                return null;
+                //return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, ria.async.DeferredData(model), 'search');
             }
 
             if(this.submitLessonPlan(model, submitType == 'submitOnEdit'))
@@ -1188,7 +1190,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.cacheAnnouncementAttachments(null);
                     this.cacheAnnouncementApplications(null);
                     if(isEdit)
-                        return this.BackgroundNavigate('announcement', 'view', [model.getId()]);
+                        return this.BackgroundNavigate('announcement', 'view', [model.getId(), chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN]);
                     else{
                         return this.BackgroundNavigate('feed', 'list', [null, true]);
                     }
@@ -1329,7 +1331,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.cacheAnnouncementAttachments(null);
                     this.cacheAnnouncementApplications(null);
                     if(isEdit)
-                        return this.BackgroundNavigate('announcement', 'view', [model.getId()]);
+                        return this.BackgroundNavigate('announcement', 'view', [model.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT]);
                     else{
                         return this.BackgroundNavigate('feed', 'list', [null, true]);
                     }

@@ -41,10 +41,10 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[Number, String]],
-            ria.async.Future, function searchLessonPlansTemplates(galleryCategoryId, filter) {
-                return this.get('LessonPlan/SearchLessonPlansTemplates.json', chlk.models.announcement.LessonPlanViewData, {
-                    galleryCategoryId: galleryCategoryId.valueOf(),
-                    filter: filter
+            ria.async.Future, function searchLessonPlansTemplates(galleryCategoryId_, filter_) {
+                return this.get('LessonPlan/SearchLessonPlansTemplates.json', ArrayOf(chlk.models.announcement.LessonPlanViewData), {
+                    galleryCategoryId: this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, galleryCategoryId_),
+                    filter: filter_
                 });
             },
 

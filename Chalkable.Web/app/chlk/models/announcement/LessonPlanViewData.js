@@ -33,6 +33,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'galleryCategoryId',
 
             function getPercents(){
+                if(!this.endDate || !this.startDate)
+                    return 0;
                 var len = getDateDiffInDays(this.startDate.getDate(), this.endDate.getDate()) + 1;
                 var greenDaysLen = getDateDiffInDays(this.startDate.getDate(), getDate()) + 1;
                 if(greenDaysLen < 1)

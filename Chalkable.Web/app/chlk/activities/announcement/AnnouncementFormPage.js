@@ -149,7 +149,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 node.addClass('pressed');
                 var typeId = node.getData('typeid');
                 var typeName = node.getData('typename');
-                this.dom.find('input[name=announcementtypeid]').setValue(typeId);
+                this.dom.find('input[name=announcementTypeId]').setValue(typeId);
                 this.dom.find('input[name=announcementtypename]').setValue(typeName);
                 setTimeout(function(){
                     node.parent('form').trigger('submit');
@@ -163,7 +163,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var option = node.find(':selected');
                 var typeId = option.getData('typeid');
                 var typeName = option.getData('typename');
-                this.dom.find('input[name=announcementtypeid]').setValue(typeId);
+                this.dom.find('input[name=announcementTypeId]').setValue(typeId);
                 this.dom.find('input[name=announcementtypename]').setValue(typeName);
                 this.dom.find('#announcement-type-btn').trigger('click');
                 wasTypeChanged = true;
@@ -315,10 +315,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                 new ria.dom.Dom().on('click.save', '.class-button[type=submit]', function($target, event){
                     if(!that.dom.find('.is-edit').getData('isedit')){
                         var classId = $target.getAttr('classId');
-                        that.dom.find('input[name=classid]').setValue(classId);
+                        that.dom.find('input[name=classId]').setValue(classId);
                         var defaultType = $target.getData('default-announcement-type-id');
                         if(defaultType)
-                            that.dom.find('input[name=announcementtypeid]').setValue(defaultType);
+                            that.dom.find('input[name=announcementTypeId]').setValue(defaultType);
                     }
 
                     if($target.getAttr('type') == 'submit'){

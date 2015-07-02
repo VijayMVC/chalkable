@@ -22,7 +22,7 @@ mixin FeedItem(item, disabled, isStudentGrading)
     div(class = itemClasses).feed-item
         +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), false)(data-tooltip=Msg.Done).star.complete
         +ActionLink('announcement', isStudentGrading ? 'starFromStudentGrades' : 'star', item.getId().valueOf(), true)(data-tooltip= Msg.ToDo).star
-        +ActionLink('announcement', 'view', item.getId())(class = disabled ? 'disabled' : '').announcement-link
+        +ActionLink('announcement', 'view', item.getId(), item.getType())(class = disabled ? 'disabled' : '').announcement-link
             if adminAnnouncement
                 .title: +Glue_(item.getTitle() || Msg.Admin_Announcement, "")
             if classAnnouncement
@@ -30,7 +30,8 @@ mixin FeedItem(item, disabled, isStudentGrading)
             if lessonPlan
                 .title: +Glue_(lessonPlan.getClassName(), Msg.Lesson_Plan)
             if lessonPlan
-                .date= lessonPlan.getStartDate().format('From M d, to') + lessonPlan.getEndDate().format('M d')
+                -console.info(lessonPlan.getEndDate())
+                .date= (lessonPlan.getStartDate() && lessonPlan.getStartDate().format('From M d, to')) + (lessonPlan.getEndDate() && lessonPlan.getEndDate().format('M d'))
                 .attachment
                     .grades
                         .visible

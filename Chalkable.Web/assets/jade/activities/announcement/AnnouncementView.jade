@@ -32,7 +32,7 @@ mixin Glue_()
 
     .buttons
         if !self.getUserRole().isStudent()
-            +ActionButton('announcement', 'edit', self.getId())(class = self.isAbleEdit() ? "" : "disabled").right Edit
+            +ActionButton('announcement', 'edit', self.getId(), self.getType())(class = self.isAbleEdit() ? "" : "disabled").right Edit
         +ActionButton('feed', 'doToList').back-button Back
         .clear-fix
 

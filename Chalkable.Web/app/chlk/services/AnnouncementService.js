@@ -137,10 +137,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId]],
-            ria.async.Future, function editAnnouncement(id) {
+            [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function editAnnouncement(id, announcementType) {
                 return this.get('Announcement/Edit.json', chlk.models.announcement.AnnouncementForm, {
-                    announcementId: id.valueOf()
+                    announcementId: id.valueOf(),
+                    type: announcementType.valueOf()
                 });
             },
 
@@ -158,10 +159,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId]],
-            ria.async.Future, function getAnnouncement(id) {
+            [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function getAnnouncement(id, announcementType_) {
                 return this.get('Announcement/Read.json', chlk.models.announcement.AnnouncementView, {
-                    announcementId: id.valueOf()
+                    announcementId: id.valueOf(),
+                    announcementType: announcementType_ && announcementType_.valueOf()
                 })
                 .then(function(announcement){
                   this.cache[announcement.getId().valueOf()] = announcement;

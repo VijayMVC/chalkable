@@ -23,7 +23,11 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanSearchTpl, 'search', '.left-top-container', ria.mvc.PartialUpdateRuleActions.Replace)],
         [chlk.activities.lib.PageClass('new-item')],
         'LessonPlanFormPage', EXTENDS(chlk.activities.announcement.AnnouncementFormPage), [
-
+            [ria.mvc.DomEventBind('change', '#galleryCategoryForSearch')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            function categorySearchChange(node, event, selected_){
+                node.parent('.left-top-container').find('#changeCategoryUpdate').trigger('click');
+            }
         ]
     );
 });

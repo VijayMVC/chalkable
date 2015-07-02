@@ -4,7 +4,7 @@
     +Select('galleryCategoryForSearch')#galleryCategoryForSearch
         each item in self.getCategories()
             +Option(item.getId(), item.getName(), item.getId() == galleryId)
-    BUTTON(type="submit", submitType="changeCategory")#changeCategoryUpdate.x-hidden
+    BUTTON(type="submit", value="changeCategory", name="submitType").validate-skip#changeCategoryUpdate.x-hidden
 .search-container
     label(for="filter") Choose from New Item Gallery
     +SearchBox(chlk.services.LessonPlanService, "searchLessonPlansTemplates", chlk.templates.announcement.LessonPlanAutoCompleteTpl, galleryId)(
