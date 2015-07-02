@@ -15,8 +15,8 @@ NAMESPACE('chlk.models.announcement', function () {
 
             OVERRIDE, VOID, function deserialize(raw) {
                 BASE(raw);
-                this.startDate = SJX.fromDeserializable(raw.starts, chlk.models.common.ChlkDate);
-                this.endDate = SJX.fromDeserializable(raw.ends, chlk.models.common.ChlkDate);
+                this.startDate = SJX.fromDeserializable(raw.startdate, chlk.models.common.ChlkDate);
+                this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
                 this.classId = SJX.fromValue(Number(raw.classid), chlk.models.id.ClassId);
                 this.shortClassName = SJX.fromValue(raw.classname, String);
                 this.className = SJX.fromValue(raw.fullclassname, String);

@@ -209,3 +209,6 @@ As
 		left join Staff sf on sf.Id = ana.AnswererRef
 		left join StaffSchool sfs on sfs.StaffRef = sf.Id
 Go
+
+
+Drop view vwAdminAnnouncement

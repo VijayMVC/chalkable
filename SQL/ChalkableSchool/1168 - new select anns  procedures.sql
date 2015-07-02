@@ -148,12 +148,6 @@ Where (@sisActivityIds is not null and SisActivityId is not null and SisActivity
 exec spSelectClassAnnouncement @classAnnouncement
 Go
 
-select * from LessonPlan
-
-select * from Announcement
-where Id = 1000002199
-
-
 
 Create Procedure spSelectLessonPlans @lessonPlanT TLessonPlan readonly
 As

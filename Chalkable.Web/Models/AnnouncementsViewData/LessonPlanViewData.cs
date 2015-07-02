@@ -7,8 +7,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 {
     public class LessonPlanViewData : ShortAnnouncementViewData
     {
-        public DateTime? Starts { get; set; }
-        public DateTime? Ends { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? EndDate { get; set; }
         public int ClassId { get; set; }
         public string ClassName { get; set; }
         public string FullClassName { get; set; }
@@ -18,8 +18,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         protected LessonPlanViewData(LessonPlan announcement)
             : base(announcement)
         {
-            Starts = announcement.StartDate;
-            Ends = announcement.EndDate;
+            StartDate = announcement.StartDate;
+            EndDate = announcement.EndDate;
             ClassId = announcement.ClassRef;
             ClassName = announcement.ClassName;
             FullClassName = announcement.FullClassName;
