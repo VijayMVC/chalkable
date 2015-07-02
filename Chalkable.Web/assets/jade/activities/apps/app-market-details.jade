@@ -99,10 +99,22 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
                         .table-row
                             .desc
                                 | Installed by &#32;
+                                span= item.getSchoolName()
+                                | &#32;
+                                -var RoleEnum = chlk.models.common.RoleEnum
+                                case item.getOwnerRoleId()
+                                    when RoleEnum.TEACHER
+                                        | Teacher
+                                    when RoleEnum.STUDENT
+                                        | Student
+                                    when RoleEnum.DISTRICTADMIN
+                                        | District
+                                | &#32;
                                 span= item.getFullName()
                                 | &#32; for &#32;
-                                span= item.getInstalledCount()
-                                | &#32; in &#32;
-                                span= item.getSchoolName()
+                                = item.getInstalledCount()
+                                | &#32; Students - &#32;
+                                = item.getInstallDate().toString('m/dd/yy')
+
                             .amount= item.getPrice() || 'Free'
                             .balance= item.getRemains()

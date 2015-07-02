@@ -6,6 +6,9 @@ REQUIRE('chlk.models.apps.AppInstallGroup');
 REQUIRE('chlk.models.apps.AppInstallInfo');
 REQUIRE('chlk.models.apps.AppRating');
 
+REQUIRE('chlk.models.common.Role');
+REQUIRE('chlk.models.common.ChlkDate');
+
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
@@ -20,6 +23,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.personId = SJX.fromValue(raw.personid, chlk.models.id.SchoolPersonId);
                 this.firstName = SJX.fromValue(raw.firstname, String);
                 this.lastName = SJX.fromValue(raw.lastname, String);
+                this.ownerRoleId = SJX.fromValue(raw.ownerroleid, chlk.models.common.RoleEnum);
 
                 this.installedCount = SJX.fromValue(raw.installedcount, Number);
                 this.price = SJX.fromValue(raw.price, Number);
@@ -27,11 +31,14 @@ NAMESPACE('chlk.models.apps', function () {
 
                 this.schoolId = SJX.fromValue(raw.schoolid, chlk.models.id.SchoolId);
                 this.schoolName = SJX.fromValue(raw.schoolname, String);
+
+                this.installDate = SJX.fromDeserializable(raw.installdate, chlk.models.common.ChlkDate);
             },
 
             chlk.models.id.SchoolPersonId, 'personId',
             String, 'firstName',
             String, 'lastName',
+            chlk.models.common.RoleEnum, 'ownerRoleId',
 
             Number, 'installedCount',
             Number, 'price',
@@ -39,6 +46,8 @@ NAMESPACE('chlk.models.apps', function () {
 
             chlk.models.id.SchoolId, 'schoolId',
             String, 'schoolName',
+
+            chlk.models.common.ChlkDate, 'installDate',
 
             String, function getFullName() {
                 return [this.firstName, this.lastName].filter(function (_) { return _ }).join(' ');
