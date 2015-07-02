@@ -57,6 +57,12 @@ namespace Chalkable.Data.School.DataAccess
                                    join [{2}] on [{2}].[{3}] = [{0}].[{1}]"
                               , type.Name, AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, "Announcement", Announcement.ID_FIELD);
 
+            res.Sql.AppendFormat(@"		
+                                    left join LessonPlan on LessonPlan.Id = Announcement.Id
+		                            left join ClassAnnouncement on ClassAnnouncement.Id = Announcement.Id
+		                            left join AdminAnnouncement on AdminAnnouncement.Id = Announcement.Id
+                                ");
+
             queryCondition.BuildSqlWhere(res, type.Name);
             if (!needsAllAttachments)
                 res.Sql.AppendFormat(" and AnnouncementAttachment.PersonRef = @callerId");
@@ -98,7 +104,7 @@ namespace Chalkable.Data.School.DataAccess
             {
                 res.Sql.Append(@" and exists(select * from ClassTeacher 
                                              where (ClassTeacher.PersonRef = @callerId or AnnouncementAttachment.PersonRef = ClassTeacher.PersonRef)
-                                                    and ClassTeacher.ClassRef = Announcement.ClassRef)");
+                                                    and (ClassTeacher.ClassRef = LessonPlan.ClassRef or ClassTeacher.ClassRef = ClassAnnouncement.ClassRef))");
                 return res;
 
             }
@@ -106,10 +112,11 @@ namespace Chalkable.Data.School.DataAccess
             {
                 res.Sql.Append(@" and (AnnouncementAttachment.PersonRef = @callerId 
                                        or (
-                                            Announcement.ClassRef in (select cp.ClassRef from ClassPerson cp where cp.PersonRef = @callerId)
-                                            and Announcement.ClassRef in (select ct.ClassRef from ClassTeacher ct where ct.PersonRef = AnnouncementAttachment.PersonRef)
+                                                exists(select * from ClassPerson cp where cp.PersonRef = @callerId and (cp.ClassRef = LessonPlan.ClassRef or cp.ClassRef = ClassAnnouncement.ClassRef))
+                                            and 
+                                                exists(select ct.ClassRef from ClassTeacher ct where ct.PersonRef = AnnouncementAttachment.PersonRef and (ct.ClassRef = LessonPlan.ClassRef or ct.ClassRef = ClassAnnouncement.ClassRef))
                                           )
-                                       or (Announcement.AdminRef is not null and exists(select * from AdminAnnouncementRecipient aar 
+                                       or (AdminAnnouncement.Id is not null and exists(select * from AnnouncementGroup aar 
                                                                                         join StudentGroup st on st.GroupRef = aar.GroupRef
 																			            where st.StudentRef = @callerId and aar.AnnouncementRef = Announcement.Id)
                                           )
