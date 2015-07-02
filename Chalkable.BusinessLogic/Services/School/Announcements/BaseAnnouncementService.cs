@@ -53,6 +53,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public virtual void DeleteAnnouncement(int announcementId)
         {
+            throw new NotImplementedException();
             //Trace.Assert(Context.PersonId.HasValue);
             //using (var uow = Update())
             //{

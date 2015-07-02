@@ -351,7 +351,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.common.ChlkDate]],
         function addDistrictAdminAction(date_) {
-            var result = this.announcementService
+            var result = this.adminAnnouncementService
                 .addAdminAnnouncement(date_)
                 .attach(this.validateResponse_())
                 .then(function(model){
@@ -370,10 +370,10 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId]],
-        function editDistrictAdminAction(announcementId) {
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function editDistrictAdminAction(announcementId, announcementType) {
             var result = this.announcementService
-                .editAnnouncement(announcementId)
+                .editAnnouncement(announcementId, announcementType)
                 .attach(this.validateResponse_())
                 .then(function(model){
                     var announcement = model.getAnnouncement();
@@ -979,7 +979,7 @@ NAMESPACE('chlk.controllers', function (){
         function saveDistrictAdminAction(model){
             if (model.getSubmitType() == 'saveNoUpdate'){
                 this.setNotAblePressSidebarButton(true);
-                this.announcementService
+                this.adminAnnouncementService
                     .saveAdminAnnouncement(
                         model.getId(),
                         model.getTitle(),
@@ -990,15 +990,12 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             }
 
-            var res = this.announcementService
+            var res = this.adminAnnouncementService
                 .submitAdminAnnouncement(
                     model.getId(),
                     model.getContent(),
                     model.getTitle(),
-                    model.getExpiresDate(),
-                    model.getAttachments(),
-                    model.getApplicationsIds(),
-                    model.getMarkingPeriodId()
+                    model.getExpiresDate()
                 )
                 .attach(this.validateResponse_());
 
@@ -1536,7 +1533,7 @@ NAMESPACE('chlk.controllers', function (){
                 return new chlk.models.announcement.AdminAnnouncementRecipient(model.getId(), item.getId(), item.getName());
             });
             model.setRecipients(recipients);
-            this.announcementService.addGroupsToAnnouncement(model.getId(), model.getGroupIds())
+            this.adminAnnouncementService.addGroupsToAnnouncement(model.getId(), model.getGroupIds())
                 .then(function(){
                     this.BackgroundCloseView(chlk.activities.announcement.AnnouncementGroupsDialog);
                 }, this)

@@ -345,7 +345,7 @@ else begin
 	update Announcement set Content = @prevContent where Id = @announcementId
 end
 
-exec spGetAdminAnnouncementDetails @announcementId, @personId, @callerRole, null
+exec spGetAdminAnnouncementDetails @announcementId, @personId, @callerRole
 commit
 GO
 
