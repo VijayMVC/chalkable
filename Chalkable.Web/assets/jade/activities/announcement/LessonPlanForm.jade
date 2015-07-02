@@ -98,7 +98,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                     label(for="add-to-gallery") Add to Lesson Plan Gallery
                                     +SlideCheckbox('addtogallery', false, false)#add-to-gallery
                                 .category-container.new-input-container
-                                    #add-to-galelry-btn.validate-skip.x-hidden(name="submitType", value="saveNoUpdate", type="submit" )
+                                    BUTTON#add-to-galelry-btn.validate-skip.x-hidden(name="submitType", value="saveNoUpdate", type="submit" )
                                     label(for="galleryCategoryId") Category:
                                     +Select('galleryCategoryId')(disabled="disabled")#galleryCategoryId
                                         each item in announcement.getCategories()

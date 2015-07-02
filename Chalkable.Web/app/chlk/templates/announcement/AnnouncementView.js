@@ -56,7 +56,8 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             Number, 'applicationsCount',
 
-
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'exempt',
 
             /*[ria.templates.ModelPropertyBind],
             Number, 'ownerAttachmentsCount',
@@ -97,8 +98,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             String, 'applicationName',
 
-             [ria.templates.ModelPropertyBind],
-             Boolean, 'exempt',
+
 
              [ria.templates.ModelPropertyBind],
              ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
@@ -115,11 +115,11 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             Boolean, function isStudentGraded(){
                 var grade = this.getGrade();
-                return this.isDropped() || this.isExempt() || grade >= 0;
+                return this.getClassAnnouncementData().isDropped() || this.isExempt() || grade >= 0;
             },
 
             String, function displayStudentGradeValue(){
-                if(this.isDropped()) return Msg.Dropped;
+                if(this.getClassAnnouncementData().isDropped()) return Msg.Dropped;
                 if(this.isExempt()) return Msg.Exempt;
                 var grade = this.getGrade();
                 if(grade || grade == 0) return grade.toString();
