@@ -32,7 +32,7 @@ namespace FluentACS.ManagementService
 
         public Issuer AddFacebookIdentityProvider(string displayName, string facebookAppId, string facebookAppSecret)
         {
-            return AddFacebookIdentityProvider(displayName, facebookAppId, facebookAppSecret, new [] { "email" });
+            return AddFacebookIdentityProvider(displayName, facebookAppId, facebookAppSecret, new[] { "email" });
         }
 
         public Issuer AddFacebookIdentityProvider(string displayName, string facebookAppId, string facebookAppSecret, string[] loginParameters)
@@ -51,10 +51,10 @@ namespace FluentACS.ManagementService
 
                 var facebook = new IdentityProvider
                                    {
-                                       DisplayName = displayName, 
-                                       LoginLinkName = "Facebook", 
-                                       LoginParameters = String.Join(",", loginParameters), 
-                                       WebSSOProtocolType = WebSSOProtocolType.Facebook.ToString(), 
+                                       DisplayName = displayName,
+                                       LoginLinkName = "Facebook",
+                                       LoginParameters = String.Join(",", loginParameters),
+                                       WebSSOProtocolType = WebSSOProtocolType.Facebook.ToString(),
                                        IssuerId = issuer.Id
                                    };
 
@@ -286,7 +286,7 @@ namespace FluentACS.ManagementService
             {
                 var rule = new Rule
                                {
-                                   InputClaimType = inputClaimType, 
+                                   InputClaimType = inputClaimType,
                                    OutputClaimType = outputClaimType
                                };
 
@@ -303,8 +303,8 @@ namespace FluentACS.ManagementService
             this.AddRelyingPartyWithAsymmetricKey(relyingPartyName, realmAddress, replyAddress, signingCert, signingCertPassword, encryptionCert, ruleGroupName, allowedIdentityProviders);
         }
 
-        public void AddRelyingPartyWithAsymmetricKey(string relyingPartyName, string realmAddress, string replyAddress, 
-            byte[] signingCert = null, string signingCertPassword = "", byte[] encryptionCert = null, string ruleGroupName = "", 
+        public void AddRelyingPartyWithAsymmetricKey(string relyingPartyName, string realmAddress, string replyAddress,
+            byte[] signingCert = null, string signingCertPassword = "", byte[] encryptionCert = null, string ruleGroupName = "",
             string[] allowedIdentityProviders = null)
         {
             try
@@ -321,8 +321,8 @@ namespace FluentACS.ManagementService
                 // Create the Reply for Relying Party
                 var reply = new RelyingPartyAddress
                                 {
-                                    Address = replyAddress, 
-                                    EndpointType = RelyingPartyAddressEndpointType.Reply.ToString(), 
+                                    Address = replyAddress,
+                                    EndpointType = RelyingPartyAddressEndpointType.Reply.ToString(),
                                     RelyingParty = relyingParty
                                 };
 
@@ -351,7 +351,7 @@ namespace FluentACS.ManagementService
         }
 
         public void AddRelyingPartyWithKey(string relyingPartyName, string realmAddress, string replyAddress, byte[] symmetricKey,
-            TokenType tokenType, int tokenLifetime, 
+            TokenType tokenType, int tokenLifetime,
             byte[] signingCert, string signingCertPassword, DateTime? signingStartDate, DateTime? signingEndDate,
             byte[] encryptionCert, string ruleGroupName, string[] allowedIdentityProviders)
         {
@@ -364,7 +364,7 @@ namespace FluentACS.ManagementService
                 var asymmetricTokenEncryptionRequired = encryptionCert != null;
 
                 RelyingParty relyingParty;
-                CreateRelyingParty(client, relyingPartyName, ruleGroupName, realmAddress, string.Empty, tokenType, tokenLifetime, 
+                CreateRelyingParty(client, relyingPartyName, ruleGroupName, realmAddress, string.Empty, tokenType, tokenLifetime,
                     asymmetricTokenEncryptionRequired, out relyingParty);
 
                 // Create the Reply for Relying Party
@@ -383,7 +383,7 @@ namespace FluentACS.ManagementService
                 {
                     AddSigningKeyToRelyingParty(client, relyingPartyName, signingCert, signingCertPassword, signingStartDate.Value, signingEndDate.Value, relyingParty);
                 }
-                
+
                 if (symmetricKey != null)
                 {
                     AddSigningKeyToRelyingParty(client, relyingPartyName, symmetricKey, defaultStartDate, defaultEndDate, relyingParty);
@@ -409,7 +409,7 @@ namespace FluentACS.ManagementService
             this.AddRelyingPartyWithSymmetricKey(relyingPartyName, realmAddress, string.Empty, symmetricKey, TokenType.SAML_2_0, Constants.RelyingPartyTokenLifetime, ruleGroupName, allowedIdentityProviders);
         }
 
-        public void AddRelyingPartyWithSymmetricKey(string relyingPartyName, string realmAddress, string replyAddress, 
+        public void AddRelyingPartyWithSymmetricKey(string relyingPartyName, string realmAddress, string replyAddress,
             byte[] symmetricKey, TokenType tokenType, int tokenLifetime, string ruleGroupName = "", string[] allowedIdentityProviders = null)
         {
             try
@@ -474,11 +474,11 @@ namespace FluentACS.ManagementService
 
                 var serviceIdentityKey = new ServiceIdentityKey
                                              {
-                                                 DisplayName = "Credentials for " + name, 
-                                                 Value = Encoding.UTF8.GetBytes(secret), 
-                                                 Type = IdentityKeyTypes.Password.ToString(), 
-                                                 Usage = IdentityKeyUsages.Password.ToString(), 
-                                                 StartDate = defaultStartDate, 
+                                                 DisplayName = "Credentials for " + name,
+                                                 Value = Encoding.UTF8.GetBytes(secret),
+                                                 Type = IdentityKeyTypes.Password.ToString(),
+                                                 Usage = IdentityKeyUsages.Password.ToString(),
+                                                 StartDate = defaultStartDate,
                                                  EndDate = defaultEndDate
                                              };
 
@@ -501,13 +501,13 @@ namespace FluentACS.ManagementService
 
                 var serviceKey = new ServiceKey
                                      {
-                                         DisplayName = displayName, 
-                                         Type = keyType.ToString(), 
-                                         Usage = keyUsage.ToString(), 
-                                         Value = keyValue, 
-                                         Password = string.IsNullOrEmpty(protectionPassword) ? null : new UTF8Encoding().GetBytes(protectionPassword), 
-                                         StartDate = defaultStartDate, 
-                                         EndDate = defaultEndDate, 
+                                         DisplayName = displayName,
+                                         Type = keyType.ToString(),
+                                         Usage = keyUsage.ToString(),
+                                         Value = keyValue,
+                                         Password = string.IsNullOrEmpty(protectionPassword) ? null : new UTF8Encoding().GetBytes(protectionPassword),
+                                         StartDate = defaultStartDate,
+                                         EndDate = defaultEndDate,
                                          IsPrimary = true
                                      };
 
@@ -527,9 +527,9 @@ namespace FluentACS.ManagementService
                 var rule = new Rule
                                {
                                    Description = description,
-                                   InputClaimType = inputClaimType, 
-                                   InputClaimValue = inputClaimValue, 
-                                   OutputClaimType = outputClaimType, 
+                                   InputClaimType = inputClaimType,
+                                   InputClaimValue = inputClaimValue,
+                                   OutputClaimType = outputClaimType,
                                    OutputClaimValue = outputClaimValue
                                };
 
@@ -548,14 +548,14 @@ namespace FluentACS.ManagementService
 
         public ManagementService CreateManagementServiceClient()
         {
-           
-                var managementServiceEndpoint = string.Format(CultureInfo.InvariantCulture, "https://{0}.{1}/{2}", this.serviceNamespace, Constants.AcsHostName, Constants.ManagementServiceHead);
 
-                var managementService = new ManagementService(new Uri(managementServiceEndpoint))
-                                            {
-                                                IgnoreMissingProperties = true
-                                            };
-                managementService.SendingRequest += this.AttachTokenWithWritePermissions;
+            var managementServiceEndpoint = string.Format(CultureInfo.InvariantCulture, "https://{0}.{1}/{2}", this.serviceNamespace, Constants.AcsHostName, Constants.ManagementServiceHead);
+
+            var managementService = new ManagementService(new Uri(managementServiceEndpoint))
+                                        {
+                                            IgnoreMissingProperties = true
+                                        };
+            managementService.SendingRequest += this.AttachTokenWithWritePermissions;
 
             return managementService;
         }
@@ -826,12 +826,12 @@ namespace FluentACS.ManagementService
         {
             var relyingPartyKey = new RelyingPartyKey
                                       {
-                                          DisplayName = "Encryption Certificate for " + relyingPartyName, 
-                                          Type = KeyType.X509Certificate.ToString(), 
-                                          Usage = KeyUsage.Encrypting.ToString(), 
-                                          Value = encryptionCert, 
-                                          RelyingParty = relyingParty, 
-                                          StartDate = defaultStartDate, 
+                                          DisplayName = "Encryption Certificate for " + relyingPartyName,
+                                          Type = KeyType.X509Certificate.ToString(),
+                                          Usage = KeyUsage.Encrypting.ToString(),
+                                          Value = encryptionCert,
+                                          RelyingParty = relyingParty,
+                                          StartDate = defaultStartDate,
                                           EndDate = defaultEndDate
                                       };
 
@@ -858,7 +858,7 @@ namespace FluentACS.ManagementService
                 {
                     var rpidp = new RelyingPartyIdentityProvider
                                     {
-                                        IdentityProviderId = idp.Id, 
+                                        IdentityProviderId = idp.Id,
                                         RelyingPartyId = relyingParty.Id
                                     };
 
@@ -872,14 +872,14 @@ namespace FluentACS.ManagementService
         {
             var relyingPartyKey = new RelyingPartyKey
                                       {
-                                          DisplayName = "Signing Certificate for " + relyingPartyName, 
-                                          Type = KeyType.X509Certificate.ToString(), 
-                                          Usage = KeyUsage.Signing.ToString(), 
-                                          Value = signingCert, 
-                                          Password = string.IsNullOrEmpty(signingCertPassword) ? null : new UTF8Encoding().GetBytes(signingCertPassword), 
-                                          RelyingParty = relyingParty, 
-                                          StartDate = defaultStartDate, 
-                                          EndDate = defaultEndDate, 
+                                          DisplayName = "Signing Certificate for " + relyingPartyName,
+                                          Type = KeyType.X509Certificate.ToString(),
+                                          Usage = KeyUsage.Signing.ToString(),
+                                          Value = signingCert,
+                                          Password = string.IsNullOrEmpty(signingCertPassword) ? null : new UTF8Encoding().GetBytes(signingCertPassword),
+                                          RelyingParty = relyingParty,
+                                          StartDate = defaultStartDate,
+                                          EndDate = defaultEndDate,
                                           IsPrimary = true
                                       };
 
@@ -892,12 +892,12 @@ namespace FluentACS.ManagementService
         {
             var relyingPartyKey = new RelyingPartyKey
                                       {
-                                          DisplayName = "Signing Key for " + relyingPartyName, 
-                                          Type = KeyType.Symmetric.ToString(), 
-                                          Usage = KeyUsage.Signing.ToString(), 
-                                          Value = symmetricKey, 
-                                          RelyingParty = relyingParty, 
-                                          StartDate = defaultStartDate, 
+                                          DisplayName = "Signing Key for " + relyingPartyName,
+                                          Type = KeyType.Symmetric.ToString(),
+                                          Usage = KeyUsage.Signing.ToString(),
+                                          Value = symmetricKey,
+                                          RelyingParty = relyingParty,
+                                          StartDate = defaultStartDate,
                                           EndDate = defaultEndDate,
                                           IsPrimary = true
                                       };
@@ -912,11 +912,11 @@ namespace FluentACS.ManagementService
             // Create Relying Party
             relyingParty = new RelyingParty
                                {
-                                   Name = relyingPartyName, 
-                                   DisplayName = relyingPartyName, 
-                                   Description = relyingPartyName, 
-                                   TokenType = tokenType.ToString(), 
-                                   TokenLifetime = tokenLifetime, 
+                                   Name = relyingPartyName,
+                                   DisplayName = relyingPartyName,
+                                   Description = relyingPartyName,
+                                   TokenType = tokenType.ToString(),
+                                   TokenLifetime = tokenLifetime,
                                    AsymmetricTokenEncryptionRequired = asymmetricTokenEncryptionRequired
                                };
 
@@ -939,7 +939,7 @@ namespace FluentACS.ManagementService
 
                 var relyingPartyRuleGroup = new RelyingPartyRuleGroup
                                                 {
-                                                    RuleGroupId = ruleGroup.Id, 
+                                                    RuleGroupId = ruleGroup.Id,
                                                     RelyingParty = relyingParty
                                                 };
 
@@ -949,8 +949,8 @@ namespace FluentACS.ManagementService
             // Create the Realm for Relying Party
             var realm = new RelyingPartyAddress
                             {
-                                Address = realmAddress, 
-                                EndpointType = RelyingPartyAddressEndpointType.Realm.ToString(), 
+                                Address = realmAddress,
+                                EndpointType = RelyingPartyAddressEndpointType.Realm.ToString(),
                                 RelyingParty = relyingParty
                             };
 
@@ -960,8 +960,8 @@ namespace FluentACS.ManagementService
             {
                 var reply = new RelyingPartyAddress
                                 {
-                                    Address = replyAddress, 
-                                    EndpointType = RelyingPartyAddressEndpointType.Reply.ToString(), 
+                                    Address = replyAddress,
+                                    EndpointType = RelyingPartyAddressEndpointType.Reply.ToString(),
                                     RelyingParty = relyingParty
                                 };
 
@@ -970,13 +970,13 @@ namespace FluentACS.ManagementService
 
             client.SaveChanges(SaveChangesOptions.Batch);
         }
-        
+
         private static Exception TryGetExceptionDetails(Exception ex)
         {
             return ex;
-                /*string.IsNullOrWhiteSpace(cachedSwtToken)
-                    ? ex
-                    : new ServiceManagementException(ex, cachedSwtToken);*/
+            /*string.IsNullOrWhiteSpace(cachedSwtToken)
+                ? ex
+                : new ServiceManagementException(ex, cachedSwtToken);*/
         }
 
         private void AddRuleToRuleGroup(string ruleGroupName, Issuer issuer, Rule rule)
@@ -1060,21 +1060,29 @@ namespace FluentACS.ManagementService
             values.Add("client_secret", this.serviceIdentityPasswordForManagement);
             values.Add("scope", client.BaseAddress + "v2/mgmt/service/");
 
-            byte[] responseBytes = client.UploadValues("/v2/OAuth2-13", "POST", values);
-
-            //
-            // Extract the access token and return it.
-            //
-            using (MemoryStream responseStream = new MemoryStream(responseBytes))
+            try
             {
-                OAuth2TokenResponse tokenResponse = (OAuth2TokenResponse)new DataContractJsonSerializer(typeof(OAuth2TokenResponse)).ReadObject(responseStream);
-                return tokenResponse.AccessToken;
+                byte[] responseBytes = client.UploadValues("/v2/OAuth2-13", "POST", values);
+                //
+                // Extract the access token and return it.
+                //
+                using (MemoryStream responseStream = new MemoryStream(responseBytes))
+                {
+                    OAuth2TokenResponse tokenResponse = (OAuth2TokenResponse)new DataContractJsonSerializer(typeof(OAuth2TokenResponse)).ReadObject(responseStream);
+                    return tokenResponse.AccessToken;
+                }
+            }
+            catch (WebException ex)
+            {
+                var reader = new StreamReader(ex.Response.GetResponseStream());
+                var msg = reader.ReadToEnd();
+                throw new Exception(msg, ex);
             }
         }
 
         public void AddServiceIdentityWithCertificate(string name, X509Certificate2 certificate)
         {
-            AddServiceIdentityWithCertificate(name, new [] { certificate });
+            AddServiceIdentityWithCertificate(name, new[] { certificate });
         }
 
         public void AddServiceIdentityWithCertificate(string name, IEnumerable<X509Certificate2> certificates)

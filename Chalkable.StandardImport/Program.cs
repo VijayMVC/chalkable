@@ -12,7 +12,7 @@ namespace Chalkable.StandardImport
         static void Main(string[] args)
         {
             if (args.Length < 4)
-                throw new Exception("No enaph params. You should write 4 params. ConnectionString, CC_StandardsFileDirectory, Ab_StandardFilesDirectory, ImportLogstFilesDirectory");
+                throw new Exception("Not enough parameters. You should provide 4 params. ConnectionString, CC_StandardsFileDirectory, Ab_StandardFilesDirectory, ImportLogstFilesDirectory");
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -21,11 +21,11 @@ namespace Chalkable.StandardImport
             string error;
             if(!ValidateConnectionString(args[0], out error))
                 throw new Exception(string.Format("Invalid connection string. {0}", error));
-            if (!Path.IsPathRooted(args[1]))
+            if (!Directory.Exists(args[1]))
                 throw new Exception("Invalid CC_StandardFilesDirectory");
-            if (!Path.IsPathRooted(args[2]))
+            if (!Directory.Exists(args[2]))
                 throw new Exception("Invalid Ab_StandardFilesDirectory");
-            if (!Path.IsPathRooted(args[3]))
+            if (!Directory.Exists(args[3]))
                 throw new Exception("Invalid ImportLogstFilesDirectory");
             ProcessImport(args[0], args[1], args[2], args[3]);
         }

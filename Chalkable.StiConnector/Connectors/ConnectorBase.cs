@@ -156,27 +156,24 @@ namespace Chalkable.StiConnector.Connectors
 
                 if (status == HttpStatusCode.NotFound || status == HttpStatusCode.MethodNotAllowed)
                     return default(T);
-                else
+                if (status == HttpStatusCode.BadRequest)
                 {
-                    if (status == HttpStatusCode.BadRequest)
+                    var inowErrorModel = JsonConvert.DeserializeObject<InowErrorMessageModel>(msg);
+                    if (inowErrorModel.ModelStates != null && inowErrorModel.ModelStates.Count > 0)
                     {
-                        var inowErrorModel = JsonConvert.DeserializeObject<InowErrorMessageModel>(msg);
-                        if (inowErrorModel.ModelStates != null && inowErrorModel.ModelStates.Count > 0)
+                        var chlkMessages = new List<string>();
+                        foreach (var modelState in inowErrorModel.ModelStates)
                         {
-                            var chlkMessages = new List<string>();
-                            foreach (var modelState in inowErrorModel.ModelStates)
-                            {
-                                if(string.IsNullOrEmpty(modelState)) continue;
-                                var chlkMessage = errorMapper.Map(modelState);
-                                chlkMessages.Add(chlkMessage ?? modelState);
-                            }
-                            throw new ChalkableSisException(chlkMessages);
+                            if(string.IsNullOrEmpty(modelState)) continue;
+                            var chlkMessage = errorMapper.Map(modelState);
+                            chlkMessages.Add(chlkMessage ?? modelState);
                         }
-                        throw new ChalkableSisException(msg);
-                        
+                        throw new ChalkableSisException(chlkMessages);
                     }
-                    throw new HttpException((int)status, ex.Message + Environment.NewLine + msg);
+                    throw new ChalkableSisException(msg);
+                        
                 }
+                throw new HttpException((int)status, ex.Message + Environment.NewLine + msg);
             }
             throw new ChalkableException(msg);
         }
