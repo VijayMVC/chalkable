@@ -83,7 +83,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                             data-value=lessonPlan.getEndDate() ? lessonPlan.getEndDate().format('mm/dd/yy') : ''
                             placeholder='Due max date'
                             class='validate[required]'
-                            )#mindate
+                            )#maxdate
                             .calendar-mark
                         .advanced-options
                             A.advanced-options-btn(href="javascript:;")= Msg.Advanced_options
