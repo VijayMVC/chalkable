@@ -175,13 +175,14 @@ NAMESPACE('chlk.services', function () {
                 }, this);
             },
 
-            [[chlk.models.id.AnnouncementId, Boolean]],
-            ria.async.Future, function checkItem(announcementId, complete_) {
+            [[chlk.models.id.AnnouncementId, Boolean, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function checkItem(announcementId, complete_, type_) {
                 this.setImportantCount(this.getImportantCount() + (complete_ ? 1 : -1));
                 return this.post('Announcement/Complete', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
                     complete: complete_,
-                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
+                    announcementType: type_ && type_.valueOf(),
+                    type: type_ && type_.valueOf()
                 });
             },
 

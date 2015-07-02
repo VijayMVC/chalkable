@@ -1363,18 +1363,18 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('inbox')],
-        [[chlk.models.id.AnnouncementId, Boolean]],
-        function starAction(id, complete_){
+        [[chlk.models.id.AnnouncementId, Boolean, chlk.models.announcement.AnnouncementTypeEnum]],
+        function starAction(id, complete_, type_){
             this.announcementService
-                .checkItem(id, complete_)
+                .checkItem(id, complete_, type_)
                 .attach(this.validateResponse_());
             return null;
         },
 
         [chlk.controllers.SidebarButton('statistic')],
-        [[chlk.models.id.AnnouncementId, Boolean]],
-        function starFromStudentGradesAction(id, complete_){
-            return this.starAction(id, complete_);
+        [[chlk.models.id.AnnouncementId, Boolean, chlk.models.announcement.AnnouncementTypeEnum]],
+        function starFromStudentGradesAction(id, complete_, type_){
+            return this.starAction(id, complete_, type_);
         },
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],

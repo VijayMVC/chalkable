@@ -32,6 +32,6 @@ NAMESPACE('chlk.models.grading', function () {
 
             chlk.models.classes.Class, 'clazz',
 
-            ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements'
+            ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'announcements'
         ])
 });
