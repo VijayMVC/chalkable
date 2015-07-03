@@ -63,8 +63,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                             +DatePicker('startdate', lessonPlan.getStartDate())(
                             data-options={
                                 showOtherMonths: true,
-                                selectOtherMonths: true,
-                                dateRanges: self.getClassScheduleDateRanges()
+                                selectOtherMonths: true
                             },
                             data-value=lessonPlan.getStartDate() ? lessonPlan.getStartDate().format('mm/dd/yy') : ''
                             placeholder='Due min date',
@@ -76,8 +75,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                             +DatePicker('enddate', lessonPlan.getEndDate())(
                             data-options={
                                 showOtherMonths: true,
-                                selectOtherMonths: true,
-                                dateRanges: self.getClassScheduleDateRanges()
+                                selectOtherMonths: true
                             },
                             data-value=lessonPlan.getEndDate() ? lessonPlan.getEndDate().format('mm/dd/yy') : ''
                             placeholder='Due max date'
