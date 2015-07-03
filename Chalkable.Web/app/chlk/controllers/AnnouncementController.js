@@ -24,6 +24,7 @@ REQUIRE('chlk.activities.announcement.AddDuplicateAnnouncementDialog');
 REQUIRE('chlk.activities.announcement.AnnouncementGroupsDialog');
 REQUIRE('chlk.activities.announcement.AnnouncementEditGroupsDialog');
 REQUIRE('chlk.activities.announcement.GroupStudentsFilterDialog');
+REQUIRE('chlk.activities.announcement.AddNewCategoryDialog');
 
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.LastMessages');
@@ -47,6 +48,7 @@ REQUIRE('chlk.models.standard.StandardsListViewData');
 REQUIRE('chlk.models.announcement.AddDuplicateAnnouncementViewData');
 REQUIRE('chlk.models.standard.StandardsTableViewData');
 REQUIRE('chlk.models.standard.GetStandardTreePostData');
+REQUIRE('chlk.models.common.SimpleObject');
 
 REQUIRE('chlk.lib.exception.AppErrorException');
 
@@ -1231,6 +1233,28 @@ NAMESPACE('chlk.controllers', function (){
                     return chlk.models.announcement.AnnouncementForm.$create(classesBarData, true);
                 }, this);
             return this.PushView(chlk.activities.announcement.LessonPlanFormPage, result);
+        },
+
+        function addCategoryClickAction(){
+            return this.ShadeView(chlk.activities.announcement.AddNewCategoryDialog, ria.async.DeferredData(new chlk.models.common.SimpleObject()));
+        },
+
+        [[chlk.models.common.SimpleObject]],
+        function addCategoryAction(model){
+            this.BackgroundCloseView(chlk.activities.announcement.AddNewCategoryDialog);
+            var result = this.lessonPlanService
+                .addCategory(model.getValue())
+                .attach(this.validateResponse_())
+                .then(function(msgs){
+                    return this.lessonPlanService.listCategories()
+                        .then(function(list){
+                            var model = new chlk.models.announcement.FeedAnnouncementViewData();
+                            model.setCategories(list);
+                            this.BackgroundUpdateView(chlk.activities.announcement.LessonPlanFormPage, model, 'right-categories');
+                            return model;
+                        }, this);
+                }, this);
+            return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, result, 'categories');
         },
 
         [[chlk.models.id.ClassId]],

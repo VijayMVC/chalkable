@@ -32,6 +32,13 @@ NAMESPACE('chlk.services', function () {
                 return this.get('LPGalleryCategory/ListCategories.json', ArrayOf(chlk.models.common.NameId));
             },
 
+            [[String]],
+            ria.async.Future, function addCategory(name) {
+                return this.get('LPGalleryCategory/CreateCategory.json', chlk.models.common.NameId, {
+                    name: name
+                });
+            },
+
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
             ria.async.Future, function createFromTemplate(lessonPlanTplId, classId) {
                 return this.get('LessonPlan/CreateFromTemplate.json', chlk.models.announcement.LessonPlanForm, {

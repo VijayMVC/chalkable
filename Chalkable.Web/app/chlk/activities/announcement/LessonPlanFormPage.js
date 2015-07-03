@@ -4,6 +4,7 @@ REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.templates.announcement.LastMessages');
 REQUIRE('chlk.templates.announcement.AnnouncementTitleTpl');
 REQUIRE('chlk.templates.announcement.LessonPlanSearchTpl');
+REQUIRE('chlk.templates.announcement.LessonPlanCategoriesListTpl');
 REQUIRE('chlk.templates.announcement.LessonPlanAutoCompleteTpl');
 REQUIRE('chlk.templates.SuccessTpl');
 REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
@@ -22,7 +23,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.standard.AnnouncementStandardsTpl, '', '.standards-list' , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LastMessages, '', '.drop-down-container', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.SuggestedAppsListTpl, '', '.suggested-apps-block', ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanSearchTpl, 'search', '.left-top-container', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanSearchTpl, 'categories', '#galleryCategoryForSearchContainer', ria.mvc.PartialUpdateRuleActions.Replace)],
         [chlk.activities.lib.PageClass('new-item')],
         'LessonPlanFormPage', EXTENDS(chlk.activities.announcement.AnnouncementFormPage), [
             [ria.mvc.DomEventBind('change', '#galleryCategoryForSearch')],
@@ -57,6 +58,20 @@ NAMESPACE('chlk.activities.announcement', function () {
                 new ria.dom.Dom().on('click', '.create-from-template', function($target, event){
                     that.setNotSave(true);
                 });
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanCategoriesListTpl, 'right-categories')],
+            VOID, function doUpdateCategories(tpl, model, msg_) {
+                tpl.renderTo(this.dom.find('#galleryCategoryIdContainer').setHTML(''));
+                setTimeout(function(){
+                    if(!this.dom.find('#add-to-gallery').checked()){
+                        var select = this.dom.find('#galleryCategoryId');
+                        select.setAttr('disabled', 'disabled');
+                        select.setProp('disabled', true);
+                        select.trigger('liszt:updated');
+                    }
+                }.bind(this), 1);
+
             }
 
 

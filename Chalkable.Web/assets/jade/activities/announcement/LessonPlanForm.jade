@@ -41,7 +41,20 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                     .left-block(class=needStandardsBlock ? 'with-standards' : '')
                         .left-block-container
                             .left-top-container
-                                +RenderWith(announcement, chlk.templates.announcement.LessonPlanSearchTpl)
+                                .categories-container
+                                    label(for="galleryCategoryForSearch") Category:
+                                    SPAN#galleryCategoryForSearchContainer
+                                        +Select('galleryCategoryForSearch')#galleryCategoryForSearch
+                                            each item in announcement.getCategories()
+                                                +Option(item.getId(), item.getName())
+                                    BUTTON(type="submit", value="changeCategory", name="submitType").validate-skip#changeCategoryUpdate.x-hidden
+                                .search-container
+                                    label(for="filter") Choose from New Item Gallery
+                                    +SearchBox(chlk.services.LessonPlanService, "searchLessonPlansTemplates", chlk.templates.announcement.LessonPlanAutoCompleteTpl)(
+                                    name="filter", placeholder="Default Lesson Plan", value = announcement.getFilter()
+                                    ).search-templates
+                                .add-category
+                                    +ActionButton('announcement', 'addCategoryClick').special-button2.add + Add Category
                             +TextArea(name="content", placeholder="Assignment")= announcement.getContent()
                             if needStandardsBlock
                                 .add-standards-container
@@ -96,9 +109,10 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                 .category-container.new-input-container
                                     BUTTON#add-to-galelry-btn.validate-skip.x-hidden(name="submitType", value="saveNoUpdate", type="submit" )
                                     label(for="galleryCategoryId") Category:
-                                    +Select('galleryCategoryId')(disabled="disabled")#galleryCategoryId
-                                        each item in announcement.getCategories()
-                                            +Option(item.getId(), item.getName(), lessonPlan.getGalleryCategoryId() && item.getId() == lessonPlan.getGalleryCategoryId().valueOf())
+                                    SPAN#galleryCategoryIdContainer
+                                        +Select('galleryCategoryId')(disabled="disabled")#galleryCategoryId
+                                            each item in announcement.getCategories()
+                                                +Option(item.getId(), item.getName(), lessonPlan.getGalleryCategoryId() && item.getId() == lessonPlan.getGalleryCategoryId().valueOf())
 
                 .apps-attachments-bock.attachments-and-applications
                     ann = announcement
