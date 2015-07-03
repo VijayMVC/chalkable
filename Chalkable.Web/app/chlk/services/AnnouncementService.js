@@ -18,6 +18,7 @@ REQUIRE('chlk.models.id.AnnouncementAttachmentId');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
 REQUIRE('chlk.models.id.AnnouncementQnAId');
 REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
+REQUIRE('chlk.models.announcement.AnnouncementAttributeType');
 
 
 NAMESPACE('chlk.services', function () {

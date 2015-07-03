@@ -144,13 +144,13 @@ NAMESPACE('chlk.services', function () {
 
             },
 
-            [[chlk.models.id.SchoolPersonId, chlk.models.id.AppId, chlk.models.id.AnnouncementId]],
-            ria.async.Future, function addToAnnouncement(personId, appId, announcementId) {
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.AppId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function addToAnnouncement(personId, appId, announcementId, announcementType) {
                 return this
                     .post('Application/AddToAnnouncement.json', chlk.models.apps.AppAttachment, {
                         applicationId: appId.valueOf(),
                         announcementId: announcementId.valueOf(),
-                        announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
+                        announcementType: announcementType.valueOf()
                     })
                     .then(function(attachment){
                         return this.getOauthCode(personId, attachment.getUrl())
@@ -328,15 +328,6 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getAppAnalytics(appId){
                 return this
                     .post('Application/GetAppAnalytics.json', chlk.models.developer.HomeAnalytics, {
-                        applicationId: appId.valueOf()
-                    });
-            },
-
-            [[chlk.models.id.AppId, chlk.models.id.AnnouncementId]],
-            ria.async.Future, function addAppToAnnouncement(appId, announcementId){
-                return this
-                    .post('Application/AddToAnnouncement.json', chlk.models.apps.AppAttachment, {
-                        announcementId: announcementId.valueOf(),
                         applicationId: appId.valueOf()
                     });
             },

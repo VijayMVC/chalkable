@@ -1,12 +1,15 @@
 REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.attachment.Attachment');
+REQUIRE('chlk.models.announcement.AnnouncementAttributeViewData');
+REQUIRE('chlk.models.announcement.AnnouncementAttributeListViewData');
 REQUIRE('chlk.models.announcement.StudentAnnouncements');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.apps.ApplicationForAttach');
 REQUIRE('chlk.models.announcement.AdminAnnouncementRecipient');
+
 REQUIRE('chlk.models.announcement.Announcement');
 
 NAMESPACE('chlk.models.announcement', function () {
@@ -23,6 +26,7 @@ NAMESPACE('chlk.models.announcement', function () {
             OVERRIDE, VOID, function deserialize(raw) {
                 BASE(raw);
                 this.announcementAttachments = SJX.fromArrayOfDeserializables(raw.announcementattachments, chlk.models.attachment.Attachment);
+                this.announcementAttributes = SJX.fromArrayOfDeserializables(raw.announcementattributes, chlk.models.announcement.AnnouncementAttributeViewData);
                 this.announcementQnAs = SJX.fromArrayOfDeserializables(raw.announcementqnas, chlk.models.announcement.AnnouncementQnA);
                 this.applications = SJX.fromArrayOfDeserializables(raw.applications, chlk.models.apps.AppAttachment);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.Standard);
@@ -79,6 +83,8 @@ NAMESPACE('chlk.models.announcement', function () {
                 }
             },
 
+
+            ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
             ArrayOf(chlk.models.apps.AppAttachment), 'applications',
@@ -130,6 +136,13 @@ NAMESPACE('chlk.models.announcement', function () {
                 var classAvg = studentAnnouncements.getGradesAvg(count_);
                 studentAnnouncements.setClassAvg(classAvg);
                 return classAvg;
+            },
+
+            chlk.models.announcement.AnnouncementAttributeListViewData, function getAttributesListViewData(){
+                var attrViewData = chlk.models.announcement.AnnouncementAttributeListViewData();
+                attrViewData.setAnnouncementId(this.getId());
+                attrViewData.setAnnouncementAttributes(this.getAnnouncementAttributes());
+                return attrViewData;
             }
         ]);
 });

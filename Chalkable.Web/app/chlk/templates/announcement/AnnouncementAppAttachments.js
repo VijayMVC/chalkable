@@ -54,6 +54,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AppId, 'assessmentApplicationId',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'canAddStandard',
+
             String, function getStandardsUrlComponents() {
                 return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&')
             }
