@@ -348,7 +348,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.common.ChlkDate, Boolean, chlk.models.id.ClassId]],
         function addViaCalendarTeacherAction(date_, noDraft_, classId_){
-            return this.addClassAnnouncementAction(classId_, null, date_, noDraft_);
+            return this.addAction(classId_, null, date_, noDraft_);
         },
 
         [[chlk.models.common.ChlkDate, Boolean, chlk.models.id.ClassId]],
@@ -454,8 +454,8 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.ClassId, Number]],
-        function addAction(classId_, announcementTypeId_) {
+        [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, Boolean]],
+        function addAction(classId_, announcementTypeId_, date_, noDraft_) {
             this.getView().reset();
             this.getContext().getSession().set('classInfo', null);
             return this.announcementService
@@ -468,6 +468,13 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(model){
                     if(model && model.getAnnouncement()){
                         var resModel =  this.addEditAction(model, false);
+                        var item = resModel.getAnnouncement().getLessonPlanData() || resModel.getAnnouncement().getClassAnnouncementData()
+                        /*if(noDraft_){
+                            item.setClassId(classId_ || null);
+                        }*/
+                        if(date_){
+                            item.setExpiresDate(date_);
+                        }
                         if(resModel.getAnnouncement().getLessonPlanData()){
                             return this.Redirect('announcement', 'lessonPlanFromModel', [resModel]);
                         }else
