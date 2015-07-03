@@ -348,7 +348,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.common.ChlkDate, Boolean, chlk.models.id.ClassId]],
         function addViaCalendarTeacherAction(date_, noDraft_, classId_){
-            return this.addClassAnnouncementAction(classId_, null, date_, noDraft_);
+            return this.addAction(classId_, null, date_, noDraft_);
         },
 
         [[chlk.models.common.ChlkDate, Boolean, chlk.models.id.ClassId]],
@@ -454,8 +454,8 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.ClassId, Number]],
-        function addAction(classId_, announcementTypeId_) {
+        [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, Boolean]],
+        function addAction(classId_, announcementTypeId_, date_, noDraft_) {
             this.getView().reset();
             this.getContext().getSession().set('classInfo', null);
             return this.announcementService
@@ -468,14 +468,24 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(model){
                     if(model && model.getAnnouncement()){
                         var resModel =  this.addEditAction(model, false);
+                        var classAnnouncement = resModel.getAnnouncement().getClassAnnouncementData();
+                        /*if(noDraft_){
+                            item.setClassId(classId_ || null);
+                        }*/
+                        if(classAnnouncement && date_){
+                            classAnnouncement.setExpiresDate(date_);
+                        }
                         if(resModel.getAnnouncement().getLessonPlanData()){
-                            return this.Redirect('announcement', 'lessonPlanFromModel', [resModel]);
+                            return this.lessonPlanFromModelAction(resModel);
+                            //return this.Redirect('announcement', 'lessonPlanFromModel', [resModel]);
                         }else
-                            return this.Redirect('announcement', 'classAnnouncementFromModel', [resModel]);
+                            return this.classAnnouncementFromModelAction(resModel);
+                            //return this.Redirect('announcement', 'classAnnouncementFromModel', [resModel]);
                     }
                     var classes = this.classService.getClassesForTopBarSync();
                     var classesBarData = new chlk.models.classes.ClassesForTopBar(classes);
-                    return this.Redirect('announcement', 'classAnnouncementFromModel', [chlk.models.announcement.AnnouncementForm.$create(classesBarData, true)]);
+                    return this.classAnnouncementFromModelAction(chlk.models.announcement.AnnouncementForm.$create(classesBarData, true));
+                    //return this.Redirect('announcement', 'classAnnouncementFromModel', [chlk.models.announcement.AnnouncementForm.$create(classesBarData, true)]);
                 },this)
                 .attach(this.validateResponse_());
         },
@@ -682,9 +692,11 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(model){
                     var resModel =  this.addEditAction(model, true);
                     if(resModel.getAnnouncement().getLessonPlanData()){
-                        return this.Redirect('announcement', 'lessonPlanFromModel', [resModel]);
+                        return this.lessonPlanFromModelAction(resModel);
+                        //return this.Redirect('announcement', 'lessonPlanFromModel', [resModel]);
                     }else
-                        return this.Redirect('announcement', 'classAnnouncementFromModel', [resModel]);
+                        return this.classAnnouncementFromModelAction(resModel);
+                        //return this.Redirect('announcement', 'classAnnouncementFromModel', [resModel]);
                 }, this);
             return res;
         },

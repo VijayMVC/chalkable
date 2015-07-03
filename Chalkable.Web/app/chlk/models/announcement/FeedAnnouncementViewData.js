@@ -124,7 +124,7 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.id.ClassId, 'classId',
 
             function getTitleModel(){
-                var title = this.getTitle();
+                var title = this.getClassAnnouncementData().getTitle();
                 return new chlk.models.announcement.AnnouncementTitleViewData(title);
             },
 
