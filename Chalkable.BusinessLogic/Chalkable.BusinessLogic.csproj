@@ -242,7 +242,6 @@
     <Compile Include="Services\School\AnnouncementAttachmentService.cs" />
     <Compile Include="Services\School\AnnouncementAttributeService.cs" />
     <Compile Include="Services\School\AnnouncementQnAService.cs" />
-    <Compile Include="Services\School\AnnouncementService.cs" />
     <Compile Include="Services\School\Announcements\AdminAnnouncementService.cs" />
     <Compile Include="Services\School\Announcements\AnnouncementFetchService.cs" />
     <Compile Include="Services\School\Announcements\BaseAnnouncementService.cs" />

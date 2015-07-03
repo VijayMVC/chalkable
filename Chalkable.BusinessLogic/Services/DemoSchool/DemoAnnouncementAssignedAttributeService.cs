@@ -3,6 +3,7 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -29,19 +30,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
            
         }
 
-        public AnnouncementDetails Delete(int announcementId, int assignedAttributeId)
+        public AnnouncementDetails Delete(int announcementType, int announcementId, int assignedAttributeId)
         {
             throw new System.NotImplementedException();
         }
 
-        public AnnouncementDetails Add(int announcementId, int attributeTypeId)
+        public AnnouncementDetails Add(int announcementType, int announcementId, int attributeTypeId)
         {
             throw new System.NotImplementedException();
         }
 
-        public AnnouncementDetails Add(int announcementAttributes)
-        {
-            throw new System.NotImplementedException();
-        }
     }
 }

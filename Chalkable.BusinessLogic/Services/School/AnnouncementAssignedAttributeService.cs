@@ -4,6 +4,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -12,8 +13,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<AnnouncementAssignedAttribute> announcementAttributes);
         void Edit(IList<AnnouncementAssignedAttribute> announcementAttributes);
         void Delete(IList<AnnouncementAssignedAttribute> announcementAttributes);
-        AnnouncementDetails Delete(int announcementId, int assignedAttributeId);
-        AnnouncementDetails Add(int announcementId, int attributeTypeId);
+        AnnouncementDetails Delete(int announcementType, int announcementId, int assignedAttributeId);
+        AnnouncementDetails Add(int announcementType, int announcementId, int attributeTypeId);
     }
 
     public class AnnouncementAssignedAttributeService : SchoolServiceBase, IAnnouncementAssignedAttributeService
@@ -41,10 +42,10 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u => new DataAccessBase<AnnouncementAssignedAttribute>(u).Delete(announcementAttributes));
         }
 
-        public AnnouncementDetails Delete(int announcementId, int assignedAttributeId)
+        public AnnouncementDetails Delete(int announcementType, int announcementId, int assignedAttributeId)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
-            var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
+            var ann = ServiceLocator.GetAnnouncementService((AnnouncementType)announcementType).GetAnnouncementDetails(announcementId);
             if (!(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue))
                 throw new UnassignedUserException();
 
@@ -64,9 +65,9 @@ namespace Chalkable.BusinessLogic.Services.School
             return AnnouncementSecurity.CanModifyAnnouncement(ann, Context);
         }
 
-        public AnnouncementDetails Add(int announcementId, int attributeTypeId)
+        public AnnouncementDetails Add(int announcementType, int announcementId, int attributeTypeId)
         {
-            var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
+            var ann = ServiceLocator.GetAnnouncementService((AnnouncementType)announcementType).GetAnnouncementDetails(announcementId);
             if (!(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue))
                 throw new UnassignedUserException();
 

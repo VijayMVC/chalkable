@@ -68,14 +68,14 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult Complete(int announcementId, int announcementType, bool? complete, int type)
+        public ActionResult Complete(int announcementId, int announcementType, bool? complete)
         {
             if (!complete.HasValue)
             {
                 var prev = SchoolLocator.GetAnnouncementService((AnnouncementType)announcementType).GetAnnouncementDetails(announcementId).Complete;
                 complete = !prev;
             }
-            SchoolLocator.GetAnnouncementService((AnnouncementType)type).SetComplete(announcementId, complete.Value);
+            SchoolLocator.GetAnnouncementService((AnnouncementType)announcementType).SetComplete(announcementId, complete.Value);
             return Json(true);
         }
 
