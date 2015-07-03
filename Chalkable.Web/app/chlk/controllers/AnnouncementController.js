@@ -765,12 +765,12 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.AnnouncementId, Object]],
         function uploadAttachmentOnCreateAction(announcementId, files) {
-            //this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
+            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
             return this.Redirect('announcement', 'uploadAttachment', [announcementId, files]);
         },
 
         [[chlk.models.id.AnnouncementId, Object]],
-        function fetchaAttachmentFuture_(announcementId, files) {
+        ria.async.Future, function fetchUploadAttachmentFuture_(announcementId, files) {
             return this.announcementService
                 .uploadAttachment(announcementId, files)
                 .catchError(this.handleNoAnnouncementException_, this)
@@ -786,12 +786,14 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, Object, Object]],
         function uploadAttachmentAction(announcementId, files) {
+            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage
                     , this.fetchUploadAttachmentFuture_(announcementId, files), 'update-attachments');
         },
 
         [[chlk.models.id.AnnouncementId, Object, Object]],
         function uploadAttachmentDistrictAdminAction(announcementId, files) {
+            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
             return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage
                     , this.fetchUploadAttachmentFuture_(announcementId, files), 'update-attachments');
         },
