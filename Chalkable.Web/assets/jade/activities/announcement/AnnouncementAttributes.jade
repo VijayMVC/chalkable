@@ -5,7 +5,7 @@ mixin AttributeBlock_(attribute, readOnly, index)
                 .attribute-item
                     .title-panel
                         .attribute-title
-                            +SearchBox(chlk.services.AnnouncementService, "getAnnouncementAttributesSync", chlk.templates.announcement.AnnouncementAttributesDropdownTpl)(
+                            +SearchBox(chlk.services.AnnouncementService, "getAnnouncementAttributeTypesSync", chlk.templates.announcement.AnnouncementAttributesDropdownTpl)(
                             value=attribute.getName(),
                             default-value=attribute.getName(),
                             minLength = 0,
