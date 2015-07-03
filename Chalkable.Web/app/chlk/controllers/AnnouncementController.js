@@ -476,16 +476,16 @@ NAMESPACE('chlk.controllers', function (){
                             classAnnouncement.setExpiresDate(date_);
                         }
                         if(resModel.getAnnouncement().getLessonPlanData()){
-                            return this.lessonPlanFromModelAction(resModel);
-                            //return this.Redirect('announcement', 'lessonPlanFromModel', [resModel]);
+                            //return this.lessonPlanFromModelAction(resModel);
+                            return this.Redirect('announcement', 'lessonPlanFromModel', [resModel]);
                         }else
-                            return this.classAnnouncementFromModelAction(resModel);
-                            //return this.Redirect('announcement', 'classAnnouncementFromModel', [resModel]);
+                            //return this.classAnnouncementFromModelAction(resModel);
+                            return this.Redirect('announcement', 'classAnnouncementFromModel', [resModel]);
                     }
                     var classes = this.classService.getClassesForTopBarSync();
                     var classesBarData = new chlk.models.classes.ClassesForTopBar(classes);
-                    return this.classAnnouncementFromModelAction(chlk.models.announcement.AnnouncementForm.$create(classesBarData, true));
-                    //return this.Redirect('announcement', 'classAnnouncementFromModel', [chlk.models.announcement.AnnouncementForm.$create(classesBarData, true)]);
+                    //return this.classAnnouncementFromModelAction(chlk.models.announcement.AnnouncementForm.$create(classesBarData, true));
+                    return this.Redirect('announcement', 'classAnnouncementFromModel', [chlk.models.announcement.AnnouncementForm.$create(classesBarData, true)]);
                 },this)
                 .attach(this.validateResponse_());
         },
@@ -692,11 +692,11 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(model){
                     var resModel =  this.addEditAction(model, true);
                     if(resModel.getAnnouncement().getLessonPlanData()){
-                        return this.lessonPlanFromModelAction(resModel);
-                        //return this.Redirect('announcement', 'lessonPlanFromModel', [resModel]);
+                        //return this.lessonPlanFromModelAction(resModel);
+                        return this.Redirect('announcement', 'lessonPlanFromModel', [resModel]);
                     }else
-                        return this.classAnnouncementFromModelAction(resModel);
-                        //return this.Redirect('announcement', 'classAnnouncementFromModel', [resModel]);
+                        //return this.classAnnouncementFromModelAction(resModel);
+                        return this.Redirect('announcement', 'classAnnouncementFromModel', [resModel]);
                 }, this);
             return res;
         },
