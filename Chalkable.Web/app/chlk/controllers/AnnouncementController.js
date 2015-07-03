@@ -586,18 +586,12 @@ NAMESPACE('chlk.controllers', function (){
         },
 
 
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,  chlk.models.common.RoleEnum.DISTRICTADMIN
-        ])],
-        [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
-        function addAttributeAction(announcementId, announcementType) {
-
+        function fetchAddAttributeFuture_(announcementId, announcementType) {
             var attributeId = this.announcementService
                 .getAnnouncementAttributeTypesList()[0].getId();
 
-            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
-            var result = this.announcementService
+            return this.announcementService
                 .addAnnouncementAttribute(announcementId, attributeId, announcementType)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
@@ -606,16 +600,33 @@ NAMESPACE('chlk.controllers', function (){
                     this.cacheAnnouncement(announcement);
                     return announcement.getAttributesListViewData();
                 }, this);
-            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result, 'update-attributes');
         },
 
         [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,  chlk.models.common.RoleEnum.DISTRICTADMIN
+            chlk.models.common.RoleEnum.TEACHER
         ])],
         [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function addAttributeTeacherAction(announcementId, announcementType) {
+            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage,
+                this.fetchAddAttributeFuture_(announcementId, announcementType), 'update-attributes');
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function addAttributeDistrictAdminAction(announcementId, announcementType) {
+            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
+            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage,
+                this.fetchAddAttributeFuture_(announcementId, announcementType), 'update-attributes');
+        },
+
         [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum]],
-        function removeAttributeAction(announcementId, attributeId, announcementType) {
-            var result = this.announcementService
+        function fetchRemoveAttributeFuture_(announcementId, attributeId, announcementType) {
+            return this.announcementService
                 .removeAnnouncementAttribute(announcementId, attributeId, announcementType)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
@@ -624,7 +635,26 @@ NAMESPACE('chlk.controllers', function (){
                     this.cacheAnnouncement(announcement);
                     return announcement.getAttributesListViewData();
                 }, this);
-            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage, result, 'update-attributes');
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function removeAttributeTeacherAction(announcementId, attributeId, announcementType) {
+            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage,
+                this.fetchRemoveAttributeFuture_(announcementId, attributeId, announcementType),  'update-attributes');
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function removeAttributeDistrictAdminAction(announcementId, attributeId, announcementType) {
+            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage,
+                this.fetchRemoveAttributeFuture_(announcementId, attributeId, announcementType),  'update-attributes');
         },
 
 
@@ -736,7 +766,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.id.AnnouncementId, Object]],
-        function fetchUploadAttachmentFuture_(announcementId, files) {
+        function fetchaAttachmentFuture_(announcementId, files) {
             return this.announcementService
                 .uploadAttachment(announcementId, files)
                 .catchError(this.handleNoAnnouncementException_, this)
