@@ -484,8 +484,8 @@ NAMESPACE('chlk.controllers', function (){
                     }
                     var classes = this.classService.getClassesForTopBarSync();
                     var classesBarData = new chlk.models.classes.ClassesForTopBar(classes);
-                    return this.classAnnouncementFromModelAction(chlk.models.announcement.AnnouncementForm.$create(classesBarData, true));
-                    //return this.Redirect('announcement', 'classAnnouncementFromModel', [chlk.models.announcement.AnnouncementForm.$create(classesBarData, true)]);
+                    //return this.classAnnouncementFromModelAction(chlk.models.announcement.AnnouncementForm.$create(classesBarData, true));
+                    return this.Redirect('announcement', 'classAnnouncementFromModel', [chlk.models.announcement.AnnouncementForm.$create(classesBarData, true)]);
                 },this)
                 .attach(this.validateResponse_());
         },
