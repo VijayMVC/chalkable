@@ -141,6 +141,7 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.announcement.AnnouncementAttributeListViewData, function getAttributesListViewData(){
                 var attrViewData = chlk.models.announcement.AnnouncementAttributeListViewData();
                 attrViewData.setAnnouncementId(this.getId());
+                attrViewData.setAnnouncementType(this.getType());
                 attrViewData.setAnnouncementAttributes(this.getAnnouncementAttributes());
                 return attrViewData;
             }

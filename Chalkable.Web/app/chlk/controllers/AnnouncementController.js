@@ -613,10 +613,10 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,  chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId]],
-        function removeAttributeAction(announcementId, attributeId) {
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function removeAttributeAction(announcementId, attributeId, announcementType) {
             var result = this.announcementService
-                .removeAnnouncementAttribute(announcementId, attributeId)
+                .removeAnnouncementAttribute(announcementId, attributeId, announcementType)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(announcement){

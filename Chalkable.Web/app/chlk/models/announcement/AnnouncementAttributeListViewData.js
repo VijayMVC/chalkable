@@ -10,6 +10,8 @@ NAMESPACE('chlk.models.announcement', function(){
 
         chlk.models.id.AnnouncementId, 'announcementId',
 
+        chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
+
         Boolean, function isEmpty(){
             return (this.getAnnouncementAttributes() || []).length == 0;
         }

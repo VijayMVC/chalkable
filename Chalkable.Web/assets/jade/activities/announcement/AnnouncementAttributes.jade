@@ -1,4 +1,4 @@
-mixin AttributeBlock_(attribute, readOnly, index)
+mixin AttributeBlock_(attribute, readOnly, announcementType, index)
     if !readOnly
         .table
             .left-block
@@ -16,9 +16,12 @@ mixin AttributeBlock_(attribute, readOnly, index)
                                 label(for="attr-hidefromstudents", class="hideLabel") Hide from students
                                 .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
                                 +SlideCheckbox('hidefromstudents', false, false)
-                                +ActionLink('announcement', 'removeAttribute', self.getAnnouncementId(), attribute.getId()).remove-attribute
+                                +ActionLink('announcement', 'removeAttribute', self.getAnnouncementId(), attribute.getId(), announcementType).remove-attribute
                     .description
-                        textarea(value=attribute.getDescription())
+                        textarea(value=attribute.getText())
+                    .attribute-file-attachment
+                        div.simple-gray-button.file.attach-doc Attach doc
+                            +FileUpload('announcement', 'uploadAttachmentOnCreate', attribute.getId())#add-attribute-file-attachment.simple-gray-button
             .right-block
     else
         div(class="attribute-item-container chlk-calendar", data-index=index)
@@ -27,10 +30,10 @@ mixin AttributeBlock_(attribute, readOnly, index)
                 .collapse
             .mp-data
                 .ann-types-container
-                    .attribute-description=attribute.getDescription()
+                    .attribute-description=attribute.getText()
 
 -var attributes = self.getAnnouncementAttributes() || []
 each attribute, index in attributes
-    +AttributeBlock_(attribute, self.isReadOnly(), index)
+    +AttributeBlock_(attribute, self.isReadOnly(), self.getAnnouncementType(), index)
 
 
