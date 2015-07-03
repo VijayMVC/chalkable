@@ -1,0 +1,12 @@
+-var galleryId = self.getGalleryCategoryForSearch()
+.categories-container
+    label(for="galleryCategoryForSearch") Category:
+    +Select('galleryCategoryForSearch')#galleryCategoryForSearch
+        each item in self.getCategories()
+            +Option(item.getId(), item.getName(), item.getId() == galleryId)
+    BUTTON(type="submit", value="changeCategory", name="submitType").validate-skip#changeCategoryUpdate.x-hidden
+.search-container
+    label(for="filter") Choose from New Item Gallery
+    +SearchBox(chlk.services.LessonPlanService, "searchLessonPlansTemplates", chlk.templates.announcement.LessonPlanAutoCompleteTpl, galleryId)(
+        name="filter", placeholder="Default Lesson Plan", value = self.getFilter()
+    ).search-templates
