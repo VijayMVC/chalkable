@@ -27,11 +27,11 @@ mixin FileCabinetBlock_(title, announcementId)
             +ActionButton('announcement', 'fileCabinet', announcementId)#add-file-from-cabinet.simple-gray-button=title
 
 
-mixin AttributeBlock_(title, announcementId)
+mixin AttributeBlock_(title, announcementId, announcementType)
     .announcement-item.application(data-tooltip=title, data-tooltip-type="overflow")
         .wrapper
             .attach-attribute
-            +ActionButton('announcement', 'addAttribute', announcementId)=title
+            +ActionButton('announcement', 'addAttribute', announcementId, announcementType)=title
 
 mixin StandardBlock_(title, announcementId, classId, announcementTypeName)
     .announcement-item.application(data-tooltip=title, data-tooltip-type="overflow")
@@ -48,6 +48,7 @@ mixin AssessmentBlock_(title, announcementId, assessmentAppId)
 announcementId = self.getAnnouncementId() && self.getAnnouncementId().valueOf()
 classId = self.getClassId() && self.getClassId().valueOf()
 announcementTypeName = self.getAnnouncementTypeName() || ''
+announcementType = self.getAnnouncementType()
 
 .dialog.attach-dialog
     .x-window-header
@@ -56,17 +57,16 @@ announcementTypeName = self.getAnnouncementTypeName() || ''
     .x-window-body
 
             .attachments-and-applications
-                +FileAttachBlock_("Attach a file")
+                +FileAttachBlock_("Attach a file", announcementType)
 
                 if self.isFileCabinetEnabled()
-                    +FileCabinetBlock_("File Cabinet", announcementId)
+                    +FileCabinetBlock_("File Cabinet", announcementId, announcementType)
 
                 if self.isStandardAttachEnabled()
-                    +StandardBlock_("Add Standard", announcementId, classId, announcementTypeName)
-
+                    +StandardBlock_("Add Standard", announcementId, classId, announcementTypeName, announcementType)
 
                 if self.isAttributesEnabled()
-                    +AttributeBlock_("Attach attribute", announcementId, classId)
+                    +AttributeBlock_("Attach attribute", announcementId, announcementType)
 
 
                 if self.getAssessmentAppId()

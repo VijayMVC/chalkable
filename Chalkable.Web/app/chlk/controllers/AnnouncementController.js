@@ -140,7 +140,7 @@ NAMESPACE('chlk.controllers', function (){
             this.cacheAnnouncementAttachments(attachments);
         },
 
-        [[chlk.models.announcement.Announcement]],
+        [[chlk.models.announcement.FeedAnnouncementViewData]],
         function prepareAttributes(announcement){
             var attributes = announcement.getAnnouncementAttributes() || [];
             attributes.forEach(function(item){
@@ -551,8 +551,18 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,  chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, chlk.models.id.AppId, Boolean, String, Number]],
-        function attachAction(announcementId, classId, appUrlAppend_, assessmentAppId_, canAddStandard, announcementTypeName, pageIndex_) {
+        [[
+            chlk.models.id.AnnouncementId,
+            chlk.models.id.ClassId,
+            String,
+            chlk.models.id.AppId,
+            Boolean,
+            String,
+            chlk.models.announcement.AnnouncementTypeEnum,
+            Number
+        ]],
+        function attachAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
+                              canAddStandard, announcementTypeName, announcementType, pageIndex_) {
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
 
@@ -568,8 +578,9 @@ NAMESPACE('chlk.controllers', function (){
                         this.isStudyCenterEnabled(),
                         canAddStandard,
                         assessmentAppId_,
-                        announcementTypeName
-                )}, this) : new ria.async.DeferredData(chlk.models.apps.InstalledAppsViewData.$createForAdmin(announcementId));
+                        announcementTypeName,
+                        announcementType
+                )}, this) : new ria.async.DeferredData(chlk.models.apps.InstalledAppsViewData.$createForAdmin(announcementId, announcementType));
 
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, result);
         },
@@ -579,15 +590,15 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,  chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId]],
-        function addAttributeAction(announcementId) {
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function addAttributeAction(announcementId, announcementType) {
 
             var attributeId = this.announcementService
                 .getAnnouncementAttributeTypesList()[0].getId();
 
             this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
             var result = this.announcementService
-                .addAnnouncementAttribute(announcementId, attributeId)
+                .addAnnouncementAttribute(announcementId, attributeId, announcementType)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(announcement){
@@ -720,7 +731,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.AnnouncementId, Object]],
         function uploadAttachmentOnCreateAction(announcementId, files) {
-            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
+            //this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
             return this.Redirect('announcement', 'uploadAttachment', [announcementId, files]);
         },
 

@@ -94,19 +94,21 @@ NAMESPACE('chlk.services', function () {
             },
 
 
-            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAttributeTypeId]],
-            ria.async.Future, function addAnnouncementAttribute(announcementId, attributeTypeId){
-                return this.post('AnnouncementAttribute/AddAttribute.json', chlk.models.announcement.Announcement, {
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAttributeTypeId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function addAnnouncementAttribute(announcementId, attributeTypeId, announcementType){
+                return this.post('AnnouncementAttribute/AddAttribute.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
-                    attributeTypeId: attributeTypeId.valueOf()
+                    attributeTypeId: attributeTypeId.valueOf(),
+                    announcementType: announcementType.valueOf()
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId]],
-            ria.async.Future, function removeAnnouncementAttribute(announcementId, attributeId){
-                return this.post('AnnouncementAttribute/DeleteAttribute.json', chlk.models.announcement.Announcement, {
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function removeAnnouncementAttribute(announcementId, attributeId, announcementType){
+                return this.post('AnnouncementAttribute/DeleteAttribute.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
-                    assignedAttributeId: attributeId.valueOf()
+                    assignedAttributeId: attributeId.valueOf(),
+                    announcementType: announcementType.valueOf()
                 });
             },
 
