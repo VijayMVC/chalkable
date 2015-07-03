@@ -211,5 +211,3 @@ As
 		left join StaffSchool sfs on sfs.StaffRef = sf.Id
 Go
 
-
-Drop view vwAdminAnnouncement
