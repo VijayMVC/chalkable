@@ -609,7 +609,9 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
         function addAttributeTeacherAction(announcementId, announcementType) {
             this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
-            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage,
+            return this.UpdateView(announcementType == chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN ?
+                    chlk.activities.announcement.LessonPlanFormPage :
+                    chlk.activities.announcement.AnnouncementFormPage,
                 this.fetchAddAttributeFuture_(announcementId, announcementType), 'update-attributes');
         },
 
@@ -643,7 +645,9 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum]],
         function removeAttributeTeacherAction(announcementId, attributeId, announcementType) {
-            return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage,
+            return this.UpdateView(announcementType == chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN ?
+            chlk.activities.announcement.LessonPlanFormPage :
+            chlk.activities.announcement.AnnouncementFormPage,
                 this.fetchRemoveAttributeFuture_(announcementId, attributeId, announcementType),  'update-attributes');
         },
 
