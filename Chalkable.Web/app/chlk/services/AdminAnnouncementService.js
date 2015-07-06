@@ -28,23 +28,29 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, String, String, chlk.models.common.ChlkDate]],
-            ria.async.Future, function saveAdminAnnouncement(id, title_, content_, expiresdate_) {
+            [[chlk.models.id.AnnouncementId, String, String, chlk.models.common.ChlkDate,
+                chlk.models.announcement.AnnouncementAttributeListViewData
+            ]],
+            ria.async.Future, function saveAdminAnnouncement(id, title_, content_, expiresdate_, attributesListData) {
                 return this.post('AdminAnnouncement/Save.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId:id.valueOf(),
                     title: title_,
                     content: content_,
-                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat()
+                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
+                    attributes: attributesListData.getPostData()
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, String, String, chlk.models.common.ChlkDate]],
-            ria.async.Future, function submitAdminAnnouncement(id, content_, title_, expiresdate_) {
+            [[chlk.models.id.AnnouncementId, String, String, chlk.models.common.ChlkDate,
+                chlk.models.announcement.AnnouncementAttributeListViewData
+            ]],
+            ria.async.Future, function submitAdminAnnouncement(id, content_, title_, expiresdate_, attributesListData) {
                 return this.post('AdminAnnouncement/Submit.json', Boolean, {
                     adminAnnouncementId:id.valueOf(),
                     title: title_,
                     content: content_,
-                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat()
+                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
+                    attributes: attributesListData.getPostData()
                 });
             },
 

@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
+using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.ActionResults;
@@ -35,7 +38,7 @@ namespace Chalkable.Web.Controllers
                 {
                     return Json(new ChalkableException(ChlkResources.ERR_FILE_REQUIRED));
                 }
-                string uuid = null;
+                string uuid = nul;Al
                 if (SchoolLocator.CrocodocService.IsDocument(name))
                 {
                     uuid = SchoolLocator.CrocodocService.UploadDocument(name, bin).uuid;
@@ -97,8 +100,11 @@ namespace Chalkable.Web.Controllers
             return Json(res, 6);*/
         }
 
+
+
+
        
-        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult DeleteAttribute(int announcementType, int announcementId, int assignedAttributeId)
         {
 

@@ -326,6 +326,8 @@ NAMESPACE('chlk.controllers', function (){
         function prepareAnnouncementAttachedItems(announcement){
             this.prepareAttachments(announcement);
 
+            this.prepareAttributes(announcement);
+
             var applications = announcement.getApplications() || [];
             this.cacheAnnouncementApplications(applications);
 
@@ -1097,6 +1099,7 @@ NAMESPACE('chlk.controllers', function (){
         function prepareAnnouncementForm_(announcement){
             announcement.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
             announcement.setApplications(this.getCachedAnnouncementApplications());
+            announcement.setAnnouncementAttributes(this.getCachedAnnouncementAttributes());
             return chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(announcement);
         },
 
@@ -1118,7 +1121,8 @@ NAMESPACE('chlk.controllers', function (){
                         model.getId(),
                         model.getTitle(),
                         model.getContent(),
-                        model.getExpiresDate()
+                        model.getExpiresDate(),
+                        model.getAttributesListViewData()
                     )
                     .attach(this.validateResponse_());
                 return null;
@@ -1129,7 +1133,8 @@ NAMESPACE('chlk.controllers', function (){
                     model.getId(),
                     model.getContent(),
                     model.getTitle(),
-                    model.getExpiresDate()
+                    model.getExpiresDate(),
+                    model.getAttributesListViewData()
                 )
                 .attach(this.validateResponse_());
 
@@ -1176,6 +1181,7 @@ NAMESPACE('chlk.controllers', function (){
                 model.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
                 model.setApplications(this.getCachedAnnouncementApplications());
                 model.setCategories(this.getCachedLessonPlanCategories());
+                mode.setAnnouncementAttributes(this.getCachedAnnouncementAttributes());
                 var announcementForm =  chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(model);
                 return this.saveLessonPlanAction(model, announcementForm);
             }
@@ -1267,7 +1273,9 @@ NAMESPACE('chlk.controllers', function (){
                 model.getGalleryCategoryId(),
                 model.getStartDate(),
                 model.getEndDate(),
-                model.isHiddenFromStudents()
+                model.isHiddenFromStudents(),
+                model.getAttributesListViewData()
+
             )
                 .attach(this.validateResponse_())
                 .then(function(model){
@@ -1281,6 +1289,7 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setApplications(applications);
                         announcement.setCanAddStandard(model.isCanAddStandard());
                         announcement.setStandards(model.getStandards());
+                        announcement.setAnnouncementAttributes(model.getAnnouncementAttributes());
                         announcement.setGradingStudentsCount(model.getGradingStudentsCount());
                         announcement.setAbleToRemoveStandard(model.isAbleToRemoveStandard());
                         announcement.setSuggestedApps(model.getSuggestedApps());
@@ -1309,7 +1318,8 @@ NAMESPACE('chlk.controllers', function (){
                     model.getGalleryCategoryId(),
                     model.getStartDate(),
                     model.getEndDate(),
-                    model.isHiddenFromStudents()
+                    model.isHiddenFromStudents(),
+                    model.getAttributesListViewData()
                 )
                 .attach(this.validateResponse_());
 
@@ -1320,6 +1330,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.cacheLessonPlanClassId(null);
                     this.cacheAnnouncementAttachments(null);
                     this.cacheAnnouncementApplications(null);
+                    this.cacheAnnouncementAttributes(null);
                     if(isEdit)
                         return this.BackgroundNavigate('announcement', 'view', [model.getId(), chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN]);
                     else{
@@ -1395,7 +1406,8 @@ NAMESPACE('chlk.controllers', function (){
                     model.getWeightAddition(),
                     model.getWeightMultiplier(),
                     model.isHiddenFromStudents(),
-                    model.isAbleDropStudentScore()
+                    model.isAbleDropStudentScore(),
+                    model.getAttributesListViewData()
                 )
                 .attach(this.validateResponse_())
                 .then(function(model){
@@ -1409,6 +1421,7 @@ NAMESPACE('chlk.controllers', function (){
                         announcement.setApplications(applications);
                         announcement.setCanAddStandard(model.isCanAddStandard());
                         announcement.setStandards(model.getStandards());
+                        announcement.setAnnouncementAttributes(model.getAnnouncementAttributes());
                         announcement.setGradingStudentsCount(model.getGradingStudentsCount());
                         announcement.setAbleToRemoveStandard(model.isAbleToRemoveStandard());
                         announcement.setSuggestedApps(model.getSuggestedApps());
@@ -1443,7 +1456,8 @@ NAMESPACE('chlk.controllers', function (){
                         model.getWeightAddition(),
                         model.getWeightMultiplier(),
                         model.isHiddenFromStudents(),
-                        model.isAbleDropStudentScore()
+                        model.isAbleDropStudentScore(),
+                        model.getAttributesListViewData()
                     )
                     .attach(this.validateResponse_());
             else
@@ -1452,7 +1466,8 @@ NAMESPACE('chlk.controllers', function (){
                         model.getId(),
                         model.getContent(),
                         model.getTitle(),
-                        model.getExpiresDate()
+                        model.getExpiresDate(),
+                        model.getAttributesListViewData()
                     )
                     .attach(this.validateResponse_());
 
@@ -1461,6 +1476,7 @@ NAMESPACE('chlk.controllers', function (){
                     this.cacheAnnouncement(null);
                     this.cacheAnnouncementAttachments(null);
                     this.cacheAnnouncementApplications(null);
+                    this.cacheAnnouncementAttributes(null);
                     if(isEdit)
                         return this.BackgroundNavigate('announcement', 'view', [model.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT]);
                     else{
