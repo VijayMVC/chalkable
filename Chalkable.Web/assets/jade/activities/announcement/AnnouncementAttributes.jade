@@ -21,7 +21,7 @@ mixin AttributeBlock_(attribute, readOnly, announcementType, index)
                         textarea(value=attribute.getText())
                     .attribute-file-attachment
                         div.simple-gray-button.file.attach-doc Attach doc
-                            +FileUpload('announcement', 'uploadAttachmentOnCreate', attribute.getId())#add-attribute-file-attachment.simple-gray-button
+                            +FileUpload('announcement', 'uploadAttachmentOnCreate', attribute.getId(), announcementType)#add-attribute-file-attachment.simple-gray-button
             .right-block
     else
         div(class="attribute-item-container chlk-calendar", data-index=index)
