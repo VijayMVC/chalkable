@@ -1,4 +1,4 @@
-Create Procedure spSelectAdminAnnoucnement @adminAnnouncementT TAdminAnnouncement readonly
+Alter Procedure spSelectAdminAnnoucnement @adminAnnouncementT TAdminAnnouncement readonly
  As
 	Select 
 		t.*,
@@ -11,7 +11,7 @@ Create Procedure spSelectAdminAnnoucnement @adminAnnouncementT TAdminAnnouncemen
 	From @adminAnnouncementT t
  Go
 
-Create Procedure spGetAdminAnnouncements @id int, @personId int, @roleId int,  @ownedOnly bit
+Alter Procedure spGetAdminAnnouncements @id int, @personId int, @roleId int,  @ownedOnly bit
 	,@fromDate DateTime2, @toDate DateTime2, @start int, @count int, @now DateTime2
 	,@gradeLevelsIds nvarchar(256), @complete bit, @studentId int
 As
