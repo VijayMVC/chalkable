@@ -1,0 +1,159 @@
+mixin AppAttachmentBlock(item, pictureHref, i)
+    +LoadingImage(src=pictureHref, id="loading-image-" + i)
+        .title
+            div=item.getName()
+
+
+mixin AnnouncementTooltip()
+    div(attributes).announcement-view-tooltip
+        .comment-container
+            block
+        .comment-triangle
+            .white.comment-triangle
+
+-function glue() { return [].slice.call(arguments).filter(function (_) { return !/^\s*$/.test(_||'') }).join(' - ') }
+            
+mixin Glue_()
+    = glue.apply(null, arguments) 
+
+.announcement-view.not-transparent
+    -var isAdminAnnouncement = self.isAdminAnnouncement()
+    -var isReadonly = !self.isAbleToGrade()
+    -var studentAnnouncements = false
+    -var studentAnnouncementsInfo = self.getStudentAnnouncements()
+    -var applications = self.getApplications()
+    -var gradeViewApps = self.getGradeViewApps()
+    -var grade = self.getGrade()
+    .autocomplete-list.announcement-view
+    if studentAnnouncementsInfo
+        studentAnnouncements = studentAnnouncementsInfo.getItems()
+
+    .buttons
+        if !self.getUserRole().isStudent()
+            +ActionButton('announcement', 'edit', self.getId())(class = self.isAbleEdit() ? "" : "disabled").right Edit
+        +ActionButton('feed', 'doToList').back-button Back
+        .clear-fix
+
+    h2.page-title: +Glue_((isAdminAnnouncement ? (self.getTitle() || Msg.Admin_Announcement) : self.getAnnouncementTypeName()), self.getClassName())
+    .announcement-details-panel
+        .details-container.silver-panel
+
+            if self.getUserRole().isStudent() && ( (self.isStudentGraded() && self.displayStudentGradeValue()) || self.getComment() )
+                .comment-grade-container
+                    .grade-value.right=self.displayStudentGradeValue()
+                    .comment(
+                        data-tooltip = self.getComment(),
+                        data-tooltip-type = "overflow",
+                        data-tooltip-class = "wide"
+                    )= self.getComment() || (Msg.Your_grade + ":")
+            if self.getUserRole().isTeacher() && self.isHiddenFromStudents()
+                +AnnouncementTooltip().make-visible-container
+                    .comment This item is hidden from students.
+                    +ActionLink('announcement', 'makeVisible', self.getId()).make-visible-btn Make visible
+            br
+            .table
+                .avatar-block-left
+                    if self.getOwner()
+                        if self.getUserRole().isTeacher()
+                            +ProfileLink(self.getOwner(), 'teacher')(
+                                data-tooltip=self.getOwner().getFullName(),
+                            ).image-container.person-img-container
+                                +PersonImg(self.getOwner(), 47)
+                        else
+                            a(data-tooltip=self.getOwner().getFullName()).image-container.person-img-container
+                                +PersonImg(self.getOwner(), 47)
+
+                .description
+                    .chat-bubble
+                        h2(class=self.getExpiresDateColor())=self.getExpiresDateText()
+                        p!= glue(self.getTitle(), self.linkify(self.getContent()))
+
+                        if self.getStandards() && self.getStandards().length > 0
+                            .standards-container
+                                .title Standards:
+                                .standard-list
+                                    each standard in self.getStandards()
+                                        button(data-tooltip = standard.getDescription()).same-on-hover= standard.getName()
+                                        = ' '
+
+                        if self.getRecipients() && self.getRecipients().length > 0
+                            .standards-container
+                                .title Groups:
+                                .standard-list
+                                    each recipient in self.getRecipients()
+                                        button(data-tooltip = recipient.getGroupName(), data-tooltip-type="overflow").same-on-hover= recipient.getGroupName()
+                                        = ' '
+
+        -var attachments = self.getAnnouncementAttachments() || []
+        -var applications = self.getApplications() || []
+        if attachments.length + applications.length
+            +CloseOpen('Attachments')
+                .content.attachments-and-applications
+                    +RenderWith(self.getModel(), chlk.templates.announcement.Announcement)(
+                        userRole = self.getUserRole()
+                    )
+
+        -var attributesList = self.getModel().getAttributesListViewData()
+        -attributesList.setReadOnly(true)
+
+        if !attributesList.isEmpty()
+            +CloseOpen('Attributes')
+                .content.attributes
+                    +RenderWith(attributesList, chlk.templates.announcement.AnnouncementAttributesTpl)(
+                        userRole = self.getUserRole()
+                    )
+
+        if self.getUserRole().isStudent()
+            -var myAttachments = (self.getAnnouncementAttachments() || []).filter(function (_) { return _.isOwner(); });
+            if self.isGradable() || myAttachments.length
+                +CloseOpen('My Attachments')
+                    #attachments-block.student-attachments.content
+                        +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
+                            userRole = self.getUserRole()
+                        )
+            if self.getStandards() && self.getStandards().length > 0 && self.getStandards().filter(function(standard){return standard.getAcademicBenchmarkId()}).length
+                +CloseOpen('Practice & Improve')
+                    .student-attachments.content
+                        .announcement-item.attachment
+                            .wrapper
+                                img(src=window.scriptsRoot + '/Content/images2/study-center-banner.png')
+                                .title Study Center
+                                +ActionButton('studycenter', 'startPractice', self.getStandards().map(function (_) { return _.getStandardId(); })) Start Practice
+
+
+        -var showPostQuestion = !self.isAnnOwner() && self.getUserRole().isStudent()
+        if showPostQuestion || self.getAnnouncementQnAs().length
+            .questions-and-answers
+                +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementQnAs)(
+                    userRole = self.getUserRole()
+                )
+
+        if !self.getUserRole().isStudent() && studentAnnouncements && studentAnnouncements.length && self.isGradable()
+            +CloseOpen('Grades')
+                .auto-grades
+                    each app in self.getAutoGradeApps()
+                        .item(data-id=app.id)
+                            -var count = app.students.length
+                            .title #{app.name} posted #{count} #{count > 1 ? "grades" : "grade"}
+                            .buttons: +ActionButton('', '').green-button.view-auto-grades View
+                                +ActionButton('announcement', 'applyAutoGrades', app.id)(style="display:none").blue-button.accept-auto-grades.accept-decline Accept
+                                +ActionButton('announcement', 'discardAutoGrades', app.id)(style="display:none").negative-button.decline-auto-grades.accept-decline Decline
+
+                div(class=self.getApplicationsCount() ? "" : "no-applications").grading-part
+                    +Hidden('maxScore', self.getMaxScore())#max-score
+                    +RenderWith(studentAnnouncementsInfo, chlk.templates.announcement.AnnouncementGradingPartTpl)(
+                        autoGradeApps = self.getAutoGradeApps(),
+                        readonly = isReadonly,
+                        gradeViewApps = self.getGradeViewApps(),
+                        applications = self.getApplications(),
+                        userRole = self.getUserRole(),
+                        owner = self.getOwner(),
+                        announcementId = self.getId(),
+                        maxScore = self.getMaxScore(),
+                        ableDropStudentScore = self.isAbleDropStudentScore(),
+                        ableToExempt = self.isAbleToExempt(),
+                        gradable = self.isGradable(),
+                        standards = self.getStandards(),
+                        LEIntegrated = self.isLEIntegrated(),
+                        classId = self.getClassId()
+                    )

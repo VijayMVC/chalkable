@@ -1,0 +1,36 @@
+mixin AttributeBlock_(attribute, readOnly, index)
+    if !readOnly
+        .table
+            .left-block
+                .attribute-item
+                    .title-panel
+                        .attribute-title
+                            +SearchBox(chlk.services.AnnouncementService, "getAnnouncementAttributesSync", chlk.templates.announcement.AnnouncementAttributesDropdownTpl)(
+                            value=attribute.getName(),
+                            default-value=attribute.getName(),
+                            minLength = 0,
+                            class="announcement-attr-name", id="announcement-attrs-" + attribute.getId(),
+                            listCls = "max-200"
+                            )
+                        .attribute-access
+                                label(for="attr-hidefromstudents", class="hideLabel") Hide from students
+                                .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
+                                +SlideCheckbox('hidefromstudents', false, false)
+                                +ActionLink('announcement', 'removeAttribute', self.getAnnouncementId(), attribute.getId()).remove-attribute
+                    .description
+                        textarea(value=attribute.getDescription())
+            .right-block
+    else
+        div(class="attribute-item-container chlk-calendar", data-index=index)
+            .header.attribute-title.open(data-tooltip=attribute.getName())
+                span.mp-name.attr-name=attribute.getName()
+                .collapse
+            .mp-data
+                .ann-types-container
+                    .attribute-description=attribute.getDescription()
+
+-var attributes = self.getAnnouncementAttributes() || []
+each attribute, index in attributes
+    +AttributeBlock_(attribute, self.isReadOnly(), index)
+
+
