@@ -492,6 +492,7 @@ var Msg = {
     Late_to_a_class: 'Late to a class',
     Leave_anyways: 'Leave anyway',
     Lesson_Plan: 'Lesson Plan',
+    Lesson_Plans: 'Lesson Plans',
     Lets_do_it: 'Lets do it',
     Letter_grade: 'Letter grade',
     Loading_text: 'Loading...',

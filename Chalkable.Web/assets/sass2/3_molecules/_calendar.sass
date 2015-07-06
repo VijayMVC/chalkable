@@ -84,11 +84,27 @@
       font-size: 12px
       line-height: 30px
 
+      .count
+        display: inline-block
+        padding: 3px
+        height: 10px
+        border-radius: 10px
+        width: 10px
+        position: relative
+        line-height: 10px
+        left: 5px
+
       &.red
         background: #d45151
 
+        .count
+          background-color: #41b768
+
       &.green
         background: #41b768
+
+        .count
+          background-color: #d45151
 
     .day-names > DIV
       display: table-cell
@@ -162,6 +178,9 @@
 
       &.not-current-month
         color: #d0d0ce !important
+
+        a
+          color: #d0d0ce
 
     .today
       border-color: #13495c
