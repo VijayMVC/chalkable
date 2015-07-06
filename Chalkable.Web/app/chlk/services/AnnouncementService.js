@@ -85,11 +85,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, Object]],
-            ria.async.Future, function uploadAttachment(announcementId, files) {
+            [[chlk.models.id.AnnouncementId, Object, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function uploadAttachment(announcementId, files, announcementType) {
                 return this.uploadFiles('AnnouncementAttachment/AddAttachment', files, chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
-                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
+                    announcementType: announcementType.valueOf()
                 });
             },
 

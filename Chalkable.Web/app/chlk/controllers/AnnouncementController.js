@@ -779,16 +779,16 @@ NAMESPACE('chlk.controllers', function (){
 
 
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, Object]],
-        function uploadAttachmentOnCreateAction(announcementId, files) {
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Object]],
+        function uploadAttachmentOnCreateAction(announcementId, announcementType, files) {
             this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
-            return this.Redirect('announcement', 'uploadAttachment', [announcementId, files]);
+            return this.Redirect('announcement', 'uploadAttachment', [announcementId,  announcementType, files]);
         },
 
-        [[chlk.models.id.AnnouncementId, Object]],
-        ria.async.Future, function fetchUploadAttachmentFuture_(announcementId, files) {
+        [[chlk.models.id.AnnouncementId, Object, chlk.models.announcement.AnnouncementTypeEnum]],
+        ria.async.Future, function fetchUploadAttachmentFuture_(announcementId, files, announcementType) {
             return this.announcementService
-                .uploadAttachment(announcementId, files)
+                .uploadAttachment(announcementId, files, announcementType)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(announcement){
@@ -800,18 +800,18 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
-        [[chlk.models.id.AnnouncementId, Object, Object]],
-        function uploadAttachmentAction(announcementId, files) {
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Object]],
+        function uploadAttachmentAction(announcementId, announcementType, files) {
             this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
             return this.UpdateView(chlk.activities.announcement.AnnouncementFormPage
-                    , this.fetchUploadAttachmentFuture_(announcementId, files), 'update-attachments');
+                    , this.fetchUploadAttachmentFuture_(announcementId, files, announcementType), 'update-attachments');
         },
 
-        [[chlk.models.id.AnnouncementId, Object, Object]],
-        function uploadAttachmentDistrictAdminAction(announcementId, files) {
+        [[chlk.models.id.AnnouncementId,  chlk.models.announcement.AnnouncementTypeEnum, Object]],
+        function uploadAttachmentDistrictAdminAction(announcementId, announcementType, files) {
             this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
             return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage
-                    , this.fetchUploadAttachmentFuture_(announcementId, files), 'update-attachments');
+                    , this.fetchUploadAttachmentFuture_(announcementId, files, announcementType), 'update-attachments');
         },
 
         [[chlk.models.id.AnnouncementId]],

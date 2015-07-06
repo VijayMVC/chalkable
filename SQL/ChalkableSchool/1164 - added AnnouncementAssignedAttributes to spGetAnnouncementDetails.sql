@@ -1,6 +1,3 @@
-USE [83009FE9-8594-4E33-A09E-1EF4F81D0E8D]
-GO
-
 alter Procedure [dbo].[spGetAnnouncementDetails] @id int, @callerId int, @callerRole int, @schoolId int
 as
 

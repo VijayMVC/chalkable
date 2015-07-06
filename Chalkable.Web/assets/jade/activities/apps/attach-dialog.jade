@@ -10,14 +10,14 @@ mixin AppIconLink_(announcementId, app, iconTooltip)
             else
                 +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, appId, self.getAppUrlAppend()) Attach
 
-mixin FileAttachBlock_(title)
+mixin FileAttachBlock_(title, announcementId, announcementType)
     .announcement-item.application(data-tooltip=title, data-tooltip-type="overflow")
         .wrapper
             .attach-file.img
             .title(data-tooltip=title, data-tooltip-type="overflow")= title
             .shortdesc= title
             div.simple-gray-button.download-link.file=title
-                +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId])#add-file-attachment.simple-gray-button
+                +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType])#add-file-attachment.simple-gray-button
 
 
 mixin FileCabinetBlock_(title, announcementId)
@@ -65,7 +65,7 @@ announcementType = self.getAnnouncementType()
     .x-window-body
 
             .attachments-and-applications
-                +FileAttachBlock_("Attach a file", announcementType)
+                +FileAttachBlock_("Attach a file", announcementId, announcementType)
 
                 if self.isFileCabinetEnabled()
                     +FileCabinetBlock_("File Cabinet", announcementId, announcementType)
