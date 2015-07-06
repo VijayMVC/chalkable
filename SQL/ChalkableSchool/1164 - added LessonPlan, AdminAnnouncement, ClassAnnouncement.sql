@@ -105,6 +105,9 @@ go
 drop index UQ_Announcement_SisActivityId on Announcement 
 Go
 
+Drop Index IX_Announcement_SisId on Announcement
+Go
+
 Alter Table Announcement
 Drop Column SisActivityId
 go
