@@ -10,7 +10,7 @@
                         +ActionLink('announcement', 'view', item.getId(), chlk.models.announcement.AnnouncementTypeEnum.ADMIN).pop-up-announcement
                             div
                                 +TooltipWithOverflow(item.getTitle()).title
-                                +TooltipWithOverflow(item.getClassName() || item.getPersonName()).under
+                                +TooltipWithOverflow(item.getPersonName()).under
     .items-list
         if announcements.length > 0
             h2=Msg.Item(true)
