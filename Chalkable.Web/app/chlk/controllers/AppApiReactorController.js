@@ -69,7 +69,7 @@ NAMESPACE('chlk.controllers', function (){
             function simpleAppAttachAction(data){
                 var announcementAppId = new chlk.models.id.AnnouncementApplicationId(data.announcementAppId);
                 var announcementId = new chlk.models.id.AnnouncementId(data.announcementId);
-                var announcementType = data.announcementType ? new chlk.models.id.AnnouncementTypeEnum(data.announcementType) : null;
+                var announcementType = data.announcementType ? new chlk.models.announcement.AnnouncementTypeEnum(data.announcementType) : null;
                 return this.appsService
                     .attachApp(announcementAppId, announcementType)
                     .catchError(function(error_){
