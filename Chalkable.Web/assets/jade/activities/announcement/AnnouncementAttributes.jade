@@ -15,7 +15,7 @@ mixin AttributeBlock_(attribute, readOnly, announcementType, index)
                         .attribute-access
                                 label(for="attr-hidefromstudents", class="hideLabel") Hide from students
                                 .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
-                                +SlideCheckbox('hidefromstudents', false, false)
+                                +SlideCheckbox('hidefromstudents', !attribute.isVisibleForStudents(), false)
                                 +ActionLink('announcement', 'removeAttribute', self.getAnnouncementId(), attribute.getId(), announcementType).remove-attribute
                     .description
                         textarea(value=attribute.getText())

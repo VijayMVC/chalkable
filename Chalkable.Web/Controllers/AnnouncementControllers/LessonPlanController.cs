@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Mvc;
+using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.AnnouncementsViewData;
 
@@ -30,15 +33,19 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult Save(int lessonPlanId, int classId, string title, string content, int? galleryCategoryId, DateTime? startDate, DateTime? endDate, bool hideFromStudents)
+        public ActionResult Save(int lessonPlanId, int classId, string title, string content, int? galleryCategoryId, 
+            DateTime? startDate, DateTime? endDate, bool hideFromStudents, IList<AnnouncementAssignedAttribute> attributes)
         {
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit((int)AnnouncementType.LessonPlan, lessonPlanId, attributes);
             var res = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents);
             return Json(PrepareAnnouncmentViewDataForEdit(res));
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult Submit(int lessonPlanId, int classId, string title, string content, int? galleryCategoryId, DateTime? startDate, DateTime? endDate, bool hideFromStudents)
+        public ActionResult Submit(int lessonPlanId, int classId, string title, string content, int? galleryCategoryId,
+            DateTime? startDate, DateTime? endDate, bool hideFromStudents, IList<AnnouncementAssignedAttribute> attributes)
         {
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit((int)AnnouncementType.LessonPlan, lessonPlanId, attributes);
             var ann = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents);
             SchoolLocator.LessonPlanService.Submit(lessonPlanId);
             var lessonPlan = SchoolLocator.LessonPlanService.GetLessonPlanById(lessonPlanId);

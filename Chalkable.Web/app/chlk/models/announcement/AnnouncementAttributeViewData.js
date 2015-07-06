@@ -31,6 +31,8 @@ NAMESPACE('chlk.models.announcement', function(){
 
         String, 'text',
 
+        String, 'uuid',
+
         Boolean, 'visibleForStudents',
 
         chlk.models.id.AnnouncementAttributeTypeId, 'attributeTypeId',
@@ -42,8 +44,20 @@ NAMESPACE('chlk.models.announcement', function(){
             this.id = SJX.fromValue(raw.id, chlk.models.id.AnnouncementAssignedAttributeId);
             this.name = SJX.fromValue(raw.name, String);
             this.text = SJX.fromValue(raw.text, String);
+            this.uuid = SJX.fromValue(raw.uuid, String);
             this.visibleForStudents = SJX.fromValue(raw.visibleforstudents, Boolean);
             this.attributeTypeId = SJX.fromValue(raw.attributetypeid, chlk.models.id.AnnouncementAttributeTypeId);
+        },
+
+
+        Object, function getPostData(){
+            return {
+                name: this.getName() || '',
+                text: this.getText() || '',
+                uuid: this.getUuid() || '',
+                visibleforstudents: this.isVisibleForStudents(),
+                attributyTypeId: this.getAttributeTypeId().valueOf()
+            }
         }
     ]);
 });

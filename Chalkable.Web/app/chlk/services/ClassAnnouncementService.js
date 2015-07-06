@@ -32,11 +32,12 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String
                 , chlk.models.common.ChlkDate
-                , Number, Number, Number, Boolean, Boolean
+                , Number, Number, Number, Boolean, Boolean,
+                chlk.models.announcement.AnnouncementAttributeListViewData
             ]],
             ria.async.Future, function saveClassAnnouncement(id, classId_, classAnnouncementTypeId_, title_, content_
                 , expiresdate_, maxScore_, weightAddition_, weighMultiplier_
-                , hideFromStudent_, canDropStudentScore_) {
+                , hideFromStudent_, canDropStudentScore_, attributesListData) {
                 return this.post('ClassAnnouncement/SaveAnnouncement.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId:id.valueOf(),
                     classAnnouncementTypeId:classAnnouncementTypeId_,
@@ -48,16 +49,19 @@ NAMESPACE('chlk.services', function () {
                     weightaddition: weightAddition_,
                     weightmultiplier: weighMultiplier_,
                     hidefromstudents: hideFromStudent_ || false,
-                    candropstudentscore: canDropStudentScore_ || false
+                    candropstudentscore: canDropStudentScore_ || false,
+                    attributes: attributesListData.getPostData()
                 });
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String
-                , chlk.models.common.ChlkDate, Number, Number, Number, Boolean, Boolean
+                , chlk.models.common.ChlkDate, Number, Number, Number, Boolean, Boolean,
+                chlk.models.announcement.AnnouncementAttributeListViewData
+
             ]],
             ria.async.Future, function submitClassAnnouncement(id, classId_, announcementTypeId_, title_, content_
                 , expiresdate_, maxScore_, weightAddition_, weighMultiplier_
-                , hideFromStudent_, canDropStudentScore_) {
+                , hideFromStudent_, canDropStudentScore_, attributesListData) {
                 return this.post('ClassAnnouncement/SubmitAnnouncement.json', Boolean, {
                     announcementid:id.valueOf(),
                     classannouncementtypeid:announcementTypeId_,
@@ -68,7 +72,8 @@ NAMESPACE('chlk.services', function () {
                     weightaddition: weightAddition_,
                     weightmultiplier: weighMultiplier_,
                     hidefromstudents: hideFromStudent_ || false,
-                    candropstudentscore: canDropStudentScore_ || false
+                    candropstudentscore: canDropStudentScore_ || false,
+                    attributes: attributesListData.getPostData()
                 });
             },
 

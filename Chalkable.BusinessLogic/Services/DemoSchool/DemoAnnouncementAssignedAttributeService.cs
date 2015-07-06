@@ -20,6 +20,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
            
         }
 
+        public AnnouncementDetails Edit(int announcementType, int announcementId, IList<AnnouncementAssignedAttribute> announcementAttributes)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public void Edit(IList<AnnouncementAssignedAttribute> announcementAttributes)
         {
            

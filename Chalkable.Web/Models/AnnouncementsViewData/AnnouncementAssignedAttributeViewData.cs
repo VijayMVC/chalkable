@@ -8,7 +8,10 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
+        public int AttributeTypeId { get; set; }
+        public string Uuid { get; set; }
+        public string Text { get; set; }
+        public bool VisibleForStudents { get; set; }
 
         public static IList<AnnouncementAssignedAttributeViewData> Create(IList<AnnouncementAssignedAttribute> announcementAttributes)
         {
@@ -16,7 +19,11 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 {
                     Id = x.Id,
                     Name = x.Name,
-                    Description = x.Text
+                    Text= x.Text,
+                    AttributeTypeId = x.AttributeTypeId,
+                    Uuid = x.Uuid,
+                    VisibleForStudents = x.VisibleForStudents
+                    
                 }).ToList();
         } 
     }
