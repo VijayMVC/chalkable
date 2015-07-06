@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 
@@ -59,16 +62,18 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult SaveAnnouncement(ClassAnnouncementInfo classAnnouncementInfo, int? classId)
+        public ActionResult SaveAnnouncement(ClassAnnouncementInfo classAnnouncementInfo, int? classId, IList<AnnouncementAssignedAttribute> attributes)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit((int)AnnouncementType.Class, classAnnouncementInfo.AnnouncementId,  attributes);
             var ann = SchoolLocator.ClassAnnouncementService.Edit(classAnnouncementInfo);
             return Json(PrepareAnnouncmentViewDataForEdit(ann));
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult SubmitAnnouncement(ClassAnnouncementInfo classAnnouncementInfo)
+        public ActionResult SubmitAnnouncement(ClassAnnouncementInfo classAnnouncementInfo, IList<AnnouncementAssignedAttribute> attributes)
         {
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit((int)AnnouncementType.Class, classAnnouncementInfo.AnnouncementId, attributes);
             var annDetails = SchoolLocator.ClassAnnouncementService.Edit(classAnnouncementInfo);
             var classAnnouncement = SchoolLocator.ClassAnnouncementService.GetClassAnnouncemenById(classAnnouncementInfo.AnnouncementId);
             SchoolLocator.ClassAnnouncementService.Submit(classAnnouncement.Id);

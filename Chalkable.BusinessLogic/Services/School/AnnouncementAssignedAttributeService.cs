@@ -11,7 +11,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IAnnouncementAssignedAttributeService
     {
         void Add(IList<AnnouncementAssignedAttribute> announcementAttributes);
-        void Edit(IList<AnnouncementAssignedAttribute> announcementAttributes);
+        AnnouncementDetails Edit(int announcementType, int announcementId, IList<AnnouncementAssignedAttribute> announcementAttributes);
         void Delete(IList<AnnouncementAssignedAttribute> announcementAttributes);
         AnnouncementDetails Delete(int announcementType, int announcementId, int assignedAttributeId);
         AnnouncementDetails Add(int announcementType, int announcementId, int attributeTypeId);
@@ -30,10 +30,26 @@ namespace Chalkable.BusinessLogic.Services.School
             DoUpdate(u => new DataAccessBase<AnnouncementAssignedAttribute>(u).Insert(announcementAttributes));
         }
 
-        public void Edit(IList<AnnouncementAssignedAttribute> announcementAttributes)
+        public AnnouncementDetails Edit(int announcementType, int announcementId, IList<AnnouncementAssignedAttribute> announcementAttributes)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
-            DoUpdate(u => new DataAccessBase<AnnouncementAssignedAttribute>(u).Update(announcementAttributes));
+            var ann = ServiceLocator.GetAnnouncementService((AnnouncementType)announcementType).GetAnnouncementDetails(announcementId);
+            if (!(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue))
+                throw new UnassignedUserException();
+
+            if (announcementAttributes != null)
+            {
+                using (var uow = Update())
+                {
+                    var da = new DataAccessBase<AnnouncementAssignedAttribute, int>(uow);
+
+                    da.Update(announcementAttributes);
+                    uow.Commit();
+                    ann.AnnouncementAttributes = da.GetAll();
+                }
+            }
+            
+            return ann;
         }
 
         public void Delete(IList<AnnouncementAssignedAttribute> announcementAttributes)

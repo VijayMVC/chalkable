@@ -14,6 +14,18 @@ NAMESPACE('chlk.models.announcement', function(){
 
         Boolean, function isEmpty(){
             return (this.getAnnouncementAttributes() || []).length == 0;
+        },
+
+        Object, function getPostData(){
+
+            var res = [];
+            var attrs = (this.getAnnouncementAttributes() || []);
+
+            attrs.forEach(function(item){
+               res.push(item.getPostData());
+            });
+
+            return res;
         }
     ]);
 });
