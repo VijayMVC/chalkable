@@ -18,13 +18,17 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'errorTitle',
             String, 'errorMessage',
 
-            [[chlk.models.apps.Application, chlk.models.apps.AppModes]],
-            function $(app, mode){
+            chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
+
+            [[chlk.models.apps.Application, chlk.models.apps.AppModes, chlk.models.announcement.AnnouncementTypeEnum]],
+            function $(app, mode, announcementType_){
 
                 var fullUrl = app.getCurrentModeUrl() + "&code=" + app.getOauthCode();
 
                 this.setApp(app);
                 this.setAppMode(mode);
+
+                this.setAnnouncementType(announcementType_);
 
                 var buttons = [];
                 switch(mode){

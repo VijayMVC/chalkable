@@ -489,7 +489,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(app){
                     app.setCurrentModeUrl(app.getEditUrl() + (appUrlAppend_ ? '&' + appUrlAppend_ : ''));
-                    return new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT);
+                    return new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT, announcementType);
                 }, this);
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
