@@ -479,9 +479,8 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, String]],
-        function tryToAttachAction(announcementId, appId, appUrlAppend_) {
-            var announcementType = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, null);
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
+        function tryToAttachAction(announcementId, appId, announcementType, appUrlAppend_) {
             var result = this.appsService
                 .addToAnnouncement(this.getCurrentPerson().getId(), appId, announcementId, announcementType)
                 .catchError(function(error_){
@@ -501,10 +500,10 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, String]],
-        function tryToAttachFromAnnouncementAction(announcementId, appId, appUrlAppend_) {
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
+        function tryToAttachFromAnnouncementAction(announcementId, appId, announcementType, appUrlAppend_) {
             //this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
-            return this.tryToAttachAction(announcementId, appId, appUrlAppend_);
+            return this.tryToAttachAction(announcementId, appId, announcementType, appUrlAppend_);
         },
 
         [chlk.controllers.StudyCenterEnabled()],

@@ -161,12 +161,12 @@ NAMESPACE('chlk.services', function () {
                     }, this);
             },
 
-            [[chlk.models.id.AnnouncementApplicationId]],
-            ria.async.Future, function attachApp(appAnnouncementId) {
+            [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementType]],
+            ria.async.Future, function attachApp(appAnnouncementId, announcementType_) {
               return this
                   .post('Application/Attach.json', chlk.models.announcement.FeedAnnouncementViewData, {
                       announcementApplicationId: appAnnouncementId.valueOf(),
-                      announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
+                      announcementType: announcementType_ && announcementType_.valueOf()
                   });
             },
 
