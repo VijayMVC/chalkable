@@ -57,14 +57,14 @@ NAMESPACE('chlk.models.announcement', function(){
             this.attributeAttachment = SJX.fromDeserializable(raw.attributeattachment, chlk.models.announcement.AnnouncementAttributeAttachmentViewData);
         },
 
-
         Object, function getPostData(){
             return {
                 name: this.getName() || '',
                 text: this.getText() || '',
                 uuid: this.getUuid() || '',
                 visibleforstudents: this.isVisibleForStudents(),
-                attributyTypeId: this.getAttributeTypeId().valueOf()
+                attributyTypeId: this.getAttributeTypeId().valueOf(),
+                id: this.getId().valueOf()
             }
         }
     ]);
