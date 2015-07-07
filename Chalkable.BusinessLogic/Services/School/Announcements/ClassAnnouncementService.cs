@@ -287,13 +287,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 var da = CreateClassAnnouncementDataAccess(uow);
                 var res = GetDetails(da, announcementId);
+                if(res == null)
+                    throw new NoAnnouncementException();
                 if (res.ClassAnnouncementData.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassAnnouncementData.SisActivityId.Value);
                     if (activity == null)
-                    {
                         throw new NoAnnouncementException();
-                    }
+                    
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
                     var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(res.ClassAnnouncementData.ClassAnnouncementTypeName);
                     res.ClassAnnouncementData.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?)null;

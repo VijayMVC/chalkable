@@ -282,7 +282,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public override AnnouncementDetails GetAnnouncementDetails(int announcementId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetDetails(announcementId, Context.PersonId.Value, Context.RoleId));
+            return DoRead(u =>
+                {
+                    var res = CreateDataAccess(u).GetDetails(announcementId, Context.PersonId.Value, Context.RoleId);
+                    if(res == null)
+                        throw new NoAnnouncementException();
+                    return res;
+                });
         }
 
 
