@@ -33,7 +33,7 @@ NAMESPACE('chlk.services', function () {
             ]],
             ria.async.Future, function saveAdminAnnouncement(id, title_, content_, expiresdate_, attributesListData) {
                 return this.post('AdminAnnouncement/Save.json', chlk.models.announcement.FeedAnnouncementViewData, {
-                    announcementId:id.valueOf(),
+                    adminAnnouncementId:id.valueOf(),
                     title: title_,
                     content: content_,
                     expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),

@@ -124,8 +124,9 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.id.ClassId, 'classId',
 
             function getTitleModel(){
-                var title = this.getClassAnnouncementData().getTitle();
-                return new chlk.models.announcement.AnnouncementTitleViewData(title);
+                var title = this.getClassAnnouncementData() ? this.getClassAnnouncementData().getTitle() :
+                    (this.getLessonPlanData() ? this.getLessonPlanData().getTitle() : this.getAdminAnnouncementData().getTitle());
+                return new chlk.models.announcement.AnnouncementTitleViewData(title, this.getType());
             },
 
             String, function calculateGradesAvg(count_) {

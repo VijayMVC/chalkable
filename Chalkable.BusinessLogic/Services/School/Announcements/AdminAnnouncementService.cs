@@ -187,7 +187,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public AdminAnnouncement GetAdminAnnouncementById(int adminAnnouncementId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncement(adminAnnouncementId, Context.PersonId.Value));
+            return DoRead(u =>
+                {
+                    var res = CreateAdminAnnouncementDataAccess(u).GetAnnouncement(adminAnnouncementId, Context.PersonId.Value);
+                    if(res == null)
+                        throw new NoAnnouncementException();
+                    return res;
+                });
         }
 
 

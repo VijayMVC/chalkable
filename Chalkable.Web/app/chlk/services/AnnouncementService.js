@@ -162,20 +162,20 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId]],
-            ria.async.Future, function deleteAttachment(attachmentId, announcementId) {
+            [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function deleteAttachment(attachmentId, announcementId, announcementType) {
                 return this.get('AnnouncementAttachment/DeleteAttachment.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementAttachmentId: attachmentId.valueOf(),
                     announcementId: announcementId.valueOf(),
-                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
+                    announcementType: announcementType.valueOf()
                 });
             },
 
-            [[chlk.models.id.AnnouncementApplicationId]],
-            ria.async.Future, function deleteApp(announcementAppId) {
+            [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function deleteApp(announcementAppId, announcementType) {
                 return this.get('Application/RemoveFromAnnouncement.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementApplicationId: announcementAppId.valueOf(),
-                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
+                    announcementType: announcementType.valueOf()
                 });
             },
 

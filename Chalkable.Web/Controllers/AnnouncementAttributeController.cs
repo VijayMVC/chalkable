@@ -39,7 +39,7 @@ namespace Chalkable.Web.Controllers
                     uuid = SchoolLocator.CrocodocService.UploadDocument(name, bin).uuid;
                 }
                 var announcement = SchoolLocator.AnnouncementAssignedAttributeService.AddAttributeAttachment(announcementType, announcementId, assignedAttributeId, bin, name, uuid);
-                AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id, (AnnouncementType)announcementType);
+                AnnouncementViewData res = PrepareAnnouncmentViewDataForEdit(announcement);
                 return Json(res, HTML_CONTENT_TYPE, 6);
             }
             catch (Exception exception)

@@ -273,7 +273,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public ClassAnnouncement GetClassAnnouncemenById(int classAnnouncementId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateClassAnnouncementDataAccess(u).GetAnnouncement(classAnnouncementId, Context.PersonId.Value));
+            return DoRead(u =>
+                {
+                    var res = CreateClassAnnouncementDataAccess(u).GetAnnouncement(classAnnouncementId, Context.PersonId.Value);
+                    if(res == null)
+                        throw new NoAnnouncementException();
+                    return res;
+                });
         }
 
         public override Announcement GetAnnouncementById(int id)
@@ -287,8 +293,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 var da = CreateClassAnnouncementDataAccess(uow);
                 var res = GetDetails(da, announcementId);
-                if(res == null)
-                    throw new NoAnnouncementException();
                 if (res.ClassAnnouncementData.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassAnnouncementData.SisActivityId.Value);
