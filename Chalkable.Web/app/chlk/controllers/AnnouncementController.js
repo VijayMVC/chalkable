@@ -931,7 +931,7 @@ NAMESPACE('chlk.controllers', function (){
             }else{
                 var buttons = [downloadAttachmentButton];
                 res = this.announcementService
-                    .startViewSession(attachmentId)
+                    .startAttributeAttachmentViewSession(attachmentId)
                     .then(function(session){
                         attachmentUrl = 'https://crocodoc.com/view/' + session;
                         return new chlk.models.common.attachments.BaseAttachmentViewData(

@@ -30,7 +30,7 @@ mixin AttributeBlock_(attribute, readOnly, announcementType, index)
                                 +SlideCheckbox('hidefromstudents', !attribute.isVisibleForStudents(), false)
                                 +ActionLink('announcement', 'removeAttribute', self.getAnnouncementId(), attribute.getId(), announcementType).remove-attribute
                     .description
-                        textarea(value=attribute.getText())
+                        textarea(value=attribute.getText()).edit-attribute-text
 
                         if attachment
                             .file-attachment=attachment.getName()

@@ -107,9 +107,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
-        public ActionResult StartViewSession(int announcementAttachmentId)
+        public ActionResult StartViewSession(int assignedAttributeId)
         {
-            var att = SchoolLocator.AnnouncementAttachmentService.GetAttachmentById(announcementAttachmentId);
+            var att = SchoolLocator.AnnouncementAssignedAttributeService.GetAssignedAttribyteById(assignedAttributeId);
             if (att == null)
             {
                 Response.StatusCode = 404;
@@ -120,8 +120,7 @@ namespace Chalkable.Web.Controllers
             try
             {
                 var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.PersonId ?? 0);
-                bool isOwner = (person.Id == att.PersonRef);
-                var canAnnotate = isOwner || person.RoleRef != CoreRoles.STUDENT_ROLE.Id;
+                var canAnnotate = person.RoleRef != CoreRoles.STUDENT_ROLE.Id;
                 string name = person.FirstName;
                 if (string.IsNullOrEmpty(name))
                 {
@@ -134,7 +133,6 @@ namespace Chalkable.Web.Controllers
                     CanAnnotate = canAnnotate,
                     PersonId = person.Id,
                     PersonName = name,
-                    IsOwner = isOwner
                 });
                 return Json(res.session);
             }

@@ -138,6 +138,15 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+
+            [[chlk.models.id.AnnouncementAssignedAttributeId]],
+            ria.async.Future, function startAttributeAttachmentViewSession(assignedAttributeId) {
+                return this.get('AnnouncementAttribute/StartViewSession', String, {
+                    assignedAttributeId: assignedAttributeId.valueOf(),
+                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
+                });
+            },
+
             [[chlk.models.id.AnnouncementAttachmentId, chlk.models.id.AnnouncementId]],
             ria.async.Future, function cloneAttachment(attachmentId, announcementId) {
                 return this.get('AnnouncementAttachment/CloneAttachment', chlk.models.announcement.AnnouncementView, {
