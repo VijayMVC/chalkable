@@ -93,6 +93,24 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, Object]],
+            ria.async.Future, function uploadAttributeAttachment(announcementType, announcementId, assignedAttributeId, files) {
+                return this.uploadFiles('AnnouncementAttribute/AddAttributeAttachment.json', files, chlk.models.announcement.FeedAnnouncementViewData, {
+                    announcementId: announcementId.valueOf(),
+                    announcementType: announcementType.valueOf(),
+                    assignedAttributeId: assignedAttributeId.valueOf()
+                });
+            },
+
+            [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId]],
+            ria.async.Future, function removeAttributeAttachment(announcementType, announcementId, assignedAttributeId) {
+                return this.post('AnnouncementAttribute/RemoveAttributeAttachment.json', chlk.models.announcement.FeedAnnouncementViewData, {
+                    announcementId: announcementId.valueOf(),
+                    announcementType: announcementType.valueOf(),
+                    assignedAttributeId: assignedAttributeId.valueOf()
+                });
+            },
+
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAttributeTypeId, chlk.models.announcement.AnnouncementTypeEnum]],
             ria.async.Future, function addAnnouncementAttribute(announcementId, attributeTypeId, announcementType){

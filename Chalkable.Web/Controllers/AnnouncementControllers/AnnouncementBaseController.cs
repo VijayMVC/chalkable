@@ -30,7 +30,9 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         {
             var ownersIds = GetAnnouncementOwnersIds(ann);
             var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, ownersIds);
-            var annView = (AnnouncementDetailedViewData)PrepareAnnouncmentViewData(ann, attInfo);
+            var attrAttachmentInfo = AttachmentLogic.PrepareAttributeAttachmentsInfo(ann.AnnouncementAttributes, MasterLocator.CrocodocService);
+
+            var annView = (AnnouncementDetailedViewData)PrepareAnnouncmentViewData(ann, attInfo, attrAttachmentInfo);
             if (ann.State == AnnouncementState.Created)
             {
                 var stAnnouncements = ann.StudentAnnouncements;
@@ -71,18 +73,22 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann)
         {
             var ownersIds = GetAnnouncementOwnersIds(ann);
-            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, ownersIds);             
-            return PrepareAnnouncmentViewData(ann, attInfo);
+            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, ownersIds);
+
+            var attrAttachmentInfo = AttachmentLogic.PrepareAttributeAttachmentsInfo(ann.AnnouncementAttributes,
+                MasterLocator.CrocodocService);
+            
+            return PrepareAnnouncmentViewData(ann, attInfo, attrAttachmentInfo);
         }
 
-        protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann, IList<AnnouncementAttachmentInfo> attachments)
+        protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann, IList<AnnouncementAttachmentInfo> attachments, IList<AssignedAttributeAttachmentInfo> attrAttachmentInfo)
         {
             if (ann.ClassAnnouncementData != null && ann.ClassAnnouncementData.SisActivityId.HasValue)
             {
                 ann.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(ann.Id);
                 ann.GradingStudentsCount = ann.StudentAnnouncements.Count(x => x.IsGraded);
             }
-            var annViewData = AnnouncementDetailedViewData.Create(ann, Context.PersonId.Value, attachments);
+            var annViewData = AnnouncementDetailedViewData.Create(ann, Context.PersonId.Value, attachments, attrAttachmentInfo);
             annViewData.Applications = ApplicationLogic.PrepareAnnouncementApplicationInfo(SchoolLocator, MasterLocator, ann.Id);
             annViewData.ApplicationsCount = annViewData.Applications.Count;
             annViewData.AssessmentApplicationId = MasterLocator.ApplicationService.GetAssessmentId();

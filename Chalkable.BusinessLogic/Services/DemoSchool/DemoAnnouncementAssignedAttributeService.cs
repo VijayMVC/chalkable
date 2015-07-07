@@ -45,5 +45,26 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new System.NotImplementedException();
         }
 
+        public AnnouncementDetails AddAttributeAttachment(int announcementType, int announcementId, int assignedAttributeId, byte[] bin,
+            string name, string uuid)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public AnnouncementAssignedAttribute GetAssignedAttribyteById(int assignedAttributeId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public AnnouncementDetails RemoveAttributeAttachment(int announcementType, int announcementId, int assignedAttributeId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public AnnouncementDetails AddAttributeAttachment(int announcementType, int announcementId, byte[] bin, string name,
+            string uuid)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

@@ -1,4 +1,16 @@
+mixin AttributeAttachment(attachment)
+    .attribute-attachment
+        if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
+            A(href=attachment.getUrl()).download-link Download
+            .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
+        else
+            +LoadingImage(src="#", id="loading-image-" + attachment.getId())
+            .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
+            +ActionButton('announcement', 'viewAttributeAttachment', attachment.getId()) Open
+
+
 mixin AttributeBlock_(attribute, readOnly, announcementType, index)
+    -var attachment = attribute.getAttributeAttachment()
     if !readOnly
         .table
             .left-block
@@ -19,18 +31,30 @@ mixin AttributeBlock_(attribute, readOnly, announcementType, index)
                                 +ActionLink('announcement', 'removeAttribute', self.getAnnouncementId(), attribute.getId(), announcementType).remove-attribute
                     .description
                         textarea(value=attribute.getText())
+
+                        if attachment
+                            .file-attachment=attachment.getName()
+                                +ActionLink('announcement', 'removeAttributeAttachment', announcementType, self.getAnnouncementId(), attribute.getId()).remove-file-attachment
+
+
                     .attribute-file-attachment
                         div.simple-gray-button.file.attach-doc Attach doc
-                            +FileUpload('announcement', 'uploadAttachmentOnCreate', attribute.getId(), announcementType)#add-attribute-file-attachment.simple-gray-button
+                            +FileUpload('announcement', 'addAttributeAttachment', [announcementType, self.getAnnouncementId(), attribute.getId()])#add-attribute-file-attachment.simple-gray-button
             .right-block
     else
         div(class="attribute-item-container chlk-calendar", data-index=index)
-            .header.attribute-title.open(data-tooltip=attribute.getName())
+            .header.attribute-title(data-tooltip=attribute.getName())
                 span.mp-name.attr-name=attribute.getName()
                 .collapse
             .mp-data
-                .ann-types-container
+                .attribute-details
                     .attribute-description=attribute.getText()
+
+                    if attachment
+                        h3 Attachments
+                        .attribute-attachments
+                            +AttributeAttachment(attachment)
+
 
 -var attributes = self.getAnnouncementAttributes() || []
 each attribute, index in attributes

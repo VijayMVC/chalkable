@@ -32,7 +32,6 @@ namespace Chalkable.StiConnector.Connectors
             UsersConnector = new UsersConnector(this);
             AttendanceConnector = new AttendanceConnector(this);
             ActivityConnector = new ActivityConnector(this);
-            ActivityAttachmentsConnector = new ActivityAttachmentsConnector(this);
             AttachmentConnector = new AttachmentConnector(this);
             SectionStandardConnector = new SectionStandardConnector(this);
             ActivityScoreConnector = new ActivityScoreConnector(this);
@@ -56,7 +55,6 @@ namespace Chalkable.StiConnector.Connectors
         public UsersConnector UsersConnector { get; private set; }
         public AttendanceConnector AttendanceConnector { get; private set; }
         public ActivityConnector ActivityConnector { get; private set; }
-        public ActivityAttachmentsConnector ActivityAttachmentsConnector { get; private set; }
         public ActivityAssignedAttributeConnector ActivityAssignedAttributeConnector { get; private set; }
         public AttachmentConnector AttachmentConnector { get; private set; }
         public SectionStandardConnector SectionStandardConnector { get; private set; }

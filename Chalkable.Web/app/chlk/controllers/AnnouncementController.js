@@ -784,9 +784,41 @@ NAMESPACE('chlk.controllers', function (){
             this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
             return this.Redirect('announcement', 'uploadAttachment', [announcementId,  announcementType, files]);
         },
+        
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, Object]],
+        function addAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId, files) {
+            var result = this.announcementService
+                .uploadAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeId, files)
+                .catchError(this.handleNoAnnouncementException_, this)
+                .attach(this.validateResponse_())
+                .then(function(announcement){
+                    this.prepareAttributes(announcement);
+                    this.cacheAnnouncement(announcement);
+                    return announcement.getAttributesListViewData();
+                }, this);
+            return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'update-attributes');
+        },
+
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId]],
+        function removeAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId) {
+            var result = this.announcementService
+                .removeAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeId)
+                .catchError(this.handleNoAnnouncementException_, this)
+                .attach(this.validateResponse_())
+                .then(function (announcement) {
+                    this.prepareAttributes(announcement);
+                    this.cacheAnnouncement(announcement);
+                    return announcement.getAttributesListViewData();
+                }, this);
+            return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'update-attributes');
+        },
+
 
         [[chlk.models.id.AnnouncementId, Object, chlk.models.announcement.AnnouncementTypeEnum]],
-        ria.async.Future, function fetchUploadAttachmentFuture_(announcementId, files, announcementType) {
+            ria.async.Future, function fetchUploadAttachmentFuture_(announcementId, files, announcementType) {
+
             return this.announcementService
                 .uploadAttachment(announcementId, files, announcementType)
                 .catchError(this.handleNoAnnouncementException_, this)
