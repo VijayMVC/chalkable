@@ -15,7 +15,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
     {
         protected AnnouncementViewData PrepareFullAnnouncementViewData(int announcementId, int? announcementType, bool forRead = false)
         {
-            return PrepareFullAnnouncementViewData(announcementId, (AnnouncementType?) announcementType, forRead);
+            var type = (AnnouncementType?) announcementType ?? SchoolLocator.AnnouncementFetchService.GetAnnouncementType(announcementId);
+            return PrepareFullAnnouncementViewData(announcementId, type, forRead);
         }
 
         protected AnnouncementViewData PrepareFullAnnouncementViewData(int announcementId, AnnouncementType? announcementType, bool forRead = false)

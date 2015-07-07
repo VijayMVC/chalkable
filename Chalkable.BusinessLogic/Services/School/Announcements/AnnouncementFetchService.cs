@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
+using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
@@ -13,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null);
         IList<Announcement> GetAnnouncementsByFilter(string filter);
         Announcement GetLastDraft();
+        AnnouncementType GetAnnouncementType(int announcementId);
     }
 
     public class AnnouncementFetchService : SchoolServiceBase, IAnnouncementFetchService
@@ -90,6 +92,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if (BaseSecurity.IsDistrictAdmin(Context))
                 return ServiceLocator.AdminAnnouncementService.GetLastDraft();
             return ServiceLocator.ClassAnnouncementService.GetLastDraft() ?? (Announcement) ServiceLocator.LessonPlanService.GetLastDraft();
+        }
+
+        public AnnouncementType GetAnnouncementType(int announcementId)
+        {
+            return DoRead(u => new AnnouncementDataAccess(u).GetAnnouncementType(announcementId));
         }
     }
 
