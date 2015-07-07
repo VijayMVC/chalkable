@@ -58,7 +58,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.AnnouncementId, String]],
             ria.async.Future, function editTitle(announcementId, title) {
                 return this.get('LessonPlan/EditTitle.json', Boolean, {
-                    lessonPlanId: announcementId.valueOf(),
+                    announcementId: announcementId.valueOf(),
                     title: title
                 });
             },
