@@ -38,6 +38,8 @@ namespace Chalkable.UserTracking
         void UserLoggedInForFirstTime(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate, string timeZoneId, string role);
         void SentMessageTo(string email, string userName);
         void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached);
+        void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached);
+        void CreateNewAdminItem(string email, string adminName, int appsAttached, int docsAttached);
         void CreatedReport(string email, string reportType);
         void SetDiscipline(string login, int? classId, DateTime date, string description, int studentId);
         void SetFinalGrade(string login, int classId, int studentId, int gradingPeriodId, string averageValue, bool exempt, string note);

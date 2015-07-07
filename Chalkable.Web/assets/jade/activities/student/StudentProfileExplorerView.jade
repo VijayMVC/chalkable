@@ -32,7 +32,7 @@
                                     data-tooltip = studentName + ' has ' + announcement.getTitle() + ' ' + self.getDaysForAnnouncement(announcement),
                                     data-tooltip-type="overflow"
                                 ) #{studentName + " has "}
-                                    +ActionLink('announcement', 'view', announcement.getId())
+                                    +ActionLink('announcement', 'view', announcement.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT)
                                         b=announcement.getTitle() + " "
                                     |#{self.getDaysForAnnouncement(announcement)}
                                 .right-block __

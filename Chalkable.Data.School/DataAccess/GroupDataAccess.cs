@@ -18,7 +18,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var dbQuery = new DbQuery(new List<DbQuery>
                 {
-                    Orm.SimpleDelete<AdminAnnouncementRecipient>(new AndQueryCondition{{AdminAnnouncementRecipient.GROUP_REF_FIELD, key}}),
+                    Orm.SimpleDelete<AnnouncementGroup>(new AndQueryCondition{{AnnouncementGroup.GROUP_REF_FIELD, key}}),
                     Orm.SimpleDelete<StudentGroup>(new AndQueryCondition{{StudentGroup.GROUP_REF_FIELD, key}}),
                     Orm.SimpleDelete<Group>(new AndQueryCondition{{Group.ID_FIELD, key}})
                 });

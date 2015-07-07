@@ -8,7 +8,7 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// <summary>
         /// A list of attributes that are associated with the activity
         /// </summary>
-        public IEnumerable<ActivityAttribute> Attributes { get; set; }
+        public IEnumerable<ActivityAssignedAttribute> Attributes { get; set; }
         public IEnumerable<ActivityStandard> Standards { get; set; }
         public int? CategoryId { get; set; }
         public string CategoryName { get; set; }

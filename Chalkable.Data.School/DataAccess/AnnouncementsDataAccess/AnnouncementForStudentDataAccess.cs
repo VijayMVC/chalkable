@@ -1,7 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Chalkable.Data.Common;
-using Chalkable.Data.School.Model;
+﻿using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
@@ -11,30 +10,25 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
         }
         
-        private const string GET_STUDENT_ANNOUNCEMENTS = "spGetStudentAnnouncements";
-
-        private const string COMPLETE = "complete";
-        private const string ADMIN_ONLY = "adminOnly";
-
-        public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
-        {
-            var parameters = new Dictionary<string, object>
-                {
-                    {COMPLETE, query.Complete},
-                    {ADMIN_ONLY, query.AdminOnly}
-                };
-            return GetAnnouncementsComplex(GET_STUDENT_ANNOUNCEMENTS, parameters, query);
-        }
-
-        public override Announcement GetAnnouncement(int id, int callerId)
-        {
-            return GetAnnouncements(new AnnouncementsQuery {Id = id, PersonId = callerId, Start = 0, Count = 1})
-                .Announcements.FirstOrDefault();
-        }
-
-        public override Announcement GetLastDraft(int personId)
+        public override ClassAnnouncement GetLastDraft(int personId)
         {
             throw new System.NotImplementedException();
+        }
+
+        protected override DbQuery SeletClassAnnouncements(string tableName, int callerId)
+        {
+            var dbQuery = new DbQuery();
+            var selectSet = string.Format("{0}.*, cast(0 as bit) as IsOwner", tableName);
+            dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, selectSet, tableName);
+            return dbQuery;
+        }
+
+        protected override DbQuery FilterClassAnnouncementByCaller(DbQuery dbQuery, int callerId)
+        {
+            dbQuery.Sql.Append(@" and (ClassRef in (select ClassPerson.ClassRef from ClassPerson where ClassPerson.PersonRef = @callerId))");
+            dbQuery.Sql.AppendFormat(" and {0} = 1 ", LessonPlan.VISIBLE_FOR_STUDENT_FIELD);
+            dbQuery.Parameters.Add("callerId", callerId);
+            return dbQuery;
         }
     }
 }

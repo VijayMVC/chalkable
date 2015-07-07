@@ -49,12 +49,15 @@ namespace Chalkable.StiConnector.Connectors
             ClassroomOptionConnector = new ClassroomOptionConnector(this);
             SectionDashboardConnector = new SectionDashboardConnector(this);
             LearningEarningsConnector = new LearningEarningsConnector(this);
+            ActivityAssignedAttributeConnector = new ActivityAssignedAttributeConnector(this);
         }
+
 
         public UsersConnector UsersConnector { get; private set; }
         public AttendanceConnector AttendanceConnector { get; private set; }
         public ActivityConnector ActivityConnector { get; private set; }
         public ActivityAttachmentsConnector ActivityAttachmentsConnector { get; private set; }
+        public ActivityAssignedAttributeConnector ActivityAssignedAttributeConnector { get; private set; }
         public AttachmentConnector AttachmentConnector { get; private set; }
         public SectionStandardConnector SectionStandardConnector { get; private set; }
         public ActivityScoreConnector ActivityScoreConnector { get; private set; }

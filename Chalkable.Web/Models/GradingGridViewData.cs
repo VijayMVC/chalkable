@@ -2,6 +2,7 @@
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -85,8 +86,8 @@ namespace Chalkable.Web.Models
                 BuildTotalPoints(res, stIds, gradeBook.StudentTotalPoints);
             
             res.GradingItems = gradeBook.Announcements
-                                        .OrderByDescending(x=>x.Expires)
-                                        .Select(x => ShortAnnouncementGradeViewData.Create(x, x.StudentAnnouncements, stIds))
+                                        .OrderByDescending(x=>x.ClassAnnouncementData.Expires)
+                                        .Select(x => ShortAnnouncementGradeViewData.Create(x.ClassAnnouncementData, x.StudentAnnouncements, stIds))
                                         .ToList();
 
             return res;
@@ -275,15 +276,15 @@ namespace Chalkable.Web.Models
         }
     }
 
-    public class ShortAnnouncementGradeViewData : AnnouncementShortViewData
+    public class ShortAnnouncementGradeViewData : ClassAnnouncementViewData
     {
         public ShortStudentsAnnouncementsViewData StudentAnnouncements { get; set; }
 
-        protected ShortAnnouncementGradeViewData(AnnouncementComplex announcement) : base(announcement)
+        protected ShortAnnouncementGradeViewData(ClassAnnouncement announcement) : base(announcement)
         {
         }
 
-        public static ShortAnnouncementGradeViewData Create(AnnouncementComplex announcement, 
+        public static ShortAnnouncementGradeViewData Create(ClassAnnouncement announcement, 
             IList<StudentAnnouncementDetails> studentAnnouncements, IList<int> studentIds)
         {
             studentAnnouncements = studentAnnouncements.Where(x => x.AnnouncementId == announcement.Id).ToList();

@@ -6,6 +6,7 @@ REQUIRE('chlk.activities.calendar.announcement.WeekPage');
 REQUIRE('chlk.activities.calendar.announcement.MonthPage');
 REQUIRE('chlk.activities.calendar.announcement.DayPage');
 REQUIRE('chlk.activities.calendar.announcement.MonthDayPopUp');
+REQUIRE('chlk.activities.calendar.announcement.MonthDayLessonPlansPopUp');
 REQUIRE('chlk.activities.calendar.announcement.WeekBarPopUp');
 REQUIRE('chlk.activities.calendar.announcement.WeekDayPopUp');
 
@@ -40,7 +41,7 @@ NAMESPACE('chlk.controllers', function (){
                     var startDate = dateRangeObj.startDate;
                     var endDate = dateRangeObj.endDate;
                     if(date.getDate() < startDate.getDate() || date.getDate() > endDate.getDate())
-                        if(model.getAnnouncements().length || model.getItems().length)
+                        if(model.getAnnouncements().length || model.getAdminAnnouncements().length)
                             model.setNoPlusButton(true);
                         else
                             return ria.async.BREAK;
@@ -50,6 +51,19 @@ NAMESPACE('chlk.controllers', function (){
                     return model;
                 }, this);
             return this.ShadeView(chlk.activities.calendar.announcement.MonthDayPopUp, result);
+        },
+
+        [chlk.controllers.SidebarButton('calendar')],
+        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
+        function showMonthDayLessonPlansAction(date, classId_) {
+            var result = this.calendarService
+                .getMonthDayInfo(date)
+                .attach(this.validateResponse_())
+                .then(function(model){
+                    model.setTarget(chlk.controls.getActionLinkControlLastNode());
+                    return model;
+                }, this);
+            return this.ShadeView(chlk.activities.calendar.announcement.MonthDayLessonPlansPopUp, result);
         },
 
         /*[chlk.controllers.SidebarButton('calendar')],

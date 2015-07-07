@@ -148,5 +148,13 @@ namespace Chalkable.UserTracking
         public void LoggedInFromINow(string login)
         {
         }
+        
+        public void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached)
+        {
+        }
+
+        public void CreateNewAdminItem(string email, string adminName, int appsAttached, int docsAttached)
+        {
+        }
     }
 }

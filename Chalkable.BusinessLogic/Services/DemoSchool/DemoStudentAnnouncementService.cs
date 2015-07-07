@@ -155,7 +155,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits,
             string comment, bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
-            var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+            var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
 
             Trace.Assert(ann.SisActivityId.HasValue);
 
@@ -240,7 +240,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             return StudentAnnouncementStorage.GetAll().Where(x => x.AnnouncementId == announcementId).Select(x =>
             {
-                var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+                var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
 
                 var student = ServiceLocator.StudentService.GetById(x.StudentId, Context.SchoolYearId.Value);
                 var details = new StudentDetails
@@ -272,7 +272,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     Exempt = x.Exempt,
                     ExtraCredit = x.ExtraCredit,
                     Incomplete = x.Incomplete,
-                    ClassId = ann.ClassRef.Value,
+                    ClassId = ann.ClassRef,
                     Late = x.Late,
                     NumericScore = x.NumericScore,
                     OverMaxScore = x.OverMaxScore,
@@ -299,10 +299,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId)
         {
-            if (!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
+            Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
-            var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+            var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
             var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(ann.Expires, true);
             Trace.Assert(mp != null);
             if (ann.SisActivityId.HasValue)
@@ -317,14 +316,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 else
                 {
                     scores = ActivityScoreStorage.GetSores(ann.SisActivityId.Value);
-                    persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef.Value, mp.Id);
+                    persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef, mp.Id);
                 }
                 var res = new List<StudentAnnouncementDetails>();
                 foreach (var score in scores)
                 {
                     var stAnn = new StudentAnnouncementDetails
                     {
-                        ClassId = ann.ClassRef.Value,
+                        ClassId = ann.ClassRef,
                         Student = persons.First(x => x.Id == score.StudentId),
                         AnnouncementId = ann.Id
                     };

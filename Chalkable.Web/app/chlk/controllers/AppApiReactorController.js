@@ -1,7 +1,7 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ApplicationService');
 REQUIRE('chlk.models.common.Button');
-REQUIRE('chlk.activities.apps.AttachAppDialog');
+REQUIRE('chlk.activities.apps.AttachDialog');
 
 
 NAMESPACE('chlk.controllers', function (){
@@ -69,15 +69,16 @@ NAMESPACE('chlk.controllers', function (){
             function simpleAppAttachAction(data){
                 var announcementAppId = new chlk.models.id.AnnouncementApplicationId(data.announcementAppId);
                 var announcementId = new chlk.models.id.AnnouncementId(data.announcementId);
+                var announcementType = data.announcementType ? new chlk.models.announcement.AnnouncementTypeEnum(data.announcementType) : null;
                 return this.appsService
-                    .attachApp(announcementAppId)
+                    .attachApp(announcementAppId, announcementType)
                     .catchError(function(error_){
                         throw new chlk.lib.exception.AppErrorException(error_);
                     }, this)
                     .attach(this.validateResponse_())
                     .then(function(result){
                         this.BackgroundCloseView(chlk.activities.apps.AppWrapperDialog);
-                        this.BackgroundCloseView(chlk.activities.apps.AttachAppDialog);
+                        this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
                         return this.Redirect('announcement', 'addAppAttachment', [result]);
                     }, this);
             },

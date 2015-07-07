@@ -31,6 +31,17 @@ namespace Chalkable.Data.Common
             }
         }
 
+        protected void ExcuteStoredProcedure(string name, SqlParameter[] parameters, int? timeout = null)
+        {
+            using (var command = unitOfWork.GetStoredProcedureCommandWithParams(name, parameters))
+            {
+                if (timeout.HasValue)
+                    command.CommandTimeout = timeout.Value;
+                command.ExecuteNonQuery();
+            }
+        }
+
+        
         protected SqlDataReader ExecuteStoredProcedureReader(string name, IDictionary<string, object> parameters, int? timeout = null)
         {
             using (var command = unitOfWork.GetStoredProcedureCommandWithParams(name, parameters))

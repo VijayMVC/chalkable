@@ -57,6 +57,7 @@ REQUIRE('chlk.models.people.ShortUserInfo');
 REQUIRE('chlk.models.grading.AvgComment');
 REQUIRE('chlk.models.school.SchoolOption');
 REQUIRE('chlk.models.school.LEParams');
+REQUIRE('chlk.models.announcement.AnnouncementAttributeType');
 
 REQUIRE('chlk.models.id.SchoolId');
 REQUIRE('chlk.models.id.DistrictId');
@@ -136,6 +137,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.STUDY_CENTER_ENABLED, Boolean);
                 this.saveInSession(session, ChlkSessionConstants.LE_PARAMS, chlk.models.school.LEParams);
                 this.saveInSession(session, ChlkSessionConstants.GRADE_LEVELS, ArrayOf(chlk.models.grading.GradeLevel));
+                this.saveInSession(session, ChlkSessionConstants.ANNOUNCEMENT_ATTRIBUTES, ArrayOf(chlk.models.announcement.AnnouncementAttributeType));
 
                 this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
 

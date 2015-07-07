@@ -39,3 +39,16 @@ Chalkable.Web/Content/images2/alerts-icons-*.png
 es-server/node_modules/*
 _UpgradeReport_Files/*
 UpgradeLog*
+app/node_modules
+NEW UI
+Chalkable.Web/Content/extjs
+Chalkable.Azure
+.idea
+Chalkable.Tests/Services/Master
+Chalkable.Tests/Services
+Chalkable.Web/Content/audio
+screens
+psd
+home page
+Chalkable.Web/Scripts/highcharts
+Chalkable.Web/Scripts/extjs

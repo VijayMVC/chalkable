@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementsByDate)],
         'AnnouncementsByDate', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements',
+            ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'date',

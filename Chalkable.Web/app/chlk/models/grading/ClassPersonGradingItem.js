@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.announcement.AnnouncementType');
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -14,7 +14,7 @@ NAMESPACE('chlk.models.grading', function () {
             Number, 'classItemTypeAvg',
 
             [ria.serialize.SerializeProperty('items')],
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements'
+            ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements'
 
         ]);
 });

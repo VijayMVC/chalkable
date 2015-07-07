@@ -68,11 +68,13 @@ NAMESPACE('chlk.activities.apps', function () {
                     var node = this.dom.find('#add-app');
                     var announcementAppId = node.getData('announcement-app-id');
                     var announcementId = node.getData('announcement-id');
+                    var announcementType = node.getData('announcement-type');
                     var simpleApp = !node.getData('advanced-app');
                     data = {
                         attach: true,
                         announcementAppId: announcementAppId,
                         announcementId: announcementId,
+                        announcementType: announcementType,
                         simpleApp: simpleApp
                     };
 

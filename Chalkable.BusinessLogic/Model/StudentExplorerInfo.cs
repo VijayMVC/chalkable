@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Logic.Comperators;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Model
@@ -44,7 +41,7 @@ namespace Chalkable.BusinessLogic.Model
                 var avg = mostRecentAveragesWithGrade.FirstOrDefault(x => x.SectionId == classDetailse.Id);
                 var gradeValue = avg != null ? (avg.EnteredNumericAverage ?? avg.CalculatedNumericAverage) : null;
                 var stScores = standardScores.Where(x => x.SectionId == classDetailse.Id).ToList();
-                var importantItem = announcements.FirstOrDefault(x => x.ClassRef == classDetailse.Id);
+                var importantItem = announcements.FirstOrDefault(x => x.ClassAnnouncementData.ClassRef == classDetailse.Id);
                 res.Add(Create(classDetailse, gradeValue, stScores, standards, importantItem));                   
             }
             return OrderClassGradeInfo(res);

@@ -18,7 +18,7 @@ itemStyleInfo = {}
                 .item-type-details.x-hidden
                     each item in itemType.getAnnouncements()
                         itemStyleInfo = self.prepareItemStyleInfo(item)
-                        +ActionLink('announcement', 'view', item.getId())(class = itemStyleInfo.droppedItemClass).new-grading-box.item
+                        +ActionLink('announcement', 'view', item.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT)(class = itemStyleInfo.droppedItemClass).new-grading-box.item
                             .avg-section.x-hidden
                                 .new-grading-box.avg-box-left.dropped-box Dropped
                                 div(class= itemStyleInfo.emptyBoxClass).new-grading-box.avg-box-right

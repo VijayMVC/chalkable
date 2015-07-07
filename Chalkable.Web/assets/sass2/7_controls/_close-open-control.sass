@@ -16,7 +16,7 @@
       height: 1px
       background: #e7e6e2
 
-    .open, .close
+    .co-open, .co-close
       float: right
       font-size: 12px
       font-weight: normal
@@ -24,19 +24,19 @@
       color: #434341
       cursor: pointer
 
-  &.opened
-    .open
+  &.co-opened
+    .co-open
       display: none
 
-    &.finished
+    &.co-finished
       .close-open-block
         overflow: visible
 
-  &:not(.opened)
+  &:not(.co-opened)
     >h3
       color: #aba9a5
 
-    .close
+    .co-close
       display: none
 
     .close-open-block

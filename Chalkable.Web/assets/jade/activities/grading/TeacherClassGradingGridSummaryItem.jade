@@ -102,7 +102,7 @@ mixin DisplayTotalPoints(model)
                 maxScore = announcement.getMaxScore()
                 div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.with-horizontal-dots.announcement-container
                     .grading-grid-th
-                        +ActionLink('announcement', 'view', announcement.getId())
+                        +ActionLink('announcement', 'view', announcement.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT)
                             div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
                         .time=announcement.getExpiresDate().format('M d')
                         .max-score.dotted-h(data-sort-type="anno", data-sort-anno-id=announcement.getId().valueOf())=maxScore

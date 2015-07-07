@@ -46,9 +46,19 @@ namespace Chalkable.BusinessLogic.Security
         
         public static bool IsDistrictOrTeacher(UserContext context)
         {
-            return IsDistrictAdmin(context) || context.Role == CoreRoles.TEACHER_ROLE;
+            return IsDistrictAdmin(context) || IsTeacher(context);
         }
         
+        public static bool IsTeacher(UserContext context)
+        {
+            return context.Role == CoreRoles.TEACHER_ROLE;
+        }
+        public static void EnsureTeacher(UserContext context)
+        {
+            if(!IsTeacher(context))
+                throw new ChalkableSecurityException();
+        }
+
         public static void EnsureAdminOrTeacher(UserContext context)
         {
             if (!IsDistrictOrTeacher(context))

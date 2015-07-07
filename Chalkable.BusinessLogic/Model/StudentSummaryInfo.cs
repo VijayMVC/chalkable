@@ -3,6 +3,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Connectors.Model.Attendances;
 
@@ -41,7 +42,7 @@ namespace Chalkable.BusinessLogic.Model
             var scores = nowDashboard.Scores.Where(x => !string.IsNullOrEmpty(x.ScoreValue)).ToList();
             foreach (var score in scores)
             {
-                var ann = anns.FirstOrDefault(x => x.SisActivityId == score.ActivityId);
+                var ann = anns.FirstOrDefault(x => x.ClassAnnouncementData.SisActivityId == score.ActivityId);
                 if(ann == null) continue;
                 var studentAnn = new StudentAnnouncement {AnnouncementId = ann.Id};
                 mapper.Map(studentAnn, score);

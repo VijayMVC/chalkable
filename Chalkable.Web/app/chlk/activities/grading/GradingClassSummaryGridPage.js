@@ -177,7 +177,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     popUpTpl = new chlk.templates.grading.GradingPopUpTpl();
                     popUpTpl.options({
                         ableDropStudentScore: this.getBooleanValue_(cell.getData('able-drop-student-score')),
-                        ableExemptStudentScore: this.getBooleanValue_(cell.getData('able-exempt-student-score')),
+                        ableToExempt: this.getBooleanValue_(cell.getData('able-exempt-student-score')),
                         autoDropped: this.getBooleanValue_(cell.getData('auto-dropped'))
                     });
                 }
@@ -488,7 +488,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 if(!cell.hasClass('avg-value-container')){
                     tpl.options({
                         ableDropStudentScore: this.getBooleanValue_(cell.getData('able-drop-student-score')),
-                        ableExemptStudentScore: this.getBooleanValue_(cell.getData('able-exempt-student-score')),
+                        ableToExempt: this.getBooleanValue_(cell.getData('able-exempt-student-score')),
                         notAblePutScore: this.getBooleanValue_(cell.getData('canputonlyzero'))
                     });
                 }else{

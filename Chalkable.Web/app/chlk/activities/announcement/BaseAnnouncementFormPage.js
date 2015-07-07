@@ -1,6 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.announcement.BaseAnnouncementFormTpl');
-REQUIRE('chlk.templates.announcement.Announcement');
+REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.templates.announcement.LastMessages');
 
 NAMESPACE('chlk.activities.announcement', function () {
@@ -155,10 +155,20 @@ NAMESPACE('chlk.activities.announcement', function () {
                 new ria.dom.Dom().on('click.dropdown', this._handler);
             },
 
+            Boolean, 'notSave',
+
+            [ria.mvc.DomEventBind('click', '.announcement-type-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function onTypeClick(node, event){
+                if(node.hasClass('no-save'))
+                    this.setNotSave(true);
+            },
+
             OVERRIDE, VOID, function onStop_() {
                 var button = new ria.dom.Dom('#save-form-button');
-                if(button.exists())
+                if(button.exists() && !this.isNotSave())
                     button.trigger('click');
+                this.setNotSave(false);
                 new ria.dom.Dom().off('click.dropdown', this._handler);
                 BASE();
             }

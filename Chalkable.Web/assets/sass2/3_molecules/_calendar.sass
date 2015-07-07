@@ -75,6 +75,37 @@
   .calendar-body
     text-align: center
 
+    .lesson-plan-item
+      position: absolute
+      color: white
+      top: 0
+      left: 0
+      right: 0
+      font-size: 12px
+      line-height: 30px
+
+      .count
+        display: inline-block
+        padding: 3px
+        height: 10px
+        border-radius: 10px
+        width: 10px
+        position: relative
+        line-height: 10px
+        left: 5px
+
+      &.red
+        background: #d45151
+
+        .count
+          background-color: #41b768
+
+      &.green
+        background: #41b768
+
+        .count
+          background-color: #d45151
+
     .day-names > DIV
       display: table-cell
       width: 100 / 7 * 1%
@@ -99,10 +130,10 @@
     .items > .row
       display: table-row
 
-    .items > .row > A, .week-day
+    .items > .row > SPAN, .week-day
       width: 100 / 7 * 1%
 
-    .items > .row > A
+    .items > .row > SPAN
       display: table-cell
       height: 116px
       text-decoration: none
@@ -136,13 +167,20 @@
       &.today.with-anns::after
         background-color: #fff
 
-      h2
+      A
+        text-decoration: none
+
+      .h2
         margin: 0
         font-size: 24px
         line-height: 116px
+        display: block
 
       &.not-current-month
         color: #d0d0ce !important
+
+        a
+          color: #d0d0ce
 
     .today
       border-color: #13495c

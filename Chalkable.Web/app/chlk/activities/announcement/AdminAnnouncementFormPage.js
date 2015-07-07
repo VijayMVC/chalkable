@@ -1,5 +1,6 @@
-REQUIRE('chlk.templates.announcement.Announcement');
+REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.templates.announcement.AdminAnnouncementFormTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementAttributesTpl');
 
 REQUIRE('chlk.activities.announcement.BaseAnnouncementFormPage');
 
@@ -10,12 +11,13 @@ NAMESPACE('chlk.activities.announcement', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AdminAnnouncementFormTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, 'update-attachments', '.apps-attachments-bock', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, 'update-attachments', '.apps-attachments-bock', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttributesTpl, 'update-attributes', '.attributes-block', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AdminAnnouncementRecipientsTpl, 'recipients', '.recipients-list', ria.mvc.PartialUpdateRuleActions.Replace)],
         [chlk.activities.lib.PageClass('new-item')],
         'AdminAnnouncementFormPage', EXTENDS(chlk.activities.announcement.BaseAnnouncementFormPage), [
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, chlk.activities.lib.DontShowLoader())],
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, chlk.activities.lib.DontShowLoader())],
             VOID, function addGroups(tpl, model, msg_) {
                 this.dom.find('.group-ids').setValue(model.getGroupIds());
             },

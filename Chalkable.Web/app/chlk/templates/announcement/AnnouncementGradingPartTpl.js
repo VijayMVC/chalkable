@@ -1,6 +1,6 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.people.User');
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 REQUIRE('chlk.templates.announcement.StudentAnnouncementsTpl');
 
 

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
@@ -6,6 +7,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -40,11 +42,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             if (announcementQnAQuery.AnswererId.HasValue)
             {
-                var announcementQnAComplexs = qnas as IList<AnnouncementQnAComplex> ?? qnas.ToList();
-                var announcementIds = announcementQnAComplexs.Select(x => x.AnnouncementRef);
-                var personIds = announcementIds.Select(annId => ServiceLocator.AnnouncementService.GetAnnouncementById(annId))
-                    .Select(announcement => announcement.PrimaryTeacherRef).ToList();
-                qnas = announcementQnAComplexs.Where(x => personIds.Contains(x.AskerRef));
+                //TODO : implement this later
+                //var announcementQnAComplexs = qnas as IList<AnnouncementQnAComplex> ?? qnas.ToList();
+                //var announcementIds = announcementQnAComplexs.Select(x => x.AnnouncementRef);
+                //var personIds = announcementIds.Select(annId => ServiceLocator.AnnouncementService.GetAnnouncementById(annId))
+                //    .Select(announcement => announcement.PrimaryTeacherRef).ToList();
+                //qnas = announcementQnAComplexs.Where(x => personIds.Contains(x.AskerRef));
             }
 
             return new AnnouncementQnAQueryResult
@@ -54,34 +57,40 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             };
         }
 
-        public AnnouncementQnA AskQuestion(int announcementId, string question)
+        public AnnouncementQnA AskQuestion(int announcementId, AnnouncementType announcementType, string question)
         {
-            if (!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
+            Trace.Assert(Context.PersonId.HasValue);
 
-            var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+            var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
 
-            if(!ann.PrimaryTeacherRef.HasValue)
-                throw new ChalkableException("There is no teachers for that item");
+            //if(!ann.PrimaryTeacherRef.HasValue)
+            //    throw new ChalkableException("There is no teachers for that item");
 
             var annQnA = new AnnouncementQnAComplex
             {
                 AnnouncementRef = announcementId,
                 AskerRef = Context.PersonId.Value,
-                ClassRef = ann.ClassRef.Value,
                 Question = question,
                 QuestionTime = Context.NowSchoolTime,
                 State = AnnouncementQnAState.Asked,
                 Asker = ServiceLocator.PersonService.GetPersonDetails(Context.PersonId.Value),
-                Answerer = ServiceLocator.PersonService.GetPersonDetails(ann.PrimaryTeacherRef.Value)
+                Answerer = ServiceLocator.PersonService.GetPersonDetails(ann.Owner.Id)
             };
+
+            if (ann.ClassAnnouncementData != null)
+                annQnA.ClassRef = ann.ClassAnnouncementData.ClassRef;
+            if (ann.LessonPlanData != null)
+                annQnA.ClassRef = ann.LessonPlanData.ClassRef;
+            if (ann.AdminAnnouncementData != null)
+                annQnA.AdminRef = ann.AdminAnnouncementData.AdminRef;
+            
             AnnouncementQnAStorage.Add(annQnA);
             annQnA = GetAnnouncementQnA(new AnnouncementQnAQuery
             {
                 AnnouncementId = announcementId,
                 CallerId = annQnA.AskerRef
             }).AnnouncementQnAs.OrderByDescending(x => x.Id).First();
-            ServiceLocator.NotificationService.AddAnnouncementNotificationQnToAuthor(annQnA.Id, ann.Id);
+            ServiceLocator.NotificationService.AddAnnouncementNotificationQnToAuthor(annQnA.Id, ann.Id, announcementType);
             return annQnA;
         }
 
@@ -100,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     && ((DemoClassService)ServiceLocator.ClassService).ClassTeacherExists(announcementQnA.ClassRef.Value, Context.PersonId.Value));
         }
 
-        public AnnouncementQnA Answer(int announcementQnAId, string question, string answer)
+        public AnnouncementQnA Answer(int announcementQnAId, AnnouncementType announcementType, string question, string answer)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
@@ -119,9 +128,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 annQnA.AnsweredTime = Context.NowSchoolTime;
                 annQnA.Answer = answer;
             }
-        
             AnnouncementQnAStorage.Update(annQnA);
-            ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToStudent(annQnA.Id, annQnA.AnnouncementRef);
+            ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToStudent(annQnA.Id, annQnA.AnnouncementRef, announcementType);
             return annQnA;
         }
 

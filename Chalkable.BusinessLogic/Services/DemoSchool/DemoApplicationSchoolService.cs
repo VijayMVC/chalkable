@@ -6,6 +6,7 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -53,31 +54,33 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<int> GetAssignedUserIds(Guid appId, int? announcementAppId)
         {
-            var res = new List<int>();
-            if (announcementAppId.HasValue)
-            {
+            throw new NotImplementedException();
+            //TODO: impl this later
+            //var res = new List<int>();
+            //if (announcementAppId.HasValue)
+            //{
 
-                var anDa = ((DemoAnnouncementService)ServiceLocator.AnnouncementService).GetTeacherAnnouncementService();
-                var announcementApplication = GetAnnouncementApplication(announcementAppId.Value);
-                var ann = anDa.GetAnnouncementById(announcementApplication.AnnouncementRef);
-                var csp = ServiceLocator.ClassService.GetClassPersons(ann.ClassRef.Value, null);
-                res.AddRange(csp.Select(x => x.PersonRef));
-                var c = ServiceLocator.ClassService.GetById(ann.ClassRef.Value);
-                if (Context.PersonId != c.PrimaryTeacherRef)
-                    if (c.PrimaryTeacherRef.HasValue) res.Add(c.PrimaryTeacherRef.Value);
-            }
-            else
-            {
-                var inst = ((DemoAppMarketService)ServiceLocator.AppMarketService).GetAppInstalls(appId, true);
-                res.AddRange(inst.Select(x => x.PersonRef));
-            }
-            return res;
+            //    var anDa = ((DemoAnnouncementService)ServiceLocator.AnnouncementService).GetTeacherAnnouncementService();
+            //    var announcementApplication = GetAnnouncementApplication(announcementAppId.Value);
+            //    var ann = anDa.GetAnnouncementById(announcementApplication.AnnouncementRef);
+            //    var csp = ServiceLocator.ClassService.GetClassPersons(ann.ClassRef.Value, null);
+            //    res.AddRange(csp.Select(x => x.PersonRef));
+            //    var c = ServiceLocator.ClassService.GetById(ann.ClassRef.Value);
+            //    if (Context.PersonId != c.PrimaryTeacherRef)
+            //        if (c.PrimaryTeacherRef.HasValue) res.Add(c.PrimaryTeacherRef.Value);
+            //}
+            //else
+            //{
+            //    var inst = ((DemoAppMarketService)ServiceLocator.AppMarketService).GetAppInstalls(appId, true);
+            //    res.AddRange(inst.Select(x => x.PersonRef));
+            //}
+            //return res;
         }
 
-        public AnnouncementApplication AddToAnnouncement(int announcementId, Guid applicationId)
+        public AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementType announcementType, Guid applicationId)
         {
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
-            var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
+            var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
             if (!ApplicationSecurity.CanAddToAnnouncement(app, ann, Context))
                 throw new ChalkableSecurityException();
             var aa = new AnnouncementApplication
@@ -85,7 +88,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 AnnouncementRef = announcementId,
                 ApplicationRef = applicationId,
                 Active = false,
-                Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
+                Order = ServiceLocator.GetAnnouncementService(announcementType).GetNewAnnouncementItemOrder(ann)
             };
             AnnouncementApplicationStorage.Add(aa);
             aa = AnnouncementApplicationStorage.GetAll(announcementId, applicationId, false).OrderByDescending(x => x.Id).First();
@@ -97,13 +100,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return AnnouncementApplicationStorage.GetById(announcementAppId);
         }
 
-        public void AttachAppToAnnouncement(int announcementAppId)
+        public void AttachAppToAnnouncement(int announcementAppId, AnnouncementType announcementType)
         {
             var aa = GetAnnouncementApplication(announcementAppId);
-            var ann = ((DemoAnnouncementService)ServiceLocator.AnnouncementService).GetTeacherAnnouncementService()
-                .GetAnnouncement(aa.AnnouncementRef, Context.Role.Id, Context.PersonId.Value);
-            var c = ServiceLocator.ClassService.GetById(ann.ClassRef.Value);
-            if (Context.PersonId != c.PrimaryTeacherRef)
+            var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(aa.AnnouncementRef);
+            if (ann.IsOwner)
                 throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
             aa.Active = true;
             AnnouncementApplicationStorage.Update(aa);
@@ -125,27 +126,28 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false)
         {
-            var announcementApplications = AnnouncementApplicationStorage.GetData().Select(x => x.Value);
+            //implement this later
+            throw new NotImplementedException();
+            //var announcementApplications = AnnouncementApplicationStorage.GetData().Select(x => x.Value);
 
-            announcementApplications = announcementApplications.Where(x =>
-            {
-                var announcement = ServiceLocator.AnnouncementService.GetAnnouncementById(x.AnnouncementRef);
-                return ((DemoAppMarketService)ServiceLocator.AppMarketService).AppInstallExists(x.ApplicationRef, personId)
-                       && announcement.PrimaryTeacherRef == personId
-                       || ((DemoClassService)ServiceLocator.ClassService).ClassPersonExists(announcement.ClassRef.Value, personId);
-            });
-            return announcementApplications.ToList();
+            //announcementApplications = announcementApplications.Where(x =>
+            //{
+            //    var announcement = ServiceLocator.AnnouncementService.GetAnnouncementById(x.AnnouncementRef);
+            //    return ((DemoAppMarketService)ServiceLocator.AppMarketService).AppInstallExists(x.ApplicationRef, personId)
+            //           && announcement.PrimaryTeacherRef == personId
+            //           || ((DemoClassService)ServiceLocator.ClassService).ClassPersonExists(announcement.ClassRef.Value, personId);
+            //});
+            //return announcementApplications.ToList();
         }
 
-        public Announcement RemoveFromAnnouncement(int announcementAppId)
+        public Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementType announcementType)
         {
             try
             {
                 var aa = AnnouncementApplicationStorage.GetById(announcementAppId);
                 AnnouncementApplicationStorage.Delete(announcementAppId);
-                var res = ServiceLocator.AnnouncementService.GetAnnouncementById(aa.AnnouncementRef);
-                var c = ServiceLocator.ClassService.GetById(res.ClassRef.Value);
-                if (Context.PersonId != c.PrimaryTeacherRef)
+                var res = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(aa.AnnouncementRef);
+                if (res.IsOwner)
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 return res;
             }

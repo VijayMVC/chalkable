@@ -17,10 +17,13 @@ NAMESPACE('chlk.templates.calendar.announcement', function () {
             chlk.models.schoolYear.ScheduleSection, 'scheduleSection',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements',
+            ArrayOf(chlk.models.announcement.LessonPlanViewData), 'lessonPlans',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.Announcement), 'items',
+            ArrayOf(chlk.models.announcement.AdminAnnouncementViewData), 'adminAnnouncements',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassId, 'selectedClassId',

@@ -1,4 +1,15 @@
-.announcement-form-page, .admin-announcement-form-page
+.add-new-category-dialog
+  input[name=value]
+    margin: 10px 20px
+
+  BUTTON.add
+    margin-bottom: 15px
+
+.announcement-form-page, .admin-announcement-form-page, .lesson-plan-form-page
+  .attach-btn-area
+    margin-bottom: 20px
+    button
+      width: 132px
 
   .bottom-block
     margin-top: 78px
@@ -138,17 +149,19 @@
       left: auto
       right: 24px
 
-  .right-block
-    width: 250px
+  .left-top-container
+    >DIV
+      display: inline-block
+      margin-right: 15px
 
-    > *
-      margin-left: 18px
-      position: relative
-
+  .right-block, .left-top-container
     INPUT[type=text]
       box-sizing: border-box
       width: 225px
       margin-bottom: 16px
+
+    SELECT
+      width: 225px
 
     LABEL[for]
       font-size: 13px
@@ -158,6 +171,15 @@
       +text-shadow(transparentize(#fff, .5) 0 1px 1px)
       margin-bottom: 6px
       display: block
+
+  .right-block
+    width: 250px
+
+    > *
+      margin-left: 18px
+      position: relative
+
+
 
     .question-mark, .calendar-mark
       position: absolute

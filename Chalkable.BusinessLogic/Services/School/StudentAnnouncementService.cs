@@ -33,7 +33,9 @@ namespace Chalkable.BusinessLogic.Services.School
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment, bool dropped,
                                             bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
         {
-            var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+            var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
+            if(!ann.IsSubmitted)
+                throw new ChalkableException("Announcement is not submitted yet");
             if (!string.IsNullOrEmpty(value) && value.Trim() != "")
                 exempt = false;
             else value = null;
@@ -72,7 +74,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             Trace.Assert(Context.SchoolYearId.HasValue);
-            var ann = ServiceLocator.AnnouncementService.GetAnnouncementById(announcementId);
+            var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
             if (ann.SisActivityId.HasValue)
             {
                 IList<Score> scores = new List<Score>();
@@ -85,14 +87,14 @@ namespace Chalkable.BusinessLogic.Services.School
                 else
                 {
                     scores = ConnectorLocator.ActivityScoreConnector.GetSores(ann.SisActivityId.Value);
-                    var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(ann.ClassRef.Value);
+                    var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(ann.ClassRef);
                     bool? enrolled = classRoomOption != null && !classRoomOption.IncludeWithdrawnStudents ? true : default(bool?);
                     var mp = ServiceLocator.MarkingPeriodService.GetLastMarkingPeriod(ann.Expires);
                     if (mp == null)
                     {
                         throw new ChalkableException("No marking period is scheduled at announcements expiery date.");
                     }
-                    persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef.Value, mp.Id, enrolled);
+                    persons = ServiceLocator.StudentService.GetClassStudents(ann.ClassRef, mp.Id, enrolled);
                 }
                 var res = new List<StudentAnnouncementDetails>();
                 var alternateScores = ServiceLocator.AlternateScoreService.GetAlternateScores();
@@ -103,7 +105,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     {
                         var stAnn = new StudentAnnouncementDetails
                             {
-                                ClassId = ann.ClassRef.Value,
+                                ClassId = ann.ClassRef,
                                 Student = student,
                                 AnnouncementId = ann.Id
                             };
@@ -132,7 +134,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if(!annApp.Active)
                 throw new ChalkableSecurityException("This application is not attached to an item");
 
-            var announcement = ServiceLocator.AnnouncementService.GetAnnouncementById(annApp.AnnouncementRef); // security here
+            var announcement = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(annApp.AnnouncementRef); // security here
 
             if (recepientId != Context.PersonId && !announcement.IsOwner)
                 throw new ChalkableSecurityException("Only owner can post auto grade for student");

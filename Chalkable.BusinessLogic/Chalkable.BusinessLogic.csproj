@@ -103,6 +103,7 @@
     <Compile Include="Mapping\ModelMappers\AnnouncementComplexToActivityMapper.cs" />
     <Compile Include="Mapping\ModelMappers\BaseMapper.cs" />
     <Compile Include="Mapping\ModelMappers\ClassDisciplineToDisciplineReferralMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\ActivityAssignedAttrToAnnouncementAssignedAttrMapper.cs" />
     <Compile Include="Mapping\ModelMappers\DisciplineReferralToClassDisciplineMapper.cs" />
     <Compile Include="Mapping\ModelMappers\MapperFactory.cs" />
     <Compile Include="Mapping\ModelMappers\ScoreToStudentAnnMapper.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Security\UserSecurity.cs" />
     <Compile Include="Services\CrocodocService.cs" />
     <Compile Include="Services\DbService.cs" />
+    <Compile Include="Services\DemoSchool\DemoAnnouncementAssignedAttributeService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementAttributeService.cs" />
     <Compile Include="Services\DemoSchool\DemoApplicationSchoolService.cs" />
     <Compile Include="Services\DemoSchool\DemoAppMarketService.cs" />
@@ -183,6 +185,7 @@
     <Compile Include="Services\DemoSchool\DemoGradingPeriodService.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingScaleService.cs" />
     <Compile Include="Services\DemoSchool\DemoGroupService.cs" />
+    <Compile Include="Services\DemoSchool\DemoLPGalleryCategoryService.cs" />
     <Compile Include="Services\DemoSchool\DemoSchoolConstants.cs" />
     <Compile Include="Services\DemoSchool\DemoPersonEmailService.cs" />
     <Compile Include="Services\DemoSchool\DemoPracticeGradeService.cs" />
@@ -239,7 +242,11 @@
     <Compile Include="Services\School\AnnouncementAttachmentService.cs" />
     <Compile Include="Services\School\AnnouncementAttributeService.cs" />
     <Compile Include="Services\School\AnnouncementQnAService.cs" />
-    <Compile Include="Services\School\AnnouncementService.cs" />
+    <Compile Include="Services\School\Announcements\AdminAnnouncementService.cs" />
+    <Compile Include="Services\School\Announcements\AnnouncementFetchService.cs" />
+    <Compile Include="Services\School\Announcements\BaseAnnouncementService.cs" />
+    <Compile Include="Services\School\Announcements\ClassAnnouncementService.cs" />
+    <Compile Include="Services\School\Announcements\LessonPlanService.cs" />
     <Compile Include="Services\School\AttendanceMonthService.cs" />
     <Compile Include="Services\School\BellScheduleService.cs" />
     <Compile Include="Services\School\ClassAnnouncementTypeService.cs" />
@@ -250,6 +257,7 @@
     <Compile Include="Services\School\CalendarDateService.cs" />
     <Compile Include="Services\School\ClassroomOptionService.cs" />
     <Compile Include="Services\School\ContactService.cs" />
+    <Compile Include="Services\School\AnnouncementAssignedAttributeService.cs" />
     <Compile Include="Services\School\CourseTypeService.cs" />
     <Compile Include="Services\School\DayTypeService.cs" />
     <Compile Include="Services\DemoSchool\DemoAnnouncementQnAService.cs" />
@@ -283,6 +291,7 @@
     <Compile Include="Services\School\GradingPeriodService.cs" />
     <Compile Include="Services\School\GradingStandardService.cs" />
     <Compile Include="Services\School\GradingStatisticService.cs" />
+    <Compile Include="Services\School\LPGalleryCategoryService.cs" />
     <Compile Include="Services\School\MarkingPeriodService.cs" />
     <Compile Include="Services\School\Notifications\NotificationBuilder.cs" />
     <Compile Include="Services\School\Notifications\NotificationService.cs" />

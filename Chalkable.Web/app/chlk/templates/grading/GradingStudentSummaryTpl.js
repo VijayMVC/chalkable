@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.grading', function () {
         [ria.templates.ModelBind(chlk.models.grading.GradingStudentSummaryViewData)],
         'GradingStudentSummaryTpl', EXTENDS(chlk.templates.common.PageWithClasses), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements',
+            ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'announcements',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.GradingStatsByDateViewData), 'totalAvgPerDate',

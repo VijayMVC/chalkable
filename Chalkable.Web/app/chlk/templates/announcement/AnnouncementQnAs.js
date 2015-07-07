@@ -1,5 +1,5 @@
-REQUIRE('chlk.templates.announcement.Announcement');
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.templates.ChlkTemplate');
+REQUIRE('chlk.models.announcement.FeedAnnouncementViewData');
 REQUIRE('chlk.converters.dateTime.DateTimeTextConverter');
 
 NAMESPACE('chlk.templates.announcement', function () {
@@ -7,14 +7,18 @@ NAMESPACE('chlk.templates.announcement', function () {
     /** @class chlk.templates.announcement.AnnouncementQnAs*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AnnouncementQnAs.jade')],
-        [ria.templates.ModelBind(chlk.models.announcement.Announcement)],
-        'AnnouncementQnAs', EXTENDS(chlk.templates.announcement.Announcement), [
+        [ria.templates.ModelBind(chlk.models.announcement.FeedAnnouncementViewData)],
+        'AnnouncementQnAs', EXTENDS(chlk.templates.ChlkTemplate), [
+            Boolean, 'moreClicked',
 
-            OVERRIDE, chlk.models.people.User, function getCurrentUser(){
-                return this.getModel().getCurrentUser();
-            },
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AnnouncementId, 'id',
 
-            Boolean, 'moreClicked'
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'annOwner',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs'
 
         ])
 });

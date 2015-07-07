@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Models.AnnouncementsViewData;
 
 namespace Chalkable.Web.Models
@@ -15,7 +14,7 @@ namespace Chalkable.Web.Models
         public IList<GradingStandardClassItemViewData> Items { get; set; }
  
         public static GradingStandardClassSummaryViewData Create(GradingPeriod gradingPeriod
-            , IList<GradingStandardInfo> gradingStandards, IList<AnnouncementComplex> announcements
+            , IList<GradingStandardInfo> gradingStandards, IList<ClassAnnouncement> announcements
             , IList<AnnouncementStandard> announcementStandards)
         {
             var res = new GradingStandardClassSummaryViewData
@@ -41,16 +40,16 @@ namespace Chalkable.Web.Models
     {
         public StandardViewData ItemDescription { get; set; }
         public decimal? Avg { get; set; } 
-        public IList<AnnouncementShortViewData> Announcements { get; set; }
+        public IList<ClassAnnouncementViewData> Announcements { get; set; }
  
-        public static GradingStandardClassItemViewData Create(IList<AnnouncementComplex> announcements,
+        public static GradingStandardClassItemViewData Create(IList<ClassAnnouncement> announcements,
                                                               decimal? avg, Standard standard)
         {
             return new GradingStandardClassItemViewData
                 {
                     ItemDescription = StandardViewData.Create(standard),
                     Avg = avg,
-                    Announcements = AnnouncementShortViewData.Create(announcements)
+                    Announcements = ClassAnnouncementViewData.Create(announcements)
                 };
         }
     }

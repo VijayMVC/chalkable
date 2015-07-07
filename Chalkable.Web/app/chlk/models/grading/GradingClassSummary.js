@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.grading.GradingClassSummaryPart');
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 REQUIRE('chlk.models.common.PageWithClassesAndGradingPeriodsViewData');
 
 NAMESPACE('chlk.models.grading', function () {

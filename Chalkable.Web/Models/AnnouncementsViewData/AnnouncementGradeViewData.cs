@@ -3,33 +3,33 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
 {
     public class AnnouncementGradeViewData : AnnouncementViewData
     {
-        protected AnnouncementGradeViewData(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements, bool? wasAnnouncementTypeGraded = null)
-            : base(announcement, wasAnnouncementTypeGraded)
+        public decimal? Grade { get; set; }
+        public string Comment { get; set; }
+
+        protected AnnouncementGradeViewData(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements)
+            : base(announcement)
         {
-            PrepareGradingInfo(this, announcement, studentAnnouncements);
+            PrepareGradingInfo(this, studentAnnouncements);
         }
 
-        protected AnnouncementGradeViewData(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded = null)
-            : base(announcement, wasAnnouncementTypeGraded)
+        protected AnnouncementGradeViewData(AnnouncementComplex announcement)
+            : base(announcement)
         {
         }
 
-        public static AnnouncementGradeViewData Create(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements, IGradingStyleMapper mapper, bool? wasAnnouncementTypeGraded = null)
+        public static AnnouncementGradeViewData Create(AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements)
         {
-            var res = new AnnouncementGradeViewData(announcement, studentAnnouncements, wasAnnouncementTypeGraded);
-            return res;
+           return new AnnouncementGradeViewData(announcement, studentAnnouncements);
         }
 
-        private static void PrepareGradingInfo(AnnouncementViewData res, AnnouncementComplex announcement, IList<StudentAnnouncement> studentAnnouncements)
+        private static void PrepareGradingInfo(AnnouncementGradeViewData res,  IList<StudentAnnouncement> studentAnnouncements)
         {
-            res.Avg = announcement.Avg;
-            res.AvgNumeric = announcement.Avg;
-            res.GradingStyle = (int)(announcement.GradingStyle);
             if (studentAnnouncements != null && studentAnnouncements.Count > 0)
             {
                 if (studentAnnouncements.Count == 1)
@@ -38,23 +38,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                     res.Grade = studentAnnouncement.NumericScore;
                     res.Comment = studentAnnouncement.Comment;
                 }
-                int graded = 0;
-                decimal? summ = null;
-                int cnt = 0;
-                foreach (var gradeItem in studentAnnouncements)
-                {
-                    if (gradeItem.NumericScore.HasValue)
-                    {
-                        graded++;
-                        summ = summ.HasValue ? summ + gradeItem.NumericScore.Value : gradeItem.NumericScore.Value;
-                        cnt++;
-                    }
-                }
-                var count = studentAnnouncements.Count;
-                res.GradeSummary = graded + "/" + count;
-                res.AttachmentSummary = res.StudentsCountWithAttachments + "/" + count;
-                res.Avg = summ.HasValue ? (int)Math.Round(1.0 * (double)summ.Value / cnt) : (int?)null;
-                res.AvgNumeric = summ.HasValue ? Math.Round(1.0 * (double)summ.Value / cnt) : (double?)null;
             }
         }
     }

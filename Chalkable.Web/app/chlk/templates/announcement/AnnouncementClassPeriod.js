@@ -16,6 +16,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'dayNumber',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements'
+            ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements'
         ])
 });

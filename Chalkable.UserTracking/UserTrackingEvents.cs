@@ -20,6 +20,8 @@ namespace Chalkable.UserTracking
         public const string ChangedEmail = "changed email";
         public const string SentMessageTo = "sent a message to";
         public const string CreatedNewItem = "created new item";
+        public const string CreatedNewLessonPlan = "created new lesson plan";
+        public const string CreatedNewAdminItem = "created new admin item";
         public const string FinishedFirstStep = "finished first step";
         public const string FinishedSecondStep = "finished second step";
         public const string InvitedUser = "invited user";

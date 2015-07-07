@@ -19,7 +19,6 @@ NAMESPACE('chlk.models.announcement', function () {
             VOID, function deserialize(raw) {
                 this.announcementTypeId = SJX.fromValue(raw.announcementtypeid, Number);
                 this.schoolOptions = SJX.fromDeserializable(raw.schooloptions, chlk.models.school.SchoolOption);
-                this.chalkableAnnouncementTypeId = SJX.fromValue(raw.chalkableannouncementtypeid, Number);
                 this.announcementTitle = SJX.fromValue(raw.announcmenttitel, String);
                 this.classAvg = SJX.fromValue(raw.classavg, String);
                 this.className = SJX.fromValue(raw.classname, String);
@@ -33,7 +32,6 @@ NAMESPACE('chlk.models.announcement', function () {
 
             Number, 'announcementTypeId',
             chlk.models.school.SchoolOption, 'schoolOptions',
-            Number, 'chalkableAnnouncementTypeId',
             String, 'announcementTitle',
 
             String, 'className',

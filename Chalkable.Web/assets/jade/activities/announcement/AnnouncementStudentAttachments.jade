@@ -1,7 +1,8 @@
-if self.isGradable()
+-var classAnnouncement = self.getClassAnnouncementData()
+if classAnnouncement && classAnnouncement.isGradable()
     #attach-file-area.announcement-item.attach-file-area
         div.simple-gray-button.file Attach File
-            +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf()])#add-attachment.simple-gray-button
+            +FileUpload('announcement', 'uploadAttachment', [self.getId().valueOf(), self.getType()])#add-attachment.simple-gray-button
 each attachment, i in self.getAnnouncementAttachments()
     if attachment.isOwner()
         .announcement-item.attachment

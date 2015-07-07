@@ -1,12 +1,12 @@
 ﻿using System;
-using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Model
 {
-    public class AnnouncementInfo
+    public class  ClassAnnouncementInfo
     {
         public int AnnouncementId { get; set; }
-        public string Subject { get; set; }
+        public int ClassId { get; set; }
         public string Title { get; set; }
         public string Content { get; set; }
         public DateTime? ExpiresDate { get; set; }
@@ -19,22 +19,21 @@ namespace Chalkable.BusinessLogic.Model
         public bool HideFromStudents { get; set; }
 
 
-        public AnnouncementInfo()
+        public ClassAnnouncementInfo()
         {
             MaxScore = 100;
             WeightAddition = 0;
             WeightMultiplier = 1;
         }
 
-        public static AnnouncementInfo Create(Announcement announcement)
+        public static ClassAnnouncementInfo Create(ClassAnnouncement announcement)
         {
-            return new AnnouncementInfo
+            return new ClassAnnouncementInfo
                 {
                     ClassAnnouncementTypeId = announcement.ClassAnnouncementTypeRef,
                     AnnouncementId = announcement.Id,
                     Content = announcement.Content,
                     ExpiresDate = announcement.Expires,
-                    Subject = announcement.Subject,
                     MaxScore = announcement.MaxScore,
                     WeightAddition = announcement.WeightAddition,
                     WeightMultiplier = announcement.WeightMultiplier,

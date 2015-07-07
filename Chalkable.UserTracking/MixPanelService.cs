@@ -389,6 +389,25 @@ namespace Chalkable.UserTracking
             SendEvent(email, UserTrackingEvents.CreatedNewItem, properties);
         }
 
+        public void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached)
+        {
+            var properties = new Dictionary<string, object>();
+            properties[CLASS] = sClass;
+            properties[APPS_ATTACHED] = appsAttached;
+            properties[DOCS_ATTACHED] = docsAttached;
+            SendEvent(email, UserTrackingEvents.CreatedNewLessonPlan, properties);
+        }
+
+        private const string ADMIN = "admin";
+        public void CreateNewAdminItem(string email, string adminName,  int appsAttached, int docsAttached)
+        {
+            var properties = new Dictionary<string, object>();
+            properties[ADMIN] = adminName;
+            properties[APPS_ATTACHED] = appsAttached;
+            properties[DOCS_ATTACHED] = docsAttached;
+            SendEvent(email, UserTrackingEvents.CreatedNewAdminItem, properties);       
+        }
+
         private const string REPORT_TYPE = "report-type";
         public void CreatedReport(string email, string reportType)
         {

@@ -12,7 +12,9 @@ namespace Chalkable.Data.Common.Orm
     {
 
         public const string SELECT_FORMAT = "SELECT {0} FROM [{1}] ";
+        public const string SELECT_COLUMN_FORMAT = "SELECT [{1}].[{0}] FROM [{1}]";
         public const string JOIN = "JOIN";
+        public const string ON = "ON";
         public const string SIMPLE_JOIN_FORMAT = JOIN + " [{0}] ON [{0}].[{1}] = [{2}].[{3}] ";
         public const string ASC = "ASC";
         public const string DESC = "DESC";
@@ -41,10 +43,13 @@ namespace Chalkable.Data.Common.Orm
                 && propertyInfo.GetCustomAttribute<NotDbFieldAttr>() == null;
         }
         
-        public static List<string> Fields(Type t, bool identityFields = true, bool pkFields = true)
+        public static List<string> Fields(Type t, bool identityFields = true, bool pkFields = true, bool declaredOnly = false)
         {
             var res = new List<string>();
-            var props = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
+            var flag = BindingFlags.Instance | BindingFlags.Public;
+            if(declaredOnly)
+                flag = flag | BindingFlags.DeclaredOnly;
+            var props = t.GetProperties(flag);
             foreach (var propertyInfo in props)
                 if (propertyInfo.CanWrite && propertyInfo.CanRead)
                 {
@@ -128,10 +133,15 @@ namespace Chalkable.Data.Common.Orm
 
         public static DbQuery SimpleListInsert<T>(IList<T> objs)
         {
-            var res = new DbQuery {Parameters = new Dictionary<string, object>()};
-            var b = new StringBuilder();
             var t = typeof(T);
             var fields = Fields(t, false);
+            return SimpleListInsert(t, objs, fields);
+        }
+
+        public static DbQuery SimpleListInsert<T>(Type t, IList<T> objs, IList<string> fields)
+        {
+            var res = new DbQuery { Parameters = new Dictionary<string, object>() };
+            var b = new StringBuilder();
             b.Append("Insert into [").Append(t.Name).Append("] (");
             b.Append(fields.Select(x => "[" + x + "]").JoinString(",")).Append(")");
             b.Append(" values ");
@@ -147,7 +157,7 @@ namespace Chalkable.Data.Common.Orm
                 {
                     var fieldValue = t.GetProperty(field).GetValue(objs[i]);
                     res.Parameters.Add(field + "_" + i.ToString(), fieldValue);
-                }                
+                }
             }
             res.Sql = b;
             return res;

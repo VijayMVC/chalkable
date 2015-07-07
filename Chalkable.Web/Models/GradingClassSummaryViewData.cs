@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Mapping;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Models.AnnouncementsViewData;
 
 namespace Chalkable.Web.Models
@@ -69,7 +70,7 @@ namespace Chalkable.Web.Models
             {
                 foreach (var gradedClassAnnouncementType in announcementTypes)
                 {
-                    var anns = announcements.Where(x => x.ClassAnnouncementTypeRef == gradedClassAnnouncementType.Id).ToList();
+                    var anns = announcements.Where(x => x.ClassAnnouncementData.ClassAnnouncementTypeRef == gradedClassAnnouncementType.Id).ToList();
                     res.ByAnnouncementTypes.Add(GradingClassSummaryItemViewData.Create(anns, gradedClassAnnouncementType));
                 }
             }
@@ -80,7 +81,7 @@ namespace Chalkable.Web.Models
     public class GradingClassSummaryItemViewData
     {
         public ClassAnnouncementTypeViewData Type { get; set; }
-        public IList<AnnouncementShortViewData> Announcements { get; set; }
+        public IList<ClassAnnouncementViewData> Announcements { get; set; }
         public decimal Percent { get; set; }
         public decimal? Avg { get; set; }
         
@@ -92,7 +93,7 @@ namespace Chalkable.Web.Models
                     Percent = announcementType.Percentage,
                     Type = ClassAnnouncementTypeViewData.Create(announcementType),
                     Avg = (decimal?) announcementType.Avg,
-                    Announcements = announcements.Select(AnnouncementShortViewData.Create).ToList()
+                    Announcements = announcements.Select(x=>ClassAnnouncementViewData.Create(x.ClassAnnouncementData)).ToList()
                 };
             return res;
         }

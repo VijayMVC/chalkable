@@ -1,4 +1,6 @@
-﻿namespace Chalkable.Data.School.Model
+﻿using Chalkable.Data.School.Model.Announcements;
+
+namespace Chalkable.Data.School.Model
 {
 
     public enum StudentAnnouncementStateEnum

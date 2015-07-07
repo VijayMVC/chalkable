@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -44,13 +45,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public override Announcement GetAnnouncement(IEnumerable<AnnouncementComplex> announcements, 
             int announcementId, int roleId, int userId)
         {
-            var announcementRecipients =
-                ((DemoAnnouncementService) ServiceLocator.AnnouncementService).GetAnnouncementRecipients(
-                    announcementId, roleId, userId, true).Select(x => x.AnnouncementRef);
-            return
-                announcements.Where(x => x.Id == announcementId && x.PrimaryTeacherRef == userId || announcementRecipients.Contains(x.Id))
-                    .Select(x => x)
-                    .First();
+            //TODO it later
+            throw new NotImplementedException();
+            //var announcementRecipients =
+            //    ((DemoAnnouncementService) ServiceLocator.AnnouncementService).GetAnnouncementRecipients(
+            //        announcementId, roleId, userId, true).Select(x => x.AnnouncementRef);
+            //return
+            //    announcements.Where(x => x.Id == announcementId && x.PrimaryTeacherRef == userId || announcementRecipients.Contains(x.Id))
+            //        .Select(x => x)
+            //        .First();
         }
     }
 
@@ -63,25 +66,28 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public override IEnumerable<AnnouncementComplex> GetAnnouncements(IEnumerable<AnnouncementComplex> announcements, AnnouncementsQuery query)
         {
-            return announcements.Where(x => x.VisibleForStudent).OrderByDescending(x => x.Id).ToList();
+            throw new NotImplementedException();
+            //return announcements.Where(x => x.VisibleForStudent).OrderByDescending(x => x.Id).ToList();
         }
 
         public override Announcement GetAnnouncement(IEnumerable<AnnouncementComplex> announcements,
             int announcementId, int roleId, int userId)
         {
-            var classRefs = ServiceLocator.ClassService.GetClassPersons(userId, null).Select(x => x.ClassRef).ToList();
-            var gradeLevelRefs = ((DemoSchoolYearService)ServiceLocator.SchoolYearService)
-                .GetStudentAssignments(userId).Select(x => x.GradeLevelRef).ToList();
+            //TODO : it later
+            throw new NotImplementedException();
+            //var classRefs = ServiceLocator.ClassService.GetClassPersons(userId, null).Select(x => x.ClassRef).ToList();
+            //var gradeLevelRefs = ((DemoSchoolYearService)ServiceLocator.SchoolYearService)
+            //    .GetStudentAssignments(userId).Select(x => x.GradeLevelRef).ToList();
 
-            var annRecipients =
-                ((DemoAnnouncementService) ServiceLocator.AnnouncementService).GetAnnouncementRecipients(
-                    announcementId, roleId, userId, true)
-                   // .Where(x => x.GradeLevelRef != null && gradeLevelRefs.Contains(x.GradeLevelRef.Value))
-                    .Select(x => x.AnnouncementRef);
+            //var annRecipients =
+            //    ((DemoAnnouncementService) ServiceLocator.AnnouncementService).GetAnnouncementRecipients(
+            //        announcementId, roleId, userId, true)
+            //       // .Where(x => x.GradeLevelRef != null && gradeLevelRefs.Contains(x.GradeLevelRef.Value))
+            //        .Select(x => x.AnnouncementRef);
 
-            return announcements.Where(x => x.Id == announcementId && classRefs.Contains(x.ClassRef.Value) || annRecipients.Contains(x.Id))
-                  .Select(x => x)
-                  .First();
+            //return announcements.Where(x => x.Id == announcementId && classRefs.Contains(x.ClassRef.Value) || annRecipients.Contains(x.Id))
+            //      .Select(x => x)
+            //      .First();
         }
     }
 

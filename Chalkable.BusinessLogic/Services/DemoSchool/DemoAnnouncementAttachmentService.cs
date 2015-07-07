@@ -9,6 +9,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
@@ -42,15 +43,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             AnnouncementAttachmentStorage = new DemoAnnouncementAttachmentStorage();
         }
 
-        private bool CanAttach(Announcement ann)
+        private bool CanAttach(AnnouncementComplex ann)
         {
+            //TODO: rewrite this method later
+            int? classId = null;
+            if (ann.ClassAnnouncementData != null) 
+                classId = ann.ClassAnnouncementData.ClassRef;
+            if (ann.LessonPlanData != null)
+                classId = ann.LessonPlanData.ClassRef;
             return AnnouncementSecurity.CanModifyAnnouncement(ann, Context)
-                || ((DemoClassService)ServiceLocator.ClassService).ClassPersonExists(ann.ClassRef.Value, Context.PersonId);
+                || (classId.HasValue && ((DemoClassService)ServiceLocator.ClassService).ClassPersonExists(classId.Value, Context.PersonId));
         }
 
-        public Announcement AddAttachment(int announcementId, byte[] content, string name, string uuid)
+        public Announcement AddAttachment(int announcementId, AnnouncementType annType, byte[] content, string name, string uuid)
         {
-            var ann = ServiceLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
+            var ann = ServiceLocator.GetAnnouncementService(annType).GetAnnouncementDetails(announcementId);
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             if (!CanAttach(ann))
@@ -63,7 +70,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 AttachedDate = Context.NowSchoolTime,
                 Name = name,
                 Uuid = uuid,
-                Order = ServiceLocator.AnnouncementService.GetNewAnnouncementItemOrder(ann)
+                Order = ServiceLocator.GetAnnouncementService(annType).GetNewAnnouncementItemOrder(ann)
             };
 
             var attachment = AnnouncementAttachmentStorage.Add(annAtt);
@@ -72,11 +79,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (ann.State != AnnouncementState.Draft)
             {
                 if (ann.IsOwner)
-                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId);
+                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId, annType);
                 else
-                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToTeachers(announcementId, Context.PersonId.Value);
+                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToTeachers(announcementId, annType, Context.PersonId.Value);
             }
             return ann;
+        }
+
+        public void AddAttachmentToBlob(IList<AttachmentContentInfo> attachmentContent)
+        {
+            throw new NotImplementedException();
         }
 
         public void DeleteAttachment(int announcementAttachmentId)
@@ -92,72 +104,73 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private IList<AnnouncementAttachment> GetAttachmentsQuery(AnnouncementAttachmentQuery query)
         {
-            query.CallerId = Context.PersonId;
-            query.RoleId = Context.Role.Id;
+            throw new NotImplementedException();
+            //query.CallerId = Context.PersonId;
+            //query.RoleId = Context.Role.Id;
 
-            var attachments = AnnouncementAttachmentStorage.GetData().Select(x => x.Value);
+            //var attachments = AnnouncementAttachmentStorage.GetData().Select(x => x.Value);
 
-            if (query.AnnouncementId.HasValue)
-            {
-                attachments = attachments.Where(x => x.AnnouncementRef == query.AnnouncementId);
-            }
+            //if (query.AnnouncementId.HasValue)
+            //{
+            //    attachments = attachments.Where(x => x.AnnouncementRef == query.AnnouncementId);
+            //}
 
-            if (CoreRoles.SUPER_ADMIN_ROLE.Id == query.RoleId)
-            {
-                return attachments.ToList();
-            }
-            if (CoreRoles.DISTRICT_ADMIN_ROLE.Id == query.RoleId)
-            {
+            //if (CoreRoles.SUPER_ADMIN_ROLE.Id == query.RoleId)
+            //{
+            //    return attachments.ToList();
+            //}
+            //if (CoreRoles.DISTRICT_ADMIN_ROLE.Id == query.RoleId)
+            //{
 
-                attachments = attachments.Where(x => x.PersonRef == query.CallerId);
-                return attachments.ToList();
-            }
-            if (CoreRoles.TEACHER_ROLE.Id == query.RoleId)
-            {
-                var announcementRefs = ((DemoAnnouncementService)ServiceLocator.AnnouncementService)
-                    .GetAnnouncementRecipients(null)
-                        .Select(x => x.AnnouncementRef).ToList();
+            //    attachments = attachments.Where(x => x.PersonRef == query.CallerId);
+            //    return attachments.ToList();
+            //}
+            //if (CoreRoles.TEACHER_ROLE.Id == query.RoleId)
+            //{
+            //    var announcementRefs = ((DemoAnnouncementService)ServiceLocator.AnnouncementService)
+            //        .GetAnnouncementRecipients(null)
+            //            .Select(x => x.AnnouncementRef).ToList();
 
-                if (announcementRefs.Count > 0)
-                    attachments = attachments.Where(x =>
-                        {
-                            var announcement = ServiceLocator.AnnouncementService.GetAnnouncementById(x.AnnouncementRef);
-                            return x.PersonRef == query.CallerId || x.PersonRef == announcement.PrimaryTeacherRef || announcementRefs.Contains(x.AnnouncementRef);
-                        });
+            //    if (announcementRefs.Count > 0)
+            //        attachments = attachments.Where(x =>
+            //            {
+            //                var announcement = ServiceLocator.AnnouncementService.GetAnnouncementById(x.AnnouncementRef);
+            //                return x.PersonRef == query.CallerId || x.PersonRef == announcement.PrimaryTeacherRef || announcementRefs.Contains(x.AnnouncementRef);
+            //            });
 
-            }
-            if (CoreRoles.STUDENT_ROLE.Id == query.RoleId)
-            {
-                var classRefs = ServiceLocator.ClassService.GetClassPersons(query.CallerId.Value, null).Select(x => x.ClassRef).ToList();
+            //}
+            //if (CoreRoles.STUDENT_ROLE.Id == query.RoleId)
+            //{
+            //    var classRefs = ServiceLocator.ClassService.GetClassPersons(query.CallerId.Value, null).Select(x => x.ClassRef).ToList();
 
-                attachments = attachments.Where(x =>
-                {
-                    var classRef = ServiceLocator.AnnouncementService.GetAnnouncementById(x.AnnouncementRef).ClassRef;
-                    return (x.PersonRef == query.CallerId || classRefs.Contains(classRef.Value));
-                });
-                return attachments.ToList();
-            }
+            //    attachments = attachments.Where(x =>
+            //    {
+            //        var classRef = ServiceLocator.AnnouncementService.GetAnnouncementById(x.AnnouncementRef).ClassRef;
+            //        return (x.PersonRef == query.CallerId || classRefs.Contains(classRef.Value));
+            //    });
+            //    return attachments.ToList();
+            //}
 
 
-            if (!query.NeedsAllAttachments)
-                attachments = attachments.Where(x => x.PersonRef == query.CallerId);
+            //if (!query.NeedsAllAttachments)
+            //    attachments = attachments.Where(x => x.PersonRef == query.CallerId);
 
-            if (!string.IsNullOrEmpty(query.Filter))
-            {
-                var filters =
-                    query.Filter.Trim()
-                        .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
-                        .Select(x => x.ToLower())
-                        .ToList();
+            //if (!string.IsNullOrEmpty(query.Filter))
+            //{
+            //    var filters =
+            //        query.Filter.Trim()
+            //            .Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries)
+            //            .Select(x => x.ToLower())
+            //            .ToList();
 
-                attachments = attachments.Where(x => filters.Contains(x.Name.ToLower()));
-            }
+            //    attachments = attachments.Where(x => filters.Contains(x.Name.ToLower()));
+            //}
 
-            if (query.Start.HasValue)
-                attachments = attachments.Skip(query.Start.Value);
-            if (query.Count.HasValue)
-                attachments = attachments.Take(query.Count.Value);
-            return attachments.ToList();
+            //if (query.Start.HasValue)
+            //    attachments = attachments.Skip(query.Start.Value);
+            //if (query.Count.HasValue)
+            //    attachments = attachments.Take(query.Count.Value);
+            //return attachments.ToList();
         }
 
         public IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)
@@ -187,10 +200,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public AttachmentContentInfo GetAttachmentContent(int announcementAttachmentId)
         {
             var att = GetAttachmentById(announcementAttachmentId);
-            var content = ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, announcementAttachmentId.ToString());
-            return AttachmentContentInfo.Create(att, content);
-            
+            return GetAttachmentContent(att);
         }
+
+        public AttachmentContentInfo GetAttachmentContent(AnnouncementAttachment announcementAttachment)
+        {
+            var content = ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, announcementAttachment.Id.ToString());
+            return AttachmentContentInfo.Create(announcementAttachment, content);
+        }
+
         public IList<AnnouncementAttachment> GetAttachments(string filter)
         {
             return GetAttachmentsQuery(new AnnouncementAttachmentQuery
@@ -228,12 +246,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AnnouncementAttachment> DuplicateFrom(int fromAnnouncementId, int toAnnouncementId)
         {
-            var sourceAnnouncement = ServiceLocator.AnnouncementService.GetAnnouncementDetails(fromAnnouncementId);
+            var sourceAnnouncement = ServiceLocator.ClassAnnouncementService.GetAnnouncementDetails(fromAnnouncementId);
             foreach (var sourceAnnouncementAttachment in sourceAnnouncement.AnnouncementAttachments)
             {
                 var content = ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS,
                     sourceAnnouncementAttachment.Id.ToString(CultureInfo.InvariantCulture));
-                AddAttachment(toAnnouncementId, content, sourceAnnouncementAttachment.Name, "");
+                AddAttachment(toAnnouncementId, AnnouncementType.Class, content, sourceAnnouncementAttachment.Name, "");
             }
             return GetAttachments(toAnnouncementId);
         }

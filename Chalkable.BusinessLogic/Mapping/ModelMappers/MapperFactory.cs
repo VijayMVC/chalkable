@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Mapping.ModelMappers
@@ -21,11 +22,16 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             _customMappers = new Dictionary<Pair<Type, Type>, Object>
                     {
                         {new Pair<Type, Type>(typeof(Announcement), typeof(Activity)), new ActivityToAnnouncementMapper()},
-                        {new Pair<Type, Type>(typeof(AnnouncementComplex), typeof(Activity)), new ActivityToAnnouncementMapper()},
-                        {new Pair<Type, Type>(typeof(AnnouncementDetails), typeof(Activity)), new ActivityToAnnouncementMapper()},
+                        {new Pair<Type, Type>(typeof(ClassAnnouncement), typeof(Activity)), new ActivityToClassAnnouncementMapper()},
+                        {new Pair<Type, Type>(typeof(AnnouncementComplex), typeof(Activity)), new ActivityToAnnouncementComplexMapper()},
+                        {new Pair<Type, Type>(typeof(AnnouncementDetails), typeof(Activity)), new ActivityToAnnouncementDetailsMapper()},
+
+                        {new Pair<Type, Type>(typeof(Activity), typeof(Announcement)), new AnnouncementToActivityMapper()},
+                        {new Pair<Type, Type>(typeof(Activity), typeof(ClassAnnouncement)), new ClassAnnouncementToActivityMapper()},
                         {new Pair<Type, Type>(typeof(Activity), typeof(AnnouncementComplex)), new AnnouncementComplexToActivityMapper()},
-                        {new Pair<Type, Type>(typeof(Activity), typeof(AnnouncementDetails)), new AnnouncementComplexToActivityMapper()},
-                        {new Pair<Type, Type>(typeof(StiAttachment), typeof(AnnouncementAttachment)), new AnnouncementAttToActivityAttMapper()},
+                        {new Pair<Type, Type>(typeof(Activity), typeof(AnnouncementDetails)), new AnnouncementDetailsToActivityMapper()},
+
+                        {new Pair<Type, Type>(typeof(ActivityAttachment), typeof(AnnouncementAttachment)), new AnnouncementAttToActivityAttMapper()},
                         {new Pair<Type, Type>(typeof(AnnouncementAttachment), typeof(ActivityAttachment)), new StiAttachmentToAnnouncementAttMapper()},
                         {new Pair<Type, Type>(typeof(AnnouncementAttachment), typeof(StiAttachment)), new StiAttachmentToAnnouncementAttMapper()},
                         {new Pair<Type, Type>(typeof(StudentAnnouncement), typeof(Score)), new ScoreToStudentAnnMapper()},
@@ -33,7 +39,8 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                         {new Pair<Type, Type>(typeof(Score), typeof(StudentAnnouncementDetails)), new StudentAnnouncementToScoreMapper()},
                         {new Pair<Type, Type>(typeof(Score), typeof(StudentAnnouncement)), new StudentAnnouncementToScoreMapper()},
                         {new Pair<Type, Type>(typeof(ClassDiscipline), typeof(DisciplineReferral)), new DisciplineReferralToClassDisciplineMapper()},
-                        {new Pair<Type, Type>(typeof(DisciplineReferral), typeof(ClassDiscipline)), new ClassDisciplineToDisciplineReferralMapper()}
+                        {new Pair<Type, Type>(typeof(DisciplineReferral), typeof(ClassDiscipline)), new ClassDisciplineToDisciplineReferralMapper()},
+                        {new Pair<Type, Type>(typeof(AnnouncementAssignedAttribute), typeof(ActivityAssignedAttribute)), new ActivityAssignedAttrToAnnouncementAssignedAttrMapper() }
                     };
         }
         public static IMapper<TReturn, TSource> GetMapper<TReturn, TSource>()

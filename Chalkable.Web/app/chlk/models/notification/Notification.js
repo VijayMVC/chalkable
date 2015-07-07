@@ -59,14 +59,6 @@ NAMESPACE('chlk.models.notification', function () {
             String, 'announcementTypeName',
             chlk.models.common.ChlkDate, 'created',
 
-            READONLY, Number, 'chalkableAnnouncementType',
-            Number, function getChalkableAnnouncementType(){
-                var res = this.getAnnouncementType();
-                if(res) return res;
-                if(this.isAdminAnnouncement()) return chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf();
-                return chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf();
-            },
-
             String, function getCreatedTime(){
                 var created = this.getCreated();
                 return created ? this.convertToTime_(created) : '';

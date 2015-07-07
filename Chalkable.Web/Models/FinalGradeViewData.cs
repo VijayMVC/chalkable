@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Models.DisciplinesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -70,7 +71,7 @@ namespace Chalkable.Web.Models
                 IList<StudentAnnouncementDetails> stAnns = gradeBook.Announcements
                     .Where(a => a.StudentAnnouncements.Any(stAnn => stAnn.StudentId == student.Id))
                     .Select(a => a.StudentAnnouncements.First(stAnn => stAnn.StudentId == student.Id)).ToList();
-                studentFinalGrade.StatsByType = StudentGradingByTypeStatsViewData.Create(gradeBook.Announcements, stAnns);
+                studentFinalGrade.StatsByType = StudentGradingByTypeStatsViewData.Create(gradeBook.Announcements.Select(x=>x.ClassAnnouncementData).ToList(), stAnns);
                 var currentStAttendance = finalGrade.Attendances.FirstOrDefault(x => x.StudentId == student.Id);
                 studentFinalGrade.Attendance = FinalStudentAttendanceViewData.Create(currentStAttendance, finalGrade.Attendances);
                 var disciplines = finalGrade.Disciplines.Where(x => x.StudentId == student.Id).ToList();
@@ -130,7 +131,7 @@ namespace Chalkable.Web.Models
         public string ClassAnnouncementTypeName { get; set; }
         public IList<StudentGradingStatsViewData> StudentGradingStats { get; set; }
 
-        public static IList<StudentGradingByTypeStatsViewData> Create(IList<AnnouncementDetails> announcements
+        public static IList<StudentGradingByTypeStatsViewData> Create(IList<ClassAnnouncement> announcements
             , IList<StudentAnnouncementDetails> studentAnnouncements)
         {
             var res = new List<StudentGradingByTypeStatsViewData>();
@@ -157,7 +158,7 @@ namespace Chalkable.Web.Models
         public IList<ShortAnnouncementGradeViewData> AnnouncementGrades { get; set; }
         public decimal? Grade { get; set; }
 
-        public static IList<StudentGradingStatsViewData> Create(IList<AnnouncementDetails> announcements
+        public static IList<StudentGradingStatsViewData> Create(IList<ClassAnnouncement> announcements
             , IList<StudentAnnouncementDetails> studentAnnouncements)
         {
             var res = new List<StudentGradingStatsViewData>();

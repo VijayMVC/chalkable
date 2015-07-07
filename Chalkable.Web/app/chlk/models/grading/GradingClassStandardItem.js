@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.common.NameId');
-REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
+REQUIRE('chlk.models.announcement.ShortAnnouncementViewData');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.grading', function () {
             [ria.serialize.SerializeProperty('itemdescription')],
             chlk.models.common.NameId, 'itemDescription',
 
-            ArrayOf(chlk.models.announcement.BaseAnnouncementViewData), 'announcements',
+            ArrayOf(chlk.models.announcement.ShortAnnouncementViewData), 'announcements',
 
             Number, 'percent',
 

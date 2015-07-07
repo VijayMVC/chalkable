@@ -198,11 +198,11 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassStandardSummary(int classId)
         {
             var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId, null);
-            var anns = SchoolLocator.AnnouncementService.GetAnnouncements(null, null, false, classId);
+            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncements(null, null, classId);
             var schoolYearId = GetCurrentSchoolYearId();
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYearId, classId);
             var res = new List<GradingStandardClassSummaryViewData>();
-            var annSts = SchoolLocator.AnnouncementService.GetAnnouncementStandards(classId);
+            var annSts = SchoolLocator.ClassAnnouncementService.GetAnnouncementStandards(classId);
             foreach (var gradingPeriod in gradingPeriods)
             {
                 var gs = gradingStandards.Where(x => gradingPeriod.Id == x.GradingPeriodId).ToList();
@@ -237,7 +237,10 @@ namespace Chalkable.Web.Controllers
 
         private IList<AnnouncementViewData> GetGradedItems(int? start = null, int? count = null, int? classId = null)
         {
-            return FeedController.GetAnnouncementForFeedList(SchoolLocator, start, count, null, classId, false, true);
+            var st = start ?? 0;
+            var cn = count ?? 10;
+            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(null, null, classId, null, false, true, st, cn);
+            return FeedController.GetAnnouncementForFeedList(SchoolLocator, anns);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]

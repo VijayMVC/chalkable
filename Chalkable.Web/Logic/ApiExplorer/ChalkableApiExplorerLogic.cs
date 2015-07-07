@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -8,17 +7,15 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Web.Compilation;
 using System.Web.Mvc;
-using System.Xml;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
-using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
-using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Controllers;
+using Chalkable.Web.Controllers.AnnouncementControllers;
 using Chalkable.Web.Controllers.CalendarControllers;
 using Chalkable.Web.Controllers.PersonControllers;
 using Chalkable.Web.Models;
-using Chalkable.Web.Models.ChalkableApiExplorerViewData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -81,7 +78,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
             RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.List(DateTime.Today, DemoSchoolConstants.AlgebraClassId, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.Week(DateTime.Today, DemoSchoolConstants.AlgebraClassId, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.Day(DateTime.Today, null), ApiMethodCallType.Get);
-            RegisterApiMethodDefaults<AnnouncementController>(x => x.Read(1), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AnnouncementController>(x => x.Read(1, (int)AnnouncementType.Class), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AnnouncementTypeController>(x => x.List(DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<ClassController>(x => 
                 x.List(DemoSchoolConstants.CurrentSchoolYearId, DemoSchoolConstants.FirstMarkingPeriodId, DemoSchoolConstants.TeacherId, null, null), ApiMethodCallType.Post);

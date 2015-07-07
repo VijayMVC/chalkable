@@ -1,6 +1,8 @@
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.schoolYear.ScheduleSection');
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.announcement.LessonPlanViewData');
+REQUIRE('chlk.models.announcement.AdminAnnouncementViewData');
+REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 REQUIRE('chlk.models.Popup');
 REQUIRE('chlk.models.id.ClassId');
 
@@ -22,9 +24,13 @@ NAMESPACE('chlk.models.calendar.announcement', function () {
             [ria.serialize.SerializeProperty('schedulesection')],
             chlk.models.schoolYear.ScheduleSection, 'scheduleSection',
 
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements',
+            [ria.serialize.SerializeProperty('lessonplans')],
+            ArrayOf(chlk.models.announcement.LessonPlanViewData), 'lessonPlans',
 
-            ArrayOf(chlk.models.announcement.Announcement), 'items',
+            [ria.serialize.SerializeProperty('adminannouncements')],
+            ArrayOf(chlk.models.announcement.AdminAnnouncementViewData), 'adminAnnouncements',
+
+            ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements',
 
             String, 'todayClassName',
 

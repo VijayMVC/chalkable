@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 
@@ -16,17 +17,17 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult Ask(int announcementId, string question)
+        public ActionResult Ask(int announcementId, int announcementType, string question)
         {
-            var qna = SchoolLocator.AnnouncementQnAService.AskQuestion(announcementId, question);
+            var qna = SchoolLocator.AnnouncementQnAService.AskQuestion(announcementId, (AnnouncementType)announcementType, question);
             var res = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnA(qna.Id);
             return Json(AnnouncementQnAViewData.Create(res), 5);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult Answer(int announcementQnAId, string question, string answer)
+        public ActionResult Answer(int announcementQnAId, int announcementType, string question, string answer)
         {
-            var qna = SchoolLocator.AnnouncementQnAService.Answer(announcementQnAId, question, answer);
+            var qna = SchoolLocator.AnnouncementQnAService.Answer(announcementQnAId, (AnnouncementType)announcementType, question, answer);
             var res = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnA(qna.Id);
             return Json(AnnouncementQnAViewData.Create(res), 5);
         }
