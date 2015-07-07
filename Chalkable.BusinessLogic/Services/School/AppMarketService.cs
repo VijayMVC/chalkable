@@ -22,7 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
  
         IList<ApplicationInstall> ListInstalledAppInstalls(int personId);
         IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId);
-        ApplicationInstallAction Install(Guid applicationId, int? personId, IList<int> roleIds, IList<int> classIds, IList<Guid> departmentIds, IList<int> gradeLevelIds, int schoolYearId, DateTime dateTime);
+        ApplicationInstallAction Install(Guid applicationId, int? personId, IList<int> classIds, int schoolYearId, DateTime dateTime);
         IList<ApplicationInstall> GetInstallations(Guid applicationId, int personId, bool owners = true);
         ApplicationInstall GetInstallationForPerson(Guid applicationId, int personId);
         ApplicationInstall GetInstallationById(int applicationInstallId);
@@ -31,10 +31,10 @@ namespace Chalkable.BusinessLogic.Services.School
         void Uninstall(IList<int> applicationInstallIds);
         bool CanInstall(Guid applicationId, int? schoolPersonId, IList<int> classIds);
 
-        IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> roleIds, IList<int> classIds, IList<Guid> departmentIds, IList<int> gradeLevelIds);
+        IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> classIds);
         IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(int schoolYearId, Guid applicationId);
         
-        ApplicationTotalPriceInfo GetApplicationTotalPrice(Guid applicationId, int? schoolPerson, IList<int> roleids, IList<int> classids, IList<int> gradelevelids, IList<Guid> departmentids);
+        ApplicationTotalPriceInfo GetApplicationTotalPrice(Guid applicationId, int? schoolPerson, IList<int> classids);
         IList<ApplicationInstallHistory> GetApplicationInstallationHistory(Guid applicationId);
     }
 
@@ -42,9 +42,6 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         private const string APP_INSTALLED_FOR_FMT = "{0} was installed for : \n";
         private const string APP_CLASS_FMT = "Class {0} \n";
-        private const string APP_GRADE_LEVEL_FMT = "Grade Level {0} \n";
-        private const string APP_DEPARTMENT_FMT = "Department {0} \n";
-        private const string APP_ROLE_FMT = "Role {0} \n";
 
         public AppMarketService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -211,7 +208,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public bool IsPersonForInstall(Guid applicationId)
         {
-            var r = GetPersonsForApplicationInstallCount(applicationId, null, null, null, null, null).ToList();
+            var r = GetPersonsForApplicationInstallCount(applicationId, null, null).ToList();
             return r.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count > 0;
         }
 
@@ -331,8 +328,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> roleIds, IList<int> classIds,
-                                                          IList<Guid> departmentIds, IList<int> gradeLevelIds)
+        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> classIds)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);

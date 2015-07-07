@@ -101,23 +101,19 @@ namespace Chalkable.Web.Controllers
         public ActionResult Install(Guid applicationId, int? personId, IntList classids)
         {
             var schoolyearId = GetCurrentSchoolYearId();
-            if (!SchoolLocator.AppMarketService.CanInstall(applicationId, personId, roleIds, classids, gradelevelids, departmentids))
+            if (!SchoolLocator.AppMarketService.CanInstall(applicationId, personId, classids))
                 throw new ChalkableException(ChlkResources.ERR_APP_NOT_ENOUGH_MONEY_OR_ALREADY_INSTALLED);
 
-            var totalPrice = SchoolLocator.AppMarketService.GetApplicationTotalPrice(applicationId, personId, roleIds, classids, gradelevelids, departmentids).TotalPrice;
-            var appinstallAction = SchoolLocator.AppMarketService.Install(applicationId, personId, roleIds, classids, departmentids, gradelevelids, schoolyearId, Context.NowSchoolYearTime);
+            var totalPrice = SchoolLocator.AppMarketService.GetApplicationTotalPrice(applicationId, personId, classids).TotalPrice;
+            var appinstallAction = SchoolLocator.AppMarketService.Install(applicationId, personId, classids, schoolyearId, Context.NowSchoolYearTime);
             try
             {
-                if (departmentids == null) departmentids = new GuidList();
-                if (gradelevelids == null) gradelevelids = new IntList();
                 if (classids == null) classids = new IntList();
                 
                 //todo: person payment
                 // MasterLocator.FundService.AppInstallPersonPayment(appinstallAction.Id, totalPrice, Context.NowSchoolTime, ChlkResources.APP_WAS_BOUGHT);   
                 var classes = classids.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList();
-                var gradeLevels = gradelevelids.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList();
-                var departments = departmentids.Select(x => x.ToString()).ToList();
-                MasterLocator.UserTrackingService.BoughtApp(Context.Login, applicationId.ToString(), classes, departments, gradeLevels);
+                MasterLocator.UserTrackingService.BoughtApp(Context.Login, applicationId.ToString(), classes);
             }
             catch (Exception)
             {
@@ -146,17 +142,17 @@ namespace Chalkable.Web.Controllers
             if (Context.Role.Id == CoreRoles.DISTRICT_ADMIN_ROLE.Id)
                 history = SchoolLocator.AppMarketService.GetApplicationInstallationHistory(applicationId);
             var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings, history);
-            var persons = SchoolLocator.AppMarketService.GetPersonsForApplicationInstallCount(application.Id, Context.PersonId, null, null, null, null);
+            var persons = SchoolLocator.AppMarketService.GetPersonsForApplicationInstallCount(application.Id, Context.PersonId, null);
             res.InstalledForPersonsGroup = ApplicationLogic.PrepareInstalledForPersonGroupData(SchoolLocator, MasterLocator, application);
             res.IsInstalledOnlyForMe = persons.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count == 0;
             return Json(res);
         }
         
         [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher, Student")]
-        public ActionResult GetApplicationTotalPrice(Guid applicationid, int? personId, IntList classids, IntList roleids, GuidList departments, IntList gradelevelids)
+        public ActionResult GetApplicationTotalPrice(Guid applicationid, int? personId, IntList classids)
         {
             var app = MasterLocator.ApplicationService.GetApplicationById(applicationid);
-            var totalPrice = SchoolLocator.AppMarketService.GetApplicationTotalPrice(applicationid, personId, roleids, classids, gradelevelids, departments);
+            var totalPrice = SchoolLocator.AppMarketService.GetApplicationTotalPrice(applicationid, personId, classids);
             return Json(ApplicationTotalPriceViewData.Create(app, totalPrice));
         }
 

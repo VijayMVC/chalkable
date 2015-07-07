@@ -134,10 +134,6 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         {
             All = 0,
             Class = 1,
-            GradeLevel = 2,
-            Department = 3,
-            Role = 4,
-            Group = 5,
             CurrentUser = 6
         }
         public bool IsInstalled { get; set; }

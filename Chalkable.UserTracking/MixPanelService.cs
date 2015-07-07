@@ -321,25 +321,12 @@ namespace Chalkable.UserTracking
             SendEvent(email, UserTrackingEvents.CreatedApp, properties);
         }
 
-        private const string INSTALLED_FOR_ALL = "installed-for-all";
         private const string CLASSES = "classes";
-        private const string DEPARTMENTS = "departments";
-        private const string GRADE_LEVELS = "grade-levels";
-        public void BoughtApp(string email, string appName, List<string> classes, List<string> departments, List<string> gradeLevels)
+        public void BoughtApp(string email, string appName, List<string> classes)
         {
             var properties = new Dictionary<string, object>();
             properties[APP_NAME] = appName;
-
-            if (classes.Count == 0 && departments.Count == 0 && gradeLevels.Count == 0)
-            {
-                properties[INSTALLED_FOR_ALL] = true;
-            }
-            else
-            {
-                if (classes.Count > 0) properties[CLASSES] = classes;
-                if (departments.Count > 0) properties[DEPARTMENTS] = departments;
-                if (gradeLevels.Count > 0) properties[GRADE_LEVELS] = gradeLevels;
-            }
+            if (classes.Count > 0) properties[CLASSES] = classes;
             SendEvent(email, UserTrackingEvents.BoughtApp, properties);
         }
 

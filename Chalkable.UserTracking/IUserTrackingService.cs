@@ -30,7 +30,7 @@ namespace Chalkable.UserTracking
         void SubmittedForApprooval(string email, string appName, string shortDescription, string subjects, decimal price, decimal? pricePerSchool, decimal? pricePerClass);
         void UpdatedDraft(string email, string appName, string shortDescription, string subjects, decimal price, decimal? pricePerSchool, decimal? pricePerClass);
         void CreatedApp(string email, string appName);
-        void BoughtApp(string email, string appName, List<string> classes, List<string> departments, List<string> gradeLevels);
+        void BoughtApp(string email, string appName, List<string> classes);
         void LaunchedApp(string email, string appName);
         void ResetPassword(string email);
         void ChangedPassword(string email);

@@ -8,7 +8,6 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Logic
@@ -36,42 +35,7 @@ namespace Chalkable.Web.Logic
             res.Add(InstalledForPersonsGroupViewData.Create(InstalledForPersonsGroupViewData.GroupTypeEnum.All, null, "All", !isPersonForInstall));
             if (BaseSecurity.IsDistrictAdmin(maseterLocator.Context))
             {
-                var roles = new List<CoreRole>
-                    {
-                        CoreRoles.DISTRICT_ADMIN_ROLE,
-                        CoreRoles.TEACHER_ROLE,
-                        CoreRoles.STUDENT_ROLE
-                    };
-                var departments = maseterLocator.ChalkableDepartmentService.GetChalkableDepartments();
-                var depIds = departments.Select(x => x.Id).ToList();
-                var gradeLevels = schoolLocator.GradeLevelService.GetGradeLevels();
-                var glIds = gradeLevels.Select(x => x.Id).ToList();
-
-                var counts = schoolLocator.AppMarketService.GetPersonsForApplicationInstallCount(application.Id, null, roles.Select(x => x.Id).ToList(), null, depIds, glIds);
-                foreach (var role in roles)
-                {
-                    var groupId = role.Id.ToString();
-                    var c = counts.FirstOrDefault(x => x.Type == PersonsForAppInstallTypeEnum.Role && x.GroupId == groupId);
-                    var installed = c == null || c.Count == 0;
-                    res.Add(InstalledForPersonsGroupViewData.Create(InstalledForPersonsGroupViewData.GroupTypeEnum.Role, groupId,
-                        role.Name, installed));
-                }
-                foreach (var department in departments)
-                {
-                    var groupId = department.Id.ToString();
-                    var c = counts.FirstOrDefault(x => x.Type == PersonsForAppInstallTypeEnum.Department && x.GroupId == groupId);
-                    var installed = c == null || c.Count == 0;
-                    res.Add(InstalledForPersonsGroupViewData.Create(InstalledForPersonsGroupViewData.GroupTypeEnum.Department, groupId,
-                        department.Name, installed));
-                }
-                foreach (var gradeLevel in gradeLevels)
-                {
-                    var groupId = gradeLevel.Id.ToString();
-                    var c = counts.FirstOrDefault(x => x.Type == PersonsForAppInstallTypeEnum.GradeLevel && x.GroupId == groupId);
-                    var installed = c == null || c.Count == 0;
-                    res.Add(InstalledForPersonsGroupViewData.Create(InstalledForPersonsGroupViewData.GroupTypeEnum.GradeLevel, groupId,
-                        gradeLevel.Name, installed));
-                }
+                throw new NotImplementedException();
             }
             if (maseterLocator.Context.Role == CoreRoles.TEACHER_ROLE)
             {

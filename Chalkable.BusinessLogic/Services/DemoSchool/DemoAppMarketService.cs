@@ -145,39 +145,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     (appInstalls.Count > 0 || appInstalls.All(install => install.PersonRef != cp.PersonRef)))
             }).ToList();
         }
-
-        private void PrepareDepartmentInstalls(ICollection<Guid> departmentIds, IEnumerable<KeyValuePair<int, int>> personsForInstall, List<PersonsForApplicationInstall> result)
-        {
-            if (departmentIds == null) return;
-            var personRefs = personsForInstall.Select(x => x.Key).ToList();
-            var mpId = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolTime).Id;
-            var filtered =
-                ((DemoClassService)ServiceLocator.ClassService).GetClassPersons().Where(x =>
-                {
-                    var cls = ServiceLocator.ClassService.GetById(x.ClassRef);
-                    return personRefs.Contains(x.PersonRef) && cls.ChalkableDepartmentRef != null &&
-                           departmentIds.Contains(cls.ChalkableDepartmentRef.Value) && x.MarkingPeriodRef == mpId;
-                }).Select(x =>
-                {
-                    var chalkableDepartmentRef = ServiceLocator.ClassService.GetById(x.ClassRef).ChalkableDepartmentRef;
-                    return chalkableDepartmentRef != null
-                        ? new
-                        {
-                            x.PersonRef,
-                            DepartmentName = ServiceLocator.ServiceLocatorMaster.ChalkableDepartmentService
-                            .GetChalkableDepartmentById(chalkableDepartmentRef.Value).Name
-                        }
-                        : new { x.PersonRef, DepartmentName = "" };
-                });
-
-            result.AddRange(filtered.Select(x => new PersonsForApplicationInstall
-            {
-                GroupId = x.DepartmentName,
-                PersonId = x.PersonRef,
-                Type = PersonsForAppInstallTypeEnum.Department
-            }));
-        }
-
+        
         private void PrepareClassInstalls(IList<int> classIds, IEnumerable<KeyValuePair<int, int>> personsForInstall,
             List<PersonsForApplicationInstall> result, int callerRoleId)
         {
@@ -213,10 +181,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
         }
 
-        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int userId, int? personId, IList<int> roleIds, IList<Guid> departmentIds, IList<int> gradeLevelIds, IList<int> classIds, int id, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
+        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int userId, int? personId, IList<int> classIds, int id, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
-            var personsForAppInstall = GetPersonsForApplicationInstall(applicationId, userId, personId, roleIds, departmentIds,
-                gradeLevelIds, classIds, id, hasAdminMyApps, hasTeacherMyApps, hasStudentMyApps, canAttach, schoolYearId);
+            var personsForAppInstall = GetPersonsForApplicationInstall(applicationId, userId, personId, classIds, id, hasAdminMyApps, hasTeacherMyApps, hasStudentMyApps, canAttach, schoolYearId);
 
             var res =
                 (personsForAppInstall.GroupBy(p => new {p.Type, p.GroupId}).Select(gr => new
@@ -261,20 +228,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return canInstall;
         }
 
-        private static void PrepareRoleInstalls(ICollection<int> roleIds, List<PersonsForApplicationInstall> result, IEnumerable<KeyValuePair<int, int>> personsForInstall)
-        {
-            if (roleIds == null) return;
-            result.AddRange(
-                personsForInstall.Where(x => roleIds.Contains(x.Value)).Select(x => new PersonsForApplicationInstall
-                {
-                    GroupId = x.Key.ToString(CultureInfo.InvariantCulture),
-                    PersonId = x.Key,
-                    Type = PersonsForAppInstallTypeEnum.Role
-                }));
-        }
-
-        private static void PreparePersonInstalls(int? personId, IList<int> roleIds, IList<Guid> departmentIds, IList<int> gradeLevelIds,
-            IList<int> classIds, int callerRoleId, int? callerId, List<PersonsForApplicationInstall> result,
+        private static void PreparePersonInstalls(int? personId, IList<int> classIds, int callerRoleId, int? callerId, List<PersonsForApplicationInstall> result,
             List<KeyValuePair<int, int>> personsForInstall)
         {
             var isSinglePerson = false;
@@ -282,7 +236,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (callerRoleId == CoreRoles.TEACHER_ROLE.Id && !personId.HasValue)
             {
                 personId = callerId;
-                isSinglePerson = true;
             }
 
             if (personId.HasValue)
@@ -294,20 +247,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     Type = PersonsForAppInstallTypeEnum.Person
                 }));
             }
-
-            if (roleIds == null && departmentIds == null && gradeLevelIds == null && classIds == null &&
-                (isSinglePerson || !personId.HasValue))
-            {
-                result.AddRange(personsForInstall.Select(x => new PersonsForApplicationInstall
-                {
-                    GroupId = x.Key.ToString(CultureInfo.InvariantCulture),
-                    PersonId = x.Key,
-                    Type = PersonsForAppInstallTypeEnum.Person
-                }));
-            }
         }
 
-        public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, int value, int? personId, IList<int> roleIds, IList<Guid> departmentIds, IList<int> gradeLevelIds, IList<int> classIds, int id, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
+        public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, int value, int? personId, IList<int> classIds, int id, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
         {
 
             var callerRoleId = Context.RoleId;
@@ -352,12 +294,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             personsForInstall = personsForInstall.Where(x => !installed.Contains(x.Key)).ToList();
 
             var result = new List<PersonsForApplicationInstall>();
-            PrepareRoleInstalls(roleIds, result, personsForInstall);
-            PrepareDepartmentInstalls(departmentIds, personsForInstall, result);
             PrepareClassInstalls(classIds, personsForInstall, result, callerRoleId);
-            PreparePersonInstalls(personId, roleIds, departmentIds, gradeLevelIds, classIds, callerRoleId, callerId, result, personsForInstall);
-            if (gradeLevelIds != null && gradeLevelIds.Count > 0)
-                throw new NotImplementedException();
+            PreparePersonInstalls(personId, classIds, callerRoleId, callerId, result, personsForInstall);
             return result;
         }
 
@@ -378,23 +316,21 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return ApplicationInstallStorage.GetInstalledByAppId(applicationId, sy.Id);
         }
 
-        public ApplicationInstallAction Install(Guid applicationId, int? personId, IList<int> roleIds, IList<int> classIds,
-                                                IList<Guid> departmentIds, IList<int> gradeLevelIds, int schoolYearId, DateTime dateTime)
+        public ApplicationInstallAction Install(Guid applicationId, int? personId, IList<int> classIds, int schoolYearId, DateTime dateTime)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
 
-            if (!CanInstall(applicationId, personId, roleIds, classIds, gradeLevelIds, departmentIds))
+            if (!CanInstall(applicationId, personId, classIds))
                 throw new ChalkableException(ChlkResources.ERR_APP_NOT_ENOUGH_MONEY);
-            ChargeMoneyForAppInstall(applicationId, personId, roleIds, classIds, gradeLevelIds, departmentIds);
+            ChargeMoneyForAppInstall(applicationId, personId, classIds);
 
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
-            var persons = GetPersonsForApplicationInstall(applicationId, Context.PersonId.Value, personId
-                                                , roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
+            var persons = GetPersonsForApplicationInstall(applicationId, Context.PersonId.Value, personId, classIds, Context.Role.Id
                                                , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, schoolYearId);
             var spIds = persons.Select(x => x.PersonId).Distinct().ToList();
             var schoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
-            var res = RegisterApplicationInstallAction(app, personId, roleIds, classIds, departmentIds, gradeLevelIds);
+            var res = RegisterApplicationInstallAction(app, personId, classIds);
             var appInstalls = new List<ApplicationInstall>();
 
             foreach (var spId in spIds)
@@ -418,7 +354,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
-        private ApplicationInstallAction RegisterApplicationInstallAction(Application app, int? personId, IList<int> roleids, IList<int> classids, IList<Guid> departmentids, IList<int> gradelevelids)
+        private ApplicationInstallAction RegisterApplicationInstallAction(Application app, int? personId, IList<int> classids)
         {
             
             var res = new ApplicationInstallAction
@@ -450,67 +386,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }
                 ApplicationInstallActionClassesStorage.Add(appInstallAcClasses);
             }
-
-            if (BaseSecurity.IsDistrictAdmin(Context))
-            {
-                if (gradelevelids != null)
-                {
-                    var gradeLevels = ServiceLocator.GradeLevelService.GetGradeLevels()
-                        .Where(x => app.GradeLevels.Any(y => y.GradeLevel == x.Number))
-                        .Where(x => gradelevelids.Contains(x.Id));
-                    var aiaGls = new List<ApplicationInstallActionGradeLevel>();
-                    foreach (var gradeLevel in gradeLevels)
-                    {
-                        descriptionBuilder.AppendFormat(APP_GRADE_LEVEL_FMT, gradeLevel.Name);
-                        aiaGls.Add(new ApplicationInstallActionGradeLevel
-                        {
-                            AppInstallActionRef = res.Id,
-                            GradeLevelRef = gradeLevel.Id
-                        });
-                    }
-                    ApplicationInstallActionGradeLevelStorage.Add(aiaGls);
-                }
-                if (departmentids != null)
-                {
-                    var departments = ServiceLocator.ServiceLocatorMaster.ChalkableDepartmentService.GetChalkableDepartments();
-                    departments = departments.Where(x => departmentids.Contains(x.Id)).ToList();
-
-                    var aiaDepartments = new List<ApplicationInstallActionDepartment>();
-                    foreach (var department in departments)
-                    {
-                        descriptionBuilder.AppendFormat(APP_DEPARTMENT_FMT, department.Name);
-                        aiaDepartments.Add(new ApplicationInstallActionDepartment
-                        {
-                            AppInstallActionRef = res.Id,
-                            DepartmentRef = department.Id,
-                        });
-                    }
-                    ApplicationInstallActionDepartmentStorage.Add(aiaDepartments);
-                }
-                if (roleids != null)
-                {
-                    var roles = roleids.Select(CoreRoles.GetById).ToList();
-
-                    var appInstallActionRoles = new List<ApplicationInstallActionRole>();
-                    foreach (var role in roles)
-                    {
-                        descriptionBuilder.AppendFormat(APP_ROLE_FMT, role.Name);
-                        appInstallActionRoles.Add(new ApplicationInstallActionRole
-                        {
-                            AppInstallActionRef = res.Id,
-                            RoleId = role.Id
-                        });
-                    }
-                    ApplicationInstallActionRoleStorage.Add(appInstallActionRoles);
-                }
-            }
             res.Description = descriptionBuilder.ToString();
             ApplicationInstallActionStorage.Update(res);
             return res;
         }
-
-
-
 
         public IList<ApplicationInstall> GetInstallations(Guid applicationId, int personId, bool owners = true)
         {
@@ -532,7 +411,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public bool IsPersonForInstall(Guid applicationId)
         {
-            var r = GetPersonsForApplicationInstallCount(applicationId, null, null, null, null, null).ToList();
+            var r = GetPersonsForApplicationInstallCount(applicationId, null, null).ToList();
             return r.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count > 0;
         }
 
@@ -554,19 +433,19 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public bool CanInstall(Guid applicationId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> gradelevelIds, IList<Guid> departmentIds)
+        public bool CanInstall(Guid applicationId, int? schoolPersonId, IList<int> classIds)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            var priceData = GetApplicationTotalPrice(applicationId, schoolPersonId, roleIds, classIds, gradelevelIds, departmentIds);
+            var priceData = GetApplicationTotalPrice(applicationId, schoolPersonId, classIds);
             var cnt = priceData.TotalCount;//ApplicationInstallCountInfo.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count.Value;
             var budgetBalance = ServiceLocator.ServiceLocatorMaster.FundService.GetUserBalance(Context.PersonId.Value);
             return (budgetBalance - priceData.TotalPrice >= 0 || priceData.TotalPrice == 0) && cnt > 0;
         }
 
-        private void ChargeMoneyForAppInstall(Guid applicationId, int? schoolPersonId, IList<int> roleIds, IList<int> classIds, IList<int> gradelevelIds, IList<Guid> departmentIds)
+        private void ChargeMoneyForAppInstall(Guid applicationId, int? schoolPersonId, IList<int> classIds)
         {
-            var priceData = GetApplicationTotalPrice(applicationId, schoolPersonId, roleIds, classIds, gradelevelIds, departmentIds);
+            var priceData = GetApplicationTotalPrice(applicationId, schoolPersonId, classIds);
 
             if (Context.PersonId.HasValue)
             {
@@ -589,20 +468,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
-        public ApplicationTotalPriceInfo GetApplicationTotalPrice(Guid applicationId, int? schoolPerson, IList<int> roleids, IList<int> classids, IList<int> gradelevelids, IList<Guid> departmentids)
+        public ApplicationTotalPriceInfo GetApplicationTotalPrice(Guid applicationId, int? schoolPerson, IList<int> classids)
         {
-            var isForAll = !(schoolPerson.HasValue || (roleids != null && roleids.Count > 0) || (classids != null && classids.Count > 0) ||
-                                   (gradelevelids != null && gradelevelids.Count > 0) || (departmentids != null && departmentids.Count > 0));
-            //var r = GetPersonsForApplicationInstallCount(applicationId, schoolPerson, roleids, classids, departmentids, gradelevelids).ToList();
-
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
-            var persons = GetPersonsForApplicationInstall(app, schoolPerson, roleids, classids, departmentids, gradelevelids);
-            var totalPrice = GetApplicationTotalPrice(app, persons, isForAll);
+            var persons = GetPersonsForApplicationInstall(app, schoolPerson, classids);
+            var totalPrice = GetApplicationTotalPrice(app, persons);
             var totalCount = persons.GroupBy(x => x.PersonId).Select(x => x.Key).Count();
             return ApplicationTotalPriceInfo.Create(totalPrice, totalCount);
         }
         
-        private decimal GetApplicationTotalPrice(Application app, IEnumerable<PersonsForApplicationInstall> applicationInstallCount, bool isForAll)
+        private decimal GetApplicationTotalPrice(Application app, IEnumerable<PersonsForApplicationInstall> applicationInstallCount)
         {
 
             decimal totalPrice = 0;
@@ -612,7 +487,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 if (BaseSecurity.IsDistrictAdmin(Context))
                 {
                     totalPrice = app.Price * totalCount;
-                    return totalPrice > app.PricePerSchool && isForAll && app.PricePerSchool.HasValue ? app.PricePerSchool.Value : totalPrice;
+                    return totalPrice;
                 }
                 if (Context.Role.Id == CoreRoles.TEACHER_ROLE.Id)
                 {
@@ -639,24 +514,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return totalPrice;
         }
 
-        private IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Application app, int? personId, IList<int> roleIds,
-                                                         IList<int> classIds, IList<Guid> departmentIds, IList<int> gradeLevelIds)
+        private IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Application app, int? personId, IList<int> classIds)
         {
             var sy = ((DemoSchoolYearService)ServiceLocator.SchoolYearService).GetByDate(Context.NowSchoolTime.Date);
             return GetPersonsForApplicationInstall(app.Id, Context.PersonId ?? 0
-                                                   , personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
+                                                   , personId, classIds, Context.Role.Id
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
         }
 
 
-        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> roleIds, IList<int> classIds,
-                                                          IList<Guid> departmentIds, IList<int> gradeLevelIds)
+        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> classIds)
         {
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
-
             var sy = ((DemoSchoolYearService)ServiceLocator.SchoolYearService).GetByDate(Context.NowSchoolTime.Date);
-            return GetPersonsForApplicationInstallCount(applicationId, Context.PersonId ?? 0, personId, roleIds, departmentIds, gradeLevelIds, classIds, Context.Role.Id
-                                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
+            return GetPersonsForApplicationInstallCount(applicationId, Context.PersonId ?? 0, personId, classIds, Context.Role.Id, app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
         }
 
         public IDictionary<Guid, int> GetNotInstalledStudentCountPerApp(int staffId, int classId, int markingPeriodId)

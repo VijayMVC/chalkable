@@ -83,7 +83,7 @@ namespace Chalkable.UserTracking
         {
         }
 
-        public void BoughtApp(string email, string appName, List<string> classes, List<string> departments, List<string> gradeLevels)
+        public void BoughtApp(string email, string appName, List<string> classes)
         {
         }
 
