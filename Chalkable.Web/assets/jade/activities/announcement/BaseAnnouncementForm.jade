@@ -23,12 +23,8 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
     -var isAdmin = userRole.isAdmin()
 
     +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
-    div(class=announcementItem.getExpiresDate() ? 'with-date' : '').title-block-container
-        if isAdmin
-            .title-block
-                INPUT(type="text", name="title", placeholder="Title", value=announcement.getTitle(), autocomplete="off", maxlength="30", class='validate[required]')#admin-title
-        else
-            +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
+    div(class=announcementItem.getExpiresDate() || isAdmin ? 'with-date' : '').title-block-container
+        +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
     -var needStandardsBlock = !isAdmin && (standards.length > 0 || announcement.isCanAddStandard())
     .table
         .left-block(class=needStandardsBlock ? 'with-standards' : '')

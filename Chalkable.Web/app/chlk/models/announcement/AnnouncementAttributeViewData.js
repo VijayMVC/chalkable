@@ -1,6 +1,8 @@
 REQUIRE('ria.serialize.SJX');
 REQUIRE('ria.serialize.IDeserializable');
+
 REQUIRE('chlk.models.id.AnnouncementAssignedAttributeId');
+REQUIRE('chlk.models.id.AnnouncementAssignedAttributeAttachmentId');
 REQUIRE('chlk.models.id.AnnouncementAttributeTypeId');
 
 NAMESPACE('chlk.models.announcement', function(){
@@ -8,21 +10,26 @@ NAMESPACE('chlk.models.announcement', function(){
 
     var SJX = ria.serialize.SJX;
 
+    /**@class chlk.models.announcement.AssignedAttributeAttachmentViewData*/
+
+    UNSAFE, FINAL, CLASS('AnnouncementAttributeAttachmentViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
+
+        chlk.models.id.AnnouncementAssignedAttributeAttachmentId, 'id',
+        String, 'name',
+        String, 'url',
+        String, 'thumbnailUrl',
+        Number, 'type',
+
+        VOID, function deserialize(raw) {
+            this.id = SJX.fromValue(raw.id, chlk.models.id.AnnouncementAssignedAttributeAttachmentId);
+            this.name = SJX.fromValue(raw.name, String);
+            this.url = SJX.fromValue(raw.url, String);
+            this.thumbnailUrl = SJX.fromValue(raw.thumbnailUrl, String);
+            this.type = SJX.fromValue(raw.type, Number);
+        }
+    ]);
+
     /**@class chlk.models.announcement.AnnouncementAttributeViewData*/
-
-    /*
-     public int AnnouncementRef { get; set; }
-     public int AttributeTypeId { get; set; }
-     public string Uuid { get; set; }
-
-     [NotDbFieldAttr]
-     public int? SisActivityId { get; set; }
-     [NotDbFieldAttr]
-     public int? SisAttributeId { get; set; }
-    * */
-
-
-
 
     UNSAFE, FINAL, CLASS('AnnouncementAttributeViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
         chlk.models.id.AnnouncementAssignedAttributeId, 'id',
@@ -37,8 +44,8 @@ NAMESPACE('chlk.models.announcement', function(){
 
         chlk.models.id.AnnouncementAttributeTypeId, 'attributeTypeId',
 
+        chlk.models.announcement.AnnouncementAttributeAttachmentViewData, 'attributeAttachment',
 
-        //add attribute attachment
 
         VOID, function deserialize(raw) {
             this.id = SJX.fromValue(raw.id, chlk.models.id.AnnouncementAssignedAttributeId);
@@ -47,8 +54,8 @@ NAMESPACE('chlk.models.announcement', function(){
             this.uuid = SJX.fromValue(raw.uuid, String);
             this.visibleForStudents = SJX.fromValue(raw.visibleforstudents, Boolean);
             this.attributeTypeId = SJX.fromValue(raw.attributetypeid, chlk.models.id.AnnouncementAttributeTypeId);
+            this.attributeAttachment = SJX.fromDeserializable(raw.attributeattachment, chlk.models.announcement.AnnouncementAttributeAttachmentViewData);
         },
-
 
         Object, function getPostData(){
             return {
@@ -56,7 +63,8 @@ NAMESPACE('chlk.models.announcement', function(){
                 text: this.getText() || '',
                 uuid: this.getUuid() || '',
                 visibleforstudents: this.isVisibleForStudents(),
-                attributyTypeId: this.getAttributeTypeId().valueOf()
+                attributyTypeId: this.getAttributeTypeId().valueOf(),
+                id: this.getId().valueOf()
             }
         }
     ]);

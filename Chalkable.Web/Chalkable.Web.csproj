@@ -312,6 +312,7 @@
     <Compile Include="Models\ClassroomOptionViewData.cs" />
     <Compile Include="Models\CommonCoreStandardViewData.cs" />
     <Compile Include="Models\AppTesterViewData.cs" />
+    <Compile Include="Models\AssignedAttributeAttachmentViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineTypeSummaryViewData.cs" />
     <Compile Include="Models\GradedItemViewData.cs" />

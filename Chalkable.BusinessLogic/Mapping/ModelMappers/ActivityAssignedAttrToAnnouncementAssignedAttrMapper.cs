@@ -19,6 +19,9 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                 announcementAttribute.Uuid = activityAttribute.Attachment.CrocoDocId.HasValue
                     ? activityAttribute.Attachment.CrocoDocId.ToString()
                     : "";
+                announcementAttribute.SisAttributeAttachmentId = activityAttribute.Attachment.AttachmentId;
+                announcementAttribute.SisAttachmentMimeType = activityAttribute.Attachment.MimeType;
+                announcementAttribute.SisAttachmentName = activityAttribute.Attachment.Name;
             }
         }
     }

@@ -26,9 +26,9 @@ namespace Chalkable.Web.Controllers
         private const string HTML_CONTENT_TYPE = "text/html";
 
         [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult AddAttributeAttachment(int announcementType, int announcementId)
+        public ActionResult AddAttributeAttachment(int announcementType, int announcementId, int assignedAttributeId)
         {
-            /*try
+            try
             {
                 EnsureAnnouncementExists(announcementType, announcementId);            
 
@@ -38,12 +38,12 @@ namespace Chalkable.Web.Controllers
                 {
                     return Json(new ChalkableException(ChlkResources.ERR_FILE_REQUIRED));
                 }
-                string uuid = nul;Al
+                string uuid = null;
                 if (SchoolLocator.CrocodocService.IsDocument(name))
                 {
                     uuid = SchoolLocator.CrocodocService.UploadDocument(name, bin).uuid;
                 }
-                var announcement = SchoolLocator.AnnouncementAttachmentService.AddAttachment(announcementType, announcementId, bin, name, uuid);
+                var announcement = SchoolLocator.AnnouncementAssignedAttributeService.AddAttributeAttachment(announcementType, announcementId, assignedAttributeId, bin, name, uuid);
                 AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id, (AnnouncementType)announcementType);
                 return Json(res, HTML_CONTENT_TYPE, 6);
             }
@@ -58,8 +58,17 @@ namespace Chalkable.Web.Controllers
                     ContentType = HTML_CONTENT_TYPE,
                     SerializationDepth = 4
                 };
-            }*/
-            throw new NotImplementedException();
+            }
+        }
+
+
+        [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult RemoveAttributeAttachment(int announcementType, int announcementId, int assignedAttributeId)
+        {
+            EnsureAnnouncementExists(announcementType, announcementId);
+            var announcement = SchoolLocator.AnnouncementAssignedAttributeService.RemoveAttributeAttachment(announcementType, announcementId, assignedAttributeId);
+            AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id, (AnnouncementType)announcementType);
+            return Json(res, HTML_CONTENT_TYPE, 6);
         }
 
         [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("DistrictAdmin, Teacher")]
