@@ -1160,7 +1160,9 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.announcement.FeedAnnouncementViewData]],
         function saveDistrictAdminAction(model){
-            if (model.getSubmitType() == 'saveNoUpdate'){
+            var submitType = model.getSubmitType();
+
+            if (submitType == 'saveNoUpdate'){
                 this.setNotAblePressSidebarButton(true);
                 this.adminAnnouncementService
                     .saveAdminAnnouncement(
@@ -1172,6 +1174,14 @@ NAMESPACE('chlk.controllers', function (){
                     )
                     .attach(this.validateResponse_());
                 return null;
+            }
+
+            if (submitType == 'saveTitle'){
+                return this.saveAdminTitleAction(model.getId(), model.getTitle())
+            }
+
+            if (submitType == 'checkTitle'){
+                return this.checkAdminTitleAction(model.getTitle(), model.getId());
             }
 
             var res = this.adminAnnouncementService
@@ -1197,6 +1207,28 @@ NAMESPACE('chlk.controllers', function (){
                 }
             }, this);
             return null;
+        },
+
+        [[chlk.models.id.AnnouncementId, String]],
+        function saveAdminTitleAction(announcementId, announcementTitle){
+            var result = this.adminAnnouncementService
+                .editTitle(announcementId, announcementTitle)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return new chlk.models.announcement.AnnouncementAttributeListViewData();
+                });
+            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, result, chlk.activities.lib.DontShowLoader());
+        },
+
+        [[String, chlk.models.id.AnnouncementId]],
+        function checkAdminTitleAction(title, annoId){
+            var res = this.adminAnnouncementService
+                .existsTitle(title, annoId)
+                .attach(this.validateResponse_())
+                .then(function(success){
+                    return new chlk.models.Success(success);
+                });
+            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, res, chlk.activities.lib.DontShowLoader());
         },
 
         [chlk.controllers.NotChangedSidebarButton()],

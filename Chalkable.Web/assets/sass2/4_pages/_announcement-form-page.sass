@@ -24,8 +24,11 @@
   .title-block
     margin-top: 16px
 
-    &:not(.active)
-      .input-container, .save-title-btn
+    &.class-announcement:not(.active)
+      .input-container
+        display: none
+
+      .save-title-btn
         display: none
 
     &.active

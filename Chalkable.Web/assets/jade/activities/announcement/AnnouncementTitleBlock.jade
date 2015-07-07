@@ -1,5 +1,7 @@
-.title-block
-    .title-text=self.getTitle()
+-var isClass = self.getType() == chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT
+.title-block(class = (isClass ? 'class-announcement' : ''))
+    if isClass
+        .title-text=self.getTitle()
     .edit-icon
     .input-container
         INPUT(data-title=self.getTitle(), type="text", name="title", class="validate[required]", value=self.getTitle(), autocomplete="off", maxlength="30")#title

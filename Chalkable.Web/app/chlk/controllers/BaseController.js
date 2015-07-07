@@ -116,7 +116,11 @@ NAMESPACE('chlk.controllers', function (){
                    }, this)
                    .catchException(chlk.lib.exception.ChalkableSisException, function(exception){
                        var msg = this.mapSisErrorMessage(exception.getMessage());
+
                        return this.ShowMsgBox(msg, 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                           .then(function(){
+                               this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
+                           }, this)
                            .thenBreak();
                    }, this)
                    .catchException(chlk.lib.exception.AppErrorException, function(exception){

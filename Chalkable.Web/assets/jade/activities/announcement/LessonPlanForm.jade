@@ -34,8 +34,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
 
                 +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
                 .title-block-container.with-date
-                    .title-block
-                        INPUT(type="text", name="title", placeholder="Title", value=announcement.getTitle(), autocomplete="off", maxlength="30", class='validate[required]')#admin-title
+                    +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
                 -var needStandardsBlock = (standards.length > 0 || announcement.isCanAddStandard())
                 .table
                     .left-block(class=needStandardsBlock ? 'with-standards' : '')
