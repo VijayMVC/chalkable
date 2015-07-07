@@ -101,6 +101,16 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return Json(AnnouncementAttributeViewData.Create(res));
         }
 
+        protected ActionResult EditTitle(int announcementId, AnnouncementType announcementType, string title, Func<string, bool> existsAction)
+        {
+            if (!existsAction(title))
+            {
+                SchoolLocator.GetAnnouncementService(announcementType).EditTitle(announcementId, title);
+                return Json(true);
+            }
+            return Json(false);
+        }
+
         protected CreateAnnouncementViewData PrepareCreateAnnouncementViewData(AnnouncementDetails annDetails)
         {
             return new CreateAnnouncementViewData

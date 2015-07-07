@@ -60,5 +60,11 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         {
            return Json(SchoolLocator.AdminAnnouncementService.Exists(title, excludeAdminAnnouncementId));
         }
+        
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult EditTitle(int announcementId, string title)
+        {
+            return EditTitle(announcementId, AnnouncementType.Admin, title, t => SchoolLocator.AdminAnnouncementService.Exists(t, announcementId));
+        }
     }
 }
