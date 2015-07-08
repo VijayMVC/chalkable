@@ -1,4 +1,14 @@
-Alter PROCEDURE [dbo].[spGetPersonsForApplicationInstall]
+USE [11111111-0DCB-4021-971E-C322D3656186]
+GO
+
+/****** Object:  StoredProcedure [dbo].[spGetPersonsForApplicationInstall]    Script Date: 08.07.2015 16:50:56 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[spGetPersonsForApplicationInstall]
 @applicationId uniqueidentifier, @callerId int, @personId int, @classIds nvarchar(2048), @callerRoleId int
 , @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolYearId int
 as
@@ -64,7 +74,7 @@ begin
 			Insert Into @preResult
 				([type], groupId, SchoolYearId, PersonId)
 			Select Distinct 
-				3, Class.Id, ClassPerson.PersonRef, Class.SchoolYearRef
+				3, Class.Id, Class.SchoolYearRef, ClassPerson.PersonRef
 			From
 				ClassPerson
 				join Class on ClassPerson.ClassRef = Class.id
@@ -101,6 +111,7 @@ from
 	
 select *
 from @preResult
+
 GO
 
 
