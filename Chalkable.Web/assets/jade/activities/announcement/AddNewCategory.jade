@@ -1,0 +1,10 @@
+.dialog.edit-groups
+    .x-window-header
+        h1 Add Category
+        .close.close-btn
+    +ActionForm('announcement', 'addCategory').category-form
+        .groups-container
+            INPUT(type="text", name="value")
+        .buttons-container
+            BUTTON(type="submit").special-button2.add.add-group + New Category
+
