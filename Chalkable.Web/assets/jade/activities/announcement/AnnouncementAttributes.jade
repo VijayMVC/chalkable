@@ -39,7 +39,8 @@ mixin AttributeBlock_(attribute, readOnly, announcementType, index)
 
                     .attribute-file-attachment
                         div.simple-gray-button.file.attach-doc Attach doc
-                            +FileUpload('announcement', 'addAttributeAttachment', [announcementType, self.getAnnouncementId(), attribute.getId()])#add-attribute-file-attachment.simple-gray-button
+                            +FileUpload('announcement', 'addAttributeAttachment', [announcementType, self.getAnnouncementId(), attribute.getId()])(id="add-attribute-file-attachment" + attribute.getId(),
+                            class="simple-gray-button")
             .right-block
     else
         div(class="attribute-item-container chlk-calendar", data-index=index)
