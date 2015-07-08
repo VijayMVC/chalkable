@@ -9,6 +9,9 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementAttributeType)],
         'AnnouncementAttributesDropdownTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            String, 'name'
+            String, 'name',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AnnouncementAttributeTypeId, 'id'
         ]);
 });

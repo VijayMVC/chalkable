@@ -173,8 +173,8 @@ NAMESPACE('chlk.activities.announcement', function () {
                 BASE();
             },
 
-            [[chlk.models.id.AnnouncementAssignedAttributeId, String, Boolean]],
-            function onAssignedAttributeChange_(assignedAttributeId, text, visibleForStudents) {
+            [[chlk.models.id.AnnouncementAssignedAttributeId, String, Boolean, chlk.models.id.AnnouncementAttributeTypeId]],
+            function onAssignedAttributeChange_(assignedAttributeId, text, visibleForStudents, attributeTypeId) {
                 var attrsJson = this.dom.find('input[name=announcementAssignedAttrs]').getValue() || '';
 
                 if (attrsJson == '') return;
@@ -188,6 +188,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if (wd.getId() == assignedAttributeId){
                         wd.setText(text);
                         wd.setVisibleForStudents(visibleForStudents);
+                        wd.setAttributeTypeId(attributeTypeId);
                     }
                     updatedAttrs.push(wd.getPostData());
                 }
@@ -204,9 +205,9 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 var id = node.getAttr('id').replace('text-', '');
                 var attrId = new chlk.models.id.AnnouncementAssignedAttributeId(id);
-
+                var attributeTypeId = new chlk.models.id.AnnouncementAttributeTypeId(this.dom.find('#announcement-attrs-type-'+id + "-hidden").getValue());
                 var isVisible = !this.dom.find('input[name=attr-hidefromstudents-'+id + "]").checked();
-                this.onAssignedAttributeChange_(attrId, node.getValue(), isVisible);
+                this.onAssignedAttributeChange_(attrId, node.getValue(), isVisible, attributeTypeId);
             },
 
             [ria.mvc.DomEventBind('change', 'input[type=checkbox].edit-attribute-visibility')],
@@ -215,13 +216,22 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 var id = node.getAttr('name').replace('attr-hidefromstudents-', '');
                 var attrId = new chlk.models.id.AnnouncementAssignedAttributeId(id);
-
+                var attributeTypeId = new chlk.models.id.AnnouncementAttributeTypeId(this.dom.find('#announcement-attrs-type-'+id + "-hidden").getValue());
                 var isVisible = !node.checked();
                 var text = this.dom.find('#text-'+id).getValue();
-                this.onAssignedAttributeChange_(attrId, text, isVisible);
-            }
+                this.onAssignedAttributeChange_(attrId, text, isVisible, attributeTypeId);
+            },
 
-            //todo: update on attribute type change
+            [ria.mvc.DomEventBind('change', 'input[type=text].announcement-attr-type-name')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            function onAssignedAttributeTypeChange(node, event, selected) {
+                var id = node.getAttr('id').replace('announcement-attrs-type-', '');
+                var attrId = new chlk.models.id.AnnouncementAssignedAttributeId(id);
+                var attributeTypeId = selected.selected.getId();
+                var isVisible = !this.dom.find('input[name=attr-hidefromstudents-'+id + "]").checked();
+                var text = this.dom.find('#text-'+id).getValue();
+                this.onAssignedAttributeChange_(attrId, text, isVisible, attributeTypeId);
+            }
         ]
     );
 });

@@ -21,7 +21,7 @@ mixin AttributeBlock_(attribute, readOnly, announcementType, index)
                             value=attribute.getName(),
                             default-value=attribute.getName(),
                             minLength = 0,
-                            class="announcement-attr-name", id="announcement-attrs-" + attribute.getId(),
+                            class="announcement-attr-type-name", id="announcement-attrs-type-" + attribute.getId(),
                             listCls = "max-200"
                             )
                         .attribute-access
@@ -39,7 +39,8 @@ mixin AttributeBlock_(attribute, readOnly, announcementType, index)
 
                     .attribute-file-attachment
                         div.simple-gray-button.file.attach-doc Attach doc
-                            +FileUpload('announcement', 'addAttributeAttachment', [announcementType, self.getAnnouncementId(), attribute.getId()])#add-attribute-file-attachment.simple-gray-button
+                            +FileUpload('announcement', 'addAttributeAttachment', [announcementType, self.getAnnouncementId(), attribute.getId()])(id="add-attribute-file-attachment" + attribute.getId(),
+                            class="simple-gray-button")
             .right-block
     else
         div(class="attribute-item-container chlk-calendar", data-index=index)
