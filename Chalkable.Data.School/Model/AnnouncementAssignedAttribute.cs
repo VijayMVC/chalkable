@@ -24,6 +24,7 @@ namespace Chalkable.Data.School.Model
         public int? SisAttributeAttachmentId { get; set; }
         public string SisAttachmentName { get; set; }
         public string SisAttachmentMimeType { get; set; }
+        public int? SisActivityAssignedAttributeId { get; set; }
 
         [NotDbFieldAttr]
         public AnnouncementAssignedAttributeAttachment Attachment
@@ -59,11 +60,7 @@ namespace Chalkable.Data.School.Model
             }
         }
 
-        [NotDbFieldAttr]
-        public int? SisActivityId { get; set; }
-        [NotDbFieldAttr]
-        public int? SisAttributeId { get; set; }
-
+        
 
 
         public static AnnouncementAssignedAttribute Create(AssignedAttributeInputModel attributeInputModel)

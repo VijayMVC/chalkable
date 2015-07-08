@@ -10,8 +10,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             announcementAttribute.Name = activityAttribute.Name;
             announcementAttribute.VisibleForStudents = activityAttribute.VisibleInHomePortal;
             announcementAttribute.Text = activityAttribute.Text;
-            announcementAttribute.SisAttributeId = activityAttribute.Id;
-            announcementAttribute.SisActivityId = activityAttribute.ActivityId;
+            announcementAttribute.SisActivityAssignedAttributeId = activityAttribute.Id;
             announcementAttribute.AttributeTypeId = activityAttribute.AttributeId;
 
             if (activityAttribute.Attachment != null)

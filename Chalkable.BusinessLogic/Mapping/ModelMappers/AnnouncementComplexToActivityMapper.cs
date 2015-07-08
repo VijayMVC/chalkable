@@ -66,7 +66,6 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
 
                 foreach (var annAtt in annDetails.AnnouncementAttributes)
                 {
-                    if (annAtt.SisAttributeId.HasValue) continue;
                     var att = new ActivityAssignedAttribute()
                     {
                         ActivityId = activity.Id
