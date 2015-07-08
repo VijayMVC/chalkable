@@ -145,9 +145,16 @@ NAMESPACE('chlk.models.announcement', function () {
                 var attrViewData = chlk.models.announcement.AnnouncementAttributeListViewData();
                 attrViewData.setAnnouncementId(this.getId());
                 attrViewData.setAnnouncementType(this.getType());
+                var announcementAssignedAttrsJson = this.getAnnouncementAssignedAttrs() || '';
+                var postAttrs = this.attributesFromJsonString(announcementAssignedAttrsJson);
+                attrViewData.setAnnouncementAttributes(postAttrs.length > 0 ? postAttrs :  this.getAnnouncementAttributes());
+                return attrViewData;
+            },
 
+            [[String]],
+            ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), function attributesFromJsonString(jsonString){
                 var attrs = [];
-                var srcAttrs = this.getAssignedAttributesPostData();
+                var srcAttrs = this.getAssignedAttributesPostData(jsonString);
                 if (srcAttrs.length > 0){
 
                     for(var i = 0; i < srcAttrs.length; ++i){
@@ -155,17 +162,13 @@ NAMESPACE('chlk.models.announcement', function () {
                         var wd = chlk.models.announcement.AnnouncementAttributeViewData.$fromObject(item);
                         attrs.push(wd);
                     }
-                    attrViewData.setAnnouncementAttributes(attrs);
                 }
-                else
-                    attrViewData.setAnnouncementAttributes(this.getAnnouncementAttributes());
-                return attrViewData;
+                return attrs;
             },
 
-
-
-            Object, function getAssignedAttributesPostData(){
-                var announcementAssignedAttrsJson = this.getAnnouncementAssignedAttrs() || '';
+            [[String]],
+            Object, function getAssignedAttributesPostData(jsonString_){
+                var announcementAssignedAttrsJson = jsonString_ ? jsonString_ : this.getAnnouncementAssignedAttrs() || '';
                 var attrs = announcementAssignedAttrsJson !== '' ? JSON.parse(announcementAssignedAttrsJson) : [];
                 return attrs;
             }

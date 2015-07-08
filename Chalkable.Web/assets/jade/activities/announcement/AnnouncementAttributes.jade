@@ -9,7 +9,7 @@ mixin AttributeAttachment(attachment, announcementType, announcementId)
             +ActionButton('announcement', 'viewAttributeAttachment', attachment.getId(), announcementType, announcementId) Open
 
 
-mixin AttributeBlock_(attribute, readOnly, announcementType, index)
+mixin AttributeBlock_(attribute, readOnly, announcementType, index, tpl)
     -var attachment = attribute.getAttributeAttachment()
     if !readOnly
         .table
@@ -34,12 +34,11 @@ mixin AttributeBlock_(attribute, readOnly, announcementType, index)
 
                         if attachment && attachment.getId() && attachment.getId() > 0
                             .file-attachment=attachment.getName()
-                                +ActionLink('announcement', 'removeAttributeAttachment', announcementType, self.getAnnouncementId(), attachment.getId()).remove-file-attachment
-
+                                +ActionLink('announcement', 'removeAttributeAttachment', announcementType, self.getAnnouncementId(), attribute.getId(), attachment.getId(), tpl.getActualAttributes()).remove-file-attachment
 
                     .attribute-file-attachment
                         div.simple-gray-button.file.attach-doc Attach doc
-                            +FileUpload('announcement', 'addAttributeAttachment', [announcementType, self.getAnnouncementId(), attribute.getId()])(id="add-attribute-file-attachment" + attribute.getId(),
+                            +FileUpload('announcement', 'addAttributeAttachment', [announcementType, self.getAnnouncementId(), attribute.getId(), tpl.getActualAttributes()])(id="add-attribute-file-attachment" + attribute.getId(),
                             class="simple-gray-button")
             .right-block
     else
@@ -68,6 +67,6 @@ if !self.isReadOnly()
 
 
 each attribute, index in attributes
-    +AttributeBlock_(attribute, self.isReadOnly(), self.getAnnouncementType(), index)
+    +AttributeBlock_(attribute, self.isReadOnly(), self.getAnnouncementType(), index, self)
 
 

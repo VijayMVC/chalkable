@@ -24,6 +24,13 @@ NAMESPACE('chlk.templates.announcement', function(){
 
             String, function announcementAttrsToJSONString(){
                 return this.getModel().toJSON();
+            },
+
+
+            String, function getActualAttributes(){
+                return ria.dom.Dom('input[name=announcementAssignedAttrs]').getValue();
             }
+
+
     ]);
 });

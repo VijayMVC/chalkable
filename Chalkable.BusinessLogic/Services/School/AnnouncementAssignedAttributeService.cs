@@ -158,6 +158,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     assignedAttribute.Uuid = uuid;
                     assignedAttribute.SisAttachmentName = name;
+                    assignedAttribute.SisAttributeAttachmentId = assignedAttributeId;
                     AddAttributeAttachmentToBlob(assignedAttributeId, bin);
                 }
                 var da = new DataAccessBase<AnnouncementAssignedAttribute>(uow);

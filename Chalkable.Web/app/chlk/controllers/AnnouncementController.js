@@ -777,13 +777,34 @@ NAMESPACE('chlk.controllers', function (){
         },
         
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, Object]],
-        function addAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId, files) {
+        [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, String, Object]],
+        function addAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId, attributesList, files) {
             var result = this.announcementService
                 .uploadAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeId, files)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(announcement){
+                    var updatedAttribute = announcement.getAnnouncementAttributes().filter(function(item){
+                        return item.getId() == announcementAssignedAttributeId;
+                    })
+
+                    var attachment = null;
+                    if (updatedAttribute){
+                        attachment = updatedAttribute[0].getAttributeAttachment();
+                    }
+
+                    var attrs = announcement.attributesFromJsonString(attributesList);
+                    attrs = attrs.map(function(item){
+                       if (item.getId() == announcementAssignedAttributeId){
+                           item.setAttributeAttachment(attachment);
+                       }
+                        return item;
+                    });
+
+                    if (attrs.length > 0){
+                        announcement.setAnnouncementAttributes(attrs);
+                        announcement.setAnnouncementAssignedAttrs(attributesList);
+                    }
                     this.prepareAttributes(announcement);
                     this.cacheAnnouncement(announcement);
                     return announcement.getAttributesListViewData();
@@ -792,13 +813,27 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeAttachmentId]],
-        function removeAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId) {
+        [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId,
+            chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.id.AnnouncementAssignedAttributeAttachmentId, String]],
+        function removeAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId, announcementAssignedAttributeAttachmentId, attributesList) {
             var result = this.announcementService
-                .removeAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeId)
+                .removeAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeAttachmentId)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function (announcement) {
+                    var attrs = announcement.attributesFromJsonString(attributesList);
+                    attrs = attrs.map(function(item){
+                        if (item.getId() == announcementAssignedAttributeId){
+                            item.setAttributeAttachment(null);
+                        }
+                        return item;
+                    });
+
+                    if (attrs.length > 0){
+                        announcement.setAnnouncementAttributes(attrs);
+                        announcement.setAnnouncementAssignedAttrs(attributesList);
+                    }
+                    announcement.setAnnouncementAssignedAttrs(attributesList);
                     this.prepareAttributes(announcement);
                     this.cacheAnnouncement(announcement);
                     return announcement.getAttributesListViewData();

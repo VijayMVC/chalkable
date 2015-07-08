@@ -193,11 +193,11 @@ NAMESPACE('chlk.activities.announcement', function () {
                     updatedAttrs.push(wd.getPostData());
                 }
 
-                this.dom.find('input[name=announcementAssignedAttrs]').setValue(JSON.stringify(updatedAttrs));
+
+                var attrJson = JSON.stringify(updatedAttrs);
+                this.dom.find('input[name=announcementAssignedAttrs]').setValue(attrJson);
+
             },
-
-
-
 
             [ria.mvc.DomEventBind('keyup', 'textarea.edit-attribute-text')],
             [[ria.dom.Dom, ria.dom.Event]],
