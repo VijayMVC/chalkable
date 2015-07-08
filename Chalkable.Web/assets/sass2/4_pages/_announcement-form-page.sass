@@ -1,0 +1,218 @@
+.add-new-category-dialog
+  input[name=value]
+    margin: 10px 20px
+
+  BUTTON.add
+    margin-bottom: 15px
+
+.announcement-form-page, .admin-announcement-form-page, .lesson-plan-form-page
+  .attach-btn-area
+    margin-bottom: 20px
+    button
+      width: 132px
+
+  .bottom-block
+    margin-top: 78px
+
+  .ann-form-container > *
+    margin-bottom: 24px
+
+  .title-block-container:not(.with-date)
+    .save-title-btn
+      display: none
+
+  .title-block
+    margin-top: 16px
+
+    &.class-announcement:not(.active)
+      .input-container
+        display: none
+
+      .save-title-btn
+        display: none
+
+    &.active
+      .title-text, .edit-icon
+        display: none
+
+    .input-container
+      position: relative
+      display: inline-block
+
+    .title-text, INPUT[type=text]
+      font-size: 16px
+      font-weight: 600
+
+    .title-text
+      line-height: 31px
+      display: inline-block
+
+    BUTTON
+      vertical-align: top
+      margin-left: 3px
+
+  .table, .left-block
+    width: 100%
+
+  .left-block textarea
+    display: block
+    padding: 15px 45px 80px 15px
+    min-height: 157px
+    width: 100%
+    box-sizing: border-box
+
+  .left-block-container
+    position: relative
+
+
+  .add-recipients-container
+    position: absolute
+    bottom: 15px
+    left: 15px
+    right: 15px
+
+  .add-standards-container
+    position: absolute
+    bottom: 15px
+    left: 15px
+    right: 15px
+
+  .standards-list, .recipients-list
+    border-top: dashed 3px #e0e0e0
+    padding-top: 8px
+
+    BUTTON, .button-like
+      position: relative
+      padding-right: 29px
+      display: inline-block
+
+      &:not(:last-child)
+        margin-right: 10px
+
+    .remove-standard
+      border: none
+      width: 32px
+      height: 32px
+      box-shadow: none
+      +icons-32-sprite(close)
+      position: absolute
+      top: -2px
+      right: -2px
+
+  .add-standards .title, .add-recipients .title
+    color: #e0e0e0
+    font-weight: 600
+    font-size: 12px
+    padding-top: 6px
+    padding-bottom: 0
+    cursor: pointer
+    text-align: center
+
+  .drawer-icon
+    width: 32px
+    height: 32px
+    position: absolute
+    +icons-32-sprite(inbox)
+    right: 15px
+    bottom: 80px
+    opacity: .5
+    +transition(opacity .3s ease-in-out)
+    cursor: pointer
+
+    &:hover
+      opacity: 1
+
+  .left-block
+    position: relative
+
+  .drop-down-container
+    position: absolute
+    top: 100%
+    left: 0
+    right: 0
+    background: #fff
+    display: none
+    //border: 1px solid #000
+    margin-top: -80px
+
+    .new-item-dropdown
+      white-space: normal
+      text-align: left
+
+    h1
+      padding: 0
+      margin: 0
+
+    +box-shadow(transparentize(#000, .8) 0 2px 16px)
+    z-index: 11
+
+    &.top::before
+      +rotate(-45deg)
+      top: -7px
+      left: auto
+      right: 24px
+
+  .left-top-container
+    >DIV
+      display: inline-block
+      margin-right: 15px
+
+  .right-block, .left-top-container
+    INPUT[type=text]
+      box-sizing: border-box
+      width: 225px
+      margin-bottom: 16px
+
+    SELECT
+      width: 225px
+
+    LABEL[for]
+      font-size: 13px
+      line-height: 18px
+      font-weight: 600
+      color: #56554f
+      +text-shadow(transparentize(#fff, .5) 0 1px 1px)
+      margin-bottom: 6px
+      display: block
+
+  .right-block
+    width: 250px
+
+    > *
+      margin-left: 18px
+      position: relative
+
+
+
+    .question-mark, .calendar-mark
+      position: absolute
+      right: 5px
+      width: 24px
+      height: 24px
+      bottom: 18px
+      font-size: 0
+      opacity: .5
+
+    .question-mark
+      +icons-24-sprite(question)
+
+    .calendar-mark
+      +icons-24-sprite(calendar)
+
+
+  .advanced-options-container
+    position: absolute
+    padding: 15px
+    +box-shadow(transparentize(#000, .8) 0 2px 16px)
+    margin-left: -16px
+    margin-top: 8px
+    z-index: 11
+
+    > *
+      position: relative
+
+    &.top::before
+      +rotate(-45deg)
+      top: -7px
+      left: 30%
+      margin-left: -7px
