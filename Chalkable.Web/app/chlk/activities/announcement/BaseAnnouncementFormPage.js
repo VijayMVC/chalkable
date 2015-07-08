@@ -188,7 +188,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if (wd.getId() == assignedAttributeId){
                         wd.setText(text);
                         wd.setVisibleForStudents(visibleForStudents);
-                        wd.setAttributeTypeId(1);// wd.setAttributeTypeId(attributeTypeId);
+                        wd.setAttributeTypeId(attributeTypeId);
                     }
                     updatedAttrs.push(wd.getPostData());
                 }
