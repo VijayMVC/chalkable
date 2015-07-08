@@ -57,10 +57,10 @@ namespace Chalkable.Web.Controllers
         }
 
         [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult RemoveAttributeAttachment(int announcementType, int announcementId, int assignedAttributeId)
+        public ActionResult RemoveAttributeAttachment(int announcementType, int announcementId, int attributeAttachmentId)
         {
             EnsureAnnouncementExists(announcementType, announcementId);
-            var announcement = SchoolLocator.AnnouncementAssignedAttributeService.RemoveAttributeAttachment((AnnouncementType)announcementType, announcementId, assignedAttributeId);
+            var announcement = SchoolLocator.AnnouncementAssignedAttributeService.RemoveAttributeAttachment((AnnouncementType)announcementType, announcementId, attributeAttachmentId);
             AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id, (AnnouncementType)announcementType);
             return Json(res, HTML_CONTENT_TYPE, 6);
         }

@@ -18,14 +18,13 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAnnouncementAssignedAttributeService
     {
-        void Add(IList<AnnouncementAssignedAttribute> announcementAttributes);
         AnnouncementDetails Edit(AnnouncementType announcementType, int announcementId, IList<AssignedAttributeInputModel> attributes);
-        void Delete(IList<AnnouncementAssignedAttribute> announcementAttributes);
         AnnouncementDetails Delete(AnnouncementType announcementType, int announcementId, int assignedAttributeId);
         AnnouncementDetails Add(AnnouncementType announcementType, int announcementId, int attributeTypeId);
         AnnouncementDetails AddAttributeAttachment(AnnouncementType announcementType, int announcementId, int assignedAttributeId, byte[] bin, string name, string uuid);
         AnnouncementAssignedAttribute GetAssignedAttribyteById(int assignedAttributeId);
-        AnnouncementDetails RemoveAttributeAttachment(AnnouncementType announcementType, int announcementId, int assignedAttributeId);
+        AnnouncementAssignedAttribute GetAssignedAttribyteByAttachmentId(int attributeAttachmentId);
+        AnnouncementDetails RemoveAttributeAttachment(AnnouncementType announcementType, int announcementId, int attributeAttachmentId);
         AttributeAttachmentContentInfo GetAttributeAttachmentContent(int assignedAttributeId, AnnouncementType announcementType);
     }
 
@@ -34,12 +33,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public AnnouncementAssignedAttributeService(IServiceLocatorSchool serviceLocator)
             : base(serviceLocator)
         {
-        }
-
-        public void Add(IList<AnnouncementAssignedAttribute> announcementAttributes)
-        {
-            BaseSecurity.EnsureAdminOrTeacher(Context);
-            DoUpdate(u => new DataAccessBase<AnnouncementAssignedAttribute>(u).Insert(announcementAttributes));
         }
 
         public AnnouncementDetails Edit(AnnouncementType announcementType, int announcementId, IList<AssignedAttributeInputModel> attributes)
@@ -65,12 +58,6 @@ namespace Chalkable.BusinessLogic.Services.School
             return ann;
         }
 
-        public void Delete(IList<AnnouncementAssignedAttribute> announcementAttributes)
-        {
-            BaseSecurity.EnsureAdminOrTeacher(Context);
-            DoUpdate(u => new DataAccessBase<AnnouncementAssignedAttribute>(u).Delete(announcementAttributes));
-        }
-
         public AnnouncementDetails Delete(AnnouncementType announcementType, int announcementId, int assignedAttributeId)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
@@ -78,7 +65,22 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue))
                 throw new UnassignedUserException();
 
-            RemoveAttributeAttachment(announcementType, announcementId, assignedAttributeId);
+            var attribute =
+                ServiceLocator.AnnouncementAssignedAttributeService.GetAssignedAttribyteById(assignedAttributeId);
+            var attachment = attribute.Attachment;
+
+
+            if (attachment != null)
+            {
+                if (announcementType == AnnouncementType.Class && attachment.StiAttachment)
+                {
+                    ConnectorLocator.AttachmentConnector.DeleteAttachment(attachment.AttachmentId);
+                }
+                else
+                {
+                    RemoveAttributeAttachmentFromBlob(attachment.AttachmentId);//same id as attribute id
+                }
+            }
 
             using (var uow = Update())
             {
@@ -134,7 +136,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var assignedAttribute =
                 ServiceLocator.AnnouncementAssignedAttributeService.GetAssignedAttribyteById(assignedAttributeId);
 
-            if (assignedAttribute.Attachment != null)
+            if (assignedAttribute.Attachment != null && assignedAttribute.Attachment.AttachmentId > 0)
             {
                 throw new ChalkableSisException("You can't attach more than one file to an attribute");
             }
@@ -199,14 +201,19 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new DataAccessBase<AnnouncementAssignedAttribute>(u).GetAll(new AndQueryCondition{{AnnouncementAssignedAttribute.ID_FIELD, assignedAttributeId}}).First());
         }
 
-        public AnnouncementDetails RemoveAttributeAttachment(AnnouncementType announcementType, int announcementId, int assignedAttributeId)
+        public AnnouncementAssignedAttribute GetAssignedAttribyteByAttachmentId(int attributeAttachmentId)
+        {
+            return DoRead(u => new DataAccessBase<AnnouncementAssignedAttribute>(u).GetAll(new AndQueryCondition { { AnnouncementAssignedAttribute.SIS_ATTRIBUTE_ATTACHMENT_ID, attributeAttachmentId} }).First());
+        }
+
+        public AnnouncementDetails RemoveAttributeAttachment(AnnouncementType announcementType, int announcementId, int attributeAttachmentId)
         {
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
             if (!(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue))
                 throw new UnassignedUserException();
 
             var attribute =
-                ServiceLocator.AnnouncementAssignedAttributeService.GetAssignedAttribyteById(assignedAttributeId);
+                ServiceLocator.AnnouncementAssignedAttributeService.GetAssignedAttribyteByAttachmentId(attributeAttachmentId);
             var attachment = attribute.Attachment;
 
 

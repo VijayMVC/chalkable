@@ -32,9 +32,9 @@ mixin AttributeBlock_(attribute, readOnly, announcementType, index)
                     .description
                         textarea(class="edit-attribute-text", id="text-" + attribute.getId())=attribute.getText()
 
-                        if attachment
+                        if attachment && attachment.getId() && attachment.getId() > 0
                             .file-attachment=attachment.getName()
-                                +ActionLink('announcement', 'removeAttributeAttachment', announcementType, self.getAnnouncementId(), attribute.getId()).remove-file-attachment
+                                +ActionLink('announcement', 'removeAttributeAttachment', announcementType, self.getAnnouncementId(), attachment.getId()).remove-file-attachment
 
 
                     .attribute-file-attachment
@@ -53,7 +53,7 @@ mixin AttributeBlock_(attribute, readOnly, announcementType, index)
                 .attribute-details
                     .attribute-description=attribute.getText()
 
-                    if attachment
+                    if attachment && attachment.getId() && attachment.getId() > 0
                         h3 Attachments
                         .attribute-attachments
                             +AttributeAttachment(attachment, announcementType, self.getAnnouncementId())

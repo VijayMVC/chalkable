@@ -84,6 +84,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new System.NotImplementedException();
         }
 
+        public AnnouncementAssignedAttribute GetAssignedAttribyteByAttachmentId(int attributeAttachmentId)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public AnnouncementDetails RemoveAttributeAttachment(AnnouncementType announcementType, int announcementId,
             int assignedAttributeId)
         {

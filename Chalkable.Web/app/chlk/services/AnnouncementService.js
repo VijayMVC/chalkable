@@ -14,6 +14,7 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.StandardId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.id.AnnouncementAssignedAttributeAttachmentId');
 REQUIRE('chlk.models.id.AnnouncementAttachmentId');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
 REQUIRE('chlk.models.id.AnnouncementQnAId');
@@ -102,12 +103,12 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId]],
-            ria.async.Future, function removeAttributeAttachment(announcementType, announcementId, assignedAttributeId) {
+            [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeAttachmentId]],
+            ria.async.Future, function removeAttributeAttachment(announcementType, announcementId, assignedAttributeAttachmentId) {
                 return this.post('AnnouncementAttribute/RemoveAttributeAttachment.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
                     announcementType: announcementType.valueOf(),
-                    assignedAttributeId: assignedAttributeId.valueOf()
+                    attributeAttachmentId: assignedAttributeAttachmentId.valueOf()
                 });
             },
 

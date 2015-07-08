@@ -792,7 +792,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId]],
+        [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeAttachmentId]],
         function removeAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId) {
             var result = this.announcementService
                 .removeAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeId)
