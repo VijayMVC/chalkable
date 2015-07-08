@@ -33,18 +33,15 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult Submit(int adminAnnouncementId, string title, string content, DateTime? expiresDate, IList<AssignedAttributeInputModel> attributes)
         {
-
             Trace.Assert(Context.PersonId.HasValue);
             if (string.IsNullOrEmpty(title))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "Announcement Title "));
-
-
+            
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.Admin, adminAnnouncementId, attributes);
             var res = SchoolLocator.AdminAnnouncementService.Edit(adminAnnouncementId, title, content, expiresDate);
             SchoolLocator.AdminAnnouncementService.Submit(adminAnnouncementId);
             SchoolLocator.AdminAnnouncementService.DeleteDrafts(Context.PersonId.Value);
-            var adminAnn = SchoolLocator.AdminAnnouncementService.GetAdminAnnouncementById(adminAnnouncementId);
-            TrackNewItemCreate(res, (s, appsCount, doscCount) => s.CreateNewAdminItem(Context.Login, adminAnn.AdminName, appsCount, doscCount));
+            TrackNewItemCreate(res, (s, appsCount, doscCount) => s.CreateNewAdminItem(Context.Login, res.AdminAnnouncementData.AdminName, appsCount, doscCount));
             return Json(true, 5);
         }
 

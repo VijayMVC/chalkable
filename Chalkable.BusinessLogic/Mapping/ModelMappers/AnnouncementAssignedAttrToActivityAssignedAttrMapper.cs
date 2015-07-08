@@ -8,10 +8,8 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
     {
         protected override void InnerMap(ActivityAssignedAttribute activityAssignedAttribute, AnnouncementAssignedAttribute announcementAssignedAttribute)
         {
-           if (announcementAssignedAttribute.SisAttributeId.HasValue)
-                activityAssignedAttribute.Id = announcementAssignedAttribute.SisAttributeId.Value;
-            if (announcementAssignedAttribute.SisActivityId.HasValue)
-                activityAssignedAttribute.ActivityId = announcementAssignedAttribute.SisActivityId.Value;
+            if (announcementAssignedAttribute.SisActivityAssignedAttributeId.HasValue)
+                activityAssignedAttribute.Id = announcementAssignedAttribute.SisActivityAssignedAttributeId.Value;
             
             activityAssignedAttribute.VisibleInHomePortal = announcementAssignedAttribute.VisibleForStudents;
             activityAssignedAttribute.Name = announcementAssignedAttribute.Name;
