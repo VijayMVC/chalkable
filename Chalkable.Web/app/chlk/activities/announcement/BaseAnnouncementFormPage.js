@@ -207,7 +207,21 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 var isVisible = !this.dom.find('input[name=attr-hidefromstudents-'+id + "]").checked();
                 this.onAssignedAttributeChange_(attrId, node.getValue(), isVisible);
+            },
+
+            [ria.mvc.DomEventBind('change', 'input[type=checkbox].edit-attribute-visibility')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function onAssignedAttributeAccessChange(node, event) {
+
+                var id = node.getAttr('name').replace('attr-hidefromstudents-', '');
+                var attrId = new chlk.models.id.AnnouncementAssignedAttributeId(id);
+
+                var isVisible = !node.checked();
+                var text = this.dom.find('#text-'+id).getValue();
+                this.onAssignedAttributeChange_(attrId, text, isVisible);
             }
+
+            //todo: update on attribute type change
         ]
     );
 });

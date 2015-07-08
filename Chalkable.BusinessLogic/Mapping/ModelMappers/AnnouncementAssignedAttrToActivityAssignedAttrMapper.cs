@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                 var stiAttachment = new StiAttachment
                 {
                     AttachmentId = announcementAssignedAttribute.SisAttributeAttachmentId.Value,
-                    CrocoDocId = new Guid(announcementAssignedAttribute.Uuid),
+                    CrocoDocId = !string.IsNullOrWhiteSpace(announcementAssignedAttribute.Uuid) ? new Guid(announcementAssignedAttribute.Uuid) : (Guid?)null,
                     Name = announcementAssignedAttribute.SisAttachmentName,
                     MimeType = announcementAssignedAttribute.SisAttachmentMimeType
                 };

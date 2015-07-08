@@ -37,7 +37,7 @@ NAMESPACE('chlk.models.announcement', function(){
         Object, function getPostData() {
             return {
                 attachmentname: this.getName(),
-                attachmentid: this.getId().valueOf(),
+                attachmentid: this.getId() && this.getId().valueOf(),
                 url: this.getUrl(),
                 thumbnailurl: this.getThumbnailUrl(),
                 type: this.getType(),
