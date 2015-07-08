@@ -87,7 +87,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, Number
                 , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean,
-                chlk.models.announcement.AnnouncementAttributeListViewData
+                Array
             ]],
             ria.async.Future, function saveLessonPlan(id, classId_, title_, content_, galleryCategoryId_
                 , startDate_, endDate_, hideFromStudent_, attributesListData) {
@@ -100,13 +100,13 @@ NAMESPACE('chlk.services', function () {
                     startDate: startDate_ && startDate_.toStandardFormat(),
                     endDate: endDate_ && endDate_.toStandardFormat(),
                     hidefromstudents: hideFromStudent_ || false,
-                    attributes: attributesListData.getPostData()
+                    attributes: attributesListData
                 });
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, Number
                 , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean,
-                chlk.models.announcement.AnnouncementAttributeListViewData]],
+                Array]],
             ria.async.Future, function submitLessonPlan(id, classId_, title_, content_, galleryCategoryId_
                 , startDate_, endDate_, hideFromStudent_, attributesListData) {
                 return this.post('LessonPlan/Submit.json', chlk.models.announcement.FeedAnnouncementViewData, {
@@ -118,7 +118,7 @@ NAMESPACE('chlk.services', function () {
                     startDate: startDate_ && startDate_.toStandardFormat(),
                     endDate: endDate_ && endDate_.toStandardFormat(),
                     hidefromstudents: hideFromStudent_ || false,
-                    attributes: attributesListData.getPostData()
+                    attributes: attributesListData
                 });
             }
         ])

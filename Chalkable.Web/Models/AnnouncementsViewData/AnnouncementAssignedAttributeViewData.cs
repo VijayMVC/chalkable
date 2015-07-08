@@ -11,59 +11,35 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public int Id { get; set; }
         public string Name { get; set; }
         public int AttributeTypeId { get; set; }
+        public int AnnouncementRef { get; set; }
         public string Uuid { get; set; }
         public string Text { get; set; }
         public bool VisibleForStudents { get; set; }
         public AssignedAttributeAttachmentViewData AttributeAttachment { get; set; }
 
+
+
+        public static AnnouncementAssignedAttributeViewData Create(AnnouncementAssignedAttribute attr, IList<AssignedAttributeAttachmentInfo> attrAttachmentInfos)
+        {
+            var result = new AnnouncementAssignedAttributeViewData
+            {
+                Id = attr.Id,
+                Name = attr.Name,
+                Text = attr.Text,
+                AttributeTypeId = attr.AttributeTypeId,
+                Uuid = attr.Uuid,
+                VisibleForStudents = attr.VisibleForStudents,
+                AnnouncementRef = attr.AnnouncementRef,
+                AttributeAttachment = AssignedAttributeAttachmentViewData.Create(attr.Attachment, attrAttachmentInfos)
+            };
+
+
+            return result;
+        }
+
         public static IList<AnnouncementAssignedAttributeViewData> Create(IList<AnnouncementAssignedAttribute> announcementAttributes, IList<AssignedAttributeAttachmentInfo> attrAttachmentInfos)
         {
-
-
-            var attrs = new List<AnnouncementAssignedAttributeViewData>();
-
-
-            foreach (var annAtrr in announcementAttributes)
-            {
-                var wd = new AnnouncementAssignedAttributeViewData
-                {
-                    Id = annAtrr.Id,
-                    Name = annAtrr.Name,
-                    Text = annAtrr.Text,
-                    AttributeTypeId = annAtrr.AttributeTypeId,
-                    Uuid = annAtrr.Uuid,
-                    VisibleForStudents = annAtrr.VisibleForStudents
-
-                };
-
-
-                if (annAtrr.SisAttributeAttachmentId.HasValue)
-                {
-
-                    var attachmentInfo = attrAttachmentInfos.FirstOrDefault(
-                            x =>
-                                x.AttributeAttachment != null &&
-                                x.AttributeAttachment.AttachmentId == annAtrr.SisAttributeAttachmentId.Value);
-
-                    if (attachmentInfo != null)
-                    {
-                        wd.AttributeAttachment = new AssignedAttributeAttachmentViewData()
-                        {
-                            Id = annAtrr.SisAttributeAttachmentId.Value,
-                            Name = annAtrr.SisAttachmentName,
-                            ThumbnailUrl = attachmentInfo.DownloadThumbnailUrl,
-                            Url = attachmentInfo.DownloadDocumentUrl
-                            //Type = annAtrr.SisAttachmentMimeType
-                        };
-                    }
-                    
-                        
-                }
-
-                attrs.Add(wd);
-            }
-
-            return attrs;
-        } 
+            return announcementAttributes.Select(annAtrr => Create(annAtrr, attrAttachmentInfos)).ToList();
+        }
     }
 }

@@ -29,7 +29,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.AnnouncementId, String, String, chlk.models.common.ChlkDate,
-                chlk.models.announcement.AnnouncementAttributeListViewData
+                Array
             ]],
             ria.async.Future, function saveAdminAnnouncement(id, title_, content_, expiresdate_, attributesListData) {
                 return this.post('AdminAnnouncement/Save.json', chlk.models.announcement.FeedAnnouncementViewData, {
@@ -37,12 +37,12 @@ NAMESPACE('chlk.services', function () {
                     title: title_,
                     content: content_,
                     expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
-                    attributes: attributesListData.getPostData()
+                    attributes: attributesListData
                 });
             },
 
             [[chlk.models.id.AnnouncementId, String, String, chlk.models.common.ChlkDate,
-                chlk.models.announcement.AnnouncementAttributeListViewData
+                Array
             ]],
             ria.async.Future, function submitAdminAnnouncement(id, content_, title_, expiresdate_, attributesListData) {
                 return this.post('AdminAnnouncement/Submit.json', Boolean, {
@@ -50,7 +50,7 @@ NAMESPACE('chlk.services', function () {
                     title: title_,
                     content: content_,
                     expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
-                    attributes: attributesListData.getPostData()
+                    attributes: attributesListData
                 });
             },
 

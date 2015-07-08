@@ -38,7 +38,7 @@ namespace Chalkable.Web.Controllers
                 {
                     uuid = SchoolLocator.CrocodocService.UploadDocument(name, bin).uuid;
                 }
-                var announcement = SchoolLocator.AnnouncementAssignedAttributeService.AddAttributeAttachment(announcementType, announcementId, assignedAttributeId, bin, name, uuid);
+                var announcement = SchoolLocator.AnnouncementAssignedAttributeService.AddAttributeAttachment((AnnouncementType)announcementType, announcementId, assignedAttributeId, bin, name, uuid);
                 AnnouncementViewData res = PrepareAnnouncmentViewDataForEdit(announcement);
                 return Json(res, HTML_CONTENT_TYPE, 6);
             }
@@ -60,7 +60,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult RemoveAttributeAttachment(int announcementType, int announcementId, int assignedAttributeId)
         {
             EnsureAnnouncementExists(announcementType, announcementId);
-            var announcement = SchoolLocator.AnnouncementAssignedAttributeService.RemoveAttributeAttachment(announcementType, announcementId, assignedAttributeId);
+            var announcement = SchoolLocator.AnnouncementAssignedAttributeService.RemoveAttributeAttachment((AnnouncementType)announcementType, announcementId, assignedAttributeId);
             AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id, (AnnouncementType)announcementType);
             return Json(res, HTML_CONTENT_TYPE, 6);
         }
@@ -69,7 +69,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult AddAttribute(int announcementType, int announcementId, int attributeTypeId)
         {
             EnsureAnnouncementExists(announcementType, announcementId);
-            var announcement = SchoolLocator.AnnouncementAssignedAttributeService.Add(announcementType, announcementId, attributeTypeId);
+            var announcement = SchoolLocator.AnnouncementAssignedAttributeService.Add((AnnouncementType)announcementType, announcementId, attributeTypeId);
             AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id, (AnnouncementType)announcementType);
             return Json(res, HTML_CONTENT_TYPE, 6);
         }
@@ -83,7 +83,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult DownloadAttributeAttachment(int assignedAttributeId, int announcementType, bool? needsDownload, int? width, int? height)
         {
-            var attContentInfo = SchoolLocator.AnnouncementAssignedAttributeService.GetAttributeAttachmentContent(assignedAttributeId, announcementType);
+            var attContentInfo = SchoolLocator.AnnouncementAssignedAttributeService.GetAttributeAttachmentContent(assignedAttributeId, (AnnouncementType)announcementType);
             if (attContentInfo == null)
             {
                 Response.StatusCode = 404;
@@ -156,7 +156,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult DeleteAttribute(int announcementType, int announcementId, int assignedAttributeId)
         {
             EnsureAnnouncementExists(announcementType, announcementId);
-            var announcement = SchoolLocator.AnnouncementAssignedAttributeService.Delete(announcementType, announcementId, assignedAttributeId);
+            var announcement = SchoolLocator.AnnouncementAssignedAttributeService.Delete((AnnouncementType)announcementType, announcementId, assignedAttributeId);
             AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id, (AnnouncementType)announcementType);
             return Json(res, 6);
         }

@@ -27,6 +27,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 BASE(raw);
                 this.announcementAttachments = SJX.fromArrayOfDeserializables(raw.announcementattachments, chlk.models.attachment.Attachment);
                 this.announcementAttributes = SJX.fromArrayOfDeserializables(raw.announcementattributes, chlk.models.announcement.AnnouncementAttributeViewData);
+                this.announcementAssignedAttrs = SJX.fromValue(raw.announcementAssignedAttrs, String);
                 this.announcementQnAs = SJX.fromArrayOfDeserializables(raw.announcementqnas, chlk.models.announcement.AnnouncementQnA);
                 this.applications = SJX.fromArrayOfDeserializables(raw.applications, chlk.models.apps.AppAttachment);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.Standard);
@@ -85,6 +86,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
 
             ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
+            String, 'announcementAssignedAttrs',
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
             ArrayOf(chlk.models.apps.AppAttachment), 'applications',
@@ -143,8 +145,29 @@ NAMESPACE('chlk.models.announcement', function () {
                 var attrViewData = chlk.models.announcement.AnnouncementAttributeListViewData();
                 attrViewData.setAnnouncementId(this.getId());
                 attrViewData.setAnnouncementType(this.getType());
-                attrViewData.setAnnouncementAttributes(this.getAnnouncementAttributes());
+
+                var attrs = [];
+                var srcAttrs = this.getAssignedAttributesPostData();
+                if (srcAttrs.length > 0){
+
+                    for(var i = 0; i < srcAttrs.length; ++i){
+                        var item = srcAttrs[i];
+                        var wd = chlk.models.announcement.AnnouncementAttributeViewData.$fromObject(item);
+                        attrs.push(wd);
+                    }
+                    attrViewData.setAnnouncementAttributes(attrs);
+                }
+                else
+                    attrViewData.setAnnouncementAttributes(this.getAnnouncementAttributes());
                 return attrViewData;
+            },
+
+
+
+            Object, function getAssignedAttributesPostData(){
+                var announcementAssignedAttrsJson = this.getAnnouncementAssignedAttrs() || '';
+                var attrs = announcementAssignedAttrsJson !== '' ? JSON.parse(announcementAssignedAttrsJson) : [];
+                return attrs;
             }
         ]);
 });

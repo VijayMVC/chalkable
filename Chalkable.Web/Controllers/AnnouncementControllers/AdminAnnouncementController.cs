@@ -22,16 +22,16 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult Save(int adminAnnouncementId, string title, string content, DateTime? expiresDate,  IList<AnnouncementAssignedAttribute> attributes)
+        public ActionResult Save(int adminAnnouncementId, string title, string content, DateTime? expiresDate, IList<AssignedAttributeInputModel> attributes)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit((int)AnnouncementType.Admin, adminAnnouncementId, attributes);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.Admin, adminAnnouncementId, attributes);
             var res = SchoolLocator.AdminAnnouncementService.Edit(adminAnnouncementId, title, content, expiresDate);
             return Json(PrepareAnnouncmentViewDataForEdit(res));
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult Submit(int adminAnnouncementId, string title, string content, DateTime? expiresDate,  IList<AnnouncementAssignedAttribute> attributes)
+        public ActionResult Submit(int adminAnnouncementId, string title, string content, DateTime? expiresDate, IList<AssignedAttributeInputModel> attributes)
         {
 
             Trace.Assert(Context.PersonId.HasValue);
@@ -39,7 +39,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "Announcement Title "));
 
 
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit((int)AnnouncementType.Admin, adminAnnouncementId, attributes);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.Admin, adminAnnouncementId, attributes);
             var res = SchoolLocator.AdminAnnouncementService.Edit(adminAnnouncementId, title, content, expiresDate);
             SchoolLocator.AdminAnnouncementService.Submit(adminAnnouncementId);
             SchoolLocator.AdminAnnouncementService.DeleteDrafts(Context.PersonId.Value);

@@ -14,6 +14,7 @@ using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
+using Microsoft.Data.OData.Query.SemanticAst;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
@@ -300,6 +301,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                         throw new NoAnnouncementException();
                     
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
+
                     var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(res.ClassAnnouncementData.ClassAnnouncementTypeName);
                     res.ClassAnnouncementData.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?)null;
                 }

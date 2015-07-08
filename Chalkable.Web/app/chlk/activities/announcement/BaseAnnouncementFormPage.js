@@ -171,6 +171,42 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.setNotSave(false);
                 new ria.dom.Dom().off('click.dropdown', this._handler);
                 BASE();
+            },
+
+            [[chlk.models.id.AnnouncementAssignedAttributeId, String, Boolean]],
+            function onAssignedAttributeChange_(assignedAttributeId, text, visibleForStudents) {
+                var attrsJson = this.dom.find('input[name=announcementAssignedAttrs]').getValue() || '';
+
+                if (attrsJson == '') return;
+
+                var attrs = JSON.parse(attrsJson) || [];
+                var updatedAttrs = [];
+                for(var i = 0; i < attrs.length; ++i){
+                    var item = attrs[i];
+                    var wd = chlk.models.announcement.AnnouncementAttributeViewData.$fromObject(item);
+
+                    if (wd.getId() == assignedAttributeId){
+                        wd.setText(text);
+                        wd.setVisibleForStudents(visibleForStudents);
+                    }
+                    updatedAttrs.push(wd.getPostData());
+                }
+
+                this.dom.find('input[name=announcementAssignedAttrs]').setValue(JSON.stringify(updatedAttrs));
+            },
+
+
+
+
+            [ria.mvc.DomEventBind('keyup', 'textarea.edit-attribute-text')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function onAssignedAttributeTextChange(node, event) {
+
+                var id = node.getAttr('id').replace('text-', '');
+                var attrId = new chlk.models.id.AnnouncementAssignedAttributeId(id);
+
+                var isVisible = !this.dom.find('input[name=attr-hidefromstudents-'+id + "]").checked();
+                this.onAssignedAttributeChange_(attrId, node.getValue(), isVisible);
             }
         ]
     );

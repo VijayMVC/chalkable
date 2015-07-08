@@ -61,25 +61,21 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             {
                 if (activity.Attributes == null)
                     activity.Attributes = new List<ActivityAssignedAttribute>();
+
                 var newAtts = new List<ActivityAssignedAttribute>();
+
                 foreach (var annAtt in annDetails.AnnouncementAttributes)
                 {
-                    if (annAtt.SisAttributeId.HasValue)
+                    if (annAtt.SisAttributeId.HasValue) continue;
+                    var att = new ActivityAssignedAttribute()
                     {
-                        var att = activity.Attributes.FirstOrDefault(x => x.Id == annAtt.SisAttributeId);
-                        if (att == null)
-                        {
-                            att = new ActivityAssignedAttribute()
-                            {
-                                ActivityId = activity.Id,
-                                
-                            };
-                            newAtts.Add(att);
-                        }
-                        MapperFactory.GetMapper<ActivityAssignedAttribute, AnnouncementAssignedAttribute>().Map(att, annAtt);
-                    }
+                        ActivityId = activity.Id
+                    };
+                    newAtts.Add(att);
+                    MapperFactory.GetMapper<ActivityAssignedAttribute, AnnouncementAssignedAttribute>().Map(att, annAtt);
                 }
                 activity.Attributes = activity.Attributes.Concat(newAtts);
+
             }
             if (annDetails.AnnouncementStandards != null && annDetails.AnnouncementStandards.Count > 0)
             {

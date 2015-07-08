@@ -54,7 +54,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
         {
             MapperFactory.GetMapper<AnnouncementComplex, Activity>().Map(annDetails, activity);
 
-            if(annDetails.AnnouncementAttachments == null)
+            if (annDetails.AnnouncementAttributes == null)
                 annDetails.AnnouncementAttributes = new List<AnnouncementAssignedAttribute>();
 
             annDetails.AnnouncementAttributes = annDetails.AnnouncementAttributes.Where(a => activity.Attributes != null 

@@ -1199,7 +1199,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.getTitle(),
                         model.getContent(),
                         model.getExpiresDate(),
-                        model.getAttributesListViewData()
+                        model.getAssignedAttributesPostData()
                     )
                     .attach(this.validateResponse_());
                 return null;
@@ -1219,7 +1219,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.getContent(),
                     model.getTitle(),
                     model.getExpiresDate(),
-                    model.getAttributesListViewData()
+                    model.getAssignedAttributesPostData()
                 )
                 .attach(this.validateResponse_());
 
@@ -1403,7 +1403,7 @@ NAMESPACE('chlk.controllers', function (){
                 model.getStartDate(),
                 model.getEndDate(),
                 model.isHiddenFromStudents(),
-                model.getAttributesListViewData()
+                model.getAssignedAttributesPostData()
 
             )
                 .attach(this.validateResponse_())
@@ -1448,7 +1448,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.getStartDate(),
                     model.getEndDate(),
                     model.isHiddenFromStudents(),
-                    model.getAttributesListViewData()
+                    model.getAssignedAttributesPostData()
                 )
                 .attach(this.validateResponse_());
 
@@ -1536,7 +1536,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.getWeightMultiplier(),
                     model.isHiddenFromStudents(),
                     model.isAbleDropStudentScore(),
-                    model.getAttributesListViewData()
+                    model.getAssignedAttributesPostData()
                 )
                 .attach(this.validateResponse_())
                 .then(function(model){
@@ -1586,7 +1586,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.getWeightMultiplier(),
                         model.isHiddenFromStudents(),
                         model.isAbleDropStudentScore(),
-                        model.getAttributesListViewData()
+                        model.getAssignedAttributesPostData()
                     )
                     .attach(this.validateResponse_());
             else
@@ -1596,7 +1596,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.getContent(),
                         model.getTitle(),
                         model.getExpiresDate(),
-                        model.getAttributesListViewData()
+                        model.getAssignedAttributesPostData()
                     )
                     .attach(this.validateResponse_());
 
