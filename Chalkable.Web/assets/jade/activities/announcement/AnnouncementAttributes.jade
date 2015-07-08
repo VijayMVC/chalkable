@@ -4,7 +4,7 @@ mixin AttributeAttachment(attachment, announcementType, announcementId)
             A(href=attachment.getUrl()).download-link Download
             .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
         else
-            +LoadingImage(src="#", id="loading-image-" + attachment.getId())
+            +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + attachment.getId())
             .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
             +ActionButton('announcement', 'viewAttributeAttachment', attachment.getId(), announcementType, announcementId) Open
 

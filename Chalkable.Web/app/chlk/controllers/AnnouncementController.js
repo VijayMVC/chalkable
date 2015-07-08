@@ -131,6 +131,23 @@ NAMESPACE('chlk.controllers', function (){
             }
         },
 
+        function prepareAttribute(attribute, announcementType){
+
+            var attributeAttachment = attribute.getAttributeAttachment();
+
+            if (!attributeAttachment) return;
+
+            if(attributeAttachment.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf()){
+                attributeAttachment.setThumbnailUrl(this.announcementService.getAttributeAttachmentUri(attribute.getId(), announcementType, false, 170, 110));
+                attributeAttachment.setUrl(this.announcementService.getAttributeAttachmentUri(attribute.getId(), announcementType, false, null, null));
+            }
+            if(attributeAttachment.getType() == chlk.controllers.AttachmentTypeEnum.OTHER.valueOf()){
+                attributeAttachment.setUrl(this.announcementService.getAttributeAttachmentUri(attribute.getId(), announcementType, true, null, null));
+            }
+
+            attribute.setAttributeAttachment(attributeAttachment);
+        },
+
         [[chlk.models.announcement.FeedAnnouncementViewData]],
         function prepareAttachments(announcement){
             var attachments = announcement.getAnnouncementAttachments() || [], ids = [];
@@ -146,7 +163,7 @@ NAMESPACE('chlk.controllers', function (){
         function prepareAttributes(announcement){
             var attributes = announcement.getAnnouncementAttributes() || [];
             attributes.forEach(function(item){
-                //this.prepareAttachment(item);//prepare attribute attachment too
+                this.prepareAttribute(item, announcement.getType());
             }, this);
             announcement.setAnnouncementAttributes(attributes);
             this.cacheAnnouncementAttributes(attributes);
@@ -698,6 +715,7 @@ NAMESPACE('chlk.controllers', function (){
 
         function prepareAnnouncementForView(announcement){
             this.prepareAttachments(announcement);
+            this.prepareAttributes(announcement);
             var studentAnnouncements = announcement.getStudentAnnouncements();
             if(studentAnnouncements){
                 var studentItems = studentAnnouncements.getItems(), that = this;

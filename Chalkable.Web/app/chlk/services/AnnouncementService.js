@@ -172,6 +172,17 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum, Boolean, Number, Number]],
+            String, function getAttributeAttachmentUri(assignedAttributeId, announcementType, needsDownload, width, height) {
+                return this.getUrl('AnnouncementAttribute/DownloadAttributeAttachment', {
+                    assignedAttributeId: assignedAttributeId.valueOf(),
+                    announcementType:announcementType.valueOf(),
+                    needsDownload: needsDownload,
+                    width: width,
+                    height: height
+                });
+            },
+
             [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
             ria.async.Future, function deleteAttachment(attachmentId, announcementId, announcementType) {
                 return this.get('AnnouncementAttachment/DeleteAttachment.json', chlk.models.announcement.FeedAnnouncementViewData, {
