@@ -23,6 +23,9 @@ NAMESPACE('chlk.templates.apps', function() {
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'announcementId',
 
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
+
             String, function getStandardsUrlComponents() {
                 return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&')
             }
