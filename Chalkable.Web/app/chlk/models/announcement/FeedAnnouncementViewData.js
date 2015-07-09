@@ -9,6 +9,7 @@ REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.apps.ApplicationForAttach');
 REQUIRE('chlk.models.announcement.AdminAnnouncementRecipient');
+REQUIRE('chlk.models.announcement.CategoryViewData');
 
 REQUIRE('chlk.models.announcement.Announcement');
 
@@ -46,7 +47,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.gradeViewApps = SJX.fromArrayOfDeserializables(raw.gradeviewapps, chlk.models.apps.AppAttachment);
                 this.applicationsIds = SJX.fromValue(raw.applicationsids, String);
                 this.markingPeriodId = SJX.fromValue(raw.markingperiodid, chlk.models.id.MarkingPeriodId);
-                this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.common.NameId);
+                this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.announcement.CategoryViewData);
 
                 this.submitType = SJX.fromValue(raw.submitType, String);
                 this.galleryCategoryId = SJX.fromValue(raw.galleryCategoryId, Number);
@@ -102,7 +103,7 @@ NAMESPACE('chlk.models.announcement', function () {
             ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
 
             Number, 'announcementTypeId',
-            ArrayOf(chlk.models.common.NameId), 'categories',
+            ArrayOf(chlk.models.announcement.CategoryViewData), 'categories',
             String, 'groupIds',
             String, 'attachments',
             String, 'applicationsIds',

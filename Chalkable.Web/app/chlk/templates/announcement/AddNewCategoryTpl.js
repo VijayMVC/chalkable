@@ -9,6 +9,6 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AddNewCategory.jade')],
         'AddNewCategoryTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.common.NameId), 'categories'
+            ArrayOf(chlk.models.announcement.CategoryViewData), 'categories'
         ])
 });

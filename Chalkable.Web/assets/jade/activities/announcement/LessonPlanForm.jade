@@ -50,7 +50,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                 .search-container
                                     label(for="filter") Choose from New Item Gallery
                                     +SearchBox(chlk.services.LessonPlanService, "searchLessonPlansTemplates", chlk.templates.announcement.LessonPlanAutoCompleteTpl)(
-                                    name="filter", placeholder="Default Lesson Plan", value = announcement.getFilter()
+                                        name="filter", placeholder="Default Lesson Plan", value = announcement.getFilter(), minLength = 0
                                     ).search-templates
                                 .add-category
                                     +ActionButton('announcement', 'editCategories').special-button2.add + Add Category

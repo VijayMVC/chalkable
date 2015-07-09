@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.common.NameId');
+REQUIRE('chlk.models.announcement.CategoryViewData');
 
 NAMESPACE('chlk.models.announcement', function(){
 
@@ -7,13 +7,13 @@ NAMESPACE('chlk.models.announcement', function(){
 
     CLASS('CategoriesListViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
 
-        ArrayOf(chlk.models.common.NameId), 'categories',
+        ArrayOf(chlk.models.announcement.CategoryViewData), 'categories',
 
         VOID, function deserialize(raw){
-            this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.common.NameId);
+            this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.announcement.CategoryViewData);
         },
 
-        [[ArrayOf(chlk.models.common.NameId)]],
+        [[ArrayOf(chlk.models.announcement.CategoryViewData)]],
         function $(categories_){
             BASE();
             if(categories_)

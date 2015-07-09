@@ -29,19 +29,19 @@ NAMESPACE('chlk.services', function () {
             },
 
             ria.async.Future, function listCategories() {
-                return this.get('LPGalleryCategory/ListCategories.json', ArrayOf(chlk.models.common.NameId));
+                return this.get('LPGalleryCategory/ListCategories.json', ArrayOf(chlk.models.announcement.CategoryViewData));
             },
 
             [[String]],
             ria.async.Future, function addCategory(name) {
-                return this.get('LPGalleryCategory/CreateCategory.json', chlk.models.common.NameId, {
+                return this.get('LPGalleryCategory/CreateCategory.json', chlk.models.announcement.CategoryViewData, {
                     name: name
                 });
             },
 
             [[Number, String]],
             ria.async.Future, function updateCategory(categoryId, name) {
-                return this.get('LPGalleryCategory/UpdateCategory.json', chlk.models.common.NameId, {
+                return this.get('LPGalleryCategory/UpdateCategory.json', chlk.models.announcement.CategoryViewData, {
                     name: name,
                     categoryId: categoryId
                 });
@@ -62,8 +62,8 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[Number, String]],
-            ria.async.Future, function searchLessonPlansTemplates(galleryCategoryId_, filter_) {
+            [[String, Object]],
+            ria.async.Future, function searchLessonPlansTemplates(filter_, galleryCategoryId_) {
                 return this.get('LessonPlan/SearchLessonPlansTemplates.json', ArrayOf(chlk.models.announcement.LessonPlanViewData), {
                     galleryCategoryId: this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, galleryCategoryId_),
                     filter: filter_
