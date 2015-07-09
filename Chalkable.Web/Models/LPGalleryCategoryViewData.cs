@@ -9,6 +9,8 @@ namespace Chalkable.Web.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public int OwnerId { get; set; }
+        public int LessonPlansCount { get; set; }
+
         
         public static LPGalleryCategoryViewData Create(LPGalleryCategory category)
         {
@@ -17,6 +19,7 @@ namespace Chalkable.Web.Models
                     Id = category.Id,
                     Name = category.Name,
                     OwnerId = category.OwnerRef,
+                    LessonPlansCount = category.LessonPlansCount
                 };
         }
 

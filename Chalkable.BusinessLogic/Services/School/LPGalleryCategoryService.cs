@@ -1,19 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
     public interface ILPGalleryCategoryService
     {
+        IList<LPGalleryCategory> GetList();
         LPGalleryCategory Add(string name);
         LPGalleryCategory Edit(int categoryId, string name);
+        bool Exists(string name, int? excludeCategoryId);
         void Delete(int categoryId);
-        IList<LPGalleryCategory> GetList();
     }
 
     public class LPGalleryCategoryService : SchoolServiceBase, ILPGalleryCategoryService
@@ -21,17 +24,23 @@ namespace Chalkable.BusinessLogic.Services.School
         public LPGalleryCategoryService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
         }
+        
+        public IList<LPGalleryCategory> GetList()
+        {
+            return DoRead(u => new LPGalleryCategoryDataAccess(u).GetAll());
+        }
 
         public LPGalleryCategory Add(string name)
         {
-            if(!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
+            Trace.Assert(Context.PersonId.HasValue);
             ValidateParams(name); 
             BaseSecurity.EnsureAdminOrTeacher(Context);
             var res = new LPGalleryCategory {Name = name, OwnerRef = Context.PersonId.Value};
             using (var u = Update())
             {
-                var da = new DataAccessBase<LPGalleryCategory, int>(u);
+                var da = new LPGalleryCategoryDataAccess(u);
+                if (da.Exists(name, null))
+                    throw new ChalkableException("Category with such name already exists");
                 da.Insert(res);
                 res = da.GetAll().Last();
                 u.Commit();
@@ -44,7 +53,9 @@ namespace Chalkable.BusinessLogic.Services.School
             ValidateParams(name);
             using (var uow = Update())
             {
-                var da = new DataAccessBase<LPGalleryCategory, int>(uow);
+                var da = new LPGalleryCategoryDataAccess(uow);
+                if(da.Exists(name, categoryId))
+                    throw new ChalkableException("Category with such name already exists");
                 var category = da.GetById(categoryId);
                 EnsureModifyPermission(category);
                 category.Name = name;
@@ -56,15 +67,21 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(int categoryId)
         {
+            Trace.Assert(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue);
             DoUpdate(u =>
                 {
-                    var da = new DataAccessBase<LPGalleryCategory, int>(u);
-                    EnsureModifyPermission(da.GetById(categoryId));
+                    var da = new LPGalleryCategoryDataAccess(u);
+                    var category = da.GetById(categoryId);
+                    EnsureInDeletePermission(category);
                     da.Delete(categoryId);
-                    //TODO: delete all references from lesson plan to category
                 });
         }
-        
+
+        public bool Exists(string name, int? excludeCategoryId)
+        {
+            return DoRead(u => new LPGalleryCategoryDataAccess(u).Exists(name, excludeCategoryId));
+        }
+
         private void ValidateParams(string name)
         {
             if (string.IsNullOrEmpty(name))
@@ -77,9 +94,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException("Only owner can modify category");            
         }
 
-        public IList<LPGalleryCategory> GetList()
+        private void EnsureInDeletePermission(LPGalleryCategory category)
         {
-            return DoRead(u => new DataAccessBase<LPGalleryCategory>(u).GetAll());
+            EnsureModifyPermission(category);
+            if (category.LessonPlansCount > 0)
+                throw new ChalkableException("Current GalleryCategory has lessonPlanTemplates. You can't delete such category");
         }
     }
 }
