@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
     public interface IAnnouncementFetchService
     {
-        IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, int start, int count, int? classId);
+        IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, int start, int count, int? classId, DateTime? lastItemDate);
         AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null);
         IList<Announcement> GetAnnouncementsByFilter(string filter);
         Announcement GetLastDraft();
@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
 
-        public IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, int start, int count, int? classId)
+        public IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, int start, int count, int? classId, DateTime? lastItemDate)
         {
             if (BaseSecurity.IsDistrictAdmin(Context))
                 return ServiceLocator.AdminAnnouncementService.GetAdminAnnouncementsForFeed(complete, null, null, null, start, count);
@@ -35,9 +35,20 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
 
                 var classAnns = ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(null, null, classId, complete, true, null, start, count + 1);
+                
+                DateTime fromDate = Context.SchoolYearStartDate ?? DateTime.MinValue, 
+                        toDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
+                if (start != 0)
+                {
+                    if (classAnns.Count > 0)
+                        fromDate = classAnns.Min(x => x.ClassAnnouncementData.Expires);
+                    else if(lastItemDate.HasValue) 
+                        fromDate = lastItemDate.Value;
+                }
+                if (classAnns.Count > 0)
+                    toDate = classAnns.Max(x => x.ClassAnnouncementData.Expires);
 
-                var fromDate = start != 0 && classAnns.Count > 0 ? classAnns.Min(x => x.ClassAnnouncementData.Expires) : DateTime.MinValue;
-                var toDate = classAnns.Count > 0 ? classAnns.Max(x => x.ClassAnnouncementData.Expires) : DateTime.MaxValue;
+
                 if (classAnns.Count == count + 1)
                     classAnns.RemoveAt(classAnns.Count - 1);
 
@@ -45,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 res.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(fromDate, toDate, null, classId, complete, true));
 
                 if (Context.Role == CoreRoles.STUDENT_ROLE)
-                    res.AddRange(ServiceLocator.AdminAnnouncementService.GetAdminAnnouncementsForFeed(complete, null, fromDate, toDate, start, count));
+                    res.AddRange(ServiceLocator.AdminAnnouncementService.GetAdminAnnouncementsForFeed(complete, null, fromDate, toDate));
             }
             return res.OrderBy(x =>
             {
@@ -55,6 +66,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }).ToList();
         }
 
+        
         public AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null)
         {
             var res = new AnnouncementComplexList()
