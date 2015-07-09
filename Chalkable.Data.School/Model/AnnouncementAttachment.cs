@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
@@ -26,10 +22,6 @@ namespace Chalkable.Data.School.Model
         public string Uuid { get; set; }
         public int Order { get; set; }
 
-        [NotDbFieldAttr]
-        public int? SisActivityId { get; set; }
-
         public int? SisAttachmentId { get; set; }
-
     }
 }

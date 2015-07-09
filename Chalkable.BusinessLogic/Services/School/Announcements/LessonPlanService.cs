@@ -84,53 +84,16 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         private IList<AnnouncementAttachment> CopyAttachments(int fromLessonPlanId, int toLessonPlanId, UnitOfWork unitOfWork)
         {
-            var attachmentsForCopy = new AnnouncementAttachmentDataAccess(unitOfWork)
-                .GetAll(new AndQueryCondition
-                    {
-                        {AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, fromLessonPlanId}
-                    })
-                .Select(x => ServiceLocator.AnnouncementAttachmentService.GetAttachmentContent(x)).ToList();
-            var attContents = attachmentsForCopy.Select(x => 
-                AttachmentContentInfo.Create(
-                    new AnnouncementAttachment
-                    {
-                        AnnouncementRef = toLessonPlanId,
-                        PersonRef = Context.PersonId.Value,
-                        AttachedDate = Context.NowSchoolTime,
-                        Name = x.Attachment.Name,
-                        Order = x.Attachment.Order,
-                        Uuid = x.Attachment.Uuid
-                    }, x.Content)).ToList();
-
             var da = new AnnouncementAttachmentDataAccess(unitOfWork);
-            da.Insert(attContents.Select(x => x.Attachment).ToList());
-            var attsIds = da.GetAll(new AndQueryCondition { { AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, toLessonPlanId } })
-                     .OrderByDescending(x => x.Id).Take(attContents.Count).ToList();
-            attsIds = attsIds.OrderBy(x => x.Id).ToList();
-            for (int i = 0; i < attsIds.Count; i++)
-            {
-                attContents[i].Attachment.Id = attsIds[0].Id;
-            }
-            ServiceLocator.AnnouncementAttachmentService.AddAttachmentToBlob(attContents);
-            return attContents.Select(x => x.Attachment).ToList();
+            var attachmentsForCopy = da.TakeLastAttachments(fromLessonPlanId);
+            return ServiceLocator.AnnouncementAttachmentService.CopyAttachments(toLessonPlanId, attachmentsForCopy, unitOfWork);
         }
 
         private IList<AnnouncementAssignedAttribute> CopyAttributes(int fromLessonPlanId, int toLessonPlanId, UnitOfWork unitOfWork)
         {
             var da = new DataAccessBase<AnnouncementAssignedAttribute>(unitOfWork);
             var attributesForCopying = da.GetAll(new AndQueryCondition {{AnnouncementAssignedAttribute.ANNOUNCEMENT_REF_FIELD, fromLessonPlanId}});
-            var res = attributesForCopying.Select(x => new AnnouncementAssignedAttribute
-                {
-                    AnnouncementRef = toLessonPlanId,
-                    AttributeTypeId = x.AttributeTypeId,
-                    Name = x.Name,
-                    Text = x.Text,
-                    VisibleForStudents = x.VisibleForStudents,
-                    Uuid = x.Uuid
-                }).ToList();
-            da.Insert(res);
-            //TODO: adding attributes to blob 
-            return res;
+            return ServiceLocator.AnnouncementAssignedAttributeService.CopyNonStiAttributes(toLessonPlanId, attributesForCopying, unitOfWork);
         } 
 
         public AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content,

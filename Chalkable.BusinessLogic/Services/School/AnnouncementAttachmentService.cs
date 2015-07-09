@@ -6,10 +6,9 @@ using System.Linq;
 
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.DataAccess;
 
@@ -20,7 +19,8 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAnnouncementAttachmentService
     {
-        Announcement AddAttachment(int announcementId, AnnouncementType type, byte[] content, string name, string uuid);
+        IList<AnnouncementAttachment> CopyAttachments(int toAnnouncemenId, IList<AnnouncementAttachment> attachmentsForCopying, UnitOfWork unitOfWork);
+        Announcement AddAttachment(int announcementId, AnnouncementType type, byte[] content, string name);
         void AddAttachmentToBlob(IList<AttachmentContentInfo> attachmentContent);
         void DeleteAttachment(int announcementAttachmentId);
         IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true);
@@ -46,13 +46,54 @@ namespace Chalkable.BusinessLogic.Services.School
             return AnnouncementSecurity.CanModifyAnnouncement(ann, Context) || recipients.Any(p => p.Id == Context.PersonId);
         }
 
-        public Announcement AddAttachment(int announcementId, AnnouncementType type, byte[] content, string name, string uuid)
+        private string UploadToCrocodoc(string name, byte[] content)
+        {
+            if (ServiceLocator.CrocodocService.IsDocument(name))
+                return ServiceLocator.CrocodocService.UploadDocument(name, content).uuid;
+            return null;
+        }
+
+        public IList<AnnouncementAttachment> CopyAttachments(int toAnnouncemenId, IList<AnnouncementAttachment> attachmentsForCopying, UnitOfWork unitOfWork)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            var attContentsForCopy = attachmentsForCopying.Select(ServiceLocator.AnnouncementAttachmentService.GetAttachmentContent).ToList();
+
+            var attContents = new List<AttachmentContentInfo>();
+            foreach (var attWithContent in attContentsForCopy)
+            {
+                var uuid = UploadToCrocodoc(attWithContent.Attachment.Name, attWithContent.Content);
+                var att = new AnnouncementAttachment
+                    {
+                        AnnouncementRef = toAnnouncemenId,
+                        AttachedDate = attWithContent.Attachment.AttachedDate,
+                        Name = attWithContent.Attachment.Name,
+                        PersonRef = Context.PersonId.Value,
+                        Uuid = uuid,
+                        Order = attWithContent.Attachment.Order
+                    };
+                attContents.Add(AttachmentContentInfo.Create(att, attWithContent.Content));
+            }
+            var da = new AnnouncementAttachmentDataAccess(unitOfWork);
+            da.Insert(attContents.Select(x => x.Attachment).ToList());
+            var atts = da.TakeLastAttachments(toAnnouncemenId, attContents.Count);
+            
+            for (var i = 0; i < atts.Count; i++) 
+                attContents[i].Attachment = atts[i];
+            
+            AddAttachmentToBlob(attContents);
+            return atts;
+        }
+
+
+        public Announcement AddAttachment(int announcementId, AnnouncementType type, byte[] content, string name)
         {
             var annDetails = ServiceLocator.GetAnnouncementService(type).GetAnnouncementDetails(announcementId);
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolLocalId.HasValue);
             if (!CanAttach(annDetails))
                 throw new ChalkableSecurityException();
+            
+            var uuid = UploadToCrocodoc(name, content);
             using (var uow = Update())
             {               
                 var annAtt = new AnnouncementAttachment

@@ -26,6 +26,7 @@ namespace Chalkable.BusinessLogic.Services.School
         AnnouncementAssignedAttribute GetAssignedAttribyteByAttachmentId(int attributeAttachmentId);
         AnnouncementDetails RemoveAttributeAttachment(AnnouncementType announcementType, int announcementId, int attributeAttachmentId);
         AttributeAttachmentContentInfo GetAttributeAttachmentContent(int assignedAttributeId, AnnouncementType announcementType);
+        IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int toAnnouncementId, IList<AnnouncementAssignedAttribute> attributesForCopying, UnitOfWork unitOfWork);
     }
 
     public class AnnouncementAssignedAttributeService : SisConnectedService, IAnnouncementAssignedAttributeService
@@ -99,7 +100,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AnnouncementDetails Add(AnnouncementType announcementType, int announcementId, int attributeTypeId)
         {
-            var ann = ServiceLocator.GetAnnouncementService((AnnouncementType)announcementType).GetAnnouncementDetails(announcementId);
+            var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
             if (!(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue))
                 throw new UnassignedUserException();
 
@@ -245,28 +246,62 @@ namespace Chalkable.BusinessLogic.Services.School
             
         }
 
-
-
         public AttributeAttachmentContentInfo GetAttributeAttachmentContent(int assignedAttributeId, AnnouncementType announcementType)
         {
             var attribute = GetAssignedAttribyteById(assignedAttributeId);
-            AttributeAttachmentContentInfo result = null;
-            var attachment = attribute.Attachment;
+            return GetAttributeAttachmentContent(attribute);
+        }
 
-            if (attachment != null)
+        private string UploadToCrocodoc(string name, byte[] content)
+        {
+            if (ServiceLocator.CrocodocService.IsDocument(name))
+                return ServiceLocator.CrocodocService.UploadDocument(name, content).uuid;
+            return null;
+        }
+
+        private AttributeAttachmentContentInfo GetAttributeAttachmentContent(AnnouncementAssignedAttribute attribute)
+        {
+            AttributeAttachmentContentInfo result = null;
+            if (attribute.Attachment != null)
             {
-                if (announcementType == AnnouncementType.Class)
+                if (attribute.SisActivityAssignedAttributeId.HasValue)
                 {
-                    var content =
-                        ConnectorLocator.AttachmentConnector.GetAttachmentContent(attachment.AttachmentId);
-                    result = AttributeAttachmentContentInfo.Create(attachment.AttachmentName, content);
+                    var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(attribute.Attachment.AttachmentId);
+                    result = AttributeAttachmentContentInfo.Create(attribute.Attachment.AttachmentName, content);
                 }
-                else
-                {
-                    result = GetAttributeAttachmentFromBlob(attachment.AttachmentName, attachment.AttachmentId);
-                }
+                else result = GetAttributeAttachmentFromBlob(attribute.Attachment.AttachmentName, attribute.Attachment.AttachmentId);
             }
             return result;
+        }
+
+        public IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int toAnnouncementId, IList<AnnouncementAssignedAttribute> attributesForCopying, UnitOfWork unitOfWork)
+        {
+            attributesForCopying = attributesForCopying.Where(x => !x.SisActivityAssignedAttributeId.HasValue).ToList();
+            var attributsWithContents = attributesForCopying.Select(x => AnnouncementAssignedAttributeInfo.Create(x, GetAttributeAttachmentContent(x)));
+
+            var atributesInfo = new List<AnnouncementAssignedAttributeInfo>();
+            foreach (var attributeContent in attributsWithContents)
+            {
+                var attribute = new AnnouncementAssignedAttribute
+                    {
+                        AnnouncementRef = toAnnouncementId,
+                        AttributeTypeId = attributeContent.Attribute.AttributeTypeId,
+                        Name = attributeContent.Attribute.Name,
+                        Text = attributeContent.Attribute.Text,
+                        VisibleForStudents = attributeContent.Attribute.VisibleForStudents,
+                    };
+                if (attributeContent.AttachmentContentInfo != null)
+                    attribute.Uuid = UploadToCrocodoc(attributeContent.Attribute.Name, attributeContent.AttachmentContentInfo.Content);
+                atributesInfo.Add(AnnouncementAssignedAttributeInfo.Create(attribute, attributeContent.AttachmentContentInfo));
+            }
+            var da = new DataAccessBase<AnnouncementAssignedAttribute>(unitOfWork);
+            da.Insert(atributesInfo.Select(x => x.Attribute).ToList());
+
+            var attribues = da.GetAll(new AndQueryCondition { {AnnouncementAssignedAttribute.ANNOUNCEMENT_REF_FIELD, toAnnouncementId}})
+                              .OrderByDescending(x => x.Id).Take(atributesInfo.Count).OrderBy(x => x.Id).ToList();
+            for (var i = 0; i < attribues.Count; i++)
+                AddAttributeAttachmentToBlob(attribues[i].Id, atributesInfo[i].AttachmentContentInfo.Content);
+            return attribues;
         }
     }
 }

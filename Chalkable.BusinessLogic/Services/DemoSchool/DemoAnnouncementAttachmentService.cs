@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
@@ -55,7 +56,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 || (classId.HasValue && ((DemoClassService)ServiceLocator.ClassService).ClassPersonExists(classId.Value, Context.PersonId));
         }
 
-        public Announcement AddAttachment(int announcementId, AnnouncementType annType, byte[] content, string name, string uuid)
+        private string UploadToCrocodoc(string name, byte[] content)
+        {
+            if (ServiceLocator.CrocodocService.IsDocument(name))
+                return ServiceLocator.CrocodocService.UploadDocument(name, content).uuid;
+            return null;
+        }
+
+        public IList<AnnouncementAttachment> CopyAttachments(int toAnnouncemenId, IList<AnnouncementAttachment> attachmentsForCopying)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<AnnouncementAttachment> CopyAttachments(int toAnnouncemenId, IList<AnnouncementAttachment> attachmentsForCopying, UnitOfWork unitOfWork)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Announcement AddAttachment(int announcementId, AnnouncementType annType, byte[] content, string name)
         {
             var ann = ServiceLocator.GetAnnouncementService(annType).GetAnnouncementDetails(announcementId);
             if (!Context.PersonId.HasValue)
@@ -63,6 +81,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (!CanAttach(ann))
                 throw new ChalkableSecurityException();
 
+            var uuid = UploadToCrocodoc(name, content);
             var annAtt = new AnnouncementAttachment
             {
                 AnnouncementRef = ann.Id,
@@ -251,7 +270,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 var content = ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS,
                     sourceAnnouncementAttachment.Id.ToString(CultureInfo.InvariantCulture));
-                AddAttachment(toAnnouncementId, AnnouncementType.Class, content, sourceAnnouncementAttachment.Name, "");
+                AddAttachment(toAnnouncementId, AnnouncementType.Class, content, sourceAnnouncementAttachment.Name);
             }
             return GetAttachments(toAnnouncementId);
         }
