@@ -300,7 +300,8 @@ namespace Chalkable.BusinessLogic.Services.School
             var attribues = da.GetAll(new AndQueryCondition { {AnnouncementAssignedAttribute.ANNOUNCEMENT_REF_FIELD, toAnnouncementId}})
                               .OrderByDescending(x => x.Id).Take(atributesInfo.Count).OrderBy(x => x.Id).ToList();
             for (var i = 0; i < attribues.Count; i++)
-                AddAttributeAttachmentToBlob(attribues[i].Id, atributesInfo[i].AttachmentContentInfo.Content);
+                if(atributesInfo[i].AttachmentContentInfo != null)
+                    AddAttributeAttachmentToBlob(attribues[i].Id, atributesInfo[i].AttachmentContentInfo.Content);
             return attribues;
         }
     }
