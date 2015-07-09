@@ -6,7 +6,7 @@ namespace Chalkable.Data.School.Model
     {
         public PersonsForAppInstallTypeEnum Type { get; set; }
         public int? GroupId { get; set; }
-        public int SchoolYear { get; set; }
+        public int SchoolYearId { get; set; }
         public int PersonId { get; set; }
     }
 
@@ -15,7 +15,7 @@ namespace Chalkable.Data.School.Model
         public PersonsForAppInstallTypeEnum Type { get; set; }
 
         public int? GroupId { get; set; }
-        public int? SchoolYear { get; set; }
+        public int? SchoolYearId { get; set; }
         public int? Count { get; set; }
     }
 

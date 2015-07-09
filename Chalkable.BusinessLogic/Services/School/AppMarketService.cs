@@ -76,10 +76,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new StudyCenterDisabledException();
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-
-            if (!CanInstall(applicationId, personId, classIds))
-                throw new ChalkableException(ChlkResources.ERR_APP_NOT_ENOUGH_MONEY);
-
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
             using (var uow = Update())
             {

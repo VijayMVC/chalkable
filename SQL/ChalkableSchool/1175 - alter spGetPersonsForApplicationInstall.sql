@@ -1,14 +1,4 @@
-USE [11111111-0DCB-4021-971E-C322D3656186]
-GO
-
-/****** Object:  StoredProcedure [dbo].[spGetPersonsForApplicationInstall]    Script Date: 08.07.2015 16:50:56 ******/
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-CREATE PROCEDURE [dbo].[spGetPersonsForApplicationInstall]
+Alter PROCEDURE [dbo].[spGetPersonsForApplicationInstall]
 @applicationId uniqueidentifier, @callerId int, @personId int, @classIds nvarchar(2048), @callerRoleId int
 , @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolYearId int
 as
@@ -103,12 +93,16 @@ begin
 		end
 	end
 end
-
+declare @a int
+select @a = count(*) from @preResult
+print (@a)
 delete from @preResult 
 from 
 	(select PersonId, SchoolYearId from @preResult) x
-	join ApplicationInstall on x.PersonId = ApplicationInstall.PersonRef and x.SchoolYearId = ApplicationInstall.SchoolYearRef
-	
+	join ApplicationInstall on x.PersonId = ApplicationInstall.PersonRef 
+			and x.SchoolYearId = ApplicationInstall.SchoolYearRef
+			and ApplicationInstall.ApplicationRef = @applicationId
+			and ApplicationInstall.Active = 1
 select *
 from @preResult
 

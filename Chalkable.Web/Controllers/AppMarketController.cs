@@ -104,7 +104,6 @@ namespace Chalkable.Web.Controllers
             if (!SchoolLocator.AppMarketService.CanInstall(applicationId, personId, classids))
                 throw new ChalkableException(ChlkResources.ERR_APP_NOT_ENOUGH_MONEY_OR_ALREADY_INSTALLED);
 
-            var totalPrice = SchoolLocator.AppMarketService.GetApplicationTotalPrice(applicationId, personId, classids).TotalPrice;
             var appinstallAction = SchoolLocator.AppMarketService.Install(applicationId, personId, classids, schoolyearId, Context.NowSchoolYearTime);
             try
             {
