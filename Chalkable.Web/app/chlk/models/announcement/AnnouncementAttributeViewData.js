@@ -31,7 +31,7 @@ NAMESPACE('chlk.models.announcement', function(){
             this.thumbnailUrl = SJX.fromValue(raw.thumbnailurl, String);
             this.type = SJX.fromValue(raw.type, Number);
             this.stiAttachment = SJX.fromValue(raw.stiattachment, Boolean);
-            this.mimetype = SJX.fromValue(raw.mimetype, String);
+            this.mimeType = SJX.fromValue(raw.mimetype, String);
         },
 
         Object, function getPostData() {

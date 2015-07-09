@@ -73,7 +73,7 @@ namespace Chalkable.Data.School.Model
                 Id = attributeInputModel.Id,
                 Name = attributeInputModel.Name,
                 Text = attributeInputModel.Text,
-                VisibleForStudents = attributeInputModel.VisibleForStudents
+                VisibleForStudents = attributeInputModel.VisibleForStudents,
             };
 
             if (attributeInputModel.AttributeAttachment != null)
@@ -81,6 +81,7 @@ namespace Chalkable.Data.School.Model
                 attribute.SisAttributeAttachmentId = attributeInputModel.AttributeAttachment.AttachmentId;
                 attribute.SisAttachmentName = attributeInputModel.AttributeAttachment.AttachmentName;
                 attribute.SisAttachmentMimeType = attributeInputModel.AttributeAttachment.MimeType;
+                attribute.Uuid = attributeInputModel.AttributeAttachment.Uuid;
             }
 
             return attribute;

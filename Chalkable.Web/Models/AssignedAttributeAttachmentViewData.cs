@@ -16,6 +16,8 @@ namespace Chalkable.Web.Models
         public string ThumbnailUrl { get; set; }
         public int Type { get; set; }
         public bool StiAttachment { get; set; }
+        public string Uuid { get; set; }
+        public string MimeType { get; set; }
 
         public static AssignedAttributeAttachmentViewData Create(AnnouncementAssignedAttributeAttachment attachment, IList<AssignedAttributeAttachmentInfo> attrAttachmentInfos)
         {
@@ -33,6 +35,8 @@ namespace Chalkable.Web.Models
                     Name = attachment.AttachmentName,
                     Type = (int)MimeHelper.GetTypeByName(attachment.AttachmentName),
                     StiAttachment = attachment.StiAttachment,
+                    Uuid = attachment.Uuid,
+                    MimeType = attachment.MimeType
 
                 };
 
