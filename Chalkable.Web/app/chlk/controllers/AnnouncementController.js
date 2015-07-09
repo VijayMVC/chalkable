@@ -1122,12 +1122,12 @@ NAMESPACE('chlk.controllers', function (){
              return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT, new chlk.models.announcement.FeedAnnouncementViewData());
         },
 
-        [[ArrayOf(chlk.models.common.NameId)]],
+        [[ArrayOf(chlk.models.announcement.CategoryViewData)]],
         function cacheLessonPlanCategories(categories){
             this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORIES, categories);
         },
 
-        ArrayOf(chlk.models.common.NameId), function getCachedLessonPlanCategories(){
+        ArrayOf(chlk.models.announcement.CategoryViewData), function getCachedLessonPlanCategories(){
             return this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORIES, []);
         },
 
@@ -2099,7 +2099,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.NotChangedSidebarButton()],
         function addCategoryAction(){
-            var res = new ria.async.DeferredData(new chlk.models.common.NameId);
+            var res = new ria.async.DeferredData(new chlk.models.announcement.CategoryViewData);
 
             return this.UpdateView(chlk.activities.announcement.AddNewCategoryDialog, res);
         },
@@ -2129,7 +2129,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.common.NameId]],
+        [[chlk.models.announcement.CategoryViewData]],
         function createCategoryAction(model){
             var res = this.lessonPlanService.addCategory(model.getName())
                 .thenCall(this.lessonPlanService.listCategories, [])
@@ -2143,7 +2143,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.common.NameId]],
+        [[chlk.models.announcement.CategoryViewData]],
         function editCategoryNameAction(model){
             var res = this.lessonPlanService.updateCategory(Number(model.getId()), model.getName())
                 .thenCall(this.lessonPlanService.listCategories, [])
