@@ -43,7 +43,7 @@ namespace Chalkable.Web.Logic
                 AttributeAttachment = announcementAttribute.Attachment,
                 DocWidth = docWidth,
                 DocHeight = docHeight,
-                //DownloadDocumentUrl =  crocodocService.BuildDownloadDocumentUrl(announcementAttribute.Uuid, announcementAttribute.),
+                DownloadDocumentUrl = announcementAttribute.Attachment != null ? crocodocService.BuildDownloadDocumentUrl(announcementAttribute.Uuid, announcementAttribute.Attachment.AttachmentName) : "",
                 DownloadThumbnailUrl = crocodocService.BuildDownloadhumbnailUrl(announcementAttribute.Uuid, docWidth, docHeight)
             }).ToList();
         }
