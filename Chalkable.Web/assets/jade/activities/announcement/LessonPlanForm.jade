@@ -45,6 +45,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                         label(for="galleryCategoryForSearch") Category:
                                         SPAN#galleryCategoryForSearchContainer
                                             +Select('galleryCategoryForSearch')#galleryCategoryForSearch
+                                                +Option('', 'Select category', true)
                                                 each item in announcement.getCategories()
                                                     +Option(item.getId(), item.getName())
                                         BUTTON(type="submit", value="changeCategory", name="submitType").validate-skip#changeCategoryUpdate.x-hidden

@@ -1352,7 +1352,7 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             if (submitType == 'changeCategory'){
-                this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, model.getGalleryCategoryForSearch());
+                this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, model.getGalleryCategoryForSearch() || '');
                 return null;
                 //return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, ria.async.DeferredData(model), 'search');
             }
