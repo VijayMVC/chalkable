@@ -48,6 +48,8 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                                 each item in announcement.getCategories()
                                                     +Option(item.getId(), item.getName())
                                         BUTTON(type="submit", value="changeCategory", name="submitType").validate-skip#changeCategoryUpdate.x-hidden
+                                        BUTTON(type="submit", value="createFromTemplate", name="submitType").validate-skip#createFromTemplate.x-hidden
+                                        +Hidden('announcementForTemplateId', null)#announcementForTemplateId
                                     .search-container
                                         label(for="filter") Choose from New Item Gallery
                                         +SearchBox(chlk.services.LessonPlanService, "searchLessonPlansTemplates", chlk.templates.announcement.LessonPlanAutoCompleteTpl)(
@@ -105,12 +107,12 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                     .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
                                 .check-box-container
                                     label(for="add-to-gallery") Add to Lesson Plan Gallery
-                                    +SlideCheckbox('addtogallery', !!lessonPlan.getGalleryCategoryId(), false)#add-to-gallery
+                                    +SlideCheckbox('addtogallery', !!lessonPlan.getGalleryCategoryId(), !!lessonPlan.getGalleryCategoryId())#add-to-gallery
                                 .category-container.new-input-container
                                     BUTTON#add-to-galelry-btn.validate-skip.x-hidden(name="submitType", value="saveNoUpdate", type="submit" )
                                     label(for="galleryCategoryId") Category:
                                     SPAN#galleryCategoryIdContainer
-                                        +Select('galleryCategoryId')(disabled="disabled")#galleryCategoryId
+                                        +Select('galleryCategoryId')(disabled=!!lessonPlan.getGalleryCategoryId() ? false : "disabled")#galleryCategoryId
                                             each item in announcement.getCategories()
                                                 +Option(item.getId(), item.getName(), lessonPlan.getGalleryCategoryId() && item.getId() == lessonPlan.getGalleryCategoryId())
 

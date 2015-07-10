@@ -28,7 +28,6 @@ REQUIRE('chlk.activities.reports.MissingAssignmentsReportDialog');
 REQUIRE('chlk.activities.reports.BirthdayReportDialog');
 REQUIRE('chlk.activities.reports.SeatingChartReportDialog');
 REQUIRE('chlk.activities.reports.GradeVerificationReportDialog');
-REQUIRE('chlk.activities.reports.LessonPlanReportDialog');
 
 REQUIRE('chlk.models.grading.GradingSummaryGridSubmitViewData');
 
@@ -525,22 +524,6 @@ NAMESPACE('chlk.controllers', function (){
 
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
-            function lessonPlanReportAction(gradingPeriodId, classId, startDate, endDate){
-                if (this.isDemoSchool())
-                    return this.ShowMsgBox('Not available for demo', 'Error'), null;
-                var classInfo = this.classService.getClassAnnouncementInfo(classId);
-                var activityCategories = classInfo.getTypesByClass();
-                var res = this.announcementService.getAnnouncementAttributeTypesSync()
-                    .then(function(items){
-                        var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.LESSON_PLAN_REPORT) ||
-                            this.hasUserPermission_(chlk.models.people.UserPermissionEnum.LESSON_PLAN_REPORT_CLASSROOM);
-                        return new chlk.models.reports.LessonPlanReportViewData(activityCategories, items, classId, gradingPeriodId, startDate, endDate, ableDownload);
-                    }, this);
-                return this.ShadeView(chlk.activities.reports.LessonPlanReportDialog, res);
-            },
-
-            [chlk.controllers.SidebarButton('statistic')],
-            [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
             function worksheetReportAction(gradingPeriodId, classId, startDate, endDate){
                 var res = this.getWorksheetReportInfo_(gradingPeriodId, classId, startDate, endDate);
                 return this.ShadeView(chlk.activities.reports.WorksheetReportDialog, res);
@@ -682,43 +665,6 @@ NAMESPACE('chlk.controllers', function (){
                 this.getContext().getDefaultView().submitToIFrame(src);
                 return null;
             },
-
-
-            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.LESSON_PLAN_REPORT])],
-            [chlk.controllers.SidebarButton('statistic')],
-            [[chlk.models.reports.SubmitLessonPlanReportViewData]],
-            function submitLessonPlanReportAction(reportViewData){
-                if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
-                    return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
-                }
-
-                if (reportViewData.isIncludeActivities() && !reportViewData.getActivityAttribute()){
-                    return this.ShowAlertBox("You should select at least one activity attribute", "Error"), null;
-                }
-
-                if (reportViewData.isIncludeActivities() && !reportViewData.getActivityCategory()){
-                    return this.ShowAlertBox("You should select at least one activity category", "Error"), null;
-                }
-
-                var src = this.reportingService.submitLessonPlanReport(
-                    reportViewData.getClassId(),
-                    reportViewData.getGradingPeriodId(),
-                    reportViewData.getFormat(),
-                    reportViewData.getStartDate(),
-                    reportViewData.getEndDate(),
-                    reportViewData.getSortActivities(),
-                    reportViewData.getPublicPrivateText(),
-                    reportViewData.getMaxCount(),
-                    reportViewData.isIncludeActivities(),
-                    reportViewData.isIncludeStandards(),
-                    reportViewData.getActivityAttribute().split(','),
-                    reportViewData.getActivityCategory().split(',')
-                );
-                this.BackgroundCloseView(chlk.activities.reports.LessonPlanReportDialog);
-                this.getContext().getDefaultView().submitToIFrame(src);
-                return null;
-            },
-
 
             [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.GRADE_BOOK_REPORT])],
             [chlk.controllers.SidebarButton('statistic')],

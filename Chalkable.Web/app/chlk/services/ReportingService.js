@@ -5,7 +5,6 @@ REQUIRE('chlk.models.reports.SubmitComprehensiveProgressViewData');
 REQUIRE('chlk.models.reports.SubmitMissingAssignmentsReportViewData');
 REQUIRE('chlk.models.reports.SubmitBirthdayReportViewData');
 REQUIRE('chlk.models.reports.SubmitGradeVerificationReportViewData');
-REQUIRE('chlk.models.reports.SubmitLessonPlanReportViewData');
 REQUIRE('chlk.models.reports.SubmitAttendanceProfileReportViewData');
 REQUIRE('chlk.models.reports.SubmitAttendanceRegisterReportViewData');
 
@@ -255,27 +254,6 @@ NAMESPACE('chlk.services', function () {
                 monthId: monthId,
                 showLocalReasonCode: showLocalReasonCode_,
                 includeTardies: includeTardies_
-            });
-        },
-
-        [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, chlk.models.reports.ReportFormatEnum, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
-            chlk.models.reports.SortActivityOptions, chlk.models.reports.PublicPrivateTextOptions, Number, Boolean, Boolean, Array, Array]],
-
-        String, function submitLessonPlanReport(classId, gradingPeriodId, format, startDate, endDate, sortActivities, publicPrivateText_, maxCount_,
-                                                includeActivities_, includeStandards_, activityAttribute_, activityCategory_){
-            return this.getUrl('Reporting/LessonPlanReport.json', {
-                classId: classId.valueOf(),
-                gradingPeriodId: gradingPeriodId.valueOf(),
-                format: format.valueOf(),
-                startDate: startDate.toStandardFormat(),
-                endDate: endDate.toStandardFormat(),
-                sortItems: sortActivities.valueOf(),
-                publicPrivateText: publicPrivateText_ && publicPrivateText_.valueOf(),
-                maxCount: maxCount_,
-                includeAnnouncements: includeActivities_,
-                includeStandards: includeStandards_,
-                announcementAttributes : this.arrayToCsv(activityAttribute_),
-                announcementTypes: this.arrayToCsv(activityCategory_)
             });
         },
 
