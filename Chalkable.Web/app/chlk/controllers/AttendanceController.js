@@ -108,7 +108,9 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
-        [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.ATTENDANCE_PROFILE_REPORT])],
+        [chlk.controllers.Permissions([
+            [chlk.models.people.UserPermissionEnum.ATTENDANCE_PROFILE_REPORT, chlk.models.people.UserPermissionEnum.ATTENDANCE_PROFILE_REPORT_CLASSROOM]
+        ])],
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.reports.SubmitAttendanceProfileReportViewData]],
         function submitAttendanceProfileReportAction(reportViewData){
