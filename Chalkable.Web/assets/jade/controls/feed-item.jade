@@ -39,6 +39,7 @@ mixin FeedItem(item, disabled, isStudentGrading)
                                 .line
                                     .inner-line(style="width:" + lessonPlan.getPercents() + "%;")
                                 .right-text #{lessonPlan.getPercents()}%
+                    .description= item.getTitle()
             else
                 -var announcementItem = classAnnouncement || adminAnnouncement
                 .date= announcementItem.getExpiresDate() ? announcementItem.getExpiresDate().toString('m/d/y') : ''
@@ -46,3 +47,4 @@ mixin FeedItem(item, disabled, isStudentGrading)
                     .grades
                         .visible
                             .content: +Glue_(item.getTitle(), item.getShortContent())
+
