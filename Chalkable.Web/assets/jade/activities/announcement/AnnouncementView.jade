@@ -75,6 +75,8 @@ mixin Glue_()
                     .chat-bubble
                         if itemWithExpiresDate
                             h2(class=itemWithExpiresDate.getExpiresDateColor())=itemWithExpiresDate.getExpiresDateText()
+                        else
+                            h2=(lessonPlan.getStartDate() && ('From ' +  lessonPlan.getStartDate().format('M d'))) + (lessonPlan.getEndDate() && (' to ' + lessonPlan.getEndDate().format('M d')))
                         p!= glue(self.getTitle(), self.linkify(self.getContent()))
 
                         if self.getStandards() && self.getStandards().length > 0
