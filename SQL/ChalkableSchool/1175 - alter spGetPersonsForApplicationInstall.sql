@@ -1,4 +1,4 @@
-Alter PROCEDURE [dbo].[spGetPersonsForApplicationInstall]
+Alter Procedure [dbo].[spGetPersonsForApplicationInstall]
 @applicationId uniqueidentifier, @callerId int, @personId int, @classIds nvarchar(2048), @callerRoleId int
 , @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolYearId int
 as
@@ -98,13 +98,14 @@ select @a = count(*) from @preResult
 print (@a)
 delete from @preResult 
 from 
-	(select PersonId, SchoolYearId from @preResult) x
+	@preResult x
 	join ApplicationInstall on x.PersonId = ApplicationInstall.PersonRef 
 			and x.SchoolYearId = ApplicationInstall.SchoolYearRef
 			and ApplicationInstall.ApplicationRef = @applicationId
 			and ApplicationInstall.Active = 1
 select *
 from @preResult
+
 
 GO
 

@@ -37,22 +37,31 @@ Begin
 End
 
 select
-	Class.Id as ClassId,
-	Class.Name as ClassName,
+	ClassId,
+	ClassName,
 	Count(*) as NotInstalledStudentCount
-from 
-	Class
-	join ClassPerson on ClassPerson.ClassRef = Class.Id
-	join Student on Student.Id = ClassPerson.PersonRef	
-	join @classes c on Class.Id = c.Id
-	left join ApplicationInstall on ApplicationInstall.PersonRef = Student.Id 
-		and ApplicationInstall.SchoolYearRef = Class.SchoolYearRef
-		and ApplicationInstall.ApplicationRef = @applicationid
-		and ApplicationInstall.Active = 1
-where
-	ApplicationInstall.Id is null
+from
+	(select distinct
+		Class.Id as ClassId,
+		Class.Name as ClassName,
+		ClassPerson.PersonRef	
+	from 
+		Class
+		join @classes c on Class.Id = c.Id
+		join ClassPerson on ClassPerson.ClassRef = Class.Id
+		join Student on Student.Id = ClassPerson.PersonRef		
+		left join (select * from ApplicationInstall
+				where ApplicationInstall.ApplicationRef = @applicationid
+				and ApplicationInstall.Active = 1
+			) a 
+			 on a.PersonRef = Student.Id 
+			and a.SchoolYearRef = Class.SchoolYearRef
+	where
+		a.Id is null) X
 group by
-	Class.Id, Class.Name
+	ClassId,
+	ClassName
+
 
 GO
 
