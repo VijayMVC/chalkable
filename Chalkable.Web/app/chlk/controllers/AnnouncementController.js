@@ -883,8 +883,8 @@ NAMESPACE('chlk.controllers', function (){
                     , this.fetchUploadAttachmentFuture_(announcementId, files, announcementType), 'update-attachments');
         },
 
-        [[chlk.models.id.AnnouncementId,  chlk.models.announcement.AnnouncementTypeEnum, Object]],
-        function uploadAttachmentDistrictAdminAction(announcementId, announcementType, files) {
+        [[chlk.models.id.AnnouncementId,  chlk.models.announcement.AnnouncementTypeEnum, Object, Boolean]],
+        function uploadAttachmentDistrictAdminAction(announcementId, announcementType, files, onCreate_) {
             this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
             return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage
                     , this.fetchUploadAttachmentFuture_(announcementId, files, announcementType), 'update-attachments');
