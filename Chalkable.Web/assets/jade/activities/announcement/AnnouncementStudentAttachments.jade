@@ -6,7 +6,7 @@ if classAnnouncement && classAnnouncement.isGradable()
 each attachment, i in self.getAnnouncementAttachments()
     if attachment.isOwner()
         .announcement-item.attachment
-            +ActionLink('announcement', 'deleteAttachment', attachment.getId(), self.getId()).close-btn
+            +ActionLink('announcement', 'deleteAttachment', attachment.getId(), self.getId(), self.getModel().getType()).close-btn
             .wrapper
                 if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
                     .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")=attachment.getName()
