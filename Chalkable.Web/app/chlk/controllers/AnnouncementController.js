@@ -1357,6 +1357,10 @@ NAMESPACE('chlk.controllers', function (){
                 //return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, ria.async.DeferredData(model), 'search');
             }
 
+            if (submitType == 'createFromTemplate'){
+                return this.Redirect('announcement', 'createFromTemplate', [model.getAnnouncementForTemplateId()]);
+            }
+
             if(this.submitLessonPlan(model, submitType == 'submitOnEdit'))
                 return this.ShadeLoader();
 

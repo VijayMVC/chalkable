@@ -64,6 +64,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.ableDropStudentScore = SJX.fromValue(raw.candropstudentscore, Boolean);
                 this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, Number);
                 this.filter = SJX.fromValue(raw.filter, String);
+                this.announcementForTemplateId = SJX.fromValue(raw.announcementForTemplateId, chlk.models.id.AnnouncementId);
 
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
 
@@ -125,6 +126,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'weightAddition',
             Boolean, 'ableDropStudentScore',
             chlk.models.id.ClassId, 'classId',
+            chlk.models.id.AnnouncementId, 'announcementForTemplateId',
 
             function getTitleModel(){
                 var title = this.getClassAnnouncementData() ? this.getClassAnnouncementData().getTitle() :

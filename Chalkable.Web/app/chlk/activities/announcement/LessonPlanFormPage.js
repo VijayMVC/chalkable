@@ -30,6 +30,19 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function categorySearchChange(node, event, selected_){
                 node.parent('.left-top-container').find('#changeCategoryUpdate').trigger('click');
+                setTimeout(function(){
+                    this.dom.find('.search-templates').trigger('focus');
+                }.bind(this), 10);
+            },
+
+            [ria.mvc.DomEventBind('change', '.search-templates')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            function searchTemplatesChange(node, event, selected_){
+                var value = this.dom.find('[name=filter][type=hidden]').getValue();
+                if(value){
+                    this.dom.find('#announcementForTemplateId').setValue(value);
+                    node.parent('.left-top-container').find('#createFromTemplate').trigger('click');
+                }
             },
 
             [ria.mvc.DomEventBind('change', '#add-to-gallery')],
