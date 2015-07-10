@@ -20,7 +20,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
         public ActionResult List(int? start, int? count, bool? complete, int? classId, DateTime? lastItemDate)
         {
-            return Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId, lastItemDate));
+            return Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId));
         }
 
         [AuthorizationFilter("DistrictAdmin")]
@@ -31,11 +31,11 @@ namespace Chalkable.Web.Controllers
         }
 
         public static IList<AnnouncementViewData> GetAnnouncementForFeedList(IServiceLocatorSchool schoolL, int? start, int? count
-            , bool? complete, int? classId, DateTime? lastItemDate)
+            , bool? complete, int? classId)
         {
             start = start ?? 0;
             count = count ?? (DemoUserService.IsDemoUser(schoolL.Context) ? int.MaxValue : 10);
-            var list = schoolL.AnnouncementFetchService.GetAnnouncementsForFeed(complete, start.Value, count.Value, classId, lastItemDate);
+            var list = schoolL.AnnouncementFetchService.GetAnnouncementsForFeed(complete, start.Value, count.Value, classId);
             return GetAnnouncementForFeedList(schoolL, list);
         }
 

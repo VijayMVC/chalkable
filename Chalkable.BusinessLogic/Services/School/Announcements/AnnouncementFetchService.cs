@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
     public interface IAnnouncementFetchService
     {
-        IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, int start, int count, int? classId, DateTime? lastItemDate);
+        IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, int start, int count, int? classId);
         AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null);
         IList<Announcement> GetAnnouncementsByFilter(string filter);
         Announcement GetLastDraft();
@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
 
-        public IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, int start, int count, int? classId, DateTime? lastItemDate)
+        public IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, int start, int count, int? classId)
         {
             if (BaseSecurity.IsDistrictAdmin(Context))
                 return ServiceLocator.AdminAnnouncementService.GetAdminAnnouncementsForFeed(complete, null, null, null, start, count);
@@ -35,35 +35,43 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
 
                 var classAnns = ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(null, null, classId, complete, true, null, start, count + 1);
+ 
+                if (start > 0 && classAnns.Count == 0)
+                    return new List<AnnouncementComplex>();
+
+                //indentify date range for gettiing lesson plans and admin items
+                DateTime fromDate, toDate;
+                GetDateRangeForAddtionalFeedItems(out fromDate, out toDate, classAnns, start, count);
                 
-                DateTime fromDate = Context.SchoolYearStartDate ?? DateTime.MinValue, 
-                        toDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
-                if (start != 0)
-                {
-                    if (classAnns.Count > 0)
-                        fromDate = classAnns.Min(x => x.ClassAnnouncementData.Expires);
-                    else if(lastItemDate.HasValue) 
-                        fromDate = lastItemDate.Value;
-                }
-                if (classAnns.Count > 0)
-                    toDate = classAnns.Max(x => x.ClassAnnouncementData.Expires);
-
-
-                if (classAnns.Count == count + 1)
-                    classAnns.RemoveAt(classAnns.Count - 1);
-
+                //remove (count + 1) - item 
+                if(classAnns.Count > count)
+                    classAnns.RemoveAt(classAnns.Count - 1);   
+                
                 res.AddRange(classAnns);
-                res.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(fromDate, toDate, null, classId, complete, true));
 
+                //get addtional feed items 
+                res.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(fromDate, toDate, null, classId, complete, true));
                 if (Context.Role == CoreRoles.STUDENT_ROLE)
                     res.AddRange(ServiceLocator.AdminAnnouncementService.GetAdminAnnouncementsForFeed(complete, null, fromDate, toDate));
             }
+            //sort all items by expires date or start date
             return res.OrderBy(x =>
             {
                 if (x.AdminAnnouncementData != null) return x.AdminAnnouncementData.Expires;
                 if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
                 return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
             }).ToList();
+        }
+
+        private void GetDateRangeForAddtionalFeedItems(out DateTime fromDate, out DateTime toDate, IList<AnnouncementComplex> classAnnouncements, int start, int count)
+        {
+            fromDate = Context.SchoolYearStartDate ?? DateTime.MinValue;
+            toDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
+            if(start > 0 && classAnnouncements.Count > 0)
+                fromDate = classAnnouncements.Min(x => x.ClassAnnouncementData.Expires);
+
+            if(classAnnouncements.Count > count)
+                toDate = classAnnouncements.Max(x => x.ClassAnnouncementData.Expires);
         }
 
         
