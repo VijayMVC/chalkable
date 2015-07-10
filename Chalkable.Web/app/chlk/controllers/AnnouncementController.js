@@ -602,7 +602,7 @@ NAMESPACE('chlk.controllers', function (){
                         assessmentAppId_,
                         announcementTypeName,
                         announcementType
-                )}, this) : new ria.async.DeferredData(chlk.models.apps.InstalledAppsViewData.$createForAdmin(announcementId, announcementType));
+                )}, this) : new ria.async.DeferredData(chlk.models.apps.InstalledAppsViewData.$createForAdmin(announcementId, announcementType, assessmentAppId_));
 
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, result);
         },
