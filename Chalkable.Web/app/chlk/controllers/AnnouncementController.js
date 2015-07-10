@@ -1358,7 +1358,7 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             if (submitType == 'createFromTemplate'){
-                return this.Redirect('announcement', 'createFromTemplate', [model.getAnnouncementForTemplateId()]);
+                return this.Redirect('announcement', 'createFromTemplate', [model.getAnnouncementForTemplateId(), classId]);
             }
 
             if(this.submitLessonPlan(model, submitType == 'submitOnEdit'))
@@ -1367,9 +1367,8 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
-        [[chlk.models.id.AnnouncementId]],
-        function createFromTemplateAction(announcementId){
-            var classId = this.getCachedLessonPlanClassId();
+        [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
+        function createFromTemplateAction(announcementId, classId){
             var result = ria.async.wait([
                     this.lessonPlanService.createFromTemplate(announcementId, classId),
                     this.lessonPlanService.listCategories()
