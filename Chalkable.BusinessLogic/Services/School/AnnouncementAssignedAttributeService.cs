@@ -22,7 +22,7 @@ namespace Chalkable.BusinessLogic.Services.School
         AnnouncementAssignedAttribute GetAssignedAttribyteByAttachmentId(int attributeAttachmentId);
         AnnouncementDetails RemoveAttributeAttachment(AnnouncementType announcementType, int announcementId, int attributeAttachmentId);
         AttributeAttachmentContentInfo GetAttributeAttachmentContent(int assignedAttributeId, AnnouncementType announcementType);
-        IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int toAnnouncementId, IList<AnnouncementAssignedAttribute> attributesForCopying, UnitOfWork unitOfWork);
+        IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, int toAnnouncementId);
     }
 
     public class AnnouncementAssignedAttributeService : SisConnectedService, IAnnouncementAssignedAttributeService
@@ -270,8 +270,11 @@ namespace Chalkable.BusinessLogic.Services.School
             return result;
         }
 
-        public IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int toAnnouncementId, IList<AnnouncementAssignedAttribute> attributesForCopying, UnitOfWork unitOfWork)
+        public IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, int toAnnouncementId, UnitOfWork unitOfWork)
         {
+
+            var da = new DataAccessBase<AnnouncementAssignedAttribute>(unitOfWork);
+            var attributesForCopying = da.GetAll(new AndQueryCondition {{AnnouncementAssignedAttribute.ANNOUNCEMENT_REF_FIELD, fromAnnouncementId}});
             attributesForCopying = attributesForCopying.Where(x => !x.SisActivityAssignedAttributeId.HasValue).ToList();
             var attributsWithContents = attributesForCopying.Select(x => AnnouncementAssignedAttributeInfo.Create(x, GetAttributeAttachmentContent(x)));
 
@@ -290,7 +293,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     attribute.Uuid = UploadToCrocodoc(attributeContent.Attribute.Name, attributeContent.AttachmentContentInfo.Content);
                 atributesInfo.Add(AnnouncementAssignedAttributeInfo.Create(attribute, attributeContent.AttachmentContentInfo));
             }
-            var da = new DataAccessBase<AnnouncementAssignedAttribute>(unitOfWork);
             da.Insert(atributesInfo.Select(x => x.Attribute).ToList());
 
             var attribues = da.GetAll(new AndQueryCondition { {AnnouncementAssignedAttribute.ANNOUNCEMENT_REF_FIELD, toAnnouncementId}})
@@ -299,6 +301,16 @@ namespace Chalkable.BusinessLogic.Services.School
                 if(atributesInfo[i].AttachmentContentInfo != null)
                     AddAttributeAttachmentToBlob(attribues[i].Id, atributesInfo[i].AttachmentContentInfo.Content);
             return attribues;
+        }
+
+        public IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, int toAnnouncementId)
+        {
+            using (var u = Update())
+            {
+                var res = CopyNonStiAttributes(fromAnnouncementId, toAnnouncementId, u);
+                u.Commit();
+                return res;
+            }
         }
     }
 }

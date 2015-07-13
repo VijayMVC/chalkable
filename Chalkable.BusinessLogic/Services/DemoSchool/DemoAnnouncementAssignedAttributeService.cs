@@ -100,11 +100,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new System.NotImplementedException();
         }
 
-        public IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int toAnnouncementId, IList<AnnouncementAssignedAttribute> attributesForCopying, UnitOfWork unitOfWork)
+        public IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, int toAnnouncementId)
         {
             throw new System.NotImplementedException();
         }
 
+        
         public AnnouncementDetails RemoveAttributeAttachment(int announcementType, int announcementId, int assignedAttributeId)
         {
             throw new System.NotImplementedException();

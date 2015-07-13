@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAnnouncementAttachmentService
     {
-        IList<AnnouncementAttachment> CopyAttachments(int toAnnouncemenId, IList<AnnouncementAttachment> attachmentsForCopying, UnitOfWork unitOfWork);
+        IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, int toAnnouncementId);
         Announcement AddAttachment(int announcementId, AnnouncementType type, byte[] content, string name);
         void AddAttachmentToBlob(IList<AttachmentContentInfo> attachmentContent);
         void DeleteAttachment(int announcementAttachmentId);
@@ -53,9 +53,11 @@ namespace Chalkable.BusinessLogic.Services.School
             return null;
         }
 
-        public IList<AnnouncementAttachment> CopyAttachments(int toAnnouncemenId, IList<AnnouncementAttachment> attachmentsForCopying, UnitOfWork unitOfWork)
+        public IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, int toAnnouncemenId, UnitOfWork unitOfWork)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            var da = new AnnouncementAttachmentDataAccess(unitOfWork);
+            var attachmentsForCopying = da.TakeLastAttachments(fromAnnouncementId);
             var attContentsForCopy = attachmentsForCopying.Select(ServiceLocator.AnnouncementAttachmentService.GetAttachmentContent).ToList();
 
             var attContents = new List<AttachmentContentInfo>();
@@ -73,7 +75,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     };
                 attContents.Add(AttachmentContentInfo.Create(att, attWithContent.Content));
             }
-            var da = new AnnouncementAttachmentDataAccess(unitOfWork);
             da.Insert(attContents.Select(x => x.Attachment).ToList());
             var atts = da.TakeLastAttachments(toAnnouncemenId, attContents.Count);
             
@@ -82,6 +83,17 @@ namespace Chalkable.BusinessLogic.Services.School
             
             AddAttachmentToBlob(attContents);
             return atts;
+        }
+
+
+        public IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, int toAnnouncementId)
+        {
+            using (var u = Update())
+            {
+                var res = CopyAttachments(fromAnnouncementId, toAnnouncementId, u);
+                u.Commit();
+                return res;
+            }
         }
 
 
@@ -212,5 +224,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             return (new BlobHelper()).GetBlobsRelativeAddress(ATTACHMENT_CONTAINER_ADDRESS);
         }
+
+        
     }
 }

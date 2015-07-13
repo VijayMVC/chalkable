@@ -75,26 +75,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             using (var u = Update())
             {
                 res = CreateLessonPlanDataAccess(u).CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
-                res.AnnouncementAttachments = CopyAttachments(lessonPlanTemplateId, res.Id, u);
-                res.AnnouncementAttributes = CopyAttributes(lessonPlanTemplateId, res.Id, u);
+                res.AnnouncementAttachments = ((AnnouncementAttachmentService)ServiceLocator.AnnouncementAttachmentService).CopyAttachments(lessonPlanTemplateId, res.Id, u);
+                res.AnnouncementAttributes = ((AnnouncementAssignedAttributeService)ServiceLocator.AnnouncementAssignedAttributeService).CopyNonStiAttributes(lessonPlanTemplateId, res.Id, u);
                 u.Commit();
             }
             return res;
         }
-
-        private IList<AnnouncementAttachment> CopyAttachments(int fromLessonPlanId, int toLessonPlanId, UnitOfWork unitOfWork)
-        {
-            var da = new AnnouncementAttachmentDataAccess(unitOfWork);
-            var attachmentsForCopy = da.TakeLastAttachments(fromLessonPlanId);
-            return ServiceLocator.AnnouncementAttachmentService.CopyAttachments(toLessonPlanId, attachmentsForCopy, unitOfWork);
-        }
-
-        private IList<AnnouncementAssignedAttribute> CopyAttributes(int fromLessonPlanId, int toLessonPlanId, UnitOfWork unitOfWork)
-        {
-            var da = new DataAccessBase<AnnouncementAssignedAttribute>(unitOfWork);
-            var attributesForCopying = da.GetAll(new AndQueryCondition {{AnnouncementAssignedAttribute.ANNOUNCEMENT_REF_FIELD, fromLessonPlanId}});
-            return ServiceLocator.AnnouncementAssignedAttributeService.CopyNonStiAttributes(toLessonPlanId, attributesForCopying, unitOfWork);
-        } 
 
         public AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content,
                                         DateTime? startDate, DateTime? endDate, bool visibleForStudent)
