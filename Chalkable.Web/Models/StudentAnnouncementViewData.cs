@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -10,7 +11,6 @@ namespace Chalkable.Web.Models
     public class StudentAnnouncementsViewData
     {
         public IList<StudentAnnouncementViewData> Items { get; set; }
-        public int GradingStyle { get; set; }
         public string AnnouncmentTitle { get; set; }
         public int? AnnouncementTypeId { get; set; }
         public int? ChalkableAnnouncementTypeId { get; set; }
@@ -21,21 +21,19 @@ namespace Chalkable.Web.Models
 
         private StudentAnnouncementsViewData() { }
 
-        public static StudentAnnouncementsViewData Create(IList<StudentAnnouncementDetails> items, IList<AnnouncementAttachmentInfo> attachments
-            , GradingStyleEnum gradingStyle = GradingStyleEnum.Numeric100)
+        public static StudentAnnouncementsViewData Create(IList<StudentAnnouncementDetails> items, IList<AnnouncementAttachmentInfo> attachments)
         {
             return new StudentAnnouncementsViewData
                 {
-                    GradingStyle = (int) gradingStyle,
                     Items = StudentAnnouncementViewData.Create(items, attachments)
                 };
             //CalculateClassAvg(res, items);
         }
 
-        public static StudentAnnouncementsViewData Create(AnnouncementComplex anouncement, IList<StudentAnnouncementDetails> items,
-            IList<AnnouncementAttachmentInfo> attachments, GradingStyleEnum gradingStyle = GradingStyleEnum.Numeric100)
+        public static StudentAnnouncementsViewData Create(ClassAnnouncement anouncement, IList<StudentAnnouncementDetails> items,
+            IList<AnnouncementAttachmentInfo> attachments)
         {
-            var res = Create(items, attachments, gradingStyle);
+            var res = Create(items, attachments);
             res.ClassName = anouncement.ClassName;
             res.AnnouncementTypeId = anouncement.ClassAnnouncementTypeRef;
             res.ChalkableAnnouncementTypeId = anouncement.ChalkableAnnouncementType;

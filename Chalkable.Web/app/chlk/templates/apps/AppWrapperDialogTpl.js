@@ -34,6 +34,10 @@ NAMESPACE('chlk.templates.apps', function () {
             String, 'errorTitle',
 
             [ria.templates.ModelPropertyBind],
-            String, 'errorMessage'
+            String, 'errorMessage',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
+
         ])
 });

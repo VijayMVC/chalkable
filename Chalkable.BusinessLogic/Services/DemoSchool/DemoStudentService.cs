@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Connectors.Model.Attendances;
 
@@ -228,7 +229,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             };
             var student = GetStudentDetails(studentId, syId);
             var activitiesids = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();
-            var anns = ((DemoAnnouncementService) ServiceLocator.AnnouncementService).GetByActivitiesIds(activitiesids);
+
+            //TODO: impl
+            var anns = new List<AnnouncementComplex>(); //((DemoAnnouncementService) ServiceLocator.ClassAnnouncementService).GetByActivitiesIds(activitiesids);
             var res = StudentSummaryInfo.Create(student, nowDashboard, chlkInfractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
         }
@@ -258,8 +261,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     if (activity == null) continue;
                     importantActivitiesIds.Add(activity.Id);
                 }
-                announcements = ((DemoAnnouncementService)ServiceLocator.AnnouncementService).GetTeacherAnnouncementService()
-                    .GetByActivitiesIds(importantActivitiesIds);
+                //TODO : impl later
+                //announcements = ((DemoAnnouncementService)ServiceLocator.AnnouncementService).GetTeacherAnnouncementService()
+                //    .GetByActivitiesIds(importantActivitiesIds);
             }
             return StudentExplorerInfo.Create(student, classes, inowStExpolorer.Averages.ToList()
                 , inowStExpolorer.Standards.ToList(), announcements, standards);

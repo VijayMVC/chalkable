@@ -3,6 +3,7 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
 
+
 NAMESPACE('chlk.models.apps', function () {
 
     "use strict";
@@ -15,6 +16,7 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.id.AppId, 'assessmentAppId',
             String, 'announcementTypeName',
             chlk.models.common.PaginatedList, 'apps',
+            chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
             String, 'appUrlAppend',
 
             Boolean, 'fileCabinetEnabled',
@@ -30,9 +32,11 @@ NAMESPACE('chlk.models.apps', function () {
                 Boolean,
                 Boolean,
                 chlk.models.id.AppId,
-                String
+                String,
+                chlk.models.announcement.AnnouncementTypeEnum
             ]],
-            function $(announcementId, classId, apps, appUrlAppend, studyCenterEnabled, canAddStandard, assessmentAppId, announcementTypeName){
+            function $(announcementId, classId, apps, appUrlAppend, studyCenterEnabled,
+                       canAddStandard, assessmentAppId, announcementTypeName, announcementType){
                 BASE();
                 this.setAnnouncementId(announcementId);
                 this.setApps(apps);
@@ -46,18 +50,24 @@ NAMESPACE('chlk.models.apps', function () {
                 if (assessmentAppId)
                     this.setAssessmentAppId(assessmentAppId);
                 this.setAnnouncementTypeName(announcementTypeName);
+                this.setAnnouncementType(announcementType);
             },
 
             [[
-                chlk.models.id.AnnouncementId
+                chlk.models.id.AnnouncementId,
+                chlk.models.announcement.AnnouncementTypeEnum,
+                chlk.models.id.AppId
             ]],
-            function $createForAdmin(announcementId){
+            function $createForAdmin(announcementId, announcementType, assessmentAppId_){
                 BASE();
                 this.setAnnouncementId(announcementId);
                 this.setAttributesEnabled(true);
                 this.setFileCabinetEnabled(false);
                 this.setStandardAttachEnabled(false);
                 this.setShowApps(false);
+                this.setAnnouncementType(announcementType);
+                if (assessmentAppId_)
+                    this.setAssessmentAppId(assessmentAppId_);
             }
         ]);
 });

@@ -50,6 +50,7 @@ var ChlkSessionConstants = {
     ANNOUNCEMENT_ATTACHMENTS: 'AnnouncementAttachments',
     ANNOUNCEMENT: 'announcement',
     ANNOUNCEMENT_ID: 'announcementId',
+    ANNOUNCEMENT_TYPE: 'announcementType',
     STANDARD_IDS: 'StandardsIds',
     CC_STANDARD_CODES: 'StandardCodes',
     CC_STANDARDS: 'CCStandards',
@@ -64,6 +65,8 @@ var ChlkSessionConstants = {
     GROUPS_IDS: 'GroupsIds',
     GROUPS_LIST: 'GroupsList',
     LE_PARAMS: 'leParams',
+    LESSON_PLAN_CATEGORIES: 'lessonPlanCategories',
+    LESSON_PLAN_CATEGORY_FOR_SEARCH: 'lessonPlanCategoryForSearch',
     ANNOUNCEMENT_ATTRIBUTES: 'announcementAttributes',
     ANNOUNCEMENT_ASSIGNED_ATTRIBUTES: 'announcementAssignedAttributes'
 };

@@ -166,7 +166,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (p.FirstLoginDate.HasValue) return;
                 p.FirstLoginDate = Context.NowSchoolTime;
                 da.Update(p);
-                ServiceLocator.AnnouncementService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
+                ServiceLocator.ClassAnnouncementService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
+                ServiceLocator.LessonPlanService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
+                ServiceLocator.AdminAnnouncementService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
             });
         }
 

@@ -28,8 +28,9 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             chlk.models.standard.StandardsListViewData, function prepareStandardsListData() {
                 var ann = this.announcement;
+                var itemWithClass = ann.getClassAnnouncementData() || ann.getLessonPlanData();
                 return new chlk.models.standard.StandardsListViewData(
-                    null, ann.getClassId(),
+                    null, itemWithClass ? itemWithClass.getClassId() : null,
                     null, ann.getStandards(),
                     ann.getId()
                 );
@@ -38,7 +39,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.apps.SuggestedAppsList, function prepareSuggestedAppListData(){
                 var ann = this.getAnnouncement();
                 if(!ann) return null;
-                return new chlk.models.apps.SuggestedAppsList(ann.getClassId(), ann.getId(), ann.getSuggestedApps(), ann.getStandards());
+                return new chlk.models.apps.SuggestedAppsList(ann.getClassId(), ann.getId(), ann.getSuggestedApps(), ann.getStandards(), null, ann.getType());
             }
         ]);
 });

@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.common.ChlkDate');
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 
 
 NAMESPACE('chlk.models.announcement', function () {
@@ -8,7 +8,7 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.AnnouncementsByDate*/
     CLASS(
         'AnnouncementsByDate', [
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements',
+            ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements',
 
             chlk.models.common.ChlkDate, 'date',
 

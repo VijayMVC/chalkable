@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -22,6 +22,12 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new AndQueryCondition { { AnnouncementAttachment.ID_FIELD, id } };
             return GetAnnouncementAttachments(conds, callerId, roleId).FirstOrDefault();
         }
+
+        public IList<AnnouncementAttachment> TakeLastAttachments(int announcementId, int count = int.MaxValue)
+        {
+            var conds = new AndQueryCondition {{AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, announcementId}};
+            return GetAll(conds).OrderByDescending(x => x.Id).Take(count).OrderBy(x => x.Id).ToList();
+        } 
 
         public IList<AnnouncementAttachment> GetList(int callerId, int roleId, string filter = null)
         {
@@ -55,6 +61,12 @@ namespace Chalkable.Data.School.DataAccess
             res.Sql.AppendFormat(@"select [{0}].* from [{0}] 
                                    join [{2}] on [{2}].[{3}] = [{0}].[{1}]"
                               , type.Name, AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, "Announcement", Announcement.ID_FIELD);
+
+            res.Sql.AppendFormat(@"		
+                                    left join LessonPlan on LessonPlan.Id = Announcement.Id
+		                            left join ClassAnnouncement on ClassAnnouncement.Id = Announcement.Id
+		                            left join AdminAnnouncement on AdminAnnouncement.Id = Announcement.Id
+                                ");
 
             queryCondition.BuildSqlWhere(res, type.Name);
             if (!needsAllAttachments)
@@ -97,7 +109,7 @@ namespace Chalkable.Data.School.DataAccess
             {
                 res.Sql.Append(@" and exists(select * from ClassTeacher 
                                              where (ClassTeacher.PersonRef = @callerId or AnnouncementAttachment.PersonRef = ClassTeacher.PersonRef)
-                                                    and ClassTeacher.ClassRef = Announcement.ClassRef)");
+                                                    and (ClassTeacher.ClassRef = LessonPlan.ClassRef or ClassTeacher.ClassRef = ClassAnnouncement.ClassRef))");
                 return res;
 
             }
@@ -105,10 +117,11 @@ namespace Chalkable.Data.School.DataAccess
             {
                 res.Sql.Append(@" and (AnnouncementAttachment.PersonRef = @callerId 
                                        or (
-                                            Announcement.ClassRef in (select cp.ClassRef from ClassPerson cp where cp.PersonRef = @callerId)
-                                            and Announcement.ClassRef in (select ct.ClassRef from ClassTeacher ct where ct.PersonRef = AnnouncementAttachment.PersonRef)
+                                                exists(select * from ClassPerson cp where cp.PersonRef = @callerId and (cp.ClassRef = LessonPlan.ClassRef or cp.ClassRef = ClassAnnouncement.ClassRef))
+                                            and 
+                                                exists(select ct.ClassRef from ClassTeacher ct where ct.PersonRef = AnnouncementAttachment.PersonRef and (ct.ClassRef = LessonPlan.ClassRef or ct.ClassRef = ClassAnnouncement.ClassRef))
                                           )
-                                       or (Announcement.AdminRef is not null and exists(select * from AdminAnnouncementRecipient aar 
+                                       or (AdminAnnouncement.Id is not null and exists(select * from AnnouncementGroup aar 
                                                                                         join StudentGroup st on st.GroupRef = aar.GroupRef
 																			            where st.StudentRef = @callerId and aar.AnnouncementRef = Announcement.Id)
                                           )

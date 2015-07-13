@@ -10,15 +10,14 @@ mixin TooltipWithOverflow(text)
             .week
                 p=item.getDate().format('DD, M d')
     .items-table
-        -var wholeDayItems = self.getAnnouncementsOffPeriods();
-        -var hasWholeDayItems = wholeDayItems.some(function (_) { return _.length; });
+        -var hasWholeDayItems = self.getItems().filter(function(item){return item.getAdminAnnouncements() && item.getAdminAnnouncements().length > 0}).length > 0;
         if hasWholeDayItems
             .item.whole-day
-                each item in wholeDayItems
-                    .cell(class = item.day.getTodayClassName())
-                        each ann in item
-                            -var annShowText = ann.getTitle() + (ann.getClassName() ? ' - ' + ann.getClassName() : '')
-                            +ActionLink('announcement', 'view', ann.getId()).period-item.announcement
+                each item in self.getItems()
+                    .cell(class = item.getTodayClassName())
+                        each ann in item.getAdminAnnouncements()
+                            -var annShowText = ann.getTitle()
+                            +ActionLink('announcement', 'view', ann.getId(), chlk.models.announcement.AnnouncementTypeEnum.ADMIN).period-item.announcement
                                 .announcement-calendar-item(data-tooltip = annShowText)
                                     strong=annShowText
         each item in self.groupAnnouncementsAsTable()
@@ -30,8 +29,8 @@ mixin TooltipWithOverflow(text)
                         if order == 0
                             A: .period-info= period.getName()
                         each ann in calendarDayItem
-                            -VALIDATE_ARG('ann', [chlk.models.announcement.Announcement], ann)
-                            +ActionLink('announcement', 'view', ann.getId()).period-item.announcement
+                            -VALIDATE_ARG('ann', [chlk.models.announcement.ClassAnnouncementViewData], ann)
+                            +ActionLink('announcement', 'view', ann.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).period-item.announcement
                                 .announcement-calendar-item(data-tooltip = ann.getTitle() + ' - ' + ann.getClassName())
                                     strong= ann.getTitle()
                                     = ' - ' + ann.getClassName()

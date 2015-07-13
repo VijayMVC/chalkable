@@ -12,7 +12,10 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.period.Period, 'period',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.Announcement), 'announcements',
+            ArrayOf(chlk.models.announcement.LessonPlanViewData), 'lessonPlans',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'date',

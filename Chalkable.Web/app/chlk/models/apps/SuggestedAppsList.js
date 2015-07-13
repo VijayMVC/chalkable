@@ -15,9 +15,11 @@ NAMESPACE('chlk.models.apps', function() {
             chlk.models.id.ClassId, 'classId',
             chlk.models.id.AnnouncementId, 'announcementId',
             String, 'standardUrlComponents',
+            chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
 
-            [[chlk.models.id.ClassId, chlk.models.id.AnnouncementId, ArrayOf(chlk.models.apps.ApplicationForAttach), ArrayOf(chlk.models.standard.Standard)]],
-            function $(classId_, announcementId_, suggestedApps_, standards_, standardUrlComponents_){
+            [[chlk.models.id.ClassId, chlk.models.id.AnnouncementId, ArrayOf(chlk.models.apps.ApplicationForAttach),
+                ArrayOf(chlk.models.standard.Standard), chlk.models.announcement.AnnouncementTypeEnum]],
+            function $(classId_, announcementId_, suggestedApps_, standards_, standardUrlComponents_, announcementType_){
                 BASE();
                 if(classId_)
                     this.setClassId(classId_);
@@ -29,6 +31,8 @@ NAMESPACE('chlk.models.apps', function() {
                     this.setStandards(standards_);
                 if(standardUrlComponents_)
                     this.setStandardUrlComponents(standardUrlComponents_);
+                if(announcementType_)
+                    this.setAnnouncementType(announcementType_);
             }
     ]);
 

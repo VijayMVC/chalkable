@@ -63,6 +63,17 @@ namespace Chalkable.Data.Common
             return command;
         }
 
+        public SqlCommand GetStoredProcedureCommandWithParams(string name, SqlParameter[] parameters)
+        {
+            var command = GetStoredProcedureCommand(name);
+            command.Parameters.Clear();
+            if (parameters != null)
+            {
+                command.Parameters.AddRange(parameters);
+            }
+            return command;
+        }
+
         public SqlCommand GetTextCommandWithParams(string sql, IDictionary<string, object> parameters)
         {
             SqlCommand command = GetTextCommand(sql);

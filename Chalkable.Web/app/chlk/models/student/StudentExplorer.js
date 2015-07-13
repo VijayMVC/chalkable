@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.people.User');
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.standard.StandardForExplorer');
 REQUIRE('ria.serialize.SJX');
@@ -19,12 +19,12 @@ NAMESPACE('chlk.models.student', function(){
 
             chlk.models.classes.Class, 'clazz',
             Number, 'avg',
-            chlk.models.announcement.Announcement, 'announcement',
+            chlk.models.announcement.ClassAnnouncementViewData, 'announcement',
             ArrayOf(chlk.models.standard.StandardForExplorer), 'standards',
 
             VOID, function deserialize(raw){
                 this.clazz = SJX.fromDeserializable(raw.class, chlk.models.classes.Class);
-                this.announcement = SJX.fromDeserializable(raw.importantannouncement, chlk.models.announcement.Announcement);
+                this.announcement = SJX.fromDeserializable(raw.importantannouncement, chlk.models.announcement.ClassAnnouncementViewData);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.StandardForExplorer);
                 this.avg = SJX.fromValue(raw.avg, Number);
             }

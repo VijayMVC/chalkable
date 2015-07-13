@@ -6,6 +6,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -76,14 +77,20 @@ namespace Chalkable.Web.Models
     {
         public int? AnnouncementType { get; set; }
         public bool IsAdminAnnouncement { get; set; }
-        public static SearchViewData Create(AnnouncementComplex announcement)
+        public static SearchViewData Create(Announcement announcement)
         {
+            var annData = announcement;
+            var description = announcement.Title;
+            var classAnnData = announcement as ClassAnnouncement;
+            if (classAnnData != null)
+                description = string.Format("{0} {1} {2}", announcement.Title
+                            , announcement.AnnouncementTypeName, (classAnnData).Order);
+            
             return new AnnouncementSearchViewData
             {
                 Id = announcement.Id.ToString(),
-                Description = string.Format("{0} {1} {2}", announcement.Title, announcement.ClassAnnouncementTypeName, announcement.Order),
-                AnnouncementType = announcement.ChalkableAnnouncementType,
-                IsAdminAnnouncement = announcement.IsAdminAnnouncement,
+                Description = description,
+                AnnouncementType = (int?)annData.Type,
                 SearchType = (int)SearchTypeEnum.Announcements
             };
         }
@@ -173,7 +180,7 @@ namespace Chalkable.Web.Models
 
         public override IList<SearchViewData> Build(Object searchRes)
         {
-            var announcements = searchRes as IList<AnnouncementComplex>;
+            var announcements = searchRes as IList<Announcement>;
             if (announcements == null || (SearchTypeEnum)searchType != SearchTypeEnum.Announcements)
                 throw new ChalkableException(ChlkResources.ERR_INVALID_SEARCH_VIEW_BUILDER);
 

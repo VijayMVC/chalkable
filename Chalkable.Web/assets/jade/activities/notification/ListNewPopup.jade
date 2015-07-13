@@ -19,7 +19,7 @@
                     if item.getType() == chlk.models.notification.NotificationTypeEnum.ANNOUNCEMENT
                         .notification-announcement
                             a
-                                div(class="announcement-type-" + item.getChalkableAnnouncementType()).icon.blue
+                                .icon.blue
                             span= item.getAnnouncementTypeName()
 
                 div(class=item.isShown()? 'content' : 'content unshown')

@@ -1,5 +1,4 @@
-﻿using Chalkable.BusinessLogic.Model;
-using Chalkable.Data.School.Model;
+﻿using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Mapping.ModelMappers
@@ -11,8 +10,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             announcementAttribute.Name = activityAttribute.Name;
             announcementAttribute.VisibleForStudents = activityAttribute.VisibleInHomePortal;
             announcementAttribute.Text = activityAttribute.Text;
-            announcementAttribute.SisAttributeId = activityAttribute.Id;
-            announcementAttribute.SisActivityId = activityAttribute.ActivityId;
+            announcementAttribute.SisActivityAssignedAttributeId = activityAttribute.Id;
             announcementAttribute.AttributeTypeId = activityAttribute.AttributeId;
 
             if (activityAttribute.Attachment != null)
@@ -20,6 +18,9 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                 announcementAttribute.Uuid = activityAttribute.Attachment.CrocoDocId.HasValue
                     ? activityAttribute.Attachment.CrocoDocId.ToString()
                     : "";
+                announcementAttribute.SisAttributeAttachmentId = activityAttribute.Attachment.AttachmentId;
+                announcementAttribute.SisAttachmentMimeType = activityAttribute.Attachment.MimeType;
+                announcementAttribute.SisAttachmentName = activityAttribute.Attachment.Name;
             }
         }
     }

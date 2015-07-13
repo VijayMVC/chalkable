@@ -13,22 +13,6 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
             [ria.templates.ModelPropertyBind],
             chlk.models.classes.ClassesForTopBar, 'topData',
 
-            function getAnnouncementsOffPeriods() {
-                return this.items.map(function (day, index) {
-                    var classesTaday = day.getAnnouncementPeriods()
-                        .map(function (_) { return _.getPeriod(); })
-                        .filter(function (_) { return _.getStartTime() && _.getClassName(); })
-                        .map(function (_) { return _.getClassId(); });
-
-                    var result = day.getAnnouncements()
-                        .filter(function (_) { return classesTaday.indexOf(_.getClassId()) < 0 });
-
-                    result.day = day;
-
-                    return result;
-                });
-            },
-
             function groupAnnouncementsAsTable() {
                 var rows = [], that = this;
                 this.items.forEach(function (day, index) {
@@ -41,7 +25,7 @@ NAMESPACE('chlk.templates.calendar.announcement', function(){
                             if (!periodItem.getPeriod().getStartTime() || !periodItem.getPeriod().getClassName())
                                 return [];
 
-                            return day.getAnnouncements().filter(function (ann) {
+                            return periodItem.getAnnouncements().filter(function (ann) {
                                 return ann.getClassId() == classId;
                             })
                         }));

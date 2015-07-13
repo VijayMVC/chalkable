@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Models;
 
 namespace Chalkable.Web.Logic
@@ -13,7 +13,7 @@ namespace Chalkable.Web.Logic
         {
             var gradingItems = announcement.StudentAnnouncements.ToList();
             gradingItems = gradingItems.OrderBy(x => x.Student.LastName).ThenBy(x => x.Student.FirstName).ToList();
-            var res = StudentAnnouncementsViewData.Create(announcement, gradingItems, announcementAttachmentInfos, announcement.GradingStyle);
+            var res = StudentAnnouncementsViewData.Create(announcement.ClassAnnouncementData, gradingItems, announcementAttachmentInfos);
             return res;
         }
     }

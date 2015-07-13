@@ -18,11 +18,11 @@ NAMESPACE('chlk.activities.announcement', function () {
     /** @class chlk.activities.announcement.UpdateAnnouncementItemViewModel*/
     CLASS(
         'UpdateAnnouncementItemViewModel', [
-            chlk.models.announcement.Announcement, 'announcement',
+            chlk.models.announcement.FeedAnnouncementViewData, 'announcement',
 
             chlk.models.announcement.StudentAnnouncement, 'currentItem',
 
-            [[chlk.models.announcement.Announcement, chlk.models.announcement.StudentAnnouncement]],
+            [[chlk.models.announcement.FeedAnnouncementViewData, chlk.models.announcement.StudentAnnouncement]],
             function $(announcement_, currentItem_){
                 BASE();
                 if(announcement_)
@@ -38,7 +38,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.templates.ModelBind(chlk.activities.announcement.UpdateAnnouncementItemViewModel)],
         'UpdateAnnouncementItemTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.Announcement, 'announcement',
+            chlk.models.announcement.FeedAnnouncementViewData, 'announcement',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.StudentAnnouncement, 'currentItem'
@@ -336,10 +336,11 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 this.setMoreClicked(false);
 
-                var allScores = [], zeroPercentageScores = [];
-                if(this.getRole().isTeacher()){
-                    this.setAbleDropStudentScore(model.isAbleDropStudentScore());
-                    this.setAbleToExempt(model.isAbleToExempt());
+                var allScores = [], zeroPercentageScores = [], classAnnouncement = model.getClassAnnouncementData();
+                var lessonPlan = model.getLessonPlanData();
+                if(this.getRole().isTeacher() && classAnnouncement){
+                    this.setAbleDropStudentScore(classAnnouncement.isAbleDropStudentScore());
+                    this.setAbleToExempt(classAnnouncement.isAbleToExempt());
                     model.getAlternateScores().forEach(function(item){
                         allScores.push(item.getName());
                         allScores.push(item.getName() + ' (fill all)');
@@ -355,10 +356,10 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                     allScores = allScores.concat(['Incomplete', 'Incomplete (fill all)', 'Late', 'Late (fill all)']);
 
-                    if(model.isAbleDropStudentScore()){
+                    if(classAnnouncement.isAbleDropStudentScore()){
                         allScores = allScores.concat(['Dropped', 'Dropped (fill all)']);
                     }
-                    if(model.isAbleToExempt()){
+                    if(classAnnouncement.isAbleToExempt()){
                         allScores = allScores.concat(['Exempt', 'Exempt (fill all)']);
                     }
                     this.setAllScores(allScores);
@@ -366,15 +367,20 @@ NAMESPACE('chlk.activities.announcement', function () {
                 }
 
                 this.setOwner(model.getOwner());
-                this.setMaxScore(model.getMaxScore());
-                this.setStudentAnnouncements(model.getStudentAnnouncements()
-                    ? model.getStudentAnnouncements().getItems() :[]);
-                this.setApplicationsInGradeView(model.getGradeViewApps());
+                if(classAnnouncement){
+                    this.setMaxScore(classAnnouncement.getMaxScore());
+                    this.setStudentAnnouncements(model.getStudentAnnouncements()
+                        ? model.getStudentAnnouncements().getItems() :[]);
+                    this.setApplicationsInGradeView(model.getGradeViewApps());
+                    this.setGradable(classAnnouncement.isGradable());
+                    this.setAbleToGrade(classAnnouncement.isAbleToGrade());
+                    this.setAutoGradeApps(model.getAutoGradeApps());
+                }
+
+
                 this.setApplications(model.getApplications());
-                this.setAutoGradeApps(model.getAutoGradeApps());
                 this.setAnnouncementId(model.getId());
-                this.setGradable(model.isGradable());
-                this.setAbleToGrade(model.isAbleToGrade());
+
 
                 var moving = new ria.dom.Dom('.moving-wrapper');
                 if(moving.exists()){
@@ -947,7 +953,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var parent = node.parent('.attribute-item-container');
 
                 var attrData = parent.find('.mp-data');
-                var container = attrData.find('.ann-types-container');
+                var container = attrData.find('.attribute-details');
                 jQuery(attrData.valueOf()).animate({
                     height: parent.hasClass('open') ? 0 : (container.height() + parseInt(container.getCss('margin-bottom'), 10))
                 }, 500);

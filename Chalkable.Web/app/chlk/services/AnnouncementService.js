@@ -14,10 +14,12 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.StandardId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.id.AnnouncementAssignedAttributeAttachmentId');
 REQUIRE('chlk.models.id.AnnouncementAttachmentId');
 REQUIRE('chlk.models.announcement.AnnouncementQnA');
 REQUIRE('chlk.models.id.AnnouncementQnAId');
 REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
+REQUIRE('chlk.models.announcement.AnnouncementAttributeType');
 
 
 NAMESPACE('chlk.services', function () {
@@ -84,34 +86,65 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, Object]],
-            ria.async.Future, function uploadAttachment(announcementId, files) {
-                return this.uploadFiles('AnnouncementAttachment/AddAttachment', files, chlk.models.announcement.Announcement, {
-                    announcementId: announcementId.valueOf()
+            [[chlk.models.id.AnnouncementId, Object, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function uploadAttachment(announcementId, files, announcementType) {
+                return this.uploadFiles('AnnouncementAttachment/AddAttachment', files, chlk.models.announcement.FeedAnnouncementViewData, {
+                    announcementId: announcementId.valueOf(),
+                    announcementType: announcementType.valueOf()
+                });
+            },
+
+            [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, Object]],
+            ria.async.Future, function uploadAttributeAttachment(announcementType, announcementId, assignedAttributeId, files) {
+                return this.uploadFiles('AnnouncementAttribute/AddAttributeAttachment.json', files, chlk.models.announcement.FeedAnnouncementViewData, {
+                    announcementId: announcementId.valueOf(),
+                    announcementType: announcementType.valueOf(),
+                    assignedAttributeId: assignedAttributeId.valueOf()
+                });
+            },
+
+            [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeAttachmentId]],
+            ria.async.Future, function removeAttributeAttachment(announcementType, announcementId, assignedAttributeAttachmentId) {
+                return this.post('AnnouncementAttribute/RemoveAttributeAttachment.json', chlk.models.announcement.FeedAnnouncementViewData, {
+                    announcementId: announcementId.valueOf(),
+                    announcementType: announcementType.valueOf(),
+                    attributeAttachmentId: assignedAttributeAttachmentId.valueOf()
                 });
             },
 
 
-            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAttributeTypeId]],
-            ria.async.Future, function addAnnouncementAttribute(announcementId, attributeTypeId){
-                return this.post('AnnouncementAttribute/AddAttribute.json', chlk.models.announcement.Announcement, {
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAttributeTypeId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function addAnnouncementAttribute(announcementId, attributeTypeId, announcementType){
+                return this.post('AnnouncementAttribute/AddAttribute.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
-                    attributeTypeId: attributeTypeId.valueOf()
+                    attributeTypeId: attributeTypeId.valueOf(),
+                    announcementType: announcementType.valueOf()
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId]],
-            ria.async.Future, function removeAnnouncementAttribute(announcementId, attributeId){
-                return this.post('AnnouncementAttribute/DeleteAttribute.json', chlk.models.announcement.Announcement, {
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function removeAnnouncementAttribute(announcementId, attributeId, announcementType){
+                return this.post('AnnouncementAttribute/DeleteAttribute.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
-                    assignedAttributeId: attributeId.valueOf()
+                    assignedAttributeId: attributeId.valueOf(),
+                    announcementType: announcementType.valueOf()
                 });
             },
 
             [[chlk.models.id.AnnouncementAttachmentId]],
             ria.async.Future, function startViewSession(announcementAttachmentId) {
                 return this.get('AnnouncementAttachment/StartViewSession', String, {
-                    announcementAttachmentId: announcementAttachmentId.valueOf()
+                    announcementAttachmentId: announcementAttachmentId.valueOf(),
+                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
+                });
+            },
+
+
+            [[chlk.models.id.AnnouncementAssignedAttributeId]],
+            ria.async.Future, function startAttributeAttachmentViewSession(assignedAttributeId) {
+                return this.get('AnnouncementAttribute/StartViewSession', String, {
+                    assignedAttributeId: assignedAttributeId.valueOf(),
+                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 });
             },
 
@@ -119,7 +152,8 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function cloneAttachment(attachmentId, announcementId) {
                 return this.get('AnnouncementAttachment/CloneAttachment', chlk.models.announcement.AnnouncementView, {
                     originalAttachmentId: attachmentId.valueOf(),
-                    announcementId: announcementId.valueOf()
+                    announcementId: announcementId.valueOf(),
+                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 });
             },
 
@@ -138,36 +172,31 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, String]],
-            ria.async.Future, function editTitle(announcementId, title) {
-                return this.get('Announcement/EditTitle.json', Boolean, {
-                    announcementId: announcementId.valueOf(),
-                    title: title
+            [[chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum, Boolean, Number, Number]],
+            String, function getAttributeAttachmentUri(assignedAttributeId, announcementType, needsDownload, width, height) {
+                return this.getUrl('AnnouncementAttribute/DownloadAttributeAttachment', {
+                    assignedAttributeId: assignedAttributeId.valueOf(),
+                    announcementType:announcementType.valueOf(),
+                    needsDownload: needsDownload,
+                    width: width,
+                    height: height
                 });
             },
 
-            [[String, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.id.AnnouncementId]],
-            ria.async.Future, function existsTitle(title, classId, expiresDate, announcementId) {
-                return this.get('Announcement/Exists.json', Boolean, {
-                    title: title,
-                    classId: classId.valueOf(),
-                    expiresDate: expiresDate && expiresDate.toStandardFormat(),
-                    excludeAnnouncementId: announcementId.valueOf()
-                });
-            },
-
-            [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId]],
-            ria.async.Future, function deleteAttachment(attachmentId, announcementId) {
-                return this.get('AnnouncementAttachment/DeleteAttachment.json', chlk.models.announcement.Announcement, {
+            [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function deleteAttachment(attachmentId, announcementId, announcementType) {
+                return this.get('AnnouncementAttachment/DeleteAttachment.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementAttachmentId: attachmentId.valueOf(),
-                    announcementId: announcementId.valueOf()
+                    announcementId: announcementId.valueOf(),
+                    announcementType: announcementType.valueOf()
                 });
             },
 
-            [[chlk.models.id.AnnouncementApplicationId]],
-            ria.async.Future, function deleteApp(announcementAppId) {
-                return this.get('Application/RemoveFromAnnouncement.json', chlk.models.announcement.Announcement, {
-                    announcementApplicationId: announcementAppId.valueOf()
+            [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function deleteApp(announcementAppId, announcementType) {
+                return this.get('Application/RemoveFromAnnouncement.json', chlk.models.announcement.FeedAnnouncementViewData, {
+                    announcementApplicationId: announcementAppId.valueOf(),
+                    announcementType: announcementType.valueOf()
                 });
             },
 
@@ -179,84 +208,6 @@ NAMESPACE('chlk.services', function () {
                     expiresDate: expiresDate_ ? expiresDate_.valueOf() : null
                 });
             },
-
-            [[chlk.models.common.ChlkDate]],
-            ria.async.Future, function addAdminAnnouncement(expiresDate_) {
-                return this.get('Announcement/CreateForAdmin.json', chlk.models.announcement.AnnouncementCreate, {
-                    expiresDate: expiresDate_ ? expiresDate_.valueOf() : null
-                });
-            },
-
-            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String
-                , chlk.models.common.ChlkDate, String, String, chlk.models.id.MarkingPeriodId
-                , Number, Number, Number, Boolean, Boolean
-            ]],
-            ria.async.Future, function saveAnnouncement(id, classId_, classAnnouncementTypeId_, title_, content_
-                , expiresdate_, attachments_, applications_, markingPeriodId_, maxScore_, weightAddition_, weighMultiplier_
-                , hideFromStudent_, canDropStudentScore_) {
-                return this.post('Announcement/SaveAnnouncement.json', chlk.models.announcement.Announcement, {
-                    announcementId:id.valueOf(),
-                    classAnnouncementTypeId:classAnnouncementTypeId_,
-                    title: title_,
-                    classId: classId_ ? classId_.valueOf() : null,
-                    markingPeriodId:markingPeriodId_ ? markingPeriodId_.valueOf() : null,
-                    content: content_,
-                    attachments: attachments_,
-                    applications: applications_,
-                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
-                    maxscore: maxScore_,
-                    weightaddition: weightAddition_,
-                    weightmultiplier: weighMultiplier_,
-                    hidefromstudents: hideFromStudent_ || false,
-                    candropstudentscore: canDropStudentScore_ || false
-                });
-            },
-
-            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String
-                , chlk.models.common.ChlkDate, String, String, chlk.models.id.MarkingPeriodId
-                , Number, Number, Number, Boolean, Boolean
-            ]],
-            ria.async.Future, function submitAnnouncement(id, classId_, announcementTypeId_, title_, content_
-                , expiresdate_, attachments_, applications_, markingPeriodId_, maxScore_, weightAddition_, weighMultiplier_
-                , hideFromStudent_, canDropStudentScore_) {
-                return this.post('Announcement/SubmitAnnouncement.json', Boolean, {
-                    announcementid:id.valueOf(),
-                    classannouncementtypeid:announcementTypeId_,
-                    classId: classId_ ? classId_.valueOf() : null,
-                    markingperiodid: markingPeriodId_ ? markingPeriodId_.valueOf() : null,
-                    content: content_,
-                    attachments: attachments_,
-                    applications: applications_,
-                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat(),
-                    maxscore: maxScore_,
-                    weightaddition: weightAddition_,
-                    weightmultiplier: weighMultiplier_,
-                    hidefromstudents: hideFromStudent_ || false,
-                    candropstudentscore: canDropStudentScore_ || false
-                });
-            },
-
-            [[chlk.models.id.AnnouncementId, String, String, chlk.models.common.ChlkDate, String, String, chlk.models.id.MarkingPeriodId]],
-            ria.async.Future, function submitAdminAnnouncement(id, content_, title_, expiresdate_, attachments_, applications_, markingPeriodId_) {
-                return this.post('Announcement/SubmitForAdmin.json', Boolean, {
-                    announcementid:id.valueOf(),
-                    markingperiodid: markingPeriodId_ ? markingPeriodId_.valueOf() : null,
-                    title: title_,
-                    content: content_,
-                    attachments: attachments_,
-                    applications: applications_,
-                    expiresdate: expiresdate_ && expiresdate_.toStandardFormat()
-                });
-            },
-
-            [[chlk.models.id.AnnouncementId, String]],
-            ria.async.Future, function addGroupsToAnnouncement(id, groupIds_) {
-                return this.post('Announcement/SubmitGroupsToAnnouncement.json', Boolean, {
-                    announcementid:id.valueOf(),
-                    groupsids: groupIds_
-                });
-            },
-
             
             [[chlk.models.id.ClassId, Number, chlk.models.id.SchoolPersonId]],
             ria.async.Future, function listLast(classId, classAnnouncementTypeId, schoolPersonId) {
@@ -267,53 +218,35 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId]],
-            ria.async.Future, function editAnnouncement(id) {
+            [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function editAnnouncement(id, announcementType) {
                 return this.get('Announcement/Edit.json', chlk.models.announcement.AnnouncementForm, {
-                    announcementId: id.valueOf()
-                });
-            },
-
-            [[chlk.models.id.AnnouncementId, String]],
-            ria.async.Future, function duplicateAnnouncement(id, classIds) {
-                return this.get('Announcement/DuplicateAnnouncement.json', Boolean, {
                     announcementId: id.valueOf(),
-                    classIds: classIds
+                    announcementType: announcementType.valueOf()
                 });
             },
 
             [[chlk.models.id.AnnouncementId]],
-            ria.async.Future, function deleteAnnouncement(id) {
-                return this.post('Announcement/Delete.json', chlk.models.announcement.Announcement, {
-                    announcementId: id.valueOf()
+            ria.async.Future, function deleteAnnouncement(id, announcementType) {
+                return this.post('Announcement/Delete.json', chlk.models.announcement.FeedAnnouncementViewData, {
+                    announcementId: id.valueOf(),
+                    announcementType: announcementType && announcementType.valueOf()
                 });
             },
 
-            [[chlk.models.id.AnnouncementId]],
-            ria.async.Future, function dropAnnouncement(id) {
-                return this.post('Announcement/DropAnnouncement.json', chlk.models.announcement.Announcement, {
-                    announcementId: id.valueOf()
+            [[chlk.models.id.SchoolPersonId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function deleteDrafts(id, announcementType) {
+                return this.post('Announcement/DeleteDrafts.json', chlk.models.announcement.FeedAnnouncementViewData, {
+                    personId: id.valueOf(),
+                    announcementType: announcementType && announcementType.valueOf()
                 });
             },
 
-            [[chlk.models.id.AnnouncementId]],
-            ria.async.Future, function unDropAnnouncement(id) {
-                return this.post('Announcement/UndropAnnouncement.json', chlk.models.announcement.Announcement, {
-                    announcementId: id.valueOf()
-                });
-            },
-
-            [[chlk.models.id.SchoolPersonId]],
-            ria.async.Future, function deleteDrafts(id) {
-                return this.post('Announcement/DeleteDrafts.json', chlk.models.announcement.Announcement, {
-                    personId: id.valueOf()
-                });
-            },
-
-            [[chlk.models.id.AnnouncementId]],
-            ria.async.Future, function getAnnouncement(id) {
+            [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function getAnnouncement(id, announcementType_) {
                 return this.get('Announcement/Read.json', chlk.models.announcement.AnnouncementView, {
-                    announcementId: id.valueOf()
+                    announcementId: id.valueOf(),
+                    announcementType: announcementType_ && announcementType_.valueOf()
                 })
                 .then(function(announcement){
                   this.cache[announcement.getId().valueOf()] = announcement;
@@ -321,19 +254,13 @@ NAMESPACE('chlk.services', function () {
                 }, this);
             },
 
-            [[chlk.models.id.AnnouncementId, Boolean]],
-            ria.async.Future, function checkItem(announcementId, complete_) {
+            [[chlk.models.id.AnnouncementId, Boolean, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function checkItem(announcementId, complete_, type_) {
                 this.setImportantCount(this.getImportantCount() + (complete_ ? 1 : -1));
-                return this.post('Announcement/Complete', chlk.models.announcement.Announcement, {
+                return this.post('Announcement/Complete', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
-                    complete: complete_
-                });
-            },
-
-            [[chlk.models.id.AnnouncementId]],
-            ria.async.Future, function makeVisible(announcementId) {
-                return this.post('Announcement/MakeVisible', chlk.models.announcement.Announcement, {
-                    announcementId: announcementId.valueOf()
+                    complete: complete_,
+                    announcementType: type_ && type_.valueOf(),
                 });
             },
 
@@ -341,7 +268,8 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function askQuestion(announcementId, question) {
                 return this.post('AnnouncementQnA/Ask', chlk.models.announcement.AnnouncementQnA, {
                     announcementId: announcementId.valueOf(),
-                    question: question
+                    question: question,
+                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 }).then(function(qna){
                     var result =this.cache[qna.getAnnouncementId().valueOf()];
                     result.getAnnouncementQnAs().push(qna);
@@ -355,7 +283,8 @@ NAMESPACE('chlk.services', function () {
                 return this.post('AnnouncementQnA/Answer', chlk.models.announcement.AnnouncementQnA, {
                     announcementQnAId: announcementQnAId.valueOf(),
                     question: question,
-                    answer: answer
+                    answer: answer,
+                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 }).then(function(qna){
                         return this.editCacheAnnouncementQnAs_(qna);
                 }, this);
@@ -407,17 +336,19 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.StandardId]],
             ria.async.Future, function addStandard(announcementId, standardId) {
-                return this.get('Announcement/AddStandard.json', chlk.models.announcement.Announcement, {
+                return this.get('Announcement/AddStandard.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
-                    standardId: standardId.valueOf()
+                    standardId: standardId.valueOf(),
+                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 });
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.StandardId]],
             ria.async.Future, function removeStandard(announcementId, standardId) {
-                return this.get('Announcement/RemoveStandard.json', chlk.models.announcement.Announcement, {
+                return this.get('Announcement/RemoveStandard.json', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
-                    standardId: standardId.valueOf()
+                    standardId: standardId.valueOf(),
+                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 });
             },
 
@@ -458,7 +389,8 @@ NAMESPACE('chlk.services', function () {
             [[Array]],
             ria.async.Future, function deleteAnnouncementTypes(ids){
                 return this.get('AnnouncementType/Delete.json', Boolean,{
-                    classAnnouncementTypeIds: this.arrayToCsv(ids)
+                    classAnnouncementTypeIds: this.arrayToCsv(ids),
+                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 });
             },
 

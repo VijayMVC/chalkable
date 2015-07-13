@@ -1,5 +1,6 @@
 ﻿using System;
 using Chalkable.Data.Common;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.Data.School.Model
 {
@@ -33,7 +34,7 @@ namespace Chalkable.Data.School.Model
     {
         public Person Person { get; set; }
         public Announcement Announcement { get; set; }
-        public ClassAnnouncementType AnnouncementType { get; set; }
+        public ClassAnnouncementType ClassAnnouncementType { get; set; }
         public PrivateMessageDetails PrivateMessage { get; set; }
         public Person QuestionPerson { get; set; }
         public MarkingPeriod MarkingPeriod { get; set; }

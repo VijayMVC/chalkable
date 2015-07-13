@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -120,7 +121,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
            
             var gradeBook = gradeBooks.First();
-            gradeBook.Activities = ((DemoAnnouncementService)ServiceLocator.AnnouncementService).GetActivitiesForClass(classId);
+            //TODO : impl this
+            //gradeBook.Activities = ((DemoAnnouncementService)ServiceLocator.ClassAnnouncementService).GetActivitiesForClass(classId);
             var activityIds = gradeBook.Activities.Select(x => x.Id).ToList();
             gradeBook.Scores = ((DemoStudentAnnouncementService) ServiceLocator.StudentAnnouncementService).GetActivityScores(activityIds);
 
@@ -144,7 +146,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 FromDate = gradingPeriod.StartDate,
                 ToDate = gradingPeriod.EndDate
             };
-            var anns = ServiceLocator.AnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
+            var anns = ServiceLocator.ClassAnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
             return BuildGradeBook(gradebook, gradingPeriod, anns, students);
         }
 
@@ -187,14 +189,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var classTeachers = ServiceLocator.ClassService.GetClassTeachers(stiGradeBook.SectionId, null);
             foreach (var activity in activities)
             {
-                var ann = anns.FirstOrDefault(x => x.SisActivityId == activity.Id);
+                var ann = anns.FirstOrDefault(x => x.ClassAnnouncementData.SisActivityId == activity.Id);
                 var annDetails = new AnnouncementDetails
                 {
                     Id = ann.Id,
-                    ClassName = ann.ClassName,
                     Title = ann.Title,
+                    AnnouncementData = ann.ClassAnnouncementData,
                     StudentAnnouncements = new List<StudentAnnouncementDetails>(),
-                    PrimaryTeacherRef = ann.PrimaryTeacherRef,
                     IsOwner = classTeachers.Any(x => x.PersonRef == Context.PersonId)
                 };
                 MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(annDetails, activity);
@@ -208,7 +209,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     var stAnn = new StudentAnnouncementDetails
                     {
                         AnnouncementId = ann.Id,
-                        ClassId = ann.ClassRef.Value,
+                        ClassId = ann.ClassAnnouncementData.ClassRef,
                         Student = student,
                     };
                     MapperFactory.GetMapper<StudentAnnouncementDetails, Score>().Map(stAnn, score);

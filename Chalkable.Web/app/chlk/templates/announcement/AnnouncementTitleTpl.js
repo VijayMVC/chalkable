@@ -9,6 +9,9 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.ModelBind(chlk.models.announcement.AnnouncementTitleViewData)],
         'AnnouncementTitleTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            String, 'title'
+            String, 'title',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.AnnouncementTypeEnum, 'type'
         ]);
 });

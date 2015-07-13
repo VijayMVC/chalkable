@@ -57,6 +57,7 @@ REQUIRE('chlk.models.people.ShortUserInfo');
 REQUIRE('chlk.models.grading.AvgComment');
 REQUIRE('chlk.models.school.SchoolOption');
 REQUIRE('chlk.models.school.LEParams');
+REQUIRE('chlk.models.announcement.AnnouncementAttributeType');
 
 REQUIRE('chlk.models.id.SchoolId');
 REQUIRE('chlk.models.id.DistrictId');

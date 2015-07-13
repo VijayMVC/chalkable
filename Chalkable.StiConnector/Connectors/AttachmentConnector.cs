@@ -29,7 +29,6 @@ namespace Chalkable.StiConnector.Connectors
         
         public void DeleteAttachment(int activityId, int id)
         {
-            locator.ActivityAttachmentsConnector.Delete(activityId, id);
             DeleteAttachment(id);
         }
 

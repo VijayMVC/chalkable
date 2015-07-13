@@ -3,7 +3,7 @@ REQUIRE('chlk.models.grading.AnnTypeGradeStatsViewData');
 REQUIRE('chlk.models.grading.GradingClassSummaryPart');
 REQUIRE('chlk.models.schoolYear.MarkingPeriod');
 REQUIRE('chlk.models.common.PageWithClassesAndGradingPeriodsViewData');
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 REQUIRE('chlk.models.announcement.FeedAnnouncementViewData');
 
 REQUIRE('chlk.models.grading.GradingClassSummaryForCurrentPeriodViewData');

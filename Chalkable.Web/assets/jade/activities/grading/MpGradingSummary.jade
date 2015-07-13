@@ -6,7 +6,7 @@ div(data-index=self.getIndex()).ann-type-container
     announcements = self.getAnnouncements()
     each announcement, i in announcements
         div(data-index=i).announcements-type-item
-            +ActionLink('announcement', 'view', announcement.getId())(
+            +ActionLink('announcement', 'view', announcement.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT)(
                 annId = announcement.getId().valueOf(),
                 class = announcement.isDropped() ? "dropped" : "",
                 data-tooltip = announcement.getTitle(),

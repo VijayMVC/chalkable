@@ -479,18 +479,17 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, String]],
-        function tryToAttachAction(announcementId, appId, appUrlAppend_) {
-
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
+        function tryToAttachAction(announcementId, appId, announcementType, appUrlAppend_) {
             var result = this.appsService
-                .addToAnnouncement(this.getCurrentPerson().getId(), appId, announcementId)
+                .addToAnnouncement(this.getCurrentPerson().getId(), appId, announcementId, announcementType)
                 .catchError(function(error_){
                     throw new chlk.lib.exception.AppErrorException(error_);
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(app){
                     app.setCurrentModeUrl(app.getEditUrl() + (appUrlAppend_ ? '&' + appUrlAppend_ : ''));
-                    return new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT);
+                    return new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT, announcementType);
                 }, this);
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
@@ -501,10 +500,10 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, String]],
-        function tryToAttachFromAnnouncementAction(announcementId, appId, appUrlAppend_) {
-            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
-            return this.tryToAttachAction(announcementId, appId, appUrlAppend_);
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
+        function tryToAttachFromAnnouncementAction(announcementId, appId, announcementType, appUrlAppend_) {
+            //this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
+            return this.tryToAttachAction(announcementId, appId, announcementType, appUrlAppend_);
         },
 
         [chlk.controllers.StudyCenterEnabled()],

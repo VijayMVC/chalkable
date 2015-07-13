@@ -8,6 +8,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using GCObjectRenderer;
 
 namespace Chalkable.BusinessLogic.Services.School.Notifications

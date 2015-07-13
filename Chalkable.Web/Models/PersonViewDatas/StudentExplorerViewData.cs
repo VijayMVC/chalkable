@@ -30,7 +30,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
     {
         public ShortClassViewData Class { get; set; }
         public decimal? Avg { get; set; }
-        public AnnouncementShortViewData ImportantAnnouncement { get; set; }
+        public ShortAnnouncementViewData ImportantAnnouncement { get; set; }
         public IList<StudentStandardGradeViewData> Standards { get; set; }
 
         public static StudentClassExplorerViewData Create(StudentClassExplorerInfo classExplorerInfo)
@@ -40,7 +40,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 res.Class = ShortClassViewData.Create(classExplorerInfo.ClassInfo);
             res.Avg = classExplorerInfo.Avg;
             if (classExplorerInfo.MostImportantAnnouncement != null)
-                res.ImportantAnnouncement = AnnouncementShortViewData.Create(classExplorerInfo.MostImportantAnnouncement);
+                res.ImportantAnnouncement = ClassAnnouncementViewData.Create(classExplorerInfo.MostImportantAnnouncement.ClassAnnouncementData);
             res.Standards = classExplorerInfo.Standards.Select(StudentStandardGradeViewData.Create).ToList();
             return res;
         }

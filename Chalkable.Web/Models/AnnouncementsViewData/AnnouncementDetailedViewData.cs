@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -19,22 +20,19 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 
         public ShortPersonViewData Owner { get; set; }
         public bool Exempt { get; set; }
-
+         
         public bool CanRemoveStandard { get; set; }
 
         public IList<ApplicationForAttachViewData> SuggestedApps { get; set; }
 
-        public IList<AdminAnnouncementRecipientViewData> Recipients { get; set; } 
+        public IList<AdminAnnouncementGroupViewData> Recipients { get; set; } 
 
         private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements)
-            : base(announcementDetails, studentAnnouncements, null)
+            : base(announcementDetails, studentAnnouncements)
         {
             if (announcementDetails.AnnouncementQnAs != null)
                 AnnouncementQnAs = AnnouncementQnAViewData.Create(announcementDetails.AnnouncementQnAs);
 
-
-            if (announcementDetails.AnnouncementAttributes != null)
-                AnnouncementAttributes = AnnouncementAssignedAttributeViewData.Create(announcementDetails.AnnouncementAttributes);
 
             if(announcementDetails.Owner != null)
                 Owner = ShortPersonViewData.Create(announcementDetails.Owner);
@@ -46,14 +44,14 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                                 || studentAnnouncements.All(x => string.IsNullOrEmpty(x.ScoreValue));
         }
 
-        private AnnouncementDetailedViewData(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded)
-            : base(announcement, wasAnnouncementTypeGraded)
+        private AnnouncementDetailedViewData(AnnouncementComplex announcement)
+            : base(announcement)
         {
         }
 
-        public static AnnouncementDetailedViewData CreateEmpty(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded = null)
+        public static AnnouncementDetailedViewData CreateEmpty(AnnouncementComplex announcement)
         {
-            return new AnnouncementDetailedViewData(announcement, wasAnnouncementTypeGraded);
+            return new AnnouncementDetailedViewData(announcement);
         }
 
         public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, int currentSchoolPersonId)
@@ -72,10 +70,13 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             return new AnnouncementDetailedViewData(announcementDetails, studentAnnouncements);
         }
 
-        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, int currentSchoolPersonId, IList<AnnouncementAttachmentInfo> attachmentInfos)
+        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, int currentSchoolPersonId, IList<AnnouncementAttachmentInfo> attachmentInfos, IList<AssignedAttributeAttachmentInfo> attrAttachmentInfos)
         {
             var res = Create(announcementDetails, currentSchoolPersonId);
             res.AnnouncementAttachments = AnnouncementAttachmentViewData.Create(attachmentInfos, currentSchoolPersonId);
+
+            if (announcementDetails.AnnouncementAttributes != null)
+                res.AnnouncementAttributes = AnnouncementAssignedAttributeViewData.Create(announcementDetails.AnnouncementAttributes, attrAttachmentInfos);
             return res;
         }
     }

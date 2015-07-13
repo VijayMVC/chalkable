@@ -136,12 +136,11 @@ NAMESPACE('chlk.services', function () {
                 var mpEndDate = dateRangeObj.endDate;
                 days.forEach(function(day){
                     var itemsArray = [], itemsObject = {};
-                    var items = day.getItems();
+                    var items = day.getAnnouncements();
                     for (var i = 0; i < items.length; i++){
                         var typeName = items[i].getAnnouncementTypeName();
                         var title = items[i].getTitle();
                         var typeId = items[i].getAnnouncementTypeId();
-                        var typesEnum = chlk.models.announcement.AnnouncementTypeEnum;
                         if (itemsObject[typeName]){
                             if(typeof itemsObject[typeName] == 'number'){
                                 itemsObject[typeName] = itemsObject[typeName] + 1;
@@ -151,8 +150,7 @@ NAMESPACE('chlk.services', function () {
                             }
                         }
                         else{
-                            var showSubject = title !== null && typeId == typesEnum.ADMIN || typeId == typesEnum.ANNOUNCEMENT;
-                            itemsObject[typeName] = showSubject ? title + ' ' + typeName : title || typeName;
+                            itemsObject[typeName] = isAdmin ? title + ' ' + typeName : title || typeName;
                         }
                     }
 

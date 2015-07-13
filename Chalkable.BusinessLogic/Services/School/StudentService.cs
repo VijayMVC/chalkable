@@ -11,6 +11,7 @@ using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -104,12 +105,13 @@ namespace Chalkable.BusinessLogic.Services.School
         public StudentSummaryInfo GetStudentSummaryInfo(int studentId)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(syId, studentId);
             var student = ServiceLocator.StudentService.GetById(studentId, syId);
             var infractions = ServiceLocator.InfractionService.GetInfractions();
             var activitiesIds = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();
-            var anns = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value).GetByActivitiesIds(activitiesIds));
+            var anns = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value).GetByActivitiesIds(activitiesIds, Context.PersonId.Value));
             var res = StudentSummaryInfo.Create(student, nowDashboard, infractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
         }
@@ -182,7 +184,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         if (activity == null) continue;
                         importanActivitiesIds.Add(activity.Id);
                     }
-                    announcements = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value).GetByActivitiesIds(importanActivitiesIds));
+                    announcements = DoRead(uow => new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value).GetByActivitiesIds(importanActivitiesIds, Context.PersonId.Value));
                 }
             }
             return StudentExplorerInfo.Create(student, classes, mostRecentAverages, inowStandardScores, announcements, standards);

@@ -12,6 +12,7 @@ REQUIRE('chlk.models.apps.ShortAppInfo');
 REQUIRE('chlk.models.apps.BannedAppData');
 REQUIRE('chlk.models.apps.AppPersonRating');
 REQUIRE('chlk.models.apps.ApplicationAuthorization');
+REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 
 REQUIRE('chlk.models.id.GradeLevelId');
 REQUIRE('chlk.models.id.SchoolPersonId');
@@ -143,12 +144,13 @@ NAMESPACE('chlk.services', function () {
 
             },
 
-            [[chlk.models.id.SchoolPersonId, chlk.models.id.AppId, chlk.models.id.AnnouncementId]],
-            ria.async.Future, function addToAnnouncement(personId, appId, announcementId) {
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.AppId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function addToAnnouncement(personId, appId, announcementId, announcementType) {
                 return this
                     .post('Application/AddToAnnouncement.json', chlk.models.apps.AppAttachment, {
                         applicationId: appId.valueOf(),
-                        announcementId: announcementId.valueOf()
+                        announcementId: announcementId.valueOf(),
+                        announcementType: announcementType.valueOf()
                     })
                     .then(function(attachment){
                         return this.getOauthCode(personId, attachment.getUrl())
@@ -159,11 +161,12 @@ NAMESPACE('chlk.services', function () {
                     }, this);
             },
 
-            [[chlk.models.id.AnnouncementApplicationId]],
-            ria.async.Future, function attachApp(appAnnouncementId) {
+            [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementType]],
+            ria.async.Future, function attachApp(appAnnouncementId, announcementType_) {
               return this
-                  .post('Application/Attach.json', chlk.models.announcement.Announcement, {
-                      announcementApplicationId: appAnnouncementId.valueOf()
+                  .post('Application/Attach.json', chlk.models.announcement.FeedAnnouncementViewData, {
+                      announcementApplicationId: appAnnouncementId.valueOf(),
+                      announcementType: announcementType_ && announcementType_.valueOf()
                   });
             },
 
@@ -325,15 +328,6 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getAppAnalytics(appId){
                 return this
                     .post('Application/GetAppAnalytics.json', chlk.models.developer.HomeAnalytics, {
-                        applicationId: appId.valueOf()
-                    });
-            },
-
-            [[chlk.models.id.AppId, chlk.models.id.AnnouncementId]],
-            ria.async.Future, function addAppToAnnouncement(appId, announcementId){
-                return this
-                    .post('Application/AddToAnnouncement.json', chlk.models.apps.AppAttachment, {
-                        announcementId: announcementId.valueOf(),
                         applicationId: appId.valueOf()
                     });
             },

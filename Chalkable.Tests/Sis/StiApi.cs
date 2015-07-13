@@ -46,6 +46,32 @@ namespace Chalkable.Tests.Sis
         }
 
         [Test]
+        public void Test4()
+        {
+            var cl = ConnectorLocator.Create("Chalkable", "8nA4qU4yG", "http://sandbox.sti-k12.com/chalkable/api/");
+            var items = (cl.SyncConnector.GetDiff(typeof(AcadSession), null) as SyncResult<AcadSession>).All.ToList();
+            items = items.ToList();
+
+            var sql = new StringBuilder();
+            sql.Append(@"declare @sy table (id int, ArchiveDate datetime2 null) 
+                         insert into @sy
+                         values");
+
+            foreach ( var item in items)
+            {
+                var s = string.Format("({0},{1}),", item.AcadSessionID, item.ArchiveDate.HasValue ? "cast('" + item.ArchiveDate.Value + "' as datetime2)" : "null");
+                sql.Append(s);
+            }
+            sql.Append(" ").Append(@"update SchoolYear
+                                    set ArchiveDate = sy.ArchiveDate
+                                    from SchoolYear 
+                                    join @sy sy on SchoolYear.Id = sy.Id");
+
+        
+            Debug.WriteLine(sql.ToString());
+        }
+
+        [Test]
         public void Test3()
         {
             Debug.WriteLine(DateTime.Now.Month);

@@ -12,7 +12,7 @@ else if self.isBanned()
 else if self.isAppError()
     +AppErrorDialog()
 else
-    +AttachmentDialog(self.getUrl(), self.getToolbarButtons(), announcementId, announcementAppId, self.getType(), advancedApp).app-wrapper
+    +AttachmentDialog(self.getUrl(), self.getToolbarButtons(), announcementId, announcementAppId, self.getType(), advancedApp, self.getAnnouncementType()).app-wrapper
 
 
 

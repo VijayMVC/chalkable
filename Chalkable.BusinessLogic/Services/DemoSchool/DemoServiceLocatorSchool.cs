@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IClassService classService;
         private ISchoolYearService schoolYearService;
         private IAnnouncementQnAService announcementQnAService;
-        private IAnnouncementService announcementService;
+        //private IAnnouncementService announcementService;
         private IAnnouncementAttachmentService announcementAttachmentService;
         private IPhoneService phoneService;
         private IPrivateMessageService privateMessageService;
@@ -67,14 +67,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IGroupService groupService;
         private ICourseTypeService courseTypeService;
         private ISettingsService settingsService;
+        private ILPGalleryCategoryService lpGalleryCategoryService { get; set; }
         private IAnnouncementAssignedAttributeService announcementAssignedAttributeService;
+
 
         public DemoServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster): base(serviceLocatorMaster.Context)        
         {
             this.serviceLocatorMaster = serviceLocatorMaster;
             notificationService = new DemoNotificationService(this);
             appMarketService = new DemoAppMarketService(this);
-            announcementService = new DemoAnnouncementService(this);
+            //announcementService = new DemoAnnouncementService(this);
             personService = new DemoPersonService(this);
             schoolYearService = new DemoSchoolYearService(this);
             markingPeriodService = new DemoMarkingPeriodService(this);
@@ -125,6 +127,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             courseTypeService = new DemoCourseTypeService(this);
             settingsService = new DemoSettingsService(this);
             announcementAssignedAttributeService = new DemoAnnouncementAssignedAttributeService(this);
+            lpGalleryCategoryService = new LPGalleryCategoryService(this);
         }
 
         public bool IsInitialized { get; private set; }
@@ -149,7 +152,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IClassService ClassService { get { return classService; } }
         public ISchoolYearService SchoolYearService { get { return schoolYearService; } }
         public IAnnouncementQnAService AnnouncementQnAService { get { return announcementQnAService; } }
-        public IAnnouncementService AnnouncementService { get { return announcementService; } }
+        //public IAnnouncementService AnnouncementService { get { return announcementService; } }
         public IAnnouncementAttachmentService AnnouncementAttachmentService { get { return announcementAttachmentService; } }
         public IPhoneService PhoneService { get { return phoneService; } }
         public IPrivateMessageService PrivateMessageService { get { return privateMessageService; } }
@@ -202,7 +205,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public ICourseTypeService CourseTypeService { get { return courseTypeService; } }
 
         public ISettingsService SettingsService { get { return settingsService; } }
-
+        public ILPGalleryCategoryService LPGalleryCategoryService { get { return lpGalleryCategoryService; } }
 
         private void AddAttendances()
         {
@@ -1765,7 +1768,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private void AddClass(int id, string name, string classNumber)
         {
             ((DemoClassService)ClassService).AddClass(id, name, classNumber);
-            ((DemoAnnouncementService)AnnouncementService).AddDemoAnnouncementsForClass(id);
+            //todo: implement this later
+            //((DemoAnnouncementService)AnnouncementService).AddDemoAnnouncementsForClass(id);
             AddSeatingChartForClass(DemoSchoolConstants.FirstMarkingPeriodId, id);
             AddSeatingChartForClass(DemoSchoolConstants.SecondMarkingPeriodId, id);
         }
@@ -1805,7 +1809,34 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             Context = context;
             ((DemoServiceLocatorMaster)serviceLocatorMaster).Update(context);
-            ((DemoAnnouncementService)AnnouncementService).SetupAnnouncementProcessor(context, this);
+            //todo : implement this later
+            //((DemoAnnouncementService)AnnouncementService).SetupAnnouncementProcessor(context, this);
+        }
+
+
+        public School.Announcements.ILessonPlanService LessonPlanService
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public School.Announcements.IClassAnnouncementService ClassAnnouncementService
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public School.Announcements.IAdminAnnouncementService AdminAnnouncementService
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public School.Announcements.IAnnouncementFetchService AnnouncementFetchService
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public School.Announcements.IBaseAnnouncementService GetAnnouncementService(Data.School.Model.Announcements.AnnouncementType? type)
+        {
+            throw new NotImplementedException();
         }
     }
 

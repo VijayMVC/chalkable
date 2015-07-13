@@ -1,12 +1,12 @@
 REQUIRE('chlk.templates.ChlkTemplate');
-REQUIRE('chlk.models.announcement.Announcement');
+REQUIRE('chlk.models.announcement.FeedAnnouncementViewData');
 
 NAMESPACE('chlk.templates.announcement', function(){
 
     /**@class chlk.templates.announcement.AdminAnnouncementRecipientsTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/AdminAnnouncementRecipients.jade')],
-        [ria.templates.ModelBind(chlk.models.announcement.Announcement)],
+        [ria.templates.ModelBind(chlk.models.announcement.FeedAnnouncementViewData)],
         'AdminAnnouncementRecipientsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],

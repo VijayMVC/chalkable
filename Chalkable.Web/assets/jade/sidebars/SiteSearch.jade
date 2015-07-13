@@ -26,7 +26,7 @@ li(data-title = self.getDescription(), data-value = self.getId().valueOf() + '|'
                 +ActionLink('announcement', 'view', self.getId()).image-container.white.shadow
                     div.site-search-announcement.search-item
                         .icon-item
-                            div(class="announcement-type-" + self.getChalkableAnnouncementType()).icon.blue.image
+                            .icon.blue.image
                         div.title= self.getDescription()
             when chlk.models.search.SearchTypeEnum.APPLICATIONS
                 +ActionLink('appmarket', 'details', self.getId()).image-container.white.shadow

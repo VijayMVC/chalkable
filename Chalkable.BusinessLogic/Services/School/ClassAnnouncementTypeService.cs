@@ -3,6 +3,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -140,7 +141,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         Name = classAnnouncementType.Name,
                         Percentage = classAnnouncementType.Percentage,
                         ChalkableAnnouncementTypeRef = classAnnouncementType.ChalkableAnnouncementTypeRef,
-                        Avg = (double?)announcementDetailses.Where(x => x.ClassAnnouncementTypeRef == classAnnouncementType.Id)
+                        Avg = (double?)announcementDetailses.Where(x =>x.ClassAnnouncementData != null && x.ClassAnnouncementData.ClassAnnouncementTypeRef == classAnnouncementType.Id)
                                                    .Average(x => x.StudentAnnouncements.Average(y => y.NumericScore))
                     };
                 res.Add(gradedClassAnnType);

@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
-using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.CalendarsViewData;
@@ -23,37 +19,42 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
         public ActionResult List(DateTime? date, int? classId, int? personId)
          {
-             if (!SchoolLocator.Context.PersonId.HasValue)
-                 throw new UnassignedUserException();
+             Trace.Assert(Context.PersonId.HasValue);
              DateTime start, end;
              MonthCalendar(ref date, out start, out end);
              var schoolYearId = GetCurrentSchoolYearId();
              int? studentId, teacherId;
              PrepareUsersIdsForCalendar(SchoolLocator, personId, out teacherId, out studentId);
-             var isAdmin = BaseSecurity.IsDistrictAdmin(Context);
-             var announcements = isAdmin
-                    ? SchoolLocator.AnnouncementService.GetAdminAnnouncements(null, null, start, end, 0, int.MaxValue, true, studentId)
-                    : SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, classId, true);
-             if (personId.HasValue && !isAdmin)
+             //var isAdmin = BaseSecurity.IsDistrictAdmin(Context);
+             //var announcements = isAdmin
+             //       ? SchoolLocator.AnnouncementService.GetAdminAnnouncements(null, null, start, end, 0, int.MaxValue, true, studentId)
+             //       : SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, classId, true);
+             var announcementList = SchoolLocator.AnnouncementFetchService.GetAnnouncementComplexList(start, end, false, classId, studentId);
+             if (personId.HasValue)
              {
                  var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
-                 announcements = announcements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
+                 announcementList.LessonPlans = announcementList.LessonPlans.Where(l => classes.Any(c => c.Id == l.ClassRef)).ToList();
+                 announcementList.ClassAnnouncements = announcementList.ClassAnnouncements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
              }
              if (DemoUserService.IsDemoUser(Context))
              {
-                 announcements = announcements.Where(x => x.State == AnnouncementState.Created).ToList();
+                 //announcements = announcements.Where(x => x.State == AnnouncementState.Created).ToList();
              }
              var days = SchoolLocator.CalendarDateService.GetLastDays(schoolYearId, true, start, end);
              return Json(PrepareMonthCalendar(start, end, date.Value, (dateTime, isCurrentMonth) => 
-                 AnnouncementMonthCalendarViewData.Create(dateTime, isCurrentMonth, announcements, days)));
+                 AnnouncementMonthCalendarViewData.Create(dateTime, isCurrentMonth, announcementList, days)));
          }
 
          [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
          public ActionResult ListByDateRange(DateTime? startDate, DateTime? endDate, int? classId)
          {
-             var query = new AnnouncementsQuery {FromDate = startDate, ToDate = endDate, ClassId = classId};
-             var anns = SchoolLocator.AnnouncementService.GetAnnouncementsComplex(query);
-             return Json(AnnouncementShortViewData.Create(anns));
+             //todo : investigate where this method is used
+             var annList = SchoolLocator.AnnouncementFetchService.GetAnnouncementComplexList(startDate, endDate, false, classId);
+             var res = new List<ShortAnnouncementViewData>();
+             res.AddRange(annList.LessonPlans.Select(ShortAnnouncementViewData.Create));
+             res.AddRange(annList.ClassAnnouncements.Select(ShortAnnouncementViewData.Create));
+             res.AddRange(annList.AdminAnnouncements.Select(ShortAnnouncementViewData.Create));
+             return Json(res);
          }
 
          [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
@@ -80,18 +81,23 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              int? teacherId, studentId;
              PrepareUsersIdsForCalendar(locator, personId, out teacherId, out studentId);
              var res = new List<AnnouncementCalendarWeekViewData>();
-             var announcements = BaseSecurity.IsDistrictAdmin(locator.Context) 
-                 ? locator.AnnouncementService.GetAdminAnnouncements(null, null, start, end, 0, int.MaxValue, true, studentId)
-                 : locator.AnnouncementService.GetAnnouncements(start, end, false, classId, true);
+
+             var announcementList = locator.AnnouncementFetchService.GetAnnouncementComplexList(start, end, true, classId, studentId);
+
              var schedule = locator.ClassPeriodService.GetSchedule(teacherId, studentId, classId, start, end);
              var classes = locator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
-             announcements = announcements.Where(a => a.IsAdminAnnouncement ||  classes.Any(c => c.Id == a.ClassRef)).ToList();
+
+             announcementList.LessonPlans = announcementList.LessonPlans.Where(l => classes.Any(c => c.Id == l.ClassRef)).ToList();
+             announcementList.ClassAnnouncements = announcementList.ClassAnnouncements.Where(a => classes.Any(c => c.Id == a.ClassRef)).ToList();
+
              for (var d = start; d <= end; d = d.AddDays(1))
              {
-                 var currentDayAnns = announcements.Where(x => x.Expires.Date == d).ToList();
+                 var classAnns = announcementList.ClassAnnouncements.Where(x => x.Expires.Date == d).ToList();
+                 var lessonPlans = announcementList.LessonPlans.Where(x => x.StartDate <= d && x.EndDate >= d).ToList();
+                 var adminAnns = announcementList.AdminAnnouncements.Where(x => x.Expires.Date == d).ToList();
                  var daySchedule = schedule.Where(x => x.Day == d).ToList();
-                 var annPeriods = AnnouncementPeriodViewData.Create(daySchedule, currentDayAnns, locator.Context.NowSchoolTime);
-                 res.Add(AnnouncementCalendarWeekViewData.Create(d, annPeriods, currentDayAnns));
+                 var annPeriods = AnnouncementPeriodViewData.Create(daySchedule, classAnns, lessonPlans, locator.Context.NowSchoolTime);
+                 res.Add(AnnouncementCalendarWeekViewData.Create(d, annPeriods, adminAnns));
              }
              return res;
          }

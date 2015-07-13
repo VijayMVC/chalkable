@@ -1,6 +1,6 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.announcement.BaseAnnouncementFormTpl');
-REQUIRE('chlk.templates.announcement.Announcement');
+REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.templates.announcement.LastMessages');
 
 NAMESPACE('chlk.activities.announcement', function () {
@@ -155,12 +155,82 @@ NAMESPACE('chlk.activities.announcement', function () {
                 new ria.dom.Dom().on('click.dropdown', this._handler);
             },
 
+            Boolean, 'notSave',
+
+            [ria.mvc.DomEventBind('click', '.announcement-type-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function onTypeClick(node, event){
+                if(node.hasClass('no-save'))
+                    this.setNotSave(true);
+            },
+
             OVERRIDE, VOID, function onStop_() {
                 var button = new ria.dom.Dom('#save-form-button');
-                if(button.exists())
+                if(button.exists() && !this.isNotSave())
                     button.trigger('click');
+                this.setNotSave(false);
                 new ria.dom.Dom().off('click.dropdown', this._handler);
                 BASE();
+            },
+
+            [[chlk.models.id.AnnouncementAssignedAttributeId, String, Boolean, chlk.models.id.AnnouncementAttributeTypeId]],
+            function onAssignedAttributeChange_(assignedAttributeId, text, visibleForStudents, attributeTypeId) {
+                var attrsJson = this.dom.find('input[name=announcementAssignedAttrs]').getValue() || '';
+
+                if (attrsJson == '') return;
+
+                var attrs = JSON.parse(attrsJson) || [];
+                var updatedAttrs = [];
+                for(var i = 0; i < attrs.length; ++i){
+                    var item = attrs[i];
+                    var wd = chlk.models.announcement.AnnouncementAttributeViewData.$fromObject(item);
+
+                    if (wd.getId() == assignedAttributeId){
+                        wd.setText(text);
+                        wd.setVisibleForStudents(visibleForStudents);
+                        wd.setAttributeTypeId(attributeTypeId);
+                    }
+                    updatedAttrs.push(wd.getPostData());
+                }
+
+
+                var attrJson = JSON.stringify(updatedAttrs);
+                this.dom.find('input[name=announcementAssignedAttrs]').setValue(attrJson);
+
+            },
+
+            [ria.mvc.DomEventBind('keyup', 'textarea.edit-attribute-text')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function onAssignedAttributeTextChange(node, event) {
+
+                var id = node.getAttr('id').replace('text-', '');
+                var attrId = new chlk.models.id.AnnouncementAssignedAttributeId(id);
+                var attributeTypeId = new chlk.models.id.AnnouncementAttributeTypeId(this.dom.find('#announcement-attrs-type-'+id + "-hidden").getValue());
+                var isVisible = !this.dom.find('input[name=attr-hidefromstudents-'+id + "]").checked();
+                this.onAssignedAttributeChange_(attrId, node.getValue(), isVisible, attributeTypeId);
+            },
+
+            [ria.mvc.DomEventBind('change', 'input[type=checkbox].edit-attribute-visibility')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function onAssignedAttributeAccessChange(node, event) {
+
+                var id = node.getAttr('name').replace('attr-hidefromstudents-', '');
+                var attrId = new chlk.models.id.AnnouncementAssignedAttributeId(id);
+                var attributeTypeId = new chlk.models.id.AnnouncementAttributeTypeId(this.dom.find('#announcement-attrs-type-'+id + "-hidden").getValue());
+                var isVisible = !node.checked();
+                var text = this.dom.find('#text-'+id).getValue();
+                this.onAssignedAttributeChange_(attrId, text, isVisible, attributeTypeId);
+            },
+
+            [ria.mvc.DomEventBind('change', 'input[type=text].announcement-attr-type-name')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            function onAssignedAttributeTypeChange(node, event, selected) {
+                var id = node.getAttr('id').replace('announcement-attrs-type-', '');
+                var attrId = new chlk.models.id.AnnouncementAssignedAttributeId(id);
+                var attributeTypeId = selected.selected.getId();
+                var isVisible = !this.dom.find('input[name=attr-hidefromstudents-'+id + "]").checked();
+                var text = this.dom.find('#text-'+id).getValue();
+                this.onAssignedAttributeChange_(attrId, text, isVisible, attributeTypeId);
             }
         ]
     );

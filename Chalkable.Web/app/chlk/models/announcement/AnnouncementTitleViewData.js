@@ -4,13 +4,17 @@ NAMESPACE('chlk.models.announcement', function () {
     /** @class chlk.models.announcement.AnnouncementTitleViewData*/
     CLASS(
         'AnnouncementTitleViewData', [
-            [[String]],
-            function $(title_){
+            [[String, chlk.models.announcement.AnnouncementTypeEnum]],
+            function $(title_, type_){
                 BASE();
                 if(title_)
                     this.setTitle(title_);
+                if(type_)
+                    this.setType(type_);
             },
 
-            String, 'title'
+            String, 'title',
+
+            chlk.models.announcement.AnnouncementTypeEnum, 'type'
         ]);
 });

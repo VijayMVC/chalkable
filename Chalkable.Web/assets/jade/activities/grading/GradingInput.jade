@@ -24,7 +24,7 @@ normalValue = self.getModel().getNormalValue()
                 +Hidden('dropped', self.isDropped()).dropped-hidden
             +LabeledCheckbox(Msg.Late, 'islate', self.isLate())(data-value=self.isLate(), addCallBack = true).with-value
             +LabeledCheckbox(Msg.Incomplete, 'isincomplete', self.isIncomplete())(data-value=self.isIncomplete(), addCallBack = true).with-value
-            if self.isAbleExemptStudentScore()
+            if self.isAbleToExempt()
                 +LabeledCheckbox(Msg.Exempt, 'isexempt', self.isExempt())(data-value=self.isExempt(), addCallBack = true).with-value.exempt-checkbox
             else
                 +Hidden('isexempt', self.isExempt())

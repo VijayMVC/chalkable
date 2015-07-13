@@ -111,7 +111,7 @@ namespace Chalkable.BusinessLogic.Services.School
             int[] activityIds = new int[10];
             if (inputModel.AnnouncementIds != null && inputModel.AnnouncementIds.Count > 0)
             {
-                var anns = ServiceLocator.AnnouncementService.GetAnnouncements(inputModel.StartDate, inputModel.EndDate);
+                var anns = ServiceLocator.ClassAnnouncementService.GetClassAnnouncements(inputModel.StartDate, inputModel.EndDate, null); 
                 anns = anns.Where(x => x.SisActivityId.HasValue && inputModel.AnnouncementIds.Contains(x.Id)).ToList();
                 activityIds = anns.Select(x => x.SisActivityId.Value).ToArray();    
             }

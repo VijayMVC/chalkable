@@ -21,8 +21,8 @@ namespace Chalkable.Web.Models
         public Guid? ApplicationId { get; set; }
         public string ApplcicationName { get; set; }
         public string ApplicationIcon47Url { get; set; }
-        public int? AnnouncementType { get; set; }
-        public bool IsAdminAnnouncement { get; set; }
+        public int? ClassAnnouncementTypeId { get; set; }
+        public int AnnouncementType { get; set; }
         public string AnnouncementTypeName { get; set; }
         public DateTime Created { get; set; }
         public int? ClassId { get; set; }
@@ -95,10 +95,10 @@ namespace Chalkable.Web.Models
             //    res.ApplcicationName = notification.Application.Name;
             //    res.ApplicationIcon47Url = AppTools.BuildIconUrl(notification.Application, true);
             //}
-            if (notification.AnnouncementRef.HasValue && notification.AnnouncementType != null)
+            if (notification.AnnouncementRef.HasValue && notification.ClassAnnouncementType != null)
             {
-                res.AnnouncementType = notification.AnnouncementType.Id;
-                res.AnnouncementTypeName = notification.AnnouncementType.Name;
+                res.AnnouncementType = notification.ClassAnnouncementType.Id;
+                res.AnnouncementTypeName = notification.ClassAnnouncementType.Name;
             }
             return res;
         }
@@ -112,13 +112,13 @@ namespace Chalkable.Web.Models
                 throw new ChalkableException(ChlkResources.ERR_INVALID_NOTIFICATION_BUILDER_FOR_TYPE);
             var res = new NotificationViewData(notification)
                 {
-                    IsAdminAnnouncement = notification.AnnouncementType == null && !notification.Announcement.ClassAnnouncementTypeRef.HasValue,
                     Person = ShortPersonViewData.Create(notification.QuestionPerson)
                 };
-            if (notification.AnnouncementType != null)
+            if (notification.ClassAnnouncementType != null)
             {
-                res.AnnouncementType = notification.AnnouncementType.ChalkableAnnouncementTypeRef;
-                res.AnnouncementTypeName = notification.AnnouncementType.Name;
+                res.AnnouncementType = (int) notification.Announcement.Type;
+                res.ClassAnnouncementTypeId = notification.ClassAnnouncementType.ChalkableAnnouncementTypeRef;
+                res.AnnouncementTypeName = notification.ClassAnnouncementType.Name;
             }
             return res;
         }

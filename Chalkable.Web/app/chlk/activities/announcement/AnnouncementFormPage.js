@@ -1,6 +1,6 @@
 REQUIRE('chlk.activities.announcement.BaseAnnouncementFormPage');
 REQUIRE('chlk.templates.announcement.AnnouncementFormTpl');
-REQUIRE('chlk.templates.announcement.Announcement');
+REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.templates.announcement.LastMessages');
 REQUIRE('chlk.templates.announcement.AnnouncementTitleTpl');
 REQUIRE('chlk.templates.SuccessTpl');
@@ -8,6 +8,7 @@ REQUIRE('chlk.templates.standard.AnnouncementStandardsTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementAttributesTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementAttributesDropdownTpl');
 REQUIRE('chlk.templates.apps.SuggestedAppsListTpl');
+REQUIRE('chlk.templates.announcement.Announcement');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
@@ -18,7 +19,7 @@ NAMESPACE('chlk.activities.announcement', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AnnouncementFormTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, 'update-attachments', '.apps-attachments-bock', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, 'update-attachments', '.apps-attachments-bock', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttributesTpl, 'update-attributes', '.attributes-block', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementFormTpl, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.standard.AnnouncementStandardsTpl, '', '.standards-list' , ria.mvc.PartialUpdateRuleActions.Replace)],
@@ -45,7 +46,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, 'update-standards-and-suggested-apps', '', ria.mvc.PartialUpdateRuleActions.Replace)],
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, 'update-standards-and-suggested-apps', '', ria.mvc.PartialUpdateRuleActions.Replace)],
             [[Object, Object, String]],
             VOID, function updateStandardsAndSuggestedApps(tpl, model, msg_) {
                 var standardsData = new chlk.models.standard.StandardsListViewData(
@@ -63,7 +64,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 model.setNeedButtons(true);
                 model.setNeedDeleteButton(true);
-                var attachmentsTpl = new chlk.templates.announcement.Announcement();
+                var attachmentsTpl = new chlk.templates.announcement.AnnouncementAppAttachments();
                 this.onPrepareTemplate_(attachmentsTpl, model, msg_);
                 attachmentsTpl.assign(model);
                 attachmentsTpl.renderTo(this.dom.find('.apps-attachments-bock').empty());
@@ -135,6 +136,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.submit-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function setTitleOnSubmitClick(node, event){
+                if(this.dom.find('.title-text').exists())
                 this.dom.find('[name-title]').setValue(this.dom.find('.title-text').getHTML());
             },
 
@@ -146,12 +148,14 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.DomEventBind('click', '.announcement-type-button:not(.pressed)')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function typeClick(node, event){
+            function typeClick(node, event){
+                if(node.hasClass('no-save'))
+                    return;
                 node.parent().find('.pressed').removeClass('pressed');
                 node.addClass('pressed');
                 var typeId = node.getData('typeid');
                 var typeName = node.getData('typename');
-                this.dom.find('input[name=announcementtypeid]').setValue(typeId);
+                this.dom.find('input[name=announcementTypeId]').setValue(typeId);
                 this.dom.find('input[name=announcementtypename]').setValue(typeName);
                 setTimeout(function(){
                     node.parent('form').trigger('submit');
@@ -165,7 +169,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var option = node.find(':selected');
                 var typeId = option.getData('typeid');
                 var typeName = option.getData('typename');
-                this.dom.find('input[name=announcementtypeid]').setValue(typeId);
+                this.dom.find('input[name=announcementTypeId]').setValue(typeId);
                 this.dom.find('input[name=announcementtypename]').setValue(typeName);
                 this.dom.find('#announcement-type-btn').trigger('click');
                 wasTypeChanged = true;
@@ -210,7 +214,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 this.dom.find('.title-text:visible').trigger('click');
             },
 
-            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.Announcement, chlk.activities.lib.DontShowLoader())],
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, chlk.activities.lib.DontShowLoader())],
             VOID, function doSaveTitle(tpl, model, msg_) {
 
             },
@@ -260,7 +264,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(!value || !value.trim()){
                         dom.find('.save-title-btn').setAttr('disabled', true);
                     }else{
-                        var picker = this.dom.find('#expiresdate');
                         if(value == node.getData('title') && !node.hasClass('should-check')){
                             this.updateFormByNotExistingTitle();
                             dom.find('.save-title-btn').setAttr('disabled', true);
@@ -317,10 +320,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                 new ria.dom.Dom().on('click.save', '.class-button[type=submit]', function($target, event){
                     if(!that.dom.find('.is-edit').getData('isedit')){
                         var classId = $target.getAttr('classId');
-                        that.dom.find('input[name=classid]').setValue(classId);
+                        that.dom.find('input[name=classId]').setValue(classId);
                         var defaultType = $target.getData('default-announcement-type-id');
                         if(defaultType)
-                            that.dom.find('input[name=announcementtypeid]').setValue(defaultType);
+                            that.dom.find('input[name=announcementTypeId]').setValue(defaultType);
                     }
 
                     if($target.getAttr('type') == 'submit'){

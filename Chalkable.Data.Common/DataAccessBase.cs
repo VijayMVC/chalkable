@@ -31,6 +31,17 @@ namespace Chalkable.Data.Common
             }
         }
 
+        protected void ExcuteStoredProcedure(string name, SqlParameter[] parameters, int? timeout = null)
+        {
+            using (var command = unitOfWork.GetStoredProcedureCommandWithParams(name, parameters))
+            {
+                if (timeout.HasValue)
+                    command.CommandTimeout = timeout.Value;
+                command.ExecuteNonQuery();
+            }
+        }
+
+        
         protected SqlDataReader ExecuteStoredProcedureReader(string name, IDictionary<string, object> parameters, int? timeout = null)
         {
             using (var command = unitOfWork.GetStoredProcedureCommandWithParams(name, parameters))
@@ -317,12 +328,7 @@ namespace Chalkable.Data.Common
             }
         }
 
-        protected bool Exists<T>(QueryCondition conditions) where T : new()
-        {
-            var q = Orm.Orm.CountSelect<T>(conditions, ALL_COUNT_FIELD);
-            return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, ALL_COUNT_FIELD) > 0);
-        }
-
+        
         protected bool Exists(DbQuery query, string resName = ALL_COUNT_FIELD)
         {
             var q = Orm.Orm.CountSelect(query, resName);
@@ -332,6 +338,12 @@ namespace Chalkable.Data.Common
         {
             var q = Orm.Orm.CountSelect(query, ALL_COUNT_FIELD);
             return Read(q, reader => reader.Read() ? SqlTools.ReadInt32(reader, ALL_COUNT_FIELD) : 0);
+        }
+
+        protected bool Exists<T>(QueryCondition conditions) where T : new()
+        {
+            var q = Orm.Orm.CountSelect<T>(conditions, ALL_COUNT_FIELD);
+            return Read(q, reader => reader.Read() && SqlTools.ReadInt32(reader, ALL_COUNT_FIELD) > 0);
         }
 
         public virtual IList<TEntity> GetAll(QueryCondition conditions = null)
@@ -389,6 +401,11 @@ namespace Chalkable.Data.Common
         public virtual TEntity GetByIdOrNull(TParam key)
         {
             return SelectOneOrNull<TEntity>(BuildCondsByKey(key));
+        }
+
+        public virtual bool Exists(QueryCondition condition)
+        {
+            return Exists<TEntity>(condition);
         }
 
         private QueryCondition BuildCondsByKey(TParam key)

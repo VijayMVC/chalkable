@@ -15,18 +15,18 @@ NAMESPACE('chlk.controls', function () {
                     .onActivityRefreshed(function (activity, model) {
                         var node = ria.dom.Dom('#' + id),
                             container = node.find('.close-open-block'), timeout;
-                        node.on('click', '.open, .close', function(){
+                        node.on('click', '.co-open, .co-close', function(){
                             clearTimeout(timeout);
-                            if(node.hasClass('opened')){
+                            if(node.hasClass('co-opened')){
                                 container.setCss('height', 0);
-                                node.removeClass('opened');
+                                node.removeClass('co-opened');
                             }
                             else{
                                 container.setCss('height', 'auto');
-                                node.addClass('opened');
+                                node.addClass('co-opened');
                             }
                             timeout = setTimeout(function(){
-                                node.addClass('finished');
+                                node.addClass('co-finished');
                             }, 200)
                         })
                     }.bind(this));

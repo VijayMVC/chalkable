@@ -31,9 +31,6 @@ NAMESPACE('chlk.templates.search', function () {
             Boolean, 'adminAnnouncement',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'chalkableAnnouncementType',
-
-            [ria.templates.ModelPropertyBind],
             String, 'smallPictureId',
 
             [ria.templates.ModelPropertyBind],

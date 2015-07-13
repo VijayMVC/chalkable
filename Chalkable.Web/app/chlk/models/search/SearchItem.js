@@ -31,14 +31,6 @@ NAMESPACE('chlk.models.search', function () {
             chlk.models.id.DepartmentId, 'departmentId',
             String, 'documentThumbnailUrl',
 
-            READONLY, Number, 'chalkableAnnouncementType',
-            Number, function getChalkableAnnouncementType(){
-                var res = this.getAnnouncementType();
-                if(res) return res;
-                if(this.isAdminAnnouncement()) return chlk.models.announcement.AnnouncementTypeEnum.ADMIN.valueOf();
-                return chlk.models.announcement.AnnouncementTypeEnum.ANNOUNCEMENT.valueOf();
-            },
-
             VOID, function deserialize(raw) {
                 this.id = SJX.fromValue(raw.id, String);
                 this.description = SJX.fromValue(raw.description, String);

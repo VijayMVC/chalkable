@@ -59,13 +59,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataAccess\AdminAnnouncementDataDataAccess.cs" />
-    <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementForAdminDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementRecipientDataDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\AdminAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\ClassAnnouncementDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanDataAccess.cs" />
     <Compile Include="DataAccess\AutoGradeDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementApplicationDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementAttachmentDataAccess.cs" />
-    <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\BaseAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementQnADataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementForStudentDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AnnouncementForTeacherDataAccess.cs" />
@@ -74,6 +75,7 @@
     <Compile Include="DataAccess\ClassTeacherDataAccess.cs" />
     <Compile Include="DataAccess\GradingPeriodDataAccess.cs" />
     <Compile Include="DataAccess\GroupDataAccess.cs" />
+    <Compile Include="DataAccess\LPGalleryCategoryDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
     <Compile Include="DataAccess\DbMaintenanceDataAccess.cs" />
     <Compile Include="DataAccess\ScheduleDataAccess.cs" />
@@ -97,16 +99,19 @@
     <Compile Include="DataAccess\StudentDataAccess.cs" />
     <Compile Include="DataAccess\SyncVersionDataAccess.cs" />
     <Compile Include="Model\Address.cs" />
-    <Compile Include="Model\AdminAnnouncementData.cs" />
+    <Compile Include="Model\AnnouncementRecipientData.cs" />
     <Compile Include="Model\AlphaGrade.cs" />
     <Compile Include="Model\AlternateScore.cs" />
-    <Compile Include="Model\Announcement.cs" />
+    <Compile Include="Model\Announcements\AdminAnnouncement.cs" />
+    <Compile Include="Model\Announcements\Announcement.cs" />
     <Compile Include="Model\AnnouncementApplication.cs" />
     <Compile Include="Model\AnnouncementAttachment.cs" />
     <Compile Include="Model\AnnouncementAttribute.cs" />
     <Compile Include="Model\AnnouncementQnA.cs" />
-    <Compile Include="Model\AdminAnnouncementRecipient.cs" />
+    <Compile Include="Model\AnnouncementGroup.cs" />
     <Compile Include="Model\AnnouncementStandard.cs" />
+    <Compile Include="Model\Announcements\ClassAnnouncement.cs" />
+    <Compile Include="Model\Announcements\LessonPlan.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstall.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallAction.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionClasses.cs" />
@@ -129,6 +134,7 @@
     <Compile Include="Model\AnnouncementAssignedAttribute.cs" />
     <Compile Include="Model\CourseType.cs" />
     <Compile Include="Model\Date.cs" />
+    <Compile Include="Model\LPGalleryCategory.cs" />
     <Compile Include="Model\SystemSetting.cs" />
     <Compile Include="Model\GradedItem.cs" />
     <Compile Include="Model\GradingComment.cs" />

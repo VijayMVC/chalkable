@@ -4,91 +4,91 @@ using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
 {
-    public class AnnouncementViewData : AnnouncementShortViewData
+    public class AnnouncementViewData : ShortAnnouncementViewData
     {
+        public ShortAnnouncementViewData LessonPlanData { get; set; }
+        public ShortAnnouncementViewData AdminAnnouncementData { get; set; }
+        public ShortAnnouncementViewData ClassAnnouncementData { get; set; }
+
+        public int? ClassId { get; set; }
+        public string ClassName { get; set; }
+
+        //Announcement summary data
         private const int SHORT_LENGHT = 60;
-
-        public DateTime Created { get; set; }
-
+        public string ShortContent { get; set; }
         public bool Complete { get; set; }
-        public int State { get; set; }
-        public AnnouncementState StateTyped { get; set; }
-        public int QnACount { get; set; }
         public int AttachmentsCount { get; set; }
         public int OwnerAttachmentsCount { get; set; }
-        public int? RecipientId { get; set; }
-        public string Content { get; set; }
-        public string ShortContent { get; set; }
-        public decimal? WeightMultiplier { get; set; }
-        public decimal? WeightAddition { get; set; }
-        public bool HideFromStudents { get; set; }
-        
         public bool CanAddStandard { get; set; }
-
-        public decimal? Grade { get; set; }
         public int? StudentAnnouncementId { get; set; }
-        public int StudentsCount { get; set; }
         public int StudentsCountWithAttachments { get; set; }
         public int StudentsCountWithoutAttachments { get; set; }
         public int GradingStudentsCount { get; set; }
-        public int NonGradingStudentsCount { get; set; }
-        public string Comment { get; set; }
-        //Grading
-        public string GradeSummary { get; set; }
-        public string AttachmentSummary { get; set; }
-        public int? Avg { get; set; }
-        public double? AvgNumeric { get; set; }
-        public int GradingStyle { get; set; }
+        
         //Application
         public int ApplicationsCount { get; set; }
         public string ApplicationName { get; set; }
-
-        public bool? WasAnnouncementTypeGraded { get; set; }
         public bool ShowGradingIcon { get; set; }
-
         public Guid? AssessmentApplicationId { get; set; }
 
-        protected AnnouncementViewData(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded)
+        protected AnnouncementViewData(AnnouncementComplex announcement)
             : base(announcement)
         {
+            ShortAnnouncementViewData annData = null;
+            if (announcement.LessonPlanData != null)
+            {
+                LessonPlanData = LessonPlanViewData.Create(announcement.LessonPlanData);
+                annData = LessonPlanData;
+                ClassId = announcement.LessonPlanData.ClassRef;
+                ClassName = announcement.LessonPlanData.ClassName;
+            }
+            if (announcement.AdminAnnouncementData != null)
+            {
+                AdminAnnouncementData = AdminAnnouncementViewData.Create(announcement.AdminAnnouncementData);
+                annData = AdminAnnouncementData;
+            }
+            if (announcement.ClassAnnouncementData != null)
+            {
+                ClassAnnouncementData = ClassAnnouncementViewData.Create(announcement.ClassAnnouncementData);
+                annData = ClassAnnouncementData;
+                ClassId = announcement.ClassAnnouncementData.ClassRef;
+                ClassName = announcement.ClassAnnouncementData.ClassName;
+            }
+            if (annData != null)
+            {
+                PersonId = annData.PersonId;
+                PersonName = annData.PersonName;
+                PersonGender = annData.PersonGender;   
+            }
             AttachmentsCount = announcement.AttachmentsCount;
             OwnerAttachmentsCount = announcement.OwnerAttachmentsCount;
-            QnACount = announcement.QnACount;
             Complete = announcement.Complete;
-            State = (int)announcement.State;
-            RecipientId = announcement.ClassRef;
-            Content = announcement.Content;
 
             var content = announcement.Content ?? "";
             ShortContent = StringTools.BuildShortText(content, SHORT_LENGHT);
 
-            HideFromStudents = !announcement.VisibleForStudent;
-            WeightAddition = announcement.WeightAddition;
-            WeightMultiplier = announcement.WeightMultiplier;
-            Created = announcement.Created;  
-            StudentsCount = announcement.StudentsCount;
+            var studentsCounts = announcement.StudentsCount;
             StudentsCountWithAttachments = announcement.StudentsCountWithAttachments;
-            StudentsCountWithoutAttachments = StudentsCount - StudentsCountWithAttachments;
+            StudentsCountWithoutAttachments = studentsCounts - StudentsCountWithAttachments;
             GradingStudentsCount = announcement.GradingStudentsCount;
-            NonGradingStudentsCount = StudentsCount - GradingStudentsCount;
             ApplicationsCount = announcement.ApplicationCount;
-            WasAnnouncementTypeGraded = wasAnnouncementTypeGraded;
-            ShowGradingIcon = StudentsCount > 0 && StudentsCountWithAttachments * 4 > StudentsCount || GradingStudentsCount > 0;
+            ShowGradingIcon = studentsCounts > 0 && StudentsCountWithAttachments * 4 > studentsCounts || GradingStudentsCount > 0;
         }
 
 
-        public static AnnouncementViewData Create(AnnouncementComplex announcement, bool? wasAnnouncementTypeGraded = null, string applicationName = null)
+        public static AnnouncementViewData Create(AnnouncementComplex announcement, string applicationName = null)
         {
-            var res = new AnnouncementViewData(announcement, wasAnnouncementTypeGraded);
+            var res = new AnnouncementViewData(announcement);
             if (!string.IsNullOrEmpty(applicationName))
                 res.ApplicationName = applicationName;
             return res;
         }
 
-        public new static IList<AnnouncementViewData> Create(IList<AnnouncementComplex> announcements)
+        public static IList<AnnouncementViewData> Create(IList<AnnouncementComplex> announcements)
         {
             return announcements.Select(x => Create(x)).ToList();
         }
@@ -101,7 +101,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             {
                 var app = applications.FirstOrDefault(a=> annApps.Any(annApp=>annApp.ApplicationRef == a.Id && annApp.AnnouncementRef == ann.Id));
                 var appName = app != null ? app.Name : null;
-                var annView = Create(ann, null, appName);
+                var annView = Create(ann, appName);
                 if (string.IsNullOrEmpty(appName))
                     annView.ApplicationsCount = 0;
                 res.Add(annView);
