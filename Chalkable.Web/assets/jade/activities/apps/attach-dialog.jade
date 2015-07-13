@@ -26,7 +26,7 @@ mixin FileCabinetBlock_(title, announcementId)
             .file-cabinet.img
             div(data-tooltip=title, data-tooltip-type="overflow").title=title
             .shortdesc
-            +ActionButton('announcement', 'fileCabinet', announcementId)#add-file-from-cabinet.simple-gray-button=title
+            +ActionButton('announcement', 'fileCabinet', announcementId)#add-file-from-cabinet.simple-gray-button.disabled=title
 
 
 mixin AttributeBlock_(title, announcementId, announcementType)
