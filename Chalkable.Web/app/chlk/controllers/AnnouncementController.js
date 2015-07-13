@@ -961,9 +961,10 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId]],
         function viewAttributeAttachmentAction(attachmentId, announcementType, announcementId){
-            var attachment = this.getCachedAnnouncementAttributes().filter(function(item){ return item.getId() == attachmentId; })[0];
-            if (!attachment)
+            var attribute = this.getCachedAnnouncementAttributes().filter(function(item){ return item.getId() == attachmentId; })[0];
+            if (!attribute || !attribute.getAttributeAttachment())
                 return null;
+            var attachment = attribute.getAttributeAttachment();
 
             var attachmentUrl, res;
             var downloadAttachmentButton = new chlk.models.common.attachments.ToolbarButton(
