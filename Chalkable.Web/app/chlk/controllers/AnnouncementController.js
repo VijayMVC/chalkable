@@ -1674,7 +1674,7 @@ NAMESPACE('chlk.controllers', function (){
                 .thenCall(this.classService.updateClassAnnouncementTypes, [classesIds])
                 .then(function(data){
                     this.BackgroundCloseView(chlk.activities.announcement.AddDuplicateAnnouncementDialog);
-                    this.BackgroundNavigate('announcement', 'edit', [model.getAnnouncementId()]);
+                    this.BackgroundNavigate('announcement', 'edit', [model.getAnnouncementId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT]);
                     return ria.async.BREAK;
                 }, this);
             return null;
