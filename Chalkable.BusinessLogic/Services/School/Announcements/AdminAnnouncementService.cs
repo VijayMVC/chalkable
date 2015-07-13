@@ -262,7 +262,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     Count = count,
                     PersonId = Context.PersonId,
                     RoleId = Context.RoleId,
-                    GradeLevelsIds = gradeLevels
+                    GradeLevelsIds = gradeLevels,
+                    OwnedOnly = true
                 })).Announcements;
         }
 
