@@ -6,18 +6,24 @@
   border: 1px solid #d7d7d7
   border-radius: 2px
   position: relative
+  overflow: hidden
 
   input[type=checkbox]
+    top: 100px
+    position: relative
+
     &.partially-checked::before,  &:checked::before
       content: ' '
       position: absolute
       top: 3px
-      left: 3px
-      right: 3px
+      left: 0px
+      right: 0px
       bottom: 3px
 
     &:checked::before
-      background: image-url("images2/common/green-check.png") center center no-repeat
+      top: -100px
+      bottom: 100px
+      background: image-url("images2/icons-24/check.png") -6px -5px no-repeat
 
     &:not(:checked):not(.partially-checked)
       opacity: 0
