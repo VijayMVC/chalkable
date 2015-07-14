@@ -35,7 +35,7 @@ NAMESPACE('chlk.activities.announcement', function(){
                 node.parent('.group-container').find('.create-group').show();
             },
 
-            [ria.mvc.DomEventBind('click', '.delete-btn')],
+            [ria.mvc.DomEventBind('click', '.delete-btn:not(.disabled)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function deleteClick(node, event){
                 node.parent('.group-container').fadeOut();

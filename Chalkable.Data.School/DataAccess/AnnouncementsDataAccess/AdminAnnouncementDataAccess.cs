@@ -141,7 +141,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             var conds = new AndQueryCondition
                 {
-                    {AdminAnnouncement.ADMIN_REF_FIELD, callerId},
                     {Announcement.ID_FIELD, adminAnnouncementId}
                 };
             return GetAnnouncements(conds, callerId).FirstOrDefault();

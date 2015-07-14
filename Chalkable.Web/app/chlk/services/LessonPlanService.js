@@ -29,13 +29,28 @@ NAMESPACE('chlk.services', function () {
             },
 
             ria.async.Future, function listCategories() {
-                return this.get('LPGalleryCategory/ListCategories.json', ArrayOf(chlk.models.common.NameId));
+                return this.get('LPGalleryCategory/ListCategories.json', ArrayOf(chlk.models.announcement.CategoryViewData));
             },
 
             [[String]],
             ria.async.Future, function addCategory(name) {
-                return this.get('LPGalleryCategory/CreateCategory.json', chlk.models.common.NameId, {
+                return this.get('LPGalleryCategory/CreateCategory.json', Boolean, {
                     name: name
+                });
+            },
+
+            [[Number, String]],
+            ria.async.Future, function updateCategory(categoryId, name) {
+                return this.get('LPGalleryCategory/UpdateCategory.json', Boolean, {
+                    name: name,
+                    categoryId: categoryId
+                });
+            },
+
+            [[Number, String]],
+            ria.async.Future, function deleteCategory(categoryId) {
+                return this.get('LPGalleryCategory/DeleteCategory.json', Boolean, {
+                    categoryId: categoryId
                 });
             },
 
@@ -47,8 +62,8 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[Number, String]],
-            ria.async.Future, function searchLessonPlansTemplates(galleryCategoryId_, filter_) {
+            [[String, Object]],
+            ria.async.Future, function searchLessonPlansTemplates(filter_, galleryCategoryId_) {
                 return this.get('LessonPlan/SearchLessonPlansTemplates.json', ArrayOf(chlk.models.announcement.LessonPlanViewData), {
                     galleryCategoryId: this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, galleryCategoryId_),
                     filter: filter_
@@ -58,7 +73,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.AnnouncementId, String]],
             ria.async.Future, function editTitle(announcementId, title) {
                 return this.get('LessonPlan/EditTitle.json', Boolean, {
-                    lessonPlanId: announcementId.valueOf(),
+                    announcementId: announcementId.valueOf(),
                     title: title
                 });
             },
@@ -87,7 +102,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, Number
                 , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean,
-                chlk.models.announcement.AnnouncementAttributeListViewData
+                Array
             ]],
             ria.async.Future, function saveLessonPlan(id, classId_, title_, content_, galleryCategoryId_
                 , startDate_, endDate_, hideFromStudent_, attributesListData) {
@@ -100,13 +115,13 @@ NAMESPACE('chlk.services', function () {
                     startDate: startDate_ && startDate_.toStandardFormat(),
                     endDate: endDate_ && endDate_.toStandardFormat(),
                     hidefromstudents: hideFromStudent_ || false,
-                    attributes: attributesListData.getPostData()
+                    attributes: attributesListData
                 });
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, Number
                 , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean,
-                chlk.models.announcement.AnnouncementAttributeListViewData]],
+                Array]],
             ria.async.Future, function submitLessonPlan(id, classId_, title_, content_, galleryCategoryId_
                 , startDate_, endDate_, hideFromStudent_, attributesListData) {
                 return this.post('LessonPlan/Submit.json', chlk.models.announcement.FeedAnnouncementViewData, {
@@ -118,7 +133,7 @@ NAMESPACE('chlk.services', function () {
                     startDate: startDate_ && startDate_.toStandardFormat(),
                     endDate: endDate_ && endDate_.toStandardFormat(),
                     hidefromstudents: hideFromStudent_ || false,
-                    attributes: attributesListData.getPostData()
+                    attributes: attributesListData
                 });
             }
         ])

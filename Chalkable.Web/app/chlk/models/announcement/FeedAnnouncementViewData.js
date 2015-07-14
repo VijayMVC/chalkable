@@ -9,6 +9,7 @@ REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.apps.ApplicationForAttach');
 REQUIRE('chlk.models.announcement.AdminAnnouncementRecipient');
+REQUIRE('chlk.models.announcement.CategoryViewData');
 
 REQUIRE('chlk.models.announcement.Announcement');
 
@@ -27,6 +28,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 BASE(raw);
                 this.announcementAttachments = SJX.fromArrayOfDeserializables(raw.announcementattachments, chlk.models.attachment.Attachment);
                 this.announcementAttributes = SJX.fromArrayOfDeserializables(raw.announcementattributes, chlk.models.announcement.AnnouncementAttributeViewData);
+                this.announcementAssignedAttrs = SJX.fromValue(raw.announcementAssignedAttrs, String);
                 this.announcementQnAs = SJX.fromArrayOfDeserializables(raw.announcementqnas, chlk.models.announcement.AnnouncementQnA);
                 this.applications = SJX.fromArrayOfDeserializables(raw.applications, chlk.models.apps.AppAttachment);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.Standard);
@@ -45,7 +47,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.gradeViewApps = SJX.fromArrayOfDeserializables(raw.gradeviewapps, chlk.models.apps.AppAttachment);
                 this.applicationsIds = SJX.fromValue(raw.applicationsids, String);
                 this.markingPeriodId = SJX.fromValue(raw.markingperiodid, chlk.models.id.MarkingPeriodId);
-                this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.common.NameId);
+                this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.announcement.CategoryViewData);
 
                 this.submitType = SJX.fromValue(raw.submitType, String);
                 this.galleryCategoryId = SJX.fromValue(raw.galleryCategoryId, Number);
@@ -62,6 +64,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.ableDropStudentScore = SJX.fromValue(raw.candropstudentscore, Boolean);
                 this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, Number);
                 this.filter = SJX.fromValue(raw.filter, String);
+                this.announcementForTemplateId = SJX.fromValue(raw.announcementForTemplateId, chlk.models.id.AnnouncementId);
 
                 this.ableEdit = SJX.fromValue(raw.ableedit, Boolean);
 
@@ -85,6 +88,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
 
             ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
+            String, 'announcementAssignedAttrs',
             ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
             ArrayOf(chlk.models.apps.AppAttachment), 'applications',
@@ -100,7 +104,7 @@ NAMESPACE('chlk.models.announcement', function () {
             ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
 
             Number, 'announcementTypeId',
-            ArrayOf(chlk.models.common.NameId), 'categories',
+            ArrayOf(chlk.models.announcement.CategoryViewData), 'categories',
             String, 'groupIds',
             String, 'attachments',
             String, 'applicationsIds',
@@ -122,10 +126,12 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'weightAddition',
             Boolean, 'ableDropStudentScore',
             chlk.models.id.ClassId, 'classId',
+            chlk.models.id.AnnouncementId, 'announcementForTemplateId',
 
             function getTitleModel(){
-                var title = this.getClassAnnouncementData().getTitle();
-                return new chlk.models.announcement.AnnouncementTitleViewData(title);
+                var title = this.getClassAnnouncementData() ? this.getClassAnnouncementData().getTitle() :
+                    (this.getLessonPlanData() ? this.getLessonPlanData().getTitle() : this.getAdminAnnouncementData().getTitle());
+                return new chlk.models.announcement.AnnouncementTitleViewData(title, this.getType());
             },
 
             String, function calculateGradesAvg(count_) {
@@ -142,8 +148,32 @@ NAMESPACE('chlk.models.announcement', function () {
                 var attrViewData = chlk.models.announcement.AnnouncementAttributeListViewData();
                 attrViewData.setAnnouncementId(this.getId());
                 attrViewData.setAnnouncementType(this.getType());
-                attrViewData.setAnnouncementAttributes(this.getAnnouncementAttributes());
+                var announcementAssignedAttrsJson = this.getAnnouncementAssignedAttrs() || '';
+                var postAttrs = this.attributesFromJsonString(announcementAssignedAttrsJson);
+                attrViewData.setAnnouncementAttributes(postAttrs.length > 0 ? postAttrs :  this.getAnnouncementAttributes());
                 return attrViewData;
+            },
+
+            [[String]],
+            ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), function attributesFromJsonString(jsonString){
+                var attrs = [];
+                var srcAttrs = this.getAssignedAttributesPostData(jsonString);
+                if (srcAttrs.length > 0){
+
+                    for(var i = 0; i < srcAttrs.length; ++i){
+                        var item = srcAttrs[i];
+                        var wd = chlk.models.announcement.AnnouncementAttributeViewData.$fromObject(item);
+                        attrs.push(wd);
+                    }
+                }
+                return attrs;
+            },
+
+            [[String]],
+            Object, function getAssignedAttributesPostData(jsonString_){
+                var announcementAssignedAttrsJson = jsonString_ ? jsonString_ : this.getAnnouncementAssignedAttrs() || '';
+                var attrs = announcementAssignedAttrsJson !== '' ? JSON.parse(announcementAssignedAttrsJson) : [];
+                return attrs;
             }
         ]);
 });

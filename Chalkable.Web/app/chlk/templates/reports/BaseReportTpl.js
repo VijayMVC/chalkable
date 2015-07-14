@@ -40,7 +40,6 @@ NAMESPACE('chlk.templates.reports', function () {
                     new chlk.models.common.ActionLinkModel(controllerName, 'missingAssignmentsReport', 'Missing Assignments', 'missingAssignmentsReport' == pressedAction, args, classNames),
                     new chlk.models.common.ActionLinkModel(controllerName, 'birthdayReport', 'Birthday Listing', 'birthdayReport' == pressedAction, args, classNames),
                     new chlk.models.common.ActionLinkModel(controllerName, 'gradeVerificationReport', 'Grade Verification', 'gradeVerificationReport' == pressedAction, args, classNames),
-                    new chlk.models.common.ActionLinkModel(controllerName, 'lessonPlanReport', 'Lesson Plan', 'lessonPlanReport' == pressedAction, args, classNames),
                     new chlk.models.common.ActionLinkModel(controllerName, 'seatingChartReport', 'Seating Chart', 'seatingChartReport' == pressedAction, args, classNames)
                 ];
             }

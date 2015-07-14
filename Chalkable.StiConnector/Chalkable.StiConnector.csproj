@@ -98,7 +98,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connectors\ActivityAttachmentsConnector.cs" />
     <Compile Include="Connectors\ActivityCategoryConnnector.cs" />
     <Compile Include="Connectors\ActivityConnector.cs" />
     <Compile Include="Connectors\ActivityScoreConnector.cs" />

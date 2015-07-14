@@ -166,7 +166,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var ann = GetAnnouncementById(adminAnnouncementId); //security check
             DoUpdate(u => SubmitAnnouncementGroups(ann.Id, groupsIds, u));
         }
-        
+
         public override Announcement GetAnnouncementById(int id)
         {
             return GetAdminAnnouncementById(id);
@@ -177,7 +177,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.PersonId.HasValue);
             return DoRead(u =>
                 {
-                    var res = CreateAdminAnnouncementDataAccess(u).GetDetails(announcementId, Context.PersonId.Value, Context.RoleId);
+                    var res = CreateDataAccess(u).GetDetails(announcementId, Context.PersonId.Value, Context.RoleId);
                     if(res == null) 
                         throw new NoAnnouncementException();
                     return res;
@@ -187,7 +187,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public AdminAnnouncement GetAdminAnnouncementById(int adminAnnouncementId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncement(adminAnnouncementId, Context.PersonId.Value));
+            return DoRead(u =>
+            {
+                var res = CreateDataAccess(u).GetAnnouncement(adminAnnouncementId, Context.PersonId.Value);
+                if (res == null)
+                    throw new NoAnnouncementException();
+                return res;
+            });
         }
 
 
@@ -256,7 +262,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     Count = count,
                     PersonId = Context.PersonId,
                     RoleId = Context.RoleId,
-                    GradeLevelsIds = gradeLevels
+                    GradeLevelsIds = gradeLevels,
+                    OwnedOnly = true
                 })).Announcements;
         }
 

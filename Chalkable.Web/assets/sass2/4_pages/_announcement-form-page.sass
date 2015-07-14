@@ -24,8 +24,11 @@
   .title-block
     margin-top: 16px
 
-    &:not(.active)
-      .input-container, .save-title-btn
+    &.class-announcement:not(.active)
+      .input-container
+        display: none
+
+      .save-title-btn
         display: none
 
     &.active
@@ -150,6 +153,9 @@
       right: 24px
 
   .left-top-container
+    .add-category
+      margin-bottom: 17px
+
     >DIV
       display: inline-block
       margin-right: 15px

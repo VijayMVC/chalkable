@@ -34,9 +34,6 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 AnnouncementQnAs = AnnouncementQnAViewData.Create(announcementDetails.AnnouncementQnAs);
 
 
-            if (announcementDetails.AnnouncementAttributes != null)
-                AnnouncementAttributes = AnnouncementAssignedAttributeViewData.Create(announcementDetails.AnnouncementAttributes);
-
             if(announcementDetails.Owner != null)
                 Owner = ShortPersonViewData.Create(announcementDetails.Owner);
             if(announcementDetails.AnnouncementStandards != null)
@@ -73,10 +70,13 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             return new AnnouncementDetailedViewData(announcementDetails, studentAnnouncements);
         }
 
-        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, int currentSchoolPersonId, IList<AnnouncementAttachmentInfo> attachmentInfos)
+        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, int currentSchoolPersonId, IList<AnnouncementAttachmentInfo> attachmentInfos, IList<AssignedAttributeAttachmentInfo> attrAttachmentInfos)
         {
             var res = Create(announcementDetails, currentSchoolPersonId);
             res.AnnouncementAttachments = AnnouncementAttachmentViewData.Create(attachmentInfos, currentSchoolPersonId);
+
+            if (announcementDetails.AnnouncementAttributes != null)
+                res.AnnouncementAttributes = AnnouncementAssignedAttributeViewData.Create(announcementDetails.AnnouncementAttributes, attrAttachmentInfos);
             return res;
         }
     }

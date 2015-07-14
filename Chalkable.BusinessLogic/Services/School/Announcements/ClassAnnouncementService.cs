@@ -14,6 +14,7 @@ using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
+using Microsoft.Data.OData.Query.SemanticAst;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
@@ -130,31 +131,35 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public override void Submit(int announcementId)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
+            var res = GetAnnouncementDetails(announcementId);
             using (var uow = Update())
             {
                 var da = CreateClassAnnouncementDataAccess(uow);
-                var res = GetAnnouncementDetails(announcementId);
-                var classAnn = res.ClassAnnouncementData;
                 AnnouncementSecurity.EnsureInModifyAccess(res, Context);
-                if (res.IsDraft)
+                if (res.ClassAnnouncementData.IsDraft)
                 {
-                    res.State = AnnouncementState.Created;
-                    res.Created = Context.NowSchoolTime.Date;
-                    if (string.IsNullOrEmpty(res.Title) || classAnn.DefaultTitle == res.Title)
-                        res.Title = classAnn.DefaultTitle;
+                    res.ClassAnnouncementData.State = AnnouncementState.Created;
+                    res.ClassAnnouncementData.Created = Context.NowSchoolTime.Date;
+                    if (string.IsNullOrEmpty(res.ClassAnnouncementData.Title) 
+                        || res.ClassAnnouncementData.DefaultTitle == res.ClassAnnouncementData.Title)
+                        res.ClassAnnouncementData.Title = res.ClassAnnouncementData.DefaultTitle;
 
                     var activity = new Activity();
                     MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
-                    activity = ConnectorLocator.ActivityConnector.CreateActivity(classAnn.ClassRef, activity);
+                    activity = ConnectorLocator.ActivityConnector.CreateActivity(res.ClassAnnouncementData.ClassRef, activity);
                     if (da.Exists(activity.Id))
                         throw new ChalkableException("Announcement with such activityId already exists");
-                    classAnn.SisActivityId = activity.Id;
+                    //classAnn.SisActivityId = activity.Id;
+                    var annAttDa = new DataAccessBase<AnnouncementAssignedAttribute>(uow);
+                    annAttDa.Delete(res.AnnouncementAttributes);
+                    MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
+                    annAttDa.Insert(res.AnnouncementAttributes); 
                 }
-                da.Update(classAnn);
+                da.Update(res.ClassAnnouncementData);
 
-                var sy = new SchoolYearDataAccess(uow).GetByDate(classAnn.Expires, Context.SchoolLocalId.Value);
-                if (classAnn.ClassAnnouncementTypeRef.HasValue)
-                    da.ReorderAnnouncements(sy.Id, classAnn.ClassAnnouncementTypeRef.Value, classAnn.ClassRef);
+                var sy = new SchoolYearDataAccess(uow).GetByDate(res.ClassAnnouncementData.Expires, Context.SchoolLocalId.Value);
+                if (res.ClassAnnouncementData.ClassAnnouncementTypeRef.HasValue)
+                    da.ReorderAnnouncements(sy.Id, res.ClassAnnouncementData.ClassAnnouncementTypeRef.Value, res.ClassAnnouncementData.ClassRef);
                 uow.Commit();
             }
         }
@@ -212,6 +217,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                             }
                         });
                 }
+
                 MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
                 ConnectorLocator.ActivityConnector.UpdateActivity(ann.SisActivityId.Value, activity);
 
@@ -273,7 +279,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public ClassAnnouncement GetClassAnnouncemenById(int classAnnouncementId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateClassAnnouncementDataAccess(u).GetAnnouncement(classAnnouncementId, Context.PersonId.Value));
+            return DoRead(u =>
+                {
+                    var res = CreateClassAnnouncementDataAccess(u).GetAnnouncement(classAnnouncementId, Context.PersonId.Value);
+                    if(res == null)
+                        throw new NoAnnouncementException();
+                    return res;
+                });
         }
 
         public override Announcement GetAnnouncementById(int id)
@@ -291,10 +303,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassAnnouncementData.SisActivityId.Value);
                     if (activity == null)
-                    {
                         throw new NoAnnouncementException();
-                    }
+                    
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
+
                     var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(res.ClassAnnouncementData.ClassAnnouncementTypeName);
                     res.ClassAnnouncementData.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?)null;
                 }

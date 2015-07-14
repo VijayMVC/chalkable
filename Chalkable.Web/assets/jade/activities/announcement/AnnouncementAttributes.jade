@@ -1,4 +1,16 @@
+mixin AttributeAttachment_(attachment, announcementType, announcementId)
+    .attribute-attachment
+        if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
+            A(href=attachment.getUrl()).download-link Download
+            .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
+        else
+            +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + attachment.getId())
+            .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
+            +ActionButton('announcement', 'viewAttributeAttachment', attachment.getId(), announcementType, announcementId) Open
+
+
 mixin AttributeBlock_(attribute, readOnly, announcementType, index)
+    -var attachment = attribute.getAttributeAttachment()
     if !readOnly
         .table
             .left-block
@@ -7,32 +19,53 @@ mixin AttributeBlock_(attribute, readOnly, announcementType, index)
                         .attribute-title
                             +SearchBox(chlk.services.AnnouncementService, "getAnnouncementAttributeTypesSync", chlk.templates.announcement.AnnouncementAttributesDropdownTpl)(
                             value=attribute.getName(),
-                            default-value=attribute.getName(),
+                            default-value=attribute.getAttributeTypeId() ? attribute.getAttributeTypeId().valueOf() : 1,
                             minLength = 0,
-                            class="announcement-attr-name", id="announcement-attrs-" + attribute.getId(),
+                            class="announcement-attr-type-name", id="announcement-attrs-type-" + attribute.getId(),
                             listCls = "max-200"
                             )
                         .attribute-access
-                                label(for="attr-hidefromstudents", class="hideLabel") Hide from students
+                                label(for="attr-hidefromstudents" + attribute.getId(), class="hideLabel") Hide from students
                                 .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
-                                +SlideCheckbox('hidefromstudents', !attribute.isVisibleForStudents(), false)
+                                +SlideCheckbox('attr-hidefromstudents-' + attribute.getId(), !attribute.isVisibleForStudents(), false).edit-attribute-visibility
                                 +ActionLink('announcement', 'removeAttribute', self.getAnnouncementId(), attribute.getId(), announcementType).remove-attribute
                     .description
-                        textarea(value=attribute.getText())
+                        textarea(class="edit-attribute-text", id="text-" + attribute.getId())=attribute.getText()
+
+                        if attachment && attachment.getId() && attachment.getId() > 0
+                            .file-attachment=attachment.getName()
+                                +ActionLink('announcement', 'removeAttributeAttachment', announcementType, self.getAnnouncementId(), attribute.getId(), attachment.getId()).remove-file-attachment
+
                     .attribute-file-attachment
                         div.simple-gray-button.file.attach-doc Attach doc
-                            +FileUpload('announcement', 'uploadAttachmentOnCreate', attribute.getId(), announcementType)#add-attribute-file-attachment.simple-gray-button
+                            +FileUpload('announcement', 'addAttributeAttachment', [announcementType, self.getAnnouncementId(), attribute.getId()])(id="add-attribute-file-attachment" + attribute.getId(),
+                            class="simple-gray-button")
             .right-block
     else
         div(class="attribute-item-container chlk-calendar", data-index=index)
-            .header.attribute-title.open(data-tooltip=attribute.getName())
+            .header.attribute-title(data-tooltip=attribute.getName())
                 span.mp-name.attr-name=attribute.getName()
                 .collapse
+                if !attribute.isVisibleForStudents() && !self.getUserRole().isStudent()
+                    span.attr-is-hidden This Attribute is Hidden from students
             .mp-data
-                .ann-types-container
+                .attribute-details
                     .attribute-description=attribute.getText()
 
+                    if attachment && attachment.getId() && attachment.getId() > 0
+                        h3 Attachments
+                        .attribute-attachments
+                            +AttributeAttachment_(attachment, announcementType, self.getAnnouncementId())
+
+
+
+
+
 -var attributes = self.getAnnouncementAttributes() || []
+if !self.isReadOnly()
+    +Hidden('announcementAssignedAttrs', self.announcementAttrsToJSONString())
+
+
 each attribute, index in attributes
     +AttributeBlock_(attribute, self.isReadOnly(), self.getAnnouncementType(), index)
 

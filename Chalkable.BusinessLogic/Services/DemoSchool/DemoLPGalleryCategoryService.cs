@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -37,6 +38,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             category.Name = name;
             lpGalleryCategoryStorage.Update(category);
             return category;
+        }
+
+        public bool Exists(string name, int? excludeCategoryId)
+        {
+            return GetList().Any(c => c.Name == name && c.Id != excludeCategoryId);
         }
 
         public void Delete(int categoryId)

@@ -4,6 +4,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.SyncModel;
 
 namespace Chalkable.BusinessLogic.Mapping.ModelMappers
 {
@@ -56,26 +57,25 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
         protected override void InnerMap(Activity activity, AnnouncementDetails annDetails)
         {
             MapperFactory.GetMapper<Activity, AnnouncementComplex>().Map(activity, annDetails);
-            //if (annDetails.AnnouncementAttachments != null && annDetails.AnnouncementAttachments.Count > 0)
-            //{
-            //    if (activity.Attachments == null)
-            //        activity.Attachments = new List<ActivityAttachment>();
-            //    var newAtts = new List<ActivityAttachment>();
-            //    foreach (var annAtt in annDetails.AnnouncementAttachments)
-            //    {
-            //        if (annAtt.SisAttachmentId.HasValue)
-            //        {
-            //            var att = activity.Attachments.FirstOrDefault(x => x.AttachmentId == annAtt.SisAttachmentId);
-            //            if (att == null)
-            //            {
-            //                att = new ActivityAttachment { ActivityId = activity.Id };
-            //                newAtts.Add(att);
-            //            }
-            //            MapperFactory.GetMapper<ActivityAttachment, AnnouncementAttachment>().Map(att, annAtt);
-            //        }
-            //    }
-            //    activity.Attachments = activity.Attachments.Concat(newAtts);
-            //}
+            if (annDetails.AnnouncementAttributes != null && annDetails.AnnouncementAttributes.Count > 0)
+            {
+                if (activity.Attributes == null)
+                    activity.Attributes = new List<ActivityAssignedAttribute>();
+
+                var newAtts = new List<ActivityAssignedAttribute>();
+
+                foreach (var annAtt in annDetails.AnnouncementAttributes)
+                {
+                    var att = new ActivityAssignedAttribute()
+                    {
+                        ActivityId = activity.Id
+                    };
+                    newAtts.Add(att);
+                    MapperFactory.GetMapper<ActivityAssignedAttribute, AnnouncementAssignedAttribute>().Map(att, annAtt);
+                }
+                activity.Attributes = activity.Attributes.Concat(newAtts);
+
+            }
             if (annDetails.AnnouncementStandards != null && annDetails.AnnouncementStandards.Count > 0)
             {
                 if (activity.Standards == null)

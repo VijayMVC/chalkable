@@ -59,9 +59,7 @@ namespace Chalkable.Web.Models
             var streetName = string.IsNullOrEmpty(address.AddressLine1) ? address.AddressLine2 : address.AddressLine1;
             var res = new List<string>();
             if(!string.IsNullOrEmpty(streetName) && !string.IsNullOrEmpty(address.StreetNumber))
-                res.Add(string.Format("{0} {1}", address.StreetNumber, streetName));
-            if(!string.IsNullOrEmpty(address.AddressNumber))
-                res.Add(string.Format("#{0}", address.AddressNumber));
+                res.Add(string.Format("{0} {1}", address.StreetNumber, streetName));            
             if(!string.IsNullOrEmpty(address.City))
                 res.Add(address.City);
             if(!string.IsNullOrEmpty(address.State))

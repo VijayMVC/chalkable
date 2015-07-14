@@ -953,7 +953,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var parent = node.parent('.attribute-item-container');
 
                 var attrData = parent.find('.mp-data');
-                var container = attrData.find('.ann-types-container');
+                var container = attrData.find('.attribute-details');
                 jQuery(attrData.valueOf()).animate({
                     height: parent.hasClass('open') ? 0 : (container.height() + parseInt(container.getCss('margin-bottom'), 10))
                 }, 500);

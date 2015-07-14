@@ -33,25 +33,31 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult Save(int lessonPlanId, int classId, string title, string content, int? galleryCategoryId, 
-            DateTime? startDate, DateTime? endDate, bool hideFromStudents, IList<AnnouncementAssignedAttribute> attributes)
+        public ActionResult Save(int lessonPlanId, int classId, string title, string content, int? galleryCategoryId,
+            DateTime? startDate, DateTime? endDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes)
         {
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit((int)AnnouncementType.LessonPlan, lessonPlanId, attributes);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.LessonPlan, lessonPlanId, attributes);
             var res = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents);
             return Json(PrepareAnnouncmentViewDataForEdit(res));
         }
 
         [AuthorizationFilter("Teacher")]
         public ActionResult Submit(int lessonPlanId, int classId, string title, string content, int? galleryCategoryId,
-            DateTime? startDate, DateTime? endDate, bool hideFromStudents, IList<AnnouncementAssignedAttribute> attributes)
+            DateTime? startDate, DateTime? endDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes)
         {
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit((int)AnnouncementType.LessonPlan, lessonPlanId, attributes);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.LessonPlan, lessonPlanId, attributes);
             var ann = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents);
             SchoolLocator.LessonPlanService.Submit(lessonPlanId);
             var lessonPlan = SchoolLocator.LessonPlanService.GetLessonPlanById(lessonPlanId);
             //TODO delete old drafts 
             TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewLessonPlan(Context.Login, lessonPlan.ClassName, appsCount, doscCount));
             return Json(true, 5);
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult EditTitle(int announcementId, string title)
+        {
+            return EditTitle(announcementId, AnnouncementType.LessonPlan, title, t => SchoolLocator.LessonPlanService.Exists(t, announcementId));              
         }
 
         [AuthorizationFilter("Teacher")]

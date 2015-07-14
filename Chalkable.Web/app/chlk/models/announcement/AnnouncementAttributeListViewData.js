@@ -25,7 +25,14 @@ NAMESPACE('chlk.models.announcement', function(){
                res.push(item.getPostData());
             });
 
+
             return res;
+
+        },
+
+        String, function toJSON(){
+            return JSON.stringify(this.getPostData());
         }
+
     ]);
 });

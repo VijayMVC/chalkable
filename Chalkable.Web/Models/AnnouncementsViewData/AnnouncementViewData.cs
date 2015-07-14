@@ -13,7 +13,10 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public ShortAnnouncementViewData LessonPlanData { get; set; }
         public ShortAnnouncementViewData AdminAnnouncementData { get; set; }
         public ShortAnnouncementViewData ClassAnnouncementData { get; set; }
-        
+
+        public int? ClassId { get; set; }
+        public string ClassName { get; set; }
+
         //Announcement summary data
         private const int SHORT_LENGHT = 60;
         public string ShortContent { get; set; }
@@ -35,14 +38,32 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         protected AnnouncementViewData(AnnouncementComplex announcement)
             : base(announcement)
         {
+            ShortAnnouncementViewData annData = null;
             if (announcement.LessonPlanData != null)
+            {
                 LessonPlanData = LessonPlanViewData.Create(announcement.LessonPlanData);
+                annData = LessonPlanData;
+                ClassId = announcement.LessonPlanData.ClassRef;
+                ClassName = announcement.LessonPlanData.ClassName;
+            }
             if (announcement.AdminAnnouncementData != null)
+            {
                 AdminAnnouncementData = AdminAnnouncementViewData.Create(announcement.AdminAnnouncementData);
+                annData = AdminAnnouncementData;
+            }
             if (announcement.ClassAnnouncementData != null)
+            {
                 ClassAnnouncementData = ClassAnnouncementViewData.Create(announcement.ClassAnnouncementData);
-
-
+                annData = ClassAnnouncementData;
+                ClassId = announcement.ClassAnnouncementData.ClassRef;
+                ClassName = announcement.ClassAnnouncementData.ClassName;
+            }
+            if (annData != null)
+            {
+                PersonId = annData.PersonId;
+                PersonName = annData.PersonName;
+                PersonGender = annData.PersonGender;   
+            }
             AttachmentsCount = announcement.AttachmentsCount;
             OwnerAttachmentsCount = announcement.OwnerAttachmentsCount;
             Complete = announcement.Complete;

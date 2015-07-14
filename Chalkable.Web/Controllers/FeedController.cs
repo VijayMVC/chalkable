@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
@@ -17,7 +18,7 @@ namespace Chalkable.Web.Controllers
     public class FeedController : ChalkableController
     {
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
-        public ActionResult List(int? start, int? count, bool? complete, int? classId)
+        public ActionResult List(int? start, int? count, bool? complete, int? classId, DateTime? lastItemDate)
         {
             return Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId));
         }

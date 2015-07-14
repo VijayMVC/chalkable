@@ -136,6 +136,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [ria.mvc.DomEventBind('click', '.submit-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function setTitleOnSubmitClick(node, event){
+                if(this.dom.find('.title-text').exists())
                 this.dom.find('[name-title]').setValue(this.dom.find('.title-text').getHTML());
             },
 
@@ -263,7 +264,6 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(!value || !value.trim()){
                         dom.find('.save-title-btn').setAttr('disabled', true);
                     }else{
-                        var picker = this.dom.find('#expiresdate');
                         if(value == node.getData('title') && !node.hasClass('should-check')){
                             this.updateFormByNotExistingTitle();
                             dom.find('.save-title-btn').setAttr('disabled', true);
