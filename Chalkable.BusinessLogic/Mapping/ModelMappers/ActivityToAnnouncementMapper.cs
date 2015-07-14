@@ -45,6 +45,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             if(ann.ClassAnnouncementData == null)
                 throw new ChalkableException("Only classAnnouncement can be mapped from activity");
             MapperFactory.GetMapper<ClassAnnouncement, Activity>().Map(ann.ClassAnnouncementData, activity);
+            ann.Complete = activity.Complete;
         }
     }
 
