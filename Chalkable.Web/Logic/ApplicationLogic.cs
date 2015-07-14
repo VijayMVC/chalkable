@@ -8,6 +8,7 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Logic
@@ -30,20 +31,21 @@ namespace Chalkable.Web.Logic
             IServiceLocatorSchool schoolLocator, IServiceLocatorMaster maseterLocator, Application application)
         {
             IList<InstalledForPersonsGroupViewData> res = new List<InstalledForPersonsGroupViewData>();
-            bool isPersonForInstall = schoolLocator.AppMarketService.IsPersonForInstall(application.Id);
-            
-            res.Add(InstalledForPersonsGroupViewData.Create(InstalledForPersonsGroupViewData.GroupTypeEnum.All, null, "All", !isPersonForInstall));
-            if (BaseSecurity.IsDistrictAdmin(maseterLocator.Context))
-            {
-                throw new NotImplementedException();
-            }
-            if (maseterLocator.Context.Role == CoreRoles.TEACHER_ROLE)
+            if (maseterLocator.Context.Role == CoreRoles.TEACHER_ROLE || maseterLocator.Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE)
             {
                 if (!schoolLocator.Context.SchoolYearId.HasValue)
                     throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
-                Trace.Assert(schoolLocator.Context.PersonId.HasValue);
-                var classes = schoolLocator.ClassService.GetTeacherClasses(schoolLocator.Context.SchoolYearId.Value, schoolLocator.Context.PersonId.Value);
+
                 var studentCountToAppInstall = schoolLocator.AppMarketService.GetStudentCountToAppInstallByClass(schoolLocator.Context.SchoolYearId.Value, application.Id);
+                bool isPersonForInstall = studentCountToAppInstall.Sum(x => x.NotInstalledStudentCount) > 0;
+                res.Add(InstalledForPersonsGroupViewData.Create(InstalledForPersonsGroupViewData.GroupTypeEnum.All, null, "All", !isPersonForInstall));
+                Trace.Assert(schoolLocator.Context.PersonId.HasValue);
+                IList<ClassDetails> classes;
+                if (maseterLocator.Context.Role == CoreRoles.TEACHER_ROLE)
+                    classes = schoolLocator.ClassService.GetTeacherClasses(schoolLocator.Context.SchoolYearId.Value, schoolLocator.Context.PersonId.Value);
+                else
+                    throw new NotImplementedException();
+                
                 foreach (var clazz in classes)
                 {
                     var studentCountView = studentCountToAppInstall.FirstOrDefault(x => x.ClassId == clazz.Id);

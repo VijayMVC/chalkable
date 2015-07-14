@@ -26,7 +26,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ApplicationInstall> GetInstallations(Guid applicationId, int personId, bool owners = true);
         ApplicationInstall GetInstallationForPerson(Guid applicationId, int personId);
         ApplicationInstall GetInstallationById(int applicationInstallId);
-        bool IsPersonForInstall(Guid applicationId);
         void Uninstall(int applicationInstallationId);
         void Uninstall(IList<int> applicationInstallIds);
         bool CanInstall(Guid applicationId, int? schoolPersonId, IList<int> classIds);
@@ -200,12 +199,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new ApplicationInstallDataAccess(uow);
                 return da.GetById(applicationInstallId);
             }
-        }
-
-        public bool IsPersonForInstall(Guid applicationId)
-        {
-            var r = GetPersonsForApplicationInstallCount(applicationId, null, null).ToList();
-            return r.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count > 0;
         }
 
         public void Uninstall(int applicationInstallationId)

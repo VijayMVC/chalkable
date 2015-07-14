@@ -400,12 +400,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return ApplicationInstallStorage.GetById(applicationInstallId);
         }
 
-        public bool IsPersonForInstall(Guid applicationId)
-        {
-            var r = GetPersonsForApplicationInstallCount(applicationId, null, null).ToList();
-            return r.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count > 0;
-        }
-
         public void Uninstall(int applicationInstallationId)
         {
             Uninstall(new List<int> {applicationInstallationId});
