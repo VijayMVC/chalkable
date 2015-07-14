@@ -380,6 +380,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return ClassStorage.GetAll();
         }
 
+        public IList<ClassDetails> GetAllSchoolsActiveClasses()
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<ClassDetails> GetClassesSortedByPeriod()
         {
             IList<ClassDetails> classes;

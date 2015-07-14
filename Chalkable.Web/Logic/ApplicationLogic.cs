@@ -42,9 +42,10 @@ namespace Chalkable.Web.Logic
                 Trace.Assert(schoolLocator.Context.PersonId.HasValue);
                 IList<ClassDetails> classes;
                 if (maseterLocator.Context.Role == CoreRoles.TEACHER_ROLE)
-                    classes = schoolLocator.ClassService.GetTeacherClasses(schoolLocator.Context.SchoolYearId.Value, schoolLocator.Context.PersonId.Value);
+                    classes = schoolLocator.ClassService.GetTeacherClasses(schoolLocator.Context.SchoolYearId.Value,
+                        schoolLocator.Context.PersonId.Value);
                 else
-                    throw new NotImplementedException();
+                    classes = schoolLocator.ClassService.GetAllSchoolsActiveClasses();
                 
                 foreach (var clazz in classes)
                 {

@@ -36,6 +36,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses);
         Class GetById(int id);
         IList<Class> GetAll();
+        IList<ClassDetails> GetAllSchoolsActiveClasses();
     }
 
     public class ClassService : SchoolServiceBase, IClassService
@@ -129,7 +130,12 @@ namespace Chalkable.BusinessLogic.Services.School
             BaseSecurity.EnsureSysAdmin(Context);
             return DoRead(u => new ClassDataAccess(u).GetAll());
         }
-        
+
+        public IList<ClassDetails> GetAllSchoolsActiveClasses()
+        {
+            return DoRead(u => new ClassDataAccess(u).GetAllSchoolsActiveClasses());
+        }
+
         public void Delete(IList<Class> classes)
         {
             DoUpdate(uow => new ClassDataAccess(uow).Delete(classes));

@@ -2,6 +2,7 @@
 using System.Data.SqlClient;
 using System.Linq;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -110,6 +111,15 @@ namespace Chalkable.Data.School.DataAccess
                 classDetailse.ClassTeachers = classTeachers.Where(cTeacher => cTeacher.ClassRef == classDetailse.Id).ToList();
             }
             return classes;
+        }
+
+        public IList<ClassDetails> GetAllSchoolsActiveClasses()
+        {
+            IDictionary<string, object> ps = new Dictionary<string, object>();
+            using (var reader = ExecuteStoredProcedureReader("spGetAllSchoolsActiveClasses", ps))
+            {
+                return ReadClasses(reader);
+            }
         }
     }
 }

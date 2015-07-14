@@ -26,14 +26,9 @@ If @roleId = 10
 Begin
 	Insert Into @classes
 	Select 
-		Class.Id		
+		Class.Class_Id		
 	From 
-		Class
-		join SchoolYear on Class.SchoolYearRef = SchoolYear.Id
-	Where
-		SchoolYear.StartDate <= getDate()
-		and SchoolYear.EndDate >= getDate()
-		and ArchiveDate is null
+		spGetAllSchoolsActiveClasses
 End
 
 select
@@ -61,6 +56,7 @@ from
 group by
 	ClassId,
 	ClassName
+
 
 
 GO
