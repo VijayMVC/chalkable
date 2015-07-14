@@ -4,8 +4,8 @@
     Button(disabled='disabled', style = self.getId() ? 'display:none;' : '', type="submit").special-button2.blue-button.create-group ok
     if self.getId()
         if self.getLessonPlansCount() > 0
-            +ActionLink('announcement', 'tryDeleteCategory', self.getId()).delete-btn
-        else
             +ActionLink('announcement', 'tryDeleteCategory', self.getId())(data-tooltip = "You can\'t delete category with Lesson Plan").delete-btn.disabled
+        else
+            +ActionLink('announcement', 'tryDeleteCategory', self.getId()).delete-btn
     else
         .delete-btn
