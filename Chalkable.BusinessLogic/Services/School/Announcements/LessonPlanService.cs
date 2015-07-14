@@ -72,11 +72,18 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.PersonId.HasValue);
             BaseSecurity.EnsureTeacher(Context);
             AnnouncementDetails res;
+            var annApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(lessonPlanTemplateId, true);
+            var appIds = annApps.Select(aa => aa.ApplicationRef).ToList();
+            //get only simple apps
+            var apps = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(appIds).Where(a=>!a.IsAdvanced).ToList();
+            annApps = annApps.Where(aa => apps.Any(a => a.Id == aa.ApplicationRef)).ToList();
+
             using (var u = Update())
             {
                 res = CreateLessonPlanDataAccess(u).CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
                 res.AnnouncementAttachments = ((AnnouncementAttachmentService)ServiceLocator.AnnouncementAttachmentService).CopyAttachments(lessonPlanTemplateId, res.Id, u);
                 res.AnnouncementAttributes = ((AnnouncementAssignedAttributeService)ServiceLocator.AnnouncementAssignedAttributeService).CopyNonStiAttributes(lessonPlanTemplateId, res.Id, u);
+                res.AnnouncementApplications = ((ApplicationSchoolService)ServiceLocator.ApplicationSchoolService).CopyAnnApplications(res.Id, annApps, u);
                 u.Commit();
             }
             return res;
