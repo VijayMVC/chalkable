@@ -13,6 +13,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         public string Name { get; set; }
         public string ClassNumber { get; set; }
         public string Description { get; set; }
+        public int? SchoolYearId { get; set; }
         
         protected ShortClassViewData(Class cClass)
         {
@@ -20,6 +21,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             Name = cClass.Name;
             Description = cClass.Description;
             ClassNumber = cClass.ClassNumber;
+            SchoolYearId = cClass.SchoolYearRef;
         }
 
         public static ShortClassViewData Create(Class cClass)
@@ -34,6 +36,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         public ShortPersonViewData Teacher { get; set; }
         public IList<int> MarkingPeriodsId { get; set; }
         public IList<int> TeachersIds { get; set; } 
+        public SchoolYearViewData SchoolYear { get; set; }
 
         protected ClassViewData(ClassDetails classComplex) : base(classComplex)
         {
@@ -43,6 +46,8 @@ namespace Chalkable.Web.Models.ClassesViewData
                 Teacher = ShortPersonViewData.Create(classComplex.PrimaryTeacher);
                 Teacher.DisplayName = classComplex.PrimaryTeacher.DisplayName();
             }
+            if (classComplex.SchoolYear != null)
+                SchoolYear = SchoolYearViewData.Create(classComplex.SchoolYear);
             MarkingPeriodsId = classComplex.MarkingPeriodClasses.Select(x => x.MarkingPeriodRef).ToList();
             TeachersIds = classComplex.ClassTeachers.Select(x => x.PersonRef).ToList();
         }

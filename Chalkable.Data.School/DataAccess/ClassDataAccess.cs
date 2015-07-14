@@ -96,6 +96,8 @@ namespace Chalkable.Data.School.DataAccess
                 var c = reader.Read<ClassDetails>(true);
                 if (c.PrimaryTeacherRef.HasValue)
                     c.PrimaryTeacher = reader.Read<Person>(true);
+                if (c.SchoolYearRef.HasValue)
+                    c.SchoolYear = reader.Read<SchoolYear>(true);
                 classes.Add(c);
             }
             reader.NextResult();

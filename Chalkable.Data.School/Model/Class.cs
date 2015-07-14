@@ -34,6 +34,8 @@ namespace Chalkable.Data.School.Model
     {
         [NotDbFieldAttr]
         public Person PrimaryTeacher { get; set; }
+        [NotDbFieldAttr]
+        public SchoolYear SchoolYear { get; set; }
         public IList<MarkingPeriodClass> MarkingPeriodClasses { get; set; }
         public IList<ClassTeacher> ClassTeachers { get; set; }
         public int StudentsCount { get; set; }
