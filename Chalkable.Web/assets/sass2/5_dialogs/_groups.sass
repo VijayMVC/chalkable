@@ -1,4 +1,4 @@
-.group-students-filter-dialog, .announcement-edit-groups-dialog, .announcement-groups-dialog
+.group-students-filter-dialog, .announcement-edit-groups-dialog, .announcement-groups-dialog, .add-new-category-dialog
   .saved-block
     top: 21px
     right: 40px
@@ -36,8 +36,7 @@
         overflow: hidden
         text-overflow: ellipsis
 
-
-.group-students-filter-dialog, .announcement-edit-groups-dialog
+.group-students-filter-dialog, .announcement-edit-groups-dialog, .add-new-category-dialog
   .dialog
     width: 300px
 
@@ -53,10 +52,11 @@
   .items-container
     margin-left: 30px
 
-.announcement-edit-groups-dialog
+.announcement-edit-groups-dialog, .add-new-category-dialog
   .dialog
     .delete-btn
       top: 10px
+      pointer-events: auto
       right: 6px
 
     .create-group

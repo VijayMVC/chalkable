@@ -15,7 +15,7 @@ mixin FileAttachBlock_(title, announcementId, announcementType)
         .wrapper
             .attach-file.img
             .title(data-tooltip=title, data-tooltip-type="overflow")= title
-            .shortdesc= title
+            .shortdesc
             div.simple-gray-button.download-link.file=title
                 +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType])#add-file-attachment.simple-gray-button
 
@@ -26,7 +26,7 @@ mixin FileCabinetBlock_(title, announcementId)
             .file-cabinet.img
             div(data-tooltip=title, data-tooltip-type="overflow").title=title
             .shortdesc
-            +ActionButton('announcement', 'fileCabinet', announcementId)#add-file-from-cabinet.simple-gray-button=title
+            +ActionButton('announcement', 'fileCabinet', announcementId)#add-file-from-cabinet.simple-gray-button.disabled=title
 
 
 mixin AttributeBlock_(title, announcementId, announcementType)
@@ -86,4 +86,5 @@ announcementType = self.getAnnouncementType()
 
             if self.isShowApps()
                 .paging
-                    +Paginator2('announcement', 'attach', self.apps, [announcementId, classId, self.getAppUrlAppend(), self.isStandardAttachEnabled()])
+                    +Paginator2('announcement', 'attach', self.apps, [announcementId, classId, self.getAppUrlAppend(),
+                        self.getAssessmentAppId(), self.isStandardAttachEnabled(), announcementTypeName, announcementType])

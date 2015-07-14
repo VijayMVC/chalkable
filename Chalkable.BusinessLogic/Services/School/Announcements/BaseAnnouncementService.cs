@@ -42,18 +42,16 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
         }
 
-        public abstract Announcement GetAnnouncementById(int id);
         public abstract AnnouncementDetails GetAnnouncementDetails(int announcementId);
         public abstract void DeleteAnnouncement(int announcementId);
 
+        public abstract Announcement GetAnnouncementById(int id);
         public abstract Announcement EditTitle(int announcementId, string title);
         public abstract void Submit(int announcementId);
         public abstract void SetAnnouncementsAsComplete(DateTime? date, bool complete);
         public abstract bool CanAddStandard(int announcementId);
 
-
         protected abstract BaseAnnouncementDataAccess<TAnnouncement> CreateDataAccess(UnitOfWork unitOfWork);
-
 
         public void DeleteDrafts(int personId)
         {

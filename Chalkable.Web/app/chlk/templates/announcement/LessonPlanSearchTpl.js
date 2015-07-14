@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.ModelBind(chlk.models.announcement.FeedAnnouncementViewData)],
         'LessonPlanSearchTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.common.NameId), 'categories',
+            ArrayOf(chlk.models.announcement.CategoryViewData), 'categories',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.LessonPlanViewData, 'lessonPlanData',

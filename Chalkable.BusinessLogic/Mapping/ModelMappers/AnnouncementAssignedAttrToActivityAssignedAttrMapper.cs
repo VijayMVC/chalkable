@@ -8,11 +8,9 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
     {
         protected override void InnerMap(ActivityAssignedAttribute activityAssignedAttribute, AnnouncementAssignedAttribute announcementAssignedAttribute)
         {
-            if (!announcementAssignedAttribute.SisAttributeId.HasValue ||
-                !announcementAssignedAttribute.SisActivityId.HasValue) return;
-
-            activityAssignedAttribute.Id = announcementAssignedAttribute.SisAttributeId.Value;
-            activityAssignedAttribute.Id = announcementAssignedAttribute.SisAttributeId.Value;
+            if (announcementAssignedAttribute.SisActivityAssignedAttributeId.HasValue)
+                activityAssignedAttribute.Id = announcementAssignedAttribute.SisActivityAssignedAttributeId.Value;
+            
             activityAssignedAttribute.VisibleInHomePortal = announcementAssignedAttribute.VisibleForStudents;
             activityAssignedAttribute.Name = announcementAssignedAttribute.Name;
             activityAssignedAttribute.Text = announcementAssignedAttribute.Text;
@@ -23,7 +21,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                 var stiAttachment = new StiAttachment
                 {
                     AttachmentId = announcementAssignedAttribute.SisAttributeAttachmentId.Value,
-                    CrocoDocId = new Guid(announcementAssignedAttribute.Uuid),
+                    CrocoDocId = !string.IsNullOrWhiteSpace(announcementAssignedAttribute.Uuid) ? new Guid(announcementAssignedAttribute.Uuid) : (Guid?)null,
                     Name = announcementAssignedAttribute.SisAttachmentName,
                     MimeType = announcementAssignedAttribute.SisAttachmentMimeType
                 };

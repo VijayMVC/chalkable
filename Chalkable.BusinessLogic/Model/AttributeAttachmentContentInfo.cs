@@ -12,4 +12,20 @@ namespace Chalkable.BusinessLogic.Model
             return new AttributeAttachmentContentInfo { AttachmentName = attachmentName, Content = content };
         }
     }
+
+    public class AnnouncementAssignedAttributeInfo
+    {
+        public AnnouncementAssignedAttribute Attribute { get; set; }
+        public AttributeAttachmentContentInfo AttachmentContentInfo { get; set; }
+
+        public static AnnouncementAssignedAttributeInfo Create(AnnouncementAssignedAttribute attribute,
+                                                               AttributeAttachmentContentInfo attachmentContentInfo)
+        {
+            return new AnnouncementAssignedAttributeInfo
+                {
+                    AttachmentContentInfo = attachmentContentInfo,
+                    Attribute = attribute
+                };
+        }
+    }
 }

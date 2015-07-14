@@ -10,7 +10,7 @@ mixin ReportDatePicker(header, date, name, minDate, maxDate, optional)
          maxDate: maxDate && maxDate.getDate()
       },
       class=optional ? undefined : "validate[required]"
-   )
+   ).report-date-picker
 
 mixin ReportDatePickers(startDate, endDate, itemClass_, needLimitation_, optional)
    TD(class = itemClass_ || 'item-3')

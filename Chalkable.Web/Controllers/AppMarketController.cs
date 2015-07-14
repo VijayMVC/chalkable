@@ -18,6 +18,7 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AppMarketController : ChalkableController
     {
+        private const int ATTACH_DEFAULT_PAGE_SIZE = 12;
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult List(GuidList categoriesIds, IntList gradeLevelsIds, string filter, int? filterMode, int? sortingMode, int? start, int? count)
         {
@@ -30,7 +31,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult ListInstalledForAttach(int personId, int classId, int markingPeriodId, int? start, int? count)
         {
             var st = start ?? 0;
-            var cnt = count ?? 9;
+            var cnt = count ?? ATTACH_DEFAULT_PAGE_SIZE;
 
             var studentCountPerApp = SchoolLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
             var installedApp = GetApplications(MasterLocator, studentCountPerApp.Select(x => x.Key).Distinct().ToList(), true, null);

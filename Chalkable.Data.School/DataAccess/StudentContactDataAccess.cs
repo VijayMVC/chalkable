@@ -68,7 +68,7 @@ namespace Chalkable.Data.School.DataAccess
                     studentContact.Person.PersonEmails = emails.Where(a => a.PersonRef == studentContact.ContactRef).ToList();
                 }
             }
-            return studentContacts;
+            return studentContacts.OrderByDescending(x => x.IsFamilyMember).ThenBy(x => x.Person.LastName).ThenBy(x => x.Person.FirstName).ToList();
         } 
     }
 }

@@ -19,13 +19,39 @@ NAMESPACE('chlk.models.announcement', function(){
         String, 'url',
         String, 'thumbnailUrl',
         Number, 'type',
+        String, 'uuid',
+        String, 'mimeType',
+        Boolean, 'stiAttachment',
 
         VOID, function deserialize(raw) {
             this.id = SJX.fromValue(raw.id, chlk.models.id.AnnouncementAssignedAttributeAttachmentId);
             this.name = SJX.fromValue(raw.name, String);
             this.url = SJX.fromValue(raw.url, String);
-            this.thumbnailUrl = SJX.fromValue(raw.thumbnailUrl, String);
+            this.uuid = SJX.fromValue(raw.uuid, String);
+            this.thumbnailUrl = SJX.fromValue(raw.thumbnailurl, String);
             this.type = SJX.fromValue(raw.type, Number);
+            this.stiAttachment = SJX.fromValue(raw.stiattachment, Boolean);
+            this.mimeType = SJX.fromValue(raw.mimetype, String);
+        },
+
+        Object, function getPostData() {
+            return {
+                name: this.getName(),
+                id: this.getId() && this.getId().valueOf(),
+                url: this.getUrl(),
+                thumbnailurl: this.getThumbnailUrl(),
+                type: this.getType(),
+                stiattachment: this.isStiAttachment(),
+                uuid: this.getUuid(),
+                mimetype: this.getMimeType()
+
+            }
+        },
+
+        [[Object]],
+        function $fromObject(obj){
+            BASE();
+            this.deserialize(obj);
         }
     ]);
 
@@ -44,8 +70,9 @@ NAMESPACE('chlk.models.announcement', function(){
 
         chlk.models.id.AnnouncementAttributeTypeId, 'attributeTypeId',
 
-        chlk.models.announcement.AnnouncementAttributeAttachmentViewData, 'attributeAttachment',
+        chlk.models.id.AnnouncementId, 'announcementRef',
 
+        chlk.models.announcement.AnnouncementAttributeAttachmentViewData, 'attributeAttachment',
 
         VOID, function deserialize(raw) {
             this.id = SJX.fromValue(raw.id, chlk.models.id.AnnouncementAssignedAttributeId);
@@ -55,6 +82,7 @@ NAMESPACE('chlk.models.announcement', function(){
             this.visibleForStudents = SJX.fromValue(raw.visibleforstudents, Boolean);
             this.attributeTypeId = SJX.fromValue(raw.attributetypeid, chlk.models.id.AnnouncementAttributeTypeId);
             this.attributeAttachment = SJX.fromDeserializable(raw.attributeattachment, chlk.models.announcement.AnnouncementAttributeAttachmentViewData);
+            this.announcementRef = SJX.fromValue(raw.announcementref, chlk.models.id.AnnouncementId);
         },
 
         Object, function getPostData(){
@@ -63,9 +91,18 @@ NAMESPACE('chlk.models.announcement', function(){
                 text: this.getText() || '',
                 uuid: this.getUuid() || '',
                 visibleforstudents: this.isVisibleForStudents(),
-                attributyTypeId: this.getAttributeTypeId().valueOf(),
-                id: this.getId().valueOf()
+                attributetypeid: this.getAttributeTypeId().valueOf(),
+                id: this.getId().valueOf(),
+                announcementref: this.getAnnouncementRef().valueOf(),
+                attributeattachment: this.getAttributeAttachment() ? this.getAttributeAttachment().getPostData() : null
             }
+        },
+
+        [[Object]],
+        function $fromObject(obj) {
+            BASE();
+            this.deserialize(obj);
+
         }
     ]);
 });

@@ -10,15 +10,24 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher")]
         public ActionResult CreateCategory(string name)
         {
-            var res = SchoolLocator.LPGalleryCategoryService.Add(name);
-            return Json(LPGalleryCategoryViewData.Create(res));
+            if (!SchoolLocator.LPGalleryCategoryService.Exists(name, null))
+            {
+                SchoolLocator.LPGalleryCategoryService.Add(name);
+                return Json(true);
+            }
+            return Json(false);
         }
 
         [AuthorizationFilter("Teacher")]
         public ActionResult UpdateCategory(int categoryId, string name)
         {
-            var res = SchoolLocator.LPGalleryCategoryService.Edit(categoryId, name);
-            return Json(LPGalleryCategoryViewData.Create(res));
+
+            if (!SchoolLocator.LPGalleryCategoryService.Exists(name, categoryId))
+            {
+                SchoolLocator.LPGalleryCategoryService.Edit(categoryId, name);
+                return Json(true);
+            }
+            return Json(false);
         }
 
         [AuthorizationFilter("Teacher")]

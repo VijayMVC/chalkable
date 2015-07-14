@@ -15,28 +15,43 @@ namespace Chalkable.Web.Models
         public string Url { get; set; }
         public string ThumbnailUrl { get; set; }
         public int Type { get; set; }
+        public bool StiAttachment { get; set; }
+        public string Uuid { get; set; }
+        public string MimeType { get; set; }
 
-        public static AssignedAttributeAttachmentViewData Create(AssignedAttributeAttachment attachment)
+        public static AssignedAttributeAttachmentViewData Create(AnnouncementAssignedAttributeAttachment attachment, IList<AssignedAttributeAttachmentInfo> attrAttachmentInfos)
         {
-            return new AssignedAttributeAttachmentViewData
+            AssignedAttributeAttachmentViewData attachmentViewData = null;
+
+            if (attachment != null)
             {
-                Id = attachment.AttachmentId,
-                Name = attachment.Name,
-                Type = (int)MimeHelper.GetTypeByName(attachment.Name)
-            };
+                var attachmentInfo = attrAttachmentInfos.FirstOrDefault(x => attachment.StiAttachment
+                                   && x.AttributeAttachment != null &&
+                                   x.AttributeAttachment.Id == attachment.Id);
+
+                attachmentViewData = new AssignedAttributeAttachmentViewData
+                {
+                    Id = attachment.Id,
+                    Name = attachment.Name,
+                    Type = (int)MimeHelper.GetTypeByName(attachment.Name),
+                    StiAttachment = attachment.StiAttachment,
+                    Uuid = attachment.Uuid,
+                    MimeType = attachment.MimeType
+
+                };
+
+                if (attachmentInfo != null)
+                {
+                    attachmentViewData.ThumbnailUrl = attachmentInfo.DownloadThumbnailUrl;
+                    attachmentViewData.Url = attachmentInfo.DownloadDocumentUrl;
+                }
+                
+            }
+
+            
+            return attachmentViewData;
         }
 
-        public static AssignedAttributeAttachmentViewData Create(AssignedAttributeAttachmentInfo attributeAttachment)
-        {
-            var res = Create(attributeAttachment.AttributeAttachment);
-            res.Url = attributeAttachment.DownloadDocumentUrl;
-            res.ThumbnailUrl = attributeAttachment.DownloadThumbnailUrl;
-            return res;
-        }
-        public static IList<AssignedAttributeAttachmentViewData> Create(IList<AssignedAttributeAttachmentInfo> attributeAttachments)
-        {
-            var res = attributeAttachments.Select(Create);
-            return res.ToList();
-        }
+       
     }
 }

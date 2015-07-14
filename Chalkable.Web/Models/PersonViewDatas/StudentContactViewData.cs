@@ -8,7 +8,13 @@ namespace Chalkable.Web.Models.PersonViewDatas
     {
         public PersonInfoViewData PersonInfo { get; set; }
         public string RelationshipName { get; set; }
-        public bool IsFamalyMember { get; set; }
+        public bool IsFamilyMember { get; set; }
+        public bool IsEmergencyContact { get; set; }
+        public bool IsResponsibleForBill { get; set; }
+        public bool IsAllowedToPickup { get; set; }
+        public bool IsCustodian { get; set; }
+        public bool ReceivesMailings { get; set; }
+        public bool ReceivesBill { get; set; }
 
         public static IList<StudentContactViewData> Create(IList<StudentContactDetails> studentContacts)
         {
@@ -16,7 +22,13 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 {
                     PersonInfo = PersonInfoViewData.Create(x.Person),
                     RelationshipName = x.ContactRelationship.Name,
-                    IsFamalyMember = x.IsFamilyMember
+                    IsFamilyMember = x.IsFamilyMember,
+                    IsAllowedToPickup = x.CanPickUp,
+                    IsEmergencyContact = x.IsEmergencyContact,
+                    IsResponsibleForBill = x.IsResponsibleForBill,
+                    IsCustodian = x.IsCustodian,
+                    ReceivesBill = x.ReceivesBill,
+                    ReceivesMailings = x.ReceivesMailings
                 }).ToList();
         } 
     }

@@ -1,5 +1,6 @@
-REQUIRE('chlk.activities.lib.TemplateDialog');
+REQUIRE('chlk.activities.announcement.AnnouncementEditGroupsDialog');
 REQUIRE('chlk.templates.announcement.AddNewCategoryTpl');
+REQUIRE('chlk.templates.announcement.LessonPlanCategoryTpl');
 
 NAMESPACE('chlk.activities.announcement', function(){
 
@@ -7,13 +8,15 @@ NAMESPACE('chlk.activities.announcement', function(){
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AddNewCategoryTpl)],
-        'AddNewCategoryDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
-            [ria.mvc.DomEventBind('submit', '.category-form')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function categorySubmit(node, event){
-                var node = this.dom.find('input[name=value]');
-                if(!node.getValue())
-                    return false;
+        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AddNewCategoryTpl, null, null , ria.mvc.PartialUpdateRuleActions.Replace)],
+        'AddNewCategoryDialog', EXTENDS(chlk.activities.announcement.AnnouncementEditGroupsDialog),[
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanCategoryTpl)],
+            VOID, function newCategory(tpl, model, msg_) {
+                var newGroup = ria.dom.Dom('.new-group');
+                tpl.renderTo(newGroup.setHTML(''));
+                setTimeout(function(){
+                    newGroup.find('.group-name').trigger('focus');
+                }, 1);
             }
         ]);
 });

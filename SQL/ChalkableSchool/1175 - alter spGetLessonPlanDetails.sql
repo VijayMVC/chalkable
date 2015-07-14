@@ -47,7 +47,3 @@ where AnnouncementRef = @lessonPlanId
 		
 
 GO
-
-
-select * from vwLessonPlan
-where Title = 'my hidden lesson plan'

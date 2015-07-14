@@ -35,12 +35,7 @@ namespace Chalkable.Web.Controllers
                 {
                     return Json(new ChalkableException(ChlkResources.ERR_FILE_REQUIRED));
                 }
-                string uuid = null;
-                if (SchoolLocator.CrocodocService.IsDocument(name))
-                {
-                    uuid = SchoolLocator.CrocodocService.UploadDocument(name, bin).uuid;
-                }
-                var announcement = SchoolLocator.AnnouncementAttachmentService.AddAttachment(announcementId, (AnnouncementType)announcementType, bin, name, uuid);
+                var announcement = SchoolLocator.AnnouncementAttachmentService.AddAttachment(announcementId, (AnnouncementType)announcementType, bin, name);
                 AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id, (AnnouncementType)announcementType);
                 return Json(res, HTML_CONTENT_TYPE, 6);
             }
@@ -75,13 +70,8 @@ namespace Chalkable.Web.Controllers
             {
                 byte[] bin = attContentInfo.Content;
                 string name = attContentInfo.Attachment.Name;
-                string uuid = null;
-                if (SchoolLocator.CrocodocService.IsDocument(name))
-                {
-                    uuid = SchoolLocator.CrocodocService.UploadDocument(name, bin).uuid;
-                }
-
-                SchoolLocator.AnnouncementAttachmentService.AddAttachment(attContentInfo.Attachment.AnnouncementRef, (AnnouncementType)announcementType, bin, name, uuid);
+               
+                SchoolLocator.AnnouncementAttachmentService.AddAttachment(attContentInfo.Attachment.AnnouncementRef, (AnnouncementType)announcementType, bin, name);
             }
             AnnouncementViewData res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementType)announcementType);
             return Json(res, 6);

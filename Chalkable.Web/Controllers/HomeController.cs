@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
@@ -96,9 +97,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult DistrictAdmin()
         {
-            if (!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
-
+            Trace.Assert(Context.PersonId.HasValue);
             var distictAdmin = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
             PrepareCommonViewData();
             ViewData[ViewConstants.ROLE_NAME] = CoreRoles.DISTRICT_ADMIN_ROLE.LoweredName;
@@ -259,8 +258,7 @@ namespace Chalkable.Web.Controllers
 
         private void PrepareStudentJsonData()
         {
-            if (!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
+            Trace.Assert(Context.PersonId.HasValue);
             var startupData = SchoolLocator.SchoolService.GetStartupData();
 
             PrepareCommonViewDataForSchoolPerson(startupData);
@@ -277,8 +275,7 @@ namespace Chalkable.Web.Controllers
 
         private void PrepareTeacherJsonData()
         {
-            if (!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
+            Trace.Assert(Context.PersonId.HasValue);
             var startupData = SchoolLocator.SchoolService.GetStartupData();
 
             PrepareCommonViewDataForSchoolPerson(startupData);

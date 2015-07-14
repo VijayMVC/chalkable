@@ -55,9 +55,10 @@ NAMESPACE('chlk.models.apps', function () {
 
             [[
                 chlk.models.id.AnnouncementId,
-                chlk.models.announcement.AnnouncementTypeEnum
+                chlk.models.announcement.AnnouncementTypeEnum,
+                chlk.models.id.AppId
             ]],
-            function $createForAdmin(announcementId, announcementType){
+            function $createForAdmin(announcementId, announcementType, assessmentAppId_){
                 BASE();
                 this.setAnnouncementId(announcementId);
                 this.setAttributesEnabled(true);
@@ -65,6 +66,8 @@ NAMESPACE('chlk.models.apps', function () {
                 this.setStandardAttachEnabled(false);
                 this.setShowApps(false);
                 this.setAnnouncementType(announcementType);
+                if (assessmentAppId_)
+                    this.setAssessmentAppId(assessmentAppId_);
             }
         ]);
 });

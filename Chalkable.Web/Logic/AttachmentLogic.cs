@@ -38,35 +38,21 @@ namespace Chalkable.Web.Logic
             int docWidth = AnnouncementAttachment.DOCUMENT_DEFAULT_WIDTH,
                 docHeight = AnnouncementAttachment.DOCUMENT_DEFAULT_HEIGHT;
 
-            return annAttrs.Select(announcementAttribute => new AssignedAttributeAttachmentInfo()
+            return annAttrs.Select(announcementAttribute => new AssignedAttributeAttachmentInfo
             {
-                AttributeAttachment = announcementAttribute.SisAttributeAttachmentId.HasValue ? new AssignedAttributeAttachment
-                {
-                    AttachmentId = announcementAttribute.SisAttributeAttachmentId.Value,
-                    Name = announcementAttribute.SisAttachmentName,
-                    Uuid = announcementAttribute.Uuid
-                } : null,
+                AttributeAttachment = announcementAttribute.Attachment,
                 DocWidth = docWidth,
                 DocHeight = docHeight,
-                DownloadDocumentUrl = crocodocService.BuildDownloadDocumentUrl(announcementAttribute.Uuid, announcementAttribute.Name),
+                DownloadDocumentUrl = announcementAttribute.Attachment != null ? crocodocService.BuildDownloadDocumentUrl(announcementAttribute.Uuid, announcementAttribute.Attachment.Name) : "",
                 DownloadThumbnailUrl = crocodocService.BuildDownloadhumbnailUrl(announcementAttribute.Uuid, docWidth, docHeight)
             }).ToList();
         }
     }
 
 
-    public class AssignedAttributeAttachment
-    {
-        public int AttachmentId { get; set; }
-        public string MimeType { get; set; }
-        public string Name { get; set; }
-        public string Uuid { get; set; }
-    }
-
-
     public class AssignedAttributeAttachmentInfo
     {
-        public AssignedAttributeAttachment AttributeAttachment { get; set; }
+        public AnnouncementAssignedAttributeAttachment AttributeAttachment { get; set; }
         public int DocWidth { get; set; }
         public int DocHeight { get; set; }
         public string DownloadDocumentUrl { get; set; }

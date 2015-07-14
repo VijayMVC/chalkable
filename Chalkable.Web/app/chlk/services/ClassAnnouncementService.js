@@ -33,7 +33,7 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String
                 , chlk.models.common.ChlkDate
                 , Number, Number, Number, Boolean, Boolean,
-                chlk.models.announcement.AnnouncementAttributeListViewData
+                Array
             ]],
             ria.async.Future, function saveClassAnnouncement(id, classId_, classAnnouncementTypeId_, title_, content_
                 , expiresdate_, maxScore_, weightAddition_, weighMultiplier_
@@ -50,13 +50,13 @@ NAMESPACE('chlk.services', function () {
                     weightmultiplier: weighMultiplier_,
                     hidefromstudents: hideFromStudent_ || false,
                     candropstudentscore: canDropStudentScore_ || false,
-                    attributes: attributesListData.getPostData()
+                    attributes: attributesListData
                 });
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String
                 , chlk.models.common.ChlkDate, Number, Number, Number, Boolean, Boolean,
-                chlk.models.announcement.AnnouncementAttributeListViewData
+               Array
 
             ]],
             ria.async.Future, function submitClassAnnouncement(id, classId_, announcementTypeId_, title_, content_
@@ -73,7 +73,7 @@ NAMESPACE('chlk.services', function () {
                     weightmultiplier: weighMultiplier_,
                     hidefromstudents: hideFromStudent_ || false,
                     candropstudentscore: canDropStudentScore_ || false,
-                    attributes: attributesListData.getPostData()
+                    attributes: attributesListData
                 });
             },
 

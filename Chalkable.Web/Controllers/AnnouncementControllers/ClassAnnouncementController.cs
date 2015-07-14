@@ -62,23 +62,22 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult SaveAnnouncement(ClassAnnouncementInfo classAnnouncementInfo, int? classId, IList<AnnouncementAssignedAttribute> attributes)
+        public ActionResult SaveAnnouncement(ClassAnnouncementInfo classAnnouncementInfo, int? classId, IList<AssignedAttributeInputModel> attributes)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit((int)AnnouncementType.Class, classAnnouncementInfo.AnnouncementId,  attributes);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.Class, classAnnouncementInfo.AnnouncementId, attributes);
             var ann = SchoolLocator.ClassAnnouncementService.Edit(classAnnouncementInfo);
             return Json(PrepareAnnouncmentViewDataForEdit(ann));
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult SubmitAnnouncement(ClassAnnouncementInfo classAnnouncementInfo, IList<AnnouncementAssignedAttribute> attributes)
+        public ActionResult SubmitAnnouncement(ClassAnnouncementInfo classAnnouncementInfo, IList<AssignedAttributeInputModel> attributes)
         {
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit((int)AnnouncementType.Class, classAnnouncementInfo.AnnouncementId, attributes);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.Class, classAnnouncementInfo.AnnouncementId, attributes);
             var annDetails = SchoolLocator.ClassAnnouncementService.Edit(classAnnouncementInfo);
-            var classAnnouncement = SchoolLocator.ClassAnnouncementService.GetClassAnnouncemenById(classAnnouncementInfo.AnnouncementId);
-            SchoolLocator.ClassAnnouncementService.Submit(classAnnouncement.Id);
-            SchoolLocator.ClassAnnouncementService.DeleteAnnouncements(classAnnouncementInfo.ClassId, classAnnouncement.ClassAnnouncementTypeRef, AnnouncementState.Draft);
-            TrackNewItemCreate(annDetails, (s, appsCount, doscCount)=> s.CreatedNewItem(Context.Login, classAnnouncement.ClassAnnouncementTypeName, classAnnouncement.ClassName, appsCount, doscCount));
+            SchoolLocator.ClassAnnouncementService.Submit(annDetails.Id);
+            SchoolLocator.ClassAnnouncementService.DeleteAnnouncements(classAnnouncementInfo.ClassId, annDetails.ClassAnnouncementData.ClassAnnouncementTypeRef, AnnouncementState.Draft);
+            TrackNewItemCreate(annDetails, (s, appsCount, doscCount)=> s.CreatedNewItem(Context.Login, annDetails.ClassAnnouncementData.ClassAnnouncementTypeName, annDetails.ClassAnnouncementData.ClassName, appsCount, doscCount));
             return Json(true, 5);
         }
 

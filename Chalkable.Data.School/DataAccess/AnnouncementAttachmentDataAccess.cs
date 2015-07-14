@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -23,6 +22,12 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new AndQueryCondition { { AnnouncementAttachment.ID_FIELD, id } };
             return GetAnnouncementAttachments(conds, callerId, roleId).FirstOrDefault();
         }
+
+        public IList<AnnouncementAttachment> TakeLastAttachments(int announcementId, int count = int.MaxValue)
+        {
+            var conds = new AndQueryCondition {{AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, announcementId}};
+            return GetAll(conds).OrderByDescending(x => x.Id).Take(count).OrderBy(x => x.Id).ToList();
+        } 
 
         public IList<AnnouncementAttachment> GetList(int callerId, int roleId, string filter = null)
         {

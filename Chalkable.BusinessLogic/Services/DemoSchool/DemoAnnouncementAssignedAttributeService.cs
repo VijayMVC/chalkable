@@ -21,6 +21,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
            
         }
 
+        public AnnouncementDetails Edit(AnnouncementType announcementType, int announcementId, IList<AssignedAttributeInputModel> attributes)
+        {
+            throw new System.NotImplementedException();
+        }
+
+
+        public AnnouncementDetails Edit(AnnouncementType announcementType, int announcementId, IList<AnnouncementAssignedAttribute> announcementAttributes)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public AnnouncementDetails Edit(int announcementType, int announcementId, IList<AnnouncementAssignedAttribute> announcementAttributes)
         {
             throw new System.NotImplementedException();
@@ -34,6 +45,22 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public void Delete(IList<AnnouncementAssignedAttribute> announcementAttributes)
         {
            
+        }
+
+        public AnnouncementDetails Delete(AnnouncementType announcementType, int announcementId, int assignedAttributeId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public AnnouncementDetails Add(AnnouncementType announcementType, int announcementId, int attributeTypeId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public AnnouncementDetails AddAttributeAttachment(AnnouncementType announcementType, int announcementId,
+            int assignedAttributeId, byte[] bin, string name, string uuid)
+        {
+            throw new System.NotImplementedException();
         }
 
         public AnnouncementDetails Delete(int announcementType, int announcementId, int assignedAttributeId)
@@ -57,6 +84,28 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new System.NotImplementedException();
         }
 
+        public AnnouncementAssignedAttribute GetAssignedAttribyteByAttachmentId(int attributeAttachmentId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public AnnouncementDetails RemoveAttributeAttachment(AnnouncementType announcementType, int announcementId,
+            int assignedAttributeId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public AttributeAttachmentContentInfo GetAttributeAttachmentContent(int assignedAttributeId, AnnouncementType announcementType)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, int toAnnouncementId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        
         public AnnouncementDetails RemoveAttributeAttachment(int announcementType, int announcementId, int assignedAttributeId)
         {
             throw new System.NotImplementedException();
