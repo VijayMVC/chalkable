@@ -10,6 +10,9 @@ NAMESPACE('chlk.templates.announcement', function(){
         'AdminAnnouncementRecipientsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients'
+            ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AnnouncementId, 'id'
         ]);
 });
