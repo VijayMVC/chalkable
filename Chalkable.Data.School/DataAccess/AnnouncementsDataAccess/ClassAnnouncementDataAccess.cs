@@ -81,7 +81,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var t = typeof (ClassAnnouncement);
             var fileds = Orm.Fields(t, true, true, true);
             fileds.Add(Announcement.ID_FIELD);
-            var q = Orm.SimpleListInsert(t, new List<ClassAnnouncement>{entity}, fileds);
+            var q = Orm.SimpleListInsert(t, new List<ClassAnnouncement> { entity }, fileds, false);
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 

@@ -29,7 +29,7 @@ namespace Chalkable.Tests.DataAccess
             u.Login = "login";
             u.IsSysAdmin = true;
             u.IsDeveloper = false;
-            var q = Orm.SimpleInsert(u);
+            var q = Orm.SimpleInsert(u, false);
             Debug.WriteLine(q.Sql);
             Debug.WriteLine(q.Parameters.Select(x=>x.Key + "=" + x.Value).JoinString("\n"));
 
