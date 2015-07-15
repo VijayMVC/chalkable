@@ -61,13 +61,41 @@ devName = app.getDeveloperInfo().getName()
             +Hidden('groups', "")
 
             .row
-                .group-header.first User:
-                .items
-                    div
-                        each item in app.getInstalledForGroups()
-                            +InstallItem(item)
-                        if self.userRole.isAdmin()
-                            +Button(type="submit", name="submitActionType", value="manage-groups", data-no-update = "1") Manage groups
+                if self.userRole.isAdmin()
+                    .schools
+                        h1 Schools
+                        .school(filter-school-id= -1 )
+                            | All
+                            .box-checkbox.right: +Checkbox(null, false, false)( school-id= -1 )
+                        each school in self.allClasses.getSchools()
+                            .school(filter-school-id= school.getId() )
+                                = school.getName()
+                                .box-checkbox.right: +Checkbox(null, false, false)( school-id= school.getId() )
+                    .courses
+                        h1 Course Types
+                        each courseType in self.allClasses.getCourseTypes()
+                            .course(filter-course-type-id= courseType.getCourseTypeId() ).x-hidden
+                                = courseType.getCourseTypeName()
+                                .box-checkbox.right: +Checkbox(null, false, false)( course-type-id= courseType.getCourseTypeId() )
+                    .classes
+                        h1 Classes
+                        each clazz in self.getOrderedClasses_()
+                            .class(school-id= clazz.getSchoolId(), course-type-id= clazz.getCourseTypeId() ).x-hidden
+                                = clazz.getFullClassName()
+                                -var isInstalled = self.isAlreadyInstalled_(clazz.getId())
+                                .box-checkbox.right: +Checkbox(isInstalled ? null : 'chk-' + clazz.getId().valueOf(), isInstalled, isInstalled )(
+                                        install-group=chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ.valueOf()
+                                        course-type-id= clazz.getCourseTypeId()
+                                        school-id= clazz.getSchoolId()
+                                    )
+                else
+                    .group-header.first User:
+                    .items
+                        div
+                            each item in app.getInstalledForGroups()
+                                +InstallItem(item)
+
+
             .calculated-price
             .install-info
                 .install-btn

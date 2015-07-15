@@ -5,6 +5,7 @@ REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.PictureService');
 REQUIRE('chlk.services.ApplicationService');
+REQUIRE('chlk.services.ClassService');
 
 REQUIRE('chlk.activities.apps.AppMarketPage');
 REQUIRE('chlk.activities.apps.AppMarketDetailsPage');
@@ -310,6 +311,22 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('apps')],
         [chlk.controllers.StudyCenterEnabled()],
+        [[chlk.models.id.AppId]],
+        function tryToInstallDistrictAdminAction(appId) {
+                var appInfo = ria.async.wait(
+                    this.appMarketService.getDetails(appId).attach(this.validateResponse_()),
+                    this.classService.getAllSchoolsActiveClasses().attach(this.validateResponse_())
+                )
+                .then(function(data){
+                    var app = this.prepareAppPictures_(data[0]);
+                    app = this.prepareApplicationInstallGroups_(app);
+                    return new chlk.models.apps.AppMarketInstallViewData(app, data[1]);
+                }, this);
+            return this.ShadeOrUpdateView(chlk.activities.apps.InstallAppDialog, appInfo);
+        },
+
+        [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.id.AppId, chlk.models.apps.AppTotalPrice, chlk.models.id.ClassId, chlk.models.id.AnnouncementId]],
         function tryToQuickInstallAction(applicationId, appTotalPrice, classId, announcementId_){
             var res = this.appMarketService
@@ -395,17 +412,6 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.apps.AppInstallPostData]],
         function installAction(appInstallData) {
             switch(appInstallData.getSubmitActionType()){
-                case 'manage-groups':
-                    return this.Redirect('group', 'show', [{
-                        selectedIds: appInstallData.getGroups().split(',').map(chlk.models.id.GroupId),
-                        controller: 'appmarket',
-                        action: 'update-groups',
-                        resultHidden: 'groupIds',
-                        hiddenParams: {
-                            'id': appInstallData.getAppId()
-                        }
-                    }]);
-
                 case 'install':
                     var res = this.install_(appInstallData, 'installComplete', null, 'installFail', null);
                     return this.UpdateView(chlk.activities.apps.InstallAppDialog, res);
@@ -419,6 +425,10 @@ NAMESPACE('chlk.controllers', function (){
                     else
                         res = new ria.async.DeferredData(new chlk.models.apps.AppTotalPrice.$createEmpty());
                     return this.UpdateView(chlk.activities.apps.InstallAppDialog, res, 'getAppPrice');
+
+                default:
+                    _DEBUG && console.warn('Unsupported submit-action-type', appInstallData.getSubmitActionType());
+                    return null;
             }
         },
 

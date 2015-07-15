@@ -13,6 +13,8 @@ NAMESPACE('chlk.activities.apps', function () {
 
         'InstallAppDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
+            Number, 'priceCalcTimeout',
+
             [[Object, String]],
             OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
                 if(msg_ == 'getAppPrice'){
@@ -91,7 +93,18 @@ NAMESPACE('chlk.activities.apps', function () {
                 this.dom.find('button').setAttr('disabled', 'disabled');
             },
 
-            [ria.mvc.DomEventBind('change', 'input[type=checkbox]')],
+            VOID, function refreshPrice_() {
+                _DEBUG && console.info('starting calc price timeout');
+                this.priceCalcTimeout && clearTimeout(this.priceCalcTimeout);
+                this.priceCalcTimeout = setTimeout(function(){
+                    _DEBUG && console.info('doing calc price');
+                    this.prepareAppInstallPostData_();
+                    this.dom.find('input[name=submitActionType]').setValue('getAppPrice');
+                    this.dom.find('form').trigger('submit');
+                }.bind(this), 1700);
+            },
+
+            [ria.mvc.DomEventBind('change', 'input[type=checkbox][install-group]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleInstallGroups(node, event){
                 var groupType = node.getAttr('install-group');
@@ -112,13 +125,104 @@ NAMESPACE('chlk.activities.apps', function () {
                     this.dom.find('input[install-group=' + chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER.valueOf() + ']').trigger(event, [false]);
                 }
 
-                this.dom.find('input[name=submitActionType]').setValue('getAppPrice');
+                this.refreshPrice_();
+            },
 
-                setTimeout(function(){
-                    this.prepareAppInstallPostData_();
-                    this.dom.find('form').trigger('submit');
-                }.bind(this), 700);
+            [ria.mvc.DomEventBind('change', '.school input[type=checkbox][school-id]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function toggleSchoolCheckbox(node, event) {
+                var schoolId = node.getAttr('school-id'),
+                    val = node.is(':checked');
 
+                if (schoolId == -1) {
+                    this.dom.find('.class input[type=checkbox]:not([disabled])').setAttr('checked', val);
+                    this.dom.find('.school input[type=checkbox]').setAttr('checked', val);
+                } else {
+                    this.dom.find('.class input[type=checkbox][install-group][school-id=' + schoolId + ']:not([disabled])').setAttr('checked', val)
+                }
+
+                this.refreshPrice_();
+            },
+
+            [ria.mvc.DomEventBind('click', '.school[filter-school-id]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function toggleSchoolClassesVisibility(node, event) {
+                var schoolId = node.getAttr('filter-school-id');
+                this.dom.find('.course').addClass('x-hidden').setAttr('selected-school-id', schoolId);
+                this.dom.find('.course input[type=checkbox]').setAttr('selected-school-id', schoolId);
+                this.dom.find('.class').addClass('x-hidden');
+
+                this.dom.find('.school.active').removeClass('active');
+                this.dom.find('.course.active').removeClass('active');
+                node.addClass('active');
+
+                if (schoolId != -1) {
+
+                    var selectedCount = 0,
+                        allCount = 0;
+                    this.dom.find('.school').forEach(function (_) {
+                        allCount++;
+                        if (_.is(':checked')) selectedCount ++;
+                    });
+
+                    if (selectedCount == 0) {
+                        this.dom.find('.school input[school-id=-1]').setAttr('checked', false).removeClass('partially-checked');
+                    } else if (selectedCount == allCount) {
+                        this.dom.find('.school input[school-id=-1]').setAttr('checked', true).removeClass('partially-checked');
+                    } else {
+                        this.dom.find('.school input[school-id=-1]').setAttr('checked', false).addClass('partially-checked');
+                    }
+
+                    var visibleCourseTypes = {};
+                    this.dom.find('.class[school-id=' + schoolId + ']')
+                        .forEach(function ($node) {
+                            visibleCourseTypes[$node.getAttr('course-type-id')] = true;
+                        });
+
+                    Object.getOwnPropertyNames(visibleCourseTypes).forEach(function (_) {
+                        _ && this.dom.find('.course[filter-course-type-id=' + _ + ']').removeClass('x-hidden');
+                    }.bind(this));
+                }
+            },
+
+            [ria.mvc.DomEventBind('change', '.course input[type=checkbox][course-type-id]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function toggleCourseTypeCheckbox(node, event) {
+                var schoolId = node.getAttr('selected-school-id'),
+                    courseTypeId = node.getAttr('course-type-id'),
+                    val = node.is(':checked');
+
+                this.dom.find('.class input[type=checkbox][install-group][school-id=' + schoolId + '][course-type-id=' + courseTypeId + ']:not([disabled])').setAttr('checked', val);
+
+                var selectedCount = 0,
+                    allCount = 0;
+                this.dom.find('.course:not(.x-hidden)').forEach(function (_) {
+                    allCount++;
+                    if (_.is(':checked')) selectedCount ++;
+                });
+
+                if (selectedCount == 0) {
+                    this.dom.find('.school input[school-id=' + schoolId + ']').setAttr('checked', false).removeClass('partially-checked');
+                } else if (selectedCount == allCount) {
+                    this.dom.find('.school input[school-id=' + schoolId + ']').setAttr('checked', true).removeClass('partially-checked');
+                } else {
+                    this.dom.find('.school input[school-id=' + schoolId + ']').setAttr('checked', false).addClass('partially-checked');
+                }
+
+                this.refreshPrice_();
+            },
+
+            [ria.mvc.DomEventBind('click', '.course[filter-course-type-id]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function toggleCourseTypeClassesVisibility(node, event) {
+                var schoolId = node.getAttr('selected-school-id'),
+                    courseTypeId = node.getAttr('filter-course-type-id');
+
+                this.dom.find('.class').addClass('x-hidden');
+                this.dom.find('.class[school-id=' + schoolId +'][course-type-id=' + courseTypeId + ']').removeClass('x-hidden');
+
+                this.dom.find('.course.active').removeClass('active');
+                node.addClass('active');
             }
         ]);
 });

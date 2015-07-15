@@ -8,6 +8,7 @@ REQUIRE('chlk.models.classes.ClassSummary');
 REQUIRE('chlk.models.classes.ClassInfo');
 REQUIRE('chlk.models.classes.ClassSchedule');
 REQUIRE('chlk.models.classes.ClassGradingViewData');
+REQUIRE('chlk.models.classes.AllSchoolsActiveClasses');
 
 REQUIRE('chlk.models.common.ChlkDate');
 
@@ -134,8 +135,10 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Class/ClassApps.json', chlk.models.classes.ClassApps,{
                     classId: classId && classId.valueOf()
                 })
+            },
+
+            ria.async.Future, function getAllSchoolsActiveClasses(){
+                return this.get('Class/AllSchoolsActiveClasses.json', chlk.models.classes.AllSchoolsActiveClasses, {})
             }
-
-
         ])
 });

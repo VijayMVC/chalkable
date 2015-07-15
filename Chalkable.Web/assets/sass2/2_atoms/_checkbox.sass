@@ -31,6 +31,11 @@
     &.partially-checked::before
       background: #6BBA71
 
+    &[disabled], &[readonly]
+      -webkit-filter: grayscale(100%)
+      filter: grayscale(100%)
+
+
 .labeled-checkbox
   display: inline-block
   position: relative

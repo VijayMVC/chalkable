@@ -3,6 +3,8 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.id.DepartmentId');
 REQUIRE('chlk.models.id.SchoolPersonId');
+REQUIRE('chlk.models.id.SchoolId');
+REQUIRE('chlk.models.id.CourseTypeId');
 
 NAMESPACE('chlk.models.classes', function () {
     "use strict";
@@ -23,6 +25,8 @@ NAMESPACE('chlk.models.classes', function () {
                 this.teacher = SJX.fromDeserializable(raw.teacher, chlk.models.people.User);
                 this.defaultAnnouncementTypeId = SJX.fromValue(raw.defaultAnnouncementTypeId, Number);
                 this.teachersIds = SJX.fromArrayOfValues(raw.teachersids, chlk.models.id.SchoolPersonId);
+                this.schoolId = raw.schoolyear ? SJX.fromValue(raw.schoolyear.schoolid, chlk.models.id.SchoolId) : null;
+                this.courseTypeId = SJX.fromValue(raw.coursetypeid, chlk.models.id.CourseTypeId);
             },
 
             chlk.models.id.DepartmentId, 'departmentId',
@@ -33,6 +37,8 @@ NAMESPACE('chlk.models.classes', function () {
             String, 'classNumber',
             String, 'name',
             READONLY, String, 'fullClassName',
+            chlk.models.id.SchoolId, 'schoolId',
+            chlk.models.id.CourseTypeId, 'courseTypeId',
 
             String, function getFullClassName(){
                 var classNumber = this.getClassNumber();
