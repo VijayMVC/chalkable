@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
            
         }
 
-        public AnnouncementDetails Edit(AnnouncementType announcementType, int announcementId, IList<AssignedAttributeInputModel> attributes)
+        public void Edit(AnnouncementType announcementType, int announcementId, IList<AssignedAttributeInputModel> attributes)
         {
             throw new System.NotImplementedException();
         }
@@ -47,17 +47,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
            
         }
 
-        public AnnouncementDetails Delete(AnnouncementType announcementType, int announcementId, int assignedAttributeId)
+        public void Delete(AnnouncementType announcementType, int announcementId, int assignedAttributeId)
         {
             throw new System.NotImplementedException();
         }
 
-        public AnnouncementDetails Add(AnnouncementType announcementType, int announcementId, int attributeTypeId)
+        public AnnouncementAssignedAttribute Add(AnnouncementType announcementType, int announcementId, int attributeTypeId)
         {
             throw new System.NotImplementedException();
         }
 
-        public AnnouncementDetails AddAttributeAttachment(AnnouncementType announcementType, int announcementId,
+        public AnnouncementAssignedAttribute AddAttributeAttachment(AnnouncementType announcementType, int announcementId,
             int assignedAttributeId, byte[] bin, string name, string uuid)
         {
             throw new System.NotImplementedException();
@@ -79,17 +79,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new System.NotImplementedException();
         }
 
-        public AnnouncementAssignedAttribute GetAssignedAttribyteById(int assignedAttributeId)
+        public AnnouncementAssignedAttribute GetAssignedAttributeById(int assignedAttributeId)
         {
             throw new System.NotImplementedException();
         }
 
-        public AnnouncementAssignedAttribute GetAssignedAttribyteByAttachmentId(int attributeAttachmentId)
+        public AnnouncementAssignedAttribute GetAssignedAttributeByAttachmentId(int attributeAttachmentId)
         {
             throw new System.NotImplementedException();
         }
 
-        public AnnouncementDetails RemoveAttributeAttachment(AnnouncementType announcementType, int announcementId,
+        public AnnouncementAssignedAttribute RemoveAttributeAttachment(AnnouncementType announcementType, int announcementId,
             int assignedAttributeId)
         {
             throw new System.NotImplementedException();

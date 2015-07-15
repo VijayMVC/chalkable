@@ -1,12 +1,19 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.announcement.BaseAnnouncementFormTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementAttributesTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementAttributeTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementAttributeAttachmentTpl');
+REQUIRE('chlk.templates.announcement.AnnouncementAttributeAttachDocBtnTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.templates.announcement.LastMessages');
+
 
 NAMESPACE('chlk.activities.announcement', function () {
     "use strict";
 
     /** @class chlk.activities.announcement.BaseAnnouncementFormPage*/
+
+
     CLASS(
         'BaseAnnouncementFormPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
@@ -37,6 +44,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                 var maxScoreNode = this.dom.find('[name="maxscore"]');
                 if(maxScoreNode.exists() && !maxScoreNode.getValue())
                     maxScoreNode.setValue('100');
+
+                this.saveAttributes_();
+
                 setTimeout(function(){
                     var submitType = node.getData('submit-type');
                     if(submitType == "submitOnEdit" || submitType == "submit"){
@@ -173,64 +183,99 @@ NAMESPACE('chlk.activities.announcement', function () {
                 BASE();
             },
 
-            [[chlk.models.id.AnnouncementAssignedAttributeId, String, Boolean, chlk.models.id.AnnouncementAttributeTypeId]],
-            function onAssignedAttributeChange_(assignedAttributeId, text, visibleForStudents, attributeTypeId) {
-                var attrsJson = this.dom.find('input[name=announcementAssignedAttrs]').getValue() || '';
 
-                if (attrsJson == '') return;
+            function saveAttributes_(){
+                var attrDomElems = new ria.dom.Dom('.attributes-block').find('.table') || [];
+                var attrs = [];
 
-                var attrs = JSON.parse(attrsJson) || [];
-                var updatedAttrs = [];
-                for(var i = 0; i < attrs.length; ++i){
-                    var item = attrs[i];
-                    var wd = chlk.models.announcement.AnnouncementAttributeViewData.$fromObject(item);
+                var that = this;
 
-                    if (wd.getId() == assignedAttributeId){
-                        wd.setText(text);
-                        wd.setVisibleForStudents(visibleForStudents);
-                        wd.setAttributeTypeId(attributeTypeId);
+                attrDomElems.forEach(function(domElem){
+                    var id = domElem.getAttr('id').replace('assigned-attr-', '');
+                    var attributeTypeId = that.dom.find('#announcement-attrs-type-'+id + "-hidden").getValue();
+                    var name = that.dom.find('#announcement-attrs-type-'+id).getValue();
+                    var isVisible = !that.dom.find('input[name=attr-hidefromstudents-'+id + "]").checked();
+                    var text = that.dom.find('#text-'+id).getValue();
+                    var announcementType = domElem.getAttr('data-announcement-type');
+                    var announcementRef = domElem.getAttr('data-announcement-id');
+
+                    var attachmentModel = null;
+                    var attachmentDom = that.dom.find('#file-attribute-attachment-' + id);
+                    if (attachmentDom.valueOf()){
+                        var attachmentId = attachmentDom.getAttr('data-attachment-id');
+                        var stiAttachment = attachmentDom.getAttr('data-sti-attachment') == 'true';
+                        var attachmentUuid = attachmentDom.getAttr('data-uuid') || '';
+                        var attachmentName = attachmentDom.getAttr('data-name') || '';
+                        var attachmentMimeType = attachmentDom.getAttr('data-mime-type') || '';
+
+                        var attachmentObj = {
+                            id: attachmentId,
+                            stiattachment: stiAttachment,
+                            uuid: attachmentUuid,
+                            name: attachmentName,
+                            mimetype: attachmentMimeType
+                        };
+
+                        attachmentModel = chlk.models.announcement.AnnouncementAttributeAttachmentViewData.$fromObject(attachmentObj);
                     }
-                    updatedAttrs.push(wd.getPostData());
-                }
+
+                    var attr = {
+                        id: id,
+                        text: text,
+                        name: name,
+                        visibleforstudents: isVisible,
+                        attributetypeid: attributeTypeId,
+                        announcementref: announcementRef,
+                        announcementtype: announcementType
+                    };
+
+                    var attrViewData = chlk.models.announcement.AnnouncementAttributeViewData.$fromObject(attr);
+                    attrViewData.setAttributeAttachment(attachmentModel);
+                    attrs.push(attrViewData.getPostData());
+                });
 
 
-                var attrJson = JSON.stringify(updatedAttrs);
+                var attrJson = JSON.stringify(attrs);
                 this.dom.find('input[name=announcementAssignedAttrs]').setValue(attrJson);
-
             },
 
-            [ria.mvc.DomEventBind('keyup', 'textarea.edit-attribute-text')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function onAssignedAttributeTextChange(node, event) {
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttributeTpl)],
+            VOID, function updateAttribute(tpl, model, msg_) {
 
-                var id = node.getAttr('id').replace('text-', '');
-                var attrId = new chlk.models.id.AnnouncementAssignedAttributeId(id);
-                var attributeTypeId = new chlk.models.id.AnnouncementAttributeTypeId(this.dom.find('#announcement-attrs-type-'+id + "-hidden").getValue());
-                var isVisible = !this.dom.find('input[name=attr-hidefromstudents-'+id + "]").checked();
-                this.onAssignedAttributeChange_(attrId, node.getValue(), isVisible, attributeTypeId);
-            },
+                if (msg_){
+                    if (msg_ == 'remove-attribute'){
+                        this.dom.find('#assigned-attr-' + model.getId()).empty();
+                    }
+                    if (msg_ == 'add-attribute'){
+                        var attrDom = new ria.dom.Dom().fromHTML(tpl.render());
+                        attrDom.appendTo('.attributes-block');
+                    }
 
-            [ria.mvc.DomEventBind('change', 'input[type=checkbox].edit-attribute-visibility')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function onAssignedAttributeAccessChange(node, event) {
+                    if (msg_ == 'add-attribute-attachment'){
 
-                var id = node.getAttr('name').replace('attr-hidefromstudents-', '');
-                var attrId = new chlk.models.id.AnnouncementAssignedAttributeId(id);
-                var attributeTypeId = new chlk.models.id.AnnouncementAttributeTypeId(this.dom.find('#announcement-attrs-type-'+id + "-hidden").getValue());
-                var isVisible = !node.checked();
-                var text = this.dom.find('#text-'+id).getValue();
-                this.onAssignedAttributeChange_(attrId, text, isVisible, attributeTypeId);
-            },
+                        var attachmentTpl = chlk.templates.announcement.AnnouncementAttributeAttachmentTpl();
+                        attachmentTpl.assign(model.getAttributeAttachment());
+                        var attrAttachmentDom = new ria.dom.Dom().fromHTML(attachmentTpl.render());
+                        attrAttachmentDom.appendTo('#file-attribute-attachment-area-' + model.getId());
 
-            [ria.mvc.DomEventBind('change', 'input[type=text].announcement-attr-type-name')],
-            [[ria.dom.Dom, ria.dom.Event, Object]],
-            function onAssignedAttributeTypeChange(node, event, selected) {
-                var id = node.getAttr('id').replace('announcement-attrs-type-', '');
-                var attrId = new chlk.models.id.AnnouncementAssignedAttributeId(id);
-                var attributeTypeId = selected.selected.getId();
-                var isVisible = !this.dom.find('input[name=attr-hidefromstudents-'+id + "]").checked();
-                var text = this.dom.find('#text-'+id).getValue();
-                this.onAssignedAttributeChange_(attrId, text, isVisible, attributeTypeId);
+                        var attachDocBtnTpl = chlk.templates.announcement.AnnouncementAttributeAttachDocBtnTpl();
+                        attachDocBtnTpl.assign(model);
+                        var attachDocBtnDom = new ria.dom.Dom().fromHTML(attachDocBtnTpl.render());
+                        new ria.dom.Dom('#file-attachment-button-'+ model.getId()).empty();
+                        attachDocBtnDom.appendTo('#file-attachment-button-'+ model.getId());
+                    }
+
+                    if (msg_ == 'remove-attribute-attachment'){
+                        if (model.getAttributeAttachment() == null){
+                            this.dom.find('#file-attribute-attachment-' + model.getId()).removeSelf();
+                            var attachDocBtnTpl = chlk.templates.announcement.AnnouncementAttributeAttachDocBtnTpl();
+                            attachDocBtnTpl.assign(model);
+                            var attachDocBtnDom = new ria.dom.Dom().fromHTML(attachDocBtnTpl.render());
+                            new ria.dom.Dom('#file-attachment-button-'+ model.getId()).empty();
+                            attachDocBtnDom.appendTo('#file-attachment-button-'+ model.getId());
+                        }
+                    }
+                }
             }
         ]
     );

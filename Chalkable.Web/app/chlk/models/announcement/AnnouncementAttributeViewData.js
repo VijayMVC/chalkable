@@ -23,6 +23,14 @@ NAMESPACE('chlk.models.announcement', function(){
         String, 'mimeType',
         Boolean, 'stiAttachment',
 
+        //
+        Boolean, 'readOnly',
+        chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
+        chlk.models.id.AnnouncementId, 'announcementId',
+        chlk.models.id.AnnouncementAssignedAttributeId, 'attributeId',
+
+        
+
         VOID, function deserialize(raw) {
             this.id = SJX.fromValue(raw.id, chlk.models.id.AnnouncementAssignedAttributeAttachmentId);
             this.name = SJX.fromValue(raw.name, String);
@@ -38,13 +46,13 @@ NAMESPACE('chlk.models.announcement', function(){
             return {
                 name: this.getName(),
                 id: this.getId() && this.getId().valueOf(),
-                url: this.getUrl(),
-                thumbnailurl: this.getThumbnailUrl(),
-                type: this.getType(),
                 stiattachment: this.isStiAttachment(),
                 uuid: this.getUuid(),
-                mimetype: this.getMimeType()
-
+                mimetype: this.getMimeType(),
+                //ignored on server
+                url: this.getUrl(),
+                thumbnailurl: this.getThumbnailUrl(),
+                type: this.getType()
             }
         },
 
@@ -74,6 +82,18 @@ NAMESPACE('chlk.models.announcement', function(){
 
         chlk.models.announcement.AnnouncementAttributeAttachmentViewData, 'attributeAttachment',
 
+        ////
+
+        Boolean, 'deleted',
+
+        Boolean, 'readOnly',
+
+        Number, 'index',
+
+        chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
+
+        chlk.models.id.AnnouncementId, 'announcementId',
+
         VOID, function deserialize(raw) {
             this.id = SJX.fromValue(raw.id, chlk.models.id.AnnouncementAssignedAttributeId);
             this.name = SJX.fromValue(raw.name, String);
@@ -83,6 +103,7 @@ NAMESPACE('chlk.models.announcement', function(){
             this.attributeTypeId = SJX.fromValue(raw.attributetypeid, chlk.models.id.AnnouncementAttributeTypeId);
             this.attributeAttachment = SJX.fromDeserializable(raw.attributeattachment, chlk.models.announcement.AnnouncementAttributeAttachmentViewData);
             this.announcementRef = SJX.fromValue(raw.announcementref, chlk.models.id.AnnouncementId);
+            this.announcementType = SJX.fromValue(raw.announcementtype, chlk.models.announcement.AnnouncementTypeEnum);
         },
 
         Object, function getPostData(){
@@ -103,6 +124,14 @@ NAMESPACE('chlk.models.announcement', function(){
             BASE();
             this.deserialize(obj);
 
+        },
+
+
+        [[chlk.models.id.AnnouncementAssignedAttributeId, Boolean]],
+        function $fromId(id, deleted){
+            BASE();
+            this.setId(id);
+            this.setDeleted(deleted);
         }
     ]);
 });
