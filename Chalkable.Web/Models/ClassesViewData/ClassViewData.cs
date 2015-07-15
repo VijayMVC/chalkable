@@ -14,6 +14,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         public string ClassNumber { get; set; }
         public string Description { get; set; }
         public int? SchoolYearId { get; set; }
+        public int CourseTypeId { get; set; }
         
         protected ShortClassViewData(Class cClass)
         {
@@ -22,6 +23,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             Description = cClass.Description;
             ClassNumber = cClass.ClassNumber;
             SchoolYearId = cClass.SchoolYearRef;
+            CourseTypeId = cClass.CourseTypeRef;
         }
 
         public static ShortClassViewData Create(Class cClass)
