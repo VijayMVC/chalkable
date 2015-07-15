@@ -133,6 +133,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ClassDetails> GetAllSchoolsActiveClasses()
         {
+            if (!BaseSecurity.IsDistrictAdmin(Context))
+                throw new ChalkableSecurityException();
             return DoRead(u => new ClassDataAccess(u).GetAllSchoolsActiveClasses());
         }
 

@@ -27,5 +27,4 @@ namespace Chalkable.Web.Models.SchoolsViewData
             return schools.Select(Create).ToList();
         } 
     }
-
 }

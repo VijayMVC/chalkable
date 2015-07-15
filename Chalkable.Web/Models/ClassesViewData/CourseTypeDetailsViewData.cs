@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
+using Chalkable.Web.Models.SchoolsViewData;
 using CourseType = Chalkable.Data.School.Model.CourseType;
 
 namespace Chalkable.Web.Models.ClassesViewData
@@ -49,5 +50,36 @@ namespace Chalkable.Web.Models.ClassesViewData
         public int CoureTypeId { get; set; }
         public string CoureTypeCode { get; set; }
         public string CoureTypeName { get; set; }
+
+        public static ShortCourseTypeViewData Create(CourseType courseType)
+        {
+            return new ShortCourseTypeViewData
+            {
+                CoureTypeId = courseType.Id,
+                CoureTypeCode = courseType.Code,
+                CoureTypeName = courseType.Name
+            };
+        }
+
+        public static IList<ShortCourseTypeViewData> Create(IList<CourseType> courseType)
+        {
+            return courseType.Select(Create).ToList();
+        }
+    }
+
+    public class AllSchoolsActiveClassesViewData
+    {
+        public IList<ClassViewData> Classes { get; set; }
+        public IList<ShortCourseTypeViewData> CourseTypes { get; set; }
+        public IList<LocalSchoolViewData> Schools { get; set; }
+
+        public static AllSchoolsActiveClassesViewData Create(IList<ClassDetails> classes, IList<CourseType> courseTypes, IList<School> schools)
+        {
+            var res = new AllSchoolsActiveClassesViewData();
+            res.Classes = ClassViewData.Create(classes);
+            res.CourseTypes = ShortCourseTypeViewData.Create(courseTypes);
+            res.Schools = LocalSchoolViewData.Create(schools);
+            return res;
+        }
     }
 }

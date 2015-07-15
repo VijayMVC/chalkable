@@ -88,5 +88,15 @@ namespace Chalkable.Web.Controllers
             return Json(CourseTypeDetailsViewData.Create(courses, courseTypes));
         }
 
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult AllSchoolsActiveClasses()
+        {
+            var classes = SchoolLocator.ClassService.GetAllSchoolsActiveClasses();
+            var courseTypes = SchoolLocator.CourseTypeService.GetList(true);
+            var schools = SchoolLocator.SchoolService.GetSchools();
+            var res = AllSchoolsActiveClassesViewData.Create(classes, courseTypes, schools);
+            return Json(res);
+        }
+
     }
 }
