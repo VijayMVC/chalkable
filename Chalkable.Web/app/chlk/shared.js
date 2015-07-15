@@ -77,9 +77,13 @@ function daysInMonth(month,year) {
 
 function getSerial(number){
     switch(number){
-        case 1: return '1st';
-        case 2: return '2nd';
-        case 3: return '3rd';
+        case 1:;
+        case 21:;
+        case 31: return number + 'st';
+        case 2:;
+        case 22: return number + 'nd';
+        case 3:;
+        case 23: return number + 'rd';
         default: return parseInt(number, 10) + 'th';
     }
 }

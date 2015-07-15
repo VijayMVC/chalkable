@@ -53,6 +53,7 @@ NAMESPACE('chlk.activities.announcement', function(){
             VOID, function studentCheck(node, event, value_){
                 var allCheck = this.dom.find('.all-students-check');
                 this.prepareCheckBoxes(this.dom.find('.student-check'), allCheck);
+                this.updateGradeLevel();
             },
 
             function updateGradeLevel(){

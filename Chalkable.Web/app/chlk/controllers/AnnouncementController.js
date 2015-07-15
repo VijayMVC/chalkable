@@ -1028,6 +1028,16 @@ NAMESPACE('chlk.controllers', function (){
         function deleteAnnouncementAction(announcementId, announcementType) {
             return this.announcementService
                 .deleteAnnouncement(announcementId, announcementType)
+                .catchException(chlk.lib.exception.ChalkableSisException, function(exception){
+                    this.disableAnnouncementSaving(false);
+                    var msg = this.mapSisErrorMessage(exception.getMessage());
+
+                    return this.ShowMsgBox(msg, 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                        .then(function(){
+                            this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
+                        }, this)
+                        .thenBreak();
+                }, this)
                 .attach(this.validateResponse_())
                 .then(function(model){
                     return this.Redirect('feed', 'list', [null, true]);
