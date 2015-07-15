@@ -157,6 +157,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
         }
 
+        public IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying)
+        {
+            throw new NotImplementedException();
+        }
+
         public void DeleteAnnouncementApplications(int announcementId, bool onlyActive = false)
         {
             var announcementApps = AnnouncementApplicationStorage.GetAll(announcementId, onlyActive);

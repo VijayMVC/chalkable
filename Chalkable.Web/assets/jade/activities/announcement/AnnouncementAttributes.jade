@@ -21,6 +21,8 @@ mixin AttributeBlock_(attribute, readOnly, announcementType, index)
                             value=attribute.getName(),
                             default-value=attribute.getAttributeTypeId() ? attribute.getAttributeTypeId().valueOf() : 1,
                             minLength = 0,
+                            withButton = true,
+                            keepNonExsistentValue = true,
                             class="announcement-attr-type-name", id="announcement-attrs-type-" + attribute.getId(),
                             listCls = "max-200"
                             )

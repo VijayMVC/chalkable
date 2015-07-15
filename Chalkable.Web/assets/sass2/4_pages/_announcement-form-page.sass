@@ -64,26 +64,45 @@
   .left-block-container
     position: relative
 
-
-  .add-recipients-container
-    position: absolute
-    bottom: 15px
-    left: 15px
-    right: 15px
-
   .add-standards-container
     position: absolute
     bottom: 15px
     left: 15px
     right: 15px
 
-  .standards-list, .recipients-list
+  .standards-list
     border-top: dashed 3px #e0e0e0
     padding-top: 8px
 
+    .add-standards .title
+      color: #e0e0e0
+      font-weight: 600
+      font-size: 12px
+      padding-top: 6px
+      padding-bottom: 0
+      cursor: pointer
+      text-align: center
+
+  .recipients-list
+    &::before
+      content: 'To :'
+      position: absolute
+      left: 0
+      font: bold 16px Arial
+      top: 7px
+
+  .standards-list, .recipients-list
+    padding-left: 50px
+    position: relative
+
+    BUTTON
+      min-width: 35px
+
+    .button-like
+      min-width: 20px
+
     BUTTON, .button-like
       position: relative
-      padding-right: 29px
       display: inline-block
 
       &:not(:last-child)
@@ -98,15 +117,6 @@
       position: absolute
       top: -2px
       right: -2px
-
-  .add-standards .title, .add-recipients .title
-    color: #e0e0e0
-    font-weight: 600
-    font-size: 12px
-    padding-top: 6px
-    padding-bottom: 0
-    cursor: pointer
-    text-align: center
 
   .drawer-icon
     width: 32px

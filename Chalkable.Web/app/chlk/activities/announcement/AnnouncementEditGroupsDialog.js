@@ -38,7 +38,8 @@ NAMESPACE('chlk.activities.announcement', function(){
             [ria.mvc.DomEventBind('click', '.delete-btn:not(.disabled)')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function deleteClick(node, event){
-                node.parent('.group-container').fadeOut();
+                if(!node.hasClass('action-link'))
+                    node.parent('.group-container').fadeOut();
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.group.AnnouncementGroupTpl)],

@@ -35,6 +35,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private const string COMPLETE = "complete";
         private const string STUDENT_ID = "studentId";
 
+        public abstract AdminAnnouncement GetLastDraft(int personId);
 
 
         public override void Insert(AdminAnnouncement entity)

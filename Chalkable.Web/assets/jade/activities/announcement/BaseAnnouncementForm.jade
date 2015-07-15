@@ -26,20 +26,18 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
     div(class=announcementItem.getExpiresDate() || isAdmin ? 'with-date' : '').title-block-container
         +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
     -var needStandardsBlock = !isAdmin && (standards.length > 0 || announcement.isCanAddStandard())
+    if isAdmin
+        -var recipients = announcement.getRecipients() || []
+        .add-recipients-container
+            .add-recipients
+                .recipients-list
+                    +RenderWith(announcement, chlk.templates.announcement.AdminAnnouncementRecipientsTpl)(
+                    userRole = userRole
+                    studyCenterEnabled = self.isStudyCenterEnabled()
+                    )
     .table
         .left-block(class=needStandardsBlock ? 'with-standards' : '')
             .left-block-container
-                if isAdmin
-                    -var recipients = announcement.getRecipients() || []
-                    .add-recipients-container
-                        .add-recipients
-                            .recipients-list
-                                +RenderWith(announcement, chlk.templates.announcement.AdminAnnouncementRecipientsTpl)(
-                                    userRole = userRole
-                                    studyCenterEnabled = self.isStudyCenterEnabled()
-                                )
-                            .title=recipients.length > 0 ? Msg.Click_to_add_more : 'Click to add group'
-                            +ActionLink('announcement', 'showGroups', announcement.getId()).add-recipients-btn.x-hidden
                 +TextArea(name="content", placeholder="Assignment")= announcement.getContent()
                 if needStandardsBlock
                     .add-standards-container

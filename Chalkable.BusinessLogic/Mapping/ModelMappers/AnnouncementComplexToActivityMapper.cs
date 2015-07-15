@@ -33,13 +33,9 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             activity.MayBeDropped = ann.MayBeDropped;
             activity.Description = ann.Content;
             activity.DisplayInHomePortal = ann.VisibleForStudent;
-
             activity.MayBeExempt = ann.MayBeExempt;
             activity.IsScored = ann.IsScored;
             activity.SectionId = ann.ClassRef;
-   
-
- 
         }
     }
 

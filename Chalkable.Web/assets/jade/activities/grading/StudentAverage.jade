@@ -1,5 +1,5 @@
-displayValue = self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrades(), false, null, self.isRoundDisplayedAverages())
-originalValue = self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrades(), true, null, self.isRoundDisplayedAverages())
+displayValue = self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrades(), false, null, self.isRoundDisplayedAverages(), self.isAbleDisplayStudentAverage())
+originalValue = self.getModel().displayAvgGradeValue(self.isAbleDisplayAlphaGrades(), true, null, self.isRoundDisplayedAverages(), self.isAbleDisplayStudentAverage())
 edited = self.isExempt() || self.getEnteredAvg() || self.getEnteredAvg() == 0 || self.getEnteredAlphaGrade()
 div(
     data-isexempt= self.isExempt(),

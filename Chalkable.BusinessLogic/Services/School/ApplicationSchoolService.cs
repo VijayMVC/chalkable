@@ -6,6 +6,7 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
@@ -27,6 +28,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false);
         Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementType type);
 
+        IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying);
     }
 
     public class ApplicationSchoolService : SchoolServiceBase, IApplicationSchoolService
@@ -178,6 +180,25 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 throw new ChalkableException(String.Format(ChlkResources.ERR_CANT_DELETE_ANNOUNCEMENT_APPLICATION, announcementAppId));
             }
+        }
+
+        public IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying)
+        {
+            return DoRead(u => CopyAnnApplications(toAnnouncementId, annAppsForCopying, u));
+        }
+
+        public IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying, UnitOfWork unitOfWork)
+        {
+            var da = new AnnouncementApplicationDataAccess(unitOfWork);
+            var res = annAppsForCopying.Select(aa => new AnnouncementApplication
+            {
+                ApplicationRef = aa.ApplicationRef,
+                Active = aa.Active,
+                Order = aa.Order,
+                AnnouncementRef = toAnnouncementId,
+            }).ToList();
+            da.Insert(res);
+            return da.GetAnnouncementApplicationsbyAnnIds(new List<int> { toAnnouncementId });
         }
 
 

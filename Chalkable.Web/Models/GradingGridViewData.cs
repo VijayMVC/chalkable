@@ -82,7 +82,7 @@ namespace Chalkable.Web.Models
             var stIds = res.Students.Select(x => x.StudentInfo.Id).ToList();
             res.TotalAvarages = StudentTotalAveragesViewData.Create(gradeBook.Averages, stIds);
 
-            if (res.DisplayTotalPoints)
+            if (res.DisplayTotalPoints || res.DisplayAlphaGrades)
                 BuildTotalPoints(res, stIds, gradeBook.StudentTotalPoints);
             
             res.GradingItems = gradeBook.Announcements

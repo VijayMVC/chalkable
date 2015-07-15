@@ -7,10 +7,10 @@ NAMESPACE('chlk.models.reports', function (){
     /**@class chlk.models.reports.GradeBookReportViewData*/
     CLASS('GradeBookReportViewData',  EXTENDS(chlk.models.reports.BaseReportViewData), [
 
-        ArrayOf(chlk.models.announcement.BaseAnnouncementViewData), 'announcements',
+        ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), 'announcements',
 
         [[chlk.models.id.GradingPeriodId, chlk.models.id.ClassId, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
-            ArrayOf(chlk.models.people.ShortUserInfo), ArrayOf(chlk.models.announcement.BaseAnnouncementViewData, Boolean)]],
+            ArrayOf(chlk.models.people.ShortUserInfo), ArrayOf(chlk.models.announcement.ClassAnnouncementViewData), Boolean]],
         function $(gradingPeriodId_, classId_, startDate_, endDate_, students_, announcements_, ableDownload_){
             BASE(classId_, gradingPeriodId_, startDate_, endDate_, students_, ableDownload_);
             if(announcements_)
