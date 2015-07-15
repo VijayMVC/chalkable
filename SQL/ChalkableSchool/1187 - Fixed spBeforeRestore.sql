@@ -58,7 +58,7 @@ as
 	begin
 		if not exists(select * from @chalkableTables where name = @table) 
 		begin
-			set @sql = 'Delete from ' + @table			
+			set @sql = 'Delete from [' + @table	+ ']'
 			exec sp_executesql @sql			
 		end
 		fetch next from TableCursor
