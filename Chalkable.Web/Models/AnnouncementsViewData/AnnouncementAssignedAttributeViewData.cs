@@ -21,7 +21,14 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 
         public static AnnouncementAssignedAttributeViewData Create(AnnouncementAssignedAttribute attr, IList<AssignedAttributeAttachmentInfo> attrAttachmentInfos)
         {
-            var result = new AnnouncementAssignedAttributeViewData
+            var result = Create(attr);
+            result.AttributeAttachment = AssignedAttributeAttachmentViewData.Create(attr.Attachment, attrAttachmentInfos);
+            return result;
+        }
+
+        public static AnnouncementAssignedAttributeViewData Create(AnnouncementAssignedAttribute attr)
+        {
+            return new AnnouncementAssignedAttributeViewData
             {
                 Id = attr.Id,
                 Name = attr.Name,
@@ -30,11 +37,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 Uuid = attr.Uuid,
                 VisibleForStudents = attr.VisibleForStudents,
                 AnnouncementRef = attr.AnnouncementRef,
-                AttributeAttachment = AssignedAttributeAttachmentViewData.Create(attr.Attachment, attrAttachmentInfos)
             };
-
-
-            return result;
         }
 
         public static IList<AnnouncementAssignedAttributeViewData> Create(IList<AnnouncementAssignedAttribute> announcementAttributes, IList<AssignedAttributeAttachmentInfo> attrAttachmentInfos)

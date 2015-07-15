@@ -126,19 +126,19 @@ namespace Chalkable.Data.Common.Orm
 
         //TODO: insert from select 
 
-        public static DbQuery SimpleInsert<T>(T obj)
+        public static DbQuery SimpleInsert<T>(T obj, bool returnInsertedEntityId)
         {
-            return SimpleListInsert(new List<T> { obj });
+            return SimpleListInsert(new List<T> { obj }, returnInsertedEntityId);
         } 
 
-        public static DbQuery SimpleListInsert<T>(IList<T> objs)
+        public static DbQuery SimpleListInsert<T>(IList<T> objs, bool returnInsertedEntityId)
         {
             var t = typeof(T);
             var fields = Fields(t, false);
-            return SimpleListInsert(t, objs, fields);
+            return SimpleListInsert(t, objs, fields, returnInsertedEntityId);
         }
 
-        public static DbQuery SimpleListInsert<T>(Type t, IList<T> objs, IList<string> fields)
+        public static DbQuery SimpleListInsert<T>(Type t, IList<T> objs, IList<string> fields, bool returnInsertedEntityId)
         {
             var res = new DbQuery { Parameters = new Dictionary<string, object>() };
             var b = new StringBuilder();
@@ -158,6 +158,11 @@ namespace Chalkable.Data.Common.Orm
                     var fieldValue = t.GetProperty(field).GetValue(objs[i]);
                     res.Parameters.Add(field + "_" + i.ToString(), fieldValue);
                 }
+            }
+
+            if (returnInsertedEntityId)
+            {
+                b.Append(";select CAST(SCOPE_IDENTITY() AS INT) as insertedEntityId");
             }
             res.Sql = b;
             return res;
