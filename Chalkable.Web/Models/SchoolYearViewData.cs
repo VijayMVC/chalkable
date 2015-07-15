@@ -12,6 +12,7 @@ namespace Chalkable.Web.Models
         public string Description { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
+        public int SchoolId { get; set; }
         
         public static SchoolYearViewData Create(SchoolYear schoolYear)
         {
@@ -22,6 +23,7 @@ namespace Chalkable.Web.Models
                 Description = schoolYear.Description,
                 StartDate = schoolYear.StartDate,
                 EndDate = schoolYear.EndDate,
+                SchoolId = schoolYear.SchoolRef
             };
             return res;
         }
