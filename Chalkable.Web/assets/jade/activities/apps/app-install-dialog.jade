@@ -1,0 +1,102 @@
+mixin InstallItem(item)
+    descr = item.getDescription()
+    tooltipText = item.getTooltipHint() || ""
+    withoutTooltip = tooltipText.length == 0
+    if item.isInstalled()
+        .labeled-checkbox.disbaled
+            input(type="checkbox", disabled, checked)
+            label(class="disabled-lbl", data-tooltip=tooltipText)=descr
+    else
+        +LabeledCheckbox(
+            item.getDescription(),
+            'chk-' + item.getId(),
+            item.isInstalled(),
+            item.isInstalled(), tooltipText)(
+            install-group="#{item.getGroupType().valueOf()}",
+            noTooltip = withoutTooltip ? "true" : undefined,
+            withoutOverflow="true",
+            data-tooltip=tooltipText
+        )
+
+app = self.getApp()
+webSiteLink = app.getDeveloperInfo().getWebSite()
+devName = app.getDeveloperInfo().getName()
+
+
+
+.dialog.app-market-install
+    .x-window-header
+        a.close.close-btn.dark
+        h1=app.getName()
+    .x-window-body
+        .app-screenshots-panel.content
+            +Carousel()
+                -videoUrl = app.getVideoDemoUrl() || ''
+                -dims = chlk.models.apps.AppPicture.SCREENSHOT_DIMS()
+                if videoUrl
+                    +CarouselItem().img(data-page = 1)
+                        +Video(true)(src=videoUrl, width=dims.width, height=dims.height)
+                each picture, index in app.getScreenshotPictures().getItems()
+                    +CarouselItem().img(data-page= index + 2)
+                        img(src=picture.getPictureUrl())
+        .content
+            .app-title
+                span="by "
+                a(href=webSiteLink, target="blank").dev-web-site=devName
+            .right.rating-margin
+                +Rating("appRating", app.getApplicationRating().getAverage(), false).all
+        .content
+            .app-info-details
+                .app-description
+                    textarea(name = "app-description", class = "app-description", readonly)=app.getDescription()
+        +ActionForm('appmarket', 'install').content
+            +Hidden('appId', app.getId().valueOf())
+            +Hidden('classes', "")
+            +Hidden('submitActionType', "")
+            +Hidden('gradeLevels', "")
+            +Hidden('departments', "")
+            +Hidden('roles', "")
+            +Hidden('currentPerson', "")
+            +Hidden('forAll', "")
+            +Hidden('groups', "")
+
+            .row
+                if self.userRole.isAdmin()
+                    .schools
+                        h1 Schools
+                        .school(filter-school-id= -1 )
+                            | All
+                            .box-checkbox.right: +Checkbox(null, false, false)( school-id= -1 )
+                        each school in self.allClasses.getSchools()
+                            .school(filter-school-id= school.getId() )
+                                = school.getName()
+                                .box-checkbox.right: +Checkbox(null, false, false)( school-id= school.getId() )
+                    .courses
+                        h1 Course Types
+                        each courseType in self.allClasses.getCourseTypes()
+                            .course(filter-course-type-id= courseType.getCourseTypeId() ).x-hidden
+                                = courseType.getCourseTypeName()
+                                .box-checkbox.right: +Checkbox(null, false, false)( course-type-id= courseType.getCourseTypeId() )
+                    .classes
+                        h1 Classes
+                        each clazz in self.getOrderedClasses_()
+                            .class(school-id= clazz.getSchoolId(), course-type-id= clazz.getCourseTypeId() ).x-hidden
+                                = clazz.getFullClassName()
+                                -var isInstalled = self.isAlreadyInstalled_(clazz.getId())
+                                .box-checkbox.right: +Checkbox(isInstalled ? null : 'chk-' + clazz.getId().valueOf(), isInstalled, isInstalled )(
+                                        install-group=chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ.valueOf()
+                                        course-type-id= clazz.getCourseTypeId()
+                                        school-id= clazz.getSchoolId()
+                                    )
+                else
+                    .group-header.first User:
+                    .items
+                        div
+                            each item in app.getInstalledForGroups()
+                                +InstallItem(item)
+
+
+            .calculated-price
+            .install-info
+                .install-btn
+                    +Button(disabled = true, type="submit", name="submitActionType", value="install").special-button.blue-button Install App
