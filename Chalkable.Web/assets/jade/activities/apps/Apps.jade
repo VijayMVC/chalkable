@@ -1,0 +1,74 @@
+mixin AppManagementControls_(app)
+    -var id = app.getId()
+    if app.getState().getStateId() == chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
+        +ActionLink('apps', 'approve', id).btn Approve
+        | &nbsp;
+        +ActionLink('apps', 'decline', id).btn Reject
+    else
+        span=app.getState().toString()
+
+
+mixin ApplicationActionLinks_(app, isLive)
+    if !self.isReadOnly()
+        +ActionLink('apps', 'details', app.getId())(title="View info").profile
+    if !isLive
+        +ActionLink('apps', 'testApplication', app.getDeveloperId())(title="Test app").computer
+    if !self.isReadOnly()
+        +ActionLink('apps', 'tryDeleteApplication', app.getId(), app.getName())(title="Remove app").remove
+
+mixin AppsFilterSelect_(name, items)
+    +Select(name)(attributes)
+        each item in items
+            +Option(item.value, item.displayValue, item.selected)
+
+.apps-list
+    style(type="text/css", scoped) .bold { font-weight: 600; }
+    +ActionForm('apps', 'list')#apps-list-form
+        +Hidden('start', self.applications.getPageIndex())
+        +Hidden('totalCount', self.applications.getTotalCount())
+        +Hidden('actualCount', self.applications.getActualCount())
+        +Hidden('pageSize', self.applications.getPageSize())
+
+        .x-form-field
+            label  Developer:
+            +AppsFilterSelect_('developerid', self.prepareDevelopersSelectModel())#developers-select
+        .x-form-field
+            label States:
+            +AppsFilterSelect_('state', self.prepareStatesSelectModel())#states-select
+
+
+    +Grid('apps', 'page', self.applications, [self.getDeveloperId(), self.getStateId(), null]).not-transparent
+        +GridHead()
+            .th
+            .th Application Name
+            .th Description
+            .th Is Live
+            .th Draft State
+            .th Draft Actions
+            .th Live Actions
+            .th.narrow
+            .th
+        +GridBody()
+            each item in self.applications.getItems()
+                -var liveApp = item.getLiveApplication()
+                +GridRow()(class = liveApp ? 'bold' : '')
+                    .td
+                        img.app-icon(src=item.getIconPictureUrl(), height=47)
+                    .td= item.getName()
+                    .td= item.getShortDescription()
+                    .td: span=item.getLiveAppId() ? "True" : "False"
+                    .td.app-state: +AppManagementControls_(item)
+                    .td.action-links: +ApplicationActionLinks_(item)
+                    .td.action-links
+                        if item.getLiveAppId() && item.getLiveApplication()
+                            +ApplicationActionLinks_(item.getLiveApplication(), true)
+                        else
+                            span -
+                    .td
+                        if !self.isReadOnly()
+                            if liveApp
+                                +ActionForm('apps', 'changeAppType')
+                                    +LabeledCheckbox('Is Internal', 'isInternal', liveApp.isInternal(), false, 'Click to change app internal status')
+                                    +Hidden('appId', liveApp.getId())
+                            else
+                                span -
