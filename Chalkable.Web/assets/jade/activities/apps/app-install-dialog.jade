@@ -62,32 +62,44 @@ devName = app.getDeveloperInfo().getName()
 
             .row
                 if self.userRole.isAdmin()
+                    -var tree = self.calculateClassesTree_()
+                    -console.info(tree)
                     .schools
                         h1 Schools
+                        .just-me
+                            | Just me
+                            -var isInstalled = self.isAlreadyInstalledForMe_()
+                            .box-checkbox.right: +Checkbox(isInstalled ? null : 'chk-1', isInstalled, isInstalled)( install-group=chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER.valueOf() )
                         .school(filter-school-id= -1 )
                             | All
+                            -var isInstalled = tree.every(function (_) { return _.isInstalled });
                             .box-checkbox.right: +Checkbox(null, false, false)( school-id= -1 )
-                        each school in self.allClasses.getSchools()
-                            .school(filter-school-id= school.getId() )
-                                = school.getName()
-                                .box-checkbox.right: +Checkbox(null, false, false)( school-id= school.getId() )
+                        each school in tree
+                            .school(filter-school-id= school.id )
+                                = school.name
+                                -var isInstalled = school.isInstalled
+                                .box-checkbox.right: +Checkbox(null, isInstalled, isInstalled)( school-id= school.id )
                     .courses
                         h1 Course Types
-                        each courseType in self.allClasses.getCourseTypes()
-                            .course(filter-course-type-id= courseType.getCourseTypeId() ).x-hidden
-                                = courseType.getCourseTypeName()
-                                .box-checkbox.right: +Checkbox(null, false, false)( course-type-id= courseType.getCourseTypeId() )
+                        each school in tree
+                            each courseType in school.courseTypes
+                                .course(filter-course-type-id= courseType.id, school-id= school.id ).x-hidden
+                                    = courseType.name
+                                    -var isInstalled = courseType.isInstalled
+                                    .box-checkbox.right: +Checkbox(null, isInstalled, isInstalled)( course-type-id= courseType.id, school-id= school.id )
                     .classes
                         h1 Classes
-                        each clazz in self.getOrderedClasses_()
-                            .class(school-id= clazz.getSchoolId(), course-type-id= clazz.getCourseTypeId() ).x-hidden
-                                = clazz.getFullClassName()
-                                -var isInstalled = self.isAlreadyInstalled_(clazz.getId())
-                                .box-checkbox.right: +Checkbox(isInstalled ? null : 'chk-' + clazz.getId().valueOf(), isInstalled, isInstalled )(
-                                        install-group=chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ.valueOf()
-                                        course-type-id= clazz.getCourseTypeId()
-                                        school-id= clazz.getSchoolId()
-                                    )
+                        each school in tree
+                            each courseType in school.courseTypes
+                                each clazz in courseType.classes
+                                    .class(school-id= school.id, course-type-id= courseType.id ).x-hidden
+                                        = clazz.name
+                                        -var isInstalled = clazz.isInstalled
+                                        .box-checkbox.right: +Checkbox(isInstalled ? null : 'chk-' + clazz.id, isInstalled, isInstalled )(
+                                                install-group=chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ.valueOf()
+                                                course-type-id= courseType.id
+                                                school-id= school.id
+                                            )
                 else
                     .group-header.first User:
                     .items
