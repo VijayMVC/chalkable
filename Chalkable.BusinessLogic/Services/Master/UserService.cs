@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
@@ -46,7 +47,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void DeleteUsers(IList<int> localIds, Guid districtId);
         void Edit(IList<User> users);
         void Add(IList<User> users);
-        void CreateUserLoginInfos();
+        void CreateUserLoginInfos(IList<Guid> ids);
     }
 
     public class UserService : MasterServiceBase, IUserService
@@ -82,9 +83,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             });
         }
 
-        public void CreateUserLoginInfos()
+        public void CreateUserLoginInfos(IList<Guid> ids)
         {
-            DoUpdate(u => new UserDataAccess(u).CreateUserLoginInfos());
+            DoUpdate(u => new UserDataAccess(u).CreateUserLoginInfos(ids, 30 + ids.Count));
         }
 
         public UserContext Login(string login, string password)

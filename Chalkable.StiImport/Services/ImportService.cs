@@ -31,6 +31,7 @@ namespace Chalkable.StiImport.Services
         protected IServiceLocatorSchool ServiceLocatorSchool { get; set; }
         protected BackgroundTaskService.BackgroundTaskLog Log { get; private set; }
         protected SisConnectionInfo ConnectionInfo { get; private set; }
+        private IList<Guid> insertedUsers; 
 
         public ImportService(Guid districtId, SisConnectionInfo connectionInfo, BackgroundTaskService.BackgroundTaskLog log)
         {
@@ -101,7 +102,7 @@ namespace Chalkable.StiImport.Services
             if (context.GetSyncResult<User>().All.Length > 0)
             {
                 Log.LogInfo("creating user login infos");
-                ServiceLocatorMaster.UserService.CreateUserLoginInfos();    
+                ServiceLocatorMaster.UserService.CreateUserLoginInfos(insertedUsers);    
             }
             Log.LogInfo("import is completed");
         }
@@ -142,7 +143,7 @@ namespace Chalkable.StiImport.Services
             if (context.GetSyncResult<User>().All.Length > 0)
             {
                 Log.LogInfo("creating user login infos");
-                ServiceLocatorMaster.UserService.CreateUserLoginInfos();
+                ServiceLocatorMaster.UserService.CreateUserLoginInfos(insertedUsers);
             }
             Log.LogInfo("resync after sti DB restore is completed");   
         }

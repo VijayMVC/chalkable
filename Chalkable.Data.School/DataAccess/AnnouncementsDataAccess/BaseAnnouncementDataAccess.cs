@@ -68,7 +68,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public void Delete(IList<int> announcementIds)
         {
             var parameters = PrepareTIdsParams(announcementIds, "announcementIdList");
-            ExcuteStoredProcedure("spDeleteAnnouncements", new []{parameters});
+            ExecuteStoredProcedure("spDeleteAnnouncements", new []{parameters});
         }
 
         protected AnnouncementDetails GetDetails(string procedureName, IDictionary<string, object> parameters)
