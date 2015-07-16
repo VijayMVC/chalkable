@@ -58,6 +58,14 @@ NAMESPACE('chlk.services', function () {
 
             },
 
+            [[chlk.models.id.AnnouncementId, Object, chlk.models.announcement.AnnouncementTypeEnum]],
+                ria.async.Future, function uploadAttachment(announcementId, files, announcementType) {
+                return this.uploadFiles('AnnouncementAttachment/AddAttachment', files, chlk.models.announcement.FeedAnnouncementViewData, {
+                        announcementId: announcementId.valueOf(),
+                        announcementType: announcementType.valueOf()
+                });
+            },
+
 
             [[String]],
             ria.async.Future, function getGradeComments(query_) {
