@@ -4,7 +4,7 @@ GO
 Drop Type TClassDetails
 GO
 
-Create Type TClassDetails As Table(
+Create Type [dbo].[TClassDetails] AS TABLE(
 	[Class_Id] [int] NULL,
 	[Class_ClassNumber] [nvarchar](max) NULL,
 	[Class_Name] [nvarchar](max) NULL,
@@ -23,6 +23,13 @@ Create Type TClassDetails As Table(
 	[Person_LastName] [nvarchar](max) NULL,
 	[Person_Gender] [nvarchar](max) NULL,
 	[Person_RoleRef] [int] NULL,
+	[SchoolYear_Id] [int] NULL,
+	[SchoolYear_SchoolRef] [int] NULL,
+	[SchoolYear_Name] [nvarchar](max) NULL,
+	[SchoolYear_Description] [nvarchar](max) NULL,
+	[SchoolYear_StartDate] [datetime2](7) NULL,
+	[SchoolYear_EndDate] [datetime2](7) NULL,
+	[SchoolYear_ArchiveDate] [datetime2](7) NULL,
 	[Class_StudentsCount] [int] NULL
 )
 GO

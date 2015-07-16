@@ -523,8 +523,8 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.announcement.AnnouncementForm]],
-        function lessonPlanFromModel_(model) {
-            var result = this.lessonPlanService.listCategories()
+        function getLessonPlanFromModel_(model) {
+            return this.lessonPlanService.listCategories()
                 .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(ex){
                     return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
                     throw error;
@@ -537,6 +537,11 @@ NAMESPACE('chlk.controllers', function (){
                     return model;
                 },this)
                 .attach(this.validateResponse_());
+        },
+
+        [[chlk.models.announcement.AnnouncementForm]],
+        function lessonPlanFromModel_(model) {
+            var result = this.getLessonPlanFromModel_(model);
             return this.PushView(chlk.activities.announcement.LessonPlanFormPage, result);
         },
 
@@ -715,13 +720,15 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(model){
                     var resModel =  this.addEditAction(model, true);
                     if(resModel.getAnnouncement().getLessonPlanData()){
-                        return this.lessonPlanFromModel_(resModel);
-                        //return this.Redirect('announcement', 'lessonPlanFromModel', [resModel]);
-                    }else
-                        return this.classAnnouncementFromModel_(resModel);
-                        //return this.Redirect('announcement', 'classAnnouncementFromModel', [resModel]);
+                        return this.getLessonPlanFromModel_(resModel);
+                    }else{
+                        this.cacheAnnouncementType(chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT);
+                        return resModel;
+                    }
                 }, this);
-            return res;
+            if(announcementType == chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN)
+                return this.PushView(chlk.activities.announcement.LessonPlanFormPage, res);
+            return this.PushView(chlk.activities.announcement.AnnouncementFormPage, res);
         },
 
         function prepareAnnouncementForView(announcement){
