@@ -16,14 +16,16 @@
       content: ' '
       position: absolute
       top: 3px
-      left: 0px
+      left: -1px
       right: 0px
       bottom: 3px
 
     &:checked::before
       top: -100px
       bottom: 100px
-      background: image-url("images2/icons-24/check.png") -6px -5px no-repeat
+      +icons-24-sprite(check, 0, -6px, -5px)
+      height: 14px
+      width: 14px
 
     &:not(:checked):not(.partially-checked)
       opacity: 0

@@ -75,7 +75,9 @@ NAMESPACE('chlk.activities.announcement', function () {
                         model.getClassId(),
                         model.getId(),
                         suggestedApps,
-                        model.getStandards()
+                        model.getStandards(),
+                        null,
+                        model.getType()
                     );
                     var suggestedAppsTpl = new chlk.templates.apps.SuggestedAppsListTpl();
                     this.onPrepareTemplate_(suggestedAppsTpl, model, msg_);

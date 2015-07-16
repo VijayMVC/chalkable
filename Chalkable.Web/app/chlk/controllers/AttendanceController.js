@@ -191,9 +191,10 @@ NAMESPACE('chlk.controllers', function (){
                             return new chlk.models.attendance.NotTakenAttendanceClassesViewData(items);
                         }.bind(this));
                     this.BackgroundUpdateView(chlk.activities.attendance.SummaryPage, res, chlk.activities.lib.DontShowLoader());
+                    var gp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD, null);
 
                     var topModel = new chlk.models.classes.ClassesForTopBar(null);
-                    return new chlk.models.attendance.SummaryPage(topModel, summary);
+                    return new chlk.models.attendance.SummaryPage(topModel, summary, gp);
                 }, this);
             return this.PushView(chlk.activities.attendance.SummaryPage, result);
         },

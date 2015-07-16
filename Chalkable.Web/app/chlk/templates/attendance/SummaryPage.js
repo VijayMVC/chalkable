@@ -11,6 +11,9 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.attendance.AttendanceSummary, 'summary',
 
+            [ria.templates.ModelPropertyBind],
+            chlk.models.schoolYear.GradingPeriod, 'gradingPeriod',
+
             [[Number, Number]],
             String, function getColor(i, opacity_){
                 var colors =  ['rgba(204, 0, 0, 1)', 'rgba(204, 102, 0, 1)', 'rgba(0, 204, 204, 1)',
@@ -23,25 +26,6 @@ NAMESPACE('chlk.templates.attendance', function () {
                 return color;
             },
 
-            /*[[ArrayOf(chlk.models.attendance.StudentSummaryItem)]],
-            ArrayOf(Array), function getGroupedStudents(students){
-                if(!students.length) return [];
-                var res = [], res1=[];
-                students.forEach(function(item, index){
-                    if(index && index % 18 == 0){
-                        res.push(res1);
-                        res1=[];
-                    }
-                    res1.push(item);
-                });
-                var max = 6 - res1.length % 6;
-                if(max != 6)
-                    for(var i=0; i < max; i++)
-                        res1.push(false);
-                res.push(res1);
-                return res;
-            },*/
-
             [[chlk.models.attendance.AbsentLateSummaryItem]],
             Object, function getChartOptions(data){
                 var classesInfo = data.getClassesStats();
@@ -52,6 +36,7 @@ NAMESPACE('chlk.templates.attendance', function () {
                 dt.setSeconds(0);
                 dt.setMilliseconds(0);
                 var today = new chlk.models.common.ChlkDate(getDate());
+                var gpStart = this.getGradingPeriod().getStartDate();
                 var start = today.add(chlk.models.common.ChlkDateEnum.MONTH, -1);
                 classesInfo && classesInfo.forEach(function(type, i){
                     var data = [], sTooltips = {};
@@ -75,8 +60,12 @@ NAMESPACE('chlk.templates.attendance', function () {
 
                 var min = Date.UTC(start.getDate().getFullYear(), start.getDate().getMonth(), start.getDate().getDate()),
                     max = Date.UTC(today.getDate().getFullYear(), today.getDate().getMonth(), today.getDate().getDate()),
-                    needLabel = ((max - min) / 1000 / 3600 / 24) % 2 == 0;
+                    needLabel = ((max - min) / 1000 / 3600 / 24) % 2 == 0,
+                    chartMin = min - 1000 * 60 * 60 * 10;
                 var needFirstLabel = needLabel;
+
+                if(gpStart.getDate() > chartMin)
+                    min = gpStart.getDate();
 
                 return {
                     chart: {

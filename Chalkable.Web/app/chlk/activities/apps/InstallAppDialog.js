@@ -94,26 +94,27 @@ NAMESPACE('chlk.activities.apps', function () {
             },
 
             VOID, function refreshPrice_() {
-                _DEBUG && console.info('starting calc price timeout');
-                this.priceCalcTimeout && clearTimeout(this.priceCalcTimeout);
-                this.priceCalcTimeout = setTimeout(function(){
-                    _DEBUG && console.info('doing calc price');
-                    this.prepareAppInstallPostData_();
-                    this.dom.find('input[name=submitActionType]').setValue('getAppPrice');
-                    this.dom.find('form').trigger('submit');
-                }.bind(this), 1700);
+                var installGroups = this.dom.find('input[install-group]:checked:not(:disabled)');
+                var isInstallBtnEnabled = installGroups.count() > 0;
+                if(!isInstallBtnEnabled)
+                    this.disableInstallBtn_();
+                else {
+                    _DEBUG && console.info('starting calc price timeout');
+                    this.priceCalcTimeout && clearTimeout(this.priceCalcTimeout);
+                    this.priceCalcTimeout = setTimeout(function () {
+                        _DEBUG && console.info('doing calc price');
+                        this.prepareAppInstallPostData_();
+                        this.dom.find('input[name=submitActionType]').setValue('getAppPrice');
+                        this.dom.find('form').trigger('submit');
+                    }.bind(this), _DEBUG ? 5000 : 1000);
+                }
             },
 
             [ria.mvc.DomEventBind('change', 'input[type=checkbox][install-group]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleInstallGroups(node, event){
                 var groupType = node.getAttr('install-group');
-
-                var installGroups = this.dom.find('input[install-group]:checked:not(:disabled)');
-                var isInstallBtnEnabled = installGroups.count() > 0;
-                var event = chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf();
-                if(!isInstallBtnEnabled)
-                    this.disableInstallBtn_();
+                event = chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf();
 
                 if(groupType == chlk.models.apps.AppInstallGroupTypeEnum.ALL
                     || groupType == chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER){
@@ -128,6 +129,54 @@ NAMESPACE('chlk.activities.apps', function () {
                 this.refreshPrice_();
             },
 
+            [ria.mvc.DomEventBind('change', '.class input[type=checkbox][school-id][course-type-id]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function toggleSchoolClass(node, event){
+                var schoolId = node.getAttr('school-id'),
+                    courseTypeId = node.getAttr('course-type-id');
+
+                var anyChecked = this.dom.find('.class input[type=checkbox][school-id=' + schoolId + '][course-type-id=' + courseTypeId + ']:checked:not(:disabled)').exists(),
+                    anyUnchecked = this.dom.find('.class input[type=checkbox][school-id=' + schoolId + '][course-type-id=' + courseTypeId + ']:not(:checked):not(:disabled)').exists(),
+                    anyPartiallyChecked = this.dom.find('.class input[type=checkbox][school-id=' + schoolId + '][course-type-id=' + courseTypeId + '].partially-checked:not(:disabled)').exists();
+
+                setTimeout(function () {
+                    var allSchoolsChk = this.dom.find('.course input[school-id=' + schoolId + '][course-type-id=' + courseTypeId + ']');
+                    if (anyChecked && !anyPartiallyChecked && !anyUnchecked) {
+                        chlk.controls.CheckboxControl.SET_CHECKED(allSchoolsChk);
+                    } else if (!anyChecked && !anyPartiallyChecked) {
+                        chlk.controls.CheckboxControl.SET_UNCHECKED(allSchoolsChk);
+                    } else {
+                        chlk.controls.CheckboxControl.SET_PARTIALLY_CHECKED(allSchoolsChk);
+                    }
+
+                    anyChecked = this.dom.find('.course input[type=checkbox][school-id=' + schoolId + ']:checked:not(:disabled)').exists();
+                    anyUnchecked = this.dom.find('.course input[type=checkbox][school-id=' + schoolId + ']:not(:checked):not(:disabled)').exists();
+                    anyPartiallyChecked = this.dom.find('.course input[type=checkbox][school-id=' + schoolId + '].partially-checked:not(:disabled)').exists();
+
+                    allSchoolsChk = this.dom.find('.school input[school-id=' + schoolId + ']');
+                    if (anyChecked && !anyPartiallyChecked && !anyUnchecked) {
+                        chlk.controls.CheckboxControl.SET_CHECKED(allSchoolsChk);
+                    } else if (!anyChecked && !anyPartiallyChecked) {
+                        chlk.controls.CheckboxControl.SET_UNCHECKED(allSchoolsChk);
+                    } else {
+                        chlk.controls.CheckboxControl.SET_PARTIALLY_CHECKED(allSchoolsChk);
+                    }
+
+                    anyChecked = this.dom.find('.school input[type=checkbox]:checked:not([school-id=-1]):not(:disabled)').exists();
+                    anyUnchecked = this.dom.find('.school input[type=checkbox]:not(:checked):not([school-id=-1]):not(:disabled)').exists();
+                    anyPartiallyChecked = this.dom.find('.school input[type=checkbox].partially-checked:not([school-id=-1]):not(:disabled)').exists();
+
+                    allSchoolsChk = this.dom.find('.school input[school-id=-1]');
+                    if (anyChecked && !anyPartiallyChecked && !anyUnchecked) {
+                        chlk.controls.CheckboxControl.SET_CHECKED(allSchoolsChk);
+                    } else if (!anyChecked && !anyPartiallyChecked) {
+                        chlk.controls.CheckboxControl.SET_UNCHECKED(allSchoolsChk);
+                    } else {
+                        chlk.controls.CheckboxControl.SET_PARTIALLY_CHECKED(allSchoolsChk);
+                    }
+                }.bind(this), 1);
+            },
+
             [ria.mvc.DomEventBind('change', '.school input[type=checkbox][school-id]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleSchoolCheckbox(node, event) {
@@ -135,10 +184,43 @@ NAMESPACE('chlk.activities.apps', function () {
                     val = node.is(':checked');
 
                 if (schoolId == -1) {
-                    this.dom.find('.class input[type=checkbox]:not([disabled])').setAttr('checked', val);
-                    this.dom.find('.school input[type=checkbox]').setAttr('checked', val);
+                    this.dom.find('.class input[type=checkbox]:not([disabled])')
+                        .forEach(function (_) {
+                            chlk.controls.CheckboxControl.SET_CHECKED_VALUE(_, val);
+                        });
+                    this.dom.find('.course input[type=checkbox]:not([disabled])')
+                        .forEach(function (_) {
+                            chlk.controls.CheckboxControl.SET_CHECKED_VALUE(_, val);
+                        });
+                    this.dom.find('.school input[type=checkbox]:not([disabled])')
+                        .forEach(function (_) {
+                            chlk.controls.CheckboxControl.SET_CHECKED_VALUE(_, val);
+                        });
                 } else {
-                    this.dom.find('.class input[type=checkbox][install-group][school-id=' + schoolId + ']:not([disabled])').setAttr('checked', val)
+                    this.dom.find('.class input[type=checkbox][install-group][school-id=' + schoolId + ']:not(:disabled)')
+                        .forEach(function (_) {
+                            chlk.controls.CheckboxControl.SET_CHECKED_VALUE(_, val);
+                        });
+
+                    this.dom.find('.course input[type=checkbox][school-id=' + schoolId + ']:not(:disabled)')
+                        .forEach(function (_) {
+                            chlk.controls.CheckboxControl.SET_CHECKED_VALUE(_, val);
+                        });
+
+                    setTimeout(function () {
+                        var anyChecked = this.dom.find('.school input[type=checkbox]:checked:not([school-id=-1]):not(:disabled)').exists(),
+                            anyUnchecked = this.dom.find('.school input[type=checkbox]:not(:checked):not([school-id=-1]):not(:disabled)').exists(),
+                            anyPartiallyChecked = this.dom.find('.school input[type=checkbox].partially-checked:not([school-id=-1]):not(:disabled)').exists();
+
+                        var allSchoolsChk = this.dom.find('.school input[school-id=-1]');
+                        if (anyChecked && !anyPartiallyChecked && !anyUnchecked) {
+                            chlk.controls.CheckboxControl.SET_CHECKED(allSchoolsChk);
+                        } else if (!anyChecked && !anyPartiallyChecked) {
+                            chlk.controls.CheckboxControl.SET_UNCHECKED(allSchoolsChk);
+                        } else {
+                            chlk.controls.CheckboxControl.SET_PARTIALLY_CHECKED(allSchoolsChk);
+                        }
+                    }.bind(this), 1);
                 }
 
                 this.refreshPrice_();
@@ -148,8 +230,7 @@ NAMESPACE('chlk.activities.apps', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleSchoolClassesVisibility(node, event) {
                 var schoolId = node.getAttr('filter-school-id');
-                this.dom.find('.course').addClass('x-hidden').setAttr('selected-school-id', schoolId);
-                this.dom.find('.course input[type=checkbox]').setAttr('selected-school-id', schoolId);
+                this.dom.find('.course').addClass('x-hidden');
                 this.dom.find('.class').addClass('x-hidden');
 
                 this.dom.find('.school.active').removeClass('active');
@@ -157,57 +238,49 @@ NAMESPACE('chlk.activities.apps', function () {
                 node.addClass('active');
 
                 if (schoolId != -1) {
-
-                    var selectedCount = 0,
-                        allCount = 0;
-                    this.dom.find('.school').forEach(function (_) {
-                        allCount++;
-                        if (_.is(':checked')) selectedCount ++;
-                    });
-
-                    if (selectedCount == 0) {
-                        this.dom.find('.school input[school-id=-1]').setAttr('checked', false).removeClass('partially-checked');
-                    } else if (selectedCount == allCount) {
-                        this.dom.find('.school input[school-id=-1]').setAttr('checked', true).removeClass('partially-checked');
-                    } else {
-                        this.dom.find('.school input[school-id=-1]').setAttr('checked', false).addClass('partially-checked');
-                    }
-
-                    var visibleCourseTypes = {};
-                    this.dom.find('.class[school-id=' + schoolId + ']')
-                        .forEach(function ($node) {
-                            visibleCourseTypes[$node.getAttr('course-type-id')] = true;
-                        });
-
-                    Object.getOwnPropertyNames(visibleCourseTypes).forEach(function (_) {
-                        _ && this.dom.find('.course[filter-course-type-id=' + _ + ']').removeClass('x-hidden');
-                    }.bind(this));
+                    this.dom.find('.course[school-id=' + schoolId + ']').removeClass('x-hidden');
                 }
             },
 
             [ria.mvc.DomEventBind('change', '.course input[type=checkbox][course-type-id]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleCourseTypeCheckbox(node, event) {
-                var schoolId = node.getAttr('selected-school-id'),
+                var schoolId = node.getAttr('school-id'),
                     courseTypeId = node.getAttr('course-type-id'),
                     val = node.is(':checked');
 
-                this.dom.find('.class input[type=checkbox][install-group][school-id=' + schoolId + '][course-type-id=' + courseTypeId + ']:not([disabled])').setAttr('checked', val);
+                this.dom.find('.class input[type=checkbox][install-group][school-id=' + schoolId + '][course-type-id=' + courseTypeId + ']:not([disabled])')
+                    .forEach(function (_) {
+                        chlk.controls.CheckboxControl.SET_CHECKED_VALUE(_, val);
+                    });
 
-                var selectedCount = 0,
-                    allCount = 0;
-                this.dom.find('.course:not(.x-hidden)').forEach(function (_) {
-                    allCount++;
-                    if (_.is(':checked')) selectedCount ++;
-                });
+                setTimeout(function () {
+                    var anyChecked = this.dom.find('.course input[type=checkbox][school-id=' + schoolId + ']:checked:not(:disabled)').exists(),
+                        anyUnchecked = this.dom.find('.course input[type=checkbox][school-id=' + schoolId + ']:not(:checked):not(:disabled)').exists(),
+                        anyPartiallyChecked = this.dom.find('.course input[type=checkbox][school-id=' + schoolId + '].partially-checked:not(:disabled)').exists();
 
-                if (selectedCount == 0) {
-                    this.dom.find('.school input[school-id=' + schoolId + ']').setAttr('checked', false).removeClass('partially-checked');
-                } else if (selectedCount == allCount) {
-                    this.dom.find('.school input[school-id=' + schoolId + ']').setAttr('checked', true).removeClass('partially-checked');
-                } else {
-                    this.dom.find('.school input[school-id=' + schoolId + ']').setAttr('checked', false).addClass('partially-checked');
-                }
+                    var allSchoolsChk = this.dom.find('.school input[school-id=' + schoolId + ']');
+                    if (anyChecked && !anyPartiallyChecked && !anyUnchecked) {
+                        chlk.controls.CheckboxControl.SET_CHECKED(allSchoolsChk);
+                    } else if (!anyChecked && !anyPartiallyChecked) {
+                        chlk.controls.CheckboxControl.SET_UNCHECKED(allSchoolsChk);
+                    } else {
+                        chlk.controls.CheckboxControl.SET_PARTIALLY_CHECKED(allSchoolsChk);
+                    }
+
+                    anyChecked = this.dom.find('.school input[type=checkbox]:checked:not([school-id=-1]):not(:disabled)').exists();
+                    anyUnchecked = this.dom.find('.school input[type=checkbox]:not(:checked):not([school-id=-1]):not(:disabled)').exists();
+                    anyPartiallyChecked = this.dom.find('.school input[type=checkbox].partially-checked:not([school-id=-1]):not(:disabled)').exists();
+
+                    allSchoolsChk = this.dom.find('.school input[school-id=-1]');
+                    if (anyChecked && !anyPartiallyChecked && !anyUnchecked) {
+                        chlk.controls.CheckboxControl.SET_CHECKED(allSchoolsChk);
+                    } else if (!anyChecked && !anyPartiallyChecked) {
+                        chlk.controls.CheckboxControl.SET_UNCHECKED(allSchoolsChk);
+                    } else {
+                        chlk.controls.CheckboxControl.SET_PARTIALLY_CHECKED(allSchoolsChk);
+                    }
+                }.bind(this), 1);
 
                 this.refreshPrice_();
             },
@@ -215,7 +288,7 @@ NAMESPACE('chlk.activities.apps', function () {
             [ria.mvc.DomEventBind('click', '.course[filter-course-type-id]')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function toggleCourseTypeClassesVisibility(node, event) {
-                var schoolId = node.getAttr('selected-school-id'),
+                var schoolId = node.getAttr('school-id'),
                     courseTypeId = node.getAttr('filter-course-type-id');
 
                 this.dom.find('.class').addClass('x-hidden');

@@ -84,6 +84,46 @@ NAMESPACE('chlk.controls', function () {
                 var node = dom.parent().find('.hidden-checkbox');
                 node.setValue(value);
                 node.setData('value', value);
+            },
+
+            [[ria.dom.Dom]],
+            VOID, function SET_CHECKED(node) {
+                var hidden = node.parent().find('.hidden-checkbox');
+                hidden.setData('value', true);
+                hidden.setValue(true);
+                node.setProp('checked', true);
+                node.setAttr('checked', 'checked');
+                node.removeClass('partially-checked');
+            },
+
+            [[ria.dom.Dom]],
+            VOID, function SET_PARTIALLY_CHECKED(node) {
+                var hidden = node.parent().find('.hidden-checkbox');
+                hidden.setData('value', true);
+                hidden.setValue(true);
+                node.setProp('checked', true);
+                node.setAttr('checked', 'checked');
+                node.addClass('partially-checked');
+            },
+
+            [[ria.dom.Dom]],
+            VOID, function SET_UNCHECKED(node) {
+                var hidden = node.parent().find('.hidden-checkbox');
+                hidden.setData('value', false);
+                hidden.setValue(false);
+                node.setProp('checked', false);
+                node.removeAttr('checked');
+                node.removeClass('partially-checked');
+            },
+
+            [[ria.dom.Dom, Boolean]],
+            VOID, function SET_CHECKED_VALUE(node, val) {
+                var hidden = node.parent().find('.hidden-checkbox');
+                hidden.setData('value', val);
+                hidden.setValue(val);
+                node.removeClass('partially-checked');
+                node.setAttr('checked', val);
+                node.setProp('checked', val);
             }
         ]);
 });
