@@ -256,6 +256,7 @@ namespace Chalkable.StiImport.Services
                     IsSysAdmin = false
                 }).ToList();
             ServiceLocatorMaster.UserService.Add(users);
+            insertedUsers = users.Select(x => x.Id).ToList();
         }
         
         private void InsertSchoolUsers()

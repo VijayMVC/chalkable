@@ -31,11 +31,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public void CreateUserLoginInfos()
-        {
-            throw new NotImplementedException();
-        }
-
         public void Edit(IList<User> users)
         {
             throw new NotImplementedException();
@@ -54,6 +49,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public void Add(IList<User> users)
         {
             UserStorage.Add(users);
+        }
+
+        public void CreateUserLoginInfos(IList<Guid> ids)
+        {
+            throw new NotImplementedException();
         }
 
         private const string DEMO_USER_PREFIX = "demo_user_";

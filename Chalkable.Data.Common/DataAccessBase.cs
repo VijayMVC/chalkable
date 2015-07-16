@@ -31,7 +31,7 @@ namespace Chalkable.Data.Common
             }
         }
 
-        protected void ExcuteStoredProcedure(string name, SqlParameter[] parameters, int? timeout = null)
+        protected void ExecuteStoredProcedure(string name, SqlParameter[] parameters, int? timeout = null)
         {
             using (var command = unitOfWork.GetStoredProcedureCommandWithParams(name, parameters))
             {

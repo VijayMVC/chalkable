@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using Chalkable.Common;
@@ -142,11 +144,24 @@ namespace Chalkable.Data.Master.DataAccess
             return GetUser(conds);
         }
 
-        public void CreateUserLoginInfos()
+        public void CreateUserLoginInfos(IList<Guid> ids, int timeout)
         {
-            using (ExecuteStoredProcedureReader("spCreateLoginInfos", new Dictionary<string, object>(), 3600))
+            var idTable = new DataTable();
+            idTable.Columns.Add("Id");
+            bool auto = true;
+            if (ids != null)
             {
+                foreach (var guid in ids)
+                    idTable.Rows.Add(guid);
+                auto = false;
             }
+            
+            var ps = new Dictionary<string, object>
+            {
+                {"@list", idTable},
+                {"@auto", auto}
+            };
+            ExecuteStoredProcedure("spCreateLoginInfos", ps, timeout);
         }
     }
 }
