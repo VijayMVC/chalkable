@@ -40,6 +40,10 @@ mixin ProfileInfoView(model)
                         .info-title=Msg.Birthday
                         .data-info
                             input(type="text", value=model.getBirthDateText(), readonly)
+                    .section-data
+                        .info-title=Msg.GradeLevel
+                        .data-info
+                            input(type="text", value=model.getGradeLevel().getName(), readonly)
 
             +CloseOpen(Msg.Home_info).today-work-panel
                 .sections-info

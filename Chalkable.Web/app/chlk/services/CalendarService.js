@@ -25,7 +25,7 @@ NAMESPACE('chlk.services', function () {
         'CalendarService', EXTENDS(chlk.services.BaseService), [
             [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
             ria.async.Future, function listByDateRange(startDate_, endDate_, classId_) {
-                return this.get('AnnouncementCalendar/ListByDateRange.json', ArrayOf(chlk.models.announcement.BaseAnnouncementViewData) , {
+                return this.get('AnnouncementCalendar/ListClassAnnsByDateRange.json', ArrayOf(chlk.models.announcement.ClassAnnouncementViewData) , {
                     startDate: startDate_ && startDate_.toString('mm-dd-yy'),
                     endDate: endDate_ && endDate_.toString('mm-dd-yy'),
                     classId: classId_ && classId_.valueOf()

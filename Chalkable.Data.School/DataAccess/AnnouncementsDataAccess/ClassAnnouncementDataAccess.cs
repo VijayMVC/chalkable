@@ -41,6 +41,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private const string START_PARAM = "start";
         private const string COUNT_PARAM = "count";
 
+        public abstract ClassAnnouncement GetLastDraft(int personId, int schoolYearId);
+
+
         protected AnnouncementQueryResult GetAnnouncementsComplex(string procedureName, Dictionary<string, object> parameters, AnnouncementsQuery query)
         {
             parameters.Add(ID_PARAM, query.Id);
@@ -78,7 +81,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var t = typeof (ClassAnnouncement);
             var fileds = Orm.Fields(t, true, true, true);
             fileds.Add(Announcement.ID_FIELD);
-            var q = Orm.SimpleListInsert(t, new List<ClassAnnouncement>{entity}, fileds);
+            var q = Orm.SimpleListInsert(t, new List<ClassAnnouncement> { entity }, fileds, false);
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 

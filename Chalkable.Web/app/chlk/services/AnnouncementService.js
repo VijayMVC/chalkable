@@ -58,23 +58,6 @@ NAMESPACE('chlk.services', function () {
 
             },
 
-            [[String]],
-            ria.async.Future, function getAnnouncementAttributeTypesSync(query_) {
-
-                var attrs = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ATTRIBUTES, []);
-
-                if (query_){
-                    query_ = query_.toLowerCase();
-                    attrs = attrs.filter(function(item){
-                        return item != null && item.getName().toLowerCase().indexOf(query_) != -1;
-                    });
-                }
-                return new ria.async.DeferredData(attrs);
-            },
-
-            ArrayOf(chlk.models.announcement.AnnouncementAttributeType), function getAnnouncementAttributeTypesList() {
-                return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ATTRIBUTES, []);
-            },
 
             [[String]],
             ria.async.Future, function getGradeComments(query_) {
@@ -86,64 +69,10 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, Object, chlk.models.announcement.AnnouncementTypeEnum]],
-            ria.async.Future, function uploadAttachment(announcementId, files, announcementType) {
-                return this.uploadFiles('AnnouncementAttachment/AddAttachment', files, chlk.models.announcement.FeedAnnouncementViewData, {
-                    announcementId: announcementId.valueOf(),
-                    announcementType: announcementType.valueOf()
-                });
-            },
-
-            [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, Object]],
-            ria.async.Future, function uploadAttributeAttachment(announcementType, announcementId, assignedAttributeId, files) {
-                return this.uploadFiles('AnnouncementAttribute/AddAttributeAttachment.json', files, chlk.models.announcement.FeedAnnouncementViewData, {
-                    announcementId: announcementId.valueOf(),
-                    announcementType: announcementType.valueOf(),
-                    assignedAttributeId: assignedAttributeId.valueOf()
-                });
-            },
-
-            [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeAttachmentId]],
-            ria.async.Future, function removeAttributeAttachment(announcementType, announcementId, assignedAttributeAttachmentId) {
-                return this.post('AnnouncementAttribute/RemoveAttributeAttachment.json', chlk.models.announcement.FeedAnnouncementViewData, {
-                    announcementId: announcementId.valueOf(),
-                    announcementType: announcementType.valueOf(),
-                    attributeAttachmentId: assignedAttributeAttachmentId.valueOf()
-                });
-            },
-
-
-            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAttributeTypeId, chlk.models.announcement.AnnouncementTypeEnum]],
-            ria.async.Future, function addAnnouncementAttribute(announcementId, attributeTypeId, announcementType){
-                return this.post('AnnouncementAttribute/AddAttribute.json', chlk.models.announcement.FeedAnnouncementViewData, {
-                    announcementId: announcementId.valueOf(),
-                    attributeTypeId: attributeTypeId.valueOf(),
-                    announcementType: announcementType.valueOf()
-                });
-            },
-
-            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum]],
-            ria.async.Future, function removeAnnouncementAttribute(announcementId, attributeId, announcementType){
-                return this.post('AnnouncementAttribute/DeleteAttribute.json', chlk.models.announcement.FeedAnnouncementViewData, {
-                    announcementId: announcementId.valueOf(),
-                    assignedAttributeId: attributeId.valueOf(),
-                    announcementType: announcementType.valueOf()
-                });
-            },
-
             [[chlk.models.id.AnnouncementAttachmentId]],
             ria.async.Future, function startViewSession(announcementAttachmentId) {
                 return this.get('AnnouncementAttachment/StartViewSession', String, {
                     announcementAttachmentId: announcementAttachmentId.valueOf(),
-                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
-                });
-            },
-
-
-            [[chlk.models.id.AnnouncementAssignedAttributeId]],
-            ria.async.Future, function startAttributeAttachmentViewSession(assignedAttributeId) {
-                return this.get('AnnouncementAttribute/StartViewSession', String, {
-                    assignedAttributeId: assignedAttributeId.valueOf(),
                     announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 });
             },
@@ -166,17 +95,6 @@ NAMESPACE('chlk.services', function () {
             String, function getAttachmentUri(announcementAttachmentId, needsDownload, width, height) {
                 return this.getUrl('AnnouncementAttachment/DownloadAttachment', {
                     announcementAttachmentId: announcementAttachmentId.valueOf(),
-                    needsDownload: needsDownload,
-                    width: width,
-                    height: height
-                });
-            },
-
-            [[chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum, Boolean, Number, Number]],
-            String, function getAttributeAttachmentUri(assignedAttributeId, announcementType, needsDownload, width, height) {
-                return this.getUrl('AnnouncementAttribute/DownloadAttributeAttachment', {
-                    assignedAttributeId: assignedAttributeId.valueOf(),
-                    announcementType:announcementType.valueOf(),
                     needsDownload: needsDownload,
                     width: width,
                     height: height

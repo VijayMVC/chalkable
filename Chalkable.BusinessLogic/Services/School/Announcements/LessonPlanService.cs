@@ -72,29 +72,22 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.PersonId.HasValue);
             BaseSecurity.EnsureTeacher(Context);
             AnnouncementDetails res;
+            var annApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(lessonPlanTemplateId, true);
+            var appIds = annApps.Select(aa => aa.ApplicationRef).ToList();
+            //get only simple apps
+            var apps = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(appIds).Where(a=>!a.IsAdvanced).ToList();
+            annApps = annApps.Where(aa => apps.Any(a => a.Id == aa.ApplicationRef)).ToList();
+
             using (var u = Update())
             {
                 res = CreateLessonPlanDataAccess(u).CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
-                res.AnnouncementAttachments = CopyAttachments(lessonPlanTemplateId, res.Id, u);
-                res.AnnouncementAttributes = CopyAttributes(lessonPlanTemplateId, res.Id, u);
+                res.AnnouncementAttachments = ((AnnouncementAttachmentService)ServiceLocator.AnnouncementAttachmentService).CopyAttachments(lessonPlanTemplateId, res.Id, u);
+                res.AnnouncementAttributes = ((AnnouncementAssignedAttributeService)ServiceLocator.AnnouncementAssignedAttributeService).CopyNonStiAttributes(lessonPlanTemplateId, res.Id, u);
+                res.AnnouncementApplications = ((ApplicationSchoolService)ServiceLocator.ApplicationSchoolService).CopyAnnApplications(res.Id, annApps, u);
                 u.Commit();
             }
             return res;
         }
-
-        private IList<AnnouncementAttachment> CopyAttachments(int fromLessonPlanId, int toLessonPlanId, UnitOfWork unitOfWork)
-        {
-            var da = new AnnouncementAttachmentDataAccess(unitOfWork);
-            var attachmentsForCopy = da.TakeLastAttachments(fromLessonPlanId);
-            return ServiceLocator.AnnouncementAttachmentService.CopyAttachments(toLessonPlanId, attachmentsForCopy, unitOfWork);
-        }
-
-        private IList<AnnouncementAssignedAttribute> CopyAttributes(int fromLessonPlanId, int toLessonPlanId, UnitOfWork unitOfWork)
-        {
-            var da = new DataAccessBase<AnnouncementAssignedAttribute>(unitOfWork);
-            var attributesForCopying = da.GetAll(new AndQueryCondition {{AnnouncementAssignedAttribute.ANNOUNCEMENT_REF_FIELD, fromLessonPlanId}});
-            return ServiceLocator.AnnouncementAssignedAttributeService.CopyNonStiAttributes(toLessonPlanId, attributesForCopying, unitOfWork);
-        } 
 
         public AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content,
                                         DateTime? startDate, DateTime? endDate, bool visibleForStudent)
@@ -127,7 +120,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     ValidateLessonPlan(lessonPlan, da);
                 da.Update(lessonPlan);
                 uow.Commit();
-                return da.GetDetails(lessonPlanId, Context.PersonId.Value, Context.RoleId);
+                return GetDetails(da, lessonPlanId);
             }                
         }
 
@@ -245,13 +238,19 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public override AnnouncementDetails GetAnnouncementDetails(int announcementId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u =>
-                {
-                    var res = CreateDataAccess(u).GetDetails(announcementId, Context.PersonId.Value, Context.RoleId);
-                    if(res == null)
-                        throw new NoAnnouncementException();
-                    return res;
-                });
+            return DoRead(u =>  GetDetails(CreateDataAccess(u), announcementId));
+        }
+        
+        private AnnouncementDetails GetDetails(BaseAnnouncementDataAccess<LessonPlan> dataAccess, int announcementId)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            var ann = dataAccess.GetDetails(announcementId, Context.PersonId.Value, Context.Role.Id);
+            if (ann == null)
+                throw new NoAnnouncementException();
+            var annStandards = ServiceLocator.StandardService.GetAnnouncementStandards(announcementId);
+            ann.AnnouncementStandards = annStandards.Where(x => ann.AnnouncementStandards.Any(y => y.StandardRef == x.StandardRef 
+                                                                                                && y.AnnouncementRef == x.AnnouncementRef)).ToList();
+            return ann;
         }
 
 
@@ -322,7 +321,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public LessonPlan GetLastDraft()
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetLastDraft(Context.PersonId.Value));
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            return DoRead(u => CreateLessonPlanDataAccess(u).GetLastDraft(Context.PersonId.Value, Context.SchoolYearId.Value));
         }
     }
 }

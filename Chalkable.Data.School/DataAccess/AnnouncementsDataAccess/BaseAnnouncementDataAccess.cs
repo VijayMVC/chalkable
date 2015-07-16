@@ -23,7 +23,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public abstract AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query);
         public abstract IList<TAnnouncement> GetAnnouncements(QueryCondition conds, int callerId); 
         public abstract TAnnouncement GetAnnouncement(int id, int callerId);
-        public abstract TAnnouncement GetLastDraft(int personId);
         
         public abstract bool CanAddStandard(int announcementId);
         public abstract AnnouncementDetails GetDetails(int id, int callerId, int? roleId);

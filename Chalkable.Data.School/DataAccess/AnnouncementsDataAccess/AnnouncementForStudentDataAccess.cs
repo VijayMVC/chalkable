@@ -10,7 +10,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
         }
         
-        public override ClassAnnouncement GetLastDraft(int personId)
+        public override ClassAnnouncement GetLastDraft(int personId, int schoolYearId)
         {
             throw new System.NotImplementedException();
         }

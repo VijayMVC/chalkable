@@ -573,7 +573,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public  ClassAnnouncement GetLastDraft()
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateClassAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value));
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            return DoRead(u => CreateClassAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value, Context.SchoolYearId.Value));
         }
 
     }

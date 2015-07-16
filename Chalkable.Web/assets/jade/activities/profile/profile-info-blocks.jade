@@ -30,7 +30,7 @@ mixin ProfileInfoView(model)
                             .data-info=model.getBirthDateText()
                     if gradeLevelName
                         .section-data
-                            .info-title Grade
+                            .info-title=Msg.Grade_Level
                             .data-info=gradeLevelName
 
             if homePhone || address

@@ -17,7 +17,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             this.schoolId = schoolId;
         }
 
-
         public override void Insert(LessonPlan entity)
         {
             throw new NotImplementedException();
@@ -195,11 +194,14 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
 
-        public override LessonPlan GetLastDraft(int personId)
+        public LessonPlan GetLastDraft(int personId, int schoolYearId)
         {
             var conds = new AndQueryCondition {{Announcement.STATE_FIELD, AnnouncementState.Draft}};
             var dbQuery = SelectLessonPlan(conds);
             FilterLessonPlanByCallerId(dbQuery, personId);
+            dbQuery.Sql.AppendFormat(" and [{0}] in (select [{2}] from [{1}] where [{3}] = @{3}) "
+                                     , LessonPlan.CLASS_REF_FIELD, typeof(Class).Name, Class.ID_FIELD, Class.SCHOOL_YEAR_REF);
+            dbQuery.Parameters.Add(Class.SCHOOL_YEAR_REF, schoolYearId);
             Orm.OrderBy(dbQuery, LessonPlan.VW_LESSON_PLAN_NAME, Announcement.CREATED_FIELD, Orm.OrderType.Desc);
             return ReadOneOrNull<LessonPlan>(dbQuery);
         }

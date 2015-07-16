@@ -60,6 +60,7 @@ NAMESPACE('chlk.templates.grading', function () {
             },
 
             Boolean, 'ableDisplayAlphaGrades',
-            Boolean, 'roundDisplayedAverages'
+            Boolean, 'roundDisplayedAverages',            
+            Boolean, 'ableDisplayStudentAverage'
         ]);
 });

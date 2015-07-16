@@ -31,6 +31,7 @@ namespace Chalkable.Web.Models
             ClassId = announcementType.ClassRef;
             HighScoresToDrop = announcementType.HighScoresToDrop;
             LowScoresToDrop = announcementType.LowScoresToDrop;
+            IsSystem = announcementType.IsSystem;
         }
 
         public static ClassAnnouncementTypeViewData Create(ClassAnnouncementType announcementType)

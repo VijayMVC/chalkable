@@ -70,12 +70,31 @@ namespace Chalkable.Data.Common
                     command.CommandTimeout = timeout.Value;
                 command.ExecuteNonQuery();
             }
+
+           
         }
 
-        protected void SimpleInsert<T>(T obj)
+        protected int SimpleInsert<T>(T obj, bool returnInsertedEntityId = false)
         {
-            var q = Orm.Orm.SimpleInsert(obj);
-            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+            var q = Orm.Orm.SimpleInsert(obj, returnInsertedEntityId);
+
+            var insertedEntityId = -1;
+
+            if (returnInsertedEntityId)
+            {
+                using (var reader = ExecuteReaderParametrized(q.Sql.ToString(), q.Parameters))
+                {
+                    if (reader.Read())
+                    {
+                        insertedEntityId = SqlTools.ReadInt32(reader, "insertedEntityId");
+                    }
+                }
+            }
+            else
+            {
+                ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+            }
+            return insertedEntityId;
         }
         
         protected void SimpleInsert<T>(IList<T> objs)
@@ -132,7 +151,7 @@ namespace Chalkable.Data.Common
                 }
                 else
                 {
-                    var q = Orm.Orm.SimpleListInsert(objs);
+                    var q = Orm.Orm.SimpleListInsert(objs, false);
                     ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
                 }
             }
@@ -361,6 +380,11 @@ namespace Chalkable.Data.Common
         public virtual void Insert(TEntity entity)
         {
             SimpleInsert(entity);
+        }
+
+        public virtual int InsertWithEntityId(TEntity entity)
+        {
+            return SimpleInsert(entity, true);
         }
 
         public virtual void Insert(IList<TEntity> entities)

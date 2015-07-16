@@ -19,18 +19,6 @@ NAMESPACE('chlk.templates.announcement', function(){
             chlk.models.id.AnnouncementId, 'announcementId',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'readOnly',
-
-
-            String, function announcementAttrsToJSONString(){
-                return this.getModel().toJSON();
-            },
-
-
-            String, function getActualAttributes(){
-                return ria.dom.Dom('input[name=announcementAssignedAttrs]').getValue();
-            }
-
-
+            Boolean, 'readOnly'
     ]);
 });

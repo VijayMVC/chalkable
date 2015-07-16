@@ -57,6 +57,13 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              return Json(res);
          }
 
+         [AuthorizationFilter("Teacher, Student")]
+         public ActionResult ListClassAnnsByDateRange(DateTime? startDate, DateTime? endDate, int? classId)
+         {
+             var res = SchoolLocator.ClassAnnouncementService.GetClassAnnouncements(startDate, endDate, classId);
+             return Json(ClassAnnouncementViewData.Create(res));
+         }
+
          [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
          public ActionResult Week(DateTime? date, int? classId, int? personId)
          {

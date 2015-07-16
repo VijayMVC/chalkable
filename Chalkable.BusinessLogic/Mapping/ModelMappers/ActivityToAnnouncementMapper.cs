@@ -45,6 +45,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             if(ann.ClassAnnouncementData == null)
                 throw new ChalkableException("Only classAnnouncement can be mapped from activity");
             MapperFactory.GetMapper<ClassAnnouncement, Activity>().Map(ann.ClassAnnouncementData, activity);
+            ann.Complete = activity.Complete;
         }
     }
 
@@ -58,7 +59,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                 annDetails.AnnouncementAttributes = new List<AnnouncementAssignedAttribute>();
 
             annDetails.AnnouncementAttributes = annDetails.AnnouncementAttributes.Where(a => activity.Attributes != null 
-                && activity.Attributes.Any(x => x.AttributeId == a.SisActivityAssignedAttributeId)).ToList();
+                && activity.Attributes.Any(x => x.Id == a.SisActivityAssignedAttributeId)).ToList();
 
             if (activity.Attributes != null && activity.Attributes.Any())
             {
