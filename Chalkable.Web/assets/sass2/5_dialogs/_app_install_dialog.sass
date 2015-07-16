@@ -1,0 +1,76 @@
+.install-app-dialog
+  .dialog
+    +transform(none)
+    width: 872px
+    margin-left: -398px
+    top: 6%
+
+    .app-description
+      border-bottom: 1px solid #e7e6e2
+      margin-bottom: 25px
+
+    .app-description TEXTAREA
+      border: none
+      background: none
+      box-shadow: none
+      width: 99%
+      min-height: 70px
+      resize: none
+
+    .app-info-details
+      margin-top: 20px
+
+    .app-title
+      margin-top: 24px
+
+    .rating-margin
+      margin-top: -20px
+
+    .group-header
+      width: 72px
+      display: table-cell
+    .items
+      display: table-cell
+
+    .labeled-checkbox
+      margin-right: 15px
+      margin-bottom: 10px
+      min-width: 125px
+
+    .calculated-price
+
+      .price-item
+        .price
+          font-weight: bold
+        span
+          display: inline-block
+        .price-header
+          margin: 0 30px 12px 0
+        &.last
+          .price-header
+            margin: 0 35px 30px 0px
+
+    .install-btn
+      button
+        padding: 5px 47px
+        font-size: 17px
+        text-transform: uppercase
+
+  .schools, .courses, .classes
+    width: 33%
+    display: inline-block
+    vertical-align: top
+    height: 300px
+    overflow-y: scroll
+    margin-bottom: 15px
+
+    h1
+      background: linear-gradient(to bottom, #f4f4f3, #ffffff)
+
+  .school, .course, .class
+    margin: 5px
+    cursor: pointer
+    height: 24px
+
+    &.active
+      font-weight: 600
