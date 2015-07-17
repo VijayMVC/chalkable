@@ -123,7 +123,7 @@ NAMESPACE('chlk.activities.apps', function () {
                     }).trigger(event, [false]);
                 }else{
                     this.dom.find('input[install-group=' + chlk.models.apps.AppInstallGroupTypeEnum.ALL.valueOf() + ']').trigger(event, [false]);
-                    this.dom.find('input[install-group=' + chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER.valueOf() + ']').trigger(event, [false]);
+                    this.dom.find('input[install-group=' + chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER.valueOf() + ']:not(:disabled)').trigger(event, [false]);
                 }
 
                 this.refreshPrice_();

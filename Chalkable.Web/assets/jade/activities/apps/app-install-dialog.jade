@@ -67,11 +67,11 @@ devName = app.getDeveloperInfo().getName()
                     .schools
                         h1 Schools
                         .just-me
-                            | Just me
+                            | For me
                             -var isInstalled = self.isAlreadyInstalledForMe_()
                             .box-checkbox.right: +Checkbox(isInstalled ? null : 'chk-1', isInstalled, isInstalled)( install-group=chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER.valueOf() )
                         .school(filter-school-id= -1 )
-                            | All
+                            | All Schools
                             -var isInstalled = tree.every(function (_) { return _.isInstalled });
                             .box-checkbox.right: +Checkbox(null, false, false)( school-id= -1 )
                         each school in tree
