@@ -176,8 +176,15 @@ namespace Chalkable.BusinessLogic.Services.School
                     MaxStandardAverage = inputModel.MaxStandardAverage,
                     MinStandardAverage = inputModel.MinStandardAverage,
                     SectionComment = inputModel.ClassComment,
-                    StudentIds = inputModel.StudentIds != null ? inputModel.StudentIds.ToArray() : null,
                 };
+            //TODO: maiby remove this later after inow fix
+            if (inputModel.StudentIds == null)
+            {
+                var students = ServiceLocator.StudentService.GetClassStudents(inputModel.ClassId, gp.MarkingPeriodRef);
+                stiModel.StudentIds = students.Select(x => x.Id).ToArray();
+            }
+            else stiModel.StudentIds = inputModel.StudentIds.ToArray();
+
             return ConnectorLocator.ReportConnector.ProgressReport(stiModel);
         }
 
