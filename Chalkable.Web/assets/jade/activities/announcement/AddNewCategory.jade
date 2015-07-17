@@ -1,0 +1,11 @@
+.dialog.edit-groups
+    .x-window-header
+        h1 Edit Categories
+        .close.close-btn
+
+    .groups-container
+        each category in self.getCategories()
+            +RenderWith(category, chlk.templates.announcement.LessonPlanCategoryTpl)
+        .new-group
+    .buttons-container
+        +ActionButton('announcement', 'addCategory').special-button2.add.add-group + New Category
