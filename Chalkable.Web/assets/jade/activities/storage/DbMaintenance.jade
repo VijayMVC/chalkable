@@ -1,0 +1,27 @@
+.db-maintenance
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('dbmaintenance', 'listBackups').pressed Backups
+                +ActionLink('dbmaintenance', 'updateDb') Update
+    +ActionLink('dbmaintenance', 'backup').i-b.t-d.not-blue
+        +Button().special-button2.green BackUp
+    +Grid('dbmaintenance', 'listBackups', self).not-transparent
+        +GridHead()
+            .th Date
+            .th Ticks
+            .th Has Master
+            .th Has S. Template
+            .th School Count
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td= item.getCreated().toString("dd/mm/yy hh/min/ss")
+                    .td= item.getTicks()
+                    .td= item.isHasMaster()
+                    .td= item.isHasSchoolTemplate()
+                    .td= item.getSchoolCount()
+                    .td.action-links
+                        +ActionLink('dbmaintenance', 'restore', item.getTicks()).plugin
+
