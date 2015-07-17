@@ -57,14 +57,8 @@ NAMESPACE('chlk.controllers', function (){
                 var res = '';
                 if(bDate){
                     var day = parseInt(bDate.format('d'), 10);
-                    var str;
-                    switch(day % 10){
-                        case 1: str = 'st';break;
-                        case 2: str = 'n&#100;';break;
-                        case 3: str = 'r&#100;';break;
-                        default: str = 'th';
-                    }
-                    res = 'M d' + str + ' yy';
+                    var str = getSerial(day).replace('d', '&#100;');
+                    res = 'M ' + str + ' yy';
                 }
 
                 var phones = model.getPhones() || [];
