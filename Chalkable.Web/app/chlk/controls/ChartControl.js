@@ -161,7 +161,7 @@ NAMESPACE('chlk.controls', function () {
                         }
                     }
                 };
-                if(res.yAxis.title && res.yAxis.title.text)
+                if(res.yAxis.title && res.yAxis.title.text && options.series.length)
                     attrs.class.push('with-y-title');
                 attrs['data-options'] = res;
                 this.queueReanimation_(attrs.id, res);
