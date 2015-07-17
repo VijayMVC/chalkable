@@ -92,7 +92,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult AllSchoolsActiveClasses()
         {
             var classes = SchoolLocator.ClassService.GetAllSchoolsActiveClasses();
-            var courseTypes = SchoolLocator.CourseTypeService.GetList(true);
+            var courseTypes = SchoolLocator.CourseTypeService.GetList(false);
             var schools = SchoolLocator.SchoolService.GetSchools();
             var res = AllSchoolsActiveClassesViewData.Create(classes, courseTypes, schools);
             return Json(res);

@@ -93,3 +93,5 @@ as
 
 	CLOSE TableCursor;
 	DEALLOCATE TableCursor;
+	
+GO

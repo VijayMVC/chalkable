@@ -68,3 +68,4 @@ as
 	DEALLOCATE TableCursor;
 
 	commit
+GO
