@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
+﻿using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -116,9 +113,19 @@ namespace Chalkable.BusinessLogic.Services
             var nvc = new NameValueCollection { { TOKEN, GetToken() } };
             var fileType = MimeHelper.GetContentTypeByName(fileName);
             return ChalkableHttpFileLoader.HttpUploadFile(UrlTools.UrlCombine(GetCrocodocApiUrl(), DOCUMENT_UPLOAD)
-                , fileName, fileContent, fileType, null, Deserialize<DocumentUploadResponse>, nvc);
+                , fileName, fileContent, fileType, HandleUploadException, Deserialize<DocumentUploadResponse>, nvc);
         }
 
+
+        private const string ERROR_FORMAT = "Error calling : '{0}' ;\n ErrorMessage : {1}";
+        private void HandleUploadException(WebException ex)
+        {
+            var reader = new StreamReader(ex.Response.GetResponseStream());
+            var msg = reader.ReadToEnd();
+            var traceMsg = string.Format(ERROR_FORMAT, ex.Response.ResponseUri, msg);
+            Trace.TraceError(traceMsg);
+        }
+        
         private T Deserialize<T>(string response)
         {
             return (new JsonSerializer()).Deserialize<T>(new JsonTextReader(new StringReader(response)));

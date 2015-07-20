@@ -162,6 +162,7 @@ namespace Chalkable.Data.Common.Orm
 
             if (returnInsertedEntityId)
             {
+                //TODO: have to get list of enities
                 b.Append(";select CAST(SCOPE_IDENTITY() AS INT) as insertedEntityId");
             }
             res.Sql = b;
