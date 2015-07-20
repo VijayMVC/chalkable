@@ -17,7 +17,7 @@
         .app-filter
             .subject
                 .subject-filter
-                    BUTTON.title.btn(type="button", href="javascript:;") Subject...
+                    BUTTON.title.btn(type="button", href="javascript:;", disabled = !self.categories || !self.categories.length) Subject...
                     .items.x-hidden.popup-bubble.top
                         +Hidden('selectedCategories', self.getAllCategoriesIds(self.categories))
                         +LabeledCheckbox('All Categories', 'app-category-all', true, true)
