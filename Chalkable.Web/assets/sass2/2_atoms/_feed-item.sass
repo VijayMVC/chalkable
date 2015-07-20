@@ -136,7 +136,7 @@
   .visible::before
     +icons-24-sprite(invisible)
 
-  &.no-attachments .attachment, &.no-attachment-icon .attachment, &.non-gradable .grades, &.visible-for-students .visible
+  &.no-attachments:not(.app-icon) .attachment, &.no-attachment-icon:not(.app-icon) .attachment, &.non-gradable .grades, &.visible-for-students .visible
     padding-right: 0
     &::before
       display: none
