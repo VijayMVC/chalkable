@@ -309,7 +309,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                         var attributeService = (AnnouncementAssignedAttributeService)ServiceLocator.AnnouncementAssignedAttributeService;
                         attributeService.AddMissingSisAttributes(res.AnnouncementAttributes, uow);
                         attributeService.UploadMissingAttributeAttachments(res.AnnouncementAttributes, uow);
-                        res.AnnouncementAttributes = new AnnouncementAssignedAttributeDataAccess(uow).GetListByAnnouncementId(announcementId);
+                        res.AnnouncementAttributes = new AnnouncementAssignedAttributeDataAccess(uow).GetListByAnntId(announcementId);
                         MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
                         ConnectorLocator.ActivityConnector.UpdateActivity(res.ClassAnnouncementData.SisActivityId.Value, activity);
                     }
