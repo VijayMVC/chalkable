@@ -129,12 +129,16 @@ namespace Chalkable.Data.School.DataAccess
 
         public PaginatedList<Person> SearchPersons(int schoolId, string filter, bool orderByFirstName, int start, int count)
         {
+            var filters = (filter != null) ? filter.Split(new[] {' '}, StringSplitOptions.RemoveEmptyEntries) : null;
+
             var ps = new Dictionary<string, object>
             {
                 {"@schoolId", schoolId},
                 {"@start", start},
                 {"@count", count},
-                {"@filter", "%" + filter + "%"},
+                {"@filter1", filters!=null && filters.Length>0 ? "%"+filters[0]+"%" : null},
+                {"@filter2", filters!=null && filters.Length>1 ? "%"+filters[1]+"%" : null},
+                {"@filter3", filters!=null && filters.Length>2 ? "%"+filters[2]+"%" : null},
                 {"@orderByFirstName", orderByFirstName}
             };
             return ExecuteStoredProcedurePaginated<Person>("spSearchPersons", ps, start, count);
