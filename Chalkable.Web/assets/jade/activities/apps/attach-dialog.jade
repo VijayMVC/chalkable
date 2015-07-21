@@ -21,7 +21,7 @@ mixin FileAttachBlock_(title, announcementId, announcementType)
 
 
 mixin FileCabinetBlock_(title, announcementId)
-    .announcement-item.application
+    .announcement-item.application.x-hidden
         .wrapper
             .file-cabinet.img
             div(data-tooltip=title, data-tooltip-type="overflow").title=title

@@ -7,6 +7,7 @@
   .box-checkbox
     position: relative
     z-index: 5
+    top: 4px
 
     &.disabled
       opacity: 0.5
@@ -90,14 +91,14 @@
     >A, >SPAN
       background: inline-image('images2/explorer/group-default-item.png') 22px 0 no-repeat
 
-      &.active
+      &.active, &:hover
         background: inline-image('images2/explorer/group-default-item.png') 22px 0 no-repeat, #f7f7f5
 
     &:last-child
       >A, >SPAN
         background: inline-image('images2/explorer/group-last-item.png') 22px 0 no-repeat
 
-        &.active
+        &.active, &:hover
           background: inline-image('images2/explorer/group-last-item.png') 22px 0 no-repeat, #f7f7f5
 
   .groups-container
