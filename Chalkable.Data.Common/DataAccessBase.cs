@@ -101,53 +101,15 @@ namespace Chalkable.Data.Common
         {
             if (objs.Count > 0)
             {
-                //TODO: move query build to orm
                 var t = typeof(T);
                 var fields = Orm.Orm.Fields(t, false);
                 var keyCount = Orm.Orm.GetPrimaryKeyFields(t).Count;
                 if ((fields.Count + keyCount) * objs.Count > MAX_PARAMETER_NUMBER)
                 {
-                    var table = new DataTable();
-                    var props = new PropertyInfo[fields.Count];
-                    var isEnum = new bool[fields.Count];
-                    for (int i = 0; i < fields.Count; i++)
-                    {
-                        props[i] = t.GetProperty(fields[i]);
-                        var pt = Nullable.GetUnderlyingType(props[i].PropertyType) ?? props[i].PropertyType;
-                        isEnum[i] = pt.IsEnum;
-                        if (isEnum[i])
-                            pt = typeof (int);
-                        table.Columns.Add(fields[i], pt);
-                    }
-                    foreach (var obj in objs)
-                    {
-                        var ps = new object[fields.Count];
-                        for (int i = 0; i < fields.Count; i++)
-                        {
-                            var fieldValue = props[i].GetValue(obj);
-                            if (isEnum[i] && fieldValue != null)
-                                ps[i] = (int) fieldValue;
-                            else
-                                ps[i] = fieldValue ?? DBNull.Value;
-                        }
-                        table.Rows.Add(ps);
-                    }
                     var f = fields.Select(x => "[" + x + "]").JoinString(",");
                     var sql = string.Format("INSERT INTO [{0}]({1}) SELECT {1} FROM @t", t.Name, f);
-                    using (var c = unitOfWork.GetTextCommand(sql))
-                    {
-                        c.CommandTimeout = 10 + objs.Count;
-                        c.Parameters.Add(
-                           new SqlParameter
-                           {
-                               ParameterName = "@t",
-                               SqlDbType = SqlDbType.Structured,
-                               TypeName = "T" + t.Name,
-                               Value = table,
-                           });
-
-                        c.ExecuteNonQuery();
-                    }
+                    IDictionary<string, object> ps = new Dictionary<string, object> { {"t", objs} };
+                    ExecuteNonQueryParametrized(sql, ps, 10 + objs.Count);
                 }
                 else
                 {
