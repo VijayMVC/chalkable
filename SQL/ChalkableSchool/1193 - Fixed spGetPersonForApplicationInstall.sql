@@ -20,7 +20,7 @@ begin
 	select cast(s as int) from dbo.split(',', @classIds)
 end
 
-declare @canInstallForTeacher bit = @hasTeacherMyApps | @canAttach 
+declare @canInstallForTeacher bit = @hasTeacherMyApps | @canAttach
 declare @canInstallForStudent bit = @hasStudentMyApps | @canAttach
 declare @installForAll bit = 0
 if @classIds is null and @personId is null
@@ -80,7 +80,7 @@ begin
 		--filter classes if caller is teahcer 
 		else if @callerRoleId = 2
 				delete from @classIdsT
-				where value in (select ClassRef from ClassTeacher where PersonRef = @callerId)
+				where value not in (select ClassRef from ClassTeacher where PersonRef = @callerId)
 
 
 		if @canInstallForStudent = 1
@@ -131,6 +131,7 @@ from
 		on x.PersonId = A.PersonRef and x.SchoolYearId = A.SchoolYearRef
 Where 
 	A.Id is null
+
 
 GO
 
