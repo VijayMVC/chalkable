@@ -62,11 +62,12 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
 
                 foreach (var annAtt in annDetails.AnnouncementAttributes)
                 {
-                    var att = new ActivityAssignedAttribute()
+                    var att =  activity.Attributes.FirstOrDefault(x => x.Id == annAtt.SisActivityAssignedAttributeId);
+                    if (att == null)
                     {
-                        ActivityId = activity.Id
-                    };
-                    newAtts.Add(att);
+                        att = new ActivityAssignedAttribute { ActivityId = activity.Id };
+                        newAtts.Add(att);   
+                    }
                     MapperFactory.GetMapper<ActivityAssignedAttribute, AnnouncementAssignedAttribute>().Map(att, annAtt);
                 }
                 activity.Attributes = activity.Attributes.Concat(newAtts);

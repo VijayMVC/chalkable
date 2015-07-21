@@ -225,9 +225,8 @@ namespace Chalkable.BusinessLogic.Services.School
                             var classAnn = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
                             var activityAssignedAttribute = ConnectorLocator.ActivityAssignedAttributeConnector.GetAttribute(classAnn.SisActivityId.Value, attribute.SisActivityAssignedAttributeId.Value);
                             activityAssignedAttribute.Attachment = null;
-                            ConnectorLocator.ActivityAssignedAttributeConnector.Update(classAnn.SisActivityId.Value, attribute.SisActivityAssignedAttributeId.Value, activityAssignedAttribute);    
+                            ConnectorLocator.ActivityAssignedAttributeConnector.Update(classAnn.SisActivityId.Value, attribute.SisActivityAssignedAttributeId.Value, activityAssignedAttribute);
                         }
-                        ConnectorLocator.AttachmentConnector.DeleteAttachment(attachment.Id);
                     }
                     else
                     {
