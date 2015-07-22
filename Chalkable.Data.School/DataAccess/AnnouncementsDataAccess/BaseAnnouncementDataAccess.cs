@@ -43,22 +43,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             SimpleUpdate<TAnnouncement>(ps, conds);
         }
 
-        private SqlParameter PrepareTIdsParams(IEnumerable<int> announcementIds, string paramName)
-        {
-            var table = new DataTable();
-            table.Columns.Add("Id", typeof (int));
-            foreach (var announcementId in announcementIds)
-            {
-                table.Rows.Add(announcementId);
-            }
-            return new SqlParameter
-                {
-                    ParameterName = "@" + paramName,
-                    SqlDbType = SqlDbType.Structured,
-                    TypeName = "TInt32",
-                    Value = table,
-                };
-        }
         
         public override void Delete(int announcementId)
         {
@@ -67,8 +51,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         
         public void Delete(IList<int> announcementIds)
         {
-            var parameters = PrepareTIdsParams(announcementIds, "announcementIdList");
-            ExecuteStoredProcedure("spDeleteAnnouncements", new []{parameters});
+            var paraments = new Dictionary<string, object>()
+            {
+                {"announcementIdList", announcementIds}
+            };
+            ExecuteStoredProcedure("spDeleteAnnouncements", paraments);
         }
 
         protected AnnouncementDetails GetDetails(string procedureName, IDictionary<string, object> parameters)
