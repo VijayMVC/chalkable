@@ -1,9 +1,16 @@
+Create Type TInt32 As Table
+(
+	[Value] int NULL
+)
+GO
+
+
 Alter Procedure [dbo].[spGetPersonsForApplicationInstall] 
-@applicationId uniqueidentifier, @callerId int, @personId int, @classIds nvarchar(2048), @callerRoleId int
+@applicationId uniqueidentifier, @callerId int, @personId int, @classIds TInt32 readonly, @callerRoleId int
 , @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolYearId int
 as
-declare @classIdsT table(value int);
 
+declare @classIdsT TInt
 
 PRINT('application id');
 PRINT(@applicationId);
@@ -14,16 +21,17 @@ PRINT(@personId );
 PRINT('caller role id');
 PRINT(@callerRoleId);
 
-if(@classIds is not null)
+if exists (select * from @classIds)
 begin
 	insert into @classIdsT(value)
-	select cast(s as int) from dbo.split(',', @classIds)
+	select value from @classIds
 end
+
 
 declare @canInstallForTeacher bit = @hasTeacherMyApps | @canAttach
 declare @canInstallForStudent bit = @hasStudentMyApps | @canAttach
 declare @installForAll bit = 0
-if @classIds is null and @personId is null
+if not exists (select * from @classIds) and @personId is null
 	set @installForAll = 1
 
 declare @canInstall bit = 0
@@ -133,6 +141,49 @@ Where
 	A.Id is null
 
 
+
+GO
+
+Alter Procedure [dbo].[spGetPersonsForApplicationInstallCount]
+	@applicationId uniqueidentifier, @callerId int, @personId int,
+	 @classIds TInt32 readonly, @callerRoleId int , @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolYearId int
+As
+PRINT('start');
+PRINT(getDate());
+
+Declare @preResult Table
+(
+	[Type] int not null,
+	GroupId int,
+	SchoolYearId int null, 
+	PersonId int not null
+);
+
+Insert Into @preResult
+exec dbo.spGetPersonsForApplicationInstall @applicationId, @callerId, @personId, @classIds
+, @callerRoleId , @hasAdminMyApps , @hasTeacherMyApps , @hasStudentMyApps , @canAttach, @schoolYearId
+
+select 
+	[Type], [GroupId], Count(*) as [Count]
+from 
+	@preResult
+group by 
+	[Type], [GroupId]
+union
+select 
+	5 as [Type], 
+	null as [GroupId], 
+	COUNT(*) as [Count] 
+from 
+	(select distinct PersonId from @preResult) z
+
+PRINT('end');
+PRINT(getDate());
+
+
 GO
 
 
+
+Drop Type TInt
+GO

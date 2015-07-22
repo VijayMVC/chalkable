@@ -1832,7 +1832,7 @@ NAMESPACE('chlk.controllers', function (){
             this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_ID, announcementId);
             var groupsIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []).map(function (_) { return _.valueOf() });
             return this.Redirect('group', 'show', [{
-                selectedIds: groupsIds,
+                selected: groupsIds,
                 controller: 'announcement',
                 action: 'saveGroupsToAnnouncement',
                 resultHidden: 'groupIds',

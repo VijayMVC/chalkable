@@ -698,7 +698,9 @@ NAMESPACE('chlk.controllers', function (){
             },
 
 
-            [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.BIRTHDAY_LISTING_REPORT])],
+            [chlk.controllers.Permissions([
+                [chlk.models.people.UserPermissionEnum.BIRTHDAY_LISTING_REPORT, chlk.models.people.UserPermissionEnum.BIRTHDAY_LISTING_REPORT_CLASSROOM]
+            ])],
             [chlk.controllers.SidebarButton('statistic')],
             [[chlk.models.reports.SubmitBirthdayReportViewData]],
             function submitBirthdayReportAction(reportViewData){
