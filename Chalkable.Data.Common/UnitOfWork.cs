@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Reflection;
+using Chalkable.Common;
 
 namespace Chalkable.Data.Common
 {
@@ -101,8 +105,79 @@ namespace Chalkable.Data.Common
                 foreach (var pair in parameters)
                 {
                    SqlParameter parameter;
-                   if (pair.Value != null)
-                        parameter = new SqlParameter(CompleteToParam(pair.Key), pair.Value);
+                    if (pair.Value != null)
+                    {
+                        if (pair.Value is IEnumerable && !(pair.Value is string))
+                        {
+                            var type = pair.Value.GetType();
+
+                            while (!type.IsGenericType && type.BaseType != null)
+                                type = type.BaseType;
+
+                            if (type.IsGenericType)
+                            {
+                                if (type.GetGenericArguments().Length != 1)
+                                    throw new NotSupportedException();
+                                var g = type.GetGenericArguments()[0];
+                                if (g.IsValueType || g == typeof(string))
+                                {
+                                    var table = new DataTable();
+                                    table.Columns.Add("value");
+                                    foreach (var obj in (pair.Value as IEnumerable))
+                                    {
+                                        table.Rows.Add(obj);
+                                    }
+                                    parameter = new SqlParameter
+                                    {
+                                        ParameterName = CompleteToParam(pair.Key),
+                                        SqlDbType = SqlDbType.Structured,
+                                        TypeName = "T" + g.Name,
+                                        Value = table,
+                                    };
+                                }
+                                else
+                                {
+                                    var fields = Orm.Orm.Fields(g, false);
+                                    var table = new DataTable();
+                                    var props = new PropertyInfo[fields.Count];
+                                    var isEnum = new bool[fields.Count];
+                                    for (int i = 0; i < fields.Count; i++)
+                                    {
+                                        props[i] = g.GetProperty(fields[i]);
+                                        var pt = Nullable.GetUnderlyingType(props[i].PropertyType) ?? props[i].PropertyType;
+                                        isEnum[i] = pt.IsEnum;
+                                        if (isEnum[i])
+                                            pt = typeof(int);
+                                        table.Columns.Add(fields[i], pt);
+                                    }
+                                    foreach (var obj in (pair.Value as IEnumerable))
+                                    {
+                                        var ps = new object[fields.Count];
+                                        for (int i = 0; i < fields.Count; i++)
+                                        {
+                                            var fieldValue = props[i].GetValue(obj);
+                                            if (isEnum[i] && fieldValue != null)
+                                                ps[i] = (int)fieldValue;
+                                            else
+                                                ps[i] = fieldValue ?? DBNull.Value;
+                                        }
+                                        table.Rows.Add(ps);
+                                    }
+                                    parameter = new SqlParameter
+                                           {
+                                               ParameterName = CompleteToParam(pair.Key),
+                                               SqlDbType = SqlDbType.Structured,
+                                               TypeName = "T" + g.Name,
+                                               Value = table,
+                                           };
+                                }
+                            }
+                            else
+                                throw new NotImplementedException();
+                        }
+                        else
+                            parameter = new SqlParameter(CompleteToParam(pair.Key), pair.Value);
+                    }
                    else
                         parameter = new SqlParameter(CompleteToParam(pair.Key), DBNull.Value);
 

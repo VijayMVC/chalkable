@@ -20,7 +20,7 @@ namespace Chalkable.Web.ActionFilters
         private static RaygunClient raygunClient = new RaygunClient();
         static AjaxHandleErrorAttribute()
         {
-            raygunClient.ApplicationVersion = CompilerHelper.Version;
+            raygunClient.ApplicationVersion = Settings.Domain + CompilerHelper.Version;
         }
 
         public override void OnException(ExceptionContext filterContext)
