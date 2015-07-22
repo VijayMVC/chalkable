@@ -91,7 +91,8 @@ namespace Chalkable.Data.School.DataAccess
                     filters.Add("@filter3");
                     res.Parameters.Add("@filter3", string.Format(FILTER_FORMAT, sl[2]));
                 }
-                res.Sql.AppendFormat(" and (LOWER(Name) like {0})", filters.JoinString(" or LOWER(Name) like "));
+                if(filters.Count>0)
+                    res.Sql.AppendFormat(" and (LOWER(Name) like {0})", filters.JoinString(" or LOWER(Name) like "));
             }
 
             res.Parameters.Add("@callerId", callerId);

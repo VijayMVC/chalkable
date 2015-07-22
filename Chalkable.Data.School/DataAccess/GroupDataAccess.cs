@@ -80,8 +80,8 @@ namespace Chalkable.Data.School.DataAccess
                     {GROUP_ID_PARAM, groupId},
                     {SCHOOL_YEAR_ID_PARAM, schoolYearId},
                     {GRADE_LEVEL_ID_PARAM, gradeLevelId},
-                    {CLASSES_IDS_PARAM, classesIds != null ? classesIds.Select(x=>x.ToString()).JoinString(",") : null},
-                    {COURSES_IDS_PARAM, coursesIds != null ? coursesIds.Select(x=>x.ToString()).JoinString(",") : null}
+                    {CLASSES_IDS_PARAM, classesIds ?? new List<int>()},
+                    {COURSES_IDS_PARAM, coursesIds ?? new List<int>()}
                 };
            return ExecuteStoredProcedureList<StudentForGroup>(SP_SEARCH_STUDENTS_FOR_GROUP, parametes);
         }

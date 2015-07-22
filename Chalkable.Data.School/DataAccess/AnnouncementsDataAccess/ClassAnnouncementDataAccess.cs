@@ -191,11 +191,10 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public IList<AnnouncementComplex> GetByActivitiesIds(IList<int> activitiesIds, int personId)
         {
             if (activitiesIds == null || activitiesIds.Count == 0) return new List<AnnouncementComplex>();
-            var strIds = activitiesIds.Select(x => x.ToString(CultureInfo.InvariantCulture)).JoinString(",");
             var parameters = new Dictionary<string, object>
                 {
                     {"personId", personId},
-                    {"sisActivityIds", strIds}
+                    {"sisActivityIds", activitiesIds}
                 };
             using (var reader = ExecuteStoredProcedureReader("spGetClassAnnouncementsBySisActivities", parameters))
             {

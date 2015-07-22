@@ -55,7 +55,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 {
                     ParameterName = "@" + paramName,
                     SqlDbType = SqlDbType.Structured,
-                    TypeName = "TIntId",
+                    TypeName = "TInt32",
                     Value = table,
                 };
         }
