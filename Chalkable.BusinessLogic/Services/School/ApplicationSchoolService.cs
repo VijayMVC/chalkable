@@ -39,13 +39,13 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<int> GetAssignedUserIds(Guid appId, int? announcementAppId)
         {
-            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
             var res = new List<int>();
             using (var uow = Read())
             {
                 if (announcementAppId.HasValue)
                 {
-                    var anDa = new AnnouncementForTeacherDataAccess(uow, Context.SchoolLocalId.Value);
+                    var anDa = new ClassAnnouncementForTeacherDataAccess(uow, Context.SchoolYearId.Value);
                     var da = new AnnouncementApplicationDataAccess(uow);
                     var announcementApplication = da.GetById(announcementAppId.Value);
                     var ann = anDa.GetById(announcementApplication.AnnouncementRef);

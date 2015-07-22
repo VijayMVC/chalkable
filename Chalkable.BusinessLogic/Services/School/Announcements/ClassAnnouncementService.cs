@@ -53,11 +53,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected ClassAnnouncementDataAccess CreateClassAnnouncementDataAccess(UnitOfWork unitOfWork)
         {
-            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
             if (Context.Role == CoreRoles.TEACHER_ROLE)
-                return new AnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolLocalId.Value);
+                return new ClassAnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
             if (Context.Role == CoreRoles.STUDENT_ROLE)
-                return new AnnouncementForStudentDataAccess(unitOfWork, Context.SchoolLocalId.Value);
+                return new ClassAnnouncementForStudentDataAccess(unitOfWork, Context.SchoolYearId.Value);
             throw new NotImplementedException();
         }
 
@@ -515,7 +515,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     {
                         Created = Context.NowSchoolTime,
                         State = AnnouncementState.Created,
-                        SchoolRef = Context.SchoolLocalId.Value,
+                        SchoolYearRef = Context.SchoolYearId.Value,
                         SisActivityId = activity.Id,
                     };
                 MapperFactory.GetMapper<ClassAnnouncement, Activity>().Map(ann, activity);
@@ -575,14 +575,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return res;
         }
 
-
-
         public ClassAnnouncement GetLastDraft()
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
-            return DoRead(u => CreateClassAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value, Context.SchoolYearId.Value));
+            return DoRead(u => CreateClassAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value));
         }
-
     }
 }

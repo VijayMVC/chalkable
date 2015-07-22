@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Web.Mvc;
+using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
@@ -76,6 +77,13 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult MakeVisible(int lessonPlanId)
         {
             SchoolLocator.LessonPlanService.SetVisibleForStudent(lessonPlanId, true);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult DuplicateLessonPlan(int lessonPlanId, IntList classIds)
+        {
+            SchoolLocator.LessonPlanService.CopyLessonPlan(lessonPlanId, classIds);
             return Json(true);
         }
     }
