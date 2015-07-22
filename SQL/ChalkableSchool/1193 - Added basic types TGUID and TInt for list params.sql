@@ -1,11 +1,11 @@
 Create Type TGUID As Table 
 (
-	[value] [uniqueidentifier] NULL
+	[Value] [uniqueidentifier] NULL
 )
 GO
 
 Create Type TInt As Table
 (
-	[Id] int NULL
+	[Value] int NULL
 )
 GO

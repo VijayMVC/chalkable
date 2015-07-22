@@ -15,7 +15,7 @@ Begin
 		UserLoginInfo
 		(Id) 
 	select 
-		value 
+		[value]
 	from 
 		@List
 End
@@ -38,6 +38,6 @@ GO
 
 Create Type TInt As Table
 (
-	[Id] int NULL
+	[Value] int NULL
 )
 GO

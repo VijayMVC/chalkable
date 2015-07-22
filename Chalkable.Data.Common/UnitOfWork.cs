@@ -110,9 +110,15 @@ namespace Chalkable.Data.Common
                         if (pair.Value is IEnumerable && !(pair.Value is string))
                         {
                             var type = pair.Value.GetType();
+
+                            while (!type.IsGenericType && type.BaseType != null)
+                                type = type.BaseType;
+
                             if (type.IsGenericType)
                             {
-                                var g = type.GetGenericTypeDefinition();
+                                if (type.GetGenericArguments().Length != 1)
+                                    throw new NotSupportedException();
+                                var g = type.GetGenericArguments()[0];
                                 if (g.IsValueType || g == typeof(string))
                                 {
                                     var table = new DataTable();
