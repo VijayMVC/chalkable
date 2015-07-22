@@ -30,6 +30,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<LessonPlan> GetLessonPlansbyFilter(string filter); 
         IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? galeryCategoryId, int? classId, bool? complete, bool onlyOwners = false, int start = 0, int count = int.MaxValue); 
         LessonPlan GetLastDraft();
+
+        void CopyLessonPlan(int lessonPlanId, IList<int> classIds);
     }
 
     public class LessonPlanService : BaseAnnouncementService<LessonPlan>, ILessonPlanService
@@ -46,11 +48,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected LessonPlanDataAccess CreateLessonPlanDataAccess(UnitOfWork unitOfWork)
         {
-            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
             if (BaseSecurity.IsTeacher(Context))
-                return new LessonPlanForTeacherDataAccess(unitOfWork, Context.SchoolLocalId.Value);
+                return new LessonPlanForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
             if (Context.Role == CoreRoles.STUDENT_ROLE)
-                return new LessonPlanForStudentDataAccess(unitOfWork, Context.SchoolLocalId.Value);
+                return new LessonPlanForStudentDataAccess(unitOfWork, Context.SchoolYearId.Value);
 
             throw new ChalkableException("Not supported role for lesson plan");
         }
@@ -58,10 +60,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public AnnouncementDetails Create(int classId, DateTime? startDate, DateTime? endDate)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
             BaseSecurity.EnsureTeacher(Context);
             using (var u = Update())
             {
-                var res = CreateLessonPlanDataAccess(u).Create(classId, Context.NowSchoolTime, startDate, endDate, Context.PersonId.Value);
+                var res = CreateLessonPlanDataAccess(u).Create(classId, Context.NowSchoolTime, startDate, endDate, Context.PersonId.Value, Context.SchoolYearId.Value);
                 u.Commit();
                 return res;
             }
@@ -322,7 +325,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetLastDraft(Context.PersonId.Value, Context.SchoolYearId.Value));
+            return DoRead(u => CreateLessonPlanDataAccess(u).GetLastDraft(Context.PersonId.Value));
+        }
+
+        public void CopyLessonPlan(int lessonPlanId, IList<int> classIds)
+        {
+            throw new NotImplementedException();
         }
     }
 }

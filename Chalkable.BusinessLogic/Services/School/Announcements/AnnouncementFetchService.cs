@@ -108,7 +108,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public Announcement GetLastDraft()
         {
-            Announcement res = null;
             if (BaseSecurity.IsDistrictAdmin(Context))
                 return ServiceLocator.AdminAnnouncementService.GetLastDraft();
             return ServiceLocator.ClassAnnouncementService.GetLastDraft() ?? (Announcement) ServiceLocator.LessonPlanService.GetLastDraft();

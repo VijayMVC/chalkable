@@ -103,7 +103,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {COUNT_PARAM, query.Count },
                     {NOW_PARAM, query.Now },
                     {PERSON_ID_PARAM, query.PersonId},
-                    {GRADE_LEVELS_IDS_PARAM, query.GradeLevelsIds != null ? query.GradeLevelsIds.Select(x => x.ToString()).JoinString(",") : null},
+                    {GRADE_LEVELS_IDS_PARAM, query.GradeLevelsIds ?? new List<int>()},
                     {COMPLETE, query.Complete},
                     {STUDENT_ID, query.StudentId}
                 };
