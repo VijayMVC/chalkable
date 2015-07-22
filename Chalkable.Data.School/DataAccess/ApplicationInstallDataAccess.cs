@@ -103,10 +103,9 @@ namespace Chalkable.Data.School.DataAccess
                     {"hasTeacherMyApps", hasTeacherMyApps},
                     {"hasStudentMyApps", hasStudentMyApps},
                     {"canAttach", canAttach},
-                    {"schoolYearId", schoolYearId}
+                    {"schoolYearId", schoolYearId},
+                    {"classIds", classes }
                 };
-            ps.Add("classIds", classes == null || classes.Count == 0 ? null : classes.JoinString(","));
-           
             using (var reader = ExecuteStoredProcedureReader("spGetPersonsForApplicationInstallCount", ps))
             {
                 return reader.ReadList<PersonsForApplicationInstallCount>();

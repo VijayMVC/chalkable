@@ -146,20 +146,10 @@ namespace Chalkable.Data.Master.DataAccess
 
         public void CreateUserLoginInfos(IList<Guid> ids, int timeout)
         {
-            var idTable = new DataTable();
-            idTable.Columns.Add("Id");
-            bool auto = true;
-            if (ids != null)
-            {
-                foreach (var guid in ids)
-                    idTable.Rows.Add(guid);
-                auto = false;
-            }
-            
             var ps = new Dictionary<string, object>
             {
-                {"@list", idTable},
-                {"@auto", auto}
+                {"@list", ids},
+                {"@auto", (ids != null)}
             };
             ExecuteStoredProcedure("spCreateLoginInfos", ps, timeout);
         }
