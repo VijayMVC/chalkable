@@ -66,21 +66,20 @@ namespace Chalkable.BusinessLogic.Services.School
                 ServiceLocator.AnnouncementAssignedAttributeService.GetAssignedAttributeById(assignedAttributeId);
             var attachment = attribute.Attachment;
 
-            if (announcementType == AnnouncementType.Class)
-            {
-                var announcement = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
-                if (announcement.SisActivityId.HasValue && attribute.SisActivityAssignedAttributeId.HasValue)
-                {
-                    ConnectorLocator.ActivityAssignedAttributeConnector.Delete(announcement.SisActivityId.Value, attribute.SisActivityAssignedAttributeId.Value);
-                }
-                if (attachment != null)
-                {
-                    RemoveAttributeAttachment(announcementType, announcementId, attachment.Id);
-                }
-            }
-
             using (var uow = Update())
             {
+                if (announcementType == AnnouncementType.Class)
+                {
+                    var announcement = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
+                    if (announcement.SisActivityId.HasValue && attribute.SisActivityAssignedAttributeId.HasValue)
+                    {
+                        ConnectorLocator.ActivityAssignedAttributeConnector.Delete(announcement.SisActivityId.Value, attribute.SisActivityAssignedAttributeId.Value);
+                    }
+                    if (attachment != null)
+                    {
+                        RemoveAttributeAttachment(announcementType, announcementId, attachment.Id);
+                    }
+                }
                 var da = new DataAccessBase<AnnouncementAssignedAttribute, int>(uow);
                 da.Delete(assignedAttributeId);
                 uow.Commit();
