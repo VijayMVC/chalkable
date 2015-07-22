@@ -11,10 +11,10 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
     public class LessonPlanDataAccess : BaseAnnouncementDataAccess<LessonPlan>
     {
-        protected int schoolId;
-        public LessonPlanDataAccess(UnitOfWork unitOfWork, int schoolId) : base(unitOfWork)
+        protected int schoolYearId;
+        public LessonPlanDataAccess(UnitOfWork unitOfWork, int schoolYearId) : base(unitOfWork)
         {
-            this.schoolId = schoolId;
+            this.schoolYearId = schoolYearId;
         }
 
         public override void Insert(LessonPlan entity)
@@ -31,11 +31,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             base.Update(entity);
         }
         
-        public AnnouncementDetails Create(int classId, DateTime created, DateTime? startDate, DateTime? endDate, int personId)
+        public AnnouncementDetails Create(int classId, DateTime created, DateTime? startDate, DateTime? endDate, int personId, int schoolYearId)
         {
             var parameters = new Dictionary<string, object>
                 {
-                    {"schoolId", schoolId},
+                    {"schoolYearId", schoolYearId},
                     {"classId", classId},
                     {"created", created},
                     {"startDate", startDate},
@@ -53,7 +53,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             var parameters = new Dictionary<string, object>
                 {
-                    {"schoolId", schoolId},
+                    {"schoolYearId", schoolYearId},
                     {"personId", personId},
                     {"lessonPlanTemplateId", lessonPlanTemplateId},
                     {"classId", classId}
@@ -71,7 +71,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {"lessonPlanId", id},
                     {"callerId", callerId},
                     {"callerRole", roleId},
-                    {"schoolId", schoolId}
+                    {"schoolYearId", schoolYearId}
                 };
            return GetDetails("spGetLessonPlanDetails", parameters);
         }
@@ -92,7 +92,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
         public override IList<LessonPlan> GetAnnouncements(QueryCondition condition, int callerId)
         {
-            var conds = new AndQueryCondition { condition, { LessonPlan.SCHOOL_REF_FIELD, schoolId } };
+            var conds = new AndQueryCondition { condition, { LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId } };
             var dbQuery = SelectLessonPlan(conds, callerId);
             dbQuery = FilterLessonPlanByCallerId(dbQuery, callerId);
             return ReadMany<LessonPlan>(dbQuery);
@@ -114,7 +114,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         public IList<LessonPlan> GetLessonPlansByFilter(string filter, int callerId)
         {
-            var dbQuery = SelectLessonPlan(new AndQueryCondition(), callerId);
+            var conds = new AndQueryCondition {{LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}};
+            var dbQuery = SelectLessonPlan(conds, callerId);
             FilterLessonPlanByCallerId(dbQuery, callerId);
             var words = filter.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
             if (words.Length > 0)
@@ -176,7 +177,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var parameter = new Dictionary<string, object>
                 {
                     {"id", query.Id},
-                    {"schoolId", schoolId},
+                    {"schoolYearId", schoolYearId},
                     {"personId", query.PersonId},
                     {"classId", query.ClassId},
                     {"roleId", query.RoleId},
@@ -194,14 +195,15 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
 
-        public LessonPlan GetLastDraft(int personId, int schoolYearId)
+        public LessonPlan GetLastDraft(int personId)
         {
-            var conds = new AndQueryCondition {{Announcement.STATE_FIELD, AnnouncementState.Draft}};
+            var conds = new AndQueryCondition
+                {
+                    {Announcement.STATE_FIELD, AnnouncementState.Draft},
+                    {LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
+                };
             var dbQuery = SelectLessonPlan(conds);
             FilterLessonPlanByCallerId(dbQuery, personId);
-            dbQuery.Sql.AppendFormat(" and [{0}] in (select [{2}] from [{1}] where [{3}] = @{3}) "
-                                     , LessonPlan.CLASS_REF_FIELD, typeof(Class).Name, Class.ID_FIELD, Class.SCHOOL_YEAR_REF);
-            dbQuery.Parameters.Add(Class.SCHOOL_YEAR_REF, schoolYearId);
             Orm.OrderBy(dbQuery, LessonPlan.VW_LESSON_PLAN_NAME, Announcement.CREATED_FIELD, Orm.OrderType.Desc);
             return ReadOneOrNull<LessonPlan>(dbQuery);
         }
@@ -221,7 +223,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var conds = new AndQueryCondition
                 {
                     {Announcement.ID_FIELD, announcementId},
-                    {LessonPlan.SCHOOL_REF_FIELD, schoolId}
+                    {LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
                 };
             conds.BuildSqlWhere(dbQuery, LessonPlan.VW_LESSON_PLAN_NAME);
             return Exists(dbQuery);
@@ -232,7 +234,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var conds = new AndQueryCondition
                 {
                     {LessonPlan.CLASS_REF_FIELD, classId},
-                    {LessonPlan.SCHOOL_REF_FIELD, schoolId}
+                    {LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
                 };
             var res = ReadMany<LessonPlan>(SelectLessonPlan(conds));
             return res.Select(x => x.Content).Distinct().ToList();
@@ -243,7 +245,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var conds = new AndQueryCondition
                 {
                     {Announcement.TITLE_FIELD, title},
-                    {LessonPlan.SCHOOL_REF_FIELD, schoolId}
+                    {LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
                 };
             if(excludedAnnouncementId.HasValue)
                 conds.Add(Announcement.ID_FIELD, excludedAnnouncementId, ConditionRelation.NotEqual);
@@ -254,7 +256,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
     public class LessonPlanForTeacherDataAccess : LessonPlanDataAccess
     {
-        public LessonPlanForTeacherDataAccess(UnitOfWork unitOfWork, int schoolId) : base(unitOfWork, schoolId)
+        public LessonPlanForTeacherDataAccess(UnitOfWork unitOfWork, int schoolYearId)
+            : base(unitOfWork, schoolYearId)
         {
         }
 
@@ -265,13 +268,12 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             dbQuery.Parameters.Add(callerIdParam, callerId);
             return dbQuery;
         }
-
-
     }
 
     public class LessonPlanForStudentDataAccess : LessonPlanDataAccess
     {
-        public LessonPlanForStudentDataAccess(UnitOfWork unitOfWork, int schoolId) : base(unitOfWork, schoolId)
+        public LessonPlanForStudentDataAccess(UnitOfWork unitOfWork, int schoolYearId)
+            : base(unitOfWork, schoolYearId)
         {
         }
 

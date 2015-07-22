@@ -4,13 +4,13 @@ using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
-    public class AnnouncementForStudentDataAccess : ClassAnnouncementDataAccess
+    public class ClassAnnouncementForStudentDataAccess : ClassAnnouncementDataAccess
     {
-        public AnnouncementForStudentDataAccess(UnitOfWork unitOfWork, int schoolId) : base(unitOfWork, schoolId)
+        public ClassAnnouncementForStudentDataAccess(UnitOfWork unitOfWork, int schoolYearId) : base(unitOfWork, schoolYearId)
         {
         }
         
-        public override ClassAnnouncement GetLastDraft(int personId, int schoolYearId)
+        public override ClassAnnouncement GetLastDraft(int personId)
         {
             throw new System.NotImplementedException();
         }

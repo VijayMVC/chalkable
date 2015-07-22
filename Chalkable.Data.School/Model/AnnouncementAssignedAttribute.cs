@@ -77,6 +77,7 @@ namespace Chalkable.Data.School.Model
                 Name = attributeInputModel.Name,
                 Text = attributeInputModel.Text,
                 VisibleForStudents = attributeInputModel.VisibleForStudents,
+                SisActivityAssignedAttributeId = attributeInputModel.SisActivityAssignedAttributeId
             };
 
             if (attributeInputModel.AttributeAttachment != null)
@@ -116,6 +117,8 @@ namespace Chalkable.Data.School.Model
         public string Name { get; set; }
         public string Text { get; set; }
         public bool VisibleForStudents { get; set; }
+
+        public int? SisActivityAssignedAttributeId { get; set; }
 
         public AnnouncementAssignedAttributeAttachment AttributeAttachment { get; set; }
 

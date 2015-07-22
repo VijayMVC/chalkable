@@ -67,9 +67,6 @@ announcementType = self.getAnnouncementType()
             .attachments-and-applications
                 +FileAttachBlock_("Attach a file", announcementId, announcementType)
 
-                if self.isFileCabinetEnabled()
-                    +FileCabinetBlock_("File Cabinet", announcementId, announcementType)
-
                 if self.isStandardAttachEnabled()
                     +StandardBlock_("Add Standard", announcementId, classId, announcementTypeName, announcementType)
 

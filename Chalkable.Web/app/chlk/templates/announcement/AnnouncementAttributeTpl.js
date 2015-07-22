@@ -49,8 +49,10 @@ NAMESPACE('chlk.templates.announcement', function(){
             chlk.models.id.AnnouncementId, 'announcementId',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.AnnouncementAttributeType), 'attributeTypes'
+            ArrayOf(chlk.models.announcement.AnnouncementAttributeType), 'attributeTypes',
 
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.SisAssignedAttributeId, 'sisActivityAssignedAttributeId'
 
     ]);
 });

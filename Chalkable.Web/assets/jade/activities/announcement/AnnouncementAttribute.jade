@@ -12,8 +12,9 @@ mixin AttributeAttachment_(attachment, announcementType, announcementId)
 mixin AttributeBlock_(attribute)
     -var attachment = attribute.getAttributeAttachment()
     if !attribute.isReadOnly()
-        .table(id="assigned-attr-" + attribute.getId(), data-announcement-id = attribute.getAnnouncementId(),
-        data-announcement-type= attribute.getAnnouncementType())
+        .table(id="assigned-attr-" + attribute.getId(), data-announcement-id = attribute.getAnnouncementId().valueOf(),
+        data-announcement-type= attribute.getAnnouncementType(),
+        data-sis-assigned-attr-id = attribute.getSisActivityAssignedAttributeId() ? attribute.getSisActivityAssignedAttributeId().valueOf() : null)
             .left-block
                 .attribute-item
                     .title-panel

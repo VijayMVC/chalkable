@@ -15,6 +15,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string Uuid { get; set; }
         public string Text { get; set; }
         public bool VisibleForStudents { get; set; }
+        public int? SisActivityAssignedAttributeId { get; set; }
         public AssignedAttributeAttachmentViewData AttributeAttachment { get; set; }
 
 
@@ -37,6 +38,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
                 Uuid = attr.Uuid,
                 VisibleForStudents = attr.VisibleForStudents,
                 AnnouncementRef = attr.AnnouncementRef,
+                SisActivityAssignedAttributeId = attr.SisActivityAssignedAttributeId
             };
         }
 

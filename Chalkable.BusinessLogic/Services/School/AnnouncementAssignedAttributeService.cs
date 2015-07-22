@@ -66,21 +66,21 @@ namespace Chalkable.BusinessLogic.Services.School
                 ServiceLocator.AnnouncementAssignedAttributeService.GetAssignedAttributeById(assignedAttributeId);
             var attachment = attribute.Attachment;
 
-
-            if (attachment != null)
-            {
-                if (announcementType == AnnouncementType.Class && attachment.StiAttachment)
-                {
-                    ConnectorLocator.AttachmentConnector.DeleteAttachment(attachment.Id);
-                }
-                else
-                {
-                    RemoveAttributeAttachmentFromBlob(attachment.Id);//same id as attribute id
-                }
-            }
-
             using (var uow = Update())
             {
+                if (attachment != null)
+                {
+                    RemoveAttributeAttachment(announcementType, announcementId, attachment.Id);
+                }
+                if (announcementType == AnnouncementType.Class)
+                {
+                    var announcement = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
+                    if (announcement.SisActivityId.HasValue && attribute.SisActivityAssignedAttributeId.HasValue)
+                    {
+                        ConnectorLocator.ActivityAssignedAttributeConnector.Delete(announcement.SisActivityId.Value, attribute.SisActivityAssignedAttributeId.Value);
+                    }
+                }
+                
                 var da = new DataAccessBase<AnnouncementAssignedAttribute, int>(uow);
                 da.Delete(assignedAttributeId);
                 uow.Commit();
@@ -111,10 +111,24 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     AnnouncementRef = ann.Id,
                     AttributeTypeId = attributeType.Id,
-                    Name = attributeType.Name,
                     Text = " ",
-                    VisibleForStudents = true
+                    VisibleForStudents = true,
+                    Name = attributeType.Name
                 };
+
+                if (announcementType == AnnouncementType.Class)
+                {
+                    var announcement = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
+                    if (announcement.SisActivityId.HasValue)
+                    {
+                        var activityAssignedAttr = new ActivityAssignedAttribute();
+                        MapperFactory.GetMapper<ActivityAssignedAttribute, AnnouncementAssignedAttribute>().Map(activityAssignedAttr, annAttribute);
+                        activityAssignedAttr = ConnectorLocator.ActivityAssignedAttributeConnector.CreateActivityAttribute(announcement.SisActivityId.Value, activityAssignedAttr);
+                        MapperFactory.GetMapper<AnnouncementAssignedAttribute, ActivityAssignedAttribute>().Map(annAttribute, activityAssignedAttr);
+                        annAttribute.Name = attributeType.Name;//activity attr returns null name
+                    }
+                }
+                
                 var da = new AnnouncementAssignedAttributeDataAccess(uow);
                 id = da.InsertWithEntityId(annAttribute);
                 uow.Commit();

@@ -11,7 +11,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public const string VW_LESSON_PLAN_COMPLEX = "vwLessonPlanComplex";
 
         public const string CLASS_REF_FIELD = "ClassRef";
-        public const string SCHOOL_REF_FIELD = "SchoolRef";
+        public const string SCHOOL_SCHOOLYEAR_REF_FIELD = "SchoolYearRef";
         public const string GALERRY_CATEGORY_REF_FIELD = "GalleryCategoryRef";
         public const string PRIMARY_TEACHER_REF_FIELD = "PrimaryTeacherRef";
         public const string START_DATE_FIELD = "StartDate";
@@ -22,7 +22,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public int? GalleryCategoryRef { get; set; }
-        public int SchoolRef { get; set; }
+        public int SchoolYearRef { get; set; }
         public int ClassRef { get; set; }
         public bool VisibleForStudent { get; set; }
 

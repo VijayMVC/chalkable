@@ -198,6 +198,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     var text = that.dom.find('#text-'+id).getValue();
                     var announcementType = domElem.getAttr('data-announcement-type');
                     var announcementRef = domElem.getAttr('data-announcement-id');
+                    var sisAttrId = domElem.getAttr('data-sis-assigned-attr-id');
 
                     var attachmentModel = null;
                     var attachmentDom = that.dom.find('#file-attribute-attachment-' + id);
@@ -224,9 +225,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                         text: text,
                         name: name,
                         visibleforstudents: isVisible,
-                        attributetypeid: attributeTypeId,
+                        attributetypeid: attributeTypeId || 1,
                         announcementref: announcementRef,
-                        announcementtype: announcementType
+                        announcementtype: announcementType,
+                        sisactivityassignedattributeid: sisAttrId
                     };
 
                     var attrViewData = chlk.models.announcement.AnnouncementAttributeViewData.$fromObject(attr);
@@ -244,7 +246,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 if (msg_){
                     if (msg_ == 'remove-attribute'){
-                        this.dom.find('#assigned-attr-' + model.getId()).empty();
+                        this.dom.find('#assigned-attr-' + model.getId()).removeSelf();
                     }
                     if (msg_ == 'add-attribute'){
                         var attrDom = new ria.dom.Dom().fromHTML(tpl.render());

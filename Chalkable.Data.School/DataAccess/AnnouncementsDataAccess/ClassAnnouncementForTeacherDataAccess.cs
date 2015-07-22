@@ -5,9 +5,9 @@ using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
-    public class AnnouncementForTeacherDataAccess : ClassAnnouncementDataAccess
+    public class ClassAnnouncementForTeacherDataAccess : ClassAnnouncementDataAccess
     {
-        public AnnouncementForTeacherDataAccess(UnitOfWork unitOfWork, int schoolId) : base(unitOfWork, schoolId)
+        public ClassAnnouncementForTeacherDataAccess(UnitOfWork unitOfWork, int schoolYearId) : base(unitOfWork, schoolYearId)
         {
         }
         protected override DbQuery SeletClassAnnouncements(string tableName, int callerId)
@@ -29,20 +29,16 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return dbQuery;
         }
         
-        public override ClassAnnouncement GetLastDraft(int personId, int schoolYearId)
+        public override ClassAnnouncement GetLastDraft(int personId)
         {
             var conds = new AndQueryCondition
                 {
                     {Announcement.STATE_FIELD, AnnouncementState.Draft},
-                    {ClassAnnouncement.SCHOOL_REF_FIELD, schoolId}
+                    {ClassAnnouncement.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
                 };
             var dbQuery = SeletClassAnnouncements(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, personId);
             conds.BuildSqlWhere(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME);
             FilterClassAnnouncementByCaller(dbQuery, personId);
-            dbQuery.Sql.AppendFormat(" and [{0}] in (select [{2}] from [{1}] where [{3}] = @{3}) "
-                         , LessonPlan.CLASS_REF_FIELD, typeof(Class).Name, Class.ID_FIELD, Class.SCHOOL_YEAR_REF);
-            dbQuery.Parameters.Add(Class.SCHOOL_YEAR_REF, schoolYearId);
-
             Orm.OrderBy(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, Announcement.CREATED_FIELD, Orm.OrderType.Desc);
             return ReadOneOrNull<ClassAnnouncement>(dbQuery);
         }

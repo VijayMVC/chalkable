@@ -4,6 +4,7 @@ REQUIRE('ria.serialize.IDeserializable');
 REQUIRE('chlk.models.id.AnnouncementAssignedAttributeId');
 REQUIRE('chlk.models.id.AnnouncementAssignedAttributeAttachmentId');
 REQUIRE('chlk.models.id.AnnouncementAttributeTypeId');
+REQUIRE('chlk.models.id.SisAssignedAttributeId');
 
 NAMESPACE('chlk.models.announcement', function(){
 
@@ -94,6 +95,8 @@ NAMESPACE('chlk.models.announcement', function(){
 
         chlk.models.id.AnnouncementId, 'announcementId',
 
+        chlk.models.id.SisAssignedAttributeId, 'sisActivityAssignedAttributeId',
+
         ArrayOf(chlk.models.announcement.AnnouncementAttributeType), 'attributeTypes',
 
         VOID, function deserialize(raw) {
@@ -105,6 +108,7 @@ NAMESPACE('chlk.models.announcement', function(){
             this.attributeTypeId = SJX.fromValue(raw.attributetypeid, chlk.models.id.AnnouncementAttributeTypeId);
             this.attributeAttachment = SJX.fromDeserializable(raw.attributeattachment, chlk.models.announcement.AnnouncementAttributeAttachmentViewData);
             this.announcementRef = SJX.fromValue(raw.announcementref, chlk.models.id.AnnouncementId);
+            this.sisActivityAssignedAttributeId = SJX.fromValue(raw.sisactivityassignedattributeid, chlk.models.id.SisAssignedAttributeId);
             this.announcementType = SJX.fromValue(raw.announcementtype, chlk.models.announcement.AnnouncementTypeEnum);
         },
 
@@ -117,7 +121,8 @@ NAMESPACE('chlk.models.announcement', function(){
                 attributetypeid: this.getAttributeTypeId().valueOf(),
                 id: this.getId().valueOf(),
                 announcementref: this.getAnnouncementRef().valueOf(),
-                attributeattachment: this.getAttributeAttachment() ? this.getAttributeAttachment().getPostData() : null
+                attributeattachment: this.getAttributeAttachment().getId() ? this.getAttributeAttachment().getPostData() : null,
+                sisactivityassignedattributeid: this.getSisActivityAssignedAttributeId() ? this.getSisActivityAssignedAttributeId().valueOf() : null
             }
         },
 
