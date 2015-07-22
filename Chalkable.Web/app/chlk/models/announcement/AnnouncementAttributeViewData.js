@@ -117,7 +117,7 @@ NAMESPACE('chlk.models.announcement', function(){
                 attributetypeid: this.getAttributeTypeId().valueOf(),
                 id: this.getId().valueOf(),
                 announcementref: this.getAnnouncementRef().valueOf(),
-                attributeattachment: this.getAttributeAttachment() ? this.getAttributeAttachment().getPostData() : null
+                attributeattachment: this.getAttributeAttachment().getId() ? this.getAttributeAttachment().getPostData() : null
             }
         },
 

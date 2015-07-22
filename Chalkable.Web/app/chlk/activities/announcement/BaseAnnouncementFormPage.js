@@ -224,7 +224,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         text: text,
                         name: name,
                         visibleforstudents: isVisible,
-                        attributetypeid: attributeTypeId,
+                        attributetypeid: attributeTypeId || 1,
                         announcementref: announcementRef,
                         announcementtype: announcementType
                     };
@@ -244,7 +244,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 if (msg_){
                     if (msg_ == 'remove-attribute'){
-                        this.dom.find('#assigned-attr-' + model.getId()).empty();
+                        this.dom.find('#assigned-attr-' + model.getId()).removeSelf();
                     }
                     if (msg_ == 'add-attribute'){
                         var attrDom = new ria.dom.Dom().fromHTML(tpl.render());

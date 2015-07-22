@@ -12,7 +12,7 @@ mixin AttributeAttachment_(attachment, announcementType, announcementId)
 mixin AttributeBlock_(attribute)
     -var attachment = attribute.getAttributeAttachment()
     if !attribute.isReadOnly()
-        .table(id="assigned-attr-" + attribute.getId(), data-announcement-id = attribute.getAnnouncementId(),
+        .table(id="assigned-attr-" + attribute.getId(), data-announcement-id = attribute.getAnnouncementId().valueOf(),
         data-announcement-type= attribute.getAnnouncementType())
             .left-block
                 .attribute-item

@@ -66,16 +66,16 @@ namespace Chalkable.BusinessLogic.Services.School
                 ServiceLocator.AnnouncementAssignedAttributeService.GetAssignedAttributeById(assignedAttributeId);
             var attachment = attribute.Attachment;
 
-
-            if (attachment != null)
+            if (announcementType == AnnouncementType.Class)
             {
-                if (announcementType == AnnouncementType.Class && attachment.StiAttachment)
+                var announcement = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
+                if (announcement.SisActivityId.HasValue && attribute.SisActivityAssignedAttributeId.HasValue)
                 {
-                    ConnectorLocator.AttachmentConnector.DeleteAttachment(attachment.Id);
+                    ConnectorLocator.ActivityAssignedAttributeConnector.Delete(announcement.SisActivityId.Value, attribute.SisActivityAssignedAttributeId.Value);
                 }
-                else
+                if (attachment != null)
                 {
-                    RemoveAttributeAttachmentFromBlob(attachment.Id);//same id as attribute id
+                    RemoveAttributeAttachment(announcementType, announcementId, attachment.Id);
                 }
             }
 
