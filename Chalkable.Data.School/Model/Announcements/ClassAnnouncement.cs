@@ -13,7 +13,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public const string CLASS_ANNOUNCEMENT_TYPE_REF_FIELD = "ClassAnnouncementTypeRef";
         public const string SIS_ACTIVITY_ID_FIELD = "SisActivityId";
         public const string PRIMARY_TEACHER_REF_FIELD = "PrimaryTeacherRef";
-        public const string SCHOOL_REF_FIELD = "SchoolRef";
+        public const string SCHOOL_SCHOOLYEAR_REF_FIELD = "SchoolYearRef";
 
         public const string VISIBLE_FOR_STUDENT = "VisibleForStudent";
 
@@ -24,7 +24,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public DateTime Expires { get; set; }
         public int? ClassAnnouncementTypeRef { get; set; }
         public int ClassRef { get; set; }
-        public int SchoolRef { get; set; }
+        public int SchoolYearRef { get; set; }
         public int Order { get; set; }
         public bool Dropped { get; set; }
         
