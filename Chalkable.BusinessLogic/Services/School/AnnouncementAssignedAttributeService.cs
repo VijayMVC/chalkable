@@ -112,7 +112,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     AnnouncementRef = ann.Id,
                     AttributeTypeId = attributeType.Id,
                     Text = " ",
-                    VisibleForStudents = true,
+                    VisibleForStudents = false,
                     Name = attributeType.Name
                 };
 
