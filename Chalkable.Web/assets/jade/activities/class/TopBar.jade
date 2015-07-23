@@ -1,0 +1,12 @@
+BUTTON(
+    classId=self.getId(),
+    index=self.getIndex(),
+    class=self.isPressed() ? "pressed " : "",
+    type="button",
+    data-default-announcement-type-id = self.getDefaultAnnouncementTypeId(),
+    name="submitType",
+    value="save",
+    data-tooltip=self.getId() ? self.getFullClassName() : ''
+).item.class-button.validate-skip
+    +ClassImg(self, 45, 80).avatar
+    SPAN.text-container= self.getName()
