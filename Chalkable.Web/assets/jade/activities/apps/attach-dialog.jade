@@ -1,0 +1,87 @@
+mixin AppIconLink_(announcementId, app, iconTooltip, announcementType)
+    -var appId = app.getId().valueOf()
+    .announcement-item.application(data-tooltip=iconTooltip)
+        .wrapper
+            +LoadingImage(src=app.getBannerPictureUrl(), id="loading-image-" + appId)
+            .title(data-tooltip=app.getName(), data-tooltip-type="overflow")= app.getName()
+            .shortdesc= app.getShortDescription()
+            if app.needToInstall()
+                +ActionButton('appmarket', 'details', app.getId()) Install
+            else
+                +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, appId, announcementType, self.getAppUrlAppend()) Attach
+
+mixin FileAttachBlock_(title, announcementId, announcementType)
+    .announcement-item.application(data-tooltip=title, data-tooltip-type="overflow")
+        .wrapper
+            .attach-file.img
+            .title(data-tooltip=title, data-tooltip-type="overflow")= title
+            .shortdesc
+            div.simple-gray-button.download-link.file=title
+                +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType])#add-file-attachment.simple-gray-button
+
+
+mixin FileCabinetBlock_(title, announcementId)
+    .announcement-item.application.x-hidden
+        .wrapper
+            .file-cabinet.img
+            div(data-tooltip=title, data-tooltip-type="overflow").title=title
+            .shortdesc
+            +ActionButton('announcement', 'fileCabinet', announcementId)#add-file-from-cabinet.simple-gray-button.disabled=title
+
+
+mixin AttributeBlock_(title, announcementId, announcementType)
+    .announcement-item.application
+        .wrapper
+            .attach-attribute.img
+            div(data-tooltip=title, data-tooltip-type="overflow").title=title
+            .shortdesc
+            +ActionButton('announcement', 'addAttribute', announcementId, announcementType)=title
+
+mixin StandardBlock_(title, announcementId, classId, announcementTypeName)
+    .announcement-item.application
+        .wrapper
+            .attach-standard.img
+            div(data-tooltip=title, data-tooltip-type="overflow").title=title
+            .shortdesc
+            +ActionButton('announcement', 'showStandards', announcementTypeName, announcementId, classId)=title
+
+mixin AssessmentBlock_(title, announcementId, assessmentAppId, announcementType)
+    .announcement-item.application
+        .wrapper
+            .attach-assessment.img
+            div(data-tooltip=title, data-tooltip-type="overflow").title=title
+            .shortdesc
+            +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, assessmentAppId, announcementType)#add-assesment.simple-gray-button=title
+
+announcementId = self.getAnnouncementId() && self.getAnnouncementId().valueOf()
+classId = self.getClassId() && self.getClassId().valueOf()
+announcementTypeName = self.getAnnouncementTypeName() || ''
+announcementType = self.getAnnouncementType()
+
+.dialog.attach-dialog
+    .x-window-header
+        h1 ATTACH
+        a.close.close-btn
+    .x-window-body
+
+            .attachments-and-applications
+                +FileAttachBlock_("Attach a file", announcementId, announcementType)
+
+                if self.isStandardAttachEnabled()
+                    +StandardBlock_("Add Standard", announcementId, classId, announcementTypeName, announcementType)
+
+                if self.isAttributesEnabled()
+                    +AttributeBlock_("Attach attribute", announcementId, announcementType)
+
+
+                if self.getAssessmentAppId()
+                    +AssessmentBlock_("Assessment", announcementId, self.getAssessmentAppId(), announcementType)
+
+                if self.isShowApps()
+                    each app in self.apps.getItems()
+                        +AppIconLink_(announcementId, app, self.getAppIconToolTip(app), announcementType)
+
+            if self.isShowApps()
+                .paging
+                    +Paginator2('announcement', 'attach', self.apps, [announcementId, classId, self.getAppUrlAppend(),
+                        self.getAssessmentAppId(), self.isStandardAttachEnabled(), announcementTypeName, announcementType])
