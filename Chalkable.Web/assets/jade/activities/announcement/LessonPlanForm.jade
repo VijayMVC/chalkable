@@ -33,7 +33,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                 -var standards = announcement.getStandards() || []
 
                 +ActionLink('announcement', 'showTitlePopUp')#show-title-popup.x-hidden
-                .title-block-container.with-date
+                .title-block-container(class = lessonPlan.getGalleryCategoryId() ? 'with-gallery-id' : '')
                     +RenderWith(announcement.getTitleModel(), chlk.templates.announcement.AnnouncementTitleTpl)
                 -var needStandardsBlock = (standards.length > 0 || announcement.isCanAddStandard())
                 .table
@@ -110,7 +110,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                     label(for="add-to-gallery") Add to Lesson Plan Gallery
                                     +SlideCheckbox('addtogallery', !!lessonPlan.getGalleryCategoryId(), !!lessonPlan.getGalleryCategoryId())#add-to-gallery
                                 .category-container.new-input-container
-                                    BUTTON#add-to-galelry-btn.validate-skip.x-hidden(name="submitType", value="saveNoUpdate", type="submit" )
+                                    BUTTON#add-to-galelry-btn.validate-skip.x-hidden(name="submitType", value="addToGallery", type="submit" )
                                     label(for="galleryCategoryId") Category:
                                     SPAN#galleryCategoryIdContainer
                                         +Select('galleryCategoryId')(disabled=!!lessonPlan.getGalleryCategoryId() ? false : "disabled")#galleryCategoryId
