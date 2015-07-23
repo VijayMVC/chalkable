@@ -13,6 +13,8 @@ REQUIRE('chlk.templates.apps.SuggestedAppsListTpl');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
+    var titleTimeout;
+
     /** @class chlk.activities.announcement.LessonPlanFormPage*/
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
@@ -26,6 +28,12 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.PartialUpdateRule(chlk.templates.announcement.LessonPlanSearchTpl, 'categories', '#galleryCategoryForSearchContainer', ria.mvc.PartialUpdateRuleActions.Replace)],
         [chlk.activities.lib.PageClass('new-item')],
         'LessonPlanFormPage', EXTENDS(chlk.activities.announcement.AnnouncementFormPage), [
+
+            OVERRIDE, VOID, function onRender_(model){
+                BASE(model);
+                titleTimeout = undefined;
+            },
+
             [ria.mvc.DomEventBind('change', '#galleryCategoryForSearch')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function categorySearchChange(node, event, selected_){
@@ -50,11 +58,15 @@ NAMESPACE('chlk.activities.announcement', function () {
             function addToGalleryChange(node, event, selected_){
                 var select = this.dom.find('#galleryCategoryId');
                 if(node.checked()){
+                    this.dom.find('.title-block-container').addClass('with-gallery-id');
                     select.removeAttr('disabled');
                     select.setProp('disabled', false);
                 }else{
+                    this.dom.find('.title-block-container').removeClass('with-gallery-id');
                     select.setAttr('disabled', 'disabled');
                     select.setProp('disabled', true);
+                    select.find('[selected], :selected').setAttr('selected', false);
+                    select.find('[selected], :selected').setProp('selected', false);
                 }
                 select.trigger('liszt:updated');
             },
@@ -63,6 +75,34 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event, Object]],
             function categorySelect(node, event, selected_){
                 node.parent('.category-container').find('#add-to-galelry-btn').trigger('click')
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.SuccessTpl, 'addToGallery')],
+            VOID, function addToGalleryRule(tpl, model, msg_) {
+                if(model.isData())
+                    this.dom.find('#add-to-gallery').trigger('click');
+            },
+
+            [ria.mvc.DomEventBind('keyup', 'input[name=title]')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            OVERRIDE, VOID, function titleKeyUp(node, event){
+                var dom = this.dom, node = node, value = node.getValue();
+                if(dom.find('.title-block-container').hasClass('with-gallery-id')){
+                    if(!value || !value.trim()){
+                        dom.find('.save-title-btn').setAttr('disabled', true);
+                    }else{
+                        if(value == node.getData('title')){
+                            this.updateFormByNotExistingTitle();
+                            dom.find('.save-title-btn').setAttr('disabled', true);
+                        }else{
+                            titleTimeout && clearTimeout(titleTimeout);
+                            titleTimeout = setTimeout(function(){
+                                if(value == node.getValue())
+                                    dom.find('#check-title-button').trigger('click');
+                            }, 100);
+                        }
+                    }
+                }
             },
 
             OVERRIDE, VOID, function onStart_() {

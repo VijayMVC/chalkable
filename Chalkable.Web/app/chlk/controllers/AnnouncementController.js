@@ -1341,8 +1341,10 @@ NAMESPACE('chlk.controllers', function (){
                 return this.saveLessonPlanTitleAction(model.getId(), model.getTitle())
             }
 
-            if (submitType == 'checkTitle'){
-                return this.checkLessonPlanTitleAction(model.getTitle(), model.getId());
+            if (submitType == 'checkTitle' || submitType == 'addToGallery'){
+                if(model.getGalleryCategoryId() && model.getGalleryCategoryId().valueOf())
+                    return this.checkLessonPlanTitleAction(model, submitType == 'addToGallery');
+                return null;
             }
 
             if (submitType == 'save'){
@@ -1420,15 +1422,20 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, result, chlk.activities.lib.DontShowLoader());
         },
 
-        [[String, chlk.models.id.AnnouncementId]],
-        function checkLessonPlanTitleAction(title, annoId){
+        [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
+        function checkLessonPlanTitleAction(model, isAddToGallery_){
             var res = this.lessonPlanService
-                .existsTitle(title, annoId)
+                .existsInGallery(model.getTitle(), model.getId())
                 .attach(this.validateResponse_())
-                .then(function(success){
-                    return new chlk.models.Success(success);
-                });
-            return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, res, chlk.activities.lib.DontShowLoader());
+                .then(function(exists){
+                    if(!exists && isAddToGallery_)
+                        this.saveLessonPlanAction(model);
+                    if(exists)
+                        this.ShowMsgBox('There is Lesson Plan with that title in gallery', 'whoa.');
+                    return new chlk.models.Success(exists);
+                }, this);
+
+            return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, res, isAddToGallery_ ? 'addToGallery' : chlk.activities.lib.DontShowLoader());
         },
 
         [[chlk.models.announcement.FeedAnnouncementViewData, chlk.models.announcement.AnnouncementForm]],

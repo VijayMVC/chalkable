@@ -68,9 +68,9 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult ExistsInGallery(string title, int? exceludedLessonPlanId)
+        public ActionResult ExistsInGallery(string title, int? excludedLessonPlanId)
         {
-            return Json(SchoolLocator.LessonPlanService.ExistsInGallery(title, exceludedLessonPlanId));
+            return Json(SchoolLocator.LessonPlanService.ExistsInGallery(title, excludedLessonPlanId));
         }
 
         [AuthorizationFilter("Teacher")]

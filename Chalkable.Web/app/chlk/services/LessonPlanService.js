@@ -86,6 +86,14 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[String, chlk.models.id.AnnouncementId]],
+            ria.async.Future, function existsInGallery(title, excludedLessonPlanId) {
+                return this.get('LessonPlan/ExistsInGallery.json', Boolean, {
+                    title: title,
+                    excludedLessonPlanId: excludedLessonPlanId.valueOf()
+                });
+            },
+
             [[chlk.models.id.ClassId]],
             ria.async.Future, function listLast(classId) {
                 return this.get('LessonPlan/ListLast.json', ArrayOf(String), {
