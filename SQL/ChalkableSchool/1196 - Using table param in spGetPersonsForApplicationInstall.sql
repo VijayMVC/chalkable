@@ -10,7 +10,7 @@ Alter Procedure [dbo].[spGetPersonsForApplicationInstall]
 , @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolYearId int
 as
 
-declare @classIdsT TInt
+declare @classIdsT TInt32
 
 PRINT('application id');
 PRINT(@applicationId);

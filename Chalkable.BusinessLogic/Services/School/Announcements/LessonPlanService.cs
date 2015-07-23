@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
-using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
@@ -23,6 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId); 
         IList<string> GetLastFieldValues(int classId);
         bool Exists(string title, int? excludedLessonPlaId);
+        bool ExistsInGallery(string title, int? exceludedLessonPlanId);
         void SetVisibleForStudent(int lessonPlanId, bool visible);
         LessonPlan GetLessonPlanById(int lessonPlanId);
 
@@ -31,7 +29,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? galeryCategoryId, int? classId, bool? complete, bool onlyOwners = false, int start = 0, int count = int.MaxValue); 
         LessonPlan GetLastDraft();
 
-        void CopyLessonPlan(int lessonPlanId, IList<int> classIds);
+        void DuplicateLessonPlan(int lessonPlanId, IList<int> classIds);
     }
 
     public class LessonPlanService : BaseAnnouncementService<LessonPlan>, ILessonPlanService
@@ -141,8 +139,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     var da = CreateLessonPlanDataAccess(uow);
                     if (string.IsNullOrEmpty(title))
                         throw new ChalkableException("Title parameter is empty");
-                    if (da.Exists(title, announcement.Id))
-                        throw new ChalkableException("The item with current title already exists");
+                    if (da.ExistsInGallery(title, announcement.Id) && announcement.GalleryCategoryRef.HasValue)
+                        throw new ChalkableException("The item with current title already exists in the gallery");
                     announcement.Title = title;
                     da.Update(announcement);
                     uow.Commit();
@@ -182,8 +180,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             if (string.IsNullOrEmpty(lessonPlan.Title))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "LessonPlan Title "));
-            if (da.Exists(lessonPlan.Title, lessonPlan.Id))
-                throw new ChalkableException("Lesson Plan with current title already exists");
+            if (da.Exists(lessonPlan.Title, lessonPlan.Id) && lessonPlan.GalleryCategoryRef.HasValue)
+                throw new ChalkableException("Lesson Plan with current title already exists in the gallery");
                     
         }
 
@@ -328,9 +326,23 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateLessonPlanDataAccess(u).GetLastDraft(Context.PersonId.Value));
         }
 
-        public void CopyLessonPlan(int lessonPlanId, IList<int> classIds)
+        public void DuplicateLessonPlan(int lessonPlanId, IList<int> classIds)
         {
-            throw new NotImplementedException();
+            var lessonPlan = GetLessonPlanById(lessonPlanId);
+            if(lessonPlan.IsDraft)
+                throw new ChalkableException("Only submited lesson plan can be duplicate");
+
+            using (var u = Update())
+            {
+
+                u.Commit();
+            }
+        }
+
+
+        public bool ExistsInGallery(string title, int? exceludedLessonPlanId)
+        {
+            return DoRead(u => CreateLessonPlanDataAccess(u).ExistsInGallery(title, exceludedLessonPlanId));
         }
     }
 }

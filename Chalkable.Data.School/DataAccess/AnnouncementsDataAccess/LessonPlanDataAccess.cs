@@ -238,17 +238,31 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 };
             var res = ReadMany<LessonPlan>(SelectLessonPlan(conds));
             return res.Select(x => x.Content).Distinct().ToList();
-        } 
+        }
 
-        public bool Exists(string title, int? excludedAnnouncementId)
+        //TODO: remove this method later 
+        public bool Exists(string title, int? excludedLessonPlanId)
         {
             var conds = new AndQueryCondition
                 {
                     {Announcement.TITLE_FIELD, title},
                     {LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
                 };
-            if(excludedAnnouncementId.HasValue)
-                conds.Add(Announcement.ID_FIELD, excludedAnnouncementId, ConditionRelation.NotEqual);
+            if (excludedLessonPlanId.HasValue)
+                conds.Add(Announcement.ID_FIELD, excludedLessonPlanId, ConditionRelation.NotEqual);
+            var dbQuery = Orm.SimpleSelect(LessonPlan.VW_LESSON_PLAN_NAME, conds);
+            return Exists(dbQuery);
+        }
+
+        public bool ExistsInGallery(string title, int? excludedLessonPlanId)
+        {
+            var conds = new AndQueryCondition
+                {
+                    {Announcement.TITLE_FIELD, title},
+                    {LessonPlan.GALERRY_CATEGORY_REF_FIELD, null, ConditionRelation.NotEqual}
+                };
+            if (excludedLessonPlanId.HasValue)
+                conds.Add(Announcement.ID_FIELD, excludedLessonPlanId, ConditionRelation.NotEqual);
             var dbQuery = Orm.SimpleSelect(LessonPlan.VW_LESSON_PLAN_NAME, conds);
             return Exists(dbQuery);
         }

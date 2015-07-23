@@ -68,6 +68,12 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher")]
+        public ActionResult ExistsInGallery(string title, int? exceludedLessonPlanId)
+        {
+            return Json(SchoolLocator.LessonPlanService.ExistsInGallery(title, exceludedLessonPlanId));
+        }
+
+        [AuthorizationFilter("Teacher")]
         public ActionResult ListLast(int classId)
         {
             return Json(SchoolLocator.LessonPlanService.GetLastFieldValues(classId));
@@ -83,7 +89,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("Teacher")]
         public ActionResult DuplicateLessonPlan(int lessonPlanId, IntList classIds)
         {
-            SchoolLocator.LessonPlanService.CopyLessonPlan(lessonPlanId, classIds);
+            SchoolLocator.LessonPlanService.DuplicateLessonPlan(lessonPlanId, classIds);
             return Json(true);
         }
     }
