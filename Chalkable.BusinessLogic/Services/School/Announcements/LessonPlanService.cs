@@ -139,8 +139,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     var da = CreateLessonPlanDataAccess(uow);
                     if (string.IsNullOrEmpty(title))
                         throw new ChalkableException("Title parameter is empty");
-                    if (da.Exists(title, announcement.Id))
-                        throw new ChalkableException("The item with current title already exists");
+                    if (da.ExistsInGallery(title, announcement.Id) && announcement.GalleryCategoryRef.HasValue)
+                        throw new ChalkableException("The item with current title already exists in the gallery");
                     announcement.Title = title;
                     da.Update(announcement);
                     uow.Commit();
@@ -180,8 +180,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             if (string.IsNullOrEmpty(lessonPlan.Title))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "LessonPlan Title "));
-            if (da.Exists(lessonPlan.Title, lessonPlan.Id))
-                throw new ChalkableException("Lesson Plan with current title already exists");
+            if (da.Exists(lessonPlan.Title, lessonPlan.Id) && lessonPlan.GalleryCategoryRef.HasValue)
+                throw new ChalkableException("Lesson Plan with current title already exists in the gallery");
                     
         }
 
