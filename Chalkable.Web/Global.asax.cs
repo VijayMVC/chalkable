@@ -59,7 +59,7 @@ namespace Chalkable.Web
             masterLocator.CommonCoreStandardService.BuildAbToCCMapper();
 
             var keys = ChalkableApiExplorerLogic.GenerateControllerDescriptionKeys();
-            masterLocator.PreferenceService.BuildDefaultControllerDescriptions(keys);
+            masterLocator.PreferenceService.BuildDefaultControllerDescriptions(keys.Distinct().ToList());
         }
 
         private void ConfigureDiagnostics()
