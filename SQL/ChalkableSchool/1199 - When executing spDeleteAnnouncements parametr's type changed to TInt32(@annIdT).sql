@@ -1,6 +1,4 @@
 
-Go
-
 Alter Procedure [dbo].[spCreateAdminAnnouncement] @personId int, @created datetime2, @expires datetime2, @state int
 as
 begin transaction

@@ -32,35 +32,22 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public IList<Person> GetAll()
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
-            using (var uow = Read())
-            {
-                var da = new PersonDataAccess(uow);
-                return da.GetAll();
-            }
+            BaseSecurity.EnsureSysAdmin(Context);
+            return DoRead(u => new PersonDataAccess(u).GetAll());
         }
 
         public void Add(IList<Person> persons)
         {
-            if (!BaseSecurity.IsSysAdmin(Context))
-                throw new ChalkableSecurityException();
+            BaseSecurity.EnsureSysAdmin(Context);
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
-            using (var uow = Update())
-            {
-                var da = new PersonDataAccess(uow);
-                da.Insert(persons);                
-                uow.Commit();
-            }
+
+            DoUpdate(u => new PersonDataAccess(u).Insert(persons));
         }
         
         public Person GetPerson(int id)
         {
-            using (var uow = Read())
-            {
-                return new PersonDataAccess(uow).GetById(id);
-            }
+            return DoRead(u => new PersonDataAccess(u).GetById(id));
         }
 
         public PersonDetails GetPersonDetails(int id)

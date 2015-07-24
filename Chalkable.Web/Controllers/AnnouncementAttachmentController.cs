@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
@@ -129,6 +130,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult StartViewSession(int announcementAttachmentId)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             var att = SchoolLocator.AnnouncementAttachmentService.GetAttachmentById(announcementAttachmentId);
             if (att == null)
             {
@@ -139,20 +141,19 @@ namespace Chalkable.Web.Controllers
 
             try
             {
-                var person = SchoolLocator.PersonService.GetPerson(SchoolLocator.Context.PersonId ?? 0);
-                bool isOwner = (person.Id == att.PersonRef);
-                var canAnnotate = isOwner || person.RoleRef != CoreRoles.STUDENT_ROLE.Id;
+                bool isOwner = (Context.PersonId == att.PersonRef);
+                var canAnnotate = isOwner || Context.Role != CoreRoles.STUDENT_ROLE;
+                var person = SchoolLocator.PersonService.GetPerson(Context.PersonId.Value);
                 string name = person.FirstName;
                 if (string.IsNullOrEmpty(name))
                 {
-                    var user = MasterLocator.UserService.GetById(SchoolLocator.Context.UserId);
-                    name = user.Login;
+                    name = Context.Login;
                 }
                 var res = SchoolLocator.CrocodocService.StartViewSession(new StartViewSessionRequestModel
                     {
                         Uuid = att.Uuid,
                         CanAnnotate = canAnnotate,
-                        PersonId = person.Id,
+                        PersonId = Context.PersonId.Value,
                         PersonName = name,
                         IsOwner = isOwner
                     });
