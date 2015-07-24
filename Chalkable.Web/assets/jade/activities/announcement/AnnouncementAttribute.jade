@@ -46,25 +46,30 @@ mixin AttributeBlock_(attribute)
                         +RenderWith(attribute.getModel(), chlk.templates.announcement.AnnouncementAttributeAttachDocBtnTpl)
             .right-block
     else
-        div(class="attribute-item-container chlk-calendar", data-index=attribute.getIndex())
-            .header.attribute-title(data-tooltip=attribute.getName())
-                span.mp-name.attr-name=attribute.getName()
-                .collapse
-                if !attribute.isVisibleForStudents() && !self.getUserRole().isStudent()
-                    span.attr-is-hidden This Attribute is Hidden from students
-            .mp-data
-                .attribute-details
-                    .attribute-description=attribute.getText()
+        if !self.getUserRole().isStudent() || self.getUserRole().isStudent() && attribute.isVisibleForStudents()
 
-                    if attachment && attachment.getId() && attachment.getId() > 0
-                        h3 Attachments
-                        .attribute-attachments
-                            if attachment && attachment.getId() && attachment.getId() > 0
-                                -attachment.setReadOnly(true)
-                                -attachment.setAnnouncementType(attribute.getAnnouncementType())
-                                -attachment.setAnnouncementId(attribute.getAnnouncementId())
-                                -attachment.setAttributeId(attribute.getId())
-                                +RenderWith(attachment, chlk.templates.announcement.AnnouncementAttributeAttachmentTpl)
+            div(class="attribute-item-container chlk-calendar", data-index=attribute.getIndex())
+                .header.attribute-title(data-tooltip=attribute.getName())
+                    span.mp-name.attr-name=attribute.getName()
+                    .collapse
+                    if !attribute.isVisibleForStudents() && !self.getUserRole().isStudent()
+                        span.attr-is-hidden This Attribute is Hidden from students
+                .mp-data
+                    .attribute-details
+                        .attribute-description=attribute.getText()
+
+                        if attachment && attachment.getId() && attachment.getId() > 0
+                            h3 Attachments
+                            .attribute-attachments
+                                if attachment && attachment.getId() && attachment.getId() > 0
+                                    -attachment.setReadOnly(true)
+                                    -attachment.setAnnouncementType(attribute.getAnnouncementType())
+                                    -attachment.setAnnouncementId(attribute.getAnnouncementId())
+                                    -attachment.setAttributeId(attribute.getId())
+                                    +RenderWith(attachment, chlk.templates.announcement.AnnouncementAttributeAttachmentTpl)
+
+
+
 
 +AttributeBlock_(self)
 
