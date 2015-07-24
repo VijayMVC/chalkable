@@ -199,10 +199,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         private void SubmitAnnouncementGroups(int announcementId, IEnumerable<int> groupsIds, UnitOfWork uow)
         {
-            if (groupsIds == null) return;
             var da = new DataAccessBase<AnnouncementGroup, int>(uow);
             var annGroups = da.GetAll(new AndQueryCondition { { AnnouncementGroup.ANNOUNCEMENT_REF_FIELD, announcementId } });
             da.Delete(annGroups);
+            if (groupsIds == null) return;
             groupsIds = groupsIds.Distinct();
             var annRecipients = groupsIds.Select(gId => new AnnouncementGroup
             {
