@@ -2193,7 +2193,35 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.AnnouncementId, chlk.models.id.GroupId]],
         function removeRecipientAction(announcementId, recipientId){
-            //TODO implementetion
+
+            var res = this.groupService.list()
+                .then(function(groups){
+                    var groupIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []);
+                    groupIds = groupIds.filter(function(id){
+                        return id != recipientId
+                    });
+                    var groupIdsStr = groupIds.map(function(item){return item.valueOf()}).join(',');
+
+                    groups = groups.filter(function(item){
+                        return groupIds.indexOf(item.getId()) > -1
+                    });
+
+                    var recipients = groups.map(function(item){
+                        return new chlk.models.announcement.AdminAnnouncementRecipient(announcementId, item.getId(), item.getName());
+                    });
+                    var model = new chlk.models.announcement.FeedAnnouncementViewData();
+                    model.setId(announcementId);
+                    model.setRecipients(recipients);
+                    this.getContext().getSession().set(ChlkSessionConstants.GROUPS_IDS, groupIds);
+
+                    return this.adminAnnouncementService.addGroupsToAnnouncement(model.getId(), groupIdsStr)
+                        .then(function(){
+                            return model;
+                        }, this)
+                }, this)
+                .attach(this.validateResponse_());
+
+            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, res, 'recipients');
         },
 
         function attributeAttachmentExistsAction() {
