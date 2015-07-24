@@ -36,7 +36,13 @@ namespace Chalkable.BusinessLogic.Services.Master
                     var p = preference ?? CreatePreference(false, defaultelem.Key, defaultelem.Value);
                     cache.Add(p.Key, p);
                 }
+                foreach (var preference in preferences)
+                {
+                    if (!cache.ContainsKey(preference.Key))
+                        cache.Add(preference.Key, preference);
+                }
             }
+            
             
         }
 
@@ -61,7 +67,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var da = new PreferenceDataAccess(uow);
                 var forInsert = preferences.Where(p => !cache.ContainsKey(p.Key)).ToList();
                 da.Insert(forInsert);
-                foreach (var p in preferences)
+                foreach (var p in forInsert)
                 {
                    cache.Add(p.Key, p);
                 }
