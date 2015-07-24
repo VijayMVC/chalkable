@@ -1,0 +1,21 @@
+.dialog.report-window
+   +ActionForm('reporting', 'submitStudentComprehensiveProgressReport').student-comprehensive-report-form.no-working.report-form
+      .x-window-header
+         .close.close-btn.dark
+         h1=Msg.Create_Report
+
+      .x-window-body
+         .action-bar: .items: +ActionLinkList(self.buildReportLinksData('studentComprehensiveProgressReport'))
+         .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
+            TABLE.report-table.student-report
+               TR
+                  TD.item-1
+                     h3=Msg.GradingPeriod
+                     +Select('gradingPeriodId').gp-select
+                        each gp,i in self.getGradingPeriods()
+                           +Option(gp.getId(), gp.getName(), i == 0)
+      .x-window-footer.report-bottom
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
