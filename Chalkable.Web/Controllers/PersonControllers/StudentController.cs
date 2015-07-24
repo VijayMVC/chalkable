@@ -81,7 +81,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User })]
-        public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, int? classId, bool? byLastName)
+        public ActionResult GetStudents(string filter, bool? myStudentsOnly, int? start, int? count, int? classId, bool? byLastName, int? markingPeriod)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
             int? teacherId = null;
@@ -90,7 +90,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             int? classMatesToId = null;
             if (CoreRoles.STUDENT_ROLE == SchoolLocator.Context.Role)
                 classMatesToId = Context.PersonId;
-            var res = SchoolLocator.StudentService.SearchStudents(Context.SchoolYearId.Value, classId, teacherId, classMatesToId, filter, byLastName != true, start ?? 0, count ?? 10);
+            var res = SchoolLocator.StudentService.SearchStudents(Context.SchoolYearId.Value, classId, teacherId, classMatesToId, filter, byLastName != true, start ?? 0, count ?? 10, markingPeriod);
             return Json(res.Transform(StudentViewData.Create));
         }
 
