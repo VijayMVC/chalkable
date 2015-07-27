@@ -64,6 +64,26 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
 
+        
+        public IList<int> DuplicateLessonPlan(int lessonPlanId, IList<int> classIds, DateTime created)
+        {
+            var parameters = new Dictionary<string, object>
+                {
+                    {"lessonPlanId", lessonPlanId},
+                    {"classIds", classIds},
+                    {"created", created}
+                };
+            using (var reader = ExecuteStoredProcedureReader("spDuplicateLessonPlan", parameters))
+            {
+                var res = new List<int>();
+                while (reader.Read())
+                {
+                    res.Add(SqlTools.ReadInt32(reader, "LessonPlanId"));
+                }
+                return res;
+            }
+        }
+
         public override AnnouncementDetails GetDetails(int id, int callerId, int? roleId)
         {
             var parameters = new Dictionary<string, object>
@@ -267,10 +287,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return Exists(dbQuery);
         }
 
-        public IList<int> DuplicateLessonPlan(int lessonPlanId, IList<int> classIds, DateTime created)
-        {
-            throw new NotImplementedException();
-        }
+        
     }
 
     public class LessonPlanForTeacherDataAccess : LessonPlanDataAccess
