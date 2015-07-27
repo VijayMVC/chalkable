@@ -11,11 +11,17 @@ NAMESPACE('chlk.templates.announcement', function(){
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.classes.Class), 'classes', //todo: rename
+
             [ria.templates.ModelPropertyBind],
             chlk.models.id.ClassId, 'selectedClassId',
+
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'announcementId',
+
             [ria.templates.ModelPropertyBind],
-            String, 'selectedIds'
+            String, 'selectedIds',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.AnnouncementTypeEnum, 'type'
         ]);
 });

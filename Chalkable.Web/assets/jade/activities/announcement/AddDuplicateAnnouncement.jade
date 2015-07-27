@@ -6,6 +6,7 @@
         .x-window-body
             +Hidden('announcementId', self.getAnnouncementId() && self.getAnnouncementId().valueOf())
             +Hidden('selectedIds', '')
+            +Hidden('type', self.getType().valueOf())
             .main-container
                 +LeftRightToolbar(self.getClasses())(
                     selectedItemId=selectedClassId && selectedClassId.valueOf(),

@@ -13,9 +13,10 @@ NAMESPACE('chlk.models.announcement', function () {
             chlk.models.id.ClassId, 'selectedClassId',
             chlk.models.id.AnnouncementId, 'announcementId',
             String, 'selectedIds',
+            chlk.models.announcement.AnnouncementTypeEnum, 'type',
 
-            [[chlk.models.id.AnnouncementId, ArrayOf(chlk.models.classes.Class), chlk.models.id.ClassId]],
-            function $(announcementId_, classes_, selectedClassId_){
+            [[chlk.models.id.AnnouncementId, ArrayOf(chlk.models.classes.Class), chlk.models.id.ClassId, chlk.models.announcement.AnnouncementTypeEnum]],
+            function $(announcementId_, classes_, selectedClassId_, type_){
                 BASE();
                 if(announcementId_)
                     this.setAnnouncementId(announcementId_);
@@ -25,6 +26,8 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.setSelectedClassId(selectedClassId_);
                     this.setSelectedIds(selectedClassId_.valueOf().toString())
                 }
+                if(type_)
+                    this.setType(type_);
             }
          ]);
 });

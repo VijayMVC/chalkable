@@ -1670,11 +1670,11 @@ NAMESPACE('chlk.controllers', function (){
             return res;
         },
 
-        [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
-        function showDuplicateFormAction(announcementId, selectedClassId){
+        [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function showDuplicateFormAction(announcementId, selectedClassId, type){
             var classes = this.classService.getClassesForTopBarSync();
             var addDupAnnModel = new chlk.models.announcement.AddDuplicateAnnouncementViewData(announcementId
-                , classes, selectedClassId);
+                , classes, selectedClassId, type);
             var res = new ria.async.DeferredData(addDupAnnModel);
             return this.ShadeView(chlk.activities.announcement.AddDuplicateAnnouncementDialog, res);
         },
@@ -1682,13 +1682,14 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.AddDuplicateAnnouncementViewData]],
         function duplicateAction(model){
             var classesIds = this.getIdsList(model.getSelectedIds(), chlk.models.id.ClassId);
-            var res = this.classAnnouncementService
-                .duplicateAnnouncement(model.getAnnouncementId(), model.getSelectedIds())
+            var method = model.getType() == chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT ? this.classAnnouncementService.duplicateAnnouncement :
+                this.lessonPlanService.duplicateLessonPlan;
+            var res = method(model.getAnnouncementId(), model.getSelectedIds())
                 .attach(this.validateResponse_())
                 .thenCall(this.classService.updateClassAnnouncementTypes, [classesIds])
                 .then(function(data){
                     this.BackgroundCloseView(chlk.activities.announcement.AddDuplicateAnnouncementDialog);
-                    this.BackgroundNavigate('announcement', 'edit', [model.getAnnouncementId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT]);
+                    this.BackgroundNavigate('announcement', 'edit', [model.getAnnouncementId(), model.getType()]);
                     return ria.async.BREAK;
                 }, this);
             return null;

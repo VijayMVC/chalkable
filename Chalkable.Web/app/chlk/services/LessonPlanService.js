@@ -108,6 +108,14 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.AnnouncementId, String]],
+            ria.async.Future, function duplicateLessonPlan(id, classIds) {
+                return this.get('LessonPlan/DuplicateLessonPlan.json', Boolean, {
+                    lessonPlanId: id.valueOf(),
+                    classIds: classIds
+                });
+            },
+
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, Number
                 , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean,
                 Array
