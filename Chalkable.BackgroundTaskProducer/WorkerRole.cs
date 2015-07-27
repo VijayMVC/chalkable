@@ -3,11 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using Chalkable.BackgroundTaskProducer.Producers;
-using Chalkable.Data.Master.Model;
 using Chalkable.Web.Tools;
-using Microsoft.WindowsAzure;
-using Microsoft.WindowsAzure.Diagnostics;
-using Microsoft.WindowsAzure.Diagnostics.Management;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Mindscape.Raygun4Net;
 
