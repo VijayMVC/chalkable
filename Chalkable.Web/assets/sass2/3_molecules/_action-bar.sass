@@ -1,0 +1,40 @@
+.action-bar
+  position: relative
+  margin: 5px 0 5px
+
+  &::before
+    content: ' '
+    position: absolute
+    bottom: 0
+    left: 0
+    right: 0
+    height: 1px
+    background: #e7e6e2
+
+  .items
+    z-index: 1
+    position: relative
+    display: inline-block
+
+  .items > *
+    font-family: 'Open Sans', sanf-serif
+    font-weight: 400
+    font-size: 13px
+    padding: 0 20px 8px
+    border: 0px solid transparent
+    border-bottom-width: 4px
+    display: inline-block
+    cursor: pointer
+
+    &, A
+      color: #2b2a28
+      text-decoration: none
+
+    +single-transition(border-bottom-color, .2s, ease-in-out)
+
+  .items
+    .pressed, & > *:hover, &:hover .pressed:hover
+      border-bottom-color: #56554f
+
+    &:hover .pressed
+      border-bottom-color: transparent
