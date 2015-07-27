@@ -266,6 +266,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var dbQuery = Orm.SimpleSelect(LessonPlan.VW_LESSON_PLAN_NAME, conds);
             return Exists(dbQuery);
         }
+
+        public IList<int> DuplicateLessonPlan(int lessonPlanId, IList<int> classIds, DateTime created)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class LessonPlanForTeacherDataAccess : LessonPlanDataAccess

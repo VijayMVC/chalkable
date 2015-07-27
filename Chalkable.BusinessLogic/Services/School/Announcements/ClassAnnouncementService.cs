@@ -303,21 +303,28 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
                     
                     //insert missing announcementAssignedAttribute
-                    //TODO: think how to rewrite this if statement
-                    if (res.AnnouncementAttributes.Any(x => x.Id <= 0 || (x.Attachment != null && string.IsNullOrEmpty(x.Uuid) && ServiceLocator.CrocodocService.IsDocument(x.Attachment.Name))))
+                    if (HasMissingAttributes(res))
                     {
                         var attributeService = (AnnouncementAssignedAttributeService)ServiceLocator.AnnouncementAssignedAttributeService;
                         attributeService.AddMissingSisAttributes(res.AnnouncementAttributes, uow);
                         attributeService.UploadMissingAttributeAttachments(res.AnnouncementAttributes, uow);
                         res.AnnouncementAttributes = new AnnouncementAssignedAttributeDataAccess(uow).GetListByAnntId(announcementId);
-                        MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
-                        ConnectorLocator.ActivityConnector.UpdateActivity(res.ClassAnnouncementData.SisActivityId.Value, activity);
                     }
                 }
                 res.AnnouncementData = PrepareClassAnnouncementTypeData(res.ClassAnnouncementData);
                 uow.Commit();
                 return res;
             }
+        }
+
+        private bool HasMissingAttributes(AnnouncementDetails ann)
+        {
+            return ann.AnnouncementAttributes.Any(x => x.Id <= 0 || IsMissingAttachment(x));
+        }
+
+        private bool IsMissingAttachment(AnnouncementAssignedAttribute attribute)
+        {
+            return attribute.Attachment != null && string.IsNullOrEmpty(attribute.Uuid) && ServiceLocator.CrocodocService.IsDocument(attribute.Attachment.Name);
         }
 
         private AnnouncementDetails GetDetails(ClassAnnouncementDataAccess dataAccess, int announcementId)

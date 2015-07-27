@@ -308,7 +308,7 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, int toAnnouncementId, UnitOfWork unitOfWork)
+        public IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, IList<int> toAnnouncementIds, UnitOfWork unitOfWork)
         {
             var da = new AnnouncementAssignedAttributeDataAccess(unitOfWork);
             var attributesForCopying = da.GetListByAnntId(fromAnnouncementId);
@@ -318,7 +318,9 @@ namespace Chalkable.BusinessLogic.Services.School
             var atributesInfo = new List<AnnouncementAssignedAttributeInfo>();
             foreach (var attributeContent in attributsWithContents)
             {
-                var attribute = new AnnouncementAssignedAttribute
+                foreach (var toAnnouncementId in toAnnouncementIds)
+                {
+                    var attribute = new AnnouncementAssignedAttribute
                     {
                         AnnouncementRef = toAnnouncementId,
                         AttributeTypeId = attributeContent.Attribute.AttributeTypeId,
@@ -326,13 +328,14 @@ namespace Chalkable.BusinessLogic.Services.School
                         Text = attributeContent.Attribute.Text,
                         VisibleForStudents = attributeContent.Attribute.VisibleForStudents,
                     };
-                if (attributeContent.AttachmentContentInfo != null)
-                    attribute.Uuid = UploadToCrocodoc(attributeContent.Attribute.Name, attributeContent.AttachmentContentInfo.Content);
-                atributesInfo.Add(AnnouncementAssignedAttributeInfo.Create(attribute, attributeContent.AttachmentContentInfo));
+                    if (attributeContent.AttachmentContentInfo != null)
+                        attribute.Uuid = UploadToCrocodoc(attributeContent.Attribute.Name, attributeContent.AttachmentContentInfo.Content);
+                    atributesInfo.Add(AnnouncementAssignedAttributeInfo.Create(attribute, attributeContent.AttachmentContentInfo));   
+                }
             }
             da.Insert(atributesInfo.Select(x => x.Attribute).ToList());
 
-            var attribues = da.GetLastListByAnnId(toAnnouncementId, atributesInfo.Count);
+            var attribues = da.GetLastListByAnnIds(toAnnouncementIds, atributesInfo.Count);
             for (var i = 0; i < attribues.Count; i++)
                 if(atributesInfo[i].AttachmentContentInfo != null)
                     AddAttributeAttachmentToBlob(attribues[i].Id, atributesInfo[i].AttachmentContentInfo.Content);
@@ -343,7 +346,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var u = Update())
             {
-                var res = CopyNonStiAttributes(fromAnnouncementId, toAnnouncementId, u);
+                var res = CopyNonStiAttributes(fromAnnouncementId, new List<int>{toAnnouncementId}, u);
                 u.Commit();
                 return res;
             }

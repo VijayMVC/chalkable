@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -12,10 +13,20 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+        public IList<AnnouncementAssignedAttribute> GetLastListByAnnIds(IList<int> toAnnouncementIds, int count)
+        {
+            var annIdsStr = toAnnouncementIds.Select(x => x.ToString()).JoinString(",");
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, "*", typeof (AnnouncementAssignedAttribute).Name)
+                   .AppendFormat(" Where {0} in ({1}) ", AnnouncementAssignedAttribute.ANNOUNCEMENT_REF_FIELD, annIdsStr);
+
+            return ReadMany<AnnouncementAssignedAttribute>(dbQuery)
+                   .OrderByDescending(x => x.Id).Take(count).OrderBy(x => x.Id).ToList();
+        }
+
         public IList<AnnouncementAssignedAttribute> GetLastListByAnnId(int announcementId, int count)
         {
-            return GetListByAnntId(announcementId).OrderByDescending(x => x.Id)
-                                                  .Take(count).OrderBy(x => x.Id).ToList();
+            return GetLastListByAnnIds(new List<int> {announcementId}, count);
         }
 
         public IList<AnnouncementAssignedAttribute> GetListByAnntId(int announcementId)

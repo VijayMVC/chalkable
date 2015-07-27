@@ -184,21 +184,24 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying)
         {
-            return DoRead(u => CopyAnnApplications(toAnnouncementId, annAppsForCopying, u));
+            return DoRead(u => CopyAnnApplications(annAppsForCopying, new List<int> {toAnnouncementId}, u));
         }
 
-        public IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying, UnitOfWork unitOfWork)
+        public IList<AnnouncementApplication> CopyAnnApplications(IList<AnnouncementApplication> annAppsForCopying, IList<int> toAnnouncementIds, UnitOfWork unitOfWork)
         {
             var da = new AnnouncementApplicationDataAccess(unitOfWork);
-            var res = annAppsForCopying.Select(aa => new AnnouncementApplication
+            foreach (var toAnnouncementId in toAnnouncementIds)
             {
-                ApplicationRef = aa.ApplicationRef,
-                Active = aa.Active,
-                Order = aa.Order,
-                AnnouncementRef = toAnnouncementId,
-            }).ToList();
-            da.Insert(res);
-            return da.GetAnnouncementApplicationsbyAnnIds(new List<int> { toAnnouncementId });
+                var res = annAppsForCopying.Select(aa => new AnnouncementApplication
+                {
+                    ApplicationRef = aa.ApplicationRef,
+                    Active = aa.Active,
+                    Order = aa.Order,
+                    AnnouncementRef = toAnnouncementId,
+                }).ToList();
+                da.Insert(res);   
+            }
+            return da.GetAnnouncementApplicationsbyAnnIds(toAnnouncementIds);
         }
 
 
