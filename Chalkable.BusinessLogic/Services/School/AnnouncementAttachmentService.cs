@@ -39,7 +39,6 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private const string ATTACHMENT_CONTAINER_ADDRESS = "attachmentscontainer";
 
-
         private bool CanAttach(Announcement ann)
         {
             var recipients = ServiceLocator.GetAnnouncementService(ann.Type).GetAnnouncementRecipientPersons(ann.Id);
@@ -53,18 +52,20 @@ namespace Chalkable.BusinessLogic.Services.School
             return null;
         }
 
-        public IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, int toAnnouncemenId, UnitOfWork unitOfWork)
+        public IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, IList<int> toAnnouncemenIds, UnitOfWork unitOfWork)
         {
             Trace.Assert(Context.PersonId.HasValue);
             var da = new AnnouncementAttachmentDataAccess(unitOfWork);
-            var attachmentsForCopying = da.TakeLastAttachments(fromAnnouncementId);
+            var attachmentsForCopying = da.GetLastAttachments(fromAnnouncementId);
             var attContentsForCopy = attachmentsForCopying.Select(ServiceLocator.AnnouncementAttachmentService.GetAttachmentContent).ToList();
 
             var attContents = new List<AttachmentContentInfo>();
             foreach (var attWithContent in attContentsForCopy)
             {
-                var uuid = UploadToCrocodoc(attWithContent.Attachment.Name, attWithContent.Content);
-                var att = new AnnouncementAttachment
+                foreach (var toAnnouncemenId in toAnnouncemenIds)
+                {
+                    var uuid = UploadToCrocodoc(attWithContent.Attachment.Name, attWithContent.Content);
+                    var att = new AnnouncementAttachment
                     {
                         AnnouncementRef = toAnnouncemenId,
                         AttachedDate = attWithContent.Attachment.AttachedDate,
@@ -73,10 +74,11 @@ namespace Chalkable.BusinessLogic.Services.School
                         Uuid = uuid,
                         Order = attWithContent.Attachment.Order
                     };
-                attContents.Add(AttachmentContentInfo.Create(att, attWithContent.Content));
+                    attContents.Add(AttachmentContentInfo.Create(att, attWithContent.Content));
+                }
             }
             da.Insert(attContents.Select(x => x.Attachment).ToList());
-            var atts = da.TakeLastAttachments(toAnnouncemenId, attContents.Count);
+            var atts = da.GetLastAttachments(toAnnouncemenIds, attContents.Count);
             
             for (var i = 0; i < atts.Count; i++) 
                 attContents[i].Attachment = atts[i];
@@ -90,7 +92,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             using (var u = Update())
             {
-                var res = CopyAttachments(fromAnnouncementId, toAnnouncementId, u);
+                var res = CopyAttachments(fromAnnouncementId, new List<int>{toAnnouncementId}, u);
                 u.Commit();
                 return res;
             }

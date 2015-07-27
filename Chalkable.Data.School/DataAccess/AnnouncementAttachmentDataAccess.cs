@@ -23,10 +23,19 @@ namespace Chalkable.Data.School.DataAccess
             return GetAnnouncementAttachments(conds, callerId, roleId).FirstOrDefault();
         }
 
-        public IList<AnnouncementAttachment> TakeLastAttachments(int announcementId, int count = int.MaxValue)
+        public IList<AnnouncementAttachment> GetLastAttachments(IList<int> announcementIds, int count = int.MaxValue)
         {
-            var conds = new AndQueryCondition {{AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, announcementId}};
-            return GetAll(conds).OrderByDescending(x => x.Id).Take(count).OrderBy(x => x.Id).ToList();
+            var annIdsStr = announcementIds.Select(x => x.ToString()).JoinString(",");
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, "*", typeof (AnnouncementAttachment).Name)
+                   .AppendFormat(" Where {0} in ({1})", AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD, annIdsStr);
+
+            return ReadMany<AnnouncementAttachment>(dbQuery).OrderByDescending(x => x.Id).Take(count).OrderBy(x => x.Id).ToList();
+        } 
+
+        public IList<AnnouncementAttachment> GetLastAttachments(int announcementId, int count = int.MaxValue)
+        {
+            return GetLastAttachments(new List<int> {announcementId}, count);
         } 
 
         public IList<AnnouncementAttachment> GetList(int callerId, int roleId, string filter = null)
