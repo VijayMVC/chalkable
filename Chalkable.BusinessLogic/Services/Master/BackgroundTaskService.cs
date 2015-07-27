@@ -59,6 +59,8 @@ namespace Chalkable.BusinessLogic.Services.Master
             private const int MAX_MSG_LEN = (1 << 16) - 1;
             public void Log(int level, string message)
             {
+                if (message == null)
+                    message = "[null]";
                 if (message.Length > MAX_MSG_LEN)
                 {
                     message = message.Substring(0, MAX_MSG_LEN);

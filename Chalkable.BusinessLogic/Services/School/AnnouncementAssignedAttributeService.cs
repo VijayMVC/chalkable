@@ -329,7 +329,12 @@ namespace Chalkable.BusinessLogic.Services.School
                         VisibleForStudents = attributeContent.Attribute.VisibleForStudents,
                     };
                     if (attributeContent.AttachmentContentInfo != null)
-                        attribute.Uuid = UploadToCrocodoc(attributeContent.Attribute.Name, attributeContent.AttachmentContentInfo.Content);
+                    {
+                        attribute.Uuid = UploadToCrocodoc(attributeContent.Attribute.SisAttachmentName, attributeContent.AttachmentContentInfo.Content);
+                        attribute.SisAttachmentName = attributeContent.Attribute.SisAttachmentName;
+                        attribute.SisAttributeAttachmentId = attributeContent.Attribute.SisAttributeAttachmentId;
+                        attribute.SisAttachmentMimeType = attributeContent.Attribute.SisAttachmentMimeType;
+                    }
                     atributesInfo.Add(AnnouncementAssignedAttributeInfo.Create(attribute, attributeContent.AttachmentContentInfo));   
                 }
             }
