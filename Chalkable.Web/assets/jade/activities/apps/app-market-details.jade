@@ -8,9 +8,7 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
     h2.page-title= app.getName()
     .action-bar
         .items
-            -console.log(self.isStudyCenterEnabled())
-            +ActionLink('appmarket', 'myApps')(class= !self.isStudyCenterEnabled() ? 'disabled' : '').my-apps.toolbar-btn My Apps
-            +ActionLink('appmarket', 'list').app-store.toolbar-btn.pressed App Store
+            +ActionLink('appmarket', 'list').app-store.toolbar-btn Back
     .fixed-width
         .app-screenshots-panel
             +Carousel()
