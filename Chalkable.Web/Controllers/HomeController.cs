@@ -220,15 +220,18 @@ namespace Chalkable.Web.Controllers
             var leLinkStatus = leLinkSetting != null && leLinkSetting.Value == "active";
             var leUrl = leUrlSetting != null ? leUrlSetting.Value : "";
 
+            bool enabled = ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.AWARD_LE_CREDITS})
+                           ||
+                           ClaimInfo.HasPermissions(Context.Claims,
+                               new List<string> {ClaimInfo.AWARD_LE_CREDITS_CLASSROOM});
             var leParams = new LEParams
             {
                 LEEnabled = Context.LEEnabled,
                 LESyncComplete = Context.LESyncComplete,
                 LELinkStatus = leLinkStatus,
                 LEBaseUrl = leUrl,
-                IssueLECreditsEnabled =  ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.AWARD_LE_CREDITS}),
-                LEAccessEnabled =  ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.AWARD_LE_CREDITS})
-                   || ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.AWARD_LE_CREDITS_CLASSROOM})
+                IssueLECreditsEnabled =  enabled,
+                LEAccessEnabled =  enabled
             };
             return leParams;
         }
