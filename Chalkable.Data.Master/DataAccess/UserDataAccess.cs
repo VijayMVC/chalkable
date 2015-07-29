@@ -149,7 +149,7 @@ namespace Chalkable.Data.Master.DataAccess
             var ps = new Dictionary<string, object>
             {
                 {"@list", ids},
-                {"@auto", (ids != null)}
+                {"@auto", false}
             };
             ExecuteStoredProcedure("spCreateLoginInfos", ps, timeout);
         }
