@@ -61,6 +61,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     this.dom.find('.title-block-container').addClass('with-gallery-id');
                     select.removeAttr('disabled');
                     select.setProp('disabled', false);
+                    this.dom.find('#check-title-btn').trigger('click');
                 }else{
                     this.dom.find('.title-block-container').removeClass('with-gallery-id');
                     select.setAttr('disabled', 'disabled');
@@ -91,16 +92,16 @@ NAMESPACE('chlk.activities.announcement', function () {
                     if(!value || !value.trim()){
                         dom.find('.save-title-btn').setAttr('disabled', true);
                     }else{
-                        if(value == node.getData('title')){
+                        /*if(value == node.getData('title')){
                             this.updateFormByNotExistingTitle();
                             dom.find('.save-title-btn').setAttr('disabled', true);
-                        }else{
+                        }else{*/
                             titleTimeout && clearTimeout(titleTimeout);
                             titleTimeout = setTimeout(function(){
                                 if(value == node.getValue())
                                     dom.find('#check-title-button').trigger('click');
                             }, 100);
-                        }
+                        //}
                     }
                 }
             },

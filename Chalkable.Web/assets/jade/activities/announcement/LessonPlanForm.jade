@@ -107,10 +107,11 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                     +SlideCheckbox('hidefromstudents', lessonPlan.isHiddenFromStudents(), false)
                                     .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
                                 .check-box-container
-                                    label(for="add-to-gallery") Add to Lesson Plan Gallery
-                                    +SlideCheckbox('addtogallery', !!lessonPlan.getGalleryCategoryId(), !!lessonPlan.getGalleryCategoryId())#add-to-gallery
+                                    label(for="add-to-gallery-check") Add to Lesson Plan Gallery
+                                    +SlideCheckbox('addtogallery', !!lessonPlan.getGalleryCategoryId())#add-to-gallery
                                 .category-container.new-input-container
-                                    BUTTON#add-to-galelry-btn.validate-skip.x-hidden(name="submitType", value="addToGallery", type="submit" )
+                                    BUTTON#add-to-galelry-btn.validate-skip.x-hidden(name="submitType", value="saveNoUpdate", type="submit" )
+                                    BUTTON#check-title-btn.validate-skip.x-hidden(name="submitType", value="addToGallery", type="submit" )
                                     label(for="galleryCategoryId") Category:
                                     SPAN#galleryCategoryIdContainer
                                         +Select('galleryCategoryId')(disabled=!!lessonPlan.getGalleryCategoryId() ? false : "disabled")#galleryCategoryId

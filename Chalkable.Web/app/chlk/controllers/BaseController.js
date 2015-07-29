@@ -107,6 +107,9 @@ NAMESPACE('chlk.controllers', function (){
                    })
                    .catchException(chlk.lib.exception.ChalkableException, function(exception){
                        return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                           .then(function(){
+                               this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
+                           }, this)
                            .thenBreak();
                    }, this)
                    .catchException(chlk.lib.exception.NoAnnouncementException, function(exception){

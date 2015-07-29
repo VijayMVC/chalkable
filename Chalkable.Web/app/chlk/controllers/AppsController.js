@@ -447,15 +447,15 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],
-        [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId, String]],
-        function openSuggestedAppTeacherAction(appId, classId, annId, appUrlAppend_){
+        [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, String]],
+        function openSuggestedAppTeacherAction(appId, classId, annId, announcementType, appUrlAppend_){
             var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
             this.appMarketService.getApplicationTotalPrice(appId, null, classIds,null, null, null)
                 .attach(this.validateResponse_())
                 .then(function(appTotalPrice){
                     if(appTotalPrice.getTotalPersonsCount() > 0)
                         return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, classId, annId]);
-                    return this.BackgroundNavigate('apps', 'tryToAttach', [annId, appId, appUrlAppend_]);
+                    return this.BackgroundNavigate('apps', 'tryToAttach', [annId, appId, announcementType, appUrlAppend_]);
                 }, this);
             return null;
         },

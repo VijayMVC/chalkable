@@ -1342,7 +1342,7 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             if (submitType == 'checkTitle' || submitType == 'addToGallery'){
-                if(model.getGalleryCategoryId() && model.getGalleryCategoryId().valueOf())
+                if(submitType == 'addToGallery' || model.getGalleryCategoryId() && model.getGalleryCategoryId().valueOf())
                     return this.checkLessonPlanTitleAction(model, submitType == 'addToGallery');
                 return null;
             }
@@ -1428,8 +1428,6 @@ NAMESPACE('chlk.controllers', function (){
                 .existsInGallery(model.getTitle(), model.getId())
                 .attach(this.validateResponse_())
                 .then(function(exists){
-                    if(!exists && isAddToGallery_)
-                        this.saveLessonPlanAction(model);
                     if(exists)
                         this.ShowMsgBox('There is Lesson Plan with that title in gallery', 'whoa.');
                     return new chlk.models.Success(exists);
