@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -53,6 +54,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriod)
         {
+            string[] filters = (filter != null) ? filter.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries) : null;
             var ps = new Dictionary<string, object>
             {
                 {"@start", start},
@@ -61,7 +63,9 @@ namespace Chalkable.Data.School.DataAccess
                 {"@teacherId", teacherId},
                 {"@classmatesToid", classmatesToId},
                 {"@schoolYearId", schoolYearId},
-                {"@filter", string.IsNullOrEmpty(filter) ? null : string.Format(FILTER_FORMAT, filter)},
+                {"@filter1", filters!=null && filters.Length>0 ? "%"+filters[0]+"%" : null},
+                {"@filter2", filters!=null && filters.Length>1 ? "%"+filters[1]+"%" : null},
+                {"@filter3", filters!=null && filters.Length>2 ? "%"+filters[2]+"%" : null},
                 {"@orderByFirstName", orderByFirstName},
                 {"@markingPeriod", markingPeriod}
             };
