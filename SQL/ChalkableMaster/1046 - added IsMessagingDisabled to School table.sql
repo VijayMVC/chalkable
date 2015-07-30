@@ -15,14 +15,14 @@ Create Procedure [dbo].[spUpdateMessagingDisabled]
 	@districtId uniqueidentifier,
 	@schoolId uniqueidentifier,
 	@disabled bit
-Begin Transaction 
 as
+Begin Transaction 
 	if @districtId is not null
 	begin
 		Update 
 			School 
 		Set
-			IsMessaginDisabled = @disabled
+			IsMessagingDisabled = @disabled
 		where 
 			DistrictRef = @districtId
 	end
@@ -31,7 +31,7 @@ as
 		Update 
 			School 
 		Set
-			IsMessaginDisabled = @disabled
+			IsMessagingDisabled = @disabled
 		where 
 			Id = @schoolId
 	end
