@@ -55,12 +55,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 throw new ChalkableSecurityException(ChlkResources.ERR_VIEW_INFO_INVALID_RIGHTS);
             
             var person = SchoolLocator.PersonService.GetPersonDetails(id);
-            var res = vdCreator(person);
-            if (Context.RoleId == 2 && Context.PersonId == id) //just for teacher user
-            {
-                res.Email = MasterLocator.UserService.GetUserEmailById(Context.UserId);
-            }
-            return res;
+            return vdCreator(person);
         }
 
         private bool CanGetInfo(int personId)
