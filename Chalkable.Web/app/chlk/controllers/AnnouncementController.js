@@ -780,6 +780,7 @@ NAMESPACE('chlk.controllers', function (){
                 announcement.getStudentAnnouncements().setSchoolOptions(schoolOptions);
 
             this.cacheAnnouncement(announcement);
+            announcement.setHasAccessToLE(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS_CLASSROOM));
             return announcement;
         },
 

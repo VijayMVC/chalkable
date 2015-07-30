@@ -12,6 +12,9 @@ NAMESPACE('chlk.templates.grading', function () {
             ArrayOf(chlk.models.common.NameId), 'gradingPeriods',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'hasAccessToLE',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.grading.GradingClassSummaryItems, 'currentGradingBox'
         ]);
 });

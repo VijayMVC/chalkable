@@ -15,6 +15,9 @@ REQUIRE('chlk.models.grading.GradingClassSummary');
              String, 'action',
 
              [ria.templates.ModelPropertyBind],
+             Boolean, 'hasAccessToLE',
+
+             [ria.templates.ModelPropertyBind],
              String, 'gridAction'
          ]);
  });

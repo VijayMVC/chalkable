@@ -91,6 +91,7 @@ NAMESPACE('chlk.controllers', function (){
                         var gradingPeriod = this.getCurrentGradingPeriod();
                         model.setTopData(topData);
                         model.setGradingPeriodId(gradingPeriod.getId());
+                        model.setHasAccessToLE(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS_CLASSROOM));
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassSummaryPage, result);
@@ -133,6 +134,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.setGradingPeriodId(gradingPeriod.getId());
                         model.setAction('standards');
                         model.setGridAction('standardsGrid');
+                        model.setHasAccessToLE(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS_CLASSROOM));
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassStandardsPage, result);
@@ -225,6 +227,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.setGradingComments(gradingComments);
                         model.setAbleEdit(canEdit);
                         model.setAbleEditDirectValue(canEditDirectValue);
+                        model.setHasAccessToLE(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS_CLASSROOM));
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.FinalGradesPage, result);
@@ -270,6 +273,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.setGradingPeriodId(gradingPeriod.getId());
                         model.setAlternateScores(alternateScores);
                         model.setGradingComments(gradingComments);
+                        model.setHasAccessToLE(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS_CLASSROOM));
                         var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
                         if(model.getCurrentGradingGrid()){
                             var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM)
@@ -337,6 +341,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.setAbleEdit(canEdit);
                         model.setAblePostStandards(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM)
                             || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN));
+                        model.setHasAccessToLE(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS_CLASSROOM));
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassStandardsGridPage, result);

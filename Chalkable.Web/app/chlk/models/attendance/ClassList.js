@@ -20,11 +20,13 @@ NAMESPACE('chlk.models.attendance', function () {
 
             Boolean, 'byLastName',
 
+            Boolean, 'hasAccessToLE',
+
             Boolean, 'ableChangeReasons',
 
             [[chlk.models.classes.ClassesForTopBar, chlk.models.schoolYear.GradingPeriod, chlk.models.id.ClassId, ArrayOf(chlk.models.attendance.ClassAttendance),
-                chlk.models.common.ChlkDate, Boolean,  ArrayOf(chlk.models.attendance.AttendanceReason), Boolean, Boolean, Boolean]],
-            function $(topData_, gradingPeriod_, selectedId_, items_, date_, byLastName_, reasons_, canRePost_, canSetAttendance_, canChangeReasons_){
+                chlk.models.common.ChlkDate, Boolean,  ArrayOf(chlk.models.attendance.AttendanceReason), Boolean, Boolean, Boolean, Boolean]],
+            function $(topData_, gradingPeriod_, selectedId_, items_, date_, byLastName_, reasons_, canRePost_, canSetAttendance_, canChangeReasons_, hasAccessToLE_){
                 BASE(topData_, selectedId_);
                 if(gradingPeriod_)
                     this.setGradingPeriod(gradingPeriod_);
@@ -36,6 +38,8 @@ NAMESPACE('chlk.models.attendance', function () {
                     this.setReasons(reasons_);
                 if(byLastName_)
                     this.setByLastName(byLastName_);
+                if(hasAccessToLE_)
+                    this.setHasAccessToLE(hasAccessToLE_);
                 if(canChangeReasons_)
                     this.setAbleChangeReasons(canChangeReasons_);
 

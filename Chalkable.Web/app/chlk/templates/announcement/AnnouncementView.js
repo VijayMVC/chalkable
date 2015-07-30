@@ -59,6 +59,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'exempt',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'hasAccessToLE',
+
             /*[ria.templates.ModelPropertyBind],
             Number, 'ownerAttachmentsCount',
 

@@ -20,5 +20,5 @@
             +RenderWith(self.getUsersList(), chlk.templates.people.UsersListTpl)(
                 my = self.isMy(),
                 userRole = self.getUserRole(),
-                LEIntegrated = self.isLEIntegrated()
+                LEIntegrated = self.isLEIntegrated() && self.isHasAccessToLE()
             )
