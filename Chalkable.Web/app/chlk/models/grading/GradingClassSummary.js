@@ -13,9 +13,13 @@ NAMESPACE('chlk.models.grading', function () {
 
             String, 'gridAction',
 
-            [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId, chlk.models.grading.GradingClassSummaryPart]],
-            function $(topData_, selectedId_, summaryPart_){
+            Boolean, 'hasAccessToLE',
+
+            [[chlk.models.classes.ClassesForTopBar, chlk.models.id.ClassId, chlk.models.grading.GradingClassSummaryPart, Boolean]],
+            function $(topData_, selectedId_, summaryPart_, hasAccessToLE_){
                 BASE(topData_, selectedId_);
+                if(hasAccessToLE_)
+                    this.setHasAccessToLE(hasAccessToLE_);
                 if(summaryPart_)
                     this.setSummaryPart(summaryPart_);
             }

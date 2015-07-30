@@ -21,6 +21,9 @@ NAMESPACE('chlk.templates.grading', function () {
             Boolean, 'ableEdit',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'hasAccessToLE',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'ablePostStandards'
         ]);
 });

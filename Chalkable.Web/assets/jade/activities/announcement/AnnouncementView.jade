@@ -167,6 +167,6 @@ mixin Glue_()
                             ableToExempt = classAnnouncement.isAbleToExempt(),
                             gradable = classAnnouncement.isGradable(),
                             standards = self.getStandards(),
-                            LEIntegrated = self.isLEIntegrated(),
+                            LEIntegrated = self.isLEIntegrated() && self.isHasAccessToLE(),
                             classId = classAnnouncement.getClassId()
                         )

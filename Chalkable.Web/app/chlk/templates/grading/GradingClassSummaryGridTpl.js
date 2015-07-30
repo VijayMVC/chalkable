@@ -20,6 +20,9 @@ NAMESPACE('chlk.templates.grading', function () {
             Boolean, 'ableEdit',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'hasAccessToLE',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
 
             [ria.templates.ModelPropertyBind],

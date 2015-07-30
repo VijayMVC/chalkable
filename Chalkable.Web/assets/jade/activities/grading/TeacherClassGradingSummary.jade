@@ -12,7 +12,7 @@
             +ActionLink('grading', "summary", selectedId).pressed=Msg.Item(true)
             +ActionLink('grading', "standards", selectedId)=Msg.Standard(true)
             +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
-            if self.isLEIntegrated()
+            if self.isLEIntegrated() && self.isHasAccessToLE()
                 +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
 
     .buttons-group

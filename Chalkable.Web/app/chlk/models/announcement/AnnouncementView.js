@@ -8,6 +8,8 @@ NAMESPACE('chlk.models.announcement', function () {
         'AnnouncementView', EXTENDS(chlk.models.announcement.FeedAnnouncementViewData), [
             ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
 
+            Boolean, 'hasAccessToLE',
+
             ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores'
 
         ]);

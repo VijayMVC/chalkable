@@ -14,7 +14,7 @@
             +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
             +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
             +ActionLink('grading', "finalGrades", selectedId).pressed=Msg.Final_Grade(true)
-            if self.isLEIntegrated()
+            if self.isLEIntegrated() && self.isHasAccessToLE()
                 +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
     .mps-container
         each gradingPeriod,i in self.getGradingPeriods()

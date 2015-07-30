@@ -19,6 +19,8 @@ NAMESPACE('chlk.models.grading', function () {
 
         Boolean, 'ableEdit',
 
+        Boolean, 'hasAccessToLE',
+
         Boolean, 'ableEditDirectValue'
     ]);
 });

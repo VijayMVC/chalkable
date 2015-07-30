@@ -13,6 +13,8 @@ NAMESPACE('chlk.models.grading', function () {
             [ria.serialize.SerializeProperty('gradingperiods')],
             ArrayOf(chlk.models.common.NameId), 'gradingPeriods',
 
+            Boolean, 'hasAccessToLE',
+
             [ria.serialize.SerializeProperty('currentgradingbox')],
             chlk.models.grading.GradingClassSummaryItems, 'currentGradingBox'
         ]);

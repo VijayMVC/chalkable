@@ -49,7 +49,7 @@ h2.page-title Attendance
                 .black-arrow.no-class-scheduled.row=Msg.No_class_scheduled(self.getDate().format('mm/dd/yy')) + ' or no students in this class'
     if self.getItems().length > 0
         .people-list-container.not-transparent(class=self.canPost() ? 'can-post' : '')
-            +RenderWith(self.getModel(), chlk.templates.attendance.ClassListPeopleTpl)(LEIntegrated = self.isLEIntegrated())(
+            +RenderWith(self.getModel(), chlk.templates.attendance.ClassListPeopleTpl)(LEIntegrated = self.isLEIntegrated() && self.isHasAccessToLE())(
                 userRole= self.getUserRole()
             )
 

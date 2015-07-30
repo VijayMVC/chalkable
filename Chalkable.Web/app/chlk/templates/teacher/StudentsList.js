@@ -15,6 +15,9 @@ NAMESPACE('chlk.templates.teacher', function () {
             chlk.models.classes.ClassesForTopBar, 'topData', //todo: rename
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'hasAccessToLE',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'my'
         ]);
 });

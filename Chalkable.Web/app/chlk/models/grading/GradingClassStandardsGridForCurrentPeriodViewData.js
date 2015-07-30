@@ -19,6 +19,8 @@ NAMESPACE('chlk.models.grading', function () {
 
             ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
 
+            Boolean, 'hasAccessToLE',
+
             Boolean, 'ablePostStandards'
         ]);
 });
