@@ -1,0 +1,20 @@
+.school-details
+    -buttonText = getActionButtons()[self.getButtons()[0] - 1]
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            //move this to some mixin
+            .left
+                +ActionLink('schools', 'details', self.getId()).pressed Now
+                +ActionLink('schools', 'details', self.getId()) Schedule
+                +ActionLink('schools', 'people', self.getId()) People
+                +ActionLink('schools', 'sisInfo', self.getId()) SIS
+    .content.profile-page-margin
+        .left
+            +PhotoContainer('https://dev.chalkable.com/PersonPicture/Read?pictureId=132310&width=256&height=256&gender=m')
+        .left.school-info
+            h1= self.getName()
+            .status #{self.getStatusNumber()}. #{self.getStatus()}
+                +ActionLink('schools', 'actionButtons', self.getId())#show-buttons-popup
+                    +Button().special-button2.blue= buttonText
+        .clear
+
