@@ -1,11 +1,11 @@
-mixin AppIconLink_(announcementId, app, iconTooltip, announcementType)
+mixin AppIconLink_(announcementId, app, needToInstall, iconTooltip, announcementType)
     -var appId = app.getId().valueOf()
     .announcement-item.application(data-tooltip=iconTooltip)
         .wrapper
             +LoadingImage(src=app.getBannerPictureUrl(), id="loading-image-" + appId)
             .title(data-tooltip=app.getName(), data-tooltip-type="overflow")= app.getName()
             .shortdesc= app.getShortDescription()
-            if app.needToInstall()
+            if needToInstall
                 +ActionButton('appmarket', 'details', app.getId(), true) Install
             else
                 +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, appId, announcementType, self.getAppUrlAppend()) Attach
@@ -78,8 +78,13 @@ announcementType = self.getAnnouncementType()
                     +AssessmentBlock_("Assessment", announcementId, self.getAssessmentAppId(), announcementType)
 
                 if self.isShowApps()
-                    each app in self.apps.getItems()
-                        +AppIconLink_(announcementId, app, self.getAppIconToolTip(app), announcementType)
+                    if self.getUserRole().isAdmin()
+                        each app in self.apps.getItems()
+                            +AppIconLink_(announcementId, app, false, null, announcementType)
+                    else
+                        each app in self.apps.getItems()
+                            +AppIconLink_(announcementId, app, app.needToInstall(), self.getAppIconToolTip(app), announcementType)
+
 
             if self.isShowApps()
                 .paging

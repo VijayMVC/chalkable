@@ -606,21 +606,43 @@ NAMESPACE('chlk.controllers', function (){
             if (canAddStandard) ++btnsCount;
             if (assessmentAppId_) ++btnsCount;
 
-            var result = !this.userIsAdmin() ?
-                this.appMarketService
-                .getAppsForAttach(userId, classId, mp.getId(), pageIndex_ | 0, 16 - btnsCount)
-                .attach(this.validateResponse_())
-                .then(function(data){
-                    return new chlk.models.apps.InstalledAppsViewData(announcementId,
-                        classId,
-                        data,
-                        appUrlAppend_ || '',
-                        this.isStudyCenterEnabled(),
-                        canAddStandard,
-                        assessmentAppId_,
-                        announcementTypeName,
-                        announcementType
-                )}, this) : new ria.async.DeferredData(chlk.models.apps.InstalledAppsViewData.$createForAdmin(announcementId, announcementType, assessmentAppId_));
+            var start = pageIndex_ | 0, count = 16 - btnsCount;
+
+            var result;
+            if (this.userIsAdmin()){
+                result = this.appMarketService
+                    .getInstalledApps(userId, start, null, count)
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        return new chlk.models.apps.InstalledAppsViewData(announcementId,
+                            classId,
+                            data,
+                            appUrlAppend_ || '',
+                            this.isStudyCenterEnabled(),
+                            canAddStandard,
+                            assessmentAppId_,
+                            announcementTypeName,
+                            announcementType
+                        )}, this);
+            }
+            else {
+                var result = this.appMarketService
+                    .getAppsForAttach(userId, classId, mp.getId(), start, count)
+                    .attach(this.validateResponse_())
+                    .then(function(data){
+                        return new chlk.models.apps.InstalledAppsViewData(announcementId,
+                            classId,
+                            data,
+                            appUrlAppend_ || '',
+                            this.isStudyCenterEnabled(),
+                            canAddStandard,
+                            assessmentAppId_,
+                            announcementTypeName,
+                            announcementType
+                        )}, this);
+            }
+
+            //new ria.async.DeferredData(chlk.models.apps.InstalledAppsViewData.$createForAdmin(announcementId, announcementType, assessmentAppId_));
 
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, result);
         },
