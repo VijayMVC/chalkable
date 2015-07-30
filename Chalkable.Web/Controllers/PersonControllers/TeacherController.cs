@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Web.Mvc;
+using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
@@ -22,6 +23,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
         public ActionResult Info(int personId)
         {
             var res = GetInfo(personId, TeacherInfoViewData.Create);
+            if (Context.PersonId == personId) //just for teacher user
+                res.Email = MasterLocator.UserService.GetUserEmailById(Context.UserId);
             return Json(res);
         }
 
