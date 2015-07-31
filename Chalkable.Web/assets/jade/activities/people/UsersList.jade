@@ -1,5 +1,4 @@
--users=self.getUsers()
--selectedIndex = self.getSelectedIndex();
+-users=self.getUsers();
 .buttons.filter
     .left
         input(type="hidden", name="byLastName", value=(self.isByLastName() ? 'true' : 'false'))
@@ -16,9 +15,6 @@
 
 .people-list-container.not-transparent
     .header
-        if self.isLEIntegrated()
-            .le-link
-                +ActionLink('teachers', 'giveLECredits', selectedIndex) Open Learning Earnings
         .title.total-count= self.getTotalText()
 
     .grid-container.loader-container

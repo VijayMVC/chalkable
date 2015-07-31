@@ -15,8 +15,11 @@
                     =self.getUserRole().isStudent() ? Msg.My_Teachers :Msg.Whole_School
     +ActionForm('students', 'updateList')#people-list-form
         input(type="hidden", name="my", value=(self.isMy() ? 'true' : 'false')))
-        input(type="hidden", name="classId", value=self.getTopData().getSelectedItemId()))
+        input(type="hidden", name="classId", value=selectedId))
         .users-list-container
+            if self.isLEIntegrated()
+                .le-link
+                    +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
             +RenderWith(self.getUsersList(), chlk.templates.people.UsersListTpl)(
                 my = self.isMy(),
                 userRole = self.getUserRole(),
