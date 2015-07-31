@@ -40,27 +40,21 @@ namespace Chalkable.BusinessLogic.Services.School
         public void Edit(AnnouncementType announcementType, int announcementId, IList<AssignedAttributeInputModel> attributes)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
-            if (!(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue))
-                throw new UnassignedUserException();
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
 
+            ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(announcementId); // security check
             var announcementAttributes = AnnouncementAssignedAttribute.Create(attributes);
 
             if (attributes != null)
-            {
-                using (var uow = Update())
-                {
-                    var da = new DataAccessBase<AnnouncementAssignedAttribute>(uow);
-                    da.Update(announcementAttributes);
-                    uow.Commit();
-                }
-            }
+                DoUpdate(u=> new AnnouncementAssignedAttributeDataAccess(u).Update(announcementAttributes));
         }
 
         public void Delete(AnnouncementType announcementType, int announcementId, int assignedAttributeId)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
-            if (!(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue))
-                throw new UnassignedUserException();
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
 
             var attribute =
                 ServiceLocator.AnnouncementAssignedAttributeService.GetAssignedAttributeById(assignedAttributeId);
@@ -136,15 +130,13 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public AnnouncementAssignedAttribute AddAttributeAttachment(AnnouncementType announcementType, int announcementId, int assignedAttributeId, byte[] bin, string name,
-            string uuid)
+        public AnnouncementAssignedAttribute AddAttributeAttachment(AnnouncementType announcementType, int announcementId, int assignedAttributeId, byte[] bin, string name, string uuid)
         {
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(announcementId);
             if (!(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue))
                 throw new UnassignedUserException();
 
-            var assignedAttribute =
-                ServiceLocator.AnnouncementAssignedAttributeService.GetAssignedAttributeById(assignedAttributeId);
+            var assignedAttribute = ServiceLocator.AnnouncementAssignedAttributeService.GetAssignedAttributeById(assignedAttributeId);
 
             if (assignedAttribute.Attachment != null && assignedAttribute.Attachment.Id > 0)
             {
@@ -175,7 +167,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 da.Update(assignedAttribute);
                 uow.Commit();
             }
-
 
             return GetAssignedAttributeById(assignedAttributeId);
         }

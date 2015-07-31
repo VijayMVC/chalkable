@@ -121,10 +121,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                                         DateTime? startDate, DateTime? endDate, bool visibleForStudent)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            var lessonPlan = GetLessonPlanById(lessonPlanId); // security check 
             using (var uow = Update())
             {
                 var da = CreateLessonPlanDataAccess(uow);
-                var lessonPlan = da.GetAnnouncement(lessonPlanId, Context.PersonId.Value);
                 AnnouncementSecurity.EnsureInModifyAccess(lessonPlan, Context);
                 
                 if (lessonPlan.ClassRef != classId)
@@ -253,7 +253,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 {
                     var res = CreateLessonPlanDataAccess(u).GetAnnouncement(lessonPlanId, Context.PersonId.Value);
                     if(res == null)
-                        throw new ChalkableSecurityException();
+                        throw new NoAnnouncementException();
                     return res;
                 });
         }
