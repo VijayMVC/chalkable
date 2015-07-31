@@ -34,9 +34,9 @@ NAMESPACE('chlk.services', function () {
 
 
             [[chlk.models.id.ClassId]],
-            ria.async.Future, function giveLECredits(classId) {
+            ria.async.Future, function giveLECredits(classId_) {
                 return this.post('Home/LECredits.json', chlk.models.classes.LECreditsDialogViewData, {
-                    classId: classId.valueOf()
+                    classId: classId_ && classId_.valueOf()
                 });
             },
 

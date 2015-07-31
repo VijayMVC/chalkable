@@ -215,6 +215,7 @@ namespace Chalkable.Web.Controllers
 
         private LEParams PrepareLEParams()
         {
+            //TODO: move this LEService
             var leLinkSetting = SchoolLocator.SettingsService.GetSetting("LearningEarnings", "LinkStatus");
             var leUrlSetting = SchoolLocator.SettingsService.GetSetting("LearningEarnings", "Url");
             var leLinkStatus = leLinkSetting != null && leLinkSetting.Value == "active";
@@ -358,8 +359,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher, Student")]
         public ActionResult LearningEarnings()
         {
-            var leParams = PrepareLEParams();
 
+            //TODO: move this LEService
+            var leParams = PrepareLEParams();
 
             if (!Context.PersonId.HasValue || leParams.LEEnabled && (!leParams.LESyncComplete || !leParams.LEAccessEnabled))
                 throw new ChalkableSecurityException();
@@ -377,14 +379,22 @@ namespace Chalkable.Web.Controllers
           
         }
 
-        [AuthorizationFilter("Teacher, Student")]
-        public ActionResult LECredits(int classId)
+        [AuthorizationFilter("Teacher")]
+        public ActionResult LECredits(int? classId)
         {
+            //TODO: move this LEService
             var leParams = PrepareLEParams();
             if (!Context.PersonId.HasValue || leParams.LEEnabled && !leParams.LESyncComplete && !leParams.IssueLECreditsEnabled)
                throw new ChalkableSecurityException();
 
-            var clsPersons = string.Join(",", SchoolLocator.ClassService.GetClassPersons(null, classId, true, null).Select(x => x.PersonRef).ToList());
+            var syId = GetCurrentSchoolYearId();
+            IList<int> studentIds;
+            if (!classId.HasValue)
+                studentIds = SchoolLocator.StudentService.GetTeacherStudents(Context.PersonId.Value, syId).Select(x => x.Id).ToList();
+            else
+                studentIds = SchoolLocator.ClassService.GetClassPersons(null, classId.Value, null, null).Select(x => x.PersonRef).Distinct().ToList();
+
+            var clsPersons = studentIds.JoinString(",");
             var integratedSignOnUrl = string.Format(leParams.LEBaseUrl + "sti/give_credits?districtGUID={0}&sti_session_variable={1}&studentIds={2}", Context.DistrictId, Context.SisToken,  clsPersons);
             return Json(new {url = integratedSignOnUrl});
         }
