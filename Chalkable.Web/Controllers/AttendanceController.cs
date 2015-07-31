@@ -111,9 +111,10 @@ namespace Chalkable.Web.Controllers
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             var schoolYearId = GetCurrentSchoolYearId();
-            var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(schoolYearId, date ?? Context.NowSchoolYearTime.Date);
+            var d = date ?? Context.NowSchoolYearTime.Date;
+            var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(schoolYearId, d);
             var attendanceSummary = SchoolLocator.AttendanceService.GetAttendanceSummary(Context.PersonId.Value, gradingPeriod);
-            return Json(TeacherAttendanceSummaryViewData.Create(attendanceSummary));
+            return Json(TeacherAttendanceSummaryViewData.Create(attendanceSummary, d));
         }
 
         [AuthorizationFilter("Teacher", true, new[] { AppPermissionType.Attendance })]
