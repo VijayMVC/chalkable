@@ -646,7 +646,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, result);
         },
 
-
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
         function fetchAddAttributeFuture_(announcementId, announcementType) {
             var attributeId = this.assignedAttributeService
@@ -663,6 +662,9 @@ NAMESPACE('chlk.controllers', function (){
                         .getAnnouncementAttributeTypesList());
                     attribute.setReadOnly(false);
                     this.prepareAttribute(attribute);
+                    var attributes = this.getCachedAnnouncementAttributes();
+                    attributes.push(attribute);
+                    this.cacheAnnouncementAttributes(attributes);
                     return attribute;
                 }, this);
         },
@@ -698,6 +700,8 @@ NAMESPACE('chlk.controllers', function (){
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(deleted){
+                    var attributes = this.getCachedAnnouncementAttributes().filter(function(attribute){return attribute.getId() != attributeId});
+                    this.cacheAnnouncementAttributes(attributes);
                     return new chlk.models.announcement.AnnouncementAttributeViewData.$fromId(attributeId, deleted);
                 }, this);
         },
@@ -854,6 +858,15 @@ NAMESPACE('chlk.controllers', function (){
                     attribute.setAttributeAttachment(attachment);
                     attribute.setAttributeTypes(this.assignedAttributeService
                         .getAnnouncementAttributeTypesList());
+                    attribute.setAnnouncementType(announcementType);
+                    this.prepareAttribute(attribute);
+                    var attributes = this.getCachedAnnouncementAttributes();
+                    var attribute2 = attributes.filter(function(attr){return attr.getId() == attribute.getId()})[0];
+                    attribute2.setAttributeAttachment(attribute.getAttributeAttachment());
+                    attribute2.setAttributeTypes(this.assignedAttributeService
+                        .getAnnouncementAttributeTypesList());
+                    attribute2.setAnnouncementType(announcementType);
+                    this.cacheAnnouncementAttributes(attributes);
                     return attribute;
                 }, this);
             return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'add-attribute-attachment');
@@ -873,6 +886,12 @@ NAMESPACE('chlk.controllers', function (){
                     attribute.setReadOnly(false);
                     attribute.setAttributeTypes(this.assignedAttributeService
                         .getAnnouncementAttributeTypesList());
+
+                    var attributes = this.getCachedAnnouncementAttributes();
+                    var attribute2 = attributes.filter(function(attr){return attr.getId() == attribute.getId()})[0];
+                    attribute2.setAttributeAttachment(null);
+                    this.cacheAnnouncementAttributes(attributes);
+
                     return attribute;
                 }, this);
             return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'remove-attribute-attachment');
@@ -990,11 +1009,11 @@ NAMESPACE('chlk.controllers', function (){
                 "download-attachment",
                 "Download Attachment",
                 "/AnnouncementAttribute/DownloadAttributeAttachment.json?needsDownload=true&assignedAttributeId=" + attributeId.valueOf() +
-                    "&announcementType=" +announcementType.valueOf()
+                    "&announcementType=" +announcementType.valueOf() + "&time=" + getDate().getTime()
             );
 
             if(attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE.valueOf()){
-                attachmentUrl = attachment.getUrl();
+                attachmentUrl = attachment.getUrl() + "&time=" + getDate().getTime();
                 var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(
                     attachmentUrl,
                     [downloadAttachmentButton],
