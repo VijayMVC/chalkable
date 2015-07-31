@@ -96,9 +96,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [chlk.controllers.LEIntegrated()],
             [[chlk.models.id.ClassId]],
-            function giveLECreditsAction(classId){
+            function giveLECreditsAction(classId_){
                 var result = this.teacherService
-                    .giveLECredits(classId)
+                    .giveLECredits(classId_)
                     .attach(this.validateResponse_());
 
                 return this.ShadeView(chlk.activities.classes.LECreditsDialog, result);
