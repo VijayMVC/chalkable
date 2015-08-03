@@ -51,7 +51,10 @@ namespace Chalkable.BackgroundTaskProcessor
                 }
             }
 
-            foreach (var dbServer in Settings.ChalkableSchoolDbServers)
+            string[] serversForTemplateDbs = Settings.ChalkableSchoolDbServers;
+            if (backup)
+                serversForTemplateDbs = serversForTemplateDbs.Take(1).ToArray();
+            foreach (var dbServer in serversForTemplateDbs)
             {
                 var c = new SqlConnection(Settings.GetSchoolTemplateConnectionString(dbServer));
                 var t = new AllSchoolRunner<long>.Task
