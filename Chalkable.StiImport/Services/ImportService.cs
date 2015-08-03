@@ -127,6 +127,7 @@ namespace Chalkable.StiImport.Services
             DownloadSyncData();
             Log.LogInfo("remove user records");
             context.GetSyncResult<User>().Inserted = new User[0];
+            context.GetSyncResult<User>().Rows = new User[0];
             context.GetSyncResult<User>().Updated = null;
             context.GetSyncResult<User>().Deleted = null;
             Log.LogInfo("do initial sync");
