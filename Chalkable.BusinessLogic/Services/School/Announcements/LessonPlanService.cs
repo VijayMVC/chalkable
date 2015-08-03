@@ -207,7 +207,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             if (string.IsNullOrEmpty(lessonPlan.Title))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "LessonPlan Title "));
-            if (da.Exists(lessonPlan.Title, lessonPlan.Id) && lessonPlan.GalleryCategoryRef.HasValue)
+            if (da.ExistsInGallery(lessonPlan.Title, lessonPlan.Id) && lessonPlan.GalleryCategoryRef.HasValue)
                 throw new ChalkableException("Lesson Plan with current title already exists in the gallery");
                     
         }

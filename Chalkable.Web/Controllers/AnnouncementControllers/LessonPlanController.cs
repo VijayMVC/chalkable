@@ -58,7 +58,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("Teacher")]
         public ActionResult EditTitle(int announcementId, string title)
         {
-            return EditTitle(announcementId, AnnouncementType.LessonPlan, title, t => SchoolLocator.LessonPlanService.Exists(t, announcementId));              
+            return EditTitle(announcementId, AnnouncementType.LessonPlan, title, t => SchoolLocator.LessonPlanService.ExistsInGallery(t, announcementId));              
         }
 
         [AuthorizationFilter("Teacher")]
