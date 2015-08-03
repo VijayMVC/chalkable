@@ -77,6 +77,11 @@
   <ItemGroup>
     <PublishProfile Include="Profiles\chalkablestaging.azurePubxml" />
   </ItemGroup>
+  <ItemGroup>
+    <DiagnosticsConfiguration Include="Chalkable.BackgroundTaskProcessorContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="Chalkable.BackgroundTaskProducerContent\diagnostics.wadcfgx" />
+    <DiagnosticsConfiguration Include="Chalkable.WebContent\diagnostics.wadcfgx" />
+  </ItemGroup>
   <!-- Import the target files for this project template -->
   <PropertyGroup>
     <VisualStudioVersion Condition=" '$(VisualStudioVersion)' == '' ">10.0</VisualStudioVersion>

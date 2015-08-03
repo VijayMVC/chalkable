@@ -42,7 +42,6 @@ UpgradeLog*
 app/node_modules
 NEW UI
 Chalkable.Web/Content/extjs
-Chalkable.Azure
 .idea
 Chalkable.Tests/Services/Master
 Chalkable.Tests/Services
