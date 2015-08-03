@@ -44,7 +44,7 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
 
-            if (CanGiveCredits())
+            if (!CanGiveCredits())
                 throw new ChalkableSecurityException();
 
             var syId = Context.SchoolYearId.Value;
