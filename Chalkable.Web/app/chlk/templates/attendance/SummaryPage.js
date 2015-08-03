@@ -30,21 +30,18 @@ NAMESPACE('chlk.templates.attendance', function () {
             Object, function getChartOptions(data){
                 var classesInfo = data.getClassesStats();
                 var series = [];
-                var dt = getDate();
-                dt.setMinutes(0);
-                dt.setHours(0);
-                dt.setSeconds(0);
-                dt.setMilliseconds(0);
                 var today = new chlk.models.common.ChlkDate(getDate());
                 var gpStart = this.getGradingPeriod().getStartDate();
                 var start = today.add(chlk.models.common.ChlkDateEnum.MONTH, -1);
+                var startDate = start.add(chlk.models.common.ChlkDateEnum.DAY, -1).getDate();
+                var todayDate = getDate();
                 classesInfo && classesInfo.forEach(function(type, i){
-                    var data = [], sTooltips = {};
-                    type.getDayStats().forEach(function(item, i){
-                        var cur = item.getDate().getDate();
-                        if(cur >= start.add(chlk.models.common.ChlkDateEnum.DAY, -1).getDate() && cur <= today.getDate()){
-                            var time = item.getDate().getDate().getTime();
-                            data.push([time, item.getStudentCount() || 0]);
+                    var data = [];
+                    type.getDayStats().slice(-31).forEach(function(item, i){
+                        var cur = getDate(item.date);
+                        if(cur >= startDate && cur <= todayDate){
+                            var time = cur.getTime();
+                            data.push([time, item.studentcount || 0]);
                         }
                     });
 
@@ -57,6 +54,7 @@ NAMESPACE('chlk.templates.attendance', function () {
                         data: data
                     });
                 });
+
 
                 var min = Date.UTC(start.getDate().getFullYear(), start.getDate().getMonth(), start.getDate().getDate()),
                     max = Date.UTC(today.getDate().getFullYear(), today.getDate().getMonth(), today.getDate().getDate()),

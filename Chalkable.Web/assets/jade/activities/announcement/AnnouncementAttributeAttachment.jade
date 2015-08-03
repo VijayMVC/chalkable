@@ -7,7 +7,12 @@ mixin AttributeAttachment_(attachment)
             data-uuid=attachment.getUuid(),
             data-name=attachment.getName(),
             data-mime-type=attachment.getMimeType()
-        )=attachment.getName()
+        )
+            if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER
+                A(href=attachment.getUrl()).download-link.attachment-name=attachment.getName()
+            else
+                +ActionLink('announcement', 'viewAttributeAttachment', attachment.getAttributeId(), attachment.getAnnouncementType(),
+                attachment.getAnnouncementId()).attachment-name=attachment.getName()
             +ActionLink('announcement', 'removeAttributeAttachment', attachment.getAnnouncementType(),
             attachment.getAnnouncementId(), attachment.getAttributeId(), attachment.getId()).remove-file-attachment
     else

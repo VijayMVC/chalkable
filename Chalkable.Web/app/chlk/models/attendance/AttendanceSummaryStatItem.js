@@ -9,11 +9,11 @@ NAMESPACE('chlk.models.attendance', function () {
     CLASS(
         UNSAFE, FINAL, 'AttendanceSummaryStatItem', IMPLEMENTS(ria.serialize.IDeserializable), [
             VOID, function deserialize(raw){
-                this.dayStats = SJX.fromArrayOfDeserializables(raw.daystats, chlk.models.attendance.AttendanceStatItem);
+                this.dayStats = raw.daystats || [];
                 this.clazz = SJX.fromDeserializable(raw.class, chlk.models.classes.Class);
             },
 
-            ArrayOf(chlk.models.attendance.AttendanceStatItem), 'dayStats',
+            Array, 'dayStats',
             chlk.models.classes.Class, 'clazz'
         ]);
 });

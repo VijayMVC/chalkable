@@ -13,18 +13,18 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public ShortAttendanceSummaryViewData Absent { get; set; }
         public ShortAttendanceSummaryViewData Late { get; set; }
 
-        public static TeacherAttendanceSummaryViewData Create(AttendanceSummary attendanceSummary)
+        public static TeacherAttendanceSummaryViewData Create(AttendanceSummary attendanceSummary, DateTime currentDate)
         {
             var res = new TeacherAttendanceSummaryViewData();
             var alerts = new List<string>();
             res.Absent = new ShortAttendanceSummaryViewData
                 {
-                    ClassesStats = ClassAttendanceStatViewData.Create(attendanceSummary.ClassesDaysStat, AttendanceTypeEnum.Absent),
+                    ClassesStats = ClassAttendanceStatViewData.Create(attendanceSummary.ClassesDaysStat, AttendanceTypeEnum.Absent, currentDate),
                     Students = ShortStudentAttendanceViewData.Create(attendanceSummary.Students, alerts, AttendanceTypeEnum.Absent)
                 };
             res.Late = new ShortAttendanceSummaryViewData
                 {
-                    ClassesStats = ClassAttendanceStatViewData.Create(attendanceSummary.ClassesDaysStat, AttendanceTypeEnum.Tardies),
+                    ClassesStats = ClassAttendanceStatViewData.Create(attendanceSummary.ClassesDaysStat, AttendanceTypeEnum.Tardies, currentDate),
                     Students = ShortStudentAttendanceViewData.Create(attendanceSummary.Students, alerts, AttendanceTypeEnum.Tardies)
                 };
             return res;
@@ -43,12 +43,12 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public ShortClassViewData Class { get; set; }
         public IList<ShortAttendanceStatViewData> DayStats { get; set; }
  
-        public static IList<ClassAttendanceStatViewData> Create(IList<ClassDailyAttendanceSummary> classDailyAttendances, AttendanceTypeEnum type)
+        public static IList<ClassAttendanceStatViewData> Create(IList<ClassDailyAttendanceSummary> classDailyAttendances, AttendanceTypeEnum type, DateTime currentDate)
         {
             return classDailyAttendances.Select(x => new ClassAttendanceStatViewData
                 {
                     Class = ShortClassViewData.Create(x.Class),
-                    DayStats = ShortAttendanceStatViewData.Create(x.DailyAttendances, type)
+                    DayStats = ShortAttendanceStatViewData.Create(x.DailyAttendances, type, currentDate)
                 }).ToList();
         }
     }
@@ -59,10 +59,15 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public string Summary { get; set; }
         public DateTime Date { get; set; }
 
-        public static IList<ShortAttendanceStatViewData> Create(IList<DailyAttendanceSummary> dailyAttendanceSummaries, AttendanceTypeEnum type)
+        public static IList<ShortAttendanceStatViewData> Create(IList<DailyAttendanceSummary> dailyAttendanceSummaries, AttendanceTypeEnum type, DateTime currentDate)
         {
             var res = new List<ShortAttendanceStatViewData>();
             string prevMonth = "";
+
+            //get only for last month
+            var fromDate = currentDate.AddDays(-31);
+            dailyAttendanceSummaries = dailyAttendanceSummaries.Where(x => x.Date.Date >= fromDate && x.Date.Date <= currentDate).ToList();
+
             foreach (var dailyAttendanceSummary in dailyAttendanceSummaries)
             {
                 var attCount = 0;
