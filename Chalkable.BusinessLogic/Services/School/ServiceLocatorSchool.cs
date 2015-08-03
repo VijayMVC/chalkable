@@ -74,6 +74,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IAdminAnnouncementService AdminAnnouncementService { get; }
         IAnnouncementFetchService AnnouncementFetchService { get; }
         IBaseAnnouncementService GetAnnouncementService(AnnouncementType? type);
+
+        ILEService LeService { get; }
     }
 
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -143,6 +145,8 @@ namespace Chalkable.BusinessLogic.Services.School
         private IAdminAnnouncementService adminAnnouncementService;
         private IAnnouncementFetchService announcementFetchService;
 
+        private ILEService leService;
+
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
         {
@@ -209,6 +213,7 @@ namespace Chalkable.BusinessLogic.Services.School
             classAnnouncementService = new ClassAnnouncementService(this);
             adminAnnouncementService = new AdminAnnouncementService(this);
             announcementFetchService = new AnnouncementFetchService(this);
+            leService = new LEService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -269,6 +274,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IDbMaintenanceService DbMaintenanceService {get { return dbMaintenanceService; }}
         public ISettingsService SettingsService { get { return settingsService; } }
         public ILPGalleryCategoryService LPGalleryCategoryService { get { return lpGalleryCategoryService; } }
+        public ILEService LeService { get { return leService; } }
 
         public IDbService SchoolDbService
         {
@@ -295,6 +301,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 default : throw new ChalkableException("Not supported announcement type"); //todo implement NotSupportedChalkableException
             }
         }
-
+        
     }
 }

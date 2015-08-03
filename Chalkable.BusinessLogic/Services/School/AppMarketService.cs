@@ -333,10 +333,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IDictionary<Guid, int> GetNotInstalledStudentCountPerApp(int staffId, int classId, int markingPeriodId)
         {
-            using (var uow = Read())
-            {
-                return  new ApplicationInstallDataAccess(uow).GetNotInstalledStudentsCountPerApplication(staffId, classId, markingPeriodId);
-            }
+           return DoRead(u=> new ApplicationInstallDataAccess(u).GetNotInstalledStudentsCountPerApplication(staffId, classId, markingPeriodId));
         }
     }
 }

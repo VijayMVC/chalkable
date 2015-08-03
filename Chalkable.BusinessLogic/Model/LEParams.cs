@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Chalkable.BusinessLogic.Model
+﻿namespace Chalkable.BusinessLogic.Model
 {
     public class LEParams
     {
@@ -14,5 +8,7 @@ namespace Chalkable.BusinessLogic.Model
         public bool LESyncComplete { get; set; }
         public bool IssueLECreditsEnabled { get; set; }
         public bool LEAccessEnabled { get; set; }
+        public bool AwardLECredits { get; set; }
+        public bool AwardLECreditsClassroom { get; set; }
     }
 }

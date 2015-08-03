@@ -41,6 +41,13 @@ namespace Chalkable.Web.Controllers
             return Json(new PaginatedList<ApplicationForAttachViewData>(res, st / cnt, cnt, totalCount));
         }
 
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult ListInstalledForAdminAttach(int personId, IntList groupIds, int? start, int? count)
+        {
+            throw new NotImplementedException();
+        }
+
+
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult SuggestedApps(int classId, GuidList abIds, int markingPeriodId, int? start, int? count, bool? myAppsOnly)
         {

@@ -1838,6 +1838,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+        public ILEService LeService { get { throw new NotImplementedException(); } }
     }
 
 }

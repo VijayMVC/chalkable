@@ -206,35 +206,11 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.MESSAGIN_DISABLED] = Context.MessagingDisabled;
 
 
-            var leParams = PrepareLEParams();
+            var leParams = SchoolLocator.LeService.GetLEParams();
 
             PrepareJsonData(leParams, ViewConstants.LE_PARAMS);
             PrepareJsonData(Context.Claims, ViewConstants.USER_CLAIMS);
 
-        }
-
-        private LEParams PrepareLEParams()
-        {
-            //TODO: move this LEService
-            var leLinkSetting = SchoolLocator.SettingsService.GetSetting("LearningEarnings", "LinkStatus");
-            var leUrlSetting = SchoolLocator.SettingsService.GetSetting("LearningEarnings", "Url");
-            var leLinkStatus = leLinkSetting != null && leLinkSetting.Value == "active";
-            var leUrl = leUrlSetting != null ? leUrlSetting.Value : "";
-
-            bool enabled = ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.AWARD_LE_CREDITS})
-                           ||
-                           ClaimInfo.HasPermissions(Context.Claims,
-                               new List<string> {ClaimInfo.AWARD_LE_CREDITS_CLASSROOM});
-            var leParams = new LEParams
-            {
-                LEEnabled = Context.LEEnabled,
-                LESyncComplete = Context.LESyncComplete,
-                LELinkStatus = leLinkStatus,
-                LEBaseUrl = leUrl,
-                IssueLECreditsEnabled =  enabled,
-                LEAccessEnabled =  enabled
-            };
-            return leParams;
         }
 
         private void PrepareCommonViewDataForSchoolPerson(StartupData startupData)
@@ -355,48 +331,18 @@ namespace Chalkable.Web.Controllers
                    || ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM_ADMIN});
         }
 
-
+        
         [AuthorizationFilter("Teacher, Student")]
         public ActionResult LearningEarnings()
         {
-
-            //TODO: move this LEService
-            var leParams = PrepareLEParams();
-
-            if (!Context.PersonId.HasValue || leParams.LEEnabled && (!leParams.LESyncComplete || !leParams.LEAccessEnabled))
-                throw new ChalkableSecurityException();
-
-            var person = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
-
-            var integratedSignOn = leParams.LEEnabled && leParams.LELinkStatus;
-
-            var integratedSignOnUrl = string.Format(leParams.LEBaseUrl + "sti/auth?districtGUID={0}&sti_session_variable={1}", Context.DistrictId, Context.SisToken);
-            var nonIntegratedSignOnUrl = string.Format(leParams.LEBaseUrl + "sti/auth?districtGUID={0}&schoolid={1}&userid={2}&firstname={3}&lastname={4}",
-                Context.DistrictId, person.SchoolRef, person.UserId, person.FirstName, person.LastName);
-
-            var url = integratedSignOn ? integratedSignOnUrl : nonIntegratedSignOnUrl;
-            return new RedirectResult(url);
-          
+            return new RedirectResult(SchoolLocator.LeService.BuildLESingOnUlr());
         }
 
         [AuthorizationFilter("Teacher")]
         public ActionResult LECredits(int? classId)
-        {
-            //TODO: move this LEService
-            var leParams = PrepareLEParams();
-            if (!Context.PersonId.HasValue || leParams.LEEnabled && !leParams.LESyncComplete && !leParams.IssueLECreditsEnabled)
-               throw new ChalkableSecurityException();
-
-            var syId = GetCurrentSchoolYearId();
-            IList<int> studentIds;
-            if (!classId.HasValue)
-                studentIds = SchoolLocator.StudentService.GetTeacherStudents(Context.PersonId.Value, syId).Select(x => x.Id).ToList();
-            else
-                studentIds = SchoolLocator.ClassService.GetClassPersons(null, classId.Value, null, null).Select(x => x.PersonRef).Distinct().ToList();
-
-            var clsPersons = studentIds.JoinString(",");
-            var integratedSignOnUrl = string.Format(leParams.LEBaseUrl + "sti/give_credits?districtGUID={0}&sti_session_variable={1}&studentIds={2}", Context.DistrictId, Context.SisToken,  clsPersons);
-            return Json(new {url = integratedSignOnUrl});
+        {   
+            var url = SchoolLocator.LeService.BuildLECreditsUrl(classId);
+            return Json(new {url});
         }
     }
 
