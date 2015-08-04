@@ -313,7 +313,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('apps')],
         [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.id.AppId]],
-        function tryToInstallDistrictAdminAction(appId) {
+        function tryToInstallDistrictAdminAction(appId, fromNewItem_) {
                 var appInfo = ria.async.wait(
                     this.appMarketService.getDetails(appId).attach(this.validateResponse_()),
                     this.classService.getAllSchoolsActiveClasses().attach(this.validateResponse_())
@@ -321,7 +321,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(data){
                     var app = this.prepareAppPictures_(data[0]);
                     app = this.prepareApplicationInstallGroups_(app);
-                    return new chlk.models.apps.AppMarketInstallViewData(app, data[1]);
+                    return new chlk.models.apps.AppMarketInstallViewData(app, data[1], fromNewItem_);
                 }, this);
             return this.ShadeOrUpdateView(chlk.activities.apps.InstallAppDialog, appInfo);
         },
