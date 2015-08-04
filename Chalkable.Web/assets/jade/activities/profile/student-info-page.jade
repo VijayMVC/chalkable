@@ -13,16 +13,17 @@ mixin ParentProfileInfoView(contacts)
                 if person.getEmail()
                     .section-data
                         .info-title=Msg.Email
-                        .data-info=person.getEmail()
-                if primaryPhone
-                    .section-data
-                        .info-title=Msg.Cell
-                        .data-info=primaryPhone
+                        .data-info=person.getEmail()                
+                each phone in person.getPhones()                    
+                    if phone.isIsPrimary()
+                        .section-data
+                            .info-title=Msg.PrimaryPhone                    
+                            .data-info=phone.getValue()                            
                 if address
                     .section-data
                         .info-title=Msg.Address
                         .data-info=address
-                -var readOnly = true;                                        
+                -var readOnly = true;                                        ;
                 +LabeledCheckbox('Is Family Member', 'Family-Member', contact.isFamilyMember(), readOnly)
                 +LabeledCheckbox('Is Emergency Contact', 'Emergency-Contact', contact.isEmergencyContact(), readOnly)
                 +LabeledCheckbox('Is Responsible For Bill', 'Is Responsible For Bill', contact.isResponsibleForBill(), readOnly)
