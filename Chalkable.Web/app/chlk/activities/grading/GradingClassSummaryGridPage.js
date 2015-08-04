@@ -135,7 +135,8 @@ NAMESPACE('chlk.activities.grading', function () {
                                 avgTpl.options({
                                     ableDisplayAlphaGrades: model.isAbleDisplayAlphaGrades(),
                                     roundDisplayedAverages: model.isRoundDisplayedAverages(),
-                                    gradingPeriodId: model.getGradingPeriod().getId()
+                                    gradingPeriodId: model.getGradingPeriod().getId(),
+                                    ableDisplayStudentAverage: model.isAbleDisplayStudentAverage()
                                 });
 
                                 avgTpl.renderTo(dom.find('.avg-value-container[data-average-id=' + average.getAverageId().valueOf() + '][data-student-id=' + average.getStudentId().valueOf() + ']:not(.active-cell)').empty());

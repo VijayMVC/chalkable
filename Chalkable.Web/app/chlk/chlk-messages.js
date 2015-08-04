@@ -178,6 +178,7 @@ var Msg = {
     Popular: 'Popular',
     Post: 'Post',
     Pricing: 'Pricing',
+    PrimaryPhone: 'Phone',
     Private: 'Private',
     Profile: 'Profile',
     Public: 'Public',
