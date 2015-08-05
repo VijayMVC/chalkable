@@ -1,5 +1,4 @@
 REQUIRE('chlk.templates.profile.SchoolPersonProfileTpl');
-REQUIRE('chlk.templates.student.StudentClassGradingTpl');
 REQUIRE('chlk.models.student.StudentProfileGradingViewData');
 
 NAMESPACE('chlk.templates.student', function(){
@@ -12,6 +11,6 @@ NAMESPACE('chlk.templates.student', function(){
         'StudentProfileGradingTpl', EXTENDS(chlk.templates.profile.SchoolPersonProfileTpl.OF(chlk.models.student.StudentGradingInfo)),[
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.schoolYear.MarkingPeriod, 'markingPeriod'
+            chlk.models.schoolYear.GradingPeriod, 'gradingPeriod'
         ]);
 });

@@ -71,11 +71,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.SchoolPersonId, chlk.models.id.MarkingPeriodId]],
-            ria.async.Future, function getGradingInfo(studentId, markingPeriodId){
-                return this.get('Student/Grading.json', chlk.models.student.StudentGradingInfo, {
-                    personId: studentId && studentId.valueOf(),
-                    markingPeriodId: markingPeriodId && markingPeriodId.valueOf()
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId]],
+            ria.async.Future, function getGradingInfo(studentId, gradingPeriodId_){
+                return this.get('Student/GradingSummary.json', chlk.models.student.StudentGradingInfo, {
+                    studentId: studentId && studentId.valueOf(),
+                    gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf()
                 });
             },
 

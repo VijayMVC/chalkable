@@ -1,23 +1,20 @@
 user = self.getUser()
-.loader-container
-    .loader
-    +UserProfileTopBar(self, self.getUser(), 'grading')
-    .profile-info.grading-view
-        .summary-info
-            .person-info.standard-short-info
-                .avarar-container.standard-small-container
-                    .img-container
-                        +PersonImg(user, 64, true)
-                h1.profile-person-name=user.getDisplayName()
-            h2.mp-conteiner
-                label=self.getMarkingPeriod().getName()
-            .grading-info
-                +LeftRightToolbar(user.getStudentGradings(), chlk.templates.student.StudentClassGradingTpl)(
-                    itemsCount = 6,
-                    disablePrevButton = false,
-                    needDots = false,
-                    hideArrows = true,
-                    fixedPadding = true,
-                )
-            h2
-                label Stats & facts
+.profile-page
+    h2.page-title=Msg.Student_profile
+
+    +ProfileTopBar(self, 'grading')
+    .summary-view
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(user, 140, true)
+            #info-panel.central-block.panel-block
+                -var displayName =user.getDisplayName() || user.getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+
+        .grading-stats
+            each gpStats in user.getGradesByGradingPeriod()
+                +CloseOpen(gpStats.getGradingPeriod().getName())
+                    +LeftRightToolbar().classes-bar
+                        each classGrading in user.getStudentGradings()
+                            div
