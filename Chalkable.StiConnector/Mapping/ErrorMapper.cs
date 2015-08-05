@@ -211,7 +211,7 @@ namespace Chalkable.StiConnector.Mapping
         private static IDictionary<string, string> mapper = new Dictionary<string, string>
             {
                 {InowErrors.ACTIVITY_DATE_INVALID_RANGE_FOR_SECION_ERROR, "Looks like you set the due date when class isn't scheduled. Try a different date."},
-                {InowErrors.ACTIVITY_DELETEFAILED_ACTIVITYSCORESFOUND_ERROR, "You can't delete an item if there are already grades on it. Delete those grades to delete the item. Also it could be withdrawn students."},
+                {InowErrors.ACTIVITY_DELETEFAILED_ACTIVITYSCORESFOUND_ERROR, "You can't delete an item if there are already grades on it. Delete those grades to delete the item. Please notice that withdrawn students also could have grades."},
                 {InowErrors.ACTIVITY_MAXIMUM_SCORE_REQUIRED_IF_SCORED_ERROR, "Looks like you forgot to add a Max Score for your assignment. You need to add this if the item is gradable."},
                 {InowErrors.ACTIVITY_MAXIMUM_SCORE_INVALID_RANGE_0_TO_9999_99_ERROR, "The max score has to be a number between 0 and 9,999."},
                 {InowErrors.ACTIVITY_MAYBEDROPPED_REQUIRED_IF_SCORED_ERROR, "If your item is gradable, it needs to be droppable. "},
