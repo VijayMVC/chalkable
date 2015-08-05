@@ -24,6 +24,7 @@ NAMESPACE('chlk.models.calendar', function () {
                 var year = date.getDate().getFullYear();
                 var month = date.getDate().getMonth();
                 var day = date.getDate().getDate();
+                day = day > 28 ? 28 : day;
                 var prevMonth = month ? month - 1 : 11;
                 var prevYear = month ? year : year - 1;
                 var prevDate = getSchoolYearServerDate(prevYear, prevMonth, day);
