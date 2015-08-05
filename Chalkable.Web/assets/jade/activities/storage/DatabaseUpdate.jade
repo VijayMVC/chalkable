@@ -1,0 +1,16 @@
+.db-maintenance
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('dbmaintenance', 'listBackups') Backups
+                +ActionLink('dbmaintenance', 'updateDb').pressed Update
+    +ActionForm('dbmaintenance', 'runSql').db-update-form
+        .x-form-field
+            label Master Update
+            textarea(name="masterSql")
+        .x-form-field
+            label School Update
+            textarea(name="schoolSql")
+        +Button()(type="submit").special-button.blue-button.submit-btn RUN
+
+
