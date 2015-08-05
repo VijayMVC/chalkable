@@ -6,6 +6,7 @@ REQUIRE('chlk.templates.announcement.AnnouncementAttributeAttachmentTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementAttributeAttachDocBtnTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementAppAttachments');
 REQUIRE('chlk.templates.announcement.LastMessages');
+REQUIRE('chlk.templates.common.SimpleObjectTpl');
 
 
 NAMESPACE('chlk.activities.announcement', function () {
@@ -239,6 +240,11 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 var attrJson = JSON.stringify(attrs);
                 this.dom.find('input[name=announcementAssignedAttrs]').setValue(attrJson);
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.common.SimpleObjectTpl, chlk.activities.lib.DontShowLoader())],
+            VOID, function doUpdateApp(tpl, model, msg_) {
+                this.dom.find('.attach-icon[data-id=' + model.getValue() + ']').removeClass('x-hidden');
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttributeTpl)],

@@ -351,8 +351,8 @@ NAMESPACE('chlk.controllers', function (){
 
 
         [chlk.controllers.SidebarButton('apps')],
-        [[Boolean]],
-        function installCompleteAction(result) {
+        [[Boolean, chlk.models.id.AppId]],
+        function installCompleteAction(result, appId) {
             var title = result ? "Installation successful" : "Error while installing app.";
             return this.ShowMsgBox(title, '', [{
                 text: 'Ok',
@@ -370,14 +370,18 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('apps')],
-        [[chlk.models.id.SchoolPersonId, Boolean]],
-        function quickInstallCompleteAction(personId, result){
+        [[chlk.models.id.SchoolPersonId, Boolean, chlk.models.id.AppId]],
+        function quickInstallCompleteAction(personId, result, appId){
             var res = this.appMarketService.getPersonBalance(personId, true)
                 .attach(this.validateResponse_())
                 .then(function(data){
                     var text = 'App succesfully installed! Your new balance is ' + data.getBalance();
+                    this.BackgroundUpdateView(chlk.activities.announcement.AnnouncementFormPage, chlk.models.common.SimpleObject(appId.valueOf()), chlk.activities.lib.DontShowLoader());
+                    this.BackgroundUpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, chlk.models.common.SimpleObject(appId.valueOf()), chlk.activities.lib.DontShowLoader());
+                    this.BackgroundUpdateView(chlk.activities.announcement.LessonPlanFormPage, chlk.models.common.SimpleObject(appId.valueOf()), chlk.activities.lib.DontShowLoader());
                     return new chlk.models.common.RequestResultViewData(true, text);
-                });
+                }, this);
+
             return this.UpdateView(chlk.activities.apps.QuickAppInstallDialog, res);
         },
 
@@ -480,6 +484,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(result){
                     completeActionArgs = completeActionArgs || [];
                     completeActionArgs.push(result);
+                    completeActionArgs.push(appInstallArgs[0]);
                     return this.BackgroundNavigate('appmarket', installCompleteAction, completeActionArgs);
                 }, this);
 
