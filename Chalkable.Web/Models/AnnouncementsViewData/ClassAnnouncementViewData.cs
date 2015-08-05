@@ -46,8 +46,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             MaxScore = announcement.MaxScore;
             CanDropStudentScore = announcement.MayBeDropped;
             MayBeExempt = announcement.MayBeExempt;
-            Gradable = announcement.Gradable;
-            CanGrade = Gradable && IsOwner;
+            Gradable = announcement.IsScored;
+            CanGrade = Gradable && IsOwner && announcement.IsScored ;
             DepartmentId = announcement.DepartmentId;
             HideFromStudents = !announcement.VisibleForStudent;
             WeightAddition = announcement.WeightAddition;
