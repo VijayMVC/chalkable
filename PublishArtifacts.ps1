@@ -101,7 +101,7 @@ try{
   $cspkg_urls = Get-Item ".\Chalkable.Azure\bin\Release\app.publish\Chalkable.Azure.cspkg" | PutFileWithUrl -dbase $buildNo
 
   # Put service configurations
-  $cscfg_urls = Get-Item ".\Chalkable.Azure\ServiceConfiguration.*.cscfg" | Where-Object {!($_.Name -like "*Local*")} | PutFileWithUrl -dbase $buildNo
+  Get-Item ".\Chalkable.Azure\ServiceConfiguration.*.cscfg" | Where-Object {!($_.Name -like "*Local*")} | PutFile -dbase $buildNo
 
 
   # Statics container
@@ -124,7 +124,7 @@ try{
   # CI
   Write-Host "Starting deployment"
   $cspkg_url = $cspkg_urls | Where-Object { $_ -match ".*Azure\.cspkg" }
-  $cscfg_url = Get-Item ".\Chalkable.Azure\ServiceConfiguration.Staging.cscfg" #$cscfg_urls | Where-Object { $_ -match ".*Staging\.cscfg" }
+  $cscfg_url = Get-Item ".\Chalkable.Azure\ServiceConfiguration.Staging.cscfg"
   $service = "chalkablestaging"
   $slot = "Production"
   $deployment = Get-AzureDeployment -ServiceName $service -Slot $slot
