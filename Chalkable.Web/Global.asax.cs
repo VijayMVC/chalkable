@@ -17,6 +17,7 @@ using Chalkable.Web.Models;
 using Chalkable.Web.Models.Binders;
 using Chalkable.Web.Tools;
 using Microsoft.Web.Mvc.Controls;
+using Mindscape.Raygun4Net;
 
 
 namespace Chalkable.Web
@@ -25,6 +26,8 @@ namespace Chalkable.Web
     // visit http://go.microsoft.com/?LinkId=9394801
     public class MvcApplication : HttpApplication
     {
+        private static readonly RaygunClient RaygunClient = new RaygunClient();
+
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -68,12 +71,12 @@ namespace Chalkable.Web
 
 
         protected void Application_AuthenticateRequest(object sender, EventArgs args)
-        {
+        {            
             var chalkableUser = ChalkableAuthentication.GetUser();
             if (chalkableUser != null)
             {
                 HttpContext.Current.User = chalkableUser;
-            }
+            }            
         }
 
         void Application_BeginRequest(object source, EventArgs e)
@@ -112,6 +115,29 @@ namespace Chalkable.Web
                               "", // leave default port http or https
                               httpRequest.Url.PathAndQuery
                     ));
+        }
+
+        protected void Application_Error(object sender, EventArgs e)
+        {
+            // Code that runs when an unhandled error occurs
+
+            // Get the exception object.
+            Exception exc = Server.GetLastError();
+
+            // Handle HTTP errors
+            if (exc is HttpException)
+            {
+                // The Complete Error Handling Example generates
+                // some errors using URLs with "NoCatch" in them;
+                // ignore these here to simulate what would happen
+                // if a global.asax handler were not implemented.
+                if (exc.Message.Contains("NoCatch") || exc.Message.Contains("maxUrlLength"))
+                    return;
+            }
+
+#if !DEBUG
+                RaygunClient.SendInBackground(exc);
+#endif
         }
     }
 
