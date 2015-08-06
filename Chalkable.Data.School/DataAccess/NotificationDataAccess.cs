@@ -127,9 +127,9 @@ namespace Chalkable.Data.School.DataAccess
                 };
         }
 
-        public IList<NotificationDetails> GetNotificationsDetails(NotificationQuery query)
+        public IList<NotificationDetails> GetNotificationsDetails(NotificationQuery query, bool includeMessages = true)
         {
-            var q = BuildGetNotificationDetailsDbQuery(query);
+            var q = BuildGetNotificationDetailsDbQuery(query, includeMessages);
             using (var reader = ExecuteReaderParametrized(q.Sql.ToString(), q.Parameters))
             {
                 return ReadListNotifcationDetails(reader);
