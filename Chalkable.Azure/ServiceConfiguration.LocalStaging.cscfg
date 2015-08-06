@@ -21,7 +21,7 @@
       
       <!-- CDN and content settings-->
       <Setting name="Domain" value="" />
-      <Setting name="ScriptsRoot" value="//127.0.0.1:5001" />
+      <Setting name="ScriptsRoot" value="" />
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="/C4mMnNlyqjKQgE5uimJM/jjLQ6M14BEcCRMHvaXzo4=" />
       <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="https://localhost/chalkable" />
