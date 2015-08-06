@@ -14,6 +14,8 @@
       <Setting name="ChalkableSchoolDbServers" value="" />
       <Setting name="ChalkableSchoolTemplateDbName" value="" />
       <Setting name="DbUpdateTimeout" value="" />
+      <!-- Redis Cache -->
+      <Setting name="RedisCache.ConnectionString" value="" />
       <!-- CDN and content settings-->
       <Setting name="Domain" value="" />
       <Setting name="ScriptsRoot" value="" />

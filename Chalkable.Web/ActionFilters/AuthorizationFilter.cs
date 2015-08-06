@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Linq;
-using System.Net;
-using System.Security;
 using System.Web;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Web.ActionResults;
 using Chalkable.Web.Controllers;
-using Microsoft.IdentityModel.Protocols.WSIdentity;
 
 namespace Chalkable.Web.ActionFilters
 {

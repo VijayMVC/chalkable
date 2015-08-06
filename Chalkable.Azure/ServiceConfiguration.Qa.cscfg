@@ -13,6 +13,8 @@
       <Setting name="ChalkableSchoolDbServers" value="v8xjnk8au1.database.windows.net" />
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <Setting name="DbUpdateTimeout" value="3600" />
+      <!-- Redis Cache -->
+      <Setting name="RedisCache.ConnectionString" value="chlk-qa.redis.cache.windows.net,abortConnect=false,ssl=true,password=mOiq0phviZ0/SiUAuwCj/9hsWReh4YFzCYQWYln7uZw=" />
       <!-- CDN and content settings-->
       <Setting name="Domain" value="classroom.qa.chalkable.com" />
       <Setting name="ScriptsRoot" value="https://az374501.vo.msecnd.net/static-{0}" />

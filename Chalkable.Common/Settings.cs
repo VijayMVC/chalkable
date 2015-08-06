@@ -132,5 +132,9 @@ namespace Chalkable.Common
         {
             return ConfigurationManager.AppSettings[field];
         }
+
+        /* Global Cache */
+
+        public static string RedisCacheConnectionString { get { return Get("RedisCache.ConnectionString"); } }
     }
 }
