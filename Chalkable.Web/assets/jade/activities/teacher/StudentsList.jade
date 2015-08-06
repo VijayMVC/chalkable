@@ -17,7 +17,7 @@
         input(type="hidden", name="my", value=(self.isMy() ? 'true' : 'false')))
         input(type="hidden", name="classId", value=selectedId))
         .users-list-container
-            if self.isLEIntegrated()
+            if self.isLEIntegrated() && self.isHasAccessToLE()
                 .le-link
                     +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
             +RenderWith(self.getUsersList(), chlk.templates.people.UsersListTpl)(
