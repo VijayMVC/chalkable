@@ -34,6 +34,8 @@ REQUIRE('chlk.models.student.StudentProfileGradingViewData');
 NAMESPACE('chlk.controllers', function (){
     "use strict";
 
+    var listFutures = [];
+
     /** @class chlk.controllers.StudentsController */
     CLASS(
         'StudentsController', EXTENDS(chlk.controllers.UserController), [
@@ -132,6 +134,16 @@ NAMESPACE('chlk.controllers', function (){
                     if(isScroll)  return this.prepareUsers(usersData, start);
                     return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter(), rolesText);
                 }, this);
+
+                if(isScroll){
+                    listFutures.push(result);
+                }else{
+                    listFutures.forEach(function(item){
+                        item.cancel();
+                    });
+                    listFutures = [];
+                }
+
                 return this.UpdateView(chlk.activities.person.ListPage, result, isScroll ? chlk.activities.lib.DontShowLoader() : '');
             },
 
