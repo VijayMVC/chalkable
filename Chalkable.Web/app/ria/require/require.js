@@ -41,7 +41,7 @@ ria.__REQUIRE = ria.__REQUIRE || {};
         if (!path.match(/^\//i))
             path = appCodeDir + path;
 
-        path = path.replace(/\/\//gi, '/');
+        path = (path.match(/^\//i) ? '/' : '') + path.replace(/\/\//gi, '/');
 
         return path;
     }
