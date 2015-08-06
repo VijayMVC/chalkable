@@ -72,6 +72,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Chalkable.BackgroundTaskProcessorContent\" />
+    <Folder Include="Chalkable.BackgroundTaskProducerContent\" />
+    <Folder Include="Chalkable.WebContent\" />
     <Folder Include="Profiles" />
   </ItemGroup>
   <ItemGroup>
