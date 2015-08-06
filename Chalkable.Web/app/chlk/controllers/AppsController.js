@@ -506,9 +506,11 @@ NAMESPACE('chlk.controllers', function (){
             return this.tryToAttachAction(announcementId, appId, announcementType, appUrlAppend_);
         },
 
-        [chlk.controllers.StudyCenterEnabled()],
         [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId, Boolean, chlk.models.id.SchoolPersonId, String]],
         function viewAppAction(url, viewUrl, mode, announcementAppId_, isBanned, studentId_, appUrlSuffix_) {
+            if(!this.isStudyCenterEnabled())
+                return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+
             var result = this.appsService
                 .getOauthCode(this.getCurrentPerson().getId(), url)
                 .catchError(function(error_){
