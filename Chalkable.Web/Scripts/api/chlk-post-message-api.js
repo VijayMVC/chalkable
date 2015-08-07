@@ -19,8 +19,8 @@ var chlkRequestSiteRoot = function () {
     if (result == 'https://qa.chalkable.com/')
         return 'https://classroom.qa.chalkable.com/';
 
-    if (result == 'https://dev.chalkable.com/')
-        return 'https://classroom.dev.chalkable.com/';
+    //if (result == 'https://dev.chalkable.com/')
+    //    return 'https://classroom.dev.chalkable.com/';
 
     return result;
 };
