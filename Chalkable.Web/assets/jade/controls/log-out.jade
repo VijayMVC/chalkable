@@ -9,6 +9,6 @@ mixin Logout(controller, action, currentPerson)
     .wrapper
         BUTTON.blue.logout-area= currentPerson.getDisplayName()
         .logout
-            a.inow(href="/User/RedirectToINow.aspx") Go to iNOW
+            a.inow(href="/User/RedirectToINow.aspx") Go to iNow
             +SwitchBlock(currentPerson)
             +ActionLink(controller, action) Log Out
