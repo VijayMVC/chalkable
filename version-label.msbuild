@@ -19,9 +19,9 @@
 			ReplacementText='$(Version)' />
     <FileUpdate Files="Chalkable.Database.Master\Chalkable.Database.Master.sqlproj" 
 			Regex='1.0.0.0' 
-			ReplacementText='$(BuildNo)' />
+			ReplacementText='1.0.0.$(BuildNo)' />
 		<FileUpdate Files="Chalkable.Database.School\Chalkable.Database.School.sqlproj" 
 			Regex='1.0.0.0' 
-			ReplacementText='$(BuildNo)' />
+			ReplacementText='1.0.0.$(BuildNo)' />
 	</Target>
 </Project>
