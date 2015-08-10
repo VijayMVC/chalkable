@@ -6,10 +6,10 @@
     [Uuid]                           NVARCHAR (255) NULL,
     [AttributeTypeId]                INT            NOT NULL,
     [VisibleForStudents]             BIT            NOT NULL,
-    [SisActivityAssignedAttributeId] INT            NULL,
     [SisAttributeAttachmentId]       INT            NULL,
     [SisAttachmentName]              NVARCHAR (255) NULL,
     [SisAttachmentMimeType]          NVARCHAR (255) NULL,
+    [SisActivityAssignedAttributeId] INT            NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_AnnouncementAssignedAttribute_Announcement] FOREIGN KEY ([AnnouncementRef]) REFERENCES [dbo].[Announcement] ([Id]),
     CONSTRAINT [FK_AnnouncementAssignedAttribute_AttributeTypeId] FOREIGN KEY ([AttributeTypeId]) REFERENCES [dbo].[AnnouncementAttribute] ([Id])

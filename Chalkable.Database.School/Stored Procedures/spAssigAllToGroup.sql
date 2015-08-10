@@ -1,4 +1,5 @@
 ﻿
+
 create procedure spAssigAllToGroup @groupId int, @now datetime2
 as
 begin transaction

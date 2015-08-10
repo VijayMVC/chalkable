@@ -1,5 +1,4 @@
-﻿
-CREATE Procedure [dbo].[spGetStartupData]
+﻿CREATE Procedure [dbo].[spGetStartupData]
 @schoolYearId int,
 @personId int,
 @roleId int,

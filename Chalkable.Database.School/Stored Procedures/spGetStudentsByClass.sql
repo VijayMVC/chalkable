@@ -1,4 +1,6 @@
-﻿CREATE Procedure [dbo].[spGetStudentsByClass]
+﻿
+
+CREATE Procedure [dbo].[spGetStudentsByClass]
 @classId int,
 @markingPeriodId int,
 @isEnrolled bit

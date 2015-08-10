@@ -1,5 +1,4 @@
 ﻿
-
 CREATE Procedure [dbo].[spCreateLessonPlan] @schoolYearId int, @classId int, @personId int, @created datetime2, @startDate datetime2, @endDate datetime2, @state int
 As
 Begin Transaction

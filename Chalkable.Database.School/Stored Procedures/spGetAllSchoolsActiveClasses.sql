@@ -1,4 +1,5 @@
-﻿CREATE Procedure spGetAllSchoolsActiveClasses
+﻿
+CREATE Procedure spGetAllSchoolsActiveClasses
 as
 
 Declare @class TClassDetails

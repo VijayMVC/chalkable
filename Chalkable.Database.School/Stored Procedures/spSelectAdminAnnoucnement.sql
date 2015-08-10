@@ -1,4 +1,5 @@
-﻿Create Procedure spSelectAdminAnnoucnement @adminAnnouncementT TAdminAnnouncement readonly
+﻿
+Create Procedure spSelectAdminAnnoucnement @adminAnnouncementT TAdminAnnouncement readonly
 As
 Select
 t.*,

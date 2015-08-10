@@ -1,4 +1,5 @@
-﻿CREATE View [dbo].[vwClass]
+﻿
+CREATE View [dbo].[vwClass]
 As
 Select
 Class.Id as Class_Id,

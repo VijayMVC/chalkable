@@ -1,7 +1,6 @@
 ﻿
 
 
-
 CREATE procedure [dbo].[spGetClassAnnouncementsBySisActivities]
 @personId int,
 @sisActivityIds TInt32 ReadOnly

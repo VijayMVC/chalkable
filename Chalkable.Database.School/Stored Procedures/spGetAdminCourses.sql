@@ -1,4 +1,5 @@
 ﻿
+
 create procedure [dbo].[spGetAdminCourses] @schoolYearId int, @gradeLevelId int
 as
 

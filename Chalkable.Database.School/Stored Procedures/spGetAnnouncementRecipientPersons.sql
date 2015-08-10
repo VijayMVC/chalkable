@@ -1,6 +1,5 @@
 ﻿
 
-
 CREATE Procedure [dbo].[spGetAnnouncementRecipientPersons]
 @announcementId int,
 @callerId int

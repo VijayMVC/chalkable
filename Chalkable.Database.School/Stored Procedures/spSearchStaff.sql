@@ -1,4 +1,6 @@
-﻿CREATE Procedure [dbo].[spSearchStaff]
+﻿
+
+CREATE Procedure [dbo].[spSearchStaff]
 @start int,
 @count int,
 @classId int,

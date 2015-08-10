@@ -37,9 +37,6 @@ and PersonRef in (select id from @personIdsT)
 group by ApplicationRef
 
 
-
-
-
 select app.id as ApplicationId,
 (case when appSt.appId is null then @classStudentCount else @classStudentCount - appSt.studentCount end) as NotInstalledStudentCount
 from @appsIdsT app

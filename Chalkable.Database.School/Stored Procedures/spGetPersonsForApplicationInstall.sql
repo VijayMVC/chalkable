@@ -1,4 +1,6 @@
-﻿CREATE Procedure [dbo].[spGetPersonsForApplicationInstall]
+﻿
+
+CREATE Procedure [dbo].[spGetPersonsForApplicationInstall]
 @applicationId uniqueidentifier, @callerId int, @personId int, @classIds TInt32 readonly, @callerRoleId int
 , @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolYearId int
 as

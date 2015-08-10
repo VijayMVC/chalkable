@@ -1,5 +1,4 @@
 ﻿
-
 Create Procedure spSearchClasses
 @filter1 nvarchar(max), @filter2 nvarchar(max), @filter3 nvarchar(max)
 as

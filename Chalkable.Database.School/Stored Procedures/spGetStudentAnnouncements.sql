@@ -1,4 +1,6 @@
-﻿CREATE procedure [dbo].[spGetStudentAnnouncements]
+﻿
+
+CREATE procedure [dbo].[spGetStudentAnnouncements]
 @id int, @schoolId int, @personId int, @classId int
 , @fromDate DateTime2, @toDate DateTime2, @start int, @count int
 , @complete bit, @adminOnly bit

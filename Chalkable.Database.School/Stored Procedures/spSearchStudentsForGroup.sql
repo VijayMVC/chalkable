@@ -1,5 +1,4 @@
 ﻿
-
 CREATE Procedure [dbo].[spSearchStudentsForGroup]
 @groupId Int,
 @schoolYearId Int,

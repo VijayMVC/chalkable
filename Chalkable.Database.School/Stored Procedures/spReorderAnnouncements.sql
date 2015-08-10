@@ -1,4 +1,5 @@
-﻿CREATE procedure [dbo].[spReorderAnnouncements] @schoolYearId int, @classAnnType int, @classId int
+﻿
+CREATE procedure [dbo].[spReorderAnnouncements] @schoolYearId int, @classAnnType int, @classId int
 as
 with AnnView as
 (

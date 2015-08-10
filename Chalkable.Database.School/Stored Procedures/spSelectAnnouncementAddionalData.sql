@@ -1,4 +1,6 @@
-﻿CREATE Procedure [dbo].[spSelectAnnouncementAddionalData] @announcementId int, @ownerId int, @callerId int, @schoolId int
+﻿
+
+CREATE Procedure [dbo].[spSelectAnnouncementAddionalData] @announcementId int, @ownerId int, @callerId int, @schoolId int
 As
 select top 1 * from vwPerson
 where Id = @ownerId and (@schoolId is null or SchoolRef = @schoolId)

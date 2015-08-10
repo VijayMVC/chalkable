@@ -18,13 +18,13 @@
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_District_SisUser]
-    ON [dbo].[User]([SisUserId] ASC, [DistrictRef] ASC);
+CREATE NONCLUSTERED INDEX [IX_USER_LOGIN_PASSWORD]
+    ON [dbo].[User]([Login] ASC, [Password] ASC);
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_USER_LOGIN_PASSWORD]
-    ON [dbo].[User]([Login] ASC, [Password] ASC);
+CREATE NONCLUSTERED INDEX [IX_User_SisUserId_District]
+    ON [dbo].[User]([SisUserId] ASC, [DistrictRef] ASC);
 
 
 GO

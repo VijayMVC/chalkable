@@ -1,4 +1,5 @@
 ﻿
+
 CREATE View vwAllSchoolsActiveClasses
 as
 Select

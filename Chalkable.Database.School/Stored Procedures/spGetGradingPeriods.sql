@@ -1,4 +1,5 @@
-﻿Create Procedure spGetGradingPeriods
+﻿
+Create Procedure spGetGradingPeriods
 @id int,
 @schoolYearId int,
 @classId int

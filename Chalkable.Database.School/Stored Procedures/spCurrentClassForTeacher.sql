@@ -1,5 +1,4 @@
 ﻿
-
 CREATE Procedure [dbo].[spCurrentClassForTeacher]
 @schoolYearId int,
 @teacherId int,
