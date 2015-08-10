@@ -67,10 +67,10 @@
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+    <Reference Include="Microsoft.WindowsAzure.Diagnostics, Version=2.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
       <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.WindowsAzure.Storage, Version=4.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -316,7 +316,9 @@
     <Compile Include="Models\DailyAttendanceViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineTypeSummaryViewData.cs" />
     <Compile Include="Models\GradedItemViewData.cs" />
-    <Compile Include="Models\GradingScaleViewData.cs" />
+    <Compile Include="Models\GradingViewData\StudentProfileGradingDetailViewData.cs" />
+    <Compile Include="Models\GradingViewData\StudentProfileGradingSummaryViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingScaleViewData.cs" />
     <Compile Include="Models\GroupsViewData\GroupExplorerViewData.cs" />
     <Compile Include="Models\GroupsViewData\GroupViewData.cs" />
     <Compile Include="Models\LPGalleryCategoryViewData.cs" />
@@ -333,15 +335,15 @@
     <Compile Include="Models\DisciplinesViewData\StudentDisciplineSummaryViewData.cs" />
     <Compile Include="Models\DistrictViewData.cs" />
     <Compile Include="Models\FinalGradeViewData.cs" />
-    <Compile Include="Models\GradingClassSummaryViewData.cs" />
-    <Compile Include="Models\GradingCommentViewData.cs" />
-    <Compile Include="Models\GradingGridViewData.cs" />
-    <Compile Include="Models\GradingPeriodViewData.cs" />
-    <Compile Include="Models\GradingStandardClassSummaryViewData.cs" />
-    <Compile Include="Models\GradingStandardGridViewData.cs" />
-    <Compile Include="Models\GradingStudentClassSummaryViewData.cs" />
-    <Compile Include="Models\GradingStudentSummaryViewData.cs" />
-    <Compile Include="Models\GradingTeacherSummaryViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingClassSummaryViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingCommentViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingGridViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingPeriodViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingStandardClassSummaryViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingStandardGridViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingStudentClassSummaryViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingStudentSummaryViewData.cs" />
+    <Compile Include="Models\GradingViewData\GradingTeacherSummaryViewData.cs" />
     <Compile Include="Models\ItemGradigStatViewData.cs" />
     <Compile Include="Models\NotificationsByDateViewData.cs" />
     <Compile Include="Models\NotificationViewData.cs" />

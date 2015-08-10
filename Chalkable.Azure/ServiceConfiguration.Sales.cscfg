@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ServiceConfiguration serviceName="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2014-06.2.4">
+<ServiceConfiguration serviceName="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2015-04.2.6">
   <Role name="Chalkable.Web">
     <Instances count="1" />
     <ConfigurationSettings>
@@ -32,9 +32,9 @@
       <Setting name="api.explorer.client-name" value="api explorer" />
       <Setting name="api.explorer.scope" value="https://sales.chalkable.com/" />
       <!--tracking-->
-      <Setting name="mixpanel-token" value=""/>
+      <Setting name="mixpanel-token" value="" />
       <!-- other settings -->
-      <Setting name="home-redirect-url" value="/Home/Index"/>
+      <Setting name="home-redirect-url" value="/Home/Index" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
@@ -65,7 +65,7 @@
       <Setting name="DbBackupServiceUrl" value="https://sn1prod-dacsvc.azure.com/DACWebService.svc" />
       <Setting name="PictureProcessorCount" value="1" />
       <!--tracking-->
-      <Setting name="mixpanel-token" value=""/>
+      <Setting name="mixpanel-token" value="" />
     </ConfigurationSettings>
   </Role>
   <Role name="Chalkable.BackgroundTaskProducer">
@@ -99,7 +99,7 @@
       <Setting name="TaskProducer.DbBackupProducer.IntervalStart" value="0" />
       <Setting name="TaskProducer.DbBackupProducer.IntervalEnd" value="86400" />
       <!--tracking-->
-      <Setting name="mixpanel-token" value=""/>
+      <Setting name="mixpanel-token" value="" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

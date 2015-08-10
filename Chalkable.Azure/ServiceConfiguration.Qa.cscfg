@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ServiceConfiguration serviceName="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2014-06.2.4">
+<ServiceConfiguration serviceName="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2015-04.2.6">
   <Role name="Chalkable.Web">
     <Instances count="1" />
     <ConfigurationSettings>
@@ -34,7 +34,7 @@
       <!--tracking-->
       <Setting name="mixpanel-token" value="" />
       <!-- other settings -->
-      <Setting name="home-redirect-url" value="https://home.qa.chalkable.com/"/>
+      <Setting name="home-redirect-url" value="https://home.qa.chalkable.com/" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="A0EDC440D203C991E3739E5121061E10B03044E7" thumbprintAlgorithm="sha1" />
