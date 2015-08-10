@@ -70,7 +70,6 @@
     <Folder Include="Properties" />
     <Folder Include="Tables\" />
     <Folder Include="Views\" />
-    <Folder Include="Security\" />
     <Folder Include="Functions\" />
     <Folder Include="Stored Procedures\" />
     <Folder Include="User Defined Types\" />
@@ -98,14 +97,9 @@
     <Build Include="Tables\Preference.sql" />
     <Build Include="Tables\School.sql" />
     <Build Include="Tables\SchoolUser.sql" />
-    <Build Include="Tables\su.sql" />
-    <Build Include="Tables\tmp.sql" />
     <Build Include="Tables\User.sql" />
     <Build Include="Tables\UserLoginInfo.sql" />
     <Build Include="Views\vwDistrictSyncStatus.sql" />
-    <Build Include="Security\chalkableqa.sql" />
-    <Build Include="Security\chalkableqa_1.sql" />
-    <Build Include="Security\RoleMemberships.sql" />
     <Build Include="Functions\Split.sql" />
     <Build Include="Stored Procedures\spAfterRestore.sql" />
     <Build Include="Stored Procedures\spBeforeRestore.sql" />
