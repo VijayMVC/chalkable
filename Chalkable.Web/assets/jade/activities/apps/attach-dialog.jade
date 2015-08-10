@@ -20,13 +20,13 @@ mixin FileAttachBlock_(title, announcementId, announcementType)
                 +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType])#add-file-attachment.simple-gray-button
 
 
-mixin FileCabinetBlock_(title, announcementId)
-    .announcement-item.application.x-hidden
+mixin FileCabinetBlock_(title, announcementId, announcementType)
+    .announcement-item.application
         .wrapper
             .file-cabinet.img
             div(data-tooltip=title, data-tooltip-type="overflow").title=title
             .shortdesc
-            +ActionButton('announcement', 'fileCabinet', announcementId)#add-file-from-cabinet.simple-gray-button.disabled=title
+            +ActionButton('announcement', 'fileCabinet', announcementId, announcementType)#add-file-from-cabinet.simple-gray-button=title
 
 
 mixin AttributeBlock_(title, announcementId, announcementType)
@@ -66,6 +66,10 @@ announcementType = self.getAnnouncementType()
 
             .attachments-and-applications
                 +FileAttachBlock_("Attach a file", announcementId, announcementType)
+
+
+                if self.isFileCabinetEnabled()
+                    +FileCabinetBlock_("File Cabinet", announcementId, announcementType)
 
                 if self.isStandardAttachEnabled()
                     +StandardBlock_("Add Standard", announcementId, classId, announcementTypeName, announcementType)

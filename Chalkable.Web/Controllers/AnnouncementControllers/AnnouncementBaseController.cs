@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
@@ -13,6 +14,12 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 {
     public class AnnouncementBaseController : ChalkableController
     {
+
+        protected void EnsureAnnouncementExsists(int announcementId, int? announcementType)
+        {
+            SchoolLocator.GetAnnouncementService((AnnouncementType?)announcementType).GetAnnouncementById(announcementId);
+        }
+
         protected AnnouncementViewData PrepareFullAnnouncementViewData(int announcementId, int? announcementType, bool forRead = false)
         {
             var type = (AnnouncementType?) announcementType ?? SchoolLocator.AnnouncementFetchService.GetAnnouncementType(announcementId);
@@ -30,10 +37,11 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         protected AnnouncementViewData PrepareFullAnnouncementViewDataForRead(AnnouncementDetails ann)
         {
             var ownersIds = GetAnnouncementOwnersIds(ann);
-            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, ownersIds);
-            var attrAttachmentInfo = AttachmentLogic.PrepareAttributeAttachmentsInfo(ann.AnnouncementAttributes, MasterLocator.CrocodocService);
-
-            var annView = (AnnouncementDetailedViewData)PrepareAnnouncmentViewData(ann, attInfo, attrAttachmentInfo);
+            var annAttsInfo = SchoolLocator.AnnouncementAttachmentService.TransformToAttachmentsInfo(ann.AnnouncementAttachments, ownersIds);
+            var attrAttachmentsInfo = ann.AnnouncementAttributes.Where(x=>x.Attachment != null)
+                                                                .Select(x => SchoolLocator.AttachementService.TransformToAttachmentInfo(x.Attachment)).ToList(); 
+            
+            var annView = (AnnouncementDetailedViewData)PrepareAnnouncmentViewData(ann, annAttsInfo, attrAttachmentsInfo);
             if (ann.State == AnnouncementState.Created)
             {
                 var stAnnouncements = ann.StudentAnnouncements;
@@ -44,7 +52,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 }
                 if (stAnnouncements.Count > 0 && ann.GradableType)
                 {
-                    annView.StudentAnnouncements = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, ann, attInfo);
+                    annView.StudentAnnouncements = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, ann, annAttsInfo);
                     var autoGrades = SchoolLocator.StudentAnnouncementService.GetAutoGradesByAnnouncementId(ann.Id);
                     annView.AutoGradeApps = AutoGradeViewData.Create(autoGrades);
                 }
@@ -74,15 +82,13 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann)
         {
             var ownersIds = GetAnnouncementOwnersIds(ann);
-            var attInfo = AttachmentLogic.PrepareAttachmentsInfo(ann.AnnouncementAttachments, MasterLocator.CrocodocService, ownersIds);
-
-            var attrAttachmentInfo = AttachmentLogic.PrepareAttributeAttachmentsInfo(ann.AnnouncementAttributes,
-                MasterLocator.CrocodocService);
-            
-            return PrepareAnnouncmentViewData(ann, attInfo, attrAttachmentInfo);
+            var annAttsInfo = SchoolLocator.AnnouncementAttachmentService.TransformToAttachmentsInfo(ann.AnnouncementAttachments, ownersIds);
+            var attrAttachmentsInfo = ann.AnnouncementAttributes.Where(x=>x.Attachment != null)
+                .Select(x => SchoolLocator.AttachementService.TransformToAttachmentInfo(x.Attachment)).ToList(); 
+            return PrepareAnnouncmentViewData(ann, annAttsInfo, attrAttachmentsInfo);
         }
 
-        protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann, IList<AnnouncementAttachmentInfo> attachments, IList<AssignedAttributeAttachmentInfo> attrAttachmentInfo)
+        protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann, IList<AnnouncementAttachmentInfo> attachments, IList<AttachmentInfo> attrAttachmentInfo)
         {
             if (ann.ClassAnnouncementData != null && ann.ClassAnnouncementData.SisActivityId.HasValue)
             {

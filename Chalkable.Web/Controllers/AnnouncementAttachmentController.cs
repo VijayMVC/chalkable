@@ -10,7 +10,6 @@ using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.ActionResults;
 using Chalkable.Web.Controllers.AnnouncementControllers;
-using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
 
@@ -19,12 +18,13 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AnnouncementAttachmentController : AnnouncementBaseController
     {
-        private const string HEADER_FORMAT = "inline; filename={0}";
-        private const string CONTENT_DISPOSITION = "Content-Disposition";       
         private const string HTML_CONTENT_TYPE = "text/html";
 
+        private const string HEADER_FORMAT = "inline; filename={0}";
+        private const string CONTENT_DISPOSITION = "Content-Disposition";
+        
         [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
-        public ActionResult AddAttachment(int announcementId, int announcementType)
+        public ActionResult UploadAnnouncementAttachment(int announcementId, int announcementType)
         {
             try
             {
@@ -36,52 +36,30 @@ namespace Chalkable.Web.Controllers
                 {
                     return Json(new ChalkableException(ChlkResources.ERR_FILE_REQUIRED));
                 }
-                var announcement = SchoolLocator.AnnouncementAttachmentService.AddAttachment(announcementId, (AnnouncementType)announcementType, bin, name);
+                var announcement = SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementType)announcementType, bin, name);
                 AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id, (AnnouncementType)announcementType);
                 return Json(res, HTML_CONTENT_TYPE, 6);
             }
             catch (Exception exception)
             {
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = 500;
-                Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
-                return new ChalkableJsonResult(false)
-                {
-                    Data = ExceptionViewData.Create(exception, exception.InnerException),
-                    ContentType = HTML_CONTENT_TYPE,
-                    SerializationDepth = 4
-                };
+                return HandleAttachmentException(exception);
             }
-        }
-
-        private void EnsureAnnouncementExsists(int announcementId, int? announcementType)
-        {
-            //TODO: impl this later
-            // get announcement to ensure it exists
-            SchoolLocator.GetAnnouncementService((AnnouncementType?)announcementType).GetAnnouncementById(announcementId);
         }
 
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
-        public ActionResult CloneAttachment(int originalAttachmentId, int announcementId, int announcementType)
+        public ActionResult Add(int announcementId, int announcementType, int attachmentId)
         {
             EnsureAnnouncementExsists(announcementId, announcementType);
-
-            var attContentInfo = SchoolLocator.AnnouncementAttachmentService.GetAttachmentContent(originalAttachmentId);
-            if (attContentInfo != null && announcementId == attContentInfo.Attachment.AnnouncementRef)
-            {
-                byte[] bin = attContentInfo.Content;
-                string name = attContentInfo.Attachment.Name;
-               
-                SchoolLocator.AnnouncementAttachmentService.AddAttachment(attContentInfo.Attachment.AnnouncementRef, (AnnouncementType)announcementType, bin, name);
-            }
-            AnnouncementViewData res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementType)announcementType);
+            SchoolLocator.AnnouncementAttachmentService.Add(announcementId, (AnnouncementType)announcementType, attachmentId);
+            var res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementType) announcementType);
             return Json(res, 6);
         }
 
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
-        public ActionResult DownloadAttachment(int announcementAttachmentId, bool? needsDownload, int? width, int? height)
+        public ActionResult DownloadAttachment(int attachmentId, bool? needsDownload, int? width, int? height)
         {
-            var attContentInfo = SchoolLocator.AnnouncementAttachmentService.GetAttachmentContent(announcementAttachmentId);
+            var att = SchoolLocator.AnnouncementAttachmentService.GetAnnouncementAttachmentById(attachmentId).Attachment;
+            var attContentInfo = SchoolLocator.AttachementService.GetAttachmentContent(att);
             if (attContentInfo == null)
             {
                 Response.StatusCode = 404;
@@ -105,40 +83,16 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
-        public ActionResult DeleteAttachment(int announcementAttachmentId, int announcementId, int announcementType)
-        {
-            EnsureAnnouncementExsists(announcementId, announcementType);
-
-            var attachment = SchoolLocator.AnnouncementAttachmentService.GetAttachmentById(announcementAttachmentId);
-            if (attachment != null && attachment.AnnouncementRef == announcementId)
-                SchoolLocator.AnnouncementAttachmentService.DeleteAttachment(announcementAttachmentId);
-
-            var res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementType)announcementType);
-            return Json(res, 6);
-        }
-        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
-        public ActionResult GetAttachments(int announcementId, int? announcementType, int? start, int? count)
-        {
-            EnsureAnnouncementExsists(announcementId, announcementType);
-
-            var announcementAttachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(announcementId, start ?? 0, count ?? 10, false);
-            var attachmentsInfo = AttachmentLogic.PrepareAttachmentsInfo(announcementAttachments, MasterLocator.CrocodocService);
-            var res = AnnouncementAttachmentViewData.Create(attachmentsInfo, SchoolLocator.Context.PersonId ?? 0);
-            return Json(res);
-        }
-
-        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
-        public ActionResult StartViewSession(int announcementAttachmentId)
+        public ActionResult StartViewSession(int attachmentId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            var att = SchoolLocator.AnnouncementAttachmentService.GetAttachmentById(announcementAttachmentId);
+            var att = SchoolLocator.AnnouncementAttachmentService.GetAnnouncementAttachmentById(attachmentId).Attachment;
             if (att == null)
             {
                 Response.StatusCode = 404;
                 Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
                 return null;
             }
-
             try
             {
                 bool isOwner = (Context.PersonId == att.PersonRef);
@@ -150,28 +104,76 @@ namespace Chalkable.Web.Controllers
                     name = Context.Login;
                 }
                 var res = SchoolLocator.CrocodocService.StartViewSession(new StartViewSessionRequestModel
-                    {
-                        Uuid = att.Uuid,
-                        CanAnnotate = canAnnotate,
-                        PersonId = Context.PersonId.Value,
-                        PersonName = name,
-                        IsOwner = isOwner
-                    });
+                {
+                    Uuid = att.Uuid,
+                    CanAnnotate = canAnnotate,
+                    PersonId = Context.PersonId.Value,
+                    PersonName = name,
+                    IsOwner = isOwner
+                });
                 return Json(res.session);
             }
             catch (Exception exception)
             {
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = 500;
-                Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
-                return new ChalkableJsonResult(false)
-                {
-                    Data = ExceptionViewData.Create(exception, exception.InnerException),
-                    ContentType = HTML_CONTENT_TYPE,
-                    SerializationDepth = 4
-                };
+                return HandleAttachmentException(exception);
             }
         }
+        private ActionResult HandleAttachmentException(Exception exception)
+        {
+            Response.TrySkipIisCustomErrors = true;
+            Response.StatusCode = 500;
+            Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
+            return new ChalkableJsonResult(false)
+            {
+                Data = ExceptionViewData.Create(exception, exception.InnerException),
+                ContentType = HTML_CONTENT_TYPE,
+                SerializationDepth = 4
+            };
+        }
 
+
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
+        public ActionResult CloneAttachment(int originalAttachmentId, int announcementId, int announcementType)
+        {
+            EnsureAnnouncementExsists(announcementId, announcementType);
+
+            var annAtt = SchoolLocator.AnnouncementAttachmentService.GetAnnouncementAttachmentById(originalAttachmentId);
+            var attContentInfo = SchoolLocator.AttachementService.GetAttachmentContent(annAtt.AttachmentRef);
+            if (attContentInfo != null && announcementId == annAtt.AnnouncementRef)
+            {
+                byte[] bin = attContentInfo.Content;
+                string name = attContentInfo.Attachment.Name;
+                SchoolLocator.AnnouncementAttachmentService.UploadAttachment(annAtt.AnnouncementRef, (AnnouncementType)announcementType, bin, name);
+            }
+            AnnouncementViewData res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementType)announcementType);
+            return Json(res, 6);
+        }
+
+        
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
+        public ActionResult DeleteAttachment(int announcementAttachmentId, int announcementId, int announcementType)
+        {
+            EnsureAnnouncementExsists(announcementId, announcementType);
+
+            var attachment = SchoolLocator.AnnouncementAttachmentService.GetAnnouncementAttachmentById(announcementAttachmentId);
+            if (attachment != null && attachment.AnnouncementRef == announcementId)
+                SchoolLocator.AnnouncementAttachmentService.Delete(announcementAttachmentId);
+
+            var res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementType)announcementType);
+            return Json(res, 6);
+        }
+        
+        [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
+        public ActionResult GetAttachments(int announcementId, int? announcementType, int? start, int? count)
+        {
+            EnsureAnnouncementExsists(announcementId, announcementType);
+
+            var announcementAttachments = SchoolLocator.AnnouncementAttachmentService.GetAnnouncementAttachments(announcementId, start ?? 0, count ?? 10, false);
+            var attachmentsInfo = SchoolLocator.AnnouncementAttachmentService.TransformToAttachmentsInfo(announcementAttachments, null);
+            var res = AnnouncementAttachmentViewData.Create(attachmentsInfo, SchoolLocator.Context.PersonId ?? 0);
+            return Json(res);
+        }
+
+        
     }
 }

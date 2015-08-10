@@ -58,11 +58,30 @@ NAMESPACE('chlk.services', function () {
 
             },
 
+            [[String, chlk.models.attachment.SortAttachmentType, Number, Number]],
+            ria.async.Future, function getAttachments(filter_, sortType_, start_, count_){
+                return this.getPaginatedList('Attachment/AttachmentsList.json', chlk.models.attachment.Attachment,{
+                    filter: filter_,
+                    sortType: sortType_ && sortType_.valueOf(),
+                    start: start_,
+                    count: count_
+                });
+            },
+
             [[chlk.models.id.AnnouncementId, Object, chlk.models.announcement.AnnouncementTypeEnum]],
                 ria.async.Future, function uploadAttachment(announcementId, files, announcementType) {
-                return this.uploadFiles('AnnouncementAttachment/AddAttachment', files, chlk.models.announcement.FeedAnnouncementViewData, {
+                return this.uploadFiles('AnnouncementAttachment/UploadAnnouncementAttachment', files, chlk.models.announcement.FeedAnnouncementViewData, {
                         announcementId: announcementId.valueOf(),
                         announcementType: announcementType.valueOf()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId]],
+            ria.async.Future, function addAttachment(announcementId, announcementType, attachmentId) {
+                return this.post('AnnouncementAttachment/Add', chlk.models.announcement.FeedAnnouncementViewData, {
+                    announcementId: announcementId.valueOf(),
+                    announcementType: announcementType.valueOf(),
+                    attachmentId: attachmentId.valueOf()
                 });
             },
 

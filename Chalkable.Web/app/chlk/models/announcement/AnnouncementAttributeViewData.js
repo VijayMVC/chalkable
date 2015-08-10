@@ -120,7 +120,7 @@ NAMESPACE('chlk.models.announcement', function(){
                 visibleforstudents: this.isVisibleForStudents(),
                 attributetypeid: this.getAttributeTypeId().valueOf(),
                 id: this.getId().valueOf(),
-                announcementref: this.getAnnouncementRef().valueOf(),
+                announcementid: this.getAnnouncementRef().valueOf(),
                 attributeattachment: this.getAttributeAttachment().getId() ? this.getAttributeAttachment().getPostData() : null,
                 sisactivityassignedattributeid: this.getSisActivityAssignedAttributeId() ? this.getSisActivityAssignedAttributeId().valueOf() : null
             }

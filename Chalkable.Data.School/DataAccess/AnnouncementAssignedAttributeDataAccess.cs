@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -17,11 +18,24 @@ namespace Chalkable.Data.School.DataAccess
         {
             var annIdsStr = toAnnouncementIds.Select(x => x.ToString()).JoinString(",");
             var dbQuery = new DbQuery();
-            dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, "*", typeof (AnnouncementAssignedAttribute).Name)
-                   .AppendFormat(" Where {0} in ({1}) ", AnnouncementAssignedAttribute.ANNOUNCEMENT_REF_FIELD, annIdsStr);
+            var annRefField = string.Format("{0}_{1}", typeof (AnnouncementAssignedAttribute).Name, AnnouncementAssignedAttribute.ANNOUNCEMENT_REF_FIELD);
+            dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, "*", AnnouncementAssignedAttribute.VW_ANNOUNCEMENT_ASSIGNED_ATTRIBUTE)
+                       .AppendFormat(" Where {0} in ({1}) ", annRefField, annIdsStr);
 
-            return ReadMany<AnnouncementAssignedAttribute>(dbQuery)
-                   .OrderByDescending(x => x.Id).Take(count).OrderBy(x => x.Id).ToList();
+            return  Read(dbQuery, ReadAttributes).OrderByDescending(x => x.Id).Take(count).OrderBy(x => x.Id).ToList();
+        }
+
+        public static IList<AnnouncementAssignedAttribute> ReadAttributes(DbDataReader reader)
+        {
+            var res = new List<AnnouncementAssignedAttribute>();
+            while (reader.Read())
+            {
+                var attribute = reader.Read<AnnouncementAssignedAttribute>(true);
+                if (attribute.AttachmentRef.HasValue)
+                    attribute.Attachment = reader.Read<Attachment>(true);
+                res.Add(attribute);
+            }
+            return res;
         }
 
         public IList<AnnouncementAssignedAttribute> GetLastListByAnnId(int announcementId, int count)
@@ -31,17 +45,8 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<AnnouncementAssignedAttribute> GetListByAnntId(int announcementId)
         {
-            var conds = new AndQueryCondition {{AnnouncementAssignedAttribute.ANNOUNCEMENT_REF_FIELD, announcementId}};
-            return GetAll(conds);
+            return GetLastListByAnnId(announcementId, int.MaxValue).OrderBy(x => x.Id).ToList();
         }
-
-        public AnnouncementAssignedAttribute GetByAttachmentId(int attachmentId)
-        {
-            var conds = new AndQueryCondition
-                {
-                    {AnnouncementAssignedAttribute.SIS_ATTRIBUTE_ATTACHMENT_ID, attachmentId}
-                };
-            return GetAll(conds).First();
-        } 
+        
     }
 }

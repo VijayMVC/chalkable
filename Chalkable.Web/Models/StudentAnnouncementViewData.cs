@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Logic;
@@ -111,7 +112,7 @@ namespace Chalkable.Web.Models
             foreach (var studentAnnouncementInfo in items)
             {
                 var spId = studentAnnouncementInfo.Student.Id;
-                var ids = attachments != null ? attachments.Where(x => x.Attachment.PersonRef == spId).ToList() : null;
+                var ids = attachments != null ? attachments.Where(x => x.AttachmentInfo.Attachment.PersonRef == spId).ToList() : null;
                 res.Add(Create(studentAnnouncementInfo, ids));
             }
             return res;

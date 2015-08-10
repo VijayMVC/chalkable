@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
-using Chalkable.Web.Logic;
 using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -70,7 +70,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             return new AnnouncementDetailedViewData(announcementDetails, studentAnnouncements);
         }
 
-        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, int currentSchoolPersonId, IList<AnnouncementAttachmentInfo> attachmentInfos, IList<AssignedAttributeAttachmentInfo> attrAttachmentInfos)
+        public static AnnouncementDetailedViewData Create(AnnouncementDetails announcementDetails, int currentSchoolPersonId, IList<AnnouncementAttachmentInfo> attachmentInfos, IList<AttachmentInfo> attrAttachmentInfos)
         {
             var res = Create(announcementDetails, currentSchoolPersonId);
             res.AnnouncementAttachments = AnnouncementAttachmentViewData.Create(attachmentInfos, currentSchoolPersonId);

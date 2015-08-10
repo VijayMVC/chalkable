@@ -19,7 +19,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.id.AnnouncementId, 'announcementId',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.attachment.Attachment), 'attachments',
+            ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'attachments',
 
             [ria.templates.ModelPropertyBind],
             String, 'comment',

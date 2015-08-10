@@ -1,8 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web.Services.Configuration;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
-using Chalkable.Web.Logic;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
 {
@@ -16,35 +15,27 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string Text { get; set; }
         public bool VisibleForStudents { get; set; }
         public int? SisActivityAssignedAttributeId { get; set; }
-        public AssignedAttributeAttachmentViewData AttributeAttachment { get; set; }
+        public AttachmentViewData AttributeAttachment { get; set; }
 
-
-
-        public static AnnouncementAssignedAttributeViewData Create(AnnouncementAssignedAttribute attr, IList<AssignedAttributeAttachmentInfo> attrAttachmentInfos)
+        public static AnnouncementAssignedAttributeViewData Create(AnnouncementAssignedAttribute attr, AttachmentInfo attachmentInfo)
         {
-            var result = Create(attr);
-            result.AttributeAttachment = AssignedAttributeAttachmentViewData.Create(attr.Attachment, attrAttachmentInfos);
+            var result = new AnnouncementAssignedAttributeViewData
+                {
+                    Id = attr.Id,
+                    Name = attr.Name,
+                    Text = attr.Text,
+                    AttributeTypeId = attr.AttributeTypeId,
+                    VisibleForStudents = attr.VisibleForStudents,
+                    AnnouncementRef = attr.AnnouncementRef,
+                    SisActivityAssignedAttributeId = attr.SisActivityAssignedAttributeId,
+                    AttributeAttachment = attachmentInfo != null ? AttachmentViewData.Create(attachmentInfo) : null
+                };
             return result;
         }
 
-        public static AnnouncementAssignedAttributeViewData Create(AnnouncementAssignedAttribute attr)
+        public static IList<AnnouncementAssignedAttributeViewData> Create(IList<AnnouncementAssignedAttribute> announcementAttributes, IList<AttachmentInfo> attrAttachmentInfos)
         {
-            return new AnnouncementAssignedAttributeViewData
-            {
-                Id = attr.Id,
-                Name = attr.Name,
-                Text = attr.Text,
-                AttributeTypeId = attr.AttributeTypeId,
-                Uuid = attr.Uuid,
-                VisibleForStudents = attr.VisibleForStudents,
-                AnnouncementRef = attr.AnnouncementRef,
-                SisActivityAssignedAttributeId = attr.SisActivityAssignedAttributeId
-            };
-        }
-
-        public static IList<AnnouncementAssignedAttributeViewData> Create(IList<AnnouncementAssignedAttribute> announcementAttributes, IList<AssignedAttributeAttachmentInfo> attrAttachmentInfos)
-        {
-            return announcementAttributes.Select(annAtrr => Create(annAtrr, attrAttachmentInfos)).ToList();
+            return announcementAttributes.Select(annAtrr => Create(annAtrr, attrAttachmentInfos.FirstOrDefault(x=>x.Attachment.Id == annAtrr.Id))).ToList();
         }
     }
 }

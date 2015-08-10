@@ -28,7 +28,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             ArrayOf(chlk.models.announcement.AdminAnnouncementRecipient), 'recipients',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
+            ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
 
             [ria.templates.ModelPropertyBind],
             Number, 'announcementTypeId', // make enum

@@ -23,19 +23,41 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, Object]],
             ria.async.Future, function uploadAttributeAttachment(announcementType, announcementId, assignedAttributeId, files) {
-                return this.uploadFiles('AnnouncementAttribute/AddAttributeAttachment.json', files, chlk.models.announcement.AnnouncementAttributeViewData, {
+                return this.uploadFiles('AnnouncementAttribute/UploadAttachment.json', files, chlk.models.announcement.AnnouncementAttributeViewData, {
                     announcementId: announcementId.valueOf(),
                     announcementType: announcementType.valueOf(),
                     assignedAttributeId: assignedAttributeId.valueOf()
                 });
             },
 
-            [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeAttachmentId]],
-            ria.async.Future, function removeAttributeAttachment(announcementType, announcementId, assignedAttributeAttachmentId) {
-                return this.post('AnnouncementAttribute/RemoveAttributeAttachment.json', chlk.models.announcement.AnnouncementAttributeViewData, {
+            [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.id.AttachmentId]],
+            ria.async.Future, function addAttachment(announcementType, announcementId, assignedAttributeId, attachmentId){
+                return this.post('AnnouncementAttribute/AddAttachment.json', chlk.models.announcement.AnnouncementAttributeViewData,{
                     announcementId: announcementId.valueOf(),
                     announcementType: announcementType.valueOf(),
-                    attributeAttachmentId: assignedAttributeAttachmentId.valueOf()
+                    assignedAttributeId: assignedAttributeId.valueOf(),
+                    attachmentId: attachmentId.valueOf()
+                });
+            },
+
+
+            [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
+            ria.async.Future, function cloneAttachmentForAttribute(attachmentId, announcementId, announcementType, assignedAttributeId) {
+                return this.get('AnnouncementAttachment/CloneAttachment', chlk.models.announcement.AnnouncementView, {
+                    attachmentId: attachmentId.valueOf(),
+                    announcementId: announcementId.valueOf(),
+                    announcementType: announcementType,
+                    announcementAssignedAttributeId: assignedAttributeId.valueOf()
+                });
+            },
+
+
+            [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId]],
+            ria.async.Future, function removeAttributeAttachment(announcementType, announcementId, attributeId) {
+                return this.post('AnnouncementAttribute/RemoveAttachment.json', chlk.models.announcement.AnnouncementAttributeViewData, {
+                    announcementId: announcementId.valueOf(),
+                    announcementType: announcementType.valueOf(),
+                    announcementAssignedAttributeId: attributeId.valueOf()
                 });
             },
 
@@ -53,7 +75,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function removeAnnouncementAttribute(announcementId, attributeId, announcementType){
                 return this.post('AnnouncementAttribute/DeleteAttribute.json', Boolean, {
                     announcementId: announcementId.valueOf(),
-                    assignedAttributeId: attributeId.valueOf(),
+                    announcementAssignedAttributeId: attributeId.valueOf(),
                     announcementType: announcementType.valueOf()
                 });
             },

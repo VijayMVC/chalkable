@@ -307,7 +307,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     {
                         var attributeService = (AnnouncementAssignedAttributeService)ServiceLocator.AnnouncementAssignedAttributeService;
                         attributeService.AddMissingSisAttributes(res.AnnouncementAttributes, uow);
-                        attributeService.UploadMissingAttributeAttachments(res.AnnouncementAttributes, uow);
+                        attributeService.UploadMissingAttachments(res.AnnouncementAttributes, uow);
                         res.AnnouncementAttributes = new AnnouncementAssignedAttributeDataAccess(uow).GetListByAnntId(announcementId);
                     }
                 }
@@ -324,7 +324,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         private bool IsMissingAttachment(AnnouncementAssignedAttribute attribute)
         {
-            return attribute.Attachment != null && string.IsNullOrEmpty(attribute.Uuid) && ServiceLocator.CrocodocService.IsDocument(attribute.Attachment.Name);
+            return attribute.Attachment != null && string.IsNullOrEmpty(attribute.Attachment.Uuid) && ServiceLocator.CrocodocService.IsDocument(attribute.Attachment.Name);
         }
 
         private AnnouncementDetails GetDetails(ClassAnnouncementDataAccess dataAccess, int announcementId)

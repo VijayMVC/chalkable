@@ -82,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             using (var u = Update())
             {
                 res = CreateLessonPlanDataAccess(u).CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
-                res.AnnouncementAttachments = ((AnnouncementAttachmentService)ServiceLocator.AnnouncementAttachmentService).CopyAttachments(lessonPlanTemplateId, new List<int>{res.Id}, u);
+                res.AnnouncementAttachments = ((AnnouncementAttachmentService)ServiceLocator.AnnouncementAttachmentService).CopyAnnouncementAttachments(lessonPlanTemplateId, new List<int>{res.Id}, u);
                 res.AnnouncementAttributes = ((AnnouncementAssignedAttributeService)ServiceLocator.AnnouncementAssignedAttributeService).CopyNonStiAttributes(lessonPlanTemplateId, new List<int>{res.Id}, u);
                 res.AnnouncementApplications = ((ApplicationSchoolService)ServiceLocator.ApplicationSchoolService).CopyAnnApplications(annApps, new List<int>{res.Id}, u);
                 u.Commit();
@@ -109,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             using (var u = Update())
             {
                 var resIds = CreateLessonPlanDataAccess(u).DuplicateLessonPlan(lessonPlanId, classIds, Context.NowSchoolYearTime);
-                ((AnnouncementAttachmentService)ServiceLocator.AnnouncementAttachmentService).CopyAttachments(lessonPlanId, resIds, u);
+                ((AnnouncementAttachmentService)ServiceLocator.AnnouncementAttachmentService).CopyAnnouncementAttachments(lessonPlanId, resIds, u);
                 ((AnnouncementAssignedAttributeService)ServiceLocator.AnnouncementAssignedAttributeService).CopyNonStiAttributes(lessonPlanId, resIds, u);
                 ((ApplicationSchoolService)ServiceLocator.ApplicationSchoolService).CopyAnnApplications(annApps, resIds, u);
                 u.Commit();
