@@ -3,6 +3,7 @@
     [DistrictRef]    UNIQUEIDENTIFIER NOT NULL,
     [Ban]            BIT              NOT NULL,
     CONSTRAINT [FK_ApplicationDistrictOption_Application] FOREIGN KEY ([ApplicationRef]) REFERENCES [dbo].[Application] ([Id]),
-    CONSTRAINT [FK_ApplicationDistrictOption_District] FOREIGN KEY ([DistrictRef]) REFERENCES [dbo].[District] ([Id])
+    CONSTRAINT [FK_ApplicationDistrictOption_District] FOREIGN KEY ([DistrictRef]) REFERENCES [dbo].[District] ([Id]),
+    CONSTRAINT [PK_ApplicationDistrictOption] PRIMARY KEY ([ApplicationRef], [DistrictRef])
 );
 
