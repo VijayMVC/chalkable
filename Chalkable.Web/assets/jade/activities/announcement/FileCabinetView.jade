@@ -1,19 +1,21 @@
 mixin FileIcon_(announcementId, announcementType, assignedAttributeId, attachment)
    .announcement-item.application
+      -console.log()
+      -console.log(!assignedAttributeId)
+      -console.log(!!assignedAttributeId)
       .wrapper
          +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + attachment.getId().valueOf())
          .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
          .shortdesc
             .data='Uploaded: ' + attachment.getUploadedDate().format('m/dd/yy')
             .data='Last Sent: ' + attachment.getLastAttachedDate().format('m/dd/yy')
-         if !assignedAttributeId
-            +ActionButton('announcement', 'attachFromCabinet', announcementId, announcementType, attachment.getId()) Attach
-            +ActionButton('announcement', 'cloneAttachment', attachment.getId(), announcementId, announcementType) Duplicate
-         else
+
+         if assignedAttributeId && assignedAttributeId.valueOf()
             +ActionButton('announcement', 'attachFromCabinetToAttribute', announcementId, announcementType, attachment.getId(), assignedAttributeId) Attach
             +ActionButton('announcement', 'cloneAttachmentForAttribute', announcementType, announcementId, attachment.getId(), assignedAttributeId) Duplicate
-
-
+         else
+            +ActionButton('announcement', 'attachFromCabinet', announcementId, announcementType, attachment.getId()) Attach
+            +ActionButton('announcement', 'cloneAttachment', attachment.getId(), announcementId, announcementType) Duplicate
 
 -var announcementId = self.getAnnouncementId()
 -var announcementType = self.getAnnouncementType()

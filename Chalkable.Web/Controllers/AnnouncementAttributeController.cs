@@ -57,7 +57,7 @@ namespace Chalkable.Web.Controllers
         {
             EnsureAnnouncementExsists(announcementId, announcementType);            
             var attr = SchoolLocator.AnnouncementAssignedAttributeService.AddAttachment((AnnouncementType) announcementType, announcementId, assignedAttributeId, attachmentId);
-            var attrAttachmentInfo = SchoolLocator.AttachementService.TransformToAttachmentInfo(attr.Attachment, null);
+            var attrAttachmentInfo = SchoolLocator.AttachementService.TransformToAttachmentInfo(attr.Attachment);
             var res = AnnouncementAssignedAttributeViewData.Create(attr, attrAttachmentInfo);
             return Json(res, HTML_CONTENT_TYPE, 6);
         }

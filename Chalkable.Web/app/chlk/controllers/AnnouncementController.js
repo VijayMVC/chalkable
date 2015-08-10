@@ -756,8 +756,8 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeOrUpdateView(chlk.activities.announcement.FileCabinetDialog, res);
         },
 
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId]],
-        function attachFromCabinetAction(announcementId, announcementType, attachmentId){
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, Boolean]],
+        function attachFromCabinetAction(announcementId, announcementType, attachmentId, onCreate_){
             this.BackgroundCloseView(chlk.activities.announcement.FileCabinetDialog);
             var res = this.announcementService
                 .addAttachment(announcementId, announcementType, attachmentId)
@@ -781,18 +781,11 @@ NAMESPACE('chlk.controllers', function (){
                 .addAttachment(announcementId, announcementType, attachmentId, assignedAttributeId)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
-                .then(function(announcement){
-                    announcement.setNeedButtons(true);
-                    announcement.setNeedDeleteButton(true);
-                    this.prepareAttachments(announcement);
-                    this.cacheAnnouncement(announcement);
-                    return announcement;
+                .then(function(attribute){
+                    return this.prepareAttributeData(announcementId, announcementType, assignedAttributeId, attribute);
                 }, this);
-            return this.UpdateView(onCreate_ ? this.getAnnouncementFormPageType_(announcementType) : this.getView().getCurrent().getClass(), res, 'update-attachments');
+            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType));
         },
-
-
-
 
         [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum]],
         function fetchRemoveAttributeFuture_(announcementId, attributeId, announcementType) {
@@ -943,26 +936,31 @@ NAMESPACE('chlk.controllers', function (){
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(attribute){
-                    var attachment = attribute.getAttributeAttachment();
-                    attachment.setReadOnly(false);
-                    attachment.setAnnouncementType(announcementType);
-                    attachment.setAnnouncementId(announcementId);
-                    attachment.setAttributeId(announcementAssignedAttributeId);
-                    attribute.setAttributeAttachment(attachment);
-                    attribute.setAttributeTypes(this.assignedAttributeService
-                        .getAnnouncementAttributeTypesList());
-                    attribute.setAnnouncementType(announcementType);
-                    this.prepareAttribute(attribute);
-                    var attributes = this.getCachedAnnouncementAttributes();
-                    var attribute2 = attributes.filter(function(attr){return attr.getId() == attribute.getId()})[0];
-                    attribute2.setAttributeAttachment(attribute.getAttributeAttachment());
-                    attribute2.setAttributeTypes(this.assignedAttributeService
-                        .getAnnouncementAttributeTypesList());
-                    attribute2.setAnnouncementType(announcementType);
-                    this.cacheAnnouncementAttributes(attributes);
-                    return attribute;
+                    return this.prepareAttributeData(announcementId, announcementType, announcementAssignedAttributeId, attribute);
                 }, this);
             return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'add-attribute-attachment');
+        },
+
+        [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementAttributeViewData]],
+        function prepareAttributeData(announcementId, announcementType, announcementAssignedAttributeId, attribute){
+            var attachment = attribute.getAttributeAttachment();
+            attachment.setReadOnly(false);
+            attachment.setAnnouncementType(announcementType);
+            attachment.setAnnouncementId(announcementId);
+            attachment.setAttributeId(announcementAssignedAttributeId);
+            attribute.setAttributeAttachment(attachment);
+            attribute.setAttributeTypes(this.assignedAttributeService
+                .getAnnouncementAttributeTypesList());
+            attribute.setAnnouncementType(announcementType);
+            this.prepareAttribute(attribute);
+            var attributes = this.getCachedAnnouncementAttributes();
+            var attribute2 = attributes.filter(function(attr){return attr.getId() == attribute.getId()})[0];
+            attribute2.setAttributeAttachment(attribute.getAttributeAttachment());
+            attribute2.setAttributeTypes(this.assignedAttributeService
+                .getAnnouncementAttributeTypesList());
+            attribute2.setAnnouncementType(announcementType);
+            this.cacheAnnouncementAttributes(attributes);
+            return attribute;
         },
 
         [chlk.controllers.SidebarButton('add-new')],
