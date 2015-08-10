@@ -65,8 +65,8 @@ NAMESPACE('chlk.models.attachment', function () {
                 this.thumbnailUrl = SJX.fromValue(raw.thumbnailurl, String);
                 this.type = SJX.fromValue(raw.type, Number);
                 this.url = SJX.fromValue(raw.url, String);
-                this.uploadedDate = SJX.fromDeserializable(raw.uploaddate, chlk.models.common.ChlkDate);
-                this.lastAttachedDate = SJX.fromDeserializable(raw.lastattacheddate, chlk.models.common.ChlkDate);
+                this.uploadedDate = SJX.fromDeserializable(raw.uploaded, chlk.models.common.ChlkDate);
+                this.lastAttachedDate = SJX.fromDeserializable(raw.lastattached, chlk.models.common.ChlkDate);
                 this.personId = SJX.fromValue(raw.personid, chlk.models.id.SchoolPersonId);
                 this.stiAttachment = SJX.fromValue(raw.stiattachment, Boolean);
             },

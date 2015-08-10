@@ -4,6 +4,8 @@ mixin FileIcon_(announcementId, announcementType, assignedAttributeId, attachmen
          +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + attachment.getId().valueOf())
          .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
          .shortdesc
+            .data='Uploaded: ' + attachment.getUploadedDate().format('m/dd/yy')
+            .data='Last Sent: ' + attachment.getLastAttachedDate().format('m/dd/yy')
          if !assignedAttributeId
             +ActionButton('announcement', 'attachFromCabinet', announcementId, announcementType, attachment.getId()) Attach
             +ActionButton('announcement', 'cloneAttachment', attachment.getId(), announcementId, announcementType) Duplicate
@@ -39,11 +41,12 @@ mixin FileIcon_(announcementId, announcementType, assignedAttributeId, attachmen
                         +Option(sortTypeEnum.NEWEST_UPLOADED.valueOf(), 'Newest Uploaded', sortTypeEnum.NEWEST_UPLOADED == self.getSortType())
                         +Option(sortTypeEnum.OLDEST_UPLOADED.valueOf(), 'Oldest Uploaded', sortTypeEnum.OLDEST_UPLOADED == self.getSortType())
                .right.wrapper
-                  input(type="text", placeholder='Filter list...', name="filter", value=self.getFilter()).file-search.search-input
-                  .search-glass
-                  .people-search-imgs
-                     label.people-search-img
-                     label.people-search-close.opacity0
+                  .file-search-container
+                     input(type="text", placeholder='Filter list...', name="filter", value=self.getFilter()).file-search.search-input
+                     .search-glass
+                     .file-search-imgs
+                        label.file-search-img
+                        label.file-search-close.opacity0
                .clear-fix
 
             .attachments-and-applications
