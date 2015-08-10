@@ -17,7 +17,7 @@
                     td.name-td
                         .column.groups
                             h1.column-cell=Msg.My_Groups
-                                +ActionButton('group', 'editGroups')(type="button").special-button2.edit-button=Msg.Edit
+                                +ActionButton('group', 'editGroups', hiddenParams.id)(type="button").special-button2.edit-button=Msg.Edit
                             each group in self.getGroups()
                                 .column-cell
                                     +ActionLink('group', 'showGroupMembers', group.getId())(data-tooltip=group.getName(), data-tooltip-type="overflow").group-name.name

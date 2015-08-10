@@ -9,6 +9,9 @@ NAMESPACE('chlk.templates.group', function () {
         [ria.templates.ModelBind(chlk.models.group.GroupsListViewData)],
         'GroupsListTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.group.Group), 'groups'
+            ArrayOf(chlk.models.group.Group), 'groups',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AnnouncementId, 'announcementId'
         ])
 });

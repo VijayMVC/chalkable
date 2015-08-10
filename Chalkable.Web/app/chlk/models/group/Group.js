@@ -1,6 +1,6 @@
 REQUIRE('chlk.models.id.GroupId');
 REQUIRE('chlk.models.people.User');
-
+REQUIRE('chlk.models.id.AnnouncementId');
 
 NAMESPACE('chlk.models.group', function(){
 
@@ -10,11 +10,13 @@ NAMESPACE('chlk.models.group', function(){
     CLASS('Group', IMPLEMENTS(ria.serialize.IDeserializable), [
 
         chlk.models.id.GroupId, 'id',
+        chlk.models.id.AnnouncementId, 'announcementId',
         String, 'name',
         Boolean, 'withStudents',
 
         VOID, function deserialize(raw){
             this.id = SJX.fromValue(raw.id, chlk.models.id.GroupId);
+            this.announcementId = SJX.fromValue(raw.announcementid, chlk.models.id.AnnouncementId);
             this.name = SJX.fromValue(raw.name, String);
             this.withStudents = SJX.fromValue(raw.hasstudents, Boolean);
         }
