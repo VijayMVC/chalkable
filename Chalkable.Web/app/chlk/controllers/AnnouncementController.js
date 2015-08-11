@@ -1826,7 +1826,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.standard.GetStandardTreePostData]],
         function getStandardTreeAction(data){
-            var res = this.standardService.getStandardParentsSubTree(data.getStandardId())
+            var res = this.standardService.getStandardParentsSubTree(data.getStandardId(), data.getClassId())
                 .then(function(standardsTable){
                     var description, subjectId;
                     if(standardsTable && standardsTable.getStandardsColumns() && standardsTable.getStandardsColumns().length > 0){
