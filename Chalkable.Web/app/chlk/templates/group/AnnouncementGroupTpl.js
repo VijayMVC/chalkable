@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.group.Group');
+REQUIRE('chlk.models.id.AnnouncementId');
 
 NAMESPACE('chlk.templates.group', function () {
 
@@ -12,6 +13,8 @@ NAMESPACE('chlk.templates.group', function () {
             chlk.models.id.GroupId, 'id',
 
             [ria.templates.ModelPropertyBind],
-            String, 'name'
+            String, 'name',
+
+            chlk.models.id.AnnouncementId, 'announcementId'
         ])
 });
