@@ -47,6 +47,9 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
 
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AnnouncementAssignedAttributeId, 'assignedAttributeId',
+
             [[chlk.models.apps.ApplicationForAttach]],
             String, function getAppIconToolTip(app){
                 var res = null;

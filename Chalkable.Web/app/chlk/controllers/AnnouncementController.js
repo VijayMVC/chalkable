@@ -649,6 +649,13 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, result);
         },
 
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
+        function attachForAttributeAction(announcementId, announcementType, assignedAttributeId){
+            var data = new chlk.models.apps.InstalledAppsViewData.$createForAttribute(announcementId, announcementType, assignedAttributeId);
+            var res =  new ria.async.DeferredData(data);
+            return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, res);
+        },
+
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
         function fetchAddAttributeFuture_(announcementId, announcementType) {
             var attributeId = this.assignedAttributeService
@@ -778,7 +785,7 @@ NAMESPACE('chlk.controllers', function (){
         function attachFromCabinetToAttributeAction(announcementId, announcementType, attachmentId, assignedAttributeId){
             this.BackgroundCloseView(chlk.activities.announcement.FileCabinetDialog);
             var res = this.assignedAttributeService
-                .addAttachment(announcementId, announcementType, attachmentId, assignedAttributeId)
+                .addAttachment(announcementType, announcementId, attachmentId, assignedAttributeId)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(attribute){
@@ -953,9 +960,11 @@ NAMESPACE('chlk.controllers', function (){
 
 
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Object]],
-        function uploadAttachmentOnCreateAction(announcementId, announcementType, files) {
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId, Object]],
+        function uploadAttachmentOnCreateAction(announcementId, announcementType, assignedAttributeId, files) {
             this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
+            if(assignedAttributeId && assignedAttributeId.valueOf())
+                return this.Redirect('announcement', 'addAttributeAttachment', [announcementType, announcementId, assignedAttributeId, files]);
             return this.Redirect('announcement', 'uploadAttachment', [announcementId,  announcementType, files, true]);
         },
         

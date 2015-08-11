@@ -43,10 +43,10 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
             ria.async.Future, function cloneAttachmentForAttribute(attachmentId, announcementId, announcementType, assignedAttributeId) {
-                return this.get('AnnouncementAttachment/CloneAttachment', chlk.models.announcement.AnnouncementView, {
+                return this.post('AnnouncementAttribute/CloneAttachment', chlk.models.announcement.AnnouncementAttributeViewData, {
                     attachmentId: attachmentId.valueOf(),
                     announcementId: announcementId.valueOf(),
-                    announcementType: announcementType,
+                    announcementType: announcementType.valueOf(),
                     announcementAssignedAttributeId: assignedAttributeId.valueOf()
                 });
             },
