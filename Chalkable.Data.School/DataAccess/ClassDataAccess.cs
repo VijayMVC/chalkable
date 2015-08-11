@@ -123,5 +123,14 @@ namespace Chalkable.Data.School.DataAccess
                 return ReadClasses(reader);
             }
         }
+
+        public void Delete(IList<int> ids)
+        {
+            var ps = new Dictionary<string, object>
+            {
+                {"@classIds", ids}
+            };
+            ExecuteStoredProcedure("spDeleteClasses", ps);
+        }
     }
 }

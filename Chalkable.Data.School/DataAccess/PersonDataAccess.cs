@@ -143,5 +143,14 @@ namespace Chalkable.Data.School.DataAccess
             };
             return ExecuteStoredProcedurePaginated<Person>("spSearchPersons", ps, start, count);
         }
+
+        public void Delete(IList<int> ids)
+        {
+            var ps = new Dictionary<string, object>
+            {
+                {"@personIds", ids}
+            };
+            ExecuteStoredProcedure("spDeletePersons", ps);
+        }
     }
 }

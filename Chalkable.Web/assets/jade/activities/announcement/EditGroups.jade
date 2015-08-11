@@ -5,7 +5,9 @@
 
     .groups-container
         each group in self.getGroups()
-            +RenderWith(group, chlk.templates.group.AnnouncementGroupTpl)
+            +RenderWith(group, chlk.templates.group.AnnouncementGroupTpl)(
+                announcementId = self.getAnnouncementId()
+            )
         .new-group
     .buttons-container
         +ActionButton('group', 'addGroup').special-button2.add.add-group + New Group
