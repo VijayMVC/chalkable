@@ -10,6 +10,7 @@ using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -42,36 +43,37 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             Trace.Assert(Context.PersonId.HasValue);
             Attachment res = null;
-            DoUpdate(u => { res = Upload(name, content, uploadToSti, u);});
+            DoUpdate(u => { res = Upload(name, content, uploadToSti, u, ServiceLocator, ConnectorLocator);});
             return res;
         }
 
-        public Attachment Upload(string name, byte[] content, bool uploadToSti, UnitOfWork unitOfWork)
+        public static Attachment Upload(string name, byte[] content, bool uploadToSti, UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, ConnectorLocator connectorLocator)
         {
-            Trace.Assert(Context.PersonId.HasValue);
+            var context = serviceLocator.Context;
+            Trace.Assert(context.PersonId.HasValue);
             var res = new Attachment
                 {
                     Name = name,
-                    PersonRef = Context.PersonId.Value,
-                    Uuid = UploadToCrocodoc(name, content),
-                    UploadedDate = Context.NowSchoolTime,
-                    LastAttachedDate = Context.NowSchoolTime
+                    PersonRef = context.PersonId.Value,
+                    Uuid = UploadToCrocodoc(name, content, serviceLocator),
+                    UploadedDate = context.NowSchoolTime,
+                    LastAttachedDate = context.NowSchoolTime
                 };
             var da = new AttachmentDataAccess(unitOfWork);
             if (uploadToSti)
             {
-                var stiAtt = ConnectorLocator.AttachmentConnector.UploadAttachment(name, content).Last();
+                var stiAtt = connectorLocator.AttachmentConnector.UploadAttachment(name, content).Last();
 
                 //TODO : use mapping 
                 res.Name = stiAtt.Name;
                 res.SisAttachmentId = stiAtt.AttachmentId;
                 res.MimeType = stiAtt.MimeType;
                 da.Insert(res);
-                return da.GetLast(Context.PersonId.Value);
+                return da.GetLast(context.PersonId.Value);
             }
             da.Insert(res);
-            res = da.GetLast(Context.PersonId.Value);
-            res.RelativeBlobAddress = UploadToBlob(res, content);
+            res = da.GetLast(context.PersonId.Value);
+            res.RelativeBlobAddress = UploadToBlob(res, content, serviceLocator);
             da.Update(res);
             return res;
         }
@@ -153,35 +155,35 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private const string ATTACHMENT_CONTAINER_ADDRESS = "attachmentscontainer";
         
-        private string UploadToBlob(Attachment attachment, byte[] content)
+        private static string UploadToBlob(Attachment attachment, byte[] content, IServiceLocatorSchool serviceLocator)
         {
             return UploadToBlob(new List<AttachmentContentInfo>
                 {
                     new AttachmentContentInfo{Attachment = attachment, Content = content}
-                }).First();
+                }, serviceLocator).First();
         }
-        private IList<string> UploadToBlob(IList<AttachmentContentInfo> attachmentContent)
+        private static IList<string> UploadToBlob(IList<AttachmentContentInfo> attachmentContent, IServiceLocatorSchool serviceLocator)
         {
             var res = new List<string>();
             foreach (var attachmentContentInfo in attachmentContent)
             {
-                var key = GenerateKeyForBlob(attachmentContentInfo.Attachment);
-                ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, key, attachmentContentInfo.Content);
+                var key = GenerateKeyForBlob(attachmentContentInfo.Attachment, serviceLocator.Context);
+                serviceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, key, attachmentContentInfo.Content);
                 res.Add(key);
             }
             return res;
         }
 
-        private string GenerateKeyForBlob(Attachment attachment)
+        private static string GenerateKeyForBlob(Attachment attachment, UserContext context)
         {
             var res = attachment.Id.ToString(CultureInfo.InvariantCulture);
-            return Context.DistrictId.HasValue ? string.Format("{0}_{1}", res, Context.DistrictId.Value) : res;
+            return context.DistrictId.HasValue ? string.Format("{0}_{1}", res, context.DistrictId.Value) : res;
         }
 
-        private string UploadToCrocodoc(string name, byte[] content)
+        private static string UploadToCrocodoc(string name, byte[] content, IServiceLocatorSchool serviceLocator)
         {
-            if (ServiceLocator.CrocodocService.IsDocument(name))
-                return ServiceLocator.CrocodocService.UploadDocument(name, content).uuid;
+            if (serviceLocator.CrocodocService.IsDocument(name))
+                return serviceLocator.CrocodocService.UploadDocument(name, content).uuid;
             return null;
         }
 

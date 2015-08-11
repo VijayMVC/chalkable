@@ -8,6 +8,7 @@ using Chalkable.Data.School.DataAccess;
 
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -38,9 +39,9 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
         
-        public IList<AnnouncementAttachment> CopyAnnouncementAttachments(int fromAnnouncementId, IList<int> toAnnouncemenIds, UnitOfWork unitOfWork)
+        public static IList<AnnouncementAttachment> CopyAnnouncementAttachments(int fromAnnouncementId, IList<int> toAnnouncemenIds, UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, ConnectorLocator connectorLocator)
         {
-            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(serviceLocator.Context.PersonId.HasValue);
             var da = new AnnouncementAttachmentDataAccess(unitOfWork);
             var annAttachmentsForCopying = da.GetLastAttachments(fromAnnouncementId);
             
@@ -51,8 +52,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
 
                     var attForCopy = annAttForCopy.Attachment;
-                    var content = ServiceLocator.AttachementService.GetAttachmentContent(attForCopy).Content;
-                    var att = ((AttachmentService)ServiceLocator.AttachementService).Upload(attForCopy.Name, content, attForCopy.IsStiAttachment, unitOfWork);
+                    var content = serviceLocator.AttachementService.GetAttachmentContent(attForCopy).Content;
+                    var att = AttachmentService.Upload(attForCopy.Name, content, attForCopy.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
                     var annAtt = new AnnouncementAttachment
                     {
                         AnnouncementRef = toAnnouncemenId,
@@ -71,12 +72,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, int toAnnouncementId)
         {
-            using (var u = Update())
-            {
-                var res = CopyAnnouncementAttachments(fromAnnouncementId, new List<int>{toAnnouncementId}, u);
-                u.Commit();
-                return res;
-            }
+            IList<AnnouncementAttachment> res = null;
+            DoUpdate(u=> { res = CopyAnnouncementAttachments(fromAnnouncementId, new List<int> {toAnnouncementId}, u, ServiceLocator, ConnectorLocator);});
+            return res;
         }
 
         public Announcement Add(int announcementId, AnnouncementType type, int attachmentId)
@@ -120,7 +118,7 @@ namespace Chalkable.BusinessLogic.Services.School
             
             using (var uow = Update())
             {
-                var att = ((AttachmentService) ServiceLocator.AttachementService).Upload(name, content, false, uow);
+                var att = AttachmentService.Upload(name, content, false, uow, ServiceLocator, ConnectorLocator);
                 var annAtt = new AnnouncementAttachment
                 {
                     AnnouncementRef = annDetails.Id,

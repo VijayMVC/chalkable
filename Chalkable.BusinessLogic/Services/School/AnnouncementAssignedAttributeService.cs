@@ -9,6 +9,7 @@ using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Exceptions;
 
@@ -144,7 +145,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSisException("You can't attach more than one file to an attribute");
 
                 var isStiAttribute = assignedAttribute.IsStiAttribute || announcementType == AnnouncementType.Class;
-                var attachment = ((AttachmentService)ServiceLocator.AttachementService).Upload(name, bin, isStiAttribute, uow);
+                var attachment = AttachmentService.Upload(name, bin, isStiAttribute, uow, ServiceLocator, ConnectorLocator);
                 assignedAttribute.AttachmentRef = attachment.Id;
                 assignedAttribute.Attachment = attachment;
                 da.Update(assignedAttribute);
@@ -234,33 +235,34 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void AddMissingSisAttributes(IList<AnnouncementAssignedAttribute> attributes, UnitOfWork u)
+        public static void AddMissingSisAttributes(ClassAnnouncement classAnn, IList<AnnouncementAssignedAttribute> attributes, UnitOfWork u
+            , ConnectorLocator connectorLocator, IServiceLocatorSchool serviceLocator)
         {
             var missingAttributes = attributes.Where(a => a.Id <= 0).ToList();
-            //var stiAttachmentsIds = missingAttributes.Where(x => x.Attachment != null && x.Attachment.SisAttachmentId.HasValue)
-            //                                         .Select(x => x.Attachment.SisAttachmentId.Value).ToList();
-            //var attachmentDa = new AttachmentDataAccess(u);
-            //var existingAttachments = attachmentDa.GetBySisAttachmentIds(stiAttachmentsIds); 
-            //foreach (var attribute in missingAttributes)
-            //{
-            //    var attachment = attribute.Attachment;
-            //    if (attachment != null && attachment.IsStiAttachment && ServiceLocator.CrocodocService.IsDocument(attribute.Attachment.Name))
-            //    {
-            //        var existingAtt = existingAttachments.FirstOrDefault(x => x.SisAttachmentId == attachment.SisAttachmentId);
-            //        //if not exists uploadNewAttachment
-            //        if (existingAtt == null)
-            //        {
-            //            var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(attribute.Attachment.SisAttachmentId.Value);
-            //            attachment.Uuid = ServiceLocator.CrocodocService.UploadDocument(attribute.Attachment.Name, content).uuid;    
-            //        }
-            //    }
-            //}
+            var attrs = UploadMissingAttachments(classAnn, missingAttributes, u, connectorLocator, serviceLocator);
+            if(attributes.Count > 0)
+                foreach (var missingAttr in missingAttributes)
+                {
+                    var attr = attrs.FirstOrDefault(x => x.SisActivityAssignedAttributeId == missingAttr.SisActivityAssignedAttributeId);
+                    if(attr == null) continue;
+                    missingAttr.AttachmentRef = attr.AttachmentRef;
+                    missingAttr.Attachment = attr.Attachment;
+                }
             new AnnouncementAssignedAttributeDataAccess(u).Insert(missingAttributes);
          }
 
-        public void UploadMissingAttachments(IList<AnnouncementAssignedAttribute> attributes, UnitOfWork u)
+        public static void AttachMissingAttachments(ClassAnnouncement classAnn, IList<AnnouncementAssignedAttribute> attributes, UnitOfWork u
+            , ConnectorLocator connectorLocator, IServiceLocatorSchool serviceLocator)
+        {
+            attributes = UploadMissingAttachments(classAnn, attributes, u, connectorLocator, serviceLocator);
+            new AnnouncementAssignedAttributeDataAccess(u).Update(attributes);
+        }
+
+        private static IList<AnnouncementAssignedAttribute> UploadMissingAttachments(ClassAnnouncement classAnn, IList<AnnouncementAssignedAttribute> attributes, UnitOfWork u
+            , ConnectorLocator connectorLocator, IServiceLocatorSchool serviceLocator)
         {
             var attributesForUpdate = attributes.Where(x => x.Attachment != null && x.Attachment.SisAttachmentId.HasValue && !x.AttachmentRef.HasValue).ToList();
+            if(attributesForUpdate.Count == 0) return new List<AnnouncementAssignedAttribute>();
             var da = new AttachmentDataAccess(u);
             var existingsAtts = da.GetBySisAttachmentIds(attributesForUpdate.Select(x => x.Attachment.SisAttachmentId.Value).ToList());
             var attsForUpload = new List<Attachment>();
@@ -270,27 +272,32 @@ namespace Chalkable.BusinessLogic.Services.School
                 var existingAtt = existingsAtts.FirstOrDefault(x => x.SisAttachmentId == attachment.SisAttachmentId);
                 if (existingAtt == null)
                 {
-                    var content = ConnectorLocator.AttachmentConnector.GetAttachmentContent(attribute.Attachment.SisAttachmentId.Value);
-                    attachment.Uuid = ServiceLocator.CrocodocService.UploadDocument(attribute.Attachment.Name, content).uuid;
-                    attachment.UploadedDate = Context.NowSchoolYearTime;
+                    var content = connectorLocator.AttachmentConnector.GetAttachmentContent(attribute.Attachment.SisAttachmentId.Value);
+                    attachment.Uuid = serviceLocator.CrocodocService.UploadDocument(attribute.Attachment.Name, content).uuid;
+                    attachment.UploadedDate = classAnn.Created;
                     attachment.LastAttachedDate = attachment.UploadedDate;
+                    attachment.PersonRef = classAnn.PrimaryTeacherRef;
                     attsForUpload.Add(attachment);
                 }
                 else attribute.AttachmentRef = existingAtt.Id;
             }
-            da.Insert(attsForUpload);
-            existingsAtts = da.GetBySisAttachmentIds(attsForUpload.Select(x => x.SisAttachmentId.Value).ToList());
-            foreach (var attribute in attributesForUpdate.Where(x=> !x.AttachmentRef.HasValue))
+            if (attsForUpload.Count > 0)
             {
-                var att = existingsAtts.First(x => x.SisAttachmentId == attribute.Attachment.SisAttachmentId);
-                attribute.Attachment = att;
-                attribute.AttachmentRef = att.Id;
+                da.Insert(attsForUpload);
+                existingsAtts = da.GetBySisAttachmentIds(attsForUpload.Select(x => x.SisAttachmentId.Value).ToList());
+                foreach (var attribute in attributesForUpdate.Where(x => !x.AttachmentRef.HasValue))
+                {
+                    var att = existingsAtts.First(x => x.SisAttachmentId == attribute.Attachment.SisAttachmentId);
+                    attribute.Attachment = att;
+                    attribute.AttachmentRef = att.Id;
+                }    
             }
-            new AnnouncementAssignedAttributeDataAccess(u).Update(attributesForUpdate);
+            return attributesForUpdate;
         }
 
 
-        public IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, IList<int> toAnnouncementIds, UnitOfWork unitOfWork)
+        public static IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, IList<int> toAnnouncementIds, 
+            UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, ConnectorLocator connectorLocator)
         {
             var da = new AnnouncementAssignedAttributeDataAccess(unitOfWork);
             var attributesForCopying = da.GetListByAnntId(fromAnnouncementId);
@@ -311,9 +318,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     };
                     if (attributeForCopying.Attachment != null)
                     {
-                        var attService = ((AttachmentService) ServiceLocator.AttachementService);
-                        var attContent = attService.GetAttachmentContent(attributeForCopying.Attachment);
-                        var att = attService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment, unitOfWork);
+                        var attContent = serviceLocator.AttachementService.GetAttachmentContent(attributeForCopying.Attachment);
+                        var att = AttachmentService.Upload(attContent.Attachment.Name, attContent.Content, attContent.Attachment.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
                         attribute.AttachmentRef = att.Id;
                         attribute.Attachment = att;
                     }
@@ -328,7 +334,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, int toAnnouncementId)
         {
             IList<AnnouncementAssignedAttribute> res = null;
-            DoUpdate(u=> { res = CopyNonStiAttributes(fromAnnouncementId, new List<int> {toAnnouncementId}, u); });
+            DoUpdate(u=> { res = CopyNonStiAttributes(fromAnnouncementId, new List<int> {toAnnouncementId}, u, ServiceLocator, ConnectorLocator); });
             return res;
         }
 

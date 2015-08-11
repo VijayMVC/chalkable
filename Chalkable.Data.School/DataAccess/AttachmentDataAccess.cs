@@ -33,8 +33,8 @@ namespace Chalkable.Data.School.DataAccess
         public IList<Attachment> GetBySisAttachmentIds(IList<int> sisAttachmentIds)
         {
             var str = sisAttachmentIds.JoinString(",");
-            var res = Orm.SimpleSelect(typeof (Attachment).Name, new AndQueryCondition());
-            res.Sql.AppendFormat(" and {0} in ({1})", Attachment.SIS_ATTACHMENT_ID_FIELD, str);
+            var res = Orm.SimpleSelect(typeof (Attachment).Name, null);
+            res.Sql.AppendFormat(" Where {0} in ({1})", Attachment.SIS_ATTACHMENT_ID_FIELD, str);
             return ReadMany<Attachment>(res);
         } 
 

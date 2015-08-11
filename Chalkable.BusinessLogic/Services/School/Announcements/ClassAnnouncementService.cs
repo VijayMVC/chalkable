@@ -314,9 +314,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     //insert missing announcementAssignedAttribute
                     if (HasMissingAttributes(res))
                     {
-                        var attributeService = (AnnouncementAssignedAttributeService)ServiceLocator.AnnouncementAssignedAttributeService;
-                        attributeService.AddMissingSisAttributes(res.AnnouncementAttributes, uow);
-                        attributeService.UploadMissingAttachments(res.AnnouncementAttributes, uow);
+                        AnnouncementAssignedAttributeService.AddMissingSisAttributes(res.ClassAnnouncementData, res.AnnouncementAttributes, uow, ConnectorLocator, ServiceLocator);
+                        AnnouncementAssignedAttributeService.AttachMissingAttachments(res.ClassAnnouncementData, res.AnnouncementAttributes, uow, ConnectorLocator, ServiceLocator);
                         res.AnnouncementAttributes = new AnnouncementAssignedAttributeDataAccess(uow).GetListByAnntId(announcementId);
                     }
                 }
