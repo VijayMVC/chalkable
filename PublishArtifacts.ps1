@@ -85,6 +85,8 @@ Function Check-Deployment($service, $slot){
 }
 
 try{
+  Import-Module "C:\Program Files (x86)\Microsoft SDKs\Azure\PowerShell\ServiceManagement\Azure\Azure.psd1"
+
   $publishsettings = ".\ChalkableAzure.publishsettings"
   Write-Host "Importing publish profile and setting subscription"
   [xml] $xml = Get-Content "./PublishArtifacts.config.xml"
