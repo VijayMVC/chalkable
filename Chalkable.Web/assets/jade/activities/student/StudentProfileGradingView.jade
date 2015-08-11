@@ -1,4 +1,7 @@
 user = self.getUser()
+
+
+-console.log(user, user.getGradesByGradingPeriod())
 .profile-page
     h2.page-title=Msg.Student_profile
 
@@ -16,5 +19,6 @@ user = self.getUser()
             each gpStats in user.getGradesByGradingPeriod()
                 +CloseOpen(gpStats.getGradingPeriod().getName())
                     +LeftRightToolbar().classes-bar
-                        each classGrading in user.getStudentGradings()
-                            div
+                        each classGrading in gpStats.getStudentGradings()
+                            +GlanceBox(null, null, {value: classGrading.getStudentAvg(), title: classGrading.getClassName()})
+

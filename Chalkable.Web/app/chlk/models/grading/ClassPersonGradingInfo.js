@@ -5,22 +5,29 @@ REQUIRE('chlk.models.grading.StudentAverageInfo');
 NAMESPACE('chlk.models.grading', function (){
    "use strict";
 
-    /**@class chlk.models.grading.ClassPersonGradingInfo*/
-    CLASS('ClassPersonGradingInfo',  [
+    var SJX = ria.serialize.SJX;
 
-        [ria.serialize.SerializeProperty('classid')],
+    /**@class chlk.models.grading.ClassPersonGradingInfo*/
+    CLASS(UNSAFE, 'ClassPersonGradingInfo', IMPLEMENTS(ria.serialize.IDeserializable),   [
+
         chlk.models.id.ClassId, 'classId',
 
-        [ria.serialize.SerializeProperty('classname')],
         String, 'className',
 
-        [ria.serialize.SerializeProperty('studentavg')],
         Number, 'studentAvg',
 
-        [ria.serialize.SerializeProperty('itemtypesstats')],
-        ArrayOf(chlk.models.grading.ClassPersonGradingItem), 'gradingByAnnouncementTypes',
+        //[ria.serialize.SerializeProperty('itemtypesstats')],
+        //ArrayOf(chlk.models.grading.ClassPersonGradingItem), 'gradingByAnnouncementTypes',
 
-        [ria.serialize.SerializeProperty('studentaverages')],
-        chlk.models.grading.StudentAverageInfo, 'studentAverages'
+        //[ria.serialize.SerializeProperty('studentaverages')],
+        //chlk.models.grading.StudentAverageInfo, 'studentAverages',
+
+
+        VOID, function deserialize(raw){
+            this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
+            this.className = SJX.fromValue(raw.classname, String);
+            this.studentAvg = SJX.fromValue(raw.calculatedavg, Number);
+
+        }
     ]);
 });

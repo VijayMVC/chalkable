@@ -144,20 +144,27 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var syId = GetCurrentSchoolYearId();
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
             var gradingSummary = SchoolLocator.GradingStatisticService.GetStudentGradingSummary(syId, studentId);
+
+            var classes =
+                gradingSummary.StudentAverages.Select(x => SchoolLocator.ClassService.GetById(x.ClassId)).ToList();
+
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
             var gp = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime.Date);
-            var res = StudentProfileGradingSummaryViewData.Create(student, gradingSummary, gp, gradingPeriods);
+            var res = StudentProfileGradingSummaryViewData.Create(student, gradingSummary, gp, gradingPeriods, classes);
             return Json(res);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult GradingDetails(int studentId)
+        public ActionResult GradingDetails(int studentId, int gradingPeriodId)
         {
             var syId = GetCurrentSchoolYearId();
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
-            var gp = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime.Date);
+            var gp = SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             var gradingDetails = SchoolLocator.GradingStatisticService.GetStudentGradingDetails(syId, studentId, gp.Id);
-            var res = StudentProfileGradingDetailViewData.Create(student, gradingDetails, gp);
+            
+            var activityIds = gradingDetails.StudentAnnouncements.Select(x => x.ActivityId).Distinct().ToList();
+            var announcements = SchoolLocator.ClassAnnouncementService.GetByActivitiesIds(activityIds);
+            var res = StudentProfileGradingDetailViewData.Create(student, gradingDetails, gp, announcements);
             return Json(res);
         }
 

@@ -6,39 +6,38 @@ using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.GradingViewData
 {
-    public class StudentProfileGradingSummaryViewData : StudentViewData
+    public class StudentProfileGradingSummaryViewData
     {
 
         public GradingPeriodViewData CurrentGradingPeriod { get; set; }
         public IEnumerable<StudentGradings> GradesByGradingPeriod { get; set; } 
-        protected StudentProfileGradingSummaryViewData(StudentDetails person)
-            : base(person)
-        {
-        }
-
+        public StudentViewData Student { get; set; }
+        
         public static StudentProfileGradingSummaryViewData Create(StudentDetails student, 
-            StudentGrading gradingSummary, GradingPeriod currentGradingPeriod, IList<GradingPeriod> gradingPeriods)
+            StudentGrading gradingSummary, GradingPeriod currentGradingPeriod, IList<GradingPeriod> gradingPeriods, IList<Class> classes)
         {
 
             var gradings = new List<StudentGradings>();
-
             foreach (var gp in gradingPeriods)
             {
-                var avgs = gradingSummary.StudentAverages.Where(x => x.GradingPeriodId == gp.Id && x.IsGradingPeriodAverage);
+                var avgs = gradingSummary.StudentAverages.Where(x => x.GradingPeriodId == gp.Id && x.IsGradingPeriodAverage).ToList();
+                foreach (var avg in avgs)
+                {
+                    avg.ClassName = classes.First(x => x.Id == avg.ClassId).Name;
+                }
+
                 gradings.Add( new StudentGradings
                 {
                     GradingPeriod = GradingPeriodViewData.Create(gp),
                     StudentAverages = avgs
                 });
             }
-
-            var res = new StudentProfileGradingSummaryViewData(student)
+            return new StudentProfileGradingSummaryViewData
             {
+                Student = StudentViewData.Create(student),
                 CurrentGradingPeriod = GradingPeriodViewData.Create(currentGradingPeriod),
                 GradesByGradingPeriod = gradings
-            };
-
-            return res;
+            };;
         }
     }
 
