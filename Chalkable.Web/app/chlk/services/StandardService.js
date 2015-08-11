@@ -72,10 +72,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.StandardId]],
-            ria.async.Future, function getStandardParentsSubTree(standardId){
+            [[chlk.models.id.StandardId, chlk.models.id.ClassId]],
+            ria.async.Future, function getStandardParentsSubTree(standardId, classId){
                 return this.get('Standard/GetStandardParentsSubTree', chlk.models.standard.StandardsTable  ,{
-                    standardId: standardId && standardId.valueOf()
+                    standardId: standardId && standardId.valueOf(),
+                    classId: classId && classId.valueOf()
                 });
             },
 
