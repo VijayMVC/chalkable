@@ -312,7 +312,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('apps')],
         [chlk.controllers.StudyCenterEnabled()],
-        [[chlk.models.id.AppId]],
+        [[chlk.models.id.AppId, Boolean]],
         function tryToInstallDistrictAdminAction(appId, fromNewItem_) {
                 var appInfo = ria.async.wait(
                     this.appMarketService.getDetails(appId).attach(this.validateResponse_()),

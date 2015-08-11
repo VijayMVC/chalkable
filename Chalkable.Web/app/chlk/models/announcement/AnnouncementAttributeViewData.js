@@ -13,7 +13,7 @@ NAMESPACE('chlk.models.announcement', function(){
 
     /**@class chlk.models.announcement.AssignedAttributeAttachmentViewData*/
 
-    UNSAFE, FINAL, CLASS('AnnouncementAttributeAttachmentViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
+    CLASS(UNSAFE, FINAL, 'AnnouncementAttributeAttachmentViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
 
         chlk.models.id.AnnouncementAssignedAttributeAttachmentId, 'id',
         String, 'name',
@@ -66,7 +66,7 @@ NAMESPACE('chlk.models.announcement', function(){
 
     /**@class chlk.models.announcement.AnnouncementAttributeViewData*/
 
-    UNSAFE, FINAL, CLASS('AnnouncementAttributeViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
+    CLASS(UNSAFE, FINAL, 'AnnouncementAttributeViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
         chlk.models.id.AnnouncementAssignedAttributeId, 'id',
 
         String, 'name',
