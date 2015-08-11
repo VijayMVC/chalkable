@@ -46,8 +46,11 @@ Select
 	 AttachedDate,
 	 AttachedDate,
 	 Uuid,
-	 null,
-	 cast(Id as nvarchar) + '_' + @districtId,
+	 SisAttachmentId,
+	 Case When SisAttachmentId is null 
+		Then cast(Id as nvarchar) + '_' + @districtId
+		Else null
+	 End,
 	 Id	   
 From 
 	AnnouncementAttachment

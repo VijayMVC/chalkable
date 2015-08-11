@@ -14,6 +14,27 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+        public override AnnouncementAssignedAttribute GetById(int key)
+        {
+            var dbQuery = new DbQuery();
+            var idField = string.Format("{0}_{1}", typeof (AnnouncementAssignedAttribute).Name, AnnouncementAssignedAttribute.ID_FIELD);
+            dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, "*", AnnouncementAssignedAttribute.VW_ANNOUNCEMENT_ASSIGNED_ATTRIBUTE);
+            var conds = new AndQueryCondition {{idField, key}};
+            conds.BuildSqlWhere(dbQuery, AnnouncementAssignedAttribute.VW_ANNOUNCEMENT_ASSIGNED_ATTRIBUTE);
+            return Read(dbQuery, ReadAttributes).First();
+        }
+
+        public IList<AnnouncementAssignedAttribute> GetAttributesByIds(IList<int> ids)
+        {
+            var annIdsStr = ids.Select(x => x.ToString()).JoinString(",");
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, "*", typeof(AnnouncementAssignedAttribute).Name)
+                       .AppendFormat(" Where {0} in ({1}) ", AnnouncementAssignedAttribute.ID_FIELD, annIdsStr);
+
+            return ReadMany<AnnouncementAssignedAttribute>(dbQuery);
+        } 
+        
+
         public IList<AnnouncementAssignedAttribute> GetLastListByAnnIds(IList<int> toAnnouncementIds, int count)
         {
             var annIdsStr = toAnnouncementIds.Select(x => x.ToString()).JoinString(",");

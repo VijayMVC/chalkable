@@ -11,7 +11,7 @@ NAMESPACE('chlk.models.announcement', function(){
 
     var SJX = ria.serialize.SJX;
 
-    /**@class chlk.models.announcement.AssignedAttributeAttachmentViewData*/
+    /**@class chlk.models.announcement.AnnouncementAttributeAttachmentViewData*/
 
     UNSAFE, FINAL, CLASS('AnnouncementAttributeAttachmentViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
 
@@ -121,8 +121,8 @@ NAMESPACE('chlk.models.announcement', function(){
                 attributetypeid: this.getAttributeTypeId().valueOf(),
                 id: this.getId().valueOf(),
                 announcementid: this.getAnnouncementRef().valueOf(),
-                attributeattachment: this.getAttributeAttachment().getId() ? this.getAttributeAttachment().getPostData() : null,
-                sisactivityassignedattributeid: this.getSisActivityAssignedAttributeId() ? this.getSisActivityAssignedAttributeId().valueOf() : null
+                attachmentid: this.getAttributeAttachment().getId() ? this.getAttributeAttachment().getId().valueOf() : null,
+                attributeattachment: this.getAttributeAttachment().getId() ? this.getAttributeAttachment().getPostData() : null
             }
         },
 

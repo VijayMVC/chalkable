@@ -87,14 +87,16 @@ namespace Chalkable.Web.Controllers
             EnsureAnnouncementExsists(announcementId, announcementType);
             var attribute = SchoolLocator.AnnouncementAssignedAttributeService.GetAssignedAttributeById(announcementAssignedAttributeId);
             var attContentInfo = SchoolLocator.AttachementService.GetAttachmentContent(attachmentId);
+            
             if (attContentInfo != null && announcementId == attribute.AnnouncementRef)
             {
                 byte[] bin = attContentInfo.Content;
                 string name = attContentInfo.Attachment.Name;
-                SchoolLocator.AnnouncementAssignedAttributeService.UploadAttachment((AnnouncementType)announcementType, announcementId, announcementAssignedAttributeId, bin, name);
+                attribute = SchoolLocator.AnnouncementAssignedAttributeService.UploadAttachment((AnnouncementType)announcementType, announcementId, announcementAssignedAttributeId, bin, name);
             }
-            AnnouncementViewData res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementType)announcementType);
-            return Json(res, 6);
+            var attrAttachmentInfo = attribute.Attachment != null ? SchoolLocator.AttachementService.TransformToAttachmentInfo(attribute.Attachment) : null;
+            var res = AnnouncementAssignedAttributeViewData.Create(attribute, attrAttachmentInfo);
+            return Json(res, HTML_CONTENT_TYPE, 6);
         }
 
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]

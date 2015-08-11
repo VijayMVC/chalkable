@@ -12,8 +12,8 @@
         public bool VisibleForStudents { get; set; }
 
         //TODO: remove those fields later
-        public int? SisActivityAssignedAttributeId { get; set; }
-        public int? SisActivityId { get; set; }
+        //public int? SisActivityAssignedAttributeId { get; set; }
+        //public int? SisActivityId { get; set; }
     }
     
 }

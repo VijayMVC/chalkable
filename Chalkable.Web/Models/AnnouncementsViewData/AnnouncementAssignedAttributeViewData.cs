@@ -35,7 +35,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 
         public static IList<AnnouncementAssignedAttributeViewData> Create(IList<AnnouncementAssignedAttribute> announcementAttributes, IList<AttachmentInfo> attrAttachmentInfos)
         {
-            return announcementAttributes.Select(annAtrr => Create(annAtrr, attrAttachmentInfos.FirstOrDefault(x=>x.Attachment.Id == annAtrr.Id))).ToList();
+            return announcementAttributes.Select(annAtrr => Create(annAtrr, attrAttachmentInfos.FirstOrDefault(x=>x.Attachment.Id == annAtrr.AttachmentRef))).ToList();
         }
     }
 }

@@ -196,7 +196,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public string DownloadDocumentUrl { get; set; }
         public string DownloadThumbnailUrl { get; set; }
         public bool IsTeacherAttachment { get; set; }
-
     }
 
 }

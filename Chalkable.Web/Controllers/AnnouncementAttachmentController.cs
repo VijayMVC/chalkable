@@ -83,10 +83,10 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
-        public ActionResult StartViewSession(int attachmentId)
+        public ActionResult StartViewSession(int announcementAttachmentId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            var att = SchoolLocator.AnnouncementAttachmentService.GetAnnouncementAttachmentById(attachmentId).Attachment;
+            var att = SchoolLocator.AnnouncementAttachmentService.GetAnnouncementAttachmentById(announcementAttachmentId).Attachment;
             if (att == null)
             {
                 Response.StatusCode = 404;
@@ -137,13 +137,13 @@ namespace Chalkable.Web.Controllers
         {
             EnsureAnnouncementExsists(announcementId, announcementType);
 
-            var annAtt = SchoolLocator.AnnouncementAttachmentService.GetAnnouncementAttachmentById(originalAttachmentId);
-            var attContentInfo = SchoolLocator.AttachementService.GetAttachmentContent(annAtt.AttachmentRef);
-            if (attContentInfo != null && announcementId == annAtt.AnnouncementRef)
+            //var annAtt = SchoolLocator.AnnouncementAttachmentService.GetAnnouncementAttachmentById(originalAttachmentId);
+            var attContentInfo = SchoolLocator.AttachementService.GetAttachmentContent(originalAttachmentId); //SchoolLocator.AttachementService.GetAttachmentContent(annAtt.AttachmentRef);
+            if (attContentInfo != null) //&& announcementId == annAtt.AnnouncementRef)
             {
                 byte[] bin = attContentInfo.Content;
                 string name = attContentInfo.Attachment.Name;
-                SchoolLocator.AnnouncementAttachmentService.UploadAttachment(annAtt.AnnouncementRef, (AnnouncementType)announcementType, bin, name);
+                SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementType)announcementType, bin, name);
             }
             AnnouncementViewData res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementType)announcementType);
             return Json(res, 6);
