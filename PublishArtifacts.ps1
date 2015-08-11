@@ -68,11 +68,11 @@ function PutContentDir($dbase, $exclude) {
 }
 
 Function Set-AzureSettings($publishsettings, $subscription, $storageaccount){
-    Import-AzurePublishSettingsFile $publishsettings
+    Import-AzurePublishSettingsFile -PublishSettingsFile $publishsettings
  
-    Set-AzureSubscription $subscription -CurrentStorageAccount $storageaccount
+    Set-AzureSubscription -SubscriptionName $subscription -CurrentStorageAccount $storageaccount
  
-    Select-AzureSubscription $subscription
+    Select-AzureSubscription -SubscriptionName $subscription
 }
 
 Function Upgrade-Deployment($package_url, $service, $slot, $config){
