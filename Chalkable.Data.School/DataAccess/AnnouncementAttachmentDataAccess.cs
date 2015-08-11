@@ -117,7 +117,7 @@ namespace Chalkable.Data.School.DataAccess
             }
             if (CoreRoles.DISTRICT_ADMIN_ROLE.Id == roleId)
             {
-                res.Sql.Append("and Attachment_PersonRef =@callerId");
+                res.Sql.Append("and Attachment_PersonRef = @callerId and AdminAnnouncement.Id is not null");
                 return res;
             }
             if (CoreRoles.TEACHER_ROLE.Id == roleId)
