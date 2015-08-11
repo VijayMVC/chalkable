@@ -37,6 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = false, bool? graded = null, int start = 0, int count = int.MaxValue);
         IList<ClassAnnouncement> GetClassAnnouncementsByFilter(string filter); 
         ClassAnnouncement GetLastDraft();
+        IList<AnnouncementComplex> GetByActivitiesIds(IList<int> activitiesIds);
     }
 
     public class ClassAnnouncementService : BaseAnnouncementService<ClassAnnouncement>, IClassAnnouncementService
@@ -505,7 +506,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return res;
         }
 
-        private IList<AnnouncementComplex> GetByActivitiesIds(IList<int> activitiesIds)
+        public IList<AnnouncementComplex> GetByActivitiesIds(IList<int> activitiesIds)
         {
             Trace.Assert(Context.PersonId.HasValue);
             return DoRead(u => CreateClassAnnouncementDataAccess(u).GetByActivitiesIds(activitiesIds, Context.PersonId.Value));
