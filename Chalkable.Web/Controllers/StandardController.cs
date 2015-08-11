@@ -29,9 +29,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult GetStandardParentsSubTree(int standardId)
+        public ActionResult GetStandardParentsSubTree(int standardId, int? classId)
         {
-            var res = SchoolLocator.StandardService.GetStandardParentsSubTree(standardId);
+            var res = SchoolLocator.StandardService.GetStandardParentsSubTree(standardId, classId);
             return Json(StandardsTableViewData.Create(res), 6);
         }
 

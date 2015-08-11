@@ -386,7 +386,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }).ToList();
         }
 
-        public StandardTreePath GetStandardParentsSubTree(int standardId)
+        public StandardTreePath GetStandardParentsSubTree(int standardId, int? classId)
         {
             return StandardStorage.GetStandardParentsSubTree(standardId);
         }
