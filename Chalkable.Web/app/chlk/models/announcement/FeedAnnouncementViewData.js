@@ -26,7 +26,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             OVERRIDE, VOID, function deserialize(raw) {
                 BASE(raw);
-                this.announcementAttachments = SJX.fromArrayOfDeserializables(raw.announcementattachments, chlk.models.attachment.Attachment);
+                this.announcementAttachments = SJX.fromArrayOfDeserializables(raw.announcementattachments, chlk.models.attachment.AnnouncementAttachment);
                 this.announcementAttributes = SJX.fromArrayOfDeserializables(raw.announcementattributes, chlk.models.announcement.AnnouncementAttributeViewData);
                 this.announcementAssignedAttrs = SJX.fromValue(raw.announcementAssignedAttrs, String);
                 this.announcementQnAs = SJX.fromArrayOfDeserializables(raw.announcementqnas, chlk.models.announcement.AnnouncementQnA);
@@ -89,7 +89,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
             String, 'announcementAssignedAttrs',
-            ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
+            ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
             ArrayOf(chlk.models.apps.AppAttachment), 'applications',
             ArrayOf(chlk.models.standard.Standard), 'standards',

@@ -569,7 +569,7 @@
 
 //        private AnnouncementDetails ConvertToDetails(AnnouncementComplex announcement)
 //        {
-//            var announcementAttachments = ServiceLocator.AnnouncementAttachmentService.GetAttachments(announcement.Id);
+//            var announcementAttachments = ServiceLocator.AnnouncementAttachmentService.GetAnnouncementAttachments(announcement.Id);
 
 //            var announcementApplications = new List<AnnouncementApplication>();
 //            var announcementsQnA = ServiceLocator.AnnouncementQnAService.GetAnnouncementQnAs(announcement.Id);

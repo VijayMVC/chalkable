@@ -10,23 +10,23 @@ mixin AppIconLink_(announcementId, app, needToInstall, iconTooltip, announcement
             else
                 +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, appId, announcementType, self.getAppUrlAppend()) Attach
 
-mixin FileAttachBlock_(title, announcementId, announcementType)
+mixin FileAttachBlock_(title, announcementId, announcementType, assignedAttributeId)
     .announcement-item.application(data-tooltip=title, data-tooltip-type="overflow")
         .wrapper
             .attach-file.img
             .title(data-tooltip=title, data-tooltip-type="overflow")= title
             .shortdesc
             div.simple-gray-button.download-link.file=title
-                +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType])#add-file-attachment.simple-gray-button
+                +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType, assignedAttributeId])#add-file-attachment.simple-gray-button
 
 
-mixin FileCabinetBlock_(title, announcementId)
-    .announcement-item.application.x-hidden
+mixin FileCabinetBlock_(title, announcementId, announcementType, assignedAttributeId)
+    .announcement-item.application
         .wrapper
             .file-cabinet.img
             div(data-tooltip=title, data-tooltip-type="overflow").title=title
             .shortdesc
-            +ActionButton('announcement', 'fileCabinet', announcementId)#add-file-from-cabinet.simple-gray-button.disabled=title
+            +ActionButton('announcement', 'fileCabinet', announcementId, announcementType, assignedAttributeId)#add-file-from-cabinet.simple-gray-button=title
 
 
 mixin AttributeBlock_(title, announcementId, announcementType)
@@ -58,6 +58,8 @@ classId = self.getClassId() && self.getClassId().valueOf()
 announcementTypeName = self.getAnnouncementTypeName() || ''
 announcementType = self.getAnnouncementType()
 
+-var assignedAttributeId = self.getAssignedAttributeId();
+
 .dialog.attach-dialog
     .x-window-header
         h1 ATTACH
@@ -65,7 +67,11 @@ announcementType = self.getAnnouncementType()
     .x-window-body
 
             .attachments-and-applications
-                +FileAttachBlock_("Attach a file", announcementId, announcementType)
+                +FileAttachBlock_("Attach a file", announcementId, announcementType, assignedAttributeId)
+
+
+                if self.isFileCabinetEnabled()
+                    +FileCabinetBlock_("File Cabinet", announcementId, announcementType, assignedAttributeId)
 
                 if self.isStandardAttachEnabled()
                     +StandardBlock_("Add Standard", announcementId, classId, announcementTypeName, announcementType)

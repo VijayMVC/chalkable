@@ -259,10 +259,10 @@ namespace Chalkable.Data.Common
         }
 
         protected PaginatedList<T> PaginatedSelect<T>(DbQuery innerSelect, string orderByColumn, int start, int count,
-                                                      Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc) where T : new()
+                                                      Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc, bool complexResult = false) where T : new()
         {
             var q = Orm.Orm.PaginationSelect(innerSelect, orderByColumn,orderType, start, count);
-            return ReadPaginatedResult(q, start, count, x => x.ReadList<T>());
+            return ReadPaginatedResult(q, start, count, x => x.ReadList<T>(complexResult));
         }
 
         protected PaginatedList<T> ReadPaginatedResult<T>(DbQuery dbQuery, int start, int count,

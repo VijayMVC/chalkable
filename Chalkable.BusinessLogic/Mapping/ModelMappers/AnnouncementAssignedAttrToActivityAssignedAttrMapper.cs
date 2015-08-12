@@ -1,5 +1,4 @@
-﻿using System;
-using Chalkable.Data.School.Model;
+﻿using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Mapping.ModelMappers
@@ -16,17 +15,11 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             activityAssignedAttribute.Text = announcementAssignedAttribute.Text;
             activityAssignedAttribute.AttributeId = (short)announcementAssignedAttribute.AttributeTypeId;
 
-            if (announcementAssignedAttribute.SisAttributeAttachmentId.HasValue)
+            if (announcementAssignedAttribute.Attachment != null)
             {
-                var stiAttachment = new StiAttachment
-                {
-                    AttachmentId = announcementAssignedAttribute.SisAttributeAttachmentId.Value,
-                    CrocoDocId = !string.IsNullOrWhiteSpace(announcementAssignedAttribute.Uuid) ? new Guid(announcementAssignedAttribute.Uuid) : (Guid?)null,
-                    Name = announcementAssignedAttribute.SisAttachmentName,
-                    MimeType = announcementAssignedAttribute.SisAttachmentMimeType
-                };
-
-                activityAssignedAttribute.Attachment = stiAttachment;
+                if(activityAssignedAttribute.Attachment == null)
+                    activityAssignedAttribute.Attachment = new StiAttachment();
+                MapperFactory.GetMapper<StiAttachment, Attachment>().Map(activityAssignedAttribute.Attachment, announcementAssignedAttribute.Attachment);
             }
         }
     }
