@@ -68,33 +68,6 @@ Go
 Alter Table AnnouncementAttachment
 Alter Column AttachmentRef int not null
 Go
-
-
-Alter Table AnnouncementAttachment
-Drop Column Name 
-Go
-
-Alter Table AnnouncementAttachment
-Drop Constraint FK_AnnouncementAttachment_Person
-Go
-
-Alter Table AnnouncementAttachment
-Drop Column PersonRef
-Go
-
-
-Alter Table AnnouncementAttachment
-Drop Column UUid
-Go
-
-
-Alter Table AnnouncementAttachment
-Drop Column SisAttachmentId
-Go
-
-
-Go
-
 ----------------------------------------------------
 --Add AttachmentRef to AnnouncementAssignedAttribute
 ----------------------------------------------------
@@ -155,22 +128,6 @@ Go
 
 Alter Table Attachment
 Drop Column AnnouncementAssignedAttributeId
-Go
-
-Alter Table AnnouncementAssignedAttribute
-Drop Column UUid
-Go
-
-Alter Table AnnouncementAssignedAttribute
-Drop Column SisAttributeAttachmentId
-Go
-
-Alter Table AnnouncementAssignedAttribute
-Drop Column SisAttachmentName
-Go
-
-Alter Table AnnouncementAssignedAttribute
-Drop Column SisAttachmentMimeType
 Go
 
 Alter Table AnnouncementAssignedAttribute

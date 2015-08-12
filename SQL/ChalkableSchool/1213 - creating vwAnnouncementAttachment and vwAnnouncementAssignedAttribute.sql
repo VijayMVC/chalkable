@@ -18,7 +18,7 @@ Select
 From
 	AnnouncementAttachment
 Join Attachment on Attachment.Id = AnnouncementAttachment.AttachmentRef 
-
+Go
 
 Create View vwAnnouncementAssignedAttribute
 As
@@ -44,7 +44,7 @@ Select
 From 
 	AnnouncementAssignedAttribute
 Left Join Attachment On Attachment.Id = AnnouncementAssignedAttribute.AttachmentRef
-
+Go
 
 Alter Procedure [dbo].[spSelectAnnouncementAddionalData] @announcementId int, @ownerId int, @callerId int, @schoolId int
 As
