@@ -21,7 +21,7 @@ namespace Chalkable.Web.Models
                 AttachedDate = announcementAttachmentInfo.AnnouncementAttachment.AttachedDate,
                 Id = announcementAttachmentInfo.AnnouncementAttachment.Id,
                 Order = announcementAttachmentInfo.AnnouncementAttachment.Order,
-                Attachment = AttachmentViewData.Create(announcementAttachmentInfo.AttachmentInfo)
+                Attachment = AttachmentViewData.Create(announcementAttachmentInfo.AttachmentInfo, isOwner)
             };
         }
         public static IList<AnnouncementAttachmentViewData> Create(IList<AnnouncementAttachmentInfo> announcementAttachments, int personId)

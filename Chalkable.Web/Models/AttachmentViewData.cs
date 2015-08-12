@@ -38,6 +38,7 @@ namespace Chalkable.Web.Models
             };
         }
 
+       
         public static AttachmentViewData Create(AttachmentInfo attachmentInfo, int? currentPersonId = null)
         {
             return Create(attachmentInfo, currentPersonId == attachmentInfo.Attachment.PersonRef);

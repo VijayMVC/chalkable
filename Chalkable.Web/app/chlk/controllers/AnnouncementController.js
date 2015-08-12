@@ -1054,7 +1054,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Object, Boolean]],
         function uploadAttachmentAction(announcementId, announcementType, files, onCreate_) {
             this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
-            return this.UpdateView(onCreate_ ? this.getAnnouncementFormPageType_(announcementType) : this.getView().getCurrent().getClass()
+            return this.UpdateView(onCreate_ ? this.getAnnouncementFormPageType_(announcementType) : chlk.activities.announcement.AnnouncementViewPage//this.getView().getCurrent().getClass()
                     , this.fetchUploadAttachmentFuture_(announcementId, files, announcementType), 'update-attachments');
         },
 
