@@ -71,7 +71,7 @@ namespace Chalkable.Web.Controllers
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            return Json(ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, Context.PersonId.Value, classId, abIds, markingPeriodId, start, count));
+            return Json(ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, Context.PersonId.Value, classId, abIds, markingPeriodId, start, count ?? 3));
         }
         
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
