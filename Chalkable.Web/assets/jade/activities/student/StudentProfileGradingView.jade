@@ -1,0 +1,20 @@
+user = self.getUser()
+.profile-page
+    h2.page-title=Msg.Student_profile
+
+    +ProfileTopBar(self, 'grading')
+    .summary-view
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .img-container
+                    +PersonImg(user, 140, true)
+            #info-panel.central-block.panel-block
+                -var displayName =user.getDisplayName() || user.getFullName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+
+        .grading-stats
+            each gpStats in user.getGradesByGradingPeriod()
+                +CloseOpen(gpStats.getGradingPeriod().getName())
+                    +LeftRightToolbar().classes-bar
+                        each classGrading in user.getStudentGradings()
+                            div
