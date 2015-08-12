@@ -164,7 +164,14 @@ namespace Chalkable.Web.Controllers.PersonControllers
             
             var activityIds = gradingDetails.StudentAnnouncements.Select(x => x.ActivityId).Distinct().ToList();
             var announcements = SchoolLocator.ClassAnnouncementService.GetByActivitiesIds(activityIds);
-            var res = StudentProfileGradingDetailViewData.Create(student, gradingDetails, gp, announcements);
+
+
+            var classIds =
+                announcements.Select(x => x.ClassAnnouncementData.ClassRef).Distinct().ToList();
+
+            var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
+
+            var res = StudentProfileGradingDetailViewData.Create(student, gradingDetails, gp, announcements, classAnnouncementTypes);
             return Json(res);
         }
 

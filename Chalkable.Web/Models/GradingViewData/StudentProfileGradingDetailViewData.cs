@@ -19,9 +19,10 @@ namespace Chalkable.Web.Models.GradingViewData
         }
 
 
-        public static StudentProfileGradingDetailViewData Create(StudentDetails student, StudentGradingDetails gradingDetails, GradingPeriod gp, IList<AnnouncementComplex> announcements)
+        public static StudentProfileGradingDetailViewData Create(StudentDetails student, StudentGradingDetails gradingDetails, GradingPeriod gp,
+            IList<AnnouncementComplex> announcements, IEnumerable<ClassAnnouncementType> classAnnouncementTypes)
         {
-            var classAnnouncements = announcements.GroupBy(x => x.ClassRef).Select(y => new
+            var classAnnouncementGroups = announcements.GroupBy(x => x.ClassRef).Select(y => new
             {
                 ClassId = y.Key,
                 Announcements = y.ToList()
@@ -34,13 +35,13 @@ namespace Chalkable.Web.Models.GradingViewData
                 ClassAvgs = new List<ClassAvg>()
             };
 
-            foreach (var classAnnouncement in classAnnouncements)
+            foreach (var classAnnouncementGroup in classAnnouncementGroups)
             {
                 var categoryTypes =
-                    announcements.GroupBy(x => x.ClassAnnouncementData.ClassAnnouncementTypeName)
+                    classAnnouncementGroup.Announcements.GroupBy(x => x.ClassAnnouncementData.ClassAnnouncementTypeRef)
                         .Select(y => new ClassCategoryAvg()
                         {
-                            AnnouncementTypeName = y.Key,
+                            AnnouncementType = classAnnouncementTypes.FirstOrDefault(x => x.Id == y.Key),
                             Items = y
                         }).ToList();
 
@@ -56,7 +57,7 @@ namespace Chalkable.Web.Models.GradingViewData
 
                 var classAvg = new ClassAvg
                 {
-                    ClassId = classAnnouncement.ClassId,
+                    ClassId = classAnnouncementGroup.ClassId,
                     Items = categoryTypes,
                     Avg = categoryTypes.Average(x => x.Avg)
 
@@ -72,7 +73,7 @@ namespace Chalkable.Web.Models.GradingViewData
     {
         public IEnumerable<AnnouncementComplex> Items { get; set; }
         public decimal? Avg { get; set; }
-        public string AnnouncementTypeName { get; set; }
+        public ClassAnnouncementType AnnouncementType { get; set; }
     }
 
     public class ClassAvg
