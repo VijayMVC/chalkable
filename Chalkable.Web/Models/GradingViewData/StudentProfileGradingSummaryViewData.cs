@@ -20,16 +20,19 @@ namespace Chalkable.Web.Models.GradingViewData
             var gradings = new List<StudentGradings>();
             foreach (var gp in gradingPeriods)
             {
-                var avgs = gradingSummary.StudentAverages.Where(x => x.GradingPeriodId == gp.Id && x.IsGradingPeriodAverage).ToList();
-                foreach (var avg in avgs)
+                var avgs = gradingSummary.StudentAverages.Where(x => x.GradingPeriodId == gp.Id).ToList();
+
+                var classAvgs = avgs.GroupBy(x => x.ClassId).Select(x => new StudentClassAvg()
                 {
-                    avg.ClassName = classes.First(x => x.Id == avg.ClassId).Name;
-                }
+                    ClassName = classes.First(y => y.Id == x.Key).Name,
+                    StudentAverages = x.Where(z => !z.IsGradingPeriodAverage),
+                    GradingPeriodAvg = x.First(z => z.IsGradingPeriodAverage)
+                });
 
                 gradings.Add( new StudentGradings
                 {
                     GradingPeriod = GradingPeriodViewData.Create(gp),
-                    StudentAverages = avgs
+                    ClassAvgs = classAvgs
                 });
             }
             return new StudentProfileGradingSummaryViewData
@@ -41,9 +44,17 @@ namespace Chalkable.Web.Models.GradingViewData
         }
     }
 
+
+    public class StudentClassAvg
+    {
+        public ChalkableStudentAverage GradingPeriodAvg { get; set; }
+        public IEnumerable<ChalkableStudentAverage> StudentAverages { get; set; }
+        public string ClassName { get; set; }
+    }
+
     public class StudentGradings
     {
         public GradingPeriodViewData GradingPeriod { get; set; }
-        public IEnumerable<ChalkableStudentAverage> StudentAverages { get; set; } 
+        public IEnumerable<StudentClassAvg> ClassAvgs { get; set; } 
     }
 }

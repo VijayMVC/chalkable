@@ -56,7 +56,7 @@ namespace Chalkable.BusinessLogic.Model
         public decimal? EnteredAvg { get; set; }
         public int StudentId { get; set; }
         public int ClassId { get; set; }
-        public string ClassName { get; set; }
+        
         public int? GradingPeriodId { get; set; }
         public AlphaGrade CalculatedAlphaGrade { get; set; }
         public AlphaGrade EnteredAlphaGrade { get; set; }
