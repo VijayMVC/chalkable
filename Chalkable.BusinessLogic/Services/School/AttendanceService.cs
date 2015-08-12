@@ -306,7 +306,14 @@ namespace Chalkable.BusinessLogic.Services.School
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             var student = ServiceLocator.StudentService.GetById(studentId, syId);
             var stiModel = ConnectorLocator.StudentConnector.GetStudentAttendanceSummary(studentId, syId, gradingPeriodId);
-            var classes = ServiceLocator.ClassService.GetStudentClasses(syId, studentId, gradingPeriodId);
+
+            int? mpId = null;
+            if (gradingPeriodId.HasValue)
+            {
+                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value);
+                mpId = gp.MarkingPeriodRef;
+            }
+            var classes = ServiceLocator.ClassService.GetStudentClasses(syId, studentId, mpId);
             var res = new StudentAttendanceSummary {Student = student};
             if (stiModel != null)
             {
