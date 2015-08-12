@@ -5,6 +5,7 @@ NAMESPACE('chlk.activities.apps', function () {
 
     /** @class chlk.activities.apps.AttachDialog*/
     CLASS(
+        [ria.mvc.ActivityGroup('AttachDialog')],
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.apps.AttachDialogTpl)],
         'AttachDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [

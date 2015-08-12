@@ -82,9 +82,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             using (var u = Update())
             {
                 res = CreateLessonPlanDataAccess(u).CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
-                res.AnnouncementAttachments = ((AnnouncementAttachmentService)ServiceLocator.AnnouncementAttachmentService).CopyAttachments(lessonPlanTemplateId, new List<int>{res.Id}, u);
-                res.AnnouncementAttributes = ((AnnouncementAssignedAttributeService)ServiceLocator.AnnouncementAssignedAttributeService).CopyNonStiAttributes(lessonPlanTemplateId, new List<int>{res.Id}, u);
-                res.AnnouncementApplications = ((ApplicationSchoolService)ServiceLocator.ApplicationSchoolService).CopyAnnApplications(annApps, new List<int>{res.Id}, u);
+                res.AnnouncementAttachments = AnnouncementAttachmentService.CopyAnnouncementAttachments(lessonPlanTemplateId, new List<int> { res.Id }, u, ServiceLocator, ConnectorLocator);
+                res.AnnouncementAttributes = AnnouncementAssignedAttributeService.CopyNonStiAttributes(lessonPlanTemplateId, new List<int>{res.Id}, u, ServiceLocator, ConnectorLocator);
+                res.AnnouncementApplications = ApplicationSchoolService.CopyAnnApplications(annApps, new List<int> { res.Id }, u);
                 u.Commit();
             }
             return PrepareStandardsWithCode(res); 
@@ -104,14 +104,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             //get only simple apps
             var apps = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(appIds).Where(a => !a.IsAdvanced).ToList();
             annApps = annApps.Where(aa => apps.Any(a => a.Id == aa.ApplicationRef)).ToList();
-
-
+            
             using (var u = Update())
             {
                 var resIds = CreateLessonPlanDataAccess(u).DuplicateLessonPlan(lessonPlanId, classIds, Context.NowSchoolYearTime);
-                ((AnnouncementAttachmentService)ServiceLocator.AnnouncementAttachmentService).CopyAttachments(lessonPlanId, resIds, u);
-                ((AnnouncementAssignedAttributeService)ServiceLocator.AnnouncementAssignedAttributeService).CopyNonStiAttributes(lessonPlanId, resIds, u);
-                ((ApplicationSchoolService)ServiceLocator.ApplicationSchoolService).CopyAnnApplications(annApps, resIds, u);
+                AnnouncementAttachmentService.CopyAnnouncementAttachments(lessonPlanId, resIds, u, ServiceLocator, ConnectorLocator);
+                AnnouncementAssignedAttributeService.CopyNonStiAttributes(lessonPlanId, resIds, u, ServiceLocator, ConnectorLocator);
+                ApplicationSchoolService.CopyAnnApplications(annApps, resIds, u);
                 u.Commit();
             }
         }

@@ -1,33 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
-using Chalkable.Data.Common.Orm;
-using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.DataAccess;
 
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAnnouncementAttachmentService
     {
         IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, int toAnnouncementId);
-        Announcement AddAttachment(int announcementId, AnnouncementType type, byte[] content, string name);
-        void AddAttachmentToBlob(IList<AttachmentContentInfo> attachmentContent);
-        void DeleteAttachment(int announcementAttachmentId);
-        IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true);
-        IList<AnnouncementAttachment> GetAttachments(string filter);
-        AnnouncementAttachment GetAttachmentById(int announcementAttachmentId);
-        AttachmentContentInfo GetAttachmentContent(int announcementAttachmentId);
-        AttachmentContentInfo GetAttachmentContent(AnnouncementAttachment announcementAttachment);
+        Announcement UploadAttachment(int announcementId, AnnouncementType type, byte[] content, string name);
+        Announcement Add(int announcementId, AnnouncementType type, int attachmentId);
+        void Delete(int announcementAttachmentId);
+        IList<AnnouncementAttachment> GetAnnouncementAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true);
+        IList<AnnouncementAttachment> GetAnnouncementAttachments(string filter);
+        AnnouncementAttachment GetAnnouncementAttachmentById(int announcementAttachmentId);
+        IList<AnnouncementAttachmentInfo> TransformToAttachmentsInfo(IList<AnnouncementAttachment> announcementAttachments, IList<int> teacherIds);
+
     }
 
     public class AnnouncementAttachmentService : SisConnectedService, IAnnouncementAttachmentService
@@ -37,69 +32,83 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        private const string ATTACHMENT_CONTAINER_ADDRESS = "attachmentscontainer";
-
         private bool CanAttach(Announcement ann)
         {
             var recipients = ServiceLocator.GetAnnouncementService(ann.Type).GetAnnouncementRecipientPersons(ann.Id);
             return AnnouncementSecurity.CanModifyAnnouncement(ann, Context) || recipients.Any(p => p.Id == Context.PersonId);
         }
 
-        private string UploadToCrocodoc(string name, byte[] content)
+        
+        public static IList<AnnouncementAttachment> CopyAnnouncementAttachments(int fromAnnouncementId, IList<int> toAnnouncemenIds, UnitOfWork unitOfWork, IServiceLocatorSchool serviceLocator, ConnectorLocator connectorLocator)
         {
-            if (ServiceLocator.CrocodocService.IsDocument(name))
-                return ServiceLocator.CrocodocService.UploadDocument(name, content).uuid;
-            return null;
-        }
-
-        public IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, IList<int> toAnnouncemenIds, UnitOfWork unitOfWork)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(serviceLocator.Context.PersonId.HasValue);
             var da = new AnnouncementAttachmentDataAccess(unitOfWork);
-            var attachmentsForCopying = da.GetLastAttachments(fromAnnouncementId);
-            var attContentsForCopy = attachmentsForCopying.Select(ServiceLocator.AnnouncementAttachmentService.GetAttachmentContent).ToList();
-
-            var attContents = new List<AttachmentContentInfo>();
-            foreach (var attWithContent in attContentsForCopy)
+            var annAttachmentsForCopying = da.GetLastAttachments(fromAnnouncementId);
+            
+            var annAtts = new List<AnnouncementAttachment>();
+            foreach (var annAttForCopy in annAttachmentsForCopying)
             {
                 foreach (var toAnnouncemenId in toAnnouncemenIds)
                 {
-                    var uuid = UploadToCrocodoc(attWithContent.Attachment.Name, attWithContent.Content);
-                    var att = new AnnouncementAttachment
+
+                    var attForCopy = annAttForCopy.Attachment;
+                    var content = serviceLocator.AttachementService.GetAttachmentContent(attForCopy).Content;
+                    var att = AttachmentService.Upload(attForCopy.Name, content, attForCopy.IsStiAttachment, unitOfWork, serviceLocator, connectorLocator);
+                    var annAtt = new AnnouncementAttachment
                     {
                         AnnouncementRef = toAnnouncemenId,
-                        AttachedDate = attWithContent.Attachment.AttachedDate,
-                        Name = attWithContent.Attachment.Name,
-                        PersonRef = Context.PersonId.Value,
-                        Uuid = uuid,
-                        Order = attWithContent.Attachment.Order
+                        AttachedDate = annAttForCopy.AttachedDate,
+                        Order = annAttForCopy.Order,
+                        AttachmentRef = att.Id,
+                        Attachment = att
                     };
-                    attContents.Add(AttachmentContentInfo.Create(att, attWithContent.Content));
+                    annAtts.Add(annAtt);
                 }
             }
-            da.Insert(attContents.Select(x => x.Attachment).ToList());
-            var atts = da.GetLastAttachments(toAnnouncemenIds, attContents.Count);
-            
-            for (var i = 0; i < atts.Count; i++) 
-                attContents[i].Attachment = atts[i];
-            
-            AddAttachmentToBlob(attContents);
-            return atts;
+            da.Insert(annAtts);
+            return da.GetLastAttachments(toAnnouncemenIds, annAtts.Count);           
         }
 
 
         public IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, int toAnnouncementId)
         {
-            using (var u = Update())
-            {
-                var res = CopyAttachments(fromAnnouncementId, new List<int>{toAnnouncementId}, u);
-                u.Commit();
-                return res;
-            }
+            IList<AnnouncementAttachment> res = null;
+            DoUpdate(u=> { res = CopyAnnouncementAttachments(fromAnnouncementId, new List<int> {toAnnouncementId}, u, ServiceLocator, ConnectorLocator);});
+            return res;
         }
 
+        public Announcement Add(int announcementId, AnnouncementType type, int attachmentId)
+        {
+            var annDetails = ServiceLocator.GetAnnouncementService(type).GetAnnouncementDetails(announcementId);
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            if (!CanAttach(annDetails))
+                throw new ChalkableSecurityException();
 
-        public Announcement AddAttachment(int announcementId, AnnouncementType type, byte[] content, string name)
+            using (var u = Update())
+            {
+                var attDa = new AttachmentDataAccess(u);
+                var att = attDa.GetById(attachmentId);
+                if(att.PersonRef != Context.PersonId)
+                    throw new ChalkableSecurityException();
+
+                var annAtt = new AnnouncementAttachment
+                {
+                    AnnouncementRef = annDetails.Id,
+                    AttachedDate = Context.NowSchoolTime,
+                    Order = ServiceLocator.GetAnnouncementService(type).GetNewAnnouncementItemOrder(annDetails),
+                    AttachmentRef = attachmentId
+                };
+                new AnnouncementAttachmentDataAccess(u).Insert(annAtt);
+                att.LastAttachedDate = annAtt.AttachedDate;
+                attDa.Update(att);
+                u.Commit();
+                NotifyUsers(annDetails, type);
+            }
+            return annDetails;
+        }
+
+        public Announcement UploadAttachment(int announcementId, AnnouncementType type, byte[] content, string name)
         {
             var annDetails = ServiceLocator.GetAnnouncementService(type).GetAnnouncementDetails(announcementId);
             Trace.Assert(Context.PersonId.HasValue);
@@ -107,54 +116,35 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!CanAttach(annDetails))
                 throw new ChalkableSecurityException();
             
-            var uuid = UploadToCrocodoc(name, content);
             using (var uow = Update())
-            {               
+            {
+                var att = AttachmentService.Upload(name, content, false, uow, ServiceLocator, ConnectorLocator);
                 var annAtt = new AnnouncementAttachment
                 {
                     AnnouncementRef = annDetails.Id,
-                    PersonRef = Context.PersonId.Value,
                     AttachedDate = Context.NowSchoolTime,
-                    Name = name,
-                    Uuid = uuid,
-                    Order = ServiceLocator.GetAnnouncementService(type).GetNewAnnouncementItemOrder(annDetails)
+                    Order = ServiceLocator.GetAnnouncementService(type).GetNewAnnouncementItemOrder(annDetails),
+                    AttachmentRef = att.Id,
                 };
-                var da = new AnnouncementAttachmentDataAccess(uow);
-                da.Insert(annAtt);
+                new AnnouncementAttachmentDataAccess(uow).Insert(annAtt);
                 uow.Commit();
-                
-                var lastAtt = da.GetList(Context.PersonId.Value, Context.Role.Id, name).Last();
-                AddAttachmentToBlob(new List<AttachmentContentInfo> {AttachmentContentInfo.Create(lastAtt, content)});
-
-                if (!annDetails.IsDraft)
-                {
-                    if (annDetails.IsOwner)
-                        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId, type);
-                    else
-                        ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToTeachers(announcementId, type, Context.PersonId.Value);
-                }
+                NotifyUsers(annDetails, type);
             }
             return annDetails;
         }
 
-
-        public void AddAttachmentToBlob(IList<AttachmentContentInfo> attachmentContent)
+        private void NotifyUsers(Announcement announcement, AnnouncementType type)
         {
-            foreach (var attachmentContentInfo in attachmentContent)
+            if (!announcement.IsDraft)
             {
-                ServiceLocator.StorageBlobService.AddBlob(ATTACHMENT_CONTAINER_ADDRESS, GenerateKeyForBlob(attachmentContentInfo.Attachment), attachmentContentInfo.Content);                
+                if (announcement.IsOwner)
+                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcement.Id, type);
+                else
+                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToTeachers(announcement.Id, type, Context.PersonId.Value);
             }
         }
 
-
-        private string GenerateKeyForBlob(AnnouncementAttachment announcementAttachment)
-        {
-            var res = announcementAttachment.Id.ToString(CultureInfo.InvariantCulture);
-            if (Context.DistrictId.HasValue)
-                return string.Format("{0}_{1}", res, Context.DistrictId.Value);
-            return res;
-        }
-
+        
         private bool CanDeleteAttachment(AnnouncementAttachment announcementAttachment)
         {
             //TODO: impl method get announcement owners 
@@ -168,23 +158,22 @@ namespace Chalkable.BusinessLogic.Services.School
         }
 
 
-        public void DeleteAttachment(int announcementAttachmentId)
+        public void Delete(int announcementAttachmentId)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
             using (var uow = Update())
             {
                 var da = new AnnouncementAttachmentDataAccess(uow);
-                var annAtt = GetAttachmentById(announcementAttachmentId);
+                var annAtt = GetAnnouncementAttachmentById(announcementAttachmentId);
                 if (!CanDeleteAttachment(annAtt))
                     throw new ChalkableSecurityException();
                 
                 da.Delete(annAtt.Id);
-                ServiceLocator.StorageBlobService.DeleteBlob(ATTACHMENT_CONTAINER_ADDRESS, GenerateKeyForBlob(annAtt));
                 uow.Commit();
             }
         }
 
-        public IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)
+        public IList<AnnouncementAttachment> GetAnnouncementAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolLocalId.HasValue);
@@ -195,38 +184,32 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public AnnouncementAttachment GetAttachmentById(int announcementAttachmentId)
+        public AnnouncementAttachment GetAnnouncementAttachmentById(int announcementAttachmentId)
         {
             Trace.Assert(Context.PersonId.HasValue);
             return DoRead(u => new AnnouncementAttachmentDataAccess(u).GetById(announcementAttachmentId, Context.PersonId.Value, Context.Role.Id));
         }
 
-        public AttachmentContentInfo GetAttachmentContent(int announcementAttachmentId)
-        {
-            var att = GetAttachmentById(announcementAttachmentId);
-            if (att == null)
-                return null;
-
-            return GetAttachmentContent(att);
-        }
-
-        public AttachmentContentInfo GetAttachmentContent(AnnouncementAttachment announcementAttachment)
-        {
-            var content = ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, GenerateKeyForBlob(announcementAttachment));
-            return AttachmentContentInfo.Create(announcementAttachment, content);
-        }
-       
-        public IList<AnnouncementAttachment> GetAttachments(string filter)
+        public IList<AnnouncementAttachment> GetAnnouncementAttachments(string filter)
         {
             Trace.Assert(Context.PersonId.HasValue);
             return DoRead(u => new AnnouncementAttachmentDataAccess(u).GetList(Context.PersonId.Value, Context.Role.Id, filter));
         }
-        
-        public static string GetAttachmentRelativeAddress()
-        {
-            return (new BlobHelper()).GetBlobsRelativeAddress(ATTACHMENT_CONTAINER_ADDRESS);
-        }
 
-        
+        public IList<AnnouncementAttachmentInfo> TransformToAttachmentsInfo(IList<AnnouncementAttachment> announcementAttachments, IList<int> teacherIds)
+        {
+            return announcementAttachments.Select(x => new AnnouncementAttachmentInfo
+                {
+                    AttachmentInfo = ServiceLocator.AttachementService.TransformToAttachmentInfo(x.Attachment, teacherIds),
+                    AnnouncementAttachment = x
+                }).ToList();
+        }
+    }
+
+
+    public class AnnouncementAttachmentInfo
+    {
+        public AnnouncementAttachment AnnouncementAttachment { get; set; }
+        public AttachmentInfo AttachmentInfo { get; set; }
     }
 }

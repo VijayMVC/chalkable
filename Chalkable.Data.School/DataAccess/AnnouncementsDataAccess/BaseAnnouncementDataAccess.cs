@@ -87,13 +87,13 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             reader.NextResult();
             announcement.AnnouncementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
             reader.NextResult();
-            announcement.AnnouncementAttributes = reader.ReadList<AnnouncementAssignedAttribute>();
+            announcement.AnnouncementAttributes = AnnouncementAssignedAttributeDataAccess.ReadAttributes(reader);
             reader.NextResult();
-            announcement.AnnouncementApplications = reader.ReadList<AnnouncementApplication>();
+            announcement.AnnouncementApplications =  reader.ReadList<AnnouncementApplication>();
             reader.NextResult();
             announcement.AnnouncementStandards = reader.ReadList<AnnouncementStandardDetails>();
             reader.NextResult();
-            announcement.AnnouncementAttachments = reader.ReadList<AnnouncementAttachment>();
+            announcement.AnnouncementAttachments = reader.ReadList<AnnouncementAttachment>(true);
             announcement.StudentAnnouncements = new List<StudentAnnouncementDetails>();
             return announcement;
         }
