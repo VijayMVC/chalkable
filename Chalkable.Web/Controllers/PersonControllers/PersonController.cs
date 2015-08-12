@@ -83,6 +83,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 return Json(new ChalkableException(errorMessage));
 
             var res = GetInfo(personId, PersonInfoViewData.Create);
+            if(Context.Role == CoreRoles.TEACHER_ROLE)
+                res.Email = MasterLocator.UserService.GetUserEmailById(Context.UserId);
             return Json(res);
         }
     }
