@@ -115,9 +115,6 @@ select * from vwAnnouncementAttachment
 where AnnouncementAttachment_AnnouncementRef = @lessonPlanId
 	  and (@callerRole = 2 or (@callerRole = 3 and (Attachment_PersonRef = @callerId or exists(select * from @teacherIds t where t.value = Attachment_PersonRef))))
 GO
-
-
-
 Alter Procedure [dbo].[spGetAdminAnnouncementDetails] @adminAnnouncementId int, @callerId int, @callerRole int
 as
 	
