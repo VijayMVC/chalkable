@@ -8,7 +8,7 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/StudentAnnouncement.jade')],
         [ria.templates.ModelBind(chlk.models.announcement.ApplicationOrAttachment)],
         'ApplicationsAndAttachments', EXTENDS(chlk.templates.ChlkTemplate), [
-            [[ArrayOf(chlk.models.apps.Application), ArrayOf(chlk.models.attachment.Attachment)]],
+            [[ArrayOf(chlk.models.apps.Application), ArrayOf(chlk.models.attachment.AnnouncementAttachment)]],
             ArrayOf(chlk.models.announcement.ApplicationOrAttachment), function getSortedAppsAndAttachments(applications_, attachments_){
                 var attachments = attachments_ || this.getAnnouncementAttachments() || [],
                     applications = applications_ || this.getApplications() || [],

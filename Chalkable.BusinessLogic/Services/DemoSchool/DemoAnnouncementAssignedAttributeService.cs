@@ -121,5 +121,26 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new System.NotImplementedException();
         }
+
+
+        public void Delete(int announcementAssignedAttributeId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public AnnouncementAssignedAttribute UploadAttachment(AnnouncementType announcementType, int announcementId, int assignedAttributeId, byte[] bin, string name)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public AnnouncementAssignedAttribute AddAttachment(AnnouncementType announcementType, int announcementId, int assignedAttributeId, int attachmentId)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public AnnouncementAssignedAttribute RemoveAttachment(int announcementAssignedAttributeId)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

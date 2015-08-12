@@ -137,7 +137,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             }
             if (ann.AttachmentsCount > 0)
             {
-                var docs = ann.AnnouncementAttachments.Select(x => x.Name).ToList();
+                var docs = ann.AnnouncementAttachments.Select(x => x.Attachment.Name).ToList();
                 MasterLocator.UserTrackingService.AttachedDocument(Context.Login, docs);
             }
         }

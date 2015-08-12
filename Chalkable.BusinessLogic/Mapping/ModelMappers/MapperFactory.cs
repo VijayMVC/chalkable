@@ -39,6 +39,9 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                         {new Pair<Type, Type>(typeof(DisciplineReferral), typeof(ClassDiscipline)), new ClassDisciplineToDisciplineReferralMapper()},
                         {new Pair<Type, Type>(typeof(AnnouncementAssignedAttribute), typeof(ActivityAssignedAttribute)), new ActivityAssignedAttrToAnnouncementAssignedAttrMapper() },
                         {new Pair<Type, Type>(typeof(ActivityAssignedAttribute), typeof(AnnouncementAssignedAttribute)), new AnnouncementAssignedAttrToActivityAssignedAttrMapper() },
+                    
+                        {new Pair<Type, Type>(typeof(Attachment), typeof(StiAttachment)), new StiAttachmentToAttachmentMapper()},
+                        {new Pair<Type, Type>(typeof(StiAttachment), typeof(Attachment)), new AttachmentToStiAttachmentMapper()}
                     };
         }
         public static IMapper<TReturn, TSource> GetMapper<TReturn, TSource>()
