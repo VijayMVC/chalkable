@@ -1,6 +1,6 @@
 mixin AttributeAttachDocBtn_(attribute)
     if attribute.getAttributeAttachment() == null
-        +ActionButton('announcement', 'attachForAttribute', attribute.getAnnouncementId(), attribute.getAnnouncementType(), attribute.getId())(
+        +ActionButton('announcement', 'fileAttach', attribute.getAnnouncementId(), attribute.getAnnouncementType(), attribute.getId())(
             id="add-attribute-file-attachment" + attribute.getId()
         ).attach-doc  Attach doc
     else
