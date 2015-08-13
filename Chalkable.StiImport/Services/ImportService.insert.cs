@@ -34,114 +34,75 @@ using Student = Chalkable.StiConnector.SyncModel.Student;
 using StudentSchool = Chalkable.StiConnector.SyncModel.StudentSchool;
 using User = Chalkable.StiConnector.SyncModel.User;
 using UserSchool = Chalkable.StiConnector.SyncModel.UserSchool;
+using System.Linq.Expressions;
 
 namespace Chalkable.StiImport.Services
 {
     public partial class ImportService
     {
-        private void ProcessInsert()
-        {
-            Log.LogInfo("insert schools");
-            InsertSchools();
-            Log.LogInfo("insert addresses");
-            InsertAddresses();
-            Log.LogInfo("insert users");
-            InsertUsers();
-            Log.LogInfo("insert school users");
-            InsertSchoolUsers();
-            Log.LogInfo("insert persons");
-            InsertPersons();
-            Log.LogInfo("insert Staff");
-            InsertStaff();
-            Log.LogInfo("insert Student");
-            InsertStudent();
-            Log.LogInfo("insert StudentSchool");
-            InsertStudentSchool();
-            Log.LogInfo("insert StaffSchool");
-            InsertStaffSchool();
-            Log.LogInfo("insert persons emails");
-            InsertPersonsEmails();
-            Log.LogInfo("insert phones");
-            InsertPhones();
-            Log.LogInfo("insert grade levels");
-            InsertGradeLevels();
-            Log.LogInfo("insert school years");
-            InsertSchoolYears();
-            Log.LogInfo("insert student school years");
-            InsertStudentSchoolYears();
-            Log.LogInfo("insert marking periods");
-            InsertMarkingPeriods();
-            Log.LogInfo("insert grading periods");
-            InsertGradingPeriods();
-            Log.LogInfo("insert day types");
-            InsertDayTypes();
-            Log.LogInfo("insert Bell Schedules");
-            InsertBellSchedules();
-            Log.LogInfo("insert days");
-            InsertDays();
-            Log.LogInfo("insert rooms");
-            InsertRooms();
-            Log.LogInfo("insert grading scales");
-            InsertGradingScales();
-            Log.LogInfo("insert course types");
-            InserCourseTypes();
-            Log.LogInfo("insert courses");
-            InsertCourses();
-            Log.LogInfo("insert class teachers");
-            InsertClassTeachers();
-            Log.LogInfo("insert standard subjects");
-            InsertStandardSubject();
-            Log.LogInfo("insert standards");
-            InsertStandards();
-            Log.LogInfo("insert class standards");
-            InsertClassStandard();
-            Log.LogInfo("insert marking period classes");
-            InsertMarkingPeriodClasses();
-            Log.LogInfo("insert periods");
-            InsertPeriods();
-            Log.LogInfo("insert scheduled time slots");
-            InsertScheduledTimeSlots();
-            Log.LogInfo("insert class periods");
-            InsertClassPeriods();
+        private void ProcessInsert() 
+        {            
+            List<Expression<Action>> inserts = new List<Expression<Action>>();
+            
+            inserts.Add(() => InsertSchools());
+            inserts.Add(() => InsertAddresses());
+            inserts.Add(() => InsertUsers());
+            inserts.Add(() => InsertSchoolUsers());
+            inserts.Add(() => InsertPersons());
+            inserts.Add(() => InsertStaff());
+            inserts.Add(() => InsertStudent());
+            inserts.Add(() => InsertStudentSchool());
+            inserts.Add(() => InsertStaffSchool());
+            inserts.Add(() => InsertPersonsEmails());
+            inserts.Add(() => InsertPhones());
+            inserts.Add(() => InsertGradeLevels());
+            inserts.Add(() => InsertSchoolYears());
+            inserts.Add(() => InsertStudentSchoolYears());
+            inserts.Add(() => InsertMarkingPeriods());
+            inserts.Add(() => InsertGradingPeriods());
+            inserts.Add(() => InsertDayTypes());
+            inserts.Add(() => InsertBellSchedules());
+            inserts.Add(() => InsertDays());
+            inserts.Add(() => InsertRooms());
+            inserts.Add(() => InsertGradingScales());
+            inserts.Add(() => InserCourseTypes());
+            inserts.Add(() => InsertCourses());
+            inserts.Add(() => InsertClassTeachers());
+            inserts.Add(() => InsertStandardSubject());
+            inserts.Add(() => InsertStandards());
+            inserts.Add(() => InsertClassStandard());
+            inserts.Add(() => InsertMarkingPeriodClasses());
+            inserts.Add(() => InsertPeriods());
+            inserts.Add(() => InsertScheduledTimeSlots());
+            inserts.Add(() => InsertClassPeriods());
+            inserts.Add(() => InsertScheduledTimeSlotVariations());
+            inserts.Add(() => InsertSectionTimeSlotVariation());
+            inserts.Add(() => InsertClassPersons());
+            inserts.Add(() => InsertAttendanceReasons());
+            inserts.Add(() => InsertAttendanceLevelReasons());
+            inserts.Add(() => InsertAlphaGrades());
+            inserts.Add(() => InsertAlternateScores());
+            inserts.Add(() => InsertInfractions());
+            inserts.Add(() => InsertGradingScaleRanges());
+            inserts.Add(() => InsertClassroomOptions());
+            inserts.Add(() => InsertGradingComments());
+            inserts.Add(() => InsertSchoolsOptions());
+            inserts.Add(() => InsertAttendanceMonthes());
+            inserts.Add(() => InsertAnnouncementAttribues());
+            inserts.Add(() => InsertGradedItems());
+            inserts.Add(() => InsertContactRelationships());
+            inserts.Add(() => InsertStudentContacts());
+            inserts.Add(() => InsertSystemSettings());
 
-            Log.LogInfo("insert scheduled time slot variations");
-            InsertScheduledTimeSlotVariations();
-            Log.LogInfo("insert section time slot variations");
-            InsertSectionTimeSlotVariation();
+            this.ProcessActions(inserts, "Insert");            
+        }        
 
-            Log.LogInfo("insert class persons");
-            InsertClassPersons();
-            Log.LogInfo("insert attendance reasons");
-            InsertAttendanceReasons();
-            Log.LogInfo("insert attendance level reasons");
-            InsertAttendanceLevelReasons();
-            Log.LogInfo("insert alpha grades");
-            InsertAlphaGrades();
-            Log.LogInfo("insert alternate scores");
-            InsertAlternateScores();
-            Log.LogInfo("insert infractions");
-            InsertInfractions();
-            Log.LogInfo("insert scale ranges");
-            InsertGradingScaleRanges();
-            Log.LogInfo("insert classroom options");
-            InsertClassroomOptions();
-            Log.LogInfo("insert grading comments");
-            InsertGradingComments();
-            Log.LogInfo("insert schoolsOptions");
-            InsertSchoolsOptions();
-
-            Log.LogInfo("insert attendanceMonths");
-            InsertAttendanceMonthes();
-            Log.LogInfo("insert announcementAttribues");
-            InsertAnnouncementAttribues();
-            Log.LogInfo("insert gradedItems");
-            InsertGradedItems();
-            Log.LogInfo("insert contactRelationship");
-            InsertContactRelationships();
-            Log.LogInfo("insert studentContacts");
-            InsertStudentContacts();
-            Log.LogInfo("insert systemsettings");
-            InsertSystemSettings();
+        private void ProcessInsert(Dictionary<string, Action> inserts) {            
+            foreach (var item in inserts) {
+                Stopwatch requestTimer = Stopwatch.StartNew();
+                item.Value();
+                Log.LogInfo(item.Key + " " + this.taskId + " " + this.districtId + " " + requestTimer.Elapsed);
+            }
         }
 
         private void InsertSystemSettings()

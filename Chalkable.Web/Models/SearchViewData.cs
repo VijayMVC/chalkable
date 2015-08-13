@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Common;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
@@ -104,11 +105,11 @@ namespace Chalkable.Web.Models
         {
             return new AttachmentSearchViewData
             {
-                Id = info.Attachment.Id.ToString(),
-                Description = info.Attachment.Name,
-                AnnouncementId = info.Attachment.AnnouncementRef,
+                Id = info.AttachmentInfo.Attachment.Id.ToString(),
+                Description = info.AttachmentInfo.Attachment.Name,
+                AnnouncementId = info.AnnouncementAttachment.AnnouncementRef,
                 SearchType = (int)SearchTypeEnum.Attachments,
-                AttachmentThumbnailUrl = info.DownloadThumbnailUrl
+                AttachmentThumbnailUrl = info.AttachmentInfo.DownloadThumbnailUrl
             };
         }
     }

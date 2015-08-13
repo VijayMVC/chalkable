@@ -111,9 +111,13 @@ namespace Chalkable.Data.School.DataAccess
                                  , Class.COURSE_REF_FIELD, classIdParamName);
         }
 
-        public StandardTreePath GetStandardParentsSubTree(int standardId)
+        public StandardTreePath GetStandardParentsSubTree(int standardId, int? classId)
         {
-            var parameters = new Dictionary<string, object> { { "@standardId", standardId } };
+            var parameters = new Dictionary<string, object>
+            {
+                { "@standardId", standardId },
+                { "@classId", classId}
+            };
             using (var reader = ExecuteStoredProcedureReader("spGetStandardParentsWithChilds", parameters))
             {
                 IList<Standard> standards = new List<Standard>();
@@ -128,6 +132,7 @@ namespace Chalkable.Data.School.DataAccess
                 {
                     reader.NextResult();
                     standards = reader.ReadList<Standard>();
+                    
                     foreach (var parentId in parentIds)
                     {
                         path.Add(standards.First(s => s.Id == parentId));

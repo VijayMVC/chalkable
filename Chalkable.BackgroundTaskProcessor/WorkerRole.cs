@@ -1,9 +1,13 @@
 using System;
+using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using Chalkable.Common;
 using Chalkable.Web.Tools;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Mindscape.Raygun4Net;
 
@@ -44,11 +48,13 @@ namespace Chalkable.BackgroundTaskProcessor
                     try
                     {
                         raygunClient.SendInBackground(ex);
+                        Telemetry.TrackException(ex);                        
                     }
                     catch (Exception){}
 #else
                     Debug.Fail(ex.Message);
-#endif
+#endif                    
+
                     while (ex != null)
                     {
                         Trace.TraceError(ex.Message);
@@ -61,6 +67,8 @@ namespace Chalkable.BackgroundTaskProcessor
 
         public override bool OnStart()
         {
+            TelemetryConfiguration.Active.InstrumentationKey = Settings.InstrumentationKey;
+          
             // Set the maximum number of concurrent connections 
             ServicePointManager.DefaultConnectionLimit = 12;
 

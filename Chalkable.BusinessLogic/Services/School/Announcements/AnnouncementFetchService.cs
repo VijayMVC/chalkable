@@ -66,7 +66,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         private void GetDateRangeForAddtionalFeedItems(out DateTime fromDate, out DateTime toDate, IList<AnnouncementComplex> classAnnouncements, int start, int count)
         {
             fromDate = Context.SchoolYearStartDate ?? DateTime.MinValue;
-            toDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
+            toDate = DateTime.MaxValue;
             if(start > 0 && classAnnouncements.Count > 0)
                 fromDate = classAnnouncements.Min(x => x.ClassAnnouncementData.Expires);
 

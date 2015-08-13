@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -116,7 +117,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new UnassignedUserException();
             using (var uow = Update())
             {
-                new PersonDataAccess(uow).Delete(persons);
+                new PersonDataAccess(uow).Delete(persons.Select(x=>x.Id).ToList());
                 uow.Commit();
             }
         }

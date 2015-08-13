@@ -17,7 +17,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IClassService ClassService { get; }
         ISchoolYearService SchoolYearService { get; }
         IAnnouncementQnAService AnnouncementQnAService { get; }
-        //IAnnouncementService AnnouncementService { get; }
         IAnnouncementAttachmentService AnnouncementAttachmentService { get; }
         IPhoneService PhoneService { get; }
         IPrivateMessageService PrivateMessageService { get; }
@@ -75,6 +74,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IAnnouncementFetchService AnnouncementFetchService { get; }
         IBaseAnnouncementService GetAnnouncementService(AnnouncementType? type);
 
+        IAttachementService AttachementService { get; } 
         ILEService LeService { get; }
     }
 
@@ -88,7 +88,6 @@ namespace Chalkable.BusinessLogic.Services.School
         private IClassService classService;
         private ISchoolYearService schoolYearService;
         private IAnnouncementQnAService announcementQnAService;
-        //private IAnnouncementService announcementService;
         private IAnnouncementAttachmentService announcementAttachmentService;
         private IPhoneService phoneService;
         private IPrivateMessageService privateMessageService;
@@ -146,6 +145,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IAnnouncementFetchService announcementFetchService;
 
         private ILEService leService;
+        private IAttachementService attachementService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -158,7 +158,6 @@ namespace Chalkable.BusinessLogic.Services.School
             classService = new ClassService(this);
             schoolYearService = new SchoolYearService(this);
             announcementQnAService = new AnnouncementQnAService(this);
-            //announcementService = new AnnouncementService(this);
             announcementAttachmentService = new AnnouncementAttachmentService(this);
             phoneService = new PhoneService(this);
             privateMessageService = new PrivateMessageService(this);
@@ -214,6 +213,7 @@ namespace Chalkable.BusinessLogic.Services.School
             adminAnnouncementService = new AdminAnnouncementService(this);
             announcementFetchService = new AnnouncementFetchService(this);
             leService = new LEService(this);
+            attachementService = new AttachmentService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -223,7 +223,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public IClassService ClassService { get { return classService; } }
         public ISchoolYearService SchoolYearService { get { return schoolYearService; } }
         public IAnnouncementQnAService AnnouncementQnAService{ get { return announcementQnAService; } }
-        //public IAnnouncementService AnnouncementService { get { return announcementService; } }
         public IAnnouncementAttachmentService AnnouncementAttachmentService { get { return announcementAttachmentService; } }
         public IPhoneService PhoneService { get { return phoneService; } }
         public IPrivateMessageService PrivateMessageService { get { return privateMessageService; } }
@@ -275,7 +274,8 @@ namespace Chalkable.BusinessLogic.Services.School
         public ISettingsService SettingsService { get { return settingsService; } }
         public ILPGalleryCategoryService LPGalleryCategoryService { get { return lpGalleryCategoryService; } }
         public ILEService LeService { get { return leService; } }
-
+        public IAttachementService AttachementService { get { return attachementService; } }
+        
         public IDbService SchoolDbService
         {
             get { return schoolDbService; }
@@ -301,6 +301,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 default : throw new ChalkableException("Not supported announcement type"); //todo implement NotSupportedChalkableException
             }
         }
-        
+
     }
 }

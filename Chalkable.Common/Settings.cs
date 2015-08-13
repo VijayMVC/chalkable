@@ -104,6 +104,7 @@ namespace Chalkable.Common
         public static int TaskProcessorDelay { get { return Int32.Parse(Get("TaskProcessorDelay")); } }
         public static string DbBackupServiceUrl { get { return Get("DbBackupServiceUrl"); } }
         public static int PictureProcessorCount { get { return Int32.Parse(Get("PictureProcessorCount")); } }
+        public static string InstrumentationKey { get { return Get("instrumentationKey"); } }
 
         public static ProducerConfigSection GetProducerConfig(string sectionName)
         {
@@ -136,5 +137,32 @@ namespace Chalkable.Common
         /* Global Cache */
 
         public static string RedisCacheConnectionString { get { return Get("RedisCache.ConnectionString"); } }
+
+        private static Verbocity configuredVerbocity;
+        private static bool verbositySet = false;
+
+        public static Verbocity Verbocity {
+            get {
+                if (!verbositySet) {
+                    // set the default verbosity
+                    configuredVerbocity = Verbocity.Off;
+
+                    // Get the configured setting
+                    var verbositySetting = RoleEnvironment.GetConfigurationSettingValue("verbocity");
+
+                    if (!string.IsNullOrWhiteSpace(verbositySetting)) {
+                        // Ensure the case of the config setting
+                        verbositySetting = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(verbositySetting);
+                    }
+
+                    // TryParse will work with properly cased values or integers
+                    Enum.TryParse(verbositySetting, out configuredVerbocity);
+
+                    // Ensure that we only rertrieve this value once
+                    verbositySet = true;
+                }
+                return configuredVerbocity;
+            }
+        }
     }
 }

@@ -80,7 +80,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
 
             public void LogInfo(string message)
-            {
+            {                
                 Log(LEVEL_INFO, message);
             }
 
@@ -90,12 +90,13 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
 
             public void LogError(string message)
-            {
+            {                
                 Log(LEVEL_ERROR, message);
             }
 
-            public void LogException(Exception ex)
+            public void LogException(Exception ex, string districtId = null, string taskId = null)
             {
+                Chalkable.Common.Telemetry.TrackException(ex, districtId, taskId);
                 while (ex != null)
                 {
                     LogError(ex.Message);

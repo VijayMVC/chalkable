@@ -21,11 +21,12 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
     +background-image(linear-gradient(top, #FEFEFE 0%, #F9F9F7 50%, #F3F2EE 100%))
     +box-shadow(transparentize(#000, .55) 0 1px 3px, #FFFFFF 0 1px 0px inset)
 
-    &:hover
-      background: #FFFFFF
+    &:not(.same-on-hover)
+      &:hover
+        background: #FFFFFF
 
-    &:active, &.pressed, &.pressed:hover
-      background: #F2F1ED
+      &:active, &.pressed, &.pressed:hover
+        background: #F2F1ED
 
   &.blue-button
     border-color: #29596E

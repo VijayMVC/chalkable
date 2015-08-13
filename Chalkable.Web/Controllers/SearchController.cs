@@ -21,8 +21,8 @@ namespace Chalkable.Web.Controllers
             if (Context.SCEnabled && Context.Role != CoreRoles.DISTRICT_ADMIN_ROLE)
                 searchRes.Add(SearchTypeEnum.Applications, MasterLocator.ApplicationService.GetApplications(null, null, query, null, null));
             searchRes.Add(SearchTypeEnum.Announcements, SchoolLocator.AnnouncementFetchService.GetAnnouncementsByFilter(query));
-            var attachments = SchoolLocator.AnnouncementAttachmentService.GetAttachments(query);
-            searchRes.Add(SearchTypeEnum.Attachments, AttachmentLogic.PrepareAttachmentsInfo(attachments, MasterLocator.CrocodocService));
+            var attachments = SchoolLocator.AnnouncementAttachmentService.GetAnnouncementAttachments(query);
+            searchRes.Add(SearchTypeEnum.Attachments, SchoolLocator.AnnouncementAttachmentService.TransformToAttachmentsInfo(attachments, null));
             searchRes.Add(SearchTypeEnum.Classes, SchoolLocator.ClassService.SearchClasses(query));
             return Json(SearchViewData.Create(searchRes));
         }

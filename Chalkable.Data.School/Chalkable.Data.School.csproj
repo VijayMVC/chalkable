@@ -65,6 +65,7 @@
     <Compile Include="DataAccess\AnnouncementsDataAccess\ClassAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\ApplicationInstallActionDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanDataAccess.cs" />
+    <Compile Include="DataAccess\AttachmentDataAccess.cs" />
     <Compile Include="DataAccess\AutoGradeDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementApplicationDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementAttachmentDataAccess.cs" />
@@ -121,6 +122,7 @@
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionDepartment.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionGradeLevel.cs" />
     <Compile Include="Model\ApplicationInstall\ApplicationInstallActionRole.cs" />
+    <Compile Include="Model\Attachment.cs" />
     <Compile Include="Model\AttendanceMonth.cs" />
     <Compile Include="Model\AttendanceReason.cs" />
     <Compile Include="Model\AutoGrade.cs" />

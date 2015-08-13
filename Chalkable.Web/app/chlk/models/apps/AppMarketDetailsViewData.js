@@ -16,6 +16,7 @@ NAMESPACE('chlk.models.apps', function () {
                 ArrayOf(chlk.models.apps.AppCategory),
                 ArrayOf(chlk.models.apps.AppGradeLevel),
                 Number,
+                Boolean,
                 Boolean
             ]],
             function $(app, installBtnTitle, categories, gradelevels, balance, isInstalled, fromNewItem_) {

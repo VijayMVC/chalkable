@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq.Expressions;
 using System.Threading;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
@@ -9,6 +10,8 @@ using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.DataContracts;
 using User = Chalkable.StiConnector.SyncModel.User;
 
 namespace Chalkable.StiImport.Services
@@ -27,6 +30,7 @@ namespace Chalkable.StiImport.Services
         private UserContext sysadminCntx;
 
         private Guid districtId;
+        private Guid taskId;
         protected IServiceLocatorMaster ServiceLocatorMaster { get; set; }
         protected IServiceLocatorSchool ServiceLocatorSchool { get; set; }
         protected BackgroundTaskService.BackgroundTaskLog Log { get; private set; }
@@ -41,6 +45,17 @@ namespace Chalkable.StiImport.Services
             var admin = new Data.Master.Model.User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo =  new UserLoginInfo()};
             sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
             
+        }
+
+        public ImportService(Guid districtId, SisConnectionInfo connectionInfo, BackgroundTaskService.BackgroundTaskLog log, Guid taskId) {
+            // TODO: obviously we don't want duplicate code here            
+            this.taskId = taskId;
+            ConnectionInfo = connectionInfo;
+            Log = log;
+            this.districtId = districtId;
+            var admin = new Data.Master.Model.User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo = new UserLoginInfo() };
+            sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
+
         }
 
         void PingConnection(object o)
@@ -198,7 +213,7 @@ namespace Chalkable.StiImport.Services
             }
             catch (Exception ex)
             {
-                Log.LogException(ex);
+                Log.LogException(ex, districtId.ToString(), taskId.ToString());
                 throw;
             }
         }
@@ -232,7 +247,7 @@ namespace Chalkable.StiImport.Services
             }
             catch (Exception ex)
             {
-                Log.LogException(ex);
+                Log.LogException(ex, districtId.ToString(), taskId.ToString());
                 if (!schoolCommited)
                 {
                     Log.LogInfo("rollback school db");
@@ -324,12 +339,19 @@ namespace Chalkable.StiImport.Services
             context.TablesToSync[typeof(SpEdStatus).Name] = null;
             var toSync = context.TablesToSync;
             var results = new List<SyncResultBase>();
+            var counter = 0;
             foreach (var table in toSync)
             {
+                counter++;
                 var type = context.Types[table.Key];
                 Log.LogInfo("Start downloading " + table.Key);
+                
+                Stopwatch requestTimer = Stopwatch.StartNew();
+                var startTime = DateTimeOffset.UtcNow;
                 var res = (SyncResultBase)connectorLocator.SyncConnector.GetDiff(type, table.Value);
                 Log.LogInfo("Table downloaded: " + table.Key + " " + res.RowCount);
+                Chalkable.Common.Telemetry.DispatchRequest("Table download", table.Key, startTime, requestTimer.Elapsed, true, Chalkable.Common.Verbocity.Info, districtId.ToString(), taskId.ToString(), "RowCount: " + res.RowCount);
+                Log.LogInfo("Table downloaded: " + table.Key);
                 results.Add(res);
             }
             foreach (var syncResultBase in results)
@@ -347,6 +369,20 @@ namespace Chalkable.StiImport.Services
                     newVersions.Add(i.Key, i.Value.Value);
                 }
             ServiceLocatorSchool.SyncService.UpdateVersions(newVersions);
+        }
+
+        private void ProcessActions(List<Expression<Action>> actions, string actionType) {
+
+            var counter = 0;
+            foreach (var action in actions) {
+                counter++;
+                var requestStartTime = DateTimeOffset.UtcNow;
+                Stopwatch requestTimer = Stopwatch.StartNew();
+                action.Compile()();
+                var body = action.Body as MethodCallExpression;
+                Log.LogInfo(body.Method.Name);
+                Chalkable.Common.Telemetry.DispatchRequest(actionType, body.Method.Name, requestStartTime, requestTimer.Elapsed, true, Chalkable.Common.Verbocity.Info, this.districtId.ToString(), this.taskId.ToString());                
+            }
         }
     }
 
