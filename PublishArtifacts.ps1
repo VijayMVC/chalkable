@@ -1,5 +1,6 @@
 param (
-[string] $buildNo = $null
+[string] $buildNo = $null,
+[string] $buildBranch = $null
 )
 
 function GetContentTypeFromExtension([string]$extension)
@@ -86,6 +87,8 @@ Function Check-Deployment($service, $slot){
 }
 
 try{
+  Write-Host "Initializing publish artifacts; build $buildNo, branch $buildBranch"
+
   Import-Module "C:\Program Files (x86)\Microsoft SDKs\Azure\PowerShell\ServiceManagement\Azure\Azure.psd1"
 
   $publishsettings = ".\ChalkableAzure.publishsettings"
@@ -123,23 +126,33 @@ try{
 
   Get-Item "Chalkable.Web\Content" | PutContentDir -dbase "Content" -exclude ".*\\(icons-24|icons-32|alerts-icons)\\.*"
 
-
+  
   # CI
-  #Write-Host "Starting deployment"
-  #$cspkg_url = $cspkg_urls | Where-Object { $_ -match ".*Azure\.cspkg" }
-  #$cscfg_url = Get-Item ".\Chalkable.Azure\ServiceConfiguration.Staging.cscfg"
-  #$service = "chalkablestaging"
-  #$slot = "Production"
-  #$deployment = Get-AzureDeployment -ServiceName $service -Slot $slot
+  $service = $null
+  $cspkg_url = $cspkg_urls | Where-Object { $_ -match ".*Azure\.cspkg" }    
+  $cscfg_url = $null
+  if ($buildBranch == 'staging-ci') {
+    $service = "chalkablestaging"
+    $cscfg_url = Get-Item ".\Chalkable.Azure\ServiceConfiguration.Staging.cscfg"
+  } else if ($buildBranch == 'qa-ci') {
+    $service = "chalkableqa"
+    $cscfg_url = Get-Item ".\Chalkable.Azure\ServiceConfiguration.QA.cscfg"
+  }
+  
+  if ($service != $null) {
+    Write-Host "Starting deployment"
+    $slot = "Production"
+    $deployment = Get-AzureDeployment -ServiceName $service -Slot $slot
 
-  #Write-Host "Deployment exists in $service. Upgrading deployment."
-  #Write-Host "Package: $cspkg_url"
-  #Write-Host "Config: $cscfg_url"
-  #Upgrade-Deployment -package_url $cspkg_url -service $service -slot $slot -config $cscfg_url
-  #Write-Host "Upgraded Deployment"
+    Write-Host "Upgrading deployment $service in slot $slot."
+    Write-Host "Package: $cspkg_url"
+    Write-Host "Config: $cscfg_url"
+    Upgrade-Deployment -package_url $cspkg_url -service $service -slot $slot -config $cscfg_url
+    Write-Host "Upgraded Deployment"
 
-  #$deploymentid = Check-Deployment -service $service -slot $slot -Context $context
-  #Write-Host "Deployed to $service with deployment id $deploymentid"
+    $deploymentid = Check-Deployment -service $service -slot $slot -Context $context
+    Write-Host "Deployed to $service with deployment id $deploymentid"
+  }
   exit 0
 }
 catch [System.Exception] {
