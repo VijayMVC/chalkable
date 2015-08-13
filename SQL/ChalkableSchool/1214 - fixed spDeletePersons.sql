@@ -1,7 +1,12 @@
 Alter Procedure spDeletePersons  
 	@personIds TInt32 readonly
 as 
-	Delete From vwAnnouncementAttachment where Attachment_PersonRef in (Select value from @personIds as ids)
+	Delete From AnnouncementAttachment 
+	where AttachmentRef in (
+								Select Attachment.Id From Attachment
+								Join @personIds ids on ids.value = Attachment.PersonRef
+						   )
+
 	Delete From AnnouncementQnA where AskerRef in (Select value from @personIds as ids)
 									or AnswererRef in (Select value from @personIds as ids)
 	
