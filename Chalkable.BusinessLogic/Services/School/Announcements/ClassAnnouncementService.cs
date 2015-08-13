@@ -154,13 +154,16 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     annAttDa.Delete(res.AnnouncementAttributes);
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(res, activity);
                     var attributes = res.AnnouncementAttributes.Where(x => x.Attachment != null).ToList();
-                    var atts = new AttachmentDataAccess(uow).GetBySisAttachmentIds(attributes.Select(a => a.Attachment.SisAttachmentId.Value).ToList());
-                    foreach (var attribute in res.AnnouncementAttributes)
+                    if (attributes.Count > 0)
                     {
-                        if(attribute.Attachment == null) continue;
-                        var att = atts.FirstOrDefault(x => x.SisAttachmentId == attribute.Attachment.SisAttachmentId);
-                        if(att == null) continue;
-                        attribute.AttachmentRef = att.Id;
+                        var atts = new AttachmentDataAccess(uow).GetBySisAttachmentIds(attributes.Select(a => a.Attachment.SisAttachmentId.Value).ToList());
+                        foreach (var attribute in res.AnnouncementAttributes)
+                        {
+                            if (attribute.Attachment == null) continue;
+                            var att = atts.FirstOrDefault(x => x.SisAttachmentId == attribute.Attachment.SisAttachmentId);
+                            if (att == null) continue;
+                            attribute.AttachmentRef = att.Id;
+                        }
                     }
                     annAttDa.Insert(res.AnnouncementAttributes); 
                 }
