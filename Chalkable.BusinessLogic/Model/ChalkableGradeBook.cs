@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
@@ -54,6 +55,9 @@ namespace Chalkable.BusinessLogic.Model
         public decimal? CalculatedAvg { get; set; }
         public decimal? EnteredAvg { get; set; }
         public int StudentId { get; set; }
+        public int ClassId { get; set; }
+        
+        public int? GradingPeriodId { get; set; }
         public AlphaGrade CalculatedAlphaGrade { get; set; }
         public AlphaGrade EnteredAlphaGrade { get; set; }
         public bool IsGradingPeriodAverage { get; set; }
@@ -61,6 +65,7 @@ namespace Chalkable.BusinessLogic.Model
         public bool MayBeExempt { get; set; }
         public IList<ChalkableStudentAverageComment> Comments { get; set; }
         public string Note { get; set; }
+
 
 
         public static ChalkableStudentAverage Create(StudentAverage studentAverage)
@@ -75,7 +80,9 @@ namespace Chalkable.BusinessLogic.Model
                     IsGradingPeriodAverage = studentAverage.IsGradingPeriodAverage,
                     Exempt = studentAverage.Exempt,
                     MayBeExempt = studentAverage.MayBeExempt,
-                    Note = studentAverage.ReportCardNote
+                    Note = studentAverage.ReportCardNote,
+                    ClassId = studentAverage.SectionId,
+                    GradingPeriodId = studentAverage.GradingPeriodId
                 };
             if (studentAverage.CalculatedAlphaGradeId.HasValue)
                 res.CalculatedAlphaGrade = new AlphaGrade
@@ -194,5 +201,20 @@ namespace Chalkable.BusinessLogic.Model
             }
             return res;
         }
+    }
+
+
+    public class StudentGrading
+    {
+        public int StudentId { get; set; }
+        public IEnumerable<ChalkableStudentAverage> StudentAverages { get; set; } 
+    }
+
+    public class StudentGradingDetails
+    {
+        public int StudentId { get; set; }
+        public int GradingPeriodId { get; set; }
+        public IEnumerable<StudentAnnouncement> StudentAnnouncements { get; set; } 
+
     }
 }

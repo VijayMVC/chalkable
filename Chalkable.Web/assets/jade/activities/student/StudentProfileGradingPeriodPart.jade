@@ -1,0 +1,9 @@
++LeftRightToolbar()(baseMargin = 10)
+    each classGrading in self.getStudentGradings()
+        .class-item
+            +GlanceBox(null, null, {value: classGrading.getStudentAvg().getCalculatedAvg(), title: classGrading.getClazz().getName()})
+            .announcement-types-info
+                .announcement-types-info-2
+                    if classGrading.getGradingByAnnouncementTypes()
+                        each typeItem in classGrading.getGradingByAnnouncementTypes()
+                            +GlanceBox(null, null, {value: typeItem.getStudentItemTypeAvg(), title: typeItem.getAnnouncementType().getName()}).small

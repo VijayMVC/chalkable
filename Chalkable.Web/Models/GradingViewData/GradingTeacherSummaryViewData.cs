@@ -5,7 +5,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
-namespace Chalkable.Web.Models
+namespace Chalkable.Web.Models.GradingViewData
 {
     public class GradingTeacherClassSummaryViewData
     {

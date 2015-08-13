@@ -7,7 +7,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Models.AnnouncementsViewData;
 
-namespace Chalkable.Web.Models
+namespace Chalkable.Web.Models.GradingViewData
 {
 
     public class ClassGradingBoxesViewData

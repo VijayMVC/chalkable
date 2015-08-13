@@ -4,13 +4,18 @@ REQUIRE('chlk.models.grading.ClassPersonGradingInfo');
 NAMESPACE('chlk.models.grading', function (){
    "use strict";
 
-    /**@class chlk.models.grading.ClassPersonGradesByGradingPeriod*/
-    CLASS('ClassPersonGradesByGradingPeriod',  [
+    var SJX = ria.serialize.SJX;
 
-        [ria.serialize.SerializeProperty('gradingperiod')],
+    /**@class chlk.models.grading.ClassPersonGradesByGradingPeriod*/
+    CLASS(UNSAFE, 'ClassPersonGradesByGradingPeriod', IMPLEMENTS(ria.serialize.IDeserializable), [
+
         chlk.models.schoolYear.GradingPeriod, 'gradingPeriod',
 
-        [ria.serialize.SerializeProperty('studentgradings')],
-        ArrayOf(chlk.models.grading.ClassPersonGradingInfo), 'studentGradings'
+        ArrayOf(chlk.models.grading.ClassPersonGradingInfo), 'studentGradings',
+
+        VOID, function deserialize(raw) {
+            this.gradingPeriod = SJX.fromDeserializable(raw.gradingperiod, chlk.models.schoolYear.GradingPeriod);
+            this.studentGradings = SJX.fromArrayOfDeserializables(raw.classavgs, chlk.models.grading.ClassPersonGradingInfo);
+        }
     ]);
 });

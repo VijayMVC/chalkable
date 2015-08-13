@@ -11,6 +11,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
+using Chalkable.Web.Models.GradingViewData;
 
 namespace Chalkable.Web.Controllers
 {

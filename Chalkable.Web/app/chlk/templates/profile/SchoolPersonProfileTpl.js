@@ -85,7 +85,7 @@ NAMESPACE('chlk.templates.profile', function(){
 //                     || (isStudentController && !this.hasUserPermission_(permissionEnum.VIEW_ADDRESS)))
                 ];
                 if(isStudentController){
-                    res.push(this.createActionLinkModel_(controller, 'grading', 'Grading', pressedLinkName, [userId], true));
+                    res.push(this.createActionLinkModel_(controller, 'grading', 'Grading', pressedLinkName, [userId], false));
                 }
                 if(controller == this._teacherControllerName || controller == this._studentControllerName){
                     res.push(this.createActionLinkModel_(controller, 'daySchedule', 'Schedule', pressedLinkName, [userId], false));

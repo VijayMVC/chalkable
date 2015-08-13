@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Data.School.Model;
+using Chalkable.Web.Models.GradingViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.AttendancesViewData
@@ -53,7 +54,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
             res.Hover = classAttendanceSummaries
                 .Select(x => new StudentAttendnaceHoverBoxItemViewData
                 {
-                    AttendnaceCount = getAttendanceIssuesCount(x).HasValue ? (int)getAttendanceIssuesCount(x).Value : 0,
+                    AttendanceCount = getAttendanceIssuesCount(x).HasValue ? (int)getAttendanceIssuesCount(x).Value : 0,
                     ClassName = x.Class.Name
                 }).ToList();
             res.Title = totalAbsences.ToString();
@@ -64,7 +65,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
 
     public class StudentAttendnaceHoverBoxItemViewData
     {
-        public int AttendnaceCount { get; set; }
+        public int AttendanceCount { get; set; }
         public string ClassName { get; set; }
     }
 }

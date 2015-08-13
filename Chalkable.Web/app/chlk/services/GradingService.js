@@ -233,6 +233,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+
             [[chlk.models.id.AnnouncementId]],
             ria.async.Future, function getItemGradingStat(announcementId) {
                 return this.get('Grading/ItemGradingStat', null, {
