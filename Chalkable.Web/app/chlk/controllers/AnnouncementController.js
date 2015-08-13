@@ -789,7 +789,7 @@ NAMESPACE('chlk.controllers', function (){
         function attachFromCabinetToAttributeAction(announcementId, announcementType, attachmentId, assignedAttributeId){
             this.BackgroundCloseView(chlk.activities.announcement.FileCabinetDialog);
             var res = this.assignedAttributeService
-                .addAttachment(announcementType, announcementId, attachmentId, assignedAttributeId)
+                .addAttachment(announcementType, announcementId, assignedAttributeId, attachmentId)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(attribute){
@@ -974,7 +974,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.Redirect('announcement', 'addAttributeAttachment', [announcementType, announcementId, assignedAttributeId, files]);
             return this.Redirect('announcement', 'uploadAttachment', [announcementId,  announcementType, files, !isStudent]);
         },
-        
+
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, Object]],
         function addAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId, files) {
