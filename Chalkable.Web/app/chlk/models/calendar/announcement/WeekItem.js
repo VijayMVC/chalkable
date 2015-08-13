@@ -1,0 +1,35 @@
+REQUIRE('chlk.models.announcement.AnnouncementPeriod');
+REQUIRE('chlk.models.announcement.LessonPlanViewData');
+REQUIRE('chlk.models.announcement.AdminAnnouncementViewData');
+REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
+REQUIRE('chlk.models.Popup');
+REQUIRE('chlk.models.id.ClassId');
+
+NAMESPACE('chlk.models.calendar.announcement', function () {
+    "use strict";
+
+    /** @class chlk.models.calendar.announcement.WeekItem*/
+    CLASS(
+        'WeekItem', EXTENDS(chlk.models.Popup), [
+            chlk.models.common.ChlkDate, 'date',
+
+            Number, 'day',
+
+            [ria.serialize.SerializeProperty('dayofweek')],
+            Number, 'dayOfWeek',
+
+            Boolean, 'sunday',
+
+            String, 'todayClassName',
+
+            chlk.models.id.ClassId, 'selectedClassId',
+
+            [ria.serialize.SerializeProperty('announcementperiods')],
+            ArrayOf(chlk.models.announcement.AnnouncementPeriod), 'announcementPeriods',
+
+            [ria.serialize.SerializeProperty('adminannouncements')],
+            ArrayOf(chlk.models.announcement.AdminAnnouncementViewData), 'adminAnnouncements',
+
+            Boolean, 'noPlusButton'
+        ]);
+});
