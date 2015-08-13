@@ -109,37 +109,37 @@ try{
   # Put service configurations
   Get-Item ".\Chalkable.Azure\ServiceConfiguration.*.cscfg" | Where-Object {!($_.Name -like "*Local*")} | PutFile -dbase $buildNo
 
+  if ($buildNo -ne $null) {
+    # Statics container
+    $ContainerName = $xml.settings.statics + $buildNo
+    $ContainerName | New-AzureStorageContainer -Permission Container -Context $context
 
-  # Statics container
-  $ContainerName = $xml.settings.statics + $buildNo
-  $ContainerName | New-AzureStorageContainer -Permission Container -Context $context
+    Get-Item "Chalkable.Web\app\*App.compiled.js" | PutFile -dbase "app"
+    Get-Item "Chalkable.Web\app\chlk\shared.js" | PutFile -dbase "app\chlk"
+    Get-Item "Chalkable.Web\app\chlk\chlk-messages.js" | PutFile -dbase "app\chlk"
+    Get-Item "Chalkable.Web\app\chlk\chlk-constants.js" | PutFile -dbase "app\chlk"
 
-  Get-Item "Chalkable.Web\app\*App.compiled.js" | PutFile -dbase "app"
-  Get-Item "Chalkable.Web\app\chlk\shared.js" | PutFile -dbase "app\chlk"
-  Get-Item "Chalkable.Web\app\chlk\chlk-messages.js" | PutFile -dbase "app\chlk"
-  Get-Item "Chalkable.Web\app\chlk\chlk-constants.js" | PutFile -dbase "app\chlk"
+    Get-Item "Chalkable.Web\app\chlk\index" | PutDir -dbase "app\chlk\index"
+    Get-Item "Chalkable.Web\app\jquery" | PutDir -dbase "app\jquery"
+    Get-Item "Chalkable.Web\app\lib" | PutDir -dbase "app\lib"
+    Get-Item "Chalkable.Web\app\highcharts" | PutDir -dbase "app\highcharts"
 
-  Get-Item "Chalkable.Web\app\chlk\index" | PutDir -dbase "app\chlk\index"
-  Get-Item "Chalkable.Web\app\jquery" | PutDir -dbase "app\jquery"
-  Get-Item "Chalkable.Web\app\lib" | PutDir -dbase "app\lib"
-  Get-Item "Chalkable.Web\app\highcharts" | PutDir -dbase "app\highcharts"
-
-  Get-Item "Chalkable.Web\Content" | PutContentDir -dbase "Content" -exclude ".*\\(icons-24|icons-32|alerts-icons)\\.*"
-
+    Get-Item "Chalkable.Web\Content" | PutContentDir -dbase "Content" -exclude ".*\\(icons-24|icons-32|alerts-icons)\\.*"
+  }
   
   # CI
   $service = $null
   $cspkg_url = $cspkg_urls | Where-Object { $_ -match ".*Azure\.cspkg" }    
   $cscfg_url = $null
-  if ($buildBranch == 'staging-ci') {
+  if ($buildBranch -eq 'staging-ci') {
     $service = "chalkablestaging"
     $cscfg_url = Get-Item ".\Chalkable.Azure\ServiceConfiguration.Staging.cscfg"
-  } else if ($buildBranch == 'qa-ci') {
+  } elseif ($buildBranch -eq 'qa-ci') {
     $service = "chalkableqa"
     $cscfg_url = Get-Item ".\Chalkable.Azure\ServiceConfiguration.QA.cscfg"
   }
   
-  if ($service != $null) {
+  if ($service -ne $null) {
     Write-Host "Starting deployment"
     $slot = "Production"
     $deployment = Get-AzureDeployment -ServiceName $service -Slot $slot
