@@ -39,8 +39,8 @@ function PutFile($sbase, $dbase) {
 	foreach ($file in $input) {
 		$dest = $file | GetFileDest -sbase $sbase -dbase $dbase
 		$blobProperties = @{"ContentType" = GetContentTypeFromExtension($file.extension)}
-		Set-AzureStorageBlobContent -Blob $dest -Container $ContainerName -File $file.FullName -Context $context -Force -Properties $blobProperties		
-		''
+		$blob = Set-AzureStorageBlobContent -Blob $dest -Container $ContainerName -File $file.FullName -Context $context -Force -Properties $blobProperties		
+		$blob.Name
 	}
 }
 
