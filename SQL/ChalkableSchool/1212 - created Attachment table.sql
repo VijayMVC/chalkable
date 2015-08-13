@@ -44,7 +44,7 @@ Select
 	 Uuid,
 	 SisAttachmentId,
 	 Case When SisAttachmentId is null 
-		Then cast(Id as nvarchar) + '_' + @districtId
+		Then lower(cast(Id as nvarchar) + '_' + @districtId)
 		Else null
 	 End,
 	 Id	   
@@ -97,7 +97,7 @@ Go
 		 aaa.Uuid,
 		 aaa.SisAttributeAttachmentId,
 		 Case When aaa.SisAttributeAttachmentId is null 
-			  Then cast(aaa.Id as nvarchar) + '_' + @districtId
+			  Then lower(cast(aaa.Id as nvarchar) + '_' + @districtId)
 			  Else null
 		 End,
 		 aaa.Id	   
