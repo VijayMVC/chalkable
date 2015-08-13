@@ -13,6 +13,9 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.StudentService*/
     CLASS(
         'StudentService', EXTENDS(chlk.services.BaseService), [
+
+            chlk.models.student.StudentGradingInfo, 'currentStudentGradingSummary',
+
             [[chlk.models.id.ClassId, String, Boolean, Boolean, Number, Number]],
             ria.async.Future, function getStudents(classId_, filter_, myStudentsOnly_, byLastName_, start_, count_) {
                 return this.getPaginatedList('Student/GetStudents.json', chlk.models.people.User, {
@@ -76,7 +79,32 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Student/GradingSummary.json', chlk.models.student.StudentGradingInfo, {
                     studentId: studentId && studentId.valueOf(),
                     gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf()
-                });
+                }).then(function(model){
+                    this.setCurrentStudentGradingSummary(model);
+                    return model;
+                }, this);
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId]],
+            ria.async.Future, function getGradingDetailsForPeriod(studentId, gradingPeriodId){
+                return this.get('Student/GradingDetails.json', Object, {
+                    studentId: studentId && studentId.valueOf(),
+                    gradingPeriodId: gradingPeriodId.valueOf()
+                }).then(function(items){
+                    items = ria.serialize.SJX.fromArrayOfDeserializables(items.classavgs, chlk.models.grading.ClassPersonGradingInfo);
+                    var model = this.getCurrentStudentGradingSummary().getGradesByGradingPeriod().filter(function(item){return item.getGradingPeriod().getId() == gradingPeriodId })[0];
+                    model.getStudentGradings().forEach(function(item, i){
+                        var current = items.filter(function(gradingItem){
+                            return item.getClazz().getId() == gradingItem.getClassId()
+                        })[0];
+                        if(current){
+                            var info = current.getGradingByAnnouncementTypes();
+                            info && item.setGradingByAnnouncementTypes(info);
+                        }
+                    });
+                    console.info(model);
+                    return model;
+                }, this);
             },
 
             [[chlk.models.id.SchoolPersonId]],

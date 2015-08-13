@@ -25,6 +25,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ShortClassGradesSummary> GetClassesGradesSummary(int teacherId, int gradingPeriodId);
         FinalGradeInfo GetFinalGrade(int classId, GradingPeriod gradingPeriod);
         void PostStandards(int classId, int? gradingPeriodId);
+        StudentGrading GetStudentGradingSummary(int schoolYearId, int studentId);
+        StudentGradingDetails GetStudentGradingDetails(int schoolYearId, int studentId, int gradingPeriodId);
     }
     public class GradingStatisticService : SisConnectedService, IGradingStatisticService
     {
@@ -272,6 +274,39 @@ namespace Chalkable.BusinessLogic.Services.School
         public void PostStandards(int classId, int? gradingPeriodId)
         {
             ConnectorLocator.GradebookConnector.PostStandards(classId, gradingPeriodId);
+        }
+
+        public StudentGrading GetStudentGradingSummary(int schoolYearId, int studentId)
+        {
+            var gradingSummaryDashBoard = ConnectorLocator.GradingConnector.GetStudentGradingSummary(schoolYearId,
+                studentId);
+
+            return new StudentGrading
+            {
+                StudentId = gradingSummaryDashBoard.StudentId,
+                StudentAverages = gradingSummaryDashBoard.Averages.Select(ChalkableStudentAverage.Create)
+            };
+        }
+
+        public StudentGradingDetails GetStudentGradingDetails(int schoolYearId, int studentId, int gradingPeriodId)
+        {
+            var gradingDetailsDashboard = ConnectorLocator.GradingConnector.GetStudentGradingDetails(schoolYearId,
+                studentId, gradingPeriodId);
+
+            var mapper = MapperFactory.GetMapper<StudentAnnouncement, Score>();
+            var studentAnnouncements = new List<StudentAnnouncement>();
+            foreach (var score in gradingDetailsDashboard.Scores)
+            {
+                var studentAnn = new StudentAnnouncement();
+                mapper.Map(studentAnn, score);
+                studentAnnouncements.Add(studentAnn);
+            }
+
+            return new StudentGradingDetails()
+            {
+                GradingPeriodId = gradingPeriodId,
+                StudentAnnouncements = studentAnnouncements
+            };
         }
     }
 }

@@ -21,6 +21,7 @@ using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.AttendancesViewData;
 using Chalkable.Web.Models.ClassesViewData;
+using Chalkable.Web.Models.GradingViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 using Chalkable.Web.Models.SchoolsViewData;
 using Chalkable.Web.Tools;

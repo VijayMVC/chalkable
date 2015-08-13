@@ -2,7 +2,7 @@
 using System.Linq;
 using Chalkable.Data.School.Model;
 
-namespace Chalkable.Web.Models
+namespace Chalkable.Web.Models.GradingViewData
 {
     public class GradingScaleViewData
     {

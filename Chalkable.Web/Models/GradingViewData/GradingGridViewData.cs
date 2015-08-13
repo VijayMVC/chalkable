@@ -6,7 +6,7 @@ using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
-namespace Chalkable.Web.Models
+namespace Chalkable.Web.Models.GradingViewData
 {
 
     public class GradingGridSummaryViewData

@@ -320,6 +320,13 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.student.StudentProfileGradingPage, res);
             },
 
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId]],
+            function loadGradingDetailsAction(studentId, gradingPeriodId){
+                var res = this.studentService.getGradingDetailsForPeriod(studentId, gradingPeriodId)
+                    .attach(this.validateResponse_());
+                return this.UpdateView(chlk.activities.student.StudentProfileGradingPage, res);
+            },
+
             [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
             function dayScheduleAction(personId, date_){
                 return this.schedule_(

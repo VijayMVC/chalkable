@@ -411,6 +411,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         }
 
+        public StudentGrading GetStudentGradingSummary(int schoolYearId, int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public StudentGradingDetails GetStudentGradingDetails(int schoolYearId, int studentId, int gradingPeriodId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddGradeBook(Gradebook gradebook)
         {
             GradeBookStorage.Add(gradebook);
