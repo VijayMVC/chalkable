@@ -376,10 +376,11 @@ namespace Chalkable.StiImport.Services
             var counter = 0;
             foreach (var action in actions) {
                 counter++;
-                 var requestStartTime = DateTimeOffset.UtcNow;
+                var requestStartTime = DateTimeOffset.UtcNow;
                 Stopwatch requestTimer = Stopwatch.StartNew();
                 action.Compile()();
-                var body = action.Body as MethodCallExpression;               
+                var body = action.Body as MethodCallExpression;
+                Log.LogInfo(body.Method.Name);
                 Chalkable.Common.Telemetry.DispatchRequest(actionType, body.Method.Name, requestStartTime, requestTimer.Elapsed, true, Chalkable.Common.Verbocity.Info, this.districtId.ToString(), this.taskId.ToString());                
             }
         }
