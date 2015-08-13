@@ -754,6 +754,17 @@ NAMESPACE('chlk.controllers', function (){
             var res = this.announcementService.getAttachments(filter_, sortType_, start_, count_)
                 .attach(this.validateResponse_())
                 .then(function(atts){
+
+                    atts.getItems().forEach(function(attachment){
+                        if(attachment.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf()){
+                            attachment.setThumbnailUrl(this.announcementService.getFileUri(attachment.getId(), false, 170, 110));
+                            attachment.setUrl(this.announcementService.getFileUri(attachment.getId(), false, null, null));
+                        }
+                        if(attachment.getType() == chlk.controllers.AttachmentTypeEnum.OTHER.valueOf()){
+                            attachment.setUrl(this.announcementService.getFileUri(attachment.getId(), true, null, null));
+                        }
+                    }, this);
+
                     return new chlk.models.attachment.FileCabinetViewData(
                         announcementId,
                         announcementType,
@@ -762,7 +773,7 @@ NAMESPACE('chlk.controllers', function (){
                         filter_,
                         assignedAtributeId_
                     )
-                });
+                }, this);
             return this.ShadeOrUpdateView(chlk.activities.announcement.FileCabinetDialog, res);
         },
 

@@ -68,6 +68,16 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.AttachmentId, Boolean, Number, Number]],
+            String, function getFileUri(attachmentId, needsDownload, width, height) {
+                return this.getUrl('Attachment/DownloadAttachment', {
+                    attachmentId: attachmentId.valueOf(),
+                    needsDownload: needsDownload,
+                    width: width,
+                    height: height
+                });
+            },
+
             [[chlk.models.id.AnnouncementId, Object, chlk.models.announcement.AnnouncementTypeEnum]],
                 ria.async.Future, function uploadAttachment(announcementId, files, announcementType) {
                 return this.uploadFiles('AnnouncementAttachment/UploadAnnouncementAttachment', files, chlk.models.announcement.FeedAnnouncementViewData, {
