@@ -15,7 +15,7 @@ NAMESPACE('chlk.models.grading', function (){
 
         VOID, function deserialize(raw) {
             this.gradingPeriod = SJX.fromDeserializable(raw.gradingperiod, chlk.models.schoolYear.GradingPeriod);
-            this.studentGradings = SJX.fromArrayOfDeserializables(raw.studentaverages, chlk.models.grading.ClassPersonGradingInfo);
+            this.studentGradings = SJX.fromArrayOfDeserializables(raw.classavgs, chlk.models.grading.ClassPersonGradingInfo);
         }
     ]);
 });

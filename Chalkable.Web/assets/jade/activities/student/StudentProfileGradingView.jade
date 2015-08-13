@@ -1,7 +1,5 @@
 user = self.getUser()
 
-
--console.log(user, user.getGradesByGradingPeriod())
 .profile-page
     h2.page-title=Msg.Student_profile
 
@@ -17,8 +15,12 @@ user = self.getUser()
 
         .grading-stats
             each gpStats in user.getGradesByGradingPeriod()
-                +CloseOpen(gpStats.getGradingPeriod().getName())
-                    +LeftRightToolbar().classes-bar
-                        each classGrading in gpStats.getStudentGradings()
-                            +GlanceBox(null, null, {value: classGrading.getStudentAvg(), title: classGrading.getClassName()})
+                .close-open-control.co-opened.gp-container
+                    h3
+                        +ActionLink('students', 'loadGradingDetails', user.getId(), gpStats.getGradingPeriod().getId()).gp-link=gpStats.getGradingPeriod().getName()
+                    div(data-id=gpStats.getGradingPeriod().getId()).gp-items
+                        +LeftRightToolbar()(baseMargin = 10)
+                            each classGrading in gpStats.getStudentGradings()
+                                .class-item
+                                    +GlanceBox(null, null, {value: classGrading.getStudentAvg().getCalculatedAvg(), title: classGrading.getClazz().getName()})
 

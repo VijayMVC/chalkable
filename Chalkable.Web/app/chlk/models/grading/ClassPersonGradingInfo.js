@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.grading.ClassPersonGradingItem');
 REQUIRE('chlk.models.grading.StudentAverageInfo');
+REQUIRE('chlk.models.classes.Class');
 
 NAMESPACE('chlk.models.grading', function (){
    "use strict";
@@ -14,20 +15,21 @@ NAMESPACE('chlk.models.grading', function (){
 
         String, 'className',
 
-        Number, 'studentAvg',
+        chlk.models.classes.Class, 'clazz',
 
-        //[ria.serialize.SerializeProperty('itemtypesstats')],
-        //ArrayOf(chlk.models.grading.ClassPersonGradingItem), 'gradingByAnnouncementTypes',
+        chlk.models.grading.ShortStudentAverageInfo, 'studentAvg',
 
-        //[ria.serialize.SerializeProperty('studentaverages')],
-        //chlk.models.grading.StudentAverageInfo, 'studentAverages',
+        ArrayOf(chlk.models.grading.ClassPersonGradingItem), 'gradingByAnnouncementTypes',
 
+        chlk.models.grading.StudentAverageInfo, 'studentAverages',
 
         VOID, function deserialize(raw){
             this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
+            this.clazz = SJX.fromDeserializable(raw.class, chlk.models.classes.Class);
             this.className = SJX.fromValue(raw.classname, String);
-            this.studentAvg = SJX.fromValue(raw.calculatedavg, Number);
-
+            this.studentAvg = SJX.fromDeserializable(raw.gradingperiodavg, chlk.models.grading.ShortStudentAverageInfo);
+            this.gradingByAnnouncementTypes = SJX.fromArrayOfDeserializables(raw.items, chlk.models.grading.ClassPersonGradingItem);
+            this.studentAverages = SJX.fromArrayOfDeserializables(raw.studentaverages, chlk.models.grading.ShortStudentAverageInfo);
         }
     ]);
 });
