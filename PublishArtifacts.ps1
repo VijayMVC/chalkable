@@ -125,21 +125,21 @@ try{
 
 
   # CI
-  Write-Host "Starting deployment"
-  $cspkg_url = $cspkg_urls | Where-Object { $_ -match ".*Azure\.cspkg" }
-  $cscfg_url = Get-Item ".\Chalkable.Azure\ServiceConfiguration.Staging.cscfg"
-  $service = "chalkablestaging"
-  $slot = "Production"
-  $deployment = Get-AzureDeployment -ServiceName $service -Slot $slot
+  #Write-Host "Starting deployment"
+  #$cspkg_url = $cspkg_urls | Where-Object { $_ -match ".*Azure\.cspkg" }
+  #$cscfg_url = Get-Item ".\Chalkable.Azure\ServiceConfiguration.Staging.cscfg"
+  #$service = "chalkablestaging"
+  #$slot = "Production"
+  #$deployment = Get-AzureDeployment -ServiceName $service -Slot $slot
 
-  Write-Host "Deployment exists in $service. Upgrading deployment."
-  Write-Host "Package: $cspkg_url"
-  Write-Host "Config: $cscfg_url"
-  Upgrade-Deployment -package_url $cspkg_url -service $service -slot $slot -config $cscfg_url
-  Write-Host "Upgraded Deployment"
+  #Write-Host "Deployment exists in $service. Upgrading deployment."
+  #Write-Host "Package: $cspkg_url"
+  #Write-Host "Config: $cscfg_url"
+  #Upgrade-Deployment -package_url $cspkg_url -service $service -slot $slot -config $cscfg_url
+  #Write-Host "Upgraded Deployment"
 
-  $deploymentid = Check-Deployment -service $service -slot $slot -Context $context
-  Write-Host "Deployed to $service with deployment id $deploymentid"
+  #$deploymentid = Check-Deployment -service $service -slot $slot -Context $context
+  #Write-Host "Deployed to $service with deployment id $deploymentid"
   exit 0
 }
 catch [System.Exception] {
