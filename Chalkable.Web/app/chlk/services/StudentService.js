@@ -16,6 +16,8 @@ NAMESPACE('chlk.services', function () {
 
             chlk.models.student.StudentGradingInfo, 'currentStudentGradingSummary',
 
+            ArrayOf(chlk.models.grading.ClassPersonGradingInfo), 'classPersonGradingInfo',
+
             [[chlk.models.id.ClassId, String, Boolean, Boolean, Number, Number]],
             ria.async.Future, function getStudents(classId_, filter_, myStudentsOnly_, byLastName_, start_, count_) {
                 return this.getPaginatedList('Student/GetStudents.json', chlk.models.people.User, {
@@ -92,6 +94,7 @@ NAMESPACE('chlk.services', function () {
                     gradingPeriodId: gradingPeriodId.valueOf()
                 }).then(function(items){
                     items = ria.serialize.SJX.fromArrayOfDeserializables(items.classavgs, chlk.models.grading.ClassPersonGradingInfo);
+                    this.setClassPersonGradingInfo(items);
                     var model = this.getCurrentStudentGradingSummary().getGradesByGradingPeriod().filter(function(item){return item.getGradingPeriod().getId() == gradingPeriodId })[0];
                     model.getStudentGradings().forEach(function(item, i){
                         var current = items.filter(function(gradingItem){
@@ -105,6 +108,16 @@ NAMESPACE('chlk.services', function () {
                     console.info(model);
                     return model;
                 }, this);
+            },
+
+            [[Number, chlk.models.id.ClassId]],
+            chlk.models.grading.ClassPersonGradingItem, function getGradingActivitiesForStudent(announcementTypeId, classId){
+                var item = this.getClassPersonGradingInfo().filter(function(classInfo){
+                    return classInfo.getClassId() == classId
+                })[0].getGradingByAnnouncementTypes().filter(function(typeInfo){
+                        return typeInfo.getAnnouncementType().getId() == announcementTypeId
+                    })[0];
+                return item;
             },
 
             [[chlk.models.id.SchoolPersonId]],
