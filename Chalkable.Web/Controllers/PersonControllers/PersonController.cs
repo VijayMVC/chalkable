@@ -58,10 +58,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return vdCreator(person);
         }
 
-        private bool CanGetInfo(int personId)
+        protected virtual bool CanGetInfo(int personId)
         {
-            return BaseSecurity.IsDistrictOrTeacher(SchoolLocator.Context)
-                   || SchoolLocator.Context.PersonId == personId;
+            return BaseSecurity.IsDistrictOrTeacher(SchoolLocator.Context) || SchoolLocator.Context.PersonId == personId;
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]

@@ -10,7 +10,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
         {
             if (sourceObj.SisAttachmentId.HasValue)
                 returnObj.AttachmentId = sourceObj.SisAttachmentId.Value;
-            returnObj.CrocoDocId = string.IsNullOrEmpty(sourceObj.Uuid) ? Guid.Parse(sourceObj.Uuid) : (Guid?)null;
+            returnObj.CrocoDocId = !string.IsNullOrWhiteSpace(sourceObj.Uuid) ? Guid.Parse(sourceObj.Uuid) : (Guid?)null;
             returnObj.MimeType = sourceObj.MimeType;
             returnObj.Name = sourceObj.Name;
         }
