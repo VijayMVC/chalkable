@@ -42,15 +42,25 @@ namespace Chalkable.Web.Models.GradingViewData
                         .Select(y => new ClassCategoryAvg()
                         {
                             AnnouncementType = classAnnouncementTypes.FirstOrDefault(x => x.Id == y.Key),
-                            Items = y
+                            Items = y.Select(x =>  new AnnouncementItem()
+                            {
+                                Announcement = x
+                            }).ToList()
                         }).ToList();
 
                 foreach (var categoryType in categoryTypes)
                 {
-                    var ids = categoryType.Items.Select(x => x.ClassAnnouncementData.SisActivityId).Distinct();
+                    var ids = categoryType.Items.Select(x => x.Announcement.ClassAnnouncementData.SisActivityId).Distinct();
                     var studentAnnouncements =
-                        gradingDetails.StudentAnnouncements.Where(x => ids.Contains(x.ActivityId));
+                        gradingDetails.StudentAnnouncements.Where(x => ids.Contains(x.ActivityId)).ToList();
 
+                    categoryType.Items.ToList().ForEach(
+                        x =>
+                        {
+                            x.StudentAnnouncement =
+                                studentAnnouncements.FirstOrDefault(
+                                    y => y.ActivityId == x.Announcement.ClassAnnouncementData.SisActivityId);
+                        });
                     var avg = studentAnnouncements.Average(x => x.NumericScore);
                     categoryType.Avg = avg;
                 }
@@ -71,7 +81,7 @@ namespace Chalkable.Web.Models.GradingViewData
 
     public class ClassCategoryAvg
     {
-        public IEnumerable<AnnouncementComplex> Items { get; set; }
+        public IList<AnnouncementItem> Items { get; set; }
         public decimal? Avg { get; set; }
         public ClassAnnouncementType AnnouncementType { get; set; }
     }
@@ -80,6 +90,13 @@ namespace Chalkable.Web.Models.GradingViewData
     {
         public decimal? Avg { get; set; }
         public int? ClassId { get; set; }
-        public IEnumerable<ClassCategoryAvg> Items { get; set; } 
+        public IList<ClassCategoryAvg> Items { get; set; } 
+    }
+
+
+    public class AnnouncementItem
+    {
+        public AnnouncementComplex Announcement { get; set; }
+        public StudentAnnouncement StudentAnnouncement { get; set; }
     }
 }
