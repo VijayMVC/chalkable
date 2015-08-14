@@ -28,6 +28,11 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res);
         }
 
+        protected override bool CanGetInfo(int personId)
+        {
+            return Context.PersonId == personId;
+        }
+
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Schedule(int personId)
         {
