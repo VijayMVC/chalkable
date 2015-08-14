@@ -31,6 +31,11 @@ NAMESPACE('chlk.services', function () {
                     width: width,
                     height: height
                 });
+            },
+
+            [[String]],
+            String, function getViewSessionUrl(session){
+                return 'https://crocodoc.com/view/' + session;
             }
         ]);
 });

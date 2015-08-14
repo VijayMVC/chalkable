@@ -1142,13 +1142,12 @@ NAMESPACE('chlk.controllers', function (){
                 res = this.announcementAttachmentService
                     .startViewSession(attachmentId)
                     .then(function(session){
-                        attachmentUrl = 'https://crocodoc.com/view/' + session;
                         return new chlk.models.common.attachments.BaseAttachmentViewData(
-                            attachmentUrl,
+                            this.attachmentService.getViewSessionUrl(session),
                             buttons,
                             attachment.getType()
                         );
-                    });
+                    }, this);
             }
             return this.ShadeView(chlk.activities.common.attachments.AttachmentDialog, res);
         },
