@@ -274,6 +274,15 @@ namespace Chalkable.Web.Models.GradingViewData
             }
             return res;
         }
+
+        public static ShortStudentsAnnouncementsViewData Create(IList<StudentAnnouncement> studentAnnouncements, int studentId)
+        {
+            var res = new ShortStudentsAnnouncementsViewData { Items = new List<ShortStudentAnnouncementViewData>() };
+            var stAnn = studentAnnouncements.FirstOrDefault(x => x.StudentId == studentId);
+            if (stAnn != null)
+                res.Items.Add(ShortStudentAnnouncementViewData.Create(stAnn));
+            return res;
+        }
     }
 
     public class ShortAnnouncementGradeViewData : ClassAnnouncementViewData
@@ -292,6 +301,15 @@ namespace Chalkable.Web.Models.GradingViewData
                 {
                     StudentAnnouncements = ShortStudentsAnnouncementsViewData.Create(studentAnnouncements, studentIds)
                 };
+        }
+
+        public static ShortAnnouncementGradeViewData Create(ClassAnnouncement announcement,
+            IList<StudentAnnouncement> studentAnnouncements, int studentId)
+        {
+            return new ShortAnnouncementGradeViewData(announcement)
+            {
+                StudentAnnouncements = ShortStudentsAnnouncementsViewData.Create(studentAnnouncements, studentId)
+            };
         }
     }
 }
