@@ -20,6 +20,7 @@ REQUIRE('chlk.activities.profile.ScheduleMonthPage');
 REQUIRE('chlk.activities.student.StudentProfileExplorerPage');
 REQUIRE('chlk.activities.attendance.StudentDayAttendancePopup');
 REQUIRE('chlk.activities.discipline.StudentDayDisciplinePopup');
+REQUIRE('chlk.activities.student.StudentProfileGradingPopup');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.teacher.StudentsList');
@@ -325,6 +326,13 @@ NAMESPACE('chlk.controllers', function (){
                 var res = this.studentService.getGradingDetailsForPeriod(studentId, gradingPeriodId)
                     .attach(this.validateResponse_());
                 return this.UpdateView(chlk.activities.student.StudentProfileGradingPage, res);
+            },
+
+            [[Number, chlk.models.id.ClassId]],
+            function showGradingActivitiesForStudentAction(announcementTypeId, classId){
+                var model = this.studentService.getGradingActivitiesForStudent(announcementTypeId, classId);
+                model.setTarget(chlk.controls.getActionLinkControlLastNode());
+                return this.ShadeView(chlk.activities.student.StudentProfileGradingPopup, ria.async.DeferredData(model));
             },
 
             [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],

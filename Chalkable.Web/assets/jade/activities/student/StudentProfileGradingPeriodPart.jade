@@ -6,4 +6,5 @@
                 .announcement-types-info-2
                     if classGrading.getGradingByAnnouncementTypes()
                         each typeItem in classGrading.getGradingByAnnouncementTypes()
-                            +GlanceBox(null, null, {value: typeItem.getStudentItemTypeAvg(), title: typeItem.getAnnouncementType().getName()}).small
+                            +ActionLink('students', 'showGradingActivitiesForStudent', typeItem.getAnnouncementType().getId(), classGrading.getClazz().getId()).type-link
+                                +GlanceBox(null, null, {value: typeItem.getStudentItemTypeAvg(), title: typeItem.getAnnouncementType().getName()}).small
