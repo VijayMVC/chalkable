@@ -288,49 +288,7 @@ NAMESPACE('chlk.services', function () {
                     standardId: standardId.valueOf(),
                     announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 });
-            },
-
-            [[ArrayOf(chlk.models.id.ClassId)]],
-            ria.async.Future, function getClassAnnouncementTypes(classIds){
-                return this.get('AnnouncementType/ListByClasses.json', ArrayOf(chlk.models.announcement.ClassAnnouncementType),{
-                    classIds: this.arrayToCsv(classIds)
-                });
-            },
-
-            [[chlk.models.id.ClassId, String, String, Number, Number, Boolean, Number]],
-            ria.async.Future, function createAnnouncementTypes(classId, description_, name_, highScoresToDrop_, lowScoresToDrop_, isSystem_, percentage_){
-                return this.get('AnnouncementType/Create.json', chlk.models.announcement.ClassAnnouncementType,{
-                    classId: classId.valueOf(),
-                    description: description_,
-                    name: name_,
-                    highScoresToDrop: highScoresToDrop_,
-                    lowScoresToDrop: lowScoresToDrop_,
-                    isSystem: isSystem_,
-                    percentage: percentage_
-                });
-            },
-
-            [[chlk.models.id.ClassId, String, String, Number, Number, Boolean, Number, Number]],
-            ria.async.Future, function updateAnnouncementTypes(classId, description_, name_, highScoresToDrop_, lowScoresToDrop_, isSystem_, percentage_, classAnnouncementTypeId_){
-                return this.get('AnnouncementType/Update.json', chlk.models.announcement.ClassAnnouncementType,{
-                    classAnnouncementTypeId: classAnnouncementTypeId_,
-                    classId: classId.valueOf(),
-                    description: description_,
-                    name: name_,
-                    highScoresToDrop: highScoresToDrop_,
-                    lowScoresToDrop: lowScoresToDrop_,
-                    isSystem: isSystem_,
-                    percentage: percentage_
-                });
-            },
-
-            [[Array]],
-            ria.async.Future, function deleteAnnouncementTypes(ids){
-                return this.get('AnnouncementType/Delete.json', Boolean,{
-                    classAnnouncementTypeIds: this.arrayToCsv(ids),
-                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
-                });
-            },
+            }
 
         ]);
 });
