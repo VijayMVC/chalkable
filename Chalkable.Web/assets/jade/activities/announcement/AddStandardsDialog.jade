@@ -13,7 +13,7 @@
                 td.name-td
                     .standards-names.column
                         each subject in standardSubjects
-                            +ActionLink('announcement', 'showStandardsByCategory', self.getClassId(), subject.getId(), subject.getDescription())(
+                            +ActionLink('standard', 'showStandardsByCategory', self.getClassId(), subject.getId(), subject.getDescription())(
                             data-subject-id = subject.getId()
                             ).standard-name.column-cell
                                 .name(data-tooltip=subject.getName(), data-tooltip-type="overflow")=subject.getName()
@@ -21,7 +21,7 @@
                 td
                     .standards-description
 
-+ActionForm('announcement', 'getStandardTree')#get-standardt-tree-form.x-hidden
++ActionForm('standard', 'getStandardTree')#get-standardt-tree-form.x-hidden
     +Hidden('announcementid', self.getAnnouncementId())
     +Hidden('standardid', null)
     +Hidden('classid', self.getClassId())
