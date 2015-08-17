@@ -177,6 +177,7 @@ NAMESPACE('chlk.controllers', function (){
             return result;
         },
 
+        //move cc_standards logic to StandardController
         [[chlk.models.id.AppId]],
         function showStandardsAction(applicationId){
             var standards = this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []);
