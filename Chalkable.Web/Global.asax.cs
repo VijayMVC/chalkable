@@ -47,6 +47,8 @@ namespace Chalkable.Web
             }
             ConfigureDiagnostics();
             PrepareBaseServiceData();
+            
+            TelemetryConfiguration.Active.InstrumentationKey = Settings.InstrumentationKey;            
         }
 
 
