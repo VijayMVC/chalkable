@@ -130,6 +130,22 @@
       line-height: 75px
 
 .gp-container
+  margin-top: 30px
+
+  .icon
+    position: absolute
+    display: inline-block
+    width: 17px
+    height: 17px
+    right: 0
+    background-image: inline-image("images2/common/classesbar-arrow-left.png")
+    background-repeat: no-repeat
+    background-position: center center
+    +transition(all 0.2s)
+    +rotate(90deg)
+
+  &.opened
+    +rotate(-90deg)
 
   .class-item
     margin-right: 12px
