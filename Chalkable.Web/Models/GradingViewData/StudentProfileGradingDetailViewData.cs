@@ -4,6 +4,7 @@ using System.Security.Cryptography.X509Certificates;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.GradingViewData
@@ -39,38 +40,39 @@ namespace Chalkable.Web.Models.GradingViewData
             {
                 var categoryTypes =
                     classAnnouncementGroup.Announcements.GroupBy(x => x.ClassAnnouncementData.ClassAnnouncementTypeRef)
-                        .Select(y => new ClassCategoryAvg()
+                        .Select(y => new 
                         {
                             AnnouncementType = classAnnouncementTypes.FirstOrDefault(x => x.Id == y.Key),
-                            Items = y.Select(x =>  new AnnouncementItem()
-                            {
-                                Announcement = x
-                            }).ToList()
+                            Items = y
                         }).ToList();
 
+
+                var catTypes = new List<ClassCategoryAvg>();
                 foreach (var categoryType in categoryTypes)
                 {
-                    var ids = categoryType.Items.Select(x => x.Announcement.ClassAnnouncementData.SisActivityId).Distinct();
+                    var ids = categoryType.Items.Select(x => x.ClassAnnouncementData.SisActivityId).Distinct();
                     var studentAnnouncements =
                         gradingDetails.StudentAnnouncements.Where(x => ids.Contains(x.ActivityId)).ToList();
 
-                    categoryType.Items.ToList().ForEach(
-                        x =>
-                        {
-                            x.StudentAnnouncement =
-                                studentAnnouncements.FirstOrDefault(
-                                    y => y.ActivityId == x.Announcement.ClassAnnouncementData.SisActivityId);
-                        });
                     var avg = studentAnnouncements.Average(x => x.NumericScore);
-                    categoryType.Avg = avg;
+
+                   
+
+                    var catType = new ClassCategoryAvg()
+                    {
+                        AnnouncementType = categoryType.AnnouncementType,
+                        Items = categoryType.Items.Select(x => ShortAnnouncementGradeViewData.Create(x.ClassAnnouncementData, studentAnnouncements, student.Id)).ToList(),
+                        Avg = avg
+                    };
+
+                    catTypes.Add(catType);
                 }
 
                 var classAvg = new ClassAvg
                 {
                     ClassId = classAnnouncementGroup.ClassId,
-                    Items = categoryTypes,
-                    Avg = categoryTypes.Average(x => x.Avg)
-
+                    Items = catTypes,
+                    Avg = catTypes.Average(x => x.Avg)
                 };
 
                 res.ClassAvgs.Add(classAvg);
@@ -81,7 +83,7 @@ namespace Chalkable.Web.Models.GradingViewData
 
     public class ClassCategoryAvg
     {
-        public IList<AnnouncementItem> Items { get; set; }
+        public IList<ShortAnnouncementGradeViewData> Items { get; set; }
         public decimal? Avg { get; set; }
         public ClassAnnouncementType AnnouncementType { get; set; }
     }
@@ -91,12 +93,5 @@ namespace Chalkable.Web.Models.GradingViewData
         public decimal? Avg { get; set; }
         public int? ClassId { get; set; }
         public IList<ClassCategoryAvg> Items { get; set; } 
-    }
-
-
-    public class AnnouncementItem
-    {
-        public AnnouncementComplex Announcement { get; set; }
-        public StudentAnnouncement StudentAnnouncement { get; set; }
     }
 }

@@ -13,6 +13,8 @@ REQUIRE('chlk.services.LessonPlanService');
 REQUIRE('chlk.services.ClassAnnouncementService');
 REQUIRE('chlk.services.AdminAnnouncementService');
 REQUIRE('chlk.services.AnnouncementAssignedAttributeService');
+REQUIRE('chlk.services.AnnouncementAttachmentService');
+REQUIRE('chlk.services.AttachmentService');
 
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.LessonPlanFormPage');
@@ -108,6 +110,12 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.AnnouncementAssignedAttributeService, 'assignedAttributeService',
 
+        [ria.mvc.Inject],
+        chlk.services.AnnouncementAttachmentService, 'announcementAttachmentService',
+
+        [ria.mvc.Inject],
+        chlk.services.AttachmentService, 'attachmentService',
+
         ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
 
         function getAnnouncementFormPageType_(type_){
@@ -132,11 +140,11 @@ NAMESPACE('chlk.controllers', function (){
 
         function prepareAttachment(attachment){
             if(attachment.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf()){
-                attachment.setThumbnailUrl(this.announcementService.getAttachmentUri(attachment.getId(), false, 170, 110));
-                attachment.setUrl(this.announcementService.getAttachmentUri(attachment.getId(), false, null, null));
+                attachment.setThumbnailUrl(this.announcementAttachmentService.getAttachmentUri(attachment.getId(), false, 170, 110));
+                attachment.setUrl(this.announcementAttachmentService.getAttachmentUri(attachment.getId(), false, null, null));
             }
             if(attachment.getType() == chlk.controllers.AttachmentTypeEnum.OTHER.valueOf()){
-                attachment.setUrl(this.announcementService.getAttachmentUri(attachment.getId(), true, null, null));
+                attachment.setUrl(this.announcementAttachmentService.getAttachmentUri(attachment.getId(), true, null, null));
             }
         },
 
@@ -751,17 +759,17 @@ NAMESPACE('chlk.controllers', function (){
             Number
         ]],
         function getAttachments_(announcementId, announcementType, assignedAtributeId_,filter_, sortType_, start_, count_){
-            var res = this.announcementService.getAttachments(filter_, sortType_, start_, count_)
+            var res = this.attachmentService.getAttachments(filter_, sortType_, start_, count_)
                 .attach(this.validateResponse_())
                 .then(function(atts){
 
                     atts.getItems().forEach(function(attachment){
                         if(attachment.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf()){
-                            attachment.setThumbnailUrl(this.announcementService.getFileUri(attachment.getId(), false, 170, 110));
-                            attachment.setUrl(this.announcementService.getFileUri(attachment.getId(), false, null, null));
+                            attachment.setThumbnailUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, 170, 110));
+                            attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, null, null));
                         }
                         if(attachment.getType() == chlk.controllers.AttachmentTypeEnum.OTHER.valueOf()){
-                            attachment.setUrl(this.announcementService.getFileUri(attachment.getId(), true, null, null));
+                            attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), true, null, null));
                         }
                     }, this);
 
@@ -779,7 +787,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, Boolean]],
         function attachFromCabinetAction(announcementId, announcementType, attachmentId, onCreate_){
-            var res = this.announcementService
+            var res = this.announcementAttachmentService
                 .addAttachment(announcementId, announcementType, attachmentId)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
@@ -811,7 +819,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, chlk.models.id.AnnouncementAssignedAttributeId]],
         function cloneFromCabinetAction(announcementId, announcementType, attachmentId){
-            var res = this.announcementService
+            var res = this.announcementAttachmentService
                 .cloneAttachment(attachmentId, announcementId, announcementType)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
@@ -1049,7 +1057,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AnnouncementId, Object, chlk.models.announcement.AnnouncementTypeEnum]],
             ria.async.Future, function fetchUploadAttachmentFuture_(announcementId, files, announcementType) {
 
-            return this.announcementService
+            return this.announcementAttachmentService
                 .uploadAttachment(announcementId, files, announcementType)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
@@ -1115,7 +1123,7 @@ NAMESPACE('chlk.controllers', function (){
             var downloadAttachmentButton = new chlk.models.common.attachments.ToolbarButton(
                 "download-attachment",
                 "Download Attachment",
-                this.announcementService.getAttachmentUri(attachment.getId(), true)
+                this.announcementAttachmentService.getAttachmentUri(attachment.getId(), true, null, null)
             );
 
             if(attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE.valueOf()){
@@ -1131,16 +1139,15 @@ NAMESPACE('chlk.controllers', function (){
                 if(this.userInRole(chlk.models.common.RoleEnum.STUDENT) && attachment.isTeachersAttachment())
                     buttons.push(new chlk.models.common.attachments.ToolbarButton('mark-attachment', 'MARK UP', null, null,
                         'announcement', 'cloneAttachment', [attachment.getAttachmentId().valueOf(), announcementId.valueOf()], true));
-                res = this.announcementService
+                res = this.announcementAttachmentService
                     .startViewSession(attachmentId)
                     .then(function(session){
-                        attachmentUrl = 'https://crocodoc.com/view/' + session;
                         return new chlk.models.common.attachments.BaseAttachmentViewData(
-                            attachmentUrl,
+                            this.attachmentService.getViewSessionUrl(session),
                             buttons,
                             attachment.getType()
                         );
-                    });
+                    }, this);
             }
             return this.ShadeView(chlk.activities.common.attachments.AttachmentDialog, res);
         },
@@ -1187,7 +1194,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId]],
         function cloneAttachmentAction(attachmentId, announcementId) {
-            var res = this.announcementService
+            var res = this.announcementAttachmentService
                 .cloneAttachment(attachmentId, announcementId)
                 .attach(this.validateResponse_())
                 .then(function(announcement){
@@ -1274,7 +1281,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
         function deleteAttachmentAction(attachmentId, announcementId, announcementType) {
-            var result = this.announcementService
+            var result = this.announcementAttachmentService
                 .deleteAttachment(attachmentId, announcementId, announcementType)
                 .attach(this.validateResponse_())
                 .then(function(model){

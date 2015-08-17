@@ -6,10 +6,10 @@ REQUIRE('chlk.services.FinalGradeService');
 REQUIRE('chlk.services.CalendarService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.PreferenceService');
-REQUIRE('chlk.services.AnnouncementService');
 REQUIRE('chlk.services.TeacherCommentService');
 REQUIRE('chlk.services.GradingService');
 REQUIRE('chlk.services.ClassroomOptionService');
+REQUIRE('chlk.services.AnnouncementTypeService');
 
 REQUIRE('chlk.activities.setup.HelloPage');
 REQUIRE('chlk.activities.setup.VideoPage');
@@ -58,7 +58,7 @@ NAMESPACE('chlk.controllers', function (){
             chlk.services.PreferenceService, 'preferenceService',
 
             [ria.mvc.Inject],
-            chlk.services.AnnouncementService, 'announcementService',
+            chlk.services.AnnouncementTypeService, 'announcementTypeService',
 
             [ria.mvc.Inject],
             chlk.services.ClassroomOptionService, 'classroomOptionService',
@@ -162,7 +162,7 @@ NAMESPACE('chlk.controllers', function (){
             function submitClassAnnouncementAction(model){
                 var res;
                 if(model.getId() && model.getId().valueOf())
-                    res = this.announcementService.updateAnnouncementTypes(
+                    res = this.announcementTypeService.update(
                         model.getClassId(),
                         model.getDescription(),
                         model.getName(),
@@ -173,7 +173,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.getId()
                     ).attach(this.validateResponse_());
                 else
-                    res = this.announcementService.createAnnouncementTypes(
+                    res = this.announcementTypeService.create(
                         model.getClassId(),
                         model.getDescription(),
                         model.getName(),
@@ -197,7 +197,7 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.announcement.ClassAnnouncementType]],
             function deleteAnnouncementTypesAction(model){
                 this.ShowConfirmBox('Do You really want to delete ' + (model.getIds().length > 1 ? 'these categories?' : 'this category?'), "whoa.", null, 'negative-button')
-                    .thenCall(this.announcementService.deleteAnnouncementTypes, [model.getIds().split(',')])
+                    .thenCall(this.announcementTypeService.deleteTypes, [model.getIds().split(',')])
                     .attach(this.validateResponse_())
                     .thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
                     .attach(this.validateResponse_())
