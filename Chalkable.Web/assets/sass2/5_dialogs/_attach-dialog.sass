@@ -1,0 +1,10 @@
+.attach-dialog, .file-cabinet-dialog
+  .dialog
+    width: 880px
+
+
+    @each $button in attach-file, attach-attribute, attach-standard, file-cabinet
+      .#{$button}
+        +icons-170-sprite($button)
+        width: 170px
+        height: 110px
