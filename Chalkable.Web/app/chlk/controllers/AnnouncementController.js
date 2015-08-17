@@ -15,6 +15,7 @@ REQUIRE('chlk.services.AdminAnnouncementService');
 REQUIRE('chlk.services.AnnouncementAssignedAttributeService');
 REQUIRE('chlk.services.AnnouncementAttachmentService');
 REQUIRE('chlk.services.AttachmentService');
+REQUIRE('chlk.services.AnnouncementQnAService');
 
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.LessonPlanFormPage');
@@ -115,6 +116,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.AttachmentService, 'attachmentService',
+
+        [ria.mvc.Inject],
+        chlk.services.AnnouncementQnAService, 'announcementQnAService',
 
         ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
 
@@ -1916,7 +1920,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.QnAForm]],
         function askQuestionAction(model) {
-            var ann = this.announcementService
+            var ann = this.announcementQnAService
                 .askQuestion(model.getAnnouncementId(), model.getQuestion())
                 .attach(this.validateResponse_())
                 .catchError(this.handleNoAnnouncementException_, this);
@@ -1929,26 +1933,26 @@ NAMESPACE('chlk.controllers', function (){
             if (model.getQuestion()){
                 var updateType = model.getUpdateType();
                 if(updateType ==  "editQuestion"){
-                    ann = this.announcementService
+                    ann = this.announcementQnAService
                         .editQuestion(model.getId(), model.getQuestion())
                         .catchError(this.handleNoAnnouncementException_, this)
                         .attach(this.validateResponse_());
                 }
                 if(updateType == "answer"){
-                    ann = this.announcementService
+                    ann = this.announcementQnAService
                         .answerQuestion(model.getId(), model.getQuestion(), model.getAnswer())
                         .catchError(this.handleNoAnnouncementException_, this)
                         .attach(this.validateResponse_());
                 }
                 if(updateType == "editAnswer"){
-                    ann = this.announcementService
+                    ann = this.announcementQnAService
                         .editAnswer(model.getId(),  model.getAnswer())
                         .catchError(this.handleNoAnnouncementException_, this)
                         .attach(this.validateResponse_());
                 }
             }
             else
-                ann = this.announcementService
+                ann = this.announcementQnAService
                     .deleteQnA(model.getAnnouncementId(), model.getId())
                     .catchError(this.handleNoAnnouncementException_, this)
                     .attach(this.validateResponse_());
