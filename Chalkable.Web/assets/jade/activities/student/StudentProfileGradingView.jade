@@ -18,6 +18,7 @@ user = self.getUser()
                 .close-open-control.co-opened.gp-container
                     h3
                         +ActionLink('students', 'loadGradingDetails', user.getId(), gpStats.getGradingPeriod().getId()).gp-link=gpStats.getGradingPeriod().getName()
+                            .icon
                     div(data-id=gpStats.getGradingPeriod().getId()).gp-items
                         +LeftRightToolbar()(baseMargin = 10)
                             each classGrading in gpStats.getStudentGradings()
