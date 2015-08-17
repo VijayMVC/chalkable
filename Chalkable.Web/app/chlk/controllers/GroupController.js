@@ -1,6 +1,7 @@
 REQUIRE('chlk.controllers.BaseController');
 
 REQUIRE('chlk.services.GroupService');
+REQUIRE('chlk.services.ClassService');
 
 REQUIRE('chlk.activities.announcement.GroupStudentsFilterDialog');
 
@@ -12,6 +13,9 @@ NAMESPACE('chlk.controllers', function () {
         'GroupController', EXTENDS(chlk.controllers.BaseController), [
             [ria.mvc.Inject],
             chlk.services.GroupService, 'groupService',
+
+            [ria.mvc.Inject],
+            chlk.services.ClassService, 'classService',
 
             [[chlk.models.group.AnnouncementGroupsViewData]],
             function showAction(model) {

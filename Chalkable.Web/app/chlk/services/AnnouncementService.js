@@ -14,10 +14,7 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.StandardId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.id.SchoolPersonId');
-REQUIRE('chlk.models.id.AnnouncementAssignedAttributeAttachmentId');
-REQUIRE('chlk.models.id.AnnouncementAttachmentId');
-REQUIRE('chlk.models.announcement.AnnouncementQnA');
-REQUIRE('chlk.models.id.AnnouncementQnAId');
+
 REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
 REQUIRE('chlk.models.announcement.AnnouncementAttributeType');
 
@@ -58,77 +55,10 @@ NAMESPACE('chlk.services', function () {
 
             },
 
-
-            //[[chlk.models.id.AnnouncementId, Object, chlk.models.announcement.AnnouncementTypeEnum]],
-            //    ria.async.Future, function uploadAttachment(announcementId, files, announcementType) {
-            //    return this.uploadFiles('AnnouncementAttachment/UploadAnnouncementAttachment', files, chlk.models.announcement.FeedAnnouncementViewData, {
-            //            announcementId: announcementId.valueOf(),
-            //            announcementType: announcementType.valueOf()
-            //    });
-            //},
-            //
-            //[[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId]],
-            //ria.async.Future, function addAttachment(announcementId, announcementType, attachmentId) {
-            //    return this.post('AnnouncementAttachment/Add', chlk.models.announcement.FeedAnnouncementViewData, {
-            //        announcementId: announcementId.valueOf(),
-            //        announcementType: announcementType.valueOf(),
-            //        attachmentId: attachmentId.valueOf()
-            //    });
-            //},
-
-
-            [[String]],
-            ria.async.Future, function getGradeComments(query_) {
-                return this.get('Grading/GetGridComments', ArrayOf(String), {
-                    schoolYearId: this.getContext().getSession().get(ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, null).valueOf()
-                }).then(function(data){
-                    var comments = data || [];
-
-                });
-            },
-
-            //[[chlk.models.id.AnnouncementAttachmentId]],
-            //ria.async.Future, function startViewSession(announcementAttachmentId) {
-            //    return this.get('AnnouncementAttachment/StartViewSession', String, {
-            //        announcementAttachmentId: announcementAttachmentId.valueOf(),
-            //        announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
-            //    });
-            //},
-            //
-            //[[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
-            //ria.async.Future, function cloneAttachment(attachmentId, announcementId, announcementType_) {
-            //    //todo : remove getting announcementType  from session
-            //    var annType = announcementType_ || this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT);
-            //    return this.get('AnnouncementAttachment/CloneAttachment', chlk.models.announcement.AnnouncementView, {
-            //        originalAttachmentId: attachmentId.valueOf(),
-            //        announcementId: announcementId.valueOf(),
-            //        announcementType: annType.valueOf()
-            //    });
-            //},
-
             [[chlk.models.id.AnnouncementId, Boolean]],
             ria.async.Future, function setShowGradesToStudents(announcementId, value) {
                 return ria.async.DeferredData(true);
             },
-
-            //[[chlk.models.id.AnnouncementAttachmentId, Boolean, Number, Number]],
-            //String, function getAttachmentUri(announcementAttachmentId, needsDownload, width, height) {
-            //    return this.getUrl('AnnouncementAttachment/DownloadAttachment', {
-            //        attachmentId: announcementAttachmentId.valueOf(),
-            //        needsDownload: needsDownload,
-            //        width: width,
-            //        height: height
-            //    });
-            //},
-            //
-            //[[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
-            //ria.async.Future, function deleteAttachment(attachmentId, announcementId, announcementType) {
-            //    return this.get('AnnouncementAttachment/DeleteAttachment.json', chlk.models.announcement.FeedAnnouncementViewData, {
-            //        announcementAttachmentId: attachmentId.valueOf(),
-            //        announcementId: announcementId.valueOf(),
-            //        announcementType: announcementType.valueOf()
-            //    });
-            //},
 
             [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementTypeEnum]],
             ria.async.Future, function deleteApp(announcementAppId, announcementType) {
@@ -192,6 +122,11 @@ NAMESPACE('chlk.services', function () {
                 }, this);
             },
 
+            [[chlk.models.id.AnnouncementId]],
+            chlk.models.announcement.AnnouncementView, function getAnnouncementSync(id){
+                return this.cache[id.valueOf()];
+            },
+
             [[chlk.models.id.AnnouncementId, Boolean, chlk.models.announcement.AnnouncementTypeEnum]],
             ria.async.Future, function checkItem(announcementId, complete_, type_) {
                 this.setImportantCount(this.getImportantCount() + (complete_ ? 1 : -1));
@@ -200,76 +135,6 @@ NAMESPACE('chlk.services', function () {
                     complete: complete_,
                     announcementType: type_ && type_.valueOf(),
                 });
-            },
-
-            [[chlk.models.id.AnnouncementId, String]],
-            ria.async.Future, function askQuestion(announcementId, question) {
-                return this.post('AnnouncementQnA/Ask', chlk.models.announcement.AnnouncementQnA, {
-                    announcementId: announcementId.valueOf(),
-                    question: question,
-                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
-                }).then(function(qna){
-                    var result =this.cache[qna.getAnnouncementId().valueOf()];
-                    result.getAnnouncementQnAs().push(qna);
-                    return result;
-                }, this);
-            },
-
-
-            [[chlk.models.id.AnnouncementQnAId, String, String]],
-            ria.async.Future, function answerQuestion(announcementQnAId, question, answer) {
-                return this.post('AnnouncementQnA/Answer', chlk.models.announcement.AnnouncementQnA, {
-                    announcementQnAId: announcementQnAId.valueOf(),
-                    question: question,
-                    answer: answer,
-                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
-                }).then(function(qna){
-                        return this.editCacheAnnouncementQnAs_(qna);
-                }, this);
-            },
-
-
-            [[chlk.models.id.AnnouncementQnAId, String]],
-            ria.async.Future, function editQuestion(announcementQnAId, question) {
-                return this.post('AnnouncementQnA/EditQuestion', chlk.models.announcement.AnnouncementQnA, {
-                    announcementQnAId: announcementQnAId.valueOf(),
-                    question: question
-                }).then(function(qna){
-                        return this.editCacheAnnouncementQnAs_(qna);
-                    }, this);
-            },
-
-            [[chlk.models.id.AnnouncementQnAId, String]],
-            ria.async.Future, function editAnswer(announcementQnAId, answer) {
-                return this.post('AnnouncementQnA/EditAnswer', chlk.models.announcement.AnnouncementQnA, {
-                    announcementQnAId: announcementQnAId.valueOf(),
-                    answer: answer
-                }).then(function(qna){
-                            return this.editCacheAnnouncementQnAs_(qna);
-                    }, this);
-            },
-
-            [[chlk.models.announcement.AnnouncementQnA]],
-            Object, function editCacheAnnouncementQnAs_(qna){
-                var result =this.cache[qna.getAnnouncementId().valueOf()];
-                for (var i = 0; i < result.getAnnouncementQnAs().length; i++)
-                    if (result.getAnnouncementQnAs()[i].getId() == qna.getId())
-                    {
-                        result.getAnnouncementQnAs()[i] = qna;
-                        break;
-                    }
-                return result;
-            },
-
-            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementQnAId]],
-            ria.async.Future, function deleteQnA(announcementId, announcementQnAId) {
-                return this.post('AnnouncementQnA/Delete', ArrayOf(chlk.models.announcement.AnnouncementQnA), {
-                    announcementQnAId: announcementQnAId.valueOf()
-                }).then(function(qnas){
-                    var result =this.cache[announcementId.valueOf()];
-                    result.setAnnouncementQnAs(qnas);
-                    return result;
-                }, this);
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.StandardId]],

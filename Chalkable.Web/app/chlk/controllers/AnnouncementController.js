@@ -15,6 +15,7 @@ REQUIRE('chlk.services.AdminAnnouncementService');
 REQUIRE('chlk.services.AnnouncementAssignedAttributeService');
 REQUIRE('chlk.services.AnnouncementAttachmentService');
 REQUIRE('chlk.services.AttachmentService');
+REQUIRE('chlk.services.AnnouncementQnAService');
 
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.LessonPlanFormPage');
@@ -115,6 +116,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.AttachmentService, 'attachmentService',
+
+        [ria.mvc.Inject],
+        chlk.services.AnnouncementQnAService, 'announcementQnAService',
 
         ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
 
@@ -1916,7 +1920,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.QnAForm]],
         function askQuestionAction(model) {
-            var ann = this.announcementService
+            var ann = this.announcementQnAService
                 .askQuestion(model.getAnnouncementId(), model.getQuestion())
                 .attach(this.validateResponse_())
                 .catchError(this.handleNoAnnouncementException_, this);
@@ -1929,26 +1933,26 @@ NAMESPACE('chlk.controllers', function (){
             if (model.getQuestion()){
                 var updateType = model.getUpdateType();
                 if(updateType ==  "editQuestion"){
-                    ann = this.announcementService
+                    ann = this.announcementQnAService
                         .editQuestion(model.getId(), model.getQuestion())
                         .catchError(this.handleNoAnnouncementException_, this)
                         .attach(this.validateResponse_());
                 }
                 if(updateType == "answer"){
-                    ann = this.announcementService
+                    ann = this.announcementQnAService
                         .answerQuestion(model.getId(), model.getQuestion(), model.getAnswer())
                         .catchError(this.handleNoAnnouncementException_, this)
                         .attach(this.validateResponse_());
                 }
                 if(updateType == "editAnswer"){
-                    ann = this.announcementService
+                    ann = this.announcementQnAService
                         .editAnswer(model.getId(),  model.getAnswer())
                         .catchError(this.handleNoAnnouncementException_, this)
                         .attach(this.validateResponse_());
                 }
             }
             else
-                ann = this.announcementService
+                ann = this.announcementQnAService
                     .deleteQnA(model.getAnnouncementId(), model.getId())
                     .catchError(this.handleNoAnnouncementException_, this)
                     .attach(this.validateResponse_());
@@ -2065,242 +2069,6 @@ NAMESPACE('chlk.controllers', function (){
             this.getContext().getSession().set(ChlkSessionConstants.GROUPS_IDS, model.getGroupIds() ? model.getGroupIds().split(',').map(function(item){return new chlk.models.id.GroupId(item)}) : []);
             this.BackgroundUpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, model, 'recipients');
             return this.ShadeLoader();
-        },
-
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId]],
-        function showGroupMembersAction(groupId){
-            var res = this.groupService.groupExplorer(groupId)
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId, String]],
-        function showGradeLevelMembersAction(groupId, schoolYearId, gradeLevelId, classIds_){
-            var res = this.groupService.studentForGroup(groupId, schoolYearId, gradeLevelId, classIds_ && this.getIdsList(classIds_, chlk.models.id.ClassId))
-                .then(function(students){
-                    return new chlk.models.group.StudentsForGroupViewData(groupId, gradeLevelId, schoolYearId, students);
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res, classIds_ ? 'after-filter' : '');
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId]],
-        function assignGradeLevelAction(groupId, schoolYearId, gradeLevelId){
-            var res = this.groupService.assignGradeLevel(groupId, schoolYearId, gradeLevelId)
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId]],
-        function unAssignGradeLevelAction(groupId, schoolYearId, gradeLevelId){
-            var res = this.groupService.unassignGradeLevel(groupId, schoolYearId, gradeLevelId)
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolPersonId]],
-        function assignStudentAction(groupId, studentId){
-            if(!studentId)
-                return null;
-            var res = this.groupService.assignStudents(groupId, [studentId])
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolPersonId]],
-        function unAssignStudentAction(groupId, studentId){
-            if(!studentId)
-                return null;
-            var res = this.groupService.unassignStudents(groupId, [studentId])
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId]],
-        function assignSchoolAction(groupId, schoolYearId){
-            var res = this.groupService.assignSchool(groupId, schoolYearId)
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId]],
-        function unAssignSchoolAction(groupId, schoolYearId){
-            var res = this.groupService.unassignSchool(groupId, schoolYearId)
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId]],
-        function assignAllSchoolsAction(groupId){
-            var res = this.groupService.assignAllSchools(groupId)
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId]],
-        function unAssignAllSchoolsAction(groupId){
-            var res = this.groupService.unassignAllSchools(groupId)
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.GradeLevelId, chlk.models.id.SchoolYearId, String]],
-        function assignAllStudentsAction(groupId, gradeLevelId, schoolYearId, studentIds){
-            if(!studentIds)
-                return null;
-
-            var res = this.groupService.assignStudents(groupId, this.getIdsList(studentIds, chlk.models.id.SchoolPersonId))
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.GradeLevelId, chlk.models.id.SchoolYearId, String]],
-        function unAssignAllStudentsAction(groupId, gradeLevelId, schoolYearId, studentIds){
-            if(!studentIds)
-                return null;
-
-            var res = this.groupService.unassignStudents(groupId, this.getIdsList(studentIds, chlk.models.id.SchoolPersonId))
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId]],
-        function selectStudentFiltersAction(groupId, schoolYearId, gradeLevelId){
-            var res = this.classService.detailedCourseTypes(schoolYearId, gradeLevelId)
-                .then(function(courseTypes){
-                    return new chlk.models.announcement.GroupStudentsFilterViewData(groupId, schoolYearId, gradeLevelId, courseTypes)
-                })
-                .attach(this.validateResponse_());
-
-            return this.ShadeView(chlk.activities.announcement.GroupStudentsFilterDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.announcement.GroupStudentsFilterViewData]],
-        function filterStudentsAction(model){
-            this.BackgroundCloseView(chlk.activities.announcement.GroupStudentsFilterDialog);
-            return this.Redirect('announcement', 'showGradeLevelMembers', [model.getGroupId(), model.getSchoolYearId(), model.getGradeLevelId(), model.getClassIds()]);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        function editGroupsAction(){
-            var res = this.groupService.list()
-                .then(function(groups){
-                    return new chlk.models.group.GroupsListViewData(groups);
-                })
-                .attach(this.validateResponse_());
-
-            return this.ShadeView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
-        },
-
-        function afterGroupEdit(groups){
-            this.getContext().getSession().set(ChlkSessionConstants.GROUPS_LIST, groups);
-            var announcementId = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ID, null);
-            var groupsIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []);
-            var model = new chlk.models.group.AnnouncementGroupsViewData(groups, groupsIds, announcementId);
-            this.BackgroundUpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, model);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        function addGroupAction(){
-            var res = new ria.async.DeferredData(new chlk.models.group.Group);
-
-            return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId]],
-        function tryDeleteGroupAction(groupId) {
-            this.ShowConfirmBox('Are you sure you want to delete this group?', "whoa.", null, 'negative-button')
-                .then(function (data) {
-                    return this.BackgroundNavigate('announcement', 'deleteGroup', [groupId]);
-                }, this);
-            return null;
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId]],
-        function deleteGroupAction(groupId){
-            var res = this.groupService.deleteGroup(groupId)
-                .then(function(groups){
-                    this.afterGroupEdit(groups);
-                    return new chlk.models.group.GroupsListViewData(groups);
-                }, this)
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.group.Group]],
-        function createGroupAction(model){
-            var res = this.groupService.create(model.getName())
-                .then(function(groups){
-                    this.afterGroupEdit(groups);
-                    return new chlk.models.group.GroupsListViewData(groups);
-                }, this)
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.group.Group]],
-        function editGroupNameAction(model){
-            var res = this.groupService.editName(model.getId(), model.getName())
-                .then(function(groups){
-                    this.afterGroupEdit(groups);
-                    return new chlk.models.group.GroupsListViewData(groups);
-                }, this)
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
         },
 
         function editCategoriesAction(){
