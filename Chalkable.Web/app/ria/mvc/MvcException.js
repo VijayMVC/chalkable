@@ -7,6 +7,8 @@ NAMESPACE('ria.mvc', function () {
             [[String, Object]],
             function $(message, inner_) {
                 BASE(message, inner_);
+
+                window.appInsights.ChalkableTrackExceptionkPageView(method.getName());
             }
         ]);
 });

@@ -350,7 +350,7 @@ namespace Chalkable.StiImport.Services
                 var startTime = DateTimeOffset.UtcNow;
                 var res = (SyncResultBase)connectorLocator.SyncConnector.GetDiff(type, table.Value);
                 Log.LogInfo("Table downloaded: " + table.Key + " " + res.RowCount);
-                Chalkable.Common.Telemetry.DispatchRequest("Table download", table.Key, startTime, requestTimer.Elapsed, true, Chalkable.Common.Verbocity.Info, districtId.ToString(), taskId.ToString(), "RowCount: " + res.RowCount);
+                Chalkable.Common.Telemetry.DispatchRequest("Table download", table.Key, startTime, requestTimer.Elapsed, true, Chalkable.Common.Verbosity.Info, districtId.ToString(), taskId.ToString(), "RowCount: " + res.RowCount);
                 Log.LogInfo("Table downloaded: " + table.Key);
                 results.Add(res);
             }
@@ -381,7 +381,7 @@ namespace Chalkable.StiImport.Services
                 action.Compile()();
                 var body = action.Body as MethodCallExpression;
                 Log.LogInfo(body.Method.Name);
-                Chalkable.Common.Telemetry.DispatchRequest(actionType, body.Method.Name, requestStartTime, requestTimer.Elapsed, true, Chalkable.Common.Verbocity.Info, this.districtId.ToString(), this.taskId.ToString());                
+                Chalkable.Common.Telemetry.DispatchRequest(actionType, body.Method.Name, requestStartTime, requestTimer.Elapsed, true, Chalkable.Common.Verbosity.Info, this.districtId.ToString(), this.taskId.ToString());                
             }
         }
     }

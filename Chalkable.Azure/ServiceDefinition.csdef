@@ -49,6 +49,9 @@
       <Setting name="mixpanel-token" />
       <!-- other settings -->
       <Setting name="home-redirect-url" />
+      <!--application insight-->
+      <Setting name="verbosity" />
+      <Setting name="instrumentationKey" />
     </ConfigurationSettings>
   </WebRole>
   <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Medium">
@@ -77,7 +80,7 @@
       <!--tracking-->
       <Setting name="mixpanel-token" />
       <!--application insight-->
-      <Setting name="verbocity" />
+      <Setting name="verbosity" />
       <Setting name="instrumentationKey" />
     </ConfigurationSettings>
   </WorkerRole>

@@ -35,6 +35,9 @@
       <Setting name="mixpanel-token" value="2f0bfa09aa5390f4aa43c423b1f080f9" />
       <!-- other settings -->
       <Setting name="home-redirect-url" value="http://www.chalkable.com" />
+      <!--application insight-->
+      <Setting name="verbosity" value="Verbose" />
+      <Setting name="instrumentationKey" value="513938d1-9b72-4ccb-a580-09528f424826" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
@@ -68,7 +71,7 @@
       <!--tracking-->
       <Setting name="mixpanel-token" value="2f0bfa09aa5390f4aa43c423b1f080f9" />
       <!--application insight-->
-      <Setting name="verbocity" value="verbose" />
+      <Setting name="verbosity" value="verbose" />
       <Setting name="instrumentationKey" value="0b74a54b-bb11-4fd0-b158-fad84bd10c5c" />
     </ConfigurationSettings>
   </Role>

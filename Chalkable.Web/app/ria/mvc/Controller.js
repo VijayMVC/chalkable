@@ -163,6 +163,7 @@ NAMESPACE('ria.mvc', function () {
                     }
 
                     this.storeSessionBinds_();
+                    window.appInsights.ChalkableTrackPageView(method.getName());
                 } catch (e) {
                     throw new ria.mvc.MvcException("Exception in action " + method.getName(), e);
                 }

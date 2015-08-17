@@ -53,11 +53,11 @@ namespace Chalkable.BackgroundTaskProcessor
                 {
                     var res = handlers[task.Type].Handle(task, log);
                     if (res) {
-                        Telemetry.DispatchRequest(requestName, task.Type.ToString(), requestStartTime, requestTimer.Elapsed, true, Verbocity.Info, task.DistrictRef.ToString(), task.Id.ToString());
+                        Telemetry.DispatchRequest(requestName, task.Type.ToString(), requestStartTime, requestTimer.Elapsed, true, Verbosity.Info, task.DistrictRef.ToString(), task.Id.ToString());
                         log.LogInfo(string.Format("Task {0} processing succesfully completed", task.Id));
                     }
                     else {
-                        Telemetry.DispatchRequest(requestName, task.Type.ToString(), requestStartTime, requestTimer.Elapsed, false, Verbocity.Error, task.DistrictRef.ToString(), task.Id.ToString());
+                        Telemetry.DispatchRequest(requestName, task.Type.ToString(), requestStartTime, requestTimer.Elapsed, false, Verbosity.Error, task.DistrictRef.ToString(), task.Id.ToString());
                         log.LogError(string.Format("Task {0} processing failed", task.Id));
                     }
                     sl.BackgroundTaskService.Complete(task.Id, res);

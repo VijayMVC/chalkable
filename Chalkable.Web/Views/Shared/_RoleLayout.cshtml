@@ -42,7 +42,7 @@
     }
     @ChlkHelpers.RenderSiteRoot(Url)
     
-    
+    @{Html.RenderPartial("Telemetry");}
     <script type="text/javascript" src="@Url.StaticContent("/app/lib/es5-shim.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-messages.js")"></script>

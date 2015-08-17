@@ -138,17 +138,17 @@ namespace Chalkable.Common
 
         public static string RedisCacheConnectionString { get { return Get("RedisCache.ConnectionString"); } }
 
-        private static Verbocity configuredVerbocity;
+        private static Verbosity configuredVerbosity;
         private static bool verbositySet = false;
 
-        public static Verbocity Verbocity {
+        public static Verbosity Verbosity {
             get {
                 if (!verbositySet) {
                     // set the default verbosity
-                    configuredVerbocity = Verbocity.Off;
+                    configuredVerbosity = Verbosity.Off;
 
                     // Get the configured setting
-                    var verbositySetting = RoleEnvironment.GetConfigurationSettingValue("verbocity");
+                    var verbositySetting = RoleEnvironment.GetConfigurationSettingValue("verbosity");
 
                     if (!string.IsNullOrWhiteSpace(verbositySetting)) {
                         // Ensure the case of the config setting
@@ -156,12 +156,12 @@ namespace Chalkable.Common
                     }
 
                     // TryParse will work with properly cased values or integers
-                    Enum.TryParse(verbositySetting, out configuredVerbocity);
+                    Enum.TryParse(verbositySetting, out configuredVerbosity);
 
                     // Ensure that we only rertrieve this value once
                     verbositySet = true;
                 }
-                return configuredVerbocity;
+                return configuredVerbosity;
             }
         }
     }

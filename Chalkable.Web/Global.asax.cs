@@ -10,6 +10,7 @@ using Chalkable.Web.Authentication;
 using Chalkable.Web.Logic.ApiExplorer;
 using Chalkable.Web.Models.Binders;
 using Chalkable.Web.Tools;
+using Microsoft.ApplicationInsights.Extensibility;
 using Mindscape.Raygun4Net;
 
 
@@ -131,6 +132,7 @@ namespace Chalkable.Web
 #if !DEBUG
                 RaygunClient.SendInBackground(exc);
 #endif
+            TelemetryConfiguration.Active.InstrumentationKey = Settings.InstrumentationKey;
         }
     }
 

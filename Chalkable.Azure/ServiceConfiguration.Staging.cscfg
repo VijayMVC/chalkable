@@ -36,6 +36,9 @@
       <Setting name="mixpanel-token" value="" />
       <!-- other settings -->
       <Setting name="home-redirect-url" value="/Home/Index" />
+      <!--application insight-->
+      <Setting name="verbosity" value="Verbose" />
+      <Setting name="instrumentationKey" value="22b55e41-d719-4e7a-9583-3a49046cd55c" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
@@ -68,7 +71,7 @@
       <!--tracking-->
       <Setting name="mixpanel-token" value="" />
       <!--application insight-->
-      <Setting name="verbocity" value="verbose" />
+      <Setting name="verbosity" value="verbose" />
       <Setting name="instrumentationKey" value="1e48341e-3622-48cc-9c4f-b6f14b7271af" />
     </ConfigurationSettings>
   </Role>
