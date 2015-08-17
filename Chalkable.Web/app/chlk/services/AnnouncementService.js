@@ -55,17 +55,6 @@ NAMESPACE('chlk.services', function () {
 
             },
 
-            //TODO: remove this method
-            [[String]],
-            ria.async.Future, function getGradeComments(query_) {
-                return this.get('Grading/GetGridComments', ArrayOf(String), {
-                    schoolYearId: this.getContext().getSession().get(ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, null).valueOf()
-                }).then(function(data){
-                    var comments = data || [];
-
-                });
-            },
-
             [[chlk.models.id.AnnouncementId, Boolean]],
             ria.async.Future, function setShowGradesToStudents(announcementId, value) {
                 return ria.async.DeferredData(true);
