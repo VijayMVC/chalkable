@@ -577,7 +577,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId]],
         function banAppAction(appId){
-            var result = this.ShowConfirmBox('Banning this App will hide the app in the store for all users in your district. If the app was already installed by a user, it will not be uninstalled.', null, 'Ban', 'negative-button')
+            var result = this.ShowConfirmBox('Banning this App will hide the app in the store for all users in your district. If the app was already installed by a user, it will not be uninstalled.', null, 'OK', 'negative-button')
                 .thenCall(this.appsService.banApp, [appId])
                 .attach(this.validateResponse_())
                 .then(function(data) {
@@ -595,7 +595,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId]],
         function unbanAppAction(appId){
-            var result = this.ShowConfirmBox('Un ban this app?', null, 'Yes')
+            var result = this.ShowConfirmBox('Un-ban this app?', null, 'Yes')
                 .thenCall(this.appsService.unbanApp, [appId])
                 .attach(this.validateResponse_())
                 .then(function(data){

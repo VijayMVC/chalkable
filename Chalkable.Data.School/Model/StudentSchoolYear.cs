@@ -27,6 +27,7 @@ namespace Chalkable.Data.School.Model
     public enum StudentEnrollmentStatusEnum
     {
         CurrentlyEnrolled = 0,
-        PreviouslyEnrolled = 1
+        PreviouslyEnrolled = 1,
+        Registered = 2
     }
 }
