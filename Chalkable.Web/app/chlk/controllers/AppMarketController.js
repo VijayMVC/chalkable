@@ -595,7 +595,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId]],
         function unbanAppAction(appId){
-            var result = this.ShowConfirmBox('Un ban this app?', null, 'Yes')
+            var result = this.ShowConfirmBox('Un-ban this app?', null, 'Yes')
                 .thenCall(this.appsService.unbanApp, [appId])
                 .attach(this.validateResponse_())
                 .then(function(data){
