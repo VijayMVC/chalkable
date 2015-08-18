@@ -450,10 +450,7 @@ NAMESPACE('chlk.controllers', function (){
             if(!p) classId_ = null;
             if(classId_ && announcementTypeId_ && announcementTypeId_.valueOf()){
                 var classInfo = this.classService.getClassAnnouncementInfo(classId_);
-                var types = classInfo.getTypesByClass(),
-                    emptyTypes = types.filter(function(type){return !type.getId()});
-                if(emptyTypes.length)
-                    console.info('empty types - ', emptyTypes, ' types - ', types);
+                var types = classInfo.getTypesByClass();
                 var typeId = null;
                 types.forEach(function(item){
                     if(item.getId() == announcementTypeId_)

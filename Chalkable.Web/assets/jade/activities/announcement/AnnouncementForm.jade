@@ -13,8 +13,6 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
                                 data-typeid=item.getId(),
                                 data-typename=item.getName()
                             )
-                        else
-                            -console.info(item)
                 BUTTON(
                     type = announcement && announcement.getState().valueOf() ? "button" : "submit",
                     name="submitType",

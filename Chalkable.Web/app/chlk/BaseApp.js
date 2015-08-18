@@ -165,9 +165,6 @@ NAMESPACE('chlk', function (){
                 if(classesInfo != undefined && classesInfo != null){
                     for(var i in classesInfo) {
                         resObj[i] = serializer.deserialize(classesInfo[i], chlk.models.classes.ClassForWeekMask);
-                        var emptyTypes = resObj[i].getTypesByClass().filter(function(type){return !type.getId()});
-                        if(emptyTypes.length)
-                            console.info('empty types - ', emptyTypes, ' types - ', resObj[i].getTypesByClass(), ' original - ', classesInfo[i]);
                     }
                 }
                 session.set(key, resObj);
