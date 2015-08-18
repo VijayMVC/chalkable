@@ -51,3 +51,4 @@ home page
 Chalkable.Web/Scripts/highcharts
 Chalkable.Web/Scripts/extjs
 */.local/**
+.vs/**/*
