@@ -341,8 +341,8 @@ namespace Chalkable.StiImport.Services
                     SchoolYearRef = x.AcadSessionID,
                     StudentRef = x.StudentID,
                     GradeLevelRef = x.GradeLevelID.Value,
-                    EnrollmentStatus = x.CurrentEnrollmentStatus == "C" ? StudentEnrollmentStatusEnum.CurrentlyEnrolled : StudentEnrollmentStatusEnum.PreviouslyEnrolled
-                }).ToList();
+                EnrollmentStatus = StudentEnrollmentStatusEnumFromString(x.CurrentEnrollmentStatus)
+            }).ToList();
             ServiceLocatorSchool.SchoolYearService.EditStudentSchoolYears(ssy);
         }
 

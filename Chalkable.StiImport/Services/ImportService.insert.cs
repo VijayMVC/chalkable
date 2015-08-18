@@ -370,6 +370,15 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.SchoolYearService.Add(schoolYears);
         }
 
+        private StudentEnrollmentStatusEnum StudentEnrollmentStatusEnumFromString(string value)
+        {
+            return value == "C"
+                ? StudentEnrollmentStatusEnum.CurrentlyEnrolled
+                : value == "G"
+                    ? StudentEnrollmentStatusEnum.Registered
+                    : StudentEnrollmentStatusEnum.PreviouslyEnrolled;
+        }
+
         private void InsertStudentSchoolYears()
         {
             var assignments = context.GetSyncResult<StudentAcadSession>().All
@@ -380,7 +389,7 @@ namespace Chalkable.StiImport.Services
                     GradeLevelRef = x.GradeLevelID.Value,
                     SchoolYearRef = x.AcadSessionID,
                     StudentRef = x.StudentID,
-                    EnrollmentStatus = x.CurrentEnrollmentStatus == "C" ? StudentEnrollmentStatusEnum.CurrentlyEnrolled : StudentEnrollmentStatusEnum.PreviouslyEnrolled
+                    EnrollmentStatus = StudentEnrollmentStatusEnumFromString(x.CurrentEnrollmentStatus)
                 }).ToList();
             ServiceLocatorSchool.SchoolYearService.AssignStudent(assignments);
         }
