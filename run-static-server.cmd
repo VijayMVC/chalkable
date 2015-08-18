@@ -1,3 +1,2 @@
-rem @npm -g install npm@next
-@npm install
-@npm run-script serve-local
+@call npm install
+@call npm run-script serve-local
