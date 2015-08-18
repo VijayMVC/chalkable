@@ -32,10 +32,10 @@
         <Logs scheduledTransferPeriod="PT1M" scheduledTransferLogLevelFilter="Verbose" />
       </DiagnosticMonitorConfiguration>
     </WadCfg>
-    <StorageAccount>chalkableschool</StorageAccount>
+    <StorageAccount />
   </PublicConfig>
   <PrivateConfig xmlns="http://schemas.microsoft.com/ServiceHosting/2010/10/DiagnosticsConfiguration">
-    <StorageAccount name="chalkableschool" key="CA86C3J9Rn2XPm9mOr9A6QuNZQf6ldc+t3/z7djMSrtXQJRd/u7Tpb4N388nUMvczMhEHDQKtGqQXFMQksWL8Q==" endpoint="" />
+    <StorageAccount endpoint="" />
   </PrivateConfig>
   <IsEnabled>true</IsEnabled>
 </DiagnosticsConfiguration>

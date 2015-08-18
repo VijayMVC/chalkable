@@ -38,6 +38,7 @@
       <!--application insight-->
       <Setting name="verbosity" value="Verbose" />
       <Setting name="instrumentationKey" value="ef68c92f-d1a3-4b1b-a315-3fdb511c5003" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="D8884B835CF2696D0C37B56D161C1BA40CB2A708" thumbprintAlgorithm="sha1" />
@@ -73,6 +74,7 @@
       <!--application insight-->
       <Setting name="verbosity" value="verbose" />
       <Setting name="instrumentationKey" value="31afde98-0199-4de2-96d1-ba4fbd7f3552" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
     </ConfigurationSettings>
   </Role>
   <Role name="Chalkable.BackgroundTaskProducer">
@@ -108,6 +110,7 @@
       <Setting name="TaskProducer.DbBackupProducer.IntervalEnd" value="86400" />
       <!--tracking-->
       <Setting name="mixpanel-token" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

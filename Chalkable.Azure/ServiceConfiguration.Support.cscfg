@@ -38,6 +38,7 @@
       <!--application insight-->
       <Setting name="verbosity" value="Verbose" />
       <Setting name="instrumentationKey" value="dcbaf516-4b5f-401d-90b4-64c3be2f62cb" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablesupport;AccountKey=NK4huhmFj2oSzOX20F2d2wJ98KufGfleLNK+qKtUp6bzDJcq3CRn0q2G8YOJFq8LC9ucmarxzjzAyDvf0gFtAw==" />
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
@@ -72,6 +73,7 @@
       <!--application insight-->
       <Setting name="verbosity" value="verbose" />
       <Setting name="instrumentationKey" value="4d8d5f75-4ddd-4ae0-860e-db761617c5f9" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablesupport;AccountKey=NK4huhmFj2oSzOX20F2d2wJ98KufGfleLNK+qKtUp6bzDJcq3CRn0q2G8YOJFq8LC9ucmarxzjzAyDvf0gFtAw==" />
     </ConfigurationSettings>
   </Role>
   <Role name="Chalkable.BackgroundTaskProducer">
@@ -106,6 +108,7 @@
       <Setting name="TaskProducer.DbBackupProducer.IntervalEnd" value="86400" />
       <!--tracking-->
       <Setting name="mixpanel-token" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablesupport;AccountKey=NK4huhmFj2oSzOX20F2d2wJ98KufGfleLNK+qKtUp6bzDJcq3CRn0q2G8YOJFq8LC9ucmarxzjzAyDvf0gFtAw==" />
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

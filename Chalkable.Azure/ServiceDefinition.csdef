@@ -13,7 +13,8 @@
       <InputEndpoint name="Endpoint2" protocol="https" port="443" certificate="Certificate1" />
       <InputEndpoint name="Endpoint1" protocol="http" port="80" />
     </Endpoints>
-    <Imports></Imports>
+    <Imports>
+    </Imports>
     <Certificates>
       <Certificate name="Certificate1" storeLocation="LocalMachine" storeName="My" />
     </Certificates>
@@ -52,10 +53,12 @@
       <!--application insight-->
       <Setting name="verbosity" />
       <Setting name="instrumentationKey" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
     </ConfigurationSettings>
   </WebRole>
   <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Medium">
-    <Imports></Imports>
+    <Imports>
+    </Imports>
     <ConfigurationSettings>
       <!-- DB settings -->
       <Setting name="ChalkableStorage.ConnectionString" />
@@ -82,10 +85,12 @@
       <!--application insight-->
       <Setting name="verbosity" />
       <Setting name="instrumentationKey" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
     </ConfigurationSettings>
   </WorkerRole>
   <WorkerRole name="Chalkable.BackgroundTaskProducer" vmsize="ExtraSmall">
-    <Imports></Imports>
+    <Imports>
+    </Imports>
     <ConfigurationSettings>
       <!-- DB settings -->
       <Setting name="ChalkableStorage.ConnectionString" />
@@ -115,6 +120,7 @@
       <Setting name="TaskProducer.DbBackupProducer.IntervalEnd" />
       <!--tracking-->
       <Setting name="mixpanel-token" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>
