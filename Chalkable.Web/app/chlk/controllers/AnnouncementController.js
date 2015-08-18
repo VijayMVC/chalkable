@@ -1303,6 +1303,20 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'update-attachments');
         },
 
+        [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function deleteAppDistrictAdminAction(announcementAppId, announcementType) {
+            var result = this.announcementService
+                .deleteApp(announcementAppId, announcementType)
+                .attach(this.validateResponse_())
+                .then(function(model){
+                    model.setNeedButtons(true);
+                    model.setNeedDeleteButton(true);
+                    this.prepareAnnouncementAttachedItems(model);
+                    return model;
+                }, this);
+            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, result, 'update-attachments');
+        },
+
         Boolean, function isAnnouncementSavingDisabled(){
             return this.getContext().getSession().get(ChlkSessionConstants.DONT_SAVE, false);
         },
