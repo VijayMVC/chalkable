@@ -1,5 +1,6 @@
 REQUIRE('chlk.BaseApp');
 
+REQUIRE('chlk.controllers.LpGalleryCategoryController');
 REQUIRE('chlk.controllers.AnnouncementController');
 REQUIRE('chlk.controllers.AppMarketController');
 REQUIRE('chlk.controllers.AppsController');

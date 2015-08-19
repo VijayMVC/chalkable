@@ -1,11 +1,12 @@
-+ActionForm('announcement', self.getId() ? 'editCategoryName' : 'createCategory').group-container
-    +Hidden('id', self.getId())
-    INPUT(type="text",data-value=self.getName(), value = self.getName(), class=self.getId() ? '' : 'temporary', name="name", class='validate[required]').group-name
+-var categoryId = self.getId()
++ActionForm('lpgallerycategory', self.getId() ? 'editName' : 'create').group-container
+    +Hidden('id', categoryId ? categoryId.valueOf() : null)
+    INPUT(type="text",data-value=self.getName(), value = self.getName(), class=categoryId ? '' : 'temporary', name="name", class='validate[required]').group-name
     Button(disabled='disabled', style = self.getId() ? 'display:none;' : '', type="submit").special-button2.blue-button.create-group ok
     if self.getId()
         if self.getLessonPlansCount() > 0
-            +ActionLink('announcement', 'tryDeleteCategory', self.getId())(data-tooltip = "You can\'t delete category with Lesson Plan").delete-btn.disabled
+            +ActionLink('lpgallerycategory', 'tryDelete', categoryId)(data-tooltip = "You can\'t delete category with Lesson Plan").delete-btn.disabled
         else
-            +ActionLink('announcement', 'tryDeleteCategory', self.getId()).delete-btn
+            +ActionLink('lpgallerycategory', 'tryDelete', categoryId).delete-btn
     else
         .delete-btn

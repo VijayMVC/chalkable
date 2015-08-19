@@ -9,7 +9,7 @@ REQUIRE('chlk.models.common.ChlkDate');
 
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
-REQUIRE('chlk.models.id.GalleryCategoryId');
+REQUIRE('chlk.models.id.LpGalleryCategoryId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
 
@@ -28,31 +28,6 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            ria.async.Future, function listCategories() {
-                return this.get('LPGalleryCategory/ListCategories.json', ArrayOf(chlk.models.announcement.CategoryViewData));
-            },
-
-            [[String]],
-            ria.async.Future, function addCategory(name) {
-                return this.get('LPGalleryCategory/CreateCategory.json', Boolean, {
-                    name: name
-                });
-            },
-
-            [[Number, String]],
-            ria.async.Future, function updateCategory(categoryId, name) {
-                return this.get('LPGalleryCategory/UpdateCategory.json', Boolean, {
-                    name: name,
-                    categoryId: categoryId
-                });
-            },
-
-            [[Number, String]],
-            ria.async.Future, function deleteCategory(categoryId) {
-                return this.get('LPGalleryCategory/DeleteCategory.json', Boolean, {
-                    categoryId: categoryId
-                });
-            },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
             ria.async.Future, function createFromTemplate(lessonPlanTplId, classId) {
@@ -62,7 +37,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String, Object]],
+            [[String, chlk.models.id.LpGalleryCategoryId]],
             ria.async.Future, function searchLessonPlansTemplates(filter_, galleryCategoryId_) {
                 return this.get('LessonPlan/SearchLessonPlansTemplates.json', ArrayOf(chlk.models.announcement.LessonPlanViewData), {
                     galleryCategoryId: this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, galleryCategoryId_),
@@ -116,7 +91,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, Number
+            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, chlk.models.id.LpGalleryCategoryId
                 , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean,
                 Array
             ]],
@@ -135,7 +110,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, Number
+            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, chlk.models.id.LpGalleryCategoryId
                 , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean,
                 Array]],
             ria.async.Future, function submitLessonPlan(id, classId_, title_, content_, galleryCategoryId_

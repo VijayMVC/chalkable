@@ -50,7 +50,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.announcement.CategoryViewData);
 
                 this.submitType = SJX.fromValue(raw.submitType, String);
-                this.galleryCategoryId = SJX.fromValue(raw.galleryCategoryId, Number);
+                this.galleryCategoryId = SJX.fromValue(raw.galleryCategoryId, chlk.models.id.LpGalleryCategoryId);
                 this.hiddenFromStudents = SJX.fromValue(raw.hidefromstudents, Boolean);
                 this.announcementTypeId = SJX.fromValue(raw.announcementTypeId, Number);
                 this.maxScore = SJX.fromValue(raw.maxscore, Number);
@@ -62,7 +62,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
                 this.classId = SJX.fromValue(raw.classId, chlk.models.id.ClassId);
                 this.ableDropStudentScore = SJX.fromValue(raw.candropstudentscore, Boolean);
-                this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, Number);
+                this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, chlk.models.id.LpGalleryCategoryId);
                 this.filter = SJX.fromValue(raw.filter, String);
                 this.announcementForTemplateId = SJX.fromValue(raw.announcementForTemplateId, chlk.models.id.AnnouncementId);
 
@@ -114,8 +114,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'ableEdit',
             chlk.models.id.MarkingPeriodId, 'markingPeriodId',
             ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
-            Number, 'galleryCategoryId',
-            Number, 'galleryCategoryForSearch',
+            chlk.models.id.LpGalleryCategoryId, 'galleryCategoryId',
+            chlk.models.id.LpGalleryCategoryId, 'galleryCategoryForSearch',
             String, 'filter',
             Boolean, 'hiddenFromStudents',
             chlk.models.common.ChlkDate, 'expiresDate',

@@ -162,26 +162,9 @@ NAMESPACE('chlk.controllers', function (){
             function submitClassAnnouncementAction(model){
                 var res;
                 if(model.getId() && model.getId().valueOf())
-                    res = this.announcementTypeService.update(
-                        model.getClassId(),
-                        model.getDescription(),
-                        model.getName(),
-                        model.getHighScoresToDrop(),
-                        model.getLowScoresToDrop(),
-                        model.isSystem(),
-                        model.getPercentage(),
-                        model.getId()
-                    ).attach(this.validateResponse_());
+                    res = this.updateClassAnnouncementType_(model)
                 else
-                    res = this.announcementTypeService.create(
-                        model.getClassId(),
-                        model.getDescription(),
-                        model.getName(),
-                        model.getHighScoresToDrop(),
-                        model.getLowScoresToDrop(),
-                        model.isSystem(),
-                        model.getPercentage()
-                    ).attach(this.validateResponse_());
+                    res = this.updateClassAnnouncementType_(model)
                 res.thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
                     .attach(this.validateResponse_())
                     .then(function(data){
@@ -189,6 +172,34 @@ NAMESPACE('chlk.controllers', function (){
                     }, this);
                 this.BackgroundCloseView(chlk.activities.setup.ClassAnnouncementTypeDialog);
                 return null;
+            },
+
+
+            [[chlk.models.announcement.ClassAnnouncementType]],
+            ria.async.Future, function createClassAnnouncementType_(model){
+                return this.announcementTypeService.update(
+                    model.getClassId(),
+                    model.getDescription(),
+                    model.getName(),
+                    model.getHighScoresToDrop(),
+                    model.getLowScoresToDrop(),
+                    model.isSystem(),
+                    model.getPercentage(),
+                    model.getId()
+                ).attach(this.validateResponse_());
+            },
+
+            [[chlk.models.announcement.ClassAnnouncementType]],
+            function updateClassAnnouncementType_(model){
+                return this.announcementTypeService.create(
+                    model.getClassId(),
+                    model.getDescription(),
+                    model.getName(),
+                    model.getHighScoresToDrop(),
+                    model.getLowScoresToDrop(),
+                    model.isSystem(),
+                    model.getPercentage()
+                ).attach(this.validateResponse_());
             },
 
             [chlk.controllers.Permissions([

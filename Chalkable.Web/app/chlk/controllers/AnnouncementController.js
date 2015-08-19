@@ -9,6 +9,7 @@ REQUIRE('chlk.services.AppMarketService');
 REQUIRE('chlk.services.MarkingPeriodService');
 REQUIRE('chlk.services.GroupService');
 REQUIRE('chlk.services.LessonPlanService');
+REQUIRE('chlk.services.LpGalleryCategoryService');
 REQUIRE('chlk.services.ClassAnnouncementService');
 REQUIRE('chlk.services.AdminAnnouncementService');
 REQUIRE('chlk.services.AnnouncementAssignedAttributeService');
@@ -73,6 +74,9 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.LessonPlanService, 'lessonPlanService',
 
         [ria.mvc.Inject],
+        chlk.services.LpGalleryCategoryService, 'lpGalleryCategoryService',
+
+        [ria.mvc.Inject],
         chlk.services.ClassAnnouncementService, 'classAnnouncementService',
 
         [ria.mvc.Inject],
@@ -112,6 +116,7 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.AnnouncementQnAService, 'announcementQnAService',
 
         ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
+
 
         function getAnnouncementFormPageType_(type_){
             if(this.userInRole(chlk.models.common.RoleEnum.TEACHER)){
@@ -534,7 +539,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.AnnouncementForm]],
         function getLessonPlanFromModel_(model) {
-            return this.lessonPlanService.listCategories()
+            return this.lpGalleryCategoryService.list()
                 .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(ex){
                     return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
                     throw error;
@@ -565,7 +570,7 @@ NAMESPACE('chlk.controllers', function (){
             this.getContext().getSession().set('classInfo', null);
             var result = ria.async.wait([
                     this.lessonPlanService.addLessonPlan(classId_),
-                    this.lessonPlanService.listCategories()
+                    this.lpGalleryCategoryService.list()
                 ])
                 .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(ex){
                     return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
@@ -1568,7 +1573,7 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             if (submitType == 'changeCategory'){
-                this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, model.getGalleryCategoryForSearch() || '');
+                this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, model.getGalleryCategoryForSearch() || null);
                 return null;
                 //return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, ria.async.DeferredData(model), 'search');
             }
@@ -1587,7 +1592,7 @@ NAMESPACE('chlk.controllers', function (){
         function createFromTemplateAction(announcementId, classId){
             var result = ria.async.wait([
                     this.lessonPlanService.createFromTemplate(announcementId, classId),
-                    this.lessonPlanService.listCategories()
+                    this.lpGalleryCategoryService.list()
                 ])
                 .attach(this.validateResponse_())
                 .then(function(result){
@@ -2036,88 +2041,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeLoader();
         },
 
-        function editCategoriesAction(){
-            var res = this.lessonPlanService.listCategories()
-                .then(function(list){
-                    return new chlk.models.announcement.CategoriesListViewData(list);
-                })
-                .attach(this.validateResponse_());
-            return this.ShadeView(chlk.activities.announcement.AddNewCategoryDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        function addCategoryAction(){
-            var res = new ria.async.DeferredData(new chlk.models.announcement.CategoryViewData);
-
-            return this.UpdateView(chlk.activities.announcement.AddNewCategoryDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[Number]],
-        function tryDeleteCategoryAction(categoryId) {
-            this.ShowConfirmBox('Are you sure you want to delete this category?', "whoa.", null, 'negative-button')
-                .then(function (data) {
-                    return this.BackgroundNavigate('announcement', 'deleteCategory', [categoryId]);
-                }, this);
-            return null;
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[Number]],
-        function deleteCategoryAction(categoryId){
-            var res = this.lessonPlanService.deleteCategory(categoryId)
-                .thenCall(this.lessonPlanService.listCategories, [])
-                .then(function(list){
-                    this.afterGroupEditAction(list);
-                    return new chlk.models.announcement.CategoriesListViewData(list);
-                }, this)
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AddNewCategoryDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.announcement.CategoryViewData]],
-        function createCategoryAction(model){
-            var res = this.lessonPlanService.addCategory(model.getName())
-                .then(function(data){
-                    if(!data)
-                        this.ShowMsgBox("Category with this name already exists");
-                    return this.lessonPlanService.listCategories();
-                }, this)
-                .then(function(list){
-                    this.afterGroupEditAction(list);
-                    return new chlk.models.announcement.CategoriesListViewData(list);
-                }, this)
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AddNewCategoryDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.announcement.CategoryViewData]],
-        function editCategoryNameAction(model){
-            var res = this.lessonPlanService.updateCategory(Number(model.getId()), model.getName())
-                .then(function(data){
-                    if(!data)
-                        this.ShowMsgBox("Category with this name already exists");
-                    return this.lessonPlanService.listCategories();
-                }, this)
-                .then(function(list){
-                    this.afterGroupEditAction(list);
-                    return new chlk.models.announcement.CategoriesListViewData(list);
-                }, this)
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AddNewCategoryDialog, res);
-        },
-
-        function afterGroupEditAction(list){
-            var model = new chlk.models.announcement.FeedAnnouncementViewData();
-            model.setCategories(list);
-            this.BackgroundUpdateView(chlk.activities.announcement.LessonPlanFormPage, model, 'right-categories');
-            this.BackgroundUpdateView(chlk.activities.announcement.LessonPlanFormPage, model, 'categories');
-        },
 
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.AnnouncementId, chlk.models.id.GroupId]],

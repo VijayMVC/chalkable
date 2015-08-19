@@ -1,6 +1,7 @@
 REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.id.LpGalleryCategoryId');
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -21,7 +22,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.shortClassName = SJX.fromValue(raw.classname, String);
                 this.className = SJX.fromValue(raw.fullclassname, String);
                 this.hiddenFromStudents = SJX.fromValue(raw.hidefromstudents, Boolean);
-                this.galleryCategoryId = SJX.fromValue(raw.gallerycategoryid, Number);
+                this.galleryCategoryId = SJX.fromValue(raw.gallerycategoryid, chlk.models.id.LpGalleryCategoryId);
             },
 
             chlk.models.common.ChlkDate, 'startDate',
@@ -30,7 +31,7 @@ NAMESPACE('chlk.models.announcement', function () {
             String, 'shortClassName',
             String, 'className',
             Boolean, 'hiddenFromStudents',
-            Number, 'galleryCategoryId',
+            chlk.models.id.LpGalleryCategoryId, 'galleryCategoryId',
 
             function getPercents(){
                 if(!this.endDate || !this.startDate)

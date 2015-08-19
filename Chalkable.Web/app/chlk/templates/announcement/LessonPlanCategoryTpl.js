@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.ModelBind(chlk.models.announcement.CategoryViewData)],
         'LessonPlanCategoryTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            Number, 'id',
+            chlk.models.id.LpGalleryCategoryId, 'id',
 
             [ria.templates.ModelPropertyBind],
             Number, 'lessonPlansCount',
