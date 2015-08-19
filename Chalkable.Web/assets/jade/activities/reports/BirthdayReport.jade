@@ -1,0 +1,84 @@
+.dialog.report-window
+   +ActionForm('grading', 'submitBirthdayReport').birthday-report-form.no-working.report-form
+      .x-window-header
+         .close.close-btn.dark
+         h1=Msg.Create_Report
+
+      .x-window-body
+         .action-bar: .items: +ActionLinkList(self.buildReportLinksData('birthdayReport'))
+
+         +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+         +Hidden('classId', self.getClassId().valueOf())
+         .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
+            TABLE.report-table
+               TR
+                  TD.item-3
+                     h3 Report for
+                     +Select('reportFor')#report-for
+                        +Option(1, 'Date / Range of dates', true)
+                        +Option(2, 'Month / Range of months', false)
+                  +OptionalReportDatePickers()
+               TR
+                  TD.item-3
+                  TD.item-3
+                     h3 Start month
+                     +Select('startMonth')(disabled="disabled").month-select
+                        +Option(1, 'January', true)
+                        +Option(2, 'February', false)
+                        +Option(3, 'March', false)
+                        +Option(4, 'April', false)
+                        +Option(5, 'May', false)
+                        +Option(6, 'June', false)
+                        +Option(7, 'July', false)
+                        +Option(8, 'August', false)
+                        +Option(9, 'September', false)
+                        +Option(10, 'October', false)
+                        +Option(11, 'November', false)
+                        +Option(12, 'December', false)
+                  TD.item-3
+                     h3 End month
+                     +Select('endMonth')(disabled="disabled").month-select
+                        +Option(1, 'January', true)
+                        +Option(2, 'February', false)
+                        +Option(3, 'March', false)
+                        +Option(4, 'April', false)
+                        +Option(5, 'May', false)
+                        +Option(6, 'June', false)
+                        +Option(7, 'July', false)
+                        +Option(8, 'August', false)
+                        +Option(9, 'September', false)
+                        +Option(10, 'October', false)
+                        +Option(11, 'November', false)
+                        +Option(12, 'December', false)
+               TR
+                  TD.item-3
+                     h3 Group by
+                     +Select('groupBy').group-by
+                        +Option(chlk.models.reports.BirthdayGroupByMethod.NO_GROUPING.valueOf(), "No Grouping", true)
+                        +Option(chlk.models.reports.BirthdayGroupByMethod.DATE_OF_BIRTH.valueOf(), "Date of Birth", false)
+                        +Option(chlk.models.reports.BirthdayGroupByMethod.GRADE_LEVEL.valueOf(), "Grade Level", false)
+                        +Option(chlk.models.reports.BirthdayGroupByMethod.HOME_ROOM.valueOf(), 'Homeroom', false)
+                  TD.item-3
+                     h3
+                     +LabeledCheckbox('Include withdrawn students', 'includeWithdrawn', false)
+                  TD.item-3
+                     h3
+                     +LabeledCheckbox('Include student photo', 'includePhoto', false)
+               //TR
+                  TD.item-3
+                     h3 Working filter
+                     +LabeledCheckbox('Save to working filter', 'saveToFilter', false)
+                  TD.item-3
+                     h3
+                     +Select('appendOrOverwrite').append-overwrite
+                        +Option(1, 'Appent to existing', true)
+                        +Option(2, 'Overwrite existing', false)
+                  TD.item-3
+                     h3
+                     +LabeledCheckbox('Save as default format', 'saveAsDefault', false)
+      .x-window-footer.report-bottom
+         +ReportFormatSelect()
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
