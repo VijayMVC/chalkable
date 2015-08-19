@@ -41,7 +41,7 @@ NAMESPACE('chlk.activities.student', function () {
             [ria.mvc.DomEventBind('click', '.gp-container.opened .gp-link')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function gpClick(node, event){
-                node.find('.announcement-types-info').setCss('height', 0);
+                node.parent('.gp-container').removeClass('opened').find('.announcement-types-info').setCss('height', 0);
                 return false;
             }
         ]);
