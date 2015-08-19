@@ -1,0 +1,118 @@
+app = self.getApp()
+devName = app.getDeveloperInfo().getName()
+webSiteLink = app.getDeveloperInfo().getWebSite()
+
+.app-market-details
+    if self.currentBalance
+        .user-balance= "$" + self.currentBalance
+    h2.page-title= app.getName()
+    .action-bar
+        .items
+            +ActionLink('appmarket', 'list').app-store.toolbar-btn Back
+    .fixed-width
+        .app-screenshots-panel
+            +Carousel()
+                -videoUrl = app.getVideoDemoUrl() || ''
+                if videoUrl
+                    +CarouselItem().img(data-page = 1)
+                        -dims = chlk.models.apps.AppPicture.SCREENSHOT_DIMS()
+                        +Video(true)(src=videoUrl, width=dims.width, height=dims.height)
+                each picture, index in app.getScreenshotPictures().getItems()
+                    +CarouselItem().img(data-page= index + 2)
+                        img(src=picture.getPictureUrl())
+        .app-price-info
+            .right
+                if self.isStudyCenterEnabled()
+                    b= self.installBtnTitle
+                    | &nbsp;
+                    +ActionButton('appmarket', 'tryToInstall', app.getId(), self.isFromNewItem()).blue-button.mid-button(class=self.isInstalled()? "installed" : undefined) Install App
+            .app-title
+                span By&nbsp;
+                a(href=webSiteLink, target="blank").dev-web-site=devName
+
+        -var appRating = app.getApplicationRating()
+        -var reviewsCount = appRating ? appRating.getPersonRatings().length : 0
+        .inline-tabs
+            .tabs
+                .tab(data-tab-content="info-tab") Info
+                .tab(data-tab-content="reviews-tab") Reviews (#{reviewsCount})
+                .tab.x-hidden(data-tab-content="similar-tab") Similar apps
+
+            .wrapper
+                .content(data-tab-content="info-tab")
+                    .table.app-info-details
+                        .app-description!= self.linkify(app.getDescription())
+                        .side-panel
+                            span.review-link Users rating:
+                            +Rating("appRating", app.getApplicationRating().getAverage(), false).all
+                .content(data-tab-content="reviews-tab")
+                    .reviews
+                        +RenderWith(app, chlk.templates.apps.AppMarketReviewsTpl)(
+                            userRole = self.userRole,
+                            currentUser = self.currentUser
+                        )
+                .content(data-tab-content="similar-tab")
+                    .attachments-and-applications
+
+
+        +CloseOpen('App Features')
+            .content.table.permissions
+                .row
+                    .group-header.first This app is for:
+                    .items
+                        each validRole in app.getValidRoles()
+                            .permission
+                                .icon(class=self.getRoleTypeClass(validRole.getId()))
+                                .description=validRole.getName()
+                .row
+                    .group-header Info used:
+                    .items
+                        if app.getPermissions().length
+                            each permission in app.getPermissions()
+                                .permission
+                                    .icon(class=self.getPermissionTypeClass(permission.getId().valueOf()))
+                                    .description=permission.getName()
+                        else
+                            .permission
+                                .description None
+                .row
+                    .group-header.first Works on:
+                    .items
+                        each platform in app.getPlatforms()
+                            .permission
+                                .icon(class=self.getPlatformTypeClass(platform.getId().valueOf()))
+                                .description=platform.getName()
+
+        if self.userRole.isAdmin()
+            .ban-app
+                +RenderWith(app, chlk.templates.apps.AppMarketBanTpl)
+
+            +CloseOpen('History')
+                .content.table.app-install-history
+                    .table-row.half-header
+                        .desc
+                        .amount: .move-up Amount
+                        .balance: .move-up Balance
+                    each item in self.getApp().getApplicationInstallHistory()
+                        .table-row
+                            .desc
+                                | Installed by &#32;
+                                span= item.getSchoolName()
+                                | &#32;
+                                -var RoleEnum = chlk.models.common.RoleEnum
+                                case item.getOwnerRoleId()
+                                    when RoleEnum.TEACHER
+                                        | Teacher
+                                    when RoleEnum.STUDENT
+                                        | Student
+                                    when RoleEnum.DISTRICTADMIN
+                                        | District
+                                | &#32;
+                                span= item.getFullName()
+                                | &#32; for &#32;
+                                = item.getInstalledCount()
+                                | &#32; Students - &#32;
+                                = item.getInstallDate().toString('m/dd/yy')
+
+                            .amount= item.getPrice() || 'Free'
+                            .balance= item.getRemains()
