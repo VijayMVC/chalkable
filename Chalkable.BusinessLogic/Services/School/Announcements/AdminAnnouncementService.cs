@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AdminAnnouncement GetAdminAnnouncementById(int adminAnnouncementId);
         bool Exists(string title, int? excludedLessonPlaId);
 
-        IList<AnnouncementComplex> GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int start = 0, int count = int.MaxValue);
+        IList<AnnouncementComplex> GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int start = 0, int count = int.MaxValue, bool ownedOnly = true);
         IList<AdminAnnouncement> GetAdminAnnouncements(IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? studentId);
         IList<AdminAnnouncement> GetAdminAnnouncementsByFilter(string filter); 
         AdminAnnouncement GetLastDraft();
@@ -250,7 +250,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
 
-        public IList<AnnouncementComplex> GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int start = 0, int count = int.MaxValue)
+        public IList<AnnouncementComplex> GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int start = 0, int count = int.MaxValue, bool ownedOnly = true)
         {
             Trace.Assert(Context.PersonId.HasValue);
             return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
@@ -263,7 +263,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     PersonId = Context.PersonId,
                     RoleId = Context.RoleId,
                     GradeLevelsIds = gradeLevels,
-                    OwnedOnly = true
+                    OwnedOnly = ownedOnly
                 })).Announcements;
         }
 
