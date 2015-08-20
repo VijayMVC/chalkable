@@ -56,7 +56,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 studentIds = ServiceLocator.ClassService.GetClassPersons(null, classId.Value, null, null).Select(x => x.PersonRef).Distinct().ToList();
 
             var clsPersons = studentIds.JoinString(",");
-            var integratedSignOnUrl = string.Format(GetBaseUrl() + "sti/give_credits?districtGUID={0}&sti_session_variable={1}&studentIds={2}&sti_school_id="
+            var integratedSignOnUrl = string.Format(GetBaseUrl() + "sti/give_credits?districtGUID={0}&sti_session_variable={1}&studentIds={2}&sti_school_id={3}"
                 , Context.DistrictId, Context.SisToken, clsPersons, Context.SchoolLocalId.Value);
             return integratedSignOnUrl;
         }
@@ -86,7 +86,7 @@ namespace Chalkable.BusinessLogic.Services.School
             //    studentIds = ServiceLocator.StudentService.GetTeacherStudents(Context.PersonId.Value, syId).Select(x => x.Id).ToList();
             
             //else studentIds.Add(Context.PersonId.Value);
-            return string.Format(GetBaseUrl() + "sti/auth?districtGUID={0}&sti_session_variable={1}&sti_school_id="
+            return string.Format(GetBaseUrl() + "sti/auth?districtGUID={0}&sti_session_variable={1}&sti_school_id={2}"
                 , Context.DistrictId, Context.SisToken, Context.SchoolLocalId.Value);
         }
 
