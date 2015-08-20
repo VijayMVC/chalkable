@@ -17,7 +17,7 @@ namespace Chalkable.Web.Models.GroupsViewData
             return new GroupExplorerViewData
                 {
                     Group = GroupViewData.Create(groupExplorer.Group),
-                    GradeLevels = GradeLevelViewData.Create(groupExplorer.GradeLevels),
+                    GradeLevels = GradeLevelViewData.Create(groupExplorer.GradeLevels).OrderBy(x=>x.Number).ToList(),
                     Schools = groupExplorer.Schools.Select(x=> new SchoolForGroupViewData
                         {
                             Id = x.Id,
