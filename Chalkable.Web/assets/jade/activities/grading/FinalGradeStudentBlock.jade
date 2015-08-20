@@ -164,10 +164,14 @@ div(class=(selected ? "opened" : "")).attachments-container.z-10.sub-row
                             .empty-disciplines=Msg.No_discipline_issues
         .comments-notes-block
             .notes-block
+                h3=Msg.Notes + ':'
+                br
                 TEXTAREA(disabled = !self.isAbleEdit(), placeholder = Msg.Add_a_comment).notes-textarea=avg.getNote()
                 .saving-text #{Msg.Saving.toLowerCase()}...
             .comments-block
                 if avg.getCodes()
+                    h3=Msg.Comments + ':'
+                    br
                     each header in avg.getCodes()
                         +Select('select-' + header.headerid)(
                             data-header-id = header.headerid,
