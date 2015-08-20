@@ -8,6 +8,13 @@ NAMESPACE('chlk.models.attachment', function () {
 
     var SJX = ria.serialize.SJX;
 
+    /** @class chlk.models.attachment.AttachmentTypeEnum */
+    ENUM('AttachmentTypeEnum', {
+        DOCUMENT: 0,
+        PICTURE: 1,
+        OTHER: 2
+    });
+
     /** @class chlk.models.attachment.AnnouncementAttachment*/
     CLASS(
         UNSAFE, FINAL, 'AnnouncementAttachment', IMPLEMENTS(ria.serialize.IDeserializable), [
@@ -21,7 +28,7 @@ NAMESPACE('chlk.models.attachment', function () {
                 this.order = SJX.fromValue(raw.order, Number);
                 this.thumbnailUrl = SJX.fromValue(raw.attachment.thumbnailurl, String);
                 this.bigUrl = SJX.fromValue(raw.attachment.bigurl, String);
-                this.type = SJX.fromValue(raw.attachment.type, Number);
+                this.type = SJX.fromValue(raw.attachment.type, chlk.models.attachment.AttachmentTypeEnum);
                 this.openOnStart = SJX.fromValue(raw.attachment.openonstart, Boolean);
                 this.url = SJX.fromValue(raw.attachment.url, String);
             },
@@ -36,7 +43,7 @@ NAMESPACE('chlk.models.attachment', function () {
             Number, 'order',
             String, 'thumbnailUrl',
             String, 'bigUrl',
-            Number, 'type',
+            chlk.models.attachment.AttachmentTypeEnum, 'type',
             String, 'url'
         ]);
 
@@ -51,7 +58,7 @@ NAMESPACE('chlk.models.attachment', function () {
             chlk.models.id.SchoolPersonId, 'personId',
             String, 'thumbnailUrl',
             String, 'url',
-            Number, 'type',
+            chlk.models.attachment.AttachmentTypeEnum, 'type',
             Boolean, 'teachersAttachment',
             Boolean, 'owner',
             Boolean, 'stiAttachment',
@@ -63,7 +70,7 @@ NAMESPACE('chlk.models.attachment', function () {
                 this.teachersAttachment = SJX.fromValue(raw.isteacherattachment, Boolean);
                 this.name = SJX.fromValue(raw.name, String);
                 this.thumbnailUrl = SJX.fromValue(raw.thumbnailurl, String);
-                this.type = SJX.fromValue(raw.type, Number);
+                this.type = SJX.fromValue(raw.type, chlk.models.attachment.AttachmentTypeEnum);
                 this.url = SJX.fromValue(raw.url, String);
                 this.uploadedDate = SJX.fromDeserializable(raw.uploaded, chlk.models.common.ChlkDate);
                 this.lastAttachedDate = SJX.fromDeserializable(raw.lastattached, chlk.models.common.ChlkDate);

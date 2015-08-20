@@ -56,12 +56,6 @@ REQUIRE('chlk.lib.exception.AppErrorException');
 
 NAMESPACE('chlk.controllers', function (){
 
-    /** @class chlk.controllers.AttachmentTypeEnum */
-    ENUM('AttachmentTypeEnum', {
-        DOCUMENT: 0,
-        PICTURE: 1,
-        OTHER: 2
-    });
 
     /** @class chlk.controllers.AnnouncementController */
     CLASS(
@@ -139,11 +133,11 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         function prepareAttachment(attachment){
-            if(attachment.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf()){
+            if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
                 attachment.setThumbnailUrl(this.announcementAttachmentService.getAttachmentUri(attachment.getId(), false, 170, 110));
                 attachment.setUrl(this.announcementAttachmentService.getAttachmentUri(attachment.getId(), false, null, null));
             }
-            if(attachment.getType() == chlk.controllers.AttachmentTypeEnum.OTHER.valueOf()){
+            if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){
                 attachment.setUrl(this.announcementAttachmentService.getAttachmentUri(attachment.getId(), true, null, null));
             }
         },
@@ -155,11 +149,11 @@ NAMESPACE('chlk.controllers', function (){
 
             if (!attributeAttachment) return;
 
-            if(attributeAttachment.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf()){
+            if(attributeAttachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
                 attributeAttachment.setThumbnailUrl(this.assignedAttributeService.getAttributeAttachmentUri(attribute.getId(), attribute.getAnnouncementType(), false, 170, 110));
                 attributeAttachment.setUrl(this.assignedAttributeService.getAttributeAttachmentUri(attribute.getId(), attribute.getAnnouncementType(), false, null, null));
             }
-            if(attributeAttachment.getType() == chlk.controllers.AttachmentTypeEnum.OTHER.valueOf()){
+            if(attributeAttachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){
                 attributeAttachment.setUrl(this.assignedAttributeService.getAttributeAttachmentUri(attribute.getId(), attribute.getAnnouncementType(), true, null, null));
             }
 
@@ -764,11 +758,11 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(atts){
 
                     atts.getItems().forEach(function(attachment){
-                        if(attachment.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf()){
+                        if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
                             attachment.setThumbnailUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, 170, 110));
                             attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, null, null));
                         }
-                        if(attachment.getType() == chlk.controllers.AttachmentTypeEnum.OTHER.valueOf()){
+                        if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){
                             attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), true, null, null));
                         }
                     }, this);
