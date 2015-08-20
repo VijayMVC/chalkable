@@ -133,8 +133,7 @@ namespace Chalkable.Web
 
 #if !DEBUG
                 RaygunClient.SendInBackground(exc);
-#endif
-            TelemetryConfiguration.Active.InstrumentationKey = Settings.InstrumentationKey;
+#endif            
         }
     }
 

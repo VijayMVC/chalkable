@@ -350,7 +350,13 @@ namespace Chalkable.StiImport.Services
                 var startTime = DateTimeOffset.UtcNow;
                 var res = (SyncResultBase)connectorLocator.SyncConnector.GetDiff(type, table.Value);
                 Log.LogInfo("Table downloaded: " + table.Key + " " + res.RowCount);
-                Chalkable.Common.Telemetry.DispatchRequest("Table download", table.Key, startTime, requestTimer.Elapsed, true, Chalkable.Common.Verbosity.Info, districtId.ToString(), taskId.ToString(), "RowCount: " + res.RowCount);
+                var details = new Dictionary<string, string>();
+                details.Add("DistrictId", districtId.ToString());
+                details.Add("TaskId", taskId.ToString());
+                details.Add("RowCount", res.RowCount.ToString());
+                details.Add("Version", table.Value.ToString());
+
+                Chalkable.Common.Telemetry.DispatchRequest("Table download", table.Key, startTime, requestTimer.Elapsed, true, Chalkable.Common.Verbosity.Info, details);
                 Log.LogInfo("Table downloaded: " + table.Key);
                 results.Add(res);
             }
