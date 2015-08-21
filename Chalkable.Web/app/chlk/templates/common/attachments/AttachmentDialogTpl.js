@@ -18,7 +18,7 @@ NAMESPACE('chlk.templates.common.attachments', function () {
             String, 'url',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'type',
+            chlk.models.attachment.AttachmentTypeEnum, 'type',
 
             String, function getUrl() {
                 return this.url + (/\?/.test(this.url) ? '&' : '?') + 'apiRoot=' + encodeURIComponent(_GLOBAL.location.origin);

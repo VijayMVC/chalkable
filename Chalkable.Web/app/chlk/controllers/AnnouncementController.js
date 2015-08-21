@@ -1120,7 +1120,7 @@ NAMESPACE('chlk.controllers', function (){
                 this.announcementAttachmentService.getAttachmentUri(attachment.getId(), true, null, null)
             );
 
-            if(attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE.valueOf()){
+            if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
                 attachmentUrl = attachment.getUrl();
                 var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(
                     attachmentUrl,
@@ -1161,7 +1161,7 @@ NAMESPACE('chlk.controllers', function (){
                     "&announcementType=" +announcementType.valueOf() + "&time=" + getDate().getTime()
             );
 
-            if(attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE.valueOf()){
+            if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
                 attachmentUrl = attachment.getUrl() + "&time=" + getDate().getTime();
                 var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(
                     attachmentUrl,
