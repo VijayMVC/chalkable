@@ -18,7 +18,7 @@ NAMESPACE('chlk.templates.announcement', function () {
                         item.getId(),
                         item.isOwner(),
                         item.getOrder(),
-                        chlk.models.announcement.ApplicationOrAttachmentEnum(item.getType()),
+                        chlk.models.announcement.ApplicationOrAttachmentEnum(item.getType().valueOf()),
                         item.getName(),
                         item.getThumbnailUrl(),
                         item.getUrl(),

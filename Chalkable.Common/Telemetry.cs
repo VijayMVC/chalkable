@@ -48,8 +48,32 @@ namespace Chalkable.Common {
 
         public static void DispatchRequest(string name, string operation, DateTimeOffset startTime, TimeSpan duration, bool success, Verbosity verbosityThreshold, string districtId = null, string taskId = null, string details = null) {
 
-            if (IsLoggingConfigured(verbosityThreshold)) 
-            {               
+            if (IsLoggingConfigured(verbosityThreshold))
+            {
+                var properties = new Dictionary<string, string>();
+
+                if (!string.IsNullOrWhiteSpace(districtId))
+                {
+                    properties.Add("districtId", districtId);
+                }
+                if (!string.IsNullOrWhiteSpace(taskId))
+                {
+                    properties.Add("taskId", taskId);
+                }
+                if (!string.IsNullOrWhiteSpace(details))
+                {
+                    properties.Add("details", details);
+                }
+
+                DispatchRequest(name, operation, startTime, duration, success, verbosityThreshold, properties);
+            }
+        }
+
+        public static void DispatchRequest(string name, string operation, DateTimeOffset startTime, TimeSpan duration, bool success, Verbosity verbosityThreshold, Dictionary<string, string> details)
+        {
+
+            if (IsLoggingConfigured(verbosityThreshold))
+            {
                 var request = new RequestTelemetry();
                 //request.Context.InstrumentationKey = Settings.InstrumentationKey;
                 request.Name = name;
@@ -57,22 +81,17 @@ namespace Chalkable.Common {
                 request.Duration = duration;
                 request.Context.Operation.Name = operation;
 
-                if (!string.IsNullOrWhiteSpace(districtId)) { 
-                    request.Context.Properties.Add("districtId", districtId);
-                }
-                if (!string.IsNullOrWhiteSpace(taskId)) {
-                    request.Context.Properties.Add("taskId", taskId);
-                }
-                if (!string.IsNullOrWhiteSpace(details)) {
-                    request.Context.Properties.Add("details", details);
-                }
+                foreach (var pair in details)
+                {
+                    request.Context.Properties.Add(pair.Key, pair.Value);
+                }                
 
                 request.Success = success;
                 request.ResponseCode = (success) ? SUCCESS_CODE : FAILURE_CODE;
-                TelemetryClient.TrackRequest(request);            
+                TelemetryClient.TrackRequest(request);
             }
         }
-        
+
         private static bool IsLoggingConfigured(Verbosity verbosityThreshold) {
 
             var configured = Chalkable.Common.Settings.Verbosity >= verbosityThreshold;

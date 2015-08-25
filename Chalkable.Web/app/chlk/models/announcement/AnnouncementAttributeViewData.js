@@ -5,6 +5,7 @@ REQUIRE('chlk.models.id.AnnouncementAssignedAttributeId');
 REQUIRE('chlk.models.id.AnnouncementAssignedAttributeAttachmentId');
 REQUIRE('chlk.models.id.AnnouncementAttributeTypeId');
 REQUIRE('chlk.models.id.SisAssignedAttributeId');
+REQUIRE('chlk.models.attachment.Attachment');
 
 NAMESPACE('chlk.models.announcement', function(){
 
@@ -19,7 +20,7 @@ NAMESPACE('chlk.models.announcement', function(){
         String, 'name',
         String, 'url',
         String, 'thumbnailUrl',
-        Number, 'type',
+        chlk.models.attachment.AttachmentTypeEnum, 'type',
         String, 'uuid',
         String, 'mimeType',
         Boolean, 'stiAttachment',
@@ -38,7 +39,7 @@ NAMESPACE('chlk.models.announcement', function(){
             this.url = SJX.fromValue(raw.url, String);
             this.uuid = SJX.fromValue(raw.uuid, String);
             this.thumbnailUrl = SJX.fromValue(raw.thumbnailurl, String);
-            this.type = SJX.fromValue(raw.type, Number);
+            this.type = SJX.fromValue(raw.type, chlk.models.attachment.AttachmentTypeEnum);
             this.stiAttachment = SJX.fromValue(raw.stiattachment, Boolean);
             this.mimeType = SJX.fromValue(raw.mimetype, String);
         },

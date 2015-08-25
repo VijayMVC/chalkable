@@ -44,7 +44,7 @@ NAMESPACE('chlk.services', function () {
                 var annType = announcementType_ || this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT);
                 return this.get('AnnouncementAttachment/StartViewSession', String, {
                     announcementAttachmentId: announcementAttachmentId.valueOf(),
-                    announcementType: annType
+                    announcementType: annType.valueOf()
                 });
             },
 

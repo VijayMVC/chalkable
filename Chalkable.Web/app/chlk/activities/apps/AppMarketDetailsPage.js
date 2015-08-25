@@ -48,6 +48,13 @@ NAMESPACE('chlk.activities.apps', function () {
                 this.dom.find('.rating-hint').hide();
             },
 
+            [ria.mvc.DomEventBind('click', '.more-button')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function moreButtonCliack(node, event){
+                node.remove();
+                this.dom.find('.hidden-row').removeClass('hidden-row');
+            },
+
             [ria.mvc.DomEventBind('click', '.submit-review-btn')],
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function submitReview(node, event){
