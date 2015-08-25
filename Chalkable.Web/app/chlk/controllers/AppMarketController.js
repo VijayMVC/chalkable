@@ -363,6 +363,26 @@ NAMESPACE('chlk.controllers', function (){
             }], 'center'), null;
         },
 
+
+        [chlk.controllers.SidebarButton('apps')],
+        [[Boolean, chlk.models.id.AppId]],
+        function installCompleteFroNewItemAction(result, appId) {
+            var title = result ? "Installation successful" : "Error while installing app.";
+            return this.ShowMsgBox(title, '', [{
+                text: 'Ok',
+                controller: 'appmarket',
+                action: 'back',
+                params: [],
+                color: chlk.models.common.ButtonColor.GREEN.valueOf()
+            }], 'center'), null;
+        },
+
+        [chlk.controllers.NotChangedSidebarButton()],
+        function backAction(){
+            window.history.back();
+            return null;
+        },
+
         [chlk.controllers.SidebarButton('apps')],
         [[chlk.models.apps.AppInstallPostData]],
         function installFailAction(){
@@ -418,9 +438,9 @@ NAMESPACE('chlk.controllers', function (){
         function installAction(appInstallData) {
             switch(appInstallData.getSubmitActionType()){
                 case 'install':
-                    var res = this.install_(appInstallData, 'installComplete', null, 'installFail', null);
+                    var res = this.install_(appInstallData, appInstallData.isFromNewItem() ? 'installCompleteFroNewItem' : 'installComplete', null, 'installFail', null);
                     if(appInstallData.isFromNewItem())
-                        return this.Redirect('announcement', 'add');
+                        return this.ShadeLoader();
                     return this.UpdateView(chlk.activities.apps.InstallAppDialog, res);
 
                 case 'getAppPrice':

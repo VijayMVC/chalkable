@@ -22,7 +22,7 @@ NAMESPACE('chlk.templates.announcement', function(){
             String, 'thumbnailUrl',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'type',
+            chlk.models.attachment.AttachmentTypeEnum, 'type',
 
             [ria.templates.ModelPropertyBind],
             String, 'uuid',
