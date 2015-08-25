@@ -100,7 +100,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
                 
                 ann = UpdateTeacherAnnouncement(ann, announcement, announcement.ClassId, uow, da);
-                var res = MargeEditAnnResultWithStiData(da, ann);
+                var res = MergeEditAnnResultWithStiData(da, ann);
                 uow.Commit();
                 return res;
             }      
@@ -210,7 +210,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return ann;
         }
 
-        private AnnouncementDetails MargeEditAnnResultWithStiData(ClassAnnouncementDataAccess annDa, ClassAnnouncement ann)
+        private AnnouncementDetails MergeEditAnnResultWithStiData(ClassAnnouncementDataAccess annDa, ClassAnnouncement ann)
         {
             var res = GetDetails(annDa, ann.Id);
             if (ann.IsSubmitted)
