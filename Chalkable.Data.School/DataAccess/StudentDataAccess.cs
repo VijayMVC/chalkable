@@ -77,7 +77,7 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new AndQueryCondition
                 {
                     {StudentSchoolYear.SCHOOL_YEAR_REF_FIELD, schoolYearId},
-                    {StudentSchoolYear.ENROLLMENT_STATUS_FIELD, 0}
+                    {StudentSchoolYear.ENROLLMENT_STATUS_FIELD, StudentEnrollmentStatusEnum.CurrentlyEnrolled}
                 };
             if(gradeLevelId.HasValue)
                 conds.Add(StudentSchoolYear.GRADE_LEVEL_REF_FIELD, gradeLevelId);

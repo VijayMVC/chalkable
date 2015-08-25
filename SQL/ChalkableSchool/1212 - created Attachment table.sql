@@ -113,7 +113,7 @@ Go
 		 ann.Created,
 		 ann.Created,
 		 aaa.Uuid,
-		 aaa.SisAttributeAttachmentId,
+		 null,
 		 cast(aaa.Id as nvarchar) + '_' + @districtId,
 		 aaa.Id	   
 	From 
