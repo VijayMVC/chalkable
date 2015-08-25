@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
@@ -128,7 +129,10 @@ namespace Chalkable.BusinessLogic.Services.School
                 };
                 new AnnouncementAttachmentDataAccess(uow).Insert(annAtt);
                 uow.Commit();
-                NotifyUsers(annDetails, type);
+                bool notifyUsers = ((type == AnnouncementType.Class) ? annDetails.ClassAnnouncementData.VisibleForStudent :
+                    (type != AnnouncementType.LessonPlan) ? annDetails.LessonPlanData.VisibleForStudent : true) || !annDetails.IsOwner;
+                if(notifyUsers)
+                    NotifyUsers(annDetails, type);
             }
             return annDetails;
         }
