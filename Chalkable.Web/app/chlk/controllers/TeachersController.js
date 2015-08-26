@@ -93,7 +93,7 @@ NAMESPACE('chlk.controllers', function (){
                 );
             },
 
-
+            [chlk.controllers.NotChangedSidebarButton()],
             [chlk.controllers.LEIntegrated()],
             [[chlk.models.id.ClassId]],
             function giveLECreditsAction(classId_){
