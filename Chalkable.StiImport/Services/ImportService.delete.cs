@@ -35,65 +35,7 @@ namespace Chalkable.StiImport.Services
 {
     public partial class ImportService
     {
-        private void ProcessDelete()
-        {
-            //TODO: wait for fix student contact from Inow
-
-            List<Expression<Action>> deletes = new List<Expression<Action>>();
-            
-            deletes.Add(() => DeleteSystemSettings());            
-            deletes.Add(() => DeleteStudentContacts());                        
-            deletes.Add(() => DeleteContactRelationships());            
-            deletes.Add(() => DeleteAnnouncementAttributes());            
-            deletes.Add(() => DeleteGradedItems());            
-            deletes.Add(() => DeleteAttendanceMonthes());            
-            deletes.Add(() => DeleteSchoolsOptions());            
-            deletes.Add(() => DeleteGradingComments());            
-            deletes.Add(() => DeleteClassroomOptions());            
-            deletes.Add(() => DeleteGradingScaleRanges());            
-            deletes.Add(() => DeleteInfractions());            
-            deletes.Add(() => DeleteAlternateScores());            
-            deletes.Add(() => DeleteAlphaGrades());            
-            deletes.Add(() => DeleteAttendanceLevelReasons());            
-            deletes.Add(() => DeleteAttendanceReasons());            
-            deletes.Add(() => DeleteClassPersons());            
-            deletes.Add(() => DeleteSectionTimeSlotVariation());            
-            deletes.Add(() => DeleteScheduledTimeSlotVariations());            
-            deletes.Add(() => DeleteClassPeriods());            
-            deletes.Add(() => DeleteScheduledTimeSlots());            
-            deletes.Add(() => DeletePeriods());            
-            deletes.Add(() => DeleteMarkingPeriodClasses());            
-            deletes.Add(() => DeleteClassStandard());            
-            deletes.Add(() => DeleteStandards());            
-            deletes.Add(() => DeleteStandardSubject());            
-            deletes.Add(() => DeleteClassTeachers());
-            deletes.Add(() => DeleteCourses());
-            deletes.Add(() => DeleteCourseTypes());
-            deletes.Add(() => DeleteGradingScales());
-            deletes.Add(() => DeleteRooms());
-            deletes.Add(() => DeleteDays());
-            deletes.Add(() => DeleteBellSchedules());
-            deletes.Add(() => DeleteDayTypes());
-            deletes.Add(() => DeleteGradingPeriods());
-            deletes.Add(() => DeleteMarkingPeriods());
-            deletes.Add(() => DeleteStudentSchoolYears());
-            deletes.Add(() => DeleteSchoolYears());
-            deletes.Add(() => DeleteGradeLevels());
-            deletes.Add(() => DeletePhones());
-            deletes.Add(() => DeletePersonsEmails());
-            deletes.Add(() => DeleteStaffSchool());
-            deletes.Add(() => DeleteStudentSchool());
-            deletes.Add(() => DeleteStudent());
-            deletes.Add(() => DeleteStaff());
-            deletes.Add(() => DeletePersons());
-            deletes.Add(() => DeleteSchoolUsers());
-            deletes.Add(() => DeleteUsers());
-            deletes.Add(() => DeleteAddresses());
-            deletes.Add(() => DeleteSchools());
-
-            ProcessActions(deletes, "Delete");            
-        }
-
+        
         private void DeleteCourseTypes()
         {
             if (context.GetSyncResult<StiConnector.SyncModel.CourseType>().Deleted == null)
@@ -248,21 +190,6 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorSchool.AttendanceReasonService.Delete(ids);
         }
 
-        private void DeleteClassPersons()
-        {
-            if (context.GetSyncResult<StudentScheduleTerm>().Deleted == null)
-                return;
-            var students = context.GetSyncResult<StudentScheduleTerm>().Deleted
-                                  .Select(x => new ClassPerson
-                                      {
-                                          ClassRef = x.SectionID,
-                                          MarkingPeriodRef = x.TermID,
-                                          PersonRef = x.StudentID
-                                      })
-                                  .ToList();
-            ServiceLocatorSchool.ClassService.DeleteStudent(students);
-        }
-
         private void DeleteSectionTimeSlotVariation()
         {
             if (context.GetSyncResult<SectionTimeSlotVariation>().Deleted == null)
@@ -405,98 +332,7 @@ namespace Chalkable.StiImport.Services
                 }).ToList();
             ServiceLocatorSchool.ClassService.Delete(courses);
         }
-
-        private void DeleteRooms()
-        {
-            if (context.GetSyncResult<Room>().Deleted == null)
-                return;
-            var ids = context.GetSyncResult<Room>().Deleted
-                .Select(x => new Data.School.Model.Room { Id = x.RoomID }).ToList();
-            ServiceLocatorSchool.RoomService.DeleteRooms(ids);
-        }
-
-        private void DeleteDays()
-        {
-            if (context.GetSyncResult<CalendarDay>().Deleted == null)
-                return;
-            var dates = context.GetSyncResult<CalendarDay>().Deleted.Select(x => new Date
-            {
-                Day = x.Date, SchoolYearRef = x.AcadSessionID
-            }).ToList();
-            ServiceLocatorSchool.CalendarDateService.Delete(dates);
-        }
-
-        private void DeleteDayTypes()
-        {
-            if (context.GetSyncResult<DayType>().Deleted == null)
-                return;
-            var dayTypes = context.GetSyncResult<DayType>().Deleted.Select(x => new Data.School.Model.DayType
-            {
-                Id = x.DayTypeID
-            }).ToList();
-            ServiceLocatorSchool.DayTypeService.Delete(dayTypes);
-        }
-
-        private void DeleteGradingPeriods()
-        {
-            if (context.GetSyncResult<GradingPeriod>().Deleted == null)
-                return;
-            var ids = context.GetSyncResult<GradingPeriod>().Deleted.Select(x => x.GradingPeriodID).ToList();
-            ServiceLocatorSchool.GradingPeriodService.Delete(ids);
-        }
-
-        private void DeleteMarkingPeriods()
-        {
-            if (context.GetSyncResult<Term>().Deleted == null)
-                return;
-            var ids = context.GetSyncResult<Term>().Deleted.Select(x => new MarkingPeriod { Id = x.TermID }).ToList();
-            ServiceLocatorSchool.MarkingPeriodService.DeleteMarkingPeriods(ids);
-        }
-
-        private void DeleteStudentSchoolYears()
-        {
-            if (context.GetSyncResult<StudentAcadSession>().Deleted == null)
-                return;
-            var assignments = context.GetSyncResult<StudentAcadSession>().Deleted
-                                     .Select(x => new StudentSchoolYear
-                                         {
-                                             SchoolYearRef = x.AcadSessionID,
-                                             StudentRef = x.StudentID
-                                         }).ToList();
-            ServiceLocatorSchool.SchoolYearService.UnassignStudents(assignments);
-        }
-
-        private void DeleteSchoolYears()
-        {
-            if (context.GetSyncResult<AcadSession>().Deleted == null)
-                return;
-            var ids = context.GetSyncResult<AcadSession>().Deleted.Select(x => x.AcadSessionID).ToList();
-            ServiceLocatorSchool.SchoolYearService.Delete(ids);
-        }
-
-        private void DeleteGradeLevels()
-        {
-            if (context.GetSyncResult<GradeLevel>().Deleted == null)
-                return;
-            var ids = context.GetSyncResult<GradeLevel>().Deleted
-                .Select(x => new Data.School.Model.GradeLevel { Id = (int)x.GradeLevelID }).ToList();
-            ServiceLocatorSchool.GradeLevelService.Delete(ids);
-        }
-
-        private void DeletePhones()
-        {
-            if (context.GetSyncResult<PersonTelephone>().Deleted == null)
-                return;
-            var phones = context.GetSyncResult<PersonTelephone>().Deleted.Select(x => new Phone
-                {
-                    DigitOnlyValue = x.TelephoneNumber,
-                    PersonRef = x.PersonID,
-                    IsPrimary = x.IsPrimary,
-                    Value = x.FormattedTelephoneNumber
-                }).ToList();
-            ServiceLocatorSchool.PhoneService.Delete(phones);
-        }
-
+        
         private void DeletePersonsEmails()
         {
             if (context.GetSyncResult<StiConnector.SyncModel.PersonEmail>().Deleted == null)
@@ -520,40 +356,7 @@ namespace Chalkable.StiImport.Services
             var ss = context.GetSyncResult<StaffSchool>().Deleted.Select(x => new Data.School.Model.StaffSchool{SchoolRef = x.SchoolID, StaffRef = x.StaffID}).ToList();
             ServiceLocatorSchool.StaffService.DeleteStaffSchools(ss);
         }
-
-        private void DeleteStudentSchool()
-        {
-            if (context.GetSyncResult<StudentSchool>().Deleted == null)
-                return;
-            var ss = context.GetSyncResult<StudentSchool>().Deleted.Select(x => new Data.School.Model.StudentSchool { SchoolRef = x.SchoolID, StudentRef = x.StudentID}).ToList();
-            ServiceLocatorSchool.StudentService.DeleteStudentSchools(ss);
-        }
         
-        private void DeleteStudent()
-        {
-            if (context.GetSyncResult<Student>().Deleted == null)
-                return;
-            var students = context.GetSyncResult<Student>().Deleted.Select(x => new Data.School.Model.Student { Id = x.StudentID }).ToList();
-            ServiceLocatorSchool.StudentService.DeleteStudents(students);
-        }
-        
-        private void DeleteStaff()
-        {
-            if (context.GetSyncResult<Staff>().Deleted == null)
-                return;
-            var staff = context.GetSyncResult<Staff>().Deleted.Select(x => new Data.School.Model.Staff { Id = x.StaffID }).ToList();
-            ServiceLocatorSchool.StaffService.Delete(staff);
-        }
-        
-        private void DeletePersons()
-        {
-            if (context.GetSyncResult<Person>().Deleted == null)
-                return;
-            var persons = context.GetSyncResult<Person>().Deleted.Select(x => 
-                new Data.School.Model.Person{Id = x.PersonID} ).ToList();
-            ServiceLocatorSchool.PersonService.Delete(persons);
-        }
-
         private void DeleteSchoolUsers()
         {
             if (context.GetSyncResult<UserSchool>().Deleted == null)
@@ -573,40 +376,6 @@ namespace Chalkable.StiImport.Services
             }).ToList();
             ServiceLocatorSchool.UserSchoolService.Delete(districtUserSchool);
         }
-
-        private void DeleteUsers()
-        {
-            if (context.GetSyncResult<User>().Deleted == null)
-                return;
-            var ids = context.GetSyncResult<User>().Deleted.Select(x => x.UserID).ToList();
-            ServiceLocatorMaster.UserService.DeleteUsers(ids, ServiceLocatorSchool.Context.DistrictId.Value);
-        }
-
-        private void DeleteAddresses()
-        {
-            if (context.GetSyncResult<Address>().Deleted == null)
-                return;
-            var addresses = context.GetSyncResult<Address>()
-                .Deleted.Select(x => new Data.School.Model.Address { Id = x.AddressID }).ToList();
-            ServiceLocatorSchool.AddressService.Delete(addresses);
-        }
-
-        private void DeleteSchoolsOptions()
-        {
-            if (context.GetSyncResult<SchoolOption>().Deleted == null)
-                return;
-            var schoolOptions = context.GetSyncResult<SchoolOption>()
-                .Deleted.Select(x => new Data.School.Model.SchoolOption { Id = x.SchoolID }).ToList();
-            ServiceLocatorSchool.SchoolService.DeleteSchoolOptions(schoolOptions);
-        }
-
-        private void DeleteSchools()
-        {
-            if (context.GetSyncResult<School>().Deleted == null)
-                return;
-            var ids = context.GetSyncResult<School>()
-                .Deleted.Select(x => new Data.School.Model.School { Id = x.SchoolID }).ToList();
-            ServiceLocatorSchool.SchoolService.Delete(ids);
-        }
+        
     }
 }

@@ -155,6 +155,25 @@
     <Compile Include="Services\ImportService.insert.cs" />
     <Compile Include="Services\ImportService.update.cs" />
     <Compile Include="Services\ImportServiceLocatorMaster.cs" />
+    <Compile Include="Services\SyncModelAdapters\AcadSessionAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\AddressAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\CalendarDayAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\DayTypeAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\GradeLevelAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\GradingPeriodAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\PersonAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\RoomAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\SchoolAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\SchoolOptionAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\StaffAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\StudentAcadSessionAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\StudentAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\StudentScheduleTermAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\StudentSchoolAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\SyncModelAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\SyncModelWrapper.cs" />
+    <Compile Include="Services\SyncModelAdapters\TermAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\UserAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Chalkable.BusinessLogic\Chalkable.BusinessLogic.csproj">
@@ -186,6 +205,7 @@
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

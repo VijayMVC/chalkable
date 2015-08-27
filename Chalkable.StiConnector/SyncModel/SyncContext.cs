@@ -92,7 +92,7 @@ namespace Chalkable.StiConnector.SyncModel
             }
         }
 
-        public void SetResult(SyncResultBase result)
+        public void SetResult(SyncResultBase<SyncModel> result)
         {
             var tName = result.Name;
             results.Add(tName, result);
@@ -104,16 +104,24 @@ namespace Chalkable.StiConnector.SyncModel
             var tName = typeof (T).Name;
             return (SyncResult<T>)results[tName];
         }
-    }
 
-    public abstract class SyncResultBase
+        public SyncResultBase<SyncModel> GetSyncResult(Type type)
+        {
+            return (SyncResultBase<SyncModel>)results[type.Name];
+        }
+    }
+    
+    public interface SyncResultBase<out T> where T : SyncModel
     {
-        public long CurrentVersion { get; set; }
-        public abstract string Name { get; }
-        public abstract int RowCount { get; }
+        long CurrentVersion { get; set; }
+        string Name { get; }
+        int RowCount { get; }
+        T[] Updated { get; }
+        T[] Deleted { get; }
+        T[] All { get; }
     }
 
-    public class SyncResult<T> : SyncResultBase where T : SyncModel
+    public class SyncResult<T> : SyncResultBase<T> where T : SyncModel
     {
         public T[] Inserted { get; set; }
         public T[] Updated { get; set; }
@@ -132,9 +140,10 @@ namespace Chalkable.StiConnector.SyncModel
         }
 
 
-        public override string Name { get { return typeof (T).Name; } }
+        public long CurrentVersion { get; set; }
+        public string Name { get { return typeof (T).Name; } }
 
-        public override int RowCount
+        public int RowCount
         {
             get 
             { 
