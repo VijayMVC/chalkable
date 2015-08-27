@@ -16,7 +16,7 @@
         .choose-class
     else
         -var options = self.getClassroomOptions()
-        +ActionForm('setup', 'submitClassroomOption')
+        +ActionForm('setup', 'submitClassroomOption').submit-form
             TABLE.options-table
                 TR
                     TD(colspan = 2)
