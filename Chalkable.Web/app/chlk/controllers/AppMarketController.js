@@ -463,11 +463,7 @@ NAMESPACE('chlk.controllers', function (){
         Array, function prepareAppTotalPriceCallParams_(appInstallData){
             return [
                 appInstallData.getAppId(),
-                this.getIdsList(appInstallData.getDepartments(), chlk.models.id.AppInstallGroupId),
                 this.getIdsList(appInstallData.getClasses(), chlk.models.id.AppInstallGroupId),
-                this.getIdsList(appInstallData.getRoles(), chlk.models.id.AppInstallGroupId),
-                this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
-                this.getIdsList(appInstallData.getGroups(), chlk.models.id.AppInstallGroupId),
                 appInstallData.getCurrentPerson()
             ];
         },

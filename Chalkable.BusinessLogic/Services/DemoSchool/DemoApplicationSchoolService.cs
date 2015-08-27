@@ -162,6 +162,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public void BanUnBanApplication(Guid applicationId, bool ban)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<ApplicationBanHistory> GetApplicationBanHistory(Guid applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void DeleteAnnouncementApplications(int announcementId, bool onlyActive = false)
         {
             var announcementApps = AnnouncementApplicationStorage.GetAll(announcementId, onlyActive);

@@ -136,26 +136,4 @@ namespace Chalkable.Data.School.DataAccess
         }
     }
 
-    public class ApplicationInstallActionGradeLevelDataAccess : DataAccessBase<ApplicationInstallActionGradeLevel, int>
-    {
-        public ApplicationInstallActionGradeLevelDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
-        {
-        }
-    }
-
-    public class ApplicationInstallActionDepartmentDataAccess : DataAccessBase<ApplicationInstallActionDepartment, int>
-    {
-        public ApplicationInstallActionDepartmentDataAccess(UnitOfWork unitOfWork)
-            : base(unitOfWork)
-        {
-        }
-    }
-
-    public class ApplicationInstallActionRoleDataAccess : DataAccessBase<ApplicationInstallActionRole, int>
-    {
-        public ApplicationInstallActionRoleDataAccess(UnitOfWork unitOfWork)
-            : base(unitOfWork)
-        {
-        }
-    }
 }

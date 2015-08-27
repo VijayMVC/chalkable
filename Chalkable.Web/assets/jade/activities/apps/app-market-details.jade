@@ -93,26 +93,33 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
                         .desc
                         .amount: .move-up Amount
                         .balance: .move-up Balance
-                    each item, index in self.getApp().getApplicationInstallHistory()
+                    each item, index in self.getApp().getApplicationHistory()
                         .table-row(class = (index > 2) ? 'hidden-row' : '')
                             .desc
-                                | Installed by &#32;
-                                span= item.getSchoolName()
-                                | &#32;
-                                -var RoleEnum = chlk.models.common.RoleEnum
-                                case item.getOwnerRoleId()
-                                    when RoleEnum.TEACHER
-                                        | Teacher
-                                    when RoleEnum.STUDENT
-                                        | Student
-                                    when RoleEnum.DISTRICTADMIN
-                                        | District
-                                | &#32;
-                                span= item.getFullName()
-                                | &#32; for &#32;
-                                = item.getInstalledCount()
-                                | &#32; Students - &#32;
-                                = item.getInstallDate().toString('m/dd/yy')
+                                if item.isBanUnBanAction()
+                                    | #{item.getActionName()} by &#32;
+                                    | &#32;
+                                    span= item.getFullName()
+                                    | &#32; - &#32;
+                                    = item.getInstallDate().toString('m/dd/yy')
+                                else
+                                    | #{item.getActionName()} by &#32;
+                                    -var RoleEnum = chlk.models.common.RoleEnum
+                                    case item.getOwnerRoleId()
+                                        when RoleEnum.TEACHER
+                                            | Teacher
+                                        when RoleEnum.STUDENT
+                                            | Student
+                                        when RoleEnum.DISTRICTADMIN
+                                            | District
+                                    | &#32;
+                                    span= item.getFullName()
+                                    | &#32; for &#32;
+                                    = item.getInstalledCount()
+                                    | &#32; Students in &#32;
+                                    span= item.getSchoolName()
+                                    | &#32; School - &#32;
+                                    = item.getInstallDate().toString('m/dd/yy')
 
                             .amount= item.getPrice() || 'Free'
                             .balance= item.getRemains()

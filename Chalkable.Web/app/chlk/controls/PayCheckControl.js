@@ -15,15 +15,6 @@ NAMESPACE('chlk.controls', function () {
                         id: chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ,
                         name: 'classes'
                     }, {
-                       id:chlk.models.apps.AppInstallGroupTypeEnum.GRADELEVEL,
-                       name: 'gradeLevels'
-                    }, {
-                        id: chlk.models.apps.AppInstallGroupTypeEnum.DEPARTMENT,
-                        name: 'departments'
-                    }, {
-                        id: chlk.models.apps.AppInstallGroupTypeEnum.ROLE,
-                        name: 'roles'
-                    }, {
                         id: chlk.models.apps.AppInstallGroupTypeEnum.ALL,
                         name: 'forAll'
                     }, {
@@ -44,25 +35,16 @@ NAMESPACE('chlk.controls', function () {
                     installData[ids[i].id.valueOf()] = selectedIds.join(',');
                 }
                 var appId = new chlk.models.id.AppId(jQuery('input[name=appId]').val());
-                var departments = this.getAppMarketService().getIdsList(installData[chlk.models.apps.AppInstallGroupTypeEnum.DEPARTMENT.valueOf()],
-                    chlk.models.id.AppInstallGroupId);
-                var roles = this.getAppMarketService().getIdsList(installData[chlk.models.apps.AppInstallGroupTypeEnum.ROLE.valueOf()],
-                    chlk.models.id.AppInstallGroupId);
                 var classes = this.getAppMarketService().getIdsList(installData[chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ.valueOf()],
-                    chlk.models.id.AppInstallGroupId);
-                var gradeLevels = this.getAppMarketService().getIdsList(installData[chlk.models.apps.AppInstallGroupTypeEnum.GRADELEVEL.valueOf()],
                     chlk.models.id.AppInstallGroupId);
                 var currentUserId =  new chlk.models.id.AppInstallGroupId(installData[chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER.valueOf()] || "");
                 var installForJustMe = installData[chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER.valueOf()][0] != null;
 
                 return {
                     appId : appId,
-                    roles: roles,
                     classes: classes,
-                    gradeLevels : gradeLevels,
                     currentUserId : currentUserId,
                     installForJustMe : installForJustMe,
-                    departments: departments
                 };
             },
 

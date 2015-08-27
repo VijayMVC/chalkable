@@ -241,22 +241,14 @@ NAMESPACE('chlk.services', function () {
             [[
                 chlk.models.id.AppId,
                 ArrayOf(chlk.models.id.AppInstallGroupId),
-                ArrayOf(chlk.models.id.AppInstallGroupId),
-                ArrayOf(chlk.models.id.AppInstallGroupId),
-                ArrayOf(chlk.models.id.AppInstallGroupId),
-                ArrayOf(chlk.models.id.AppInstallGroupId),
                 chlk.models.id.AppInstallGroupId
             ]],
-            ria.async.Future, function installApp(appId, departments, classes, roles, gradeLevels, groups, currentPerson_) {
+            ria.async.Future, function installApp(appId, classes, currentPerson_) {
                 return this
                     .post('AppMarket/Install.json', Boolean, {
                         applicationId: appId.valueOf(),
                         personId: currentPerson_ && currentPerson_.valueOf(),
-                        departmentids: this.arrayToCsv(departments),
                         classids: this.arrayToCsv(classes),
-                        roleIds: this.arrayToCsv(roles),
-                        gradelevelids: this.arrayToCsv(gradeLevels),
-                        groups: this.arrayToCsv(groups)
                     })
                     .then(function(data){
                         this.getPersonBalance(this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId(), true);
@@ -267,22 +259,14 @@ NAMESPACE('chlk.services', function () {
             [[
                 chlk.models.id.AppId,
                 ArrayOf(chlk.models.id.AppInstallGroupId),
-                ArrayOf(chlk.models.id.AppInstallGroupId),
-                ArrayOf(chlk.models.id.AppInstallGroupId),
-                ArrayOf(chlk.models.id.AppInstallGroupId),
-                ArrayOf(chlk.models.id.AppInstallGroupId),
                 chlk.models.id.AppInstallGroupId
             ]],
-            ria.async.Future, function getApplicationTotalPrice(appId, departments, classes, roles, gradeLevels, groups, currentPerson_) {
+            ria.async.Future, function getApplicationTotalPrice(appId,  classes, currentPerson_) {
                 return this
                     .post('AppMarket/GetApplicationTotalPrice.json', chlk.models.apps.AppTotalPrice, {
                         applicationId: appId.valueOf(),
                         personId: currentPerson_ && currentPerson_.valueOf(),
-                        departmentids: this.arrayToCsv(departments),
                         classids: this.arrayToCsv(classes),
-                        roleIds: this.arrayToCsv(roles),
-                        gradelevelids: this.arrayToCsv(gradeLevels),
-                        groups: this.arrayToCsv(groups)
                     });
             },
 

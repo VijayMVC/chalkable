@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model.ApplicationInstall
@@ -20,10 +17,10 @@ namespace Chalkable.Data.School.Model.ApplicationInstall
         public int? PersonRef { get; set; }
         public Guid ApplicationRef { get; set; }
         public string Description { get; set; }
-        public int SchoolYearRef { get; set; }
-        public DateTime InstallDate { get; set; }
+       // public int SchoolYearRef { get; set; }
+        public DateTime Date { get; set; }
         public int OwnerRoleId { get; set; }
-
+        public bool Installed { get; set; }
         [NotDbFieldAttr]
         public IList<ApplicationInstall> ApplicationInstalls { get; set; } 
     }

@@ -256,7 +256,10 @@ namespace Chalkable.BusinessLogic.Services.Master
         public void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban)
         {
             BaseSecurity.EnsureDistrictAdmin(Context);
-            DoUpdate(uow => new ApplicationDataAccess(uow).SetDistrictOption(applicationId, districtId, ban));
+            DoUpdate(uow =>
+            {
+                new ApplicationDataAccess(uow).SetDistrictOption(applicationId, districtId, ban);
+            });
         }
 
 

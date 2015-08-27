@@ -115,7 +115,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult BanApp(Guid applicationId)
         {
             Trace.Assert(Context.DistrictId.HasValue);
-            MasterLocator.ApplicationService.SetApplicationDistrictOptions(applicationId, Context.DistrictId.Value, true);
+            SchoolLocator.ApplicationSchoolService.BanUnBanApplication(applicationId, true);
             return Json(true);
         }
 
@@ -123,7 +123,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult UnbanApp(Guid applicationId)
         {
             Trace.Assert(Context.DistrictId.HasValue);
-            MasterLocator.ApplicationService.SetApplicationDistrictOptions(applicationId, Context.DistrictId.Value, false);
+            SchoolLocator.ApplicationSchoolService.BanUnBanApplication(applicationId, false);
             return Json(true);
         }
 

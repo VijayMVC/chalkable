@@ -451,7 +451,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, String]],
         function openSuggestedAppTeacherAction(appId, classId, annId, announcementType, appUrlAppend_){
             var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
-            this.appMarketService.getApplicationTotalPrice(appId, null, classIds,null, null, null)
+            this.appMarketService.getApplicationTotalPrice(appId, classIds, null)
                 .attach(this.validateResponse_())
                 .then(function(appTotalPrice){
                     if(appTotalPrice.getTotalPersonsCount() > 0)
@@ -467,7 +467,7 @@ NAMESPACE('chlk.controllers', function (){
             if(viewUrl)
                 return this.viewAppAction(appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, new chlk.models.id.AnnouncementApplicationId(appId.valueOf()), isBanned, null, appUrlSuffix_);
             var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
-            this.appMarketService.getApplicationTotalPrice(appId, null, classIds,null, null, null)
+            this.appMarketService.getApplicationTotalPrice(appId, classIds, null)
                 .attach(this.validateResponse_())
                 .then(function(appTotalPrice){
                     return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, classId]);

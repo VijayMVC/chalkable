@@ -15,6 +15,15 @@ NAMESPACE('chlk.models.apps', function () {
 
     var SJX = ria.serialize.SJX;
 
+
+    /** @class chlk.models.apps.ApplicationActionEnum */
+    ENUM('ApplicationActionEnum',{
+        INSTALL:0,
+        UNINSTALL:1,
+        BUN:2,
+        UN_BUN:3
+    });
+
     /** @class chlk.models.apps.ApplicationInstallRecord */
     CLASS(
         UNSAFE, 'ApplicationInstallRecord', IMPLEMENTS(ria.serialize.IDeserializable), [
@@ -32,7 +41,8 @@ NAMESPACE('chlk.models.apps', function () {
                 this.schoolId = SJX.fromValue(raw.schoolid, chlk.models.id.SchoolId);
                 this.schoolName = SJX.fromValue(raw.schoolname, String);
 
-                this.installDate = SJX.fromDeserializable(raw.installdate, chlk.models.common.ChlkDate);
+                this.installDate = SJX.fromDeserializable(raw.date, chlk.models.common.ChlkDate);
+                this.action = SJX.fromValue(raw.action, chlk.models.apps.ApplicationActionEnum);
             },
 
             chlk.models.id.SchoolPersonId, 'personId',
@@ -48,6 +58,23 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'schoolName',
 
             chlk.models.common.ChlkDate, 'installDate',
+
+            chlk.models.apps.ApplicationActionEnum, 'action',
+
+            String, function getActionName(){
+                switch (this.getAction()){
+                    case chlk.models.apps.ApplicationActionEnum.INSTALL:  return 'Installed';
+                    case chlk.models.apps.ApplicationActionEnum.UNINSTALL: return 'Uninstalled';
+                    case chlk.models.apps.ApplicationActionEnum.BUN: return 'Buned';
+                    case chlk.models.apps.ApplicationActionEnum.UN_BUN: return 'UnBuned'
+                }
+                return null;
+            },
+
+            Boolean, function isBanUnBanAction(){
+                var action = this.getAction();
+                return action == chlk.models.apps.ApplicationActionEnum.BUN || action == chlk.models.apps.ApplicationActionEnum.UN_BUN;
+            },
 
             String, function getFullName() {
                 return [this.firstName, this.lastName].filter(function (_) { return _ }).join(' ');
@@ -69,7 +96,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.personal = SJX.fromValue(raw.personal, Boolean);
                 this.applicationInstallIds = SJX.fromValue(raw.applicationinstallids, String);
                 this.applicationRating = SJX.fromDeserializable(raw.applicationrating, chlk.models.apps.AppRating);
-                this.applicationInstallHistory = SJX.fromArrayOfDeserializables(raw.applicationinstallhistory, chlk.models.apps.ApplicationInstallRecord);
+                this.applicationHistory = SJX.fromArrayOfDeserializables(raw.applicationhistory, chlk.models.apps.ApplicationInstallRecord);
             },
             ArrayOf(chlk.models.apps.AppInstallGroup), 'installedForGroups',
             Boolean, 'installedOnlyForCurrentUser',
@@ -80,7 +107,7 @@ NAMESPACE('chlk.models.apps', function () {
             String,  'applicationInstallIds',
             Boolean, 'alreadyInstalled',
             chlk.models.apps.AppRating, 'applicationRating',
-            ArrayOf(chlk.models.apps.ApplicationInstallRecord), 'applicationInstallHistory'
+            ArrayOf(chlk.models.apps.ApplicationInstallRecord), 'applicationHistory'
         ]);
 
 

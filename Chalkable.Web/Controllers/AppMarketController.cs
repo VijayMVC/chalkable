@@ -108,11 +108,10 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Install(Guid applicationId, int? personId, IntList classids)
         {
-            var schoolyearId = GetCurrentSchoolYearId();
             if (!SchoolLocator.AppMarketService.CanInstall(applicationId, personId, classids))
                 throw new ChalkableException(ChlkResources.ERR_APP_NOT_ENOUGH_MONEY_OR_ALREADY_INSTALLED);
 
-            var appinstallAction = SchoolLocator.AppMarketService.Install(applicationId, personId, classids, schoolyearId, Context.NowSchoolYearTime);
+            var appinstallAction = SchoolLocator.AppMarketService.Install(applicationId, personId, classids, Context.NowSchoolYearTime);
             try
             {
                 if (classids == null) classids = new IntList();
@@ -146,9 +145,13 @@ namespace Chalkable.Web.Controllers
             var appRatings = MasterLocator.ApplicationService.GetRatings(applicationId);
 
             IList<ApplicationInstallHistory> history = null;
+            IList<ApplicationBanHistory> banHistory = null;
             if (Context.Role.Id == CoreRoles.DISTRICT_ADMIN_ROLE.Id)
+            {
                 history = SchoolLocator.AppMarketService.GetApplicationInstallationHistory(applicationId);
-            var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings, history);
+                banHistory = SchoolLocator.ApplicationSchoolService.GetApplicationBanHistory(applicationId);
+            }
+            var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings, history, banHistory);
             var persons = SchoolLocator.AppMarketService.GetPersonsForApplicationInstallCount(application.Id, Context.PersonId, null);
             res.InstalledForPersonsGroup = ApplicationLogic.PrepareInstalledForPersonGroupData(SchoolLocator, MasterLocator, application);
             res.IsInstalledOnlyForMe = persons.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count == 0;
