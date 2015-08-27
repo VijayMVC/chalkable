@@ -363,7 +363,7 @@ NAMESPACE('chlk', function (){
                 if ((!(error instanceof ria.mvc.UncaughtException) || _DEBUG) && console && error)
                     Raygun ? Raygun.send(Raygun.fetchRaygunError(error.toString())) : console.error(error.toString());
 
-                window.appInsights && window.appInsights.ChalkableTrackException(message);
+                window.appInsights && window.appInsights.ChalkableTrackException(error.toString());
             }
 
         ]);
