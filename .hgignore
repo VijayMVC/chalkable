@@ -52,3 +52,6 @@ Chalkable.Web/Scripts/highcharts
 Chalkable.Web/Scripts/extjs
 */.local/**
 .vs/**/*
+Chalkable.Web/Scripts/raygun*.js
+Chalkable.Azure/ecf/**
+Chalkable.Web/Scripts/raygun*.map

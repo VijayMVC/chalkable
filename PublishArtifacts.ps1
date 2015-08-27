@@ -123,6 +123,8 @@ try{
     Get-Item "Chalkable.Web\app\jquery" | PutDir -dbase "app\jquery"
     Get-Item "Chalkable.Web\app\lib" | PutDir -dbase "app\lib"
     Get-Item "Chalkable.Web\app\highcharts" | PutDir -dbase "app\highcharts"
+    
+    Get-Item "Chalkable.Web\scripts" | PutDir -dbase "scripts"
 
     Get-Item "Chalkable.Web\Content" | PutContentDir -dbase "Content" -exclude ".*\\(icons-24|icons-32|alerts-icons)\\.*"
   }
@@ -131,10 +133,10 @@ try{
   $service = $null
   $cspkg_url = $cspkg_urls | Where-Object { $_ -match ".*Azure\.cspkg" }    
   $cscfg_url = $null
-  if ($buildBranch -eq 'staging-ci') {
+  if ($buildBranch -eq 'staging') {
     $service = "chalkablestaging"
     $cscfg_url = Get-Item ".\Chalkable.Azure\ServiceConfiguration.Staging.cscfg"
-  } elseif ($buildBranch -eq 'qa-ci') {
+  } elseif ($buildBranch -eq 'qa') {
     $service = "chalkableqa"
     $cscfg_url = Get-Item ".\Chalkable.Azure\ServiceConfiguration.QA.cscfg"
   }

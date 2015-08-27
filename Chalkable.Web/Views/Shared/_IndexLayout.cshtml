@@ -1,4 +1,5 @@
 ﻿@using System.Configuration
+@using Chalkable.Common
 <!doctype html>
 <html lang="en" class="no-js">
 <head>
@@ -166,5 +167,17 @@
     
     @ChlkHelpers.MixPanel()    
     @RenderSection("MixPanelTracking", false)
+
+@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+{
+    <script type="text/javascript" src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/scripts/raygun.vanilla.min.js"></script>
+    <script type="text/javascript">
+    Raygun.init('@Settings.RaygunJsApiKey', { ignore3rdPartyErrors: true })
+        .saveIfOffline(true)
+        .withTags([location.origin])
+        .setVersion('@Chalkable.Web.Tools.CompilerHelper.Version')
+        .attach();
+    </script>
+}
 </body>
 </html>

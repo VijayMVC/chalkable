@@ -164,5 +164,7 @@ namespace Chalkable.Common
                 return configuredVerbosity;
             }
         }
+
+        public static string RaygunJsApiKey => "WV05DNwmIzBvTiSQ8pgNXQ==";
     }
 }

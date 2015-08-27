@@ -28,9 +28,9 @@
 
     appInsights.ChalkableTrackPageView = function () {
         try {
-            @if (Chalkable.Common.Settings.Verbosity >= Verbosity.Info) {
-                    @:appInsights.trackPageView('@Request.RawUrl', {DistrictId: telemetryDistrictId, SchoolYear: telemetrySchoolYear.data.id}, {DistrictId: telemetryDistrictId, SchoolYear: schoolYear});
-                                                    }
+            @if (Chalkable.Common.Settings.Verbosity >= Verbosity.Info && Chalkable.Web.Tools.CompilerHelper.IsProduction) {
+                 @:appInsights.trackPageView('@Request.RawUrl', {DistrictId: telemetryDistrictId, SchoolYear: telemetrySchoolYear.data.id}, {DistrictId: telemetryDistrictId, SchoolYear: schoolYear});
+            }
         }
         catch (err) {
         }
@@ -38,9 +38,9 @@
 
     appInsights.ChalkableTrackException = function (ex) {
         try {
-            @if (Chalkable.Common.Settings.Verbosity >= Verbosity.Error) {
-                        @:appInsights.trackException(ex);
-                                        }
+            @if (Chalkable.Common.Settings.Verbosity >= Verbosity.Error && Chalkable.Web.Tools.CompilerHelper.IsProduction) {
+                @:appInsights.trackException(ex);
+            }
         }
         catch (err) {
         }

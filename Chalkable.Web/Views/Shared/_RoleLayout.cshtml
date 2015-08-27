@@ -348,8 +348,20 @@
     }
     @ChlkHelpers.MixPanel() 
     @RenderSection("BottomScripts", false)
-    
-    
-    
-    </body> 
+
+@if (Chalkable.Web.Tools.CompilerHelper.IsProduction) {
+    <script type="text/javascript" src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/scripts/raygun.vanilla.min.js"></script>
+    <script type="text/javascript">
+        Raygun.init('@Settings.RaygunJsApiKey', { ignore3rdPartyErrors: true })
+            .whitelistCrossOriginDomains(['@Chalkable.Web.Tools.CompilerHelper.ScriptsRootDomain'])
+            .saveIfOffline(true)
+            .withTags([location.origin, '@ViewData[ViewConstants.ROLE_NAME]', '@(isDemoSchool?"demo":isDeveloperSchool?"developer":"normal")'])
+            .setUser(districtId + ':' + currentChlkPerson.id, undefined, currentChlkPerson.email, currentChlkPerson.fullname, currentChlkPerson.firstname)
+            .setVersion('@Chalkable.Web.Tools.CompilerHelper.Version')
+            .attach();
+    </script>
+}
+
+
+</body> 
 </html>
