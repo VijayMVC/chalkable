@@ -63,7 +63,7 @@ NAMESPACE('chlk.activities.grading', function () {
                     if(score[0].toLowerCase() == value.toLowerCase())
                         gradeId = score[1].valueOf()
                 });
-                gradeId && form.find('input[name=gradeid]').setValue(gradeId);
+                form.find('input[name=gradeid]').setValue(gradeId || '');
                 if(this._lastModel){
                     var items = this._lastModel.getCurrentGradingGrid().getGradingItems(),
                         len = items.length;
