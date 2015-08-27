@@ -36,7 +36,7 @@
       <!-- other settings -->
       <Setting name="home-redirect-url" value="/Home/Index" />
       <!--application insight-->
-      <Setting name="verbosity" value="Verbose" />
+      <Setting name="verbosity" value="Off" />
       <Setting name="instrumentationKey" value="f759f261-187f-4991-9c52-a74cc315262b" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
     </ConfigurationSettings>
