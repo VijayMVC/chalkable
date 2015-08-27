@@ -189,7 +189,7 @@ NAMESPACE('ria.mvc', function () {
                 try {
                     return params.map(function (_, index) {
                         try {
-                            var Type = types[index];
+                            var Type = types[index] || Object;
                             if (_ === null || _ === undefined || (!Array.isArray(_) && _ instanceof Type))
                                 return _;
 
