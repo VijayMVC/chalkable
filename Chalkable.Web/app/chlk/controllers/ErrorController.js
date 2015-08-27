@@ -17,9 +17,10 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.ClassService, 'classService',
 
-            function error404Action() {
-                var result = new ria.async.DeferredData(new chlk.models.Success());
-                return this.PushView(chlk.activities.chlkerror.Error404Page, result);
+            function error404Action(error_) {
+                var result = new ria.async.DeferredData(chlk.templates.chlkerror.Error404Model.$withMsg(error_ || ''));
+                this.view.reset();
+                return this.ShadeView(chlk.activities.chlkerror.Error404Page, result);
             },
 
             function createAnnouncementErrorAction(){
@@ -36,13 +37,15 @@ NAMESPACE('chlk.controllers', function (){
             function generalServerErrorWithClassesAction(message, withAll_, controller_, action_, params_){
                 var topModel = new chlk.models.classes.ClassesForTopBar(this.classService.getClassesForTopBarSync());
                 var res = new ria.async.DeferredData(new chlk.models.common.ServerErrorWithClassesModel.$create(topModel, message, controller_, action_, params_));
-                return this.PushView(chlk.activities.chlkerror.GeneralServerErrorWithClassesPage, res);
+                this.view.reset();
+                return this.ShadeView(chlk.activities.chlkerror.GeneralServerErrorWithClassesPage, res);
             },
 
             [[String]],
             function generalServerErrorAction(message){
                 var res = new ria.async.DeferredData(new chlk.models.common.ServerErrorModel(message));
-                return this.PushView(chlk.activities.chlkerror.GeneralServerErrorPage, res);
+                this.view.reset();
+                return this.ShadeView(chlk.activities.chlkerror.GeneralServerErrorPage, res);
             },
 
             function appErrorAction(){
@@ -54,7 +57,8 @@ NAMESPACE('chlk.controllers', function (){
             function permissionsAction(permissions){
                 var topModel = new chlk.models.classes.ClassesForTopBar(null);
                 var result = new ria.async.DeferredData(new chlk.models.common.PermissionsError(topModel, null, permissions));
-                return this.PushView(chlk.activities.common.PermissionsErrorPage, result);
+                this.view.reset();
+                return this.ShadeView(chlk.activities.common.PermissionsErrorPage, result);
             },
 
             function studyCenterAccessAction(){

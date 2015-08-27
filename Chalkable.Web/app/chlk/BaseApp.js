@@ -357,6 +357,13 @@ NAMESPACE('chlk', function (){
 
             OVERRIDE, VOID, function onStop_() {
                 this.apiHost_.onStop();
+            },
+
+            OVERRIDE, VOID, function onError_(error) {
+                if ((!(error instanceof ria.mvc.UncaughtException) || _DEBUG) && console && error)
+                    Raygun ? Raygun.send(Raygun.fetchRaygunError(error.toString())) : console.error(error.toString());
+
+                window.appInsights && window.appInsights.ChalkableTrackException(message);
             }
 
         ]);

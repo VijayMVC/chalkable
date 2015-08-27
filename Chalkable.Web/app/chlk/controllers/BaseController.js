@@ -16,6 +16,19 @@ REQUIRE('chlk.lib.exception.InvalidPictureException');
 
 NAMESPACE('chlk.controllers', function (){
 
+    var Raygun = window.Raygun || null;
+
+    if (Raygun) {
+        Raygun.fetchRaygunError = function (error) {
+            var lines = error.split(/[\n\r]{1,2}/);
+            var message = lines.filter(function (_) { return !/^\s+at/.test(_); });
+            return {
+                message: message.join('\n'),
+                stack: error
+            };
+        }
+    }
+
     /** @class chlk.controllers.SidebarButton */
     ANNOTATION(
         [[String]],
@@ -119,7 +132,9 @@ NAMESPACE('chlk.controllers', function (){
                    .catchException(chlk.lib.exception.NotAuthorizedException, function (exception) {
                        document.location.href = WEB_SITE_ROOT;
                    })
-                   .catchException(chlk.lib.exception.ChalkableException, function(exception){
+                   .catchException(chlk.lib.exception.ChalkableException, function(exception) {
+                        Raygun ? Raygun.send(Raygun.fetchRaygunError(exception.toString())) : console.error(exception.toString());
+
                        return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
@@ -133,7 +148,7 @@ NAMESPACE('chlk.controllers', function (){
                    }, this)
                    .catchException(chlk.lib.exception.ChalkableSisException, function(exception){
                        var msg = this.mapSisErrorMessage(exception.getMessage());
-
+                       Raygun ? Raygun.send(Raygun.fetchRaygunError(exception.toString())) : console.error(exception.toString());
                        return this.ShowMsgBox(msg, 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
@@ -160,8 +175,9 @@ NAMESPACE('chlk.controllers', function (){
 
            [[Object]],
            function handleServerError(error){
+               Raygun ? Raygun.send(Raygun.fetchRaygunError(error.toString())) : console.error(error.toString());
                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
-               return this.redirectToErrorPage_(error.toString(), 'error', 'error404', []);
+               return this.redirectToErrorPage_(error.toString(), 'error', 'error404', [error.toString()]);
            },
 
 
@@ -187,7 +203,6 @@ NAMESPACE('chlk.controllers', function (){
 
            [[String, String, String, Array]],
            function redirectToErrorPage_(error, controller, action, params){
-               console.error(error);
                return this.redirectToPage_(controller, action, params);
            },
 

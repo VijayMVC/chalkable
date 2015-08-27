@@ -482,10 +482,16 @@
     <Content Include="loaderio-e721e158fdd474be0e20e8973ea389f0.html" />
     <Content Include="pathfinder\student_methods.xml" />
     <Content Include="pathfinder\teacher_methods.xml" />
+    <Content Include="Scripts\raygun.js" />
+    <Content Include="Scripts\raygun.min.js" />
+    <Content Include="Scripts\raygun.vanilla.js" />
+    <Content Include="Scripts\raygun.vanilla.min.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="Views\Web.config" />
+    <Content Include="Views\Web.config">
+      <SubType>Designer</SubType>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="app\" />
@@ -614,6 +620,12 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\raygun.vanilla.min.js.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Scripts\raygun.min.js.map" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

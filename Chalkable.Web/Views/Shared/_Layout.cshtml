@@ -1,4 +1,5 @@
-﻿@using Chalkable.Web.Common
+﻿@using Chalkable.Common
+@using Chalkable.Web.Common
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
 <head>
@@ -62,7 +63,19 @@
     
     <!--[if IE 6]><script  type="text/javascript" src="@Url.StaticContent("/app/chlk/index/jq.png-min.js")"></script><![endif]-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
-    
+
+@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+{
+    <script type="text/javascript" src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/scripts/raygun.vanilla.min.js"></script>
+    <script type="text/javascript">
+        Raygun.init('@Settings.RaygunJsApiKey', { ignore3rdPartyErrors: true })
+            .saveIfOffline(true)
+            .withTags([location.origin])
+            .setVersion('@Chalkable.Web.Tools.CompilerHelper.Version')
+            .attach();
+    </script>
+}
+
    @if(!Chalkable.Web.Tools.CompilerHelper.IsDebug)
    {
        ChlkHelpers.LinkedIn(ViewData["LinkedInApplicationId"]);

@@ -1,4 +1,5 @@
-﻿using System.Configuration;
+﻿using System;
+using System.Configuration;
 using Chalkable.Common;
 
 namespace Chalkable.Web.Tools
@@ -33,5 +34,22 @@ namespace Chalkable.Web.Tools
                 return VERSION;    
             }
         }
+
+        public static string ScriptsRootDomain
+        {
+            get
+            {
+                try
+                {
+                    return new Uri(ScriptsRoot).DnsSafeHost ?? string.Empty;
+                }
+                catch
+                {
+                    return string.Empty;
+                }
+            }
+        }
+
+        public static bool IsProduction => Version != "private" + "-" + "build"; // ensure no TC versioning
     }
 }

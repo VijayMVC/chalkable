@@ -123,6 +123,8 @@ try{
     Get-Item "Chalkable.Web\app\jquery" | PutDir -dbase "app\jquery"
     Get-Item "Chalkable.Web\app\lib" | PutDir -dbase "app\lib"
     Get-Item "Chalkable.Web\app\highcharts" | PutDir -dbase "app\highcharts"
+    
+    Get-Item "Chalkable.Web\scripts" | PutDir -dbase "scripts"
 
     Get-Item "Chalkable.Web\Content" | PutContentDir -dbase "Content" -exclude ".*\\(icons-24|icons-32|alerts-icons)\\.*"
   }
