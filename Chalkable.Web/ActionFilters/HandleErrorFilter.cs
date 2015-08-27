@@ -22,7 +22,7 @@ namespace Chalkable.Web.ActionFilters
         private static RaygunClient raygunClient = new RaygunClient();
         static AjaxHandleErrorAttribute()
         {
-            raygunClient.ApplicationVersion = Settings.Domain + CompilerHelper.Version;
+            raygunClient.ApplicationVersion = CompilerHelper.Version;
         }
 
         public override void OnException(ExceptionContext filterContext)
@@ -31,7 +31,7 @@ namespace Chalkable.Web.ActionFilters
 
             if (CompilerHelper.IsProduction)
             {
-                var tags = new List<string> {filterContext.HttpContext?.Request?.Url?.DnsSafeHost};
+                var tags = new List<string> { Settings.Domain };
                 if (filterContext.HttpContext?.User != null)
                 {
                     raygunClient.User = filterContext.HttpContext.User.Identity.Name;
