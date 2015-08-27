@@ -473,6 +473,8 @@ NAMESPACE('chlk.controllers', function (){
                }
 
                this.setNotAblePressSidebarButton(false);
+
+               window.appInsights && window.appInsights.ChalkableTrackPageView(method.getName());
            },
 
 
