@@ -29,7 +29,7 @@ namespace Chalkable.BusinessLogic.Model.Attendances
         }
 
 
-        public CheckInCheckOut CheckInCheckOut { get; set; }
+        public IList<CheckInCheckOut> CheckInCheckOuts { get; set; }
         public StudentDailyAttendance DailyAttendance { get; set; }
         public IList<StudentPeriodAttendance> StudentPeriodAttendances { get; set; }    
     }
@@ -41,6 +41,7 @@ namespace Chalkable.BusinessLogic.Model.Attendances
         public string Category { get; set; }
         public string Note { get; set; }
         public int? PeriodId { get; set; }
+        public bool IsCheckIn { get; set; }
     }
 
     public class StudentPeriodAttendance : StudentClassAttendance

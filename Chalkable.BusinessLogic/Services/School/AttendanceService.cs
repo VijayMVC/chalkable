@@ -255,7 +255,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var dailyAtt = stiAttendanceDetails.DailyAbsences.FirstOrDefault(x => x.Date.Date == currentDate.Date && x.StudentId == studentId);
                 var periodAttendances = stiAttendanceDetails.PeriodAbsences.Where(x => x.Date.Date == currentDate.Date && x.StudentId == studentId).ToList();
-                var checkIncheckOut = stiAttendanceDetails.CheckInCheckOuts.FirstOrDefault(x => x.Date == currentDate.Date && x.StudentId == studentId);
+                var checkIncheckOuts = stiAttendanceDetails.CheckInCheckOuts.Where(x => x.Date == currentDate.Date && x.StudentId == studentId).ToList();
                 var item = new StudentDateAttendance
                     {
                         Date = currentDate.Date,
@@ -272,17 +272,17 @@ namespace Chalkable.BusinessLogic.Services.School
                            Level = dailyAtt.AbsenceLevel,
                        };
                 }
-                if (checkIncheckOut != null)
+
+                item.CheckInCheckOuts = checkIncheckOuts.Select(checkIncheckOut => new CheckInCheckOut
                 {
-                    item.CheckInCheckOut = new CheckInCheckOut
-                        {
-                            AttendanceReasonId = checkIncheckOut.AbsenceReasonId,
-                            Category = checkIncheckOut.AbsenceCategory,
-                            Note = checkIncheckOut.Note,
-                            Time = checkIncheckOut.Time,
-                            PeriodId = checkIncheckOut.TimeSlotId
-                        };
-                }
+                    AttendanceReasonId = checkIncheckOut.AbsenceReasonId,
+                    Category = checkIncheckOut.AbsenceCategory,
+                    Note = checkIncheckOut.Note,
+                    Time = checkIncheckOut.Time,
+                    PeriodId = checkIncheckOut.TimeSlotId,
+                    IsCheckIn = checkIncheckOut.Action == "I"
+                }).ToList();
+
                 item.StudentPeriodAttendances = periodAttendances.Select(x => new StudentPeriodAttendance
                     {
                         Student = student,

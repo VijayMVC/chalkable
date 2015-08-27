@@ -10,8 +10,10 @@
         +Hidden('params', self.getParams())
         .top-container
             h1=Msg.Attendance
-            h2 Arrival: #{studentAttendance.getArrivalTime()}
-            h2 Check-in: #{studentAttendance.getCheckInTime()}
+
+            each item in studentAttendance.getCheckInCheckOuts()
+                -var title = item.isCheckIn()? "Check-in: " : "Check-out: "
+                h2=title + (item.getCheckInTime() ?  item.getCheckInTime().toString() : "")
         if studentAttendance.getPeriodAttendances().length
             table.attendance-table
                 tr
@@ -25,3 +27,5 @@
                         td.class-name-td=item.getClassName()
                         td(class=item.getTypeName().toLowerCase()).attendance-type-td=item.getTypeName()
                         td(class=item.getTypeName().toLowerCase()).reason-td=item.getAttendanceReason() ? item.getAttendanceReason().getName() : ''
+        else
+            span No Daily Attendance was taken this day
