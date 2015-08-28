@@ -5,16 +5,19 @@
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
+    "colors": "^1.0.3",
+    "director": "^1.2.3",
     "emp.ria-jsbuild3": "^0.1.20",
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.11.2",
-    "jshint": "^2.8.0",
-    "colors": "^1.0.3",
-    "director": "^1.2.3",
+    "grunt-raygun-deployment": "^1.1.1",
+    "grunt-teamcity": "^0.1.4",
+    "grunt-text-replace": "^0.4.0",
     "http-server": "^0.7.3",
+    "jshint": "^2.8.0",
     "lodash": "^2.4.1",
     "optimist": "*",
-    "portfinder": "^0.2.1" 
+    "portfinder": "^0.2.1"
   },
   "scripts": {
     "compile": "node node_modules/emp.ria-jsbuild3/bin/jsbuild3",
