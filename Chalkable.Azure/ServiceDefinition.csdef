@@ -55,7 +55,7 @@
       <Setting name="instrumentationKey" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <!--WebClient Timeout Setting-->
-      <Setting name ="WCTimeout"/>
+      <Setting name ="WebClientTimeout"/>
     </ConfigurationSettings>
   </WebRole>
   <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Medium">

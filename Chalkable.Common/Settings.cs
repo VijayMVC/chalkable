@@ -117,36 +117,20 @@ namespace Chalkable.Common
 
         /* Web Config */
 
-        public static int MinPasswordLength
-        {
-            get
-            {
-                int value;
-                int.TryParse(GetWebConfig("minPasswordLength"), out value);
-                return value;
-            }
-        }
+        public static int MinPasswordLength => int.Parse(GetWebConfig("minPasswordLength"));
 
-        public static string HomeRedirectUrl { get { return Get("home-redirect-url"); } }
+        public static string HomeRedirectUrl => Get("home-redirect-url");
 
         private static string GetWebConfig(string field)
         {
             return ConfigurationManager.AppSettings[field];
         }
 
-        public static int WCTimeout
-        {
-            get
-            {
-                int value;
-                int.TryParse(Get("WCTimeout"), out value);
-                return value;
-            }
-        }
+        public static int WebClientTimeout => int.Parse(Get("WebClientTimeout"));
 
         /* Global Cache */
 
-        public static string RedisCacheConnectionString { get { return Get("RedisCache.ConnectionString"); } }
+        public static string RedisCacheConnectionString => Get("RedisCache.ConnectionString");
 
         private static Verbosity configuredVerbosity;
         private static bool verbositySet = false;

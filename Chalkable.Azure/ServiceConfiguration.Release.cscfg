@@ -40,7 +40,7 @@
       <Setting name="instrumentationKey" value="513938d1-9b72-4ccb-a580-09528f424826" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkableschool;AccountKey=CA86C3J9Rn2XPm9mOr9A6QuNZQf6ldc+t3/z7djMSrtXQJRd/u7Tpb4N388nUMvczMhEHDQKtGqQXFMQksWL8Q==" />
       <!--WebClient Timeout Settings-->
-      <Setting name ="WCTimeout" value="300000"/>
+      <Setting name ="WebClientTimeout" value="300000"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />

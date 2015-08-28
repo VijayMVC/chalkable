@@ -40,7 +40,7 @@
       <Setting name="instrumentationKey" value="ef68c92f-d1a3-4b1b-a315-3fdb511c5003" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <!--WebClient Timeout Settings-->
-      <Setting name ="WCTimeout" value="300000"/>
+      <Setting name ="WebClientTimeout" value="300000"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="D8884B835CF2696D0C37B56D161C1BA40CB2A708" thumbprintAlgorithm="sha1" />
