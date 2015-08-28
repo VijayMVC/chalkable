@@ -134,6 +134,16 @@ namespace Chalkable.Common
             return ConfigurationManager.AppSettings[field];
         }
 
+        public static int WCTimeout
+        {
+            get
+            {
+                int value;
+                int.TryParse(Get("WCTimeout"), out value);
+                return value;
+            }
+        }
+
         /* Global Cache */
 
         public static string RedisCacheConnectionString { get { return Get("RedisCache.ConnectionString"); } }

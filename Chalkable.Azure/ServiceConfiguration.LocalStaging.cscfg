@@ -39,6 +39,8 @@
       <Setting name="verbosity" value="Off" />
       <Setting name="instrumentationKey" value="ef68c92f-d1a3-4b1b-a315-3fdb511c5003" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
+      <!--WebClient Timeout Settings-->
+      <Setting name ="WCTimeout" value="300000"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
