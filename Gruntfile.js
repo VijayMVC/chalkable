@@ -134,15 +134,13 @@ module.exports = function(grunt) {
             'app/{jquery,lib,highcharts}/**',
             'scripts/*.min.js',
             
-            'Content/*.css',
-            'Content/{avatars,icon-templates,images}/**',
-
-            'Content/images2/**',
+            'Content/**',
             '!Content/images2/alerts-icons/*',
             '!Content/images2/icons-*/*'
           ],
           
-          filter: 'isFile'
+          filter: 'isFile',
+          dot: true
         }]
       }
     },
