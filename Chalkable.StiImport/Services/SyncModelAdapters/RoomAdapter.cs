@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.StiConnector.SyncModel;
+using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.BusinessLogic.Services.School;
+using Room = Chalkable.StiConnector.SyncModel.Room;
 
 namespace Chalkable.StiImport.Services.SyncModelAdapters
 {
@@ -24,7 +26,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                     RoomNumber = x.RoomNumber ?? UNKNOWN_ROOM_NUMBER,
                     Size = null,
                 }).ToList();
-            SchoolLocator.RoomService.AddRooms(rooms);
+            ServiceLocatorSchool.RoomService.AddRooms(rooms);
         }
 
         protected override void UpdateInternal(IList<Room> entities)
@@ -37,13 +39,13 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 RoomNumber = x.RoomNumber,
                 SchoolRef = x.SchoolID
             }).ToList();
-            SchoolLocator.RoomService.EditRooms(rooms);
+            ServiceLocatorSchool.RoomService.EditRooms(rooms);
         }
 
         protected override void DeleteInternal(IList<Room> entities)
         {
             var ids = entities.Select(x => new Data.School.Model.Room { Id = x.RoomID }).ToList();
-            SchoolLocator.RoomService.DeleteRooms(ids);
+            ServiceLocatorSchool.RoomService.DeleteRooms(ids);
         }
     }
 }

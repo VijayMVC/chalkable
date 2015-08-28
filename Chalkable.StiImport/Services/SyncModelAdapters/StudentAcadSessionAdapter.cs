@@ -32,7 +32,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                     StudentRef = x.StudentID,
                     EnrollmentStatus = StudentEnrollmentStatusEnumFromString(x.CurrentEnrollmentStatus)
                 }).ToList();
-            SchoolLocator.SchoolYearService.AssignStudent(assignments);
+            ServiceLocatorSchool.SchoolYearService.AssignStudent(assignments);
         }
 
         protected override void UpdateInternal(IList<StudentAcadSession> entities)
@@ -44,7 +44,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 GradeLevelRef = x.GradeLevelID.Value,
                 EnrollmentStatus = StudentEnrollmentStatusEnumFromString(x.CurrentEnrollmentStatus)
             }).ToList();
-            SchoolLocator.SchoolYearService.EditStudentSchoolYears(ssy);
+            ServiceLocatorSchool.SchoolYearService.EditStudentSchoolYears(ssy);
         }
 
         protected override void DeleteInternal(IList<StudentAcadSession> entities)
@@ -54,7 +54,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 SchoolYearRef = x.AcadSessionID,
                 StudentRef = x.StudentID
             }).ToList();
-            SchoolLocator.SchoolYearService.UnassignStudents(assignments);
+            ServiceLocatorSchool.SchoolYearService.UnassignStudents(assignments);
         }
     }
 }

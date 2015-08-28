@@ -20,7 +20,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 Name = x.Name,
                 Number = x.Sequence
             }).ToList();
-            SchoolLocator.GradeLevelService.Add(gradeLevels);
+            ServiceLocatorSchool.GradeLevelService.Add(gradeLevels);
         }
 
         protected override void UpdateInternal(IList<GradeLevel> entities)
@@ -33,13 +33,13 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                     Name = x.Name,
                     Number = x.Sequence
                 }).ToList();
-            SchoolLocator.GradeLevelService.Edit(gradeLevels);
+            ServiceLocatorSchool.GradeLevelService.Edit(gradeLevels);
         }
 
         protected override void DeleteInternal(IList<GradeLevel> entities)
         {
             var ids = entities.Select(x => new Data.School.Model.GradeLevel { Id = (int)x.GradeLevelID }).ToList();
-            SchoolLocator.GradeLevelService.Delete(ids);
+            ServiceLocatorSchool.GradeLevelService.Delete(ids);
         }
     }
 }

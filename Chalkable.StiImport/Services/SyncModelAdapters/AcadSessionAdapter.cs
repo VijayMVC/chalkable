@@ -24,7 +24,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                     StartDate = x.StartDate,
                     ArchiveDate = x.ArchiveDate
                 }).ToList();
-            SchoolLocator.SchoolYearService.Add(schoolYears);
+            ServiceLocatorSchool.SchoolYearService.Add(schoolYears);
         }
 
         protected override void UpdateInternal(IList<AcadSession> entities)
@@ -39,13 +39,13 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 SchoolRef = x.SchoolID,
                 ArchiveDate = x.ArchiveDate
             }).ToList();
-            SchoolLocator.SchoolYearService.Edit(schoolYears);
+            ServiceLocatorSchool.SchoolYearService.Edit(schoolYears);
         }
 
         protected override void DeleteInternal(IList<AcadSession> entities)
         {
             var ids = entities.Select(x => x.AcadSessionID).ToList();
-            SchoolLocator.SchoolYearService.Delete(ids);
+            ServiceLocatorSchool.SchoolYearService.Delete(ids);
         }
     }
 }

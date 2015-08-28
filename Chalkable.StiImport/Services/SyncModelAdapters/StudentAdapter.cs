@@ -25,7 +25,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 SpecialInstructions = x.SpecialInstructions,
                 SpEdStatus = x.SpEdStatusID.HasValue ? Locator.SpEdStatusMapping[x.SpEdStatusID.Value] : ""
             }).ToList();
-            SchoolLocator.StudentService.AddStudents(students);
+            ServiceLocatorSchool.StudentService.AddStudents(students);
         }
 
         protected override void UpdateInternal(IList<Student> entities)
@@ -43,13 +43,13 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 SpecialInstructions = x.SpecialInstructions,
                 SpEdStatus = x.SpEdStatusID.HasValue ? Locator.SpEdStatusMapping[x.SpEdStatusID.Value] : ""
             }).ToList();
-            SchoolLocator.StudentService.EditStudents(students);
+            ServiceLocatorSchool.StudentService.EditStudents(students);
         }
 
         protected override void DeleteInternal(IList<Student> entities)
         {
             var students = entities.Select(x => new Data.School.Model.Student { Id = x.StudentID }).ToList();
-            SchoolLocator.StudentService.DeleteStudents(students);
+            ServiceLocatorSchool.StudentService.DeleteStudents(students);
         }
     }
 }

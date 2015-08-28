@@ -23,7 +23,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 StartDate = term.StartDate,
                 WeekDays = 62
             }).ToList();
-            SchoolLocator.MarkingPeriodService.Add(mps);
+            ServiceLocatorSchool.MarkingPeriodService.Add(mps);
         }
 
         protected override void UpdateInternal(IList<Term> entities)
@@ -38,13 +38,13 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 StartDate = x.StartDate,
                 WeekDays = 62
             }).ToList();
-            SchoolLocator.MarkingPeriodService.Edit(mps);
+            ServiceLocatorSchool.MarkingPeriodService.Edit(mps);
         }
 
         protected override void DeleteInternal(IList<Term> entities)
         {
             var ids = entities.Select(x => new MarkingPeriod { Id = x.TermID }).ToList();
-            SchoolLocator.MarkingPeriodService.DeleteMarkingPeriods(ids);
+            ServiceLocatorSchool.MarkingPeriodService.DeleteMarkingPeriods(ids);
         }
     }
 }

@@ -1,0 +1,116 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using Chalkable.Common;
+using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.SyncModel;
+
+namespace Chalkable.StiImport.Services.SyncModelAdapters
+{
+    public class CourseAdapter : SyncModelAdapter<Course>
+    {
+        public CourseAdapter(AdapterLocator locator) : base(locator)
+        {
+        }
+
+
+        private List<Pair<string, Guid>> PrepareChalkableDepartmentKeywords()
+        {
+            var departments = ServiceLocatorMaster.ChalkableDepartmentService.GetChalkableDepartments();
+            var sep = new[] { ',' };
+            var departmenPairs = new List<Pair<string, Guid>>();
+
+            foreach (var chalkableDepartment in departments)
+            {
+                departmenPairs.AddRange(chalkableDepartment.Keywords.ToLower().Split(sep, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => new Pair<string, Guid>(x, chalkableDepartment.Id)));
+            }
+            return departmenPairs;
+        }
+
+        private Pair<string, Guid> FindClosestDepartment(List<Pair<string, Guid>> departmenPairs, string name)
+        {
+            int minDist = int.MaxValue;
+            Pair<string, Guid> closestDep = null;
+            for (int i = 0; i < departmenPairs.Count; i++)
+            {
+                var d = StringTools.LevenshteinDistance(name, departmenPairs[i].First);
+                if (d < minDist && (d <= 4 || d <= 0.3 * name.Length + 2))
+                {
+                    minDist = d;
+                    closestDep = departmenPairs[i];
+                }
+            }
+            return closestDep;
+        }
+
+
+        protected override void InsertInternal(IList<Course> entities)
+        {
+            var departmenPairs = PrepareChalkableDepartmentKeywords();
+            var courses = entities.ToList()
+                .OrderBy(x => x.SYS_CHANGE_VERSION);
+            var classes = new List<Class>();
+            foreach (var course in courses)
+            {
+                var closestDep = FindClosestDepartment(departmenPairs, course.ShortName.ToLower());
+                classes.Add(new Class
+                {
+                    ChalkableDepartmentRef = closestDep != null ? closestDep.Second : (Guid?)null,
+                    Description = course.FullName,
+                    MinGradeLevelRef = course.MinGradeLevelID,
+                    MaxGradeLevelRef = course.MaxGradeLevelID,
+                    Id = course.CourseID,
+                    ClassNumber = course.FullSectionNumber,
+                    Name = course.ShortName,
+                    SchoolYearRef = course.AcadSessionID,
+                    PrimaryTeacherRef = course.PrimaryTeacherID,
+                    RoomRef = course.RoomID,
+                    CourseRef = course.SectionOfCourseID,
+                    GradingScaleRef = course.GradingScaleID,
+                    CourseTypeRef = course.CourseTypeID
+                });
+            }
+            ServiceLocatorSchool.ClassService.Add(classes);
+        }
+
+        protected override void UpdateInternal(IList<Course> entities)
+        {
+            var courses = entities.ToList();
+            var classes = new List<Class>();
+            var departmenPairs = PrepareChalkableDepartmentKeywords();
+            foreach (var course in courses)
+            {
+                var closestDep = FindClosestDepartment(departmenPairs, course.ShortName.ToLower());
+                classes.Add(new Class
+                {
+                    ChalkableDepartmentRef = closestDep != null ? closestDep.Second : (Guid?)null,
+                    Description = course.FullName,
+                    MinGradeLevelRef = course.MinGradeLevelID,
+                    MaxGradeLevelRef = course.MaxGradeLevelID,
+                    Id = course.CourseID,
+                    ClassNumber = course.FullSectionNumber,
+                    Name = course.ShortName,
+                    SchoolYearRef = course.AcadSessionID,
+                    PrimaryTeacherRef = course.PrimaryTeacherID,
+                    RoomRef = course.RoomID,
+                    CourseRef = course.SectionOfCourseID,
+                    GradingScaleRef = course.GradingScaleID,
+                    CourseTypeRef = course.CourseTypeID
+                });
+            }
+            ServiceLocatorSchool.ClassService.Edit(classes);
+        }
+
+        protected override void DeleteInternal(IList<Course> entities)
+        {
+            var courses = entities.ToList()
+                .OrderBy(x => x.SYS_CHANGE_VERSION)
+                .Select(x => new Class
+                {
+                    Id = x.CourseID
+                }).ToList();
+            ServiceLocatorSchool.ClassService.Delete(courses);
+        }
+    }
+}

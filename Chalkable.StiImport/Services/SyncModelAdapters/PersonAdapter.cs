@@ -24,7 +24,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                     LastName = x.LastName,
                     PhotoModifiedDate = x.PhotoModifiedDate
                 }).ToList();
-            SchoolLocator.PersonService.Add(persons);
+            ServiceLocatorSchool.PersonService.Add(persons);
         }
 
         protected override void UpdateInternal(IList<Person> entities)
@@ -39,14 +39,14 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                     LastName = x.LastName,
                     PhotoModifiedDate = x.PhotoModifiedDate
                 }).ToList();
-            SchoolLocator.PersonService.UpdateForImport(persons);
+            ServiceLocatorSchool.PersonService.UpdateForImport(persons);
         }
 
         protected override void DeleteInternal(IList<Person> entities)
         {
             var persons = entities.Select(x =>
                 new Data.School.Model.Person { Id = x.PersonID }).ToList();
-            SchoolLocator.PersonService.Delete(persons);
+            ServiceLocatorSchool.PersonService.Delete(persons);
         }
     }
 }

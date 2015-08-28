@@ -19,7 +19,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             var users = entities.Select(x => new Data.Master.Model.User
             {
                 Id = Guid.NewGuid(),
-                DistrictRef = SchoolLocator.Context.DistrictId,
+                DistrictRef = ServiceLocatorSchool.Context.DistrictId,
                 FullName = x.FullName,
                 IsDemoUser = false,
                 SisUserId = x.UserID,
@@ -28,7 +28,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 Login = string.Format(USER_EMAIL_FMT, x.UserID, Guid.NewGuid()),
                 IsSysAdmin = false
             }).ToList();
-            MasterLocator.UserService.Add(users);
+            ServiceLocatorMaster.UserService.Add(users);
             Locator.InsertedUserIds = users.Select(x => x.Id).ToList();
         }
 
@@ -36,18 +36,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
             var users = entities.Select(x => new Data.Master.Model.User
             {
-                DistrictRef = SchoolLocator.Context.DistrictId,
+                DistrictRef = ServiceLocatorSchool.Context.DistrictId,
                 FullName = x.FullName,
                 SisUserId = x.UserID,
                 SisUserName = x.UserName
             }).ToList();
-            MasterLocator.UserService.Edit(users);
+            ServiceLocatorMaster.UserService.Edit(users);
         }
 
         protected override void DeleteInternal(IList<User> entities)
         {
             var ids = entities.Select(x => x.UserID).ToList();
-            MasterLocator.UserService.DeleteUsers(ids, SchoolLocator.Context.DistrictId.Value);
+            ServiceLocatorMaster.UserService.DeleteUsers(ids, ServiceLocatorSchool.Context.DistrictId.Value);
         }
     }
 }

@@ -26,7 +26,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 SchoolAnnouncement = x.SchoolAnnouncement,
                 SchoolYearRef = x.AcadSessionID
             }).ToList();
-            SchoolLocator.GradingPeriodService.Add(gPeriods);
+            ServiceLocatorSchool.GradingPeriodService.Add(gPeriods);
         }
 
         protected override void UpdateInternal(IList<GradingPeriod> entities)
@@ -45,13 +45,13 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 MarkingPeriodRef = x.TermID,
                 SchoolAnnouncement = x.SchoolAnnouncement
             }).ToList();
-            SchoolLocator.GradingPeriodService.Edit(gps);
+            ServiceLocatorSchool.GradingPeriodService.Edit(gps);
         }
 
         protected override void DeleteInternal(IList<GradingPeriod> entities)
         {
             var ids = entities.Select(x => x.GradingPeriodID).ToList();
-            SchoolLocator.GradingPeriodService.Delete(ids);
+            ServiceLocatorSchool.GradingPeriodService.Delete(ids);
         }
     }
 }

@@ -39,7 +39,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 StandardsGradingScaleRef = schoolOption.StandardsGradingScaleID,
                 TimeZoneName = schoolOption.TimeZoneName
             }).ToList();
-            SchoolLocator.SchoolService.AddSchoolOptions(res);
+            ServiceLocatorSchool.SchoolService.AddSchoolOptions(res);
         }
 
         protected override void UpdateInternal(IList<SchoolOption> entities)
@@ -69,13 +69,13 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 StandardsGradingScaleRef = schoolOption.StandardsGradingScaleID,
                 TimeZoneName = schoolOption.TimeZoneName
             }).ToList();
-            SchoolLocator.SchoolService.EditSchoolOptions(res);
+            ServiceLocatorSchool.SchoolService.EditSchoolOptions(res);
         }
 
         protected override void DeleteInternal(IList<SchoolOption> entities)
         {
             var schoolOptions = entities.Select(x => new Data.School.Model.SchoolOption { Id = x.SchoolID }).ToList();
-            SchoolLocator.SchoolService.DeleteSchoolOptions(schoolOptions);
+            ServiceLocatorSchool.SchoolService.DeleteSchoolOptions(schoolOptions);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 Number = x.Sequence,
                 SchoolYearRef = x.AcadSessionID
             }).ToList();
-            SchoolLocator.DayTypeService.Add(dayTypes);
+            ServiceLocatorSchool.DayTypeService.Add(dayTypes);
         }
 
         protected override void UpdateInternal(IList<DayType> entities)
@@ -31,7 +31,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 Number = x.Sequence,
                 SchoolYearRef = x.AcadSessionID
             }).ToList();
-            SchoolLocator.DayTypeService.Edit(dts);
+            ServiceLocatorSchool.DayTypeService.Edit(dts);
         }
 
         protected override void DeleteInternal(IList<DayType> entities)
@@ -40,7 +40,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             {
                 Id = x.DayTypeID
             }).ToList();
-            SchoolLocator.DayTypeService.Delete(dayTypes);
+            ServiceLocatorSchool.DayTypeService.Delete(dayTypes);
         }
     }
 }

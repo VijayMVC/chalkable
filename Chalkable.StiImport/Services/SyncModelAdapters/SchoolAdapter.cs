@@ -14,7 +14,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void InsertInternal(IList<School> entities)
         {
-            SchoolLocator.SchoolService.Add(entities.Select(x=>new Data.School.Model.School
+            ServiceLocatorSchool.SchoolService.Add(entities.Select(x=>new Data.School.Model.School
             {
                 Id = x.SchoolID,
                 IsActive = x.IsActive,
@@ -39,13 +39,13 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 IsLEEnabled = school.IsLEEnabled,
                 IsLESyncComplete = school.IsLESyncComplete
             }).ToList();
-            SchoolLocator.SchoolService.Edit(schools);
+            ServiceLocatorSchool.SchoolService.Edit(schools);
         }
 
         protected override void DeleteInternal(IList<School> entities)
         {
             var ids = entities.Select(x => new Data.School.Model.School { Id = x.SchoolID }).ToList();
-            SchoolLocator.SchoolService.Delete(ids);
+            ServiceLocatorSchool.SchoolService.Delete(ids);
         }
     }
 }

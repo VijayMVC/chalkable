@@ -19,7 +19,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 SchoolRef = x.SchoolID,
                 StudentRef = x.StudentID
             }).ToList();
-            SchoolLocator.StudentService.AddStudentSchools(studentSchools);
+            ServiceLocatorSchool.StudentService.AddStudentSchools(studentSchools);
         }
 
         protected override void UpdateInternal(IList<StudentSchool> entities)
@@ -30,7 +30,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         protected override void DeleteInternal(IList<StudentSchool> entities)
         {
             var ss = entities.Select(x => new Data.School.Model.StudentSchool { SchoolRef = x.SchoolID, StudentRef = x.StudentID }).ToList();
-            SchoolLocator.StudentService.DeleteStudentSchools(ss);
+            ServiceLocatorSchool.StudentService.DeleteStudentSchools(ss);
         }
     }
 
@@ -65,7 +65,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                     });
                 }
             }
-            SchoolLocator.PhoneService.AddPhones(ps);
+            ServiceLocatorSchool.PhoneService.AddPhones(ps);
         }
 
         protected override void UpdateInternal(IList<PersonTelephone> entities)
@@ -90,7 +90,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                     });
                 }
             }
-            SchoolLocator.PhoneService.EditPhones(ps);
+            ServiceLocatorSchool.PhoneService.EditPhones(ps);
         }
 
         protected override void DeleteInternal(IList<PersonTelephone> entities)
@@ -102,7 +102,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 IsPrimary = x.IsPrimary,
                 Value = x.FormattedTelephoneNumber
             }).ToList();
-            SchoolLocator.PhoneService.Delete(phones);
+            ServiceLocatorSchool.PhoneService.Delete(phones);
         }
     }
 }

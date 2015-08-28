@@ -25,7 +25,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 CountyId = x.CountryID,
                 Id = x.AddressID
             }).ToList();
-            SchoolLocator.AddressService.Add(addressInfos);
+            ServiceLocatorSchool.AddressService.Add(addressInfos);
         }
 
         protected override void UpdateInternal(IList<Address> entities)
@@ -45,13 +45,13 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 StreetNumber = x.StreetNumber,
                 State = x.State
             }).ToList();
-            SchoolLocator.AddressService.Edit(addresses);
+            ServiceLocatorSchool.AddressService.Edit(addresses);
         }
 
         protected override void DeleteInternal(IList<Address> entities)
         {
             var addresses = entities.Select(x => new Data.School.Model.Address { Id = x.AddressID }).ToList();
-            SchoolLocator.AddressService.Delete(addresses);
+            ServiceLocatorSchool.AddressService.Delete(addresses);
         }
     }
 }

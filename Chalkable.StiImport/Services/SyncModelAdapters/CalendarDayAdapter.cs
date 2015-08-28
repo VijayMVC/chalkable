@@ -22,7 +22,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                     BellScheduleRef = x.BellScheduleID,
                     Day = x.Date
                 }).ToList();
-            SchoolLocator.CalendarDateService.Add(days);
+            ServiceLocatorSchool.CalendarDateService.Add(days);
         }
 
         protected override void UpdateInternal(IList<CalendarDay> entities)
@@ -35,7 +35,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 SchoolYearRef = x.AcadSessionID,
                 Day = x.Date
             }).ToList();
-            SchoolLocator.CalendarDateService.Edit(ds);
+            ServiceLocatorSchool.CalendarDateService.Edit(ds);
         }
 
         protected override void DeleteInternal(IList<CalendarDay> entities)
@@ -45,7 +45,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 Day = x.Date,
                 SchoolYearRef = x.AcadSessionID
             }).ToList();
-            SchoolLocator.CalendarDateService.Delete(dates);
+            ServiceLocatorSchool.CalendarDateService.Delete(dates);
         }
     }
 }

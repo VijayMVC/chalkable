@@ -20,7 +20,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 MarkingPeriodRef = x.TermID,
                 IsEnrolled = x.IsEnrolled
             }).ToList();
-            SchoolLocator.ClassService.AddStudents(studentSchedules);
+            ServiceLocatorSchool.ClassService.AddStudents(studentSchedules);
         }
 
         protected override void UpdateInternal(IList<StudentScheduleTerm> entities)
@@ -32,7 +32,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                     MarkingPeriodRef = x.TermID,
                     IsEnrolled = x.IsEnrolled
                 }).ToList();
-            SchoolLocator.ClassService.EditStudents(studentSchedules);
+            ServiceLocatorSchool.ClassService.EditStudents(studentSchedules);
         }
 
         protected override void DeleteInternal(IList<StudentScheduleTerm> entities)
@@ -44,7 +44,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                                       PersonRef = x.StudentID
                                   })
                                   .ToList();
-            SchoolLocator.ClassService.DeleteStudent(students);
+            ServiceLocatorSchool.ClassService.DeleteStudent(students);
         }
     }
 }
