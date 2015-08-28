@@ -33,7 +33,8 @@ module.exports = function (grunt) {
         grunt.log.error('Deployment failed: ' + err.message);
         done(false);
       } else {        
-        grunt.log.ok('Deployment success: ' + JSON.strigify(result));
+        //grunt.log.debug(result);
+        grunt.log.ok('Deployment success.');
         done();
       }
     });

@@ -131,14 +131,14 @@ module.exports = function(grunt) {
             'app/chlk/{shared,chlk-messages,chlk-constants}.js',
             
             'app/chlk/{index,jquery,lib,highcharts}/*.js',
-            'scripts/*.min.js',
+            'Scripts/*.min.js',
             
-            'content/*.css',
-            'content/{avatars,icon-templates,images}/**',
+            'Content/*.css',
+            'Content/{avatars,icon-templates,images}/**',
 
-            'content/images2/**',
-            '!content/images2/alerts-icons/*',
-            '!content/images2/icons-*/*'
+            'Content/images2/**',
+            '!Content/images2/alerts-icons/*',
+            '!Content/images2/icons-*/*'
           ],
           
           filter: 'isFile'
