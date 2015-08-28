@@ -11,34 +11,31 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
+        private SchoolYear Selector(AcadSession x)
+        {
+            return new SchoolYear
+            {
+                Description = x.Description,
+                EndDate = x.EndDate,
+                Id = x.AcadSessionID,
+                Name = x.Name,
+                SchoolRef = x.SchoolID,
+                StartDate = x.StartDate,
+                ArchiveDate = x.ArchiveDate
+            };
+        }
+
         protected override void InsertInternal(IList<AcadSession> entities)
         {
             var schoolYears = entities.
-                Select(x => new SchoolYear
-                {
-                    Description = x.Description,
-                    EndDate = x.EndDate,
-                    Id = x.AcadSessionID,
-                    Name = x.Name,
-                    SchoolRef = x.SchoolID,
-                    StartDate = x.StartDate,
-                    ArchiveDate = x.ArchiveDate
-                }).ToList();
+                Select(Selector
+                ).ToList();
             ServiceLocatorSchool.SchoolYearService.Add(schoolYears);
         }
 
         protected override void UpdateInternal(IList<AcadSession> entities)
         {
-            var schoolYears = entities.Select(x => new SchoolYear
-            {
-                Id = x.AcadSessionID,
-                Description = x.Description,
-                StartDate = x.StartDate,
-                EndDate = x.EndDate,
-                Name = x.Name,
-                SchoolRef = x.SchoolID,
-                ArchiveDate = x.ArchiveDate
-            }).ToList();
+            var schoolYears = entities.Select(Selector).ToList();
             ServiceLocatorSchool.SchoolYearService.Edit(schoolYears);
         }
 

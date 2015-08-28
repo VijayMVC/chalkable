@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<Student> entities)
+        private Data.School.Model.Student Selector(Student x)
         {
-            var students = entities.Select(x => new Data.School.Model.Student
+            return new Data.School.Model.Student
             {
                 BirthDate = x.DateOfBirth,
                 Id = x.StudentID,
@@ -24,25 +24,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 IsAllowedInetAccess = x.IsAllowedInetAccess,
                 SpecialInstructions = x.SpecialInstructions,
                 SpEdStatus = x.SpEdStatusID.HasValue ? Locator.SpEdStatusMapping[x.SpEdStatusID.Value] : ""
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<Student> entities)
+        {
+            var students = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StudentService.AddStudents(students);
         }
 
         protected override void UpdateInternal(IList<Student> entities)
         {
-            var students = entities.Select(x => new Data.School.Model.Student
-            {
-                BirthDate = x.DateOfBirth,
-                Id = x.StudentID,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Gender = x.GenderID.HasValue ? Locator.GetnderMapping[x.GenderID.Value] : "U",
-                UserId = x.UserID,
-                HasMedicalAlert = x.HasMedicalAlert,
-                IsAllowedInetAccess = x.IsAllowedInetAccess,
-                SpecialInstructions = x.SpecialInstructions,
-                SpEdStatus = x.SpEdStatusID.HasValue ? Locator.SpEdStatusMapping[x.SpEdStatusID.Value] : ""
-            }).ToList();
+            var students = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StudentService.EditStudents(students);
         }
 

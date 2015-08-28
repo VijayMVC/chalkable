@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<ContactRelationship> entities)
+        private Data.School.Model.ContactRelationship Selector(ContactRelationship x)
         {
-            var chlkContactRelationships = entities.Select(x => new Data.School.Model.ContactRelationship
+            return new Data.School.Model.ContactRelationship
             {
                 Id = x.ContactRelationshipID,
                 Name = x.Name,
@@ -28,29 +28,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 SIFCode = x.SIFCode,
                 IsActive = x.IsActive,
                 IsSystem = x.IsSystem
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<ContactRelationship> entities)
+        {
+            var chlkContactRelationships = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ContactService.AddContactRelationship(chlkContactRelationships);
         }
 
         protected override void UpdateInternal(IList<ContactRelationship> entities)
         {
-            var contactRelationships = entities.Select(x => new Data.School.Model.ContactRelationship()
-            {
-                Id = x.ContactRelationshipID,
-                Name = x.Name,
-                Code = x.Code,
-                Description = x.Description,
-                ReceivesMailings = x.ReceivesMailings,
-                IsFamilyMember = x.IsFamilyMember,
-                IsCustodian = x.IsCustodian,
-                IsEmergencyContact = x.IsEmergencyContact,
-                StateCode = x.StateCode,
-                CanPickUp = x.CanPickUp,
-                NCESCode = x.NCESCode,
-                SIFCode = x.SIFCode,
-                IsActive = x.IsActive,
-                IsSystem = x.IsSystem
-            }).ToList();
+            var contactRelationships = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ContactService.EditContactRelationship(contactRelationships);
         }
 

@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Services.Master;
-using Chalkable.BusinessLogic.Services.School;
-using Room = Chalkable.StiConnector.SyncModel.Room;
+using Chalkable.StiConnector.SyncModel;
 
 namespace Chalkable.StiImport.Services.SyncModelAdapters
 {
@@ -13,32 +11,28 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
+        private Data.School.Model.Room Selector(Room x)
+        {
+            return new Data.School.Model.Room
+            {
+                Id = x.RoomID,
+                SchoolRef = x.SchoolID,
+                Capacity = x.StudentCapacity,
+                Description = x.Description,
+                RoomNumber = x.RoomNumber
+            };
+        }
+
         protected override void InsertInternal(IList<Room> entities)
         {
             var rooms = entities.ToList()
-                .Select(x => new Data.School.Model.Room
-                {
-                    Id = x.RoomID,
-                    SchoolRef = x.SchoolID,
-                    Capacity = x.StudentCapacity,
-                    Description = x.Description,
-                    PhoneNumber = null,
-                    RoomNumber = x.RoomNumber ?? UNKNOWN_ROOM_NUMBER,
-                    Size = null,
-                }).ToList();
+                .Select(Selector).ToList();
             ServiceLocatorSchool.RoomService.AddRooms(rooms);
         }
 
         protected override void UpdateInternal(IList<Room> entities)
         {
-            var rooms = entities.Select(x => new Data.School.Model.Room
-            {
-                Capacity = x.StudentCapacity,
-                Description = x.Description,
-                Id = x.RoomID,
-                RoomNumber = x.RoomNumber,
-                SchoolRef = x.SchoolID
-            }).ToList();
+            var rooms = entities.Select(Selector).ToList();
             ServiceLocatorSchool.RoomService.EditRooms(rooms);
         }
 

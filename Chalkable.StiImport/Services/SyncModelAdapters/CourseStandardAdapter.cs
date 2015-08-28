@@ -11,13 +11,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<CourseStandard> entities)
+        private ClassStandard Selector(CourseStandard x)
         {
-            var cs = entities.Select(x => new ClassStandard
+            return new ClassStandard
             {
                 ClassRef = x.CourseID,
                 StandardRef = x.StandardID
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<CourseStandard> entities)
+        {
+            var cs = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StandardService.AddClassStandards(cs);
         }
 
@@ -28,11 +33,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<CourseStandard> entities)
         {
-            var classStandards = entities.Select(x => new ClassStandard
-            {
-                ClassRef = x.CourseID,
-                StandardRef = x.StandardID
-            }).ToList();
+            var classStandards = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StandardService.DeleteClassStandards(classStandards);
         }
     }

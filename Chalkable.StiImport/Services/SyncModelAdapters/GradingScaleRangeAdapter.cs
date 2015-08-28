@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<GradingScaleRange> entities)
+        private Data.School.Model.GradingScaleRange Selector(GradingScaleRange x)
         {
-            var gsr = entities.Select(x => new Data.School.Model.GradingScaleRange
+            return new Data.School.Model.GradingScaleRange
             {
                 AlphaGradeRef = x.AlphaGradeID,
                 AveragingEquivalent = x.AveragingEquivalent,
@@ -21,22 +21,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 HighValue = x.HighValue,
                 IsPassing = x.IsPassing,
                 LowValue = x.LowValue
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<GradingScaleRange> entities)
+        {
+            var gsr = entities.Select(Selector).ToList();
             ServiceLocatorSchool.GradingScaleService.AddGradingScaleRanges(gsr);
         }
 
         protected override void UpdateInternal(IList<GradingScaleRange> entities)
         {
-            var gsr = entities.Select(x => new Data.School.Model.GradingScaleRange
-            {
-                AlphaGradeRef = x.AlphaGradeID,
-                AveragingEquivalent = x.AveragingEquivalent,
-                AwardGradCredit = x.AwardGradCredit,
-                GradingScaleRef = x.GradingScaleID,
-                HighValue = x.HighValue,
-                IsPassing = x.IsPassing,
-                LowValue = x.LowValue
-            }).ToList();
+            var gsr = entities.Select(Selector).ToList();
             ServiceLocatorSchool.GradingScaleService.EditGradingScaleRanges(gsr);
         }
 

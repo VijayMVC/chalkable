@@ -9,10 +9,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         public AttendanceMonthAdapter(AdapterLocator locator) : base(locator)
         {
         }
-
-        protected override void InsertInternal(IList<AttendanceMonth> entities)
+        private Data.School.Model.AttendanceMonth Selector(AttendanceMonth x)
         {
-            var res = entities.Select(x => new Data.School.Model.AttendanceMonth
+            return new Data.School.Model.AttendanceMonth
             {
                 Id = x.AttendanceMonthID,
                 SchoolYearRef = x.AcadSessionID,
@@ -22,23 +21,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 EndTime = x.EndTime,
                 IsLockedAttendance = x.IsLockedAttendance,
                 IsLockedDiscipline = x.IsLockedDiscipline,
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<AttendanceMonth> entities)
+        {
+            var res = entities.Select(Selector).ToList();
             ServiceLocatorSchool.AttendanceMonthService.Add(res);
         }
 
         protected override void UpdateInternal(IList<AttendanceMonth> entities)
         {
-            var res = entities.Select(x => new Data.School.Model.AttendanceMonth
-            {
-                Id = x.AttendanceMonthID,
-                SchoolYearRef = x.AcadSessionID,
-                Name = x.Name,
-                StartDate = x.StartDate,
-                EndDate = x.EndDate,
-                EndTime = x.EndTime,
-                IsLockedAttendance = x.IsLockedAttendance,
-                IsLockedDiscipline = x.IsLockedDiscipline
-            }).ToList();
+            var res = entities.Select(Selector).ToList();
             ServiceLocatorSchool.AttendanceMonthService.Edit(res);
         }
 

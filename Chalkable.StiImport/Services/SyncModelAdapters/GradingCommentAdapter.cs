@@ -10,27 +10,26 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<GradingComment> entities)
+        private Data.School.Model.GradingComment Selector(GradingComment x)
         {
-            var gc = entities.Select(x => new Data.School.Model.GradingComment
+            return new Data.School.Model.GradingComment
             {
                 Code = x.Code,
                 Comment = x.Comment,
                 Id = x.GradingCommentID,
                 SchoolRef = x.SchoolID
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<GradingComment> entities)
+        {
+            var gc = entities.Select(Selector).ToList();
             ServiceLocatorSchool.GradingCommentService.Add(gc);
         }
 
         protected override void UpdateInternal(IList<GradingComment> entities)
         {
-            var gc = entities.Select(x => new Data.School.Model.GradingComment
-            {
-                Code = x.Code,
-                Comment = x.Comment,
-                Id = x.GradingCommentID,
-                SchoolRef = x.SchoolID
-            }).ToList();
+            var gc = entities.Select(Selector).ToList();
             ServiceLocatorSchool.GradingCommentService.Edit(gc);
         }
 

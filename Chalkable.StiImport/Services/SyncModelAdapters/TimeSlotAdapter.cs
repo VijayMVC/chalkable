@@ -11,27 +11,26 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<TimeSlot> entities)
+        private Period Selector(TimeSlot x)
         {
-            var periods = entities.Select(x => new Period
+            return new Period
             {
                 Id = x.TimeSlotID,
                 Order = x.Sequence,
                 SchoolYearRef = x.AcadSessionID,
                 Name = x.Name
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<TimeSlot> entities)
+        {
+            var periods = entities.Select(Selector).ToList();
             ServiceLocatorSchool.PeriodService.AddPeriods(periods);
         }
 
         protected override void UpdateInternal(IList<TimeSlot> entities)
         {
-            var periods = entities.Select(x => new Period
-            {
-                Id = x.TimeSlotID,
-                Order = x.Sequence,
-                SchoolYearRef = x.AcadSessionID,
-                Name = x.Name
-            }).ToList();
+            var periods = entities.Select(Selector).ToList();
             ServiceLocatorSchool.PeriodService.Edit(periods);
         }
 

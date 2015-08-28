@@ -10,42 +10,36 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
+        private Data.School.Model.Person Selector(Person x)
+        {
+            return new Data.School.Model.Person
+            {
+                Active = false,
+                AddressRef = x.PhysicalAddressID,
+                BirthDate = x.DateOfBirth,
+                FirstName = x.FirstName,
+                Gender = x.GenderID.HasValue ? Locator.GetnderMapping[x.GenderID.Value] : "U",
+                Id = x.PersonID,
+                LastName = x.LastName,
+                PhotoModifiedDate = x.PhotoModifiedDate
+            };
+        }
+
         protected override void InsertInternal(IList<Person> entities)
         {
-            var persons = entities
-                .Select(x => new Data.School.Model.Person
-                {
-                    Active = false,
-                    AddressRef = x.PhysicalAddressID,
-                    BirthDate = x.DateOfBirth,
-                    FirstName = x.FirstName,
-                    Gender = x.GenderID.HasValue ? Locator.GetnderMapping[x.GenderID.Value] : "U",
-                    Id = x.PersonID,
-                    LastName = x.LastName,
-                    PhotoModifiedDate = x.PhotoModifiedDate
-                }).ToList();
+            var persons = entities.Select(Selector).ToList();
             ServiceLocatorSchool.PersonService.Add(persons);
         }
 
         protected override void UpdateInternal(IList<Person> entities)
         {
-            var persons = entities.Select(x => new Data.School.Model.Person
-                {
-                    AddressRef = x.PhysicalAddressID,
-                    BirthDate = x.DateOfBirth,
-                    FirstName = x.FirstName,
-                    Gender = x.GenderID.HasValue ? Locator.GetnderMapping[x.GenderID.Value] : "U",
-                    Id = x.PersonID,
-                    LastName = x.LastName,
-                    PhotoModifiedDate = x.PhotoModifiedDate
-                }).ToList();
+            var persons = entities.Select(Selector).ToList();
             ServiceLocatorSchool.PersonService.UpdateForImport(persons);
         }
 
         protected override void DeleteInternal(IList<Person> entities)
         {
-            var persons = entities.Select(x =>
-                new Data.School.Model.Person { Id = x.PersonID }).ToList();
+            var persons = entities.Select(x => new Data.School.Model.Person { Id = x.PersonID }).ToList();
             ServiceLocatorSchool.PersonService.Delete(persons);
         }
     }

@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<Staff> entities)
+        private Data.School.Model.Staff Selector(Staff x)
         {
-            var staff = entities.Select(x => new Data.School.Model.Staff
+            return new Data.School.Model.Staff
             {
                 BirthDate = x.DateOfBirth,
                 Id = x.StaffID,
@@ -20,21 +20,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 LastName = x.LastName,
                 Gender = x.GenderID.HasValue ? Locator.GetnderMapping[x.GenderID.Value] : "U",
                 UserId = x.UserID
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<Staff> entities)
+        {
+            var staff = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StaffService.Add(staff);
         }
 
         protected override void UpdateInternal(IList<Staff> entities)
         {
-            var staff = entities.Select(x => new Data.School.Model.Staff
-            {
-                BirthDate = x.DateOfBirth,
-                Id = x.StaffID,
-                FirstName = x.FirstName,
-                LastName = x.LastName,
-                Gender = x.GenderID.HasValue ? Locator.GetnderMapping[x.GenderID.Value] : "U",
-                UserId = x.UserID
-            }).ToList();
+            var staff = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StaffService.Edit(staff);
         }
 

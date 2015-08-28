@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<ScheduledTimeSlotVariation> entities)
+        private Data.School.Model.ScheduledTimeSlotVariation Selector(ScheduledTimeSlotVariation x)
         {
-            var scheduledTimeSlotVariations = entities.Select(x => new Data.School.Model.ScheduledTimeSlotVariation
+            return new Data.School.Model.ScheduledTimeSlotVariation
             {
                 Id = x.TimeSlotVariationId,
                 BellScheduleRef = x.BellScheduleId,
@@ -21,22 +21,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 Description = x.Description,
                 StartTime = x.StartTime,
                 EndTime = x.EndTime
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<ScheduledTimeSlotVariation> entities)
+        {
+            var scheduledTimeSlotVariations = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ScheduledTimeSlotService.AddScheduledTimeSlotVariations(scheduledTimeSlotVariations);
         }
 
         protected override void UpdateInternal(IList<ScheduledTimeSlotVariation> entities)
         {
-            var scheduledTimeSlotVariations = entities.Select(x => new Data.School.Model.ScheduledTimeSlotVariation
-            {
-                Id = x.TimeSlotVariationId,
-                BellScheduleRef = x.BellScheduleId,
-                PeriodRef = x.TimeSlotId,
-                Name = x.Name,
-                Description = x.Description,
-                StartTime = x.StartTime,
-                EndTime = x.EndTime
-            }).ToList();
+            var scheduledTimeSlotVariations = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ScheduledTimeSlotService.EditScheduledTimeSlotVariations(scheduledTimeSlotVariations);
         }
 

@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<GradingPeriod> entities)
+        private Data.School.Model.GradingPeriod Selector(GradingPeriod x)
         {
-            var gPeriods = entities.Select(x => new Data.School.Model.GradingPeriod
+            return new Data.School.Model.GradingPeriod
             {
                 Id = x.GradingPeriodID,
                 AllowGradePosting = x.AllowGradePosting,
@@ -25,26 +25,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 Name = x.Name,
                 SchoolAnnouncement = x.SchoolAnnouncement,
                 SchoolYearRef = x.AcadSessionID
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<GradingPeriod> entities)
+        {
+            var gPeriods = entities.Select(Selector).ToList();
             ServiceLocatorSchool.GradingPeriodService.Add(gPeriods);
         }
 
         protected override void UpdateInternal(IList<GradingPeriod> entities)
         {
-            var gps = entities.Select(x => new Data.School.Model.GradingPeriod
-            {
-                Description = x.Description,
-                EndDate = x.EndDate,
-                Id = x.GradingPeriodID,
-                Name = x.Name,
-                SchoolYearRef = x.AcadSessionID,
-                StartDate = x.StartDate,
-                AllowGradePosting = x.AllowGradePosting,
-                Code = x.Code,
-                EndTime = x.EndTime,
-                MarkingPeriodRef = x.TermID,
-                SchoolAnnouncement = x.SchoolAnnouncement
-            }).ToList();
+            var gps = entities.Select(Selector).ToList();
             ServiceLocatorSchool.GradingPeriodService.Edit(gps);
         }
 

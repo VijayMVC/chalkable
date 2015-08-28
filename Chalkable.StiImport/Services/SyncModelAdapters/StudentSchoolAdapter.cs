@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.Data.School.Model;
-using Chalkable.StiConnector.SyncModel;
 using StudentSchool = Chalkable.StiConnector.SyncModel.StudentSchool;
 
 namespace Chalkable.StiImport.Services.SyncModelAdapters
@@ -12,13 +10,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<StudentSchool> entities)
+        private Data.School.Model.StudentSchool Selector(StudentSchool x)
         {
-            var studentSchools = entities.Select(x => new Data.School.Model.StudentSchool
+            return new Data.School.Model.StudentSchool
             {
                 SchoolRef = x.SchoolID,
                 StudentRef = x.StudentID
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<StudentSchool> entities)
+        {
+            var studentSchools = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StudentService.AddStudentSchools(studentSchools);
         }
 
@@ -29,80 +32,8 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<StudentSchool> entities)
         {
-            var ss = entities.Select(x => new Data.School.Model.StudentSchool { SchoolRef = x.SchoolID, StudentRef = x.StudentID }).ToList();
+            var ss = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StudentService.DeleteStudentSchools(ss);
-        }
-    }
-
-    public class PersonTelephoneAdapter : SyncModelAdapter<PersonTelephone>
-    {
-        private const string DESCR_WORK = "Work";
-        private const string DESCR_CELL = "cell";
-        public PersonTelephoneAdapter(AdapterLocator locator) : base(locator)
-        {
-
-        }
-
-        protected override void InsertInternal(IList<PersonTelephone> entities)
-        {
-            var ps = new List<Phone>();
-            foreach (var pt in entities)
-            {
-                var type = PhoneType.Home;
-                if (pt.Description == DESCR_WORK)
-                    type = PhoneType.Work;
-                if (pt.Description == DESCR_CELL)
-                    type = PhoneType.Mobile;
-                if (!string.IsNullOrEmpty(pt.FormattedTelephoneNumber))
-                {
-                    ps.Add(new Phone
-                    {
-                        Value = pt.FormattedTelephoneNumber,
-                        DigitOnlyValue = pt.TelephoneNumber,
-                        PersonRef = pt.PersonID,
-                        IsPrimary = pt.IsPrimary,
-                        Type = type
-                    });
-                }
-            }
-            ServiceLocatorSchool.PhoneService.AddPhones(ps);
-        }
-
-        protected override void UpdateInternal(IList<PersonTelephone> entities)
-        {
-            IList<Phone> ps = new List<Phone>();
-            foreach (var pt in entities)
-            {
-                var type = PhoneType.Home;
-                if (pt.Description == DESCR_WORK)
-                    type = PhoneType.Work;
-                if (pt.Description == DESCR_CELL)
-                    type = PhoneType.Mobile;
-                if (!string.IsNullOrEmpty(pt.FormattedTelephoneNumber))
-                {
-                    ps.Add(new Phone
-                    {
-                        DigitOnlyValue = pt.TelephoneNumber,
-                        PersonRef = pt.PersonID,
-                        IsPrimary = pt.IsPrimary,
-                        Type = type,
-                        Value = pt.FormattedTelephoneNumber
-                    });
-                }
-            }
-            ServiceLocatorSchool.PhoneService.EditPhones(ps);
-        }
-
-        protected override void DeleteInternal(IList<PersonTelephone> entities)
-        {
-            var phones = entities.Select(x => new Phone
-            {
-                DigitOnlyValue = x.TelephoneNumber,
-                PersonRef = x.PersonID,
-                IsPrimary = x.IsPrimary,
-                Value = x.FormattedTelephoneNumber
-            }).ToList();
-            ServiceLocatorSchool.PhoneService.Delete(phones);
         }
     }
 }

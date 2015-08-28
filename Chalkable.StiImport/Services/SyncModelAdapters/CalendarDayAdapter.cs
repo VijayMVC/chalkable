@@ -11,30 +11,27 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
+        private Date Selector(CalendarDay x)
+        {
+            return new Date
+            {
+                DayTypeRef = x.DayTypeID,
+                IsSchoolDay = x.InSchool,
+                SchoolYearRef = x.AcadSessionID,
+                BellScheduleRef = x.BellScheduleID,
+                Day = x.Date
+            };
+        }
+
         protected override void InsertInternal(IList<CalendarDay> entities)
         {
-            var days = entities.ToList()
-                .Select(x => new Date
-                {
-                    DayTypeRef = x.DayTypeID,
-                    IsSchoolDay = x.InSchool,
-                    SchoolYearRef = x.AcadSessionID,
-                    BellScheduleRef = x.BellScheduleID,
-                    Day = x.Date
-                }).ToList();
+            var days = entities.ToList().Select(Selector).ToList();
             ServiceLocatorSchool.CalendarDateService.Add(days);
         }
 
         protected override void UpdateInternal(IList<CalendarDay> entities)
         {
-            var ds = entities.Select(x => new Date
-            {
-                DayTypeRef = x.DayTypeID,
-                IsSchoolDay = x.InSchool,
-                BellScheduleRef = x.BellScheduleID,
-                SchoolYearRef = x.AcadSessionID,
-                Day = x.Date
-            }).ToList();
+            var ds = entities.Select(Selector).ToList();
             ServiceLocatorSchool.CalendarDateService.Edit(ds);
         }
 

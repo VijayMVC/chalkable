@@ -9,28 +9,26 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         public AlphaGradeAdapter(AdapterLocator locator) : base(locator)
         {
         }
+        private Data.School.Model.AlphaGrade Selector(AlphaGrade x)
+        {
+            return new Data.School.Model.AlphaGrade
+            {
+                Id = x.AlphaGradeID,
+                Description = x.Description,
+                Name = x.Name,
+                SchoolRef = x.SchoolID
+            };
+        }
 
         protected override void InsertInternal(IList<AlphaGrade> entities)
         {
-            var alphaGrades = entities.Select(x => new Data.School.Model.AlphaGrade
-            {
-                Id = x.AlphaGradeID,
-                Description = x.Description,
-                Name = x.Name,
-                SchoolRef = x.SchoolID
-            }).ToList();
+            var alphaGrades = entities.Select(Selector).ToList();
             ServiceLocatorSchool.AlphaGradeService.AddAlphaGrades(alphaGrades);
         }
-
+        
         protected override void UpdateInternal(IList<AlphaGrade> entities)
         {
-            var alphaGrades = entities.Select(x => new Data.School.Model.AlphaGrade
-            {
-                Id = x.AlphaGradeID,
-                Description = x.Description,
-                Name = x.Name,
-                SchoolRef = x.SchoolID
-            }).ToList();
+            var alphaGrades = entities.Select(Selector).ToList();
             ServiceLocatorSchool.AlphaGradeService.EditAlphaGrades(alphaGrades);
         }
 

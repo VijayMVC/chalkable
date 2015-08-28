@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<ScheduledTimeSlot> entities)
+        private Data.School.Model.ScheduledTimeSlot Selector(ScheduledTimeSlot x)
         {
-            var allSts = entities.Select(x => new Data.School.Model.ScheduledTimeSlot
+            return new Data.School.Model.ScheduledTimeSlot
             {
                 BellScheduleRef = x.BellScheduleID,
                 Description = x.Description,
@@ -20,21 +20,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 IsDailyAttendancePeriod = x.IsDailyAttendancePeriod,
                 StartTime = x.StartTime,
                 PeriodRef = x.TimeSlotID
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<ScheduledTimeSlot> entities)
+        {
+            var allSts = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ScheduledTimeSlotService.Add(allSts);
         }
 
         protected override void UpdateInternal(IList<ScheduledTimeSlot> entities)
         {
-            var allSts = entities.Select(x => new Data.School.Model.ScheduledTimeSlot
-            {
-                BellScheduleRef = x.BellScheduleID,
-                Description = x.Description,
-                EndTime = x.EndTime,
-                IsDailyAttendancePeriod = x.IsDailyAttendancePeriod,
-                StartTime = x.StartTime,
-                PeriodRef = x.TimeSlotID
-            }).ToList();
+            var allSts = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ScheduledTimeSlotService.Edit(allSts);
         }
 

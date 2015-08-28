@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<Standard> entities)
+        private Data.School.Model.Standard Selector(Standard x)
         {
-            var sts = entities.Select(x => new Data.School.Model.Standard
+            return new Data.School.Model.Standard
             {
                 Description = x.Description,
                 Id = x.StandardID,
@@ -23,24 +23,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 StandardSubjectRef = x.StandardSubjectID,
                 UpperGradeLevelRef = x.UpperGradeLevelID,
                 AcademicBenchmarkId = x.AcademicBenchmarkId
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<Standard> entities)
+        {
+            var sts = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StandardService.AddStandards(sts);
         }
 
         protected override void UpdateInternal(IList<Standard> entities)
         {
-            var sts = entities.Select(x => new Data.School.Model.Standard
-            {
-                Description = x.Description,
-                Id = x.StandardID,
-                IsActive = x.IsActive,
-                LowerGradeLevelRef = x.LowerGradeLevelID,
-                Name = x.Name,
-                ParentStandardRef = x.ParentStandardID,
-                StandardSubjectRef = x.StandardSubjectID,
-                UpperGradeLevelRef = x.UpperGradeLevelID,
-                AcademicBenchmarkId = x.AcademicBenchmarkId
-            }).ToList();
+            var sts = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StandardService.EditStandard(sts);
         }
 

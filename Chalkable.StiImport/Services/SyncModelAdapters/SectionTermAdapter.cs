@@ -11,13 +11,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<SectionTerm> entities)
+        private MarkingPeriodClass Selector(SectionTerm x)
         {
-            var cts = entities.Select(x => new MarkingPeriodClass
+            return new MarkingPeriodClass
             {
                 ClassRef = x.SectionID,
                 MarkingPeriodRef = x.TermID,
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<SectionTerm> entities)
+        {
+            var cts = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ClassService.AssignClassToMarkingPeriod(cts);
         }
 
@@ -28,11 +33,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<SectionTerm> entities)
         {
-            var mps = entities.Select(x => new MarkingPeriodClass
-            {
-                ClassRef = x.SectionID,
-                MarkingPeriodRef = x.TermID
-            }).ToList();
+            var mps = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ClassService.DeleteMarkingPeriodClasses(mps);
         }
     }

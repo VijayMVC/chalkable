@@ -177,6 +177,7 @@
     <Compile Include="Services\SyncModelAdapters\InfractionAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\PersonEmailAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\PersonTelephoneAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\RoomAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\ScheduledSectionAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\ScheduledTimeSlotAdapter.cs" />
@@ -197,6 +198,7 @@
     <Compile Include="Services\SyncModelAdapters\StudentSchoolAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\SyncModelAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\SyncModelWrapper.cs" />
+    <Compile Include="Services\SyncModelAdapters\SystemSettingAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\TermAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\TimeSlotAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\UserAdapter.cs" />

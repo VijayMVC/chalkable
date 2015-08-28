@@ -10,13 +10,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<StaffSchool> entities)
+        private Data.School.Model.StaffSchool Selector(StaffSchool x)
         {
-            var staffSchool = entities.Select(x => new Data.School.Model.StaffSchool
+            return new Data.School.Model.StaffSchool
             {
                 SchoolRef = x.SchoolID,
                 StaffRef = x.StaffID
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<StaffSchool> entities)
+        {
+            var staffSchool = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StaffService.AddStaffSchools(staffSchool);
         }
 
@@ -27,7 +32,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<StaffSchool> entities)
         {
-            var ss = entities.Select(x => new Data.School.Model.StaffSchool { SchoolRef = x.SchoolID, StaffRef = x.StaffID }).ToList();
+            var ss = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StaffService.DeleteStaffSchools(ss);
         }
     }

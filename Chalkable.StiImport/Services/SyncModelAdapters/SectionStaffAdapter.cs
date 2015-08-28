@@ -11,29 +11,27 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<SectionStaff> entities)
+        private ClassTeacher Selector(SectionStaff x)
         {
-            var teachers = entities.Select(x => new ClassTeacher
+            return new ClassTeacher
             {
                 ClassRef = x.SectionID,
                 IsCertified = x.IsCertified,
                 IsHighlyQualified = x.IsHighlyQualified,
                 IsPrimary = x.IsPrimary,
                 PersonRef = x.StaffID
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<SectionStaff> entities)
+        {
+            var teachers = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ClassService.AddTeachers(teachers);
         }
 
         protected override void UpdateInternal(IList<SectionStaff> entities)
         {
-            var teachers = entities.Select(x => new ClassTeacher
-            {
-                ClassRef = x.SectionID,
-                IsCertified = x.IsCertified,
-                IsHighlyQualified = x.IsHighlyQualified,
-                IsPrimary = x.IsPrimary,
-                PersonRef = x.StaffID
-            }).ToList();
+            var teachers = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ClassService.EditTeachers(teachers);
         }
 

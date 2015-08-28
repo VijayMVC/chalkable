@@ -11,9 +11,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<AbsenceReason> entities)
+        private AttendanceReason Selector(AbsenceReason x)
         {
-            var rs = entities.Select(x => new AttendanceReason
+            return new AttendanceReason
             {
                 Category = x.AbsenceCategory,
                 Code = x.Code,
@@ -22,22 +22,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 IsActive = x.IsActive,
                 IsSystem = x.IsSystem,
                 Name = x.Name
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<AbsenceReason> entities)
+        {
+            var rs = entities.Select(Selector).ToList();
             ServiceLocatorSchool.AttendanceReasonService.Add(rs);
         }
 
         protected override void UpdateInternal(IList<AbsenceReason> entities)
         {
-            var rs = entities.Select(x => new AttendanceReason
-            {
-                Category = x.AbsenceCategory,
-                Code = x.Code,
-                Description = x.Description,
-                Id = x.AbsenceReasonID,
-                IsActive = x.IsActive,
-                IsSystem = x.IsSystem,
-                Name = x.Name
-            }).ToList();
+            var rs = entities.Select(Selector).ToList();
             ServiceLocatorSchool.AttendanceReasonService.Edit(rs);
         }
 

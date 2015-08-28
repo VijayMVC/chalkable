@@ -21,39 +21,32 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                     : StudentEnrollmentStatusEnum.PreviouslyEnrolled;
         }
 
+        private StudentSchoolYear Selector(StudentAcadSession x)
+        {
+            return new StudentSchoolYear
+            {
+                GradeLevelRef = x.GradeLevelID ?? 0,
+                SchoolYearRef = x.AcadSessionID,
+                StudentRef = x.StudentID,
+                EnrollmentStatus = StudentEnrollmentStatusEnumFromString(x.CurrentEnrollmentStatus)
+            };
+        }
+
         protected override void InsertInternal(IList<StudentAcadSession> entities)
         {
-            var assignments = entities.Where(x => x.GradeLevelID.HasValue)
-                .ToList()
-                .Select(x => new StudentSchoolYear
-                {
-                    GradeLevelRef = x.GradeLevelID.Value,
-                    SchoolYearRef = x.AcadSessionID,
-                    StudentRef = x.StudentID,
-                    EnrollmentStatus = StudentEnrollmentStatusEnumFromString(x.CurrentEnrollmentStatus)
-                }).ToList();
+            var assignments = entities.Where(x => x.GradeLevelID.HasValue).Select(Selector).ToList();
             ServiceLocatorSchool.SchoolYearService.AssignStudent(assignments);
         }
 
         protected override void UpdateInternal(IList<StudentAcadSession> entities)
         {
-            var ssy = entities.Select(x => new StudentSchoolYear
-            {
-                SchoolYearRef = x.AcadSessionID,
-                StudentRef = x.StudentID,
-                GradeLevelRef = x.GradeLevelID.Value,
-                EnrollmentStatus = StudentEnrollmentStatusEnumFromString(x.CurrentEnrollmentStatus)
-            }).ToList();
+            var ssy = entities.Select(Selector).ToList();
             ServiceLocatorSchool.SchoolYearService.EditStudentSchoolYears(ssy);
         }
 
         protected override void DeleteInternal(IList<StudentAcadSession> entities)
         {
-            var assignments = entities.Select(x => new StudentSchoolYear
-            {
-                SchoolYearRef = x.AcadSessionID,
-                StudentRef = x.StudentID
-            }).ToList();
+            var assignments = entities.Select(Selector).ToList();
             ServiceLocatorSchool.SchoolYearService.UnassignStudents(assignments);
         }
     }

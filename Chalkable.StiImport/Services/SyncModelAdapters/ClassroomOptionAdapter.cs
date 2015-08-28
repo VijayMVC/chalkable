@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<ClassroomOption> entities)
+        private Data.School.Model.ClassroomOption Selector(ClassroomOption x)
         {
-            var cro = entities.Select(x => new Data.School.Model.ClassroomOption
+            return new Data.School.Model.ClassroomOption
             {
                 Id = x.SectionID,
                 DefaultActivitySortOrder = x.DefaultActivitySortOrder,
@@ -33,34 +33,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 DefaultStudentSortOrder = x.DefaultStudentSortOrder,
                 SeatingChartRows = x.SeatingChartRows,
                 SeatingChartColumns = x.SeatingChartColumns
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<ClassroomOption> entities)
+        {
+            var cro = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ClassroomOptionService.Add(cro);
         }
 
         protected override void UpdateInternal(IList<ClassroomOption> entities)
         {
-            var cro = entities.Select(x => new Data.School.Model.ClassroomOption()
-            {
-                Id = x.SectionID,
-                DefaultActivitySortOrder = x.DefaultActivitySortOrder,
-                GroupByCategory = x.GroupByCategory,
-                AveragingMethod = x.AveragingMethod,
-                CategoryAveraging = x.CategoryAveraging,
-                IncludeWithdrawnStudents = x.IncludeWithdrawnStudents,
-                DisplayStudentAverage = x.DisplayStudentAverage,
-                DisplayTotalPoints = x.DisplayTotalPoints,
-                RoundDisplayedAverages = x.RoundDisplayedAverages,
-                DisplayAlphaGrade = x.DisplayAlphaGrade,
-                DisplayStudentNames = x.DisplayStudentNames,
-                DisplayMaximumScore = x.DisplayMaximumScore,
-                StandardsGradingScaleRef = x.StandardsGradingScaleID,
-                StandardsCalculationMethod = x.StandardsCalculationMethod,
-                StandardsCalculationRule = x.StandardsCalculationRule,
-                StandardsCalculationWeightMaximumValues = x.StandardsCalculationWeightMaximumValues,
-                DefaultStudentSortOrder = x.DefaultStudentSortOrder,
-                SeatingChartRows = x.SeatingChartRows,
-                SeatingChartColumns = x.SeatingChartColumns
-            }).ToList();
+            var cro = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ClassroomOptionService.Edit(cro);
         }
 

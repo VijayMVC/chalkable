@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<StudentContact> entities)
+        private Data.School.Model.StudentContact Selector(StudentContact x)
         {
-            var chlkStudentContacts = entities.Select(x => new Data.School.Model.StudentContact
+            return new Data.School.Model.StudentContact
             {
                 StudentRef = x.StudentID,
                 ContactRef = x.ContactID,
@@ -26,27 +26,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 IsResponsibleForBill = x.IsResponsibleForBill,
                 ReceivesBill = x.ReceivesBill,
                 StudentVisibleInHome = x.StudentVisibleInHome
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<StudentContact> entities)
+        {
+            var chlkStudentContacts = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ContactService.AddStudentContact(chlkStudentContacts);
         }
 
         protected override void UpdateInternal(IList<StudentContact> entities)
         {
-            var studentContacts = entities.Select(x => new Data.School.Model.StudentContact
-            {
-                StudentRef = x.StudentID,
-                ContactRef = x.ContactID,
-                ContactRelationshipRef = x.RelationshipID,
-                Description = x.Description,
-                ReceivesMailings = x.ReceivesMailings,
-                IsFamilyMember = x.IsFamilyMember,
-                IsCustodian = x.IsCustodian,
-                IsEmergencyContact = x.IsEmergencyContact,
-                CanPickUp = x.CanPickUp,
-                IsResponsibleForBill = x.IsResponsibleForBill,
-                ReceivesBill = x.ReceivesBill,
-                StudentVisibleInHome = x.StudentVisibleInHome
-            }).ToList();
+            var studentContacts = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ContactService.EditStudentContact(studentContacts);
         }
 

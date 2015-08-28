@@ -9,10 +9,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         public BellScheduleAdapter(AdapterLocator locator) : base(locator)
         {
         }
-
-        protected override void InsertInternal(IList<BellSchedule> entities)
+        
+        private Data.School.Model.BellSchedule Selector(BellSchedule x)
         {
-            var bellSchedules = entities.Select(x => new Data.School.Model.BellSchedule
+            return new Data.School.Model.BellSchedule
             {
                 Id = x.BellScheduleID,
                 Code = x.Code,
@@ -23,24 +23,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 SchoolYearRef = x.AcadSessionID,
                 TotalMinutes = x.TotalMinutes,
                 UseStartEndTime = x.UseStartEndTime
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<BellSchedule> entities)
+        {
+            var bellSchedules = entities.Select(Selector).ToList();
             ServiceLocatorSchool.BellScheduleService.Add(bellSchedules);
         }
 
         protected override void UpdateInternal(IList<BellSchedule> entities)
         {
-            var bellSchedules = entities.Select(x => new Data.School.Model.BellSchedule
-            {
-                Id = x.BellScheduleID,
-                Code = x.Code,
-                Description = x.Description,
-                IsActive = x.IsActive,
-                IsSystem = x.IsSystem,
-                Name = x.Name,
-                SchoolYearRef = x.AcadSessionID,
-                TotalMinutes = x.TotalMinutes,
-                UseStartEndTime = x.UseStartEndTime
-            }).ToList();
+            var bellSchedules = entities.Select(Selector).ToList();
             ServiceLocatorSchool.BellScheduleService.Edit(bellSchedules);
         }
 

@@ -11,9 +11,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<Term> entities)
+        private MarkingPeriod Selector(Term term)
         {
-            var mps = entities.Select(term => new MarkingPeriod
+            return new MarkingPeriod
             {
                 Description = term.Description,
                 EndDate = term.EndDate,
@@ -22,22 +22,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 SchoolYearRef = term.AcadSessionID,
                 StartDate = term.StartDate,
                 WeekDays = 62
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<Term> entities)
+        {
+            var mps = entities.Select(Selector).ToList();
             ServiceLocatorSchool.MarkingPeriodService.Add(mps);
         }
 
         protected override void UpdateInternal(IList<Term> entities)
         {
-            var mps = entities.Select(x => new MarkingPeriod
-            {
-                Description = x.Description,
-                EndDate = x.EndDate,
-                Id = x.TermID,
-                Name = x.Name,
-                SchoolYearRef = x.AcadSessionID,
-                StartDate = x.StartDate,
-                WeekDays = 62
-            }).ToList();
+            var mps = entities.Select(Selector).ToList();
             ServiceLocatorSchool.MarkingPeriodService.Edit(mps);
         }
 

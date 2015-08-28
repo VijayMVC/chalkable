@@ -10,29 +10,27 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<PersonEmail> entities)
+        private Data.School.Model.PersonEmail Selector(PersonEmail x)
         {
-            var chlkPersonsEmails = entities.Select(x => new Data.School.Model.PersonEmail
+            return new Data.School.Model.PersonEmail
             {
                 PersonRef = x.PersonID,
                 Description = x.Description,
                 EmailAddress = x.EmailAddress,
                 IsListed = x.IsListed,
                 IsPrimary = x.IsPrimary
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<PersonEmail> entities)
+        {
+            var chlkPersonsEmails = entities.Select(Selector).ToList();
             ServiceLocatorSchool.PersonEmailService.AddPersonsEmails(chlkPersonsEmails);
         }
 
         protected override void UpdateInternal(IList<PersonEmail> entities)
         {
-            var chlkPersonsEmails = entities.Select(x => new Data.School.Model.PersonEmail
-            {
-                PersonRef = x.PersonID,
-                Description = x.Description,
-                EmailAddress = x.EmailAddress,
-                IsListed = x.IsListed,
-                IsPrimary = x.IsPrimary
-            }).ToList();
+            var chlkPersonsEmails = entities.Select(Selector).ToList();
             ServiceLocatorSchool.PersonEmailService.UpdatePersonsEmails(chlkPersonsEmails);
         }
 

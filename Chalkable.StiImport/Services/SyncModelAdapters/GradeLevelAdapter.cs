@@ -11,28 +11,26 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<GradeLevel> entities)
+        private Data.School.Model.GradeLevel Selector(GradeLevel x)
         {
-            var gradeLevels = entities.Select(x => new Data.School.Model.GradeLevel
+            return new Data.School.Model.GradeLevel
             {
                 Id = x.GradeLevelID,
                 Description = x.Description,
                 Name = x.Name,
                 Number = x.Sequence
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<GradeLevel> entities)
+        {
+            var gradeLevels = entities.Select(Selector).ToList();
             ServiceLocatorSchool.GradeLevelService.Add(gradeLevels);
         }
 
         protected override void UpdateInternal(IList<GradeLevel> entities)
         {
-            var gradeLevels = entities
-                .Select(x => new Data.School.Model.GradeLevel
-                {
-                    Id = x.GradeLevelID,
-                    Description = x.Description,
-                    Name = x.Name,
-                    Number = x.Sequence
-                }).ToList();
+            var gradeLevels = entities.Select(Selector).ToList();
             ServiceLocatorSchool.GradeLevelService.Edit(gradeLevels);
         }
 

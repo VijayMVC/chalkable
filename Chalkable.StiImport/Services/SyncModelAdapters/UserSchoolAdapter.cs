@@ -12,21 +12,31 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<UserSchool> entities)
+        private Data.School.Model.UserSchool SchoolSelector(UserSchool x)
+        {
+            return new Data.School.Model.UserSchool
+            {
+                SchoolRef = x.SchoolID,
+                UserRef = x.UserID
+            };
+        }
+
+        private SchoolUser MasterSelector(UserSchool x)
         {
             Trace.Assert(ServiceLocatorSchool.Context.DistrictId.HasValue);
-            var masterUserSchool = entities.Select(x => new SchoolUser
+            return new SchoolUser
             {
                 DistrictRef = ServiceLocatorSchool.Context.DistrictId.Value,
                 SchoolRef = x.SchoolID,
                 UserRef = x.UserID
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<UserSchool> entities)
+        {
+            var masterUserSchool = entities.Select(MasterSelector).ToList();
             ServiceLocatorMaster.UserService.AddSchoolUsers(masterUserSchool);
-            var districtUserSchool = entities.Select(x => new Data.School.Model.UserSchool
-            {
-                SchoolRef = x.SchoolID,
-                UserRef = x.UserID
-            }).ToList();
+            var districtUserSchool = entities.Select(SchoolSelector).ToList();
             ServiceLocatorSchool.UserSchoolService.Add(districtUserSchool);
         }
 
@@ -37,20 +47,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<UserSchool> entities)
         {
-            Trace.Assert(ServiceLocatorSchool.Context.DistrictId.HasValue);
-            var masterSchoolUsers = entities.Select(x => new SchoolUser
-            {
-                SchoolRef = x.SchoolID,
-                UserRef = x.UserID,
-                DistrictRef = ServiceLocatorSchool.Context.DistrictId.Value
-            }).ToList();
+            var masterSchoolUsers = entities.Select(MasterSelector).ToList();
             ServiceLocatorMaster.UserService.DeleteSchoolUsers(masterSchoolUsers);
-
-            var districtUserSchool = entities.Select(x => new Data.School.Model.UserSchool
-            {
-                SchoolRef = x.SchoolID,
-                UserRef = x.UserID
-            }).ToList();
+            var districtUserSchool = entities.Select(SchoolSelector).ToList();
             ServiceLocatorSchool.UserSchoolService.Delete(districtUserSchool);
         }
     }

@@ -11,39 +11,32 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<StudentScheduleTerm> entities)
+        private ClassPerson Selector(StudentScheduleTerm x)
         {
-            var studentSchedules = entities.Select(x => new ClassPerson
+            return new ClassPerson
             {
                 ClassRef = x.SectionID,
                 PersonRef = x.StudentID,
                 MarkingPeriodRef = x.TermID,
                 IsEnrolled = x.IsEnrolled
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<StudentScheduleTerm> entities)
+        {
+            var studentSchedules = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ClassService.AddStudents(studentSchedules);
         }
 
         protected override void UpdateInternal(IList<StudentScheduleTerm> entities)
         {
-            var studentSchedules = entities.Select(x => new ClassPerson
-                {
-                    ClassRef = x.SectionID,
-                    PersonRef = x.StudentID,
-                    MarkingPeriodRef = x.TermID,
-                    IsEnrolled = x.IsEnrolled
-                }).ToList();
+            var studentSchedules = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ClassService.EditStudents(studentSchedules);
         }
 
         protected override void DeleteInternal(IList<StudentScheduleTerm> entities)
         {
-            var students = entities.Select(x => new ClassPerson
-                                  {
-                                      ClassRef = x.SectionID,
-                                      MarkingPeriodRef = x.TermID,
-                                      PersonRef = x.StudentID
-                                  })
-                                  .ToList();
+            var students = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ClassService.DeleteStudent(students);
         }
     }

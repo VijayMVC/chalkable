@@ -10,13 +10,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<SectionTimeSlotVariation> entities)
+        private Data.School.Model.SectionTimeSlotVariation Selector(SectionTimeSlotVariation x)
         {
-            var sectionTimeSlotVariations = entities.Select(x => new Data.School.Model.SectionTimeSlotVariation
+            return new Data.School.Model.SectionTimeSlotVariation
             {
                 ClassRef = x.SectionID,
                 ScheduledTimeSlotVariationRef = x.TimeSlotVariationID
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<SectionTimeSlotVariation> entities)
+        {
+            var sectionTimeSlotVariations = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ScheduledTimeSlotService.AddSectionTimeSlotVariations(sectionTimeSlotVariations);
         }
 
@@ -26,11 +31,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<SectionTimeSlotVariation> entities)
         {
-            var sectionTimeSlotVariations = entities.Select(x => new Data.School.Model.SectionTimeSlotVariation
-            {
-                ClassRef = x.SectionID,
-                ScheduledTimeSlotVariationRef = x.TimeSlotVariationID
-            }).ToList();
+            var sectionTimeSlotVariations = entities.Select(Selector).ToList();
             ServiceLocatorSchool.ScheduledTimeSlotService.DeleteSectionTimeSlotVariations(sectionTimeSlotVariations);
         }
     }

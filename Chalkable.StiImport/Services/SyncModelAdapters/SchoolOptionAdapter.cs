@@ -12,9 +12,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<SchoolOption> entities)
+        private Data.School.Model.SchoolOption Selector(SchoolOption schoolOption)
         {
-            var res = entities.Select(schoolOption => new Data.School.Model.SchoolOption
+            return new Data.School.Model.SchoolOption
             {
                 Id = schoolOption.SchoolID,
                 AllowDualEnrollment = schoolOption.AllowDualEnrollment,
@@ -38,37 +38,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 StandardsCalculationWeightMaximumValues = schoolOption.StandardsCalculationWeightMaximumValues,
                 StandardsGradingScaleRef = schoolOption.StandardsGradingScaleID,
                 TimeZoneName = schoolOption.TimeZoneName
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<SchoolOption> entities)
+        {
+            var res = entities.Select(Selector).ToList();
             ServiceLocatorSchool.SchoolService.AddSchoolOptions(res);
         }
 
         protected override void UpdateInternal(IList<SchoolOption> entities)
         {
-            var res = entities.Select(schoolOption => new Data.School.Model.SchoolOption
-            {
-                Id = schoolOption.SchoolID,
-                AllowDualEnrollment = schoolOption.AllowDualEnrollment,
-                AllowScoreEntryForUnexcused = schoolOption.AllowScoreEntryForUnexcused,
-                AllowSectionAverageModification = schoolOption.AllowSectionAverageModification,
-                AveragingMethod = schoolOption.AveragingMethod,
-                BaseHoursOffset = schoolOption.BaseHoursOffset,
-                BaseMinutesOffset = schoolOption.BaseMinutesOffset,
-                CategoryAveraging = schoolOption.CategoryAveraging,
-                CompleteStudentScheduleDefinition = schoolOption.CompleteStudentScheduleDefinition,
-                DefaultCombinationIndex = schoolOption.DefaultCombinationIndex,
-                DisciplineOverwritesAttendance = schoolOption.DisciplineOverwritesAttendance,
-                EarliestPaymentDate = schoolOption.EarliestPaymentDate,
-                IncludeReportCardCommentsInGradebook = schoolOption.IncludeReportCardCommentsInGradebook,
-                LockCategories = schoolOption.LockCategories,
-                MergeRostersForAttendance = schoolOption.MergeRostersForAttendance,
-                NextReceiptNumber = schoolOption.NextReceiptNumber,
-                ObservesDst = schoolOption.ObservesDst,
-                StandardsCalculationMethod = schoolOption.StandardsCalculationMethod,
-                StandardsCalculationRule = schoolOption.StandardsCalculationRule,
-                StandardsCalculationWeightMaximumValues = schoolOption.StandardsCalculationWeightMaximumValues,
-                StandardsGradingScaleRef = schoolOption.StandardsGradingScaleID,
-                TimeZoneName = schoolOption.TimeZoneName
-            }).ToList();
+            var res = entities.Select(Selector).ToList();
             ServiceLocatorSchool.SchoolService.EditSchoolOptions(res);
         }
 

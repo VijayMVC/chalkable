@@ -10,29 +10,27 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<StandardSubject> entities)
+        private Data.School.Model.StandardSubject Selector(StandardSubject x)
         {
-            var ss = entities.Select(x => new Data.School.Model.StandardSubject
+            return new Data.School.Model.StandardSubject
             {
                 AdoptionYear = x.AdoptionYear,
                 Id = x.StandardSubjectID,
                 Description = x.Description,
                 IsActive = x.IsActive,
                 Name = x.Name
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<StandardSubject> entities)
+        {
+            var ss = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StandardService.AddStandardSubjects(ss);
         }
 
         protected override void UpdateInternal(IList<StandardSubject> entities)
         {
-            var ss = entities.Select(x => new Data.School.Model.StandardSubject
-            {
-                AdoptionYear = x.AdoptionYear,
-                Id = x.StandardSubjectID,
-                Description = x.Description,
-                IsActive = x.IsActive,
-                Name = x.Name
-            }).ToList();
+            var ss = entities.Select(Selector).ToList();
             ServiceLocatorSchool.StandardService.EditStandardSubjects(ss);
         }
 

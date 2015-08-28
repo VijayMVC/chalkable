@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<Infraction> entities)
+        private Data.School.Model.Infraction Selector(Infraction x)
         {
-            var infractions =entities.Select(x => new Data.School.Model.Infraction
+            return new Data.School.Model.Infraction
             {
                 Code = x.Code,
                 Demerits = x.Demerits,
@@ -31,27 +31,18 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 // a nullable bool.  When null, we should assume the value is true so that the infraction will
                 // be displayed in the UI
                 VisibleInClassroom = x.VisibleInClassroom ?? true
+            };
+        }
 
-            }).ToList();
+        protected override void InsertInternal(IList<Infraction> entities)
+        {
+            var infractions =entities.Select(Selector).ToList();
             ServiceLocatorSchool.InfractionService.Add(infractions);
         }
 
         protected override void UpdateInternal(IList<Infraction> entities)
         {
-            var infractions = entities.Select(x => new Data.School.Model.Infraction
-            {
-                Code = x.Code,
-                Demerits = x.Demerits,
-                Description = x.Description,
-                Id = x.InfractionID,
-                IsActive = x.IsActive,
-                IsSystem = x.IsSystem,
-                Name = x.Name,
-                NCESCode = x.NCESCode,
-                SIFCode = x.SIFCode,
-                StateCode = x.StateCode,
-                VisibleInClassroom = x.VisibleInClassroom ?? true
-            }).ToList();
+            var infractions = entities.Select(Selector).ToList();
             ServiceLocatorSchool.InfractionService.Edit(infractions);
         }
 

@@ -10,27 +10,26 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        protected override void InsertInternal(IList<DayType> entities)
+        private Data.School.Model.DayType Selector(DayType x)
         {
-            var dayTypes = entities.Select(x => new Data.School.Model.DayType
+            return new Data.School.Model.DayType
             {
                 Id = x.DayTypeID,
                 Name = x.Name,
                 Number = x.Sequence,
                 SchoolYearRef = x.AcadSessionID
-            }).ToList();
+            };
+        }
+
+        protected override void InsertInternal(IList<DayType> entities)
+        {
+            var dayTypes = entities.Select(Selector).ToList();
             ServiceLocatorSchool.DayTypeService.Add(dayTypes);
         }
 
         protected override void UpdateInternal(IList<DayType> entities)
         {
-            var dts = entities.Select(x => new Data.School.Model.DayType
-            {
-                Id = x.DayTypeID,
-                Name = x.Name,
-                Number = x.Sequence,
-                SchoolYearRef = x.AcadSessionID
-            }).ToList();
+            var dts = entities.Select(Selector).ToList();
             ServiceLocatorSchool.DayTypeService.Edit(dts);
         }
 
