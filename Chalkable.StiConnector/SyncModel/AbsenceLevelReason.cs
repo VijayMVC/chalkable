@@ -9,5 +9,6 @@ namespace Chalkable.StiConnector.SyncModel
         public short AbsenceReasonID { get; set; }
         public bool IsDefaultReason { get; set; }
         public Guid DistrictGuid { get; set; }
+        public override int DefaultOrder => 36;
     }
 }

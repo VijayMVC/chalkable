@@ -16,5 +16,6 @@
        public bool PostRoundedAverage { get; set; }
        public short Sequence { get; set; }
        public char AveragingRule { get; set; }
+       public override int DefaultOrder => 46;
     }
 }

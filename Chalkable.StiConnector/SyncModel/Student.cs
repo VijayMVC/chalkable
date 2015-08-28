@@ -84,5 +84,7 @@ namespace Chalkable.StiConnector.SyncModel
         public bool RecievesAttendanceAlerts { get; set; }
         public bool RecievesDisciplineAlerts { get; set; }
         public bool RecievesGradeAlerts { get; set; }
+
+        public override int DefaultOrder => 7;
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
@@ -12,11 +12,12 @@ using Chalkable.Data.Master.Model;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
 using Chalkable.StiImport.Services.SyncModelAdapters;
-using User = Chalkable.StiConnector.SyncModel.User;
+using School = Chalkable.StiConnector.SyncModel.School;
+using User = Chalkable.Data.Master.Model.User;
 
 namespace Chalkable.StiImport.Services
 {
-    public partial class ImportService
+    public class ImportService
     {
         private SyncContext context;
         
@@ -37,7 +38,7 @@ namespace Chalkable.StiImport.Services
             ConnectionInfo = connectionInfo;
             Log = log;
             this.districtId = districtId;
-            var admin = new Data.Master.Model.User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo =  new UserLoginInfo()};
+            var admin = new User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo =  new UserLoginInfo()};
             sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
             
         }
@@ -48,7 +49,7 @@ namespace Chalkable.StiImport.Services
             ConnectionInfo = connectionInfo;
             Log = log;
             this.districtId = districtId;
-            var admin = new Data.Master.Model.User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo = new UserLoginInfo() };
+            var admin = new User { Id = Guid.Empty, Login = "Virtual system admin", LoginInfo = new UserLoginInfo() };
             sysadminCntx = new UserContext(admin, CoreRoles.SUPER_ADMIN_ROLE, null, null, null, null);
 
         }
@@ -104,7 +105,7 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("process pictures");
             ProcessPictures();
             Log.LogInfo("setting link status");
-            var importedSchoolIds = context.GetSyncResult<StiConnector.SyncModel.School>().All.Select(x => x.SchoolID);
+            var importedSchoolIds = context.GetSyncResult<School>().All.Select(x => x.SchoolID);
             foreach (var importedSchoolId in importedSchoolIds)
                 connectorLocator.LinkConnector.CompleteSync(importedSchoolId);
             CreateUserLoginInfos();
@@ -130,10 +131,10 @@ namespace Chalkable.StiImport.Services
             Log.LogInfo("download data to restore");
             DownloadSyncData();
             Log.LogInfo("remove user records");
-            context.GetSyncResult<User>().Inserted = new User[0];
-            context.GetSyncResult<User>().Rows = new User[0];
-            context.GetSyncResult<User>().Updated = null;
-            context.GetSyncResult<User>().Deleted = null;
+            context.GetSyncResult<StiConnector.SyncModel.User>().Inserted = new StiConnector.SyncModel.User[0];
+            context.GetSyncResult<StiConnector.SyncModel.User>().Rows = new StiConnector.SyncModel.User[0];
+            context.GetSyncResult<StiConnector.SyncModel.User>().Updated = null;
+            context.GetSyncResult<StiConnector.SyncModel.User>().Deleted = null;
             Log.LogInfo("do initial sync");
             DoInitialSync();
             Log.LogInfo("performing before restore preparation");
@@ -151,7 +152,7 @@ namespace Chalkable.StiImport.Services
 
         private void CreateUserLoginInfos()
         {
-            if (insertedUsers.Count > 0)
+            if (insertedUsers != null && insertedUsers.Count > 0)
             {
                 Log.LogInfo("creating user login infos");
                 ServiceLocatorMaster.UserService.CreateUserLoginInfos(insertedUsers);
@@ -283,26 +284,11 @@ namespace Chalkable.StiImport.Services
             foreach (var type in context.Types)
             {
                 SyncResultBase<SyncModel> sr = context.GetSyncResult(type.Value);
-                models.AddRange(sr.All.Select(x=>new SyncModelWrapper
-                {
-                    ChangeVersion = x.SYS_CHANGE_VERSION,
-                    Model = x,
-                    OperationType = PersistOperationType.Insert
-                }));
-
-                models.AddRange(sr.Updated.Select(x => new SyncModelWrapper
-                {
-                    ChangeVersion = x.SYS_CHANGE_VERSION,
-                    Model = x,
-                    OperationType = PersistOperationType.Update
-                }));
-
-                models.AddRange(sr.Deleted.Select(x => new SyncModelWrapper
-                {
-                    ChangeVersion = x.SYS_CHANGE_VERSION,
-                    Model = x,
-                    OperationType = PersistOperationType.Delete
-                }));
+                models.AddRange(sr.All.Select(x=>SyncModelWrapper.Create(x.SYS_CHANGE_VERSION, PersistOperationType.Insert, x)));
+                if (sr.Updated != null)
+                    models.AddRange(sr.Updated.Select(x => SyncModelWrapper.Create(x.SYS_CHANGE_VERSION, PersistOperationType.Update, x)));
+                if (sr.Deleted != null)
+                    models.AddRange(sr.Deleted.Select(x => SyncModelWrapper.Create(x.SYS_CHANGE_VERSION, PersistOperationType.Delete, x)));
             }
             models.Sort();
             IList<SyncModelWrapper> batch = new List<SyncModelWrapper>();
@@ -310,13 +296,14 @@ namespace Chalkable.StiImport.Services
             {
                 if (i > 0 && models[i].CompareTo(models[i - 1]) != 0)
                 {
-                    adapterLocator.GetAdapter(batch[0].Model.GetType())
-                        .Persist(batch[0].OperationType, batch.Select(x => x.Model).ToList());
+                    Persist(adapterLocator.GetAdapter(batch[0].Model.GetType()), batch[0].OperationType,
+                        batch.Select(x => x.Model).ToList());
+                    batch.Clear();
                 }
                 batch.Add(models[i]);
             }
-            adapterLocator.GetAdapter(batch[0].Model.GetType())
-                .Persist(batch[0].OperationType, batch.Select(x => x.Model).ToList());
+            Persist(adapterLocator.GetAdapter(batch[0].Model.GetType()), batch[0].OperationType,
+                        batch.Select(x => x.Model).ToList());
 
             insertedUsers = adapterLocator.InsertedUserIds;
 
@@ -325,6 +312,24 @@ namespace Chalkable.StiImport.Services
                 Log.LogInfo("update versions");
                 UpdateVersion();    
             }
+        }
+
+        private void Persist(ISyncModelAdapter adapter, PersistOperationType type, IList<SyncModel> entities)
+        {
+            if (entities.Count == 0)
+                return;
+            if (adapter == null)
+            {
+                Log.LogInfo($"No adapter for {entities[0].GetType().Name}");
+                return;
+            }
+            var requestStartTime = DateTimeOffset.UtcNow;
+            var requestTimer = Stopwatch.StartNew();
+            adapter.Persist(type, entities);
+            string typeName = type.ToString();
+            var adapterName = adapter.GetType().Name;
+            Log.LogInfo($"persist {typeName} by {adapterName}" );
+            Telemetry.DispatchRequest(typeName, adapterName, requestStartTime, requestTimer.Elapsed, true, Verbosity.Info, districtId.ToString(), taskId.ToString());
         }
 
         private void UpdateDistrictLastSync(District d, bool success)
@@ -376,10 +381,8 @@ namespace Chalkable.StiImport.Services
             context.TablesToSync[typeof(SpEdStatus).Name] = null;
             var toSync = context.TablesToSync;
             var results = new List<SyncResultBase<SyncModel>>();
-            var counter = 0;
             foreach (var table in toSync)
             {
-                counter++;
                 var type = context.Types[table.Key];
                 Log.LogInfo("Start downloading " + table.Key);
                 
@@ -393,7 +396,7 @@ namespace Chalkable.StiImport.Services
                 details.Add("RowCount", res.RowCount.ToString());
                 details.Add("Version", table.Value.ToString());
 
-                Telemetry.DispatchRequest("Table download", table.Key, startTime, requestTimer.Elapsed, true, Chalkable.Common.Verbosity.Info, details);
+                Telemetry.DispatchRequest("Table download", table.Key, startTime, requestTimer.Elapsed, true, Verbosity.Info, details);
                 Log.LogInfo("Table downloaded: " + table.Key);
                 results.Add(res);
             }
@@ -412,20 +415,6 @@ namespace Chalkable.StiImport.Services
                     newVersions.Add(i.Key, i.Value.Value);
                 }
             ServiceLocatorSchool.SyncService.UpdateVersions(newVersions);
-        }
-
-        private void ProcessActions(List<Expression<Action>> actions, string actionType) {
-
-            var counter = 0;
-            foreach (var action in actions) {
-                counter++;
-                var requestStartTime = DateTimeOffset.UtcNow;
-                var requestTimer = Stopwatch.StartNew();
-                action.Compile()();
-                var body = action.Body as MethodCallExpression;
-                Log.LogInfo(body.Method.Name);
-                Telemetry.DispatchRequest(actionType, body.Method.Name, requestStartTime, requestTimer.Elapsed, true, Chalkable.Common.Verbosity.Info, this.districtId.ToString(), this.taskId.ToString());                
-            }
         }
     }
 

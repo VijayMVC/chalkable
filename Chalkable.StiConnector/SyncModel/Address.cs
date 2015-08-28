@@ -21,5 +21,7 @@ namespace Chalkable.StiConnector.SyncModel
         public Guid DistrictGuid { get; set; }
         public short? StateID { get; set; }
         public short? CountryID { get; set; }
+
+        public override int DefaultOrder => 2;
     }
 }

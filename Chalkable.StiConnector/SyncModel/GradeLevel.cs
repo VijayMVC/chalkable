@@ -14,5 +14,7 @@ namespace Chalkable.StiConnector.SyncModel
         public Guid RowVersion { get; set; }
         public Guid DistrictGuid { get; set; }
         public byte? FreezeAfterTermSeq { get; set; }
+
+        public override int DefaultOrder => 12;
     }
 }

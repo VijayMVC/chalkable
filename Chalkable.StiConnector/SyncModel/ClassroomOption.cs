@@ -21,5 +21,6 @@ namespace Chalkable.StiConnector.SyncModel
         public string DefaultStudentSortOrder { get; set; }
         public int SeatingChartRows { get; set; }
         public int SeatingChartColumns { get; set; }
+        public override int DefaultOrder => 41;
     }
 }

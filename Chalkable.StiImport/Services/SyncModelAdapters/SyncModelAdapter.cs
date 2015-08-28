@@ -2,19 +2,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.StiConnector.SyncModel;
 
 namespace Chalkable.StiImport.Services.SyncModelAdapters
 {
-    public interface ISyncModelAdapter<out TSyncModel> where TSyncModel : SyncModel
+    public interface ISyncModelAdapter
     {
-        void Persist(PersistOperationType type, IList entities);
+        void Persist(PersistOperationType type, IList<SyncModel> entities);
     }
-    public abstract class SyncModelAdapter<TSyncModel> : ISyncModelAdapter<TSyncModel> where TSyncModel : SyncModel
+    public abstract class SyncModelAdapter<TSyncModel> : ISyncModelAdapter where TSyncModel : SyncModel
     {
         protected AdapterLocator Locator { get; }
         protected IServiceLocatorMaster ServiceLocatorMaster => Locator.MasterLocator;
@@ -31,9 +29,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         }
 
         
-        public void Persist(PersistOperationType type, IList entities)
+        public void Persist(PersistOperationType type, IList<SyncModel> entities)
         {
-            persistActions[type]((IList<TSyncModel>)entities);
+            persistActions[type](entities.Cast<TSyncModel>().ToList());
         }
 
         private void Insert(IList<TSyncModel> entities)
@@ -43,14 +41,12 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         private void Update(IList<TSyncModel> entities)
         {
-            if (entities != null)
-                UpdateInternal(entities);
+            UpdateInternal(entities);
         }
 
         private void Delete(IList<TSyncModel> entities)
         {
-            if (entities != null)
-                DeleteInternal(entities);
+            DeleteInternal(entities);
         }
 
         protected abstract void InsertInternal(IList<TSyncModel> entities);
@@ -63,7 +59,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         public IServiceLocatorMaster MasterLocator { get; }
         public IServiceLocatorSchool SchoolLocator { get; }
 
-        private Dictionary<Type, ISyncModelAdapter<SyncModel>> allAdapters;
+        private Dictionary<Type, ISyncModelAdapter> allAdapters;
 
         public List<Guid> InsertedUserIds;
 
@@ -77,7 +73,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             SpEdStatusMapping = spEdStatuses.ToDictionary(x => x.SpEdStatusID, x => x.Name);
             MasterLocator = masterLocator;
             SchoolLocator = schoolLocator;
-            allAdapters = new Dictionary<Type, ISyncModelAdapter<SyncModel>>
+            allAdapters = new Dictionary<Type, ISyncModelAdapter>
             {
                 {typeof(School), new SchoolAdapter(this) },
                 {typeof(SchoolOption), new SchoolOptionAdapter(this) },
@@ -131,11 +127,11 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             };
         }
 
-        public ISyncModelAdapter<SyncModel> GetAdapter(Type type)
+        public ISyncModelAdapter GetAdapter(Type type)
         {
             if (allAdapters.ContainsKey(type))
                 return allAdapters[type];
-            throw new Exception($"can't find adapter for model {type.Name}");
+            return null;
         }
     }
 

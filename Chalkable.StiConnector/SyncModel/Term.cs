@@ -19,5 +19,6 @@ namespace Chalkable.StiConnector.SyncModel
         public Guid DistrictGuid { get; set; }
         public string SIFCode { get; set; }
         public string NCESCode { get; set; }
+        public override int DefaultOrder => 15;
     }
 }
