@@ -117,8 +117,12 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
                                     | &#32; for &#32;
                                     = item.getInstalledCount()
                                     | &#32; Students in &#32;
-                                    span= item.getSchoolName()
-                                    | &#32; School - &#32;
+                                    if item.getSchools().length > 1
+                                        span= item.getSchools().length
+                                        | &#32; Schools - &#32;
+                                    else
+                                        span= item.getSchools()[0].getName()
+                                        | &#32; School - &#32;
                                     = item.getInstallDate().toString('m/dd/yy')
 
                             .amount= item.getPrice() || 'Free'

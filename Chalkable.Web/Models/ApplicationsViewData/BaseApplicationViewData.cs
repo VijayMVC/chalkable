@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Web.Models.SchoolsViewData;
 
 namespace Chalkable.Web.Models.ApplicationsViewData
 {
@@ -154,8 +156,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
 
     public class ApplicationActionHistoryViewData
     {
-        public int? SchoolId { get; set; }
-        public string SchoolName { get; set; }
+        public IList<IdNameViewData<int>> Schools { get; set; }
+        //public int? SchoolId { get; set; }
+        //public string SchoolName { get; set; }
         public int PersonId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -169,19 +172,25 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public static IList<ApplicationActionHistoryViewData> Create(IList<ApplicationInstallHistory> appInstallhistory, IList<ApplicationBanHistory> applicationBanHistory)
         {
             var res = new List<ApplicationActionHistoryViewData>();
-            if(applicationBanHistory != null)
-                res.AddRange(appInstallhistory.Select(x => new ApplicationActionHistoryViewData
+            if (applicationBanHistory != null)
+            {
+                var historyDic = appInstallhistory.GroupBy(x => x.ApplicationInstallActionId).ToDictionary(x=>x.Key, x=>x.ToList());
+                res.AddRange(historyDic.Select(x =>
                 {
-                    FirstName = x.FirstName,
-                    InstalledCount = x.PersonCount,
-                    LastName = x.LastName,
-                    PersonId = x.PersonId,
-                    SchoolId = x.SchoolId,
-                    SchoolName = x.SchoolName,
-                    OwnerRoleId = x.OwnerRoleId,
-                    Date = x.Date,
-                    Action = (int)(x.Installed ? ApplicationActionEnum.Install : ApplicationActionEnum.UnInstall)
+                    var historyRecord = x.Value.First();
+                    return new ApplicationActionHistoryViewData
+                    {
+                        Schools = x.Value.Select(y=>IdNameViewData<int>.Create(y.SchoolId, y.SchoolName)).ToList(),
+                        FirstName = historyRecord.FirstName,
+                        InstalledCount = x.Value.Sum(y => y.PersonCount),
+                        LastName = historyRecord.LastName,
+                        PersonId = historyRecord.PersonId,
+                        OwnerRoleId = historyRecord.OwnerRoleId,
+                        Date = historyRecord.Date,
+                        Action = (int) (historyRecord.Installed ? ApplicationActionEnum.Install : ApplicationActionEnum.UnInstall)
+                    };
                 }).ToList());
+            } 
             if(applicationBanHistory != null)
                 res.AddRange(applicationBanHistory.Select(x=> new ApplicationActionHistoryViewData
                 {
