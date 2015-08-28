@@ -17,16 +17,16 @@ module.exports = function (grunt) {
     required(options, 'deploymentSlot');
     required(options, 'parameters');
   
-    var credentials = compute.createCertificateCloudCredentials(options.credentials),
+    var credentials = options.credentials,
         serviceName = options.serviceName,
         deploymentSlot = options.deploymentSlot,
         parameters = options.parameters;
 
-    credentials.pem = fs.readFileSync(credentials.pemPath, 'utf-8')
+    credentials.pem = fs.readFileSync(credentials.pemPath, 'utf-8');
 
-    var client = new compute.createComputeManagementClient(credentials);
+    var client = new compute.createComputeManagementClient(compute.createCertificateCloudCredentials(credentials));
     
-    parameters.configuration = fs.readFileSync(parameters.configurationPath, 'utf-8').replace(/^\uFEFF/, '')
+    parameters.configuration = fs.readFileSync(parameters.configurationPath, 'utf-8').replace(/^\uFEFF/, '');
     
     var operation = client.deployments.upgradeBySlot(serviceName, deploymentSlot, parameters, function (err, result) {
       if (err) {
