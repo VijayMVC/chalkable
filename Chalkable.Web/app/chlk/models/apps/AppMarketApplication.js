@@ -21,8 +21,8 @@ NAMESPACE('chlk.models.apps', function () {
     ENUM('ApplicationActionEnum',{
         INSTALL:0,
         UNINSTALL:1,
-        BUN:2,
-        UN_BUN:3
+        BAN:2,
+        UN_BAN:3
     });
 
     /** @class chlk.models.apps.ApplicationInstallRecord */
@@ -39,9 +39,6 @@ NAMESPACE('chlk.models.apps', function () {
                 this.price = SJX.fromValue(raw.price, Number);
                 this.remains = SJX.fromValue(raw.remains, Number);
 
-                //this.schoolId = SJX.fromValue(raw.schoolid, chlk.models.id.SchoolId);
-                //this.schoolName = SJX.fromValue(raw.schoolname, String);
-
                 this.schools = SJX.fromArrayOfDeserializables(raw.schools, chlk.models.common.NameId);
 
                 this.installDate = SJX.fromDeserializable(raw.date, chlk.models.common.ChlkDate);
@@ -57,10 +54,6 @@ NAMESPACE('chlk.models.apps', function () {
             Number, 'price',
             Number, 'remains',
 
-            //
-            //chlk.models.id.SchoolId, 'schoolId',
-            //String, 'schoolName',
-
             ArrayOf(chlk.models.common.NameId), 'schools',
 
             chlk.models.common.ChlkDate, 'installDate',
@@ -71,15 +64,15 @@ NAMESPACE('chlk.models.apps', function () {
                 switch (this.getAction()){
                     case chlk.models.apps.ApplicationActionEnum.INSTALL:  return 'Installed';
                     case chlk.models.apps.ApplicationActionEnum.UNINSTALL: return 'Uninstalled';
-                    case chlk.models.apps.ApplicationActionEnum.BUN: return 'Buned';
-                    case chlk.models.apps.ApplicationActionEnum.UN_BUN: return 'UnBuned'
+                    case chlk.models.apps.ApplicationActionEnum.BAN: return 'Banned';
+                    case chlk.models.apps.ApplicationActionEnum.UN_BAN: return 'UnBanned'
                 }
                 return null;
             },
 
             Boolean, function isBanUnBanAction(){
                 var action = this.getAction();
-                return action == chlk.models.apps.ApplicationActionEnum.BUN || action == chlk.models.apps.ApplicationActionEnum.UN_BUN;
+                return action == chlk.models.apps.ApplicationActionEnum.BAN || action == chlk.models.apps.ApplicationActionEnum.UN_BAN;
             },
 
             String, function getFullName() {
