@@ -130,8 +130,9 @@ module.exports = function(grunt) {
             'app/*App.compiled.js',
             'app/chlk/{shared,chlk-messages,chlk-constants}.js',
             
-            'app/chlk/{index,jquery,lib,highcharts}/*.js',
-            'Scripts/*.min.js',
+            'app/chlk/index/**',
+            'app/{jquery,lib,highcharts}/**',
+            'scripts/*.min.js',
             
             'Content/*.css',
             'Content/{avatars,icon-templates,images}/**',
