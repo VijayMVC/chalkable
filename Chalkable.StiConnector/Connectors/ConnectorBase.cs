@@ -25,8 +25,11 @@ namespace Chalkable.StiConnector.Connectors
             request.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
             //request.KeepAlive = false;
             request.ProtocolVersion = HttpVersion.Version10;
+            request.Timeout = Settings.WebClientTimeout;
             return request;
         }
+
+
     }
 
     public class ConnectorBase

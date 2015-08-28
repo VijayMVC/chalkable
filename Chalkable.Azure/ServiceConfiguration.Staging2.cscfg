@@ -40,6 +40,8 @@
       <Setting name="verbosity" value="Verbose" />
       <Setting name="instrumentationKey" value="dedde1a0-79f6-4531-98fa-13a09428297a" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablestaging2;AccountKey=6hEiqmGj+AXMwpNHqiglj4WujwmZbLSp7PmsEeqojXWXKVqIYRUOW0M7PtcWfJyalLvJUPRYg0qFa2X39uLkWA==" />
+      <!--WebClient Timeout Settings-->
+      <Setting name ="WebClientTimeout" value="300000"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
