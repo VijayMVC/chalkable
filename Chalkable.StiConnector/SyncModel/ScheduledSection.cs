@@ -8,5 +8,6 @@ namespace Chalkable.StiConnector.SyncModel
         public int TimeSlotID { get; set; }
         public Guid DistrictGuid { get; set; }
         //public int RoomID { get; set; }
+        public override int DefaultOrder => 31;
     }
 }

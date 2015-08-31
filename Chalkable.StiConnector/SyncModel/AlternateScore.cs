@@ -11,5 +11,6 @@ namespace Chalkable.StiConnector.SyncModel
         public decimal? PercentOfMaximumScore { get; set; }
         public Guid RowVersion { get; set; }
         public Guid DistrictGuid { get; set; }
+        public override int DefaultOrder => 38;
     }
 }

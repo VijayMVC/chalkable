@@ -7,5 +7,7 @@ namespace Chalkable.StiConnector.SyncModel
         public int SchoolID { get; set; }
         public Guid DistrictGuid { get; set; }
         public Guid RowVersion { get; set; }
+
+        public override int DefaultOrder => 9;
     }
 }

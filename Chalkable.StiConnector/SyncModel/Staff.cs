@@ -43,5 +43,7 @@ namespace Chalkable.StiConnector.SyncModel
         public Guid DistrictGuid { get; set; }
         public bool IsHispanic { get; set; }
         public short? CountryOfResidenceID { get; set; }
+
+        public override int DefaultOrder => 6;
     }
 }
