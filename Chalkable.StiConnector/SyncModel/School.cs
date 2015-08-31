@@ -29,5 +29,7 @@ namespace Chalkable.StiConnector.SyncModel
         public bool IsLEEnabled { get; set; }
         public bool IsLESyncComplete { get; set; }
         public bool IsChalkableEnabled { get; set; }
+
+        public override int DefaultOrder => 1;
     }
 }

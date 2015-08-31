@@ -42,5 +42,7 @@ namespace Chalkable.StiConnector.SyncModel
         public int? ReportingSchoolID { get; set; }
         public bool AreFeesPosted { get; set; }
         public bool MergeRostersForAttendance { get; set; }
+
+        public override int DefaultOrder => 23;
     }
 }

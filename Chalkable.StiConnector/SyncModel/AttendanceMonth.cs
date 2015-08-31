@@ -12,5 +12,6 @@ namespace Chalkable.StiConnector.SyncModel
         public DateTime EndTime { get; set; }
         public bool IsLockedAttendance { get; set; }
         public bool IsLockedDiscipline { get; set; }
+        public override int DefaultOrder => 44;
     }
 }

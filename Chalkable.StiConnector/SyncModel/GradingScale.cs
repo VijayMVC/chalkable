@@ -7,5 +7,7 @@ namespace Chalkable.StiConnector.SyncModel
         public string Name { get; set; }
         public string Description { get; set; }
         public int? HomeGradeToDisplay { get; set; }
+
+        public override int DefaultOrder => 21;
     }
 }

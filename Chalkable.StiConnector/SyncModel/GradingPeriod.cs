@@ -15,5 +15,7 @@ namespace Chalkable.StiConnector.SyncModel
         public DateTime EndTime { get; set; }
         public string SchoolAnnouncement { get; set; }
         public bool AllowGradePosting { get; set; }
+
+        public override int DefaultOrder => 16;
     }
 }

@@ -28,5 +28,6 @@ namespace Chalkable.StiConnector.SyncModel
         public bool LockCategories { get; set; }
         public bool IncludeReportCardCommentsInGradebook { get; set; }
         public bool MergeRostersForAttendance { get; set; }
+        public override int DefaultOrder => 43;
     }
 }

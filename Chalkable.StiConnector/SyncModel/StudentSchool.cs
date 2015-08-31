@@ -24,5 +24,7 @@ namespace Chalkable.StiConnector.SyncModel
         public short? PMBusStopTime { get; set; }
         public Guid RowVersion { get; set; }
         public Guid DistrictGuid { get; set; }
+
+        public override int DefaultOrder => 8;
     }
 }

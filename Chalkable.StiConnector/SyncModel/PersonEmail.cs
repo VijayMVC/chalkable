@@ -9,5 +9,7 @@ namespace Chalkable.StiConnector.SyncModel
         public bool IsListed { get; set; }
         public bool IsPrimary { get; set; }
         public Guid DistrictGuid { get; set; }
+
+        public override int DefaultOrder => 10;
     }
 }
