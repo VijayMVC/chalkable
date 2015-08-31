@@ -607,12 +607,12 @@ NAMESPACE('chlk.controllers', function (){
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
 
-            var btnsCount = 2;
+            var btnsCount = 3;
 
             if (canAddStandard) ++btnsCount;
             if (assessmentAppId_) ++btnsCount;
 
-            var start = pageIndex_ | 0, count = 16 - btnsCount;
+            var start = pageIndex_ | 0, count = 12 - btnsCount;
 
             var result;
             if (this.userIsAdmin()){

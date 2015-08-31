@@ -105,7 +105,7 @@ NAMESPACE('chlk.services', function () {
                     start: start_ || 0,
                     classId: classId_ && classId_.valueOf(),
                     markingPeriodId: markingPeriodId_ && markingPeriodId_.valueOf(),
-                    count: count_ || 12
+                    count: count_ || 7
                 });
             },
 
