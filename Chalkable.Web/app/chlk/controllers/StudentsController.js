@@ -396,7 +396,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getAppsInfo(personId, 0, 10000)
                     .attach(this.validateResponse_())
                     .then(function (model) {
-                        return new chlk.models.people.UserProfileAppsViewData(this.getCurrentRole(), model);
+                        return new chlk.models.people.UserProfileAppsViewData(this.getCurrentRole(), model, this.getUserClaims_());
                     }, this);
                 return this.PushView(chlk.activities.profile.SchoolPersonAppsPage, res);
             }
