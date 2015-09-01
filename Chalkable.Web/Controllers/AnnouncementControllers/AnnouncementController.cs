@@ -83,7 +83,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("Teacher")]
         public ActionResult AddStandard(int announcementId, int standardId, int? announcementType)
         {
-            SchoolLocator.GetAnnouncementService((AnnouncementType?)announcementType).AddAnnouncementStandard(announcementId, standardId);
+            var standard = SchoolLocator.GetAnnouncementService((AnnouncementType?)announcementType).AddAnnouncementStandard(announcementId, standardId);
+            MasterLocator.UserTrackingService.AttachedStandard(Context.Login, standard.Name);
             return Json(PrepareFullAnnouncementViewData(announcementId, announcementType));
         }
 

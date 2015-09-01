@@ -14,6 +14,9 @@ REQUIRE('chlk.lib.exception.NoClassAnnouncementTypeException');
 REQUIRE('chlk.lib.exception.AppErrorException');
 REQUIRE('chlk.lib.exception.InvalidPictureException');
 
+REQUIRE('chlk.services.UserTrackingService');
+
+
 NAMESPACE('chlk.controllers', function (){
 
     var Raygun = window.Raygun || null;
@@ -114,6 +117,9 @@ NAMESPACE('chlk.controllers', function (){
     /** @class chlk.controllers.BaseController */
    CLASS(ABSTRACT,
        'BaseController', EXTENDS(ria.mvc.Controller), [
+
+           [ria.mvc.Inject],
+           chlk.services.UserTrackingService, 'userTrackingService',
 
            function $() {
                BASE();

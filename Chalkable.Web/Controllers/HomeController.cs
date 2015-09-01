@@ -100,7 +100,7 @@ namespace Chalkable.Web.Controllers
         {
             Trace.Assert(Context.PersonId.HasValue);
             var distictAdmin = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
-            PrepareCommonViewData();
+            var district = PrepareCommonViewData();
             ViewData[ViewConstants.ROLE_NAME] = CoreRoles.DISTRICT_ADMIN_ROLE.LoweredName;
             PrepareJsonData(PersonViewData.Create(distictAdmin), ViewConstants.CURRENT_PERSON);
             var gradeLevel = SchoolLocator.GradeLevelService.GetGradeLevels();
@@ -111,7 +111,7 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(AnnouncementAttributeViewData.Create(announcementAttributes), ViewConstants.ANNOUNCEMENT_ATTRIBUTES);
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyDistrictAdmin(distictAdmin.Email, "", "", 
-                Context.DistrictId.ToString(), null, Context.DistrictTimeZone, Context.Role.Name, ip);
+                district.Name, null, Context.DistrictTimeZone, Context.Role.Name, ip);
             return View();
         }
 
@@ -173,11 +173,12 @@ namespace Chalkable.Web.Controllers
             return View();
         }
 
-        private void PrepareCommonViewData()
+        private District PrepareCommonViewData()
         {
+            District district = null;
             if (Context.DistrictId.HasValue && Context.SchoolLocalId.HasValue)
             {
-                var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
+                district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
                 if (Context.DeveloperId != null)
                     ViewData[ViewConstants.IS_DEV] = true;
                 if (district.IsDemoDistrict)
@@ -211,13 +212,13 @@ namespace Chalkable.Web.Controllers
 
             PrepareJsonData(leParams, ViewConstants.LE_PARAMS);
             PrepareJsonData(Context.Claims, ViewConstants.USER_CLAIMS);
-
+            return district;
         }
 
-        private void PrepareCommonViewDataForSchoolPerson(StartupData startupData)
+        private District PrepareCommonViewDataForSchoolPerson(StartupData startupData)
         {
             //TODO: render data for demo school 
-            PrepareCommonViewData();
+            var district = PrepareCommonViewData();
             ViewData[ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT] = startupData.UnshownNotificationsCount;
             var mps = startupData.MarkingPeriods;
             MarkingPeriod markingPeriod = mps.Where(x=>x.StartDate <= Context.NowSchoolYearTime).OrderBy(x=>x.StartDate).LastOrDefault();
@@ -233,7 +234,8 @@ namespace Chalkable.Web.Controllers
 
             PrepareJsonData(MarkingPeriodViewData.Create(mps), ViewConstants.MARKING_PERIODS);
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
-            PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);        
+            PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);
+            return district;
         }
         
 
@@ -242,7 +244,7 @@ namespace Chalkable.Web.Controllers
             Trace.Assert(Context.PersonId.HasValue);
             var startupData = SchoolLocator.SchoolService.GetStartupData();
 
-            PrepareCommonViewDataForSchoolPerson(startupData);
+            var district = PrepareCommonViewDataForSchoolPerson(startupData);
             var person = startupData.Person;
             var personView = PersonInfoViewData.Create(person);
             ProcessFirstLogin(person);
@@ -251,7 +253,7 @@ namespace Chalkable.Web.Controllers
             var classes = startupData.Classes;
             PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MasterLocator.UserTrackingService.IdentifyStudent(Context.Login, person.FirstName, person.LastName, Context.DistrictId.ToString(), "", person.FirstLoginDate, Context.DistrictTimeZone, ip);
+            MasterLocator.UserTrackingService.IdentifyStudent(Context.Login, person.FirstName, person.LastName, district.Name, "", person.FirstLoginDate, Context.DistrictTimeZone, ip);
         }           
 
         private void PrepareTeacherJsonData()
@@ -259,7 +261,7 @@ namespace Chalkable.Web.Controllers
             Trace.Assert(Context.PersonId.HasValue);
             var startupData = SchoolLocator.SchoolService.GetStartupData();
 
-            PrepareCommonViewDataForSchoolPerson(startupData);
+            var district = PrepareCommonViewDataForSchoolPerson(startupData);
             var person = startupData.Person;
             var personView = PersonInfoViewData.Create(person);
             ProcessFirstLogin(person);
@@ -285,7 +287,7 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(AnnouncementAttributeViewData.Create(announcementAttributes), ViewConstants.ANNOUNCEMENT_ATTRIBUTES);
 
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MasterLocator.UserTrackingService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, Context.DistrictId.ToString(), 
+            MasterLocator.UserTrackingService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, district.Name, 
                 classNames, person.FirstLoginDate, Context.DistrictTimeZone, ip);
         }
 

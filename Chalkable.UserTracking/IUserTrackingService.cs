@@ -37,6 +37,7 @@ namespace Chalkable.UserTracking
         void ChangedEmail(string email, string newEmail);
         void UserLoggedInForFirstTime(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate, string timeZoneId, string role);
         void SentMessageTo(string email, string userName);
+
         void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached);
         void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached);
         void CreateNewAdminItem(string email, string adminName, int appsAttached, int docsAttached);
@@ -46,7 +47,11 @@ namespace Chalkable.UserTracking
         void SetScore(string login, int announcementId, int studentId, string gradeValue, string extraCredits, bool callFromGradeBook);
         void SetAttendance(string login, int classId);
         void PostedGrades(string login, int classId, int gradingPeriodId);
-        void LoggedInFromChalkable(string login);
-        void LoggedInFromINow(string login);
+        void LoggedIn(string login);
+        void AttachedAssessment(string login, int announcementId);
+        void AttachedStandard(string login, string name);
+        void UsedStandardsExplorer(string login, string explorerType);
+        void AutoGradedItem(string login, int announcementId, int studentId, string grade);
+
     }
 }
