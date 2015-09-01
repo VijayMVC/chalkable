@@ -292,6 +292,18 @@ module.exports = function(grunt) {
           config: 'Chalkable.Web/jsbuild.json'
         },
         all: {}
+    },
+    
+    compass: {                  // Task
+      'chalkable.web': {                   // Target
+        options: {              // Target options
+          config: 'Chalkable.Web/config.rb',
+          basePath: 'Chalkable.Web',
+          sassDir: 'assets/sass2',
+          cssDir: 'Content',
+          environment: 'production'
+        }
+      }
     }
   });
 
@@ -306,6 +318,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('emp.ria-grunt-jsbuild3');
+  grunt.loadNpmTasks('grunt-contrib-compass');
   
   // js concat/minify
   grunt.registerTask('jsmin', ['uglify:chalkable.web', 'concat:index-layout', 'concat:role-layout', 'concat:devdocs-layout']);
@@ -321,6 +334,8 @@ module.exports = function(grunt) {
     postBuildTasks.push('deploy-to-azure', 'raygun-create-deployment');
   }
   
+  grunt.registerTask('post-checkout', ['compass']);
+  grunt.registerTask('pre-release', ['compass', 'cssmin', 'jsmin', 'jsbuild3']);
   grunt.registerTask('post-build', postBuildTasks);
   
   // Default task(s).
