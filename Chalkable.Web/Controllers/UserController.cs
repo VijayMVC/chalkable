@@ -20,7 +20,7 @@ namespace Chalkable.Web.Controllers
             var context = LogOn(false, us => us.SisLogIn(districtId, token, expiresTime, acadSessionId));
             if (context != null)
             {
-                MasterLocator.UserTrackingService.LoggedInFromINow(context.Login);
+                MasterLocator.UserTrackingService.LoggedIn(context.Login);
                 return RedirectToHome(context.Role); 
             }
             return Redirect<HomeController>(x => x.Index());
@@ -48,7 +48,7 @@ namespace Chalkable.Web.Controllers
             if (context == null)
                 return Json(new ChalkableException(error ?? ""));
             
-            MasterLocator.UserTrackingService.LoggedInFromChalkable(context.Login);
+            MasterLocator.UserTrackingService.LoggedIn(context.Login);
             return Json(new { Role = context.Role.LoweredName });            
         }
 

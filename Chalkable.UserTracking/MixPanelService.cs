@@ -472,20 +472,48 @@ namespace Chalkable.UserTracking
         {
             var properties = new Dictionary<string, object>();
             properties[CLASS] = classId;
-            properties[GRADING_PERIOD_ID] = GRADING_PERIOD_ID;
+            properties[GRADING_PERIOD_ID] = gradingPeriodId;
             SendEvent(login, UserTrackingEvents.PostedGrades, properties);
         }
 
-        public void LoggedInFromChalkable(string login)
+        public void LoggedIn(string login)
         {
             var properties = new Dictionary<string, object>();
-            SendEvent(login, UserTrackingEvents.LoggedInFromChalkable, properties);
+            SendEvent(login, UserTrackingEvents.LoggedIn, properties);
         }
 
-        public void LoggedInFromINow(string login)
+        public void AttachedAssessment(string login, int announcementId)
         {
             var properties = new Dictionary<string, object>();
-            SendEvent(login, UserTrackingEvents.LoggedInFromINow, properties);
+            properties[ANNOUNCEMENT_ID] = announcementId;
+            SendEvent(login, UserTrackingEvents.AttachedAssessment, properties);
+        }
+
+        private const string STANDARD_NAME = "standard-name";
+        public void AttachedStandard(string login, string standardName)
+        {
+            var properties = new Dictionary<string, object>();
+            properties[STANDARD_NAME] = standardName;
+            SendEvent(login, UserTrackingEvents.AttachedStandard, properties);
+        }
+
+        private const string STANDARD_EXPLORER_TYPE = "explorer-type";
+        public void UsedStandardsExplorer(string login, string explorerType)
+        {
+            var properties = new Dictionary<string, object>();
+            properties[STANDARD_EXPLORER_TYPE] = explorerType;
+            SendEvent(login, UserTrackingEvents.UsedStandardsExplorer, properties);
+        }
+
+        public void AutoGradedItem(string login, int announcementId, int studentId, string grade)
+        {
+            var properties = new Dictionary<string, object>
+            {
+                [ANNOUNCEMENT_ID] = announcementId,
+                [STUDENT_ID] = studentId,
+                [GRADE] = grade
+            };
+            SendEvent(login, UserTrackingEvents.AutoGradedItem, properties);
         }
 
         private const string DISTINCT_ID = "distinct_id";

@@ -78,6 +78,7 @@ NAMESPACE('chlk.controllers', function (){
                     return models[0];
                 });
 
+            this.userTrackingService.tookMiniQuiz();
             return this.ShadeOrUpdateView(chlk.activities.apps.MiniQuizDialog, res, changeStandard_ ? 'content' : undefined);
         },
 

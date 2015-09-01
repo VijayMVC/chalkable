@@ -27,6 +27,9 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'fromNewItem',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'fromSuggestedApps',
+
             Object, function calculateClassesTree_() {
                 var data = this.allClasses, isInstalled = this.isAlreadyInstalled_;
 

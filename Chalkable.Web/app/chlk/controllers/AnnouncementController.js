@@ -525,6 +525,39 @@ NAMESPACE('chlk.controllers', function (){
                 },this);
         },
 
+        [chlk.controllers.Permissions([
+            [chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        function updateSuggestedAppsAction() {
+            var res = this.announcementService
+                .addAnnouncement()
+                .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(ex){
+                    return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
+                    throw error;
+                }, this)
+                .attach(this.validateResponse_())
+                .then(function(model){
+                    this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
+                    this.BackgroundCloseView(chlk.activities.apps.InstallAppDialog);
+                    var announcement = model.getAnnouncement();
+                    var suggestedApps = announcement.getSuggestedApps();
+                    var suggestedAppsListData = new chlk.models.apps.SuggestedAppsList(
+                        announcement.getClassId(),
+                        announcement.getId(),
+                        suggestedApps,
+                        announcement.getStandards(),
+                        null,
+                        announcement.getType()
+                    );
+                    this.BackgroundUpdateView(this.getAnnouncementFormPageType_(announcement.getType()), suggestedAppsListData);
+                    return model;
+                },this);
+
+            return this.ShadeLoader();
+
+        },
+
         [[chlk.models.announcement.AnnouncementForm]],
         function classAnnouncementFromModel_(model) {
             this.cacheAnnouncementType(chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT);

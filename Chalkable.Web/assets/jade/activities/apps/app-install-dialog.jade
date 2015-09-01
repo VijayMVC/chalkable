@@ -55,6 +55,7 @@ devName = app.getDeveloperInfo().getName()
             +Hidden('submitActionType', "")
             +Hidden('currentPerson', "")
             +Hidden('fromNewItem', self.isFromNewItem())
+            +Hidden('fromSuggestedApps', self.isFromSuggestedApps())
 
             .row
                 if self.userRole.isAdmin()

@@ -62,7 +62,7 @@ namespace Chalkable.Data.Master.DataAccess
         {
             var dbQuery = new DbQuery();
             dbQuery.Sql.AppendFormat(
-                "select distinct [{0}].*, [{1}].[{4}] as [{5}]  from [{0}] join [{1}] on [{1}].[{3}] = [{0}].[{2}] where 1=1 "
+                "select [{0}].*, [{1}].[{4}] as [{5}]  from [{0}] join [{1}] on [{1}].[{3}] = [{0}].[{2}] where 1=1 "
                 , typeof(CommonCoreStandard).Name, typeof(ABToCCMapping).Name, CommonCoreStandard.ID_FIELD, ABToCCMapping.CC_STANADARD_REF_FIELD
                                      , ABToCCMapping.ACADEMIC_BENCHMARK_ID_FIELD, CommonCoreStandard.ACADEMIC_BENCHMARK_ID_FIELD);
 

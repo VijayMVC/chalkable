@@ -295,17 +295,17 @@ NAMESPACE('chlk.controllers', function (){
             return app;
         },
 
-        [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [chlk.controllers.StudyCenterEnabled()],
-        [[chlk.models.id.AppId, Boolean]],
-        function tryToInstallAction(appId, fromNewItem_) {
+        [[chlk.models.id.AppId, Boolean, Boolean]],
+        function tryToInstallAction(appId, fromNewItem_, fromSuggestedApps_) {
             var appInfo = this.appMarketService
                 .getDetails(appId)
                 .attach(this.validateResponse_())
                 .then(function(app){
                     app = this.prepareAppPictures_(app);
                     app = this.prepareApplicationInstallGroups_(app);
-                    return new chlk.models.apps.AppMarketInstallViewData(app, null, fromNewItem_);
+                    return new chlk.models.apps.AppMarketInstallViewData(app, null, fromNewItem_, fromSuggestedApps_);
                 }, this);
             return this.ShadeOrUpdateView(chlk.activities.apps.InstallAppDialog, appInfo);
         },
@@ -377,6 +377,19 @@ NAMESPACE('chlk.controllers', function (){
             }], 'center'), null;
         },
 
+        [chlk.controllers.SidebarButton('apps')],
+        [[Boolean, chlk.models.id.AppId]],
+        function installCompleteFromSuggestedAppsAction(result, appId) {
+            var title = result ? "Installation successful" : "Error while installing app.";
+            return this.ShowMsgBox(title, '', [{
+                text: 'Ok',
+                controller: 'announcement',
+                action: 'updateSuggestedApps',
+                params: [],
+                color: chlk.models.common.ButtonColor.GREEN.valueOf()
+            }], 'center'), null;
+        },
+
         [chlk.controllers.NotChangedSidebarButton()],
         function backAction(){
             window.history.back();
@@ -438,7 +451,8 @@ NAMESPACE('chlk.controllers', function (){
         function installAction(appInstallData) {
             switch(appInstallData.getSubmitActionType()){
                 case 'install':
-                    var res = this.install_(appInstallData, appInstallData.isFromNewItem() ? 'installCompleteFroNewItem' : 'installComplete', null, 'installFail', null);
+                    var res = this.install_(appInstallData, appInstallData.isFromSuggestedApps() ? 'installCompleteFromSuggestedApps' :
+                        (appInstallData.isFromNewItem() ? 'installCompleteFroNewItem' : 'installComplete'), null, 'installFail', null);
                     if(appInstallData.isFromNewItem())
                         return this.ShadeLoader();
                     return this.UpdateView(chlk.activities.apps.InstallAppDialog, res);

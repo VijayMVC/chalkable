@@ -58,11 +58,7 @@ NAMESPACE('chlk.activities.lib', function () {
                 this._dialogsHolder.removeClass(HIDDEN_CLASS);
                 this._overlay
                     .removeClass(HIDDEN_CLASS)
-                    .on('click.overlay', function clickMeHandler(node, event) {
-                        this.close();
-                        return false;
-                    }.bind(this));
-
+                    .on('click.overlay', this.onCloseBtnClick.bind(this));
                 this.dom.removeClass(UNDER_OVERLAY_CLASS);
             },
 

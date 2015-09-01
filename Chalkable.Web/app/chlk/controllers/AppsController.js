@@ -464,14 +464,18 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.id.AppId, chlk.models.id.ClassId, String, String, Boolean, String]],
         function openSuggestedAppFromExplorerAction(appId, classId, appUrl, viewUrl, isBanned, appUrlSuffix_){
-            if(viewUrl)
+            if(viewUrl){
+                this.userTrackingService.openedAppFrom(appUrl, "explorer");
                 return this.viewAppAction(appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, new chlk.models.id.AnnouncementApplicationId(appId.valueOf()), isBanned, null, appUrlSuffix_);
+            }
+
             var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
             this.appMarketService.getApplicationTotalPrice(appId, classIds, null)
                 .attach(this.validateResponse_())
                 .then(function(appTotalPrice){
                     return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, classId]);
                 }, this);
+
             return null;
         },
 
@@ -507,8 +511,8 @@ NAMESPACE('chlk.controllers', function (){
             return this.tryToAttachAction(announcementId, appId, announcementType, appUrlAppend_);
         },
 
-        [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId, Boolean, chlk.models.id.SchoolPersonId, String]],
-        function viewAppAction(url, viewUrl, mode, announcementAppId_, isBanned, studentId_, appUrlSuffix_) {
+        [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId, Boolean, chlk.models.id.SchoolPersonId, String, Boolean]],
+        function viewAppAction(url, viewUrl, mode, announcementAppId_, isBanned, studentId_, appUrlSuffix_, isAssessment_) {
             if(!this.isStudyCenterEnabled())
                 return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
 
@@ -533,6 +537,8 @@ NAMESPACE('chlk.controllers', function (){
                         appAccess.setMyAppsForCurrentRoleEnabled(hasMyAppsView);
                     }
 
+                    //check if it's assessment app
+
                     if (studentId_){
                         viewUrl += "&studentId=" + studentId_.valueOf();
                     }
@@ -549,6 +555,18 @@ NAMESPACE('chlk.controllers', function (){
                     );
                     return new chlk.models.apps.AppWrapperViewData(app, mode);
                 }, this);
+
+
+            var startLocation = "";
+            if (mode == chlk.models.apps.AppModes.MYAPPSVIEW)
+                startLocation = "My Apps";
+            if (mode == chlk.models.apps.AppModes.EDIT)
+                startLocation = "New Item";
+
+            if (isAssessment_)
+                this.userTrackingService.tookAssessment();
+            else
+                this.userTrackingService.openedAppFrom(url, startLocation);
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
