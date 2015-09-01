@@ -129,9 +129,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 };
                 new AnnouncementAttachmentDataAccess(uow).Insert(annAtt);
                 uow.Commit();
-                bool notifyUsers = ((type == AnnouncementType.Class) ? annDetails.ClassAnnouncementData.VisibleForStudent :
-                    (type != AnnouncementType.LessonPlan) ? annDetails.LessonPlanData.VisibleForStudent : true) || !annDetails.IsOwner;
-                if(notifyUsers)
+                bool notifyUsers = !annDetails.IsOwner
+                                   || (annDetails.ClassAnnouncementData != null && annDetails.ClassAnnouncementData.VisibleForStudent)
+                                   || (annDetails.LessonPlanData != null && annDetails.LessonPlanData.VisibleForStudent)
+                                   || annDetails.AdminAnnouncementData != null;
+                    //((type == AnnouncementType.Class) ? annDetails.ClassAnnouncementData.VisibleForStudent :
+                    //(type == AnnouncementType.LessonPlan) || annDetails.LessonPlanData.VisibleForStudent) || !annDetails.IsOwner;
+                if (notifyUsers)
                     NotifyUsers(annDetails, type);
             }
             return annDetails;
