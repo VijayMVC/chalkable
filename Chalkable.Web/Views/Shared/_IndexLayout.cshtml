@@ -8,8 +8,15 @@
 	<meta name="description" content="Web Apps for your school">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<link href="@Url.StaticContent("/Content/index.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+{
+    <link href="@Url.StaticContent("/Content/index-layout.min.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+}
+else
+{
+    <link href="@Url.StaticContent("/Content/index.css")" rel="stylesheet" media="screen, projection" type="text/css"/>
     <link href="@Url.StaticContent("/app/jquery/validation/css/template.css")" rel="stylesheet" type="text/css"/>
+}
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/modernizr-ck.js")"></script>
     <style>
         .formErrorContent {
@@ -150,20 +157,27 @@
 	</footer>
 
     @ChlkHelpers.LoginForm(Url)
-    
 
-    <script type="text/javascript">
-        var _ = window.location.href.toString().match(/https?:\/\/[^\/]+/);
-        var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
-    </script>
-<script type="text/javascript" src="@Url.StaticContent("/app/lib/es5-shim.min.js")"></script>
-<script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-1.11.1.min.js")"></script>
-<script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-ui.min.js")"></script>
-<script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
-<script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
-<script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/retina-1.1.0.min.js")"></script>
-<script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
-<script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
+
+<script type="text/javascript">
+    var _ = window.location.href.toString().match(/https?:\/\/[^\/]+/);
+    var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
+</script>
+@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+{
+    <script type="text/javascript" src="@Url.StaticContent("/app/index-layout.min.js")"></script>
+}
+else
+{
+    <script type="text/javascript" src="@Url.StaticContent("/app/lib/es5-shim.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-1.11.1.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-ui.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/retina-1.1.0.min.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
+}
     
     @ChlkHelpers.MixPanel()    
     @RenderSection("MixPanelTracking", false)

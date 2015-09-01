@@ -28,10 +28,17 @@
     <link href="@Url.StaticContent("/Content/demo.css")" rel="stylesheet" media="screen, projection" type="text/css" />
 }
     <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700' rel='stylesheet' type='text/css'>
-    <link href="@Url.StaticContent("/app/jquery/choosen/chosen.min.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.StaticContent("/app/jquery/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet" />
+@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+{
+    <link href="@Url.StaticContent("/Content/index-layout.min.css")" rel="stylesheet" media="screen, projection" type="text/css"/>
+}
+else
+{
+    <link href="@Url.StaticContent("/app/jquery/choosen/chosen.min.css")" rel="stylesheet" type="text/css"/>
+    <link href="@Url.StaticContent("/app/jquery/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css"/>
+    <link href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css"/>
+    <link href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet"/>
+}
 
     <!-- Page specific CSS -->
     @RenderSection("Styles", false)
@@ -41,8 +48,16 @@
         ChlkHelpers.Olark();
     }
     @ChlkHelpers.RenderSiteRoot(Url)
-    
+
     @{Html.RenderPartial("Telemetry");}
+
+@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+{
+    <script type="text/javascript" src="@Url.StaticContent("/app/role-layout.min.js")"></script>
+    <script type="text/javascript" src="/Scripts/api/chlk-post-message-api.min.js"></script>
+}
+else
+{
     <script type="text/javascript" src="@Url.StaticContent("/app/lib/es5-shim.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-messages.js")"></script>
@@ -60,15 +75,16 @@
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.validate.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/highcharts/highcharts.js")"></script>
-    <script type="text/javascript" src="~/Scripts/api/chlk-post-message-api.js"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.signaturepad.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.quicksand.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.creditCardValidator.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.maskedinput-1.3.1.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.youtube.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
+    <script type="text/javascript" src="@Url.StaticContent("/app/highcharts/highcharts.js")"></script>
+    <script type="text/javascript" src="/Scripts/api/chlk-post-message-api.js"></script>
+}
 
 </head>
 <body class ="@ViewData[ViewConstants.ROLE_NAME]">

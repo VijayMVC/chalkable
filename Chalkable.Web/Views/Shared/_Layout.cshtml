@@ -8,10 +8,17 @@
     <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
     <link rel="icon" href="@Url.Content("~/favicon.ico")" />
 
-    <link href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.StaticContent("/app/jquery/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.StaticContent("/app/jquery/validation/css/validationEngine.jquery.css")" rel="stylesheet" type="text/css" />
+@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+{
+    <link href="@Url.StaticContent("/Content/devdocs-layout.min.css")" rel="stylesheet" media="screen, projection" type="text/css"/>
+}
+else
+{
+    <link href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css"/>
+    <link href="@Url.StaticContent("/app/jquery/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css"/>
+    <link href="@Url.StaticContent("/app/jquery/validation/css/validationEngine.jquery.css")" rel="stylesheet" type="text/css"/>
     <link href="@Url.StaticContent("/app/jquery/validation/css/template_index.css")" rel="stylesheet" type="text/css"/>
+}
     <!-- Page specific CSS -->
 
     @RenderSection("Styles", false)
@@ -38,6 +45,13 @@
         <div class="tooltip-triangle"></div>
     </div>
 
+@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+{
+    <script type="text/javascript" src="@Url.StaticContent("/app/devdocs-layout.min.js")"></script>
+}
+else
+{
+
     <script type="text/javascript" src="@Url.StaticContent("/app/lib/es5-shim.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-1.11.1.min.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>
@@ -48,19 +62,21 @@
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.scrollTo.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.cycle.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.fancybox.js")"></script>
-    
+
 
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
-    
-    
+
+
 
 
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
-    
+
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/html5shiv.js")"></script>
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
-    
+}
+
+
     <!--[if IE 6]><script  type="text/javascript" src="@Url.StaticContent("/app/chlk/index/jq.png-min.js")"></script><![endif]-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
