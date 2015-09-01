@@ -285,6 +285,13 @@ module.exports = function(grunt) {
           label: 'TeamCity deploy ' + vcsBranch + ' ' + buildNumber + ' ' + today,
         }
       }
+    },
+    
+    jsbuild3: {
+        options: {
+          config: 'Chalkable.Web/jsbuild.json'
+        },
+        all: {}
     }
   });
 
@@ -298,6 +305,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-concat');
   grunt.loadNpmTasks('grunt-contrib-uglify');
   grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('emp.ria-grunt-jsbuild3');
   
   // js concat/minify
   grunt.registerTask('jsmin', ['uglify:chalkable.web', 'concat:index-layout', 'concat:role-layout', 'concat:devdocs-layout']);
