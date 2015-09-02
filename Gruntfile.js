@@ -289,7 +289,8 @@ module.exports = function(grunt) {
     
     jsbuild3: {
         options: {
-          config: 'Chalkable.Web/jsbuild.json'
+          config: 'Chalkable.Web/jsbuild.json',
+          modules: []
         },
         all: {}
     },
