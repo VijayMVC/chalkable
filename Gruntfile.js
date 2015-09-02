@@ -180,8 +180,8 @@ module.exports = function(grunt) {
     
     replace: {
       chakable_web_version: {
-        src: ['Chalkable.Web\Tools\CompilerHelper.cs'],
-        dest: ['Chalkable.Web\Tools\CompilerHelper.cs'],
+        src: ['Chalkable.Web/Tools/CompilerHelper.cs'],
+        dest: ['Chalkable.Web/Tools/CompilerHelper.cs'],
         replacements: [{
           from: 'private-build',
           to: buildNumber
