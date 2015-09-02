@@ -259,10 +259,6 @@ module.exports = function(grunt) {
           src: [
             'app/*App.compiled.js',
             'app/*.min.js',
-            //'app/chlk/{shared,chlk-messages,chlk-constants}.js',
-            
-            //'app/chlk/index/**',
-            //'app/{jquery,lib,highcharts}/**',
             'scripts/*.min.js',
             'app/chlk/index/modernizr-ck.js',
             
@@ -273,6 +269,25 @@ module.exports = function(grunt) {
           
           filter: 'isFile',
           dot: true
+        },        
+        {
+          expand: true,
+          cwd: './Chalkable.Web/app/jquery/choosen/',
+          src: [
+            '*.png'
+          ],
+          dest: 'Content',          
+          filter: 'isFile'
+        },        
+        {
+          expand: true,
+          cwd: './Chalkable.Web/app/jquery/smoothness/',
+          src: [
+            'images/*'
+          ],
+          dest: 'Content',
+          
+          filter: 'isFile'
         }]
       }
     },
