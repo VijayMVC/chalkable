@@ -179,6 +179,14 @@ module.exports = function(grunt) {
     },
     
     replace: {
+      chakable_web_version: {
+        src: ['Chalkable.Web\Tools\CompilerHelper.cs'],
+        dest: ['Chalkable.Web\Tools\CompilerHelper.cs'],
+        replacements: [{
+          from: 'private-build',
+          to: buildNumber
+        }]
+      },
       raygun_deployment_version: {
         src: ['Release.tpl.yaml'],
         dest: ['Release.yaml'],
@@ -323,6 +331,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-compass');
   
   // js concat/minify
+  grunt.registerTask('version', ['replace:chakable_web_version']);
   grunt.registerTask('jsmin', ['uglify:chalkable.web', 'concat:index-layout', 'concat:role-layout', 'concat:devdocs-layout']);
   
   // general tasks
