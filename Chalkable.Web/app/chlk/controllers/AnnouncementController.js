@@ -1165,7 +1165,7 @@ NAMESPACE('chlk.controllers', function (){
                 var buttons = [downloadAttachmentButton];
                 if(this.userInRole(chlk.models.common.RoleEnum.STUDENT) && attachment.isTeachersAttachment())
                     buttons.push(new chlk.models.common.attachments.ToolbarButton('mark-attachment', 'MARK UP', null, null,
-                        'announcement', 'cloneAttachment', [attachment.getId().valueOf(), announcementId.valueOf()], true));
+                        'announcement', 'cloneAttachment', [attachment.getAttachmentId().valueOf(), announcementId.valueOf()], true));
                 res = this.announcementAttachmentService
                     .startViewSession(attachmentId)
                     .then(function(session){

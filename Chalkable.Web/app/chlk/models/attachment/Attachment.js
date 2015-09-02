@@ -21,7 +21,7 @@ NAMESPACE('chlk.models.attachment', function () {
 
             VOID, function deserialize(raw) {
                 this.id = SJX.fromValue(raw.id, chlk.models.id.AnnouncementAttachmentId);
-                this.attachmentId = SJX.fromValue(raw.attachmentid, chlk.models.id.AttachmentId);
+                this.attachmentId = SJX.fromValue(raw.attachment.id, chlk.models.id.AttachmentId);
                 this.owner = SJX.fromValue(raw.attachment.isowner, Boolean);
                 this.teachersAttachment = SJX.fromValue(raw.attachment.isteacherattachment, Boolean);
                 this.name = SJX.fromValue(raw.attachment.name, String);

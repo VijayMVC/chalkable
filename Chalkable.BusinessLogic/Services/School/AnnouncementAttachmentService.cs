@@ -133,8 +133,6 @@ namespace Chalkable.BusinessLogic.Services.School
                                    || (annDetails.ClassAnnouncementData != null && annDetails.ClassAnnouncementData.VisibleForStudent)
                                    || (annDetails.LessonPlanData != null && annDetails.LessonPlanData.VisibleForStudent)
                                    || annDetails.AdminAnnouncementData != null;
-                    //((type == AnnouncementType.Class) ? annDetails.ClassAnnouncementData.VisibleForStudent :
-                    //(type == AnnouncementType.LessonPlan) || annDetails.LessonPlanData.VisibleForStudent) || !annDetails.IsOwner;
                 if (notifyUsers)
                     NotifyUsers(annDetails, type);
             }
