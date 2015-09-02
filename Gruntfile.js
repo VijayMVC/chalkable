@@ -345,7 +345,7 @@ module.exports = function(grunt) {
     postBuildTasks.push('deploy-to-azure', 'raygun-create-deployment');
   }
   
-  grunt.registerTask('post-checkout', ['compass']);
+  grunt.registerTask('post-checkout', ['compass', 'uglify:chalkable.web']);
   grunt.registerTask('pre-release', ['compass', 'cssmin', 'jsmin', 'jsbuild3']);
   grunt.registerTask('post-build', postBuildTasks);
   
