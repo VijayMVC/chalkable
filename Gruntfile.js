@@ -250,6 +250,7 @@ module.exports = function(grunt) {
           cwd: './Chalkable.Web',
           src: [
             'app/*App.compiled.js',
+            'app/*.min.js',
             //'app/chlk/{shared,chlk-messages,chlk-constants}.js',
             
             //'app/chlk/index/**',
