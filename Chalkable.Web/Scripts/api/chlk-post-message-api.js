@@ -7,8 +7,10 @@ var chlkRequestSiteRoot = function () {
     for (var index = 0; index < scripts.length; index++) {
         var script = scripts[index];
 
-        if (script.src.toString().match(/chlk-post-message-api\.js$/i)) {
-            result = script.src.toString().toLowerCase().replace('scripts/api/chlk-post-message-api.js','');
+        var url = script.src.toString().split('?')[0],
+            regex = /chlk-post-message-api(\.min)?\.js$/i;
+        if (url.match(regex)) {
+            result = url.toLowerCase().replace(regex, '');
             break;
         }
     }
