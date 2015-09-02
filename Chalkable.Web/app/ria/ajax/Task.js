@@ -167,7 +167,7 @@ NAMESPACE('ria.ajax', function () {
                 } else {
                     this._completer.completeError(this._xhr.status == 0
                         ? ria.ajax.ConnectionException()
-                        : ria.ajax.AjaxException(this._xhr.status, this._xhr.statusText, this._xhr.response, this._xhr.url));
+                        : ria.ajax.AjaxException(this._xhr.status, this._xhr.statusText, this._xhr.response, this._url));
                 }
             },
 
