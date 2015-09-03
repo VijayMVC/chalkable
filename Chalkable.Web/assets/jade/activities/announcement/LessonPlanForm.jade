@@ -75,27 +75,27 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                             input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
                     .right-block
                         .date-picker-startdate
-                            label(for="startdate") Due min date
+                            label(for="startdate")=Msg.Start_date
                             +DatePicker('startdate', lessonPlan.getStartDate())(
-                            data-options={
-                                showOtherMonths: true,
-                                selectOtherMonths: true
-                            },
-                            data-value=lessonPlan.getStartDate() ? lessonPlan.getStartDate().format('mm/dd/yy') : ''
-                            placeholder='Due min date',
-                            class='validate[required]'
+                                data-options={
+                                    showOtherMonths: true,
+                                    selectOtherMonths: true
+                                },
+                                data-value=lessonPlan.getStartDate() ? lessonPlan.getStartDate().format('mm/dd/yy') : ''
+                                placeholder=Msg.Start_date,
+                                class='validate[required]'
                             )#mindate
                             .calendar-mark
                         .date-picker-container
-                            label(for="enddate") Due max date
+                            label(for="enddate")=Msg.End_date
                             +DatePicker('enddate', lessonPlan.getEndDate())(
-                            data-options={
-                                showOtherMonths: true,
-                                selectOtherMonths: true
-                            },
-                            data-value=lessonPlan.getEndDate() ? lessonPlan.getEndDate().format('mm/dd/yy') : ''
-                            placeholder='Due max date'
-                            class='validate[required]'
+                                data-options={
+                                    showOtherMonths: true,
+                                    selectOtherMonths: true
+                                },
+                                data-value=lessonPlan.getEndDate() ? lessonPlan.getEndDate().format('mm/dd/yy') : ''
+                                placeholder=Msg.End_date,
+                                class='validate[required]'
                             )#maxdate
                             .calendar-mark
                         .advanced-options
