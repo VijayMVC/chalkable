@@ -1,0 +1,19 @@
+mixin StandardColumn(tplObj, standards)
+    if standards.length > 0
+        td.name-td
+            .standards-names.column
+                each standard in standards
+                    +ActionLink('standard', 'showStandardsByCategory', tplObj.getClassId(), tplObj.getSubjectId(), standard.getDescription(), standard.getStandardId())(
+                    data-id=standard.getStandardId(),
+                    class= standard.isSelected() ? 'active' : ''
+                    ).standard-name.column-cell
+                        .name(data-tooltip=standard.displayTitle(), data-tooltip-type="overflow")=standard.displayTitle()
+                        .right-triangle
+
+    else
+        td
+           .standards-description=tplObj.getDescription()
+
+
+each standardsList in self.getStandardsTable().getStandardsColumns()
+    +StandardColumn(self, standardsList)

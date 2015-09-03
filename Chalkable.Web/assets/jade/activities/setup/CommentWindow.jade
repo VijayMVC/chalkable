@@ -1,0 +1,19 @@
+.dialog.report-window
+   +ActionForm('setup', 'submitComment').comment-form.no-working.report-form.no-working
+      .x-window-header
+         .close.close-btn.dark
+         -var text = self.getCommentId() ? Msg.Edit_comment + ': ' + self.getComment() : Msg.Create_comment
+         h1(data-tooltip=text, data-tooltip-type="overflow", data-tooltip-class="break-word")=text
+
+      .x-window-body
+         +Hidden('commentid', self.getCommentId() && self.getCommentId().valueOf())
+         .report-content
+            TABLE.report-table
+               TR
+                  TD.item-1
+                     h3=Msg.Comment
+                     input(name="comment", type="text", value=self.getComment(), readonly=(self.isSystem() || !self.isAbleEdit()), class="validate[required]")
+
+      .x-window-footer.report-bottom
+         BUTTON(type="submit", disabled=!self.isAbleEdit()).chlk-button.blue-button=Msg.OK
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
