@@ -34,5 +34,7 @@ namespace Chalkable.UserTracking
         public const string AttachedStandard = "attached standard";
         public const string AttachedAssessment = "attached assessment";
         public const string UsedStandardsExplorer = "used standards explorer";
+        public const string CopiedLessonPlanFromGallery = "copied lesson plan from gallery";
+        public const string SavedLessonPlanToGallery = "saved lesson plan to gallery";
     }
 }

@@ -111,7 +111,7 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(AnnouncementAttributeViewData.Create(announcementAttributes), ViewConstants.ANNOUNCEMENT_ATTRIBUTES);
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyDistrictAdmin(distictAdmin.Email, "", "", 
-                district.Name, null, Context.DistrictTimeZone, Context.Role.Name, ip);
+                district.Name, null, Context.DistrictTimeZone, Context.Role.Name, ip, Context.SCEnabled);
             return View();
         }
 
@@ -253,7 +253,8 @@ namespace Chalkable.Web.Controllers
             var classes = startupData.Classes;
             PrepareJsonData(ClassViewData.Create(classes), ViewConstants.CLASSES);
             var ip = RequestHelpers.GetClientIpAddress(Request);
-            MasterLocator.UserTrackingService.IdentifyStudent(Context.Login, person.FirstName, person.LastName, district.Name, "", person.FirstLoginDate, Context.DistrictTimeZone, ip);
+            MasterLocator.UserTrackingService.IdentifyStudent(Context.Login, person.FirstName, person.LastName, 
+                district.Name, "", person.FirstLoginDate, Context.DistrictTimeZone, ip, Context.SCEnabled);
         }           
 
         private void PrepareTeacherJsonData()
@@ -288,7 +289,7 @@ namespace Chalkable.Web.Controllers
 
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, district.Name, 
-                classNames, person.FirstLoginDate, Context.DistrictTimeZone, ip);
+                classNames, person.FirstLoginDate, Context.DistrictTimeZone, ip, Context.SCEnabled);
         }
 
         private void ProcessFirstLogin(PersonDetails person)

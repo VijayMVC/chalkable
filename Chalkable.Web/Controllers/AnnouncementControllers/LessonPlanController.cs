@@ -30,6 +30,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult CreateFromTemplate(int lessonPlanTplId, int classId)
         {
             var res = SchoolLocator.LessonPlanService.CreateFromTemplate(lessonPlanTplId, classId);
+            MasterLocator.UserTrackingService.CopiedLessonPlanFromGallery(Context.Login);
             return Json(PrepareCreateAnnouncementViewData(res));
         }
 
@@ -39,6 +40,11 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.LessonPlan, lessonPlanId, attributes);
             var res = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents);
+
+            if (res.LessonPlanData != null && res.LessonPlanData.GalleryCategoryRef.HasValue)
+            {
+                MasterLocator.UserTrackingService.SavedLessonPlanToGallery(Context.Login, title);
+            }
             return Json(PrepareAnnouncmentViewDataForEdit(res));
         }
 

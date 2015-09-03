@@ -9,12 +9,13 @@ namespace Chalkable.UserTracking
             DateTime? firstLoginDate, string ip);
 
         void IdentifyDistrictAdmin(string email, string firstName, string lastName, string schoolName,
-            DateTime? firstLoginDate, string timeZoneId, string role, string ip);
+            DateTime? firstLoginDate, string timeZoneId, string role, string ip, bool isStudyCenterEnabled);
 
         void IdentifyStudent(string email, string firstName, string lastName, string schoolName, 
-            string grade, DateTime? firstLoginDate, string timeZoneId, string ip);
+            string grade, DateTime? firstLoginDate, string timeZoneId, string ip, bool isStudyCenterEnabled);
 
-        void IdentifyTeacher(string email, string firstName, string lastName, string schoolName, List<string> classes, DateTime? firstLoginDate, string timeZoneId, string ip);
+        void IdentifyTeacher(string email, string firstName, string lastName, string schoolName, List<string> classes,
+            DateTime? firstLoginDate, string timeZoneId, string ip, bool isStudyCenterEnabled);
 
         void IdentifyDeveloper(string email, string userName,
             DateTime? firstLoginDate, string timeZoneId, string ip);
@@ -35,7 +36,8 @@ namespace Chalkable.UserTracking
         void ResetPassword(string email);
         void ChangedPassword(string email);
         void ChangedEmail(string email, string newEmail);
-        void UserLoggedInForFirstTime(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate, string timeZoneId, string role);
+        void UserLoggedInForFirstTime(string email, string firstName, string lastName, string schoolName, 
+            DateTime? firstLoginDate, string timeZoneId, string role, bool isStudyCenterEnabled);
         void SentMessageTo(string email, string userName);
 
         void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached);
@@ -53,5 +55,7 @@ namespace Chalkable.UserTracking
         void UsedStandardsExplorer(string login, string explorerType);
         void AutoGradedItem(string login, int announcementId, int studentId, string grade);
 
+        void CopiedLessonPlanFromGallery(string login);
+        void SavedLessonPlanToGallery(string login, string lessonPlanTitle);
     }
 }

@@ -14,7 +14,7 @@ namespace Chalkable.UserTracking
         }
 
         public void IdentifyDistrictAdmin(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate,
-            string timeZoneId, string role, string ip)
+            string timeZoneId, string role, string ip, bool isStudyCenterEnabled)
         {
         }
 
@@ -24,12 +24,12 @@ namespace Chalkable.UserTracking
         }
 
         public void IdentifyStudent(string email, string firstName, string lastName, string schoolName, string grade,
-            DateTime? firstLoginDate, string timeZoneId, string ip)
+            DateTime? firstLoginDate, string timeZoneId, string ip, bool isStudyCenterEnabled)
         {
         }
 
         public void IdentifyTeacher(string email, string firstName, string lastName, string schoolName, List<string> classes,
-            DateTime? firstLoginDate, string timeZoneId, string ip)
+            DateTime? firstLoginDate, string timeZoneId, string ip, bool isStudyCenterEnabled)
         {
         }
 
@@ -104,7 +104,7 @@ namespace Chalkable.UserTracking
         }
 
         public void UserLoggedInForFirstTime(string email, string firstName, string lastName, string schoolName,
-            DateTime? firstLoginDate, string timeZoneId, string role)
+            DateTime? firstLoginDate, string timeZoneId, string role, bool isStudyCenterEnabled)
         {
         }
 
@@ -164,6 +164,14 @@ namespace Chalkable.UserTracking
         public void AutoGradedItem(string login, int announcementId, int studentId, string grade)
         {
 
+        }
+
+        public void CopiedLessonPlanFromGallery(string login)
+        {
+        }
+
+        public void SavedLessonPlanToGallery(string login, string lessonPlanTitle)
+        {
         }
 
         public void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached)
