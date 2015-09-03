@@ -24,6 +24,9 @@ NAMESPACE('chlk.lib.dom', function () {
 
     ria.dom.Event = Object; // jQuery modifies event
 
+    $.fn.Dom = function() {
+        return ria.dom.Dom(this);
+    };
 
     /** @class chlk.lib.dom.jQueryDom */
     CLASS(
@@ -94,6 +97,12 @@ NAMESPACE('chlk.lib.dom', function () {
                 } else if (dom_ instanceof jQuery) {
                     this._dom = dom_;
                 }
+
+                Object.defineProperty(this, '$', {
+                    get: function () {
+                        return jQuery(this.valueOf());
+                    }.bind(this)
+                });
             },
 
             OVERRIDE, Boolean, function exists() {
@@ -628,5 +637,5 @@ NAMESPACE('chlk.lib.dom', function () {
             }
         ]);
 
-    ria.dom.Dom.SET_IMPL(ria.dom.jQueryDom);
+    ria.dom.Dom.SET_IMPL(chlk.lib.dom.jQueryDom);
 });
