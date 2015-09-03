@@ -14,7 +14,7 @@
 
 REQUIRE('ria.dom.Dom');
 
-NAMESPACE('ria.dom', function () {
+NAMESPACE('chlk.lib.dom', function () {
     "use strict";
 
     if ('undefined' === typeof jQuery)
@@ -25,7 +25,7 @@ NAMESPACE('ria.dom', function () {
     ria.dom.Event = Object; // jQuery modifies event
 
 
-    /** @class ria.dom.jQueryDom */
+    /** @class chlk.lib.dom.jQueryDom */
     CLASS(
         'jQueryDom', EXTENDS(ria.dom.Dom), [
 
@@ -579,7 +579,7 @@ NAMESPACE('ria.dom', function () {
 
             /* Text selection*/
 
-            OVERRIDE, ria.dom.Dom, function select() {
+            ria.dom.Dom, function select() {
                 this._dom.select();
                 return this;
             },
@@ -625,11 +625,6 @@ NAMESPACE('ria.dom', function () {
                     text = document.selection.createRange().text;
                 }
                 return text;
-            },
-
-            SELF, function select() {
-                this._dom.select();
-                return this._dom;
             }
         ]);
 
