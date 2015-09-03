@@ -1,0 +1,47 @@
+app = self
+appRating = app.getApplicationRating()
+
+if !self.userRole.isStudent()
+    -var currentUserRating=self.getCurrentUserAppRating();
+    -var review = currentUserRating ? currentUserRating.getReview() : "";
+    -var rating = currentUserRating ? currentUserRating.getRating() : 0;
+    BUTTON.write-review-btn.right= !currentUserRating ? Msg.Write_a_review : Msg.Edit_review
+    .rating-large
+        -var avgRating = appRating.getAverage()
+        span.review-link User Rating:
+        +Rating("appRating", avgRating, false).all
+        if avgRating
+            .rating-avg-title=avgRating.toFixed(2)
+    .add-review.x-hidden
+        +ActionForm('appmarket', 'writeReview')#submit-review-form
+            +Hidden('appId', app.getId().valueOf())
+            .review-area
+                textarea(class="validate[required]").review-text(placeholder="Write a review", name="reviewText")=review
+                .review-container
+                    +Rating('newRating', rating, true)
+                    .rating-hint
+            .btns
+                +Button()(type="submit", class="special-button blue-button submit-review-btn") Submit
+                //span.cancel-btn Cancel
+
+.user-reviews
+    .rating-roles.x-hidden
+        each item in appRating.getRoleRatings()
+            .rating-role-item
+                -var role = item.getRole()
+                .rolename=role.getName()
+                .app-rating
+                    +Rating('role-' + role.getName(), item.getRating())
+                    .personcount=item.getPersonCount()
+
+    .rating-persons
+        each item in appRating.getPersonRatings()
+            .rating-person-item
+                -var person = item.getPerson()
+                .role-avatar.teacher
+                .chat-bubble
+                    h3= person.getFullName()
+                    p!= self.linkify(item.getReview())
+                .rate-container
+                    +Rating('person-rating-' + person.getId().valueOf(), item.getRating())
+
