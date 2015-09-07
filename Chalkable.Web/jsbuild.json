@@ -1,18 +1,26 @@
 {
-	"version": "3.0",
+    "version": "3.0",
+
+    "framework": "./app/ria",
 
     "options": {
-		"uglifyjs": {
-			"output": {
-				"beautify": false
-			},
-			"compress": {
-				"dead_code": true
-			},
-			"mangle": {
-			}
-		}
-	},
+        "uglifyjs": {
+            "output": {
+                "beautify": false
+            },
+            "compress": {
+                "dead_code": true
+            },
+            "mangle": {
+            }
+        }
+    },
+
+    "assets": {
+        "jade": { "compiler": "../node_modules/emp.ria-jade/index.js", "options": { "client": true, "compileDebug": false, "self": true } },
+        "txt": {},
+        "json": {}
+    },
 
     "modules": [{
         "name": "SysAdmin",
