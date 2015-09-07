@@ -192,7 +192,8 @@ cssmin]]></param>
         <parameters>
           <param name="branchFilter"><![CDATA[+:staging
 +:qa]]></param>
-          <param name="quietPeriodMode" value="DO_NOT_USE" />
+          <param name="quietPeriod" value="600" />
+          <param name="quietPeriodMode" value="USE_CUSTOM" />
           <param name="triggerRules" value="+:*" />
         </parameters>
       </build-trigger>
