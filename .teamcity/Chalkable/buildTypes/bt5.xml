@@ -18,7 +18,7 @@
       <setting-ref ref="TRIGGER_2" />
     </disabled-settings>
     <parameters>
-      <param name="env.AZURE_STORAGE_ACCESS_KEY" value="NQhhG7sykOFgAoDcHJ015CO/zduqMPC5QQkilZK7m+VF3woFZ+UJ63OWT9r5eyH65skwt+8sjeU4cQDkE2p8YA==" />
+      <param name="env.AZURE_STORAGE_ACCESS_KEY" value="zxxda1db24a9e0854386ffb9225581b53b11e8068db01aac7fa326fea8c13c7d40c0c8a7535bb0801a9a16d0aa1c6d74044c021f9e34eb150819c6e8c3320f88eff36cd35d4c321162ec3192c5ba9431098e9520b6646dbdf75775d03cbe80d301b" spec="password display='hidden'" />
       <param name="env.BUILD_BRANCH" value="%vcsroot.branchName%" />
       <param name="env.BUILD_COUNTER" value="%build.counter%" />
       <param name="env.PEM_ENCRYPTION_SECRET" value="12FB5BB6C926EE187A58EB3B98312" />
