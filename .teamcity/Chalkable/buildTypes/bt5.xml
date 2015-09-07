@@ -12,7 +12,6 @@
       <setting-ref ref="BUILD_EXT_8" />
       <setting-ref ref="RUNNER_37" />
       <setting-ref ref="RUNNER_5" />
-      <setting-ref ref="RUNNER_6" />
       <setting-ref ref="RUNNER_8" />
       <setting-ref ref="TRIGGER_2" />
     </disabled-settings>
