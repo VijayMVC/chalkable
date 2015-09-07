@@ -13,9 +13,9 @@ declare @annToMark table (Id int, Complete bit)
 Begin Transaction
 if @announcementId is null
 Begin
-insert into @annToMark
-	Case
-	When @annTpe = 3 Then
+	if @annType = 3
+	Begin
+		Insert Into @annToMark
 		Select 
 			Id, annRecData.Complete
 		From 
@@ -27,10 +27,14 @@ insert into @annToMark
 				  and exists(select * from ClassTeacher where PersonRef = @personId and ClassTeacher.ClassRef = vwLessonPlan.ClassRef))
 				 or (@roleId = 3 
 					 and exists(select * from ClassPerson where PersonRef = @personId and ClassPerson.ClassRef = vwLessonPlan.ClassRef) and VisibleForStudent = 1))
-			and SchoolYearRef = @schoolYear
+			and SchoolYearRef = @schoolYearId
 			and [State] = 1
-		Group by vwLessonPlan.Id
-	When @annType = 2 Then
+		Group by vwLessonPlan.Id, annRecData.Complete
+	End
+	
+	If @annType = 2
+	Begin
+		Insert Into @annToMark
 		Select 
 			Id, annRecData.Complete
 		From
@@ -44,7 +48,7 @@ insert into @annToMark
 			 				where StudentGroup.StudentRef = @personId and AnnouncementRef = vwAdminAnnouncement.Id))
 				 or (@roleId = 10 and vwAdminAnnouncement.AdminRef = @personId))
 			and [State] = 1
-		Group by vwAdminAnnouncement.Id
+		Group by vwAdminAnnouncement.Id, annRecData.Complete
 	End
 End
 Else
