@@ -22,7 +22,7 @@
       <param name="env.BUILD_BRANCH" value="%vcsroot.branchName%" />
       <param name="env.BUILD_COUNTER" value="%build.counter%" />
       <param name="env.PEM_ENCRYPTION_SECRET" value="zxxb518bd5a770ce9ee28a6b89b530d041bef9450c060986f1ca2df77aca73da318" spec="password display='hidden'" />
-      <param name="env.RAYGUN_AUTHTOKEN" value="QVIXCKJcL9VpLnxCY8bUTqJGLU6rEKrM" />
+      <param name="env.RAYGUN_AUTHTOKEN" value="zxxdcfd4d7a5253c38f710f6e0d35995be18543f795223130a90ac54ee3bda21c69775d03cbe80d301b" spec="password display='hidden'" />
     </parameters>
     <build-runners>
       <runner id="RUNNER_33" name="install nuget" type="jb.nuget.installer">
