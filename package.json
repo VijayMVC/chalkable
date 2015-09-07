@@ -1,0 +1,33 @@
+{
+  "name": "chalkable-build",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "azure-mgmt-compute": "^0.9.16",
+    "colors": "^1.0.3",
+    "deploy-azure-cdn": "^1.1.0",
+    "director": "^1.2.3",
+    "emp.ria-jsbuild3": "^0.1.20",
+    "grunt": "^0.4.5",
+    "grunt-contrib-crypt": "^0.1.0",
+    "grunt-cli": "^0.1.13",
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-raygun-deployment": "^1.1.1",
+    "grunt-teamcity": "^0.1.4",
+    "grunt-text-replace": "^0.4.0",
+    "http-server": "^0.7.3",
+    "jshint": "^2.8.0",
+    "lodash": "^2.4.1",
+    "optimist": "*",
+    "portfinder": "^0.2.1"
+  },
+  "scripts": {
+    "compile": "node node_modules/emp.ria-jsbuild3/bin/jsbuild3",
+    "serve-local": "node .local/serve -D ./Chalkable.Web --ssl --cert .certs/127.cert --key .certs/127.key --cors --silent",
+    "serve-chlk": "node .local/serve -D ./Chalkable.Web --ssl --cert .certs/chalkableall.cert.pem --key .certs/chalkableall.key --cors --silent"
+  },
+  "author": "",
+  "license": "ISC"
+}
