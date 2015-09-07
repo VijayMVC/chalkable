@@ -10,9 +10,11 @@
     </options>
     <disabled-settings>
       <setting-ref ref="BUILD_EXT_8" />
-      <setting-ref ref="RUNNER_37" />
-      <setting-ref ref="RUNNER_5" />
-      <setting-ref ref="RUNNER_8" />
+      <setting-ref ref="RUNNER_36" />
+      <setting-ref ref="RUNNER_38" />
+      <setting-ref ref="RUNNER_39" />
+      <setting-ref ref="RUNNER_40" />
+      <setting-ref ref="RUNNER_41" />
       <setting-ref ref="TRIGGER_2" />
     </disabled-settings>
     <parameters>
