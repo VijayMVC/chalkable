@@ -600,5 +600,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.SchoolYearId.HasValue);
             return DoRead(u => CreateClassAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value));
         }
+
+        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate)
+        {
+            //waiting iNow api
+        }
     }
 }

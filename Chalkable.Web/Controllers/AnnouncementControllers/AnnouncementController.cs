@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.UserTracking;
@@ -79,7 +80,17 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return Json(true);
         }
 
-        
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult Done(int option)
+        {
+            MarkDoneOptions mdo = (MarkDoneOptions) option;
+            SchoolLocator.AdminAnnouncementService.SetComplete(mdo);
+            SchoolLocator.LessonPlanService.SetComplete(mdo);
+            //SchoolLocator.ClassAnnouncementService.SetComplete(mdo);
+
+            return Json(true);
+        }
+
         [AuthorizationFilter("Teacher")]
         public ActionResult AddStandard(int announcementId, int standardId, int? announcementType)
         {
