@@ -8,6 +8,9 @@ using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -75,7 +78,7 @@ namespace Chalkable.Data.School.DataAccess
                 };
             b.AppendFormat(sql, Orm.ComplexResultSetQuery(tables));
             var res = new DbQuery(b, new Dictionary<string, object>());
-            conds.BuildSqlWhere(res, tables[0].Name);
+            conds.BuildSqlWhere(res, Orm.TableName(tables[0]));
             res.Sql.AppendFormat(
                 " and (toPerson.[{0}] =@{0} and (QuestionPerson.[{0}] is null or QuestionPerson.[{0}] =@{0}))"
                 , SchoolPerson.SCHOOL_REF_FIELD);

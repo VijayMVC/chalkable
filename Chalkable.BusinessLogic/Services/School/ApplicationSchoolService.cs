@@ -11,7 +11,9 @@ using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
 using Chalkable.Data.School.Model.ApplicationInstall;
+using Chalkable.Data.School.Model.Chlk;
 
 namespace Chalkable.BusinessLogic.Services.School
 {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {

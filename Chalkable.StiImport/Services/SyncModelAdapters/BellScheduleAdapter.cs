@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
         
-        private Data.School.Model.BellSchedule Selector(BellSchedule x)
+        private Data.School.Model.Sis.BellSchedule Selector(BellSchedule x)
         {
-            return new Data.School.Model.BellSchedule
+            return new Data.School.Model.Sis.BellSchedule
             {
                 Id = x.BellScheduleID,
                 Code = x.Code,
@@ -40,7 +40,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<BellSchedule> entities)
         {
-            var bs = entities.Select(x => new Data.School.Model.BellSchedule
+            var bs = entities.Select(x => new Data.School.Model.Sis.BellSchedule
             {
                 Id = x.BellScheduleID
             }).ToList();

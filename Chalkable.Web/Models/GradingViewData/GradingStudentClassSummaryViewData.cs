@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.Web.Models.AnnouncementsViewData;
 
 namespace Chalkable.Web.Models.GradingViewData

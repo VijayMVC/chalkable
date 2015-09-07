@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
+using Chalkable.Data.School.Model.Chlk;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
 {

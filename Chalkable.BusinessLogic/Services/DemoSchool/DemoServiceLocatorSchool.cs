@@ -9,8 +9,11 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.BusinessLogic.Services.School.Notifications;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements.Sis;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.StiConnector.Connectors.Model;
 using IDbMaintenanceService = Chalkable.BusinessLogic.Services.School.IDbMaintenanceService;
+using Infraction = Chalkable.Data.School.Model.Sis.Infraction;
 using ISchoolService = Chalkable.BusinessLogic.Services.School.ISchoolService;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -1381,7 +1384,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private void AddSchool()
         {
-            SchoolService.Add(new Data.School.Model.School
+            SchoolService.Add(new Data.School.Model.Sis.School
             {
                 Id = DemoSchoolConstants.SchoolId,
                 IsActive = true,
@@ -1639,9 +1642,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         private void AddInfractions()
         {
-            var infractions = new List<Data.School.Model.Infraction>();
+            var infractions = new List<Infraction>();
 
-            var infr1 = new Data.School.Model.Infraction
+            var infr1 = new Infraction
             {
                 Code = "FI",
                 Demerits = 0,
@@ -1652,7 +1655,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 VisibleInClassroom = true,
             };
 
-            var infr2 = new Data.School.Model.Infraction
+            var infr2 = new Infraction
             {
                 Code = "DI",
                 Demerits = 0,
@@ -1663,7 +1666,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 VisibleInClassroom = true,
             };
 
-            var infr3 = new Data.School.Model.Infraction
+            var infr3 = new Infraction
             {
                 Code = "CHEAT",
                 Demerits = 0,
@@ -1674,7 +1677,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 VisibleInClassroom = true,
             };
 
-            var infr4 = new Data.School.Model.Infraction
+            var infr4 = new Infraction
             {
                 Code = "DISR",
                 Demerits = 0,
@@ -1685,7 +1688,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 VisibleInClassroom = true,
             };
 
-            var infr5 = new Data.School.Model.Infraction
+            var infr5 = new Infraction
             {
                 Code = "XDRPT",
                 Demerits = 0,
@@ -1696,7 +1699,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 VisibleInClassroom = true
             };
 
-            var infr6 = new Data.School.Model.Infraction
+            var infr6 = new Infraction
             {
                 Code = "Unif",
                 Demerits = 0,
@@ -1707,7 +1710,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 VisibleInClassroom = true
             };
 
-            var infr7 = new Data.School.Model.Infraction
+            var infr7 = new Infraction
             {
                 Code = "INACT",
                 Demerits = 0,
@@ -1718,7 +1721,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 VisibleInClassroom = true
             };
 
-            var infr8 = new Data.School.Model.Infraction
+            var infr8 = new Infraction
             {
                 Code = "LIE",
                 Demerits = 0,
@@ -1729,7 +1732,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 VisibleInClassroom = true
             };
 
-            var infr9 = new Data.School.Model.Infraction
+            var infr9 = new Infraction
             {
                 Code = "DEFI",
                 Demerits = 0,
@@ -1740,7 +1743,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 VisibleInClassroom = true
             };
 
-            var infr10 = new Data.School.Model.Infraction
+            var infr10 = new Infraction
             {
                 Code = "STEAL",
                 Demerits = 0,
@@ -1834,7 +1837,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             get { throw new NotImplementedException(); }
         }
 
-        public School.Announcements.IBaseAnnouncementService GetAnnouncementService(Data.School.Model.Announcements.AnnouncementType? type)
+        public School.Announcements.IBaseAnnouncementService GetAnnouncementService(AnnouncementType? type)
         {
             throw new NotImplementedException();
         }

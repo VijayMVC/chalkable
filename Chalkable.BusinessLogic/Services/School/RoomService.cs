@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.BusinessLogic.Services.School
 {

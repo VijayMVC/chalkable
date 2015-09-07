@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.Common;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Controllers;
 using Chalkable.Web.Controllers.AnnouncementControllers;

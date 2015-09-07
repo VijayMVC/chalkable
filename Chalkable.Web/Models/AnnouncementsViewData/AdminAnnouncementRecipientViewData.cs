@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
 {

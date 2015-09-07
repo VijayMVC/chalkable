@@ -1,4 +1,5 @@
 ﻿using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
 
 namespace Chalkable.Web.Models.GroupsViewData
 {

@@ -8,6 +8,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Newtonsoft.Json;
 
 namespace Chalkable.BusinessLogic.Services

@@ -10,9 +10,9 @@ namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface ISchoolService
     {
-        Data.Master.Model.School GetById(Guid districtRef, int localId);
-        PaginatedList<Data.Master.Model.School> GetSchools(Guid districtId, int start, int count);
-        IList<Data.Master.Model.School> GetAll();
+        Data.Master.Model.Chlk.School GetById(Guid districtRef, int localId);
+        PaginatedList<Data.Master.Model.Chlk.School> GetSchools(Guid districtId, int start, int count);
+        IList<Data.Master.Model.Chlk.School> GetAll();
         void Add(IList<SchoolInfo> schools, Guid districtId);
         void Edit(IList<SchoolInfo> schoolInfos, Guid districtId);
         void Delete(IList<int> localIds, Guid districtId);
@@ -26,25 +26,25 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        public PaginatedList<Data.Master.Model.School> GetSchools(Guid districtId, int start, int count)
+        public PaginatedList<Data.Master.Model.Chlk.School> GetSchools(Guid districtId, int start, int count)
         {
             return DoRead(u => new SchoolDataAccess(u).GetSchools(districtId, start, count));
         }
 
-        public IList<Data.Master.Model.School> GetAll()
+        public IList<Data.Master.Model.Chlk.School> GetAll()
         {
             return DoRead(u => new SchoolDataAccess(u).GetAll());
         }
         
-        public Data.Master.Model.School GetById(Guid districtRef, int localId)
+        public Data.Master.Model.Chlk.School GetById(Guid districtRef, int localId)
         {
             using (var uow = Read())
             {
                 var da = new SchoolDataAccess(uow);
                 return da.GetAll(
                     new AndQueryCondition
-                        { new SimpleQueryCondition(Data.Master.Model.School.DISTRICT_REF_FIELD, districtRef, ConditionRelation.Equal),
-                            new SimpleQueryCondition(Data.Master.Model.School.LOCAL_ID_FIELD, localId, ConditionRelation.Equal)}
+                        { new SimpleQueryCondition(Data.Master.Model.Chlk.School.DISTRICT_REF_FIELD, districtRef, ConditionRelation.Equal),
+                            new SimpleQueryCondition(Data.Master.Model.Chlk.School.LOCAL_ID_FIELD, localId, ConditionRelation.Equal)}
                     )
                     .First();
             }
@@ -55,7 +55,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             BaseSecurity.EnsureSysAdmin(Context);
             using (var uow = Update())
             {
-                new SchoolDataAccess(uow).Insert(schools.Select(x => new Data.Master.Model.School
+                new SchoolDataAccess(uow).Insert(schools.Select(x => new Data.Master.Model.Chlk.School
                     {
                         Name = x.Name,
                         LocalId = x.LocalId,

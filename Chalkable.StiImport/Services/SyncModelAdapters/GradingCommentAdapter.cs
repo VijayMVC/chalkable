@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.GradingComment Selector(GradingComment x)
+        private Data.School.Model.Sis.GradingComment Selector(GradingComment x)
         {
-            return new Data.School.Model.GradingComment
+            return new Data.School.Model.Sis.GradingComment
             {
                 Code = x.Code,
                 Comment = x.Comment,
@@ -35,7 +35,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<GradingComment> entities)
         {
-            var gradingComments = entities.Select(x => new Data.School.Model.GradingComment { Id = x.GradingCommentID }).ToList();
+            var gradingComments = entities.Select(x => new Data.School.Model.Sis.GradingComment { Id = x.GradingCommentID }).ToList();
             ServiceLocatorSchool.GradingCommentService.Delete(gradingComments);
         }
     }

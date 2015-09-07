@@ -3,6 +3,7 @@ using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.BusinessLogic.Services.School.Notifications;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
 
 namespace Chalkable.BusinessLogic.Services.School
 {

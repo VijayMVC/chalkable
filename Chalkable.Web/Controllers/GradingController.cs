@@ -6,8 +6,8 @@ using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -247,33 +247,17 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult StudentClassSummary(int studentId, int classId)
         {
-            //var gradingStats = SchoolLocator.GradingStatisticService.GetStudentClassGradeStats(mp.Id, classId, studentId);
-           // var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, mp.SchoolYearRef, null, studentId, false);
-            //return Json(GradingStudentClassSummaryViewData.Create(gradingStats.FirstOrDefault(), mp, gradingPerMp));
             ClassGradingBoxesViewData classGarding = null;//PrepareClassGradingBoxes(classId);
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(Context.NowSchoolYearTime.Date, true);
             return Json(GradingStudentClassSummaryViewData.Create(mp, GetGradedItems(null, null, classId), classGarding));
         }
-
-        //TODO: duplicate part of announcement/read data. for API compatibility only
-        /*[AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_LIST_ITEMS, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
-        public ActionResult ItemGradesList(int announcementId)
-        {
-            var annView = SchoolLocator.AnnouncementService.GetAnnouncementDetails(announcementId);
-            var attachmentsInfo = AttachmentLogic.PrepareAttachmentsInfo(annView.AnnouncementAttachments);
-            var res = StudentAnnouncementLogic.ItemGradesList(SchoolLocator, annView, attachmentsInfo);
-            return Json(res);
-        }*/
-
-        //TODO: do we need this in API still?
-        //[AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_UPDATE_ITEM, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
+        
         [AuthorizationFilter("Teacher")]
         public ActionResult UpdateItem(int announcementId, int studentId, string gradeValue, string extraCredits
             , string comment, bool dropped, bool? exempt, bool? incomplete, bool? late, bool? callFromGradeBook)
         {
             var studentAnn = SchoolLocator.StudentAnnouncementService.SetGrade(announcementId, studentId, gradeValue, extraCredits
-                , comment, dropped, late ?? false, exempt ?? false, incomplete ?? false
-                , (int)GradingStyleEnum.Numeric100);
+                , comment, dropped, late ?? false, exempt ?? false, incomplete ?? false);
 
 
             MasterLocator.UserTrackingService.SetScore(Context.Login,

@@ -6,6 +6,7 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
 using Chalkable.Web.ActionFilters;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers

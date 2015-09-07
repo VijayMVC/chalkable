@@ -9,6 +9,7 @@ using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 
 namespace Chalkable.Data.Master.DataAccess
 {
@@ -28,7 +29,7 @@ namespace Chalkable.Data.Master.DataAccess
                                          left join [{5}] on [{5}].[{6}] = [{1}].[{7}]"
                                        , Orm.ComplexResultSetQuery(typesL1), typesL1[0].Name, typesL1[1].Name,
                                        User.DISTRICT_REF_FIELD, District.ID_FIELD, typesL1[2].Name, UserLoginInfo.ID_FIELD, User.ID_FIELD);
-            conditions.BuildSqlWhere(userQuery, typesL1[0].Name);
+            conditions.BuildSqlWhere(userQuery, Orm.TableName(typesL1[0]));
 
             suQuery.Sql.AppendFormat(@"select {0} from [User]
                                        join SchoolUser on [User].[{1}] = SchoolUser.[{2}] and [User].[{7}] = SchoolUser.[{8}]
@@ -36,7 +37,7 @@ namespace Chalkable.Data.Master.DataAccess
                                        left join UserLoginInfo on UserLoginInfo.[{5}] = [User].[{6}]", Orm.ComplexResultSetQuery(typesL2)
                                      , User.SIS_USER_ID_FIELD, SchoolUser.USER_REF_FIELD, SchoolUser.SCHOOL_REF_FIELD, School.LOCAL_ID_FIELD
                                      , UserLoginInfo.ID_FIELD, User.ID_FIELD, User.DISTRICT_REF_FIELD, SchoolUser.DISTRICT_REF_FIELD, School.DISTRICT_REF_FIELD);
-            conditions.BuildSqlWhere(suQuery, typesL1[0].Name);
+            conditions.BuildSqlWhere(suQuery,Orm.TableName(typesL1[0]));
             return new DbQuery(new List<DbQuery> { userQuery, suQuery });
         } 
 

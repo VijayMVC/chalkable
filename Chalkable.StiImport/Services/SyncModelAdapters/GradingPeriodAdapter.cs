@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.GradingPeriod Selector(GradingPeriod x)
+        private Data.School.Model.Sis.GradingPeriod Selector(GradingPeriod x)
         {
-            return new Data.School.Model.GradingPeriod
+            return new Data.School.Model.Sis.GradingPeriod
             {
                 Id = x.GradingPeriodID,
                 AllowGradePosting = x.AllowGradePosting,

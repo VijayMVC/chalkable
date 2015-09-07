@@ -4,6 +4,7 @@ using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
 using Chalkable.UserTracking;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.AnnouncementsViewData;

@@ -11,9 +11,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.GradeLevel Selector(GradeLevel x)
+        private Data.School.Model.Sis.GradeLevel Selector(GradeLevel x)
         {
-            return new Data.School.Model.GradeLevel
+            return new Data.School.Model.Sis.GradeLevel
             {
                 Id = x.GradeLevelID,
                 Description = x.Description,
@@ -36,7 +36,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<GradeLevel> entities)
         {
-            var ids = entities.Select(x => new Data.School.Model.GradeLevel { Id = (int)x.GradeLevelID }).ToList();
+            var ids = entities.Select(x => new Data.School.Model.Sis.GradeLevel { Id = (int)x.GradeLevelID }).ToList();
             ServiceLocatorSchool.GradeLevelService.Delete(ids);
         }
     }

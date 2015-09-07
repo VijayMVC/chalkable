@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
 
 namespace Chalkable.BusinessLogic.Security
 {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Mvc;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 

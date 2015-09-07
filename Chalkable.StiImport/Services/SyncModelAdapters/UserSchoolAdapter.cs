@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.StiConnector.SyncModel;
 
 namespace Chalkable.StiImport.Services.SyncModelAdapters
@@ -12,9 +13,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.UserSchool SchoolSelector(UserSchool x)
+        private Data.School.Model.Sis.UserSchool SchoolSelector(UserSchool x)
         {
-            return new Data.School.Model.UserSchool
+            return new Data.School.Model.Sis.UserSchool
             {
                 SchoolRef = x.SchoolID,
                 UserRef = x.UserID

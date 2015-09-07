@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.CourseType Selector(CourseType courseType)
+        private Data.School.Model.Sis.CourseType Selector(CourseType courseType)
         {
-            return new Data.School.Model.CourseType
+            return new Data.School.Model.Sis.CourseType
             {
                 Id = courseType.CourseTypeID,
                 Name = courseType.Name,
@@ -40,7 +40,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<CourseType> entities)
         {
-            var courseTypes = entities.Select(x => new Data.School.Model.CourseType { Id = x.CourseTypeID }).ToList();
+            var courseTypes = entities.Select(x => new Data.School.Model.Sis.CourseType { Id = x.CourseTypeID }).ToList();
             ServiceLocatorSchool.CourseTypeService.Delete(courseTypes);
         }
     }

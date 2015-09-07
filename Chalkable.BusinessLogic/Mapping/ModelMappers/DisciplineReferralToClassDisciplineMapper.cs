@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
 using Chalkable.StiConnector.Connectors.Model;
+using Infraction = Chalkable.Data.School.Model.Sis.Infraction;
 
 namespace Chalkable.BusinessLogic.Mapping.ModelMappers
 {
@@ -18,7 +20,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             returnObj.Date = sourceObj.Date;
             returnObj.Description = sourceObj.Note;
             if (sourceObj.Infractions != null)
-                returnObj.Infractions = sourceObj.Infractions.Select(x => new Data.School.Model.Infraction
+                returnObj.Infractions = sourceObj.Infractions.Select(x => new Infraction
                     {
                         Id = x.Id,
                         Name = x.Name

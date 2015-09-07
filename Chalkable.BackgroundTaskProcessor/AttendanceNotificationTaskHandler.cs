@@ -2,6 +2,7 @@ using System;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 
 namespace Chalkable.BackgroundTaskProcessor
 {

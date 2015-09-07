@@ -2,6 +2,7 @@
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -27,7 +28,8 @@ namespace Chalkable.Data.School.DataAccess
         {
             var conds = new AndQueryCondition { { LPGalleryCategory.ID_FIELD, key } };
             return ReadOneOrNull<LPGalleryCategory>(BuildSelectQuery(conds));
-        }
+        }
+
         private DbQuery BuildSelectQuery(QueryCondition condition)
         {
             return Orm.SimpleSelect(LPGalleryCategory.VW_LP_GALLERY_CATEGORY, condition);

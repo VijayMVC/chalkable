@@ -4,8 +4,12 @@ using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Connectors.Model.Attendances;
+using Infraction = Chalkable.Data.School.Model.Sis.Infraction;
 
 namespace Chalkable.BusinessLogic.Model
 {
@@ -22,7 +26,7 @@ namespace Chalkable.BusinessLogic.Model
         public IList<ShortStudentClassAttendanceSummary> Attendances { get; set; } 
 
         public static StudentSummaryInfo Create(StudentDetails student, NowDashboard nowDashboard
-            , IList<Data.School.Model.Infraction> infractions, IList<AnnouncementComplex> anns, IMapper<StudentAnnouncement, Score> mapper)
+            , IList<Infraction> infractions, IList<AnnouncementComplex> anns, IMapper<StudentAnnouncement, Score> mapper)
         {
             var res = new StudentSummaryInfo
                 {
@@ -70,10 +74,10 @@ namespace Chalkable.BusinessLogic.Model
     public class InfractionSummaryInfo
     {
         public int Occurrences { get; set; }
-        public Data.School.Model.Infraction Infraction { get; set; }
+        public Infraction Infraction { get; set; }
 
         public static IList<InfractionSummaryInfo> Create(IList<InfractionSummary> infractionSummaries
-            , IList<Data.School.Model.Infraction> infractions)
+            , IList<Infraction> infractions)
         {
             return infractionSummaries.Select(x => new InfractionSummaryInfo
                 {

@@ -1,8 +1,10 @@
 ﻿using System;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.Data.School.Model;
-using School = Chalkable.Data.Master.Model.School;
+using Chalkable.Data.School.Model.Sis;
+using School = Chalkable.Data.Master.Model.Chlk.School;
 
 namespace Chalkable.Web.Models.PersonViewDatas
 {

@@ -9,9 +9,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         public AttendanceMonthAdapter(AdapterLocator locator) : base(locator)
         {
         }
-        private Data.School.Model.AttendanceMonth Selector(AttendanceMonth x)
+        private Data.School.Model.Sis.AttendanceMonth Selector(AttendanceMonth x)
         {
-            return new Data.School.Model.AttendanceMonth
+            return new Data.School.Model.Sis.AttendanceMonth
             {
                 Id = x.AttendanceMonthID,
                 SchoolYearRef = x.AcadSessionID,
@@ -38,7 +38,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<AttendanceMonth> entities)
         {
-            var attendanceMonthes = entities.Select(x => new Data.School.Model.AttendanceMonth { Id = x.AttendanceMonthID }).ToList();
+            var attendanceMonthes = entities.Select(x => new Data.School.Model.Sis.AttendanceMonth { Id = x.AttendanceMonthID }).ToList();
             ServiceLocatorSchool.AttendanceMonthService.Delete(attendanceMonthes);
         }
     }

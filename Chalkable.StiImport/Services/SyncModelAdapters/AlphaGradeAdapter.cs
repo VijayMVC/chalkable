@@ -9,9 +9,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         public AlphaGradeAdapter(AdapterLocator locator) : base(locator)
         {
         }
-        private Data.School.Model.AlphaGrade Selector(AlphaGrade x)
+        private Data.School.Model.Sis.AlphaGrade Selector(AlphaGrade x)
         {
-            return new Data.School.Model.AlphaGrade
+            return new Data.School.Model.Sis.AlphaGrade
             {
                 Id = x.AlphaGradeID,
                 Description = x.Description,
@@ -34,7 +34,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<AlphaGrade> entities)
         {
-            var alphaGrades = entities.Select(x => new Data.School.Model.AlphaGrade { Id = x.AlphaGradeID }).ToList();
+            var alphaGrades = entities.Select(x => new Data.School.Model.Sis.AlphaGrade { Id = x.AlphaGradeID }).ToList();
             ServiceLocatorSchool.AlphaGradeService.Delete(alphaGrades);
         }
     }

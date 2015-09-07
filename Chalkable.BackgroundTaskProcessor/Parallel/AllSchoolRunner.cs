@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 
 namespace Chalkable.BackgroundTaskProcessor.Parallel
 {

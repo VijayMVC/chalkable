@@ -1,6 +1,7 @@
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BackgroundTaskProcessor

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
 using Chalkable.Web.Models.DisciplinesViewData;
 
 namespace Chalkable.Web.Models.CalendarsViewData

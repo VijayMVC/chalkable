@@ -9,16 +9,18 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
     public interface ISchoolService
     {
-        void Add(Data.School.Model.School school);
-        void Add(IList<Data.School.Model.School> schools);
-        void Edit(IList<Data.School.Model.School> schools);
-        void Delete(IList<Data.School.Model.School> schools);
-        IList<Data.School.Model.School> GetSchools();
+        void Add(Data.School.Model.Sis.School school);
+        void Add(IList<Data.School.Model.Sis.School> schools);
+        void Edit(IList<Data.School.Model.Sis.School> schools);
+        void Delete(IList<Data.School.Model.Sis.School> schools);
+        IList<Data.School.Model.Sis.School> GetSchools();
 
         void AddSchoolOptions(IList<SchoolOption> schoolOptions);
         void EditSchoolOptions(IList<SchoolOption> schoolOptions);
@@ -33,12 +35,12 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public void Add(Data.School.Model.School school)
+        public void Add(Data.School.Model.Sis.School school)
         {
-            Add(new List<Data.School.Model.School> {school});
+            Add(new List<Data.School.Model.Sis.School> {school});
         }
 
-        public IList<Data.School.Model.School> GetSchools()
+        public IList<Data.School.Model.Sis.School> GetSchools()
         {
             if (!BaseSecurity.IsDistrictAdmin(Context))
                 throw new ChalkableSecurityException();
@@ -49,7 +51,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void Add(IList<Data.School.Model.School> schools)
+        public void Add(IList<Data.School.Model.Sis.School> schools)
         {
             var schoolInfos = schools.Select(x => new SchoolInfo
                 {
@@ -62,7 +64,7 @@ namespace Chalkable.BusinessLogic.Services.School
             ModifySchool(da => da.Insert(schools), (iSchoolS, districtId) => iSchoolS.Add(schoolInfos, districtId));
         }
 
-        public void Edit(IList<Data.School.Model.School> schools)
+        public void Edit(IList<Data.School.Model.Sis.School> schools)
         {
             var schoolInfos = schools.Select(x => new SchoolInfo
                 {
@@ -75,7 +77,7 @@ namespace Chalkable.BusinessLogic.Services.School
             ModifySchool(da => da.Update(schools), (iSchoolS, districtId) => iSchoolS.Edit(schoolInfos, districtId));
         }
 
-        public void Delete(IList<Data.School.Model.School> schools)
+        public void Delete(IList<Data.School.Model.Sis.School> schools)
         {
             var ids = schools.Select(x => x.Id).ToList();
             ModifySchool(da => da.Delete(schools), (schoolS, districtId) => schoolS.Delete(ids, districtId));

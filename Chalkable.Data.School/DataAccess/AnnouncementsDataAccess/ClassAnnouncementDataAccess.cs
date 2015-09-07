@@ -8,6 +8,8 @@ using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
@@ -28,7 +30,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private const string EXPIRES_PARAM = "expires";
         private const string PERSON_ID_PARAM = "personId";
         private const string STATE_PARAM = "state";
-        private const string GRADING_STYLE_PARAM = "gradingStyle";
         private const string CLASS_ID_PARAM = "classId";
         private const string SCHOOL_YEAR_ID_PARAM = "schoolYearId";
         
@@ -56,7 +57,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var t = typeof (ClassAnnouncement);
             var fileds = Orm.Fields(t, true, true, true);
             fileds.Add(Announcement.ID_FIELD);
-            var q = Orm.SimpleListInsert(t, new List<ClassAnnouncement> { entity }, fileds, false);
+            var q = Orm.SimpleListInsert(new List<ClassAnnouncement> { entity }, fileds, false);
             ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
         }
 
@@ -142,7 +143,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {CREATED_PARAM, created},
                     {EXPIRES_PARAM, expiresDate},
                     {STATE_PARAM, AnnouncementState.Draft},
-                    {GRADING_STYLE_PARAM, GradingStyleEnum.Numeric100},
                     {CLASS_ID_PARAM, classId},
                     {SCHOOL_YEAR_ID_PARAM, schoolYearId}
                 };

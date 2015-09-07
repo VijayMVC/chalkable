@@ -9,11 +9,12 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
 using Chalkable.StiImport.Services.SyncModelAdapters;
 using School = Chalkable.StiConnector.SyncModel.School;
-using User = Chalkable.Data.Master.Model.User;
+using User = Chalkable.Data.Master.Model.Chlk.User;
 
 namespace Chalkable.StiImport.Services
 {

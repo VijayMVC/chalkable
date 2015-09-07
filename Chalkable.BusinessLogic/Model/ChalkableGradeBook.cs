@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.StiConnector.Connectors.Model;
 using ClassroomOption = Chalkable.StiConnector.Connectors.Model.ClassroomOption;
 

@@ -5,6 +5,8 @@ using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -55,21 +57,22 @@ namespace Chalkable.Data.School.DataAccess
                 condition.Add(Standard.IS_ACTIVE_FIELD, true);
 
             var dbQuery = new DbQuery();
-            dbQuery.Sql.Append(@"select [Standard].* from [Standard]");
-            condition.BuildSqlWhere(dbQuery, "Standard");
+            var standardTable = Orm.TableName(typeof(Standard));
+            dbQuery.Sql.Append($"select [{standardTable}].* from [{standardTable}]");
+            condition.BuildSqlWhere(dbQuery, standardTable);
 
             if (query.ClassId.HasValue)
             {
                 dbQuery.Parameters.Add("classId", query.ClassId);
 
-                dbQuery.Sql.AppendFormat("and [{0}].[{1}] in (", "Standard", Standard.ID_FIELD);
+                dbQuery.Sql.AppendFormat("and [{0}].[{1}] in (", standardTable, Standard.ID_FIELD);
 
                 var subQuery = BuildClassStandardSubQuery("classId");
                 dbQuery.Sql.Append(subQuery).Append(")");
 
                 if (!query.ParentStandardId.HasValue && !query.AllStandards)
                 {
-                    dbQuery.Sql.AppendFormat(" and ([{0}].[{1}] is null or [{0}].[{1}] not in (", "Standard",
+                    dbQuery.Sql.AppendFormat(" and ([{0}].[{1}] is null or [{0}].[{1}] not in (", standardTable,
                                              Standard.PARENT_STANDARD_REF_FIELD)
                                 .Append(subQuery).Append("))");
                 }
@@ -164,8 +167,10 @@ namespace Chalkable.Data.School.DataAccess
                                        join [{1}] on [{1}].StandardSubjectRef = [{0}].Id
                                        join [{2}] on [{2}].StandardRef = Standard.Id
                                        join [{3}] on [{3}].Id = [{2}].ClassRef or [{3}].CourseRef = [{2}].ClassRef "
-                                     , typeof (StandardSubject).Name, typeof (Standard).Name, typeof (ClassStandard).Name,
-                                     classT.Name);
+                                     , Orm.TableName(typeof (StandardSubject))
+                                     , Orm.TableName(typeof (Standard))
+                                     , Orm.TableName(typeof (ClassStandard)),
+                                     Orm.TableName(classT));
             var conds = new AndQueryCondition {{Class.ID_FIELD, classId}};
             conds.BuildSqlWhere(dbQuery, classT.Name);
             return ReadMany<StandardSubject>(dbQuery);
@@ -206,9 +211,10 @@ namespace Chalkable.Data.School.DataAccess
         {
             var cStandardDbQuery = BuildClassStandardQuery(new List<string> {ClassStandard.STANDARD_REF_FIELD}, classCondition);
             var dbQuery = new DbQuery();
-            dbQuery.Sql.AppendFormat(@"delete from AnnouncementStandard ");
-            annCondition.BuildSqlWhere(dbQuery, "AnnouncementStandard");
-            dbQuery.Sql.AppendFormat(" and AnnouncementStandard.[{0}] {2} in ({1})"
+            var asTable = Orm.TableName(typeof(AnnouncementStandard));
+            dbQuery.Sql.Append($"delete from {asTable} ");
+            annCondition.BuildSqlWhere(dbQuery, asTable);
+            dbQuery.Sql.AppendFormat(" and {0}.[{1}] {3} in ({2})", asTable
                 , AnnouncementStandard.STANDARD_REF_FIELD, cStandardDbQuery.Sql, notInClassStandard ? "not" : "");
             foreach (var parameter in cStandardDbQuery.Parameters)
                 dbQuery.Parameters.Add(parameter);
@@ -218,12 +224,13 @@ namespace Chalkable.Data.School.DataAccess
         private DbQuery BuildClassStandardQuery(IEnumerable<string> columnsResList, QueryCondition classCondition)
         {
             var res = new DbQuery();
-            res.Sql.AppendFormat(@"select {0}
-                                   from ClassStandard 
-                                   join [Class] on [Class].[{1}] = ClassStandard.[{2}] or ClassStandard.[{2}] = Class.[{3}]"
-                                , columnsResList.Select(x => "ClassStandard.[" + x + "]").JoinString(",")
-                                , Class.ID_FIELD, ClassStandard.CLASS_REF_FIELD, Class.COURSE_REF_FIELD);
-            classCondition.BuildSqlWhere(res, "Class");
+            var csTable = Orm.TableName(typeof(ClassStandard));
+            var cTable = Orm.TableName(typeof(Class));
+            res.Sql.Append($@"select {columnsResList.Select(x => $"{csTable}.[" + x + "]").JoinString(",")}
+                                   from csTable 
+                                   join {cTable} on {cTable}.[{ Class.ID_FIELD}] = {csTable}.[{Class.COURSE_REF_FIELD}] 
+                                        or {csTable}.[{Class.COURSE_REF_FIELD}] = {cTable}.[{Class.COURSE_REF_FIELD}]");
+            classCondition.BuildSqlWhere(res, cTable);
             return res;
         }
 
@@ -232,8 +239,8 @@ namespace Chalkable.Data.School.DataAccess
             var cond = new AndQueryCondition {{Class.ID_FIELD, classId}};
             var classStDbQuery = BuildClassStandardQuery(new List<string> {ClassStandard.STANDARD_REF_FIELD}, cond);
             var dbQuery = new DbQuery();
-            dbQuery.Sql.AppendFormat(@"select * from AnnouncementStandard where AnnouncementStandard.[{0}] in ({1})",
-                AnnouncementStandard.STANDARD_REF_FIELD, classStDbQuery.Sql);
+            var asTable = Orm.TableName(typeof (AnnouncementStandard));
+            dbQuery.Sql.AppendFormat($"select * from {asTable} where {asTable}.[{AnnouncementStandard.STANDARD_REF_FIELD}] in ({classStDbQuery.Sql})");
             dbQuery.Parameters = classStDbQuery.Parameters;
             return ReadMany<AnnouncementStandard>(dbQuery);
         }
@@ -244,11 +251,11 @@ namespace Chalkable.Data.School.DataAccess
             var types = new List<Type> {typeof (AnnouncementStandard), typeof (Standard)};
             dbQuery.Sql
                    .AppendFormat(Orm.SELECT_FORMAT, Orm.ComplexResultSetQuery(types), types[0].Name).Append(" ")
-                   .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, types[1].Name, Standard.ID_FIELD,
+                   .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, Orm.TableName(types[1]), Standard.ID_FIELD,
                                  types[0].Name, AnnouncementStandard.STANDARD_REF_FIELD)
                    .Append(" ");
             var conds = new AndQueryCondition { { AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, announcementId } };
-            conds.BuildSqlWhere(dbQuery, types[0].Name);
+            conds.BuildSqlWhere(dbQuery, Orm.TableName(types[0]));
             return ReadMany<AnnouncementStandardDetails>(dbQuery, true);
         }
     }

@@ -5,6 +5,8 @@ using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -29,7 +31,7 @@ namespace Chalkable.Data.School.DataAccess
         public override IList<Group> GetAll(QueryCondition conditions = null)
         {
             var query = new DbQuery();
-            var groupTName = typeof (Group).Name;
+            var groupTName = Orm.TableName(typeof (Group));
             var querySet = string.Format(" [{0}].*, (select count(*) from [{3}] where [{3}].[{4}] = [{1}]) as {2}"
                                         , groupTName, Group.ID_FIELD, Group.STUDENT_COUNT_FIELD
                                         , typeof (StudentGroup).Name, StudentGroup.GROUP_REF_FIELD);
@@ -119,7 +121,7 @@ namespace Chalkable.Data.School.DataAccess
             query.Sql.AppendFormat("insert into [{0}] ", typeof (StudentGroup).Name)
                  .AppendFormat(@"select @groupId, StudentRef from [{0}] ", typeof (StudentSchoolYear).Name);
             var conds = BuildCondsForStudentSchoolYearSelect(schoolYearId, gradeLevelId);
-           conds.BuildSqlWhere(query, typeof(StudentSchoolYear).Name);
+           conds.BuildSqlWhere(query, Orm.TableName(typeof(StudentSchoolYear)));
             query.Sql.AppendFormat(" and StudentRef not in (select StudentRef from StudentGroup where GroupRef =@groupId)");
             query.Parameters.Add("groupId", groupId);
             ExecuteNonQueryParametrized(query.Sql.ToString(), query.Parameters);
@@ -129,9 +131,9 @@ namespace Chalkable.Data.School.DataAccess
         {
             var query = Orm.SimpleDelete<StudentGroup>(new AndQueryCondition {{StudentGroup.GROUP_REF_FIELD, groupId}});
             var ssyQuery = new DbQuery();
-            ssyQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, StudentSchoolYear.STUDENT_FIELD_REF_FIELD, typeof (StudentSchoolYear).Name);
+            ssyQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, StudentSchoolYear.STUDENT_FIELD_REF_FIELD, Orm.TableName(typeof(StudentSchoolYear)));
 
-            BuildCondsForStudentSchoolYearSelect(schoolYearId, gradeLevelId).BuildSqlWhere(ssyQuery, typeof (StudentSchoolYear).Name);
+            BuildCondsForStudentSchoolYearSelect(schoolYearId, gradeLevelId).BuildSqlWhere(ssyQuery, Orm.TableName(typeof(StudentSchoolYear)));
 
             query.Sql.AppendFormat(" and [{0}] in ({1})", StudentGroup.STUDENT_REF_FIELD, ssyQuery.Sql);
             query.AddParameters(ssyQuery.Parameters);

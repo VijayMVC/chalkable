@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.Web.Models.SchoolsViewData;
-using CourseType = Chalkable.Data.School.Model.CourseType;
+using CourseType = Chalkable.Data.School.Model.Sis.CourseType;
 
 namespace Chalkable.Web.Models.ClassesViewData
 {

@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {

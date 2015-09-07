@@ -2,6 +2,7 @@
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 
 namespace Chalkable.BusinessLogic.Common
 {

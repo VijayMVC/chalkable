@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.ClassroomOption Selector(ClassroomOption x)
+        private Data.School.Model.Sis.ClassroomOption Selector(ClassroomOption x)
         {
-            return new Data.School.Model.ClassroomOption
+            return new Data.School.Model.Sis.ClassroomOption
             {
                 Id = x.SectionID,
                 DefaultActivitySortOrder = x.DefaultActivitySortOrder,
@@ -50,7 +50,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<ClassroomOption> entities)
         {
-            var classroomOptions = entities.Select(x => new Data.School.Model.ClassroomOption { Id = x.SectionID }).ToList();
+            var classroomOptions = entities.Select(x => new Data.School.Model.Sis.ClassroomOption { Id = x.SectionID }).ToList();
             ServiceLocatorSchool.ClassroomOptionService.Delete(classroomOptions);
         }
     }

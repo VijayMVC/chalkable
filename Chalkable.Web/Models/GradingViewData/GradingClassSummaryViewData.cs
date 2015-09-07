@@ -1,10 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Mapping;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.Web.Models.AnnouncementsViewData;
 
 namespace Chalkable.Web.Models.GradingViewData
@@ -31,26 +31,7 @@ namespace Chalkable.Web.Models.GradingViewData
         public IList<GradingClassSummaryItemViewData> ByAnnouncementTypes { get; set; }
         public GradingPeriodViewData GradingPeriod { get; set; }
         public decimal? Avg { get; set; }
-
-        public static GradingClassSummaryViewData Create(IList<AnnouncementComplex> announcements, 
-            MarkingPeriodClassGradeAvg classGradingStats, IGradingStyleMapper mapper, IList<StudentAnnouncementGrade> stAnnGrades = null)
-        {
-            throw new NotImplementedException();
-            //var res = new GradingClassSummaryViewData
-            //        {
-            //            MarkingPeriod = MarkingPeriodViewData.Create(classGradingStats.MarkingPeriod),
-            //            Avg = classGradingStats.Avg,
-            //            ByAnnouncementTypes = new List<GradingClassSummaryItemViewData>()
-            //        };
-            //announcements = announcements.Where(x => x.MarkingPeriodClassRef == classGradingStats.Id).ToList();
-            //foreach (var fgAnnouncementType in fgAnnouncementTypes)
-            //{
-            //    var annPerMp = announcements.Where(x => x.AnnouncementTypeRef == fgAnnouncementType.AnnouncementTypeRef).ToList();
-            //    res.ByAnnouncementTypes.Add(GradingClassSummaryItemViewData.Create(annPerMp, fgAnnouncementType.AnnouncementType, fgAnnouncementType.PercentValue, mapper, stAnnGrades));
-            //}
-            //return res;
-        }
-
+        
         public static GradingClassSummaryViewData Create(TeacherClassGrading gradingSummary)
         {
             return Create(gradingSummary.Announcements, gradingSummary.GradingPeriod, 

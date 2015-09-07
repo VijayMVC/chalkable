@@ -1,5 +1,6 @@
 ﻿using System;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Mapping.ModelMappers

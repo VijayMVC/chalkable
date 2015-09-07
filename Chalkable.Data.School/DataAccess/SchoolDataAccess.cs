@@ -3,17 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class SchoolDataAccess : DataAccessBase<Model.School, int>
+    public class SchoolDataAccess : DataAccessBase<Model.Sis.School, int>
     {
         public SchoolDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
         {
         }
         public void Delete(IList<int> ids)
         {
-            SimpleDelete(ids.Select(x => new Model.School {Id = x}).ToList());
+            SimpleDelete(ids.Select(x => new Model.Sis.School {Id = x}).ToList());
         }
 
         public StartupData GetStartupData(int schoolYearId, int personId, int roleId, DateTime now)

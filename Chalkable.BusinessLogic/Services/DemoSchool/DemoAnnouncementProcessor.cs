@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {

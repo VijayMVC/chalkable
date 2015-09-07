@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.DayType Selector(DayType x)
+        private Data.School.Model.Sis.DayType Selector(DayType x)
         {
-            return new Data.School.Model.DayType
+            return new Data.School.Model.Sis.DayType
             {
                 Id = x.DayTypeID,
                 Name = x.Name,
@@ -35,7 +35,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<DayType> entities)
         {
-            var dayTypes = entities.Select(x => new Data.School.Model.DayType
+            var dayTypes = entities.Select(x => new Data.School.Model.Sis.DayType
             {
                 Id = x.DayTypeID
             }).ToList();

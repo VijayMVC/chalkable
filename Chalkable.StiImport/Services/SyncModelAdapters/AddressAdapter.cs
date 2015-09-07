@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.Address Selector(Address x)
+        private Data.School.Model.Sis.Address Selector(Address x)
         {
-            return new Data.School.Model.Address
+            return new Data.School.Model.Sis.Address
             {
                 AddressLine1 = x.AddressLine1,
                 AddressLine2 = x.AddressLine2,
@@ -41,7 +41,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<Address> entities)
         {
-            var addresses = entities.Select(x => new Data.School.Model.Address { Id = x.AddressID }).ToList();
+            var addresses = entities.Select(x => new Data.School.Model.Sis.Address { Id = x.AddressID }).ToList();
             ServiceLocatorSchool.AddressService.Delete(addresses);
         }
     }

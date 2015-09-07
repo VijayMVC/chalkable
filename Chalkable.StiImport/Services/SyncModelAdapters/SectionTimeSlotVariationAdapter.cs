@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.SectionTimeSlotVariation Selector(SectionTimeSlotVariation x)
+        private Data.School.Model.Sis.SectionTimeSlotVariation Selector(SectionTimeSlotVariation x)
         {
-            return new Data.School.Model.SectionTimeSlotVariation
+            return new Data.School.Model.Sis.SectionTimeSlotVariation
             {
                 ClassRef = x.SectionID,
                 ScheduledTimeSlotVariationRef = x.TimeSlotVariationID

@@ -9,9 +9,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         public AlternateScoreAdapter(AdapterLocator locator) : base(locator)
         {
         }
-        private Data.School.Model.AlternateScore Selector(AlternateScore x)
+        private Data.School.Model.Sis.AlternateScore Selector(AlternateScore x)
         {
-            return new Data.School.Model.AlternateScore
+            return new Data.School.Model.Sis.AlternateScore
             {
                 Id = x.AlternateScoreID,
                 Description = x.Description,
@@ -35,7 +35,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<AlternateScore> entities)
         {
-            var alternateScores = entities.Select(x => new Data.School.Model.AlternateScore { Id = x.AlternateScoreID }).ToList();
+            var alternateScores = entities.Select(x => new Data.School.Model.Sis.AlternateScore { Id = x.AlternateScoreID }).ToList();
             ServiceLocatorSchool.AlternateScoreService.Delete(alternateScores);
         }
     }

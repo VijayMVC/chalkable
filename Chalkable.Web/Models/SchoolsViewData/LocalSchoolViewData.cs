@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Web.Models.SchoolsViewData
 {
@@ -10,7 +11,7 @@ namespace Chalkable.Web.Models.SchoolsViewData
         public string Name { get; set; }
         public int Id { get; set; }
 
-        public static LocalSchoolViewData Create(Data.School.Model.School school)
+        public static LocalSchoolViewData Create(School school)
         {
             return new LocalSchoolViewData
             {
@@ -19,7 +20,7 @@ namespace Chalkable.Web.Models.SchoolsViewData
             };
         }
 
-        public static IList<LocalSchoolViewData> Create(IList<Data.School.Model.School> schools)
+        public static IList<LocalSchoolViewData> Create(IList<School> schools)
         {
             return schools.Select(Create).ToList();
         }

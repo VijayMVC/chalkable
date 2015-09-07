@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.BusinessLogic.Services.School
 {

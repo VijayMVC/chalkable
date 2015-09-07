@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.Infraction Selector(Infraction x)
+        private Data.School.Model.Sis.Infraction Selector(Infraction x)
         {
-            return new Data.School.Model.Infraction
+            return new Data.School.Model.Sis.Infraction
             {
                 Code = x.Code,
                 Demerits = x.Demerits,
@@ -48,7 +48,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<Infraction> entities)
         {
-            var infractions = entities.Select(x => new Data.School.Model.Infraction { Id = x.InfractionID }).ToList();
+            var infractions = entities.Select(x => new Data.School.Model.Sis.Infraction { Id = x.InfractionID }).ToList();
             ServiceLocatorSchool.InfractionService.Delete(infractions);
         }
     }

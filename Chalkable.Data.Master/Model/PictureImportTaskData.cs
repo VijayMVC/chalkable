@@ -11,7 +11,7 @@ namespace Chalkable.Data.Master.Model
 
         public override string ToString()
         {
-            return DistrictId.ToString() + "," + PersonIds.JoinString(",");
+            return DistrictId + "," + PersonIds.JoinString(",");
         }
 
         public PictureImportTaskData(Guid districtId, IList<int> personIds)

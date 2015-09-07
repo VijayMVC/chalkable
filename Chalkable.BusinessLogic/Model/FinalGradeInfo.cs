@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Chalkable.StiConnector.Connectors.Model;
+using Infraction = Chalkable.Data.School.Model.Sis.Infraction;
 
 namespace Chalkable.BusinessLogic.Model
 {
@@ -34,11 +35,11 @@ namespace Chalkable.BusinessLogic.Model
     public class FinalStudentDiscipline
     {
         public int Occurrences { get; set; }
-        public Data.School.Model.Infraction Infraction { get; set; }
+        public Infraction Infraction { get; set; }
         public int StudentId { get; set; }
 
         public static IList<FinalStudentDiscipline> Create(IList<StudentDisciplineSummary> disciplines
-            ,  IList<Data.School.Model.Infraction> infractions)
+            ,  IList<Infraction> infractions)
         {
             var res = new List<FinalStudentDiscipline>();
             foreach (var discipline in disciplines)

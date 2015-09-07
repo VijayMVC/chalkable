@@ -7,6 +7,9 @@ using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
@@ -152,7 +155,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                                         left join AdminAnnouncement on AdminAnnouncement.Id = Announcement.Id
                                         left join ClassAnnouncement on ClassAnnouncement.Id = Announcement.Id
                                     ");
-            new AndQueryCondition{{Announcement.ID_FIELD, announcementId}}.BuildSqlWhere(dbQuery, typeof(Announcement).Name);
+            new AndQueryCondition{{Announcement.ID_FIELD, announcementId}}.BuildSqlWhere(dbQuery, Orm.TableName(typeof(Announcement)));
             return Read(dbQuery, reader =>
                 {
                     reader.Read();

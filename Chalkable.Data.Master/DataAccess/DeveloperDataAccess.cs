@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 
 namespace Chalkable.Data.Master.DataAccess
 {
@@ -36,7 +37,7 @@ namespace Chalkable.Data.Master.DataAccess
             query.Sql.AppendFormat(@"select {0} 
                         from [Developer]
                         join [User] on [User].Id = [Developer].[Id] ", resulSet);
-            conds.BuildSqlWhere(query, developertype.Name);
+            conds.BuildSqlWhere(query, Orm.TableName(developertype));
             return query;
         }
     }

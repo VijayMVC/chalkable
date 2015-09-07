@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.SystemSetting Selector(SystemSetting x)
+        private Data.School.Model.Sis.SystemSetting Selector(SystemSetting x)
         {
-            return new Data.School.Model.SystemSetting
+            return new Data.School.Model.Sis.SystemSetting
             {
                 Category = x.Category,
                 Setting = x.Setting,

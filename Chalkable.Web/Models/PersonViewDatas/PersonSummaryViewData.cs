@@ -1,5 +1,6 @@
 ﻿using System;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Web.Models.PersonViewDatas
 {

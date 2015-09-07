@@ -2,6 +2,7 @@
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.GradingViewData;

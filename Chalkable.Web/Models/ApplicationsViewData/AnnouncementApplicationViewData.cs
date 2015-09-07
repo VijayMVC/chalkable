@@ -4,8 +4,10 @@ using System.Linq;
 using System.Web;
 using Chalkable.BusinessLogic.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.ApplicationInstall;
+using Chalkable.Data.School.Model.Chlk;
 
 namespace Chalkable.Web.Models.ApplicationsViewData
 {

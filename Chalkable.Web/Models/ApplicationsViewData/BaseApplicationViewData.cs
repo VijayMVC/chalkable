@@ -4,7 +4,9 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
 using Chalkable.Web.Models.SchoolsViewData;
 
 namespace Chalkable.Web.Models.ApplicationsViewData

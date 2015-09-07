@@ -6,6 +6,8 @@ using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.ApplicationInstall;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -59,7 +61,7 @@ namespace Chalkable.Data.School.DataAccess
                 {SchoolYear.START_DATE_FIELD, curentDate.Date, ConditionRelation.LessEqual },
                 {SchoolYear.END_DATE_FIELD, curentDate.Date, ConditionRelation.GreaterEqual }
             };
-            syConds.BuildSqlWhere(syQuery, typeof(SchoolYear).Name);
+            syConds.BuildSqlWhere(syQuery, Orm.TableName(typeof(SchoolYear)));
 
             query.Sql.AppendFormat(" and {0} in ({1})", ApplicationInstall.SCHOOL_YEAR_REF_FIELD, syQuery.Sql);
             query.AddParameters(syQuery.Parameters);

@@ -4,6 +4,8 @@ using System.Linq;
 using Chalkable.BusinessLogic.Mapping;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
+using Chalkable.Data.School.Model.Chlk;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
 {

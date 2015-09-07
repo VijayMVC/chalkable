@@ -2,6 +2,7 @@
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
 using System.Linq;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Data.School.DataAccess
 {

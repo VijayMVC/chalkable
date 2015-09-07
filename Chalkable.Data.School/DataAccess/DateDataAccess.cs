@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -26,12 +27,12 @@ namespace Chalkable.Data.School.DataAccess
             if(query.SchoolDaysOnly)
                 condition.Add(Date.IS_SCHOOL_DAY_FIELD, true, ConditionRelation.Equal);
 
-            condition.BuildSqlWhere(dbQuery, "Date");
+            condition.BuildSqlWhere(dbQuery, "Sis.Date");
             if (query.MarkingPeriodId.HasValue)
             {
                 dbQuery.Parameters.Add("@markingPeriodId", query.MarkingPeriodId);
-                dbQuery.Sql.AppendFormat(@" and exists(select * from MarkingPeriod where [MarkingPeriod].[{0}] = @markingPeriodId 
-                                                          and [MarkingPeriod].[{1}] <= [Date].[{3}] and [MarkingPeriod].[{2}] >= [Date].[{3}])"
+                dbQuery.Sql.AppendFormat(@" and exists(select * from Sis.MarkingPeriod where [Sis.MarkingPeriod].[{0}] = @markingPeriodId 
+                                                          and [Sis.MarkingPeriod].[{1}] <= [Sis.Date].[{3}] and [Sis.MarkingPeriod].[{2}] >= [Date].[{3}])"
                     , MarkingPeriod.ID_FIELD, MarkingPeriod.START_DATE_FIELD, MarkingPeriod.END_DATE_FIELD, Date.DATE_TIME_FIELD);
             }
             return dbQuery;

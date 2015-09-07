@@ -10,14 +10,14 @@ using Chalkable.Common.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
-    public class DemoMasterSchoolStorage : BaseDemoGuidStorage<Data.Master.Model.School>
+    public class DemoMasterSchoolStorage : BaseDemoGuidStorage<Data.Master.Model.Chlk.School>
     {
         public DemoMasterSchoolStorage()
             : base(x => x.Id)
         {
         }
 
-        public Data.Master.Model.School GetByIdOrNull(Guid id)
+        public Data.Master.Model.Chlk.School GetByIdOrNull(Guid id)
         {
             return data.ContainsKey(id) ? data[id] : null;
         }
@@ -32,12 +32,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             MasterSchoolStorage = new DemoMasterSchoolStorage();
         }
 
-        public PaginatedList<Data.Master.Model.School> GetSchools(Guid districtId, int start, int count)
+        public PaginatedList<Data.Master.Model.Chlk.School> GetSchools(Guid districtId, int start, int count)
         {
             throw new NotImplementedException();
         }
 
-        public IList<Data.Master.Model.School> GetAll()
+        public IList<Data.Master.Model.Chlk.School> GetAll()
         {
             return MasterSchoolStorage.GetAll();
         }
@@ -46,13 +46,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             if (!id.HasValue)
                 throw new ChalkableException("Not valid district id");
-            Add(new List<Data.Master.Model.School> { CreateMasterSchool(id.Value) });
+            Add(new List<Data.Master.Model.Chlk.School> { CreateMasterSchool(id.Value) });
         }
 
         public void Add(Guid districtId, int localId, string name)
         {
 
-            var school = new Data.Master.Model.School
+            var school = new Data.Master.Model.Chlk.School
             {
                 DistrictRef = districtId,
                 Id = Guid.NewGuid(),
@@ -62,9 +62,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             MasterSchoolStorage.Add(school);
         }
 
-        public static Data.Master.Model.School CreateMasterSchool(Guid id)
+        public static Data.Master.Model.Chlk.School CreateMasterSchool(Guid id)
         {
-            return new Data.Master.Model.School
+            return new Data.Master.Model.Chlk.School
             {
                 DistrictRef = id,
                 Id = id,
@@ -75,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void Add(IList<SchoolInfo> schools, Guid districtId)
         {
-            MasterSchoolStorage.Add(schools.Select(x => new Data.Master.Model.School
+            MasterSchoolStorage.Add(schools.Select(x => new Data.Master.Model.Chlk.School
             {
                 Name = x.Name,
                 LocalId = x.LocalId,
@@ -104,12 +104,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public void Add(IList<Data.Master.Model.School> schools)
+        public void Add(IList<Data.Master.Model.Chlk.School> schools)
         {
             MasterSchoolStorage.Add(schools);
         }
         
-        public Data.Master.Model.School GetById(Guid districtRef, int localId)
+        public Data.Master.Model.Chlk.School GetById(Guid districtRef, int localId)
         {
             return MasterSchoolStorage.GetAll().FirstOrDefault(x => x.DistrictRef == districtRef && x.LocalId == localId);
         }

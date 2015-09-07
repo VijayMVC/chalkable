@@ -11,9 +11,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.Room Selector(Room x)
+        private Data.School.Model.Sis.Room Selector(Room x)
         {
-            return new Data.School.Model.Room
+            return new Data.School.Model.Sis.Room
             {
                 Id = x.RoomID,
                 SchoolRef = x.SchoolID,
@@ -38,7 +38,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<Room> entities)
         {
-            var ids = entities.Select(x => new Data.School.Model.Room { Id = x.RoomID }).ToList();
+            var ids = entities.Select(x => new Data.School.Model.Sis.Room { Id = x.RoomID }).ToList();
             ServiceLocatorSchool.RoomService.DeleteRooms(ids);
         }
     }

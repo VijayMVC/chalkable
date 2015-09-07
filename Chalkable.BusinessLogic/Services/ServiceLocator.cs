@@ -7,7 +7,9 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.Model.Sis;
 using CacheItemPriority = System.Web.Caching.CacheItemPriority;
 
 namespace Chalkable.BusinessLogic.Services
@@ -50,13 +52,13 @@ namespace Chalkable.BusinessLogic.Services
             return serviceLocator;
         }
 
-        public static IServiceLocatorSchool CreateSchoolLocator(SchoolUser schoolUser, Data.School.Model.SchoolYear schoolYear = null)
+        public static IServiceLocatorSchool CreateSchoolLocator(SchoolUser schoolUser, SchoolYear schoolYear = null)
         {
             var context = CreateUserContext(schoolUser, schoolYear);
             return CreateSchoolLocator(context);
         }
 
-        private static UserContext CreateUserContext(SchoolUser schoolUser, Data.School.Model.SchoolYear schoolYear = null)
+        private static UserContext CreateUserContext(SchoolUser schoolUser, SchoolYear schoolYear = null)
         {
             int roleId;
 

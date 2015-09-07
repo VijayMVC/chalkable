@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.StiConnector.SyncModel;
 
 namespace Chalkable.StiImport.Services.SyncModelAdapters
@@ -40,7 +41,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<ActivityAttribute> entities)
         {
-            var annAttributes = entities.Select(x => new Data.School.Model.AnnouncementAttribute { Id = x.ActivityAttributeID }).ToList();
+            var annAttributes = entities.Select(x => new AnnouncementAttribute { Id = x.ActivityAttributeID }).ToList();
             ServiceLocatorSchool.AnnouncementAttributeService.Delete(annAttributes);
         }
     }

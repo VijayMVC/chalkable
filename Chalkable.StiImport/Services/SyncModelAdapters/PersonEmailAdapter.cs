@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.PersonEmail Selector(PersonEmail x)
+        private Data.School.Model.Sis.PersonEmail Selector(PersonEmail x)
         {
-            return new Data.School.Model.PersonEmail
+            return new Data.School.Model.Sis.PersonEmail
             {
                 PersonRef = x.PersonID,
                 Description = x.Description,
@@ -36,7 +36,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<PersonEmail> entities)
         {
-            var personEmails = entities.Select(x => new Data.School.Model.PersonEmail
+            var personEmails = entities.Select(x => new Data.School.Model.Sis.PersonEmail
             {
                 PersonRef = x.PersonID,
                 Description = x.Description,

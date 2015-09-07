@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.StandardSubject Selector(StandardSubject x)
+        private Data.School.Model.Sis.StandardSubject Selector(StandardSubject x)
         {
-            return new Data.School.Model.StandardSubject
+            return new Data.School.Model.Sis.StandardSubject
             {
                 AdoptionYear = x.AdoptionYear,
                 Id = x.StandardSubjectID,

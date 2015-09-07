@@ -3,6 +3,8 @@ using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
+using Chalkable.Data.School.Model.Chlk;
 using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 

@@ -11,9 +11,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         public SchoolAdapter(AdapterLocator locator) : base(locator)
         {
         }
-        private Data.School.Model.School Selector(School x)
+        private Data.School.Model.Sis.School Selector(School x)
         {
-            return new Data.School.Model.School
+            return new Data.School.Model.Sis.School
             {
                 Id = x.SchoolID,
                 IsActive = x.IsActive,
@@ -39,7 +39,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<School> entities)
         {
-            var ids = entities.Select(x => new Data.School.Model.School { Id = x.SchoolID }).ToList();
+            var ids = entities.Select(x => new Data.School.Model.Sis.School { Id = x.SchoolID }).ToList();
             ServiceLocatorSchool.SchoolService.Delete(ids);
         }
     }

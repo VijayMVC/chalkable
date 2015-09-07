@@ -2,6 +2,7 @@
 using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
 using Chalkable.Web.Models;
 
 namespace Chalkable.Web.Logic

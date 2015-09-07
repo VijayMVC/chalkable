@@ -6,8 +6,10 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.StiConnector.Connectors.Model;
-using ClassroomOption = Chalkable.Data.School.Model.ClassroomOption;
+using ClassroomOption = Chalkable.Data.School.Model.Sis.ClassroomOption;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {

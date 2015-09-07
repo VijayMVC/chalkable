@@ -3,6 +3,7 @@ using System.Linq;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -19,11 +20,11 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<Person> GetUsersByPhone(string phone)
         {
-            var phoneTName = "Phone";
+            var phoneTName = Orm.TableName(typeof(Phone));
             var query = new DbQuery();
             query.Sql.AppendFormat(@"select [{1}].* from [{0}] 
                                      join [{1}] on [{1}].[{2}] = [{0}].[{3}]"
-                , phoneTName, "Person", Person.ID_FIELD, Phone.PERSON_REF_FIELD);
+                , phoneTName, "Sis.Person", Person.ID_FIELD, Phone.PERSON_REF_FIELD);
             var conds = new AndQueryCondition {{Phone.DIGIT_ONLY_VALUE_FIELD, phone}};
             conds.BuildSqlWhere(query, phoneTName);
             return ReadMany<Person>(query);

@@ -4,6 +4,7 @@ using System.Text;
 using Chalkable.Common;
 using Chalkable.Common.Web;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Web.Models
 {

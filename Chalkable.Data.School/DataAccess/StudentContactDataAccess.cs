@@ -5,6 +5,7 @@ using System.Linq;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -27,23 +28,23 @@ namespace Chalkable.Data.School.DataAccess
                                       types[1].Name, Person.ID_FIELD, types[2].Name, ContactRelationship.ID_FIELD);
 
             var conds = new AndQueryCondition { { StudentContact.STUDENT_REF_FIELD, studentId } };
-            conds.BuildSqlWhere(stcQuery, types[0].Name);
+            conds.BuildSqlWhere(stcQuery, Orm.TableName(types[0]));
 
             var addressQuery = new DbQuery();
-            addressQuery.Sql.AppendFormat(@" select Address.* from Address
-                                             join Person on Person.AddressRef = Address.Id
-                                             join StudentContact on StudentContact.ContactRef = Person.Id ");
-            conds.BuildSqlWhere(addressQuery, types[0].Name);
+            addressQuery.Sql.AppendFormat($@" select {Orm.TableName(typeof(Address))}.* from {Orm.TableName(typeof(Address))}
+                                             join {Orm.TableName(typeof(Person))} on {Orm.TableName(typeof(Person))}.AddressRef = {Orm.TableName(typeof(Address))}.Id
+                                             join {Orm.TableName(typeof(StudentContact))} on {Orm.TableName(typeof(StudentContact))}.ContactRef = {Orm.TableName(typeof(Person))}.Id ");
+            conds.BuildSqlWhere(addressQuery, Orm.TableName(types[0]));
 
             var phonesQuery = new DbQuery();
-            phonesQuery.Sql.AppendFormat(@" select Phone.* from Phone
-                                             join StudentContact on StudentContact.ContactRef = Phone.PersonRef ");
-            conds.BuildSqlWhere(phonesQuery, types[0].Name);
+            phonesQuery.Sql.AppendFormat($@" select {Orm.TableName(typeof(Phone))}.* from {Orm.TableName(typeof(Phone))}
+                                             join {Orm.TableName(typeof(StudentContact))} on {Orm.TableName(typeof(StudentContact))}.ContactRef = {Orm.TableName(typeof(Phone))}.PersonRef ");
+            conds.BuildSqlWhere(phonesQuery, Orm.TableName(types[0]));
 
             var emailsQuery = new DbQuery();
-            emailsQuery.Sql.AppendFormat(@" select PersonEmail.* from PersonEmail
-                                             join StudentContact on StudentContact.ContactRef = PersonEmail.PersonRef ");
-            conds.BuildSqlWhere(emailsQuery, types[0].Name);
+            emailsQuery.Sql.AppendFormat($@" select {Orm.TableName(typeof(PersonEmail))}.* from {Orm.TableName(typeof(PersonEmail))}
+                                             join {Orm.TableName(typeof(StudentContact))} on {Orm.TableName(typeof(StudentContact))}.ContactRef = {Orm.TableName(typeof(PersonEmail))}.PersonRef ");
+            conds.BuildSqlWhere(emailsQuery, Orm.TableName(types[0]));
 
             var dbQeury = new DbQuery(new List<DbQuery> {stcQuery, addressQuery, phonesQuery, emailsQuery});
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 
 namespace Chalkable.BackgroundTaskProducer.Producers
 {

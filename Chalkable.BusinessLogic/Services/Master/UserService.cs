@@ -19,7 +19,9 @@ using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.Master
@@ -216,7 +218,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 }
                 Trace.Assert(user.DistrictRef.HasValue);
                 var schoolL = ServiceLocator.SchoolServiceLocator(user.DistrictRef.Value, null);
-                Data.School.Model.SchoolYear schoolYear;
+                SchoolYear schoolYear;
                 SchoolUser schoolUser;
                 var userAcadSessionsIds = iNowConnector.UsersConnector.GetUserAcadSessionsIds();
                 if(userAcadSessionsIds.Length == 0)
@@ -322,7 +324,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
         private void PrepareSchoolData(IServiceLocatorSchool schoolL, User user, int? schoolYearId, int[] acdaIds
-            , out Data.School.Model.SchoolYear schoolYear, out SchoolUser schoolUser)
+            , out SchoolYear schoolYear, out SchoolUser schoolUser)
         {
             if (schoolYearId.HasValue)
                 schoolYear = schoolL.SchoolYearService.GetSchoolYearById(schoolYearId.Value);

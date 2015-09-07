@@ -5,6 +5,7 @@ using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -53,7 +54,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var conds = new AndQueryCondition {{Attachment.PERSON_REF_FIELD, personId}};
             var dbQuery = new DbQuery();
-            var attachmentTName = typeof (Attachment).Name;
+            var attachmentTName = Orm.TableName(typeof (Attachment));
             dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, "*", attachmentTName);
             conds.BuildSqlWhere(dbQuery, attachmentTName);
             if (!string.IsNullOrEmpty(filter))

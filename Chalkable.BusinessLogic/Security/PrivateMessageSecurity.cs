@@ -1,6 +1,7 @@
 ﻿using Chalkable.BusinessLogic.Services;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
 
 namespace Chalkable.BusinessLogic.Security
 {

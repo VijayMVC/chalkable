@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.ContactRelationship Selector(ContactRelationship x)
+        private Data.School.Model.Sis.ContactRelationship Selector(ContactRelationship x)
         {
-            return new Data.School.Model.ContactRelationship
+            return new Data.School.Model.Sis.ContactRelationship
             {
                 Id = x.ContactRelationshipID,
                 Name = x.Name,
@@ -45,7 +45,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<ContactRelationship> entities)
         {
-            var contactRelationships = entities.Select(x => new Data.School.Model.ContactRelationship { Id = x.ContactRelationshipID }).ToList();
+            var contactRelationships = entities.Select(x => new Data.School.Model.Sis.ContactRelationship { Id = x.ContactRelationshipID }).ToList();
             ServiceLocatorSchool.ContactService.DeleteContactRelationship(contactRelationships);
         }
     }

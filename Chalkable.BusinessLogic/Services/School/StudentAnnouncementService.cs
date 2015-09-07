@@ -6,8 +6,9 @@ using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -16,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId);
         StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment
-            , bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
+            , bool dropped, bool late, bool exempt, bool incomplete);
         AutoGrade SetAutoGrade(int announcementApplicationId, int? recepientId, string value);
         IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId);
         IList<AutoGrade> GetAutoGrades(int announcementApplicationId);
@@ -31,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         //TODO : needs testing 
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment, bool dropped,
-                                            bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
+                                            bool late, bool exempt, bool incomplete)
         {
             var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
             if(!ann.IsSubmitted)

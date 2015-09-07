@@ -16,7 +16,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void InsertInternal(IList<User> entities)
         {
-            var users = entities.Select(x => new Data.Master.Model.User
+            var users = entities.Select(x => new Data.Master.Model.Chlk.User
             {
                 Id = Guid.NewGuid(),
                 DistrictRef = ServiceLocatorSchool.Context.DistrictId,
@@ -34,7 +34,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void UpdateInternal(IList<User> entities)
         {
-            var users = entities.Select(x => new Data.Master.Model.User
+            var users = entities.Select(x => new Data.Master.Model.Chlk.User
             {
                 DistrictRef = ServiceLocatorSchool.Context.DistrictId,
                 FullName = x.FullName,

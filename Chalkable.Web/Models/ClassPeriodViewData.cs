@@ -1,4 +1,5 @@
 ﻿using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.Web.Models.ClassesViewData;
 
 namespace Chalkable.Web.Models

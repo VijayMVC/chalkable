@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Data.Common.Backup;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 

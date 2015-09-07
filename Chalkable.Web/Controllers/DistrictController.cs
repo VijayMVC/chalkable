@@ -3,6 +3,7 @@ using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;

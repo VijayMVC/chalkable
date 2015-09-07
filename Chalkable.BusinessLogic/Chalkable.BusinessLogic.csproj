@@ -100,7 +100,6 @@
     <Compile Include="Common\AppTools.cs" />
     <Compile Include="Common\NameHelper.cs" />
     <Compile Include="Logic\Comperators\PracticeGradeScoreComperator.cs" />
-    <Compile Include="Mapping\GradingStyleMapper.cs" />
     <Compile Include="Mapping\ModelMappers\ActivityToAnnouncementMapper.cs" />
     <Compile Include="Mapping\ModelMappers\AnnouncementComplexToActivityMapper.cs" />
     <Compile Include="Mapping\ModelMappers\AttachmentToStiAttachmentMapper.cs" />

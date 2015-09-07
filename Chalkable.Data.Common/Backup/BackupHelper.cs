@@ -10,6 +10,7 @@ using System.Xml;
 using Chalkable.Common;
 using Chalkable.Data.Common.SqlAzure.ImportExport;
 using Chalkable.Data.Common.Storage;
+using static System.String;
 
 namespace Chalkable.Data.Common.Backup
 {
@@ -34,7 +35,7 @@ namespace Chalkable.Data.Common.Backup
         {
             var cloudStorageAccount = GetDefaultStorageAccount();
             key = Convert.ToBase64String(cloudStorageAccount.Credentials.ExportKey());
-            blobUri = String.Format(BLOB_URL_TEMPLATE, cloudStorageAccount.BlobEndpoint.AbsoluteUri, BACKUP_CONTAINER, time, databaseName);
+            blobUri = Format(BLOB_URL_TEMPLATE, cloudStorageAccount.BlobEndpoint.AbsoluteUri, BACKUP_CONTAINER, time, databaseName);
         }
 
         private static ExportInput BuildExportInput(long time, string serverName, string databaseName)
@@ -78,7 +79,7 @@ namespace Chalkable.Data.Common.Backup
             get
             {
                 var endpoint = Settings.DbBackupServiceUrl;
-                if (string.IsNullOrEmpty(endpoint))
+                if (IsNullOrEmpty(endpoint))
                     throw new Exception("Db export endpoint is not configured");
                 return endpoint;
             }
@@ -112,11 +113,11 @@ namespace Chalkable.Data.Common.Backup
             }
             catch (WebException responseException)
             {
-                Trace.WriteLine(string.Format("Request Falied:{0}", responseException.Message));
+                Trace.WriteLine(Format("Request Falied:{0}", responseException.Message));
                 if (responseException.Response != null)
                 {
-                    var statusCodeLine = string.Format("Status Code: {0}", ((HttpWebResponse) responseException.Response).StatusCode);
-                    var messageLine = string.Format("Status Description: {0}\n\r", ((HttpWebResponse)responseException.Response).StatusDescription);
+                    var statusCodeLine = Format("Status Code: {0}", ((HttpWebResponse) responseException.Response).StatusCode);
+                    var messageLine = Format("Status Description: {0}\n\r", ((HttpWebResponse)responseException.Response).StatusDescription);
                     Trace.WriteLine(statusCodeLine);
                     Trace.WriteLine(messageLine);
                     throw new Exception(responseException.Message, new Exception(statusCodeLine + "\n" + messageLine));
@@ -155,11 +156,11 @@ namespace Chalkable.Data.Common.Backup
             }
             catch (WebException responseException)
             {
-                Trace.WriteLine(string.Format("Request Falied:{0}", responseException.Message));
+                Trace.WriteLine(Format("Request Falied:{0}", responseException.Message));
                 if (responseException.Response != null)
                 {
-                    Trace.WriteLine(string.Format("Status Code: {0}", ((HttpWebResponse)responseException.Response).StatusCode));
-                    Trace.WriteLine(string.Format("Status Description: {0}\n\r", ((HttpWebResponse)responseException.Response).StatusDescription));
+                    Trace.WriteLine(Format("Status Code: {0}", ((HttpWebResponse)responseException.Response).StatusCode));
+                    Trace.WriteLine(Format("Status Description: {0}\n\r", ((HttpWebResponse)responseException.Response).StatusDescription));
                 }
                 throw;
             }
@@ -167,7 +168,7 @@ namespace Chalkable.Data.Common.Backup
 
         public static List<StatusInfo> CheckRequestStatus(string requestGuid, string serverName)
         {
-            var webRequest = WebRequest.Create(Endpoint + string.Format("/Status?servername={0}&username={1}&password={2}&reqId={3}",
+            var webRequest = WebRequest.Create(Endpoint + Format("/Status?servername={0}&username={1}&password={2}&reqId={3}",
                     HttpUtility.UrlEncode(serverName),
                     HttpUtility.UrlEncode(Settings.ChalkableSchoolDbUser),
                     HttpUtility.UrlEncode(Settings.ChalkableSchoolDbPassword),

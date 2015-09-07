@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models

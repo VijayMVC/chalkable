@@ -6,8 +6,9 @@ using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
 using Chalkable.StiConnector.Connectors.Model;
-using Infraction = Chalkable.Data.School.Model.Infraction;
+using Infraction = Chalkable.Data.School.Model.Sis.Infraction;
 
 namespace Chalkable.BusinessLogic.Services.School
 {

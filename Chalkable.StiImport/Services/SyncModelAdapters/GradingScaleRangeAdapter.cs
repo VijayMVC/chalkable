@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.GradingScaleRange Selector(GradingScaleRange x)
+        private Data.School.Model.Sis.GradingScaleRange Selector(GradingScaleRange x)
         {
-            return new Data.School.Model.GradingScaleRange
+            return new Data.School.Model.Sis.GradingScaleRange
             {
                 AlphaGradeRef = x.AlphaGradeID,
                 AveragingEquivalent = x.AveragingEquivalent,
@@ -38,7 +38,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<GradingScaleRange> entities)
         {
-            var gsr = entities.Select(x => new Data.School.Model.GradingScaleRange
+            var gsr = entities.Select(x => new Data.School.Model.Sis.GradingScaleRange
             {
                 AlphaGradeRef = x.AlphaGradeID,
                 GradingScaleRef = x.GradingScaleID

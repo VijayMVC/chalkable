@@ -7,6 +7,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model.ApplicationInstall;
 

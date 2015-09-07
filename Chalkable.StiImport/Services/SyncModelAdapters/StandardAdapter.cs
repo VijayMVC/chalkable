@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.Standard Selector(Standard x)
+        private Data.School.Model.Sis.Standard Selector(Standard x)
         {
-            return new Data.School.Model.Standard
+            return new Data.School.Model.Sis.Standard
             {
                 Description = x.Description,
                 Id = x.StandardID,
@@ -40,7 +40,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<Standard> entities)
         {
-            var toDelete = entities.Select(x => new Data.School.Model.Standard
+            var toDelete = entities.Select(x => new Data.School.Model.Sis.Standard
             {
                 Id = x.StandardID
             }).ToList();

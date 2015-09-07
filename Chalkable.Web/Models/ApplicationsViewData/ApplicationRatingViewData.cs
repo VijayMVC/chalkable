@@ -2,6 +2,7 @@
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.ApplicationsViewData

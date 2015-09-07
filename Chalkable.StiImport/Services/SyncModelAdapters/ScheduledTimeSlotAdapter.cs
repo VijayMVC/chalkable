@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.ScheduledTimeSlot Selector(ScheduledTimeSlot x)
+        private Data.School.Model.Sis.ScheduledTimeSlot Selector(ScheduledTimeSlot x)
         {
-            return new Data.School.Model.ScheduledTimeSlot
+            return new Data.School.Model.Sis.ScheduledTimeSlot
             {
                 BellScheduleRef = x.BellScheduleID,
                 Description = x.Description,
@@ -37,7 +37,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<ScheduledTimeSlot> entities)
         {
-            IList<Data.School.Model.ScheduledTimeSlot> sts = entities.Select(x => new Data.School.Model.ScheduledTimeSlot
+            IList<Data.School.Model.Sis.ScheduledTimeSlot> sts = entities.Select(x => new Data.School.Model.Sis.ScheduledTimeSlot
             {
                 BellScheduleRef = x.BellScheduleID,
                 PeriodRef = x.TimeSlotID

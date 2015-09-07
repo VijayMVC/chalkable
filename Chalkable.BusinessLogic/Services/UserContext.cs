@@ -7,7 +7,9 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Sis;
 
 namespace Chalkable.BusinessLogic.Services
 {
@@ -95,7 +97,7 @@ namespace Chalkable.BusinessLogic.Services
             MasterConnectionString = Settings.MasterConnectionString;     
         }
 
-        public UserContext(User user, CoreRole role, District district, Data.Master.Model.School school, Guid? developerId, int? personId, SchoolYear schoolYear = null)
+        public UserContext(User user, CoreRole role, District district, Data.Master.Model.Chlk.School school, Guid? developerId, int? personId, SchoolYear schoolYear = null)
             : this()
         {
             UserId = user.Id;

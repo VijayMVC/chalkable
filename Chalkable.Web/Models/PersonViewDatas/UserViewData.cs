@@ -1,5 +1,6 @@
 ﻿using System;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 
 namespace Chalkable.Web.Models.PersonViewDatas
 {

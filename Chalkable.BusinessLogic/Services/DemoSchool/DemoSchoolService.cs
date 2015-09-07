@@ -5,11 +5,13 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 using ISchoolService = Chalkable.BusinessLogic.Services.School.ISchoolService;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
 {
-    public class DemoSchoolStorage : BaseDemoIntStorage<Data.School.Model.School>
+    public class DemoSchoolStorage : BaseDemoIntStorage<Data.School.Model.Sis.School>
     {
         public DemoSchoolStorage()
             : base(x => x.Id)
@@ -35,7 +37,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             SchoolOptionStorage = new DemoSchoolOptionStorage();
         }
 
-        public void Add(Data.School.Model.School school)
+        public void Add(Data.School.Model.Sis.School school)
         {
             SchoolStorage.Add(school);
 
@@ -51,7 +53,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             ServiceLocator.ServiceLocatorMaster.SchoolService.Add(l, Context.DistrictId.Value);
         }
 
-        public void Add(IList<Data.School.Model.School> schools)
+        public void Add(IList<Data.School.Model.Sis.School> schools)
         {
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
@@ -64,7 +66,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }).ToList(), Context.DistrictId.Value);
         }
 
-        public void Edit(IList<Data.School.Model.School> schools)
+        public void Edit(IList<Data.School.Model.Sis.School> schools)
         {
             if (!Context.DistrictId.HasValue)
                 throw new UnassignedUserException();
@@ -77,12 +79,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }).ToList(), Context.DistrictId.Value);
         }
 
-        public void Delete(IList<Data.School.Model.School> schools)
+        public void Delete(IList<Data.School.Model.Sis.School> schools)
         {
             SchoolStorage.Delete(schools);
         }
 
-        public IList<Data.School.Model.School> GetSchools()
+        public IList<Data.School.Model.Sis.School> GetSchools()
         {
             return SchoolStorage.GetAll();
         }

@@ -12,9 +12,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.SchoolOption Selector(SchoolOption schoolOption)
+        private Data.School.Model.Sis.SchoolOption Selector(SchoolOption schoolOption)
         {
-            return new Data.School.Model.SchoolOption
+            return new Data.School.Model.Sis.SchoolOption
             {
                 Id = schoolOption.SchoolID,
                 AllowDualEnrollment = schoolOption.AllowDualEnrollment,
@@ -55,7 +55,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<SchoolOption> entities)
         {
-            var schoolOptions = entities.Select(x => new Data.School.Model.SchoolOption { Id = x.SchoolID }).ToList();
+            var schoolOptions = entities.Select(x => new Data.School.Model.Sis.SchoolOption { Id = x.SchoolID }).ToList();
             ServiceLocatorSchool.SchoolService.DeleteSchoolOptions(schoolOptions);
         }
     }

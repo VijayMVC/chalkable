@@ -7,6 +7,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 using Microsoft.WindowsAzure.Storage.Table;
 
 namespace Chalkable.BusinessLogic.Services.Master

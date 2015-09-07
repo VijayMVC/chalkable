@@ -1,0 +1,31 @@
+
+Create Schema Chlk
+GO
+
+Alter Schema Chlk Transfer dbo.[vwDistrictSyncStatus]
+Alter Schema Chlk Transfer dbo.[School]
+Alter Schema Chlk Transfer dbo.[User]
+Alter Schema Chlk Transfer dbo.[tmp]
+Alter Schema Chlk Transfer dbo.[CommonCoreStandardCategory]
+Alter Schema Chlk Transfer dbo.[CommonCoreStandard]
+Alter Schema Chlk Transfer dbo.[ApplicationDistrictOption]
+Alter Schema Chlk Transfer dbo.[ApplicationStandard]
+Alter Schema Chlk Transfer dbo.[FundRequest]
+Alter Schema Chlk Transfer dbo.[ABToCCMapping]
+Alter Schema Chlk Transfer dbo.[ApplicationPermission]
+Alter Schema Chlk Transfer dbo.[ApplicationGradeLevel]
+Alter Schema Chlk Transfer dbo.[ChalkableDepartment]
+Alter Schema Chlk Transfer dbo.[District]
+Alter Schema Chlk Transfer dbo.[ApplicationPicture]
+Alter Schema Chlk Transfer dbo.[SchoolUser]
+Alter Schema Chlk Transfer dbo.[ApplicationCategory]
+Alter Schema Chlk Transfer dbo.[Application]
+Alter Schema Chlk Transfer dbo.[FundRequestRoleDistribution]
+Alter Schema Chlk Transfer dbo.[Fund]
+Alter Schema Chlk Transfer dbo.[Category]
+Alter Schema Chlk Transfer dbo.[BackgroundTask]
+Alter Schema Chlk Transfer dbo.[Preference]
+Alter Schema Chlk Transfer dbo.[Developer]
+Alter Schema Chlk Transfer dbo.[ApplicationRating]
+Alter Schema Chlk Transfer dbo.[UserLoginInfo]
+GO

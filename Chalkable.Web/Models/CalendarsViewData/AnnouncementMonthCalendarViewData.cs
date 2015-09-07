@@ -4,6 +4,8 @@ using System.Linq;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
+using Chalkable.Data.School.Model.Announcements.Sis;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.Web.Models.AnnouncementsViewData;
 
 namespace Chalkable.Web.Models.CalendarsViewData

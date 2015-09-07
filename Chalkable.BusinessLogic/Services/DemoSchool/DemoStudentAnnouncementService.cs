@@ -8,6 +8,8 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
+using Chalkable.Data.School.Model.Sis;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool
@@ -153,7 +155,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits,
-            string comment, bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
+            string comment, bool dropped, bool late, bool exempt, bool incomplete)
         {
             var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
 

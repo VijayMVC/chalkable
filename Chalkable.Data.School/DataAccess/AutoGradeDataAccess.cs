@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Chlk;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -20,7 +21,7 @@ namespace Chalkable.Data.School.DataAccess
                     {AutoGrade.ANNOUNCEMENT_APPLICATION_REF_FIELD, announcementApplicationId},
                     {AutoGrade.STUDENT_REF_FIELD, studentId}
                 };
-            conds.BuildSqlWhere(res, typeof (AutoGrade).Name);
+            conds.BuildSqlWhere(res, Orm.TableName(typeof (AutoGrade)));
             return ReadOneOrNull<AutoGrade>(res, true);
         }
 
@@ -36,7 +37,7 @@ namespace Chalkable.Data.School.DataAccess
                 {
                     {AutoGrade.ANNOUNCEMENT_APPLICATION_REF_FIELD, announcementApplicationId}
                 };
-            conds.BuildSqlWhere(res, typeof (AutoGrade).Name);
+            conds.BuildSqlWhere(res, Orm.TableName(typeof (AutoGrade)));
             return ReadMany<AutoGrade>(res);
         }
 
@@ -52,9 +53,9 @@ namespace Chalkable.Data.School.DataAccess
         {
             var query = new DbQuery();
             var types = new List<Type> { typeof(AutoGrade), typeof(AnnouncementApplication) };
-            query.Sql.AppendFormat(Orm.SELECT_FORMAT, Orm.ComplexResultSetQuery(types), types[0].Name)
-                 .Append(" ").AppendFormat(Orm.SIMPLE_JOIN_FORMAT, types[1].Name, AnnouncementApplication.ID_FIELD
-                                           , types[0].Name, AutoGrade.ANNOUNCEMENT_APPLICATION_REF_FIELD);
+            query.Sql.AppendFormat(Orm.SELECT_FORMAT, Orm.ComplexResultSetQuery(types), Orm.TableName(types[0]))
+                 .Append(" ").AppendFormat(Orm.SIMPLE_JOIN_FORMAT, Orm.TableName(types[1]), AnnouncementApplication.ID_FIELD
+                                           , Orm.TableName(types[0]), AutoGrade.ANNOUNCEMENT_APPLICATION_REF_FIELD);
             query.Sql.Append(" ");
             return query;
         }

@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.StaffSchool Selector(StaffSchool x)
+        private Data.School.Model.Sis.StaffSchool Selector(StaffSchool x)
         {
-            return new Data.School.Model.StaffSchool
+            return new Data.School.Model.Sis.StaffSchool
             {
                 SchoolRef = x.SchoolID,
                 StaffRef = x.StaffID

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -20,7 +21,7 @@ namespace Chalkable.Data.Common.Orm
         public const string DESC = "DESC";
         public const string FULL_COLUMN_NAME_FORMAT = "[{0}].[{1}]";
         
-        private const string COMPLEX_RESULT_FORMAT = " [{0}].[{1}] as {0}_{1}";
+        private const string COMPLEX_RESULT_FORMAT = " [{0}].[{2}] as {1}_{2}";
         private const string ORDER_BY_FORMAT = "ORDER BY [{0}].[{1}] {2}";
         private const string OFFSET_ROWS_FORMAT = " OFFSET {0} ROWS FETCH NEXT {1} ROWS ONLY ";
 
@@ -42,7 +43,13 @@ namespace Chalkable.Data.Common.Orm
             return propertyInfo.GetCustomAttribute<DataEntityAttr>() == null
                 && propertyInfo.GetCustomAttribute<NotDbFieldAttr>() == null;
         }
-        
+
+        public static string TableName(Type type)
+        {
+            Debug.Assert(type.Namespace != null, "type.Namespace != null");
+            return type.Namespace.Split('.').Last() + "." + type.Name;
+        }
+
         public static List<string> Fields(Type t, bool identityFields = true, bool pkFields = true, bool declaredOnly = false)
         {
             var res = new List<string>();
@@ -83,15 +90,7 @@ namespace Chalkable.Data.Common.Orm
         public static IList<string> FullFieldsNames(Type t, string prefix)
         {
             var fields = Fields(t);
-            return fields.Select(x => FullFieldName(t, prefix, x)).ToList();
-        }
-        public static string FullFieldName(Type t, string field)
-        {
-            return FullFieldName(t, t.Name, field);
-        }
-        public static string FullFieldName(Type t, string prefix, string field)
-        {
-            return string.Format(COMPLEX_RESULT_FORMAT, prefix, field);
+            return fields.Select(x => string.Format(COMPLEX_RESULT_FORMAT, TableName(t), t.Name, x)).ToList();
         }
 
         public static string ComplexResultSetQuery(IList<Type> types)
@@ -135,14 +134,15 @@ namespace Chalkable.Data.Common.Orm
         {
             var t = typeof(T);
             var fields = Fields(t, false);
-            return SimpleListInsert(t, objs, fields, returnInsertedEntityId);
+            return SimpleListInsert(objs, fields, returnInsertedEntityId);
         }
 
-        public static DbQuery SimpleListInsert<T>(Type t, IList<T> objs, IList<string> fields, bool returnInsertedEntityId)
+        public static DbQuery SimpleListInsert<T>(IList<T> objs, IList<string> fields, bool returnInsertedEntityId)
         {
             var res = new DbQuery { Parameters = new Dictionary<string, object>() };
             var b = new StringBuilder();
-            b.Append("Insert into [").Append(t.Name).Append("] (");
+            var t = typeof (T);
+            b.Append("Insert into [").Append(TableName(t)).Append("] (");
             b.Append(fields.Select(x => "[" + x + "]").JoinString(",")).Append(")");
             b.Append(" values ");
 
@@ -156,7 +156,7 @@ namespace Chalkable.Data.Common.Orm
                 foreach (var field in fields)
                 {
                     var fieldValue = t.GetProperty(field).GetValue(objs[i]);
-                    res.Parameters.Add(field + "_" + i.ToString(), fieldValue);
+                    res.Parameters.Add(field + "_" + i, fieldValue);
                 }
             }
 
@@ -238,7 +238,7 @@ namespace Chalkable.Data.Common.Orm
                                              IDictionary<string, string> updateParamsMapper, QueryCondition queryCondition)
          {
              var res = new DbQuery { Parameters = new Dictionary<string, object>() };
-             res.Sql.Append("Update [").Append(t.Name).Append("] set");
+             res.Sql.Append("Update [").Append(TableName(t)).Append("] set");
              res.Sql.Append(updateParams.Select(x => "[" + updateParamsMapper[x.Key] + "]=@" + x.Key).JoinString(","));
 
              foreach (var updateParam in updateParams)
@@ -246,7 +246,7 @@ namespace Chalkable.Data.Common.Orm
                  if (!res.Parameters.ContainsKey(updateParam.Key))
                      res.Parameters.Add(updateParam);
              }
-             queryCondition.BuildSqlWhere(res, t.Name);
+             queryCondition.BuildSqlWhere(res, TableName(t));
              return res;
          }
 
@@ -260,9 +260,9 @@ namespace Chalkable.Data.Common.Orm
         public static DbQuery SimpleDelete<T>(QueryCondition conditioins)
         {
             var res = new DbQuery();
-            var t = typeof(T);
-            res.Sql.AppendFormat(DELETE_FORMAT, t.Name);
-            conditioins.BuildSqlWhere(res, t.Name);
+            var tName = TableName(typeof (T));
+            res.Sql.AppendFormat(DELETE_FORMAT, tName);
+            conditioins.BuildSqlWhere(res, tName);
             return res;
         }
 
@@ -280,7 +280,7 @@ namespace Chalkable.Data.Common.Orm
 
         public static DbQuery SimpleSelect<T>(QueryCondition queryCondition, int? count = null)
         {
-            return SimpleSelect(typeof(T).Name, queryCondition, count);
+            return SimpleSelect(TableName(typeof(T)), queryCondition, count);
         }
 
         public static DbQuery OrderedSelect(string tName, QueryCondition queryCondition, string orderBy, OrderType orderType, int? count = null)

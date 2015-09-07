@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 
 namespace Chalkable.Data.Master.DataAccess
 {
@@ -46,8 +47,7 @@ namespace Chalkable.Data.Master.DataAccess
                                    join [{2}] on [{2}].[{3}] = [{1}].[{4}] "
                                  , Orm.ComplexResultSetQuery(types), types[0].Name, types[1].Name
                                  , User.ID_FIELD, ApplicationRating.USER_REF_FIELD);
-            if(conditions != null)
-                conditions.BuildSqlWhere(res, types[0].Name);
+            conditions?.BuildSqlWhere(res, Orm.TableName(types[0]));
             return res;
         }
     }

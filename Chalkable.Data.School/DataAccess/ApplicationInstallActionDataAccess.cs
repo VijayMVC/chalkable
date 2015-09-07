@@ -6,6 +6,7 @@ using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.ApplicationInstall;
+using Chalkable.Data.School.Model.Chlk;
 
 namespace Chalkable.Data.School.DataAccess
 {

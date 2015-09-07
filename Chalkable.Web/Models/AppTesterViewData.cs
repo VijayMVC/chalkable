@@ -1,6 +1,7 @@
 ﻿using System;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.Master.Model.Chlk;
 
 namespace Chalkable.Web.Models
 {

@@ -10,9 +10,9 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         {
         }
 
-        private Data.School.Model.Person Selector(Person x)
+        private Data.School.Model.Sis.Person Selector(Person x)
         {
-            return new Data.School.Model.Person
+            return new Data.School.Model.Sis.Person
             {
                 Active = false,
                 AddressRef = x.PhysicalAddressID,
@@ -39,7 +39,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
 
         protected override void DeleteInternal(IList<Person> entities)
         {
-            var persons = entities.Select(x => new Data.School.Model.Person { Id = x.PersonID }).ToList();
+            var persons = entities.Select(x => new Data.School.Model.Sis.Person { Id = x.PersonID }).ToList();
             ServiceLocatorSchool.PersonService.Delete(persons);
         }
     }
