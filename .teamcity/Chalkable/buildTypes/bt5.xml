@@ -194,7 +194,8 @@ cssmin]]></param>
 +:qa]]></param>
           <param name="quietPeriod" value="600" />
           <param name="quietPeriodMode" value="USE_CUSTOM" />
-          <param name="triggerRules" value="+:*" />
+          <param name="triggerRules"><![CDATA[+:*
+-:.teamcity]]></param>
         </parameters>
       </build-trigger>
     </build-triggers>
