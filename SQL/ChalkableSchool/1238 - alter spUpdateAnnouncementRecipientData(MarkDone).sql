@@ -22,7 +22,7 @@ Begin
 			vwLessonPlan
 			left join (select * from AnnouncementRecipientData where PersonRef = @personId) as annRecData on Id = annRecData.AnnouncementRef
 		Where 
-			EndDate <= @tillDate 
+			(@tillDate is null or EndDate <= @tillDate)
 			and ((@roleId = 2 
 				  and exists(select * from ClassTeacher where PersonRef = @personId and ClassTeacher.ClassRef = vwLessonPlan.ClassRef))
 				 or (@roleId = 3 
@@ -41,7 +41,7 @@ Begin
 			vwAdminAnnouncement
 			left join(select * from AnnouncementRecipientData where PersonRef = @personId) as annRecData on Id = annRecData.AnnouncementRef
 		Where
-			Expires<=@tillDate 
+			(@tillDate is null or Expires<=@tillDate)
 			and ((@roleId = 3 
 				  and exists(select * from AnnouncementGroup ar
 			 				join StudentGroup on StudentGroup.GroupRef = ar.GroupRef
