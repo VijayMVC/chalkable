@@ -3,11 +3,13 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Data.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
@@ -283,8 +285,30 @@ namespace Chalkable.StiImport.Services
             List <SyncModelWrapper> models = new List<SyncModelWrapper>();
             foreach (var type in context.Types)
             {
+                var fkProps = new List<PropertyInfo>();
+                var flag = BindingFlags.Instance | BindingFlags.Public;
+                var props = type.Value.GetProperties(flag);
+                foreach (var propertyInfo in props)
+                    if (propertyInfo.CanRead && propertyInfo.CanWrite && propertyInfo.GetCustomAttribute<NullableForeignKey>() != null)
+                    {
+                        fkProps.Add(propertyInfo);
+                    }
+
                 SyncResultBase<SyncModel> sr = context.GetSyncResult(type.Value);
-                models.AddRange(sr.All.Select(x=>SyncModelWrapper.Create(x.SYS_CHANGE_CREATION_VERSION ?? x.SYS_CHANGE_VERSION, PersistOperationType.Insert, x)));
+                foreach (var syncModel in sr.All)
+                {
+                    if (syncModel.SYS_CHANGE_VERSION == syncModel.SYS_CHANGE_CREATION_VERSION || fkProps.Count == 0)
+                        models.Add(SyncModelWrapper.Create(syncModel.SYS_CHANGE_CREATION_VERSION ?? syncModel.SYS_CHANGE_VERSION,PersistOperationType.Insert, syncModel));
+                    else
+                    {
+                        var iModel = syncModel.Clone();
+                        foreach (var propertyInfo in fkProps)
+                            propertyInfo.SetValue(iModel, null);
+                        models.Add(SyncModelWrapper.Create(syncModel.SYS_CHANGE_CREATION_VERSION, PersistOperationType.Insert, iModel));
+                        models.Add(SyncModelWrapper.Create(syncModel.SYS_CHANGE_VERSION, PersistOperationType.Update, syncModel));
+                    }
+                }
+                
                 if (sr.Updated != null)
                     models.AddRange(sr.Updated.Select(x => SyncModelWrapper.Create(x.SYS_CHANGE_VERSION, PersistOperationType.Update, x)));
                 if (sr.Deleted != null)
