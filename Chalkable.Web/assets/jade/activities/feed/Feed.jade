@@ -22,7 +22,22 @@ div(class = noComplete ? "no-complete" : "").feed-container
         label#feed-arrow.blue-arrow.left-up-arrow=Msg.See_more_items
         label#no-items.blue-arrow.gray.div=Msg.No_items_marked_important
     else
-        .wrapper
+        +ActionForm('feed', 'getAnnouncements').wrapper
+            input(type="hidden", name="start", value=(self.getStart() || 0))
+            input(type="hidden", name="count", value=10)
+            if isAdmin
+                input(type="hidden", name="gradeLevels", value=topData.getSelectedIds())
+            else
+                input(type="hidden", name="classId", value=topData.getSelectedItemId())
+
+            .right-buttons-block
+                if self.isImportantOnly() && self.items.length
+                    input(type="submit", name="submitType", value="markDone")#mark-done-submit.x-hidden
+                    +Select('markDoneOption')(data-placeholder = 'Mark Done', value = 0).markDoneSelect
+                        +Option(0, '', false)
+                        +Option(1, 'Items due before today', false)
+                        +Option(2, 'Items older than 30 days', false)
+                        +Option(3, 'All Items', false)
             +ListView(self.items)(
                 infiniteScroll = true,
                 needGoToButton = true,
@@ -32,5 +47,6 @@ div(class = noComplete ? "no-complete" : "").feed-container
                 pageSize = 10,
                 paramsPrepend = [selected, self.importantOnly]
             )
+                Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
                 each item in self.items
                     +FeedItem(item)

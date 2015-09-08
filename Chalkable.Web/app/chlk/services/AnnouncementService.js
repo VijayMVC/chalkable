@@ -35,10 +35,17 @@ NAMESPACE('chlk.services', function () {
             Object, 'cache',
             Number, 'importantCount',
 
+            [[Number]],
+            ria.async.Future, function markDone(option) {
+                return this.get('Announcement/Done.json', Boolean, {
+                    option: option.valueOf()
+                });
+            },
+
             [[Number, chlk.models.id.ClassId, Boolean]],
-            ria.async.Future, function getAnnouncements(pageIndex_, classId_, importantOnly_) {
+            ria.async.Future, function getAnnouncements(start_, classId_, importantOnly_) {
                 return this.get('Feed/List.json', ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), {
-                    start: pageIndex_|0,
+                    start: start_ || 0,
                     classId: classId_ ? classId_.valueOf() : null,
                     complete: importantOnly_ ? false : null
                 });
@@ -46,10 +53,10 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[Number, String, Boolean]],
-            ria.async.Future, function getAnnouncementsForAdmin(pageIndex_, gradeLevels_, importantOnly_) {
+            ria.async.Future, function getAnnouncementsForAdmin(start_, gradeLevels_, importantOnly_) {
                 return this.get('Feed/DistrictAdminFeed.json', ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), {
                     gradeLevelIds : gradeLevels_,
-                    start: pageIndex_|0,
+                    start: start_ || 0,
                     complete: importantOnly_ ? false : null
                 });
 
