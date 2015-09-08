@@ -12,9 +12,9 @@
       <setting-ref ref="BUILD_EXT_12" />
       <setting-ref ref="RUNNER_44" />
       <setting-ref ref="RUNNER_45" />
-      <setting-ref ref="RUNNER_48" />
-      <setting-ref ref="RUNNER_50" />
-      <setting-ref ref="RUNNER_53" />
+      <setting-ref ref="RUNNER_47" />
+      <setting-ref ref="RUNNER_49" />
+      <setting-ref ref="RUNNER_54" />
       <setting-ref ref="TRIGGER_5" />
     </disabled-settings>
     <parameters>
