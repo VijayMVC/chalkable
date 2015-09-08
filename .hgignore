@@ -9,6 +9,7 @@ syntax: glob
 **/*.suo
 **/*.orig
 packages/**
+**/bower/*
 Chalkable.Web/**/*.css
 Chalkable.Web/**/*.compiled.js
 Chalkable.Web/app/highcharts/other/modules/no-data-to-display.src.js
