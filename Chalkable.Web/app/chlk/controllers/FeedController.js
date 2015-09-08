@@ -132,7 +132,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.feed.Feed]],
         function getAnnouncementsAction(model) {
             if(model.getSubmitType() == 'markDone')
-                return this.announcementService.markDone(model.getMarkDoneOption())
+                return this.announcementService.markDone(model.getMarkDoneOption(), model.getClassId())
                     .then(function(isMarked){
                         return this.Redirect('feed', 'list', [model.getClassId()]);
                     }, this)
