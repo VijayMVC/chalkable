@@ -68,9 +68,8 @@ namespace Chalkable.Web.Controllers
 
         private void SwitchToRole(CoreRole role)
         {
-            var isPersistentAuth = ChalkableAuthentication.IsPersistentAuthentication();
             var context = MasterLocator.UserService.SwitchToRole(role);
-            ChalkableAuthentication.SignIn(context, isPersistentAuth);
+            ChalkableAuthentication.SignIn(context, false);
         }
 
         public ActionResult LogOut()
@@ -169,7 +168,7 @@ namespace Chalkable.Web.Controllers
             var context = logOnAction(userService);
             if (context != null)
             {
-                ChalkableAuthentication.SignIn(context, remember);
+                ChalkableAuthentication.SignIn(context, false);
                 if (context.DeveloperId.HasValue && !DemoUserService.IsDemoUser(context))
                     DeveloperAuthentication.SignIn(context, remember);
             }
