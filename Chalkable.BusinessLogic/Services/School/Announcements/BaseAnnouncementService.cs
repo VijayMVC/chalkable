@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
         void SetComplete(int id, bool complete);
-        void SetComplete(MarkDoneOptions option);
+        void SetComplete(int classId, MarkDoneOptions option);
         void SetAnnouncementsAsComplete(DateTime? date, bool complete);
         bool CanAddStandard(int announcementId);
 
@@ -167,7 +167,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => new AnnouncementStandardDataAccess(u).GetAnnouncementStandardsByClassId(classId));
         }
 
-        public void SetComplete(MarkDoneOptions option)
+        public void SetComplete(int classId, MarkDoneOptions option)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
@@ -186,9 +186,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     break;
             }
 
-            SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, tillDateToUpdate);
+            SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, tillDateToUpdate, classId);
         } 
 
-        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate);
+        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int classId);
     }
 }
