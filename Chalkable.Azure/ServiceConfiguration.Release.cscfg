@@ -68,7 +68,7 @@
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserName" value="ManagementClient" />
       <Setting name="WindowsAzure.OAuth.ServiceNamespaceManagementUserKey" value="j3OCyBJiVl0AXklP/jAAaHQsDHaL7ARTeBROVWe6nL4=" />
       <!-- other settings -->
-      <Setting name="TaskProcessorDelay" value="2000" />
+      <Setting name="TaskProcessorDelay" value="1" />
       <Setting name="DbBackupServiceUrl" value="https://sn1prod-dacsvc.azure.com/DACWebService.svc" />
       <Setting name="PictureProcessorCount" value="1" />
       <!--tracking-->
