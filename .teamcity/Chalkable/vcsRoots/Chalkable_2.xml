@@ -4,7 +4,9 @@
   <param name="branchName" value="default" />
   <param name="hgCommandPath" value="hg" />
   <param name="repositoryPath" value="ssh://hg@bitbucket.org/chalkable/chalkable" />
-  <param name="teamcity:branchSpec" value="-:*" />
+  <param name="teamcity:branchSpec"><![CDATA[+:*-ci
++:*-quick-fix
++:*_Hotfix]]></param>
   <param name="uncompressedTransfer" value="true" />
 </vcs-root>
 
