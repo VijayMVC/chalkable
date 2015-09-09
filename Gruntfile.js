@@ -107,7 +107,7 @@ module.exports = function(grunt) {
           'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine-en.min.js', 
           'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.min.js', 
           'Chalkable.Web/app/jquery/snippet/jquery.snippet.min.js', 
-          'Chalkable.Web/app/jquery/jquery.validate.min.js', 
+          'Chalkable.Web/app/bower/jquery-validation/dist/jquery.validate.min.js', 
           'Chalkable.Web/app/jquery/jquery.signaturepad.min.js', 
           'Chalkable.Web/app/jquery/jquery.menu-aim.min.js', 
           'Chalkable.Web/app/jquery/jquery.quicksand.min.js', 
