@@ -1163,7 +1163,7 @@ NAMESPACE('chlk.controllers', function (){
                 res = new ria.async.DeferredData(attachmentViewData);
             }else{
                 var buttons = [downloadAttachmentButton];
-                if(this.userInRole(chlk.models.common.RoleEnum.STUDENT) && attachment.isTeachersAttachment())
+                if(this.userInRole(chlk.models.common.RoleEnum.STUDENT) && attachment.isTeachersAttachment() && attachment.getAttachmentId())
                     buttons.push(new chlk.models.common.attachments.ToolbarButton('mark-attachment', 'MARK UP', null, null,
                         'announcement', 'cloneAttachment', [attachment.getAttachmentId().valueOf(), announcementId.valueOf()], true));
                 res = this.announcementAttachmentService

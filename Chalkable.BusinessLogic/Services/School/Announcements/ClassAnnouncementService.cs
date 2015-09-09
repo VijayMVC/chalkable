@@ -601,7 +601,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateClassAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value));
         }
 
-        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate)
+        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int classId)
         {
             //waiting iNow api
         }

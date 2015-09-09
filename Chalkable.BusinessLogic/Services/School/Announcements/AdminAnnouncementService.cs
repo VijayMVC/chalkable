@@ -235,7 +235,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     .Announcements;
                 var da = new AnnouncementRecipientDataDataAccess(u);
                 foreach (var ann in anns)
-                    da.UpdateAnnouncementRecipientData(ann.Id, (int) AnnouncementType.Admin ,null, personId, null, complete, null);
+                    da.UpdateAnnouncementRecipientData(ann.Id, (int) AnnouncementType.Admin ,null, personId, null, complete, null, null);
             });
         }
 
@@ -244,7 +244,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             DoUpdate(
                 u =>
                     new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementType.Admin, null,
-                        Context.PersonId.Value, null, complete, null));
+                        Context.PersonId.Value, null, complete, null, null));
         }
 
         public override bool CanAddStandard(int announcementId)
@@ -296,12 +296,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value));
         }
 
-        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate)
+        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int classId)
         {
             DoUpdate(
                 u =>
                     new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementType.Admin,schoolYearId,
-                        personId, roleId, true, tillDateToUpdate));
+                        personId, roleId, true, tillDateToUpdate, null));
         }
     }
 }

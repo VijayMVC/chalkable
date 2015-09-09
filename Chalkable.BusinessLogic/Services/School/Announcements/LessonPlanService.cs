@@ -290,7 +290,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             DoUpdate(
                 u =>
                     new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementType.LessonPlan, null,
-                        Context.PersonId.Value, null, complete, null));
+                        Context.PersonId.Value, null, complete, null, null));
         }
 
         public override void SetAnnouncementsAsComplete(DateTime? toDate, bool complete)
@@ -308,7 +308,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     .Announcements;
                 var da = new AnnouncementRecipientDataDataAccess(u);
                 foreach (var ann in anns)
-                    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementType.LessonPlan, null, personId, null, complete, null);
+                    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementType.LessonPlan, null, personId, null, complete, null, null);
             });
         }
 
@@ -364,12 +364,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateLessonPlanDataAccess(u).ExistsInGallery(title, exceludedLessonPlanId));
         }
 
-        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate)
+        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int classId)
         {
             DoUpdate(
                 u =>
                     new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementType.LessonPlan,schoolYearId,
-                        personId, roleId, true, tillDateToUpdate));
+                        personId, roleId, true, tillDateToUpdate, classId));
         }
     }
 }

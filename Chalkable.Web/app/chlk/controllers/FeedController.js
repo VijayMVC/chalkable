@@ -85,7 +85,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('inbox')],
         [[chlk.models.id.ClassId, Boolean, Boolean, Number]],
-        function listAction(classId_, postback_, importantOnly_, pageIndex_) {
+        function listAction(classId_, postback_, importantOnly_, start_) {
 
             //todo : think about go to inow part
             if(!this.canViewFeed()){
@@ -101,14 +101,14 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             var result = this
-                .getFeedItems(postback_, importantOnly_, classId_, pageIndex_)
+                .getFeedItems(postback_, importantOnly_, classId_, start_)
                 .attach(this.validateResponse_());
             return this.PushOrUpdateView(chlk.activities.feed.FeedListPage, result);
         },
 
         [chlk.controllers.SidebarButton('inbox')],
         [[String, Boolean, Boolean, Number]],
-        function listDistrictAdminAction(gradeLevels_, postback_, importantOnly_, pageIndex_) {
+        function listDistrictAdminAction(gradeLevels_, postback_, importantOnly_, start_) {
 
             //todo : think about go to inow part
             if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHALKBLE_ADMIN)){
@@ -123,11 +123,46 @@ NAMESPACE('chlk.controllers', function (){
                 }], 'center'), null;
             }
 
-            var result = this.getAdminFeedItems(postback_, importantOnly_, gradeLevels_, pageIndex_)
+            var result = this.getAdminFeedItems(postback_, importantOnly_, gradeLevels_, start_)
                 .attach(this.validateResponse_());
             return this.PushOrUpdateView(chlk.activities.feed.FeedListAdminPage, result);
         },
 
+        [chlk.controllers.SidebarButton('inbox')],
+        [[chlk.models.feed.Feed]],
+        function getAnnouncementsAction(model) {
+            if(model.getSubmitType() == 'markDone')
+                return this.announcementService.markDone(model.getMarkDoneOption(), model.getClassId())
+                    .then(function(isMarked){
+                        return this.Redirect('feed', 'list', [model.getClassId()]);
+                    }, this)
+
+            var result = this
+                .getAnnouncements(model.getStart(), model.getClassId(), model.isImportantOnly())
+                .attach(this.validateResponse_())
+                .then(function(feedItems){
+                    return new chlk.models.feed.FeedItems(feedItems);
+                });
+            return this.UpdateView(chlk.activities.feed.FeedListPage, result, chlk.activities.lib.DontShowLoader());
+        },
+
+        [chlk.controllers.SidebarButton('inbox')],
+        [[chlk.models.feed.FeedAdmin]],
+        function getAnnouncementsDistrictAdminAction(model) {
+            if(model.getSubmitType() == 'markDone')
+                return this.announcementService.markDone(model.getMarkDoneOption())
+                    .then(function(isMarked){
+                        return this.Redirect('feed', 'list', [model.getGradeLevels()]);
+                    }, this)
+
+            var result = this
+                .getAnnouncements(model.getStart(), model.getClassId(), model.isImportantOnly())
+                .attach(this.validateResponse_())
+                .then(function(feedItems){
+                    return new chlk.models.feed.FeedItems(feedItems);
+                });
+            return this.UpdateView(chlk.activities.feed.FeedListAdminPage, result, chlk.activities.lib.DontShowLoader());
+        },
 
         Boolean, function canViewFeed(){
             var res = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM)
@@ -136,13 +171,13 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number]],
-        function getFeedItems(postback_, importantOnly_, classId_, pageIndex_){
+        function getFeedItems(postback_, importantOnly_, classId_, start_){
             return this.announcementService
-                .getAnnouncements(pageIndex_ | 0, classId_, importantOnly_)
+                .getAnnouncements(start_ | 0, classId_, importantOnly_)
                 .attach(this.validateResponse_())
                 .then(function(feedItems){
                     if(!postback_ && importantOnly_ && feedItems.length == 0)
-                        return this.getFeedItems(postback_, false, classId_, pageIndex_);
+                        return this.getFeedItems(postback_, false, classId_, start_);
 
                     var classBarItemsMdl = new chlk.models.classes.ClassesForTopBar(null, classId_);
 
@@ -156,13 +191,13 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[Boolean, Boolean, String, Number]],
-        function getAdminFeedItems(postback_, importantOnly_, gradeLevels_, pageIndex_){
+        function getAdminFeedItems(postback_, importantOnly_, gradeLevels_, start_){
             return this.announcementService
-                .getAnnouncementsForAdmin(pageIndex_ | 0, gradeLevels_, importantOnly_)
+                .getAnnouncementsForAdmin(start_ | 0, gradeLevels_, importantOnly_)
                 .attach(this.validateResponse_())
                 .then(function(feedItems){
                     if(!postback_ && importantOnly_ && feedItems.length == 0)
-                        return this.getAdminFeedItems(postback_, false, gradeLevels_, pageIndex_);
+                        return this.getAdminFeedItems(postback_, false, gradeLevels_, start_);
 
                     var glsBarItemsMdl = new chlk.models.grading.GradeLevelsForTopBar(null, gradeLevels_);
 

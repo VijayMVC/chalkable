@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 
 namespace Chalkable.Common
@@ -13,67 +15,34 @@ namespace Chalkable.Common
             get { return Connection.GetDatabase(); }
         }
 
-        private static string Get(string sessionKey, string subKey)
-        {
-            return Cache.StringGet(sessionKey + ':' + subKey);
-        }
-
-        private static void Set(string sessionKey, string subKey, string value, TimeSpan? expiery = null)
-        {
-            Cache.StringSet(sessionKey + ':' + subKey, value, expiery);
-        }
-
-        private static void Delete(string sessionKey, string subKey)
-        {
-            Cache.KeyDelete(sessionKey + ':' + subKey);
-        }
-
-        public static string GetAuth(string sessionKey)
-        {
-            return Get(sessionKey, "Auth");
-        }
-
-        public static void SetAuth(string sessionKey, string token, TimeSpan expiery)
-        {
-            Set(sessionKey, "Auth", token, expiery);
-        }
-
-        public static string GetClaims(string sessionKey)
-        {
-            return Get(sessionKey, "Claims");
-        }
-
-        public static void SetClaims(string sessionKey, string token, TimeSpan expiery)
-        {
-            Set(sessionKey, "Claims", token, expiery);
-        }
-
-        public static string GetAccessToken(string sessionKey)
-        {
-            return Get(sessionKey, "AccessToken");
-        }
-
-        public static void SetAccessToken(string sessionKey, string token, TimeSpan expiery)
-        {
-            Set(sessionKey, "AccessToken", token, expiery);
-        }
-
-        public static string GetSisToken(string sessionKey)
-        {
-            return Get(sessionKey, "SisToken");
-        }
-
-        public static void SetSisToken(string sessionKey, string token, TimeSpan expiery)
-        {
-            Set(sessionKey, "SisToken", token, expiery);
-        }
-
         public static void CleanSession(string sessionKey)
         {
-            Delete(sessionKey, "Auth");
-            Delete(sessionKey, "Claims");
-            Delete(sessionKey, "AccessToken");
-            Delete(sessionKey, "SisToken");
+            try
+            {
+                Cache.KeyDeleteAsync(sessionKey);
+            }
+            catch (Exception)
+            {
+                //ignored
+            }
+        }
+
+        public class UserInfo
+        {
+            public string Auth { get; set; }
+            public string SisToken { get; set; }
+            public string Claims { get; set; }
+        }
+
+        public static UserInfo GetUserInfo(string sessionKey)
+        {
+            var value = Cache.StringGet(sessionKey);
+            return string.IsNullOrWhiteSpace(value) ? null : JsonConvert.DeserializeObject<UserInfo>(value);
+        }
+
+        public static void SetUserInfo(string sessionKey, UserInfo userInfo, TimeSpan? expiry)
+        {
+            Cache.StringSet(sessionKey, JsonConvert.SerializeObject(userInfo), expiry);
         }
     }
 }
