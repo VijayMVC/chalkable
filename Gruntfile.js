@@ -84,7 +84,7 @@ module.exports = function(grunt) {
       },
       'index-layout': {
         src: [
-          'Chalkable.Web/app/jquery/jquery-1.11.1.min.js', 
+          'Chalkable.Web/app/bower/jquery/dist/jquery.min.js', 
           'Chalkable.Web/app/jquery/jquery-ui.min.js', 
           'Chalkable.Web/app/jquery/validation/jquery.validationEngine.min.js', 
           'Chalkable.Web/app/jquery/validation/languages/jquery.validationEngine-en.min.js', 
@@ -100,7 +100,7 @@ module.exports = function(grunt) {
           'Chalkable.Web/app/chlk/chlk-messages.min.js',
           'Chalkable.Web/app/chlk/chlk-constants.min.js',
           'Chalkable.Web/app/lib/date-en-US.js',
-          'Chalkable.Web/app/jquery/jquery-1.11.1.min.js', 
+          'Chalkable.Web/app/bower/jquery/dist/jquery.min.js', 
           'Chalkable.Web/app/jquery/jquery.autosize-min.js', 
           'Chalkable.Web/app/jquery/jquery.autoresize.min.js', 
           'Chalkable.Web/app/jquery/jquery.scrollTo.min.js', 
@@ -125,7 +125,7 @@ module.exports = function(grunt) {
       },
       'devdocs-layout': {
         src: [
-          'Chalkable.Web/app/jquery/jquery-1.11.1.min.js', 
+          'Chalkable.Web/app/bower/jquery/dist/jquery.min.js', 
           'Chalkable.Web/app/jquery/jquery.menu-aim.min.js', 
           'Chalkable.Web/app/jquery/jquery.maskedinput-1.3.1.min.js', 
           'Chalkable.Web/app/jquery/jquery-ui.min.js', 
