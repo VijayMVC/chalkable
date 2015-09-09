@@ -31,10 +31,10 @@
 }
     
     <!-- build:css /Content/role-layout.min.css -->
-    <link <!-- href="/app/bower/chosen/chosen.min.css" --> href="@Url.StaticContent("/app/bower/chosen/chosen.min.css")" rel="stylesheet" type="text/css"/>
-    <link <!-- href="/app/bower/jquery-ui/themes/smoothness/jquery-ui.css"--> href="@Url.StaticContent()" rel="stylesheet" type="text/css"/>
-    <link <!-- href="/app/jquery/snippet/jquery.snippet.min.css" --> href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css"/>
-    <link <!-- href="/app/chlk/index/prettify.css" --> href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet"/>
+    <link build:href="/app/bower/chosen/chosen.min.css" href="@Url.StaticContent("/app/bower/chosen/chosen.min.css")" rel="stylesheet" type="text/css"/>
+    <link build:href="/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" href="@Url.StaticContent("/app/bower/jquery-ui/themes/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css"/>
+    <link build:href="/app/jquery/snippet/jquery.snippet.min.css" href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css"/>
+    <link build:href="/app/chlk/index/prettify.css" href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet"/>
     <!-- endbuild -->
 
 
@@ -50,30 +50,37 @@
     @{Html.RenderPartial("Telemetry");}
 
     <!-- build:js /Scripts/role-layout.min.js -->
-    <script <!-- src="/app/chlk/shared.js" --> src='@Url.StaticContent("/app/chlk/shared.js")'></script>
-    <script <!-- src="/app/chlk/chlk-messages.js" --> src='@Url.StaticContent("/app/chlk/chlk-messages.js")'></script>
-    <script <!-- src="/app/chlk/chlk-constants.js" --> src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
-    <script <!-- src="/app/lib/date-en-US.js" --> src="@Url.StaticContent("/app/lib/date-en-US.js")"></script>
-    <script <!-- src="/app/bower/jquery/dist/jquery.js" --> src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
-    <script <!-- src="/app/bower/autosize/dist/autosize.js" --> src="@Url.StaticContent("/app/bower/autosize/dist/autosize.js")"></script>
-    <script <!-- src="/app/bower/chosen/chosen.jquery.min.js" --> src="@Url.StaticContent("/app/bower/chosen/chosen.jquery.min.js")"></script>
-    <script <!-- src="/app/bower/jcarousel/dist/jquery.jcarousel.js"--> src="@Url.StaticContent("/app/bower/jcarousel/dist/jquery.jcarousel.js")"></script>
-    <script <!-- src="/app/bower/jquery-ui/jquery-ui.js" --> src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
-    <script <!-- src="/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js" --> src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
-    <script <!-- src="/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js" --> src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js")"></script>
-    <script <!-- src="/app/jquery/snippet/jquery.snippet.min.js" --> src="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.js")"></script>
-    <script <!-- src="/app/bower/jquery-validation/dist/jquery.validate.js" --> src="@Url.StaticContent("/app/bower/jquery-validation/dist/jquery.validate.js")"></script>
-    <script <!-- src="/app/jquery/jquery.menu-aim.js" --> src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>
-    <script <!-- src="/app/jquery/validation/jquery.creditCardValidator.js" --> src="@Url.StaticContent("/app/jquery/validation/jquery.creditCardValidator.js")"></script>
-    <script <!-- src="/app/jquery/jquery.maskedinput-1.3.1.min.js" --> src="@Url.StaticContent("/app/jquery/jquery.maskedinput-1.3.1.min.js")"></script>
-    <script <!-- src="/app/jquery/jquery.youtube.js" --> src="@Url.StaticContent("/app/jquery/jquery.youtube.js")"></script>
-    <script <!-- src="/app/chlk/index/prettify.js" --> src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
-    <script <!-- src="/app/highcharts/highcharts.js" --> src="@Url.StaticContent("/app/highcharts/highcharts.js")"></script>
+    <script build:src="/app/chlk/shared.js" src='@Url.StaticContent("/app/chlk/shared.js")'></script>
+    <script build:src="/app/chlk/chlk-messages.js" src='@Url.StaticContent("/app/chlk/chlk-messages.js")'></script>
+    <script build:src="/app/chlk/chlk-constants.js" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
+    <script build:src="/app/lib/date-en-US.js" src="@Url.StaticContent("/app/lib/date-en-US.js")"></script>
+    <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
+    <script build:src="/app/bower/autosize/dist/autosize.js" src="@Url.StaticContent("/app/bower/autosize/dist/autosize.js")"></script>
+    <script build:src="/app/bower/chosen/chosen.jquery.min.js" src="@Url.StaticContent("/app/bower/chosen/chosen.jquery.min.js")"></script>
+    <script build:src="/app/bower/jcarousel/dist/jquery.jcarousel.js" src="@Url.StaticContent("/app/bower/jcarousel/dist/jquery.jcarousel.js")"></script>
+    <script build:src="/app/bower/jquery-ui/jquery-ui.js" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js")"></script>
+    <script build:src="/app/jquery/snippet/jquery.snippet.min.js" src="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.js")"></script>
+    <script build:src="/app/bower/jquery-validation/dist/jquery.validate.js" src="@Url.StaticContent("/app/bower/jquery-validation/dist/jquery.validate.js")"></script>
+    <script build:src="/app/jquery/jquery.menu-aim.js" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>
+    <script build:src="/app/jquery/validation/jquery.creditCardValidator.js" src="@Url.StaticContent("/app/jquery/validation/jquery.creditCardValidator.js")"></script>
+    <script build:src="/app/jquery/jquery.maskedinput-1.3.1.min.js" src="@Url.StaticContent("/app/jquery/jquery.maskedinput-1.3.1.min.js")"></script>
+    <script build:src="/app/jquery/jquery.youtube.js" src="@Url.StaticContent("/app/jquery/jquery.youtube.js")"></script>
+    <script build:src="/app/chlk/index/prettify.js" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
+    <script build:src="/app/highcharts/highcharts.js" src="@Url.StaticContent("/app/highcharts/highcharts.js")"></script>
     <!-- endbuild -->
 
+@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+{
+    <script type="text/javascript" src="/Scripts/api/chlk-post-message-api.min.js"></script>
+}
+else
+{
     <!-- build:js /Scripts/api/chlk-post-message-api.min.js -->
     <script type="text/javascript" src="/Scripts/api/chlk-post-message-api.js"></script>
     <!-- endbuild -->
+}
 
 </head>
 <body class ="@ViewData[ViewConstants.ROLE_NAME]">

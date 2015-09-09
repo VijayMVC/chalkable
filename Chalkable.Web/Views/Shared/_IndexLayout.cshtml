@@ -8,15 +8,11 @@
 	<meta name="description" content="Web Apps for your school">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
-{
-    <link href="@Url.StaticContent("/Content/index-layout.min.css")" rel="stylesheet" media="screen, projection" type="text/css" />
-}
-else
-{
-    <link href="@Url.StaticContent("/Content/index.css")" rel="stylesheet" media="screen, projection" type="text/css"/>
-    <link href="@Url.StaticContent("/app/jquery/validation/css/template.css")" rel="stylesheet" type="text/css"/>
-}
+    <!-- build:css /Content/index-layout.min.css -->
+    <link build:href="/Content/index.css" href="@Url.StaticContent("/Content/index.css")" rel="stylesheet" media="screen, projection" type="text/css"/>
+    <link build:href="/app/jquery/validation/css/template.css" href="@Url.StaticContent("/app/jquery/validation/css/template.css")" rel="stylesheet" type="text/css"/>
+    <!-- endbuild -->
+
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/modernizr-ck.js")"></script>
     <style>
         .formErrorContent {
@@ -163,20 +159,16 @@ else
     var _ = window.location.href.toString().match(/https?:\/\/[^\/]+/);
     var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
 </script>
-@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
-{
-    <script type="text/javascript" src="@Url.StaticContent("/app/index-layout.min.js")"></script>
-}
-else
-{
-    <script type="text/javascript" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/retina-1.1.0.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
-}
+
+    <!-- build:js /app/index-layout.min.js -->
+    <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
+    <script build:src="/app/bower/jquery-ui/jquery-ui.js" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js" src="@Url.StaticContent("")"></script>
+    <script build:src="/app/chlk/index/retina-1.1.0.min.j" src="@Url.StaticContent("/app/chlk/index/retina-1.1.0.min.js")"></script>
+    <script build:src="/app/chlk/index/main.js" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
+    <script build:src="/app/chlk/index/sign_in_forms.js" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
+    <!-- endbuild -->
     
     @ChlkHelpers.MixPanel()    
     @RenderSection("MixPanelTracking", false)

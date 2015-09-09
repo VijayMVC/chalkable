@@ -255,20 +255,13 @@ module.exports = function(grunt) {
     },
     
     usemin: {
+      cshtml: {
+        expand: true,
+        cwd: './',
+        src: ['./Chalkable.Web/Views/**/*.cshtml'],
+        filter: 'isFile'
+      },
       options: {
-        patterns: {
-          cshtml: [
-            [
-              /<script.+src=['"]\@Url\.StaticContent\(['"]([^"']+)["']/gm,
-              'Update the HTML to reference our concat/min/revved script files'
-            ],
-            [
-              /<link[^\>]+href=['"]\@Url\.StaticContent\(['"]([^"']+)['"]/gm,
-              'Update the HTML with the new css filenames'
-            ]
-          ]
-        },
-        
         blockReplacements: {
           css: function (block) {
             var media = block.media ? ' media="' + block.media + '"' : '';
@@ -305,7 +298,7 @@ module.exports = function(grunt) {
     'cssmin:generated',
     'uglify:generated',
     //'filerev',
-    //'usemin'
+    'usemin'
   ]);
   
   // js concat/minify

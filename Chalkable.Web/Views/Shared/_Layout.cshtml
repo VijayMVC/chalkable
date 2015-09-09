@@ -8,17 +8,13 @@
     <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
     <link rel="icon" href="@Url.Content("~/favicon.ico")" />
 
-@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
-{
-    <link href="@Url.StaticContent("/Content/devdocs-layout.min.css")" rel="stylesheet" media="screen, projection" type="text/css"/>
-}
-else
-{
-    <link href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.StaticContent("/app/bower/jquery-ui/themes/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/css/validationEngine.jquery.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.StaticContent("/app/jquery/validation/css/template_index.css")" rel="stylesheet" type="text/css"/>
-}
+    <!-- build:css /Content/devdocs-layout.min.css -->
+    <link build:href="/app/jquery/snippet/jquery.snippet.min.css" href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css"/>
+    <link buikd:href="/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" href="@Url.StaticContent("/app/bower/jquery-ui/themes/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css"/>
+    <link buikd:href="/app/bower/jQuery-Validation-Engine/css/validationEngine.jquery.cs" href="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/css/validationEngine.jquery.css")" rel="stylesheet" type="text/css"/>
+    <link buikd:href="/app/jquery/validation/css/template_index.css" href="@Url.StaticContent("/app/jquery/validation/css/template_index.css")" rel="stylesheet" type="text/css"/>
+    <!-- endbuild -->
+
     <!-- Page specific CSS -->
 
     @RenderSection("Styles", false)
@@ -45,36 +41,24 @@ else
         <div class="tooltip-triangle"></div>
     </div>
 
-@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
-{
-    <script type="text/javascript" src="@Url.StaticContent("/app/devdocs-layout.min.js")"></script>
-}
-else
-{
-    <script type="text/javascript" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.maskedinput-1.3.1.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.js")"></script>
+    <!-- build:js /app/devdocs-layout.min.js-->
+    <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
+    <script build:src="/app/jquery/jquery.menu-aim.js" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>
+    <script build:src="/app/jquery/jquery.maskedinput-1.3.1.min.js" src="@Url.StaticContent("/app/jquery/jquery.maskedinput-1.3.1.min.js")"></script>
+    <script build:src="/app/bower/jquery-ui/jquery-ui.js" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
+    <script build:src="/app/jquery/snippet/jquery.snippet.min.js" src="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.js")"></script>
+    <script build:src="/app/jquery/jquery.cycle.js" src="@Url.StaticContent("/app/jquery/jquery.cycle.js")"></script>
+    <script build:src="/app/jquery/jquery.fancybox.js" src="@Url.StaticContent("/app/jquery/jquery.fancybox.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js")"></script>
+    <script build:src="/app/chlk/shared.js" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
+    <script build:src="/app/chlk/index/html5shiv.js" src="@Url.StaticContent("/app/chlk/index/html5shiv.js")"></script>
+    <script build:src="/app/chlk/index/sign_in_forms.js" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
+    <script build:src="/app/chlk/index/all_not_minified.js" src="@Url.StaticContent("/app/chlk/index/all_not_minified.js")"></script>
+    <script build:src="/app/jquery/jquery.waypoints.min.js" src="@Url.StaticContent("/app/jquery/jquery.waypoints.min.js")"></script>
+    <script build:src="/app/chlk/index/prettify.js" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
+    <!-- endbuild -->
 
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.cycle.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.fancybox.js")"></script>
-
-
-    <script type="text/javascript" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js")"></script>
-
-
-
-
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
-
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/html5shiv.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
-}
-
-
-    <!--[if IE 6]><script  type="text/javascript" src="@Url.StaticContent("/app/chlk/index/jq.png-min.js")"></script><![endif]-->
     <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 @if (Chalkable.Web.Tools.CompilerHelper.IsProduction)

@@ -4,9 +4,13 @@
 	<meta charset="UTF-8">
 	<title>Developer</title>
 	<meta name="description" content="Web Apps for your school">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link href="@Url.StaticContent("/Content/index.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- build:css /Content/home-terms.min.css -->
+    <link href="@Url.StaticContent("/Content/index.css")" rel="stylesheet" media="screen, projection" type="text/css" />
     <link href="@Url.StaticContent("/app/jquery/validation/css/template.css")" rel="stylesheet" type="text/css"/>
+    <!-- endbuild -->
+
     <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/modernizr-ck.js")"></script>
     <style>
         .formErrorContent {
@@ -135,20 +139,15 @@
     var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
 </script>
 
-@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
-{
-    <script type="text/javascript" src="@Url.StaticContent("/app/index-layout.min.js")"></script>
-}
-else
-{
-    <script type="text/javascript" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/retina-1.1.0.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
-}
+    <!-- build:js /app/home-terms.min.js -->
+    <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
+    <script build:src="/app/bower/jquery-ui/jquery-ui.js" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js" src="@Url.StaticContent("")"></script>
+    <script build:src="/app/chlk/index/retina-1.1.0.min.j" src="@Url.StaticContent("/app/chlk/index/retina-1.1.0.min.js")"></script>
+    <script build:src="/app/chlk/index/main.js" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
+    <script build:src="/app/chlk/index/sign_in_forms.js" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
+    <!-- endbuild -->
 </body>
 </html>
 
