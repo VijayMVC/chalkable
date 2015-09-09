@@ -2,6 +2,9 @@ REQUIRE('chlk.controls.Base');
 
 NAMESPACE('chlk.controls', function () {
 
+    var autosize = window.autosize,
+        document = window.document;
+
     /** @class chlk.controls.TextAreaControl */
     CLASS(
         'TextAreaControl', EXTENDS(chlk.controls.Base), [
@@ -15,7 +18,7 @@ NAMESPACE('chlk.controls', function () {
                 attributes.id = attributes.id || ria.dom.Dom.GID();
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
-                        jQuery('#'+attributes.id).autosize();
+                        autosize(document.getElementById(attributes.id));
                     }.bind(this));
                 return attributes;
             }

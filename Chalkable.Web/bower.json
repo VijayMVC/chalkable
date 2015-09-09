@@ -11,6 +11,7 @@
     "tests"
   ],
   "dependencies": {
+    "autosize": "~3.0.9",
     "jquery": "~2.1.4"
   }
 }

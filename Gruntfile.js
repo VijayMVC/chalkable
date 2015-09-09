@@ -101,7 +101,7 @@ module.exports = function(grunt) {
           'Chalkable.Web/app/chlk/chlk-constants.min.js',
           'Chalkable.Web/app/lib/date-en-US.js',
           'Chalkable.Web/app/bower/jquery/dist/jquery.min.js', 
-          'Chalkable.Web/app/jquery/jquery.autosize-min.js', 
+          'Chalkable.Web/app/bower/autosize/dist/autosize.min.js', 
           'Chalkable.Web/app/jquery/jquery.autoresize.min.js', 
           'Chalkable.Web/app/jquery/jquery.scrollTo.min.js', 
           'Chalkable.Web/app/jquery/choosen/chosen.jquery.min.js', 

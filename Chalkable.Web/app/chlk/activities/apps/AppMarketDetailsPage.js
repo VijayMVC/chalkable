@@ -17,15 +17,6 @@ NAMESPACE('chlk.activities.apps', function () {
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
 
-                jQuery('textarea').autoResize({
-                    limit: 9999,
-                    animateDuration : 100,
-                    onResize : function() {
-                        var node = jQuery(this);
-                        node.scrollTo('10000px');
-                    }
-                });
-
                 this.refreshInlineTabsState_();
             },
 
