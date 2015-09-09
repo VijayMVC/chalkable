@@ -1,5 +1,5 @@
 REQUIRE('ria.mvc.DefaultApplication');
-REQUIRE('ria.dom.jQueryDom');
+REQUIRE('chlk.lib.dom.jQueryDom');
 REQUIRE('ria.dom.ready');
 REQUIRE('chlk.activities.lib.TemplatePage');
 
