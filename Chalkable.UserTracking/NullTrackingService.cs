@@ -141,14 +141,31 @@ namespace Chalkable.UserTracking
         {
         }
 
-        public void LoggedInFromChalkable(string login)
+        public void LoggedIn(string login)
         {
         }
 
-        public void LoggedInFromINow(string login)
+        public void AttachedAssessment(string login, int announcementId)
         {
         }
-        
+
+        public void TookAssessment(string login)
+        {
+        }
+
+        public void AttachedStandard(string login, string name)
+        {
+        }
+
+        public void UsedStandardsExplorer(string login, string explorerType)
+        {
+        }
+
+        public void AutoGradedItem(string login, int announcementId, int studentId, string grade)
+        {
+
+        }
+
         public void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached)
         {
         }

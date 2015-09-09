@@ -77,6 +77,7 @@ namespace Chalkable.Web.Controllers
         {
             var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
             var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId, null, false);
+            MasterLocator.UserTrackingService.UsedStandardsExplorer(Context.Login, "class explorer");
             return Json(ClassExpolorerViewData.Create(c, gradingStandards));
         }
 

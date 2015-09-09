@@ -187,6 +187,12 @@ namespace Chalkable.Web.Controllers
             var res = SchoolLocator.ApplicationSchoolService.AddToAnnouncement(announcementId, (AnnouncementType) announcementType,applicationId);
             var appInstalls = SchoolLocator.AppMarketService.GetInstallations(applicationId, Context.PersonId.Value, false);
             var app = MasterLocator.ApplicationService.GetApplicationById(applicationId);
+
+
+            var assessmentApp = MasterLocator.ApplicationService.GetAssessmentApplication();
+            if (assessmentApp != null && applicationId == assessmentApp.Id)
+                MasterLocator.UserTrackingService.AttachedAssessment(Context.Login, announcementId);
+
             return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.PersonId));
         }
 

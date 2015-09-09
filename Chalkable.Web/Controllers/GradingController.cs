@@ -320,7 +320,8 @@ namespace Chalkable.Web.Controllers
             if (string.IsNullOrWhiteSpace(gradeValue))
                 throw new ChalkableException("Param gradeValue is required");
 
-            SchoolLocator.StudentAnnouncementService.SetAutoGrade(announcementApplicationId, studentId, gradeValue);
+            var autoGrade = SchoolLocator.StudentAnnouncementService.SetAutoGrade(announcementApplicationId, studentId, gradeValue);
+            MasterLocator.UserTrackingService.AutoGradedItem(Context.Login, autoGrade.AnnouncementApplication.AnnouncementRef, autoGrade.StudentRef, autoGrade.Grade);
             return Json(true);
         }
 
