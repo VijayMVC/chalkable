@@ -60,7 +60,7 @@ module.exports = function(grunt) {
             'Chalkable.Web/app/jquery/validation/css/template.css'
           ],
           'Chalkable.Web/Content/role-layout.min.css': [
-            'Chalkable.Web/app/jquery/choosen/chosen.min.css',
+            'Chalkable.Web/app/bower/chosen/chosen.min.css',
             'Chalkable.Web/app/jquery/smoothness/jquery-ui.css',
             'Chalkable.Web/app/jquery/snippet/jquery.snippet.min.css',
             'Chalkable.Web/app/chlk/index/prettify.css'
@@ -101,7 +101,7 @@ module.exports = function(grunt) {
           'Chalkable.Web/app/lib/date-en-US.js',
           'Chalkable.Web/app/bower/jquery/dist/jquery.min.js', 
           'Chalkable.Web/app/bower/autosize/dist/autosize.min.js', 
-          'Chalkable.Web/app/jquery/choosen/chosen.jquery.min.js', 
+          'Chalkable.Web/app/bower/chosen/chosen.jquery.min.js', 
           'Chalkable.Web/app/jquery/carousel/jquery.jcarousel.min.js', 
           'Chalkable.Web/app/jquery/carousel/jquery.carouFredSel-6.2.1-packed.js', 
           'Chalkable.Web/app/jquery/jquery-ui.min.js', 
@@ -265,7 +265,7 @@ module.exports = function(grunt) {
         },        
         {
           expand: true,
-          cwd: './Chalkable.Web/app/jquery/choosen/',
+          cwd: './Chalkable.Web/app/bower/chosen/',
           src: [
             '*.png'
           ],
