@@ -30,8 +30,8 @@ module.exports = function(grunt) {
       },
       'chalkable.web': {
         files: {
-          'Chalkable.Web/app/jquery/validation/jquery.validationEngine.min.js' : 'Chalkable.Web/app/jquery/validation/jquery.validationEngine.js', 
-          'Chalkable.Web/app/jquery/validation/languages/jquery.validationEngine-en.min.js' : 'Chalkable.Web/app/jquery/validation/languages/jquery.validationEngine-en.js', 
+          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.min.js' : 'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js', 
+          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.min.js' : 'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine-en.js', 
           'Chalkable.Web/app/chlk/index/main.min.js': 'Chalkable.Web/app/chlk/index/main.js',
           'Chalkable.Web/app/chlk/index/sign_in_forms.min.js': 'Chalkable.Web/app/chlk/index/sign_in_forms.js',
           'Chalkable.Web/app/chlk/shared.min.js': 'Chalkable.Web/app/chlk/shared.js',
@@ -68,7 +68,7 @@ module.exports = function(grunt) {
           'Chalkable.Web/Content/devdocs-layout.min.css': [
             'Chalkable.Web/app/jquery/snippet/jquery.snippet.min.css',
             'Chalkable.Web/app/bower/jquery-ui/themes/smoothness/jquery-ui.css',
-            'Chalkable.Web/app/jquery/validation/css/validationEngine.jquery.css',
+            'Chalkable.Web/app/bower/jQuery-Validation-Engine/css/validationEngine.jquery.css',
             'Chalkable.Web/app/jquery/validation/css/template_index.css'
           ]
         }
@@ -85,8 +85,8 @@ module.exports = function(grunt) {
         src: [
           'Chalkable.Web/app/bower/jquery/dist/jquery.min.js', 
           'Chalkable.Web/app/bower/jquery-ui/jquery-ui.min.js', 
-          'Chalkable.Web/app/jquery/validation/jquery.validationEngine.min.js', 
-          'Chalkable.Web/app/jquery/validation/languages/jquery.validationEngine-en.min.js', 
+          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.min.js', 
+          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine-en.min.js', 
           'Chalkable.Web/app/chlk/index/retina-1.1.0.min.js', 
           'Chalkable.Web/app/chlk/index/main.min.js', 
           'Chalkable.Web/app/chlk/index/sign_in_forms.min.js'
@@ -104,8 +104,8 @@ module.exports = function(grunt) {
           'Chalkable.Web/app/bower/chosen/chosen.jquery.min.js', 
           'Chalkable.Web/app/bower/jcarousel/dist/jquery.jcarousel.min.js', 
           'Chalkable.Web/app/bower/jquery-ui/jquery-ui.min.js', 
-          'Chalkable.Web/app/jquery/validation/languages/jquery.validationEngine-en.min.js', 
-          'Chalkable.Web/app/jquery/validation/jquery.validationEngine.min.js', 
+          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine-en.min.js', 
+          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.min.js', 
           'Chalkable.Web/app/jquery/snippet/jquery.snippet.min.js', 
           'Chalkable.Web/app/jquery/jquery.validate.min.js', 
           'Chalkable.Web/app/jquery/jquery.signaturepad.min.js', 
@@ -128,8 +128,8 @@ module.exports = function(grunt) {
           'Chalkable.Web/app/jquery/snippet/jquery.snippet.min.js', 
           'Chalkable.Web/app/jquery/jquery.cycle.min.js', 
           'Chalkable.Web/app/jquery/jquery.fancybox.min.js', 
-          'Chalkable.Web/app/jquery/validation/languages/jquery.validationEngine-en.min.js', 
-          'Chalkable.Web/app/jquery/validation/jquery.validationEngine.min.js',
+          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.min.js', 
+          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.min.js',
           'Chalkable.Web/app/chlk/shared.min.js',
           'Chalkable.Web/app/chlk/index/html5shiv.min.js',
           'Chalkable.Web/app/chlk/index/sign_in_forms.min.js'
