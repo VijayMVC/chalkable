@@ -8,6 +8,7 @@
   },
   "devDependencies": {
     "azure-mgmt-compute": "^0.9.16",
+    "bower": "^1.5.2",
     "colors": "^1.0.3",
     "deploy-azure-cdn": "^1.1.0",
     "director": "^1.2.3",
