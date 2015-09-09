@@ -27,23 +27,6 @@ module.exports = function(grunt) {
     uglify: {
       options: {
         preserveComments: 'some'
-      },
-      'chalkable.web': {
-        files: {
-          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.min.js' : 'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js', 
-          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.min.js' : 'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine-en.js', 
-          'Chalkable.Web/app/chlk/index/main.min.js': 'Chalkable.Web/app/chlk/index/main.js',
-          'Chalkable.Web/app/chlk/index/sign_in_forms.min.js': 'Chalkable.Web/app/chlk/index/sign_in_forms.js',
-          'Chalkable.Web/app/chlk/shared.min.js': 'Chalkable.Web/app/chlk/shared.js',
-          'Chalkable.Web/app/chlk/chlk-messages.min.js': 'Chalkable.Web/app/chlk/chlk-messages.js',
-          'Chalkable.Web/app/chlk/chlk-constants.min.js': 'Chalkable.Web/app/chlk/chlk-constants.js',
-          'Chalkable.Web/app/jquery/jquery.menu-aim.min.js': 'Chalkable.Web/app/jquery/jquery.menu-aim.js',
-          'Chalkable.Web/app/jquery/jquery.cycle.min.js': 'Chalkable.Web/app/jquery/jquery.cycle.js',
-          'Chalkable.Web/app/jquery/jquery.fancybox.min.js': 'Chalkable.Web/app/jquery/jquery.fancybox.js',
-          'Chalkable.Web/app/chlk/index/html5shiv.min.js': 'Chalkable.Web/app/chlk/index/html5shiv.js',
-          
-          'Chalkable.Web/Scripts/api/chlk-post-message-api.min.js': 'Chalkable.Web/Scripts/api/chlk-post-message-api.js'
-        }
       }
     },
     
@@ -51,26 +34,6 @@ module.exports = function(grunt) {
       options: {
         shorthandCompacting: false,
         roundingPrecision: -1
-      },
-      'chalkable.web': {
-        files : {
-          'Chalkable.Web/Content/index-layout.min.css': [
-            'Chalkable.Web/Content/index.css', 
-            'Chalkable.Web/app/jquery/validation/css/template.css'
-          ],
-          'Chalkable.Web/Content/role-layout.min.css': [
-            'Chalkable.Web/app/bower/chosen/chosen.min.css',
-            'Chalkable.Web/app/bower/jquery-ui/themes/smoothness/jquery-ui.css',
-            'Chalkable.Web/app/jquery/snippet/jquery.snippet.min.css',
-            'Chalkable.Web/app/chlk/index/prettify.css'
-          ],
-          'Chalkable.Web/Content/devdocs-layout.min.css': [
-            'Chalkable.Web/app/jquery/snippet/jquery.snippet.min.css',
-            'Chalkable.Web/app/bower/jquery-ui/themes/smoothness/jquery-ui.css',
-            'Chalkable.Web/app/bower/jQuery-Validation-Engine/css/validationEngine.jquery.css',
-            'Chalkable.Web/app/jquery/validation/css/template_index.css'
-          ]
-        }
       }
     },
     
@@ -79,59 +42,6 @@ module.exports = function(grunt) {
         separator: ';\n\n',
         banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' + 
                 '<%= grunt.template.today("yyyy-mm-dd") %> */',
-      },
-      'index-layout': {
-        src: [
-          'Chalkable.Web/app/bower/jquery/dist/jquery.min.js', 
-          'Chalkable.Web/app/bower/jquery-ui/jquery-ui.min.js', 
-          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.min.js', 
-          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine-en.min.js', 
-          'Chalkable.Web/app/chlk/index/retina-1.1.0.min.js', 
-          'Chalkable.Web/app/chlk/index/main.min.js', 
-          'Chalkable.Web/app/chlk/index/sign_in_forms.min.js'
-          ],
-        dest: 'Chalkable.Web/app/index-layout.min.js',
-      },
-      'role-layout': {
-        src: [
-          'Chalkable.Web/app/chlk/shared.min.js',
-          'Chalkable.Web/app/chlk/chlk-messages.min.js',
-          'Chalkable.Web/app/chlk/chlk-constants.min.js',
-          'Chalkable.Web/app/lib/date-en-US.js',
-          'Chalkable.Web/app/bower/jquery/dist/jquery.min.js', 
-          'Chalkable.Web/app/bower/autosize/dist/autosize.min.js', 
-          'Chalkable.Web/app/bower/chosen/chosen.jquery.min.js', 
-          'Chalkable.Web/app/bower/jcarousel/dist/jquery.jcarousel.min.js', 
-          'Chalkable.Web/app/bower/jquery-ui/jquery-ui.min.js', 
-          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine-en.min.js', 
-          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.min.js', 
-          'Chalkable.Web/app/jquery/snippet/jquery.snippet.min.js', 
-          'Chalkable.Web/app/bower/jquery-validation/dist/jquery.validate.min.js', 
-          'Chalkable.Web/app/jquery/jquery.menu-aim.min.js', 
-          'Chalkable.Web/app/jquery/validation/jquery.creditCardValidator.js', 
-          'Chalkable.Web/app/jquery/jquery.maskedinput-1.3.1.min.js', 
-          'Chalkable.Web/app/jquery/jquery.youtube.js', 
-          'Chalkable.Web/app/chlk/index/prettify.js', 
-          'Chalkable.Web/app/highcharts/highcharts.js'
-          ],
-        dest: 'Chalkable.Web/app/role-layout.min.js',
-      },
-      'devdocs-layout': {
-        src: [
-          'Chalkable.Web/app/bower/jquery/dist/jquery.min.js', 
-          'Chalkable.Web/app/jquery/jquery.menu-aim.min.js', 
-          'Chalkable.Web/app/jquery/jquery.maskedinput-1.3.1.min.js', 
-          'Chalkable.Web/app/bower/jquery-ui/jquery-ui.min.js', 
-          'Chalkable.Web/app/jquery/snippet/jquery.snippet.min.js', 
-          'Chalkable.Web/app/jquery/jquery.cycle.min.js', 
-          'Chalkable.Web/app/jquery/jquery.fancybox.min.js', 
-          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.min.js', 
-          'Chalkable.Web/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.min.js',
-          'Chalkable.Web/app/chlk/shared.min.js',
-          'Chalkable.Web/app/chlk/index/html5shiv.min.js',
-          'Chalkable.Web/app/chlk/index/sign_in_forms.min.js'
-        ],
-        dest: 'Chalkable.Web/app/devdocs-layout.min.js',
       }
     },
     
@@ -301,21 +211,74 @@ module.exports = function(grunt) {
     },
     
     jsbuild3: {
-        options: {
-          config: 'Chalkable.Web/jsbuild.json',
-          modules: []
-        },
-        all: {}
+      options: {
+        config: 'Chalkable.Web/jsbuild.json',
+        modules: []
+      },
+      all: {}
     },
     
-    compass: {                  // Task
-      'chalkable.web': {                   // Target
-        options: {              // Target options
+    compass: {                  
+      'chalkable.web': {               
+        options: {             
           config: 'Chalkable.Web/config.rb',
           basePath: 'Chalkable.Web',
           sassDir: 'assets/sass2',
           cssDir: 'Content',
           environment: 'production'
+        }
+      }
+    },
+    
+    useminPrepare: {
+      options: {
+        root: './Chalkable.Web',
+        patterns: {
+          html: [
+            [
+              /<script.+src=['"]@Url\.StaticContent\(['"]([^"']+)["']/gm,
+              'Update the HTML to reference our concat/min/revved script files'
+            ],
+            [
+              /<link[^\>]+href=['"]@Url\.StaticContent\(['"]([^"']+)['"]/gm,
+              'Update the HTML with the new css filenames'
+            ]
+          ]
+        }
+      },
+      cshtml: {
+        expand: true,
+        cwd: './',
+        src: ['./Chalkable.Web/Views/Shared/_RoleLayout.cshtml'],
+        filter: 'isFile'
+      }
+    },
+    
+    usemin: {
+      options: {
+        patterns: {
+          cshtml: [
+            [
+              /<script.+src=['"]\@Url\.StaticContent\(['"]([^"']+)["']/gm,
+              'Update the HTML to reference our concat/min/revved script files'
+            ],
+            [
+              /<link[^\>]+href=['"]\@Url\.StaticContent\(['"]([^"']+)['"]/gm,
+              'Update the HTML with the new css filenames'
+            ]
+          ]
+        },
+        
+        blockReplacements: {
+          css: function (block) {
+            var media = block.media ? ' media="' + block.media + '"' : '';
+            return '<link rel="stylesheet" href="@Url.StaticContent("' + block.dest + '")"' + media + '>';
+          },
+          js: function (block) {
+            var defer = block.defer ? 'defer ' : '';
+            var async = block.async ? 'async ' : '';
+            return '<script ' + defer + async + 'src="@Url.StaticContent("' + block.dest + '")"><\/script>';
+          } 
         }
       }
     }
@@ -333,11 +296,21 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-cssmin');
   grunt.loadNpmTasks('emp.ria-grunt-jsbuild3');
   grunt.loadNpmTasks('grunt-contrib-compass');
+  grunt.loadNpmTasks('grunt-usemin');
+  
+  // simple build task 
+  grunt.registerTask('usemin-build', [
+    'useminPrepare',
+    'concat:generated',
+    'cssmin:generated',
+    'uglify:generated',
+    //'filerev',
+    //'usemin'
+  ]);
   
   // js concat/minify
   grunt.registerTask('version', ['replace:chakable_web_version']);
-  grunt.registerTask('jsmin', ['uglify:chalkable.web', 'concat:index-layout', 'concat:role-layout', 'concat:devdocs-layout']);
-  
+
   // general tasks
   grunt.registerTask('deploy-artifacts', ['azure-cdn-deploy']);  
   grunt.registerTask('deploy-to-azure', ['decrypt', 'azure-cs-deploy']);
@@ -350,7 +323,7 @@ module.exports = function(grunt) {
   }
   
   grunt.registerTask('post-checkout', ['compass', 'uglify:chalkable.web']);
-  grunt.registerTask('pre-release', ['compass', 'cssmin', 'jsmin', 'jsbuild3']);
+  grunt.registerTask('pre-release', ['compass', 'usemin-build', 'jsbuild3']);
   grunt.registerTask('post-build', postBuildTasks);
   
   // Default task(s).
