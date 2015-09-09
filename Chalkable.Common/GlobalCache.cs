@@ -17,7 +17,14 @@ namespace Chalkable.Common
 
         public static void CleanSession(string sessionKey)
         {
-            Cache.KeyDelete(sessionKey);
+            try
+            {
+                Cache.KeyDeleteAsync(sessionKey);
+            }
+            catch (Exception)
+            {
+                //ignored
+            }
         }
 
         public class UserInfo
