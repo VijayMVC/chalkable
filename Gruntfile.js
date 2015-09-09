@@ -61,13 +61,13 @@ module.exports = function(grunt) {
           ],
           'Chalkable.Web/Content/role-layout.min.css': [
             'Chalkable.Web/app/bower/chosen/chosen.min.css',
-            'Chalkable.Web/app/jquery/smoothness/jquery-ui.css',
+            'Chalkable.Web/app/bower/jquery-ui/themes/smoothness/jquery-ui.css',
             'Chalkable.Web/app/jquery/snippet/jquery.snippet.min.css',
             'Chalkable.Web/app/chlk/index/prettify.css'
           ],
           'Chalkable.Web/Content/devdocs-layout.min.css': [
             'Chalkable.Web/app/jquery/snippet/jquery.snippet.min.css',
-            'Chalkable.Web/app/jquery/smoothness/jquery-ui.css',
+            'Chalkable.Web/app/bower/jquery-ui/themes/smoothness/jquery-ui.css',
             'Chalkable.Web/app/jquery/validation/css/validationEngine.jquery.css',
             'Chalkable.Web/app/jquery/validation/css/template_index.css'
           ]
@@ -84,7 +84,7 @@ module.exports = function(grunt) {
       'index-layout': {
         src: [
           'Chalkable.Web/app/bower/jquery/dist/jquery.min.js', 
-          'Chalkable.Web/app/jquery/jquery-ui.min.js', 
+          'Chalkable.Web/app/bower/jquery-ui/jquery-ui.min.js', 
           'Chalkable.Web/app/jquery/validation/jquery.validationEngine.min.js', 
           'Chalkable.Web/app/jquery/validation/languages/jquery.validationEngine-en.min.js', 
           'Chalkable.Web/app/chlk/index/retina-1.1.0.min.js', 
@@ -103,7 +103,7 @@ module.exports = function(grunt) {
           'Chalkable.Web/app/bower/autosize/dist/autosize.min.js', 
           'Chalkable.Web/app/bower/chosen/chosen.jquery.min.js', 
           'Chalkable.Web/app/bower/jcarousel/dist/jquery.jcarousel.min.js', 
-          'Chalkable.Web/app/jquery/jquery-ui.min.js', 
+          'Chalkable.Web/app/bower/jquery-ui/jquery-ui.min.js', 
           'Chalkable.Web/app/jquery/validation/languages/jquery.validationEngine-en.min.js', 
           'Chalkable.Web/app/jquery/validation/jquery.validationEngine.min.js', 
           'Chalkable.Web/app/jquery/snippet/jquery.snippet.min.js', 
@@ -124,7 +124,7 @@ module.exports = function(grunt) {
           'Chalkable.Web/app/bower/jquery/dist/jquery.min.js', 
           'Chalkable.Web/app/jquery/jquery.menu-aim.min.js', 
           'Chalkable.Web/app/jquery/jquery.maskedinput-1.3.1.min.js', 
-          'Chalkable.Web/app/jquery/jquery-ui.min.js', 
+          'Chalkable.Web/app/bower/jquery-ui/jquery-ui.min.js', 
           'Chalkable.Web/app/jquery/snippet/jquery.snippet.min.js', 
           'Chalkable.Web/app/jquery/jquery.cycle.min.js', 
           'Chalkable.Web/app/jquery/jquery.fancybox.min.js', 
@@ -273,7 +273,7 @@ module.exports = function(grunt) {
         },        
         {
           expand: true,
-          cwd: './Chalkable.Web/app/jquery/smoothness/',
+          cwd: './Chalkable.Web/app/bower/jquery-ui/themes/smoothness/',
           src: [
             'images/*'
           ],
