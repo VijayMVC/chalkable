@@ -103,7 +103,6 @@ module.exports = function(grunt) {
           'Chalkable.Web/app/bower/autosize/dist/autosize.min.js', 
           'Chalkable.Web/app/bower/chosen/chosen.jquery.min.js', 
           'Chalkable.Web/app/bower/jcarousel/dist/jquery.jcarousel.min.js', 
-          'Chalkable.Web/app/jquery/carousel/jquery.carouFredSel-6.2.1-packed.js', 
           'Chalkable.Web/app/jquery/jquery-ui.min.js', 
           'Chalkable.Web/app/jquery/validation/languages/jquery.validationEngine-en.min.js', 
           'Chalkable.Web/app/jquery/validation/jquery.validationEngine.min.js', 
