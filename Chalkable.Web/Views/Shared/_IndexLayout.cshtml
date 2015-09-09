@@ -1,0 +1,188 @@
+﻿@using System.Configuration
+@using Chalkable.Common
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+	<meta charset="UTF-8">
+	<title>Chalkable</title>
+	<meta name="description" content="Web Apps for your school">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- build:css /Content/index-layout.min.css -->
+    <link build:href="/Content/index.css" href="@Url.StaticContent("/Content/index.css")" rel="stylesheet" media="screen, projection" type="text/css"/>
+    <link build:href="/app/jquery/validation/css/template.css" href="@Url.StaticContent("/app/jquery/validation/css/template.css")" rel="stylesheet" type="text/css"/>
+    <!-- endbuild -->
+
+    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/modernizr-ck.js")"></script>
+    <style>
+        .formErrorContent {
+            width: 150px;
+        }
+    </style>
+    @{Html.RenderPartial("Telemetry");}
+</head>
+<body>
+    @RenderBody()
+	<header role="banner">
+		<div class="wrap">
+			<div class="logo">
+				<h1><a href="@Url.Content("~/")">Chalkable</a></h1>
+			</div>
+			<nav>
+				<ul class="mainNav">
+					<li><a data-type="feature" href="#features">Classroom</a></li>
+					<li><a data-type="feature" href="#developers">Developers</a></li>
+					<li><a href="#" class='lg'>Login</a></li>
+				</ul>
+			</nav>
+			<a href="#" class="listMenu"></a> <!-- clicked -->
+		</div>
+	</header>
+
+	<section id="tagline">
+		<div class="wrap">
+			<div class="taglineMessage">
+				<h1>Make classtime count. <br/>Introducing Chalkable Classroom.</h1>
+				<p>Helping teachers manage daily tasks so they can focus on what matters most — their students.</p>
+                <a href="mailto:sales@sti-k12.com?subject=I'm interested in having Chalkable at my school" class="btnBig">Get your school on Chalkable</a>
+			</div>
+		</div>
+	</section>
+
+	<section id="features">
+		<div class="feature feature1">
+			<div class="wrap">
+				<figure>
+					<img src="@Url.StaticContent("/Content/images2/index/illustration-2.png")" alt="Platform image">
+				</figure>
+                <div class="description">
+                    <h1>Classroom</h1>
+                    <p>
+                        Enable teachers to spend more time and energy on student achievement, less on administrative tasks.
+                        Intuitive classroom tools manage grading, attendance, assignments, and reporting—in one place, with
+                        one student information system.  Available for free as part of STI’s InformationNOW, Classroom syncs
+                        seamlessly, requiring no double entry.
+                    </p>
+                </div>
+			</div>
+		</div>
+
+        <div id="study-center" class="feature feature2">
+            <div class="wrap">
+                <figure>
+                    <img src="@Url.StaticContent("/Content/images2/index/illustration-1.png")" alt="App store image">
+                </figure>
+                <div class="description">
+                    <h1>Study Center</h1>
+                    <p>
+                        Boost learning power with a comprehensive suite of digital learning tools. Students take control of
+                        their progress with prescriptive learning. Teachers personalize instruction and third party content
+                        for each student—without compromising the classroom. Powered by data in your SIS, Chalkable
+                        Study Center supports an app store for third party content, provides a prescriptive learning engine,
+                        integrates powerful assessments, and gives an at-a-glance view of student and school activity. And it’s
+                        all available on the devices students and teachers prefer.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+		<div id="developers" class="feature feature1">
+			<div class="wrap">
+				<figure>
+					<img src="@Url.StaticContent("/Content/images2/index/illustration-3.png")" alt="Developers image">
+				</figure>
+				<div class="description">
+					<h1>Developers</h1>
+				    <p>
+				        Integrate your web app with Chalkable Study Center for the opportunity to be exposed to millions of users, 
+				        collect payments, and deeply integrate into the core Chalkable experience. Using the API, your app will 
+				        be able to leverage the Chalkable platform (user info, schedule, grading, attendance, discipline, messaging, 
+				        notifications, etc.) to help you deliver a great experience to students, teachers, parents, or administrators. 
+				    </p>
+					<a href="@Url.Content("~/Developer/Info")" class="btn">Submit your app</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<footer>
+		<div class="wrap">
+			<div class="footerTop">
+				<ul>
+					<li>
+						<ul class="links">
+							<li><a target="_blank" href="http://blog.chalkable.com/">Blog</a></li>
+							<li><a target="_blank" href="http://chalkable.uservoice.com/">Feedback</a></li>
+							<li><a href="mailto:info@chalkable.com">Email us</a></li>
+							<li><a href="mailto:jobs@chalkable.com">Jobs</a></li>
+						</ul>
+
+					<li>
+						<ul class="address">
+							<li>Chalkable</li>
+							<li>500 7th Ave.</li>
+							<li>17th Floor</li>
+							<li>New York, NY 10018</li>
+						</ul>
+
+					<li>
+						<ul class="socials">
+							<li>
+								<a target="_blank" href="https://twitter.com/chalkable">Follow us</a>
+							</li>
+
+							<li>
+								<a target="_blank" href="https://www.facebook.com/chalkable">Like us</a>
+							</li>
+
+							<li>(800) 844-0884</li>
+						</ul>
+
+					<li>
+						<ul>
+							<li><a href="http://cl.ly/361V222N3T213e1m1J0Z">Press</a></li>
+							<li><a href="@Url.Content("~/Home/Terms")">Terms</a></li>
+						</ul>
+				</ul>
+			</div> <!-- /footerTop -->
+
+			<div class="footerBottom">
+				<p>&copy; @DateTime.Now.Year STI</p>
+			</div>
+		</div>
+	</footer>
+
+    @ChlkHelpers.LoginForm(Url)
+
+
+<script type="text/javascript">
+    var _ = window.location.href.toString().match(/https?:\/\/[^\/]+/);
+    var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
+</script>
+
+    <!-- build:js /app/index-layout.min.js -->
+    <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
+    <script build:src="/app/bower/jquery-ui/jquery-ui.js" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js" src="@Url.StaticContent("")"></script>
+    <script build:src="/app/chlk/index/retina-1.1.0.min.j" src="@Url.StaticContent("/app/chlk/index/retina-1.1.0.min.js")"></script>
+    <script build:src="/app/chlk/index/main.js" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
+    <script build:src="/app/chlk/index/sign_in_forms.js" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
+    <!-- endbuild -->
+    
+    @ChlkHelpers.MixPanel()    
+    @RenderSection("MixPanelTracking", false)
+
+@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+{
+    <script type="text/javascript" src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/scripts/raygun.vanilla.min.js"></script>
+    <script type="text/javascript">
+    Raygun.init('@Settings.RaygunJsApiKey', { ignore3rdPartyErrors: true })
+        .saveIfOffline(true)
+        .withTags([location.origin])
+        .setVersion('@Chalkable.Web.Tools.CompilerHelper.Version')
+        .attach();
+    </script>
+}
+</body>
+</html>
