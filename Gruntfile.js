@@ -101,7 +101,6 @@ module.exports = function(grunt) {
           'Chalkable.Web/app/lib/date-en-US.js',
           'Chalkable.Web/app/bower/jquery/dist/jquery.min.js', 
           'Chalkable.Web/app/bower/autosize/dist/autosize.min.js', 
-          'Chalkable.Web/app/jquery/jquery.autoresize.min.js', 
           'Chalkable.Web/app/jquery/choosen/chosen.jquery.min.js', 
           'Chalkable.Web/app/jquery/carousel/jquery.jcarousel.min.js', 
           'Chalkable.Web/app/jquery/carousel/jquery.carouFredSel-6.2.1-packed.js', 
