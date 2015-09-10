@@ -75,7 +75,7 @@ NAMESPACE('chlk.controls', function () {
                                     jQuery(option).attr('selected', selected);
                                     daySelect.appendChild(option);
                                 }
-                                daySelect.trigger("liszt:updated");
+                                daySelect.trigger("chosen:updated");
                             }
                             if(dayValue && monthValue && yearValue)
                                 hidden.setValue(monthValue + '/' + dayValue + '/' + yearValue);

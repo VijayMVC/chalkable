@@ -62,7 +62,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                         item
                             .setValue(node.getValue())
                             .trigger('change', {})
-                            .trigger('liszt:updated');
+                            .trigger('chosen:updated');
                     }
                 })
             },
