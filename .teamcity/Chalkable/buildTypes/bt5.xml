@@ -11,7 +11,6 @@
     <disabled-settings>
       <setting-ref ref="BUILD_EXT_8" />
       <setting-ref ref="RUNNER_36" />
-      <setting-ref ref="RUNNER_39" />
       <setting-ref ref="RUNNER_40" />
       <setting-ref ref="RUNNER_41" />
       <setting-ref ref="TRIGGER_2" />
@@ -58,30 +57,6 @@
           <param name="jonnyzzz.grunt.mode" value="npm" />
           <param name="jonnyzzz.grunt.tasks" value="version" />
           <param name="teamcity.step.mode" value="default" />
-        </parameters>
-      </runner>
-      <runner id="RUNNER_39" name="versioning (old)" type="MSBuild">
-        <parameters>
-          <param name="build-file-path" value="version-label.msbuild" />
-          <param name="dotNetCoverage.NCover.HTMLReport.File.Sort" value="0" />
-          <param name="dotNetCoverage.NCover.HTMLReport.File.Type" value="1" />
-          <param name="dotNetCoverage.NCover.Reg" value="selected" />
-          <param name="dotNetCoverage.NCover.platformBitness" value="x86" />
-          <param name="dotNetCoverage.NCover.platformVersion" value="v2.0" />
-          <param name="dotNetCoverage.NCover3.Reg" value="selected" />
-          <param name="dotNetCoverage.NCover3.args" value="//ias .*" />
-          <param name="dotNetCoverage.NCover3.platformBitness" value="x86" />
-          <param name="dotNetCoverage.NCover3.platformVersion" value="v2.0" />
-          <param name="dotNetCoverage.NCover3.reporter.executable.args" value="//or FullCoverageReport:Html:{teamcity.report.path}" />
-          <param name="dotNetCoverage.PartCover.Reg" value="selected" />
-          <param name="dotNetCoverage.PartCover.includes" value="[*]*" />
-          <param name="dotNetCoverage.PartCover.platformBitness" value="x86" />
-          <param name="dotNetCoverage.PartCover.platformVersion" value="v2.0" />
-          <param name="msbuild_version" value="12.0" />
-          <param name="run-platform" value="x86" />
-          <param name="targets" value="VersionAssemblies" />
-          <param name="teamcity.step.mode" value="default" />
-          <param name="toolsVersion" value="none" />
         </parameters>
       </runner>
       <runner id="RUNNER_8" name="js compile" type="jonnyzzz.grunt">
