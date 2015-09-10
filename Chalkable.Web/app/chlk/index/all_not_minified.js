@@ -1,23 +1,5 @@
 //All homepage misc. scripts
 $(window).load(function () {
-    $('.cycle').hide().fadeIn(500);
-    try{
-        $('.cycle').cycle({
-            //fx: 'toss',// choose your transition type, ex: fade, scrollUp, shuffle, etc...
-            fx: 'turnDown',
-            animOut: {
-                bottom:  140
-            },
-            speedIn:  300,
-            speedOut: 300,
-            speed:  150,
-            delay: 0,
-            timeout:1500
-        });
-    }catch(e){
-
-    }
-
     $('.signupbutton').click(function(){
         $('form').submit();
         return false;
