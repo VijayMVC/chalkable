@@ -24,6 +24,11 @@ module.exports = function(grunt) {
         all: {}
     },
     
+    clean: {
+      js: ["Chalkable.Web/app/*.js"],
+      css: ["Chalkable.Web/Content/**/*.css"],      
+    },
+    
     uglify: {
       options: {
         preserveComments: 'some'
@@ -290,6 +295,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('emp.ria-grunt-jsbuild3');
   grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-usemin');
+  grunt.loadNpmTasks('grunt-contrib-clean');
   
   // simple build task 
   grunt.registerTask('usemin-build', [
@@ -316,7 +322,7 @@ module.exports = function(grunt) {
   }
   
   grunt.registerTask('post-checkout', ['compass', 'uglify:chalkable.web']);
-  grunt.registerTask('pre-release', ['compass', 'usemin-build', 'jsbuild3']);
+  grunt.registerTask('pre-release', ['clean', 'compass', 'usemin-build', 'jsbuild3']);
   grunt.registerTask('post-build', postBuildTasks);
   
   // Default task(s).
