@@ -159,7 +159,6 @@ module.exports = function(grunt) {
             'app/*App.compiled.js',
             'app/*.min.js',
             'scripts/*.min.js',
-            'app/chlk/index/modernizr-ck.js',
             
             'Content/**',
             '!Content/images2/alerts-icons/*',
