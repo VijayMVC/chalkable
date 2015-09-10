@@ -249,7 +249,7 @@ module.exports = function(grunt) {
       cshtml: {
         expand: true,
         cwd: './',
-        src: ['./Chalkable.Web/Views/Shared/_RoleLayout.cshtml'],
+        src: ['./Chalkable.Web/Views/**/*.cshtml'],
         filter: 'isFile'
       }
     },
