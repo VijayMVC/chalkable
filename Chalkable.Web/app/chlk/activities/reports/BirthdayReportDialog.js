@@ -15,11 +15,11 @@ NAMESPACE('chlk.activities.reports', function(){
                 if(node.getValue() == 2){
                     this.dom.find('.hasDatepicker').setAttr('disabled', 'disabled');
                     this.dom.find('.month-select').setAttr('disabled', false)
-                           .trigger('liszt:updated');
+                           .trigger('chosen:updated');
                 }else{
                     this.dom.find('.hasDatepicker').setAttr('disabled', false);
                     this.dom.find('.month-select').setAttr('disabled', 'disabled')
-                           .trigger('liszt:updated');
+                           .trigger('chosen:updated');
                 }
             }
         ]);

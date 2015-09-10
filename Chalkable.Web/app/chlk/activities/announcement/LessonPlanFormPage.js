@@ -69,7 +69,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     select.find('[selected], :selected').setAttr('selected', false);
                     select.find('[selected], :selected').setProp('selected', false);
                 }
-                select.trigger('liszt:updated');
+                select.trigger('chosen:updated');
             },
 
             [ria.mvc.DomEventBind('change', '#galleryCategoryId')],
@@ -122,7 +122,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         var select = this.dom.find('#galleryCategoryId');
                         select.setAttr('disabled', 'disabled');
                         select.setProp('disabled', true);
-                        select.trigger('liszt:updated');
+                        select.trigger('chosen:updated');
                     }
                 }.bind(this), 1);
 

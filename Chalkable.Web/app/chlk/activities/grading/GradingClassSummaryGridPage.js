@@ -63,10 +63,10 @@ NAMESPACE('chlk.activities.grading', function () {
                 var option = select.find('[data-code=' + value + ']');
                 if(option.exists()){
                     select.setValue(option.getAttr('value'));
-                    select.trigger('liszt:updated');
+                    select.trigger('chosen:updated');
                 }else{
                     select.setValue('');
-                    select.trigger('liszt:updated');
+                    select.trigger('chosen:updated');
                 }
             },
 
@@ -269,7 +269,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 flag.setData('tooltip', model.getTooltipText(maxValue));
             },
 
-            [ria.mvc.DomEventBind('click', '.grading-select + .chzn-container')],
+            [ria.mvc.DomEventBind('click', '.grading-select + .chosen-container')],
             [[ria.dom.Dom, ria.dom.Event]],
             function clickSelect(node, event){
                 event.stopPropagation();
