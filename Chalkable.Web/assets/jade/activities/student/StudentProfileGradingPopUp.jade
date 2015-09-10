@@ -1,0 +1,13 @@
+.grading-popup.popup-bubble.top
+    -var announcements = self.getAnnouncements();
+    .items-list
+        if announcements.length > 0
+                each item in announcements
+                        +ActionLink('announcement', 'view', item.getId(), item.getType()).pop-up-item
+                            .icon
+                            .name(data-tooltip = item.getTitle(), data-tooltip-type="overflow")= item.getTitle()
+                            .value(class=item.getStudentAnnouncements().getItems()[0].isDropped() ? 'dropped' : '' )= self.getNormalValue(item)
+
+
+
+
