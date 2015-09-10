@@ -1384,18 +1384,7 @@ This will let Chalkable know which function of yours to call.</li>
     <script build:src="/app/chlk/index/all_not_minified.js" src="@Url.StaticContent("/app/chlk/index/all_not_minified.js")"></script>
     <script build:src="/app/chlk/index/prettify.js" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
     <!-- endbuild -->
-    @if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
-    {
-    <script type="text/javascript" src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/scripts/raygun.vanilla.min.js"></script>
-    <script type="text/javascript">
-        Raygun.init('@Settings.RaygunJsApiKey', { ignore3rdPartyErrors: true })
-            .saveIfOffline(true)
-            .withTags([location.origin])
-            .setVersion('@Chalkable.Web.Tools.CompilerHelper.Version')
-            .attach();
-    </script>
-    }
-
+    
     @if(!Chalkable.Web.Tools.CompilerHelper.IsDebug)
     {
     ChlkHelpers.LinkedIn(ViewData["LinkedInApplicationId"]);

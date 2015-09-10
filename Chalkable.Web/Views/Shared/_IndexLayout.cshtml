@@ -167,6 +167,7 @@
     <script build:src="/app/chlk/index/retina-1.1.0.min.j" src="@Url.StaticContent("/app/chlk/index/retina-1.1.0.min.js")"></script>
     <script build:src="/app/chlk/index/main.js" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
     <script build:src="/app/chlk/index/sign_in_forms.js" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
+    <script build:src="/app/bower/raygun4js/dist/raygun.js"></script>
     <!-- endbuild -->
     
     @ChlkHelpers.MixPanel()    
@@ -174,7 +175,6 @@
 
 @if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
 {
-    <script type="text/javascript" src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/scripts/raygun.vanilla.min.js"></script>
     <script type="text/javascript">
     Raygun.init('@Settings.RaygunJsApiKey', { ignore3rdPartyErrors: true })
         .saveIfOffline(true)

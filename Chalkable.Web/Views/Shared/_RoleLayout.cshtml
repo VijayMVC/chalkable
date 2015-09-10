@@ -67,6 +67,7 @@
     <script build:src="/app/jquery/jquery.menu-aim.js" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>    
     <script build:src="/app/chlk/index/prettify.js" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
     <script build:src="/app/bower/highcharts/highcharts.js" src="@Url.StaticContent("/app/bower/highcharts/highcharts.js")"></script>
+    <script build:src="/app/bower/raygun4js/dist/raygun.vanilla.js"></script>
     <!-- endbuild -->
 
 @if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
@@ -359,7 +360,6 @@ else
     @RenderSection("BottomScripts", false)
 
 @if (Chalkable.Web.Tools.CompilerHelper.IsProduction) {
-    <script type="text/javascript" src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/scripts/raygun.vanilla.min.js"></script>
     <script type="text/javascript">
         Raygun.init('@Settings.RaygunJsApiKey', { ignore3rdPartyErrors: true })
             .whitelistCrossOriginDomains(['@Chalkable.Web.Tools.CompilerHelper.ScriptsRootDomain'])
