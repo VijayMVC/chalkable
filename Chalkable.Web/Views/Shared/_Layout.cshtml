@@ -1,0 +1,88 @@
+﻿@using Chalkable.Common
+@using Chalkable.Web.Common
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
+<head>
+    <title>@ViewBag.Title</title>
+    @ChlkHelpers.RenderPageMetadata()
+    <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
+    <link rel="icon" href="@Url.Content("~/favicon.ico")" />
+
+    <!-- build:css /Content/devdocs-layout.min.css -->
+    <link build:href="/app/jquery/snippet/jquery.snippet.min.css" href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css"/>
+    <link buikd:href="/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" href="@Url.StaticContent("/app/bower/jquery-ui/themes/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css"/>
+    <link buikd:href="/app/bower/jQuery-Validation-Engine/css/validationEngine.jquery.cs" href="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/css/validationEngine.jquery.css")" rel="stylesheet" type="text/css"/>
+    <link buikd:href="/app/jquery/validation/css/template_index.css" href="@Url.StaticContent("/app/jquery/validation/css/template_index.css")" rel="stylesheet" type="text/css"/>
+    <link build:href="/app/chlk/index/prettify.css" href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet" />
+    <!-- endbuild -->
+
+    <!-- Page specific CSS -->
+
+    @RenderSection("Styles", false)
+    @if(!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    {
+        ChlkHelpers.GoogleAnalytics();    
+    }
+    
+</head>
+<body>
+    <div id="fb-root"></div>
+    <input type="hidden" value=" ServerTime :  @ViewData["CurrentServerDateTime"]"/>
+    <input type="hidden" value=" ServerDbTime:  @ViewData["CurrentServerDBDateTime"]"/>
+
+    <div id="page-header">
+        Revision: @Chalkable.Web.Tools.CompilerHelper.Version
+    </div>
+
+    @RenderSection("ContentSection", false)  
+    @RenderBody()
+
+    <div class="chlk-tooltip" id="chlk-tooltip-item">
+        <div class="tooltip-content"></div>
+        <div class="tooltip-triangle"></div>
+    </div>
+
+    <!-- build:js /app/devdocs-layout.min.js-->
+    <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
+    <script build:src="/app/jquery/jquery.menu-aim.js" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>
+    <script build:src="/app/bower/jquery-ui/jquery-ui.js" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
+    <script build:src="/app/jquery/snippet/jquery.snippet.min.js" src="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.js")"></script>
+    <script build:src="/app/jquery/jquery.cycle.js" src="@Url.StaticContent("/app/jquery/jquery.cycle.js")"></script>
+    <script build:src="/app/jquery/jquery.fancybox.js" src="@Url.StaticContent("/app/jquery/jquery.fancybox.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js")"></script>
+    <script build:src="/app/chlk/shared.js" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
+    <script build:src="/app/chlk/index/html5shiv.js" src="@Url.StaticContent("/app/chlk/index/html5shiv.js")"></script>
+    <script build:src="/app/chlk/index/sign_in_forms.js" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
+    <script build:src="/app/chlk/index/all_not_minified.js" src="@Url.StaticContent("/app/chlk/index/all_not_minified.js")"></script>
+    <script build:src="/app/jquery/jquery.waypoints.min.js" src="@Url.StaticContent("/app/jquery/jquery.waypoints.min.js")"></script>
+    <script build:src="/app/chlk/index/prettify.js" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
+    <!-- endbuild -->
+
+@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+{
+    <script type="text/javascript" src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/scripts/raygun.vanilla.min.js"></script>
+    <script type="text/javascript">
+        Raygun.init('@Settings.RaygunJsApiKey', { ignore3rdPartyErrors: true })
+            .saveIfOffline(true)
+            .withTags([location.origin])
+            .setVersion('@Chalkable.Web.Tools.CompilerHelper.Version')
+            .attach();
+    </script>
+}
+
+   @if(!Chalkable.Web.Tools.CompilerHelper.IsDebug)
+   {
+       ChlkHelpers.LinkedIn(ViewData["LinkedInApplicationId"]);
+       
+       ChlkHelpers.Facebook();
+       
+   }
+   @ChlkHelpers.MixPanel() 
+   @ChlkHelpers.Olark() 
+   @ChlkHelpers.RenderSiteRoot(Url)
+   @ChlkHelpers.WebKitAutofill()
+   @RenderSection("BottomScripts", false)
+   @RenderSection("MixPanelTracking", false)
+</body>
+</html>

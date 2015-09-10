@@ -1,0 +1,52 @@
+noComplete = self.completeOnly && !self.items.length
+div(class = noComplete ? "no-complete" : "").feed-container
+    -var topData = self.getTopData()
+    -var isAdmin = self.getUserRole().isAdmin()
+    if isAdmin
+        +GradesToolBarWithAll(topData, 'feed', 'list', [true, self.importantOnly])
+        -var selected = topData.getSelectedIds()
+    else
+        +ClassesToolBarWithAll(topData, 'feed', 'list', [true, self.importantOnly])
+        -var selected = topData.getSelectedItemId();
+    h2.page-title Feed
+    .action-bar
+        .items
+            if self.importantOnly
+                .pressed= Msg.ToDo
+                +ActionLinkButton('feed', 'list', selected || '', true, false, 0)= Msg.All
+            else
+                +ActionLinkButton('feed', 'list', selected || '', true, true, 0)= Msg.ToDo
+                .pressed= Msg.All
+    //+ActionLink('feed', 'stopNotificationsInterval')#stop-notifications-interval.x-hidden
+    if noComplete
+        label#feed-arrow.blue-arrow.left-up-arrow=Msg.See_more_items
+        label#no-items.blue-arrow.gray.div=Msg.No_items_marked_important
+    else
+        +ActionForm('feed', 'getAnnouncements').wrapper
+            input(type="hidden", name="start", value=(self.getStart() || 0))
+            input(type="hidden", name="count", value=10)
+            if isAdmin
+                input(type="hidden", name="gradeLevels", value=topData.getSelectedIds())
+            else
+                input(type="hidden", name="classId", value=topData.getSelectedItemId())
+
+            .right-buttons-block
+                if self.isImportantOnly() && self.items.length
+                    input(type="submit", name="submitType", value="markDone")#mark-done-submit.x-hidden
+                    +Select('markDoneOption')(data-placeholder = 'Mark Done', value = 0).markDoneSelect
+                        +Option(0, '', false)
+                        +Option(1, 'Items due before today', false)
+                        +Option(2, 'Items older than 30 days', false)
+                        +Option(3, 'All Items', false)
+            +ListView(self.items)(
+                infiniteScroll = true,
+                needGoToButton = true,
+                service = chlk.services.AnnouncementService,
+                method = isAdmin ? "getAnnouncementsForAdmin" : "getAnnouncements",
+                tpl = chlk.templates.announcement.FeedItemTpl,
+                pageSize = 10,
+                paramsPrepend = [selected, self.importantOnly]
+            )
+                Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
+                each item in self.items
+                    +FeedItem(item)
