@@ -11,6 +11,7 @@
     "tests"
   ],
   "dependencies": {
+    "Autolinker.js": "~0.18.1",
     "DateJS": "datejs#~1.0.0-rc3",
     "autosize": "~3.0.9",
     "chosen": "~1.4.2",
