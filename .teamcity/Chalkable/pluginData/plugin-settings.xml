@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <settings>
-  <versionedSettings rootId="Chalkable_2" enabled="true" showChanges="true" buildSettings="PREFER_VCS" />
+  <versionedSettings rootId="Chalkable_2" enabled="true" showChanges="false" buildSettings="PREFER_VCS" />
   <issueTrackers>
     <trackerConnection key="youtrack1" type="youtrack">
       <param name="secure:password" value="zxx117f05ef10e46a2b6b9a18c2e589199c" />
