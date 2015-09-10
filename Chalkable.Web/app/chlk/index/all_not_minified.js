@@ -89,27 +89,6 @@ jQuery(document).ready(function() {
         txt.keyup(func).blur(func);
     });
 
-//fancybox
-    jQuery(".fancybox-media").fancybox({
-        helpers : {
-            media: true
-        },
-        youtube : {
-            autoplay: 1
-        },
-        padding : 0,
-        closeBtn: false,
-        close  : [27], // escape key
-        toggle : [70],  // letter "f" - toggle fullscreen
-        height: 480,
-        width: 853,
-        showNavArrows : false
-        //interval: 0,
-
-
-    });
-
-
     $(window).scroll(function () {
         if ($(this).scrollTop() < 1344) {
             $('.fixed-sider').stop().animate({opacity: 0 , visibility : "hidden"}, 600);
