@@ -53,7 +53,7 @@
     <script build:src="/app/chlk/shared.js" src='@Url.StaticContent("/app/chlk/shared.js")'></script>
     <script build:src="/app/chlk/chlk-messages.js" src='@Url.StaticContent("/app/chlk/chlk-messages.js")'></script>
     <script build:src="/app/chlk/chlk-constants.js" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
-    <script build:src="/app/lib/date-en-US.js" src="@Url.StaticContent("/app/lib/date-en-US.js")"></script>
+    <script build:src="/app/bower/DateJS/build/date-en-US.js" src="@Url.StaticContent("/app/bower/DateJS/build/date-en-US.js")"></script>
     <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
     <script build:src="/app/bower/autosize/dist/autosize.js" src="@Url.StaticContent("/app/bower/autosize/dist/autosize.js")"></script>
     <script build:src="/app/bower/chosen/chosen.jquery.min.js" src="@Url.StaticContent("/app/bower/chosen/chosen.jquery.min.js")"></script>
@@ -318,7 +318,6 @@ else
                 "checkedMode": true,
                 "enablePipelineMethodCall": true,
                 "AssertWithExceptions": false,
-                "stackTraceJs": "lib/stacktrace.js",
 
                 "#require": {
                     "plugins": ["~/assets/jade.js"],
