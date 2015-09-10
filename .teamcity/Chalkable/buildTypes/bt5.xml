@@ -10,7 +10,6 @@
     </options>
     <disabled-settings>
       <setting-ref ref="BUILD_EXT_8" />
-      <setting-ref ref="RUNNER_36" />
       <setting-ref ref="TRIGGER_2" />
     </disabled-settings>
     <parameters>
@@ -57,23 +56,14 @@
           <param name="teamcity.step.mode" value="default" />
         </parameters>
       </runner>
-      <runner id="RUNNER_8" name="js compile" type="jonnyzzz.grunt">
+      <runner id="RUNNER_8" name="client compile" type="jonnyzzz.grunt">
         <parameters>
           <param name="jonnyzzz.grunt.mode" value="npm" />
-          <param name="jonnyzzz.grunt.tasks"><![CDATA[jsmin
-jsbuild3]]></param>
+          <param name="jonnyzzz.grunt.tasks" value="pre-release" />
           <param name="teamcity.step.mode" value="default" />
         </parameters>
       </runner>
-      <runner id="RUNNER_5" name="css compile" type="jonnyzzz.grunt">
-        <parameters>
-          <param name="jonnyzzz.grunt.mode" value="npm" />
-          <param name="jonnyzzz.grunt.tasks"><![CDATA[compass
-cssmin]]></param>
-          <param name="teamcity.step.mode" value="default" />
-        </parameters>
-      </runner>
-      <runner id="RUNNER_9" name="code compile" type="VS.Solution">
+      <runner id="RUNNER_9" name="server compile" type="VS.Solution">
         <parameters>
           <param name="build-file-path" value="Chalkable.sln" />
           <param name="msbuild.prop.Configuration" value="Release" />
@@ -107,16 +97,6 @@ cssmin]]></param>
           <param name="targets" value="Staging,Production,Qa" />
           <param name="teamcity.step.mode" value="default" />
           <param name="toolsVersion" value="none" />
-        </parameters>
-      </runner>
-      <runner id="RUNNER_36" name="publish to AzureStorage" type="jetbrains_powershell">
-        <parameters>
-          <param name="jetbrains_powershell_bitness" value="x86" />
-          <param name="jetbrains_powershell_execution" value="PS1" />
-          <param name="jetbrains_powershell_scriptArguments" value="%build.number% %teamcity.build.branch%" />
-          <param name="jetbrains_powershell_script_file" value="PublishArtifacts.ps1" />
-          <param name="jetbrains_powershell_script_mode" value="FILE" />
-          <param name="teamcity.step.mode" value="default" />
         </parameters>
       </runner>
       <runner id="RUNNER_37" name="grunt post-build" type="jonnyzzz.grunt">
