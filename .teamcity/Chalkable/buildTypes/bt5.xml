@@ -11,7 +11,6 @@
     <disabled-settings>
       <setting-ref ref="BUILD_EXT_8" />
       <setting-ref ref="RUNNER_36" />
-      <setting-ref ref="RUNNER_40" />
       <setting-ref ref="RUNNER_41" />
       <setting-ref ref="TRIGGER_2" />
     </disabled-settings>
@@ -64,14 +63,6 @@
           <param name="jonnyzzz.grunt.mode" value="npm" />
           <param name="jonnyzzz.grunt.tasks"><![CDATA[jsmin
 jsbuild3]]></param>
-          <param name="teamcity.step.mode" value="default" />
-        </parameters>
-      </runner>
-      <runner id="RUNNER_40" name="js compile (old)" type="jonnyzzz.node">
-        <parameters>
-          <param name="node_execution_mode" value="file" />
-          <param name="node_file" value="node_modules/emp.ria-jsbuild3/bin/jsbuild3" />
-          <param name="node_script_args" value="--config Chalkable.Web/jsbuild.json" />
           <param name="teamcity.step.mode" value="default" />
         </parameters>
       </runner>
