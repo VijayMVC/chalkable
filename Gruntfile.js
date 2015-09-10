@@ -232,6 +232,7 @@ module.exports = function(grunt) {
     useminPrepare: {
       options: {
         root: './Chalkable.Web',
+        dest: './Chalkable.Web',
         patterns: {
           html: [
             [
