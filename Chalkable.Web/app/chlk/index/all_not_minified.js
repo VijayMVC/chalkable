@@ -97,32 +97,5 @@ jQuery(document).ready(function() {
             $('.fixed-sider').stop().animate({opacity: 1, visibility : "visible"}, 600);
         }
     });
-
-    //----navbar
-    try{
-        // Do our DOM lookups beforehand
-        var nav_container = $("#demo_top_wrapper");
-        var nav = $("#sticky_navigation");
-        nav_container.waypoint({
-            handler: function(event, direction) {
-                nav.toggleClass('sticky', direction=='down');
-                if (direction == 'down') nav_container.css({ 'height':nav.outerHeight() });
-                else nav_container.css({ 'height':'auto' });
-            },
-            offset: 0
-        });
-        $.waypoints.settings.scrollThrottle = 0;
-        $('#newtoppanel').waypoint(function(event, direction) {
-            $('.top').toggleClass('hidden', direction === "up");
-        }, {
-            offset: 0
-        }).find('#demo_top_wrapper').waypoint(function(event, direction) {
-                $(this).parent().toggleClass('sticky', direction === "down");
-                event.stopPropagation();
-            });
-    }catch(e){
-
-    }
-
 });
 
