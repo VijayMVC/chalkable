@@ -1285,7 +1285,7 @@ This will let Chalkable know which function of yours to call.</li>
             url = form.attr(&#39;action&#39;),
             id = form.find(&#39;.tinymce&#39;).attr(&#39;id&#39;),
             name = form.find(&#39;.tinymce&#39;).attr(&#39;name&#39;),
-            editor = tinyMCE.get(id)&#39;
+            editor = tinyMCE.get(id);
             editor.setProgressState(1);
             var content = editor.getContent();
             var data = {};
