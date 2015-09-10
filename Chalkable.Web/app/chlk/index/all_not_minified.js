@@ -50,7 +50,7 @@ jQuery(document).ready(function() {
 
 //navbar sticky and highlight
 
-    google.setOnLoadCallback(function() {
+    $(function() {
         $(window).scroll(sticky_relocate);
         sticky_relocate();
     });

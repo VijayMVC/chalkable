@@ -13,6 +13,7 @@
     <link buikd:href="/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" href="@Url.StaticContent("/app/bower/jquery-ui/themes/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css"/>
     <link buikd:href="/app/bower/jQuery-Validation-Engine/css/validationEngine.jquery.cs" href="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/css/validationEngine.jquery.css")" rel="stylesheet" type="text/css"/>
     <link buikd:href="/app/jquery/validation/css/template_index.css" href="@Url.StaticContent("/app/jquery/validation/css/template_index.css")" rel="stylesheet" type="text/css"/>
+    <link build:href="/app/chlk/index/prettify.css" href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet" />
     <!-- endbuild -->
 
     <!-- Page specific CSS -->
@@ -44,7 +45,6 @@
     <!-- build:js /app/devdocs-layout.min.js-->
     <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
     <script build:src="/app/jquery/jquery.menu-aim.js" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>
-    <script build:src="/app/jquery/jquery.maskedinput-1.3.1.min.js" src="@Url.StaticContent("/app/jquery/jquery.maskedinput-1.3.1.min.js")"></script>
     <script build:src="/app/bower/jquery-ui/jquery-ui.js" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
     <script build:src="/app/jquery/snippet/jquery.snippet.min.js" src="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.js")"></script>
     <script build:src="/app/jquery/jquery.cycle.js" src="@Url.StaticContent("/app/jquery/jquery.cycle.js")"></script>
@@ -58,8 +58,6 @@
     <script build:src="/app/jquery/jquery.waypoints.min.js" src="@Url.StaticContent("/app/jquery/jquery.waypoints.min.js")"></script>
     <script build:src="/app/chlk/index/prettify.js" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
     <!-- endbuild -->
-
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 @if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
 {
@@ -86,6 +84,5 @@
    @ChlkHelpers.WebKitAutofill()
    @RenderSection("BottomScripts", false)
    @RenderSection("MixPanelTracking", false)
-   <script type="text/javascript" src='https://platform.twitter.com/anywhere.js?id=@ViewData["TwitterApplicationId"]&v=1' ></script>
 </body>
 </html>
