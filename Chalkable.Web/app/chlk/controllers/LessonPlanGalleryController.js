@@ -71,10 +71,21 @@ NAMESPACE('chlk.controllers', function () {
                             sortType_ || chlk.models.attachment.SortAttachmentType.NEWEST_UPLOADED,
                             classId,
                             categoryType_,
-                            filter_
+                            filter_,
+                            false// check if has district admin permission
                         );
                     }, this);
                 return this.ShadeOrUpdateView(chlk.activities.announcement.LessonPlanGalleryDialog, result);
+            },
+
+            [[chlk.models.id.AnnouncementId]],
+            function tryDeleteLessonPlanFromGalleryAction(lessonPlanId){
+                this.ShowConfirmBox('This will PERMANENTLY delete this lesson plan from the gallery for everyone. Are you sure you want to delete this?',
+                    "whoa.", null, 'negative-button')
+                    .then(function (data) {
+                        return this.BackgroundNavigate('announcement', 'deleteAnnouncement', [lessonPlanId, chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN]);
+                    }, this);
+                return null;
             }
 
         ]);

@@ -25,15 +25,18 @@ NAMESPACE('chlk.models.announcement', function () {
 
             chlk.models.id.LpGalleryCategoryId, 'categoryType',
 
+            Boolean, 'ableToRemove',
+
             [[
                 chlk.models.common.PaginatedList,
                 ArrayOf(chlk.models.announcement.CategoryViewData),
                 chlk.models.attachment.SortAttachmentType,
                 chlk.models.id.ClassId,
                 chlk.models.id.LpGalleryCategoryId,
-                String
+                String,
+                Boolean
             ]],
-            function $(lessonPlans, categories, sortType, classId, categoryType_, filter_){
+            function $(lessonPlans, categories, sortType, classId, categoryType_, filter_, canRemove){
                 BASE();
                 this.setLessonPlans(lessonPlans);
                 if (filter_)
@@ -48,6 +51,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.setClassId(classId);
 
                 this.setEmpty((this.getLessonPlans().getItems() || []).length == 0);
+                this.setAbleToRemove(canRemove);
             }
 
         ]);

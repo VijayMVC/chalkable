@@ -1,10 +1,13 @@
-mixin LessonPlanIcon_(lessonPlan, classId)
+mixin LessonPlanIcon_(lessonPlan, classId, isAbleToRemove)
    .announcement-item.application
-      .wrapper
-         .attach-assessment.img
-         .title(data-tooltip=lessonPlan.getTitle(), data-tooltip-type="overflow")= lessonPlan.getTitle()
-         .shortdesc
-         +ActionButton('announcement', 'createFromTemplate', lessonPlan.getId(), classId) Open
+       -var canRemove = isAbleToRemove || lessonPlan.isAnnOwner()
+       if canRemove
+            +ActionLink('lessonplangallery', 'tryDeleteLessonPlanFromGallery', lessonPlan.getId()).close-btn
+       .wrapper
+           .attach-assessment.img
+           .title(data-tooltip=lessonPlan.getTitle(), data-tooltip-type="overflow")= lessonPlan.getTitle()
+           .shortdesc
+           +ActionButton('announcement', 'createFromTemplate', lessonPlan.getId(), classId) Open
 .dialog.attach-dialog
    .x-window-header
       h1 LESSON PLAN GALLERY
@@ -27,7 +30,6 @@ mixin LessonPlanIcon_(lessonPlan, classId)
                             -var sortTypeEnum = chlk.models.attachment.SortAttachmentType
                             +Option(sortTypeEnum.NEWEST_UPLOADED.valueOf(), 'Newest Uploaded', sortTypeEnum.NEWEST_UPLOADED == self.getSortType())
                             +Option(sortTypeEnum.OLDEST_UPLOADED.valueOf(), 'Oldest Uploaded', sortTypeEnum.OLDEST_UPLOADED == self.getSortType())
-                            BUTTON(type="submit")#changeLpFilter.x-hidden
                .right.wrapper
                     .lesson-plan-gallery-search-container
                         input(type="text", placeholder='Search...', name="filter", value=self.getFilter()).lp-gallery-search.search-input
@@ -36,9 +38,9 @@ mixin LessonPlanIcon_(lessonPlan, classId)
            .attachments-and-applications
                if !self.isEmpty()
                    each lessonPlan in lessonPlans.getItems()
-                       +LessonPlanIcon_(lessonPlan, self.getClassId())
+
+                       +LessonPlanIcon_(lessonPlan, self.getClassId(), self.isAbleToRemove())
                else
                    .no-lesson-plans No Lesson Plans Uploaded
     .paging
-        -console.log(self.getCategoryType())
         +Paginator2('lessonplangallery', 'lessonPlanTemplatesList',lessonPlans, [self.getClassId(), self.getCategoryType(),  self.getFilter(), self.getSortType() ])
