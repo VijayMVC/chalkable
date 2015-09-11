@@ -26,7 +26,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
             input(type="hidden", name="start", value=(self.getStart() || 0))
             input(type="hidden", name="count", value=10)
             input(type="hidden", name="importantOnly", value=self.importantOnly)
-            input(type="hidden", name="latest", value=self.isLatest()).latest-earliest-input
+            input(type="hidden", name="sorttype", value=self.isLatest()).latest-earliest-input
             input(type="submit", name="submitType", value="sort")#sort-submit.x-hidden
             if isAdmin
                 input(type="hidden", name="gradeLevels", value=topData.getSelectedIds())
@@ -56,7 +56,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                                     .box-checkbox.right.lesson-plans-check
                                         +Checkbox('lessonplansonly', self.isLessonPlansOnly()).lessonplans-check
                 .date-range
-                    +DatePicker('startdate', self.getStartDate())(
+                    +DatePicker('fromdate', self.getStartDate())(
                         data-options={
                             showOtherMonths: true,
                             selectOtherMonths: true,
@@ -67,7 +67,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                         data-value=self.getStartDate() ? self.getStartDate().format('mm/dd/yy') : ''
                     ).start-end-picker
                     | -
-                    +DatePicker('enddate', self.getEndDate())(
+                    +DatePicker('todate', self.getEndDate())(
                         data-options={
                             showOtherMonths: true,
                             selectOtherMonths: true,
@@ -79,12 +79,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                     ).start-end-picker
             +ListView(self.items)(
                 infiniteScroll = true,
-                needGoToButton = true,
-                service = chlk.services.AnnouncementService,
-                method = isAdmin ? "getAnnouncementsForAdmin" : "getAnnouncements",
-                tpl = chlk.templates.announcement.FeedItemTpl,
-                pageSize = 10,
-                paramsPrepend = [selected, self.importantOnly]
+                needGoToButton = true
             )
                 Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
                 each item in self.items

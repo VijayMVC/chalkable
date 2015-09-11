@@ -187,8 +187,13 @@ NAMESPACE('chlk.controllers', function (){
                         return this.getFeedItems(postback_, false, classId_, start_, startDate_, endDate_, lessonPlansOnly_, latest_);
 
                     var classBarItemsMdl = new chlk.models.classes.ClassesForTopBar(null, classId_);
+                    var gp = this.getCurrentGradingPeriod();
+                    if(model.getStartDate().getDate() < gp.getStartDate().getDate())
+                        model.setStartDate(gp.getStartDate());
+                    if(model.getEndDate().getDate() > gp.getEndDate().getDate())
+                        model.setEndDate(gp.getEndDate());
                     model.setTopData(classBarItemsMdl);
-                    importantOnly_ && model.setImportantOnly(importantOnly_);
+                    model.setImportantOnly(importantOnly_);
 
                     return model;
                 }, this);
@@ -206,7 +211,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     var glsBarItemsMdl = new chlk.models.grading.GradeLevelsForTopBar(null, gradeLevels_);
                     model.setTopData(glsBarItemsMdl);
-                    importantOnly_ && model.setImportantOnly(importantOnly_);
+                    model.setImportantOnly(importantOnly_);
 
                     return model;
                 }, this);
