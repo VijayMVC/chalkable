@@ -51,7 +51,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                         ul.chosen-results
                             li(class = self.isLatest() ? "" : "highlighted", data-value=false).latest-earliest-option.active-result Due Date: Earliest
                             li(class = self.isLatest() ? "highlighted" : "", data-value=true).latest-earliest-option.active-result Due Date: Latest
-                            if isAdmin
+                            if !isAdmin
                                 li.active-result Lesson Plans Only
                                     .box-checkbox.right.lesson-plans-check
                                         +Checkbox('lessonplansonly', self.isLessonPlansOnly()).lessonplans-check
@@ -79,7 +79,8 @@ div(class = noComplete ? "no-complete" : "").feed-container
                     ).start-end-picker
             +ListView(self.items)(
                 infiniteScroll = true,
-                needGoToButton = true
+                needGoToButton = true,
+                pageSize = 10
             )
                 Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
                 each item in self.items

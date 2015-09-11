@@ -52,7 +52,8 @@ NAMESPACE('chlk.services', function () {
                     startDate: startDate_ && startDate_.toStandardFormat(),
                     endDate: endDate_ && endDate_.toStandardFormat(),
                     lessonPlansOnly: lessonPlansOnly_,
-                    sortType: latest_
+                    sortType: latest_,
+                    count: 10
                 });
 
             },
@@ -66,7 +67,8 @@ NAMESPACE('chlk.services', function () {
                     startDate: startDate_ && startDate_.toStandardFormat(),
                     endDate: endDate_ && endDate_.toStandardFormat(),
                     lessonPlansOnly: lessonPlansOnly_,
-                    sortType: latest_
+                    sortType: latest_,
+                    count: 10
                 });
 
             },
