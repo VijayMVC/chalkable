@@ -152,12 +152,8 @@
 	</footer>
 
     @ChlkHelpers.LoginForm(Url)
-
-
-<script type="text/javascript">
-    var _ = window.location.href.toString().match(/https?:\/\/[^\/]+/);
-    var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
-</script>
+    
+    @ChlkHelpers.RenderSiteRoot(Url)
 
     <!-- build:js /app/index-layout.min.js -->
     <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
@@ -167,21 +163,11 @@
     <script build:src="/app/chlk/index/retina-1.1.0.min.j" src="@Url.StaticContent("/app/chlk/index/retina-1.1.0.min.js")"></script>
     <script build:src="/app/chlk/index/main.js" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
     <script build:src="/app/chlk/index/sign_in_forms.js" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
+    <script build:src="/app/bower/raygun4js/dist/raygun.js"></script>
     <!-- endbuild -->
-    
-    @ChlkHelpers.MixPanel()    
-    @RenderSection("MixPanelTracking", false)
 
-@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
-{
-    <script type="text/javascript" src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/scripts/raygun.vanilla.min.js"></script>
-    <script type="text/javascript">
-    Raygun.init('@Settings.RaygunJsApiKey', { ignore3rdPartyErrors: true })
-        .saveIfOffline(true)
-        .withTags([location.origin])
-        .setVersion('@Chalkable.Web.Tools.CompilerHelper.Version')
-        .attach();
-    </script>
-}
+    @ChlkHelpers.RaygunInit()
+    @ChlkHelpers.GoogleAnalytics()
+    @ChlkHelpers.MixPanel()
 </body>
 </html>

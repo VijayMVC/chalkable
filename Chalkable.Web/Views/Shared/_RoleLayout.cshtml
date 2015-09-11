@@ -13,7 +13,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
 <head>
     <title>@ViewBag.Title</title>
-    @ChlkHelpers.RenderPageMetadata()
     <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
     <link rel="icon" href="@Url.Content("~/favicon.ico")" />
     <!--Fonts-->
@@ -40,11 +39,7 @@
 
     <!-- Page specific CSS -->
     @RenderSection("Styles", false)
-    @if (!Chalkable.Web.Tools.CompilerHelper.IsDebug)
-    {
-        ChlkHelpers.GoogleAnalytics();
-        ChlkHelpers.Olark();
-    }
+
     @ChlkHelpers.RenderSiteRoot(Url)
 
     @{Html.RenderPartial("Telemetry");}
@@ -53,7 +48,8 @@
     <script build:src="/app/chlk/shared.js" src='@Url.StaticContent("/app/chlk/shared.js")'></script>
     <script build:src="/app/chlk/chlk-messages.js" src='@Url.StaticContent("/app/chlk/chlk-messages.js")'></script>
     <script build:src="/app/chlk/chlk-constants.js" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
-    <script build:src="/app/lib/date-en-US.js" src="@Url.StaticContent("/app/lib/date-en-US.js")"></script>
+    <script build:src="/app/bower/DateJS/build/date-en-US.js" src="@Url.StaticContent("/app/bower/DateJS/build/date-en-US.js")"></script>
+    <script build:src="/app/bower/Autolinker.js/dist/Autolinker.js" src="@Url.StaticContent("/app/bower/Autolinker.js/dist/Autolinker.js")"></script>
     <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
     <script build:src="/app/bower/autosize/dist/autosize.js" src="@Url.StaticContent("/app/bower/autosize/dist/autosize.js")"></script>
     <script build:src="/app/bower/chosen/chosen.jquery.min.js" src="@Url.StaticContent("/app/bower/chosen/chosen.jquery.min.js")"></script>
@@ -66,6 +62,7 @@
     <script build:src="/app/jquery/jquery.menu-aim.js" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>    
     <script build:src="/app/chlk/index/prettify.js" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
     <script build:src="/app/bower/highcharts/highcharts.js" src="@Url.StaticContent("/app/bower/highcharts/highcharts.js")"></script>
+    <script build:src="/app/bower/raygun4js/dist/raygun.vanilla.js"></script>
     <!-- endbuild -->
 
 @if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
@@ -143,7 +140,6 @@ else
             <div class="tooltip-triangle"></div>
         </div>
         <div class="alerts-pop-up popup-bubble"></div>
-        @RenderSection("MixPanelTracking", false)
         
 <script type="text/json" id="application-value" class="valuable-script">
     @Html.Raw(@ViewData[ViewConstants.DEFAULT_APPLICATION])
@@ -318,7 +314,6 @@ else
                 "checkedMode": true,
                 "enablePipelineMethodCall": true,
                 "AssertWithExceptions": false,
-                "stackTraceJs": "lib/stacktrace.js",
 
                 "#require": {
                     "plugins": ["~/assets/jade.js"],
@@ -355,22 +350,11 @@ else
             })(roleAppScript);
         </script>
     }
+
+
+    @ChlkHelpers.RaygunInit()
+    
+    @ChlkHelpers.GoogleAnalytics()
     @ChlkHelpers.MixPanel() 
-    @RenderSection("BottomScripts", false)
-
-@if (Chalkable.Web.Tools.CompilerHelper.IsProduction) {
-    <script type="text/javascript" src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/scripts/raygun.vanilla.min.js"></script>
-    <script type="text/javascript">
-        Raygun.init('@Settings.RaygunJsApiKey', { ignore3rdPartyErrors: true })
-            .whitelistCrossOriginDomains(['@Chalkable.Web.Tools.CompilerHelper.ScriptsRootDomain'])
-            .saveIfOffline(true)
-            .withTags([location.origin, '@ViewData[ViewConstants.ROLE_NAME]', '@(isDemoSchool?"demo":isDeveloperSchool?"developer":"normal")'])
-            .setUser(districtId + ':' + currentChlkPerson.id, undefined, currentChlkPerson.email, currentChlkPerson.fullname, currentChlkPerson.firstname)
-            .setVersion('@Chalkable.Web.Tools.CompilerHelper.Version')
-            .attach();
-    </script>
-}
-
-
 </body> 
 </html>

@@ -147,6 +147,9 @@
     <script build:src="/app/chlk/index/main.js" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
     <script build:src="/app/chlk/index/sign_in_forms.js" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
     <!-- endbuild -->
+
+    @ChlkHelpers.GoogleAnalytics()
+    @ChlkHelpers.MixPanel()
 </body>
 </html>
 
