@@ -308,7 +308,7 @@ else
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
     {
-        <script src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/app/ria/_bootstrap.js" type="text/javascript">
+        <script src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/app/bower/emp.ria-framework/_bootstrap.js" type="text/javascript">
             ria.__CFG = {
                 "prettyStackTraces": true,
                 "checkedMode": true,
@@ -319,6 +319,7 @@ else
                     "plugins": ["~/assets/jade.js"],
                     "appRoot": "@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/",
                     "libs": {
+                        "ria/": "~/app/bower/emp.ria-framework/"
                     }
                 },
 
