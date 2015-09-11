@@ -5,8 +5,7 @@
 @using Chalkable.Web.Extensions
 @using Chalkable.Web.Tools
 
-@helper RaygunInit() 
-{
+@helper RaygunInit() {
     if (CompilerHelper.IsProduction)
     {
         <script type="text/javascript">
@@ -75,7 +74,7 @@
     }
 }
 
-@helper RenderSignInForm(UrlHelper Url, HtmlHelper Html)
+@helper RenderSignInForm(UrlHelper Url, System.Web.Mvc.HtmlHelper Html)
 {
    <div id="toppanel">
        <div id="panel">
