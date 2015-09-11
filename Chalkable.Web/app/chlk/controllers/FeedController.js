@@ -111,7 +111,7 @@ NAMESPACE('chlk.controllers', function (){
         function listDistrictAdminAction(gradeLevels_, postback_, importantOnly_, start_) {
 
             //todo : think about go to inow part
-            if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHALKBLE_ADMIN)){
+            if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CHALKABLE_ADMIN)){
                 var text  = 'It looks like you don\'t have the correct permissions defined in iNow \n' +
                     '(Chalkable Admin).\n' +
                     'Without those permissions you cannot use Chalkable Admin POrtal.  \n' +
