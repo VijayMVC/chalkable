@@ -13,16 +13,16 @@ NAMESPACE('chlk.models.feed', function () {
                 IMPLEMENTS(ria.serialize.IDeserializable), [
 
             VOID, function deserialize(raw) {
-                this.items = SJX.fromArrayOfDeserializables(raw.items, chlk.models.announcement.FeedAnnouncementViewData);
+                this.items = SJX.fromArrayOfDeserializables(raw.annoucementviewdatas, chlk.models.announcement.FeedAnnouncementViewData);
                 this.importantOnly = SJX.fromValue(raw.importantOnly, Boolean);
                 this.importantCount = SJX.fromValue(raw.importantCount, Number);
                 this.newNotificationCount = SJX.fromValue(raw.newNotificationCount, Number);
                 this.start = SJX.fromValue(raw.start, Number);
                 this.count = SJX.fromValue(raw.count, Number);
-                this.startDate = SJX.fromDeserializable(raw.startdate, chlk.models.common.ChlkDate);
-                this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
+                this.startDate = SJX.fromDeserializable(raw.fromdate, chlk.models.common.ChlkDate);
+                this.endDate = SJX.fromDeserializable(raw.todate, chlk.models.common.ChlkDate);
                 this.lessonPlansOnly = SJX.fromValue(raw.lessonplansonly, Boolean);
-                this.latest = SJX.fromValue(raw.latest, Boolean);
+                this.latest = SJX.fromValue(raw.sorttype, Boolean);
                 this.submitType = SJX.fromValue(raw.submitType, String);
                 this.markDoneOption = SJX.fromValue(raw.markDoneOption, Number);
                 this.gradeLevels = SJX.fromValue(raw.gradeLevels, String);

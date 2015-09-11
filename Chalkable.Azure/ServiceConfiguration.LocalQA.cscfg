@@ -17,7 +17,7 @@
       <Setting name="RedisCache.ConnectionString" value="chlk-qa.redis.cache.windows.net,abortConnect=false,ssl=true,password=mOiq0phviZ0/SiUAuwCj/9hsWReh4YFzCYQWYln7uZw=" />
       <!-- CDN and content settings-->
       <Setting name="Domain" value="" />
-      <Setting name="ScriptsRoot" value="" />
+      <Setting name="ScriptsRoot" value="//localhost:5001" />
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="Yqw/rtCv1iQ7eHejhSTVzV81Zv0Z51G/BCA/B9W4XU8=" />
       <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="qa.chalkable.com" />
