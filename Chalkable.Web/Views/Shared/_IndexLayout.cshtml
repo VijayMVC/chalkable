@@ -152,7 +152,7 @@
 	</footer>
 
     @ChlkHelpers.LoginForm(Url)
-
+    
     @ChlkHelpers.RenderSiteRoot(Url)
 
     <!-- build:js /app/index-layout.min.js -->
@@ -165,9 +165,9 @@
     <script build:src="/app/chlk/index/sign_in_forms.js" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
     <script build:src="/app/bower/raygun4js/dist/raygun.js"></script>
     <!-- endbuild -->
-    
-    @ChlkHelpers.MixPanel()    
 
     @ChlkHelpers.RaygunInit()
+    @ChlkHelpers.GoogleAnalytics()
+    @ChlkHelpers.MixPanel()
 </body>
 </html>

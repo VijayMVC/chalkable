@@ -40,7 +40,6 @@
     <!-- Page specific CSS -->
     @RenderSection("Styles", false)
 
-    @ChlkHelpers.GoogleAnalytics();
     @ChlkHelpers.RenderSiteRoot(Url)
 
     @{Html.RenderPartial("Telemetry");}
@@ -352,8 +351,10 @@ else
         </script>
     }
 
-    @ChlkHelpers.MixPanel() 
 
-    @ChlkHelpers.RaygunInit()    
+    @ChlkHelpers.RaygunInit()
+    
+    @ChlkHelpers.GoogleAnalytics()
+    @ChlkHelpers.MixPanel() 
 </body> 
 </html>

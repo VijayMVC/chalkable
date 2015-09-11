@@ -1372,8 +1372,7 @@ This will let Chalkable know which function of yours to call.</li>
     <script build:src="/app/chlk/index/all_not_minified.js" src="@Url.StaticContent("/app/chlk/index/all_not_minified.js")"></script>
     <script build:src="/app/chlk/index/prettify.js" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
     <!-- endbuild -->
-        
-    @ChlkHelpers.MixPanel()
+
     @ChlkHelpers.RenderSiteRoot(Url)
 
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
@@ -1393,16 +1392,21 @@ This will let Chalkable know which function of yours to call.</li>
             });
         });
     </script>
-    <script>(function() {
-      if (location.protocol === 'file:') {
-        document.getElementById('localFile').style.display = 'block';
-      }
+    <script>
+        (function() {
+            if (location.protocol === 'file:') {
+                document.getElementById('localFile').style.display = 'block';
+            }
 
-    }).call(this);
-    </script><script>(function() {
-      $('table').addClass('table');
+        }).call(this);
+    </script><script>
+                 (function() {
+                     $('table').addClass('table');
 
-    }).call(this);
-    </script>
+                 }).call(this);
+             </script>
+
+    @ChlkHelpers.GoogleAnalytics()
+    @ChlkHelpers.MixPanel()
 </body>
 </html>
