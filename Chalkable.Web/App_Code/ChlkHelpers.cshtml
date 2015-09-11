@@ -3,9 +3,11 @@
 @using System.Web.Mvc.Html;
 @using Chalkable.Common
 @using Chalkable.Web.Extensions
+@using Chalkable.Web.Tools
 
-@helper RaygunInit()
-    if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+@helper RaygunInit() 
+{
+    if (CompilerHelper.IsProduction)
     {
         <script type="text/javascript">
         Raygun.init('@Settings.RaygunJsApiKey', { ignore3rdPartyErrors: true })
@@ -19,7 +21,7 @@
 
 @helper MixPanel()
 {
-    if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+    if (CompilerHelper.IsProduction)
     {
     <!-- start Mixpanel -->
         <script type="text/javascript">
@@ -39,7 +41,7 @@
 
 @helper RenderSiteRoot(UrlHelper Url)
 {
-    if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
+    if (CompilerHelper.IsDebug)
     {
         <script type="text/javascript">
             var _ = window.location.href.toString().match(/https?:\/\/[^\/]+/);
@@ -56,7 +58,7 @@
 
 @helper GoogleAnalytics()
 {
-    if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+    if (CompilerHelper.IsProduction)
     {
         <script type="text/javascript">
             (function (i, s, o, g, r, a, m) {
@@ -73,7 +75,7 @@
     }
 }
 
-@helper RenderSignInForm(UrlHelper Url, System.Web.Mvc.HtmlHelper Html)
+@helper RenderSignInForm(UrlHelper Url, HtmlHelper Html)
 {
    <div id="toppanel">
        <div id="panel">
@@ -218,6 +220,6 @@
 
 @helper RenderChlkCopyrightYear(){
     <footer>
-        &copy; @DateTime.Now.Year Chalkable. Revision: @Chalkable.Web.Tools.CompilerHelper.Version <br/>
+        &copy; @DateTime.Now.Year Chalkable. Revision: @CompilerHelper.Version <br/>
     </footer>
 }    
