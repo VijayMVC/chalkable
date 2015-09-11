@@ -72,7 +72,7 @@ NAMESPACE('chlk.controllers', function () {
                             classId,
                             categoryType_,
                             filter_,
-                            false// check if has district admin permission
+                            this.getCurrentPerson().hasPermission(chlk.models.people.UserPermissionEnum.CHALKABLE_ADMIN)
                         );
                     }, this);
                 return this.ShadeOrUpdateView(chlk.activities.announcement.LessonPlanGalleryDialog, result);
