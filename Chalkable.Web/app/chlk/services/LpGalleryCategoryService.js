@@ -33,6 +33,19 @@ NAMESPACE('chlk.services', function () {
                 return this.get('LPGalleryCategory/DeleteCategory.json', Boolean, {
                     categoryId: categoryId.valueOf()
                 });
+            },
+
+            [[ArrayOf(chlk.models.announcement.CategoryViewData)]],
+            function cacheLessonPlanCategories(categories){
+                this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORIES, categories);
+            },
+
+            ArrayOf(chlk.models.announcement.CategoryViewData), function getLessonPlanCategoriesSync(){
+                return this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORIES, []);
+            },
+
+            function emptyLessonPlanCategoriesCache(){
+                this.cacheLessonPlanCategories_(null);
             }
     ]);
 });

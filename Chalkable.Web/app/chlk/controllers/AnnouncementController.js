@@ -573,7 +573,7 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(list){
-                    this.cacheLessonPlanCategories(list);
+                    this.lpGalleryCategoryService.cacheLessonPlanCategories(list);
                     this.cacheLessonPlanClassId(model.getAnnouncement().getLessonPlanData().getClassId());
                     model.getAnnouncement().setCategories(list);
                     return model;
@@ -609,7 +609,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(model && model.getAnnouncement()){
                         var resModel =  this.addEditAction(model, false);
                         resModel.getAnnouncement().setCategories(result[1]);
-                        this.cacheLessonPlanCategories(result[1]);
+                        this.lpGalleryCategoryService.cacheLessonPlanCategories(result[1]);
                         this.cacheLessonPlanClassId(resModel.getAnnouncement().getLessonPlanData().getClassId());
                         return resModel;
                     }
@@ -646,6 +646,9 @@ NAMESPACE('chlk.controllers', function (){
             if (assessmentAppId_) ++btnsCount;
 
             var start = pageIndex_ | 0, count = 12 - btnsCount;
+
+
+            //todo split this into two methods
 
             var result;
             if (this.userIsAdmin()){
@@ -693,6 +696,8 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, res);
         },
 
+
+        //todo move attribute methods to separate controller
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
         function fetchAddAttributeFuture_(announcementId, announcementType) {
@@ -1368,14 +1373,7 @@ NAMESPACE('chlk.controllers', function (){
              return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT, new chlk.models.announcement.FeedAnnouncementViewData());
         },
 
-        [[ArrayOf(chlk.models.announcement.CategoryViewData)]],
-        function cacheLessonPlanCategories(categories){
-            this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORIES, categories);
-        },
 
-        ArrayOf(chlk.models.announcement.CategoryViewData), function getCachedLessonPlanCategories(){
-            return this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORIES, []);
-        },
 
         [[chlk.models.id.ClassId]],
         function cacheLessonPlanClassId(classId){
@@ -1627,7 +1625,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(model && model.getAnnouncement()){
                         var resModel =  this.addEditAction(model, false);
                         resModel.getAnnouncement().setCategories(result[1]);
-                        this.cacheLessonPlanCategories(result[1]);
+                        this.lpGalleryCategoryService.cacheLessonPlanCategories(result[1]);
                         this.cacheLessonPlanClassId(resModel.getAnnouncement().getLessonPlanData().getClassId());
                         return resModel;
                     }
@@ -1745,7 +1743,7 @@ NAMESPACE('chlk.controllers', function (){
             res = res.then(function(saved){
                 if(saved){
                     this.cacheAnnouncement(null);
-                    this.cacheLessonPlanCategories(null);
+                    this.lpGalleryCategoryService.emptyLessonPlanCategoriesCache();
                     this.cacheLessonPlanClassId(null);
                     this.cacheAnnouncementAttachments(null);
                     this.cacheAnnouncementApplications(null);

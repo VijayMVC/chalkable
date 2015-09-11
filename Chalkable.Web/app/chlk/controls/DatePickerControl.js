@@ -110,7 +110,7 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom, Object, Object]],
             VOID, function reanimate_(node, options, value_) {
                 var defaultOptions = {dateFormat: "mm/dd/yy"};
-                node.datepicker(ria.__API.extendWithDefault(options,defaultOptions), value_ && value_.getDate());
+                node.datepicker(ria.__API.merge(options,defaultOptions), value_ && value_.getDate());
                 node.setData('control', this);
             }
         ]);

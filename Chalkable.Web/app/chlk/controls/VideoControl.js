@@ -41,7 +41,7 @@ NAMESPACE('chlk.controls', function () {
             [[Object]],
             Object, function processAttrs(attributes){
                 attributes.src = this.getVideoUrl(attributes.src);
-                attributes = ria.__API.extendWithDefault(attributes, this.getConfigs());
+                attributes = ria.__API.merge(attributes, this.getConfigs());
                 return attributes;
             }
         ]);

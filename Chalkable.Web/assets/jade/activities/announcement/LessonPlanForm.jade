@@ -49,15 +49,8 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                                 each item in announcement.getCategories()
                                                     +Option(item.getId().valueOf(), item.getName())
                                         BUTTON(type="submit", value="changeCategory", name="submitType").validate-skip#changeCategoryUpdate.x-hidden
-                                        BUTTON(type="submit", value="createFromTemplate", name="submitType").validate-skip#createFromTemplate.x-hidden
-                                        +Hidden('announcementForTemplateId', null)#announcementForTemplateId
-                                    .search-container
-                                        label(for="filter") Choose from New Item Gallery
-                                        +SearchBox(chlk.services.LessonPlanService, "searchLessonPlansTemplates", chlk.templates.announcement.LessonPlanAutoCompleteTpl)(
-                                            name="filter", placeholder="Default Lesson Plan", value = announcement.getFilter(), minLength = 0
-                                        ).search-templates
                                 .add-category
-                                    +ActionButton('lpgallerycategory', 'editCategories').special-button2.add + Add Category
+                                    +ActionButton('lessonplangallery', 'lessonPlanTemplatesList', classId).special-button2.add + Import from new Item Gallery
                             +TextArea(name="content", placeholder="Assignment")= announcement.getContent()
                             if needStandardsBlock
                                 .add-standards-container

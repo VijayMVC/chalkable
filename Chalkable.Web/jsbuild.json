@@ -1,7 +1,11 @@
 {
     "version": "3.0",
 
-    "framework": "./app/ria",
+    "framework": "./app/bower/emp.ria-framework",
+
+    "libs": {
+        "ria": "~/app/bower/emp.ria-framework/"
+    },
 
     "options": {
 		"uglifyjs": {

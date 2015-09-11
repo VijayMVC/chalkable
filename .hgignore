@@ -10,8 +10,8 @@ syntax: glob
 **/*.orig
 packages/**
 **/bower/*
-Chalkable.Web/**/*.css
-Chalkable.Web/**/*.compiled.js
+Chalkable.Web/Content/*.css
+Chalkable.Web/app/*.compiled.js
 Chalkable.Web/app/highcharts/other/modules/no-data-to-display.src.js
 Chalkable.Web/app/highcharts/other/modules/no-data-to-display.js
 Chalkable.Web/app/highcharts/other/modules/map.src.js

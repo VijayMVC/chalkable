@@ -37,11 +37,20 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String, chlk.models.id.LpGalleryCategoryId]],
-            ria.async.Future, function searchLessonPlansTemplates(filter_, galleryCategoryId_) {
-                return this.get('LessonPlan/SearchLessonPlansTemplates.json', ArrayOf(chlk.models.announcement.LessonPlanViewData), {
-                    galleryCategoryId: this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, galleryCategoryId_),
-                    filter: filter_
+            [[
+                chlk.models.id.LpGalleryCategoryId,
+                String,
+                chlk.models.attachment.SortAttachmentType,
+                Number,
+                Number
+            ]],
+            ria.async.Future, function getLessonPlanTemplatesList(categoryType_, filter_, sortType_, start_, count_) {
+                return this.getPaginatedList('LessonPlan/LessonPlanTemplates.json', chlk.models.announcement.LessonPlanViewData, {
+                    start: start_ | 0,
+                    count: count_ | 12,
+                    filter: filter_,
+                    sortType: sortType_ && sortType_.valueOf(),
+                    categoryType: categoryType_ && categoryType_.valueOf()
                 });
             },
 

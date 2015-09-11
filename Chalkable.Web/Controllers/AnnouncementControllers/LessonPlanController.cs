@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.AnnouncementsViewData;
+using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
 {
@@ -20,10 +23,15 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult SearchLessonPlansTemplates(int? galleryCategoryId, int? classId, string filter)
+        public ActionResult LessonPlanTemplates(string filter, int? categoryType, int? sortType, int? start, int? count)
         {
-            var lessonPlans = SchoolLocator.LessonPlanService.GetLessonPlansTemplates(galleryCategoryId, filter, classId);
-            return Json(LessonPlanViewData.Create(lessonPlans));
+            var st = start ?? 0;
+            var cnt = count ?? 12;
+            var sort = sortType ?? 2; 
+            var lessonPlans = SchoolLocator.LessonPlanService.GetLessonPlansTemplates(categoryType, filter, null, (AttachmentSortTypeEnum)sort, st, cnt);
+            
+            return Json(lessonPlans.Transform(LessonPlanViewData.Create));
+
         }
         
         [AuthorizationFilter("Teacher")]
@@ -41,7 +49,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.LessonPlan, lessonPlanId, attributes);
             var res = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents);
 
-            if (res.LessonPlanData != null && res.LessonPlanData.GalleryCategoryRef.HasValue)
+            if (res.LessonPlanData?.GalleryCategoryRef != null)
             {
                 MasterLocator.UserTrackingService.SavedLessonPlanToGallery(Context.Login, title);
             }

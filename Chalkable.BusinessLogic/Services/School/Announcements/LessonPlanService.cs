@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AnnouncementDetails Create(int classId, DateTime? startDate, DateTime? endDate);
         AnnouncementDetails CreateFromTemplate(int lessonPlanTemplateId, int classId);
         AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content, DateTime? startDate, DateTime? endDate, bool visibleForStudent);
-        IList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId); 
+        PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count); 
         IList<string> GetLastFieldValues(int classId);
         bool Exists(string title, int? excludedLessonPlaId);
         bool ExistsInGallery(string title, int? exceludedLessonPlanId);
@@ -318,9 +318,29 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         
-        public IList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId)
+        public PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count)
         {
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(galleryCategoryId, title, classId));
+            var lessonPlans =
+                DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(galleryCategoryId, title, classId));
+
+            switch (sortType)
+            {
+                case AttachmentSortTypeEnum.NewestUploaded:
+                        lessonPlans = lessonPlans.OrderByDescending(x => x.Created).ToList();
+                    break;
+
+                case AttachmentSortTypeEnum.RecentlySent:
+                    lessonPlans = lessonPlans.OrderByDescending(x => x.Created).ToList();
+                    break;
+
+                case AttachmentSortTypeEnum.OldestUploaded:
+                    lessonPlans = lessonPlans.OrderBy(x => x.Created).ToList();
+                    break;
+            }
+
+            var totalCount = lessonPlans.Count;
+            var res = lessonPlans.Skip(start).Take(count).ToList();
+            return new PaginatedList<LessonPlan>(res, start / count, count, totalCount);
         }
         
         public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? galleryCategoryId)

@@ -431,7 +431,7 @@ namespace Chalkable.UserTracking
         {
             var properties = new Dictionary<string, object>();
             properties[DESCRIPTION] = description;
-            properties[CLASS] = classId.HasValue ? classId.Value.ToString(CultureInfo.InvariantCulture) : "";
+            properties[CLASS] = classId?.ToString(CultureInfo.InvariantCulture) ?? "";
             properties[STUDENT_ID] = studentId.ToString(CultureInfo.InvariantCulture);
             SendEvent(login, UserTrackingEvents.SetDiscipline, properties);
         }
