@@ -153,11 +153,7 @@
 
     @ChlkHelpers.LoginForm(Url)
 
-
-<script type="text/javascript">
-    var _ = window.location.href.toString().match(/https?:\/\/[^\/]+/);
-    var WEB_SITE_ROOT = _ + '@Url.Content("~/")';
-</script>
+    @ChlkHelpers.RenderSiteRoot(Url)
 
     <!-- build:js /app/index-layout.min.js -->
     <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
@@ -171,17 +167,7 @@
     <!-- endbuild -->
     
     @ChlkHelpers.MixPanel()    
-    @RenderSection("MixPanelTracking", false)
 
-@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
-{
-    <script type="text/javascript">
-    Raygun.init('@Settings.RaygunJsApiKey', { ignore3rdPartyErrors: true })
-        .saveIfOffline(true)
-        .withTags([location.origin])
-        .setVersion('@Chalkable.Web.Tools.CompilerHelper.Version')
-        .attach();
-    </script>
-}
+    @ChlkHelpers.RaygunInit()
 </body>
 </html>

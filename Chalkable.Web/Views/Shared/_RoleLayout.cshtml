@@ -13,7 +13,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
 <head>
     <title>@ViewBag.Title</title>
-    @ChlkHelpers.RenderPageMetadata()
     <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
     <link rel="icon" href="@Url.Content("~/favicon.ico")" />
     <!--Fonts-->
@@ -40,11 +39,8 @@
 
     <!-- Page specific CSS -->
     @RenderSection("Styles", false)
-    @if (!Chalkable.Web.Tools.CompilerHelper.IsDebug)
-    {
-        ChlkHelpers.GoogleAnalytics();
-        ChlkHelpers.Olark();
-    }
+
+    @ChlkHelpers.GoogleAnalytics();
     @ChlkHelpers.RenderSiteRoot(Url)
 
     @{Html.RenderPartial("Telemetry");}
@@ -145,7 +141,6 @@ else
             <div class="tooltip-triangle"></div>
         </div>
         <div class="alerts-pop-up popup-bubble"></div>
-        @RenderSection("MixPanelTracking", false)
         
 <script type="text/json" id="application-value" class="valuable-script">
     @Html.Raw(@ViewData[ViewConstants.DEFAULT_APPLICATION])
@@ -356,21 +351,9 @@ else
             })(roleAppScript);
         </script>
     }
+
     @ChlkHelpers.MixPanel() 
-    @RenderSection("BottomScripts", false)
 
-@if (Chalkable.Web.Tools.CompilerHelper.IsProduction) {
-    <script type="text/javascript">
-        Raygun.init('@Settings.RaygunJsApiKey', { ignore3rdPartyErrors: true })
-            .whitelistCrossOriginDomains(['@Chalkable.Web.Tools.CompilerHelper.ScriptsRootDomain'])
-            .saveIfOffline(true)
-            .withTags([location.origin, '@ViewData[ViewConstants.ROLE_NAME]', '@(isDemoSchool?"demo":isDeveloperSchool?"developer":"normal")'])
-            .setUser(districtId + ':' + currentChlkPerson.id, undefined, currentChlkPerson.email, currentChlkPerson.fullname, currentChlkPerson.firstname)
-            .setVersion('@Chalkable.Web.Tools.CompilerHelper.Version')
-            .attach();
-    </script>
-}
-
-
+    @ChlkHelpers.RaygunInit()    
 </body> 
 </html>
