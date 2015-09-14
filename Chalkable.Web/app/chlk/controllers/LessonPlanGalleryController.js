@@ -34,7 +34,8 @@ NAMESPACE('chlk.controllers', function () {
                 Number
             ]],
             function lessonPlanTemplatesListAction(classId, categoryType_, filter_, sortType_, start_, count_){
-                return this.getLessonPlanTemplates_(classId, categoryType_, filter_, sortType_, start_, count_);
+                var categoryType = categoryType_ || this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, null);
+                return this.getLessonPlanTemplates_(classId, categoryType, filter_, sortType_, start_, count_);
             },
 
             [chlk.controllers.SidebarButton('add-new')],
