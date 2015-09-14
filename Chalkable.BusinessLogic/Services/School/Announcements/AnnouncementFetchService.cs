@@ -72,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
                     if (Context.Role == CoreRoles.STUDENT_ROLE)
                         res.AddRange(ServiceLocator.AdminAnnouncementService.GetAdminAnnouncementsForFeed(complete, null,
-                            fromDate, toDate, start, count, ownedOnly: false).Announcements);
+                            fromDate, toDate, start, count, ownedOnly: false, sortType: sort).Announcements);
                 }
                 //get addtional feed items 
                 res.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(fromDate, toDate, null, classId, complete, true, start, count));
