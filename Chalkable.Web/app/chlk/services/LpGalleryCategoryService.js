@@ -36,7 +36,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[ArrayOf(chlk.models.announcement.CategoryViewData)]],
-            function cacheLessonPlanCategories_(categories){
+            function cacheLessonPlanCategories(categories){
                 this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORIES, categories);
             },
 
@@ -45,7 +45,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             function emptyLessonPlanCategoriesCache(){
-                this.cacheLessonPlanCategories_(null);
+                this.cacheLessonPlanCategories(null);
             }
     ]);
 });

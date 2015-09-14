@@ -1586,7 +1586,7 @@ NAMESPACE('chlk.controllers', function (){
             if (submitType == 'save'){
                 model.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
                 model.setApplications(this.getCachedAnnouncementApplications());
-                model.setCategories(this.getCachedLessonPlanCategories());
+                model.setCategories(this.lpGalleryCategoryService.getLessonPlanCategoriesSync());
                 model.setAnnouncementAttributes(this.getCachedAnnouncementAttributes());
                 var announcementForm =  chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(model);
                 return this.saveLessonPlanAction(model, announcementForm);
