@@ -25,7 +25,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
         +ActionForm('feed', 'getAnnouncements').wrapper.no-working
             input(type="hidden", name="start", value=(self.getStart() || 0))
             input(type="hidden", name="count", value=10)
-            input(type="hidden", name="importantOnly", value=self.importantOnly)
+            input(type="hidden", name="importantOnly", value=self.importantOnly.toString())
             input(type="hidden", name="sorttype", value=self.isLatest()).latest-earliest-input
             input(type="submit", name="submitType", value="sort")#sort-submit.x-hidden
             if isAdmin
