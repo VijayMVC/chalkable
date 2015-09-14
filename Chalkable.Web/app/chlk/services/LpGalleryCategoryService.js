@@ -36,7 +36,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[ArrayOf(chlk.models.announcement.CategoryViewData)]],
-            function cacheLessonPlanCategories(categories){
+            function cacheLessonPlanCategories_(categories){
                 this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORIES, categories);
             },
 
