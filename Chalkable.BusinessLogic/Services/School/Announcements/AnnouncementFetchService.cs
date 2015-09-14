@@ -72,10 +72,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
                     if (Context.Role == CoreRoles.STUDENT_ROLE)
                         res.AddRange(ServiceLocator.AdminAnnouncementService.GetAdminAnnouncementsForFeed(complete, null,
-                            fromDate, toDate, ownedOnly: false).Announcements);
+                            fromDate, toDate, start, count, ownedOnly: false).Announcements);
                 }
                 //get addtional feed items 
-                res.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(fromDate, toDate, null, classId, complete, true));
+                res.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(fromDate, toDate, null, classId, complete, true, start, count));
                 
             }
             //sort all items by expires date or start date
