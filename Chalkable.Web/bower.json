@@ -18,6 +18,7 @@
     "emp.ria-framework": "~0.1.17",
     "highcharts": "~4.1.8",
     "jQuery-Validation-Engine": "git://github.com/posabsolute/jQuery-Validation-Engine.git#~2.6.4",
+    "jQuery-menu-aim": "git://github.com/kamens/jQuery-menu-aim.git",
     "jcarousel": "~0.3.3",
     "jquery": "~2.1.4",
     "jquery-ui": "~1.11.4",
