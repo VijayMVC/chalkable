@@ -49,7 +49,15 @@ namespace Chalkable.Web.Controllers
                 return Json(new ChalkableException(error ?? ""));
             
             MasterLocator.UserTrackingService.LoggedIn(context.Login);
-            return Json(new { Role = context.Role.LoweredName });            
+
+            if (Request.IsAjaxRequest())
+                return Json(new { Role = context.Role.LoweredName });
+
+            var role = context.Role.LoweredName;
+            if (role == "admingrade" || role == "adminview" || role == "adminedit")
+                role = "admin";
+
+            return Redirect("/Home/" + role + ".aspx");
         }
 
         [AuthorizationFilter("Teacher")]
