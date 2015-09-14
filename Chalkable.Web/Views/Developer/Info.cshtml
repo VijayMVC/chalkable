@@ -27,10 +27,9 @@
 			</div>
 			<nav>
 				<ul class="mainNav">
-					<li><a href="#" class='lg'>Login</a></li>
+					<li><a href="@Url.Content("~/")" class='lg'>Login</a></li>
 				</ul>
 			</nav>
-			<a href="#" class="listMenu"></a> <!-- clicked -->
 		</div>
 	</header>
 
@@ -120,9 +119,7 @@
 				<p>&copy; @DateTime.Now.Year STI</p>
 			</div>
 		</div>
-	</footer>
-
-	@ChlkHelpers.LoginForm(Url)
+	</footer>    
 
 <div id="dev-signup-form">
     <div id="dev-signup-makeLogin" class="loginContainer">

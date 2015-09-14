@@ -71,13 +71,6 @@ jQuery(document).ready(function() {
         $('html,body').animate({scrollTop:$(this.hash).offset().top}, 600);
     });
 
-    //show current page
-    var title =	$(document).attr('title');
-    olark('api.chat.onBeginConversation', function(){
-        olark('api.chat.sendNotificationToOperator', {body: "viewing " + title})
-    });
-    olark.identify('7960-903-10-2178');/*]]>{/literal}*/
-
 //remove space in email input
     $(function(){
         var txt = $("input#UserName");

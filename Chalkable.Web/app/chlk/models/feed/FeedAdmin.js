@@ -33,7 +33,7 @@ NAMESPACE('chlk.models.feed', function () {
                 BASE(gradeLevels_);
                 if(items_)
                     this.setItems(items_);
-                if(importantOnly_)
+                if(importantOnly_ !== undefined)
                     this.setImportantOnly(importantOnly_);
                 if(newNotificationCount_)
                     this.setNewNotificationCount(newNotificationCount_);

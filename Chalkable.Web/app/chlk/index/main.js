@@ -1,32 +1,11 @@
 $(document).ready(function(){
-	var $loginButton=$('.mainNav a.lg'),
-		$devSignupButton = $('#dev-signup-button'),
-		$loginPanel = $('#login'),
+	var $devSignupButton = $('#dev-signup-button'),
         $devSignupForm = $('#dev-signup-form'),
         $devSignupFormCloselogin = $devSignupForm.find('span.close'),
 
-		$closelogin = $loginPanel.find('span.close'),
 		$mobileMenuIcon = $('.wrap a.listMenu'),
 		$menuNav = $('.wrap nav'),
-		$feature = $menuNav.find('a[data-type=feature]'),
-		$resetPasswordAnc = $('#makeLogin .forgotPassword a'),
-		$makeLogin = $('#makeLogin'),
-		$BackToLogInAnc = $('#resetPassword .forgotPassword a'),
-		$resetPassword = $('#resetPassword');
-	
-	//open login page after a click event on the login button
-	$loginButton.on('click', function(e){
-		e.preventDefault();
-		if($(window).width()>1024){
-			$loginPanel.fadeIn();
-		}else{
-			$loginPanel.fadeIn(100);
-			if($mobileMenuIcon.is(':visible')){
-				$menuNav.removeClass('openNavigation');
-				$mobileMenuIcon.removeClass('clicked');	
-			}
-		}	
-	});
+		$feature = $menuNav.find('a[data-type=feature]');
 
     //open dev sign up page after a click event on the login button
     $devSignupButton.on('click', function(e){
@@ -42,22 +21,10 @@ $(document).ready(function(){
         }
     });
 
-	//close login page after a click event on the close button
-	$closelogin.on('click', function(){
-		closePopUp();
-	});
-
     //close dev signup page after a click event on the close button
     $devSignupFormCloselogin.on('click', function(){
         closeDevPopUp();
     });
-
-	//close login page if you click somewhere outside the login panel
-	$loginPanel.on('click', function(event){
-		if($(event.target).is('div#login')){
-			closePopUp();
-		}
-	});
 
     //close dev signup page if you click somewhere outside the login panel
     $devSignupForm.on('click', function(event){
@@ -66,40 +33,9 @@ $(document).ready(function(){
         }
     });
 
-	function closePopUp(){
-		if($(window).width()>1024){
-			$loginPanel.fadeOut(function(){
-				$resetPassword.addClass('hide');
-    			$makeLogin.removeClass('hide');
-			});
-		}else{	
-			$loginPanel.fadeOut(100, function(){
-				$resetPassword.addClass('hide');
-    			$makeLogin.removeClass('hide');
-			});
-		}
-	}
-
     function closeDevPopUp(){
-        if($(window).width() > 1024){
-            $devSignupForm.fadeOut(function(){
-                $resetPassword.addClass('hide');
-                $makeLogin.removeClass('hide');
-            });
-        }else{
-            $devSignupForm.fadeOut(100, function(){
-                $resetPassword.addClass('hide');
-                $makeLogin.removeClass('hide');
-            });
-        }
+        $devSignupForm.fadeOut();
     }
-
-	//mobile menu behaviour 
-	$mobileMenuIcon.on('click', function(e){
-		e.preventDefault();
-		$menuNav.toggleClass('openNavigation');
-		$mobileMenuIcon.toggleClass('clicked');	
-	});
 
 	//smooth scrolling to content
 	$feature.on('click', function(e){
@@ -112,22 +48,8 @@ $(document).ready(function(){
         );
         if($mobileMenuIcon.is(':visible')){
 				$menuNav.removeClass('openNavigation');
-				$mobileMenuIcon.removeClass('clicked');	
+				$mobileMenuIcon.removeClass('clicked');
 		}
-    });
-
-	//switch to reset password panel if click on the reset password link
-    $resetPasswordAnc.on('click', function(e){
-    	e.preventDefault();
-    	$makeLogin.addClass('hide');
-    	$resetPassword.removeClass('hide');
-    });
-
-	//switch to login panel if click on the rback to login link
-    $BackToLogInAnc.on('click', function(e){
-    	e.preventDefault();
-    	$resetPassword.addClass('hide');
-    	$makeLogin.removeClass('hide');
     });
 
      /*--------------------------*

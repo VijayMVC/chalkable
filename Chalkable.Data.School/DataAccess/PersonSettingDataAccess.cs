@@ -36,10 +36,14 @@ namespace Chalkable.Data.School.DataAccess
 
         public void AddPersonSettings(int personId, IDictionary<string, object> ps)
         {
-            var personSettings =
-                ps.Select(
-                    pair => new PersonSetting() {PersonRef = personId, Key = pair.Key, Value = pair.Value.ToString()});
-            Insert(personSettings.ToList());
+            List<PersonSetting> personSettings = new List<PersonSetting>();
+            foreach (var pair in ps)
+            {
+                if(pair.Value is DateTime)
+                    personSettings.Add(new PersonSetting() {Key = pair.Key, PersonRef = personId, Value = ((DateTime) pair.Value).ToString("dd/MM/yyyy") });
+                else personSettings.Add(new PersonSetting() { Key = pair.Key, PersonRef = personId, Value = pair.Value.ToString() });
+            }
+            Insert(personSettings);
         }
     }
 }

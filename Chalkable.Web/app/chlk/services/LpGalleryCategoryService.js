@@ -45,7 +45,7 @@ NAMESPACE('chlk.services', function () {
             },
 
             function emptyLessonPlanCategoriesCache(){
-                this.cacheLessonPlanCategories_(null);
+                this.cacheLessonPlanCategories(null);
             }
     ]);
 });

@@ -193,7 +193,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(model.getEndDate().getDate() > gp.getEndDate().getDate())
                         model.setEndDate(gp.getEndDate());
                     model.setTopData(classBarItemsMdl);
-                    model.setImportantOnly(importantOnly_);
+                    importantOnly_ !== undefined && model.setImportantOnly(importantOnly_);
 
                     return model;
                 }, this);
@@ -211,7 +211,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     var glsBarItemsMdl = new chlk.models.grading.GradeLevelsForTopBar(null, gradeLevels_);
                     model.setTopData(glsBarItemsMdl);
-                    model.setImportantOnly(importantOnly_);
+                    importantOnly_ !== undefined && model.setImportantOnly(importantOnly_);
 
                     return model;
                 }, this);

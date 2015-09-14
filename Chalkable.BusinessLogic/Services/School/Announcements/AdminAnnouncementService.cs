@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -333,7 +334,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                         {PersonSetting.FEED_START_DATE, Context.SchoolYearStartDate ?? DateTime.MinValue}
                     });
             }
-            else fromDate = DateTime.Parse(startDate.Value);
+            else fromDate = DateTime.ParseExact(startDate.Value, "dd/mm/yyyy", CultureInfo.InvariantCulture);
             if (endDate == null)
             {
                 toDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
@@ -343,7 +344,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                         {PersonSetting.FEED_END_DATE, Context.SchoolYearEndDate ?? toDate}
                     });
             }
-            else toDate = DateTime.Parse(endDate.Value);
+            else toDate = DateTime.ParseExact(endDate.Value, "dd/mm/yyyy", CultureInfo.InvariantCulture);
             if (sort == null)
             {
                 sortType = false;

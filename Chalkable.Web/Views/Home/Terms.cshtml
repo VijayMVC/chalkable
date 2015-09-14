@@ -6,16 +6,8 @@
 	<meta name="description" content="Web Apps for your school">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- build:css /Content/home-terms.min.css -->
     <link build:href="/Content/index.css" href="@Url.StaticContent("/Content/index.css")" rel="stylesheet" media="screen, projection" type="text/css" />
-    <link build:href="/Content/validation/template.css" href="@Url.StaticContent("/Content/validation/template.css")" rel="stylesheet" type="text/css"/>
-    <!-- endbuild -->
 
-    <style>
-        .formErrorContent {
-            width: 150px;
-        }
-    </style>
 </head>
 <body>
 <header role="banner">
@@ -26,10 +18,9 @@
          </div>
         <nav>
             <ul class="mainNav">
-                <li><a href="#" class='lg'>Login</a></li>
+                <li><a href="@Url.Content("~/")" class='lg'>Login</a></li>
              </ul>
         </nav>
-        <a href="#" class="listMenu"></a> <!-- clicked -->
     </div>
 </header>
 
@@ -86,64 +77,13 @@
 
 	<footer>
 		<div class="wrap">
-			<div class="footerTop">
-				<ul>
-					<li>
-						<ul class="links">
-							<li><a target="_blank" href="http://blog.chalkable.com/">Blog</a></li>
-							<li><a target="_blank" href="http://chalkable.uservoice.com/">Feedback</a></li>
-							<li><a href="mailto:info@chalkable.com">Email us</a></li>
-							<li><a href="mailto:jobs@chalkable.com">Jobs</a></li>
-						</ul>
-
-					<li>
-						<ul class="address">
-							<li>Chalkable</li>
-							<li>500 7th Ave.</li>
-							<li>17th Floor</li>
-							<li>New York, NY 10018</li>
-						</ul>
-
-					<li>
-						<ul class="socials">
-							<li>
-								<a target="_blank" href="https://twitter.com/chalkable">Follow us</a>
-							</li>
-
-							<li>
-								<a target="_blank" href="https://www.facebook.com/chalkable">Like us</a>
-							</li>
-
-							<li>(800) 844-0884</li>
-						</ul>
-
-					<li>
-						<ul>
-							<li><a href="http://cl.ly/361V222N3T213e1m1J0Z">Press</a></li>
-							<li><a href="@Url.Content("~/Home/Terms")">Terms</a></li>
-						</ul>
-				</ul>
-			</div> <!-- /footerTop -->
-
 			<div class="footerBottom">
 				<p>&copy; @DateTime.Now.Year STI</p>
 			</div>
 		</div>
 	</footer>
 
-	@ChlkHelpers.LoginForm(Url)
-
     @ChlkHelpers.RenderSiteRoot(Url)
-
-    <!-- build:js /app/home-terms.min.js -->
-    <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
-    <script build:src="/app/bower/jquery-ui/jquery-ui.js" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
-    <script build:src="/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
-    <script build:src="/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js")"></script>
-    <script build:src="/app/chlk/index/main.js" src="@Url.StaticContent("/app/chlk/index/main.js")"></script>
-    <script build:src="/app/chlk/index/sign_in_forms.js" src="@Url.StaticContent("/app/chlk/index/sign_in_forms.js")"></script>
-    <!-- endbuild -->
-
     @ChlkHelpers.GoogleAnalytics()
     @ChlkHelpers.MixPanel()
 </body>

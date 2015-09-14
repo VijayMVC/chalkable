@@ -42,7 +42,11 @@ namespace Chalkable.BusinessLogic.Services.School
             var ps = GetSettingsForPerson(personId, keys);
 
             foreach (var set in ps)
-                set.Value = settings[set.Key].ToString();
+            {
+                if(settings[set.Key] is DateTime)
+                    set.Value =((DateTime) settings[set.Key]).ToString("dd/MM/yyyy");
+                else set.Value = settings[set.Key].ToString();
+            }
             DoUpdate(u => new PersonSettingDataAccess(u).Update(ps));
 
             settings = settings.Where(s => ps.All(x => x.Key != s.Key)).ToDictionary(kvp => kvp.Key, kvp => kvp.Value);
