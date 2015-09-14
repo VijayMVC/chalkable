@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AdminAnnouncement GetAdminAnnouncementById(int adminAnnouncementId);
         bool Exists(string title, int? excludedLessonPlaId);
 
-        IList<AnnouncementComplex> GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int start = 0, int count = int.MaxValue, bool ownedOnly = true);
+        FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int start = 0, int count = int.MaxValue, bool ownedOnly = true, bool? sortType = null);
         IList<AdminAnnouncement> GetAdminAnnouncements(IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? studentId);
         IList<AdminAnnouncement> GetAdminAnnouncementsByFilter(string filter); 
         AdminAnnouncement GetLastDraft();
@@ -253,21 +253,107 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
 
-        public IList<AnnouncementComplex> GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int start = 0, int count = int.MaxValue, bool ownedOnly = true)
+        public FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int start = 0, int count = int.MaxValue, bool ownedOnly = true, bool? sortType = null)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
-                {
-                    Complete = complete,
-                    FromDate = fromDate,
-                    ToDate = toDate,
-                    Start = start,
-                    Count = count,
-                    PersonId = Context.PersonId,
-                    RoleId = Context.RoleId,
-                    GradeLevelsIds = gradeLevels,
-                    OwnedOnly = ownedOnly
-                })).Announcements;
+
+            DateTime startDate, endDate;
+            bool sort;
+            if (fromDate == null)
+                GetAdminSettingsForFeed(out startDate, out endDate, out sort);
+            else
+            {
+                startDate = fromDate.Value;
+                endDate = toDate.Value;
+                sort = sortType.Value;
+                ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value,
+                    new Dictionary<string, object>()
+                    {
+                        {PersonSetting.FEED_START_DATE, fromDate},
+                        {PersonSetting.FEED_END_DATE, toDate},
+                        {PersonSetting.FEED_SORTING, sort }
+                    });
+            }
+
+            var fc = new FeedComplex()
+            {
+                FromDate = startDate,
+                ToDate = endDate,
+                SortType = sort
+            };
+            if (!sort)
+                fc.Announcements =
+                    DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
+                    {
+                        Complete = complete,
+                        FromDate = startDate,
+                        ToDate = endDate,
+                        Start = start,
+                        Count = count,
+                        PersonId = Context.PersonId,
+                        RoleId = Context.RoleId,
+                        GradeLevelsIds = gradeLevels,
+                        OwnedOnly = ownedOnly
+                    })).Announcements.OrderBy(x => x.AdminAnnouncementData.Expires).ToList();
+            else
+                fc.Announcements =
+                    DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
+                    {
+                        Complete = complete,
+                        FromDate = startDate,
+                        ToDate = endDate,
+                        Start = start,
+                        Count = count,
+                        PersonId = Context.PersonId,
+                        RoleId = Context.RoleId,
+                        GradeLevelsIds = gradeLevels,
+                        OwnedOnly = ownedOnly
+                    })).Announcements.OrderByDescending(x => x.AdminAnnouncementData.Expires).ToList();
+            return fc;
+        }
+
+        private void GetAdminSettingsForFeed(out DateTime fromDate, out DateTime toDate, out bool sortType)
+        {
+            var query = new List<string>
+            {
+                PersonSetting.FEED_START_DATE,
+                PersonSetting.FEED_END_DATE,
+                PersonSetting.FEED_SORTING
+            };
+            var settings = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, query);
+            var startDate = settings.FirstOrDefault(x => x.Key == PersonSetting.FEED_START_DATE);
+            var endDate = settings.FirstOrDefault(x => x.Key == PersonSetting.FEED_END_DATE);
+            var sort = settings.FirstOrDefault(x => x.Key == PersonSetting.FEED_SORTING);
+            if (startDate == null)
+            {
+                fromDate = Context.SchoolYearStartDate ?? DateTime.MinValue;
+                ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value,
+                    new Dictionary<string, object>()
+                    {
+                        {PersonSetting.FEED_START_DATE, Context.SchoolYearStartDate ?? DateTime.MinValue}
+                    });
+            }
+            else fromDate = DateTime.Parse(startDate.Value);
+            if (endDate == null)
+            {
+                toDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
+                ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value,
+                    new Dictionary<string, object>()
+                    {
+                        {PersonSetting.FEED_END_DATE, Context.SchoolYearEndDate ?? toDate}
+                    });
+            }
+            else toDate = DateTime.Parse(endDate.Value);
+            if (sort == null)
+            {
+                sortType = false;
+                ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value,
+                    new Dictionary<string, object>()
+                    {
+                        {PersonSetting.FEED_SORTING, sortType}
+                    });
+            }
+            else sortType = bool.Parse(sort.Value);
         }
 
         public IList<AdminAnnouncement> GetAdminAnnouncements(IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? studentId)

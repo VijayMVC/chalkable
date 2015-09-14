@@ -43,22 +43,32 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[Number, chlk.models.id.ClassId, Boolean]],
-            ria.async.Future, function getAnnouncements(start_, classId_, importantOnly_) {
-                return this.get('Feed/List.json', ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), {
+            [[Number, chlk.models.id.ClassId, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Boolean]],
+            ria.async.Future, function getAnnouncements(start_, classId_, importantOnly_, startDate_, endDate_, lessonPlansOnly_, latest_) {
+                return this.get('Feed/List.json', chlk.models.feed.Feed, {
                     start: start_ || 0,
                     classId: classId_ ? classId_.valueOf() : null,
-                    complete: importantOnly_ ? false : null
+                    complete: importantOnly_ ? false : null,
+                    startDate: startDate_ && startDate_.toStandardFormat(),
+                    endDate: endDate_ && endDate_.toStandardFormat(),
+                    lessonPlansOnly: lessonPlansOnly_,
+                    sortType: latest_,
+                    count: 10
                 });
 
             },
 
-            [[Number, String, Boolean]],
-            ria.async.Future, function getAnnouncementsForAdmin(start_, gradeLevels_, importantOnly_) {
-                return this.get('Feed/DistrictAdminFeed.json', ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), {
+            [[Number, String, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Boolean]],
+            ria.async.Future, function getAnnouncementsForAdmin(start_, gradeLevels_, importantOnly_, startDate_, endDate_, lessonPlansOnly_, latest_) {
+                return this.get('Feed/DistrictAdminFeed.json', chlk.models.feed.FeedAdmin, {
                     gradeLevelIds : gradeLevels_,
                     start: start_ || 0,
-                    complete: importantOnly_ ? false : null
+                    complete: importantOnly_ ? false : null,
+                    startDate: startDate_ && startDate_.toStandardFormat(),
+                    endDate: endDate_ && endDate_.toStandardFormat(),
+                    lessonPlansOnly: lessonPlansOnly_,
+                    sortType: latest_,
+                    count: 10
                 });
 
             },

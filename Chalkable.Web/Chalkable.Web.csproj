@@ -342,6 +342,7 @@
     <Compile Include="Models\AttendancesViewData\StudentPeriodAttendanceViewData.cs" />
     <Compile Include="Models\AutoGradeViewData.cs" />
     <Compile Include="Models\CC_StandardCategoryViewData.cs" />
+    <Compile Include="Models\FeedComplexViewData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeInputData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />
@@ -584,7 +585,6 @@
     <Content Include="fakeData\studentDisciplinesSummary.json" />
     <Content Include="fakeData\bannedAppData.json" />
     <Content Include="fakeData\unbannedAppData.json" />
-    <Content Include="Views\Shared\_IndexLayout.cshtml" />
     <Content Include="fakeData\appGeneralReviews.json" />
     <Content Include="fakeData\appAnalytics.json" />
     <Content Include="fakeData\creditCardData.json" />

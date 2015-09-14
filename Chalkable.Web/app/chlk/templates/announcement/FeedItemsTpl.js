@@ -8,6 +8,8 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/FeedItems.jade')],
         [ria.templates.ModelBind(chlk.models.feed.FeedItems)],
         'FeedItemsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'items'
 
         ]);
 });

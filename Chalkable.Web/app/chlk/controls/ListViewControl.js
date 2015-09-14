@@ -271,6 +271,8 @@ NAMESPACE('chlk.controls', function () {
                         }, this);
                 }else{
                     form.find('[name=start]').setValue(configs.currentStart);
+                    if(configs.pageSize && parseInt(configs.currentStart, 10) - parseInt(form.find('[name=start]').getValue(), 10) < configs.pageSize)
+                        this.clearInterval_(grid);
                     if(loadAll_)
                         grid.find('.row').remove();
                     jQuery(grid.valueOf()).parents('form').find('.scroll-start-button').click();

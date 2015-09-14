@@ -114,6 +114,7 @@
     <Compile Include="DataAccess\LPGalleryCategoryDataAccess.cs" />
     <Compile Include="DataAccess\NotificationDataAccess.cs" />
     <Compile Include="DataAccess\DbMaintenanceDataAccess.cs" />
+    <Compile Include="DataAccess\PersonSettingDataAccess.cs" />
     <Compile Include="DataAccess\ScheduleDataAccess.cs" />
     <Compile Include="DataAccess\ScheduledTimeSlotVariationDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
@@ -171,6 +172,7 @@
     <Compile Include="Model\CourseType.cs" />
     <Compile Include="Model\Date.cs" />
     <Compile Include="Model\LPGalleryCategory.cs" />
+    <Compile Include="Model\PersonSetting.cs" />
     <Compile Include="Model\SystemSetting.cs" />
     <Compile Include="Model\GradedItem.cs" />
     <Compile Include="Model\GradingComment.cs" />
