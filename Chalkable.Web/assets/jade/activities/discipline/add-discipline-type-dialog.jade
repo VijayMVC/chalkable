@@ -1,0 +1,16 @@
+.dialog.default-add-dialog.gray
+    .x-window-header
+        span Add Discipline Type
+    .x-window-body
+        .general-info
+            +ActionForm('disciplinetype', 'save')
+                +Hidden("id", self.id)
+                .x-form-field
+                    label Name:
+                    input(type="text",name="name", value=self.name)
+                .x-form-field
+                    label Score:
+                    input(type="text",name="score", value=self.score)
+                .form-btn-conteiner
+                    +Button()(type="submit").special-button.blue-button.submit-btn Submit
+                    +Button.special-button.red-button.close Cancel
