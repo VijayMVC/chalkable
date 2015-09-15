@@ -23,14 +23,15 @@
                             .chlk-grid-container
                                 +RenderWith(self.getModel(), chlk.templates.reports.WorksheetReportGridTpl)
                     TR
-                        TD(colspan="2").item-2.blank-columns
+                        TD(colspan="3").item-1.blank-columns
                             h3=Msg.Blank_columns
                             +LabeledCheckbox('', 'title1', false)(withInput = true, placeholder = Msg.Insert_title)
                             +LabeledCheckbox('', 'title4', false)(withInput = true, placeholder = Msg.Insert_title)
                             +LabeledCheckbox('', 'title2', false)(withInput = true, placeholder = Msg.Insert_title)
                             +LabeledCheckbox('', 'title5', false)(withInput = true, placeholder = Msg.Insert_title)
                             +LabeledCheckbox('', 'title3', false)(withInput = true, placeholder = Msg.Insert_title)
-                        TD.item-2.blank-columns
+                    TR
+                        TD(colspan="3").item-1.blank-columns
                             h3=Msg.Include
                             +LabeledCheckbox(Msg.Score(true), 'printScores', false)
                             +LabeledCheckbox(Msg.Letter_grade, 'printLetterGrade', false)
