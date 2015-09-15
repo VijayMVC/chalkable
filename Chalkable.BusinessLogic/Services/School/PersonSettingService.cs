@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Chalkable.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.DataAccess;
@@ -44,7 +45,7 @@ namespace Chalkable.BusinessLogic.Services.School
             foreach (var set in ps)
             {
                 if(settings[set.Key] is DateTime)
-                    set.Value =((DateTime) settings[set.Key]).ToString("dd/MM/yyyy");
+                    set.Value =((DateTime) settings[set.Key]).ToString(Constants.DATE_FORMAT);
                 else set.Value = settings[set.Key].ToString();
             }
             DoUpdate(u => new PersonSettingDataAccess(u).Update(ps));

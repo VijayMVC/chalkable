@@ -127,7 +127,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                         {PersonSetting.FEED_START_DATE, Context.SchoolYearStartDate ?? DateTime.MinValue}
                     });
             }
-            else fromDate = DateTime.ParseExact(startDate.Value, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            else fromDate = DateTime.ParseExact(startDate.Value, Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
             if (endDate == null)
             {
                 toDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
@@ -137,7 +137,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                         {PersonSetting.FEED_END_DATE, Context.SchoolYearEndDate ?? toDate}
                     });
             }
-            else toDate = DateTime.ParseExact(endDate.Value, "dd/MM/yyyy", CultureInfo.InvariantCulture);
+            else toDate = DateTime.ParseExact(endDate.Value, Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
             if (lpOnly == null)
             {
                 lessonPlansOnly = false;

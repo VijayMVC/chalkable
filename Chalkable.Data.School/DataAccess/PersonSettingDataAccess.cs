@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -40,7 +41,7 @@ namespace Chalkable.Data.School.DataAccess
             foreach (var pair in ps)
             {
                 if(pair.Value is DateTime)
-                    personSettings.Add(new PersonSetting() {Key = pair.Key, PersonRef = personId, Value = ((DateTime) pair.Value).ToString("dd/MM/yyyy") });
+                    personSettings.Add(new PersonSetting() {Key = pair.Key, PersonRef = personId, Value = ((DateTime) pair.Value).ToString(Constants.DATE_FORMAT) });
                 else personSettings.Add(new PersonSetting() { Key = pair.Key, PersonRef = personId, Value = pair.Value.ToString() });
             }
             Insert(personSettings);
