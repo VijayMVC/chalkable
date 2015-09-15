@@ -1,0 +1,22 @@
+.discipline-types
+    .action-bar.not-transparent.buttons
+        .container.panel-bg
+            .left
+                +ActionLink('disciplinetype', 'add')#new-message-link
+                    span Add Discipline Type
+
+    +Grid('disciplinetype', 'list', self, [true, self.pageSize]).not-transparent
+        +GridHead()
+            .th Name
+            .th Score
+            .th
+        +GridBody()
+            each item in self.items
+                +GridRow()
+                    .td= item.getName()
+                    .td= item.getScore()
+                    .td.action-links
+                        +ActionLink('disciplinetype', 'update', item.getId()).view
+                        +ActionLink('disciplinetype', 'delete', item.getId()).remove
+
+
