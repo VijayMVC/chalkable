@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -37,14 +38,14 @@ namespace Chalkable.Data.School.DataAccess
 
         public void AddPersonSettings(int personId, IDictionary<string, object> ps)
         {
-            List<PersonSetting> personSettings = new List<PersonSetting>();
-            foreach (var pair in ps)
+            Insert(ps.Select(pair => new PersonSetting()
             {
-                if(pair.Value is DateTime)
-                    personSettings.Add(new PersonSetting() {Key = pair.Key, PersonRef = personId, Value = ((DateTime) pair.Value).ToString(Constants.DATE_FORMAT) });
-                else personSettings.Add(new PersonSetting() { Key = pair.Key, PersonRef = personId, Value = pair.Value.ToString() });
-            }
-            Insert(personSettings);
+                Key = pair.Key,
+                PersonRef = personId,
+                Value = (pair.Value as DateTime?)?
+                    .ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture) 
+                    ?? pair.Value.ToString()
+            }).ToList());
         }
     }
 }
