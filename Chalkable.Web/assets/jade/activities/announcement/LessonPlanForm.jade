@@ -13,8 +13,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
 -var classId = announcement && lessonPlan.getClassId() ? lessonPlan.getClassId().valueOf() : null
 -var state = announcement && announcement.getState().valueOf()
 -var types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
--var userRole = self.getUserRole();
--console.log(self.getClassScheduleDateRanges())
+-var userRole = self.getUserRole()
 
 .announcement-form.loader-container
     if announcement && lessonPlan.getClassId()
