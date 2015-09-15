@@ -72,6 +72,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     if (start > 0 && classAnns.Count == 0)
                         return res;
 
+                    //Change data range for other feed items
+                    if (start > 0 && classAnns.Count > 0)
+                        fromDate = classAnns.Min(x => x.ClassAnnouncementData.Expires);
+
+                    if (classAnns.Count > count)
+                        toDate = classAnns.Max(x => x.ClassAnnouncementData.Expires);
+
                     //remove (count + 1) - item 
                     if (classAnns.Count > count)
                         classAnns.RemoveAt(classAnns.Count - 1);
@@ -80,10 +87,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
                     if (Context.Role == CoreRoles.STUDENT_ROLE)
                         anns.AddRange(ServiceLocator.AdminAnnouncementService.GetAdminAnnouncementsForFeed(complete, null,
-                            fromDate, toDate, start, count, ownedOnly: false, sortType: sort).Announcements);
+                            fromDate, toDate, ownedOnly: false, sortType: sort).Announcements);
+                    anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(fromDate, toDate, null, classId, complete, true));
                 }
-                //get addtional feed items 
-                anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(fromDate, toDate, null, classId, complete, true, start, count));
+                else
+                    anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(fromDate, toDate, null, classId, complete, true, start, count));
                 res.Announcements = anns;
             }
             //sort all items by expires date or start date
