@@ -8,7 +8,6 @@ NAMESPACE('chlk.models.announcement', function () {
     CLASS(
         'LessonPlanGalleryPostData', [
 
-            [ria.serialize.SerializeProperty('classid')],
             chlk.models.id.ClassId, 'classId',
 
             [ria.serialize.SerializeProperty('lpGallerySortType')],
