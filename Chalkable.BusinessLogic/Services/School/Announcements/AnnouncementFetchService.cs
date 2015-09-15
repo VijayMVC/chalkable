@@ -52,55 +52,56 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             if (BaseSecurity.IsDistrictAdmin(Context))
                 return ServiceLocator.AdminAnnouncementService.GetAdminAnnouncementsForFeed(complete, null, fromDate, toDate, start, count, sort);
-
-            var res = new List<AnnouncementComplex>();
+            
+            var res = new FeedComplex
+            {
+                ToDate = toDate,
+                FromDate = fromDate,
+                LessonPlansOnly = onlyLessonPlans,
+                SortType = sort,
+                Announcements = new List<AnnouncementComplex>()
+            };
             if (BaseSecurity.IsTeacher(Context) || Context.Role == CoreRoles.STUDENT_ROLE)
             {
+                var anns = new List<AnnouncementComplex>();
                 if (!onlyLessonPlans)
                 {
                     var classAnns = ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(fromDate, toDate,
                         classId, complete, true, null, start, count + 1);
 
                     if (start > 0 && classAnns.Count == 0)
-                        return new FeedComplex();
+                        return res;
 
                     //remove (count + 1) - item 
                     if (classAnns.Count > count)
                         classAnns.RemoveAt(classAnns.Count - 1);
 
-                    res.AddRange(classAnns);
+                    anns.AddRange(classAnns);
 
                     if (Context.Role == CoreRoles.STUDENT_ROLE)
-                        res.AddRange(ServiceLocator.AdminAnnouncementService.GetAdminAnnouncementsForFeed(complete, null,
+                        anns.AddRange(ServiceLocator.AdminAnnouncementService.GetAdminAnnouncementsForFeed(complete, null,
                             fromDate, toDate, start, count, ownedOnly: false, sortType: sort).Announcements);
                 }
                 //get addtional feed items 
-                res.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(fromDate, toDate, null, classId, complete, true, start, count));
-                
+                anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(fromDate, toDate, null, classId, complete, true, start, count));
+                res.Announcements = anns;
             }
             //sort all items by expires date or start date
-            var fc = new FeedComplex
-            {
-                ToDate = toDate,
-                FromDate = fromDate,
-                LessonPlansOnly = onlyLessonPlans,
-                SortType = sort,
-            };
             if (!sort)
-                fc.Announcements = res.OrderBy(x =>
+                res.Announcements = res.Announcements.OrderBy(x =>
                 {
                     if (x.AdminAnnouncementData != null) return x.AdminAnnouncementData.Expires;
                     if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
                     return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
                 }).ToList();
             else
-                fc.Announcements = res.OrderByDescending(x =>
+                res.Announcements = res.Announcements.OrderByDescending(x =>
                 {
                     if (x.AdminAnnouncementData != null) return x.AdminAnnouncementData.Expires;
                     if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
                     return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
                 }).ToList();
-            return fc;
+            return res;
         }
 
         private void GetSettingsForFeed(out DateTime fromDate, out DateTime toDate, out bool lessonPlansOnly, out bool sortType)
