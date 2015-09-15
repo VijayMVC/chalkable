@@ -138,7 +138,7 @@ NAMESPACE('chlk.controllers', function (){
                     }, this);
 
             if(model.getSubmitType() == 'sort')
-                return this.Redirect('feed', 'list', [model.getClassId(), null, true, 0, model.getStartDate(), model.getEndDate(), model.isLessonPlansOnly(), model.isLatest()]);
+                return this.Redirect('feed', 'list', [model.getClassId(), null, model.isImportantOnly(), 0, model.getStartDate(), model.getEndDate(), model.isLessonPlansOnly(), model.isLatest()]);
 
             var result = this.announcementService
                 .getAnnouncements(model.getStart(), model.getClassId(), model.isImportantOnly(), model.getStartDate(), model.getEndDate(), model.isLessonPlansOnly(), model.isLatest())
