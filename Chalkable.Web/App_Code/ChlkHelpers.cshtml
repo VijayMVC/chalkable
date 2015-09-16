@@ -72,8 +72,13 @@
     }
 }
 
-@helper RenderChlkCopyrightYear(){
-    <footer>
-        &copy; @DateTime.Now.Year Chalkable. Revision: @CompilerHelper.Version <br/>
-    </footer>
+@helper RenderChlkCopyrightYear()
+{
+    <text>COPYRIGHT &copy; @DateTime.Now.Year Chalkable</text>
+}
+
+@helper RenderChlkCopyrightYearAndVersion(){
+    <text>
+        @RenderChlkCopyrightYear(). Build: @CompilerHelper.Version <br/>
+    </text>
 }    
