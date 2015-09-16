@@ -26,7 +26,6 @@ mixin Glue_()
     -var gradeViewApps = self.getGradeViewApps()
     -var grade = self.getGrade()
     -var itemWithExpiresDate = classAnnouncement || adminAnnouncement
-    -var isDropped = self.getStudentAnnouncements().getItems()[0].isDropped()
     .autocomplete-list.announcement-view
     if studentAnnouncementsInfo
         studentAnnouncements = studentAnnouncementsInfo.getItems()
@@ -48,6 +47,7 @@ mixin Glue_()
         .details-container.silver-panel
 
             if self.getUserRole().isStudent() && ( (self.isStudentGraded() && self.displayStudentGradeValue()) || self.getComment() || isDropped )
+                -var isDropped = self.getStudentAnnouncements().getItems()[0].isDropped()
                 .comment-grade-container
                     .grade-value.right(class = self.displayStudentGradeValue() && isDropped ? 'dropped-with-value' : '')=self.displayStudentGradeValue() || Msg.Dropped
                     .comment(
