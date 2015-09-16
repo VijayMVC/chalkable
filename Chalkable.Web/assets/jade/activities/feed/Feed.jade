@@ -41,8 +41,8 @@ div(class = noComplete ? "no-complete" : "").feed-container
                         +Option(1, 'Items due before today', false)
                         +Option(2, 'Items older than 30 days', false)
                         +Option(3, 'All Items', false)
-                input(type="text", readonly)#sort-select-input
-                #sort-select.chosen-container.chosen-container-single
+                //input(type="text", readonly)#sort-select-input
+                //#sort-select.chosen-container.chosen-container-single
                     a(href="javascript:void(0)").chosen-single
                         span Sort
                         div
@@ -51,10 +51,10 @@ div(class = noComplete ? "no-complete" : "").feed-container
                         ul.chosen-results
                             li(class = self.isLatest() ? "" : "highlighted", data-value=false).latest-earliest-option.active-result Due Date: Earliest
                             li(class = self.isLatest() ? "highlighted" : "", data-value=true).latest-earliest-option.active-result Due Date: Latest
-                            if !isAdmin
-                                li.active-result Lesson Plans Only
-                                    .box-checkbox.right.lesson-plans-check
-                                        +Checkbox('lessonplansonly', self.isLessonPlansOnly()).lessonplans-check
+                if !isAdmin
+                    .lp-only.active-result Lesson Plans Only
+                        .box-checkbox.right.lesson-plans-check
+                            +Checkbox('lessonplansonly', self.isLessonPlansOnly()).lessonplans-check
                 .date-range
                     +DatePicker('fromdate', self.getStartDate())(
                         data-options={

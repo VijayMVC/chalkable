@@ -72,7 +72,7 @@ devName = app.getDeveloperInfo().getName()
                         .school(filter-school-id= -1 )
                             | All Schools
                             -var isInstalled = tree.every(function (_) { return _.isInstalled });
-                            .box-checkbox.right: +Checkbox(null, false, false)( school-id= -1 )
+                            .box-checkbox.right: +Checkbox(null, isInstalled, isInstalled)( school-id= -1 )
                         each school in tree
                             .school(filter-school-id= school.id )
                                 = school.name

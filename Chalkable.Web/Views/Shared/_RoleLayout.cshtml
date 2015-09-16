@@ -99,9 +99,10 @@ else
                 <div id="sidebar"></div
                 ><div id="main">@RenderBody()</div>
             </div>
-            
-            
-            @ChlkHelpers.RenderChlkCopyrightYear()
+
+            <footer>
+                @ChlkHelpers.RenderChlkCopyrightYearAndVersion()
+            </footer>
         </div>
         
         @if (isDemoSchool || isDeveloperSchool)
