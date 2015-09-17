@@ -338,12 +338,14 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> classIds)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
+
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
                 var sy = new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime.Date, Context.SchoolLocalId.Value);
-                return da.GetPersonsForApplicationInstallCount(applicationId, Context.PersonId ?? 0, personId, classIds, Context.Role.Id
+                return da.GetPersonsForApplicationInstallCount(applicationId, Context.PersonId.Value, personId, classIds, Context.Role.Id
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
             }
         }

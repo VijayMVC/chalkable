@@ -63,7 +63,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return null;
         }
 
-        public IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, int toAnnouncementId)
+        public IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, IList<int> attachmentOwnersIds, int toAnnouncementId)
         {
             throw new NotImplementedException();
         }
