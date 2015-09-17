@@ -209,7 +209,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if(!lessonPlan.EndDate.HasValue)
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "LessonPlan end date "));
             if(lessonPlan.StartDate > lessonPlan.EndDate)
-                throw new ChalkableException("Lesson Plan is no valid. Start date is greater the end date");
+                throw new ChalkableException("Lesson Plan is not valid. Start date is greater than end date");
 
             if (string.IsNullOrEmpty(lessonPlan.Title))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "LessonPlan Title "));
