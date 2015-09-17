@@ -66,6 +66,15 @@
     .star.complete
       display: block
 
+  &.is-admin
+    .star
+      &::before
+        top: 30px
+        +icons-24-sprite(admin-item-todo)
+
+      &.complete::before
+        +icons-24-sprite(admin-item)
+
   .announcement-link
     padding-left: 42.5%
     position: relative

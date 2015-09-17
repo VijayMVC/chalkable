@@ -188,9 +188,9 @@ NAMESPACE('chlk.controllers', function (){
 
                     var classBarItemsMdl = new chlk.models.classes.ClassesForTopBar(null, classId_);
                     var gp = this.getCurrentGradingPeriod();
-                    if(model.getStartDate().getDate() < gp.getStartDate().getDate())
+                    if(model.getStartDate().getDate() < gp.getStartDate().getDate() || model.getStartDate().getDate() > gp.getEndDate().getDate())
                         model.setStartDate(gp.getStartDate());
-                    if(model.getEndDate().getDate() > gp.getEndDate().getDate())
+                    if(model.getEndDate().getDate() > gp.getEndDate().getDate() || model.getEndDate().getDate() < gp.getStartDate().getDate())
                         model.setEndDate(gp.getEndDate());
                     model.setTopData(classBarItemsMdl);
                     importantOnly_ !== undefined && model.setImportantOnly(importantOnly_);

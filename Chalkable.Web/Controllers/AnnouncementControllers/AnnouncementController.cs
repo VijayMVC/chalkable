@@ -86,7 +86,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             MarkDoneOptions mdo = (MarkDoneOptions) option;
             SchoolLocator.AdminAnnouncementService.SetComplete(classId, mdo);
             SchoolLocator.LessonPlanService.SetComplete(classId, mdo);
-            //SchoolLocator.ClassAnnouncementService.SetComplete(classId, mdo);
+            SchoolLocator.ClassAnnouncementService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
+            
 
             return Json(true);
         }

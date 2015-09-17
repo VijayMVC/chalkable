@@ -50,7 +50,11 @@ namespace Chalkable.Web.Models.AttendancesViewData
             decimal totalAbsences = 0, posibleAbsent = posibleDailyAttCount;
             if (dailyAttIssuesCount.HasValue)
                 totalAbsences += dailyAttIssuesCount.Value;
-            
+
+            classAttendanceSummaries =
+                classAttendanceSummaries.Where(
+                    x => (getAttendanceIssuesCount(x).HasValue ? (int) getAttendanceIssuesCount(x).Value : 0) > 0)
+                    .ToList();
             res.Hover = classAttendanceSummaries
                 .Select(x => new StudentAttendnaceHoverBoxItemViewData
                 {
