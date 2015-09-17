@@ -279,6 +279,17 @@ module.exports = function(grunt) {
           } 
         }
       }
+    },
+    
+    imagemin: {                          
+      'chalkable.web': {                
+        files: [{
+          expand: true,                  
+          cwd: 'Chalkable.Web/Content/images2/',                  
+          src: ['**/*.{png,jpg,jpeg,gif}', '!icons-*/*', '*-icons/*'], 
+          dest: 'Chalkable.Web/Content/images2/'                 
+        }]
+      }
     }
   });
 
@@ -296,6 +307,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-compass');
   grunt.loadNpmTasks('grunt-usemin');
   grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-imagemin');
   
   // simple build task 
   grunt.registerTask('usemin-build', [
@@ -316,7 +328,7 @@ module.exports = function(grunt) {
   grunt.registerTask('raygun-create-deployment', ['replace:raygun_deployment_version', 'raygun_deployment']);
   
   // branch specific tasks
-  var postBuildTasks = ['deploy-artifacts'];
+  var postBuildTasks = ['imagemin', 'deploy-artifacts'];
   if (['staging', 'qa'].indexOf(vcsBranch) >= 0) {
     postBuildTasks.push('deploy-to-azure', 'raygun-create-deployment');
   }
