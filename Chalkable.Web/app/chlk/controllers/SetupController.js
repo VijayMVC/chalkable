@@ -164,7 +164,7 @@ NAMESPACE('chlk.controllers', function (){
                 if(model.getId() && model.getId().valueOf())
                     res = this.updateClassAnnouncementType_(model)
                 else
-                    res = this.updateClassAnnouncementType_(model)
+                    res = this.createClassAnnouncementType_(model)
                 res.thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
                     .attach(this.validateResponse_())
                     .then(function(data){
@@ -177,6 +177,19 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.announcement.ClassAnnouncementType]],
             ria.async.Future, function createClassAnnouncementType_(model){
+                return this.announcementTypeService.create(
+                    model.getClassId(),
+                    model.getDescription(),
+                    model.getName(),
+                    model.getHighScoresToDrop(),
+                    model.getLowScoresToDrop(),
+                    model.isSystem(),
+                    model.getPercentage()
+                ).attach(this.validateResponse_());
+            },
+
+            [[chlk.models.announcement.ClassAnnouncementType]],
+            function updateClassAnnouncementType_(model){
                 return this.announcementTypeService.update(
                     model.getClassId(),
                     model.getDescription(),
@@ -186,19 +199,6 @@ NAMESPACE('chlk.controllers', function (){
                     model.isSystem(),
                     model.getPercentage(),
                     model.getId()
-                ).attach(this.validateResponse_());
-            },
-
-            [[chlk.models.announcement.ClassAnnouncementType]],
-            function updateClassAnnouncementType_(model){
-                return this.announcementTypeService.create(
-                    model.getClassId(),
-                    model.getDescription(),
-                    model.getName(),
-                    model.getHighScoresToDrop(),
-                    model.getLowScoresToDrop(),
-                    model.isSystem(),
-                    model.getPercentage()
                 ).attach(this.validateResponse_());
             },
 

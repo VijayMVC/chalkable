@@ -1242,7 +1242,7 @@ NAMESPACE('chlk.controllers', function (){
                     return this.prepareAnnouncementForView(announcement);
                 }, this);
             this.BackgroundCloseView(chlk.activities.common.attachments.AttachmentDialog);
-            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res, 'update-attachments');
         },
 
 
