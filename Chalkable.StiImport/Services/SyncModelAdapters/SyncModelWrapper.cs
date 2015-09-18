@@ -19,10 +19,21 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 return 1;
             if (OperationType < other.OperationType)
                 return -1;
-            if (Model.DefaultOrder > other.Model.DefaultOrder)
-                return 1;
-            if (Model.DefaultOrder < other.Model.DefaultOrder)
-                return -1;
+            if (OperationType == PersistOperationType.Delete)
+            {
+                if (Model.DefaultOrder > other.Model.DefaultOrder)
+                    return -1;
+                if (Model.DefaultOrder < other.Model.DefaultOrder)
+                    return 1;
+            }
+            else
+            {
+                if (Model.DefaultOrder > other.Model.DefaultOrder)
+                    return 1;
+                if (Model.DefaultOrder < other.Model.DefaultOrder)
+                    return -1;
+            }
+            
             return string.Compare(Model.GetType().Name, other.Model.GetType().Name);
         }
 

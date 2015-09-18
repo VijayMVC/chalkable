@@ -494,7 +494,6 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Views\DemoSchool\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -537,9 +536,6 @@
       <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>
       <Name>WindowsAzure.Acs.Oauth2</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\Footer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\SysAdmin.cshtml" />

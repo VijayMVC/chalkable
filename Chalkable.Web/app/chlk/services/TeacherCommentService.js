@@ -17,7 +17,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.TeacherCommentId, String]],
             ria.async.Future, function updateComment(commentId, comment) {
-                return this.get('TeacherComment/Update.json', null, {
+                return this.post('TeacherComment/Update.json', null, {
                     commentId : commentId.valueOf(),
                     comment : comment
                 });
@@ -25,13 +25,24 @@ NAMESPACE('chlk.services', function () {
 
             [[String]],
             ria.async.Future, function createComment(comment) {
-                return this.get('TeacherComment/Create.json', null, {
+                return this.post('TeacherComment/Create.json', null, {
                     comment : comment
                 });
             },
 
+            [[chlk.models.id.TeacherCommentId, String]],
+            ria.async.Future, function createOrUpdateComment(commentId_, comment){
+                if(commentId_ && commentId_.valueOf())
+                    return this.updateComment(
+                        commentId_,
+                        comment
+                    );
+                else
+                    return this.createComment(comment);
+            },
+
             ria.async.Future, function deleteComments(commentIds) {
-                return this.get('TeacherComment/DeleteComments.json', null, {
+                return this.post('TeacherComment/DeleteComments.json', null, {
                     commentIds : this.arrayToCsv(commentIds)
                 });
             }

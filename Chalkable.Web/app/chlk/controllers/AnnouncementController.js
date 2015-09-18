@@ -1242,7 +1242,7 @@ NAMESPACE('chlk.controllers', function (){
                     return this.prepareAnnouncementForView(announcement);
                 }, this);
             this.BackgroundCloseView(chlk.activities.common.attachments.AttachmentDialog);
-            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res, 'update-attachments');
         },
 
 
@@ -1721,7 +1721,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
         function submitLessonPlan(model, isEdit){
-            if(model.getStartDate() > model.getEndDate()){
+            if(model.getStartDate().compare(model.getEndDate()) == 1){
                 this.ShowMsgBox('Lesson Plan are no valid. Start date is greater the end date', 'whoa.');
                 return null;
             }
