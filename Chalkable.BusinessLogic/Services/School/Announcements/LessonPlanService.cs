@@ -71,6 +71,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public AnnouncementDetails CreateFromTemplate(int lessonPlanTemplateId, int classId)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            
             BaseSecurity.EnsureTeacher(Context);
             AnnouncementDetails res;
             var annApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(lessonPlanTemplateId, true);
@@ -81,8 +82,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             using (var u = Update())
             {
-                res = CreateLessonPlanDataAccess(u).CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
-                res.AnnouncementAttachments = AnnouncementAttachmentService.CopyAnnouncementAttachments(lessonPlanTemplateId, new List<int> { res.Id }, u, ServiceLocator, ConnectorLocator);
+                var da = CreateLessonPlanDataAccess(u);
+                res = da.CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
+                var lp = da.GetById(lessonPlanTemplateId);
+                var teachers = new ClassTeacherDataAccess(u).GetClassTeachers(lp.ClassRef, null).Select(x=>x.PersonRef).ToList();
+                res.AnnouncementAttachments = AnnouncementAttachmentService.CopyAnnouncementAttachments(lessonPlanTemplateId, teachers, new List<int> { res.Id }, u, ServiceLocator, ConnectorLocator);
                 res.AnnouncementAttributes = AnnouncementAssignedAttributeService.CopyNonStiAttributes(lessonPlanTemplateId, new List<int>{res.Id}, u, ServiceLocator, ConnectorLocator);
                 res.AnnouncementApplications = ApplicationSchoolService.CopyAnnApplications(annApps, new List<int> { res.Id }, u);
                 u.Commit();
@@ -107,8 +111,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             
             using (var u = Update())
             {
+                var da = CreateLessonPlanDataAccess(u);
+                var lp = da.GetById(lessonPlanId);
+                var teachers = new ClassTeacherDataAccess(u).GetClassTeachers(lp.ClassRef, null).Select(x => x.PersonRef).ToList();
                 var resIds = CreateLessonPlanDataAccess(u).DuplicateLessonPlan(lessonPlanId, classIds, Context.NowSchoolYearTime);
-                AnnouncementAttachmentService.CopyAnnouncementAttachments(lessonPlanId, resIds, u, ServiceLocator, ConnectorLocator);
+                AnnouncementAttachmentService.CopyAnnouncementAttachments(lessonPlanId, teachers, resIds, u, ServiceLocator, ConnectorLocator);
                 AnnouncementAssignedAttributeService.CopyNonStiAttributes(lessonPlanId, resIds, u, ServiceLocator, ConnectorLocator);
                 ApplicationSchoolService.CopyAnnApplications(annApps, resIds, u);
                 u.Commit();
@@ -202,7 +209,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if(!lessonPlan.EndDate.HasValue)
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "LessonPlan end date "));
             if(lessonPlan.StartDate > lessonPlan.EndDate)
-                throw new ChalkableException("Lesson Plan are no valid. Start date is greater the end date");
+                throw new ChalkableException("Lesson Plan is not valid. Start date is greater than end date");
 
             if (string.IsNullOrEmpty(lessonPlan.Title))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "LessonPlan Title "));

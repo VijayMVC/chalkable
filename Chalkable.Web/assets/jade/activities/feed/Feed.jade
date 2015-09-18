@@ -62,10 +62,11 @@ div(class = noComplete ? "no-complete" : "").feed-container
                             selectOtherMonths: true,
                             inCurrentMp: true,
                             maxDate: self.getEndDate().getDate(),
-                            dateFormat: 'M d'
+                            dateFormat: 'M d, yy'
                         },
                         data-value=self.getStartDate() ? self.getStartDate().format('mm/dd/yy') : ''
                     ).start-end-picker
+                    -console.info(self.getStartDate().getDate());
                     | -
                     +DatePicker('todate', self.getEndDate())(
                         data-options={
@@ -73,10 +74,11 @@ div(class = noComplete ? "no-complete" : "").feed-container
                             selectOtherMonths: true,
                             inCurrentMp: true,
                             minDate: self.getStartDate().getDate(),
-                            dateFormat: 'M d'
+                            dateFormat: 'M d, yy'
                         },
                         data-value=self.getEndDate() ? self.getEndDate().format('mm/dd/yy') : ''
                     ).start-end-picker
+                    -console.info(self.getEndDate().getDate());
             +ListView(self.items)(
                 infiniteScroll = true,
                 needGoToButton = true,

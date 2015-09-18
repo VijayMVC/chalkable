@@ -164,6 +164,24 @@
         width: 8px
         height: 8px
 
+      &.with-admin-anns::before
+        content: ' '
+        position: absolute
+        bottom: 5px
+        left: 50%
+        margin-left: -10px
+        border-radius: 50%
+        +icons-24-sprite(admin-item)
+        width: 24px
+        height: 24px
+
+      &.with-anns.with-admin-anns
+        &::after
+          margin-left: 9px
+
+        &::before
+          margin-left: -20px
+
       &.today.with-anns::after
         background-color: #fff
 

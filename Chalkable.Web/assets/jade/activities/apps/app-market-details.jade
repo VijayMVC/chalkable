@@ -85,7 +85,9 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
 
         if self.userRole.isAdmin()
             .ban-app
-                +RenderWith(app, chlk.templates.apps.AppMarketBanTpl)
+                +RenderWith(app, chlk.templates.apps.AppMarketBanTpl)(
+                    fromNewItem = self.isFromNewItem()
+                )
 
             +CloseOpen('History')
                 .content.table.app-install-history

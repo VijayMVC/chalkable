@@ -166,12 +166,9 @@ NAMESPACE('chlk.controllers', function (){
             return app;
         },
 
-        //todo: refactor
-        [chlk.controllers.SidebarButton('apps')],
-        [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.id.AppId, Boolean]],
-        function detailsAction(id, fromNewItem_) {
-            var result = this.appMarketService
+        function getApp(id, fromNewItem_){
+            return this.appMarketService
                 .getDetails(id)
                 .attach(this.validateResponse_())
                 .then(function(app){
@@ -179,13 +176,13 @@ NAMESPACE('chlk.controllers', function (){
                     var appPermissions = app.getPermissions() || [];
 
                     appPermissions = appPermissions.map(function(permission){
-                         switch(permission.getId().valueOf()){
-                             case chlk.models.apps.AppPermissionTypeEnum.MESSAGE.valueOf() : permission.setName("Messaging");
-                                 break;
-                             case chlk.models.apps.AppPermissionTypeEnum.GRADE.valueOf(): permission.setName("Grading");
-                                 break;
-                         }
-                         return permission;
+                        switch(permission.getId().valueOf()){
+                            case chlk.models.apps.AppPermissionTypeEnum.MESSAGE.valueOf() : permission.setName("Messaging");
+                                break;
+                            case chlk.models.apps.AppPermissionTypeEnum.GRADE.valueOf(): permission.setName("Grading");
+                                break;
+                        }
+                        return permission;
                     });
 
                     var filteredPermissions = appPermissions.filter(function(permission){
@@ -194,10 +191,10 @@ NAMESPACE('chlk.controllers', function (){
                             && permission.getId() != chlk.models.apps.AppPermissionTypeEnum.CLAZZ;
                     });
 
-                     if (appPermissions.length > filteredPermissions.length){
-                         filteredPermissions.unshift(new chlk.models.apps.AppPermission(
-                             chlk.models.apps.AppPermissionTypeEnum.UNKNOWN, 'Basic info'));
-                     }
+                    if (appPermissions.length > filteredPermissions.length){
+                        filteredPermissions.unshift(new chlk.models.apps.AppPermission(
+                            chlk.models.apps.AppPermissionTypeEnum.UNKNOWN, 'Basic info'));
+                    }
                     app.setPermissions(filteredPermissions);
 
                     var appRating = app.getApplicationRating();
@@ -220,22 +217,30 @@ NAMESPACE('chlk.controllers', function (){
                         this.appCategoryService.getCategories(),
                         this.appMarketService.getPersonBalance(this.getCurrentPerson().getId())
                     ])
-                    .attach(this.validateResponse_())
-                    .then(function(res){
-                        var categories = res[0].getItems();
-                        var balance = res[1].getBalance();
-                        return new chlk.models.apps.AppMarketDetailsViewData(
-                            app,
-                            installBtnTitle,
-                            categories,
-                            this.gradeLevelService.getGradeLevels(),
-                            balance,
-                            isAlreadyInstalledForStudent,
-                            fromNewItem_
-                        );
-                    },this);
+                        .attach(this.validateResponse_())
+                        .then(function(res){
+                            var categories = res[0].getItems();
+                            var balance = res[1].getBalance();
+                            return new chlk.models.apps.AppMarketDetailsViewData(
+                                app,
+                                installBtnTitle,
+                                categories,
+                                this.gradeLevelService.getGradeLevels(),
+                                balance,
+                                isAlreadyInstalledForStudent,
+                                fromNewItem_
+                            );
+                        },this);
                     return result;
                 }, this);
+        },
+
+        //todo: refactor
+        [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.StudyCenterEnabled()],
+        [[chlk.models.id.AppId, Boolean]],
+        function detailsAction(id, fromNewItem_) {
+            var result = this.getApp(id, fromNewItem_);
             return this.PushView(chlk.activities.apps.AppMarketDetailsPage, result);
         },
 
@@ -605,36 +610,30 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.ADMINGRADE,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
-        [[chlk.models.id.AppId]],
-        function banAppAction(appId){
+        [[chlk.models.id.AppId, Boolean]],
+        function banAppAction(appId, fromNewItem_){
             var result = this.ShowConfirmBox('Banning this App will hide the app in the store for all users in your district. If the app was already installed by a user, it will not be uninstalled.', null, 'OK', 'negative-button')
                 .thenCall(this.appsService.banApp, [appId])
                 .attach(this.validateResponse_())
                 .then(function(data) {
-                    var res = new chlk.models.apps.AppMarketApplication;
-                    res.setId(appId);
-                    res.setBanned(true);
-                    return res;
-                });
-            return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result, 'banApp');
+                    return this.getApp(appId, fromNewItem_);
+                }, this);
+            return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result);
         },
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.ADMINGRADE,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
-        [[chlk.models.id.AppId]],
-        function unbanAppAction(appId){
+        [[chlk.models.id.AppId, Boolean]],
+        function unbanAppAction(appId, fromNewItem_){
             var result = this.ShowConfirmBox('Un-ban this app?', null, 'Yes')
                 .thenCall(this.appsService.unbanApp, [appId])
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    var res = new chlk.models.apps.AppMarketApplication;
-                    res.setId(appId);
-                    res.setBanned(false);
-                    return res;
-                });
-            return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result, 'banApp');
+                    return this.getApp(appId, fromNewItem_);
+                }, this);
+            return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result);
         }
     ])
 });

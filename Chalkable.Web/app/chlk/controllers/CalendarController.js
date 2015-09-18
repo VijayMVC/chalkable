@@ -37,15 +37,22 @@ NAMESPACE('chlk.controllers', function (){
                 .getMonthDayInfo(date)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    var gp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD);
-                    var startDate = gp.getStartDate();
-                    var endDate = gp.getEndDate();
-                    if(date.getDate() < startDate.getDate() || date.getDate() > endDate.getDate())
-                        if(model.getAnnouncements().length || model.getAdminAnnouncements().length)
-                            model.setNoPlusButton(true);
-                        else
+                    if(!this.userIsAdmin()){
+                        var gp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD);
+                        var startDate = gp.getStartDate();
+                        var endDate = gp.getEndDate();
+                        if(date.getDate() < startDate.getDate() || date.getDate() > endDate.getDate())
+                            if(model.getAnnouncements().length || model.getAdminAnnouncements().length)
+                                model.setNoPlusButton(true);
+                            else
+                                return ria.async.BREAK;
+                    }else{
+                        if(!model.getAnnouncements().length && !model.getAdminAnnouncements().length)
                             return ria.async.BREAK;
+                    }
+
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
+
                     if(classId_)
                         model.setSelectedClassId(classId_);
                     return model;

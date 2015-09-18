@@ -45,9 +45,6 @@
     @{Html.RenderPartial("Telemetry");}
 
     <!-- build:js /app/role-layout.min.js -->
-    <script build:src="/app/chlk/shared.js" src='@Url.StaticContent("/app/chlk/shared.js")'></script>
-    <script build:src="/app/chlk/chlk-messages.js" src='@Url.StaticContent("/app/chlk/chlk-messages.js")'></script>
-    <script build:src="/app/chlk/chlk-constants.js" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
     <script build:src="/app/bower/DateJS/build/date-en-US.js" src="@Url.StaticContent("/app/bower/DateJS/build/date-en-US.js")"></script>
     <script build:src="/app/bower/Autolinker.js/dist/Autolinker.js" src="@Url.StaticContent("/app/bower/Autolinker.js/dist/Autolinker.js")"></script>
     <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
@@ -63,6 +60,9 @@
     <script build:src="/app/chlk/index/prettify.js" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
     <script build:src="/app/bower/highcharts/highcharts.js" src="@Url.StaticContent("/app/bower/highcharts/highcharts.js")"></script>
     <script build:src="/app/bower/raygun4js/dist/raygun.vanilla.js"></script>
+    <script build:src="/app/chlk/shared.js" src='@Url.StaticContent("/app/chlk/shared.js")'></script>
+    <script build:src="/app/chlk/chlk-messages.js" src='@Url.StaticContent("/app/chlk/chlk-messages.js")'></script>
+    <script build:src="/app/chlk/chlk-constants.js" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
     <!-- endbuild -->
 
 @if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
