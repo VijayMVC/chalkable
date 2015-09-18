@@ -26,7 +26,7 @@ module.exports = function(grunt) {
     
     clean: {
       js: ["Chalkable.Web/app/*.js"],
-      css: ["Chalkable.Web/Content/**/*.css"],      
+      css: ["Chalkable.Web/Content/*.css"],      
     },
     
     uglify: {
