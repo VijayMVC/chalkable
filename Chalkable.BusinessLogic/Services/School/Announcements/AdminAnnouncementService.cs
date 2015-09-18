@@ -367,7 +367,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     PersonId = Context.PersonId,
                     RoleId = Context.RoleId,
                     GradeLevelsIds = gradeLevels,
-                    StudentId = studentId
+                    StudentId = studentId,
+                    OwnedOnly = (Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE)
                 })).Announcements.Select(x => x.AdminAnnouncementData).ToList();
         }
 
