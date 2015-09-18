@@ -104,6 +104,17 @@ NAMESPACE('chlk.models.common', function () {
                 this._USA_DATE_TIME_FORMAT = 'm/dd/yy hh:min:ss tt'
             },
 
+            //Date, function valueOf(){
+            //    return this.getDate();
+            //},
+
+            [[SELF]],
+            Number, function compare(date){
+                var firstDate = this.getDate();
+                var secondDate = this.getDate();
+                return firstDate > secondDate ? 1 : (firstDate < secondDate ? -1 : 0);
+            },
+
             Date, function getServerDate_(str_, a_, b_){
                 return SELF.GET_SERVER_DATE(str_, a_, b_, window.serverTime);//return this.getServerDate_(window.serverTime, str_, a_, b_);
             },

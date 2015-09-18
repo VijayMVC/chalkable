@@ -26,7 +26,7 @@ module.exports = function(grunt) {
     
     clean: {
       js: ["Chalkable.Web/app/*.js"],
-      css: ["Chalkable.Web/Content/**/*.css"],      
+      css: ["Chalkable.Web/Content/*.css"],      
     },
     
     uglify: {
@@ -333,7 +333,7 @@ module.exports = function(grunt) {
     postBuildTasks.push('deploy-to-azure', 'raygun-create-deployment');
   }
   
-  grunt.registerTask('post-checkout', ['compass', 'uglify:chalkable.web']);
+  grunt.registerTask('post-checkout', ['clean', 'compass']);
   grunt.registerTask('pre-release', ['clean', 'compass', 'usemin-build', 'jsbuild3']);
   grunt.registerTask('post-build', postBuildTasks);
   

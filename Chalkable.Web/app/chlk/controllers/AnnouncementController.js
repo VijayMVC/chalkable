@@ -1721,7 +1721,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
         function submitLessonPlan(model, isEdit){
-            if(model.getStartDate() > model.getEndDate()){
+            if(model.getStartDate().compare(model.getEndDate()) == 1){
                 this.ShowMsgBox('Lesson Plan are no valid. Start date is greater the end date', 'whoa.');
                 return null;
             }
