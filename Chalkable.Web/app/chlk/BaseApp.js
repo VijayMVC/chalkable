@@ -1,5 +1,5 @@
 REQUIRE('ria.mvc.DefaultApplication');
-REQUIRE('ria.dom.jQueryDom');
+REQUIRE('chlk.lib.dom.jQueryDom');
 REQUIRE('ria.dom.ready');
 REQUIRE('chlk.activities.lib.TemplatePage');
 
@@ -36,7 +36,6 @@ REQUIRE('chlk.controls.VideoControl');
 REQUIRE('chlk.controls.PayCheckControl');
 REQUIRE('chlk.controls.ScrollBoxControl');
 REQUIRE('chlk.controls.MultipleSelectControl');
-REQUIRE('chlk.controls.MaskedInputControl');
 REQUIRE('chlk.controls.SimplePayCheckControl');
 REQUIRE('chlk.controls.CloseOpenControl');
 REQUIRE('chlk.controls.ClassesBarControl');

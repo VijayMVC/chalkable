@@ -306,6 +306,7 @@
     <Compile Include="Services\School\PeriodService.cs" />
     <Compile Include="Services\School\PersonEmailService.cs" />
     <Compile Include="Services\School\PersonService.cs" />
+    <Compile Include="Services\School\PersonSettingService.cs" />
     <Compile Include="Services\School\PhoneService.cs" />
     <Compile Include="Services\School\PracticeGradeService.cs" />
     <Compile Include="Services\School\PrivateMessageService.cs" />

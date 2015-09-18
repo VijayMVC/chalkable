@@ -24,6 +24,32 @@ module.exports = function(grunt) {
         all: {}
     },
     
+    clean: {
+      js: ["Chalkable.Web/app/*.js"],
+      css: ["Chalkable.Web/Content/*.css"],      
+    },
+    
+    uglify: {
+      options: {
+        preserveComments: 'some'
+      }
+    },
+    
+    cssmin: {
+      options: {
+        shorthandCompacting: false,
+        roundingPrecision: -1
+      }
+    },
+    
+    concat: {
+      options: {
+        separator: ';\n\n',
+        banner: '/*! <%= pkg.name %> - v<%= pkg.version %> - ' + 
+                '<%= grunt.template.today("yyyy-mm-dd") %> */',
+      }
+    },
+    
     crypt:{
       files:[{
         dir: '.certs',                         // root dir of files to encrypt / decrypt
@@ -57,6 +83,14 @@ module.exports = function(grunt) {
     },
     
     replace: {
+      chakable_web_version: {
+        src: ['Chalkable.Web/Tools/CompilerHelper.cs'],
+        dest: ['Chalkable.Web/Tools/CompilerHelper.cs'],
+        replacements: [{
+          from: 'private-build',
+          to: buildNumber
+        }]
+      },
       raygun_deployment_version: {
         src: ['Release.tpl.yaml'],
         dest: ['Release.yaml'],
@@ -128,10 +162,7 @@ module.exports = function(grunt) {
           cwd: './Chalkable.Web',
           src: [
             'app/*App.compiled.js',
-            'app/chlk/{shared,chlk-messages,chlk-constants}.js',
-            
-            'app/chlk/index/**',
-            'app/{jquery,lib,highcharts}/**',
+            'app/*.min.js',
             'scripts/*.min.js',
             
             'Content/**',
@@ -141,6 +172,25 @@ module.exports = function(grunt) {
           
           filter: 'isFile',
           dot: true
+        },        
+        {
+          expand: true,
+          cwd: './Chalkable.Web/app/bower/chosen/',
+          src: [
+            '*.png'
+          ],
+          dest: 'Content',          
+          filter: 'isFile'
+        },        
+        {
+          expand: true,
+          cwd: './Chalkable.Web/app/bower/jquery-ui/themes/smoothness/',
+          src: [
+            'images/*'
+          ],
+          dest: 'Content',
+          
+          filter: 'isFile'
         }]
       }
     },
@@ -162,6 +212,84 @@ module.exports = function(grunt) {
           label: 'TeamCity deploy ' + vcsBranch + ' ' + buildNumber + ' ' + today,
         }
       }
+    },
+    
+    jsbuild3: {
+      options: {
+        config: 'Chalkable.Web/jsbuild.json',
+        modules: []
+      },
+      all: {}
+    },
+    
+    compass: {                  
+      'chalkable.web': {               
+        options: {             
+          config: 'Chalkable.Web/config.rb',
+          basePath: 'Chalkable.Web',
+          sassDir: 'assets/sass2',
+          cssDir: 'Content',
+          environment: 'production'
+        }
+      }
+    },
+    
+    useminPrepare: {
+      options: {
+        root: './Chalkable.Web',
+        dest: './Chalkable.Web',
+        patterns: {
+          html: [
+            [
+              /<script.+src=['"]@Url\.StaticContent\(['"]([^"']+)["']/gm,
+              'Update the HTML to reference our concat/min/revved script files'
+            ],
+            [
+              /<link[^\>]+href=['"]@Url\.StaticContent\(['"]([^"']+)['"]/gm,
+              'Update the HTML with the new css filenames'
+            ]
+          ]
+        }
+      },
+      cshtml: {
+        expand: true,
+        cwd: './',
+        src: ['./Chalkable.Web/Views/**/*.cshtml'],
+        filter: 'isFile'
+      }
+    },
+    
+    usemin: {
+      cshtml: {
+        expand: true,
+        cwd: './',
+        src: ['./Chalkable.Web/Views/**/*.cshtml'],
+        filter: 'isFile'
+      },
+      options: {
+        blockReplacements: {
+          css: function (block) {
+            var media = block.media ? ' media="' + block.media + '"' : '';
+            return '<link rel="stylesheet" href="@Url.StaticContent("' + block.dest + '")"' + media + '>';
+          },
+          js: function (block) {
+            var defer = block.defer ? 'defer ' : '';
+            var async = block.async ? 'async ' : '';
+            return '<script ' + defer + async + 'src="@Url.StaticContent("' + block.dest + '")"><\/script>';
+          } 
+        }
+      }
+    },
+    
+    imagemin: {                          
+      'chalkable.web': {                
+        files: [{
+          expand: true,                  
+          cwd: 'Chalkable.Web/Content/images2/',                  
+          src: ['**/*.{png,jpg,jpeg,gif}', '!icons-*/*', '*-icons/*'], 
+          dest: 'Chalkable.Web/Content/images2/'                 
+        }]
+      }
     }
   });
 
@@ -172,18 +300,41 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-text-replace');
   grunt.loadNpmTasks('grunt-teamcity');
   grunt.loadNpmTasks('grunt-contrib-crypt');
+  grunt.loadNpmTasks('grunt-contrib-concat');
+  grunt.loadNpmTasks('grunt-contrib-uglify');
+  grunt.loadNpmTasks('grunt-contrib-cssmin');
+  grunt.loadNpmTasks('emp.ria-grunt-jsbuild3');
+  grunt.loadNpmTasks('grunt-contrib-compass');
+  grunt.loadNpmTasks('grunt-usemin');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-imagemin');
   
+  // simple build task 
+  grunt.registerTask('usemin-build', [
+    'useminPrepare',
+    'concat:generated',
+    'cssmin:generated',
+    'uglify:generated',
+    //'filerev',
+    'usemin'
+  ]);
+  
+  // js concat/minify
+  grunt.registerTask('version', ['replace:chakable_web_version']);
+
   // general tasks
   grunt.registerTask('deploy-artifacts', ['azure-cdn-deploy']);  
   grunt.registerTask('deploy-to-azure', ['decrypt', 'azure-cs-deploy']);
   grunt.registerTask('raygun-create-deployment', ['replace:raygun_deployment_version', 'raygun_deployment']);
   
   // branch specific tasks
-  var postBuildTasks = ['deploy-artifacts'];
+  var postBuildTasks = ['imagemin', 'deploy-artifacts'];
   if (['staging', 'qa'].indexOf(vcsBranch) >= 0) {
     postBuildTasks.push('deploy-to-azure', 'raygun-create-deployment');
   }
   
+  grunt.registerTask('post-checkout', ['clean', 'compass']);
+  grunt.registerTask('pre-release', ['clean', 'compass', 'usemin-build', 'jsbuild3']);
   grunt.registerTask('post-build', postBuildTasks);
   
   // Default task(s).

@@ -35,22 +35,40 @@ NAMESPACE('chlk.services', function () {
             Object, 'cache',
             Number, 'importantCount',
 
-            [[Number, chlk.models.id.ClassId, Boolean]],
-            ria.async.Future, function getAnnouncements(pageIndex_, classId_, importantOnly_) {
-                return this.get('Feed/List.json', ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), {
-                    start: pageIndex_|0,
+            [[Number, chlk.models.id.ClassId]],
+            ria.async.Future, function markDone(option, classId_) {
+                return this.get('Announcement/Done.json', Boolean, {
+                    option: option.valueOf(),
+                    classId: classId_ && classId_.valueOf()
+                });
+            },
+
+            [[Number, chlk.models.id.ClassId, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Boolean]],
+            ria.async.Future, function getAnnouncements(start_, classId_, importantOnly_, startDate_, endDate_, lessonPlansOnly_, latest_) {
+                return this.get('Feed/List.json', chlk.models.feed.Feed, {
+                    start: start_ || 0,
                     classId: classId_ ? classId_.valueOf() : null,
-                    complete: importantOnly_ ? false : null
+                    complete: importantOnly_ ? false : null,
+                    startDate: startDate_ && startDate_.toStandardFormat(),
+                    endDate: endDate_ && endDate_.toStandardFormat(),
+                    lessonPlansOnly: lessonPlansOnly_,
+                    sortType: latest_,
+                    count: 10
                 });
 
             },
 
-            [[Number, String, Boolean]],
-            ria.async.Future, function getAnnouncementsForAdmin(pageIndex_, gradeLevels_, importantOnly_) {
-                return this.get('Feed/DistrictAdminFeed.json', ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), {
+            [[Number, String, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Boolean]],
+            ria.async.Future, function getAnnouncementsForAdmin(start_, gradeLevels_, importantOnly_, startDate_, endDate_, lessonPlansOnly_, latest_) {
+                return this.get('Feed/DistrictAdminFeed.json', chlk.models.feed.FeedAdmin, {
                     gradeLevelIds : gradeLevels_,
-                    start: pageIndex_|0,
-                    complete: importantOnly_ ? false : null
+                    start: start_ || 0,
+                    complete: importantOnly_ ? false : null,
+                    startDate: startDate_ && startDate_.toStandardFormat(),
+                    endDate: endDate_ && endDate_.toStandardFormat(),
+                    lessonPlansOnly: lessonPlansOnly_,
+                    sortType: latest_,
+                    count: 10
                 });
 
             },

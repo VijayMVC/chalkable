@@ -46,9 +46,10 @@ mixin Glue_()
     .announcement-details-panel
         .details-container.silver-panel
 
-            if self.getUserRole().isStudent() && ( (self.isStudentGraded() && self.displayStudentGradeValue()) || self.getComment() )
+            if self.getUserRole().isStudent() && ( (self.isStudentGraded() && self.displayStudentGradeValue()) || self.getComment() || isDropped )
+                -var isDropped = self.getStudentAnnouncements().getItems()[0].isDropped()
                 .comment-grade-container
-                    .grade-value.right=self.displayStudentGradeValue()
+                    .grade-value.right(class = self.displayStudentGradeValue() && isDropped ? 'dropped-with-value' : '')=self.displayStudentGradeValue() || Msg.Dropped
                     .comment(
                         data-tooltip = self.getComment(),
                         data-tooltip-type = "overflow",

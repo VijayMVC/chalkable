@@ -37,15 +37,22 @@ NAMESPACE('chlk.controllers', function (){
                 .getMonthDayInfo(date)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    var dateRangeObj = this.calendarService.getDefaultCalendarDateRange();
-                    var startDate = dateRangeObj.startDate;
-                    var endDate = dateRangeObj.endDate;
-                    if(date.getDate() < startDate.getDate() || date.getDate() > endDate.getDate())
-                        if(model.getAnnouncements().length || model.getAdminAnnouncements().length)
-                            model.setNoPlusButton(true);
-                        else
+                    if(!this.userIsAdmin()){
+                        var gp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD);
+                        var startDate = gp.getStartDate();
+                        var endDate = gp.getEndDate();
+                        if(date.getDate() < startDate.getDate() || date.getDate() > endDate.getDate())
+                            if(model.getAnnouncements().length || model.getAdminAnnouncements().length)
+                                model.setNoPlusButton(true);
+                            else
+                                return ria.async.BREAK;
+                    }else{
+                        if(!model.getAnnouncements().length && !model.getAdminAnnouncements().length)
                             return ria.async.BREAK;
+                    }
+
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
+
                     if(classId_)
                         model.setSelectedClassId(classId_);
                     return model;
@@ -89,10 +96,10 @@ NAMESPACE('chlk.controllers', function (){
                 .getWeekDayInfo(date, periodClassId_, periodOrder_);
 
             if(!this.userIsAdmin()){
-                var markingPeriod = this.getContext().getSession().get(ChlkSessionConstants.MARKING_PERIOD);
-                var mpStartDate = markingPeriod.getStartDate();
-                var mpEndDate = markingPeriod.getEndDate();
-                if(date.getDate() < mpStartDate.getDate() || date.getDate() > mpEndDate.getDate())
+                var gp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD);
+                var startDate = gp.getStartDate();
+                var endDate = gp.getEndDate();
+                if(date.getDate() < startDate.getDate() || date.getDate() > endDate.getDate())
                     if(model.getAnnouncements().length)
                         model.setNoPlusButton(true);
                     else

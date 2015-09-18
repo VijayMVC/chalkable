@@ -13,8 +13,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
 -var classId = announcement && lessonPlan.getClassId() ? lessonPlan.getClassId().valueOf() : null
 -var state = announcement && announcement.getState().valueOf()
 -var types = self.getClassInfo() ? self.getClassInfo().getTypesByClass() : []
--var userRole = self.getUserRole();
--console.log(self.getClassScheduleDateRanges())
+-var userRole = self.getUserRole()
 
 .announcement-form.loader-container
     if announcement && lessonPlan.getClassId()
@@ -49,15 +48,8 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                                 each item in announcement.getCategories()
                                                     +Option(item.getId().valueOf(), item.getName())
                                         BUTTON(type="submit", value="changeCategory", name="submitType").validate-skip#changeCategoryUpdate.x-hidden
-                                        BUTTON(type="submit", value="createFromTemplate", name="submitType").validate-skip#createFromTemplate.x-hidden
-                                        +Hidden('announcementForTemplateId', null)#announcementForTemplateId
-                                    .search-container
-                                        label(for="filter") Choose from New Item Gallery
-                                        +SearchBox(chlk.services.LessonPlanService, "searchLessonPlansTemplates", chlk.templates.announcement.LessonPlanAutoCompleteTpl)(
-                                            name="filter", placeholder="Default Lesson Plan", value = announcement.getFilter(), minLength = 0
-                                        ).search-templates
                                 .add-category
-                                    +ActionButton('lpgallerycategory', 'editCategories').special-button2.add + Add Category
+                                    +ActionButton('lessonplangallery', 'lessonPlanTemplatesList', classId).special-button2.add + Import from new Item Gallery
                             +TextArea(name="content", placeholder="Assignment")= announcement.getContent()
                             if needStandardsBlock
                                 .add-standards-container
@@ -75,27 +67,29 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                             input(type="submit",id="save-form-button",value="saveNoUpdate", name="submitType", class='x-hidden validate-skip')
                     .right-block
                         .date-picker-startdate
-                            label(for="startdate") Due min date
+                            label(for="startdate")=Msg.Start_date
                             +DatePicker('startdate', lessonPlan.getStartDate())(
-                            data-options={
-                                showOtherMonths: true,
-                                selectOtherMonths: true
-                            },
-                            data-value=lessonPlan.getStartDate() ? lessonPlan.getStartDate().format('mm/dd/yy') : ''
-                            placeholder='Due min date',
-                            class='validate[required]'
+                                data-options={
+                                    showOtherMonths: true,
+                                    selectOtherMonths: true
+                                },
+                                inCurrentMp: true,
+                                data-value=lessonPlan.getStartDate() ? lessonPlan.getStartDate().format('mm/dd/yy') : ''
+                                placeholder=Msg.Start_date,
+                                class='validate[required]'
                             )#mindate
                             .calendar-mark
                         .date-picker-container
-                            label(for="enddate") Due max date
+                            label(for="enddate")=Msg.End_date
                             +DatePicker('enddate', lessonPlan.getEndDate())(
-                            data-options={
-                                showOtherMonths: true,
-                                selectOtherMonths: true
-                            },
-                            data-value=lessonPlan.getEndDate() ? lessonPlan.getEndDate().format('mm/dd/yy') : ''
-                            placeholder='Due max date'
-                            class='validate[required]'
+                                data-options={
+                                    showOtherMonths: true,
+                                    selectOtherMonths: true
+                                },
+                                inCurrentMp: true,
+                                data-value=lessonPlan.getEndDate() ? lessonPlan.getEndDate().format('mm/dd/yy') : ''
+                                placeholder=Msg.End_date,
+                                class='validate[required]'
                             )#maxdate
                             .calendar-mark
                         .advanced-options

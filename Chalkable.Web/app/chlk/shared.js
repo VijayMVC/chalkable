@@ -110,3 +110,8 @@ function debugPrint(name, obj){
     }
     console.log(name, 'end');
 }
+
+$.validationEngineLanguage.allRules["double"] = {
+    "regex": /^[-+]?([0-9]*\.[0-9]+|[0-9]+)$/,
+    "alertText" : "Invalid value"
+}

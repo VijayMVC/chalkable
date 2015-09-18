@@ -23,6 +23,7 @@ NAMESPACE('chlk.services', function () {
 
             [[String, Object]],
             function sendTrackEvent_(name, ev){
+                var mixpanel = window.mixpanel;
                 if (mixpanel && mixpanel.track){
                     mixpanel.track(name, ev);
                 }

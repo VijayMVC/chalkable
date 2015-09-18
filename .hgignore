@@ -9,8 +9,9 @@ syntax: glob
 **/*.suo
 **/*.orig
 packages/**
-Chalkable.Web/**/*.css
-Chalkable.Web/**/*.compiled.js
+**/bower/*
+Chalkable.Web/Content/*.css
+Chalkable.Web/app/*.compiled.js
 Chalkable.Web/app/highcharts/other/modules/no-data-to-display.src.js
 Chalkable.Web/app/highcharts/other/modules/no-data-to-display.js
 Chalkable.Web/app/highcharts/other/modules/map.src.js
@@ -38,3 +39,4 @@ NEW UI
 screens
 psd
 home page
+Chalkable.Web/app/**/*.min.js

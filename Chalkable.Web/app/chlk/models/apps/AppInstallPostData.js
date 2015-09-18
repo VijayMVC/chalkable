@@ -14,6 +14,7 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'groups',
             chlk.models.id.AppInstallGroupId, 'currentPerson',
             Boolean, 'fromNewItem',
+            Boolean, 'fromSuggestedApps',
 
             Boolean, function isInstallForAll(){
                 return this.getForAll() == 'all';

@@ -22,15 +22,68 @@ div(class = noComplete ? "no-complete" : "").feed-container
         label#feed-arrow.blue-arrow.left-up-arrow=Msg.See_more_items
         label#no-items.blue-arrow.gray.div=Msg.No_items_marked_important
     else
-        .wrapper
+        +ActionForm('feed', 'getAnnouncements').wrapper.no-working
+            input(type="hidden", name="start", value=(self.getStart() || 0))
+            input(type="hidden", name="count", value=10)
+            input(type="hidden", name="importantOnly", value=self.importantOnly && self.importantOnly.toString())
+            input(type="hidden", name="sorttype", value=self.isLatest()).latest-earliest-input
+            input(type="submit", name="submitType", value="sort")#sort-submit.x-hidden
+            if isAdmin
+                input(type="hidden", name="gradeLevels", value=topData.getSelectedIds())
+            else
+                input(type="hidden", name="classId", value=topData.getSelectedItemId())
+
+            .right-buttons-block
+                if self.isImportantOnly() && self.items.length
+                    input(type="submit", name="submitType", value="markDone")#mark-done-submit.x-hidden
+                    +Select('markDoneOption')(data-placeholder = 'Mark Done', value = 0).markDoneSelect
+                        +Option(0, '', false)
+                        +Option(1, 'Items due before today', false)
+                        +Option(2, 'Items older than 30 days', false)
+                        +Option(3, 'All Items', false)
+                //input(type="text", readonly)#sort-select-input
+                //#sort-select.chosen-container.chosen-container-single
+                    a(href="javascript:void(0)").chosen-single
+                        span Sort
+                        div
+                            b
+                    .chosen-drop
+                        ul.chosen-results
+                            li(class = self.isLatest() ? "" : "highlighted", data-value=false).latest-earliest-option.active-result Due Date: Earliest
+                            li(class = self.isLatest() ? "highlighted" : "", data-value=true).latest-earliest-option.active-result Due Date: Latest
+                if !isAdmin
+                    .lp-only.active-result Lesson Plans Only
+                        .box-checkbox.right.lesson-plans-check
+                            +Checkbox('lessonplansonly', self.isLessonPlansOnly()).lessonplans-check
+                .date-range
+                    +DatePicker('fromdate', self.getStartDate())(
+                        data-options={
+                            showOtherMonths: true,
+                            selectOtherMonths: true,
+                            inCurrentMp: true,
+                            maxDate: self.getEndDate().getDate(),
+                            dateFormat: 'M d, yy'
+                        },
+                        data-value=self.getStartDate() ? self.getStartDate().format('mm/dd/yy') : ''
+                    ).start-end-picker
+                    -console.info(self.getStartDate().getDate());
+                    | -
+                    +DatePicker('todate', self.getEndDate())(
+                        data-options={
+                            showOtherMonths: true,
+                            selectOtherMonths: true,
+                            inCurrentMp: true,
+                            minDate: self.getStartDate().getDate(),
+                            dateFormat: 'M d, yy'
+                        },
+                        data-value=self.getEndDate() ? self.getEndDate().format('mm/dd/yy') : ''
+                    ).start-end-picker
+                    -console.info(self.getEndDate().getDate());
             +ListView(self.items)(
                 infiniteScroll = true,
                 needGoToButton = true,
-                service = chlk.services.AnnouncementService,
-                method = isAdmin ? "getAnnouncementsForAdmin" : "getAnnouncements",
-                tpl = chlk.templates.announcement.FeedItemTpl,
-                pageSize = 10,
-                paramsPrepend = [selected, self.importantOnly]
+                pageSize = 10
             )
+                Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
                 each item in self.items
                     +FeedItem(item)

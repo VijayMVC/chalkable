@@ -171,7 +171,7 @@ header[role='banner']
       overflow: hidden
       white-space: nowrap
       +retina("images2/index/logo@2x.png")
-      +background-size(235px 54px)
+      //+background-size(235px 54px)
       margin-top: 10px
       +MQ(XS)
         width: 156px
@@ -450,17 +450,19 @@ footer
         +MQ(XL)
           &:hover
             text-decoration: underline
-    .socials
+    .socials, .socials2
       li
         padding-left: 24px
         background-position: left center
         background-repeat: no-repeat
         +background-size(16px 16px)
+    .socials
       li:nth-child(1)
         background-image: inline-image("images2/index/twitter.svg")
       li:nth-child(2)
         background-image: inline-image("images2/index/facebook.svg")
-      li:nth-child(3)
+    .socials2
+      li:nth-child(1)
         background-image: inline-image("images2/index/phone.svg")
     +MQ(S)
       padding: 0 0 20px

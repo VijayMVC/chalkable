@@ -9,6 +9,7 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'installBtnTitle',
             Boolean, 'installed',
             Boolean, 'fromNewItem',
+            Boolean, 'fromSuggestedApps',
 
             [[
                 chlk.models.apps.AppMarketApplication,
@@ -17,9 +18,10 @@ NAMESPACE('chlk.models.apps', function () {
                 ArrayOf(chlk.models.apps.AppGradeLevel),
                 Number,
                 Boolean,
+                Boolean,
                 Boolean
             ]],
-            function $(app, installBtnTitle, categories, gradelevels, balance, isInstalled, fromNewItem_) {
+            function $(app, installBtnTitle, categories, gradelevels, balance, isInstalled, fromNewItem_, fromSuggestedApps_) {
                 BASE(categories, gradelevels, balance);
                 this.setApp(app);
                 var webSiteLink = app.getDeveloperInfo().getWebSite() || "";
@@ -32,7 +34,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.setInstalled(isInstalled);
                 this.setInstallBtnTitle(installBtnTitle);
                 this.setFromNewItem(fromNewItem_ || false);
-
+                this.setFromSuggestedApps(fromSuggestedApps_ || false);
             }
         ]);
 

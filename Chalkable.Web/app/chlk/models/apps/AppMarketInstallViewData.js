@@ -13,8 +13,8 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.classes.AllSchoolsActiveClasses, 'allClasses',
 
             [[chlk.models.apps.AppMarketApplication, chlk.models.classes.AllSchoolsActiveClasses, Boolean]],
-            function $(app, allClasses_, fromNewItem_){
-                BASE(app, "", [], [], 0, app.isAlreadyInstalled(), fromNewItem_);
+            function $(app, allClasses_, fromNewItem_, fromSuggestedApps_){
+                BASE(app, "", [], [], 0, app.isAlreadyInstalled(), fromNewItem_, fromSuggestedApps_);
                 this.setAlreadyInstalled(app.isAlreadyInstalled());
                 this.setAllClasses(allClasses_ || null);
             }

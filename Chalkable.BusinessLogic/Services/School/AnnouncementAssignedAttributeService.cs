@@ -187,7 +187,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 attribute.Attachment = attachment;
                 da.Update(attribute);
 
-                if (attribute.SisActivityAssignedAttributeId.HasValue)
+                if (announcementType == AnnouncementType.Class)
                 {
                     if (!attachment.SisAttachmentId.HasValue)
                     {
@@ -196,9 +196,13 @@ namespace Chalkable.BusinessLogic.Services.School
                         MapperFactory.GetMapper<Attachment, StiAttachment>().Map(attachment, stiAtt);
                         attDa.Update(attachment);
                     }
-                    var stiAttribute = ConnectorLocator.ActivityAssignedAttributeConnector.GetAttribute(attribute.SisActivityId.Value, attribute.SisActivityAssignedAttributeId.Value);
-                    MapperFactory.GetMapper<ActivityAssignedAttribute, AnnouncementAssignedAttribute>().Map(stiAttribute, attribute);
-                    ConnectorLocator.ActivityAssignedAttributeConnector.Update(stiAttribute.ActivityId, stiAttribute.Id, stiAttribute);
+
+                    if (attribute.SisActivityAssignedAttributeId.HasValue)
+                    {
+                        var stiAttribute = ConnectorLocator.ActivityAssignedAttributeConnector.GetAttribute(attribute.SisActivityId.Value, attribute.SisActivityAssignedAttributeId.Value);
+                        MapperFactory.GetMapper<ActivityAssignedAttribute, AnnouncementAssignedAttribute>().Map(stiAttribute, attribute);
+                        ConnectorLocator.ActivityAssignedAttributeConnector.Update(stiAttribute.ActivityId, stiAttribute.Id, stiAttribute);
+                    }
                 }
                 uow.Commit();
                 return attribute;

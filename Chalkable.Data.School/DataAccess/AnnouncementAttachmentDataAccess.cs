@@ -20,7 +20,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public AnnouncementAttachment GetById(int id, int callerId, int roleId)
         {
-            var idField = string.Format("{0}_{1}", typeof(AnnouncementAttachment).Name, AnnouncementAttachment.ID_FIELD);
+            var idField = $"{typeof (AnnouncementAttachment).Name}_{AnnouncementAttachment.ID_FIELD}";
             var conds = new AndQueryCondition { { idField, id } };
             return GetAnnouncementAttachments(conds, callerId, roleId).FirstOrDefault();
         }
@@ -29,7 +29,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var annIdsStr = announcementIds.Select(x => x.ToString()).JoinString(",");
             var dbQuery = new DbQuery();
-            var annRefField = string.Format("{0}_{1}", typeof(AnnouncementAttachment).Name, AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD);
+            var annRefField = $"{typeof (AnnouncementAttachment).Name}_{AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD}";
             dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, "*", AnnouncementAttachment.VW_ANNOUNCEMENT_ATTACHMENT)
                        .AppendFormat(" Where {0} in ({1})", annRefField, annIdsStr);
 
@@ -38,7 +38,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<AnnouncementAttachment> GetLastAttachments(int announcementId, int count = int.MaxValue)
         {
-            return GetLastAttachments(new List<int> {announcementId}, count);
+            return GetLastAttachments(new List<int> {announcementId},  count);
         } 
 
         public IList<AnnouncementAttachment> GetList(int callerId, int roleId, string filter = null)

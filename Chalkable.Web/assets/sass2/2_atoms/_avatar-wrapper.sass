@@ -28,6 +28,7 @@
     height: $size * 1px
     width:  $size * 1px
 
+    opacity: 1 // must be 1.0
     position: relative
     &::before
       content: " "
@@ -44,10 +45,10 @@
       border-radius: 50%
 
   .person-avatar-m-#{$size}::before
-    background-image: image-url("avatars/" + $size + "/.no-avatar.png")
+    background-image: image-url("images2/avatar-male.svg")
 
   .person-avatar-w-#{$size}::before
-    background-image: image-url("avatars/" + $size + "/.no-avatar-female.png")
+    background-image: image-url("images2/avatar-female.svg")
 
 
 .avatar-block-left

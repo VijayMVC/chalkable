@@ -1,9 +1,13 @@
 REQUIRE('chlk.templates.JadeTemplate');
 REQUIRE('chlk.models.people.User');
-REQUIRE('lib/autolinker.min.js');
 
 NAMESPACE('chlk.templates', function () {
     "use strict";
+
+    var Autolinker = window.Autolinker || null;
+
+    if (!Autolinker)
+        throw Error('Autolinker.js is required');
 
     /** @class chlk.templates.ChlkTemplate */
     CLASS(

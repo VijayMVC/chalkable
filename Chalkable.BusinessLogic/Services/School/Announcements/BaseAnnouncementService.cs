@@ -13,6 +13,13 @@ using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
+    public enum MarkDoneOptions
+    {
+        TillToday = 1,
+        Till30Days,
+        All
+    }
+
     public interface IBaseAnnouncementService 
     {
         Announcement GetAnnouncementById(int id);
@@ -24,6 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
         void SetComplete(int id, bool complete);
+        void SetComplete(int? classId, MarkDoneOptions option);
         void SetAnnouncementsAsComplete(DateTime? date, bool complete);
         bool CanAddStandard(int announcementId);
 
@@ -157,6 +165,30 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
         {
             return DoRead(u => new AnnouncementStandardDataAccess(u).GetAnnouncementStandardsByClassId(classId));
-        }    
+        }
+
+        public void SetComplete(int? classId, MarkDoneOptions option)
+        {
+            if (!Context.PersonId.HasValue)
+                throw new UnassignedUserException();
+
+            DateTime? tillDateToUpdate;
+            switch ((MarkDoneOptions)option)
+            {
+                case MarkDoneOptions.Till30Days:
+                    tillDateToUpdate = Context.NowSchoolTime.AddMonths(-1);
+                    break;
+                case MarkDoneOptions.TillToday:
+                    tillDateToUpdate = Context.NowSchoolTime.AddDays(-1);
+                    break;
+                default:
+                    tillDateToUpdate = null;
+                    break;
+            }
+
+            SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, tillDateToUpdate, classId);
+        } 
+
+        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId);
     }
 }

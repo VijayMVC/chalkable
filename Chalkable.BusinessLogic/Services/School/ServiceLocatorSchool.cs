@@ -67,6 +67,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IDbMaintenanceService DbMaintenanceService { get; }
         ISettingsService SettingsService { get;  }
         ILPGalleryCategoryService LPGalleryCategoryService { get; }
+        IPersonSettingService PersonSettingService { get; }
 
         ILessonPlanService LessonPlanService { get; }
         IClassAnnouncementService ClassAnnouncementService { get; }
@@ -138,6 +139,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private ISettingsService settingsService;
         private ICourseTypeService courseTypeService;
         private ILPGalleryCategoryService lpGalleryCategoryService;
+        private IPersonSettingService personSettingService;
 
         private ILessonPlanService lessonPlanService;
         private IClassAnnouncementService classAnnouncementService;
@@ -214,6 +216,7 @@ namespace Chalkable.BusinessLogic.Services.School
             announcementFetchService = new AnnouncementFetchService(this);
             leService = new LEService(this);
             attachementService = new AttachmentService(this);
+            personSettingService = new PersonSettingService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -275,14 +278,13 @@ namespace Chalkable.BusinessLogic.Services.School
         public ILPGalleryCategoryService LPGalleryCategoryService { get { return lpGalleryCategoryService; } }
         public ILEService LeService { get { return leService; } }
         public IAttachementService AttachementService { get { return attachementService; } }
-        
+        public IPersonSettingService PersonSettingService { get { return personSettingService;} }
+
         public IDbService SchoolDbService
         {
             get { return schoolDbService; }
             protected set { schoolDbService = value; }
         }
-
-
 
         public ILessonPlanService LessonPlanService { get { return lessonPlanService; } }
         public IClassAnnouncementService ClassAnnouncementService { get { return classAnnouncementService; } }
