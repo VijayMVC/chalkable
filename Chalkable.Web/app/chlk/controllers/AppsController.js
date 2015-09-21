@@ -623,7 +623,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId, String]],
         function tryDeleteApplicationDeveloperAction(id, appName) {
-                this.tryDeleteApplication_(id, appName)
+            var result = this.tryDeleteApplication_(id, appName)
                 .then(function(){
                     return this.BackgroundNavigate('apps', 'general', []); }, this)
                 .thenBreak();
@@ -637,7 +637,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function (mrResult) {
                     return appName == mrResult ? mrResult : ria.async.BREAK; })
                 .thenCall(this.appsService.deleteApp, [id])
-                .attach(this.validateResponse_())
+                .attach(this.validateResponse_());
         },
 
 
