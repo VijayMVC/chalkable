@@ -30,6 +30,14 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             SimpleUpdate<Announcement>(entity);
             base.Update(entity);
         }
+
+        public override void Update(IList<LessonPlan> entities)
+        {
+            foreach (var lessonPlan in entities)
+            {
+                Update(lessonPlan);
+            }
+        }
         
         public AnnouncementDetails Create(int classId, DateTime created, DateTime? startDate, DateTime? endDate, int personId, int schoolYearId)
         {

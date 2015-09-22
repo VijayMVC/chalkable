@@ -106,5 +106,19 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             SchoolLocator.LessonPlanService.DuplicateLessonPlan(lessonPlanId, classIds);
             return Json(true);
         }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)
+        {
+            SchoolLocator.LessonPlanService.ReplaceLessonPlanInGallery(oldLessonPlanId, newLessonPlanId);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult RemoveLessonPlanFromGallery(int lessonPlanId)
+        {
+            SchoolLocator.LessonPlanService.RemoveFromGallery(lessonPlanId);
+            return Json(true);
+        }
     }
 }

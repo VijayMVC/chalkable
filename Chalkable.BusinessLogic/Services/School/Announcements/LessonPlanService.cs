@@ -30,6 +30,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         LessonPlan GetLastDraft();
 
         void DuplicateLessonPlan(int lessonPlanId, IList<int> classIds);
+        void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId);
+        void RemoveFromGallery(int lessonPlanId);
     }
 
     public class LessonPlanService : BaseAnnouncementService<LessonPlan>, ILessonPlanService
@@ -397,6 +399,30 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 u =>
                     new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementType.LessonPlan,schoolYearId,
                         personId, roleId, true, tillDateToUpdate, classId));
+        }
+
+        public void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)
+        {
+            var oldLessonPlan = GetLessonPlanById(oldLessonPlanId);
+            var newLessonPlan = GetLessonPlanById(newLessonPlanId);
+
+            if(newLessonPlan.GalleryCategoryRef.HasValue)
+                throw new ChalkableException("This lesson plan is already in gallery.");
+
+            if (!oldLessonPlan.GalleryCategoryRef.HasValue)
+                throw new ChalkableException(string.Format(@"'{0}' was deleted from Gallery.", oldLessonPlan.Title));
+
+            newLessonPlan.GalleryCategoryRef = oldLessonPlan.GalleryCategoryRef;
+            oldLessonPlan.GalleryCategoryRef = null;
+
+            DoUpdate(u => CreateLessonPlanDataAccess(u).Update(new []{ oldLessonPlan, newLessonPlan }));
+        }
+
+        public void RemoveFromGallery(int lessonPlanId)
+        {
+            var lp = GetLessonPlanById(lessonPlanId);
+            lp.GalleryCategoryRef = null;
+            DoUpdate(u => CreateLessonPlanDataAccess(u).Update(lp));
         }
     }
 }
