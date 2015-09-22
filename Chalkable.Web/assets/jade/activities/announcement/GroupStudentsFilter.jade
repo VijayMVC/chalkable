@@ -18,7 +18,7 @@
             .main-item
                 .column-cell
                     .box-checkbox
-                        +Checkbox('courseType', false)(data-id=courseType.getCourseTypeId().valueOf()).course-type-check
+                        +Checkbox('courseType', false, false, true)(data-id=courseType.getCourseTypeId().valueOf()).course-type-check
                     SPAN.name
                         .text-container(data-tooltip = courseType.getCourseTypeName())=courseType.getCourseTypeName()
                 .items-container
@@ -26,7 +26,7 @@
                         .main-item
                             .column-cell
                                 .box-checkbox
-                                    +Checkbox('course', false)(data-id=course.getId().valueOf()).course-check
+                                    +Checkbox('course', false, false, true)(data-id=course.getId().valueOf()).course-check
                                 SPAN.name
                                     .text-container(data-tooltip = course.getName())=course.getName()
                             .items-container
@@ -34,7 +34,7 @@
                                     .main-item
                                         .column-cell
                                             .box-checkbox
-                                                +Checkbox('course', false)(data-id=clazz.getId().valueOf()).class-check
+                                                +Checkbox('course', false, false, true)(data-id=clazz.getId().valueOf()).class-check
                                             SPAN.name
                                                 text = clazz.getClassNumber() + ' ' + clazz.getName()
                                                 .text-container(data-tooltip = text)=text
