@@ -54,7 +54,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                 if !isAdmin
                     .lp-only.active-result Lesson Plans Only
                         .box-checkbox.right.lesson-plans-check
-                            +Checkbox('lessonplansonly', self.isLessonPlansOnly()).lessonplans-check
+                            +Checkbox('lessonplansonly', self.isLessonPlansOnly(), false, true).lessonplans-check
                 .date-range
                     +DatePicker('fromdate', self.getStartDate())(
                         data-options={
