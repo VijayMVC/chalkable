@@ -50,6 +50,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                         BUTTON(type="submit", value="changeCategory", name="submitType").validate-skip#changeCategoryUpdate.x-hidden
                                 .add-category
                                     +ActionButton('lessonplangallery', 'lessonPlanTemplatesList', classId).special-button2.add + Import from new Item Gallery
+                                    +ActionButton('lpgallerycategory', 'editCategories').special-button2.add + Add Category +                 
                             +TextArea(name="content", placeholder="Assignment")= announcement.getContent()
                             if needStandardsBlock
                                 .add-standards-container
