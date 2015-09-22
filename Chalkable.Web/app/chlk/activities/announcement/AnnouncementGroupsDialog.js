@@ -26,7 +26,7 @@ NAMESPACE('chlk.activities.announcement', function(){
                 });
                 model.setSelected(selected);
                 tpl.setSelected(selected);
-                tpl.renderTo(this.dom);
+                tpl.renderTo(this.dom.setHTML(''));
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.group.StudentsForGroupTpl, 'after-filter')],
