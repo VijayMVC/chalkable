@@ -129,9 +129,9 @@
           <param name="branchFilter"><![CDATA[+:staging
 +:qa]]></param>
           <param name="quietPeriodMode" value="DO_NOT_USE" />
-          <param name="triggerRules"><![CDATA[+:*
--:.teamcity
--:.hgtags]]></param>
+          <param name="triggerRules"><![CDATA[-:*teamcity
+-:*hgtags
++:*]]></param>
         </parameters>
       </build-trigger>
     </build-triggers>
