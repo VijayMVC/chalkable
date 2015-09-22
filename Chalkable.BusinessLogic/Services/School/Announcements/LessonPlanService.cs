@@ -202,7 +202,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        private void ValidateLessonPlan(LessonPlan lessonPlan, LessonPlanDataAccess da)
+        private static void ValidateLessonPlan(LessonPlan lessonPlan, LessonPlanDataAccess da)
         {
             if(!lessonPlan.StartDate.HasValue)
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "LessonPlan start date "));

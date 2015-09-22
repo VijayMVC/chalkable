@@ -112,6 +112,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var infractions = ServiceLocator.InfractionService.GetInfractions();
             var activitiesIds = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();
             var anns = DoRead(uow => new ClassAnnouncementForTeacherDataAccess(uow, syId).GetByActivitiesIds(activitiesIds, Context.PersonId.Value));
+            anns = anns.Where(x => x.ClassAnnouncementData.VisibleForStudent).ToList();
             var res = StudentSummaryInfo.Create(student, nowDashboard, infractions, anns, MapperFactory.GetMapper<StudentAnnouncement, Score>());
             return res;
         }
