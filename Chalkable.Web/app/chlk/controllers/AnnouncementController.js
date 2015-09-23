@@ -1661,12 +1661,31 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
         function checkLessonPlanTitleAction(model, isAddToGallery_){
             var res = this.lessonPlanService
-                .existsInGallery(model.getTitle(), model.getId())
+                .getLessonPlanTemplateByTitle(model.getTitle())
                 .attach(this.validateResponse_())
-                .then(function(exists){
-                    if(exists)
-                        this.ShowMsgBox('There is Lesson Plan with that title in gallery', 'whoa.');
-                    return new chlk.models.Success(exists);
+                .then(function(lpInGallery){
+
+                    var success = !!lpInGallery;
+                    if(lpInGallery){
+                        if(lpInGallery.isAnnOwner()){
+                            return this.ShowMsgBox('You are replacing the existing lesson plan – do you want to continue ?', null,
+                                    [{text: 'Continue', clazz: 'blue-button', value: 'ok'},
+                                    {text: 'NO'}]
+                                )
+                                .then(function(msResult){
+                                    if(msResult){
+                                        return this.lessonPlanService.replaceLessonPlanInGallery(lpInGallery.getId(), model.getId())
+                                                   .attach(this.validateResponse_())
+                                                   .then(function(data){return new chlk.models.Success(!data)});
+                                    }
+                                    return new chlk.models.Success(true);
+                                }, this);
+                        }
+                        else{
+                            this.ShowMsgBox('There is Lesson Plan with that title in gallery', 'whoa.');
+                        }
+                    }
+                    return new chlk.models.Success(success);
                 }, this);
 
             return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, res, isAddToGallery_ ? 'addToGallery' : chlk.activities.lib.DontShowLoader());
