@@ -333,8 +333,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('apps')],
         [chlk.controllers.StudyCenterEnabled()],
-        [[chlk.models.id.AppId, chlk.models.apps.AppTotalPrice, chlk.models.id.ClassId, chlk.models.id.AnnouncementId]],
-        function tryToQuickInstallAction(applicationId, appTotalPrice, classId, announcementId_){
+        [[chlk.models.id.AppId, chlk.models.apps.AppTotalPrice, chlk.models.id.ClassId, chlk.models.id.AnnouncementId, chlk.models.id.SchoolPersonId]],
+        function tryToQuickInstallAction(applicationId, appTotalPrice, classId_, announcementId_, personId_){
             var res = this.appMarketService
                 .getDetails(applicationId)
                 .attach(this.validateResponse_())
@@ -342,7 +342,7 @@ NAMESPACE('chlk.controllers', function (){
                     var screenshotDims = chlk.models.apps.AppPicture.SCREENSHOT_DIMS();
                     var screenshots = this.pictureService.getAppPicturesByIds(app.getScreenshotIds(), screenshotDims.width, screenshotDims.height);
                     app.setScreenshotPictures(new chlk.models.apps.AppScreenShots(screenshots, false));
-                    return new chlk.models.apps.ShortAppInstallViewData(app, appTotalPrice, classId, announcementId_);
+                    return new chlk.models.apps.ShortAppInstallViewData(app, appTotalPrice, classId_, announcementId_, personId_);
                 }, this);
             return this.ShadeView(chlk.activities.apps.QuickAppInstallDialog, res);
         },

@@ -340,6 +340,7 @@ namespace Chalkable.Data.Master.DataAccess
         {
             var query = new DbQuery(new List<DbQuery>
                 {
+                    Orm.SimpleDelete<ApplicationDistrictOption>(new AndQueryCondition { {ApplicationDistrictOption.APPLICATION_REF_FIELD, id} }),
                     Orm.SimpleDelete<ApplicationPermission>(new AndQueryCondition { {ApplicationPermission.APPLICATION_REF_FIELD, id} }),
                     Orm.SimpleDelete<ApplicationCategory>(new AndQueryCondition { {ApplicationCategory.APPLICATION_REF_FIELD, id} }),
                     Orm.SimpleDelete<ApplicationPicture>(new AndQueryCondition { {ApplicationPicture.APPLICATION_REF_FIELD, id} }),
@@ -347,6 +348,7 @@ namespace Chalkable.Data.Master.DataAccess
                     Orm.SimpleDelete<ApplicationGradeLevel>(new AndQueryCondition { {ApplicationGradeLevel.APPLICATION_REF_FIELD, id} }),
                     Orm.SimpleDelete<ApplicationStandard>(new AndQueryCondition { {ApplicationStandard.APPLICATION_REF_FIELD, id} }),
                     Orm.SimpleDelete<Application>(new AndQueryCondition { {Application.ID_FIELD, id} }),
+
                 });
             ExecuteNonQueryParametrized(query.Sql.ToString(), query.Parameters);
         }

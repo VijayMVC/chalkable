@@ -50,6 +50,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                         BUTTON(type="submit", value="changeCategory", name="submitType").validate-skip#changeCategoryUpdate.x-hidden
                                 .add-category
                                     +ActionButton('lessonplangallery', 'lessonPlanTemplatesList', classId).special-button2.add + Import from new Item Gallery
+                                    +ActionButton('lpgallerycategory', 'editCategories').special-button2.add + Add Category +                 
                             +TextArea(name="content", placeholder="Assignment")= announcement.getContent()
                             if needStandardsBlock
                                 .add-standards-container
@@ -71,9 +72,9 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                             +DatePicker('startdate', lessonPlan.getStartDate())(
                                 data-options={
                                     showOtherMonths: true,
-                                    selectOtherMonths: true
+                                    selectOtherMonths: true,
+                                    inCurrentMp: true
                                 },
-                                inCurrentMp: true,
                                 data-value=lessonPlan.getStartDate() ? lessonPlan.getStartDate().format('mm/dd/yy') : ''
                                 placeholder=Msg.Start_date,
                                 class='validate[required]'
@@ -84,9 +85,9 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                             +DatePicker('enddate', lessonPlan.getEndDate())(
                                 data-options={
                                     showOtherMonths: true,
-                                    selectOtherMonths: true
+                                    selectOtherMonths: true,
+                                    inCurrentMp: true
                                 },
-                                inCurrentMp: true,
                                 data-value=lessonPlan.getEndDate() ? lessonPlan.getEndDate().format('mm/dd/yy') : ''
                                 placeholder=Msg.End_date,
                                 class='validate[required]'

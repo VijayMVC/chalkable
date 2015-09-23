@@ -12,25 +12,27 @@
     top: 100px
     position: relative
 
-    &.partially-checked::before,  &:checked::before
-      content: ' '
+    &.partially-checked+label,  &:checked+label
       position: absolute
-      top: 3px
-      left: -1px
-      right: 0px
-      bottom: 3px
+      top: 2px
+      left: 2px
+      right: 2px
+      bottom: 2px
+      cursor: pointer
 
-    &:checked::before
-      top: -100px
-      bottom: 100px
+    &:checked+label
       +icons-24-sprite(check, 0, -6px, -5px)
       height: 14px
       width: 14px
+      top: 3px
+      left: 3px
+      right: 3px
+      bottom: 3px
 
     &:not(:checked):not(.partially-checked)
       opacity: 0
 
-    &.partially-checked::before
+    &.partially-checked+label
       background: #6BBA71
 
     &[disabled], &[readonly]

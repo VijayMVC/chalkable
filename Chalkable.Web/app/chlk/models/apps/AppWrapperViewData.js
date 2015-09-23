@@ -28,7 +28,8 @@ NAMESPACE('chlk.models.apps', function () {
                 this.setApp(app);
                 this.setAppMode(mode);
 
-                this.setAnnouncementType(announcementType_);
+                if(announcementType_)
+                    this.setAnnouncementType(announcementType_);
 
                 var buttons = [];
                 switch(mode){

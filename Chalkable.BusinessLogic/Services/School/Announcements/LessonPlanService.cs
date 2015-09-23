@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AnnouncementDetails Create(int classId, DateTime? startDate, DateTime? endDate);
         AnnouncementDetails CreateFromTemplate(int lessonPlanTemplateId, int classId);
         AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content, DateTime? startDate, DateTime? endDate, bool visibleForStudent);
-        PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count); 
+        PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created); 
         IList<string> GetLastFieldValues(int classId);
         bool Exists(string title, int? excludedLessonPlaId);
         bool ExistsInGallery(string title, int? exceludedLessonPlanId);
@@ -30,6 +30,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         LessonPlan GetLastDraft();
 
         void DuplicateLessonPlan(int lessonPlanId, IList<int> classIds);
+        void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId);
+        void RemoveFromGallery(int lessonPlanId);
     }
 
     public class LessonPlanService : BaseAnnouncementService<LessonPlan>, ILessonPlanService
@@ -83,8 +85,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             using (var u = Update())
             {
                 var da = CreateLessonPlanDataAccess(u);
-                res = da.CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
                 var lp = da.GetById(lessonPlanTemplateId);
+                if(lp.IsDraft)
+                    throw new ChalkableException("Current lesson plan in gallery is not submitted yet. You can't create lesson plan from not submitted template");
+                res = da.CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
                 var teachers = new ClassTeacherDataAccess(u).GetClassTeachers(lp.ClassRef, null).Select(x=>x.PersonRef).ToList();
                 res.AnnouncementAttachments = AnnouncementAttachmentService.CopyAnnouncementAttachments(lessonPlanTemplateId, teachers, new List<int> { res.Id }, u, ServiceLocator, ConnectorLocator);
                 res.AnnouncementAttributes = AnnouncementAssignedAttributeService.CopyNonStiAttributes(lessonPlanTemplateId, new List<int>{res.Id}, u, ServiceLocator, ConnectorLocator);
@@ -202,7 +206,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        private void ValidateLessonPlan(LessonPlan lessonPlan, LessonPlanDataAccess da)
+        private static void ValidateLessonPlan(LessonPlan lessonPlan, LessonPlanDataAccess da)
         {
             if(!lessonPlan.StartDate.HasValue)
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "LessonPlan start date "));
@@ -325,10 +329,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         
-        public PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count)
+        public PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created)
         {
             var lessonPlans =
-                DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(galleryCategoryId, title, classId));
+                DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(galleryCategoryId, title, classId, state, Context.PersonId.Value));
 
             switch (sortType)
             {
@@ -397,6 +401,35 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 u =>
                     new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementType.LessonPlan,schoolYearId,
                         personId, roleId, true, tillDateToUpdate, classId));
+        }
+
+        public void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)
+        {
+            var oldLessonPlan = GetLessonPlanById(oldLessonPlanId);
+            var newLessonPlan = GetLessonPlanById(newLessonPlanId);
+
+            if (oldLessonPlan.OwnereId != Context.PersonId)
+                throw new ChalkableSecurityException("Current user is not owner of lesson plan.");
+
+            if (newLessonPlan.GalleryCategoryRef.HasValue)
+                throw new ChalkableException("This lesson plan is already in gallery.");
+
+            if (!oldLessonPlan.GalleryCategoryRef.HasValue)
+                throw new ChalkableException(string.Format(@"'{0}' was deleted from Gallery.", oldLessonPlan.Title));
+
+            newLessonPlan.GalleryCategoryRef = oldLessonPlan.GalleryCategoryRef;
+            oldLessonPlan.GalleryCategoryRef = null;
+
+            DoUpdate(u => CreateLessonPlanDataAccess(u).Update(new []{ oldLessonPlan, newLessonPlan }));
+        }
+
+        public void RemoveFromGallery(int lessonPlanId)
+        {
+            var lp = GetLessonPlanById(lessonPlanId);
+            if(lp.OwnereId != Context.PersonId)
+                throw new ChalkableSecurityException("Current user is not owner of lesson plan.");
+            lp.GalleryCategoryRef = null;
+            DoUpdate(u => CreateLessonPlanDataAccess(u).Update(lp));
         }
     }
 }
