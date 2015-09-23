@@ -415,7 +415,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 throw new ChalkableException("This lesson plan is already in gallery.");
 
             if (!oldLessonPlan.GalleryCategoryRef.HasValue)
-                throw new ChalkableException(string.Format(@"'{0}' was deleted from Gallery.", oldLessonPlan.Title));
+                throw new ChalkableException($@"'{oldLessonPlan.Title}' was deleted from Gallery.");
 
             newLessonPlan.GalleryCategoryRef = oldLessonPlan.GalleryCategoryRef;
             oldLessonPlan.GalleryCategoryRef = null;

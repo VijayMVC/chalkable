@@ -117,12 +117,12 @@ mixin Glue_()
 
         if self.getUserRole().isStudent()
             -var myAttachments = (self.getAnnouncementAttachments() || []).filter(function (_) { return _.isOwner(); });
-            if classAnnouncement && (classAnnouncement.isGradable() || myAttachments.length)
-                +CloseOpen('My Attachments')
-                    #attachments-block.student-attachments.content
-                        +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
-                            userRole = self.getUserRole()
-                        )
+            -var showMyAttachments = classAnnouncement && classAnnouncement.isGradable() || myAttachments.length
+            +CloseOpen('My Attachments')
+                #attachments-block.student-attachments.content
+                    +RenderWith(self.getModel(), chlk.templates.announcement.AnnouncementForStudentAttachments)(
+                        userRole = self.getUserRole()
+                    )
             if self.getStandards() && self.getStandards().length > 0 && self.getStandards().filter(function(standard){return standard.getAcademicBenchmarkId()}).length
                 +CloseOpen('Practice & Improve')
                     .student-attachments.content
