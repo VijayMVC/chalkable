@@ -406,7 +406,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var oldLessonPlan = GetLessonPlanById(oldLessonPlanId);
             var newLessonPlan = GetLessonPlanById(newLessonPlanId);
 
-            if(newLessonPlan.GalleryCategoryRef.HasValue)
+            if (oldLessonPlan.OwnereId != Context.PersonId)
+                throw new ChalkableSecurityException("Current user is not owner of lesson plan.");
+
+            if (newLessonPlan.GalleryCategoryRef.HasValue)
                 throw new ChalkableException("This lesson plan is already in gallery.");
 
             if (!oldLessonPlan.GalleryCategoryRef.HasValue)
@@ -421,6 +424,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public void RemoveFromGallery(int lessonPlanId)
         {
             var lp = GetLessonPlanById(lessonPlanId);
+            if(lp.OwnereId != Context.PersonId)
+                throw new ChalkableSecurityException("Current user is not owner of lesson plan.");
             lp.GalleryCategoryRef = null;
             DoUpdate(u => CreateLessonPlanDataAccess(u).Update(lp));
         }
