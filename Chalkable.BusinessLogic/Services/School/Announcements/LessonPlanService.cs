@@ -17,7 +17,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AnnouncementDetails Create(int classId, DateTime? startDate, DateTime? endDate);
         AnnouncementDetails CreateFromTemplate(int lessonPlanTemplateId, int classId);
         AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content, DateTime? startDate, DateTime? endDate, bool visibleForStudent);
-        PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count); 
+        PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created); 
         IList<string> GetLastFieldValues(int classId);
         bool Exists(string title, int? excludedLessonPlaId);
         bool ExistsInGallery(string title, int? exceludedLessonPlanId);
@@ -85,8 +85,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             using (var u = Update())
             {
                 var da = CreateLessonPlanDataAccess(u);
-                res = da.CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
                 var lp = da.GetById(lessonPlanTemplateId);
+                if(lp.IsDraft)
+                    throw new ChalkableException("Current lesson plan in gallery is not submitted yet. You can't create lesson plan from not submitted template");
+                res = da.CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
                 var teachers = new ClassTeacherDataAccess(u).GetClassTeachers(lp.ClassRef, null).Select(x=>x.PersonRef).ToList();
                 res.AnnouncementAttachments = AnnouncementAttachmentService.CopyAnnouncementAttachments(lessonPlanTemplateId, teachers, new List<int> { res.Id }, u, ServiceLocator, ConnectorLocator);
                 res.AnnouncementAttributes = AnnouncementAssignedAttributeService.CopyNonStiAttributes(lessonPlanTemplateId, new List<int>{res.Id}, u, ServiceLocator, ConnectorLocator);
@@ -327,10 +329,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         
-        public PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count)
+        public PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created)
         {
             var lessonPlans =
-                DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(galleryCategoryId, title, classId, Context.PersonId.Value));
+                DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(galleryCategoryId, title, classId, state, Context.PersonId.Value));
 
             switch (sortType)
             {

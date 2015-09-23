@@ -23,15 +23,13 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult LessonPlanTemplates(string filter, int? categoryType, int? sortType, int? start, int? count)
+        public ActionResult LessonPlanTemplates(string filter, int? categoryType, int? sortType, int? state, int? start, int? count)
         {
             var st = start ?? 0;
             var cnt = count ?? 12;
-            var sort = sortType ?? 2; 
-            var lessonPlans = SchoolLocator.LessonPlanService.GetLessonPlansTemplates(categoryType, filter, null, (AttachmentSortTypeEnum)sort, st, cnt);
-            
+            var sort = (AttachmentSortTypeEnum?) sortType ?? AttachmentSortTypeEnum.OldestUploaded;
+            var lessonPlans = SchoolLocator.LessonPlanService.GetLessonPlansTemplates(categoryType, filter, null, sort, st, cnt, (AnnouncementState?)state);
             return Json(lessonPlans.Transform(LessonPlanViewData.Create));
-
         }
         
         [AuthorizationFilter("Teacher")]

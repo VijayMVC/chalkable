@@ -62,8 +62,9 @@ NAMESPACE('chlk.controllers', function () {
             function getLessonPlanTemplates_(classId, categoryType_, filter_, sortType_, start_, count_){
                 var lessonPlanCategories = this.lpGalleryCategoryService.getLessonPlanCategoriesSync();
 
+                var state = chlk.models.announcement.StateEnum.SUBMITTED;
                 var result = this.lessonPlanService
-                    .getLessonPlanTemplatesList(categoryType_, filter_, sortType_, start_, count_)
+                    .getLessonPlanTemplatesList(categoryType_, filter_, sortType_, state, start_, count_)
                     .attach(this.validateResponse_())
                     .then(function(lessonPlans){
                         return new chlk.models.announcement.LessonPlanGalleryViewData(

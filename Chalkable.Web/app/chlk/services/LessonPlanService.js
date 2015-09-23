@@ -41,15 +41,17 @@ NAMESPACE('chlk.services', function () {
                 chlk.models.id.LpGalleryCategoryId,
                 String,
                 chlk.models.attachment.SortAttachmentType,
+                chlk.models.announcement.StateEnum,
                 Number,
                 Number
             ]],
-            ria.async.Future, function getLessonPlanTemplatesList(categoryType_, filter_, sortType_, start_, count_) {
+            ria.async.Future, function getLessonPlanTemplatesList(categoryType_, filter_, sortType_, state_, start_, count_) {
                 return this.getPaginatedList('LessonPlan/LessonPlanTemplates.json', chlk.models.announcement.LessonPlanViewData, {
                     start: start_ | 0,
                     count: count_ | 12,
                     filter: filter_,
                     sortType: sortType_ && sortType_.valueOf(),
+                    state: state_ && state_.valueOf(),
                     categoryType: categoryType_ && categoryType_.valueOf()
                 });
             },
@@ -59,7 +61,7 @@ NAMESPACE('chlk.services', function () {
             [[String, chlk.models.id.LpGalleryCategoryId]],
             ria.async.Future, function getLessonPlanTemplateByTitle(title){
                 var MAX_INT = -(1 << 31) - 1;
-                return this.getLessonPlanTemplatesList(null, title, null, 0, MAX_INT)
+                return this.getLessonPlanTemplatesList(null, title, null, null, 0, MAX_INT)
                     .then(function(data){
                         var res = data.getItems().filter(function(item){
                             return item.getTitle() == title;

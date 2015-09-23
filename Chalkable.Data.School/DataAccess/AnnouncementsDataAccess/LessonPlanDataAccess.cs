@@ -166,9 +166,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         } 
 
         
-        public IList<LessonPlan> GetLessonPlanTemplates(int? galleryCategoryId, string title, int? classId, int callerId)
+        public IList<LessonPlan> GetLessonPlanTemplates(int? galleryCategoryId, string title, int? classId, AnnouncementState? state, int callerId)
         {
-            var conds = new AndQueryCondition {{LessonPlan.GALERRY_CATEGORY_REF_FIELD, null, ConditionRelation.NotEqual}};
+            var conds = new AndQueryCondition { {LessonPlan.GALERRY_CATEGORY_REF_FIELD, null, ConditionRelation.NotEqual}};
+            if(state.HasValue)
+                conds.Add(Announcement.STATE_FIELD, state);
             if(galleryCategoryId.HasValue)
                 conds.Add(LessonPlan.GALERRY_CATEGORY_REF_FIELD, galleryCategoryId);
             if(classId.HasValue)
