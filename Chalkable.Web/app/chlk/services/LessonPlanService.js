@@ -54,6 +54,35 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+
+
+            [[String, chlk.models.id.LpGalleryCategoryId]],
+            ria.async.Future, function getLessonPlanTemplateByTitle(title){
+                var MAX_INT = -(1 << 31) - 1;
+                return this.getLessonPlanTemplatesList(null, title, null, 0, MAX_INT)
+                    .then(function(data){
+                        var res = data.getItems().filter(function(item){
+                            return item.getTitle() == title;
+                        });
+                        return res.length > 0 ? res[0] : null;
+                    });
+            },
+
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementId]],
+            ria.async.Future, function replaceLessonPlanInGallery(oldLessonPlanId, newLessonPlanId){
+                return this.post('LessonPlan/ReplaceLessonPlanInGallery', Boolean, {
+                    oldLessonPlanId : oldLessonPlanId.valueOf(),
+                    newLessonPlanId : newLessonPlanId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId]],
+            ria.async.Future, function removeLessonPlanFromGallery(lessonPlanId){
+                return this.post('LessonPlan/RemoveLessonPlanFromGallery', Boolean,{
+                    lessonPlanId: lessonPlanId.valueOf()
+                });
+            },
+
             [[chlk.models.id.AnnouncementId, String]],
             ria.async.Future, function editTitle(announcementId, title) {
                 return this.get('LessonPlan/EditTitle.json', Boolean, {
