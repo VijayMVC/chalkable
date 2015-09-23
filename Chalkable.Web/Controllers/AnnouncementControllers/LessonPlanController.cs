@@ -23,15 +23,13 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult LessonPlanTemplates(string filter, int? categoryType, int? sortType, int? start, int? count)
+        public ActionResult LessonPlanTemplates(string filter, int? categoryType, int? sortType, int? state, int? start, int? count)
         {
             var st = start ?? 0;
             var cnt = count ?? 12;
-            var sort = sortType ?? 2; 
-            var lessonPlans = SchoolLocator.LessonPlanService.GetLessonPlansTemplates(categoryType, filter, null, (AttachmentSortTypeEnum)sort, st, cnt);
-            
+            var sort = (AttachmentSortTypeEnum?) sortType ?? AttachmentSortTypeEnum.OldestUploaded;
+            var lessonPlans = SchoolLocator.LessonPlanService.GetLessonPlansTemplates(categoryType, filter, null, sort, st, cnt, (AnnouncementState?)state);
             return Json(lessonPlans.Transform(LessonPlanViewData.Create));
-
         }
         
         [AuthorizationFilter("Teacher")]
@@ -104,6 +102,20 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult DuplicateLessonPlan(int lessonPlanId, IntList classIds)
         {
             SchoolLocator.LessonPlanService.DuplicateLessonPlan(lessonPlanId, classIds);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)
+        {
+            SchoolLocator.LessonPlanService.ReplaceLessonPlanInGallery(oldLessonPlanId, newLessonPlanId);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult RemoveLessonPlanFromGallery(int lessonPlanId)
+        {
+            SchoolLocator.LessonPlanService.RemoveFromGallery(lessonPlanId);
             return Json(true);
         }
     }

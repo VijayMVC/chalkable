@@ -62,8 +62,9 @@ NAMESPACE('chlk.controllers', function () {
             function getLessonPlanTemplates_(classId, categoryType_, filter_, sortType_, start_, count_){
                 var lessonPlanCategories = this.lpGalleryCategoryService.getLessonPlanCategoriesSync();
 
+                var state = chlk.models.announcement.StateEnum.SUBMITTED;
                 var result = this.lessonPlanService
-                    .getLessonPlanTemplatesList(categoryType_, filter_, sortType_, start_, count_)
+                    .getLessonPlanTemplatesList(categoryType_, filter_, sortType_, state, start_, count_)
                     .attach(this.validateResponse_())
                     .then(function(lessonPlans){
                         return new chlk.models.announcement.LessonPlanGalleryViewData(
@@ -79,15 +80,16 @@ NAMESPACE('chlk.controllers', function () {
                 return this.ShadeOrUpdateView(chlk.activities.announcement.LessonPlanGalleryDialog, result);
             },
 
-            [[chlk.models.id.AnnouncementId]],
-            function tryDeleteLessonPlanFromGalleryAction(lessonPlanId){
+            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
+            function tryDeleteLessonPlanFromGalleryAction(lessonPlanId, classId){
                 this.ShowConfirmBox('This will PERMANENTLY delete this lesson plan from the gallery for everyone. Are you sure you want to delete this?',
                     "whoa.", null, 'negative-button')
+                    .thenCall(this.lessonPlanService.removeLessonPlanFromGallery, [lessonPlanId])
+                    .attach(this.validateResponse_())
                     .then(function (data) {
-                        return this.BackgroundNavigate('announcement', 'deleteAnnouncement', [lessonPlanId, chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN]);
+                        return this.BackgroundNavigate('lessonplangallery', 'lessonPlanTemplatesList', [classId]);
                     }, this);
                 return null;
-            }
-
+            },
         ]);
 });

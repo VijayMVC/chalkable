@@ -2,7 +2,7 @@ mixin LessonPlanIcon_(lessonPlan, classId, isAbleToRemove)
    .announcement-item.application
        -var canRemove = isAbleToRemove || lessonPlan.isAnnOwner()
        if canRemove
-            +ActionLink('lessonplangallery', 'tryDeleteLessonPlanFromGallery', lessonPlan.getId()).close-btn
+            +ActionLink('lessonplangallery', 'tryDeleteLessonPlanFromGallery', lessonPlan.getId(), classId).close-btn
        .wrapper
            .attach-assessment.img
            .title(data-tooltip=lessonPlan.getTitle(), data-tooltip-type="overflow")= lessonPlan.getTitle()

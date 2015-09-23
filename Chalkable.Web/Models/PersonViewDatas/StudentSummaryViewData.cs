@@ -17,7 +17,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public IList<ClassViewData> ClassesSection { get; set; }
         public StudentHoverBoxViewData<TotalAbsencesPerClassViewData> AttendanceBox { get; set; }
         public StudentHoverBoxViewData<DisciplineTypeSummaryViewData> DisciplineBox { get; set; }
-        public StudentHoverBoxViewData<StudentSummeryGradeViewData> GradesBox { get; set; }
+        public StudentHoverBoxViewData<StudentSummaryGradeViewData> GradesBox { get; set; }
         public StudentHoverBoxViewData<StudentSummeryRankViewData> RanksBox { get; set; }
         public IList<StudentHealthConditionViewData> HealthConditions { get; set; }
 
@@ -43,7 +43,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                     ClassesSection = ClassViewData.Create(classes),
                     AttendanceBox = StudentHoverBoxViewData<TotalAbsencesPerClassViewData>.Create(studentSummary.DailyAttendance, studentSummary.Attendances, classes),
                     DisciplineBox = StudentHoverBoxViewData<DisciplineTypeSummaryViewData>.Create(studentSummary.InfractionSummaries, studentSummary.TotalDisciplineOccurrences),
-                    GradesBox = StudentHoverBoxViewData<StudentSummeryGradeViewData>.Create(studentSummary.StudentAnnouncements),
+                    GradesBox = StudentHoverBoxViewData<StudentSummaryGradeViewData>.Create(studentSummary.StudentAnnouncements),
                     RanksBox = studentSummary.ClassRank != null ? StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(studentSummary.ClassRank) : null,
                 };
             res.CurrentClassName = NO_CLASS_SCHEDULED;
@@ -87,18 +87,18 @@ namespace Chalkable.Web.Models.PersonViewDatas
             if (dailyAbsenceSummary != null && dailyAbsenceSummary.Absences.HasValue)
                 totalAbsencesCount += dailyAbsenceSummary.Absences.Value; // Excluded tardies because of Jonathan Whitehurst's comment on CHLK-3184 
             //totalAbsencesCount += res.Hover.Sum(x => x.Absences);
-            res.Title = totalAbsencesCount.ToString();
+            res.Title = totalAbsencesCount.ToString(CultureInfo.InvariantCulture);
             return res;
         }
 
-        public static  StudentHoverBoxViewData<StudentSummeryGradeViewData> Create(IList<StudentAnnouncement> studentAnnouncements)
+        public static  StudentHoverBoxViewData<StudentSummaryGradeViewData> Create(IList<StudentAnnouncement> studentAnnouncements)
         {
             var firstStudentAn = studentAnnouncements.FirstOrDefault();
-            var res = new StudentHoverBoxViewData<StudentSummeryGradeViewData>
+            var res = new StudentHoverBoxViewData<StudentSummaryGradeViewData>
             {
-                Hover = StudentSummeryGradeViewData.Create(studentAnnouncements),
+                Hover = StudentSummaryGradeViewData.Create(studentAnnouncements),
             };
-            if (firstStudentAn != null && !string.IsNullOrEmpty(firstStudentAn.ScoreValue))
+            if (!string.IsNullOrEmpty(firstStudentAn?.ScoreValue))
             {
                 res.Title = firstStudentAn.ScoreValue;
                 res.IsPassing = firstStudentAn.NumericScore >= 65;
@@ -136,14 +136,14 @@ namespace Chalkable.Web.Models.PersonViewDatas
         }
     }
 
-    public class StudentSummeryGradeViewData
+    public class StudentSummaryGradeViewData
     {
         public string Grade { get; set; }
         public string AnnouncementTitle { get; set; }
         public int AnnouncementId { get; set; }
-        public static StudentSummeryGradeViewData Create(StudentAnnouncement studentAnnouncement)
+        public static StudentSummaryGradeViewData Create(StudentAnnouncement studentAnnouncement)
         {
-            var res = new StudentSummeryGradeViewData
+            var res = new StudentSummaryGradeViewData
             {
                 Grade = studentAnnouncement.ScoreValue,
                 AnnouncementTitle = studentAnnouncement.AnnouncementTitle,
@@ -151,7 +151,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             };
             return res;
         }
-        public static IList<StudentSummeryGradeViewData> Create(IList<StudentAnnouncement> studentAnnouncements)
+        public static IList<StudentSummaryGradeViewData> Create(IList<StudentAnnouncement> studentAnnouncements)
         {
             return studentAnnouncements.Select(Create).ToList();
         }

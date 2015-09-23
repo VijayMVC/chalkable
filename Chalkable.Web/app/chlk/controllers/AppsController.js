@@ -461,6 +461,8 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
+
+
         [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.id.AppId, chlk.models.id.ClassId, String, String, Boolean, String]],
         function openSuggestedAppFromExplorerAction(appId, classId, appUrl, viewUrl, isBanned, appUrlSuffix_){
@@ -468,13 +470,23 @@ NAMESPACE('chlk.controllers', function (){
                 this.userTrackingService.openedAppFrom(appUrl, "explorer");
                 return this.viewAppAction(appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, new chlk.models.id.AnnouncementApplicationId(appId.valueOf()), isBanned, null, appUrlSuffix_);
             }
-
             var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
-            this.appMarketService.getApplicationTotalPrice(appId, classIds, null)
-                .attach(this.validateResponse_())
-                .then(function(appTotalPrice){
-                    return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, classId]);
-                }, this);
+            var personId = new chlk.models.id.AppInstallGroupId(this.getCurrentPerson().getId().valueOf());
+
+            if(this.getCurrentRole().isStudent()){
+                this.appMarketService.getApplicationTotalPrice(appId, [], personId)
+                    .attach(this.validateResponse_())
+                    .then(function(appTotalPrice){
+                        return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, null, null, this.getCurrentPerson().getId()]);
+                    }, this);
+            }
+            else {
+                this.appMarketService.getApplicationTotalPrice(appId, classIds, null)
+                    .attach(this.validateResponse_())
+                    .then(function(appTotalPrice){
+                        return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, classId, null, null]);
+                    }, this);
+            }
 
             return null;
         },
@@ -623,7 +635,7 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AppId, String]],
         function tryDeleteApplicationDeveloperAction(id, appName) {
-                this.tryDeleteApplication_(id, appName)
+            var result = this.tryDeleteApplication_(id, appName)
                 .then(function(){
                     return this.BackgroundNavigate('apps', 'general', []); }, this)
                 .thenBreak();
@@ -637,7 +649,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function (mrResult) {
                     return appName == mrResult ? mrResult : ria.async.BREAK; })
                 .thenCall(this.appsService.deleteApp, [id])
-                .attach(this.validateResponse_())
+                .attach(this.validateResponse_());
         },
 
 
