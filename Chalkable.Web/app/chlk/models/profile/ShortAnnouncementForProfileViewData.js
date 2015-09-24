@@ -14,13 +14,14 @@ NAMESPACE('chlk.models.profile', function () {
 
             chlk.models.id.AnnouncementId, 'id',
             String, 'title',
+            Boolean, 'owner',
             chlk.models.announcement.AnnouncementTypeEnum, 'type',
 
             VOID, function deserialize(raw) {
                 this.id = SJX.fromValue(Number(raw.id), chlk.models.id.AnnouncementId);
                 this.title = SJX.fromValue(raw.title, String);
                 this.type = SJX.fromValue(raw.type, chlk.models.announcement.AnnouncementTypeEnum);
-
+                this.owner = SJX.fromValue(raw.owner, Boolean);
                 this.studentAnnouncements = ria.serialize.SJX.fromDeserializable(raw.studentannouncements, chlk.models.announcement.ShortStudentAnnouncementsViewData);
             }
         ]);
