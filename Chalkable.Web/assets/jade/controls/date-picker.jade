@@ -1,0 +1,20 @@
+mixin DatePicker(name, value_)
+    -attributes = self.processAttrs(name, value_, attributes)
+    input(type="text")(attributes)
+    if attributes['data-options'].dateFormat
+        +Hidden(name, value_).hidden-datepicker
+
+mixin DatePickerInline(name, value_)
+    -var altHiddenId = ria.dom.Dom.GID()
+    -attributes['data-options'] = attributes['data-options'] || {}
+    -attributes['data-options'].altField = '#' + altHiddenId
+    -attributes = self.processAttrs(name, value_, attributes)
+    input(type="hidden", name=attributes.name, value=value_, id = altHiddenId)
+    if attributes['data-options'].dateFormat
+        +Hidden(name, value_).hidden-datepicker
+    div(attributes)
+    
+mixin ButtonDatePicker(name, text_, value_)
+    -attributes = self.processAttrs(name, value_, attributes)
+    input(type="button", text=text_)(attributes).chlk-button
+    
