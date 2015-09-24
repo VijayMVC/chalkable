@@ -81,14 +81,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             //get only simple apps
             var apps = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(appIds).Where(a=>!a.IsAdvanced).ToList();
             annApps = annApps.Where(aa => apps.Any(a => a.Id == aa.ApplicationRef)).ToList();
-
+            var lp = GetLessonPlanById(lessonPlanTemplateId); // security check 
+            if (lp.IsDraft)
+                throw new ChalkableException("Current lesson plan in gallery is not submitted yet. You can't create lesson plan from not submitted template");
+            
             using (var u = Update())
             {
-                var da = CreateLessonPlanDataAccess(u);
-                var lp = da.GetById(lessonPlanTemplateId);
-                if(lp.IsDraft)
-                    throw new ChalkableException("Current lesson plan in gallery is not submitted yet. You can't create lesson plan from not submitted template");
-                res = da.CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
+                res = CreateLessonPlanDataAccess(u).CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
                 var teachers = new ClassTeacherDataAccess(u).GetClassTeachers(lp.ClassRef, null).Select(x=>x.PersonRef).ToList();
                 res.AnnouncementAttachments = AnnouncementAttachmentService.CopyAnnouncementAttachments(lessonPlanTemplateId, teachers, new List<int> { res.Id }, u, ServiceLocator, ConnectorLocator);
                 res.AnnouncementAttributes = AnnouncementAssignedAttributeService.CopyNonStiAttributes(lessonPlanTemplateId, new List<int>{res.Id}, u, ServiceLocator, ConnectorLocator);
@@ -101,6 +100,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public void DuplicateLessonPlan(int lessonPlanId, IList<int> classIds)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
             var lessonPlan = GetLessonPlanById(lessonPlanId); // security check
             BaseSecurity.EnsureTeacher(Context);
             if (lessonPlan.IsDraft)
@@ -115,9 +115,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             
             using (var u = Update())
             {
-                var da = CreateLessonPlanDataAccess(u);
-                var lp = da.GetById(lessonPlanId);
-                var teachers = new ClassTeacherDataAccess(u).GetClassTeachers(lp.ClassRef, null).Select(x => x.PersonRef).ToList();
+                var teachers = new ClassTeacherDataAccess(u).GetClassTeachers(lessonPlan.ClassRef, null).Select(x => x.PersonRef).ToList();
                 var resIds = CreateLessonPlanDataAccess(u).DuplicateLessonPlan(lessonPlanId, classIds, Context.NowSchoolYearTime);
                 AnnouncementAttachmentService.CopyAnnouncementAttachments(lessonPlanId, teachers, resIds, u, ServiceLocator, ConnectorLocator);
                 AnnouncementAssignedAttributeService.CopyNonStiAttributes(lessonPlanId, resIds, u, ServiceLocator, ConnectorLocator);
