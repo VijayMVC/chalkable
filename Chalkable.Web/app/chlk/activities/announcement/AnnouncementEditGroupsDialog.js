@@ -45,6 +45,7 @@ NAMESPACE('chlk.activities.announcement', function(){
             [ria.mvc.PartialUpdateRule(chlk.templates.group.AnnouncementGroupTpl)],
             VOID, function newGroup(tpl, model, msg_) {
                 var newGroup = ria.dom.Dom('.new-group');
+                tpl.setAnnouncementId(model.getAnnouncementId());
                 tpl.renderTo(newGroup.setHTML(''));
                 setTimeout(function(){
                     newGroup.find('.group-name').trigger('focus');

@@ -197,7 +197,7 @@ NAMESPACE('chlk.controllers', function () {
                     .then(function (groups) {
                         this.afterGroupEdit_(groups, announcementId);
                         //this.BackgroundNavigate('announcement', 'showGroups', [announcementId]);
-                        return new chlk.models.group.GroupsListViewData(groups);
+                        return new chlk.models.group.GroupsListViewData(groups, announcementId);
                     }, this)
                     .attach(this.validateResponse_());
 
@@ -210,7 +210,7 @@ NAMESPACE('chlk.controllers', function () {
                     .create(model.getName())
                     .then(function (groups) {
                         this.afterGroupEdit_(groups, model.getAnnouncementId());
-                        return new chlk.models.group.GroupsListViewData(groups);
+                        return new chlk.models.group.GroupsListViewData(groups, model.getAnnouncementId());
                     }, this)
                     .attach(this.validateResponse_());
 
@@ -223,7 +223,7 @@ NAMESPACE('chlk.controllers', function () {
                     .editName(model.getId(), model.getName())
                     .then(function (groups) {
                         this.afterGroupEdit_(groups, model.getAnnouncementId());
-                        return new chlk.models.group.GroupsListViewData(groups);
+                        return new chlk.models.group.GroupsListViewData(groups, model.getAnnouncementId());
                     }, this)
                     .attach(this.validateResponse_());
 
@@ -257,10 +257,11 @@ NAMESPACE('chlk.controllers', function () {
                 this.BackgroundUpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, model);
             },
 
-            function addGroupAction() {
-                var res = new ria.async.DeferredData(new chlk.models.group.Group);
-
-                return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
+            [[chlk.models.id.AnnouncementId]],
+            function addGroupAction(announcementId) {
+                var group = new chlk.models.group.Group();
+                group.setAnnouncementId(announcementId);
+                return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, new ria.async.DeferredData(group));
             }
         ]);
 

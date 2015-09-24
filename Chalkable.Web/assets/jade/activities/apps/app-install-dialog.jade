@@ -1,18 +1,18 @@
 mixin InstallItem(item)
-    descr = item.getDescription()
-    tooltipText = item.getTooltipHint() || ""
+    descr = item.description
+    tooltipText = item.tooltiphint || ""
     withoutTooltip = tooltipText.length == 0
-    if item.isInstalled()
+    if item.isinstalled
         .labeled-checkbox.disbaled
             input(type="checkbox", disabled, checked)
             label(class="disabled-lbl", data-tooltip=tooltipText)=descr
     else
         +LabeledCheckbox(
-            item.getDescription(),
-            'chk-' + item.getId(),
-            item.isInstalled(),
-            item.isInstalled(), tooltipText)(
-            install-group="#{item.getGroupType().valueOf()}",
+            item.description,
+            'chk-' + item.id,
+            item.isinstalled,
+            item.isinstalled, tooltipText)(
+            install-group="#{item.grouptype}",
             noTooltip = withoutTooltip ? "true" : undefined,
             withoutOverflow="true",
             data-tooltip=tooltipText
