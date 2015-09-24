@@ -268,23 +268,24 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.apps.AppMarketApplication]],
         chlk.models.apps.AppMarketApplication, function prepareApplicationInstallGroups_(app){
             var installedForGroups = app.getInstalledForGroups() || [];
-            installedForGroups.unshift(new chlk.models.apps.AppInstallGroup(
-                new chlk.models.id.AppInstallGroupId(this.getCurrentPerson().getId().valueOf()),
-                chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
-                app.isInstalledOnlyForCurrentUser(), Msg.Just_me
-            ));
+            installedForGroups.unshift({
+                id: this.getCurrentPerson().getId().valueOf(),
+                grouptype: chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER.valueOf(),
+                isinstalled: app.isInstalledOnlyForCurrentUser(),
+                description: Msg.Just_me
+            });
             var installedCount = 0;
             installedForGroups = installedForGroups.map(function(item){
-                if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL){
-                    item.setId(new chlk.models.id.AppInstallGroupId('all'));
+                if (item.grouptype == chlk.models.apps.AppInstallGroupTypeEnum.ALL.valueOf()){
+                    item.id = 'all';
                 }
 
-                if (item.isInstalled()) ++installedCount;
+                if (item.isinstalled) ++installedCount;
 
-                if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ){
-                    var cls = this.classService.getClassById(new chlk.models.id.ClassId(item.getId().valueOf()));
+                if (item.grouptype == chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ.valueOf()){
+                    var cls = this.classService.getClassById(new chlk.models.id.ClassId(item.id));
                     var classNumber = cls && cls.getClassNumber() ? cls.getClassNumber()+ " " : "";
-                    item.setTooltipHint(classNumber + item.getDescription());
+                    item.tooltiphint = classNumber + item.description;
                 }
                 return item;
             }, this);
