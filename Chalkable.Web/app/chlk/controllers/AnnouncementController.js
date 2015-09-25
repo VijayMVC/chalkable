@@ -1667,7 +1667,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     var success = !!lpInGallery;
                     if(lpInGallery){
-                        if(lpInGallery.isAnnOwner()){
+                        if(lpInGallery.isAnnOwner() || this.getCurrentPerson().hasPermission(chlk.models.people.UserPermissionEnum.CHALKABLE_ADMIN)){
                             return this.ShowMsgBox('You are replacing the existing lesson plan – do you want to continue ?', null,
                                     [{text: 'Continue', clazz: 'blue-button', value: 'ok'},
                                     {text: 'NO'}]
