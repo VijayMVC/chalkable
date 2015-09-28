@@ -73,7 +73,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                         br
                         Button(type="submit", name="submitType", value="sort").blue-button=Msg.OK
                 if !isAdmin
-                    +Select('anntype')(data-placeholder = 'Any Type').annTypeSelect.submit-after-select
+                    +Select('announcementtype')(data-placeholder = 'Any Type').annTypeSelect.submit-after-select
                         +Option(null, 'Any Type', !self.getAnnType())
                         +Option(typesEnum.CLASS_ANNOUNCEMENT.valueOf(), 'Activities Only', typesEnum.CLASS_ANNOUNCEMENT == self.getAnnType())
                         +Option(typesEnum.LESSON_PLAN.valueOf(), 'Lesson Plan Only', typesEnum.LESSON_PLAN == self.getAnnType())
