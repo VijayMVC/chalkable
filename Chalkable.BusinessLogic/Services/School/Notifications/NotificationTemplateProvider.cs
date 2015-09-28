@@ -7,7 +7,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         private static readonly Dictionary<string, string> templates = new Dictionary<string, string>();
 
         public const string ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION = "ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION";
-        private const string ANNOUNCEMENT_ATTACHMENT_NOTIFICATION_TEMPLATE = "New attachment is added to announcement <a href='#announcement/view/^.Notification.AnnouncementRef'>^.Other.AnnouncementTitle</a>";
+        private const string ANNOUNCEMENT_ATTACHMENT_NOTIFICATION_TEMPLATE = "New attachment is added to ^.Other.AnnouncementType <a href='#announcement/view/^.Notification.AnnouncementRef'>^.Other.AnnouncementTitle</a>";
 
         public const string ANNOUNCEMENT_REMINDER_NOTIFICATION = "ANNOUNCEMENT_REMINDER_NOTIFICATION";
         private const string ANNOUNCEMENT_REMINDER_NOTIFICATION_TEMPLATE = "Reminder about announcement: announcement <a href='#announcement/view/^.Notification.AnnouncementRef'>^.Other.AnnouncementTitle</a>";
