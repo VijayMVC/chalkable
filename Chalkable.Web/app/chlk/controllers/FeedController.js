@@ -142,7 +142,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.feed.Feed]],
         function getAnnouncementsAction(model) {
             if(model.getSubmitType() == 'markDone')
-                return this.announcementService.markDone(model.getMarkDoneOption(), model.getClassId())
+                return this.announcementService.markDone(model.getMarkDoneOption(), model.getClassId(), model.getAnnType())
                     .then(function(isMarked){
                         return this.Redirect('feed', 'list', [model.getClassId(), null, true, 0, model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.isLatest()]);
                     }, this);
@@ -163,7 +163,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.feed.FeedAdmin]],
         function getAnnouncementsDistrictAdminAction(model) {
             if(model.getSubmitType() == 'markDone')
-                return this.announcementService.markDone(model.getMarkDoneOption())
+                return this.announcementService.markDone(model.getMarkDoneOption(), null, model.getAnnType())
                     .then(function(isMarked){
                         return this.Redirect('feed', 'list', [model.getGradeLevels(), null, true, 0, model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.isLatest()]);
                     }, this);

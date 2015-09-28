@@ -35,11 +35,12 @@ NAMESPACE('chlk.services', function () {
             Object, 'cache',
             Number, 'importantCount',
 
-            [[Number, chlk.models.id.ClassId]],
-            ria.async.Future, function markDone(option, classId_) {
+            [[Number, chlk.models.id.ClassId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function markDone(option, classId_, annType_) {
                 return this.get('Announcement/Done.json', Boolean, {
                     option: option.valueOf(),
-                    classId: classId_ && classId_.valueOf()
+                    classId: classId_ && classId_.valueOf(),
+                    annType: annType_ && annType_.valueOf(),
                 });
             },
 
