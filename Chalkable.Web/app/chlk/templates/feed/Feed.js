@@ -35,7 +35,13 @@ NAMESPACE('chlk.templates.feed', function () {
             chlk.models.common.ChlkDate, 'endDate',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'lessonPlansOnly',
+            chlk.models.announcement.AnnouncementTypeEnum, 'annType',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'latest',

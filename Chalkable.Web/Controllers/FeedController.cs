@@ -17,29 +17,27 @@ namespace Chalkable.Web.Controllers
     public class FeedController : ChalkableController
     {
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
-        public ActionResult List(int? start, int? count, bool? complete, int? classId, DateTime? startDate, 
-            DateTime? endDate, bool? lessonPlansOnly, bool? sortType)
+        public ActionResult List(int? start, int? count, bool? complete, int? classId, FeedSettings settings)
         {
             return
-                Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId, startDate, endDate,
-                    lessonPlansOnly, sortType));
+                Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId, settings));
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult DistrictAdminFeed(IntList gradeLevelIds, bool? complete, int? start, int? count, DateTime? startDate,
-            DateTime? endDate, bool? sortType)
+        public ActionResult DistrictAdminFeed(IntList gradeLevelIds, bool? complete, int? start, int? count, FeedSettings settings)
         {
             var announcements = SchoolLocator.AdminAnnouncementService.GetAdminAnnouncementsForFeed(complete,
-                gradeLevelIds, startDate, endDate, start ?? 0, count ?? 10, sortType: sortType);
+                gradeLevelIds, settings, start ?? 0, count ?? 10);
             return Json(GetAnnouncementForFeedList(SchoolLocator, announcements));
         }
 
         public static FeedComplexViewData GetAnnouncementForFeedList(IServiceLocatorSchool schoolL, int? start, int? count
-            , bool? complete, int? classId, DateTime? startDate, DateTime? endDate, bool?lessonPlansOnly, bool? sortType)
+            , bool? complete, int? classId, FeedSettings settings)
         {
             start = start ?? 0;
             count = count ?? (DemoUserService.IsDemoUser(schoolL.Context) ? int.MaxValue : 10);
-            var list = schoolL.AnnouncementFetchService.GetAnnouncementsForFeed(complete, start.Value, count.Value, classId, startDate, endDate, lessonPlansOnly, sortType);
+            var list = schoolL.AnnouncementFetchService.GetAnnouncementsForFeed(complete, start.Value, count.Value,
+                classId, settings);
             return GetAnnouncementForFeedList(schoolL, list);
         }
 
@@ -54,10 +52,7 @@ namespace Chalkable.Web.Controllers
             return new FeedComplexViewData()
             {
                 AnnoucementViewDatas = AnnouncementViewData.Create(announcements.Announcements, annApps, apps),
-                LessonPlansOnly = announcements.LessonPlansOnly,
-                SortType = announcements.SortType,
-                FromDate = announcements.FromDate,
-                ToDate = announcements.ToDate
+                SettingsForFeed = announcements.SettingsForFeed
             };
         }
 
