@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Attendances;
@@ -35,10 +36,10 @@ namespace Chalkable.Web.Controllers
         }
         //TODO: implement this method later
         [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult NotTakenAttendanceClasses(DateTime? date)
+        public async Task<ActionResult> NotTakenAttendanceClasses(DateTime? date)
         {
             date = (date ?? SchoolLocator.Context.NowSchoolYearTime);
-            var notTakenAttendanceClasses = SchoolLocator.AttendanceService.GetNotTakenAttendanceClasses(date.Value);
+            var notTakenAttendanceClasses = await SchoolLocator.AttendanceService.GetNotTakenAttendanceClasses(date.Value);
             return Json(ClassViewData.Create(notTakenAttendanceClasses));
         }
 
@@ -71,7 +72,7 @@ namespace Chalkable.Web.Controllers
         }
 
         //TODO: add this to as api methods later
-        public ActionResult ClassListNew(DateTime? date, int classId)
+        /*public ActionResult ClassListNew(DateTime? date, int classId)
         {
             date = (date ?? SchoolLocator.Context.NowSchoolYearTime).Date;
             var attendance = SchoolLocator.AttendanceService.GetClassAttendance(date.Value, classId);
@@ -84,7 +85,7 @@ namespace Chalkable.Web.Controllers
             }
             return Json(ClassAttendanceViewData.Create(classId, date.Value));
         }
-
+*/
 
         private IList<StudentClassAttendanceOldViewData> ClassAttendanceList(DateTime date, int classId)
         {
@@ -106,14 +107,14 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher", true, new[] { AppPermissionType.Attendance })]
-        public ActionResult AttendanceSummary(DateTime? date)
+        public async Task<ActionResult> AttendanceSummary(DateTime? date)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             var schoolYearId = GetCurrentSchoolYearId();
             var d = date ?? Context.NowSchoolYearTime.Date;
             var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(schoolYearId, d);
-            var attendanceSummary = SchoolLocator.AttendanceService.GetAttendanceSummary(Context.PersonId.Value, gradingPeriod);
+            var attendanceSummary = await SchoolLocator.AttendanceService.GetAttendanceSummary(Context.PersonId.Value, gradingPeriod);
             return Json(TeacherAttendanceSummaryViewData.Create(attendanceSummary, d));
         }
 
