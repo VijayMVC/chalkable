@@ -111,7 +111,8 @@ NAMESPACE('chlk.controls', function () {
                             if(value > max)
                                 jQuery(node.getValue()).datepicker('setDate', max);
                         }
-                    }
+                    }else
+                        node.next().setValue('');
                 })
             },
 
