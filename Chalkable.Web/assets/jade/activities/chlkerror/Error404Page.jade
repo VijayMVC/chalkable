@@ -6,4 +6,4 @@
 
     if self.msg
         h3 Error details:
-        pre(style="color:gray;overflow-x:scroll")= window.Raygun ? window.Raygun.fetchRaygunError(self.msg).message : self.msg
+        pre(style="color:gray;overflow-x:auto")= window.Raygun ? window.Raygun.fetchRaygunError(self.msg).message : self.msg

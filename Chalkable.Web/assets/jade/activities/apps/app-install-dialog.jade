@@ -1,18 +1,18 @@
 mixin InstallItem(item)
-    descr = item.getDescription()
-    tooltipText = item.getTooltipHint() || ""
+    descr = item.description
+    tooltipText = item.tooltiphint || ""
     withoutTooltip = tooltipText.length == 0
-    if item.isInstalled()
+    if item.isinstalled
         .labeled-checkbox.disbaled
             input(type="checkbox", disabled, checked)
             label(class="disabled-lbl", data-tooltip=tooltipText)=descr
     else
         +LabeledCheckbox(
-            item.getDescription(),
-            'chk-' + item.getId(),
-            item.isInstalled(),
-            item.isInstalled(), tooltipText)(
-            install-group="#{item.getGroupType().valueOf()}",
+            item.description,
+            'chk-' + item.id,
+            item.isinstalled,
+            item.isinstalled, tooltipText)(
+            install-group="#{item.grouptype}",
             noTooltip = withoutTooltip ? "true" : undefined,
             withoutOverflow="true",
             data-tooltip=tooltipText
@@ -66,18 +66,18 @@ devName = app.getDeveloperInfo().getName()
                         .just-me
                             | For me
                             -var isInstalled = self.isAlreadyInstalledForMe_()
-                            .box-checkbox.right: +Checkbox(isInstalled ? null : 'chk-' + self.currentUser.getId().valueOf(), isInstalled, isInstalled)(
+                            .box-checkbox.right: +Checkbox(isInstalled ? null : 'chk-' + self.currentUser.getId().valueOf(), isInstalled, isInstalled, true)(
                                 install-group=chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER.valueOf()
                             )
                         .school(filter-school-id= -1 )
                             | All Schools
                             -var isInstalled = tree.every(function (_) { return _.isInstalled });
-                            .box-checkbox.right: +Checkbox(null, false, false)( school-id= -1 )
+                            .box-checkbox.right: +Checkbox(null, isInstalled, isInstalled, true)( school-id= -1 )
                         each school in tree
                             .school(filter-school-id= school.id )
                                 = school.name
                                 -var isInstalled = school.isInstalled
-                                .box-checkbox.right: +Checkbox(null, isInstalled, isInstalled)( school-id= school.id )
+                                .box-checkbox.right: +Checkbox(null, isInstalled, isInstalled, true)( school-id= school.id )
                     .courses
                         h1 Course Types
                         each school in tree
@@ -85,7 +85,7 @@ devName = app.getDeveloperInfo().getName()
                                 .course(filter-course-type-id= courseType.id, school-id= school.id ).x-hidden
                                     = courseType.name
                                     -var isInstalled = courseType.isInstalled
-                                    .box-checkbox.right: +Checkbox(null, isInstalled, isInstalled)( course-type-id= courseType.id, school-id= school.id )
+                                    .box-checkbox.right: +Checkbox(null, isInstalled, isInstalled, true)( course-type-id= courseType.id, school-id= school.id )
                     .classes
                         h1 Classes
                         each school in tree
@@ -94,7 +94,7 @@ devName = app.getDeveloperInfo().getName()
                                     .class(school-id= school.id, course-type-id= courseType.id ).x-hidden
                                         = clazz.name
                                         -var isInstalled = clazz.isInstalled
-                                        .box-checkbox.right: +Checkbox(isInstalled ? null : 'chk-' + clazz.id, isInstalled, isInstalled )(
+                                        .box-checkbox.right: +Checkbox(isInstalled ? null : 'chk-' + clazz.id, isInstalled, isInstalled, true )(
                                                 install-group=chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ.valueOf()
                                                 course-type-id= courseType.id
                                                 school-id= school.id

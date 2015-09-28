@@ -86,7 +86,7 @@ NAMESPACE('chlk.models.apps', function () {
             
             OVERRIDE, VOID, function deserialize(raw){
                 BASE(raw);
-                this.installedForGroups = SJX.fromArrayOfDeserializables(raw.installedforpersonsgroup, chlk.models.apps.AppInstallGroup);
+                this.installedForGroups = raw.installedforpersonsgroup
                 this.installedOnlyForCurrentUser = SJX.fromValue(raw.isinstalledonlyforme, Boolean);
                 this.alreadyInstalled = SJX.fromValue(raw.alreadyinstalled, Boolean);
                 this.applicationInstalls = SJX.fromArrayOfDeserializables(raw.applicationinstalls, chlk.models.apps.AppInstallInfo);
@@ -97,7 +97,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.applicationRating = SJX.fromDeserializable(raw.applicationrating, chlk.models.apps.AppRating);
                 this.applicationHistory = SJX.fromArrayOfDeserializables(raw.applicationhistory, chlk.models.apps.ApplicationInstallRecord);
             },
-            ArrayOf(chlk.models.apps.AppInstallGroup), 'installedForGroups',
+            Array, 'installedForGroups',
             Boolean, 'installedOnlyForCurrentUser',
             ArrayOf(chlk.models.apps.AppInstallInfo), 'applicationInstalls',
             Boolean, 'uninstallable',

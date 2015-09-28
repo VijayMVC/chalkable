@@ -30,6 +30,14 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             SimpleUpdate<Announcement>(entity);
             base.Update(entity);
         }
+
+        public override void Update(IList<LessonPlan> entities)
+        {
+            foreach (var lessonPlan in entities)
+            {
+                Update(lessonPlan);
+            }
+        }
         
         public AnnouncementDetails Create(int classId, DateTime created, DateTime? startDate, DateTime? endDate, int personId, int schoolYearId)
         {
@@ -156,19 +164,32 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
             return ReadMany<LessonPlan>(dbQuery);
         } 
-
         
-        public IList<LessonPlan> GetLessonPlanTemplates(int? galleryCategoryId, string title, int? classId)
+        public IList<LessonPlan> GetLessonPlanTemplates(int? galleryCategoryId, string titleFilter, int? classId, AnnouncementState? state, int callerId)
         {
-            var conds = new AndQueryCondition {{LessonPlan.GALERRY_CATEGORY_REF_FIELD, null, ConditionRelation.NotEqual}};
-            if(galleryCategoryId.HasValue)
+            return GetLessonPlanTemplates(null, galleryCategoryId, titleFilter, classId, state, callerId);
+        }
+
+        public LessonPlan GetLessonPlanTemplate(int lessonPlanId, int callerId)
+        {
+            return GetLessonPlanTemplates(lessonPlanId, null, null, null, null, callerId).FirstOrDefault();
+        }
+
+        protected IList<LessonPlan> GetLessonPlanTemplates(int? lessonPlanId, int? galleryCategoryId, string titleFilter, int? classId, AnnouncementState? state, int callerId)
+        {
+            var conds = new AndQueryCondition { { LessonPlan.GALERRY_CATEGORY_REF_FIELD, null, ConditionRelation.NotEqual } };
+            if(lessonPlanId.HasValue)
+                conds.Add(Announcement.ID_FIELD, lessonPlanId);
+            if (state.HasValue)
+                conds.Add(Announcement.STATE_FIELD, state);
+            if (galleryCategoryId.HasValue)
                 conds.Add(LessonPlan.GALERRY_CATEGORY_REF_FIELD, galleryCategoryId);
-            if(classId.HasValue)
+            if (classId.HasValue)
                 conds.Add(LessonPlan.CLASS_REF_FIELD, classId);
-            var dbQuery = SelectLessonPlan(conds);
+            var dbQuery = SelectLessonPlan(conds, callerId);
 
             dbQuery.Sql.AppendFormat(" and {0} like @{0}", Announcement.TITLE_FIELD);
-            dbQuery.Parameters.Add(Announcement.TITLE_FIELD, string.Format(FILTER_FORMAT, title));
+            dbQuery.Parameters.Add(Announcement.TITLE_FIELD, string.Format(FILTER_FORMAT, titleFilter));
             return ReadMany<LessonPlan>(dbQuery);
         }
 

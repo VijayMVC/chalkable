@@ -109,8 +109,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             user.OriginalPassword = password;
             using (var uow = Update(IsolationLevel.ReadUncommitted))
             {
-                UserContext context;
-                context = SisUserLogin(user, uow);
+                var context = SisUserLogin(user, uow);
                 uow.Commit();
                 return context;
             }

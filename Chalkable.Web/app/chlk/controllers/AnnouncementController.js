@@ -573,7 +573,7 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(list){
-                    this.cacheLessonPlanCategories(list);
+                    this.lpGalleryCategoryService.cacheLessonPlanCategories(list);
                     this.cacheLessonPlanClassId(model.getAnnouncement().getLessonPlanData().getClassId());
                     model.getAnnouncement().setCategories(list);
                     return model;
@@ -609,7 +609,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(model && model.getAnnouncement()){
                         var resModel =  this.addEditAction(model, false);
                         resModel.getAnnouncement().setCategories(result[1]);
-                        this.cacheLessonPlanCategories(result[1]);
+                        this.lpGalleryCategoryService.cacheLessonPlanCategories(result[1]);
                         this.cacheLessonPlanClassId(resModel.getAnnouncement().getLessonPlanData().getClassId());
                         return resModel;
                     }
@@ -646,6 +646,9 @@ NAMESPACE('chlk.controllers', function (){
             if (assessmentAppId_) ++btnsCount;
 
             var start = pageIndex_ | 0, count = 12 - btnsCount;
+
+
+            //todo split this into two methods
 
             var result;
             if (this.userIsAdmin()){
@@ -693,6 +696,8 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, res);
         },
 
+
+        //todo move attribute methods to separate controller
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
         function fetchAddAttributeFuture_(announcementId, announcementType) {
@@ -1237,7 +1242,7 @@ NAMESPACE('chlk.controllers', function (){
                     return this.prepareAnnouncementForView(announcement);
                 }, this);
             this.BackgroundCloseView(chlk.activities.common.attachments.AttachmentDialog);
-            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res, 'update-attachments');
         },
 
 
@@ -1368,14 +1373,7 @@ NAMESPACE('chlk.controllers', function (){
              return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT, new chlk.models.announcement.FeedAnnouncementViewData());
         },
 
-        [[ArrayOf(chlk.models.announcement.CategoryViewData)]],
-        function cacheLessonPlanCategories(categories){
-            this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORIES, categories);
-        },
 
-        ArrayOf(chlk.models.announcement.CategoryViewData), function getCachedLessonPlanCategories(){
-            return this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORIES, []);
-        },
 
         [[chlk.models.id.ClassId]],
         function cacheLessonPlanClassId(classId){
@@ -1588,7 +1586,7 @@ NAMESPACE('chlk.controllers', function (){
             if (submitType == 'save'){
                 model.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
                 model.setApplications(this.getCachedAnnouncementApplications());
-                model.setCategories(this.getCachedLessonPlanCategories());
+                model.setCategories(this.lpGalleryCategoryService.getLessonPlanCategoriesSync());
                 model.setAnnouncementAttributes(this.getCachedAnnouncementAttributes());
                 var announcementForm =  chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(model);
                 return this.saveLessonPlanAction(model, announcementForm);
@@ -1627,7 +1625,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(model && model.getAnnouncement()){
                         var resModel =  this.addEditAction(model, false);
                         resModel.getAnnouncement().setCategories(result[1]);
-                        this.cacheLessonPlanCategories(result[1]);
+                        this.lpGalleryCategoryService.cacheLessonPlanCategories(result[1]);
                         this.cacheLessonPlanClassId(resModel.getAnnouncement().getLessonPlanData().getClassId());
                         return resModel;
                     }
@@ -1663,12 +1661,31 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
         function checkLessonPlanTitleAction(model, isAddToGallery_){
             var res = this.lessonPlanService
-                .existsInGallery(model.getTitle(), model.getId())
+                .getLessonPlanTemplateByTitle(model.getTitle())
                 .attach(this.validateResponse_())
-                .then(function(exists){
-                    if(exists)
-                        this.ShowMsgBox('There is Lesson Plan with that title in gallery', 'whoa.');
-                    return new chlk.models.Success(exists);
+                .then(function(lpInGallery){
+
+                    var success = !!lpInGallery;
+                    if(lpInGallery){
+                        if(lpInGallery.isAnnOwner() || this.getCurrentPerson().hasPermission(chlk.models.people.UserPermissionEnum.CHALKABLE_ADMIN)){
+                            return this.ShowMsgBox('You are replacing the existing lesson plan \- do you want to continue ?', null,
+                                    [{text: 'Continue', clazz: 'blue-button', value: 'ok'},
+                                    {text: 'NO'}]
+                                )
+                                .then(function(msResult){
+                                    if(msResult){
+                                        return this.lessonPlanService.replaceLessonPlanInGallery(lpInGallery.getId(), model.getId())
+                                                   .attach(this.validateResponse_())
+                                                   .then(function(data){return new chlk.models.Success(!data)});
+                                    }
+                                    return new chlk.models.Success(true);
+                                }, this);
+                        }
+                        else{
+                            this.ShowMsgBox('There is Lesson Plan with that title in gallery', 'whoa.');
+                        }
+                    }
+                    return new chlk.models.Success(success);
                 }, this);
 
             return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, res, isAddToGallery_ ? 'addToGallery' : chlk.activities.lib.DontShowLoader());
@@ -1723,7 +1740,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
         function submitLessonPlan(model, isEdit){
-            if(model.getStartDate() > model.getEndDate()){
+            if(model.getStartDate().compare(model.getEndDate()) == 1){
                 this.ShowMsgBox('Lesson Plan are no valid. Start date is greater the end date', 'whoa.');
                 return null;
             }
@@ -1745,7 +1762,7 @@ NAMESPACE('chlk.controllers', function (){
             res = res.then(function(saved){
                 if(saved){
                     this.cacheAnnouncement(null);
-                    this.cacheLessonPlanCategories(null);
+                    this.lpGalleryCategoryService.emptyLessonPlanCategoriesCache();
                     this.cacheLessonPlanClassId(null);
                     this.cacheAnnouncementAttachments(null);
                     this.cacheAnnouncementApplications(null);

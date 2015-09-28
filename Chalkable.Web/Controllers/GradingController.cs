@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
@@ -235,7 +236,7 @@ namespace Chalkable.Web.Controllers
             var st = start ?? 0;
             var cn = count ?? 10;
             var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(null, null, classId, null, false, true, st, cn);
-            return FeedController.GetAnnouncementForFeedList(SchoolLocator, anns);
+            return FeedController.GetAnnouncementForFeedList(SchoolLocator, new FeedComplex() {Announcements = anns}).AnnoucementViewDatas;
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]

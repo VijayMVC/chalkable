@@ -36,7 +36,6 @@ REQUIRE('chlk.controls.VideoControl');
 REQUIRE('chlk.controls.PayCheckControl');
 REQUIRE('chlk.controls.ScrollBoxControl');
 REQUIRE('chlk.controls.MultipleSelectControl');
-REQUIRE('chlk.controls.MaskedInputControl');
 REQUIRE('chlk.controls.SimplePayCheckControl');
 REQUIRE('chlk.controls.CloseOpenControl');
 REQUIRE('chlk.controls.ClassesBarControl');

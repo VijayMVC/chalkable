@@ -164,7 +164,7 @@ NAMESPACE('chlk.controllers', function (){
                 if(model.getId() && model.getId().valueOf())
                     res = this.updateClassAnnouncementType_(model)
                 else
-                    res = this.updateClassAnnouncementType_(model)
+                    res = this.createClassAnnouncementType_(model)
                 res.thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
                     .attach(this.validateResponse_())
                     .then(function(data){
@@ -177,6 +177,19 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.announcement.ClassAnnouncementType]],
             ria.async.Future, function createClassAnnouncementType_(model){
+                return this.announcementTypeService.create(
+                    model.getClassId(),
+                    model.getDescription(),
+                    model.getName(),
+                    model.getHighScoresToDrop(),
+                    model.getLowScoresToDrop(),
+                    model.isSystem(),
+                    model.getPercentage()
+                ).attach(this.validateResponse_());
+            },
+
+            [[chlk.models.announcement.ClassAnnouncementType]],
+            function updateClassAnnouncementType_(model){
                 return this.announcementTypeService.update(
                     model.getClassId(),
                     model.getDescription(),
@@ -186,19 +199,6 @@ NAMESPACE('chlk.controllers', function (){
                     model.isSystem(),
                     model.getPercentage(),
                     model.getId()
-                ).attach(this.validateResponse_());
-            },
-
-            [[chlk.models.announcement.ClassAnnouncementType]],
-            function updateClassAnnouncementType_(model){
-                return this.announcementTypeService.create(
-                    model.getClassId(),
-                    model.getDescription(),
-                    model.getName(),
-                    model.getHighScoresToDrop(),
-                    model.getLowScoresToDrop(),
-                    model.isSystem(),
-                    model.getPercentage()
                 ).attach(this.validateResponse_());
             },
 
@@ -229,9 +229,7 @@ NAMESPACE('chlk.controllers', function (){
                         var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_GRADE_BOOK_COMMENTS);
                         return new chlk.models.setup.CommentsSetupViewData(items, canEdit);
                     }, this);
-
-                var result = new ria.async.DeferredData(res);
-                return this.PushOrUpdateView(chlk.activities.setup.CommentsSetupPage, result);
+                return this.PushOrUpdateView(chlk.activities.setup.CommentsSetupPage, res);
             },
 
             [chlk.controllers.Permissions([
@@ -257,18 +255,13 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [[chlk.models.grading.TeacherCommentViewData]],
             function submitCommentAction(model){
-                var res;
-                if(model.getCommentId() && model.getCommentId().valueOf())
-                    res = this.teacherCommentService.updateComment(
-                        model.getCommentId(),
-                        model.getComment()
-                    ).attach(this.validateResponse_());
-                else
-                    res = this.teacherCommentService.createComment(
-                        model.getComment()
-                    ).attach(this.validateResponse_());
-                this.BackgroundCloseView(chlk.activities.setup.CommentDialog);
-                return this.Redirect('setup', 'commentsSetup', []);
+                return this.teacherCommentService
+                    .createOrUpdateComment(model.getCommentId(), model.getComment())
+                    .attach(this.validateResponse_())
+                    .then(function (comment){
+                        this.BackgroundCloseView(chlk.activities.setup.CommentDialog);
+                        return this.Redirect('setup', 'commentsSetup', []);
+                    }, this);
             },
 
             [chlk.controllers.Permissions([

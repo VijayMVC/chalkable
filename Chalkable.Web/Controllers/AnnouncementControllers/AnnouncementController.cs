@@ -81,12 +81,23 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult Done(int? classId, int option)
+        public ActionResult Done(int? classId, int option, int? annType)
         {
             MarkDoneOptions mdo = (MarkDoneOptions) option;
-            SchoolLocator.AdminAnnouncementService.SetComplete(classId, mdo);
-            SchoolLocator.LessonPlanService.SetComplete(classId, mdo);
-            //SchoolLocator.ClassAnnouncementService.SetComplete(classId, mdo);
+            if (!annType.HasValue)
+            {
+                SchoolLocator.AdminAnnouncementService.SetComplete(classId, mdo);
+                SchoolLocator.LessonPlanService.SetComplete(classId, mdo);
+                SchoolLocator.ClassAnnouncementService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
+            }
+            else
+            {
+                if((AnnouncementType)annType == AnnouncementType.Class)
+                    SchoolLocator.ClassAnnouncementService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
+                if((AnnouncementType)annType == AnnouncementType.LessonPlan)
+                    SchoolLocator.LessonPlanService.SetComplete(classId, mdo);
+            }
+
 
             return Json(true);
         }

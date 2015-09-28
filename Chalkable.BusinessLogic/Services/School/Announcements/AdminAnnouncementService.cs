@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -23,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AdminAnnouncement GetAdminAnnouncementById(int adminAnnouncementId);
         bool Exists(string title, int? excludedLessonPlaId);
 
-        IList<AnnouncementComplex> GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int start = 0, int count = int.MaxValue, bool ownedOnly = true);
+        FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, FeedSettings settings, int start = 0, int count = int.MaxValue, bool ownedOnly = true);
         IList<AdminAnnouncement> GetAdminAnnouncements(IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? studentId);
         IList<AdminAnnouncement> GetAdminAnnouncementsByFilter(string filter); 
         AdminAnnouncement GetLastDraft();
@@ -253,21 +254,116 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
 
-        public IList<AnnouncementComplex> GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int start = 0, int count = int.MaxValue, bool ownedOnly = true)
+        public FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, FeedSettings settings, int start = 0, int count = int.MaxValue, bool ownedOnly = true)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
-                {
-                    Complete = complete,
-                    FromDate = fromDate,
-                    ToDate = toDate,
-                    Start = start,
-                    Count = count,
-                    PersonId = Context.PersonId,
-                    RoleId = Context.RoleId,
-                    GradeLevelsIds = gradeLevels,
-                    OwnedOnly = ownedOnly
-                })).Announcements;
+
+            DateTime feedStartDate;
+            DateTime feedEndDate;
+
+            //get or set settings
+            if (!settings.AnnouncementType.HasValue && !settings.FromDate.HasValue && !settings.ToDate.HasValue && !settings.GradingPeriodId.HasValue)
+                GetAdminSettingsForFeed(out settings);
+            else
+                SetAdminSettingsForFeed(settings);
+
+            //if items should be from certain grading period
+            if (settings.GradingPeriodId.HasValue)
+            {
+                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(settings.GradingPeriodId.Value);
+                feedStartDate = gp.StartDate;
+                feedEndDate = gp.EndDate;
+            }
+            else
+            {
+                feedStartDate = settings.FromDate.Value;
+                feedEndDate = settings.ToDate.Value;
+            }
+
+            var fc = new FeedComplex()
+            {
+                SettingsForFeed = settings
+            };
+            if (!settings.SortType.Value)
+                fc.Announcements =
+                    DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
+                    {
+                        Complete = complete,
+                        FromDate = feedStartDate,
+                        ToDate = feedEndDate,
+                        Start = start,
+                        Count = count,
+                        PersonId = Context.PersonId,
+                        RoleId = Context.RoleId,
+                        GradeLevelsIds = gradeLevels,
+                        OwnedOnly = ownedOnly
+                    })).Announcements.OrderBy(x => x.AdminAnnouncementData.Expires).ToList();
+            else
+                fc.Announcements =
+                    DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
+                    {
+                        Complete = complete,
+                        FromDate = feedStartDate,
+                        ToDate = feedEndDate,
+                        Start = start,
+                        Count = count,
+                        PersonId = Context.PersonId,
+                        RoleId = Context.RoleId,
+                        GradeLevelsIds = gradeLevels,
+                        OwnedOnly = ownedOnly
+                    })).Announcements.OrderByDescending(x => x.AdminAnnouncementData.Expires).ToList();
+            return fc;
+        }
+
+        private void GetAdminSettingsForFeed(out FeedSettings settings)
+        {
+            settings = new FeedSettings();
+            var query = new List<string>
+            {
+                PersonSetting.FEED_START_DATE,
+                PersonSetting.FEED_END_DATE,
+                PersonSetting.FEED_SORTING,
+                PersonSetting.FEED_GRADING_PERIOD_ID
+            };
+
+            var sett = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, query);
+            var startDate = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_START_DATE);
+            var endDate = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_END_DATE);
+            var sort = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_SORTING);
+            var grPeriodId = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_GRADING_PERIOD_ID);
+
+            if (grPeriodId?.Value != null)
+            {
+                settings.GradingPeriodId = int.Parse(grPeriodId.Value);
+                settings.FromDate = null;
+                settings.ToDate = null;
+            }
+            else if (startDate?.Value != null && endDate?.Value != null)
+            {
+                settings.FromDate = DateTime.ParseExact(startDate.Value, Constants.DATE_FORMAT,
+                    CultureInfo.InvariantCulture);
+                settings.ToDate = DateTime.ParseExact(endDate.Value, Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
+                settings.GradingPeriodId = null;
+            }
+            else
+            {
+                settings.FromDate = Context.SchoolYearStartDate ?? DateTime.MinValue;
+                settings.ToDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
+                settings.GradingPeriodId = null;
+            }
+
+            settings.SortType = sort != null && bool.Parse(sort.Value);
+        }
+
+        private void SetAdminSettingsForFeed(FeedSettings settings)
+        {
+            ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, new Dictionary<string, object>()
+            {
+                {PersonSetting.FEED_START_DATE, settings.FromDate },
+                {PersonSetting.FEED_END_DATE, settings.ToDate },
+                {PersonSetting.FEED_GRADING_PERIOD_ID, settings.GradingPeriodId },
+                {PersonSetting.FEED_SORTING, settings.SortType }
+            });
         }
 
         public IList<AdminAnnouncement> GetAdminAnnouncements(IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? studentId)
@@ -280,7 +376,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     PersonId = Context.PersonId,
                     RoleId = Context.RoleId,
                     GradeLevelsIds = gradeLevels,
-                    StudentId = studentId
+                    StudentId = studentId,
+                    OwnedOnly = (Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE)
                 })).Announcements.Select(x => x.AdminAnnouncementData).ToList();
         }
 

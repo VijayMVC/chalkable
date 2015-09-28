@@ -1,10 +1,27 @@
-﻿@{
+﻿@using Chalkable.Common
+@using Chalkable.Web.Common
+
+@{
     ViewBag.Title = "Developer Documentation";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@section Styles {
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata|Raleway:200">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" itemscope itemtype="Education">
+<head>
+    <title>@ViewBag.Title</title>    
+    <meta itemprop="image" content="@Url.Content(" ~/favicon.ico")">
+    <link rel="icon" href="@Url.Content(" ~/favicon.ico")" />
+
+    <!-- build:css /Content/devdocs-layout.min.css -->
+    <link build:href="/app/jquery/snippet/jquery.snippet.min.css" href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css"/>
+    <link buikd:href="/app/bower/jQuery-Validation-Engine/css/validationEngine.jquery.cs" href="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/css/validationEngine.jquery.css")" rel="stylesheet" type="text/css"/>
+    <link buikd:href="/Content/validation/template.css" href="@Url.StaticContent("/Content/validation/template.css")" rel="stylesheet" type="text/css"/>
+    <link build:href="/app/chlk/index/prettify.css" href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet" />
+    <!-- endbuild -->
+    <!-- Page specific CSS -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata|Raleway:200">
 
     <style>
         #page-header, .olrk-noquirks{
@@ -108,10 +125,9 @@
         }
 
     </style>
-}
-
-@section ContentSection {
-
+    
+</head>
+<body>
 
 <a href="#top" class="text-muted back-to-top"><i class="fa fa-toggle-up"></i>&nbsp;Back to top</a>
 <div class="container"><div class="row"><div class="col-md-3"><nav id="nav" class="hidden-sm hidden-xs affix nav">
@@ -176,7 +192,7 @@ At this moment the only available scope is <code>https://www.chalkable.com/</cod
         "<span class="hljs-attribute">refresh_token</span>": <span class="hljs-value"><span class="hljs-string">"td+G+gWGeMJ1Z8Isn0lyRg=="</span></span>,
         "<span class="hljs-attribute">scope</span>": <span class="hljs-value"><span class="hljs-string">"https://www.chalkable.com/"</span>
     </span>}
-</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="using-the-chalkable-api">Using the Chalkable API&nbsp;<a href="#using-the-chalkable-api"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>To get started, simply <a href="https://chalkable.com/Developer/Signup">sign up</a>.
+</code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="using-the-chalkable-api">Using the Chalkable API&nbsp;<a href="#using-the-chalkable-api"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>To get started, simply <a href="@Url.Content("~/Developer/Signup")">sign up</a>.
 You will immediately gain access to the Developer Portal, where you will obtain an API key. Just provide a URL begin testing your app.</p>
 <p>Below are some common methods used by Chalkable developers.
 You can see a full list of available methods inside the Chalkable Developer Portal, via the “API Explorer” tab.</p>
@@ -1262,10 +1278,10 @@ You can see a full list of available methods inside the Chalkable Developer Port
    </span>}
 ]
 </code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="javascript">Javascript&nbsp;<a href="#javascript"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>In this section we will describe in detail the JavaScript interaction between your app and Chalkable.</p>
-<p><strong>IMPORTANT:</strong> You will need to include a link to our Javascript file <a href="https://chalkable.com/Scripts/api/chlk-post-message-api.js">chlk-post-message-api.js</a> in your project. This script takes of the communication between your app inside the iframe and Chalkable, via the postMessage() method.</p>
+<p><strong>IMPORTANT:</strong> You will need to include a link to our Javascript file <a href="@Url.Content("~/Scripts/api/chlk-post-message-api.js")">@Url.Content("~/Scripts/api/chlk-post-message-api.js")</a> in your project. This script takes of the communication between your app inside the iframe and Chalkable, via the postMessage() method.</p>
 <p>As described below, you will be able to access the {CHLK_MESSENGER} object to <em>attach</em> your application to an item.</p>
 <p>We <strong>highly</strong> recommend using the hosted version as it is subject to updates.</p>
-<pre><code><span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"https://chalkable.com/Scripts/api/chlk-post-message-api.js"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
+<pre><code><span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"@Url.Content("~/Scripts/api/chlk-post-message-api.js")"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
 </code></pre><ol>
 <li>A teacher, who has installed your app via the Chalkable App Store, clicks Attach App in a New Item assignment and chooses your app.</li>
 <li>Your App URL is loaded with the edit mode appended, for Example:<pre><code><span class="hljs-tag">&lt;<span class="hljs-title">iframe</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"https://yourEdTechApp.com/home/index?mode=edit&amp;announcementapplicationid=39&amp;applicationinstallid=1717&amp;code=veo6LEX04xeK7LV1EhAQKg%3d%3d"</span><span class="hljs-value">&lt;</span>/<span class="hljs-attribute">iframe</span>&gt;</span>
@@ -1285,7 +1301,7 @@ This will let Chalkable know which function of yours to call.</li>
             url = form.attr(&#39;action&#39;),
             id = form.find(&#39;.tinymce&#39;).attr(&#39;id&#39;),
             name = form.find(&#39;.tinymce&#39;).attr(&#39;name&#39;),
-            editor = tinyMCE.get(id)&#39;
+            editor = tinyMCE.get(id);
             editor.setProgressState(1);
             var content = editor.getContent();
             var data = {};
@@ -1326,7 +1342,7 @@ This will let Chalkable know which function of yours to call.</li>
 <p>Teachers use the Chalkable platform to send assignments to their students. Teachers can attach your app directly into these assignments and students can interact with your application.</p>
 <p><strong>Adding an app to a New Item:</strong></p>
 <p>Your app will be embedded into assignments that students will use, simply by clicking the “Attach” button at the top of the frame.
-<em>Remember to include the</em> <a href="https://chalkable.com/Scripts/api/chlk-post-message-api.js">chlk-post-message-api.js</a> <em>script in your app and call it on document ready, as explained above.</em></p>
+<em>Remember to include the</em> <a href="@Url.Content("~/Scripts/api/chlk-post-message-api.js")">@Url.Content("~/Scripts/api/chlk-post-message-api.js")</a> <em>script in your app and call it on document ready, as explained above.</em></p>
 <p><strong>App Info:</strong></p>
 <p>The page in your developer account where you submit information about your app to Chalkable. This information includes descriptions, artwork, and definitions of which users will be using the app and what data the app will access.</p>
 <p><strong>Submitting your app:</strong></p>
@@ -1335,13 +1351,24 @@ This will let Chalkable know which function of yours to call.</li>
 
 </div><!--outer wrap-->
 
-}
 
-@section BottomScripts {
-        <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+    <div class="chlk-tooltip" id="chlk-tooltip-item">
+        <div class="tooltip-content"></div>
+        <div class="tooltip-triangle"></div>
+    </div>
+
+    @ChlkHelpers.RenderSiteRoot(Url)
+
+    <!-- build:js /app/devdocs-layout.min.js-->
+    <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
+    <script build:src="/app/chlk/index/all_not_minified.js" src="@Url.StaticContent("/app/chlk/index/all_not_minified.js")"></script>
+    <script build:src="/app/chlk/index/prettify.js" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
+    <!-- endbuild -->
+    
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 
     <script type="text/javascript">
-       
+
         jQuery('code').addClass('prettyprint');
         jQuery('code.remove').removeClass('prettyprint');
         jQuery('pre.example').addClass('prettyprint linenums');
@@ -1355,18 +1382,21 @@ This will let Chalkable know which function of yours to call.</li>
             });
         });
     </script>
-    <script>(function() {
-      if (location.protocol === 'file:') {
-        document.getElementById('localFile').style.display = 'block';
-      }
+    <script>
+        (function() {
+            if (location.protocol === 'file:') {
+                document.getElementById('localFile').style.display = 'block';
+            }
 
-    }).call(this);
-    </script><script>(function() {
-      $('table').addClass('table');
+        }).call(this);
+    </script><script>
+                 (function() {
+                     $('table').addClass('table');
 
-    }).call(this);
-    </script>
-    
+                 }).call(this);
+             </script>
 
-         
-}
+    @ChlkHelpers.GoogleAnalytics()
+    @ChlkHelpers.MixPanel()
+</body>
+</html>

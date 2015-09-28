@@ -153,13 +153,28 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             return null;
         }
 
+        private string GetAnnouncementType(AnnouncementType at)
+        {
+            switch (at)
+            {
+                case AnnouncementType.LessonPlan:
+                    return "lesson plan";
+                case AnnouncementType.Class:
+                    return "activity";
+                case AnnouncementType.Admin:
+                    return "admin announcement";
+                default:
+                    return "announcement";
+            }
+        }
+
         //TODO: implement builders 
 
         public Notification BuildAnnouncementNewAttachmentNotification(DateTime created, AnnouncementComplex announcement, Person recipient)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION,
                                                  NotificationType.Announcement, recipient, announcement, null, null,
-                                                 null, null, new { AnnouncementTitle = announcement.Title});
+                                                 null, null, new { AnnouncementTitle = announcement.Title, AnnouncementType = GetAnnouncementType(announcement.Type)});
         }
         public Notification BuildAnnouncementNewAttachmentNotificationToPerson(DateTime created, AnnouncementDetails announcement, Person toPerson, Person fromschoolPerson)
         {

@@ -22,6 +22,7 @@ app = self.getApp()
             +ActionForm('appmarket', 'quickInstall').content
                 +Hidden('appId', app.getId())
                 +Hidden('classes', self.getClassId())
+                +Hidden('currentPerson', self.getPersonId())
                 .calculated-price
                     +RenderWith(self.getAppTotalPrice(), chlk.templates.apps.InstallAppPriceTpl)
                 .install-info

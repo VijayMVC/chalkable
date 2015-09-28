@@ -4,7 +4,7 @@ REQUIRE('chlk.models.common.ChlkDate');
 NAMESPACE('chlk.controls', function () {
 
     chlk.controls.updateDatePicker = function (scope, node, value) {
-        var value = new chlk.models.common.ChlkSchoolYearDate.$createServerTime(node.getValue());
+        var value = new chlk.models.common.ChlkSchoolYearDate.$createServerTime(node.getData('value'));
         chlk.controls.DatePickerControl.prototype.updateDatePicker.call(scope, node, value, true);
     };
 
@@ -25,11 +25,13 @@ NAMESPACE('chlk.controls', function () {
             [[String, Object, Object]],
             Object, function processAttrs(name, value_, attrs_) {
                 attrs_.id = attrs_.id || ria.dom.Dom.GID();
-                attrs_.name = name;
+                var options = attrs_['data-options'];
+                attrs_.name = options.dateFormat ? name + 'formatted' : name;
+
                 if (value_){
                    if(!value_.format)
                         value_ = chlk.models.common.ChlkDate(getDate(value_));
-                    attrs_.value = value_.format('mm/dd/yy');
+                    attrs_.value = value_.format(options.dateFormat || 'mm/dd/yy');
                 }
 
                 var options = attrs_['data-options'];
@@ -62,8 +64,18 @@ NAMESPACE('chlk.controls', function () {
 
                 if(options.inCurrentMp && !this.userIsAdmin() ){
                     var gp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD);
-                    options.minDate = gp.getStartDate().getDate();
-                    options.maxDate = gp.getEndDate().getDate();
+                    if(!options.minDate || options.minDate < gp.getStartDate().getDate())
+                        options.minDate = gp.getStartDate().getDate();
+                    if(!options.maxDate || options.maxDate > gp.getEndDate().getDate())
+                        options.maxDate = gp.getEndDate().getDate();
+                }
+
+                if(options.inCurrentSchoolYear ){
+                    var sy = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR);
+                    if(!options.minDate || options.minDate < sy.getStartDate().getDate())
+                        options.minDate = sy.getStartDate().getDate();
+                    if(!options.maxDate || options.maxDate > sy.getEndDate().getDate())
+                        options.maxDate = sy.getEndDate().getDate();
                 }
 
                 if(options.calendarCls){
@@ -85,16 +97,22 @@ NAMESPACE('chlk.controls', function () {
                 node.off('change.datepiker');
                 node.on('change.datepiker', function(node, event){
                     var options = node.getData('options');
-                    if(options.minDate){
-                        var min = that.getServerDate(options.minDate);
-                        if(that.getServerDate(node.getValue()) < min)
-                            node.setValue(new chlk.models.common.ChlkSchoolYearDate(min).format('mm/dd/yy'));
-                    }
-                    if(options.maxDate){
-                        var max = that.getServerDate(options.maxDate);
-                        if(that.getServerDate(node.getValue()) > max)
-                            node.setValue(new chlk.models.common.ChlkSchoolYearDate(max).format('mm/dd/yy'));
-                    }
+                    var value = jQuery(node.valueOf()).datepicker('getDate');
+                    if(value){
+                        node.next().setValue(value.format('m/d/Y'));
+                        node.setData('value', value.format('m/d/Y'));
+                        if(options.minDate){
+                            var min = that.getServerDate(options.minDate);
+                            if(value < min)
+                                jQuery(node.getValue()).datepicker('setDate', min);
+                        }
+                        if(options.maxDate){
+                            var max = that.getServerDate(options.maxDate);
+                            if(value > max)
+                                jQuery(node.getValue()).datepicker('setDate', max);
+                        }
+                    }else
+                        node.next().setValue('');
                 })
             },
 
@@ -110,7 +128,7 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom, Object, Object]],
             VOID, function reanimate_(node, options, value_) {
                 var defaultOptions = {dateFormat: "mm/dd/yy"};
-                node.datepicker(ria.__API.extendWithDefault(options,defaultOptions), value_ && value_.getDate());
+                node.datepicker(ria.__API.merge(options,defaultOptions), value_ && value_.getDate());
                 node.setData('control', this);
             }
         ]);

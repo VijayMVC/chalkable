@@ -342,6 +342,7 @@
     <Compile Include="Models\AttendancesViewData\StudentPeriodAttendanceViewData.cs" />
     <Compile Include="Models\AutoGradeViewData.cs" />
     <Compile Include="Models\CC_StandardCategoryViewData.cs" />
+    <Compile Include="Models\FeedComplexViewData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeInputData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />
@@ -493,7 +494,6 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="App_Data\" />
-    <Folder Include="Views\DemoSchool\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config">
@@ -536,12 +536,6 @@
       <Project>{3051F268-B03F-42AE-A06C-1D8DD751BDBF}</Project>
       <Name>WindowsAzure.Acs.Oauth2</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\_Layout.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\Footer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Home\SysAdmin.cshtml" />
@@ -587,7 +581,6 @@
     <Content Include="fakeData\studentDisciplinesSummary.json" />
     <Content Include="fakeData\bannedAppData.json" />
     <Content Include="fakeData\unbannedAppData.json" />
-    <Content Include="Views\Shared\_IndexLayout.cshtml" />
     <Content Include="fakeData\appGeneralReviews.json" />
     <Content Include="fakeData\appAnalytics.json" />
     <Content Include="fakeData\creditCardData.json" />
