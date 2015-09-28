@@ -292,7 +292,7 @@ NAMESPACE('chlk.controllers', function (){
 
             if (this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
                 installedForGroups = installedForGroups.filter(function(item){
-                    return item.getGroupType() != chlk.models.apps.AppInstallGroupTypeEnum.ALL;
+                    return item.grouptype != chlk.models.apps.AppInstallGroupTypeEnum.ALL.valueOf();
                 });
             }
 
