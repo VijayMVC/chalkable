@@ -56,22 +56,30 @@ div(class = noComplete ? "no-complete" : "").feed-container
                                 showOtherMonths: true,
                                 selectOtherMonths: true,
                                 inCurrentSchoolYear: true,
-                                dateFormat: 'M d, yy'
+                                dateFormat: 'M d, yy',
+                                onClose: function( selectedDate ) {
+                                    $( "#toDate" ).datepicker( "option", "minDate", selectedDate );
+                                },
+                                maxDate: self.getEndDate() && self.getEndDate().getDate()
                             },
                             data-value=self.getStartDate() ? self.getStartDate().format('mm/dd/yy') : ''
-                        ).start-end-picker
+                        )#fromDate.start-end-picker
                         | -
                         +DatePicker('todate', self.getEndDate())(
                             data-options={
                                 showOtherMonths: true,
                                 selectOtherMonths: true,
                                 inCurrentSchoolYear: true,
-                                dateFormat: 'M d, yy'
+                                dateFormat: 'M d, yy',
+                                onClose: function( selectedDate ) {
+                                    $( "#fromDate" ).datepicker( "option", "maxDate", selectedDate );
+                                },
+                                minDate: self.getEndDate() && self.getEndDate().getDate()
                             },
-                            data-value=self.getEndDate() ? self.getEndDate().format('mm/dd/yy') : ''
-                        ).start-end-picker
+                            data-value=self.getStartDate() ? self.getStartDate().format('mm/dd/yy') : ''
+                        )#toDate.start-end-picker
                         br
-                        Button(type="submit", name="submitType", value="sort").blue-button=Msg.OK
+                        Button(type="submit", name="submitType", value="sort", disabled = !self.getStartDate() || self.getEndDate())#date-ok-button.blue-button=Msg.OK
                 if !isAdmin
                     +Select('announcementtype')(data-placeholder = 'Any Type').annTypeSelect.submit-after-select
                         +Option(null, 'Any Type', !self.getAnnType())

@@ -98,17 +98,19 @@ NAMESPACE('chlk.controls', function () {
                 node.on('change.datepiker', function(node, event){
                     var options = node.getData('options');
                     var value = jQuery(node.valueOf()).datepicker('getDate');
-                    node.next().setValue(value.format('m/d/Y'));
-                    node.setData('value', value.format('m/d/Y'));
-                    if(options.minDate){
-                        var min = that.getServerDate(options.minDate);
-                        if(value < min)
-                            jQuery(node.getValue()).datepicker('setDate', min);
-                    }
-                    if(options.maxDate){
-                        var max = that.getServerDate(options.maxDate);
-                        if(value > max)
-                            jQuery(node.getValue()).datepicker('setDate', max);
+                    if(value){
+                        node.next().setValue(value.format('m/d/Y'));
+                        node.setData('value', value.format('m/d/Y'));
+                        if(options.minDate){
+                            var min = that.getServerDate(options.minDate);
+                            if(value < min)
+                                jQuery(node.getValue()).datepicker('setDate', min);
+                        }
+                        if(options.maxDate){
+                            var max = that.getServerDate(options.maxDate);
+                            if(value > max)
+                                jQuery(node.getValue()).datepicker('setDate', max);
+                        }
                     }
                 })
             },

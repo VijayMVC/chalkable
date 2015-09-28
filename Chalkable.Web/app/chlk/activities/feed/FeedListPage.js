@@ -45,6 +45,16 @@ NAMESPACE('chlk.activities.feed', function () {
                 this.dom.find('#mark-done-submit').trigger('click');
             },
 
+            [ria.mvc.DomEventBind('change', '.start-end-picker')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function dateSelect(node, event, selected_){
+                var btn = this.dom.find('#date-ok-button');
+                if(!this.dom.find('#toDate').getValue() || !this.dom.find('#toDate').getValue())
+                    btn.setAttr('disabled', true);
+                else
+                    btn.removeAttr('disabled');
+            },
+
             [ria.mvc.DomEventBind('change', '.gradingPeriodSelect')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function gradingPeriodSelect(node, event, selected_){
