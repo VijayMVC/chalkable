@@ -1,0 +1,12 @@
+mixin AddStandardDialog(header, controller, action)
+    .dialog.add-standards
+        .x-window-header
+            h1=header
+            span Choose a standard that describes the item
+        +ActionForm(controller, action).add-standards-form
+            +Hidden('tmpStandardId', null)
+            block
+            .buttons-container
+                +Button.special-button2.cancel.close Cancel
+                +Button()(type="submit", disabled).special-button2.blue-button.add.add-standard-btn Submit
+
