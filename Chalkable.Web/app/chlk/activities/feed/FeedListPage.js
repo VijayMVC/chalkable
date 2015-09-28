@@ -23,18 +23,57 @@ NAMESPACE('chlk.activities.feed', function () {
                 this.dom.find('.new-notification-count').remove();
             },
 
+            function prepareSelect(node){
+                var value = parseInt(node.getValue());
+                if(!value || value < 1){
+                    node.setValue('');
+                    node.addClass('prepared');
+                }
+
+            },
+
+            [ria.mvc.DomEventBind('submit', 'form')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function formSubmit(node, event){
+                this.prepareSelect(this.dom.find('.gradingPeriodSelect'));
+                this.prepareSelect(this.dom.find('.annTypeSelect'));
+            },
+
             [ria.mvc.DomEventBind('change', '.markDoneSelect')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function markDoneSelect(node, event, selected_){
                 this.dom.find('#mark-done-submit').trigger('click');
             },
 
-            [ria.mvc.DomEventBind('click', '#sort-select-input')],
+            [ria.mvc.DomEventBind('change', '.gradingPeriodSelect')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function gradingPeriodSelect(node, event, selected_){
+                if(!node.hasClass('prepared'))
+                    setTimeout(function(){
+                        if(node.getValue() == -1)
+                            this.dom.find('.date-range-popup').removeClass('hidden')
+                        else{
+                            this.dom.find('.start-end-picker').next().setValue('');
+                            this.dom.find('#sort-submit').trigger('click');
+                        }
+
+                    }.bind(this), 10);
+
+                node.removeClass('prepared')
+            },
+
+            [ria.mvc.DomEventBind('change', '.submit-after-select')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function submitAfterSelect(node, event, selected_){
+                this.dom.find('#sort-submit').trigger('click');
+            },
+
+            [ria.mvc.DomEventBind('click', '.gradingPeriodSelect + DIV li:last-child')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function sortClick(node, event){
-                var select = this.dom.find('#sort-select');
-                select.toggleClass('chosen-container-active');
-                select.toggleClass('chosen-with-drop');
+            VOID, function dateRangeClick(node, event){
+                setTimeout(function(){
+                    this.dom.find('.date-range-popup').removeClass('hidden')
+                }.bind(this), 10);
             },
 
             [ria.mvc.DomEventBind('click', '.latest-earliest-option')],
@@ -44,10 +83,11 @@ NAMESPACE('chlk.activities.feed', function () {
                 this.sortSubmit();
             },
 
-            [ria.mvc.DomEventBind('change', '.lessonplans-check, .start-end-picker')],
+            [ria.mvc.DomEventBind('click', '.feed-tools')],
             [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function lessonPlansChange(node, event){
-                this.sortSubmit();
+            VOID, function feedToolsClick(node, event){
+                this.dom.find('.left-buttons-block').toggleClass('hidden');
+                node.toggleClass('active');
             },
 
             function sortSubmit(){
@@ -83,6 +123,22 @@ NAMESPACE('chlk.activities.feed', function () {
             function $() {
                 BASE();
                 this._dropDownClicked = false;
+            },
+
+            OVERRIDE, VOID, function onRender_(model) {
+                BASE(model);
+                var that = this;
+                new ria.dom.Dom().on('click.dates', function (node, event) {
+                    var target = new ria.dom.Dom(event.target), dom = that.dom, popup = dom.find('.date-range-popup');
+                    if (!popup.hasClass('hidden') && !target.isOrInside('.date-range-popup') && !target.isOrInside('.ui-datepicker-header') && !target.isOrInside('.ui-datepicker-calendar')) {
+                        popup.addClass('hidden');
+                    }
+                });
+            },
+
+            OVERRIDE, VOID, function onStop_() {
+                BASE();
+                new ria.dom.Dom().off('click.dates');
             }
 
         ]);

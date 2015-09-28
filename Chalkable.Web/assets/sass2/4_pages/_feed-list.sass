@@ -1,24 +1,37 @@
 .feed-list-page, .feed-list-admin-page
+  .left-buttons-block
+    position: absolute
+    left: 0
+    top: -45px
+
+    .chosen-container
+      width: 140px !important
+      margin-right: 10px
+
+    &.hidden
+      display: none
+
+  button.active
+    background: #56554f
+    color: white
+    +box-shadow(none)
+
+  .date-range-popup
+    position: absolute
+    top: 40px
+
+    &.important-only
+      left: 145px
+
+    &.hidden
+      display: none
+
   .right-buttons-block
     position: absolute
     right: 0
     top: -100px
-    text-align: right
 
-    >*
-      text-align: left
-
-    .lp-only
-      margin-left: 10px
-      display: inline-block
-
-      .box-checkbox
-        margin-left: 5px
-
-  .lesson-plans-check
-    margin-bottom: 7px
-
-  .markDoneSelect +DIV
+  //.markDoneSelect +DIV
     width: 127px !important
 
     .chosen-drop
@@ -35,34 +48,12 @@
       border-radius: 4px
       z-index: 999
 
-  #sort-select
-    margin-left: 10px
-
-    SPAN
-      width: 51px
-
-    .chosen-drop
-      width: 170px
-      margin-left: -77px
-
-    .active-result:hover
-      background: #f1f1f1
-      color: #56554f
-
-  #sort-select-input
-    position: absolute
-    z-index: 1
-    width: 85px
-    right: 0
-    opacity: 0
-    cursor: pointer
-
   .date-range
     text-align: right
 
     .hasDatepicker
-      border: none
-      box-shadow: none
+      //border: none
+      //box-shadow: none
       width: 85px
       margin-left: 4px
       cursor: pointer
@@ -71,4 +62,4 @@
     width: 100%
 
   .chlk-grid
-    margin-top: 28px
+    margin-top: 50px

@@ -70,6 +70,14 @@ NAMESPACE('chlk.controls', function () {
                         options.maxDate = gp.getEndDate().getDate();
                 }
 
+                if(options.inCurrentSchoolYear ){
+                    var sy = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_YEAR);
+                    if(!options.minDate || options.minDate < sy.getStartDate().getDate())
+                        options.minDate = sy.getStartDate().getDate();
+                    if(!options.maxDate || options.maxDate > sy.getEndDate().getDate())
+                        options.maxDate = sy.getEndDate().getDate();
+                }
+
                 if(options.calendarCls){
                     options.beforeShow = function(){
                         jQuery('#ui-datepicker-div').addClass(options.calendarCls);
