@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.BusinessLogic.Services.School;
@@ -292,7 +293,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             SeatingChartStorage.UpdateChart(classId, markingPeriodId, seatingChart);
         }
 
-        public AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod)
+        public async Task<AttendanceSummary> GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
             var classes = ServiceLocator.ClassService.GetTeacherClasses(gradingPeriod.SchoolYearRef, teacherId, gradingPeriod.MarkingPeriodRef);
@@ -324,7 +325,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return BaseAttendance.MISSING;
         }
         
-        public IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime dateTime)
+        public async Task<IList<ClassDetails>> GetNotTakenAttendanceClasses(DateTime dateTime)
         {
             return new List<ClassDetails>();
         }

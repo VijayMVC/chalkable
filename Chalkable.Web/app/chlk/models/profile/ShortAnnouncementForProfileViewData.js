@@ -21,7 +21,7 @@ NAMESPACE('chlk.models.profile', function () {
                 this.id = SJX.fromValue(Number(raw.id), chlk.models.id.AnnouncementId);
                 this.title = SJX.fromValue(raw.title, String);
                 this.type = SJX.fromValue(raw.type, chlk.models.announcement.AnnouncementTypeEnum);
-                this.owner = SJX.fromValue(raw.owner, Boolean);
+                this.owner = SJX.fromValue(raw.isowner, Boolean);
                 this.studentAnnouncements = ria.serialize.SJX.fromDeserializable(raw.studentannouncements, chlk.models.announcement.ShortStudentAnnouncementsViewData);
             }
         ]);

@@ -1,4 +1,6 @@
-noComplete = self.completeOnly && !self.items.length
+-var noComplete = self.completeOnly && !self.items.length
+-var typesEnum = chlk.models.announcement.AnnouncementTypeEnum
+
 div(class = noComplete ? "no-complete" : "").feed-container
     -var topData = self.getTopData()
     -var isAdmin = self.getUserRole().isAdmin()
@@ -33,7 +35,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
             else
                 input(type="hidden", name="classId", value=topData.getSelectedItemId())
 
-            .right-buttons-block
+            .left-buttons-block.hidden
                 if self.isImportantOnly() && self.items.length
                     input(type="submit", name="submitType", value="markDone")#mark-done-submit.x-hidden
                     +Select('markDoneOption')(data-placeholder = 'Mark Done', value = 0).markDoneSelect
@@ -41,6 +43,48 @@ div(class = noComplete ? "no-complete" : "").feed-container
                         +Option(1, 'Items due before today', false)
                         +Option(2, 'Items older than 30 days', false)
                         +Option(3, 'All Items', false)
+                +Select('gradingperiodid')(data-placeholder = self.getStartDate() && (self.getStartDate().format('M d - ') + self.getEndDate().format('M d')), value = 0).gradingPeriodSelect
+                    +Option(-2, '', !!self.getStartDate())
+                    +Option(null, 'Any Time', (!self.getGradingPeriodId() || !self.getGradingPeriodId().valueOf()) && !self.getStartDate())
+                    each gp in self.getGradingPeriods()
+                        +Option(gp.getId().valueOf(), gp.getName(), self.getGradingPeriodId() == gp.getId())
+                    +Option(-1, 'Custom Range...', false)
+                div(class = self.isImportantOnly() ? 'important-only' : '').date-range-popup.popup-bubble.top.hidden
+                    .date-range
+                        +DatePicker('fromdate', self.getStartDate())(
+                            data-options={
+                                showOtherMonths: true,
+                                selectOtherMonths: true,
+                                inCurrentSchoolYear: true,
+                                dateFormat: 'M d, yy',
+                                onClose: function( selectedDate ) {
+                                    $( "#toDate" ).datepicker( "option", "minDate", selectedDate );
+                                },
+                                maxDate: self.getEndDate() && self.getEndDate().getDate()
+                            },
+                            data-value=self.getStartDate() ? self.getStartDate().format('mm/dd/yy') : ''
+                        )#fromDate.start-end-picker
+                        | -
+                        +DatePicker('todate', self.getEndDate())(
+                            data-options={
+                                showOtherMonths: true,
+                                selectOtherMonths: true,
+                                inCurrentSchoolYear: true,
+                                dateFormat: 'M d, yy',
+                                onClose: function( selectedDate ) {
+                                    $( "#fromDate" ).datepicker( "option", "maxDate", selectedDate );
+                                },
+                                minDate: self.getEndDate() && self.getEndDate().getDate()
+                            },
+                            data-value=self.getStartDate() ? self.getStartDate().format('mm/dd/yy') : ''
+                        )#toDate.start-end-picker
+                        br
+                        Button(type="submit", name="submitType", value="sort", disabled = !self.getStartDate() || self.getEndDate())#date-ok-button.blue-button=Msg.OK
+                if !isAdmin
+                    +Select('announcementtype')(data-placeholder = 'Any Type').annTypeSelect.submit-after-select
+                        +Option(null, 'Any Type', !self.getAnnType())
+                        +Option(typesEnum.CLASS_ANNOUNCEMENT.valueOf(), 'Activities Only', typesEnum.CLASS_ANNOUNCEMENT == self.getAnnType())
+                        +Option(typesEnum.LESSON_PLAN.valueOf(), 'Lesson Plan Only', typesEnum.LESSON_PLAN == self.getAnnType())
                 //input(type="text", readonly)#sort-select-input
                 //#sort-select.chosen-container.chosen-container-single
                     a(href="javascript:void(0)").chosen-single
@@ -51,34 +95,8 @@ div(class = noComplete ? "no-complete" : "").feed-container
                         ul.chosen-results
                             li(class = self.isLatest() ? "" : "highlighted", data-value=false).latest-earliest-option.active-result Due Date: Earliest
                             li(class = self.isLatest() ? "highlighted" : "", data-value=true).latest-earliest-option.active-result Due Date: Latest
-                if !isAdmin
-                    .lp-only.active-result Lesson Plans Only
-                        .box-checkbox.right.lesson-plans-check
-                            +Checkbox('lessonplansonly', self.isLessonPlansOnly(), false, true).lessonplans-check
-                .date-range
-                    +DatePicker('fromdate', self.getStartDate())(
-                        data-options={
-                            showOtherMonths: true,
-                            selectOtherMonths: true,
-                            inCurrentMp: true,
-                            maxDate: self.getEndDate().getDate(),
-                            dateFormat: 'M d, yy'
-                        },
-                        data-value=self.getStartDate() ? self.getStartDate().format('mm/dd/yy') : ''
-                    ).start-end-picker
-                    -console.info(self.getStartDate().getDate());
-                    | -
-                    +DatePicker('todate', self.getEndDate())(
-                        data-options={
-                            showOtherMonths: true,
-                            selectOtherMonths: true,
-                            inCurrentMp: true,
-                            minDate: self.getStartDate().getDate(),
-                            dateFormat: 'M d, yy'
-                        },
-                        data-value=self.getEndDate() ? self.getEndDate().format('mm/dd/yy') : ''
-                    ).start-end-picker
-                    -console.info(self.getEndDate().getDate());
+            .right-buttons-block
+                Button(type="button").feed-tools Feed Tools
             +ListView(self.items)(
                 infiniteScroll = true,
                 needGoToButton = true,

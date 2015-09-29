@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AdminAnnouncement GetAdminAnnouncementById(int adminAnnouncementId);
         bool Exists(string title, int? excludedLessonPlaId);
 
-        FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int start = 0, int count = int.MaxValue, bool ownedOnly = true, bool? sortType = null);
+        FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, FeedSettings settings, int start = 0, int count = int.MaxValue, bool ownedOnly = true);
         IList<AdminAnnouncement> GetAdminAnnouncements(IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? studentId);
         IList<AdminAnnouncement> GetAdminAnnouncementsByFilter(string filter); 
         AdminAnnouncement GetLastDraft();
@@ -254,41 +254,43 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
 
-        public FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int start = 0, int count = int.MaxValue, bool ownedOnly = true, bool? sortType = null)
+        public FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, FeedSettings settings, int start = 0, int count = int.MaxValue, bool ownedOnly = true)
         {
             Trace.Assert(Context.PersonId.HasValue);
 
-            DateTime startDate, endDate;
-            bool sort;
-            if (fromDate == null)
-                GetAdminSettingsForFeed(out startDate, out endDate, out sort);
+            DateTime feedStartDate;
+            DateTime feedEndDate;
+
+            //get or set settings
+            if (!settings.AnnouncementType.HasValue && !settings.FromDate.HasValue && !settings.ToDate.HasValue && !settings.GradingPeriodId.HasValue)
+                GetAdminSettingsForFeed(out settings);
+            else
+                SetAdminSettingsForFeed(settings);
+
+            //if items should be from certain grading period
+            if (settings.GradingPeriodId.HasValue)
+            {
+                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(settings.GradingPeriodId.Value);
+                feedStartDate = gp.StartDate;
+                feedEndDate = gp.EndDate;
+            }
             else
             {
-                startDate = fromDate.Value;
-                endDate = toDate.Value;
-                sort = sortType.Value;
-                ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value,
-                    new Dictionary<string, object>()
-                    {
-                        {PersonSetting.FEED_START_DATE, fromDate},
-                        {PersonSetting.FEED_END_DATE, toDate},
-                        {PersonSetting.FEED_SORTING, sort }
-                    });
+                feedStartDate = settings.FromDate.Value;
+                feedEndDate = settings.ToDate.Value;
             }
 
             var fc = new FeedComplex()
             {
-                FromDate = startDate,
-                ToDate = endDate,
-                SortType = sort
+                SettingsForFeed = settings
             };
-            if (!sort)
+            if (!settings.SortType.Value)
                 fc.Announcements =
                     DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
                     {
                         Complete = complete,
-                        FromDate = startDate,
-                        ToDate = endDate,
+                        FromDate = feedStartDate,
+                        ToDate = feedEndDate,
                         Start = start,
                         Count = count,
                         PersonId = Context.PersonId,
@@ -301,8 +303,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
                     {
                         Complete = complete,
-                        FromDate = startDate,
-                        ToDate = endDate,
+                        FromDate = feedStartDate,
+                        ToDate = feedEndDate,
                         Start = start,
                         Count = count,
                         PersonId = Context.PersonId,
@@ -313,48 +315,55 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return fc;
         }
 
-        private void GetAdminSettingsForFeed(out DateTime fromDate, out DateTime toDate, out bool sortType)
+        private void GetAdminSettingsForFeed(out FeedSettings settings)
         {
+            settings = new FeedSettings();
             var query = new List<string>
             {
                 PersonSetting.FEED_START_DATE,
                 PersonSetting.FEED_END_DATE,
-                PersonSetting.FEED_SORTING
+                PersonSetting.FEED_SORTING,
+                PersonSetting.FEED_GRADING_PERIOD_ID
             };
-            var settings = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, query);
-            var startDate = settings.FirstOrDefault(x => x.Key == PersonSetting.FEED_START_DATE);
-            var endDate = settings.FirstOrDefault(x => x.Key == PersonSetting.FEED_END_DATE);
-            var sort = settings.FirstOrDefault(x => x.Key == PersonSetting.FEED_SORTING);
-            if (startDate == null)
+
+            var sett = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, query);
+            var startDate = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_START_DATE);
+            var endDate = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_END_DATE);
+            var sort = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_SORTING);
+            var grPeriodId = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_GRADING_PERIOD_ID);
+
+            if (grPeriodId?.Value != null)
             {
-                fromDate = Context.SchoolYearStartDate ?? DateTime.MinValue;
-                ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value,
-                    new Dictionary<string, object>()
-                    {
-                        {PersonSetting.FEED_START_DATE, Context.SchoolYearStartDate ?? DateTime.MinValue}
-                    });
+                settings.GradingPeriodId = int.Parse(grPeriodId.Value);
+                settings.FromDate = null;
+                settings.ToDate = null;
             }
-            else fromDate = DateTime.ParseExact(startDate.Value, Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
-            if (endDate == null)
+            else if (startDate?.Value != null && endDate?.Value != null)
             {
-                toDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
-                ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value,
-                    new Dictionary<string, object>()
-                    {
-                        {PersonSetting.FEED_END_DATE, Context.SchoolYearEndDate ?? toDate}
-                    });
+                settings.FromDate = DateTime.ParseExact(startDate.Value, Constants.DATE_FORMAT,
+                    CultureInfo.InvariantCulture);
+                settings.ToDate = DateTime.ParseExact(endDate.Value, Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
+                settings.GradingPeriodId = null;
             }
-            else toDate = DateTime.ParseExact(endDate.Value, Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
-            if (sort == null)
+            else
             {
-                sortType = false;
-                ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value,
-                    new Dictionary<string, object>()
-                    {
-                        {PersonSetting.FEED_SORTING, sortType}
-                    });
+                settings.FromDate = Context.SchoolYearStartDate ?? DateTime.MinValue;
+                settings.ToDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
+                settings.GradingPeriodId = null;
             }
-            else sortType = bool.Parse(sort.Value);
+
+            settings.SortType = sort != null && bool.Parse(sort.Value);
+        }
+
+        private void SetAdminSettingsForFeed(FeedSettings settings)
+        {
+            ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, new Dictionary<string, object>()
+            {
+                {PersonSetting.FEED_START_DATE, settings.FromDate },
+                {PersonSetting.FEED_END_DATE, settings.ToDate },
+                {PersonSetting.FEED_GRADING_PERIOD_ID, settings.GradingPeriodId },
+                {PersonSetting.FEED_SORTING, settings.SortType }
+            });
         }
 
         public IList<AdminAnnouncement> GetAdminAnnouncements(IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? studentId)

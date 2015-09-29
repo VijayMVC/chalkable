@@ -20,5 +20,7 @@ namespace Chalkable.Data.School.Model
         public const string FEED_LESSON_PLANS_ONLY = "feedlessonplansonly";
         public const string FEED_START_DATE = "feedstartdate";
         public const string FEED_END_DATE = "feedenddate";
+        public const string FEED_ANNOUNCEMENT_TYPE = "feedannouncementtype";
+        public const string FEED_GRADING_PERIOD_ID = "feedgradingperiodid";
     }
 }

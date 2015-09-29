@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -403,28 +404,36 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)
         {
-            var oldLessonPlan = GetLessonPlanById(oldLessonPlanId);
             var newLessonPlan = GetLessonPlanById(newLessonPlanId);
+            DoUpdate(u =>
+            {
+                var da = CreateLessonPlanDataAccess(u);
+                var oldLessonPlan = da.GetLessonPlanTemplate(oldLessonPlanId, Context.PersonId.Value);
 
-            if (!oldLessonPlan.IsOwner)
-                throw new ChalkableSecurityException("Current user is not owner of lesson plan.");
+                if (!oldLessonPlan.GalleryCategoryRef.HasValue)
+                    throw new ChalkableException($@"'{oldLessonPlan.Title}' was deleted from Gallery.");
 
-            if (!oldLessonPlan.GalleryCategoryRef.HasValue)
-                throw new ChalkableException($@"'{oldLessonPlan.Title}' was deleted from Gallery.");
+                if (!oldLessonPlan.IsOwner && !ClaimInfo.HasPermission(Context.Claims, ClaimInfo.CHALKABLE_ADMIN))
+                    throw new ChalkableSecurityException("Current user has no access to replace lesson plan in gallery!");
 
-            newLessonPlan.GalleryCategoryRef = oldLessonPlan.GalleryCategoryRef;
-            oldLessonPlan.GalleryCategoryRef = null;
-
-            DoUpdate(u => CreateLessonPlanDataAccess(u).Update(new []{ oldLessonPlan, newLessonPlan }));
+                newLessonPlan.GalleryCategoryRef = oldLessonPlan.GalleryCategoryRef;
+                oldLessonPlan.GalleryCategoryRef = null;
+                CreateLessonPlanDataAccess(u).Update(new[] {oldLessonPlan, newLessonPlan});
+            });
         }
 
         public void RemoveFromGallery(int lessonPlanId)
         {
-            var lp = GetLessonPlanById(lessonPlanId);
-            if(!lp.IsOwner)
-                throw new ChalkableSecurityException("Current user is not owner of lesson plan.");
-            lp.GalleryCategoryRef = null;
-            DoUpdate(u => CreateLessonPlanDataAccess(u).Update(lp));
+            Trace.Assert(Context.PersonId.HasValue);
+            DoUpdate(u =>
+            {
+                var da = CreateLessonPlanDataAccess(u);
+                var lp = da.GetLessonPlanTemplate(lessonPlanId, Context.PersonId.Value);
+                if (!lp.IsOwner && !ClaimInfo.HasPermission(Context.Claims, ClaimInfo.CHALKABLE_ADMIN))
+                    throw new ChalkableSecurityException("Current user has no access to remove lesson plan from gallery!");
+                lp.GalleryCategoryRef = null;
+                da.Update(lp);
+            });
         }
     }
 }
