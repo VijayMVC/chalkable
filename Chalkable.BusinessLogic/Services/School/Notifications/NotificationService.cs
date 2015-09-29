@@ -74,9 +74,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         private PaginatedList<NotificationDetails> GetNotifications(NotificationQuery query)
         {
-            if (!Context.SchoolLocalId.HasValue)
-                throw new UnassignedUserException();
-
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            
             using (var uow = Read())
             {
                 query.SchoolId = Context.SchoolLocalId.Value;
