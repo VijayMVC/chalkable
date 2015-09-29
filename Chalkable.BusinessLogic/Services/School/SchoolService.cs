@@ -126,7 +126,8 @@ namespace Chalkable.BusinessLogic.Services.School
             var res = DoRead(uow =>
                         new SchoolDataAccess(uow).GetStartupData(Context.SchoolYearId.Value, Context.PersonId.Value,
                             Context.RoleId, Context.NowSchoolYearTime.Date));
-
+            //TODO: add this to storage procedure
+            res.GradingPeriods = ServiceLocator.GradingPeriodService.GetGradingPeriodsDetails(Context.SchoolYearId.Value);
             return res;
         }
     }

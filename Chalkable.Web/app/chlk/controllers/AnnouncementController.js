@@ -308,22 +308,19 @@ NAMESPACE('chlk.controllers', function (){
                         if (currentClassInfo && !currentClassInfo.getTypesByClass().length)
                             throw new chlk.lib.exception.NoClassAnnouncementTypeException();
                     }
-
-                    var classMarkingPeriods = this.classService.getMarkingPeriodRefsOfClass(classId_);
-                    model.setClassScheduleDateRanges(
-                        markingPeriods
-                            .filter(function (mp) {
-                                return classMarkingPeriods.indexOf(mp.getId()) > -1
-                            })
-                            .map(function (_) {
-                                return {
-                                    start: _.getStartDate().getDate(),
-                                    end: _.getEndDate().getDate()
-                                }
-                            }));
                 }
 
             }, this);
+
+            var gradingPeriods = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIODS, []);
+            model.setClassScheduleDateRanges(
+                gradingPeriods
+                    .map(function (_) {
+                        return {
+                            start: _.getStartDate().getDate(),
+                            end: _.getEndDate().getDate()
+                        }
+                    }));
 
             var classesBarData = new chlk.models.classes.ClassesForTopBar(
                 classes,
@@ -1741,7 +1738,15 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
         function submitLessonPlan(model, isEdit){
             if(model.getStartDate().compare(model.getEndDate()) == 1){
-                this.ShowMsgBox('Lesson Plan are no valid. Start date is greater the end date', 'whoa.');
+                this.ShowMsgBox('Lesson Plan is no valid. Start date is greater the end date', 'whoa.');
+                return null;
+            }
+
+            var gradingPeriods = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIODS, []);
+
+            if(!gradingPeriods.filter(function(_){return model.getStartDate().getDate() >= _.getStartDate().getDate() && model.getStartDate().getDate() <= _.getEndDate().getDate()
+                    && model.getEndDate().getDate() >= _.getStartDate().getDate() && model.getEndDate().getDate() <= _.getEndDate().getDate()}).length){
+                this.ShowMsgBox('Lesson Plan is no valid. Start date and End date can\'t be in different grading periods', 'whoa.');
                 return null;
             }
 
