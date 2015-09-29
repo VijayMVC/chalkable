@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -62,27 +63,32 @@ namespace Chalkable.StiConnector.Connectors
 
         public T Call<T>(string url, NameValueCollection parameters = null)
         {
-            
+            return Task.Run(() => CallAsync<T>(url, parameters)).Result;
+        }
+
+        public async Task<T> CallAsync<T>(string url, NameValueCollection parameters = null) 
+        {
+            var startTime = DateTime.Now;
             var client = InitWebClient();
             MemoryStream stream = null;
             try
             {
                 client.QueryString = parameters ?? new NameValueCollection();
-                var startTime = DateTime.Now;
-                var data = client.DownloadData(url);
+
+                var dataTask = client.DownloadDataTaskAsync(url);
+                stream = new MemoryStream(await dataTask);
+                var res = JsonConvert.DeserializeObject<T>((new StreamReader(stream)).ReadToEnd());
+
                 var endTime = DateTime.Now;
                 var time = endTime - startTime;
                 var timeString = string.Format("{0}:{1}.{2}", time.Minutes, time.Seconds, time.Milliseconds);
                 Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
-
-                Debug.WriteLine(Encoding.UTF8.GetString(data));
-                stream = new MemoryStream(data);
-                return JsonConvert.DeserializeObject<T>((new StreamReader(stream)).ReadToEnd());
+                return res;
 
             }
             catch (WebException ex)
             {
-                return HandleInowException<T>(ex);
+                return HandleInowException<T>(ex); 
             }
             finally
             {
@@ -92,6 +98,12 @@ namespace Chalkable.StiConnector.Connectors
         }
 
         public byte[] Download<TPostObj>(string url, TPostObj obj, NameValueCollection optionalParams = null,
+                                     HttpMethod httpMethod = null)
+        {
+            return Task.Run(() => DownloadAsync(url, obj, optionalParams, httpMethod)).Result;
+        }
+
+        public async Task<byte[]> DownloadAsync<TPostObj>(string url, TPostObj obj, NameValueCollection optionalParams = null,
                                      HttpMethod httpMethod = null)
         {
             httpMethod = httpMethod ?? HttpMethod.Post;
@@ -107,12 +119,12 @@ namespace Chalkable.StiConnector.Connectors
                 writer.Flush();
                 var startTime = DateTime.Now;
                 var arr = stream.ToArray();
-                var res = client.UploadData(url, httpMethod.Method, arr);
-                var time = DateTime.Now - startTime; 
-                var timeString = string.Format("{0}:{1}.{2}", time.Minutes, time.Seconds, time.Milliseconds);
+                var res = client.UploadDataTaskAsync(url, httpMethod.Method, arr);
+                var time = DateTime.Now - startTime;
+                var timeString = $"{time.Minutes}:{time.Seconds}.{time.Milliseconds}";
                 Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
 
-                return res;
+                return await res;
             }
             catch (WebException ex)
             {
@@ -195,9 +207,28 @@ namespace Chalkable.StiConnector.Connectors
             return default(TReturn);
         }
 
+        public async Task<TReturn> PostAsync<TReturn, TPostObj>(string url, TPostObj obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null)
+        {
+            var data = await DownloadAsync(url, obj, optionalParams, httpMethod);
+            if (data != null && data.Length > 0)
+            {
+                using (var stream2 = new MemoryStream(data))
+                {
+                    var serializer = new JsonSerializer();
+                    return serializer.Deserialize<TReturn>(new JsonTextReader(new StreamReader(stream2)));
+                }
+            }
+            return default(TReturn);
+        }
+
         public T Post<T>(string url, T obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null)
         {
             return Post<T, T>(url, obj, optionalParams, httpMethod);
+        }
+
+        public async Task<T> PostAsync<T>(string url, T obj, NameValueCollection optionalParams = null, HttpMethod httpMethod = null)
+        {
+            return await PostAsync<T, T>(url, obj, optionalParams, httpMethod);
         }
 
 
