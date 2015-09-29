@@ -9,7 +9,6 @@ NAMESPACE('chlk.activities.student', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('profile')],
-        //[ria.mvc.PartialUpdateRule(chlk.templates.calendar.discipline.StudentDisciplineMonthCalendarTpl, '', '#discipline-calendar-info', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.TemplateBind(chlk.templates.student.StudentProfileGradingTpl)],
         'StudentProfileGradingPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
@@ -21,8 +20,10 @@ NAMESPACE('chlk.activities.student', function () {
                 var node = this.dom.find('.gp-container.opened').find('.gp-items');
                 if(node.getData('id') != model.getGradingPeriod().getId().valueOf()){
                     node.parent('.gp-container').removeClass('opened');
+                    container.find('.grades-avg-by-type-no-data').addClass('x-hidden');
                     setTimeout(function(){
                         node.find('.announcement-types-info').setCss('height', 0);
+
                     }, 1);
                 }
 
@@ -34,6 +35,7 @@ NAMESPACE('chlk.activities.student', function () {
                             height = node.height()
                     });
                     container.find('.announcement-types-info').setCss('height', height);
+                    container.find('.grades-avg-by-type-no-data').removeClass('x-hidden');
                 }, 1);
 
             },
@@ -42,6 +44,7 @@ NAMESPACE('chlk.activities.student', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function gpClick(node, event){
                 node.parent('.gp-container').removeClass('opened').find('.announcement-types-info').setCss('height', 0);
+                node.parent('.gp-container').find('.grades-avg-by-type-no-data').addClass('x-hidden');
                 return false;
             }
         ]);
