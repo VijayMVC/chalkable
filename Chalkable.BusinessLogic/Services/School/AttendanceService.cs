@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Common;
@@ -18,8 +19,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void SetClassAttendances(DateTime date, int classId, IList<StudentClassAttendance> studentAttendances);
         SeatingChartInfo GetSeatingChart(int classId, int markingPeriodId);
         void UpdateSeatingChart(int classId, int markingPeriodId, SeatingChartInfo seatingChart);
-        AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod);
-        IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime date);
+        Task<AttendanceSummary> GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod);
+        Task<IList<ClassDetails>> GetNotTakenAttendanceClasses(DateTime date);
         IList<StudentDateAttendance> GetStudentAttendancesByDateRange(int studentId, DateTime startDate, DateTime endDate);
         StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? gradingPeriodId);
         ClassAttendanceSummary GetClassAttendanceSummary(int classId, int? gradingPeriodId);
@@ -134,7 +135,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public AttendanceSummary GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod)
+        public async Task<AttendanceSummary> GetAttendanceSummary(int teacherId, GradingPeriod gradingPeriod)
         {
             var classes = ServiceLocator.ClassService.GetTeacherClasses(gradingPeriod.SchoolYearRef, teacherId, gradingPeriod.MarkingPeriodRef);
             if (classes.Count == 0)
@@ -146,8 +147,9 @@ namespace Chalkable.BusinessLogic.Services.School
                     };
             }
             var classesIds = classes.Select(x => x.Id).ToList();
+            var attSummarytask =  ConnectorLocator.AttendanceConnector.GetSectionAttendanceSummary(classesIds, gradingPeriod.StartDate, gradingPeriod.EndDate);
             var students = ServiceLocator.StudentService.GetTeacherStudents(teacherId, gradingPeriod.SchoolYearRef);
-            var sectionsAttendanceSummary = ConnectorLocator.AttendanceConnector.GetSectionAttendanceSummary(classesIds, gradingPeriod.StartDate, gradingPeriod.EndDate);
+            var sectionsAttendanceSummary = await attSummarytask;
             var res = new AttendanceSummary();
             var dailySectionAttendances = new List<DailySectionAbsenceSummary>();
             var studentAtts = new List<StudentSectionAbsenceSummary>();
@@ -221,12 +223,13 @@ namespace Chalkable.BusinessLogic.Services.School
             ConnectorLocator.SeatingChartConnector.UpdateChart(classId, markingPeriodId, seatingChart);
         }
         
-        public IList<ClassDetails> GetNotTakenAttendanceClasses(DateTime dateTime)
+        public async Task<IList<ClassDetails>> GetNotTakenAttendanceClasses(DateTime dateTime)
         {
             Trace.Assert(Context.PersonId.HasValue);
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            var postedAttendanceTask = ConnectorLocator.AttendanceConnector.GetPostedAttendances(syId, dateTime);
             var classes = ServiceLocator.ClassService.GetTeacherClasses(syId, Context.PersonId.Value).Where(x=>x.StudentsCount > 0).ToList();
-            var postedAttendances = ConnectorLocator.AttendanceConnector.GetPostedAttendances(syId, dateTime);
+            var postedAttendances = await postedAttendanceTask;
             if (postedAttendances != null && dateTime.Date <= Context.NowSchoolYearTime.Date)
             {
                 if (dateTime.Date == Context.NowSchoolYearTime.Date)

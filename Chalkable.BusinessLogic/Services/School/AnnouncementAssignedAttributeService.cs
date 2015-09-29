@@ -277,7 +277,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (existingAtt == null)
                 {
                     var content = connectorLocator.AttachmentConnector.GetAttachmentContent(attribute.Attachment.SisAttachmentId.Value);
-                    attachment.Uuid = serviceLocator.CrocodocService.UploadDocument(attribute.Attachment.Name, content).uuid;
+                    if(serviceLocator.CrocodocService.IsDocument(attribute.Attachment.Name))
+                        attachment.Uuid = serviceLocator.CrocodocService.UploadDocument(attribute.Attachment.Name, content).uuid;
                     attachment.UploadedDate = classAnn.Created;
                     attachment.LastAttachedDate = attachment.UploadedDate;
                     attachment.PersonRef = classAnn.PrimaryTeacherRef;

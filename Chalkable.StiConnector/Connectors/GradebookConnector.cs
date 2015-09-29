@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.StiConnector.Connectors
@@ -13,15 +14,15 @@ namespace Chalkable.StiConnector.Connectors
             url_format = BaseUrl + "chalkable/sections/{0}/gradebook";
         }
 
-        public Gradebook Calculate(int sectionId, int? gradingPeriodId = null)
+        public async Task<Gradebook> Calculate(int sectionId, int? gradingPeriodId = null)
         {
             var nvc = new NameValueCollection();
             if(gradingPeriodId.HasValue)
                 nvc.Add("gradingPeriodId", gradingPeriodId.Value.ToString());
-            return Post<Gradebook>(string.Format(url_format + "/calculate", sectionId), null, nvc);
+            return await PostAsync<Gradebook>(string.Format(url_format + "/calculate", sectionId), null, nvc);
         }
 
-        public Gradebook GetBySectionAndGradingPeriod(int sectionId, int? categoryId = null,
+        public async Task<Gradebook> GetBySectionAndGradingPeriod(int sectionId, int? categoryId = null,
                                                        int? gradingPeriodId = null, int? standardId = null)
         {
             var nvc = new NameValueCollection();
@@ -31,7 +32,7 @@ namespace Chalkable.StiConnector.Connectors
                 nvc.Add("gradingPeriodId", gradingPeriodId.Value.ToString());
             if(standardId.HasValue)
                 nvc.Add("standardId", standardId.Value.ToString());
-            return Call<Gradebook>(string.Format(url_format, sectionId), nvc);
+            return await CallAsync<Gradebook>(string.Format(url_format, sectionId), nvc);
         }
 
         public IList<string> GetGradebookComments(int acadSessionId, int teacherId)
@@ -63,22 +64,22 @@ namespace Chalkable.StiConnector.Connectors
             Post<Object, Object>(string.Format(url_format + "/postgrades", sectionId), new Object(), nvc);
         }
 
-        public IList<SectionGradesSummary> GetSectionGradesSummary(IList<int> sectionIds, int gradingPeriodId)
+        public async Task<IList<SectionGradesSummary>> GetSectionGradesSummary(IList<int> sectionIds, int gradingPeriodId)
         {
             var nvc = new NameValueCollection {{"gradingPeriodId", gradingPeriodId.ToString()}};
             for (int i = 0; i < sectionIds.Count; i++)
-                nvc.Add(string.Format("sectionIds[{0}]", i.ToString()), sectionIds[i].ToString());
-            return Call<IList<SectionGradesSummary>>(string.Format("{0}chalkable/grades/summary", BaseUrl), nvc);
+                nvc.Add(string.Format("sectionIds[{0}]", i), sectionIds[i].ToString());
+            return await CallAsync<IList<SectionGradesSummary>>(string.Format("{0}chalkable/grades/summary", BaseUrl), nvc);
         }
 
 
-        public AverageDashboard GetAveragesDashboard(int sectionId, int? gradingPeriodId)
+        public async Task<AverageDashboard> GetAveragesDashboard(int sectionId, int? gradingPeriodId)
         {
             var url = string.Format("{0}chalkable/sections/{1}/averages/dashboard",BaseUrl, sectionId);
             var nvc = new NameValueCollection();
             if(gradingPeriodId.HasValue)
                 nvc.Add("gradingPeriodId", gradingPeriodId.Value.ToString());
-            return Call<AverageDashboard>(url, nvc);
+            return await CallAsync<AverageDashboard>(url, nvc);
         }
 
         public void PostStandards(int sectionId, int? gradingPeriodId)

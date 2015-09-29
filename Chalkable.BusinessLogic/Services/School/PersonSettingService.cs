@@ -47,7 +47,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 set.Value = (settings[set.Key] as DateTime?)?
                     .ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture) 
-                    ?? settings[set.Key].ToString();
+                    ?? settings[set.Key]?.ToString();
             }
             DoUpdate(u => new PersonSettingDataAccess(u).Update(ps));
 

@@ -44,7 +44,7 @@ namespace Chalkable.Data.School.DataAccess
                 PersonRef = personId,
                 Value = (pair.Value as DateTime?)?
                     .ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture) 
-                    ?? pair.Value.ToString()
+                    ?? pair.Value?.ToString()
             }).ToList());
         }
     }

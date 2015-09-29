@@ -2,7 +2,7 @@ mixin DatePicker(name, value_)
     -attributes = self.processAttrs(name, value_, attributes)
     input(type="text")(attributes)
     if attributes['data-options'].dateFormat
-        +Hidden(name, value_).hidden-datepicker
+        +Hidden(name, value_ ? value_.format('mm/dd/yy') : '').hidden-datepicker
 
 mixin DatePickerInline(name, value_)
     -var altHiddenId = ria.dom.Dom.GID()
@@ -11,7 +11,7 @@ mixin DatePickerInline(name, value_)
     -attributes = self.processAttrs(name, value_, attributes)
     input(type="hidden", name=attributes.name, value=value_, id = altHiddenId)
     if attributes['data-options'].dateFormat
-        +Hidden(name, value_).hidden-datepicker
+        +Hidden(name, value_ ? value_.format('mm/dd/yy') : '').hidden-datepicker
     div(attributes)
     
 mixin ButtonDatePicker(name, text_, value_)
