@@ -98,27 +98,39 @@ webSiteLink = app.getDeveloperInfo().getWebSite()
                     each item, index in self.getApp().getApplicationHistory()
                         .table-row(class = (index > 2) ? 'hidden-row' : '')
                             .desc
+                                -var RoleEnum = chlk.models.common.RoleEnum
                                 if item.isBanUnBanAction()
                                     | #{item.getActionName()} by &#32;
+                                    case item.getOwnerRoleId()
+                                        when RoleEnum.TEACHER
+                                            | Teacher
+                                        when RoleEnum.DISTRICTADMIN
+                                            | District Administrator
                                     | &#32;
                                     span= item.getFullName()
                                     | &#32; - &#32;
                                     = item.getInstallDate().toString('m/dd/yy')
                                 else
                                     | #{item.getActionName()} by &#32;
-                                    -var RoleEnum = chlk.models.common.RoleEnum
+
                                     case item.getOwnerRoleId()
                                         when RoleEnum.TEACHER
                                             | Teacher
                                         when RoleEnum.STUDENT
                                             | Student
                                         when RoleEnum.DISTRICTADMIN
-                                            | District
+                                            | District Administrator
                                     | &#32;
                                     span= item.getFullName()
-                                    | &#32; for &#32;
-                                    = item.getInstalledCount()
-                                    | &#32; Students in &#32;
+                                    if item.getInstalledCount() == 1
+                                        if item.getOwnerRoleId() !== RoleEnum.STUDENT
+                                            | &#32; for 1 Student in &#32;
+                                        else
+                                            | &#32; in &#32;
+                                    else
+                                        | &#32; for &#32;
+                                        = item.getInstalledCount()
+                                        | &#32; Students in &#32;
                                     if item.getSchools().length > 1
                                         span= item.getSchools().length
                                         | &#32; Schools - &#32;
