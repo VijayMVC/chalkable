@@ -99,6 +99,8 @@ namespace Chalkable.Web.Controllers
         public ActionResult DistrictAdmin()
         {
             Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
             var distictAdmin = SchoolLocator.PersonService.GetPersonDetails(Context.PersonId.Value);
             var district = PrepareCommonViewData();
             ViewData[ViewConstants.ROLE_NAME] = CoreRoles.DISTRICT_ADMIN_ROLE.LoweredName;
@@ -109,6 +111,8 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);
             var announcementAttributes = SchoolLocator.AnnouncementAttributeService.GetList(true);
             PrepareJsonData(AnnouncementAttributeViewData.Create(announcementAttributes), ViewConstants.ANNOUNCEMENT_ATTRIBUTES);
+            var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(Context.SchoolYearId.Value);
+            PrepareJsonData(GradingPeriodViewData.Create(gradingPeriods), ViewConstants.GRADING_PERIODS);
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyDistrictAdmin(distictAdmin.Email, "", "", 
                 district.Name, null, Context.DistrictTimeZone, Context.Role.Name, ip, Context.SCEnabled);
@@ -238,6 +242,7 @@ namespace Chalkable.Web.Controllers
             }
             PrepareJsonData(AlphaGradeViewData.Create(startupData.AlphaGrades), ViewConstants.ALPHA_GRADES);
             PrepareJsonData(AlternateScoreViewData.Create(startupData.AlternateScores), ViewConstants.ALTERNATE_SCORES);
+            PrepareJsonData(GradingPeriodViewData.Create(startupData.GradingPeriods), ViewConstants.GRADING_PERIODS);
 
             PrepareJsonData(MarkingPeriodViewData.Create(mps), ViewConstants.MARKING_PERIODS);
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();

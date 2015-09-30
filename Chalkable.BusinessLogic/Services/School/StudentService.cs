@@ -107,7 +107,7 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.SchoolLocalId.HasValue);
             Trace.Assert(Context.PersonId.HasValue);
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(syId, studentId);
+            var nowDashboard = ConnectorLocator.StudentConnector.GetStudentNowDashboard(syId, studentId, Context.NowSchoolTime);
             var student = ServiceLocator.StudentService.GetById(studentId, syId);
             var infractions = ServiceLocator.InfractionService.GetInfractions();
             var activitiesIds = nowDashboard.Scores.GroupBy(x => x.ActivityId).Select(x => x.Key).ToList();

@@ -12,12 +12,13 @@ namespace Chalkable.Data.School.Model
         [PrimaryKeyFieldAttr]
         public int PersonRef { get; set; }
         [PrimaryKeyFieldAttr]
+        public int SchoolYearRef { get; set; }
+        [PrimaryKeyFieldAttr]
         public string Key { get; set; }
         public string Value { get; set; }
 
         //Settings
         public const string FEED_SORTING = "feedsort";
-        public const string FEED_LESSON_PLANS_ONLY = "feedlessonplansonly";
         public const string FEED_START_DATE = "feedstartdate";
         public const string FEED_END_DATE = "feedenddate";
         public const string FEED_ANNOUNCEMENT_TYPE = "feedannouncementtype";

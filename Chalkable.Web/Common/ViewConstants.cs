@@ -3,6 +3,7 @@
     public static class ViewConstants
     {
         public static string LE_PARAMS = "leParams";
+        public const string GRADING_PERIODS = "GradingPeriods";
 
         public const string MESSAGING_DISABLED = "MessagingDisabled";
         public const string MESSAGING_SETTINGS = "MessagingSettings";

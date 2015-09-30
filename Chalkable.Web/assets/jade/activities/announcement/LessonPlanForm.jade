@@ -73,7 +73,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                 data-options={
                                     showOtherMonths: true,
                                     selectOtherMonths: true,
-                                    inCurrentMp: true
+                                    dateRanges: self.getClassScheduleDateRanges()
                                 },
                                 data-value=lessonPlan.getStartDate() ? lessonPlan.getStartDate().format('mm/dd/yy') : ''
                                 placeholder=Msg.Start_date,
@@ -86,7 +86,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                 data-options={
                                     showOtherMonths: true,
                                     selectOtherMonths: true,
-                                    inCurrentMp: true
+                                    dateRanges: self.getClassScheduleDateRanges()
                                 },
                                 data-value=lessonPlan.getEndDate() ? lessonPlan.getEndDate().format('mm/dd/yy') : ''
                                 placeholder=Msg.End_date,
