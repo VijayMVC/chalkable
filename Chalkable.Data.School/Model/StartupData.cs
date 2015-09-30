@@ -8,6 +8,7 @@ namespace Chalkable.Data.School.Model
         public IList<AlternateScore> AlternateScores { get; set; } 
         public IList<MarkingPeriod> MarkingPeriods { get; set; } 
         public GradingPeriod GradingPeriod { get; set; }
+        public IList<GradingPeriod> GradingPeriods { get; set; } 
         public PersonDetails Person { get; set; }
         public IList<ClassDetails> Classes { get; set; }
         public SchoolOption SchoolOption { get; set; }
