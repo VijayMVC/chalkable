@@ -45,6 +45,12 @@ NAMESPACE('chlk.activities.feed', function () {
                 this.dom.find('#mark-done-submit').trigger('click');
             },
 
+            [ria.mvc.DomEventBind('change', 'select')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function chengeSelect(node, event, selected_){
+                this.dom.find('.to-set').setValue('true');
+            },
+
             [ria.mvc.DomEventBind('change', '.start-end-picker')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function dateSelect(node, event, selected_){
@@ -142,6 +148,7 @@ NAMESPACE('chlk.activities.feed', function () {
                     var target = new ria.dom.Dom(event.target), dom = that.dom, popup = dom.find('.date-range-popup');
                     if (!popup.hasClass('hidden') && !target.isOrInside('.date-range-popup') && !target.isOrInside('.ui-datepicker-header') && !target.isOrInside('.ui-datepicker-calendar')) {
                         popup.addClass('hidden');
+                        dom.find('.to-set').setValue('false');
                     }
                 });
             },

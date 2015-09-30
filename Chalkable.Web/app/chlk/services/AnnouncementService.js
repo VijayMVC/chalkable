@@ -45,8 +45,8 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[Number, chlk.models.id.ClassId, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
-                chlk.models.announcement.AnnouncementTypeEnum, Boolean]],
-            ria.async.Future, function getAnnouncements(start_, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, latest_) {
+                chlk.models.announcement.AnnouncementTypeEnum, Boolean, Boolean]],
+            ria.async.Future, function getAnnouncements(start_, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_) {
                 return this.get('Feed/List.json', chlk.models.feed.Feed, {
                     start: start_ || 0,
                     classId: classId_ ? classId_.valueOf() : null,
@@ -57,13 +57,15 @@ NAMESPACE('chlk.services', function () {
                     gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf(),
                     sortType: latest_,
                     lessonPlansOnly: false,
+                    toSet: toSet_ || false,
                     count: 10
                 });
 
             },
 
-            [[Number, String, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId, chlk.models.announcement.AnnouncementTypeEnum, Boolean]],
-            ria.async.Future, function getAnnouncementsForAdmin(start_, gradeLevels_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, latest_) {
+            [[Number, String, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
+                chlk.models.announcement.AnnouncementTypeEnum, Boolean, Boolean]],
+            ria.async.Future, function getAnnouncementsForAdmin(start_, gradeLevels_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_) {
                 return this.get('Feed/DistrictAdminFeed.json', chlk.models.feed.FeedAdmin, {
                     gradeLevelIds : gradeLevels_,
                     start: start_ || 0,
@@ -73,6 +75,7 @@ NAMESPACE('chlk.services', function () {
                     announcementType: annType_ && annType_.valueOf(),
                     gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf(),
                     sortType: latest_,
+                    toSet: toSet_ || false,
                     count: 10
                 });
 
