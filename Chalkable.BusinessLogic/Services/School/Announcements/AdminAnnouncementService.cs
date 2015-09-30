@@ -276,8 +276,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
             else
             {
-                feedStartDate = settings.FromDate.Value;
-                feedEndDate = settings.ToDate.Value;
+                feedStartDate = settings.FromDate ?? Context.SchoolYearStartDate ?? DateTime.MinValue;
+                feedEndDate = settings.ToDate ?? Context.SchoolYearEndDate ?? DateTime.MaxValue;
             }
 
             var fc = new FeedComplex()
@@ -326,19 +326,19 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 PersonSetting.FEED_GRADING_PERIOD_ID
             };
 
-            var sett = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, query);
+            var sett = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, query);
             var startDate = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_START_DATE);
             var endDate = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_END_DATE);
             var sort = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_SORTING);
             var grPeriodId = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_GRADING_PERIOD_ID);
 
-            if (grPeriodId?.Value != null)
+            if (!string.IsNullOrWhiteSpace(grPeriodId.Value))
             {
                 settings.GradingPeriodId = int.Parse(grPeriodId.Value);
                 settings.FromDate = null;
                 settings.ToDate = null;
             }
-            else if (startDate?.Value != null && endDate?.Value != null)
+            else if (!string.IsNullOrWhiteSpace(startDate.Value) && !string.IsNullOrWhiteSpace(endDate.Value))
             {
                 settings.FromDate = DateTime.ParseExact(startDate.Value, Constants.DATE_FORMAT,
                     CultureInfo.InvariantCulture);
@@ -347,17 +347,17 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
             else
             {
-                settings.FromDate = Context.SchoolYearStartDate ?? DateTime.MinValue;
-                settings.ToDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
+                settings.FromDate = null;
+                settings.ToDate = null;
                 settings.GradingPeriodId = null;
             }
 
-            settings.SortType = sort != null && bool.Parse(sort.Value);
+            settings.SortType = !string.IsNullOrWhiteSpace(sort.Value) && bool.Parse(sort.Value);
         }
 
         private void SetAdminSettingsForFeed(FeedSettings settings)
         {
-            ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, new Dictionary<string, object>()
+            ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, new Dictionary<string, object>()
             {
                 {PersonSetting.FEED_START_DATE, settings.FromDate },
                 {PersonSetting.FEED_END_DATE, settings.ToDate },
