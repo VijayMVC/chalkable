@@ -89,6 +89,20 @@ NAMESPACE('chlk.models.apps', function () {
                 this.setAnnouncementType(announcementType);
                 if (assessmentAppId_)
                     this.setAssessmentAppId(assessmentAppId_);
+            },
+
+            [[
+                chlk.models.id.AnnouncementId,
+                chlk.models.announcement.AnnouncementTypeEnum
+            ]],
+            function $createForStudent(announcementId, announcementType){
+                BASE();
+                this.setAnnouncementId(announcementId);
+                this.setAttributesEnabled(false);
+                this.setFileCabinetEnabled(false);
+                this.setStandardAttachEnabled(false);
+                this.setShowApps(false);
+                this.setAnnouncementType(announcementType);
             }
         ]);
 });

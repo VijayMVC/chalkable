@@ -619,7 +619,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,  chlk.models.common.RoleEnum.DISTRICTADMIN
+            chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [chlk.controllers.SidebarButton('add-new')],
         [[
@@ -632,7 +632,7 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.announcement.AnnouncementTypeEnum,
             Number
         ]],
-        function attachAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
+        function attachDistrictAdminAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
                               canAddStandard, announcementTypeName, announcementType, pageIndex_) {
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
@@ -644,44 +644,65 @@ NAMESPACE('chlk.controllers', function (){
 
             var start = pageIndex_ | 0, count = 12 - btnsCount;
 
+            var result = this.appMarketService
+                .getInstalledApps(userId, start, null, count)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return new chlk.models.apps.InstalledAppsViewData(announcementId,
+                        classId,
+                        data,
+                        appUrlAppend_ || '',
+                        this.isStudyCenterEnabled(),
+                        canAddStandard,
+                        assessmentAppId_,
+                        announcementTypeName,
+                        announcementType
+                    )}, this);
+            return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, result);
+        },
 
-            //todo split this into two methods
 
-            var result;
-            if (this.userIsAdmin()){
-                result = this.appMarketService
-                    .getInstalledApps(userId, start, null, count)
-                    .attach(this.validateResponse_())
-                    .then(function(data){
-                        return new chlk.models.apps.InstalledAppsViewData(announcementId,
-                            classId,
-                            data,
-                            appUrlAppend_ || '',
-                            this.isStudyCenterEnabled(),
-                            canAddStandard,
-                            assessmentAppId_,
-                            announcementTypeName,
-                            announcementType
-                        )}, this);
-            }
-            else {
-                var result = this.appMarketService
-                    .getAppsForAttach(userId, classId, mp.getId(), start, count)
-                    .attach(this.validateResponse_())
-                    .then(function(data){
-                        return new chlk.models.apps.InstalledAppsViewData(announcementId,
-                            classId,
-                            data,
-                            appUrlAppend_ || '',
-                            this.isStudyCenterEnabled(),
-                            canAddStandard,
-                            assessmentAppId_,
-                            announcementTypeName,
-                            announcementType
-                        )}, this);
-            }
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        [[
+            chlk.models.id.AnnouncementId,
+            chlk.models.id.ClassId,
+            String,
+            chlk.models.id.AppId,
+            Boolean,
+            String,
+            chlk.models.announcement.AnnouncementTypeEnum,
+            Number
+        ]],
+        function attachTeacherAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
+                              canAddStandard, announcementTypeName, announcementType, pageIndex_) {
 
-            //new ria.async.DeferredData(chlk.models.apps.InstalledAppsViewData.$createForAdmin(announcementId, announcementType, assessmentAppId_));
+            var userId = this.getCurrentPerson().getId();
+            var mp = this.getCurrentMarkingPeriod();
+
+            var btnsCount = 3;
+
+            if (canAddStandard) ++btnsCount;
+            if (assessmentAppId_) ++btnsCount;
+
+            var start = pageIndex_ | 0, count = 12 - btnsCount;
+
+            var result = this.appMarketService
+                .getAppsForAttach(userId, classId, mp.getId(), start, count)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return new chlk.models.apps.InstalledAppsViewData(announcementId,
+                        classId,
+                        data,
+                        appUrlAppend_ || '',
+                        this.isStudyCenterEnabled(),
+                        canAddStandard,
+                        assessmentAppId_,
+                        announcementTypeName,
+                        announcementType
+                    )}, this);
 
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, result);
         },
@@ -693,6 +714,12 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, res);
         },
 
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
+        function fileAttachStudentAction(announcementId, announcementType, assignedAttributeId_){
+            var data = new chlk.models.apps.InstalledAppsViewData.$createForStudent(announcementId, announcementType);
+            var res =  new ria.async.DeferredData(data);
+            return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, res);
+        },
 
         //todo move attribute methods to separate controller
 
@@ -743,6 +770,11 @@ NAMESPACE('chlk.controllers', function (){
                 this.fetchAddAttributeFuture_(announcementId, announcementType), 'add-attribute');
         },
 
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN,
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
         //---File Cabinet---
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
@@ -750,6 +782,10 @@ NAMESPACE('chlk.controllers', function (){
             return this.getAttachments_(announcementId, announcementType, assignedAtributeId_);
         },
 
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN,
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.attachment.FileCabinetPostData]],
         function listAttachmentsAction(postData){
@@ -764,6 +800,10 @@ NAMESPACE('chlk.controllers', function (){
             );
         },
 
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN,
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
         [chlk.controllers.SidebarButton('add-new')],
         [[
             chlk.models.id.AnnouncementId,
