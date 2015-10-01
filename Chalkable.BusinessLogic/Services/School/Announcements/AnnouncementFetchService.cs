@@ -33,10 +33,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             DateTime feedEndDate;
 
             //get or set settings
-            if (!settings.AnnouncementType.HasValue && !settings.FromDate.HasValue && !settings.ToDate.HasValue && !settings.GradingPeriodId.HasValue)
-                GetSettingsForFeed(out settings);
-            else
+            if (settings.ToSet)
                 SetSettingsForFeed(settings);
+            else
+                GetSettingsForFeed(out settings);
+            
 
             //if items should be from certain grading period
             if (settings.GradingPeriodId.HasValue)
@@ -135,20 +136,20 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 PersonSetting.FEED_GRADING_PERIOD_ID
             };
 
-            var sett = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, query);
+            var sett = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, query);
             var startDate = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_START_DATE);
             var endDate = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_END_DATE);
             var annoncementType = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_ANNOUNCEMENT_TYPE);
             var sort = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_SORTING);
             var grPeriodId = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_GRADING_PERIOD_ID);
 
-            if (grPeriodId?.Value != null)
+            if (!string.IsNullOrWhiteSpace(grPeriodId.Value))
             {
                 settings.GradingPeriodId = int.Parse(grPeriodId.Value);
                 settings.FromDate = null;
                 settings.ToDate = null;
             }
-            else if (startDate?.Value != null && endDate?.Value != null)
+            else if (!string.IsNullOrWhiteSpace(startDate.Value) && !string.IsNullOrWhiteSpace(endDate.Value))
             {
                 settings.FromDate = DateTime.ParseExact(startDate.Value, Constants.DATE_FORMAT,
                     CultureInfo.InvariantCulture);
@@ -157,21 +158,21 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
             else
             {
-                settings.FromDate = Context.SchoolYearStartDate ?? DateTime.MinValue;
-                settings.ToDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
+                settings.FromDate = null;
+                settings.ToDate = null;
                 settings.GradingPeriodId = null;
             }
 
-            if (annoncementType == null)
+            if (string.IsNullOrWhiteSpace(annoncementType.Value))
                 settings.AnnouncementType = null;
-            else settings.AnnouncementType = annoncementType.Value != null ? int.Parse(annoncementType.Value): (int?) null;
+            else settings.AnnouncementType = int.Parse(annoncementType.Value);
 
-            settings.SortType = sort != null && bool.Parse(sort.Value);
+            settings.SortType = !string.IsNullOrWhiteSpace(sort.Value) && bool.Parse(sort.Value);
         }
 
         private void SetSettingsForFeed(FeedSettings settings)
         {
-            ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, new Dictionary<string, object>()
+            ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, new Dictionary<string, object>()
             {
                 {PersonSetting.FEED_ANNOUNCEMENT_TYPE, settings.AnnouncementType },
                 {PersonSetting.FEED_START_DATE, settings.FromDate },
@@ -246,5 +247,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public int? GradingPeriodId { get; set; }
+        public bool ToSet { get; set; }
     }
 }
