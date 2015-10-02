@@ -57,7 +57,7 @@ NAMESPACE('chlk.services', function () {
                     gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf(),
                     sortType: latest_,
                     lessonPlansOnly: false,
-                    toSet: toSet_ || false,
+                    toSet: toSet_ || !!startDate_ || !!endDate_ || !!annType_ || !!gradingPeriodId_ || false,
                     count: 10
                 });
 
@@ -75,7 +75,7 @@ NAMESPACE('chlk.services', function () {
                     announcementType: annType_ && annType_.valueOf(),
                     gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf(),
                     sortType: latest_,
-                    toSet: toSet_ || false,
+                    toSet: toSet_ || !!startDate_ || !!endDate_ || !!annType_ || !!gradingPeriodId_ || false,
                     count: 10
                 });
 
