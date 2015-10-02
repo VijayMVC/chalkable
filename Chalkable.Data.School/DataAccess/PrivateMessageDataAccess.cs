@@ -36,7 +36,11 @@ namespace Chalkable.Data.School.DataAccess
         public PaginatedList<IncomePrivateMessage> GetIncomeMessages(int personId, int? messageId, IList<int> roles, string keyword, bool? read,  int start, int count)
         {
             var dbQuery = BuildIncomeMessageQuery();
-            var conds = new AndQueryCondition { {PrivateMessageRecipient.REPICENT_REF_FIELD, personId}};
+            var conds = new AndQueryCondition
+            {
+                {PrivateMessageRecipient.REPICENT_REF_FIELD, personId},
+                {PrivateMessageRecipient.DELETED_BY_RECIPIENT_FIELD, false }
+            };
             if(read.HasValue)
                 conds.Add(PrivateMessageRecipient.READ_FIELD, read);
             if(messageId.HasValue)
@@ -145,7 +149,11 @@ namespace Chalkable.Data.School.DataAccess
                 .AppendFormat($" Join {Person.VW_PERSON} as {recipientT} On {recipientT}.{Person.ID_FIELD} = {privateMessageRecipientT}.{PrivateMessageRecipient.REPICENT_REF_FIELD}")
                 .AppendFormat($" Left Join {classT} On {classT}.{Class.ID_FIELD} = {privateMessageRecipientT}.{PrivateMessageRecipient.RECIPIENT_CLASS_REF_FIELD}");
 
-            var conds = new AndQueryCondition {{PrivateMessage.FROM_PERSON_REF_FIELD, callerId}};
+            var conds = new AndQueryCondition
+            {
+                {PrivateMessage.FROM_PERSON_REF_FIELD, callerId},
+                {PrivateMessage.DELETED_BY_SENDER_FIELD, false }
+            };
             if(messageId.HasValue)
                 conds.Add(PrivateMessage.ID_FIELD, messageId);
 

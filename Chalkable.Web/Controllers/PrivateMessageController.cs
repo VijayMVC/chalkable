@@ -1,13 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Common;
-using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 
