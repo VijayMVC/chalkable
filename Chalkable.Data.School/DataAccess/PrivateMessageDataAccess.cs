@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Data.Common;
-using System.Text;
+using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -17,114 +18,155 @@ namespace Chalkable.Data.School.DataAccess
 
         private const string SENDER_PREFIX = "Sender";
         private const string RECIPIENT_PREFIX = "Recipient";
-
-
-        private DbQuery BuildGetMessagesQuery(IList<int> roles, string keyword, bool? read, int personId, bool isIncome, int schoolId)
+        
+        public IList<PrivateMessage> GetNotDeleted(IList<int> ids, int callerId)
         {
+            var conds = new AndQueryCondition
+            {
+                {PrivateMessage.FROM_PERSON_REF_FIELD, callerId},
+                {PrivateMessage.DELETED_BY_SENDER_FIELD, false}
+            };
+            var dbQuery = Orm.SimpleSelect<PrivateMessageRecipient>(conds);
+            var messagesIdsStr = ids.JoinString(",");
+            dbQuery.Sql.AppendFormat($" And {PrivateMessage.ID_FIELD} in ({messagesIdsStr})");
+            return ReadMany<PrivateMessage>(dbQuery);
+        } 
 
-            var field1 = "PrivateMessage_FromPersonRef";
-            var field2 = "PrivateMessage_DeletedBySender";
-            var prefix = RECIPIENT_PREFIX;
-            if (isIncome)
-            {
-                field1 = "PrivateMessage_ToPersonRef";
-                field2 = "PrivateMessage_DeletedByRecipient";
-                prefix = SENDER_PREFIX;
-            }
-            var conds = new Dictionary<string, object> { { "read", read }, { "personId", personId } };
-            var b = new StringBuilder();
-            b.AppendFormat(@"select vwPrivateMessage.* from vwPrivateMessage 
-                             where {0} = @personId and {1} = 0", field1, field2);
-            b.AppendFormat(" and PrivateMessage_SenderSchoolRef = @schoolId and PrivateMessage_RecipientSchoolRef = @schoolId");
-            conds.Add("@schoolId", schoolId);
-            if (isIncome && read.HasValue)
-            {
-                b.Append(" and PrivateMessage_Read = @read");
-            }
+        public PaginatedList<IncomePrivateMessage> GetIncomeMessages(int personId, int? messageId, IList<int> roles, string keyword, bool? read,  int start, int count)
+        {
+            var dbQuery = BuildIncomeMessageQuery();
+            var conds = new AndQueryCondition { {PrivateMessageRecipient.REPICENT_REF_FIELD, personId}};
+            if(read.HasValue)
+                conds.Add(PrivateMessageRecipient.READ_FIELD, read);
+            if(messageId.HasValue)
+                conds.Add(PrivateMessageRecipient.PRIVATE_MESSAGE_REF_FIELD, messageId);
+            conds.BuildSqlWhere(dbQuery, nameof(PrivateMessageRecipient));
+
             if (roles != null && roles.Count > 0)
-            {
-                var rolesString = roles.JoinString(",");
-                b.AppendFormat(" and PrivateMessage_{1}RoleRef in ({0})", rolesString, prefix);
-            }
+                dbQuery.Sql.Append($" And {Person.ROLE_REF_FIELD} in ({roles.JoinString(",")})");
+
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword + "%";
-                b.AppendFormat(@" and (PrivateMessage_Subject like @keyword or PrivateMessage_Body like @keyword
-                                        or lower(PrivateMessage_{0}FirstName) like @keyword or lower(PrivateMessage_{0}LastName) like @keyword)"
-                                        , prefix);
-                conds.Add("keyword", keyword);
+                var paramName = "@keyword";
+                dbQuery.Sql.Append($@" And ({PrivateMessage.SUBJECT_FIELD} like {paramName} Or {PrivateMessage.BODY_FIELD} like {paramName}
+                                        or Lower({Person.FIRST_NAME_FIELD}) like {paramName} Or Lower({Person.LAST_NAME_FIELD}) like {paramName})");
+                dbQuery.Parameters.Add(paramName, keyword);
             }
-            return new DbQuery (b, conds);
+            
+            dbQuery = Orm.PaginationSelect(dbQuery, PrivateMessage.SENT_FIELD, Orm.OrderType.Desc, start, count);
+            return ReadPaginatedResult(dbQuery, start, count, r=> ReadList(r, ReadIncomePrivateMessage));
         }
 
-        public static IList<PrivateMessageDetails> ReadListPrivateMessageDetails(DbDataReader reader)
+
+        public IncomePrivateMessage GetIncomePrivateMessage(int id, int callerId)
         {
-            var res = new List<PrivateMessageDetails>();
-            while (reader.Read())
-            {
-                res.Add(ReadPrivateMessageDetails(reader));
-            }
-            return res;
-        } 
-        public static PrivateMessageDetails ReadPrivateMessageDetails(DbDataReader reader)
-        {
-            var res = reader.Read<PrivateMessageDetails>(true);
-            res.Sender = ReadPrivateMessagePerson(reader, true);
-            res.Recipient = ReadPrivateMessagePerson(reader, false);
-            return res;
-        }
-        private static Person ReadPrivateMessagePerson(DbDataReader reader, bool isSender)
-        {
-            var template = "PrivateMessage_" + (isSender ? SENDER_PREFIX : RECIPIENT_PREFIX) + "{0}";
-            return new Person
-                {
-                    FirstName = SqlTools.ReadStringNull(reader, string.Format(template, Person.FIRST_NAME_FIELD)),
-                    LastName = SqlTools.ReadStringNull(reader, string.Format(template, Person.LAST_NAME_FIELD)),
-                    Gender = SqlTools.ReadStringNull(reader, string.Format(template, Person.GENDER_FIELD)),
-                    Salutation = SqlTools.ReadStringNull(reader, string.Format(template, Person.SALUTATION_FIELD)),
-                    RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD))
-                };
+            return GetIncomeMessages(callerId, id, null, null, null, 0, 1).First();
         }
 
-        public PrivateMessageDetails GetDetailsById(int id, int callerId)
+        public SentPrivateMessage GetSentPrivateMessage(int id, int callerId)
         {
-            var sql = @"select * from vwPrivateMessage where PrivateMessage_Id = @Id 
-                        and (PrivateMessage_FromPersonRef = @callerId or PrivateMessage_ToPersonRef = @callerId)";
-            var conds = new Dictionary<string, object> {{"Id", id}, {"callerId", callerId}};
-            using (var reader = ExecuteReaderParametrized(sql, conds))
-            {
-                reader.Read();
-                return ReadPrivateMessageDetails(reader);
-            }
+            return GetSentMessages(callerId, id, null, null, 0, 1).First();
         }
 
-        public IList<PrivateMessage> GetNotDeleted(int callerId)
-        {
-            var sql = @"select * from PrivateMessage 
-                        where (FromPersonRef = @callerId and DeletedBySender = 0) 
-                               or (ToPersonRef = @callerId and DeletedByRecipient = 0)";
-            var conds = new Dictionary<string, object> {{"callerId", callerId}};
-            return ReadMany<PrivateMessage>(new DbQuery (sql, conds));
-        } 
-
-        public PaginatedList<PrivateMessageDetails> GetIncomeMessages(IList<int> roles, string keyword, bool? read,
-                                                               int personId, int schoolId, int start, int count)
-        {
-            var query = BuildGetMessagesQuery(roles, keyword, read, personId, true, schoolId);
-            return ReadPaginatedPrivateMessage(query, start, count);
-        }
-        public PaginatedList<PrivateMessageDetails> GetOutComeMessage(IList<int> roles, string keyword, int personId, int schoolId,
+        public PaginatedList<SentPrivateMessage> GetSentMessages(int personId, int? messageId, IList<int> roles, string keyword,
                                                                int start, int count)
         {
-            var query = BuildGetMessagesQuery(roles, keyword, null, personId, false, schoolId);
-            return ReadPaginatedPrivateMessage(query, start, count);
-        } 
-
-        private PaginatedList<PrivateMessageDetails> ReadPaginatedPrivateMessage(DbQuery query, int start, int count)
-        {
-            var orderBy = "PrivateMessage_Sent";
-            query = Orm.PaginationSelect(query, orderBy, Orm.OrderType.Desc, start, count);
-            return ReadPaginatedResult(query, start, count, ReadListPrivateMessageDetails);
+            //var query = BuildGetMessagesQuery(roles, keyword, null, personId, false, schoolId);
+            //return ReadPaginatedPrivateMessage(query, start, count);
+            throw new NotImplementedException();
         }
+
+        private DbQuery BuildSentMessageQuery()
+        {
+
+            var dbQuery = new DbQuery();
+            var privateMsgT = typeof (PrivateMessage);
+            var privateMessageRecipientT = typeof(PrivateMessageRecipient);
+            dbQuery.Sql.Append("Select ").Append(" {0} ")
+                .Append($" From {privateMsgT.Name} ")
+                .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, Person.VW_PERSON, Person.ID_FIELD, privateMsgT.Name, PrivateMessage.FROM_PERSON_REF_FIELD)
+                .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, privateMessageRecipientT.Name, PrivateMessageRecipient.PRIVATE_MESSAGE_REF_FIELD, privateMsgT.Name, PrivateMessage.ID_FIELD);
+                       
+            throw new NotImplementedException();
+            //var msgQuery = new DbQuery();
+            //var msgRecipientQuery = new DbQuery();
+            //var privateMsgT = nameof(PrivateMessage);
+            //msgQuery.Sql.Append($"Select {privateMsgT}.* From {privateMsgT}");
+            //msgRecipientQuery.Sql.Append($"Select ")
+        }
+
+        private DbQuery BuildIncomeMessageQuery()
+        {
+            var dbQuery = new DbQuery();
+            var privateMessageT = typeof(PrivateMessage);
+            var privateMessageRecipientT = typeof(PrivateMessageRecipient);
+            dbQuery.Sql.Append($@"Select distinct {privateMessageT.Name}.*, 
+                                         [{PrivateMessageRecipient.READ_FIELD}], 
+                                         {PrivateMessageRecipient.DELETED_BY_RECIPIENT_FIELD},
+                                         {Person.VW_PERSON}.{Person.ID_FIELD} as {SENDER_PREFIX}{Person.ID_FIELD},
+                                         {Person.VW_PERSON}.{Person.FIRST_NAME_FIELD} as {SENDER_PREFIX}{Person.FIRST_NAME_FIELD},
+                                         {Person.VW_PERSON}.{Person.LAST_NAME_FIELD} as {SENDER_PREFIX}{Person.LAST_NAME_FIELD},
+                                         {Person.VW_PERSON}.{Person.SALUTATION_FIELD} as {SENDER_PREFIX}{Person.SALUTATION_FIELD},
+                                         {Person.VW_PERSON}.{Person.ROLE_REF_FIELD} as {SENDER_PREFIX}{Person.ROLE_REF_FIELD},
+                                         {Person.VW_PERSON}.{Person.GENDER_FIELD} as {SENDER_PREFIX}{Person.GENDER_FIELD}
+                                  ")
+                .Append($" From {privateMessageT.Name} ")
+                .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, Person.VW_PERSON, Person.ID_FIELD, privateMessageT.Name, PrivateMessage.FROM_PERSON_REF_FIELD)
+                .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, privateMessageRecipientT.Name, PrivateMessageRecipient.PRIVATE_MESSAGE_REF_FIELD, privateMessageT.Name, PrivateMessage.ID_FIELD);
+            return dbQuery;
+        }
+
+        public static IncomePrivateMessage ReadIncomePrivateMessage(DbDataReader reader)
+        {
+            var res = reader.Read<IncomePrivateMessage>();
+            res.Sender = ReadPrivateMessagePerson(reader, true);
+            return res;
+        }
+
+        private static IList<T> ReadList<T>(DbDataReader reader, Func<DbDataReader, T> readItemAction) 
+        {
+            var res = new List<T>();
+            while (reader.Read()) res.Add(readItemAction(reader));
+            return res;
+        } 
+        
+
+        private static Person ReadPrivateMessagePerson(DbDataReader reader, bool isSender)
+        {
+            var template = (isSender ? SENDER_PREFIX : RECIPIENT_PREFIX) + "{0}";
+            return new Person
+            {
+                Id = SqlTools.ReadInt32(reader, string.Format(template, Person.ID_FIELD)),
+                FirstName = SqlTools.ReadStringNull(reader, string.Format(template, Person.FIRST_NAME_FIELD)),
+                LastName = SqlTools.ReadStringNull(reader, string.Format(template, Person.LAST_NAME_FIELD)),
+                Gender = SqlTools.ReadStringNull(reader, string.Format(template, Person.GENDER_FIELD)),
+                Salutation = SqlTools.ReadStringNull(reader, string.Format(template, Person.SALUTATION_FIELD)),
+                RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD))
+            };
+        }
+        
+    }
+
+
+
+    public class PrivateMessageRecipientDataAccess : DataAccessBase<PrivateMessageRecipient, int>
+    {
+        public PrivateMessageRecipientDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
+        {
+        }
+
+        public IList<PrivateMessageRecipient> GetNotDelatedMessageRecpients(IList<int> messagesIds, int callerId)
+        {
+            var conds = new AndQueryCondition
+            {
+                {PrivateMessageRecipient.REPICENT_REF_FIELD, callerId},
+                {PrivateMessageRecipient.DELETED_BY_RECIPIENT_FIELD, false}
+            };
+            var dbQuery = Orm.SimpleSelect<PrivateMessageRecipient>(conds);
+            var messagesIdsStr = messagesIds.JoinString(",");
+            dbQuery.Sql.AppendFormat($" And {PrivateMessageRecipient.PRIVATE_MESSAGE_REF_FIELD} in ({messagesIdsStr})");
+            return ReadMany<PrivateMessageRecipient>(dbQuery);
+        } 
     }
 }

@@ -1,7 +1,11 @@
-﻿using System.Web.Mvc;
+﻿using System;
+using System.Diagnostics;
+using System.Web.Mvc;
 using Chalkable.BusinessLogic.Common;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
@@ -15,29 +19,40 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult List(int? start, int? count, bool? read, bool? income, string role, string keyword)
         {
-            var messageType = (income ?? true) ? PrivateMessageType.Income : PrivateMessageType.Outcome;
+            var messageType = (income ?? true) ? PrivateMessageType.Income : PrivateMessageType.Sent;
             var res = SchoolLocator.PrivateMessageService.GetMessages(start ?? 0, count ?? 10, read, messageType, role, keyword);
-            return Json(res.Transform(PrivateMessageViewData.Create));
+            return Json(res.Transform(PrivateMessageComplexViewData.Create));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult Read(int id)
+        public ActionResult Read(int id, bool? income)
         {
-            var res = SchoolLocator.PrivateMessageService.GetMessage(id);
-            return Json(PrivateMessageViewData.Create(res));
+            PrivateMessageComplexViewData res;
+            if (income.HasValue && !income.Value)
+                res = PrivateMessageComplexViewData.Create(SchoolLocator.PrivateMessageService.GetSentMessage(id));
+            else
+                res = PrivateMessageComplexViewData.Create(SchoolLocator.PrivateMessageService.GetIncomeMessage(id));
+            return Json(res);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Message })]
-        public ActionResult Send(int personId, string subject, string body)
+        public ActionResult Send(int? personId, int? classId, string subject, string body)
         {
-            var res = SchoolLocator.PrivateMessageService.SendMessage(personId, subject, body);
-            if (res != null)
-            {
-                MasterLocator.UserTrackingService.SentMessageTo(Context.Login, res.Recipient.FullName());
-            }
-            return Json(PrivateMessageViewData.Create(res));
-        }
+            if(classId.HasValue)
+                SchoolLocator.PrivateMessageService.SendMessageToClass(classId.Value, subject, body);
+            if(personId.HasValue)
+                SchoolLocator.PrivateMessageService.SendMessageToPerson(personId.Value, subject, body);
 
+            //TODO : add tracking 
+            return Json(true);
+            //var res = SchoolLocator.PrivateMessageService.SendMessage(personId.Value, subject, body);
+            //if (res != null)
+            //{
+            //    MasterLocator.UserTrackingService.SentMessageTo(Context.Login, res.Recipient.FullName());
+            //}
+            //return Json(PrivateMessageViewData.Create(res));
+        }
+        
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult MarkAsRead(IntList ids, bool read)
         {
@@ -46,19 +61,18 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult Delete(IntList ids)
+        public ActionResult Delete(IntList ids, bool? income)
         {
-            SchoolLocator.PrivateMessageService.Delete(ids);
+            var messageType = (income ?? true) ? PrivateMessageType.Income : PrivateMessageType.Sent;
+            SchoolLocator.PrivateMessageService.Delete(ids, messageType);
             return Json(true);
         }
 
-        //[AuthorizationFilter("DistrictAdmin, Teacher, Student", Preference.API_DESCR_PRIVATE_MESSAGES_LIST_POSSIBLE_RECIPIENTS, true, CallType.Get, new[] { AppPermissionType.User })]
-        //public ActionResult ListPossibleRecipients(string query)
-        //{
-        //    if (!SchoolLocator.Context.SchoolId.HasValue)
-        //        throw new UnassignedUserException();
-        //    var students = SchoolLocator.PersonService.GetPersonsByFilter(ServiceLocator.Context.SchoolId.Value, query, null);
-        //    return Json(students.Select(x => SchoolPersonViewData.Create(x, false)));
-        //}
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User, AppPermissionType.Message})]
+        public ActionResult ListPossibleRecipients(string query)
+        {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            throw new NotImplementedException();
+        }
     }
 }
