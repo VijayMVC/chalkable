@@ -104,13 +104,15 @@ namespace Chalkable.Web
                 }
             }
 
-            httpResponse.Redirect(
-                String.Format("http{0}://{1}{2}{3}",
-                              httpRequest.IsSecureConnection ? "s" : "",
-                              ensureDomain,
-                              "", // leave default port http or https
-                              httpRequest.Url.PathAndQuery
-                    ));
+            if (httpRequest.Url.PathAndQuery.ToLowerInvariant().StartsWith("/autodiscover/"))
+            {
+                var path = httpRequest.Url.PathAndQuery.Substring("/autodiscover".Length);
+                httpResponse.Redirect($"http{(httpRequest.IsSecureConnection ? "s" : "")}://webmail.chalkable.com{path}");
+
+                return;
+            }
+
+            httpResponse.Redirect($"http{(httpRequest.IsSecureConnection ? "s" : "")}://{ensureDomain}{httpRequest.Url.PathAndQuery}");
         }
 
         protected void Application_Error(object sender, EventArgs e)

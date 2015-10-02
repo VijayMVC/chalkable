@@ -30,6 +30,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
             input(type="hidden", name="importantOnly", value=self.importantOnly && self.importantOnly.toString())
             input(type="hidden", name="sorttype", value=self.isLatest()).latest-earliest-input
             input(type="submit", name="submitType", value="sort")#sort-submit.x-hidden
+            +Hidden('toSet', false).to-set
             if isAdmin
                 input(type="hidden", name="gradeLevels", value=topData.getSelectedIds())
             else
@@ -82,7 +83,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                         Button(type="submit", name="submitType", value="sort", disabled = !self.getStartDate() || self.getEndDate())#date-ok-button.blue-button=Msg.OK
                 if !isAdmin
                     +Select('announcementtype')(data-placeholder = 'Any Type').annTypeSelect.submit-after-select
-                        +Option(null, 'Any Type', !self.getAnnType())
+                        +Option(null, 'All Types', !self.getAnnType())
                         +Option(typesEnum.CLASS_ANNOUNCEMENT.valueOf(), 'Activities Only', typesEnum.CLASS_ANNOUNCEMENT == self.getAnnType())
                         +Option(typesEnum.LESSON_PLAN.valueOf(), 'Lesson Plan Only', typesEnum.LESSON_PLAN == self.getAnnType())
                 //input(type="text", readonly)#sort-select-input

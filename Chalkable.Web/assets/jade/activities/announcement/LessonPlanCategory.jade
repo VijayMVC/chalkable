@@ -4,8 +4,10 @@
     INPUT(type="text",data-value=self.getName(), value = self.getName(), class=categoryId ? '' : 'temporary', name="name", class='validate[required]').group-name
     Button(disabled='disabled', style = self.getId() ? 'display:none;' : '', type="submit").special-button2.blue-button.create-group ok
     if self.getId()
-        if self.getLessonPlansCount() > 0
-            +ActionLink('lpgallerycategory', 'tryDelete', categoryId)(data-tooltip = "You can\'t delete category with Lesson Plan").delete-btn.disabled
+        if self.getLessonPlansCount() > 0 || self.getCurrentUser().getId() != self.getOwnerId()
+            +ActionLink('lpgallerycategory', 'tryDelete', categoryId)(
+                data-tooltip = self.getCurrentUser().getId() != self.getOwnerId() ? "This category wasn\'t created by You" : "You can\'t delete category with Lesson Plan"
+            ).delete-btn.disabled
         else
             +ActionLink('lpgallerycategory', 'tryDelete', categoryId).delete-btn
     else
