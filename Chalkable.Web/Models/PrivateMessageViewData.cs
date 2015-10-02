@@ -59,13 +59,16 @@ namespace Chalkable.Web.Models
 
         public static SentPrivateMessageViewData Create(SentPrivateMessage message)
         {
-            return new SentPrivateMessageViewData(message)
+            var res = new SentPrivateMessageViewData(message)
             {
                 DeletedBySender = message.DeletedBySender,
-                RecipientClass = ShortClassViewData.Create(message.RecipientClass),
-                RecipientPerson = message.RecipientPersons.Count == 1 ? ShortPersonViewData.Create(message.RecipientPersons[0]) : null,
                 AllRecipients = ShortPersonViewData.Create(message.RecipientPersons)
             };
+            if (message.RecipientClass != null)
+                res.RecipientClass = ShortClassViewData.Create(message.RecipientClass);
+            if (message.RecipientPersons.Count == 1)
+                res.RecipientPerson = ShortPersonViewData.Create(message.RecipientPersons[0]);
+            return res;
         }
     }
 

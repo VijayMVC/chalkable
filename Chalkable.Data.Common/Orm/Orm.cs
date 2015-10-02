@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -321,12 +322,13 @@ namespace Chalkable.Data.Common.Orm
             return PaginationSelect(SimpleSelect<T>(queryCondition), orderColumn, orderType, start, count);
         }
 
+        public const string ALL_COUNT_FIELD = "AllCount";
         public static DbQuery PaginationSelect(DbQuery innerSelect, IDictionary<string, OrderType> order, int start, int count)
         {
             var b = new StringBuilder();
-            b.AppendFormat("select count(*) as AllCount from ({0}) x;", innerSelect.Sql);
+            b.Append($"select count(*) as {ALL_COUNT_FIELD} from ({innerSelect.Sql}) x;");
             b.AppendFormat("select x.* from ({0}) x ", innerSelect.Sql);
-            var orderBy = string.Format("x.[Id] {0}", orederTypesMap[OrderType.Asc]);
+            var orderBy = $"x.[Id] {orederTypesMap[OrderType.Asc]}";
             if (order != null && order.Count > 0)
             {
                 orderBy = order.Select(x => string.Format("x.[{0}] {1}", x.Key, orederTypesMap[x.Value])).JoinString(",");

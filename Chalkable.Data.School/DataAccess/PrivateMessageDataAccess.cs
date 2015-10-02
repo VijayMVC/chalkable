@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -69,31 +70,102 @@ namespace Chalkable.Data.School.DataAccess
             return GetSentMessages(callerId, id, null, null, 0, 1).First();
         }
 
-        public PaginatedList<SentPrivateMessage> GetSentMessages(int personId, int? messageId, IList<int> roles, string keyword,
+        public PaginatedList<SentPrivateMessage> GetSentMessages(int callerId, int? messageId, IList<int> roles, string keyword,
                                                                int start, int count)
         {
-            //var query = BuildGetMessagesQuery(roles, keyword, null, personId, false, schoolId);
-            //return ReadPaginatedPrivateMessage(query, start, count);
-            throw new NotImplementedException();
+            var privateMsgResultSet = $" distinct {nameof(PrivateMessage)}.* ";
+            var query = BuildSentMessageQuery(callerId, messageId, roles, keyword, privateMsgResultSet);
+            var paginatedQuery = Orm.PaginationSelect(query, PrivateMessage.SENT_FIELD, Orm.OrderType.Desc, start, count);
+            var classN = nameof(Class);
+            var recipientsSet = $@" distinct 
+                                         {nameof(PrivateMessageRecipient)}.*,
+                                         {Person.VW_PERSON}.{Person.ID_FIELD} as {SENDER_PREFIX}{Person.ID_FIELD},
+                                         {Person.VW_PERSON}.{Person.FIRST_NAME_FIELD} as {SENDER_PREFIX}{Person.FIRST_NAME_FIELD},
+                                         {Person.VW_PERSON}.{Person.LAST_NAME_FIELD} as {SENDER_PREFIX}{Person.LAST_NAME_FIELD},
+                                         {Person.VW_PERSON}.{Person.SALUTATION_FIELD} as {SENDER_PREFIX}{Person.SALUTATION_FIELD},
+                                         {Person.VW_PERSON}.{Person.ROLE_REF_FIELD} as {SENDER_PREFIX}{Person.ROLE_REF_FIELD},
+                                         {Person.VW_PERSON}.{Person.GENDER_FIELD} as {SENDER_PREFIX}{Person.GENDER_FIELD},
+                                         
+                                         {"recipient"}.{Person.ID_FIELD} as {RECIPIENT_PREFIX}{Person.ID_FIELD},
+                                         {"recipient"}.{Person.FIRST_NAME_FIELD} as {RECIPIENT_PREFIX}{Person.FIRST_NAME_FIELD},
+                                         {"recipient"}.{Person.LAST_NAME_FIELD} as {RECIPIENT_PREFIX}{Person.LAST_NAME_FIELD},
+                                         {"recipient"}.{Person.SALUTATION_FIELD} as {RECIPIENT_PREFIX}{Person.SALUTATION_FIELD},
+                                         {"recipient"}.{Person.ROLE_REF_FIELD} as {RECIPIENT_PREFIX}{Person.ROLE_REF_FIELD},
+                                         {"recipient"}.{Person.GENDER_FIELD} as {RECIPIENT_PREFIX}{Person.GENDER_FIELD},
+                                         
+                                         {classN}.{Class.NAME_FIELD} as {Class.NAME_FIELD},
+                                         {classN}.{Class.CLASS_NUMBER_FIELD} as {Class.CLASS_NUMBER_FIELD}
+                                  ";
+
+            var recipientsQuery = BuildSentMessageQuery(callerId, messageId, roles, keyword, recipientsSet);
+            var res = new DbQuery(new List<DbQuery> {paginatedQuery, recipientsQuery});
+            return ReadPaginatedResult(res, start, count, ReadSentMessages);
         }
 
-        private DbQuery BuildSentMessageQuery()
-        {
 
+
+        private IList<SentPrivateMessage> ReadSentMessages(DbDataReader reader)
+        {
+            var res = reader.ReadList<SentPrivateMessage>();
+            reader.NextResult();
+            while (reader.Read())
+            {
+                var messageRecipient = reader.Read<PrivateMessageRecipient>();
+                var message = res.FirstOrDefault(x => x.Id == messageRecipient.PrivateMessageRef);
+                if(message == null) continue;
+                if (message.RecipientPersons == null)
+                {
+                    message.RecipientPersons = new List<Person>();
+                    message.Sender = ReadPrivateMessagePerson(reader, true);
+                    if (messageRecipient.RecipientClassRef.HasValue)
+                    {
+                        message.RecipientClass = new Class
+                        {
+                            Id = messageRecipient.RecipientClassRef.Value,
+                            Name = SqlTools.ReadStringNull(reader, Class.NAME_FIELD),
+                            ClassNumber = SqlTools.ReadStringNull(reader, Class.CLASS_NUMBER_FIELD)
+                        };
+                    }
+                }
+                message.RecipientPersons.Add(ReadPrivateMessagePerson(reader, false));
+            }
+            return res;
+        }
+
+        private DbQuery BuildSentMessageQuery(int callerId, int? messageId, IList<int>  roles, string keyword, string resultSet)
+        {
             var dbQuery = new DbQuery();
             var privateMsgT = typeof (PrivateMessage);
-            var privateMessageRecipientT = typeof(PrivateMessageRecipient);
-            dbQuery.Sql.Append("Select ").Append(" {0} ")
-                .Append($" From {privateMsgT.Name} ")
+            var privateMessageRecipientT = nameof(PrivateMessageRecipient);
+            var classT = nameof (Class);
+            const string recipientT = "recipient";
+            dbQuery.Sql.Append($"Select {resultSet}  From {privateMsgT.Name} ")
                 .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, Person.VW_PERSON, Person.ID_FIELD, privateMsgT.Name, PrivateMessage.FROM_PERSON_REF_FIELD)
-                .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, privateMessageRecipientT.Name, PrivateMessageRecipient.PRIVATE_MESSAGE_REF_FIELD, privateMsgT.Name, PrivateMessage.ID_FIELD);
-                       
-            throw new NotImplementedException();
-            //var msgQuery = new DbQuery();
-            //var msgRecipientQuery = new DbQuery();
-            //var privateMsgT = nameof(PrivateMessage);
-            //msgQuery.Sql.Append($"Select {privateMsgT}.* From {privateMsgT}");
-            //msgRecipientQuery.Sql.Append($"Select ")
+                .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, privateMessageRecipientT, PrivateMessageRecipient.PRIVATE_MESSAGE_REF_FIELD, privateMsgT.Name, PrivateMessage.ID_FIELD)
+                .AppendFormat($" Join {Person.VW_PERSON} as {recipientT} On {recipientT}.{Person.ID_FIELD} = {privateMessageRecipientT}.{PrivateMessageRecipient.REPICENT_REF_FIELD}")
+                .AppendFormat($" Left Join {classT} On {classT}.{Class.ID_FIELD} = {privateMessageRecipientT}.{PrivateMessageRecipient.RECIPIENT_CLASS_REF_FIELD}");
+
+            var conds = new AndQueryCondition {{PrivateMessage.FROM_PERSON_REF_FIELD, callerId}};
+            if(messageId.HasValue)
+                conds.Add(PrivateMessage.ID_FIELD, messageId);
+
+            conds.BuildSqlWhere(dbQuery, privateMsgT.Name);
+
+            if (roles != null && roles.Count > 0)
+                dbQuery.Sql.Append($" And {recipientT}.{Person.ROLE_REF_FIELD} in ({roles.JoinString(",")})");
+
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                keyword = "%" + keyword + "%";
+                var paramName = "@keyword";
+                dbQuery.Sql.Append($@" And (
+                                            {PrivateMessage.SUBJECT_FIELD} like {paramName} Or {PrivateMessage.BODY_FIELD} like {paramName}
+                                            or ({classT}.{Class.ID_FIELD} is not null And Lower({classT}.{Class.NAME_FIELD}) like {paramName})
+                                            or ({classT}.{Class.ID_FIELD} is null And (Lower({recipientT}.{Person.FIRST_NAME_FIELD}) like {paramName} Or Lower({recipientT}.{Person.LAST_NAME_FIELD}) like {paramName}))
+                                           )");
+                dbQuery.Parameters.Add(paramName, keyword);
+            }
+            return dbQuery;
         }
 
         private DbQuery BuildIncomeMessageQuery()
