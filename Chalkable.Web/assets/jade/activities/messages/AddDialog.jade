@@ -8,8 +8,8 @@
                     label To:
                     +SearchBox(chlk.services.PersonService, "getPersons", chlk.templates.messages.RecipientAutoComplete)#recipientId(
                         name="recipientId",
-                        value=self.recipient ? self.recipient.getFirstName()+ ' ' + self.recipient.getLastName() : "",
-                        default-value=self.recipient ? self.recipient.getId() : "",
+                        value=self.recipientPerson ? self.recipientPerson.getFirstName()+ ' ' + self.recipientPerson.getLastName() : "",
+                        default-value=self.recipientPerson ? self.recipientPerson.getId() : "",
                         class="validate[required]",
                         listCls="fixed"
                     )

@@ -24,7 +24,7 @@ NAMESPACE('chlk.templates.messages', function () {
             chlk.models.people.User, 'sender',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.people.User, 'recipient',
+            chlk.models.people.User, 'recipientPerson',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'sent',

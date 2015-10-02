@@ -25,10 +25,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.MessageId]],
-            ria.async.Future, function getMessage(id) {
+            [[chlk.models.id.MessageId, Boolean]],
+            ria.async.Future, function getMessage(id, income) {
                 return this.get('PrivateMessage/Read.json', chlk.models.messages.Message, {
-                    id: id.valueOf()
+                    id: id.valueOf(),
+                    income: income
                 });
             },
 
@@ -50,9 +51,10 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.messages.SendMessage]],
             ria.async.Future, function send(model) {
                 return this.post('PrivateMessage/Send.json', null,{
-                    personId: model.getRecipientId().valueOf(),
+                    personId: !model.getClassId() && model.getRecipientId().valueOf(),
                     subject: model.getSubject(),
-                    body: model.getBody()
+                    body: model.getBody(),
+                    classId: model.getClassId() && model.getClassId().valueOf()
                 });
             }
         ])
