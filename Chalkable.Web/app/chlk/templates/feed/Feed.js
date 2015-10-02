@@ -50,6 +50,10 @@ NAMESPACE('chlk.templates.feed', function () {
             String, 'submitType',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.ClassId, 'classId'
+            chlk.models.id.ClassId, 'classId',
+
+            function hasFilters(){
+                return this.getAnnType() || this.getGradingPeriodId() || this.getStartDate() || this.getEndDate()
+            }
         ])
 });
