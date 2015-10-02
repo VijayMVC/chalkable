@@ -33,10 +33,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             DateTime feedEndDate;
 
             //get or set settings
-            if (!settings.AnnouncementType.HasValue && !settings.FromDate.HasValue && !settings.ToDate.HasValue && !settings.GradingPeriodId.HasValue)
-                GetSettingsForFeed(out settings);
-            else
+            if (settings.ToSet)
                 SetSettingsForFeed(settings);
+            else
+                GetSettingsForFeed(out settings);
+            
 
             //if items should be from certain grading period
             if (settings.GradingPeriodId.HasValue)
@@ -173,7 +174,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, new Dictionary<string, object>()
             {
-                {PersonSetting.FEED_ANNOUNCEMENT_TYPE, settings.AnnouncementType == 0 ? null:settings.AnnouncementType },
+                {PersonSetting.FEED_ANNOUNCEMENT_TYPE, settings.AnnouncementType },
                 {PersonSetting.FEED_START_DATE, settings.FromDate },
                 {PersonSetting.FEED_END_DATE, settings.ToDate },
                 {PersonSetting.FEED_GRADING_PERIOD_ID, settings.GradingPeriodId },
@@ -246,5 +247,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public int? GradingPeriodId { get; set; }
+        public bool ToSet { get; set; }
     }
 }

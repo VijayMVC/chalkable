@@ -15,6 +15,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             Number, 'lessonPlansCount',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.id.SchoolPersonId, 'ownerId',
+
+            [ria.templates.ModelPropertyBind],
             String, 'name'
         ])
 });

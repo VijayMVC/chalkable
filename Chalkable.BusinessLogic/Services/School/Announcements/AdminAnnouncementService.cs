@@ -262,10 +262,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             DateTime feedEndDate;
 
             //get or set settings
-            if (!settings.AnnouncementType.HasValue && !settings.FromDate.HasValue && !settings.ToDate.HasValue && !settings.GradingPeriodId.HasValue)
-                GetAdminSettingsForFeed(out settings);
-            else
+            if (settings.ToSet)
                 SetAdminSettingsForFeed(settings);
+            else
+                GetAdminSettingsForFeed(out settings);
+            
 
             //if items should be from certain grading period
             if (settings.GradingPeriodId.HasValue)

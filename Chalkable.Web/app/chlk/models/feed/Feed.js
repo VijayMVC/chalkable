@@ -18,6 +18,7 @@ NAMESPACE('chlk.models.feed', function () {
             VOID, function deserialize(raw) {
                 this.items = SJX.fromArrayOfDeserializables(raw.annoucementviewdatas, chlk.models.announcement.FeedAnnouncementViewData);
                 this.importantOnly = SJX.fromValue(raw.importantOnly, Boolean);
+                this.toSet = SJX.fromValue(raw.toSet, Boolean);
                 this.importantCount = SJX.fromValue(raw.importantCount, Number);
                 this.newNotificationCount = SJX.fromValue(raw.newNotificationCount, Number);
                 this.start = SJX.fromValue(raw.start, Number);
@@ -75,6 +76,8 @@ NAMESPACE('chlk.models.feed', function () {
 
             String, 'submitType',
 
-            chlk.models.id.ClassId, 'classId'
+            chlk.models.id.ClassId, 'classId',
+
+            Boolean, 'toSet'
         ]);
 });
