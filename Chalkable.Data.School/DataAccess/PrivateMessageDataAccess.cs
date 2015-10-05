@@ -225,6 +225,35 @@ namespace Chalkable.Data.School.DataAccess
                 RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD))
             };
         }
+
+
+        public PossibleMessageRecipients GetPossibleMessageRecipients(int callerId, int callerRoleId, int schoolYearId, bool teacherMessagingEnabled, 
+            bool teacherClassOnly, bool studentMessagingEnabled, bool studentClassmatesOnly, string filter1, string filter2, string filter3)
+        {
+            var parameters = new Dictionary<string, object>
+            {
+                { "callerId", callerId },
+                { "callerRoleId", callerRoleId},
+                { "schoolYearId", schoolYearId },
+
+                {"filter1", !string.IsNullOrWhiteSpace(filter1) ? string.Format(FILTER_FORMAT,filter1) : null},
+                {"filter2", !string.IsNullOrWhiteSpace(filter2) ? string.Format(FILTER_FORMAT,filter2) : null},
+                {"filter3", !string.IsNullOrWhiteSpace(filter3) ? string.Format(FILTER_FORMAT,filter3) : null},
+
+                { "teacherStudentMessagingEnabled", teacherMessagingEnabled },
+                { "studentMessagingEnabled", studentMessagingEnabled },
+                { "teacherClassOnly", teacherClassOnly },
+                { "studentClassmatesOnly", studentClassmatesOnly }
+            };
+            using (var reader = ExecuteStoredProcedureReader("spGetPossibleMessageRecipients", parameters))
+            {
+                var res = new PossibleMessageRecipients();
+                res.Persons = reader.ReadList<Person>();
+                reader.NextResult();
+                res.Classes = reader.ReadList<Class>();
+                return res;
+            }
+        }
         
     }
 

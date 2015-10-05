@@ -65,10 +65,12 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User, AppPermissionType.Message})]
-        public ActionResult ListPossibleRecipients(string query)
+        public ActionResult ListPossibleRecipients(string filter)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
-            throw new NotImplementedException();
+
+            var possibleRecipients = SchoolLocator.PrivateMessageService.GetPossibleMessageRecipients(filter);
+            return Json(PossibleMessageRecipientViewData.Create(possibleRecipients));
         }
     }
 }

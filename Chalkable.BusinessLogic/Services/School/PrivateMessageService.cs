@@ -20,6 +20,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(IList<int> id, PrivateMessageType type);
         IncomePrivateMessage GetIncomeMessage(int messageId);
         SentPrivateMessage GetSentMessage(int messageId);
+
+        PossibleMessageRecipients GetPossibleMessageRecipients(string filter);
     }
 
     public enum PrivateMessageType
@@ -237,6 +239,38 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.PersonId.HasValue);
             PrivateMessageSecurity.EnsureMessgingPermission(Context);
             return DoRead(u => new PrivateMessageDataAccess(u).GetSentPrivateMessage(messageId, Context.PersonId.Value));
+        }
+
+        public PossibleMessageRecipients GetPossibleMessageRecipients(string filter)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            var sl = filter.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+            string f1 = null, f2 = null, f3 = null;
+            if (sl.Length == 0)
+                return null;
+            if (sl.Length > 0)
+                f1 = sl[0];
+            if (sl.Length > 1)
+                f2 = sl[1];
+            if (sl.Length > 2)
+                f3 = sl[2];
+
+            if (Context.MessagingDisabled)
+                return null;
+
+            return DoRead(u => new PrivateMessageDataAccess(u)
+                .GetPossibleMessageRecipients(
+                    Context.PersonId.Value,
+                    Context.RoleId,
+                    Context.SchoolYearId.Value,
+                    Context.TeacherStudentMessaginEnabled,
+                    Context.TeacherClassMessagingOnly,
+                    Context.TeacherStudentMessaginEnabled,
+                    Context.StudentClassMessagingOnly,
+                    f1, f2, f3
+                ));
         }
 
         public IncomePrivateMessage GetIncomeMessage(int messageId)

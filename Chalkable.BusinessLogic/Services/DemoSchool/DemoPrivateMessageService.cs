@@ -77,6 +77,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public PossibleMessageRecipients GetPossibleMessageRecipients(string filter)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Delete(IList<int> ids)
         {
             throw new NotImplementedException();

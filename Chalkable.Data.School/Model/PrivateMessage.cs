@@ -57,5 +57,11 @@ namespace Chalkable.Data.School.Model
         public IList<Person> RecipientPersons { get; set; }
         public Class RecipientClass { get; set; } 
     }
-    
+
+    public class PossibleMessageRecipients
+    {
+        public IList<Person> Persons { get; set; }
+        public IList<Class> Classes { get; set; }  
+    }
+
 }
