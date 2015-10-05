@@ -39,10 +39,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String]],
-            ria.async.Future, function del(ids) {
+            [[String, Boolean]],
+            ria.async.Future, function del(ids, income_) {
                 return this.get('PrivateMessage/Delete.json', null,{
-                    ids: ids
+                    ids: ids,
+                    income: income_ || false
                 });
             },
 

@@ -51,7 +51,7 @@ NAMESPACE('chlk.controllers', function (){
                     return  this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
                 var res;
                 if (model.getSubmitType() == "delete")
-                    res = this.messageService.del(model.getSelectedIds());
+                    res = this.messageService.del(model.getSelectedIds(), model.isInbox());
                 if (model.getSubmitType() == "markAsRead")
                     res = this.messageService.markAs(model.getSelectedIds(), true);
                 if (model.getSubmitType() == "markAsUnread")
@@ -64,7 +64,7 @@ NAMESPACE('chlk.controllers', function (){
                 }else{
                     res = this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), 0);
                 }
-                return  this.PushOrUpdateView(chlk.activities.messages.MessageListPage, res);
+                return  this.UpdateView(chlk.activities.messages.MessageListPage, res);
             },
 
             [[chlk.models.common.PaginatedList, Boolean, String, String, Number]],
