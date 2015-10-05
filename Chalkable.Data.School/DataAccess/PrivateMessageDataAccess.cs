@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
-using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -27,7 +26,7 @@ namespace Chalkable.Data.School.DataAccess
                 {PrivateMessage.FROM_PERSON_REF_FIELD, callerId},
                 {PrivateMessage.DELETED_BY_SENDER_FIELD, false}
             };
-            var dbQuery = Orm.SimpleSelect<PrivateMessageRecipient>(conds);
+            var dbQuery = Orm.SimpleSelect<PrivateMessage>(conds);
             var messagesIdsStr = ids.JoinString(",");
             dbQuery.Sql.AppendFormat($" And {PrivateMessage.ID_FIELD} in ({messagesIdsStr})");
             return ReadMany<PrivateMessage>(dbQuery);
