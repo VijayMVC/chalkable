@@ -104,7 +104,8 @@ namespace Chalkable.Data.Master.DataAccess
                 res = reader.Read<User>(true);
                 if (res.DistrictRef.HasValue)
                     res.District = reader.Read<District>(true);
-                var loginInfoId = SqlTools.ReadGuidNull(reader, string.Format("{0}_{1}", typeof(UserLoginInfo).Name, UserLoginInfo.ID_FIELD));
+                var loginInfoId = SqlTools.ReadGuidNull(reader,
+                    $"{typeof (UserLoginInfo).Name}_{UserLoginInfo.ID_FIELD}");
                 if(loginInfoId != null)
                     res.LoginInfo = reader.Read<UserLoginInfo>(true);
                 reader.NextResult();

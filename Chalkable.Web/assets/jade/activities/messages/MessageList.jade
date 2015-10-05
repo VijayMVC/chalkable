@@ -22,7 +22,8 @@ h2.page-title Messages
     .items
         +ActionLink('message', 'page', true, true, self.getRole(), self.getKeyword())(class=self.isInbox() ? "pressed" : "") Inbox
         +ActionLink('message', 'page', true, false, self.getRole(), self.getKeyword())(class=self.isInbox() ? "" : "pressed") Sent
-        +ActionLink('message', 'sendPage', self.isInbox())#new-message-link New message
+        if !self.isDisabledMessaging()
+            +ActionLink('message', 'sendPage', self.isInbox())#new-message-link New message
 
 +ActionForm('message', 'do')
     input(name="role", type="hidden", value=self.getRole())
@@ -53,7 +54,7 @@ h2.page-title Messages
                     +GridRow()
                         div(
                             class= item.isRead() ? "read" : "unread",
-                            data-can-read = self.getCurrentUser().getId() == item.getRecipient().getId()
+                            data-can-read = true
                         ).item-container.table
 
                             .chk
@@ -63,7 +64,10 @@ h2.page-title Messages
                                     if self.isInbox()
                                         +PersonImg(item.getSender(), 47)
                                     else
-                                        +PersonImg(item.getRecipient(), 47)
+                                        if item.getRecipientClass()
+                                            +ClassImg(item.getRecipientClass(), 45, 80)
+                                        else
+                                            +PersonImg(item.getRecipientPerson(), 47)
 
                             +ActionLink('message', 'viewPage', item.getId(), self.isInbox()).msg-info
                                 .table.details
@@ -71,6 +75,6 @@ h2.page-title Messages
                                         if self.isInbox()
                                             =item.getSender().getFirstName() + " " + item.getSender().getLastName()
                                         else
-                                            =item.getRecipient().getFirstName()+ " "  + item.getRecipient().getLastName()
+                                            =item.getRecipientClass() ? item.getRecipientClass().getClassNumber() + " " + item.getRecipientClass().getName() : item.getRecipientPerson().getFirstName()+ " "  + item.getRecipientPerson().getLastName()
                                         .sent= item.getSent().toUSADateTimeFormat()
                                     .content= item.getShortSubject() + ' - ' + item.getShortBody()

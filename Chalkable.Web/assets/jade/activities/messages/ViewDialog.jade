@@ -2,7 +2,8 @@
     .bg-top
     .bg-middle
         .x-window-header
-            span= self.getSender().getFirstName() + " " + self.getSender().getLastName()
+            -var sender = self.getSender() || self.getCurrentUser()
+            span= sender.getFirstName() + " " + sender.getLastName()
         .x-window-body
             .general-info
                 .subject

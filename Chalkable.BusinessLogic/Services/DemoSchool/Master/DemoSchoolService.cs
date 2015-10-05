@@ -104,6 +104,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public void UpdateMessagingSettings(Guid? districtId, Guid? schoolId, bool studentMessaging, bool studentToClassOnly,
+            bool teacherToStudentMessaging, bool teacherToClassOnly)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Add(IList<Data.Master.Model.School> schools)
         {
             MasterSchoolStorage.Add(schools);

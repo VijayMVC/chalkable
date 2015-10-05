@@ -28,10 +28,7 @@ NAMESPACE('chlk.controllers', function (){
             function pageAction(postback_, inbox_, role_, keyword_, start_) {
                 inbox_ = inbox_ || false;
                 var result = this.getMessages_(inbox_, role_, keyword_, start_);
-                //this.CloseView(chlk.activities.messages.ViewDialog);
-                return postback_ ?
-                    this.UpdateView(chlk.activities.messages.MessageListPage, result) :
-                    this.PushView(chlk.activities.messages.MessageListPage, result);
+                return this.PushOrUpdateView(chlk.activities.messages.MessageListPage, result);
             },
             [[Boolean, String, String, Number]],
             ria.async.Future, function getMessages_(inbox_, role_, keyword_, start_){
@@ -54,7 +51,7 @@ NAMESPACE('chlk.controllers', function (){
                     return  this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
                 var res;
                 if (model.getSubmitType() == "delete")
-                    res = this.messageService.del(model.getSelectedIds());
+                    res = this.messageService.del(model.getSelectedIds(), model.isInbox());
                 if (model.getSubmitType() == "markAsRead")
                     res = this.messageService.markAs(model.getSelectedIds(), true);
                 if (model.getSubmitType() == "markAsUnread")
@@ -79,6 +76,8 @@ NAMESPACE('chlk.controllers', function (){
                 result.setRole(role_);
                 result.setKeyword(keyword_);
                 result.setStart(start_);
+                var messagingSetting = this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_SETTINGS, null);
+                result.setDisabledMessaging(this.getCurrentRole().isStudent() && !messagingSetting.isAllowedForStudents() && !messagingSetting.isAllowedForTeachersToStudents());
 
                 return new ria.async.DeferredData(result);
             },
@@ -89,9 +88,9 @@ NAMESPACE('chlk.controllers', function (){
             {
                 var res;
                 if (replayOnId_) {
-                    res = this.getMessageFromSession(replayOnId_);
+                    res = this.getMessageFromSession(replayOnId_, isInbox);
                     res = res.then(function(model){
-                        if(this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId() == model.getRecipient().getId()){
+                        if(model.getSender()){
                             model = new ria.async.DeferredData(new chlk.models.messages.Message(
                                 isInbox,
                                 model.getBody(),
@@ -141,9 +140,9 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.MessageId, Boolean]],
             function viewPageAction(id, isInbox)
             {
-                var res = this.getMessageFromSession(id)
+                var res = this.getMessageFromSession(id, isInbox)
                     .then(function(model){
-                        var isReplay = this.getCurrentPerson().getId() == model.getRecipient().getId();
+                        var isReplay = !!model.getSender();
                         model.setReplay(isReplay);
                         model.setInbox(isInbox);
                         if(isReplay && !model.isRead()){
@@ -158,7 +157,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.messages.ViewDialog, res);
             },
 
-            function getMessageFromSession(id)
+            function getMessageFromSession(id, income)
             {
                 var res = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_MESSAGES, []).
                     filter(function(message){
@@ -167,7 +166,7 @@ NAMESPACE('chlk.controllers', function (){
                 if (res)
                     return new ria.async.DeferredData(res);
                 return this.messageService
-                    .getMessage(id)
+                    .getMessage(id, income)
                     .attach(this.validateResponse_());
             }
         ])

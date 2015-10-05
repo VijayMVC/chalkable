@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.UI.WebControls;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
 
@@ -18,6 +21,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void Delete(IList<int> localIds, Guid districtId);
         void UpdateStudyCenterEnabled(Guid? districtId, Guid? schoolId, DateTime? enabledTill);
         void UpdateMessagingDisabled(Guid? districtId, Guid? schoolId, bool disbaled);
+        void UpdateMessagingSettings(Guid? districtId, Guid? schoolId, bool studentMessaging, bool studentToClassOnly, bool teacherToStudentMessaging, bool teacherToClassOnly);
     }
 
     public class SchoolService : MasterServiceBase, ISchoolService
@@ -63,7 +67,9 @@ namespace Chalkable.BusinessLogic.Services.Master
                         IsChalkableEnabled = x.IsChalkableEnabled,
                         IsLESyncComplete = x.IsLESyncComplete,
                         IsLEEnabled = x.IsLEEnabled,
-                        Id = Guid.NewGuid()
+                        Id = Guid.NewGuid(),
+                        StudentMessagingEnabled = true,
+                        TeacherToStudentMessaginEnabled = true
                     }).ToList());
                 uow.Commit();
             }
@@ -117,6 +123,30 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(u=> new SchoolDataAccess(u).UpdateMessagingDisabled(districtId, schoolId, disbaled));
+        }
+
+        public void UpdateMessagingSettings(Guid? districtId, Guid? schoolId, bool studentMessaging, bool studentToClassOnly, bool teacherToStudentMessaging, bool teacherToClassOnly)
+        {
+            if(!HasMessagingSettgingsAccess(Context, districtId))
+               throw new ChalkableSecurityException();
+
+            DoUpdate(u=> new SchoolDataAccess(u)
+                        .UpdateMessagingSettings(
+                                districtId, 
+                                schoolId, 
+                                studentMessaging, 
+                                studentToClassOnly, 
+                                teacherToStudentMessaging, 
+                                teacherToClassOnly
+                         )
+                );
+        }
+
+        public bool HasMessagingSettgingsAccess(UserContext context, Guid? districtId)
+        {
+            var hasPermission = ClaimInfo.HasPermission(Context.Claims, ClaimInfo.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS);
+            return (!districtId.HasValue || districtId == Context.DistrictId)
+                   && (BaseSecurity.IsSysAdmin(context) || (BaseSecurity.IsDistrictAdmin(context) && hasPermission));
         }
     }
 
