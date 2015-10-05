@@ -88,12 +88,12 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             {
                 SchoolLocator.AdminAnnouncementService.SetComplete(classId, mdo);
                 SchoolLocator.LessonPlanService.SetComplete(classId, mdo);
-                SchoolLocator.ClassAnnouncementService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
+                SchoolLocator.ClassAnnouncementService.SetAnnouncementsAsComplete(Context.SchoolYearEndDate ?? DateTime.MaxValue, true);
             }
             else
             {
                 if((AnnouncementType)annType == AnnouncementType.Class)
-                    SchoolLocator.ClassAnnouncementService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
+                    SchoolLocator.ClassAnnouncementService.SetAnnouncementsAsComplete(Context.SchoolYearEndDate ?? DateTime.MaxValue, true);
                 if((AnnouncementType)annType == AnnouncementType.LessonPlan)
                     SchoolLocator.LessonPlanService.SetComplete(classId, mdo);
             }

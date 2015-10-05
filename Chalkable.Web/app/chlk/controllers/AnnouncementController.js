@@ -284,6 +284,8 @@ NAMESPACE('chlk.controllers', function (){
             if(classAnnouncement)
                 announcementTypeId_ = classAnnouncement.getAnnouncementTypeId();
 
+            var gradingPeriods = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIODS, []);
+
             classes.forEach(function (item) {
                 var currentClassInfo = this.classService.getClassAnnouncementInfo(item.getId());
                 types = currentClassInfo ? currentClassInfo.getTypesByClass() : [];
@@ -292,6 +294,19 @@ NAMESPACE('chlk.controllers', function (){
                 if (currentClassInfo && classId_ && classId_ == item.getId()) {
                     classInfo = currentClassInfo;
                     model.setClassInfo(classInfo);
+
+                    //prepare class schedule date range
+                    model.setClassScheduleDateRanges(
+                        gradingPeriods
+                            .filter(function(gp){
+                                return item.getMarkingPeriodsId().filter(function(mpId){return mpId == gp.getMarkingPeriodId()}).length > 0
+                            })
+                            .map(function (_) {
+                                return {
+                                    start: _.getStartDate().getDate(),
+                                    end: _.getEndDate().getDate()
+                                }
+                            }));
 
                     if(classAnnouncement){
                         if (savedClassInfo && savedClassInfo.getClassId() == item.getId()) {
@@ -312,15 +327,7 @@ NAMESPACE('chlk.controllers', function (){
 
             }, this);
 
-            var gradingPeriods = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIODS, []);
-            model.setClassScheduleDateRanges(
-                gradingPeriods
-                    .map(function (_) {
-                        return {
-                            start: _.getStartDate().getDate(),
-                            end: _.getEndDate().getDate()
-                        }
-                    }));
+           // var currentClass = classes.filter(function(item){ return classId_ && item.getId() == classId_},this);
 
             var classesBarData = new chlk.models.classes.ClassesForTopBar(
                 classes,

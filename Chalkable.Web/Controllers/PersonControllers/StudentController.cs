@@ -174,9 +174,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var activityIds = gradingDetails.StudentAnnouncements.Select(x => x.ActivityId).Distinct().ToList();
             var announcements = SchoolLocator.ClassAnnouncementService.GetByActivitiesIds(activityIds);
 
-
-            var classIds =
-                announcements.Select(x => x.ClassAnnouncementData.ClassRef).Distinct().ToList();
+            var classIds = announcements.Select(x => x.ClassAnnouncementData.ClassRef).Distinct().ToList();
 
             var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
 
