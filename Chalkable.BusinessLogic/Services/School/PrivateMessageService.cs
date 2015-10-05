@@ -1,0 +1,143 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
+using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
+using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.DataAccess;
+using Chalkable.Data.School.Model;
+
+namespace Chalkable.BusinessLogic.Services.School
+{
+    public interface IPrivateMessageService
+    {
+        PrivateMessageDetails SendMessage(int toPersonId, string subject, string body);
+        PaginatedList<PrivateMessageDetails> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword);
+        void MarkAsRead(IList<int> ids, bool read);
+        void Delete(IList<int> id);
+        PrivateMessageDetails GetMessage(int id);
+    }
+
+    public enum PrivateMessageType
+    {
+        Income,
+        Outcome
+    }
+
+    //todo: needs tests
+
+    public class PrivateMessageService : SchoolServiceBase, IPrivateMessageService
+    {
+        public PrivateMessageService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
+        {
+        }
+
+        public PrivateMessageDetails SendMessage(int toPersonId, string subject, string body)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            
+            PrivateMessageSecurity.EnsureMessgingPermission(Context);
+            using (var uow = Update())
+            {
+                var da = new PrivateMessageDataAccess(uow);
+                var message = new PrivateMessage
+                    {
+                        Body = body,
+                        Subject = subject,
+                        FromPersonRef = Context.PersonId.Value,
+                        ToPersonRef = toPersonId,
+                        Sent = Context.NowSchoolTime
+                    };
+                da.Insert(message);
+                uow.Commit();
+                message = da.GetOutComeMessage(null, null, Context.PersonId.Value, Context.SchoolLocalId.Value, 0, int.MaxValue)
+                            .OrderByDescending(x=>x.Id).First();
+                //TODO: notification sending 
+                ServiceLocator.NotificationService.AddPrivateMessageNotification(message.Id);
+                return da.GetDetailsById(message.Id, Context.PersonId.Value);
+            }
+        }
+
+        public PaginatedList<PrivateMessageDetails> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            
+            PrivateMessageSecurity.EnsureMessgingPermission(Context);
+            using (var uow = Read())
+            {
+                var da = new PrivateMessageDataAccess(uow);
+                var roles = role.Split(new []{','}, StringSplitOptions.RemoveEmptyEntries).ToList();
+                var rolesIds = roles.Select(x => CoreRoles.GetByName(x).Id).ToList();
+                switch (type)
+                {
+                    case PrivateMessageType.Income:
+                        return da.GetIncomeMessages(rolesIds, keyword, read, Context.PersonId.Value, Context.SchoolLocalId.Value, start, count);
+                    case PrivateMessageType.Outcome:
+                        return da.GetOutComeMessage(rolesIds, keyword, Context.PersonId.Value, Context.SchoolLocalId.Value, start, count);
+                    default:
+                        throw new ChalkableException(ChlkResources.ERR_PRIVATE_MESSAGE_INVALID_TYPE);
+                }    
+            }
+        }
+
+        public void MarkAsRead(IList<int> ids, bool read)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+           
+            PrivateMessageSecurity.EnsureMessgingPermission(Context);
+            if (ids != null)
+                using (var uow = Update())
+                {
+                    var da = new PrivateMessageDataAccess(uow);
+                    var messages = da.GetNotDeleted(Context.PersonId.Value).Where(x => ids.Contains(x.Id)).ToList();
+                    if(messages.Count == 0)
+                        throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_MARK_INVALID_RIGHTS);
+
+                    foreach (var message in messages)
+                    {
+                        if (!PrivateMessageSecurity.CanMarkMessage(message, Context))
+                            throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_MARK_INVALID_RIGHTS);
+                        message.Read = read;
+                    }
+                    da.Update(messages);
+                    uow.Commit();
+                }
+        }
+
+        public void Delete(IList<int> ids)
+        {
+            if (ids != null)
+                using (var uow = Update())
+                {
+                    var da = new PrivateMessageDataAccess(uow);
+                    var messages = da.GetNotDeleted(Context.PersonId ?? 0).Where(x => ids.Contains(x.Id)).ToList();
+                    if (messages.Count == 0)
+                        throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_DELETE_INVALID_RIGHTS);
+
+                    foreach (var message in messages)
+                    {
+                        if (!PrivateMessageSecurity.CanDeleteMessage(message, Context))
+                            throw new ChalkableSecurityException(ChlkResources.ERR_PRIVATE_MESSAGE_DELETE_INVALID_RIGHTS);
+
+                        if (message.ToPersonRef == Context.PersonId)
+                            message.DeletedByRecipient = true;
+                        if (message.FromPersonRef == Context.PersonId)
+                            message.DeletedBySender = true;
+                    }
+                    da.Update(messages);
+                    uow.Commit();
+                }
+        }
+
+        public PrivateMessageDetails GetMessage(int id)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            PrivateMessageSecurity.EnsureMessgingPermission(Context);            
+            
+            return DoRead(u => new PrivateMessageDataAccess(u).GetDetailsById(id, Context.PersonId.Value));
+        }
+    }
+}
