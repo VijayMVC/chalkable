@@ -142,7 +142,7 @@ NAMESPACE('chlk.controllers', function (){
             {
                 var res = this.getMessageFromSession(id, isInbox)
                     .then(function(model){
-                        var isReplay = model.getRecipientPerson() && this.getCurrentPerson().getId() == model.getRecipientPerson().getId();
+                        var isReplay = !!model.getSender();
                         model.setReplay(isReplay);
                         model.setInbox(isInbox);
                         if(isReplay && !model.isRead()){
