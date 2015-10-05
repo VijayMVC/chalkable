@@ -27,9 +27,25 @@ NAMESPACE('chlk.templates.messages', function () {
             chlk.models.people.User, 'recipientPerson',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.classes.Class, 'recipientClass',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'sent',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'inbox'
+            Boolean, 'inbox',
+
+            function getRecipientText(){
+                return this.getRecipientPerson() ? this.getRecipientPerson().getFirstName()+ ' ' + this.getRecipientPerson().getLastName() :
+                    (this.getRecipientClass() ? this.getRecipientClass().getFullClassName() : '');
+            },
+
+            function getRecipientValue(){
+                var personId = this.getRecipientPerson() ? this.getRecipientPerson().getId().valueOf() : null;
+                var classId = this.getRecipientClass() ? this.getRecipientClass().getId().valueOf() : null;
+                if(!personId && !classId)
+                    return '';
+                return JSON.stringify([personId, classId]);
+            }
         ])
 });

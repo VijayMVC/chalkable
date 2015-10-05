@@ -28,10 +28,7 @@ NAMESPACE('chlk.controllers', function (){
             function pageAction(postback_, inbox_, role_, keyword_, start_) {
                 inbox_ = inbox_ || false;
                 var result = this.getMessages_(inbox_, role_, keyword_, start_);
-                //this.CloseView(chlk.activities.messages.ViewDialog);
-                return postback_ ?
-                    this.UpdateView(chlk.activities.messages.MessageListPage, result) :
-                    this.PushView(chlk.activities.messages.MessageListPage, result);
+                return this.PushOrUpdateView(chlk.activities.messages.MessageListPage, result);
             },
             [[Boolean, String, String, Number]],
             ria.async.Future, function getMessages_(inbox_, role_, keyword_, start_){
@@ -67,7 +64,7 @@ NAMESPACE('chlk.controllers', function (){
                 }else{
                     res = this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), 0);
                 }
-                return  this.UpdateView(chlk.activities.messages.MessageListPage, res);
+                return  this.PushOrUpdateView(chlk.activities.messages.MessageListPage, res);
             },
 
             [[chlk.models.common.PaginatedList, Boolean, String, String, Number]],

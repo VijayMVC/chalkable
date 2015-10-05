@@ -3,9 +3,7 @@ REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.messages.Message');
 REQUIRE('chlk.models.messages.SendMessage');
 REQUIRE('chlk.models.id.MessageId');
-
-
-
+REQUIRE('chlk.models.messages.RecipientViewData');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -48,13 +46,21 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[String]],
+            ria.async.Future, function listPossibleRecipients(filter) {
+                return this.get('PrivateMessage/ListPossibleRecipients.json', ArrayOf(chlk.models.messages.RecipientViewData),{
+                    filter: filter
+                });
+            },
+
             [[chlk.models.messages.SendMessage]],
             ria.async.Future, function send(model) {
+                var ids = JSON.parse(model.getRecipientId())
                 return this.post('PrivateMessage/Send.json', null,{
-                    personId: !model.getClassId() && model.getRecipientId().valueOf(),
+                    personId: ids[0],
                     subject: model.getSubject(),
                     body: model.getBody(),
-                    classId: model.getClassId() && model.getClassId().valueOf()
+                    classId: ids[1]
                 });
             }
         ])

@@ -75,6 +75,6 @@ h2.page-title Messages
                                         if self.isInbox()
                                             =item.getSender().getFirstName() + " " + item.getSender().getLastName()
                                         else
-                                            =item.getRecipientClass() ? item.getRecipientClass().getName() : item.getRecipientPerson().getFirstName()+ " "  + item.getRecipientPerson().getLastName()
+                                            =item.getRecipientClass() ? item.getRecipientClass().getClassNumber() + " " + item.getRecipientClass().getName() : item.getRecipientPerson().getFirstName()+ " "  + item.getRecipientPerson().getLastName()
                                         .sent= item.getSent().toUSADateTimeFormat()
                                     .content= item.getShortSubject() + ' - ' + item.getShortBody()
