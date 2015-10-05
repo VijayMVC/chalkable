@@ -74,9 +74,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         private PaginatedList<NotificationDetails> GetNotifications(NotificationQuery query)
         {
-            if (!Context.SchoolLocalId.HasValue)
-                throw new UnassignedUserException();
-
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            
             using (var uow = Read())
             {
                 query.SchoolId = Context.SchoolLocalId.Value;
@@ -227,14 +226,12 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         public void AddPrivateMessageNotification(int privateMessageId)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             using (var uow = Update())
             {
-                if (!Context.PersonId.HasValue)
-                    throw new UnassignedUserException();
-
-                var privateMessage = new PrivateMessageDataAccess(uow).GetDetailsById(privateMessageId, Context.PersonId.Value);
-                var notification = builder.BuildPrivateMessageNotification(Context.NowSchoolTime, privateMessage, privateMessage.Sender, privateMessage.Recipient);
-                new NotificationDataAccess(uow).Insert(notification);
+                var msg = new PrivateMessageDataAccess(uow).GetSentPrivateMessage(privateMessageId, Context.PersonId.Value);
+                var notifications = msg.RecipientPersons.Select(x=> builder.BuildPrivateMessageNotification(Context.NowSchoolTime, msg, msg.Sender, x)).ToList();
+                new NotificationDataAccess(uow).Insert(notifications);
                 uow.Commit();
             }
         }

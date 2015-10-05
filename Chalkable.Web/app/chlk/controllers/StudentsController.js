@@ -79,7 +79,7 @@ NAMESPACE('chlk.controllers', function (){
                         .attach(this.validateResponse_());
                 }
                 result = result.then(function(users){
-                        var usersModel = this.prepareUsersModel(users, 0, true);
+                        var usersModel = this.prepareUsersModel(users, 0, true, null, null, isMy);
                         var topModel = new chlk.models.classes.ClassesForTopBar(null, classId_);
                         return new chlk.models.teacher.StudentsList(usersModel, topModel, isMy, null, this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS));
                     }, this);
@@ -133,7 +133,7 @@ NAMESPACE('chlk.controllers', function (){
 
                 result = result.then(function(usersData){
                     if(isScroll)  return this.prepareUsers(usersData, start);
-                    return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter(), rolesText);
+                    return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter(), rolesText, model.isMy());
                 }, this);
 
                 if(isScroll){

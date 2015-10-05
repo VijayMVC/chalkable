@@ -99,7 +99,7 @@ namespace Chalkable.Data.School.DataAccess
             var res = reader.Read<NotificationDetails>(true);
             res.Person = ReadNotificationPerson(reader, "ToPerson");
             if (res.Type == NotificationType.Message)
-                res.PrivateMessage = PrivateMessageDataAccess.ReadPrivateMessageDetails(reader);
+                res.PrivateMessage = PrivateMessageDataAccess.ReadIncomePrivateMessage(reader);
             if (res.Type == NotificationType.Question)
                 res.QuestionPerson = ReadNotificationPerson(reader, "QuestionPerson");
             if (res.Type == NotificationType.Announcement || res.Type == NotificationType.Question || res.Type == NotificationType.ItemToGrade)

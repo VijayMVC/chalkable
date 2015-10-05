@@ -21,6 +21,9 @@ NAMESPACE('chlk.templates.messages', function () {
             String, 'keyword',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'disabledMessaging',
+
+            [ria.templates.ModelPropertyBind],
             Number, 'start',
 
             function getNoMessagesText(){

@@ -85,5 +85,22 @@ namespace Chalkable.Data.Master.DataAccess
                 };
             ExecuteStoredProcedure("spUpdateMessagingDisabled", ps);
         }
+
+        public void UpdateMessagingSettings(Guid? districtId, Guid? schoolId, bool studentMessaging,
+            bool studentToClassOnly, bool teacherToStudentMessaging, bool teacherToClassOnly)
+        {
+            Trace.Assert(districtId.HasValue != schoolId.HasValue);
+            IDictionary<string, object> ps = new Dictionary<string, object>
+                {
+                    {"@districtId", districtId},
+                    {"@schoolId", schoolId},
+                    {"@studentMessaging", studentMessaging},
+                    {"@studentToClassOnly", studentToClassOnly},
+                    {"@teacherToStudentMessaging", teacherToStudentMessaging},
+                    {"@teacherToClassOnly", teacherToClassOnly}
+                };
+            ExecuteStoredProcedure("spUpdateMessagingSettings", ps);
+
+        }
     }
 }

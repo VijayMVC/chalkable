@@ -34,6 +34,11 @@ namespace Chalkable.Data.School.DataAccess
         {
             return SelectMany<ClassPerson>(BuildConditioins(query));
         }
+
+        public IList<ClassPerson> GetClassPersons(int? classId)
+        {
+            return GetClassPersons(new ClassPersonQuery {ClassId = classId});
+        } 
     }
 
     public class ClassPersonQuery
