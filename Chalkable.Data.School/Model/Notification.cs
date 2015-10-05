@@ -35,7 +35,7 @@ namespace Chalkable.Data.School.Model
         public Person Person { get; set; }
         public Announcement Announcement { get; set; }
         public ClassAnnouncementType ClassAnnouncementType { get; set; }
-        public PrivateMessageDetails PrivateMessage { get; set; }
+        public PrivateMessage PrivateMessage { get; set; }
         public Person QuestionPerson { get; set; }
         public MarkingPeriod MarkingPeriod { get; set; }
     }

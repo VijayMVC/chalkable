@@ -209,8 +209,15 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.STUDY_CENTER_ENABLED] = Context.SCEnabled;
-            ViewData[ViewConstants.MESSAGIN_DISABLED] = Context.MessagingDisabled;
+            ViewData[ViewConstants.MESSAGING_DISABLED] = Context.MessagingDisabled;
 
+            var messagingSettings = MessagingSettingsViewData.Create(
+                Context.StudentMessagingEnabled,
+                Context.StudentClassMessagingOnly,
+                Context.TeacherStudentMessaginEnabled,
+                Context.TeacherClassMessagingOnly
+                );
+            PrepareJsonData(messagingSettings, ViewConstants.MESSAGING_SETTINGS);
 
             var leParams = SchoolLocator.LeService.GetLEParams();
 
