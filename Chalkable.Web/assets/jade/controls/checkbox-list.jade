@@ -1,0 +1,7 @@
+mixin CheckboxList(listName, checkboxPref, defaultVal)
+    -attributes['data-name'] = escape(listName);
+    -attributes['data-prefix'] = escape(checkboxPref);
+    .checkbox-list(attributes)
+        +Hidden(listName, defaultVal)
+        block
+
