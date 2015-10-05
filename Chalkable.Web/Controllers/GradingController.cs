@@ -269,14 +269,6 @@ namespace Chalkable.Web.Controllers
             var studentAnn = SchoolLocator.StudentAnnouncementService.SetGrade(announcementId, studentId, gradeValue, extraCredits
                 , comment, dropped, late ?? false, exempt ?? false, incomplete ?? false
                 , (int)GradingStyleEnum.Numeric100);
-
-
-            MasterLocator.UserTrackingService.SetScore(Context.Login,
-                studentAnn.AnnouncementId,
-                studentAnn.StudentId,
-                gradeValue,
-                extraCredits,
-                callFromGradeBook ?? false);
             return Json(ShortStudentAnnouncementViewData.Create(studentAnn));
         }
 

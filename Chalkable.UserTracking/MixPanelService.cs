@@ -458,17 +458,6 @@ namespace Chalkable.UserTracking
         private const string EXTRA_CREDITS = "extraCredits";
         private const string CALLED_FROM = "calledFrom";
 
-        public void SetScore(string login, int announcementId, int studentId, string gradeValue, string extraCredits, bool callFromGradeBook)
-        {
-            var properties = new Dictionary<string, object>();
-            properties[ANNOUNCEMENT_ID] = announcementId;
-            properties[STUDENT_ID] = studentId;
-            properties[GRADE] = gradeValue;
-            properties[EXTRA_CREDITS] = extraCredits;
-            properties[CALLED_FROM] = callFromGradeBook ? "Gradebook" : "Announcement View";
-            SendEvent(login, UserTrackingEvents.SetScore, properties);
-        }
-
         public void SetAttendance(string login, int classId)
         {
             var properties = new Dictionary<string, object>();

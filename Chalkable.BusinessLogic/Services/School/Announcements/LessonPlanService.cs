@@ -82,13 +82,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             //get only simple apps
             var apps = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(appIds).Where(a=>!a.IsAdvanced).ToList();
             annApps = annApps.Where(aa => apps.Any(a => a.Id == aa.ApplicationRef)).ToList();
-            var lp = GetLessonPlanById(lessonPlanTemplateId); // security check 
-            if (lp.IsDraft)
-                throw new ChalkableException("Current lesson plan in gallery is not submitted yet. You can't create lesson plan from not submitted template");
             
             using (var u = Update())
             {
-                res = CreateLessonPlanDataAccess(u).CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
+                var da = CreateLessonPlanDataAccess(u);
+                var lp = da.GetLessonPlanTemplate(lessonPlanTemplateId, Context.PersonId.Value);
+                if (lp.IsDraft)
+                    throw new ChalkableException("Current lesson plan in gallery is not submitted yet. You can't create lesson plan from not submitted template");
+
+                res = da.CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
                 var teachers = new ClassTeacherDataAccess(u).GetClassTeachers(lp.ClassRef, null).Select(x=>x.PersonRef).ToList();
                 res.AnnouncementAttachments = AnnouncementAttachmentService.CopyAnnouncementAttachments(lessonPlanTemplateId, teachers, new List<int> { res.Id }, u, ServiceLocator, ConnectorLocator);
                 res.AnnouncementAttributes = AnnouncementAssignedAttributeService.CopyNonStiAttributes(lessonPlanTemplateId, new List<int>{res.Id}, u, ServiceLocator, ConnectorLocator);

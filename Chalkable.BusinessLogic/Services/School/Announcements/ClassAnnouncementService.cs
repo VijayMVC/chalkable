@@ -183,7 +183,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             ann.Content = inputAnnData.Content;
             if (inputAnnData.ExpiresDate.HasValue)
-                ann.Expires = inputAnnData.ExpiresDate.Value;
+                ann.Expires = inputAnnData.ExpiresDate.Value.Date;
             if (inputAnnData.ClassAnnouncementTypeId.HasValue)
             {
                 ann.ClassAnnouncementTypeRef = inputAnnData.ClassAnnouncementTypeId.Value;

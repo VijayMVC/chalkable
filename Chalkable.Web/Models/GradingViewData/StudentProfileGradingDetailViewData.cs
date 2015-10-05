@@ -61,7 +61,10 @@ namespace Chalkable.Web.Models.GradingViewData
                     var catType = new ClassCategoryAvg()
                     {
                         AnnouncementType = categoryType.AnnouncementType,
-                        Items = categoryType.Items.Select(x => ShortAnnouncementGradeViewData.Create(x.ClassAnnouncementData, studentAnnouncements, student.Id)).ToList(),
+                        Items = categoryType.Items.Select(x => ShortAnnouncementGradeViewData.Create(
+                            x.ClassAnnouncementData, 
+                            studentAnnouncements.Where(sa=>sa.ActivityId == x.ClassAnnouncementData.SisActivityId).ToList(), 
+                            student.Id)).ToList(),
                         Avg = avg
                     };
 
