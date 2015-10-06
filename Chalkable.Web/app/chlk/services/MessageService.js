@@ -47,6 +47,15 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId]],
+            ria.async.Future, function canSendMessage(personId_, classId_) {
+                return ria.async.DeferredData(true);
+                return this.get('PrivateMessage/CanSendMessage.json', Boolean,{
+                    personId: personId_ && personId_.valueOf(),
+                    classId: classId_ && classId_.valueOf()
+                });
+            },
+
             [[String]],
             ria.async.Future, function listPossibleRecipients(filter) {
                 return this.get('PrivateMessage/ListPossibleRecipients.json', ArrayOf(chlk.models.messages.RecipientViewData),{

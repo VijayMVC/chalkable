@@ -76,10 +76,35 @@ NAMESPACE('chlk.controllers', function (){
                 result.setRole(role_);
                 result.setKeyword(keyword_);
                 result.setStart(start_);
-                var messagingSetting = this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_SETTINGS, null);
-                result.setDisabledMessaging(this.getCurrentRole().isStudent() && !messagingSetting.isAllowedForStudents() && !messagingSetting.isAllowedForTeachersToStudents());
+                result.setDisabledMessaging(this.isDisabledToMessage());
 
                 return new ria.async.DeferredData(result);
+            },
+
+            function isDisabledToMessage(model_){
+                var messagingSetting = this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_SETTINGS, null);
+                if(model_){
+                    var person = model_.getSender() || model_.getRecipientPerson();
+                    if(this.getCurrentRole().isStudent()){
+                        if(person){
+                            var roleId = person.getRole().getId();
+                            return roleId == chlk.models.common.RoleEnum.TEACHER && !messagingSetting.isAllowedForTeachersToStudents() ||
+                                roleId == chlk.models.common.RoleEnum.STUDENT && !messagingSetting.isAllowedForStudents();
+                        }else{
+                            return !messagingSetting.isAllowedForStudents();
+                        }
+                    }
+                    if(this.getCurrentRole().isTeacher()){
+                        if(person){
+                            var roleId = person.getRole().getId();
+                            return roleId == chlk.models.common.RoleEnum.STUDENT && !messagingSetting.isAllowedForTeachersToStudents();
+                        }else{
+                            return !messagingSetting.isAllowedForTeachersToStudents();
+                        }
+                    }
+                }
+
+                return this.getCurrentRole().isStudent() && !messagingSetting.isAllowedForStudents() && !messagingSetting.isAllowedForTeachersToStudents();
             },
 
             [chlk.controllers.SidebarButton('messages')],
@@ -90,13 +115,15 @@ NAMESPACE('chlk.controllers', function (){
                 if (replayOnId_) {
                     res = this.getMessageFromSession(replayOnId_, isInbox);
                     res = res.then(function(model){
+
                         if(model.getSender()){
                             model = new ria.async.DeferredData(new chlk.models.messages.Message(
                                 isInbox,
                                 model.getBody(),
                                 model.getSubject(),
                                 model.getSender(),
-                                model.getSent()
+                                model.getSent(),
+                                this.isDisabledToMessage(model)
                             ));
                         }
                         return model;
@@ -104,7 +131,7 @@ NAMESPACE('chlk.controllers', function (){
 
                 }
                 else
-                    res = new ria.async.DeferredData(new chlk.models.messages.Message(isInbox));
+                    res = new ria.async.DeferredData(new chlk.models.messages.Message(isInbox, null, null, null, null, this.isDisabledToMessage()));
                 return this.ShadeView(chlk.activities.messages.AddDialog, res);
             },
 
@@ -112,13 +139,15 @@ NAMESPACE('chlk.controllers', function (){
             [[Boolean, chlk.models.id.SchoolPersonId, String, String]],
             function sendToPersonAction(isInbox, personId, firstName, lastName)
             {
-
-                var model = new ria.async.DeferredData(new chlk.models.messages.Message(
+                var model = new chlk.models.messages.Message(
                     isInbox,
                     null,
                     null,
                     new chlk.models.people.User(firstName, lastName, personId)
-                ));
+                )
+                model.setDisabledMessaging(this.isDisabledToMessage(model));
+                var res = new ria.async.DeferredData(model);
+
                 return this.ShadeView(chlk.activities.messages.AddDialog, model);
             },
 
@@ -154,6 +183,21 @@ NAMESPACE('chlk.controllers', function (){
                         }
                         return model;
                     }, this);
+                res = res.then(function(model) {
+                    if (this.isDisabledToMessage(model)) {
+                        model.setDisabledMessaging(this.isDisabledToMessage(model));
+                        return model;
+                    }
+                    else {
+                        var recipient = model.getRecipientPerson() ? model.getRecipientPerson() : model.getSender();
+                        return this.messageService.canSendMessage(recipient && recipient.getId(),
+                            model.getRecipientClass() && model.getRecipientClass().getId())
+                            .then(function (canSendMessage) {
+                                model.setDisabledMessaging(!canSendMessage);
+                                return model;
+                            })
+                    }
+                }, this);
                 return this.ShadeView(chlk.activities.messages.ViewDialog, res);
             },
 
