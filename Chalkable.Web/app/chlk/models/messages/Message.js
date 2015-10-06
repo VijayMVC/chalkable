@@ -46,6 +46,8 @@ NAMESPACE('chlk.models.messages', function () {
 
             chlk.models.messages.MessageTypeEnum, 'type',
 
+            Boolean, 'disabledMessaging',
+
             VOID, function deserialize(raw) {
                 if(raw.incomemessagedata){
                     this.id = SJX.fromValue(raw.incomemessagedata.id, chlk.models.id.MessageId);
@@ -79,7 +81,7 @@ NAMESPACE('chlk.models.messages', function () {
             },
 
             [[Boolean, String, String, chlk.models.people.User, chlk.models.common.ChlkDate]],
-            function $(inbox_, body_, subject_, recipient_, sent_){
+            function $(inbox_, body_, subject_, recipient_, sent_, disabled_){
                 BASE();
                 if(inbox_)
                     this.setInbox(inbox_);
@@ -91,6 +93,7 @@ NAMESPACE('chlk.models.messages', function () {
                     this.setRecipientPerson(recipient_);
                 if(sent_)
                     this.setSent(sent_);
+                this.setDisabledMessaging(disabled_ || false);
             }
         ]);
 });

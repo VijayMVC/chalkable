@@ -35,6 +35,9 @@ NAMESPACE('chlk.templates.messages', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'inbox',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'disabledMessaging',
+
             function getRecipientText(){
                 return this.getRecipientPerson() ? this.getRecipientPerson().getFirstName()+ ' ' + this.getRecipientPerson().getLastName() :
                     (this.getRecipientClass() ? this.getRecipientClass().getFullClassName() : '');
