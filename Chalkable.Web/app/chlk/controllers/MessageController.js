@@ -28,10 +28,7 @@ NAMESPACE('chlk.controllers', function (){
             function pageAction(postback_, inbox_, role_, keyword_, start_) {
                 inbox_ = inbox_ || false;
                 var result = this.getMessages_(inbox_, role_, keyword_, start_);
-                //this.CloseView(chlk.activities.messages.ViewDialog);
-                return postback_ ?
-                    this.UpdateView(chlk.activities.messages.MessageListPage, result) :
-                    this.PushView(chlk.activities.messages.MessageListPage, result);
+                return this.PushOrUpdateView(chlk.activities.messages.MessageListPage, result);
             },
             [[Boolean, String, String, Number]],
             ria.async.Future, function getMessages_(inbox_, role_, keyword_, start_){
@@ -54,7 +51,7 @@ NAMESPACE('chlk.controllers', function (){
                     return  this.pageAction(true, model.isInbox(), model.getRole(), model.getKeyword(), 0);
                 var res;
                 if (model.getSubmitType() == "delete")
-                    res = this.messageService.del(model.getSelectedIds());
+                    res = this.messageService.del(model.getSelectedIds(), model.isInbox());
                 if (model.getSubmitType() == "markAsRead")
                     res = this.messageService.markAs(model.getSelectedIds(), true);
                 if (model.getSubmitType() == "markAsUnread")
@@ -79,8 +76,35 @@ NAMESPACE('chlk.controllers', function (){
                 result.setRole(role_);
                 result.setKeyword(keyword_);
                 result.setStart(start_);
+                result.setDisabledMessaging(this.isDisabledToMessage());
 
                 return new ria.async.DeferredData(result);
+            },
+
+            function isDisabledToMessage(model_){
+                var messagingSetting = this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_SETTINGS, null);
+                if(model_){
+                    var person = model_.getSender() || model_.getRecipientPerson();
+                    if(this.getCurrentRole().isStudent()){
+                        if(person){
+                            var roleId = person.getRole().getId();
+                            return roleId == chlk.models.common.RoleEnum.TEACHER && !messagingSetting.isAllowedForTeachersToStudents() ||
+                                roleId == chlk.models.common.RoleEnum.STUDENT && !messagingSetting.isAllowedForStudents();
+                        }else{
+                            return !messagingSetting.isAllowedForStudents();
+                        }
+                    }
+                    if(this.getCurrentRole().isTeacher()){
+                        if(person){
+                            var roleId = person.getRole().getId();
+                            return roleId == chlk.models.common.RoleEnum.STUDENT && !messagingSetting.isAllowedForTeachersToStudents();
+                        }else{
+                            return !messagingSetting.isAllowedForTeachersToStudents();
+                        }
+                    }
+                }
+
+                return this.getCurrentRole().isStudent() && !messagingSetting.isAllowedForStudents() && !messagingSetting.isAllowedForTeachersToStudents();
             },
 
             [chlk.controllers.SidebarButton('messages')],
@@ -89,15 +113,17 @@ NAMESPACE('chlk.controllers', function (){
             {
                 var res;
                 if (replayOnId_) {
-                    res = this.getMessageFromSession(replayOnId_);
+                    res = this.getMessageFromSession(replayOnId_, isInbox);
                     res = res.then(function(model){
-                        if(this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId() == model.getRecipient().getId()){
+
+                        if(model.getSender()){
                             model = new ria.async.DeferredData(new chlk.models.messages.Message(
                                 isInbox,
                                 model.getBody(),
                                 model.getSubject(),
                                 model.getSender(),
-                                model.getSent()
+                                model.getSent(),
+                                this.isDisabledToMessage(model)
                             ));
                         }
                         return model;
@@ -105,7 +131,7 @@ NAMESPACE('chlk.controllers', function (){
 
                 }
                 else
-                    res = new ria.async.DeferredData(new chlk.models.messages.Message(isInbox));
+                    res = new ria.async.DeferredData(new chlk.models.messages.Message(isInbox, null, null, null, null, this.isDisabledToMessage()));
                 return this.ShadeView(chlk.activities.messages.AddDialog, res);
             },
 
@@ -113,13 +139,15 @@ NAMESPACE('chlk.controllers', function (){
             [[Boolean, chlk.models.id.SchoolPersonId, String, String]],
             function sendToPersonAction(isInbox, personId, firstName, lastName)
             {
-
-                var model = new ria.async.DeferredData(new chlk.models.messages.Message(
+                var model = new chlk.models.messages.Message(
                     isInbox,
                     null,
                     null,
                     new chlk.models.people.User(firstName, lastName, personId)
-                ));
+                )
+                model.setDisabledMessaging(this.isDisabledToMessage(model));
+                var res = new ria.async.DeferredData(model);
+
                 return this.ShadeView(chlk.activities.messages.AddDialog, model);
             },
 
@@ -141,9 +169,9 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.MessageId, Boolean]],
             function viewPageAction(id, isInbox)
             {
-                var res = this.getMessageFromSession(id)
+                var res = this.getMessageFromSession(id, isInbox)
                     .then(function(model){
-                        var isReplay = this.getCurrentPerson().getId() == model.getRecipient().getId();
+                        var isReplay = !!model.getSender();
                         model.setReplay(isReplay);
                         model.setInbox(isInbox);
                         if(isReplay && !model.isRead()){
@@ -155,10 +183,25 @@ NAMESPACE('chlk.controllers', function (){
                         }
                         return model;
                     }, this);
+                res = res.then(function(model) {
+                    if (this.isDisabledToMessage(model)) {
+                        model.setDisabledMessaging(this.isDisabledToMessage(model));
+                        return model;
+                    }
+                    else {
+                        var recipient = model.getRecipientPerson() ? model.getRecipientPerson() : model.getSender();
+                        return this.messageService.canSendMessage(recipient && recipient.getId(),
+                            model.getRecipientClass() && model.getRecipientClass().getId())
+                            .then(function (canSendMessage) {
+                                model.setDisabledMessaging(!canSendMessage);
+                                return model;
+                            })
+                    }
+                }, this);
                 return this.ShadeView(chlk.activities.messages.ViewDialog, res);
             },
 
-            function getMessageFromSession(id)
+            function getMessageFromSession(id, income)
             {
                 var res = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_MESSAGES, []).
                     filter(function(message){
@@ -167,7 +210,7 @@ NAMESPACE('chlk.controllers', function (){
                 if (res)
                     return new ria.async.DeferredData(res);
                 return this.messageService
-                    .getMessage(id)
+                    .getMessage(id, income)
                     .attach(this.validateResponse_());
             }
         ])

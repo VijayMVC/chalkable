@@ -6,10 +6,10 @@
                 +Hidden('inbox', self.isInbox())
                 .x-form-field.send-to-container
                     label To:
-                    +SearchBox(chlk.services.PersonService, "getPersons", chlk.templates.messages.RecipientAutoComplete)#recipientId(
+                    +SearchBox(chlk.services.MessageService, "listPossibleRecipients", chlk.templates.messages.RecipientAutoComplete)#recipientId(
                         name="recipientId",
-                        value=self.recipient ? self.recipient.getFirstName()+ ' ' + self.recipient.getLastName() : "",
-                        default-value=self.recipient ? self.recipient.getId() : "",
+                        value=self.getRecipientText(),
+                        default-value=self.getRecipientValue(),
                         class="validate[required]",
                         listCls="fixed"
                     )

@@ -5,7 +5,9 @@
         public static string LE_PARAMS = "leParams";
         public const string GRADING_PERIODS = "GradingPeriods";
 
-        public const string MESSAGIN_DISABLED = "MessagingDisabled";
+        public const string MESSAGING_DISABLED = "MessagingDisabled";
+        public const string MESSAGING_SETTINGS = "MessagingSettings";
+
         public const string IS_DEMO_DISTRICT = "IsDemoDistrict";
         public const string STUDY_CENTER_ENABLED = "StudyCenterEnabled";
         public const string SCHOOL_OPTIONS="SchoolOptions";

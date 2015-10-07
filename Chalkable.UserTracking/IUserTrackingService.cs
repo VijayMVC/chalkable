@@ -46,7 +46,6 @@ namespace Chalkable.UserTracking
         void CreatedReport(string email, string reportType);
         void SetDiscipline(string login, int? classId, DateTime date, string description, int studentId);
         void SetFinalGrade(string login, int classId, int studentId, int gradingPeriodId, string averageValue, bool exempt, string note);
-        void SetScore(string login, int announcementId, int studentId, string gradeValue, string extraCredits, bool callFromGradeBook);
         void SetAttendance(string login, int classId);
         void PostedGrades(string login, int classId, int gradingPeriodId);
         void LoggedIn(string login);

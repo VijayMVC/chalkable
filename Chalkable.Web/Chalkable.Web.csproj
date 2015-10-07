@@ -400,9 +400,11 @@
     <Compile Include="Models\GroupsViewData\GroupExplorerViewData.cs" />
     <Compile Include="Models\GroupsViewData\GroupViewData.cs" />
     <Compile Include="Models\LPGalleryCategoryViewData.cs" />
+    <Compile Include="Models\MessagingSettingsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentAppsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentContactViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentExplorerViewData.cs" />
+    <Compile Include="Models\PossibleMessageRecipientViewData.cs" />
     <Compile Include="Models\PracticeGradeViewData.cs" />
     <Compile Include="Models\ScheduleItemViewData.cs" />
     <Compile Include="Models\DepartmentGradingStatViewData.cs" />

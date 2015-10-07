@@ -929,11 +929,12 @@ NAMESPACE('chlk.controllers', function (){
                         model.isExempt(),
                         JSON.parse(model.getCodesString()),
                         model.getNote()
-                    ).then(function(newModel){
+                    )
+                    .attach(this.validateResponse_())
+                    .then(function(newModel){
                         newModel.setGradingPeriodId(model.getGradingPeriodId());
                         return newModel;
-                    })
-                    .attach(this.validateResponse_());
+                    });
                 return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, chlk.activities.lib.DontShowLoader());
             },
 

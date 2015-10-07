@@ -116,7 +116,7 @@ namespace Chalkable.StiConnector.Connectors
             var nvc = new NameValueCollection();
             if (date.HasValue)
                 nvc.Add("date", date.Value.ToString(Constants.DATE_FORMAT));
-            Put<Object>(url, null);
+            Post<Object>(url, null, nvc, HttpMethod.Put);
         }
 
         public void DeleteActivity(int id)

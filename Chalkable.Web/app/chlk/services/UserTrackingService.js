@@ -21,6 +21,11 @@ NAMESPACE('chlk.services', function () {
                 this.sendTrackEvent_("Took Assessment", {});
             },
 
+            [[String]],
+            VOID, function clickedAction(actionName){
+                this.sendTrackEvent_("performed action: " + actionName, {});
+            },
+
             [[String, Object]],
             function sendTrackEvent_(name, ev){
                 var mixpanel = window.mixpanel;

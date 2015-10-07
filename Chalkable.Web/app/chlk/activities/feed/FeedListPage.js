@@ -28,6 +28,9 @@ NAMESPACE('chlk.activities.feed', function () {
                 if(!value || value < 1){
                     node.setValue('');
                     node.addClass('prepared');
+                    setTimeout(function(){
+                        node.removeClass('prepared');
+                    }, 10)
                 }
 
             },
@@ -106,6 +109,14 @@ NAMESPACE('chlk.activities.feed', function () {
                 node.toggleClass('active');
             },
 
+            [ria.mvc.DomEventBind('click', '.clear-filters')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function clearFiltersClick(node, event){
+                this.dom.find('select:not(.markDoneSelect), .start-end-picker').setValue('');
+                this.dom.find('.to-set').setValue('true');
+                this.dom.find('#sort-submit').trigger('click');
+            },
+
             function sortSubmit(){
                 this.dom.find('#sort-submit').trigger('click');
                 var select = this.dom.find('#sort-select');
@@ -151,6 +162,16 @@ NAMESPACE('chlk.activities.feed', function () {
                         dom.find('.to-set').setValue('false');
                     }
                 });
+            },
+
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
+                BASE(model, msg_);
+                this.dom.find('select.prepared').removeClass('prepared');
+            },
+
+            OVERRIDE, VOID, function onRefresh_(model) {
+                BASE(model);
+                this.dom.find('select.prepared').removeClass('prepared');
             },
 
             OVERRIDE, VOID, function onStop_() {

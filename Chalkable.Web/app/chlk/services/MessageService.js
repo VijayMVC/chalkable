@@ -3,9 +3,7 @@ REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.messages.Message');
 REQUIRE('chlk.models.messages.SendMessage');
 REQUIRE('chlk.models.id.MessageId');
-
-
-
+REQUIRE('chlk.models.messages.RecipientViewData');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -25,10 +23,11 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.MessageId]],
-            ria.async.Future, function getMessage(id) {
+            [[chlk.models.id.MessageId, Boolean]],
+            ria.async.Future, function getMessage(id, income) {
                 return this.get('PrivateMessage/Read.json', chlk.models.messages.Message, {
-                    id: id.valueOf()
+                    id: id.valueOf(),
+                    income: income
                 });
             },
 
@@ -40,19 +39,38 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String]],
-            ria.async.Future, function del(ids) {
+            [[String, Boolean]],
+            ria.async.Future, function del(ids, income_) {
                 return this.get('PrivateMessage/Delete.json', null,{
-                    ids: ids
+                    ids: ids,
+                    income: income_ || false
+                });
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId]],
+            ria.async.Future, function canSendMessage(personId_, classId_) {
+                return ria.async.DeferredData(true);
+                return this.get('PrivateMessage/CanSendMessage.json', Boolean,{
+                    personId: personId_ && personId_.valueOf(),
+                    classId: classId_ && classId_.valueOf()
+                });
+            },
+
+            [[String]],
+            ria.async.Future, function listPossibleRecipients(filter) {
+                return this.get('PrivateMessage/ListPossibleRecipients.json', ArrayOf(chlk.models.messages.RecipientViewData),{
+                    filter: filter
                 });
             },
 
             [[chlk.models.messages.SendMessage]],
             ria.async.Future, function send(model) {
+                var ids = JSON.parse(model.getRecipientId())
                 return this.post('PrivateMessage/Send.json', null,{
-                    personId: model.getRecipientId().valueOf(),
+                    personId: ids[0],
                     subject: model.getSubject(),
-                    body: model.getBody()
+                    body: model.getBody(),
+                    classId: ids[1]
                 });
             }
         ])

@@ -70,6 +70,8 @@ NAMESPACE('chlk.services', function () {
                                 throw chlk.lib.exception.NoAnnouncementException(response.data.message);
                             case 'NoClassAnnouncementTypeException':
                                 throw chlk.lib.exception.NoClassAnnouncementTypeException();
+                            case 'AggregateException':
+                                throw  chlk.lib.exception.ChalkableSisException(response.data.innermessage);
                             default:
                                 _DEBUG && console.error(exceptionType, response.data.message, response.stacktrace);
                                 throw chlk.lib.exception.DataException(exceptionType + ': ' + response.data.message);

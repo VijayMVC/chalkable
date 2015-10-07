@@ -35,11 +35,20 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.TeacherService, 'teacherService',
 
-            [[chlk.models.common.PaginatedList, Number, Boolean, String]],
-            chlk.models.people.UsersList, function prepareUsersModel(users, selectedIndex, byLastName, filter_, rolesText_){
+            [[chlk.models.common.PaginatedList, Number, Boolean, String, Boolean]],
+            chlk.models.people.UsersList, function prepareUsersModel(users, selectedIndex, byLastName, filter_, rolesText_, isMy_){
                 var hasAccess = true; //this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_PERSON);
+                var disableMessaging, isStudent = this.getCurrentRole().isStudent();
+                var messagingSettings = this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_SETTINGS, null);
+                if(isStudent){
+                    disableMessaging = isMy_ && !messagingSettings.isAllowedForStudents() ||
+                        !isMy_ && !messagingSettings.isAllowedForTeachersToStudents();
+                }else{
+                    disableMessaging = !messagingSettings.isAllowedForTeachersToStudents() ||
+                        !isMy_ && messagingSettings.isAllowedForTeachersToStudentsInTheSameClass();
+                }
                 return new chlk.models.people.UsersList(this.prepareUsers(users, null)
-                    , byLastName, selectedIndex, filter_, null, this.getCurrentRole(), this.getCurrentPerson(), rolesText_, hasAccess, this.isMessagingDisabled());
+                    , byLastName, selectedIndex, filter_, null, this.getCurrentRole(), this.getCurrentPerson(), rolesText_, hasAccess, this.isMessagingDisabled() || disableMessaging);
             },
 
             [[chlk.models.common.PaginatedList, Number]],
