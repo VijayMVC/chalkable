@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Chalkable.BusinessLogic.Services.Master;
+﻿using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.StandardImport.Models;
 
 namespace Chalkable.StandardImport.Services
@@ -13,7 +8,7 @@ namespace Chalkable.StandardImport.Services
         protected IServiceLocatorMaster ServiceLocatorMaster { get; private set; }
         public CsvContainer CsvContainer { get; protected set; }
 
-        public ImportService(string connectionString)
+        protected ImportService(string connectionString)
         {
             ServiceLocatorMaster = new StandardImportServiceLocatorMaster(connectionString);
         }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
@@ -12,7 +11,7 @@ namespace Chalkable.StandardImport
         static void Main(string[] args)
         {
             if (args.Length < 4)
-                throw new Exception("Not enough parameters. You should provide 4 params. ConnectionString, CC_StandardsFileDirectory, Ab_StandardFilesDirectory, ImportLogstFilesDirectory");
+                throw new Exception("Not enough parameters. You should provide minimum 4 params. ConnectionString, CC_StandardsFileDirectory, Ab_StandardFilesDirectory, ImportLogstFilesDirectory");
 
             for (int i = 0; i < args.Length; i++)
             {
@@ -20,14 +19,60 @@ namespace Chalkable.StandardImport
             }
             string error;
             if(!ValidateConnectionString(args[0], out error))
-                throw new Exception(string.Format("Invalid connection string. {0}", error));
-            if (!Directory.Exists(args[1]))
-                throw new Exception("Invalid CC_StandardFilesDirectory");
-            if (!Directory.Exists(args[2]))
-                throw new Exception("Invalid Ab_StandardFilesDirectory");
-            if (!Directory.Exists(args[3]))
-                throw new Exception("Invalid ImportLogstFilesDirectory");
-            ProcessImport(args[0], args[1], args[2], args[3]);
+                throw new Exception($"Invalid connection string. {error}");
+
+            if (args.Length == 4)
+            {
+                if (!Directory.Exists(args[1]))
+                    throw new Exception("Invalid CC_StandardFilesDirectory");
+                if (!Directory.Exists(args[2]))
+                    throw new Exception("Invalid Ab_StandardFilesDirectory");
+                if (!Directory.Exists(args[3]))
+                    throw new Exception("Invalid ImportLogstFilesDirectory");
+                ProcessImport(args[0], args[1], args[2], args[3]);
+            }
+            else
+            {
+                if (!Directory.Exists(args[1]))
+                    throw new Exception("Invalid CC_StandardFilesDirectory");
+                if (!Directory.Exists(args[2]))
+                    throw new Exception("Invalid NssMappingFilesDirectory");
+                if (!Directory.Exists(args[3]))
+                    throw new Exception("Invalid AlMappingFilesDirectory");
+                if (!Directory.Exists(args[4]))
+                    throw new Exception("Invalid ImportLogstFilesDirectory");
+
+                ProcessAlImport(args[0], args[1], args[2], args[3], args[4]);
+            }
+
+
+        }
+
+        private static void ProcessAlImport(string connectionString, string cc_StandardsDirectoryPath, string nssFilteDirectory, string alMappingFilesPath, string logsFilesDirectory)
+        {
+            if (!Directory.Exists(logsFilesDirectory))
+                Directory.CreateDirectory(logsFilesDirectory);
+
+            ImportService importService = new ImportCCStandardService(connectionString);
+            Console.WriteLine(@"Start common core standards import");
+            Console.WriteLine(@"----------------------------------");
+            ImportStandardFromDirectory(cc_StandardsDirectoryPath, logsFilesDirectory, importService);
+            Console.WriteLine(@"----------------------------------");
+            Console.WriteLine(@"Finished Common core import");
+            Console.WriteLine("");
+            Console.WriteLine(@"Starting Nss mapping import to local storage");
+            Console.WriteLine(@"----------------------------------");
+            importService = new NSSImportService(connectionString);
+            ImportStandardFromDirectory(nssFilteDirectory, logsFilesDirectory, importService);
+            Console.WriteLine(@"----------------------------------");
+            Console.WriteLine(@"Finished Common core import");
+            Console.WriteLine("");
+            Console.WriteLine(@"Starting Alabama abtocc mapping import");
+            Console.WriteLine(@"----------------------------------");
+            importService = new ImportAlMappingService(connectionString);
+            ImportStandardFromDirectory(alMappingFilesPath, logsFilesDirectory, importService);
+            Console.WriteLine(@"----------------------------------");
+            Console.WriteLine(@"Finished import");
         }
 
         private static void ProcessImport(string connectionString, string cc_StandardsDirectoryPath, string ab_standardsDirectoryPath, string logsFilesDirectory)
@@ -111,16 +156,14 @@ namespace Chalkable.StandardImport
             }
             finally
             {
-                if (stream != null)
-                    stream.Dispose();
-                if (stream2 != null)
-                    stream2.Dispose();
+                stream?.Dispose();
+                stream2?.Dispose();
             };
         }
 
         private static string GenerateImportResultFileName(string oldFileName)
         {
-            return string.Format("{0}_import_log{1}", Path.GetFileNameWithoutExtension(oldFileName), Path.GetExtension(oldFileName));
+            return $"{Path.GetFileNameWithoutExtension(oldFileName)}_import_log{Path.GetExtension(oldFileName)}";
         }
 
     }
