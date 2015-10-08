@@ -41,18 +41,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void SendMessageToClass(int classId, string subject, string body)
         {
-            if(!BaseSecurity.IsTeacher(Context))
-                throw new ChalkableSecurityException("Only teacher can send message to class");
+            if(!CanSendMessageToClass(classId))
+                throw new ChalkableSecurityException("Current user have no right for sending message to class");
 
             using (var uow = Update())
             {
-                PrivateMessageSecurity.EnsureMessgingPermission(Context);
-                if (!Context.TeacherStudentMessaginEnabled)
-                    throw new ChalkableSecurityException("Teacher has no rights for sending messages to students");
-
-                if (Context.TeacherClassMessagingOnly && !new ClassTeacherDataAccess(uow).Exists(classId, Context.PersonId))
-                    throw new ChalkableSecurityException("Teacher has no right for sending messages to current class. He can send message only to his own classes");
-
                 var studentsIds = new ClassPersonDataAccess(uow).GetClassPersons(classId).Select(cp=>cp.PersonRef).Distinct().ToList();
                 var messageId = CreatePrivateMessage(studentsIds, classId, subject, body, uow);
                 uow.Commit();
@@ -60,6 +53,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             
         }
+
         public void SendMessageToPerson(int personId, string subject, string body)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -67,11 +61,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var toPerson = new PersonDataAccess(uow).GetPersonDetails(personId, Context.SchoolLocalId.Value);
-                if(BaseSecurity.IsTeacher(Context))
-                    EnsureTeacherMessagingPermission(toPerson, uow);
-                if(Context.Role == CoreRoles.STUDENT_ROLE)
-                    EnsureStudentMessagingPermission(toPerson, uow);
+                if ((BaseSecurity.IsTeacher(Context) && !CanTeacherSendMessage(personId, uow)) || 
+                    (Context.Role == CoreRoles.STUDENT_ROLE && !CanStudentSendMessage(personId, uow)))
+                    throw new ChalkableSecurityException("Current user have no right for sending message to person");
 
                 var messageId = CreatePrivateMessage(new List<int> {personId}, null, subject, body, uow);
                 uow.Commit();
@@ -124,8 +116,6 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
             }
         }
-
-        
 
         private int CreatePrivateMessage(IList<int> personIds, int? classId, string subject, string body, UnitOfWork uow)
         {
@@ -285,27 +275,40 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public bool CanSendMessageToClass(int classId)
         {
-            var uow = Update();
-            return !Context.MessagingDisabled && BaseSecurity.IsTeacher(Context) && Context.TeacherStudentMessaginEnabled &&
-                   (!Context.TeacherClassMessagingOnly || new ClassTeacherDataAccess(uow).Exists(classId, Context.PersonId));
-
+            return DoRead(u => CanSendMessageToClass(classId, u));
         }
+
+        private bool CanSendMessageToClass(int classId, UnitOfWork uow)
+        {
+            return !PrivateMessageSecurity.CanSendMessage(Context) && BaseSecurity.IsTeacher(Context) && Context.TeacherStudentMessaginEnabled &&
+                   (!Context.TeacherClassMessagingOnly || new ClassTeacherDataAccess(uow).Exists(classId, Context.PersonId));
+        }
+
         public bool CanSendMessageToPerson(int personId)
+        {
+            using (var uow = Read())
+            {
+                if(BaseSecurity.IsTeacher(Context))
+                    return CanTeacherSendMessage(personId, uow);
+                if(Context.Role == CoreRoles.STUDENT_ROLE)
+                    return CanStudentSendMessage(personId, uow);
+                return false;
+            }
+        }
+
+        private bool CanTeacherSendMessage(int personId, UnitOfWork uow)
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolLocalId.HasValue);
 
-            if (Context.MessagingDisabled)
-                return false;
+            bool canSend = false;
+            var toPerson = new PersonDataAccess(uow).GetPersonDetails(personId, Context.SchoolLocalId.Value);
 
-            bool canSend = true;
-            var uow = Update();
-            var toPerson = new PersonDataAccess(uow).GetPersonDetails(personId, Context.SchoolLocalId.Value); ;
+            if (toPerson.RoleRef == CoreRoles.TEACHER_ROLE.Id)
+                return true;
 
-            if (BaseSecurity.IsTeacher(Context) && toPerson.RoleRef == CoreRoles.STUDENT_ROLE.Id)
-            {
+            if (toPerson.RoleRef == CoreRoles.STUDENT_ROLE.Id)
                 if (Context.TeacherStudentMessaginEnabled)
-                {
                     if (Context.TeacherClassMessagingOnly)
                     {
                         var toPersonClasses = new ClassDataAccess(uow).GetStudentClasses(Context.SchoolYearId.Value,
@@ -315,14 +318,23 @@ namespace Chalkable.BusinessLogic.Services.School
 
                         canSend = currPersonClasses.Any(x => toPersonClasses.Any(y => x.Id == y.Id));
                     }
-                }
-                else canSend = false;
 
-            }
-            else if (Context.Role == CoreRoles.STUDENT_ROLE && toPerson.RoleRef == CoreRoles.STUDENT_ROLE.Id)
-            {
+            return canSend;
+        }
+
+        private bool CanStudentSendMessage(int personId, UnitOfWork uow)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+
+            bool canSend = false;
+            var toPerson = new PersonDataAccess(uow).GetPersonDetails(personId, Context.SchoolLocalId.Value);
+
+            if (toPerson.RoleRef == CoreRoles.TEACHER_ROLE.Id)
+                return true;
+
+            if (toPerson.RoleRef == CoreRoles.STUDENT_ROLE.Id)
                 if (Context.StudentMessagingEnabled)
-                {
                     if (Context.StudentClassMessagingOnly)
                     {
                         var toPersonClasses = new ClassDataAccess(uow).GetStudentClasses(Context.SchoolYearId.Value,
@@ -332,10 +344,6 @@ namespace Chalkable.BusinessLogic.Services.School
 
                         canSend = currPersonClasses.Any(x => toPersonClasses.Any(y => x.Id == y.Id));
                     }
-                }
-                else canSend = false;
-            }
-            else canSend = false;
 
             return canSend;
         }
