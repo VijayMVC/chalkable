@@ -20,8 +20,9 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(IList<int> id, PrivateMessageType type);
         IncomePrivateMessage GetIncomeMessage(int messageId);
         SentPrivateMessage GetSentMessage(int messageId);
-
         PossibleMessageRecipients GetPossibleMessageRecipients(string filter);
+        bool CanSendMessageToClass(int classId);
+        bool CanSendMessageToPerson(int personId);
     }
 
     public enum PrivateMessageType
@@ -123,6 +124,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
             }
         }
+
+        
 
         private int CreatePrivateMessage(IList<int> personIds, int? classId, string subject, string body, UnitOfWork uow)
         {
@@ -279,6 +282,62 @@ namespace Chalkable.BusinessLogic.Services.School
             PrivateMessageSecurity.EnsureMessgingPermission(Context);
             return DoRead(u => new PrivateMessageDataAccess(u).GetIncomePrivateMessage(messageId, Context.PersonId.Value));
         }
-        
+
+        public bool CanSendMessageToClass(int classId)
+        {
+            var uow = Update();
+            return !Context.MessagingDisabled && BaseSecurity.IsTeacher(Context) && Context.TeacherStudentMessaginEnabled &&
+                   (!Context.TeacherClassMessagingOnly || new ClassTeacherDataAccess(uow).Exists(classId, Context.PersonId));
+
+        }
+        public bool CanSendMessageToPerson(int personId)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+
+            if (Context.MessagingDisabled)
+                return false;
+
+            bool canSend = true;
+            var uow = Update();
+            var toPerson = new PersonDataAccess(uow).GetPersonDetails(personId, Context.SchoolLocalId.Value); ;
+
+            if (BaseSecurity.IsTeacher(Context) && toPerson.RoleRef == CoreRoles.STUDENT_ROLE.Id)
+            {
+                if (Context.TeacherStudentMessaginEnabled)
+                {
+                    if (Context.TeacherClassMessagingOnly)
+                    {
+                        var toPersonClasses = new ClassDataAccess(uow).GetStudentClasses(Context.SchoolYearId.Value,
+                            personId, null);
+                        var currPersonClasses = new ClassDataAccess(uow).GetTeacherClasses(Context.SchoolYearId.Value,
+                            Context.PersonId.Value, null);
+
+                        canSend = currPersonClasses.Any(x => toPersonClasses.Any(y => x.Id == y.Id));
+                    }
+                }
+                else canSend = false;
+
+            }
+            else if (Context.Role == CoreRoles.STUDENT_ROLE && toPerson.RoleRef == CoreRoles.STUDENT_ROLE.Id)
+            {
+                if (Context.StudentMessagingEnabled)
+                {
+                    if (Context.StudentClassMessagingOnly)
+                    {
+                        var toPersonClasses = new ClassDataAccess(uow).GetStudentClasses(Context.SchoolYearId.Value,
+                            personId, null);
+                        var currPersonClasses = new ClassDataAccess(uow).GetStudentClasses(Context.SchoolYearId.Value,
+                            Context.PersonId.Value, null);
+
+                        canSend = currPersonClasses.Any(x => toPersonClasses.Any(y => x.Id == y.Id));
+                    }
+                }
+                else canSend = false;
+            }
+            else canSend = false;
+
+            return canSend;
+        }
     }
 }

@@ -6,6 +6,7 @@ using Chalkable.StandardImport.Models;
 
 namespace Chalkable.StandardImport.Services
 {
+
     public class ImportABToCCMappingsService: ImportService
     {
         public ImportABToCCMappingsService(string connectionString) : base(connectionString)
