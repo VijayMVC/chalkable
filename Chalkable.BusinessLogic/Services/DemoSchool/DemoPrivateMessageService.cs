@@ -82,6 +82,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public bool CanSendMessageToClass(int classId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CanSendMessageToPerson(int personId)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Delete(IList<int> ids)
         {
             throw new NotImplementedException();
