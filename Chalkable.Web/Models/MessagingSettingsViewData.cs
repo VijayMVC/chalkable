@@ -1,4 +1,6 @@
-﻿namespace Chalkable.Web.Models
+﻿using Chalkable.Data.Master.Model;
+
+namespace Chalkable.Web.Models
 {
     public class MessagingSettingsViewData
     {
@@ -16,6 +18,16 @@
                 TeacherToStudentMessaginEnabled = teacherToStudentMessaging,
                 TeacherToClassMessagingOnly = teacherToClassOnly
             };
+        }
+
+        public static MessagingSettingsViewData Create(MessagingSettings messagingSettings)
+        {
+            return Create(
+                messagingSettings.StudentMessagingEnabled,
+                messagingSettings.StudentToClassMessagingOnly,
+                messagingSettings.TeacherToStudentMessaginEnabled,
+                messagingSettings.TeacherToClassMessagingOnly
+            );
         }
     }
 }

@@ -8,6 +8,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
+using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {
@@ -22,6 +23,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         void UpdateStudyCenterEnabled(Guid? districtId, Guid? schoolId, DateTime? enabledTill);
         void UpdateMessagingDisabled(Guid? districtId, Guid? schoolId, bool disbaled);
         void UpdateMessagingSettings(Guid? districtId, Guid? schoolId, bool studentMessaging, bool studentToClassOnly, bool teacherToStudentMessaging, bool teacherToClassOnly);
+
+        Data.Master.Model.MessagingSettings GetDistrictMessaginSettings(Guid districtId);
     }
 
     public class SchoolService : MasterServiceBase, ISchoolService
@@ -140,6 +143,11 @@ namespace Chalkable.BusinessLogic.Services.Master
                                 teacherToClassOnly
                          )
                 );
+        }
+
+        public MessagingSettings GetDistrictMessaginSettings(Guid districtId)
+        {
+            return DoRead(u => new SchoolDataAccess(u).GetDistrictMessagingSettings(districtId));
         }
 
         public bool HasMessagingSettgingsAccess(UserContext context, Guid? districtId)

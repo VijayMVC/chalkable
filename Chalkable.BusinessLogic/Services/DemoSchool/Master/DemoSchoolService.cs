@@ -6,6 +6,7 @@ using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Master.Model;
 
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
@@ -106,6 +107,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public void UpdateMessagingSettings(Guid? districtId, Guid? schoolId, bool studentMessaging, bool studentToClassOnly,
             bool teacherToStudentMessaging, bool teacherToClassOnly)
+        {
+            throw new NotImplementedException();
+        }
+
+        public MessagingSettings GetDistrictMessaginSettings(Guid districtId)
         {
             throw new NotImplementedException();
         }

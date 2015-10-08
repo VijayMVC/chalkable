@@ -33,6 +33,9 @@ NAMESPACE('chlk.templates.messages', function () {
             chlk.models.common.ChlkDate, 'sent',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'disabledMessaging',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'inbox'
         ])
 });
