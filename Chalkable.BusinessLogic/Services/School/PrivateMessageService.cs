@@ -285,11 +285,15 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public bool CanSendMessageToClass(int classId)
         {
-            var uow = Update();
+            return DoRead(u => CanSendMessageToClass(classId, u));
+        }
+
+        private bool CanSendMessageToClass(int classId, UnitOfWork uow)
+        {
             return !Context.MessagingDisabled && BaseSecurity.IsTeacher(Context) && Context.TeacherStudentMessaginEnabled &&
                    (!Context.TeacherClassMessagingOnly || new ClassTeacherDataAccess(uow).Exists(classId, Context.PersonId));
-
         }
+
         public bool CanSendMessageToPerson(int personId)
         {
             Trace.Assert(Context.PersonId.HasValue);
