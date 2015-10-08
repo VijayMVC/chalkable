@@ -64,9 +64,9 @@ NAMESPACE('chlk.services', function () {
                 return this.get('School/UpdateMessagingSettings.json', Boolean, {
                     schoolId: schoolId_ && schoolId_.valueOf(),
                     studentMessaging: studentMessaging_,
-                    studentToClassOnly: studentToClassOnly_,
+                    studentToClassOnly: studentToClassOnly_ || false,
                     teacherToStudentMessaging: teacherToStudentMessaging_,
-                    teacherToClassOnly: teacherToClassOnly_
+                    teacherToClassOnly: teacherToClassOnly_ || false
                 });
             },
 
