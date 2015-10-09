@@ -88,7 +88,8 @@ Begin
 				Delete From @personT 
 				Where Id in (
 								Select p.Id From @personT p
-								Where not exists
+								Where exists(Select * From Student where Student.Id = p.Id)
+									  and not exists
 											(
 												Select *
 												From ClassPerson
