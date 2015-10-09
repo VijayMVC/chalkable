@@ -215,7 +215,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     Context.SchoolYearId.Value,
                     Context.TeacherStudentMessaginEnabled,
                     Context.TeacherClassMessagingOnly,
-                    Context.TeacherStudentMessaginEnabled,
+                    Context.StudentMessagingEnabled,
                     Context.StudentClassMessagingOnly,
                     f1, f2, f3
                 ));
