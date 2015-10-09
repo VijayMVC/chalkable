@@ -10,10 +10,10 @@
             +SlideCheckbox('studentmessagingenabled', self.isAllowedForStudents(), false).all-students
         .check-box-container.sub
             label(for="settings-studenttoclassmessagingonly").title Only allow students in the same classes to message each other
-            +SlideCheckbox('studenttoclassmessagingonly', self.isAllowedForStudentsInTheSameClass(), false, !self.isAllowedForStudents())(readonly = !self.isAllowedForStudents()).sudents-in-same-class
+            +SlideCheckbox('studenttoclassmessagingonly', self.isAllowedForStudentsInTheSameClass(), false, !self.isAllowedForStudents())(disabled = !self.isAllowedForStudents()).sudents-in-same-class
         .check-box-container
             label(for="settings-teachertostudentmessaginenabled").title Allow teacher to student messaging
             +SlideCheckbox('teachertostudentmessaginenabled', self.isAllowedForTeachersToStudents(), false).teachers-to-students
         .check-box-container.sub
             label(for="settings-teachertoclassmessagingonly").title Only allow teachers to message students in their classes
-            +SlideCheckbox('teachertoclassmessagingonly', self.isAllowedForTeachersToStudentsInTheSameClass(), false, !self.isAllowedForTeachersToStudents())(readonly = !self.isAllowedForTeachersToStudents()).teachers-in-same-class
+            +SlideCheckbox('teachertoclassmessagingonly', self.isAllowedForTeachersToStudentsInTheSameClass(), false, !self.isAllowedForTeachersToStudents())(disabled = !self.isAllowedForTeachersToStudents()).teachers-in-same-class

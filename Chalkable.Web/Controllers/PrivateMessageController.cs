@@ -72,5 +72,13 @@ namespace Chalkable.Web.Controllers
             var possibleRecipients = SchoolLocator.PrivateMessageService.GetPossibleMessageRecipients(filter);
             return Json(PossibleMessageRecipientViewData.Create(possibleRecipients));
         }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult CanSendMessage(int? personId, int? classId)
+        {
+            return Json((personId.HasValue && SchoolLocator.PrivateMessageService.CanSendMessageToPerson(personId.Value))
+                     || (classId.HasValue && SchoolLocator.PrivateMessageService.CanSendMessageToClass(classId.Value))
+                    );
+        }
     }
 }

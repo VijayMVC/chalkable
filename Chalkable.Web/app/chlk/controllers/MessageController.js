@@ -145,10 +145,10 @@ NAMESPACE('chlk.controllers', function (){
                     null,
                     new chlk.models.people.User(firstName, lastName, personId)
                 )
-                model.setDisabledMessaging(this.isDisabledToMessage(model));
+                model.setDisabledMessaging(this.isDisabledToMessage());
                 var res = new ria.async.DeferredData(model);
 
-                return this.ShadeView(chlk.activities.messages.AddDialog, model);
+                return this.ShadeView(chlk.activities.messages.AddDialog, res);
             },
 
             [chlk.controllers.SidebarButton('messages')],
