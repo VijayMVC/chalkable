@@ -9,6 +9,7 @@ var ChlkSessionConstants = {
     GRADING_PERIOD: 'gradingPeriod',
     GRADING_PERIODS: 'gradingPeriods',
     FINALIZED_CLASS_IDS: 'finalizedClassesIds',
+    MESSAGING_SETTINGS: 'messagingSettings',
     CURRENT_CHLK_PERSON: 'currentChlkPerson',
     CURRENT_DEVELOPER: 'currentDeveloper',
     CURRENT_PERSON: 'currentPerson',

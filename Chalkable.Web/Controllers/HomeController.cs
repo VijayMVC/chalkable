@@ -198,6 +198,9 @@ namespace Chalkable.Web.Controllers
                     ? district.LastSync.Value.ToString("yyyy/MM/dd hh:mm:ss")
                     : "";
                 ViewData[ViewConstants.DISTRICT_ID] = district.Id.ToString();
+
+                var messagingSettings = MessagingSettingsViewData.Create(MasterLocator.SchoolService.GetDistrictMessaginSettings(Context.DistrictId.Value));
+                PrepareJsonData(messagingSettings, ViewConstants.MESSAGING_SETTINGS);
             }
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
             ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
@@ -209,8 +212,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.SERVER_TIME] = Context.NowSchoolTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.STUDY_CENTER_ENABLED] = Context.SCEnabled;
-            ViewData[ViewConstants.MESSAGIN_DISABLED] = Context.MessagingDisabled;
-
+            ViewData[ViewConstants.MESSAGING_DISABLED] = Context.MessagingDisabled;
 
             var leParams = SchoolLocator.LeService.GetLEParams();
 

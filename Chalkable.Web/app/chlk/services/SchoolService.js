@@ -59,6 +59,18 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.SchoolId]],
+            ria.async.Future, function updateMessagingSettings(schoolId_, studentMessaging_, studentToClassOnly_,
+                                                               teacherToStudentMessaging_, teacherToClassOnly_) {
+                return this.get('School/UpdateMessagingSettings.json', Boolean, {
+                    schoolId: schoolId_ && schoolId_.valueOf(),
+                    studentMessaging: studentMessaging_,
+                    studentToClassOnly: studentToClassOnly_ || false,
+                    teacherToStudentMessaging: teacherToStudentMessaging_,
+                    teacherToClassOnly: teacherToClassOnly_ || false
+                });
+            },
+
+            [[chlk.models.id.SchoolId]],
             ria.async.Future, function getPeopleSummary(schoolId) {
                 return this.get('School/People.json', chlk.models.school.SchoolPeopleSummary, {
                     schoolId: schoolId.valueOf()

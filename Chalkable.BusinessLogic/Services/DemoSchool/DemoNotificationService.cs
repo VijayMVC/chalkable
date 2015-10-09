@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
@@ -90,9 +91,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
 
 
-                if (notificationDetails.PrivateMessageRef.HasValue)
-                    notificationDetails.PrivateMessage =
-                        ServiceLocator.PrivateMessageService.GetMessage(notificationDetails.PrivateMessageRef.Value);
+                //if (notificationDetails.PrivateMessageRef.HasValue)
+                //    notificationDetails.PrivateMessage =
+                //        ServiceLocator.PrivateMessageService.GetMessage(notificationDetails.PrivateMessageRef.Value);
 
                 if (notificationDetails.QuestionPersonRef.HasValue)
                     notificationDetails.QuestionPerson = ServiceLocator.PersonService.GetPersonDetails(notificationDetails.QuestionPersonRef.Value);
@@ -180,12 +181,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void AddPrivateMessageNotification(int privateMessageId)
         {
-            if (!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
-
-            var privateMessage = ServiceLocator.PrivateMessageService.GetMessage(privateMessageId);
-            var notification = builder.BuildPrivateMessageNotification(Context.NowSchoolTime, privateMessage, privateMessage.Sender, privateMessage.Recipient);
-            NotificationStorage.Add(notification);
+            Trace.Assert(Context.PersonId.HasValue);
+            var privateMessage = ServiceLocator.PrivateMessageService.GetSentMessage(privateMessageId);
+            var notifications = privateMessage.RecipientPersons.Select( x => builder.BuildPrivateMessageNotification(Context.NowSchoolTime, privateMessage, privateMessage.Sender, x));
+            NotificationStorage.Add(notifications.ToList());
         }
 
         public void AddApplicationNotification(IList<Person> toPerson, Person fromPerson, Guid applicationId)

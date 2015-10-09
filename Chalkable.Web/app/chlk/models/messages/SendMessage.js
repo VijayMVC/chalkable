@@ -9,7 +9,7 @@ NAMESPACE('chlk.models.messages', function () {
     /** @class chlk.models.messages.SendMessage*/
     CLASS(
         'SendMessage', [
-            chlk.models.id.SchoolPersonId, 'recipientId',
+            String, 'recipientId',
             String, 'subject',
             String, 'body',
             Boolean, 'inbox'

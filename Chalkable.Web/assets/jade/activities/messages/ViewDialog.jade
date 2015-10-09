@@ -2,7 +2,8 @@
     .bg-top
     .bg-middle
         .x-window-header
-            span= self.getSender().getFirstName() + " " + self.getSender().getLastName()
+            -var sender = self.getSender() || self.getCurrentUser()
+            span= sender.getFirstName() + " " + sender.getLastName()
         .x-window-body
             .general-info
                 .subject
@@ -12,7 +13,8 @@
                     +TextArea()(readonly).text=self.body
                 br
                 .form-buttons
-                    +ActionButton('message', 'sendPage', self.isInbox(), self.id).blue-button.submit-btn= self.isReplay() ? 'Reply' : 'Send'
+                    if !self.isDisabledMessaging()
+                        +ActionButton('message', 'sendPage', self.isInbox(), self.id).blue-button.submit-btn= self.isReplay() ? 'Reply' : 'Send'
                     BUTTON.cancel-button.close=Msg.Cancel
 
     .bg-bottom

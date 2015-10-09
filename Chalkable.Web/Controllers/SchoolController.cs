@@ -31,7 +31,14 @@ namespace Chalkable.Web.Controllers
         {
             MasterLocator.SchoolService.UpdateMessagingDisabled(districtId, schoolId, disabled);
             return Json(true);
-        } 
+        }
+
+        [AuthorizationFilter("SysAdmin, DistrictAdmin")]
+        public ActionResult UpdateMessagingSettings(Guid? schoolId, bool studentMessaging, bool studentToClassOnly, bool teacherToStudentMessaging, bool teacherToClassOnly)
+        {
+            MasterLocator.SchoolService.UpdateMessagingSettings(Context.DistrictId, schoolId, studentMessaging, studentToClassOnly, teacherToStudentMessaging, teacherToClassOnly);
+            return Json(true);
+        }
 
         /*[AuthorizationFilter("SysAdmin")]
         public ActionResult Summary(Guid schoolId)
