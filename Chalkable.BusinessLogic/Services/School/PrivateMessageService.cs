@@ -264,6 +264,9 @@ namespace Chalkable.BusinessLogic.Services.School
             bool canSend = false;
             var toPerson = new PersonDataAccess(uow).GetPersonDetails(personId, Context.SchoolLocalId.Value);
 
+            if (toPerson == null)
+                return false;
+
             if (toPerson.RoleRef == CoreRoles.TEACHER_ROLE.Id)
                 return true;
 
@@ -292,6 +295,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
             bool canSend = false;
             var toPerson = new PersonDataAccess(uow).GetPersonDetails(personId, Context.SchoolLocalId.Value);
+            if (toPerson == null)
+                return false;
             var currPersonClasses = new ClassDataAccess(uow).GetStudentClasses(Context.SchoolYearId.Value,
                 Context.PersonId.Value, null);
 
