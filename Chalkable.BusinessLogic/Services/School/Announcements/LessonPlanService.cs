@@ -74,8 +74,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public AnnouncementDetails CreateFromTemplate(int lessonPlanTemplateId, int classId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            
+            BaseSecurity.EnsureStudyCenterEnabled(Context);
             BaseSecurity.EnsureTeacher(Context);
+
             AnnouncementDetails res;
             var annApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(lessonPlanTemplateId, true);
             var appIds = annApps.Select(aa => aa.ApplicationRef).ToList();
@@ -154,8 +155,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 lessonPlan.StartDate = startDate;
                 lessonPlan.EndDate = endDate;
                 lessonPlan.VisibleForStudent = visibleForStudent;
-                lessonPlan.GalleryCategoryRef = galleryCategoryId;
-                if(lessonPlan.IsSubmitted)
+
+                if (Context.SCEnabled) // if only when study center enabled user may add lp to gallery
+                    lessonPlan.GalleryCategoryRef = galleryCategoryId;
+
+                if (lessonPlan.IsSubmitted)
                     ValidateLessonPlan(lessonPlan, da);
                 da.Update(lessonPlan);
                 uow.Commit();
@@ -332,8 +336,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         
         public PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created)
         {
-            var lessonPlans =
-                DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(galleryCategoryId, title, classId, state, Context.PersonId.Value));
+            Trace.Assert(Context.PersonId.HasValue);
+            BaseSecurity.EnsureStudyCenterEnabled(Context);
+
+            var lessonPlans = DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(galleryCategoryId, title, classId, state, Context.PersonId.Value));
 
             switch (sortType)
             {
@@ -406,6 +412,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)
         {
+            BaseSecurity.EnsureStudyCenterEnabled(Context); // only study center custumers can use lesson plan gallery 
+
             var newLessonPlan = GetLessonPlanById(newLessonPlanId);
             DoUpdate(u =>
             {
@@ -426,6 +434,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public void RemoveFromGallery(int lessonPlanId)
         {
+            BaseSecurity.EnsureStudyCenterEnabled(Context); // only study center custumers can use lesson plan gallery 
+
             Trace.Assert(Context.PersonId.HasValue);
             DoUpdate(u =>
             {
