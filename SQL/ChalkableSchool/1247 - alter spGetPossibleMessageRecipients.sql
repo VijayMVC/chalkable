@@ -40,9 +40,9 @@ Insert Into @personT
 Select *
 From vwPerson
 Where 
-	(@filter1 is not null and (FirstName like @filter1 or LastName like @filter1))
-	and (@filter2 is null or (FirstName like @filter2 or LastName like @filter2))
-	and (@filter3 is null or (FirstName like @filter3 or LastName like @filter3))
+	(@filter1 is not null and (lower(FirstName) like lower(@filter1) or lower(LastName) like lower(@filter1)))
+	and (@filter2 is null or (lower(FirstName) like lower(@filter2) or lower(LastName) like lower(@filter2)))
+	and (@filter3 is null or (lower(FirstName) like lower(@filter3) or lower(LastName) like lower(@filter3)))
 	and vwPerson.SchoolRef = @schoolId
 
 
@@ -118,7 +118,8 @@ Begin
 				Delete From @personT Where Id in 
 				(
 					Select p.Id From @personT p 
-					Where Not exists(
+					Where exists(Select * From Student where p.Id = Student.Id) 
+						 And Not exists(
 								Select * From ClassPerson cp1
 								Join Class c on c.Id = cp1.ClassRef
 								Join ClassPerson cp2 on cp2.ClassRef = c.Id
@@ -130,16 +131,19 @@ Begin
 		If @teacherStudentMessagingEnabled = 1
 		Begin
 			If @teacherClassOnly = 1
+			Begin
 				Delete From @personT Where Id in 
 				(
 					Select p.Id From @personT p 
-					Where not exists(
+					Where exists(Select * From Staff where p.Id = Staff.Id)
+						  And not exists(
 								Select * From ClassTeacher
 								Join Class c on c.Id = ClassTeacher.ClassRef
 								Join ClassPerson on ClassPerson.ClassRef = c.Id
 								Where c.SchoolYearRef = @schoolYearId and ClassPerson.PersonRef = @callerId And ClassTeacher.PersonRef = p.Id
 							) 
 				)
+			End
 		End
 		Else
 			Delete From @personT Where Id in (Select [Staff].Id From [Staff])
