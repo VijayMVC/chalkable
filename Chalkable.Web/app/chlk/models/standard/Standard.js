@@ -18,7 +18,7 @@ NAMESPACE('chlk.models.standard', function () {
                 this.announcementId = SJX.fromValue(raw.announcementid, chlk.models.id.AnnouncementId);
                 this.standardId = SJX.fromValue(raw.standardid, chlk.models.id.StandardId);
                 this.grade = SJX.fromValue(raw.grade, String);
-                this.commonCoreStandardCode = SJX.fromValue(raw.ccstandardcode, String);
+                this.commonCoreStandardCode = SJX.fromValue(raw.ccstandardcodes && raw.ccstandardcodes.join(','), String);
                 this.academicBenchmarkId = SJX.fromValue(raw.academicbenchmarkid, String);
                 this.subjectId = SJX.fromValue(raw.standardsubjectid, chlk.models.id.StandardSubjectId);
             },
@@ -58,6 +58,15 @@ NAMESPACE('chlk.models.standard', function () {
                     'ccStandardCode[' + index_ + ']=' + encodeURIComponent(this.getCommonCoreStandardCode() || ''),
                     'standardName[' + index_ + ']=' + encodeURIComponent(this.getName() || '')
                 ].join('&');
+
+                /*index_ = index_ != undefined ? index_|0 : 0;
+                var codes = this.getCommonCoreStandardCode().split(',').map(function(item, i, array){
+                    return 'ccStandardCode[' + i + ']=' + encodeURIComponent(array[i] || '')
+                });
+                return codes.concat([
+                    'standardId[' + index_ + ']=' + encodeURIComponent(this.getAcademicBenchmarkId() || ''),
+                    'standardName[' + index_ + ']=' + encodeURIComponent(this.getName() || '')
+                ]).join('&');*/
             }
 
         ]);
