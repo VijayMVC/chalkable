@@ -32,7 +32,7 @@ namespace Chalkable.Web.Controllers
         {
             if (!SchoolLocator.Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            return Json(PrepareClassGradingBoxes(classId));
+            return await Json(PrepareClassGradingBoxes(classId));
         }
 
         private async Task<ClassGradingBoxesViewData> PrepareClassGradingBoxes(int classId)
@@ -140,10 +140,10 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult GradingPeriodFinalGrade(int classId, int gradingPeriodId, int? averageId)
+        public async Task<ActionResult> GradingPeriodFinalGrade(int classId, int gradingPeriodId, int? averageId)
         {
             var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
-            return Json(GetGradingPeriodFinalGrade(classId, gradingPeriod, averageId));
+            return await Json(GetGradingPeriodFinalGrade(classId, gradingPeriod, averageId));
         }
 
         private async Task<GradingPeriodFinalGradeViewData> GetGradingPeriodFinalGrade(int classId, GradingPeriod gradingPeriod, int? averageId)
