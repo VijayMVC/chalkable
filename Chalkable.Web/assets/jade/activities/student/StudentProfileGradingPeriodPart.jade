@@ -3,7 +3,6 @@
             .class-item
                 +GlanceBox(null, null, {value: classGrading.getStudentAvg().getCalculatedAvg(), title: classGrading.getClazz().getName()})
                 -var gradingsByAnnouncementTypes = classGrading.getGradingByAnnouncementTypes() || []
-                -console.log(gradingsByAnnouncementTypes)
                 if gradingsByAnnouncementTypes.length > 0
                     .announcement-types-info
                         .announcement-types-info-2

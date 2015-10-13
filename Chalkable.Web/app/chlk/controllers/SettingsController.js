@@ -107,7 +107,7 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DISTRICTADMIN
             ])],
-            [chlk.controllers.SidebarButton('settings')],
+            [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.settings.AdminMessaging]],
             function updateMessagingSettingsAction(model) {
                 this.getContext().getSession().set(ChlkSessionConstants.MESSAGING_SETTINGS, model);
