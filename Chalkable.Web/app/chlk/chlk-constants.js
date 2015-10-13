@@ -40,6 +40,7 @@ var ChlkSessionConstants = {
     CURRENT_APP_ID: 'currentAppId',
     CURRENT_APP: 'currentApp',
     CACHED_APP_CATEGORIES: 'cachedCategories',
+    ALL_APP_CATEGORIES: 'all_app_categories',
     API_CACHED: 'apiCached',
     API_ROLES: 'apiRoles',
     CURRENT_MESSAGES: 'currentMessages',

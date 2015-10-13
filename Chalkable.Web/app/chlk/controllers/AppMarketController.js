@@ -84,7 +84,7 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             var result = this.appCategoryService
-                .getCategories()
+                .getAllAppCategories()
                 .attach(this.validateResponse_())
                 .then(function(data){
                     return data.getItems();
@@ -214,7 +214,7 @@ NAMESPACE('chlk.controllers', function (){
                     }
 
                     var result = ria.async.wait([
-                        this.appCategoryService.getCategories(),
+                        this.appCategoryService.getAllAppCategories(),
                         this.appMarketService.getPersonBalance(this.getCurrentPerson().getId())
                     ])
                         .attach(this.validateResponse_())

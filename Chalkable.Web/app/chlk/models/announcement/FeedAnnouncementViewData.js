@@ -136,7 +136,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 if (!viewData)
                     viewData = raw.adminannouncementdata;
                 if (!viewData)
-                    viewData = {hidefromstudents : false};
+                    viewData = {hidefromstudents : raw.hidefromstudents || false};
                 return SJX.fromValue(viewData.hidefromstudents, Boolean);
             },
 
