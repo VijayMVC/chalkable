@@ -1,0 +1,121 @@
+{
+    "hasnextpage": true,
+    "haspreviouspage": false,
+    "pageindex": 0,
+    "pagesize": 10,
+    "totalcount": 20,
+    "totalpages": 2,
+    "data": [
+    {
+        "id": 96,
+        "name": "Demo School",
+        "localid": null,
+        "ncesid": null,
+        "schooltype": null,
+        "schoolurl": null,
+        "timezoneid": "US Eastern Standard Time",
+        "sendemailnotifications": false,
+        "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
+
+    },
+    {
+        "id": 194,
+        "name": "Test Academy",
+        "localid": null,
+        "ncesid": null,
+        "schooltype": null,
+        "schoolurl": null,
+        "timezoneid": "US Eastern Standard Time",
+        "sendemailnotifications": false,
+        "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
+    },
+    {
+        "id": 229,
+        "name": "Chalkable School",
+        "localid": null,
+        "ncesid": null,
+        "schooltype": null,
+        "schoolurl": null,
+        "timezoneid": "US Eastern Standard Time",
+        "sendemailnotifications": false,
+        "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
+    },
+    {
+        "id": 244,
+        "name": "TestSchool",
+        "localid": null,
+        "ncesid": null,
+        "schooltype": null,
+        "schoolurl": null,
+        "timezoneid": "US Eastern Standard Time",
+        "sendemailnotifications": false,
+        "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
+    },
+    {
+        "id": 245,
+        "name": "TestSchool",
+        "localid": null,
+        "ncesid": null,
+        "schooltype": null,
+        "schoolurl": null,
+        "timezoneid": "US Eastern Standard Time",
+        "sendemailnotifications": false,
+        "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
+    },
+    {
+        "id": 246,
+        "name": "TestSchool",
+        "localid": null,
+        "ncesid": null,
+        "schooltype": null,
+        "schoolurl": null,
+        "timezoneid": "US Eastern Standard Time",
+        "sendemailnotifications": false,
+        "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
+    },
+        {
+            "id": 247,
+            "name": "testschool",
+            "localid": null,
+            "ncesid": null,
+            "schooltype": null,
+            "schoolurl": null,
+            "timezoneid": "US Eastern Standard Time",
+            "sendemailnotifications": false,
+            "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
+        },
+        {
+            "id": 433,
+            "name": "tester",
+            "localid": null,
+            "ncesid": null,
+            "schooltype": null,
+            "schoolurl": null,
+            "timezoneid": "US Eastern Standard Time",
+            "sendemailnotifications": false,
+            "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
+        },
+        {
+            "id": 435,
+            "name": "tester",
+            "localid": null,
+            "ncesid": null,
+            "schooltype": null,
+            "schoolurl": null,
+            "timezoneid": "US Eastern Standard Time",
+            "sendemailnotifications": false,
+            "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
+        },
+        {
+            "id": 436,
+            "name": "tester",
+            "localid": null,
+            "ncesid": null,
+            "schooltype": null,
+            "schoolurl": null,
+            "timezoneid": "US Eastern Standard Time",
+            "sendemailnotifications": false,
+            "districtid": "4d37995f-6269-4019-a6f0-1510c2014535"
+        }
+    ]
+}
