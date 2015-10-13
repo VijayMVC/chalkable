@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
@@ -56,6 +57,11 @@ namespace Chalkable.Web.Controllers
                     Data = response, 
                     SerializationDepth = serializationDepth
                 };
+        }
+
+        public async Task<ActionResult> Json<TResult>(Task<TResult> task, int serializationDepth = 10)
+        {
+            return Json(await task, serializationDepth);
         }
 
         private bool HideSensitiveData()
