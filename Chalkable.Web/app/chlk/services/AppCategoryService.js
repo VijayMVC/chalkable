@@ -25,6 +25,23 @@ NAMESPACE('chlk.services', function () {
                                         }, this);
             },
 
+
+
+            ria.async.Future, function getAllAppCategories(){
+                var cachedCategories = this.getContext().getSession().get(ChlkSessionConstants.ALL_APP_CATEGORIES);
+                var maxInt = (-1 - (1<<31));
+
+                return cachedCategories ? ria.async.DeferredData(cachedCategories)
+                    : this.getPaginatedList('Category/List.json', chlk.models.apps.AppCategory, {
+                    start: 0,
+                    count: maxInt
+                })
+                .then(function(data){
+                    this.getContext().getSession().set(ChlkSessionConstants.ALL_APP_CATEGORIES, data);
+                    return data;
+                }, this);
+            },
+
             [[String, String]],
             ria.async.Future, function addCategory(name, description) {
                 return this
