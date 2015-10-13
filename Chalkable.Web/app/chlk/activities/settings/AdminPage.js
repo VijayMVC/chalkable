@@ -3,7 +3,7 @@ REQUIRE('chlk.templates.settings.AdminMessagingTpl');
 
 NAMESPACE('chlk.activities.settings', function () {
 
-    var timer;
+    var timer, needToSubmit;
 
     /** @class chlk.activities.settings.AdminPage */
     CLASS(
@@ -16,9 +16,19 @@ NAMESPACE('chlk.activities.settings', function () {
             VOID, function checkboxSelect(node, event, selected_){
                 clearTimeout(timer);
 
+                needToSubmit = true;
+
                 timer = setTimeout(function(){
                     node.parent('form').trigger('submit');
+                    needToSubmit = false;
                 }, 2000);
+            },
+
+            OVERRIDE, VOID, function onStop_() {
+                if(needToSubmit)
+                    this.dom.find('form').trigger('submit');
+                needToSubmit = false;
+                BASE();
             },
 
             [ria.mvc.DomEventBind('change', '.all-students, .teachers-to-students')],

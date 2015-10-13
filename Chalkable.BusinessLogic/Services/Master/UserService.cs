@@ -249,6 +249,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 EnsureDistrictAdminAccess(Context.Claims);
                 Context.Role = role;
                 Context.RoleId = role.Id;
+                UpdateContext();
                 return Context;
             }
             if (role == CoreRoles.TEACHER_ROLE)
@@ -256,9 +257,23 @@ namespace Chalkable.BusinessLogic.Services.Master
                 EnsureTeacherChalkableAccess(Context.Claims);
                 Context.Role = role;
                 Context.RoleId = role.Id;
+                UpdateContext();
                 return Context;
             }
             throw new NotImplementedException();
+        }
+
+        private void UpdateContext()
+        {
+            //reset messaging settings 
+            if (Context.DistrictId.HasValue)
+            {
+                var settings = ServiceLocator.SchoolService.GetDistrictMessaginSettings(Context.DistrictId.Value);
+                Context.StudentClassMessagingOnly = settings.StudentToClassMessagingOnly;
+                Context.StudentMessagingEnabled = settings.StudentMessagingEnabled;
+                Context.TeacherStudentMessaginEnabled = settings.TeacherToStudentMessaginEnabled;
+                Context.TeacherClassMessagingOnly = settings.TeacherToClassMessagingOnly;
+            }
         }
 
         private void EnsureDistrictAdminAccess(IList<ClaimInfo> claimInfos)

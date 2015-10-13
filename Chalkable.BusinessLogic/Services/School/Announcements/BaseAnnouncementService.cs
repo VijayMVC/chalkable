@@ -173,7 +173,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 throw new UnassignedUserException();
 
             DateTime? tillDateToUpdate;
-            switch ((MarkDoneOptions)option)
+            switch (option)
             {
                 case MarkDoneOptions.Till30Days:
                     tillDateToUpdate = Context.NowSchoolTime.AddMonths(-1);
