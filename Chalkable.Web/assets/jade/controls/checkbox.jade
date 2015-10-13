@@ -1,0 +1,10 @@
+mixin Checkbox(name, val, disabled, withLabel, isReadOnly)
+    -attributes.checked = val
+    -attributes.disabled = disabled
+    -attributes.readonly = isReadOnly
+    -attributes = self.prepareData(attributes, val)
+    +Hidden(name, false)(data-value=val, class="hidden-checkbox", id=attributes.id + '-hidden', readonly = isReadOnly)
+    input(name = name, type="checkbox", class="checkbox")(attributes)
+    if withLabel
+        label(for = attributes.id)
+
