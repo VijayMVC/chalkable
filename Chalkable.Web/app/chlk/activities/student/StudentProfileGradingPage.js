@@ -45,6 +45,7 @@ NAMESPACE('chlk.activities.student', function () {
             Boolean, function gpClick(node, event){
                 node.parent('.gp-container').removeClass('opened').find('.announcement-types-info').setCss('height', 0);
                 node.parent('.gp-container').find('.grades-avg-by-type-no-data').addClass('x-hidden');
+                ria.dom.Dom('.student-profile-grading-popup').remove();
                 return false;
             }
         ]);

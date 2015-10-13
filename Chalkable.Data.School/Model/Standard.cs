@@ -27,7 +27,7 @@ namespace Chalkable.Data.School.Model
         public bool IsActive { get; set; }
         public Guid? AcademicBenchmarkId { get; set; }
         [NotDbFieldAttr]
-        public string CCStandardCode { get; set; }
+        public IList<string> CCStandardCodes { get; set; }
     }
     
     public class StandardTreePath
