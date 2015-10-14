@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.StiConnector.Connectors.Model;
@@ -7,7 +8,7 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface  IGradingStandardService
     {
-        IList<GradingStandardInfo> GetGradingStandards(int classId, int? gradingPeriodId, bool reCalculateStandards = true); 
+        Task<IList<GradingStandardInfo>> GetGradingStandards(int classId, int? gradingPeriodId, bool reCalculateStandards = true); 
         GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int gradingPeriodId, int? alphaGradeId, string note);  
     }
 
@@ -16,10 +17,10 @@ namespace Chalkable.BusinessLogic.Services.School
         public GradingStandardService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
         }
-        public IList<GradingStandardInfo> GetGradingStandards(int classId, int? gradingPeriodId, bool reCalculateStandards = true)
+        public async Task<IList<GradingStandardInfo>> GetGradingStandards(int classId, int? gradingPeriodId, bool reCalculateStandards = true)
         {
             if (reCalculateStandards && GradebookSecurity.CanReCalculateGradebook(Context)) 
-                ConnectorLocator.GradebookConnector.Calculate(classId);
+                await ConnectorLocator.GradebookConnector.Calculate(classId);
             var standardScores = ConnectorLocator.StandardScoreConnector.GetStandardScores(classId, null, gradingPeriodId);
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
             return GradingStandardInfo.Create(standardScores, standards);

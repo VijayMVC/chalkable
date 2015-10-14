@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.StiConnector.Connectors.Model;
@@ -37,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             StandardScoreStorage = new DemoStandardScoreStorage();
         }
 
-        public IList<GradingStandardInfo> GetGradingStandards(int classId, int? gradingPeriodId, bool reCalculateStandards = true)
+        public Task<IList<GradingStandardInfo>> GetGradingStandards(int classId, int? gradingPeriodId, bool reCalculateStandards = true)
         {
             var standardScores = GetStandardScores(classId, null, gradingPeriodId);
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
@@ -48,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 if (standard != null)
                     res.Add(GradingStandardInfo.Create(standardScore, standard));
             }
-            return res;
+            return new Task<IList<GradingStandardInfo>>(() => res);
         }
 
         public GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int gradingPeriodId, int? alphaGradeId, string note)
