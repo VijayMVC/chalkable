@@ -28,7 +28,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher", true, new[] { AppPermissionType.Grade, AppPermissionType.Class })]
-        public ActionResult ClassSummary(int classId)
+        public async Task<ActionResult> ClassSummary(int classId)
         {
             if (!SchoolLocator.Context.PersonId.HasValue)
                 throw new UnassignedUserException();
