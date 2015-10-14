@@ -13,7 +13,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string Name { get; set; }
         public string Description { get; set; }
         public int StandardSubjectId { get; set; }
-        public string CCStandardCode { get; set; }
+        public IList<string> CCStandardCodes { get; set; }
         public Guid? AcademicBenchmarkId { get; set; }
         public bool IsActive { get; set; }
 
@@ -27,7 +27,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             ParentStandardId = standard.ParentStandardRef;
             StandardSubjectId = standard.StandardSubjectRef;
             AcademicBenchmarkId = standard.AcademicBenchmarkId;
-            CCStandardCode = standard.CCStandardCode;
+            CCStandardCodes = standard.CCStandardCodes;
             IsActive = standard.IsActive;
         }
         

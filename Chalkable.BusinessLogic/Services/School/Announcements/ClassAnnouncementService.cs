@@ -603,7 +603,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId)
         {
-            //waiting iNow api
+            SetAnnouncementsAsComplete(tillDateToUpdate, true);
         }
     }
 }

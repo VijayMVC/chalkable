@@ -3,9 +3,12 @@ REQUIRE('chlk.activities.settings.DashboardPage');
 REQUIRE('chlk.activities.settings.TeacherPage');
 REQUIRE('chlk.activities.settings.PreferencesPage');
 REQUIRE('chlk.activities.settings.StudentPage');
+REQUIRE('chlk.activities.settings.AdminPage');
 REQUIRE('chlk.models.settings.Dashboard');
 REQUIRE('chlk.models.settings.Preference');
+REQUIRE('chlk.models.settings.AdminMessaging');
 REQUIRE('chlk.services.PreferenceService');
+REQUIRE('chlk.services.SchoolService');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -18,6 +21,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.ApplicationService, 'appsService',
+
+            [ria.mvc.Inject],
+            chlk.services.SchoolService, 'schoolService',
 
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.SYSADMIN
@@ -87,6 +93,27 @@ NAMESPACE('chlk.controllers', function (){
             function dashboardTeacherAction() {
                 var teacherSettings = new chlk.models.settings.TeacherSettings(this.getCurrentPerson().getId());
                 return this.PushView(chlk.activities.settings.TeacherPage, ria.async.DeferredData(teacherSettings));
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DISTRICTADMIN
+            ])],
+            [chlk.controllers.SidebarButton('settings')],
+            function dashboardAdminAction() {
+                var adminSettings = this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_SETTINGS, null);
+                return this.PushView(chlk.activities.settings.AdminPage, ria.async.DeferredData(adminSettings));
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DISTRICTADMIN
+            ])],
+            [chlk.controllers.NotChangedSidebarButton()],
+            [[chlk.models.settings.AdminMessaging]],
+            function updateMessagingSettingsAction(model) {
+                this.getContext().getSession().set(ChlkSessionConstants.MESSAGING_SETTINGS, model);
+                this.schoolService.updateMessagingSettings(null, model.isAllowedForStudents(), model.isAllowedForStudentsInTheSameClass(),
+                    model.isAllowedForTeachersToStudents(), model.isAllowedForTeachersToStudentsInTheSameClass());
+                return null;
             },
 
             [chlk.controllers.AccessForRoles([

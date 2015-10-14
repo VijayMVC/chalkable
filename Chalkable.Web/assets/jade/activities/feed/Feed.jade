@@ -75,9 +75,9 @@ div(class = noComplete ? "no-complete" : "").feed-container
                                 onClose: function( selectedDate ) {
                                     $( "#fromDate" ).datepicker( "option", "maxDate", selectedDate );
                                 },
-                                minDate: self.getEndDate() && self.getEndDate().getDate()
+                                minDate: self.getStartDate() && self.getStartDate().getDate()
                             },
-                            data-value=self.getStartDate() ? self.getStartDate().format('mm/dd/yy') : ''
+                            data-value=self.getEndDate() ? self.getEndDate().format('mm/dd/yy') : ''
                         )#toDate.start-end-picker
                         br
                         Button(type="submit", name="submitType", value="sort", disabled = !self.getStartDate() || self.getEndDate())#date-ok-button.blue-button=Msg.OK

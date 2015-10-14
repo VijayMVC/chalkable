@@ -439,6 +439,11 @@ NAMESPACE('chlk.lib.dom', function () {
                 if(this.getAttr('type') == 'checkbox'){
                     var node = this.parent().find('.hidden-checkbox');
                     node.setValue(value);
+                    node.setAttr('checked', value);
+                    this.setAttr('checked', value);
+                    node.parent('.slide-checkbox').setAttr('checked', value);
+                    node.setProp('checked', value);
+                    this.setProp('checked', value);
                     node.setData('value', value);
                 }
                 if(this._dom.is('select')){

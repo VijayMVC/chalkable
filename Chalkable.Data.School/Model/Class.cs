@@ -7,6 +7,8 @@ namespace Chalkable.Data.School.Model
     public class Class
     {
         public const string ID_FIELD = "Id";
+        public const string NAME_FIELD = "Name";
+        public const string CLASS_NUMBER_FIELD = "ClassNumber";
         public const string SCHOOL_YEAR_REF = "SchoolYearRef";
         public const string PRIMARY_TEACHER_REF_FIELD = "PrimaryTeacherRef";
         public const string ROOM_REF_FIELD = "RoomRef";

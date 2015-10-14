@@ -78,9 +78,9 @@ namespace Chalkable.Data.School.DataAccess
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
             {
-                {"@filter1", filter1},
-                {"@filter2", filter2},
-                {"@filter3", filter3},
+                {"@filter1", !string.IsNullOrWhiteSpace(filter1) ? string.Format(FILTER_FORMAT,filter1) : null},
+                {"@filter2", !string.IsNullOrWhiteSpace(filter2) ? string.Format(FILTER_FORMAT,filter2) : null},
+                {"@filter3", !string.IsNullOrWhiteSpace(filter3) ? string.Format(FILTER_FORMAT,filter3) : null},
             };
             using (var reader = ExecuteStoredProcedureReader("spSearchClasses", ps))
             {

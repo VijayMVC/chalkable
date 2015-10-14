@@ -59,7 +59,7 @@ namespace Chalkable.Data.Master.Model
         public const string ID_FIELD = "Id";
         public const string DISTRICT_REF_FIELD = "DistrictRef";
         public const string LOCAL_ID_FIELD = "LocalId";
-     
+
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public Guid DistrictRef { get; set; }
@@ -72,6 +72,19 @@ namespace Chalkable.Data.Master.Model
         public bool IsLESyncComplete { get; set; }
         public DateTime? StudyCenterEnabledTill { get; set; }
         public bool IsMessagingDisabled { get; set; }
+
+        public bool StudentMessagingEnabled { get; set; }
+        public bool StudentToClassMessagingOnly { get; set; }
+        public bool TeacherToStudentMessaginEnabled { get; set; }
+        public bool TeacherToClassMessagingOnly { get; set; }
+    }
+
+    public class MessagingSettings
+    {
+        public bool StudentMessagingEnabled { get; set; }
+        public bool StudentToClassMessagingOnly { get; set; }
+        public bool TeacherToStudentMessaginEnabled { get; set; }
+        public bool TeacherToClassMessagingOnly { get; set; }
     }
 
     public class SchoolUser

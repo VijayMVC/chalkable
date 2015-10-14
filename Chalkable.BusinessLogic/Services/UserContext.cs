@@ -44,6 +44,11 @@ namespace Chalkable.BusinessLogic.Services
         public bool LESyncComplete { get; set; }
         public bool MessagingDisabled { get; set; }
 
+        public bool StudentMessagingEnabled { get; set; }
+        public bool StudentClassMessagingOnly { get; set; }
+        public bool TeacherStudentMessaginEnabled { get; set; }
+        public bool TeacherClassMessagingOnly { get; set; }
+
         public int? SchoolLocalId { get; set; }
         public Guid? DeveloperId { get; set; }
         public int? PersonId { get; set; }
@@ -121,6 +126,10 @@ namespace Chalkable.BusinessLogic.Services
                     LEEnabled = school.IsLEEnabled;
                     LESyncComplete = school.IsLESyncComplete;
                     MessagingDisabled = school.IsMessagingDisabled;
+                    StudentMessagingEnabled = school.StudentMessagingEnabled;
+                    StudentClassMessagingOnly = school.StudentToClassMessagingOnly;
+                    TeacherClassMessagingOnly = school.TeacherToClassMessagingOnly;
+                    TeacherStudentMessaginEnabled = school.TeacherToStudentMessaginEnabled;
                 }
                 if (schoolYear != null)
                 {

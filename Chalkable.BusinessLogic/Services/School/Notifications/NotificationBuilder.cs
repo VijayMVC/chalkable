@@ -77,7 +77,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         private const string ROLE_ADMIN = "Admin";
 
         private Notification BuildNotificationFromTemplate(string templateName, NotificationType type, Person recipient, Announcement announcement = null
-            , Guid? applicationId = null, MarkingPeriod markingPeriod = null, PrivateMessageDetails privateMessage = null, Person asker = null, object other = null, string baseUrl = null)
+            , Guid? applicationId = null, MarkingPeriod markingPeriod = null, PrivateMessage privateMessage = null, Person asker = null, object other = null, string baseUrl = null)
         {
             var parameters = new List<string> {GetBaseUrlByRole(recipient, baseUrl)};
             var notification = new NotificationDetails
@@ -234,7 +234,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         }
 
 
-        public Notification BuildPrivateMessageNotification(DateTime created, PrivateMessageDetails privateMessage, Person fromPerson, Person toPerson)
+        public Notification BuildPrivateMessageNotification(DateTime created, PrivateMessage privateMessage, Person fromPerson, Person toPerson)
         {
             var fromPersonRole = CoreRoles.GetById(fromPerson.RoleRef);
             var otherModel = new

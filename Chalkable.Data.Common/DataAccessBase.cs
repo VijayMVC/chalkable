@@ -13,7 +13,7 @@ namespace Chalkable.Data.Common
     public class DataAccessBase<TEntity> where TEntity : new()
     {
         protected const string FILTER_FORMAT = "%{0}%";
-        private const string ALL_COUNT_FIELD = "AllCount";
+        private const string ALL_COUNT_FIELD = Orm.Orm.ALL_COUNT_FIELD;
 
         private UnitOfWork unitOfWork;
         public DataAccessBase(UnitOfWork unitOfWork)

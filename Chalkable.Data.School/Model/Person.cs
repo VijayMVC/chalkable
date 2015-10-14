@@ -22,6 +22,8 @@ namespace Chalkable.Data.School.Model
         
         public const string USER_ID_FIELD = "UserId";
 
+        public const string VW_PERSON = "vwPerson";
+
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string FirstName { get; set; }

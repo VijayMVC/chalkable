@@ -42,8 +42,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\ABToCCMappingImportModel.cs" />
+    <Compile Include="Models\AlMappingImportModel.cs" />
     <Compile Include="Models\CCStandardImportModel.cs" />
     <Compile Include="Models\CsvContainer.cs" />
+    <Compile Include="Models\NSSMappingStorage.cs" />
+    <Compile Include="Models\StandardMappingImportModel.cs" />
+    <Compile Include="Services\ImportAlMappingService.cs" />
     <Compile Include="Services\ImportCCStandardService.cs" />
     <Compile Include="Services\ImportService.cs" />
     <Compile Include="Services\ImportABToCCMappingsService.cs" />
