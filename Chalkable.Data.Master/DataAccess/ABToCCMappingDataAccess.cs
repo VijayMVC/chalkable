@@ -22,6 +22,8 @@ namespace Chalkable.Data.Master.DataAccess
 
         public IList<AbToCCMappingDetails> GetDetailsListByAdIds(IList<Guid> academicBenchamrIds)
         {
+            if(academicBenchamrIds == null || academicBenchamrIds.Count == 0)
+                return new List<AbToCCMappingDetails>();
             var query = SelectDetailsQuery();
             var idsStr = academicBenchamrIds.Select(x => $"'{x.ToString()}'").JoinString(",");
             query.Sql.AppendFormat(
