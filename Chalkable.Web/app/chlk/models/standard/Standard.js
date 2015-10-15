@@ -63,13 +63,18 @@ NAMESPACE('chlk.models.standard', function () {
                     this.setCommonCoreStandardCode(ccStandardCode_);
             },
 
-            String, function getUrlComponents(index_) {
+            String, function getUrlComponents(index_, nedIsAllStandardCodes_) {
                 index_ = index_ != undefined ? index_|0 : 0;
-                return [
+                var resArr = [
                     'standardId[' + index_ + ']=' + encodeURIComponent(this.getAcademicBenchmarkId() || ''),
                     'ccStandardCode[' + index_ + ']=' + encodeURIComponent(this.getCommonCoreStandardCode() || ''),
                     'standardName[' + index_ + ']=' + encodeURIComponent(this.getName() || '')
-                ].join('&');
+                ]
+
+                if(nedIsAllStandardCodes_)
+                    resArr.push('isAllStandardCodes=' + (!this.commonCoreStandardCode || this.commonCoreStandardCode.length < 2))
+
+                return resArr.join('&');
 
                 /*index_ = index_ != undefined ? index_|0 : 0;
                 var codes = this.getCommonCoreStandardCode().split(',').map(function(item, i, array){
