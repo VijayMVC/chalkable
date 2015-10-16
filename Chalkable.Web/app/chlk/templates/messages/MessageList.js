@@ -26,7 +26,13 @@ NAMESPACE('chlk.templates.messages', function () {
             [ria.templates.ModelPropertyBind],
             Number, 'start',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'classOnly',
+
             function getNoMessagesText(){
+                if(this.isClassOnly())
+                    return 'No messages sent to classes';
+
                 if(!this.getRole())
                     return 'No messages';
                 var role = this.getRole().indexOf('admin') > -1 ? 'admin' : this.getRole();

@@ -13,10 +13,10 @@ namespace Chalkable.Web.Controllers
     public partial class PrivateMessageController : ChalkableController
     {
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult List(int? start, int? count, bool? read, bool? income, string role, string keyword)
+        public ActionResult List(int? start, int? count, bool? read, bool? income, string role, string keyword, bool classOnly)
         {
             var messageType = (income ?? true) ? PrivateMessageType.Income : PrivateMessageType.Sent;
-            var res = SchoolLocator.PrivateMessageService.GetMessages(start ?? 0, count ?? 10, read, messageType, role, keyword);
+            var res = SchoolLocator.PrivateMessageService.GetMessages(start ?? 0, count ?? 10, read, messageType, role, keyword, classOnly);
             return Json(res.Transform(PrivateMessageComplexViewData.Create));
         }
 
