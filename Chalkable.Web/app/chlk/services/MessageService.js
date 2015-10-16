@@ -11,15 +11,16 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.MessageService*/
     CLASS(
         'MessageService', EXTENDS(chlk.services.BaseService), [
-            [[Number, Boolean, Boolean, String, String]],
-            ria.async.Future, function getMessages(start_, read_, income_, role_, keyword_) {
+            [[Number, Boolean, Boolean, String, String, Boolean]],
+            ria.async.Future, function getMessages(start_, read_, income_, role_, keyword_, classOnly_) {
                 return this.getPaginatedList('PrivateMessage/List.json', chlk.models.messages.Message, {
                     start: start_,
                     count: 10,
                     read: read_,
                     income: income_ !== false,
                     role: role_ ? role_ : "",
-                    keyword: keyword_
+                    keyword: keyword_,
+                    classOnly: classOnly_ || false
                 });
             },
 

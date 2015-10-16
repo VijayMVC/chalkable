@@ -24,23 +24,24 @@ NAMESPACE('chlk.controllers', function (){
             chlk.services.PersonService, 'personService',
 
             [chlk.controllers.SidebarButton('messages')],
-            [[Boolean, Boolean, String, String, Number]],
-            function pageAction(postback_, inbox_, role_, keyword_, start_) {
+            [[Boolean, Boolean, String, String, Number, Boolean]],
+            function pageAction(postback_, inbox_, role_, keyword_, start_, classOnly_) {
                 inbox_ = inbox_ || false;
-                var result = this.getMessages_(inbox_, role_, keyword_, start_);
+                var result = this.getMessages_(inbox_, role_, keyword_, start_, classOnly_);
                 return this.PushOrUpdateView(chlk.activities.messages.MessageListPage, result);
             },
-            [[Boolean, String, String, Number]],
-            ria.async.Future, function getMessages_(inbox_, role_, keyword_, start_){
+
+            [[Boolean, String, String, Number, Boolean]],
+            ria.async.Future, function getMessages_(inbox_, role_, keyword_, start_, classOnly_){
                 role_ = role_ || null;
                 keyword_ = keyword_ || null;
 
                 return this.messageService
-                    .getMessages(start_ | 0, null, inbox_, role_, keyword_)
+                    .getMessages(start_ | 0, null, inbox_, role_, keyword_, classOnly_)
                     .attach(this.validateResponse_())
                     .then(function(model){
                         this.getContext().getSession().set(ChlkSessionConstants.CURRENT_MESSAGES, model.getItems());
-                        return this.convertModel(model, inbox_, role_, keyword_, start_ || 0);
+                        return this.convertModel(model, inbox_, role_, keyword_, start_ || 0, classOnly_);
                     }, this);
             },
 
@@ -59,16 +60,16 @@ NAMESPACE('chlk.controllers', function (){
                 if(res){
                     res = res.attach(this.validateResponse_())
                         .then(function(x){
-                            return this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), model.getStart());
+                            return this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), model.getStart(), model.isClassOnly());
                         }, this);
                 }else{
-                    res = this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), 0);
+                    res = this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), 0, model.isClassOnly());
                 }
                 return  this.UpdateView(chlk.activities.messages.MessageListPage, res);
             },
 
-            [[chlk.models.common.PaginatedList, Boolean, String, String, Number]],
-            function convertModel(list_, inbox_, role_, keyword_, start_)
+            [[chlk.models.common.PaginatedList, Boolean, String, String, Number, Boolean]],
+            function convertModel(list_, inbox_, role_, keyword_, start_, classOnly_)
             {
                 var result = new chlk.models.messages.MessageList();
                 result.setMessages(list_);
@@ -77,7 +78,7 @@ NAMESPACE('chlk.controllers', function (){
                 result.setKeyword(keyword_);
                 result.setStart(start_);
                 result.setDisabledMessaging(this.isDisabledToMessage());
-
+                result.setClassOnly(classOnly_ || false);
                 return new ria.async.DeferredData(result);
             },
 
