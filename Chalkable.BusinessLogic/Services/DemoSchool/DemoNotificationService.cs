@@ -140,7 +140,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             AddNotifications(notifications);
         }
 
-        public void AddAnnouncementNewAttachmentNotificationToTeachers(int announcementId, AnnouncementType announcementType, int fromPersonId)
+        public void AddAnnouncementNewAttachmentNotificationToOwner(int announcementId, AnnouncementType announcementType, int fromPersonId)
         {
             throw new NotImplementedException();
             //var announcement = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
