@@ -31,6 +31,12 @@ NAMESPACE('chlk.activities.announcement', function () {
                     node.setValue('');
             },
 
+            [ria.mvc.DomEventBind('click', '.calendar-mark')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function dateMarkClick(node, event){
+                node.parent().find('.hasDatepicker').trigger('focus');
+            },
+
             [ria.mvc.DomEventBind('click', 'form')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function formClick(node, event){
