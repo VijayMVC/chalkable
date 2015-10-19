@@ -133,12 +133,17 @@ A
         box-sizing: border-box
         padding: 0 15px
         border-radius: 2px
+        height: 49px
 
     input
-        &, &:-webkit-autofill
-            background-color: $white !important
-            color: $gray_dark
-            border-color: $silver_dark
+        background-color: $white !important
+        color: $gray_dark
+        border-color: $silver_dark
+
+    input:-webkit-autofill
+        background-color: $white !important
+        color: $gray_dark
+        border-color: $silver_dark
 
     button
         background: $blue
