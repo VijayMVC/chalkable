@@ -1,0 +1,13 @@
+//requires: tplObj instanceOf chlk.templates.profile.BaseProfileTpl
+mixin ProfileTopBar(tplObj, pressedActionName)
+    .action-bar
+        .items
+            +ActionLinkList(tplObj.buildActionLinkModels(pressedActionName))
+            block
+
+//requires: tplObj instanceOf chlk.templates.profile.BaseProfileTpl
+mixin UserProfileTopBar(tplObj, user, pressedActionName)
+    +ProfileTopBar(tplObj, pressedActionName)
+        if user.getId() == tplObj.getCurrentUser().getId() && !tplObj.getUserRole().isAdmin()
+            .right
+                +ActionLink('settings', 'dashboard').settings Settings
