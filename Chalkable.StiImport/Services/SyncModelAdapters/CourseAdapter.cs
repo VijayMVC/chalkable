@@ -40,6 +40,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 {
                     minDist = d;
                     closestDep = departmenPairs[i];
+                } else if (name.Contains(departmenPairs[i].First))
+                {
+                    minDist = name.Length - departmenPairs[i].First.Length;
+                    closestDep = departmenPairs[i];
                 }
             }
             return closestDep?.Second;
