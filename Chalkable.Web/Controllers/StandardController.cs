@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
+using Chalkable.Data.Common.Enums;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
@@ -66,10 +67,18 @@ namespace Chalkable.Web.Controllers
             return Json(CommonCoreStandardViewData.Create(standards));
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true)]
+        public ActionResult GetCommonCoreStandardsByAbIds(GuidList academicBenchmarkIds)
+        {
+            var abtoccMappings = MasterLocator.CommonCoreStandardService.GetAbtoCCMappingsByAbIds(academicBenchmarkIds);
+            return Json(AbToCCMappingViewData.Create(abtoccMappings));
+        }
+
         public ActionResult GetCommonCoreStandardsByIds(GuidList standardsIds)
         {
             var standards = MasterLocator.CommonCoreStandardService.GetStandardsByIds(standardsIds ?? new List<Guid>());
             return Json(CommonCoreStandardViewData.Create(standards));
         }
+        
     }
 }

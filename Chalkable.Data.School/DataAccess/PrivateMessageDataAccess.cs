@@ -49,6 +49,7 @@ namespace Chalkable.Data.School.DataAccess
             if (roles != null && roles.Count > 0)
                 dbQuery.Sql.Append($" And {Person.ROLE_REF_FIELD} in ({roles.JoinString(",")})");
 
+
             if (!string.IsNullOrEmpty(keyword))
             {
                 keyword = "%" + keyword + "%";
@@ -70,14 +71,14 @@ namespace Chalkable.Data.School.DataAccess
 
         public SentPrivateMessage GetSentPrivateMessage(int id, int callerId)
         {
-            return GetSentMessages(callerId, id, null, null, 0, 1).First();
+            return GetSentMessages(callerId, id, null, null, 0, 1, false).First();
         }
 
         public PaginatedList<SentPrivateMessage> GetSentMessages(int callerId, int? messageId, IList<int> roles, string keyword,
-                                                               int start, int count)
+                                                               int start, int count, bool classOnly)
         {
             var privateMsgResultSet = $" distinct {nameof(PrivateMessage)}.* ";
-            var query = BuildSentMessageQuery(callerId, messageId, roles, keyword, privateMsgResultSet);
+            var query = BuildSentMessageQuery(callerId, messageId, roles, keyword, privateMsgResultSet, classOnly);
             var paginatedQuery = Orm.PaginationSelect(query, PrivateMessage.SENT_FIELD, Orm.OrderType.Desc, start, count);
             var classN = nameof(Class);
             var recipientsSet = $@" distinct 
@@ -100,7 +101,7 @@ namespace Chalkable.Data.School.DataAccess
                                          {classN}.{Class.CLASS_NUMBER_FIELD} as {Class.CLASS_NUMBER_FIELD}
                                   ";
 
-            var recipientsQuery = BuildSentMessageQuery(callerId, messageId, roles, keyword, recipientsSet);
+            var recipientsQuery = BuildSentMessageQuery(callerId, messageId, roles, keyword, recipientsSet, classOnly);
             var res = new DbQuery(new List<DbQuery> {paginatedQuery, recipientsQuery});
             return ReadPaginatedResult(res, start, count, ReadSentMessages);
         }
@@ -135,7 +136,7 @@ namespace Chalkable.Data.School.DataAccess
             return res;
         }
 
-        private DbQuery BuildSentMessageQuery(int callerId, int? messageId, IList<int>  roles, string keyword, string resultSet)
+        private DbQuery BuildSentMessageQuery(int callerId, int? messageId, IList<int>  roles, string keyword, string resultSet, bool classOnly)
         {
             var dbQuery = new DbQuery();
             var privateMsgT = typeof (PrivateMessage);
@@ -159,7 +160,15 @@ namespace Chalkable.Data.School.DataAccess
             conds.BuildSqlWhere(dbQuery, privateMsgT.Name);
 
             if (roles != null && roles.Count > 0)
+            {
                 dbQuery.Sql.Append($" And {recipientT}.{Person.ROLE_REF_FIELD} in ({roles.JoinString(",")})");
+                if (roles.Any(x => x == CoreRoles.STUDENT_ROLE.Id))
+                    dbQuery.Sql.Append($" And {PrivateMessageRecipient.RECIPIENT_CLASS_REF_FIELD} Is Null");
+            }
+            else if (classOnly)
+            {
+                dbQuery.Sql.Append($" And {PrivateMessageRecipient.RECIPIENT_CLASS_REF_FIELD} Is Not Null");
+            }
 
             if (!string.IsNullOrEmpty(keyword))
             {

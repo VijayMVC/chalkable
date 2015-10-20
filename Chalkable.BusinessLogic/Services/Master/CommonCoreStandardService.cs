@@ -19,6 +19,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         void AddABToCCMapping(IList<ABToCCMapping> abtoCcMappings);
         IList<ABToCCMapping> GetABToCCMappings(Guid? academicBenchmarkId, Guid? ccStandardId);
+        IList<AbToCCMappingDetails> GetAbtoCCMappingsByAbIds(IList<Guid> academicBenchmarkIds); 
         IList<string> GetStandardCodesByABId(Guid academicBenchmarkIds);
         IDictionary<Guid, IList<CommonCoreStandard>> GetAbToCCMapper();
         void BuildAbToCCMapper();
@@ -91,6 +92,11 @@ namespace Chalkable.BusinessLogic.Services.Master
             if(ccStandardId.HasValue)
                 conds.Add(ABToCCMapping.CC_STANADARD_REF_FIELD, ccStandardId);
             return DoRead(uow => new ABToCCMappingDataAccess(uow).GetAll(conds));
+        }
+
+        public IList<AbToCCMappingDetails> GetAbtoCCMappingsByAbIds(IList<Guid> academicBenchmarkIds)
+        {
+            return DoRead(u => new ABToCCMappingDataAccess(u).GetDetailsListByAdIds(academicBenchmarkIds));
         }
 
         public IList<string> GetStandardCodesByABId(Guid academicBenchmarkIds)

@@ -2143,7 +2143,9 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AnnouncementId, chlk.models.id.GroupId]],
         function removeRecipientAction(announcementId, recipientId){
 
-            var res = this.groupService.list()
+            var res = this.ShowConfirmBox('Are you sure you want to remove that group from announcement?', '')
+                .thenCall(this.groupService.list, [])
+                .attach(this.validateResponse_())
                 .then(function(groups){
                     var groupIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []);
                     groupIds = groupIds.filter(function(id){
@@ -2167,8 +2169,7 @@ NAMESPACE('chlk.controllers', function (){
                         .then(function(){
                             return model;
                         }, this)
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
 
             return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, res, 'recipients');
         },

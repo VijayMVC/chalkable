@@ -159,6 +159,8 @@ NAMESPACE('chlk.controls', function () {
                 return {
                     minLength: this.getMinLength(),
                     source: function( request, response ) {
+                        var node = this.element;
+                        node.addClass('pending');
                         serviceF(request.term)
                             .then(function(data){
                                 if(data instanceof chlk.models.common.PaginatedList)
@@ -222,6 +224,7 @@ NAMESPACE('chlk.controls', function () {
                         var top = parseInt(menu.getCss('top'));
                         if(top + mHeight > wHeight)
                             menu.setCss('top', top - mHeight - 35);
+                        jQuery(this).removeClass('pending');
                     }
                 };
             }

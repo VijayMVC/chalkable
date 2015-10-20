@@ -316,6 +316,7 @@
     <Compile Include="Logic\ApplicationLogic.cs" />
     <Compile Include="Logic\ClassLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
+    <Compile Include="Models\AbToCCMappingViewData.cs" />
     <Compile Include="Models\AddressViewData.cs" />
     <Compile Include="Models\AlphaGradeViewData.cs" />
     <Compile Include="Models\AlternateScoreViewData.cs" />

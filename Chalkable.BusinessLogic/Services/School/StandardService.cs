@@ -186,7 +186,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 standard.CCStandardCodes = ccStandardService.GetStandardCodesByABId(standard.AcademicBenchmarkId.Value);
             }
-            return standards;
+            return standards.OrderBy(x => x.Name).ToList();
         }
 
         public IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId)
