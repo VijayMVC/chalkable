@@ -34,33 +34,17 @@ namespace Chalkable.Data.School.DataAccess
 
         public PaginatedList<IncomePrivateMessage> GetIncomeMessages(int personId, int? messageId, IList<int> roles, string keyword, bool? read,  int start, int count)
         {
-            var dbQuery = BuildIncomeMessageQuery();
-            var conds = new AndQueryCondition
+            var param = new Dictionary<string, object>()
             {
-                {PrivateMessageRecipient.REPICENT_REF_FIELD, personId},
-                {PrivateMessageRecipient.DELETED_BY_RECIPIENT_FIELD, false }
+                ["@personId"] = personId,
+                ["@messageId"] = messageId,
+                ["@roles"] = roles ?? new List<int>(),
+                ["@filter"] = keyword,
+                ["@read"] = read,
+                ["@start"] = start,
+                ["@count"] = count
             };
-            if(read.HasValue)
-                conds.Add(PrivateMessageRecipient.READ_FIELD, read);
-            if(messageId.HasValue)
-                conds.Add(PrivateMessageRecipient.PRIVATE_MESSAGE_REF_FIELD, messageId);
-            conds.BuildSqlWhere(dbQuery, nameof(PrivateMessageRecipient));
-
-            if (roles != null && roles.Count > 0)
-                dbQuery.Sql.Append($" And {Person.ROLE_REF_FIELD} in ({roles.JoinString(",")})");
-
-
-            if (!string.IsNullOrEmpty(keyword))
-            {
-                keyword = "%" + keyword + "%";
-                var paramName = "@keyword";
-                dbQuery.Sql.Append($@" And ({PrivateMessage.SUBJECT_FIELD} like {paramName} Or {PrivateMessage.BODY_FIELD} like {paramName}
-                                        or Lower({Person.FIRST_NAME_FIELD}) like {paramName} Or Lower({Person.LAST_NAME_FIELD}) like {paramName})");
-                dbQuery.Parameters.Add(paramName, keyword);
-            }
-            
-            dbQuery = Orm.PaginationSelect(dbQuery, PrivateMessage.SENT_FIELD, Orm.OrderType.Desc, start, count);
-            return ReadPaginatedResult(dbQuery, start, count, r=> ReadList(r, ReadIncomePrivateMessage));
+            return ExecuteStoredProcedurePaginated("spGetIncomeMessages", param, r => ReadList(r, ReadIncomePrivateMessage), start, count);
         }
 
 
