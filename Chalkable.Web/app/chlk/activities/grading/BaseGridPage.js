@@ -434,7 +434,11 @@ NAMESPACE('chlk.activities.grading', function () {
                     var left = cellOffset.left - gradesPageOffset.left;
                     popUp.setCss('top', top);
                     popUp.setCss('left', left);
-                    popUp.show();
+
+                    setTimeout(function(){
+                        popUp.show();
+                    }, 10);
+
                     this.hideDropDown();
                     return false;
                 }

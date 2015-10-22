@@ -224,6 +224,9 @@ NAMESPACE('chlk.controls', function () {
                         var top = parseInt(menu.getCss('top'));
                         if(top + mHeight > wHeight)
                             menu.setCss('top', top - mHeight - 35);
+                    },
+
+                    response: function(){
                         jQuery(this).removeClass('pending');
                     }
                 };

@@ -23,7 +23,7 @@ namespace Chalkable.Web.Controllers
         private const string HEADER_FORMAT = "inline; filename={0}";
         private const string CONTENT_DISPOSITION = "Content-Disposition";
         
-        [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
+        [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student", true)]
         public ActionResult UploadAnnouncementAttachment(int announcementId, int announcementType)
         {
             try

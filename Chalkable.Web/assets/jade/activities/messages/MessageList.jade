@@ -6,7 +6,7 @@ mixin RolesGroupButtonsForMsg(isInbox, keyword, role, classOnly)
     +ActionButton('message', 'page', true, isInbox, 'districtadmin', keyword)(
     class= role == 'districtadmin' ? 'pressed' : ''
     ) Admin
-    if !isInbox
+    if !isInbox && !self.getUserRole().isStudent()
         +ActionButton('message', 'page', true, isInbox, '', keyword, 0, true)(class= classOnly ? 'pressed' : '') Class
 
 items = self.getMessages().getItems()
