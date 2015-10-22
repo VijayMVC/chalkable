@@ -1841,6 +1841,9 @@ NAMESPACE('chlk.controllers', function (){
             var announcementTypeName = model.getAnnouncementTypeName();
             var classId = model.getClassId();
 
+            if(!announcementTypeId)
+                return this.Redirect('announcement', 'lessonPlan', [classId])
+
             model.setMarkingPeriodId(this.getCurrentMarkingPeriod().getId());
 
             if (submitType == 'listLast'){
