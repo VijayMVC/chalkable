@@ -146,8 +146,8 @@
       </extension>
       <extension id="BUILD_EXT_7" type="BuildFailureOnMessage">
         <parameters>
-          <param name="buildFailureOnMessage.conditionType" value="contains" />
-          <param name="buildFailureOnMessage.messagePattern" value="exception" />
+          <param name="buildFailureOnMessage.conditionType" value="matchesRegex" />
+          <param name="buildFailureOnMessage.messagePattern" value="exceptions?\s+" />
           <param name="buildFailureOnMessage.reverse" value="false" />
         </parameters>
       </extension>

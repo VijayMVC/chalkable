@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void SendMessageToClass(int classId, string subject, string body);
         void SendMessageToPerson(int personId, string subject, string body);
-        PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword);
+        PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool classOnly);
         void MarkAsRead(IList<int> ids, bool read);
         void Delete(IList<int> id, PrivateMessageType type);
         IncomePrivateMessage GetIncomeMessage(int messageId);
@@ -96,7 +96,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return messageId;
         }
         
-        public PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword)
+        public PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool classOnly)
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolLocalId.HasValue);
@@ -113,7 +113,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         var inMsg = da.GetIncomeMessages(Context.PersonId.Value, null, rolesIds, keyword, read,  start, count);
                         return new PaginatedList<PrivateMessage>(inMsg.Select(x => x), inMsg.PageIndex, inMsg.PageSize, inMsg.TotalCount);
                     case PrivateMessageType.Sent:
-                        var sentMsg = da.GetSentMessages(Context.PersonId.Value, null, rolesIds, keyword, start, count);
+                        var sentMsg = da.GetSentMessages(Context.PersonId.Value, null, rolesIds, keyword, start, count, classOnly);
                         return new PaginatedList<PrivateMessage>(sentMsg.Select(x => x), sentMsg.PageIndex, sentMsg.PageSize, sentMsg.TotalCount);
                     default:
                         throw new ChalkableException(ChlkResources.ERR_PRIVATE_MESSAGE_INVALID_TYPE);

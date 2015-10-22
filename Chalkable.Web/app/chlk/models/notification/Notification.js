@@ -67,13 +67,19 @@ NAMESPACE('chlk.models.notification', function () {
             [[chlk.models.common.ChlkDate]],
             String, function convertToTime_(date){
                 var now = new chlk.models.common.ChlkDate(), mins;
+
+
+                var yesterday = new chlk.models.common.ChlkDate(now.getDate().addDays(-1));
+                if (yesterday.isSameDay(date)){
+                    return 'Before Today';
+                }
                 if(now.isSameDay(date)){
                     mins = Math.floor((now.getDate() - date.getDate()) / (1000 * 60));
                     if (mins <= 0) mins = 1;
                     if(mins < 60) return Msg.minutes_ago(mins);
                     else return Msg.hours_ago(Math.floor(mins/60));
                 }
-                return date.toString('hh:min tt');
+                return date.toString('mm/dd/yy hh:min tt');
             },
 
             chlk.models.common.ActionLinkModel, function prepareActionModel(){

@@ -312,6 +312,15 @@ NAMESPACE('chlk', function (){
                             $node.find('input[type=checkbox]').trigger('click')
                     });
 
+                ria.dom.Dom()
+                    .on('mousedown', '#search-glass', function($node, event) {
+                        /*var select = jQuery('#siteSearch');
+                        var val = select.val();
+                        if(val)
+                            jQuery('#siteSearch').autocomplete( "search", val)*/
+                        return false;
+                    });
+
                 ria.dom.Dom('#demo-footer')
                     .on('click', '[data-rolename]', function($node, event) {
                         if(!$node.hasClass('pressed')) {

@@ -18,11 +18,8 @@ namespace Chalkable.BusinessLogic.Model
         public decimal? NumericGrade { get; set; }
         public string Note { get; set; }
         public Standard Standard { get; set; }
-        
-        public bool HasAlphaGrade
-        {
-            get { return !string.IsNullOrEmpty(AlphaGradeName); }
-        }
+        public bool HasAlphaGrade => !string.IsNullOrEmpty(AlphaGradeName);
+        public bool HasScore => HasAlphaGrade || NumericGrade.HasValue;
 
         public static GradingStandardInfo Create(StandardScore standardScore, Standard standard)
         {
@@ -45,10 +42,6 @@ namespace Chalkable.BusinessLogic.Model
             var res = new List<GradingStandardInfo>();
             foreach (var standardScore in standardScores)
             {
-                //if (standardScore.StandardId == 37)
-                //{
-                //    bool b = true;
-                //}
                 var standard = standards.FirstOrDefault(st => st.Id == standardScore.StandardId);
                 res.Add(Create(standardScore, standard));
             }
