@@ -56,7 +56,9 @@ namespace Chalkable.Web.Authentication
                 var ticket = FormsAuthentication.Decrypt(sl[0]);
                 if (ticket == null || ticket.UserData == null)
                     return null;
-                var cntx = UserContext.FromString(ticket.UserData);
+                UserContext cntx;
+                if (!UserContext.TryConvertFromString(ticket.UserData, out cntx))
+                    return null;
                 if (sl.Length > 1)
                     cntx.SisToken = sl[1];
                 return cntx;
