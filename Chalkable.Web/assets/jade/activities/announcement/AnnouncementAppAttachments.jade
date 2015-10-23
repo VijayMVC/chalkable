@@ -48,6 +48,11 @@ if self.needButtons
             self.getModel().getAnnouncementTypeName(),
             self.getModel().getType()
         )(type="button")#add-attachments.simple-gray-button Attach
+        +ActionLink('announcement', 'addAttribute', self.getId(), self.getModel().getType())(
+            class = (!self.getAnnouncementAttributes() || !self.getAnnouncementAttributes().length) ? '' : 'x-hidden'
+        ).attach-attribute-btn.main-attach-attribute-btn Add Attribute
+            span.plus +
+
 each item, i in items
     if item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
         +AnnouncementFormApplicationItem(item, i)
