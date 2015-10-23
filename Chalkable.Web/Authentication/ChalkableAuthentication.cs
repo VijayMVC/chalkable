@@ -96,7 +96,9 @@ namespace Chalkable.Web.Authentication
             if (ticket == null || ticket.UserData == null)
                 return null;
 
-            var cntx = UserContext.FromString(ticket.UserData);
+            UserContext cntx;
+            if (!UserContext.TryConvertFromString(ticket.UserData, out cntx))
+                return null;
             if (!string.IsNullOrEmpty(cntx.DistrictServerUrl) && !Settings.ChalkableSchoolDbServers.Contains(cntx.DistrictServerUrl))
                 return null;
 

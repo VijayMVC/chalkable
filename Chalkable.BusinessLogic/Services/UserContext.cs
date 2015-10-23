@@ -55,7 +55,7 @@ namespace Chalkable.BusinessLogic.Services
         public int? SchoolYearId { get; set; }
         public DateTime? SchoolYearStartDate { get; set; }
         public DateTime? SchoolYearEndDate { get; set; }
-
+        
         [Ignore]
         public string SisToken { get; set; }
         
@@ -172,36 +172,65 @@ namespace Chalkable.BusinessLogic.Services
             return res.ToString();
         }
 
-        public static UserContext FromString(string s)
+
+        public static bool TryConvertFromString(string s, out UserContext userContext)
         {
             var sl = s.Split('\n');
 
             var t = typeof(UserContext);
             var props = t.GetProperties(BindingFlags.Instance | BindingFlags.Public);
-            var res = new UserContext();
+            userContext = new UserContext();
             int i = 0;
             foreach (var propertyInfo in props)
                 if (propertyInfo.CanWrite && propertyInfo.CanRead && propertyInfo.GetCustomAttribute<Ignore>() == null)
                 {
+                    if (sl.Length <= i)
+                    {
+                        userContext = null;
+                        return false;
+                    }
                     if (!string.IsNullOrEmpty(sl[i]))
                     {
                         object v;
-                        if (propertyInfo.PropertyType == typeof(int) || propertyInfo.PropertyType == typeof(int?))
-                            v = int.Parse(sl[i]);
-                        else if (propertyInfo.PropertyType == typeof(Guid) || propertyInfo.PropertyType == typeof(Guid?))
-                            v = Guid.Parse(sl[i]);
-                        else if (propertyInfo.PropertyType == typeof (DateTime) || propertyInfo.PropertyType == typeof (DateTime?))
-                            v = DateTime.Parse(sl[i]);
-                        else if (propertyInfo.PropertyType == typeof(bool) || propertyInfo.PropertyType == typeof(bool?))
-                            v = bool.Parse(sl[i]);
-                        else
-                            v = sl[i];
-                        propertyInfo.SetValue(res, v);
+                        if(!TryParse(propertyInfo.PropertyType, sl[i], out v))
+                        {
+                            userContext = null;
+                            return false;
+                        }
+                        propertyInfo.SetValue(userContext, v);
                     }
                     i++;
                 }
-            res.Role = CoreRoles.GetById(res.RoleId);
-            return res;
+            userContext.Role = CoreRoles.GetById(userContext.RoleId);
+            return true;
+        }
+        
+        public static bool TryParse(Type type, string s, out object o)
+        {
+            o = null;
+            if (type == typeof (int) || type == typeof (int?))
+            {
+                int v;
+                if (int.TryParse(s, out v)) o = v;
+            }
+            else if (type == typeof (Guid) || type == typeof (Guid?))
+            {
+                Guid v;
+                if (Guid.TryParse(s, out v)) o = v;
+            }
+            else if (type == typeof (DateTime) || type == typeof (DateTime?))
+            {
+                DateTime v;
+                if (DateTime.TryParse(s, out v)) o = v;
+            }
+            else if (type == typeof(bool) || type == typeof(bool?))
+            {
+                bool v;
+                if (bool.TryParse(s, out v)) o = v;
+            }
+            else if (type == typeof (string)) o = s;
+
+            return o != null;
         }
     }
 }
