@@ -16,4 +16,20 @@ NAMESPACE('chlk.models.settings', function () {
             this.allowedForTeachersToStudentsInTheSameClass = SJX.fromValue(raw.teachertoclassmessagingonly, Boolean);
         }
     ]);
+
+    /** @class chlk.models.settings.MessagingSettingsViewData*/
+    CLASS('MessagingSettingsViewData', [
+
+        chlk.models.settings.AdminMessaging, 'messagingSettings',
+        Boolean, 'ableToUpdate',
+
+        [[chlk.models.settings.AdminMessaging, Boolean]],
+        function $(messagingSettings_, ableToUpdate_){
+            BASE();
+            if(messagingSettings_)
+                this.setMessagingSettings(messagingSettings_);
+            if(ableToUpdate_)
+                this.setAbleToUpdate(ableToUpdate_);
+        }
+    ]);
 });
