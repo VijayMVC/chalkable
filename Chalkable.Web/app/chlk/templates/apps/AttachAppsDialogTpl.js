@@ -36,9 +36,6 @@ NAMESPACE('chlk.templates.apps', function () {
             Boolean, 'standardAttachEnabled',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'attributesEnabled',
-
-            [ria.templates.ModelPropertyBind],
             Boolean, 'showApps',
 
             [ria.templates.ModelPropertyBind],
