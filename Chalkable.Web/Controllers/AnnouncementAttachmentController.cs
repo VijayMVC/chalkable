@@ -6,6 +6,7 @@ using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
+using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.ActionResults;
@@ -23,7 +24,7 @@ namespace Chalkable.Web.Controllers
         private const string HEADER_FORMAT = "inline; filename={0}";
         private const string CONTENT_DISPOSITION = "Content-Disposition";
         
-        [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student", true)]
+        [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult UploadAnnouncementAttachment(int announcementId, int announcementType)
         {
             try
@@ -44,6 +45,24 @@ namespace Chalkable.Web.Controllers
             {
                 return HandleAttachmentException(exception);
             }
+        }
+
+        [AcceptVerbs(HttpVerbs.Put), AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student", true, new []{ AppPermissionType.Announcement })]
+        public ActionResult UploadAnnouncementAttachment(int announcementId, int announcementType, string fileName)
+        {
+            EnsureAnnouncementExsists(announcementId, announcementType);
+
+            var length = Request.InputStream.Length;
+            if (length == 0)
+                return Json(new ChalkableException(ChlkResources.ERR_FILE_REQUIRED));
+            
+            var bin = new byte[length];
+            Request.InputStream.Read(bin, 0, (int)length);
+            var announcement = SchoolLocator.AnnouncementAttachmentService
+                .UploadAttachment(announcementId, (AnnouncementType)announcementType, bin, fileName);
+
+            var res = PrepareFullAnnouncementViewData(announcement.Id, (AnnouncementType)announcementType);
+            return Json(res);
         }
 
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
