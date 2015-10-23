@@ -74,6 +74,7 @@ NAMESPACE('chlk.models.people', function () {
         VIEW_STUDENT_FILTER: 'View Student Filter',
         VIEW_TRANSCRIPT: 'View Transcript',
         CHALKABLE_ADMIN: 'Administer Chalkable',
+        MAINTAIN_CHALKABLE_DISTRICT_SETTINGS: 'Maintain Chalkable District Settings',
         AWARD_LE_CREDITS_CLASSROOM:'Award LE Credits (Classroom)',
         AWARD_LE_CREDITS:'Award LE Credits',
 
@@ -198,7 +199,8 @@ NAMESPACE('chlk.models.people', function () {
                 this.mapper_[this.userPermissionEnum.MAINTAIN_STUDENT_FILTER.valueOf()] = this.userPermissionEnum.MAINTAIN_STUDENT_FILTER;
                 this.mapper_[this.userPermissionEnum.VIEW_STUDENT_FILTER.valueOf()] = this.userPermissionEnum.VIEW_STUDENT_FILTER;
                 this.mapper_[this.userPermissionEnum.VIEW_TRANSCRIPT.valueOf()] = this.userPermissionEnum.VIEW_TRANSCRIPT;
-                this.mapper_[this.userPermissionEnum.CHALKABLE_ADMIN.valueOf()] = this.userPermissionEnum.CHALKABLE_ADMIN;
+                this.mapper_[this.userPermissionEnum.CHALKABLE_ADMIN.valueOf()] = this.userPermissionEnum.CHALKABLE_ADMIN
+                this.mapper_[this.userPermissionEnum.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS.valueOf()] = this.userPermissionEnum.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS;
                 this.mapper_[this.userPermissionEnum.AWARD_LE_CREDITS.valueOf()] = this.userPermissionEnum.AWARD_LE_CREDITS;
                 this.mapper_[this.userPermissionEnum.AWARD_LE_CREDITS_CLASSROOM.valueOf()] = this.userPermissionEnum.AWARD_LE_CREDITS_CLASSROOM;
                 /*report permissions */
