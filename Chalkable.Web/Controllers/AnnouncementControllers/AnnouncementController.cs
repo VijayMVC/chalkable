@@ -23,14 +23,16 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             var draft = SchoolLocator.AnnouncementFetchService.GetLastDraft();
             if (draft != null)
             {
-                if (draft.Type == AnnouncementType.Class)
+                if (draft is ClassAnnouncement)
                 {
                     var classAnn = draft as ClassAnnouncement;
                     var classAnnType = classId.HasValue ? null : classAnn.ClassAnnouncementTypeRef;
                     classId = classId ?? classAnn.ClassRef;
-                    return Redirect<ClassAnnouncementController>(c => c.CreateClassAnnouncement(classAnnType, classId.Value, null));
+                    var classAnnTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId.Value);
+                    if(classAnnTypes.Count > 0)
+                        return Redirect<ClassAnnouncementController>(c => c.CreateClassAnnouncement(classAnnType, classId.Value, null));
                 }
-                if (draft.Type == AnnouncementType.LessonPlan)
+                if (draft is LessonPlan)
                     classId = classId ?? (draft as LessonPlan).ClassRef;
             }
             if(classId.HasValue)

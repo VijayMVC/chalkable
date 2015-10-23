@@ -646,6 +646,7 @@ NAMESPACE('chlk.controllers', function (){
 
             var start = pageIndex_ | 0, count = 12;
 
+
             var result = this.appMarketService
                 .getInstalledApps(userId, start, null, count)
                 .attach(this.validateResponse_())
@@ -685,6 +686,7 @@ NAMESPACE('chlk.controllers', function (){
             var mp = this.getCurrentMarkingPeriod();
 
             var start = pageIndex_ | 0, count = 12;
+
 
             var result = this.appMarketService
                 .getAppsForAttach(userId, classId, mp.getId(), start, count)
@@ -1830,6 +1832,9 @@ NAMESPACE('chlk.controllers', function (){
             var announcementTypeId = model.getAnnouncementTypeId();
             var announcementTypeName = model.getAnnouncementTypeName();
             var classId = model.getClassId();
+
+            if(!announcementTypeId)
+                return this.Redirect('announcement', 'lessonPlan', [classId])
 
             model.setMarkingPeriodId(this.getCurrentMarkingPeriod().getId());
 
