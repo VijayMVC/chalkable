@@ -76,10 +76,6 @@ announcementType = self.getAnnouncementType()
                 if self.isStandardAttachEnabled()
                     +StandardBlock_("Add Standard", announcementId, classId, announcementTypeName, announcementType)
 
-                if self.isAttributesEnabled()
-                    +AttributeBlock_("Attach attribute", announcementId, announcementType)
-
-
                 if self.getAssessmentAppId()
                     +AssessmentBlock_("Assessment", announcementId, self.getAssessmentAppId(), announcementType)
 

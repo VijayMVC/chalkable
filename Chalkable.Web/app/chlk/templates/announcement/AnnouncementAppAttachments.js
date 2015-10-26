@@ -19,6 +19,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.id.AnnouncementId, 'id',
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
 
             [ria.templates.ModelPropertyBind],

@@ -644,7 +644,7 @@ NAMESPACE('chlk.controllers', function (){
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
 
-            var btnsCount = 3;
+            var btnsCount = 2;
 
             if (canAddStandard) ++btnsCount;
             if (assessmentAppId_) ++btnsCount;
@@ -689,7 +689,7 @@ NAMESPACE('chlk.controllers', function (){
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
 
-            var btnsCount = 3;
+            var btnsCount = 2;
 
             if (canAddStandard) ++btnsCount;
             if (assessmentAppId_) ++btnsCount;

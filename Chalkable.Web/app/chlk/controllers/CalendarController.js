@@ -37,19 +37,20 @@ NAMESPACE('chlk.controllers', function (){
                 .getMonthDayInfo(date)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    if(!this.userIsAdmin()){
-                        var gp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD);
-                        var startDate = gp.getStartDate();
-                        var endDate = gp.getEndDate();
-                        if(date.getDate() < startDate.getDate() || date.getDate() > endDate.getDate())
-                            if(model.getAnnouncements().length || model.getAdminAnnouncements().length)
-                                model.setNoPlusButton(true);
-                            else
-                                return ria.async.BREAK;
-                    }else{
-                        if(!model.getAnnouncements().length && !model.getAdminAnnouncements().length)
-                            return ria.async.BREAK;
-                    }
+
+                    //if(this.userInRole(chlk.models.common.RoleEnum.TEACHER)){
+                    //    var gp = this.getCurrentGradingPeriod();
+                    //    var startDate = gp.getStartDate();
+                    //    var endDate = gp.getEndDate();
+                    //    model.setNoPlusButton(date.getDate() < startDate.getDate() || date.getDate() > endDate.getDate());
+                    //}
+
+                    model.setNoPlusButton(this.userIsStudent() || (this.userIsTeacher() && !this.getCurrentGradingPeriod().isDateInPeriod(date)));
+
+                    var annCount = model.getAnnouncements().length;
+                    var adminAnnCount = model.getAdminAnnouncements().length;
+                    if(!annCount && !adminAnnCount && model.isNoPlusButton())
+                        return ria.async.BREAK;
 
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
 
