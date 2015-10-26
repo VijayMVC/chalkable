@@ -1,5 +1,6 @@
-Alter Procedure spGetSentMessageById
+Create Procedure spGetSentMessageById
 	@personId int,
+	@schoolYearId int,
 	@messageId int
 As
 
@@ -21,6 +22,6 @@ declare @tb TInt32
 insert into @tb
 values (@messageId)
 
-exec spGetRecipients @tb
+exec spGetMessageRecipients @tb
 
 Go

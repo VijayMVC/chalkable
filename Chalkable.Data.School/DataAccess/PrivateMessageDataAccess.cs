@@ -51,11 +51,12 @@ namespace Chalkable.Data.School.DataAccess
             return ExecuteStoredProcedurePaginated(SP_GET_INCOME_MESSAGES, param, r => ReadList(r, ReadIncomePrivateMessage), start, count);
         }
 
-        public IncomePrivateMessage GetIncomePrivateMessage(int id, int callerId)
+        public IncomePrivateMessage GetIncomePrivateMessage(int id, int callerId, int? schoolYearId)
         {
             var param = new Dictionary<string, object>()
             {
                 ["personId"] = callerId,
+                ["schoolYearId"] = schoolYearId,
                 ["messageId"] = id
             };
             using (var reader = ExecuteStoredProcedureReader(SP_GET_INCOME_MESSAGE_BY_ID, param))
@@ -71,11 +72,12 @@ namespace Chalkable.Data.School.DataAccess
 
         private const string SP_GET_SENT_MESSAGE_BY_ID = "spGetSentMessageById";
 
-        public SentPrivateMessage GetSentPrivateMessage(int id, int callerId)
+        public SentPrivateMessage GetSentPrivateMessage(int id, int callerId, int? schoolYearId)
         {
             var param = new Dictionary<string, object>()
             {
                 ["personId"] = callerId,
+                ["schoolYearId"] = schoolYearId,
                 ["messageId"] = id
             };
             using (var reader = ExecuteStoredProcedureReader(SP_GET_SENT_MESSAGE_BY_ID, param))
@@ -155,7 +157,7 @@ namespace Chalkable.Data.School.DataAccess
                 FirstName = SqlTools.ReadStringNull(reader, string.Format(template, Person.FIRST_NAME_FIELD)),
                 LastName = SqlTools.ReadStringNull(reader, string.Format(template, Person.LAST_NAME_FIELD)),
                 Gender = SqlTools.ReadStringNull(reader, string.Format(template, Person.GENDER_FIELD)),
-                Salutation = SqlTools.ReadStringNull(reader, string.Format(template, Person.SALUTATION_FIELD)),
+                //Salutation = SqlTools.ReadStringNull(reader, string.Format(template, Person.SALUTATION_FIELD)),
                 RoleRef = SqlTools.ReadInt32(reader, string.Format(template, Person.ROLE_REF_FIELD))
             };
         }

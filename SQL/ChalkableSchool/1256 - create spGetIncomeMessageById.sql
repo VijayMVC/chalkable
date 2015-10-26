@@ -1,5 +1,6 @@
 Create Procedure spGetIncomeMessageById
 @personId int,
+@schoolYearId int,
 @messageId int
 As
 
