@@ -321,6 +321,13 @@ NAMESPACE('chlk.controllers', function (){
                    this.userInRole(chlk.models.common.RoleEnum.DISTRICTADMIN);
            },
 
+           Boolean, function userIsTeacher(){
+               return this.userInRole(chlk.models.common.RoleEnum.TEACHER);
+           },
+
+           Boolean, function userIsStudent(){
+               return this.userInRole(chlk.models.common.RoleEnum.STUDENT);
+           },
 
            Boolean, function isDemoSchool(){
                return this.getContext().getSession().get(ChlkSessionConstants.DEMO_SCHOOL, false);
