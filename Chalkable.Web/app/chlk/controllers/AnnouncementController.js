@@ -37,6 +37,7 @@ REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.apps.InstalledAppsViewData');
 REQUIRE('chlk.models.announcement.ShowGradesToStudents');
+REQUIRE('chlk.models.announcement.AttributeAttachViewData');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
@@ -708,7 +709,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
         function fileAttachAction(announcementId, announcementType, assignedAttributeId_){
-            var data = new chlk.models.apps.InstalledAppsViewData.$createForAttribute(announcementId, announcementType, assignedAttributeId_);
+            var data = new chlk.models.announcement.AttributeAttachViewData(announcementId, announcementType, assignedAttributeId_);
             var res =  new ria.async.DeferredData(data);
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, res);
         },
