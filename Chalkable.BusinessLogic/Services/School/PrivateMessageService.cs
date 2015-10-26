@@ -186,7 +186,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             Trace.Assert(Context.PersonId.HasValue);
             PrivateMessageSecurity.EnsureMessgingPermission(Context);
-            return DoRead(u => new PrivateMessageDataAccess(u).GetSentPrivateMessage(messageId, Context.PersonId.Value));
+            return DoRead(u => new PrivateMessageDataAccess(u).GetSentPrivateMessage(messageId, Context.PersonId.Value, null));
         }
 
         public PossibleMessageRecipients GetPossibleMessageRecipients(string filter)
@@ -225,7 +225,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             Trace.Assert(Context.PersonId.HasValue);
             PrivateMessageSecurity.EnsureMessgingPermission(Context);
-            return DoRead(u => new PrivateMessageDataAccess(u).GetIncomePrivateMessage(messageId, Context.PersonId.Value));
+            return DoRead(u => new PrivateMessageDataAccess(u).GetIncomePrivateMessage(messageId, Context.PersonId.Value, null));
         }
 
         public bool CanSendMessageToClass(int classId)
