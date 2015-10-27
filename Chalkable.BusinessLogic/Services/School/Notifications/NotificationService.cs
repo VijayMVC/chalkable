@@ -241,7 +241,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             Trace.Assert(Context.PersonId.HasValue);
             using (var uow = Update())
             {
-                var msg = new PrivateMessageDataAccess(uow).GetSentPrivateMessage(privateMessageId, Context.PersonId.Value, null);
+                var msg = new PrivateMessageDataAccess(uow).GetSentPrivateMessage(privateMessageId, Context.PersonId.Value, Context.SchoolYearId);
                 var notifications = msg.RecipientPersons.Select(x=> builder.BuildPrivateMessageNotification(Context.NowSchoolTime, msg, msg.Sender, x)).ToList();
                 new NotificationDataAccess(uow).Insert(notifications);
                 uow.Commit();

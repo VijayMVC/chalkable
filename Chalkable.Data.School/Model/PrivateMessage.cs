@@ -24,6 +24,7 @@ namespace Chalkable.Data.School.Model
         //public bool Read { get; set; }
         public bool DeletedBySender { get; set; }
         //public bool DeletedByRecipient { get; set; }
+        public int SchoolYearRef { get; set; }
 
         [NotDbFieldAttr]
         public Person Sender { get; set; }
