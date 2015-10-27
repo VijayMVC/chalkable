@@ -1,0 +1,38 @@
+mixin FileAttachBlock_(title, announcementId, announcementType, assignedAttributeId)
+    .announcement-item.application(data-tooltip=title, data-tooltip-type="overflow")
+        .wrapper
+            .attach-file.img
+            .title(data-tooltip=title, data-tooltip-type="overflow")= title
+            .shortdesc
+            div.simple-gray-button.download-link.file=title
+                +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType, assignedAttributeId])#add-file-attachment.simple-gray-button
+
+mixin AttachDialogSidebar(tpl, name)
+    .attach-sidebar
+        +ActionLinkWithPrepend('announcement', 'attach', tpl.getParams())(class = name == 'upload' ? 'active pressed' : '').upload Upload
+        if self.isFileCabinetEnabled()
+            +ActionLinkWithPrepend('announcement', 'attach', tpl.getParams())(class = name == 'uploaded' ? 'active pressed' : '').uploaded Uploaded
+        if self.isStandardAttachEnabled()
+            +ActionLinkWithPrepend('announcement', 'attach', tpl.getParams())(class = name == 'standard' ? 'active pressed' : '').standard Standard
+        if self.getAssessmentAppId()
+            +ActionLinkWithPrepend('announcement', 'attach', tpl.getParams())(class = name == 'assesment' ? 'active pressed' : '').assesment Assesment
+        +ActionLinkWithPrepend('announcement', 'attachApps', tpl.getParams())(class = name == 'apps' ? 'active pressed' : '').apps Apps
+
+announcementId = self.getAnnouncementId() && self.getAnnouncementId().valueOf()
+classId = self.getClassId() && self.getClassId().valueOf()
+announcementTypeName = self.getAnnouncementTypeName() || ''
+announcementType = self.getAnnouncementType()
+
+-var assignedAttributeId = self.getAssignedAttributeId();
+
+.dialog.chlk-attach-dialog
+    .x-window-header
+        h1
+        a.close.close-btn
+    .attach-content
+        +AttachDialogSidebar(self, 'upload')
+        .attach-main
+            .attachments-and-applications
+                +FileAttachBlock_("Attach a file", announcementId, announcementType, assignedAttributeId)
+
+

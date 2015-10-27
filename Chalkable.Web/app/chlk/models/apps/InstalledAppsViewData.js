@@ -8,7 +8,6 @@ NAMESPACE('chlk.models.apps', function () {
     CLASS(
         'InstalledAppsViewData', EXTENDS(chlk.models.common.BaseAttachViewData), [
 
-            String, 'appUrlAppend',
             chlk.models.common.PaginatedList, 'apps',
 
             [[

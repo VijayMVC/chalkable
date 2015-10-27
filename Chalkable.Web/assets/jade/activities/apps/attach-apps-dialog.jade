@@ -53,20 +53,6 @@ mixin AssessmentBlock_(title, announcementId, assessmentAppId, announcementType)
             .shortdesc
             +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, assessmentAppId, announcementType)#add-assesment.simple-gray-button=title
 
-mixin AttachDialogSidebar(self, name)
-    .attach-sidebar
-        +ActionLink('feed', 'doToList')(class = name == 'upload' ? 'active' : '').pressed.upload Upload
-        if self.isFileCabinetEnabled()
-            +ActionLink('feed', 'doToList')(class = name == 'uploaded' ? 'active' : '').pressed.uploaded Uploaded
-        if self.isStandardAttachEnabled()
-            +ActionLink('feed', 'doToList')(class = name == 'standard' ? 'active' : '').pressed.standard Standard
-        if self.getAssessmentAppId()
-            +ActionLink('feed', 'doToList')(class = name == 'assessment' ? 'active' : '').pressed.assessment Assessment
-        if self.isShowApps()
-            +ActionLink('apps', 'view-app-attach-mode', announcementId, 'e25bafcb-4521-449e-b49d-b40830239fb9', announcementType)(class = name == 'google-drive' ? 'active' : '').apps Google Drive
-        if self.isShowApps()
-            +ActionLink('feed', 'doToList')(class = name == 'apps' ? 'active' : '').apps Apps
-
 announcementId = self.getAnnouncementId() && self.getAnnouncementId().valueOf()
 classId = self.getClassId() && self.getClassId().valueOf()
 announcementTypeName = self.getAnnouncementTypeName() || ''
@@ -88,5 +74,5 @@ announcementType = self.getAnnouncementType()
                         +AppIconLink_(announcementId, app, app.needToInstall(), self.getAppIconToolTip(app), announcementType)
 
                 .paging
-                    +Paginator2('announcement', 'attach', self.apps, [announcementId, classId, self.getAppUrlAppend(),
+                    +Paginator2('announcement', 'attachApps', self.apps, [announcementId, classId, self.getAppUrlAppend(),
                         self.getAssessmentAppId(), self.isStandardAttachEnabled(), announcementTypeName, announcementType])
