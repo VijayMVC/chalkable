@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School.Announcements;
+using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.UserTracking;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
+using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
 {
@@ -68,6 +72,19 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             var res = PrepareFullAnnouncementViewData(announcementId, announcementType, true);
             MasterLocator.UserTrackingService.OpenedAnnouncement(Context.Login, res.AnnouncementTypeName, res.Title, res.PersonName);
             return Json(res, 7);
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult AttachSettings(int announcementId, int? announcementType)
+        {
+            var assesmentId = MasterLocator.ApplicationService.GetAssessmentId();
+            var type = (AnnouncementType?)announcementType ?? AnnouncementType.Class;
+            var canAddStandard = SchoolLocator.GetAnnouncementService(type).CanAddStandard(announcementId);
+            var isAppEnabled = Context.SCEnabled;
+            var isFileCabinetEnabled = Context.Role == CoreRoles.TEACHER_ROLE; //only teacher can use file cabinet for now
+            //TODO: get external attach apps
+
+            return Json(AttachSettingsViewData.Create(assesmentId, canAddStandard, isAppEnabled, isFileCabinetEnabled, new List<BaseApplicationViewData>()));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
