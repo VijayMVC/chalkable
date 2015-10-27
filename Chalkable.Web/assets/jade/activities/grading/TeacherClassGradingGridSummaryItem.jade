@@ -39,6 +39,7 @@ mixin StudentAverages(tpl)
                     class=((i == tpl.getRowIndex() ? 'active-row ' : '') + (self.isAbleEditAvg() ? 'gradable' : '')),
                     data-able-display-alpha-grades=self.isAbleDisplayAlphaGrades(),
                     data-able-round-displayed-averages=self.isRoundDisplayedAverages(),
+                    data-able-display-student-average=self.isAbleDisplayStudentAverage(),
                     data-average-id=average.getAverageId(),
                     data-student-name=self.getStudents()[i].getStudentInfo().getDisplayName(),
                     data-student-id=average.getStudentId().valueOf(),
