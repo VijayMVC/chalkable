@@ -1,0 +1,27 @@
+.file-cabinet-dialog, .lesson-plan-gallery-dialog
+  .dialog
+    width: 880px
+
+.attach-apps-dialog, .file-cabinet-dialog, .lesson-plan-gallery-dialog
+  .dialog
+    @each $button in attach-file, attach-attribute, attach-standard, file-cabinet, attach-assessment
+      .#{$button}
+        +icons-170-sprite($button)
+        width: 170px
+        height: 110px
+
+.chlk-attach-dialog
+  width: 955px
+
+.attach-content
+  vertical-align: top
+  position: relative
+  table-layout: fixed
+  display: table
+  width: 100%
+
+  .attach-main
+    padding: 25px
+    display: table-cell
+    width: 100%
+    vertical-align: top
