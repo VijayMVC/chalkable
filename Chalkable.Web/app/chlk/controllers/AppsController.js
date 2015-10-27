@@ -14,6 +14,7 @@ REQUIRE('chlk.activities.apps.AppGeneralInfoPage');
 REQUIRE('chlk.activities.apps.AddAppDialog');
 REQUIRE('chlk.activities.apps.AppWrapperDialog');
 REQUIRE('chlk.activities.apps.AddCCStandardDialog');
+REQUIRE('chlk.activities.apps.AppAttachModeDialog');
 
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppPostData');
@@ -169,7 +170,7 @@ NAMESPACE('chlk.controllers', function (){
                     }, this);
 
                     app_.setScreenshotPictures(new chlk.models.apps.AppScreenShots(screenshotPictures, readOnly));
-		    
+
                     return new chlk.models.apps.AppInfoViewData(app_, readOnly, cats, gradeLevels, permissions, platforms, isDraft);
 
                 }, this);
@@ -509,6 +510,49 @@ NAMESPACE('chlk.controllers', function (){
                     return new chlk.models.apps.AppWrapperViewData(app, chlk.models.apps.AppModes.EDIT, announcementType);
                 }, this);
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
+        },
+
+        [chlk.controllers.StudyCenterEnabled()],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.DISTRICTADMIN
+        ])],
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
+        function viewAppAttachModeAction(announcementId, appId, announcementType, appUrlAppend_) {
+            if(!this.isStudyCenterEnabled())
+                return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+
+            var mode = chlk.models.apps.AppModes.ATTACH;
+
+            var result = this.appsService
+                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                .catchError(function(error_){
+                    throw new chlk.lib.exception.AppErrorException(error_);
+                })
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var appData = data.getApplication();
+
+                    var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
+                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                        + '&code=' + data.getAuthorizationCode()
+                        + '&announcementId=' + encodeURIComponent(announcementId.valueOf())
+                        + '&announcementType=' + encodeURIComponent(announcementType.valueOf());
+
+                    if (appUrlAppend_) {
+                        viewUrl += "&" + appUrlAppend_;
+                    }
+
+                    var model = new chlk.models.apps.InstalledAppsViewData(null, null
+                        , new chlk.models.common.PaginatedList(chlk.models.apps.Application)
+                        , viewUrl
+                        , this.isStudyCenterEnabled()
+                        , false, null, null, announcementType);
+
+                    return model;
+                }, this);
+
+            return this.ShadeView(chlk.activities.apps.AppAttachModeDialog, result);
         },
 
         [chlk.controllers.SidebarButton('add-new')],

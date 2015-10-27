@@ -222,15 +222,24 @@ namespace Chalkable.Web.Controllers
 
 
         [AuthorizationFilter]
-        public ActionResult GetOauthCode(string applicationUrl)
+        public ActionResult GetOauthCode(string applicationUrl, Guid? applicationId)
         {
             //TODO: check if app is installed??
            
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(applicationUrl, SchoolLocator.Context.Login, SchoolLocator.Context.SchoolYearId);
+
+            var app = !string.IsNullOrWhiteSpace(applicationUrl) 
+                    ? MasterLocator.ApplicationService.GetApplicationByUrl(applicationUrl) : 
+                applicationId.HasValue 
+                    ? MasterLocator.ApplicationService.GetApplicationById(applicationId.Value) : null;
+
+            if (app == null)
+                throw new ChalkableException("Application not found");
+
+            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, SchoolLocator.Context.Login, SchoolLocator.Context.SchoolYearId);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
-            var app = MasterLocator.ApplicationService.GetApplicationByUrl(applicationUrl);
+            
             var appInstall = SchoolLocator.AppMarketService.GetInstallationForPerson(app.Id, Context.PersonId.Value);
             var hasMyApps = MasterLocator.ApplicationService.HasMyApps(app);
             var applicationInstalls = new List<ApplicationInstall>();

@@ -101,12 +101,19 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('add-new')],
             [[Object]],
             function closeCurrentAppAction(data){
+                if (data.refresh_attached_files)
+                    this.BackgroundNavigate('announcement', 'refreshAttachments'
+                        , [data.announcementId, data.announcementType]);
+
                 this.getView().getCurrent().close();
                 return null;
             },
 
             [[Object]],
             function closeMeAction(data){
+                if (data.force)
+                    return this.closeCurrentAppAction(data);
+
                 return this.ShowMsgBox('Close without attaching the app?', 'just checking.', [{
                     text: 'CANCEL',
                     color: chlk.models.common.ButtonColor.GREEN.valueOf()
