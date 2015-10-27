@@ -202,7 +202,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     tpl.options({
                         gradingPeriodId: new chlk.models.id.GradingPeriodId(container.getData('grading-period-id')),
                         ableDisplayAlphaGrades: !!container.getData('able-display-alpha-grades'),
-                        roundDisplayedAverages: !!container.getData('able-round-displayed-averages')
+                        roundDisplayedAverages: !!container.getData('able-round-displayed-averages'),
+                        ableDisplayStudentAverage: !!container.getData('able-display-student-average')
                     });
                     tpl.renderTo(container.setHTML(''));
                 }
