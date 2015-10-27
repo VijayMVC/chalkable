@@ -1291,6 +1291,21 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getAnnouncementFormPageType_(), new ria.async.DeferredData(announcement), 'update-attachments');
         },
 
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function refreshAttachmentsAction(announcementId, announcementType_) {
+            var data = this.announcementService
+                .getAnnouncement(announcementId, announcementType_)
+                .attach(this.validateResponse_())
+                .then(function (announcement) {
+                    announcement.setNeedButtons(true);
+                    announcement.setNeedDeleteButton(true);
+                    this.prepareAttachments(announcement);
+                    return announcement
+                }, this);
+
+            return this.UpdateView(this.getAnnouncementFormPageType_(), data, 'update-attachments');
+        },
+
         function cancelDeleteAction(){
             this.disableAnnouncementSaving(false);
             return null;

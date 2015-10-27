@@ -169,11 +169,12 @@ NAMESPACE('chlk.services', function () {
                   });
             },
 
-            [[chlk.models.id.SchoolPersonId, String]],
-            ria.async.Future, function getOauthCode(personId, appUrl){
+            [[chlk.models.id.SchoolPersonId, String, chlk.models.id.AppId]],
+            ria.async.Future, function getOauthCode(personId, appUrl_, appId_){
                 var forEdit = false;
                 return this.get('Application/GetOauthCode.json', chlk.models.apps.ApplicationAuthorization, {
-                    applicationUrl: appUrl
+                    applicationUrl: appUrl_,
+                    applicationId: appId_ ? appId_.valueOf() : undefined
                 }).transform(function (applicationAuthorization) {
                     var app = applicationAuthorization.getApplication();
                     var appInstalls = app.getApplicationInstalls() || [];

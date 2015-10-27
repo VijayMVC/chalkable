@@ -1,0 +1,14 @@
+
+announcementId = self.getAnnouncementId() && self.getAnnouncementId().valueOf()
+classId = self.getClassId() && self.getClassId().valueOf()
+announcementTypeName = self.getAnnouncementTypeName() || ''
+announcementType = self.getAnnouncementType()
+
+.dialog.chlk-attach-dialog
+    .x-window-header
+        h1 Attach Google Drive File
+        a.close.close-btn
+    .attach-content
+        +AttachDialogSidebar(self, 'google-drive')
+        .attach-main
+            iframe(src=self.getUrl(), height="100%", width="100%", border=0, style="border: none; min-height: 500px")

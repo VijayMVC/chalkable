@@ -31,8 +31,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.setAppUrlAppend(appUrlAppend);
                 this.setFileCabinetEnabled(true);
                 this.setStandardAttachEnabled(canAddStandard);
-                var hasApps = (apps.getItems() || []).length > 0 && studyCenterEnabled;
-                this.setShowApps(hasApps);
+                this.setShowApps(studyCenterEnabled);
                 if (studyCenterEnabled && assessmentAppId)
                     this.setAssessmentAppId(assessmentAppId);
                 this.setAnnouncementTypeName(announcementTypeName);
