@@ -79,24 +79,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.calendar.announcement.WeekDayPopUp, new ria.async.DeferredData(model));
         },
 
-
-        //[chlk.controllers.SidebarButton('calendar')],
-        //[[chlk.models.common.ChlkDate, chlk.models.id.ClassId, chlk.models.id.ClassId, Number]],
-        //function showWeekBarPopUpAction(date, classId_) {
-        //
-        //    var model = this.calendarService.getWeekDayInfo(date);
-        //    model.setNoPlusButton(this.userIsStudent() || (this.userIsTeacher() && !this.getCurrentGradingPeriod().isDateInPeriod(date)));
-        //    model.setTarget(chlk.controls.getActionLinkControlLastNode());
-        //
-        //    if(!model.getAdminAnnouncements().length && model.isNoPlusButton())
-        //        return null;
-        //    if(classId_)
-        //        model.setSelectedClassId(classId_);
-        //
-        //    return  this.ShadeView(chlk.activities.calendar.announcement.WeekBarPopUp, new ria.async.DeferredData(model));
-        //},
-
-
         [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, String]],
         function dayAction(classId_, date_, gradeLevels_){
