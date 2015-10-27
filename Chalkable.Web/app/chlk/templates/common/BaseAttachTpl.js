@@ -31,6 +31,17 @@ NAMESPACE('chlk.templates.common', function () {
             String, 'announcementTypeName',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.AnnouncementTypeEnum, 'announcementType'
+            String, 'appUrlAppend',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AnnouncementAssignedAttributeId, 'assignedAttributeId',
+
+            function getParams(){
+                return [this.getAnnouncementId(), this.getClassId(), this.getAppUrlAppend(), this.getAssessmentAppId(), this.isStandardAttachEnabled(),
+                    this.getAnnouncementTypeName(), this.getAnnouncementType()]
+            }
         ])
 });

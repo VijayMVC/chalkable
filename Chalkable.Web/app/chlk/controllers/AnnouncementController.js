@@ -30,6 +30,7 @@ REQUIRE('chlk.activities.announcement.AnnouncementEditGroupsDialog');
 REQUIRE('chlk.activities.announcement.GroupStudentsFilterDialog');
 REQUIRE('chlk.activities.announcement.AddNewCategoryDialog');
 REQUIRE('chlk.activities.announcement.FileCabinetDialog');
+REQUIRE('chlk.activities.announcement.AttachFilesDialog');
 
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.LastMessages');
@@ -37,7 +38,7 @@ REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.apps.InstalledAppsViewData');
 REQUIRE('chlk.models.announcement.ShowGradesToStudents');
-REQUIRE('chlk.models.announcement.AttributeAttachViewData');
+REQUIRE('chlk.models.announcement.FileAttachViewData');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
@@ -627,6 +628,27 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN, chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        [[
+            chlk.models.id.AnnouncementId,
+            chlk.models.id.ClassId,
+            String,
+            chlk.models.id.AppId,
+            Boolean,
+            String,
+            chlk.models.announcement.AnnouncementTypeEnum,
+            Number
+        ]],
+        function attachAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
+                                           canAddStandard, announcementTypeName, announcementType, pageIndex_) {
+
+            var result = ria.async.DeferredData(new chlk.models.announcement.FileAttachViewData(announcementId, announcementType, classId));
+            return this.ShadeOrUpdateView(chlk.activities.announcement.AttachFilesDialog, result);
+        },
+
+        [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [chlk.controllers.SidebarButton('add-new')],
@@ -640,8 +662,8 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.announcement.AnnouncementTypeEnum,
             Number
         ]],
-        function attachDistrictAdminAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
-                              canAddStandard, announcementTypeName, announcementType, pageIndex_) {
+        function attachAppsDistrictAdminAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
+                                           canAddStandard, announcementTypeName, announcementType, pageIndex_) {
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
 
@@ -665,7 +687,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, result);
         },
 
-
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER
         ])],
@@ -680,8 +701,8 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.announcement.AnnouncementTypeEnum,
             Number
         ]],
-        function attachTeacherAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
-                              canAddStandard, announcementTypeName, announcementType, pageIndex_) {
+        function attachAppsTeacherAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
+                                     canAddStandard, announcementTypeName, announcementType, pageIndex_) {
 
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
@@ -709,7 +730,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
         function fileAttachAction(announcementId, announcementType, assignedAttributeId_){
-            var data = new chlk.models.announcement.AttributeAttachViewData(announcementId, announcementType, assignedAttributeId_);
+            var data = new chlk.models.announcement.FileAttachViewData(announcementId, announcementType, null, assignedAttributeId_);
             var res =  new ria.async.DeferredData(data);
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, res);
         },

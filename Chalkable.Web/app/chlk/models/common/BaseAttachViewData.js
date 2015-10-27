@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.id.AnnouncementAssignedAttributeId');
 
 NAMESPACE('chlk.models.common', function () {
 
@@ -19,6 +20,8 @@ NAMESPACE('chlk.models.common', function () {
             Boolean, 'fileCabinetEnabled',
             Boolean, 'standardAttachEnabled',
             Boolean, 'showApps',
+            chlk.models.id.AnnouncementAssignedAttributeId, 'assignedAttributeId',
+            String, 'appUrlAppend',
 
             [[
                 chlk.models.id.AnnouncementId,
