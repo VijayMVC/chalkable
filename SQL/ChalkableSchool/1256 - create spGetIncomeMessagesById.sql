@@ -18,7 +18,7 @@ select top 1
     SenderRoleRef,
     SenderGender
 from 
-	vwPrivateMessage
+	vwIncomeMessage
 where 
 	RecipientRef = @personId
 	And DeletedByRecipient = 0
