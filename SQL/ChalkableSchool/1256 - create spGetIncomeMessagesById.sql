@@ -1,6 +1,5 @@
-Create Procedure spGetIncomeMessageById
+Create Procedure [dbo].[spGetIncomeMessageById]
 @personId int,
-@schoolYearId int,
 @messageId int
 As
 
@@ -16,7 +15,6 @@ select top 1
 	SenderId,
     SenderFirstName,
     SenderLastName,
-    SenderSalutation,
     SenderRoleRef,
     SenderGender
 from 
@@ -26,4 +24,4 @@ where
 	And DeletedByRecipient = 0
 	And Id = @messageId
 
-Go
+GO

@@ -1,6 +1,5 @@
-Alter Procedure [dbo].[spGetSentMessages]
+Create Procedure [dbo].[spGetSentMessages]
 	@personId int,
-	@schoolYearId int,
 	@roles TInt32 readonly,
 	@filter nvarchar(max),
 	@start int,
@@ -51,12 +50,34 @@ where
 		)
 	And (@classOnly = 0 or [RecipientClassRef] is not null)
 
+declare @SentMsg table
+(
+	[Id] int,
+	[FromPersonRef] int,
+	[Sent] datetime2,
+	[Subject] nvarchar(max),
+	[Body] nvarchar(max),
+	[DeletedBySender] bit
+)
+
 declare @MsgIds TInt32;
 
-insert into @MsgIds 
-select x.[Id] from (
+insert into @SentMsg 
+select 
+	x.[Id],
+	x.FromPersonRef,
+	x.[Sent],
+	x.[Subject],
+	x.Body,
+	x.DeletedBySender 
+from (
 	select
-		pm.[Id]
+		pm.[Id],
+		[FromPersonRef],
+		[Sent],
+		[Subject],
+		[Body],
+		[DeletedBySender]
 	from 
 		PrivateMessage pm
 		join PrivateMessageRecipient pmr
@@ -88,8 +109,12 @@ select x.[Id] from (
 			)
 		And (@classOnly = 0 or [RecipientClassRef] is not null)
 	group by 
-		pm.Id, 
-		[Sent]
+		pm.[Id],
+		[FromPersonRef],
+		[Sent],
+		[Subject],
+		[Body],
+		[DeletedBySender]
 	order by [Sent] DESC
 
 	OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
@@ -103,25 +128,12 @@ select distinct
 	[Body],
 	[DeletedBySender]
 From 
-	PrivateMessage pm
-	join PrivateMessageRecipient pmr
-		on pm.Id = pmr.PrivateMessageRef
-	join (Select
-				[Id], 
-				[FirstName] as RecipientFirstName, 
-				[LastName] as RecipientLastName,
-				3 as RecipientRoleRef
-		  From
-				Person) as Recipient
-		on Recipient.Id = pmr.RecipientRef
-	left join (Select
-				[Id],
-				[Name] as [ClassName]
-		  From
-				Class) as RecipientClass
-		on RecipientClass.Id = pmr.RecipientClassRef
-Where pm.Id in(select * from @MsgIds)
+	@SentMsg pm
+
+insert into @MsgIds
+select [Id] from @SentMsg
 
 exec spGetMessageRecipients @MsgIds
+
 
 GO

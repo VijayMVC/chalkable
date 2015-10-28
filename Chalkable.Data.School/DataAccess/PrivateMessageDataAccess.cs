@@ -36,12 +36,11 @@ namespace Chalkable.Data.School.DataAccess
         private const string SP_GET_INCOME_MESSAGES = "spGetIncomeMessages";
         private const string SP_GET_INCOME_MESSAGE_BY_ID = "spGetIncomeMessageById";
 
-        public PaginatedList<IncomePrivateMessage> GetIncomeMessages(int personId, IList<int> roles, string keyword, bool? read, int start, int count, int? schoolYearId)
+        public PaginatedList<IncomePrivateMessage> GetIncomeMessages(int personId, IList<int> roles, string keyword, bool? read, int start, int count)
         {
             var param = new Dictionary<string, object>()
             {
                 ["personId"] = personId,
-                ["schoolYearId"] = schoolYearId,
                 ["roles"] = roles ?? new List<int>(),
                 ["filter"] = keyword,
                 ["read"] = read,
@@ -51,12 +50,11 @@ namespace Chalkable.Data.School.DataAccess
             return ExecuteStoredProcedurePaginated(SP_GET_INCOME_MESSAGES, param, r => ReadList(r, ReadIncomePrivateMessage), start, count);
         }
 
-        public IncomePrivateMessage GetIncomePrivateMessage(int id, int callerId, int? schoolYearId)
+        public IncomePrivateMessage GetIncomePrivateMessage(int id, int callerId)
         {
             var param = new Dictionary<string, object>()
             {
                 ["personId"] = callerId,
-                ["schoolYearId"] = schoolYearId,
                 ["messageId"] = id
             };
             using (var reader = ExecuteStoredProcedureReader(SP_GET_INCOME_MESSAGE_BY_ID, param))
@@ -72,12 +70,11 @@ namespace Chalkable.Data.School.DataAccess
 
         private const string SP_GET_SENT_MESSAGE_BY_ID = "spGetSentMessageById";
 
-        public SentPrivateMessage GetSentPrivateMessage(int id, int callerId, int? schoolYearId)
+        public SentPrivateMessage GetSentPrivateMessage(int id, int callerId)
         {
             var param = new Dictionary<string, object>()
             {
                 ["personId"] = callerId,
-                ["schoolYearId"] = schoolYearId,
                 ["messageId"] = id
             };
             using (var reader = ExecuteStoredProcedureReader(SP_GET_SENT_MESSAGE_BY_ID, param))
@@ -88,12 +85,11 @@ namespace Chalkable.Data.School.DataAccess
         }
 
         private const string SP_GET_SENT_PRIVATE_MESSAGES = "spGetSentMessages";
-        public PaginatedList<SentPrivateMessage> GetSentMessages(int callerId, IList<int> roles, string keyword, int start, int count, bool classOnly, int? schoolYearId)
+        public PaginatedList<SentPrivateMessage> GetSentMessages(int callerId, IList<int> roles, string keyword, int start, int count, bool classOnly)
         {
             var param = new Dictionary<string, object>()
             {
                 ["personId"] = callerId,
-                ["schoolYearId"] = schoolYearId,
                 ["roles"] = roles ?? new List<int>(),
                 ["filter"] = keyword,
                 ["start"] = start,

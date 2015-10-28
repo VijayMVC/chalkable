@@ -13,7 +13,6 @@ select
 	[Subject],
 	[Body],
 	[DeletedBySender],
-	[SchoolYearRef],
 	[Read],
 	[DeletedByRecipient],
 	p.Id as SenderId,

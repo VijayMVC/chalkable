@@ -1,8 +1,5 @@
-
-
-Alter Procedure [dbo].[spGetIncomeMessages]
+Create Procedure [dbo].[spGetIncomeMessages]
 	@personId int,
-	@schoolYearId int,
 	@roles TInt32 readonly,
 	@filter nvarchar(max),
 	@read bit,
@@ -23,11 +20,10 @@ select count(*) as AllCount from
 	SenderId,
     SenderFirstName,
     SenderLastName,
-    SenderSalutation,
     SenderRoleRef,
     SenderGender
 from 
-	vwPrivateMessage
+	vwIncomeMessage
 where 
 	RecipientRef = @personId
 	And DeletedByRecipient = 0
@@ -51,11 +47,10 @@ select
 	SenderId,
     SenderFirstName,
     SenderLastName,
-    SenderSalutation,
     SenderRoleRef,
     SenderGender
 from 
-	vwPrivateMessage
+	vwIncomeMessage
 where 
 	RecipientRef = @personId
 	And DeletedByRecipient = 0
@@ -71,4 +66,7 @@ Order By
 OFFSET @start ROWS FETCH NEXT @count ROWS ONLY 
 
 
+
 GO
+
+

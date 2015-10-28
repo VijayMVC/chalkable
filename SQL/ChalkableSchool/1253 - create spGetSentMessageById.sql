@@ -1,6 +1,5 @@
-Create Procedure spGetSentMessageById
+Create Procedure [dbo].[spGetSentMessageById]
 	@personId int,
-	@schoolYearId int,
 	@messageId int
 As
 
@@ -12,7 +11,7 @@ select top 1
 	[Body],
 	[DeletedBySender]
 from 
-	vwPrivateMessage
+	PrivateMessage
 where
 	[FromPersonRef] = @personId
 	And [DeletedBySender] = 0
@@ -24,4 +23,7 @@ values (@messageId)
 
 exec spGetMessageRecipients @tb
 
-Go
+
+GO
+
+

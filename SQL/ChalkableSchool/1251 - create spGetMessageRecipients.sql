@@ -1,8 +1,3 @@
-if Object_Id(N'[dbo].[spGetRecipients]') is not null
-	drop procedure [dbo].[spGetRecipients]
-
-Go
-
 Create Procedure [dbo].[spGetMessageRecipients]
 	@messageIds TInt32 ReadOnly
 As
