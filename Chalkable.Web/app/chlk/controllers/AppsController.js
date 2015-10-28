@@ -517,8 +517,8 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum]],
-        function viewExternalAttachAppAction(announcementId, appId, announcementType) {
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
+        function viewExternalAttachAppAction(announcementId, appId, announcementType, appUrlAppend_) {
             if(!this.isStudyCenterEnabled())
                 return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
 
@@ -537,7 +537,8 @@ NAMESPACE('chlk.controllers', function (){
                         + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
                         + '&code=' + data.getAuthorizationCode()
                         + '&announcementId=' + encodeURIComponent(announcementId.valueOf())
-                        + '&announcementType=' + encodeURIComponent(announcementType.valueOf());
+                        + '&announcementType=' + encodeURIComponent(announcementType.valueOf())
+                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
 
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
 
@@ -552,31 +553,23 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum]],
-        function viewAssessmentAppAction(announcementId, appId, announcementType) {
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
+        function attachAssessmentAppAction(announcementId, appId, announcementType, appUrlAppend_) {
             if(!this.isStudyCenterEnabled())
                 return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
 
-            var mode = chlk.models.apps.AppModes.ATTACH;
-
             var result = this.appsService
-                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                .addToAnnouncement(this.getCurrentPerson().getId(), appId, announcementId, announcementType)
                 .catchError(function(error_){
                     throw new chlk.lib.exception.AppErrorException(error_);
-                })
+                }, this)
                 .attach(this.validateResponse_())
-                .then(function(data){
-                    var appData = data.getApplication();
-
-                    var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
-                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                        + '&code=' + data.getAuthorizationCode()
-                        + '&announcementId=' + encodeURIComponent(announcementId.valueOf())
-                        + '&announcementType=' + encodeURIComponent(announcementType.valueOf());
+                .then(function(app){
+                    var viewUrl = app.getEditUrl() + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
 
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
 
-                    return new chlk.models.apps.ExternalAttachAppViewData(options, appData, viewUrl, 'Attach ' + appData.getName());
+                    return new chlk.models.apps.ExternalAttachAppViewData(options, app, viewUrl, 'Attach ' + appData.getName());
                 }, this);
 
             return this.ShadeView(chlk.activities.apps.ExternalAttachAppDialog, result);

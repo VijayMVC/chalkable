@@ -18,11 +18,13 @@ mixin AttachDialogSidebar(tpl, name)
         if options.isShowApps()
             +ActionLink('announcement', 'attachApps')(class = name == 'apps' ? 'active pressed' : '').apps Apps
             if options.getAssessmentAppId()
-                +ActionLink('apps', 'viewAssessmentApp', options.getAnnouncementId()
-                    , options.getAssessmentAppId(), options.getAnnouncementType())(class = name == options.getAssessmentAppId() ? 'active pressed' : '').assessment Assessment
+                +ActionLink('apps', 'attachAssessmentApp', options.getAnnouncementId()
+                    , options.getAssessmentAppId(), options.getAnnouncementType()
+                    , options.getAppUrlAppend())(class = name == options.getAssessmentAppId() ? 'active pressed' : '').assessment Assessment
             each app in options.getExternalAttachApps()
                 +ActionLink('apps', 'viewExternalAttachApp', options.getAnnouncementId()
-                    , app.getId(), options.getAnnouncementType())(class = name == app.getId() ? 'active pressed' : '').apps= app.getName()
+                    , app.getId(), options.getAnnouncementType()
+                    , options.getAppUrlAppend())(class = name == app.getId() ? 'active pressed' : '').apps= app.getName()
 
 
 options = self.getAttachOptions()
