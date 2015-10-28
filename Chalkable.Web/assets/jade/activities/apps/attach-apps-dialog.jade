@@ -1,4 +1,4 @@
-mixin AppIconLink_(announcementId, app, needToInstall, iconTooltip, announcementType)
+mixin AppIconLink_(announcementId, app, needToInstall, iconTooltip, announcementType, appUrlAppend)
     -var appId = app.getId().valueOf()
     .announcement-item.application(data-tooltip=iconTooltip)
         .wrapper
@@ -8,7 +8,7 @@ mixin AppIconLink_(announcementId, app, needToInstall, iconTooltip, announcement
             if needToInstall
                 +ActionButton('appmarket', 'details', app.getId(), true) Install
             else
-                +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, appId, announcementType, self.getAppUrlAppend()) Attach
+                +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, appId, announcementType, appUrlAppend) Attach
 
 mixin FileAttachBlock_(title, announcementId, announcementType, assignedAttributeId)
     .announcement-item.application(data-tooltip=title, data-tooltip-type="overflow")
@@ -53,10 +53,11 @@ mixin AssessmentBlock_(title, announcementId, assessmentAppId, announcementType)
             .shortdesc
             +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, assessmentAppId, announcementType)#add-assesment.simple-gray-button=title
 
-announcementId = self.getAnnouncementId() && self.getAnnouncementId().valueOf()
-classId = self.getClassId() && self.getClassId().valueOf()
-announcementTypeName = self.getAnnouncementTypeName() || ''
-announcementType = self.getAnnouncementType()
+options = self.getAttachOptions()
+announcementId = options.getAnnouncementId() && options.getAnnouncementId().valueOf()
+classId = options.getClassId() && options.getClassId().valueOf()
+announcementTypeName = options.getAnnouncementTypeName() || ''
+announcementType = options.getAnnouncementType()
 
 .dialog.chlk-attach-dialog
     .x-window-header
@@ -68,11 +69,11 @@ announcementType = self.getAnnouncementType()
             .attachments-and-applications
                 if self.getUserRole().isAdmin()
                     each app in self.apps.getItems()
-                        +AppIconLink_(announcementId, app, false, null, announcementType)
+                        +AppIconLink_(announcementId, app, false, null, announcementType, options.getAppUrlAppend())
                 else
                     each app in self.apps.getItems()
-                        +AppIconLink_(announcementId, app, app.needToInstall(), self.getAppIconToolTip(app), announcementType)
+                        +AppIconLink_(announcementId, app, app.needToInstall(), self.getAppIconToolTip(app), announcementType, options.getAppUrlAppend())
 
                 .paging
-                    +Paginator2('announcement', 'attachApps', self.apps, [announcementId, classId, self.getAppUrlAppend(),
-                        self.getAssessmentAppId(), self.isStandardAttachEnabled(), announcementTypeName, announcementType])
+                    +Paginator2('announcement', 'attachApps', self.apps, [announcementId, classId, options.getAppUrlAppend(),
+                        options.getAssessmentAppId(), options.isStandardAttachEnabled(), announcementTypeName, announcementType])

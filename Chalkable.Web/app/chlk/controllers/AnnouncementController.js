@@ -642,9 +642,27 @@ NAMESPACE('chlk.controllers', function (){
             Number
         ]],
         function attachAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
-                                           canAddStandard, announcementTypeName, announcementType, pageIndex_) {
+                                           canAddStandard_, announcementTypeName, announcementType, pageIndex_) {
 
-            var result = ria.async.DeferredData(new chlk.models.announcement.FileAttachViewData(announcementId, announcementType, classId));
+            var result = this.announcementService.getAttachSettings(announcementId, announcementType)
+                .then(function(options){
+                    options.updateByValues(canAddStandard_, null, announcementId, classId, announcementTypeName,
+                        announcementType, null, appUrlAppend_);
+                    this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
+                    return new chlk.models.common.BaseAttachViewData(options);
+                }, this);
+
+            return this.ShadeOrUpdateView(chlk.activities.announcement.AttachFilesDialog, result);
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN, chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        function attachFilesAction() {
+            var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
+            var result = new ria.async.DeferredData(new chlk.models.common.BaseAttachViewData(options));
+
             return this.ShadeOrUpdateView(chlk.activities.announcement.AttachFilesDialog, result);
         },
 
@@ -662,28 +680,20 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.announcement.AnnouncementTypeEnum,
             Number
         ]],
-        function attachAppsDistrictAdminAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
-                                           canAddStandard, announcementTypeName, announcementType, pageIndex_) {
+        function attachAppsDistrictAdminAction() {
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
 
-            var start = pageIndex_ | 0, count = 12;
+            var start = 0, count = 12;
 
 
             var result = this.appMarketService
                 .getInstalledApps(userId, start, null, count)
                 .attach(this.validateResponse_())
-                .then(function(data){
-                    return new chlk.models.apps.InstalledAppsViewData(announcementId,
-                        classId,
-                        data,
-                        appUrlAppend_ || '',
-                        this.isStudyCenterEnabled(),
-                        canAddStandard,
-                        assessmentAppId_,
-                        announcementTypeName,
-                        announcementType
-                    )}, this);
+                .then(function(data) {
+                    var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
+                    return new chlk.models.apps.InstalledAppsViewData(options, data);
+                }, this);
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, result);
         },
 
@@ -701,29 +711,21 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.announcement.AnnouncementTypeEnum,
             Number
         ]],
-        function attachAppsTeacherAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
-                                     canAddStandard, announcementTypeName, announcementType, pageIndex_) {
+        function attachAppsTeacherAction() {
 
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
 
-            var start = pageIndex_ | 0, count = 12;
+            var start = 0, count = 12;
+            var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
 
 
             var result = this.appMarketService
-                .getAppsForAttach(userId, classId, mp.getId(), start, count)
+                .getAppsForAttach(userId, options.getClassId(), mp.getId(), start, count)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return new chlk.models.apps.InstalledAppsViewData(announcementId,
-                        classId,
-                        data,
-                        appUrlAppend_ || '',
-                        this.isStudyCenterEnabled(),
-                        canAddStandard,
-                        assessmentAppId_,
-                        announcementTypeName,
-                        announcementType
-                    )}, this);
+                    return new chlk.models.apps.InstalledAppsViewData(options, data);
+                }, this);
 
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, result);
         },

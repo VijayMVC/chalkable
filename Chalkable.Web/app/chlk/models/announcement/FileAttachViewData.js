@@ -10,22 +10,6 @@ NAMESPACE('chlk.models.announcement', function () {
 
 
 
-            [[
-                chlk.models.id.AnnouncementId,
-                chlk.models.announcement.AnnouncementTypeEnum,
-                chlk.models.id.ClassId,
-                chlk.models.id.AnnouncementAssignedAttributeId
-            ]],
-            function $(announcementId, announcementType, classId_, assignedAttributeId_){
-                BASE();
-                this.setAnnouncementId(announcementId);
-                this.setAnnouncementType(announcementType);
-                classId_ && this.setClassId(classId_);
-                this.setFileCabinetEnabled(true);
-                this.setStandardAttachEnabled(false);
-                this.setShowApps(false);
-                if(assignedAttributeId_)
-                    this.setAssignedAttributeId(assignedAttributeId_);
-            }
+
         ]);
 });

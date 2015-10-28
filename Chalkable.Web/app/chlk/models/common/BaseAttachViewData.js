@@ -1,7 +1,4 @@
-REQUIRE('chlk.models.id.SchoolPersonId');
-REQUIRE('chlk.models.id.AnnouncementId');
-REQUIRE('chlk.models.id.ClassId');
-REQUIRE('chlk.models.id.AnnouncementAssignedAttributeId');
+REQUIRE('chlk.models.common.AttachOptionsViewData');
 
 NAMESPACE('chlk.models.common', function () {
 
@@ -10,30 +7,13 @@ NAMESPACE('chlk.models.common', function () {
     CLASS(
         'BaseAttachViewData', [
 
-            chlk.models.id.AnnouncementId, 'announcementId',
-            chlk.models.id.ClassId, 'classId',
-            chlk.models.id.AppId, 'assessmentAppId',
-            String, 'announcementTypeName',
+            chlk.models.common.AttachOptionsViewData, 'attachOptions',
 
-            chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
-
-            Boolean, 'fileCabinetEnabled',
-            Boolean, 'standardAttachEnabled',
-            Boolean, 'showApps',
-            chlk.models.id.AnnouncementAssignedAttributeId, 'assignedAttributeId',
-            String, 'appUrlAppend',
-
-            [[
-                chlk.models.id.AnnouncementId,
-                chlk.models.announcement.AnnouncementTypeEnum
-            ]],
-            function $createForStudent(announcementId, announcementType){
+            [[chlk.models.common.AttachOptionsViewData]],
+            function $(options_){
                 BASE();
-                this.setAnnouncementId(announcementId);
-                this.setFileCabinetEnabled(false);
-                this.setStandardAttachEnabled(false);
-                this.setShowApps(false);
-                this.setAnnouncementType(announcementType);
+                if(options_)
+                    this.setAttachOptions(options_);
             }
         ]);
 });

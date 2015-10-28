@@ -10,38 +10,6 @@ NAMESPACE('chlk.templates.common', function () {
         'BaseAttachTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.AnnouncementId, 'announcementId',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.ClassId, 'classId',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.AppId, 'assessmentAppId',
-
-            [ria.templates.ModelPropertyBind],
-            Boolean, 'fileCabinetEnabled',
-
-            [ria.templates.ModelPropertyBind],
-            Boolean, 'standardAttachEnabled',
-
-            [ria.templates.ModelPropertyBind],
-            Boolean, 'showApps',
-
-            [ria.templates.ModelPropertyBind],
-            String, 'announcementTypeName',
-
-            [ria.templates.ModelPropertyBind],
-            String, 'appUrlAppend',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.AnnouncementAssignedAttributeId, 'assignedAttributeId',
-
-            function getParams(){
-                return [this.getAnnouncementId(), this.getClassId(), this.getAppUrlAppend(), this.getAssessmentAppId(), this.isStandardAttachEnabled(),
-                    this.getAnnouncementTypeName(), this.getAnnouncementType()]
-            }
+            chlk.models.common.AttachOptionsViewData, 'attachOptions'
         ])
 });
