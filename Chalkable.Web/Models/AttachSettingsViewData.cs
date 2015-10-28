@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Chalkable.Data.Master.Model;
 using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Models
@@ -13,7 +14,7 @@ namespace Chalkable.Web.Models
         public IList<BaseApplicationViewData> ExternalAttachApps { get; set; }
         
         public static AttachSettingsViewData Create(Guid? assessmentId, bool isStandardEnabled, bool isAppsEnabled
-            , bool isFileCabinetEnabled, IList<BaseApplicationViewData> externalAttachApps)
+            , bool isFileCabinetEnabled, IList<Application> externalAttachApps)
         {
             return new AttachSettingsViewData
             {
@@ -21,8 +22,7 @@ namespace Chalkable.Web.Models
                 IsStandardEnabled = isStandardEnabled,
                 IsAppsEnabled = isAppsEnabled,
                 IsFileCabinetEnabled = isFileCabinetEnabled,
-                ExternalAttachApps = externalAttachApps
-
+                ExternalAttachApps = BaseApplicationViewData.Create(externalAttachApps) 
             };
         }
     }
