@@ -2064,12 +2064,6 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
-        [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
-        function showStandardsAction(typeName, announcementId, classId){
-            return this.Redirect('standard','showStandards', [typeName, announcementId, classId]);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.standard.Standard]],
         function addStandardsAction(model){
             var res = this.announcementService.addStandard(model.getAnnouncementId(), model.getStandardId())

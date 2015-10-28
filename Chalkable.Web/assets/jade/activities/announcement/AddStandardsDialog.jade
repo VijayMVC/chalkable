@@ -1,27 +1,43 @@
-
-+AddStandardDialog(self.getAnnouncementTypeName() + ' STANDARDS', 'announcement', 'addStandards')
-    +Hidden('announcementid', self.getAnnouncementId())
-    +Hidden('standardid', null)
-    +Hidden('standardIds', self.getStandardIds().join(',')).standard-ids
-    +SearchBox(chlk.services.StandardService, "searchStandardsByClassId", chlk.templates.standard.StandardAutoCompleteTpl, self.getClassId(), true)(
-        name="filter", placeholder="Find a Standard"
-    ).search-standard
-    .standards-list-container
-        standardSubjects = self.getItemStandards() || []
-        table
-            tr.standards-row
-                td.name-td
-                    .standards-names.column
-                        each subject in standardSubjects
-                            +ActionLink('standard', 'showStandardsByCategory', self.getClassId(), subject.getId(), subject.getDescription())(
-                            data-subject-id = subject.getId()
-                            ).standard-name.column-cell
-                                .name(data-tooltip=subject.getName(), data-tooltip-type="overflow")=subject.getName()
-                                .right-triangle
-                td
-                    .standards-description
+options = self.getAttachOptions()
+announcementId = options.getAnnouncementId() && options.getAnnouncementId().valueOf()
+classId = options.getClassId() && options.getClassId().valueOf()
+announcementTypeName = options.getAnnouncementTypeName() || ''
+announcementType = options.getAnnouncementType()
+.dialog.chlk-attach-dialog
+    .x-window-header
+        h1=announcementTypeName + ' STANDARDS'
+        span Choose a standard that describes the item
+        a.close.close-btn
+    .attach-content
+        +AttachDialogSidebar(self, 'standard')
+        .attach-main
+            +ActionForm('announcement', 'addStandards').add-standards-form
+                +Hidden('tmpStandardId', null)
+                +Hidden('announcementid', announcementId)
+                +Hidden('standardid', null)
+                +Hidden('standardIds', self.getStandardIds().join(',')).standard-ids
+                +SearchBox(chlk.services.StandardService, "searchStandardsByClassId", chlk.templates.standard.StandardAutoCompleteTpl, options.getClassId(), true)(
+                name="filter", placeholder="Find a Standard"
+                ).search-standard
+                .standards-list-container
+                    standardSubjects = self.getItemStandards() || []
+                        table
+                            tr.standards-row
+                                td.name-td
+                                    .standards-names.column
+                                        each subject in standardSubjects
+                                            +ActionLink('standard', 'showStandardsByCategory', classId, subject.getId(), subject.getDescription())(
+                                            data-subject-id = subject.getId()
+                                            ).standard-name.column-cell
+                                                .name(data-tooltip=subject.getName(), data-tooltip-type="overflow")=subject.getName()
+                                                .right-triangle
+                                td
+                                    .standards-description
+                .buttons-container
+                    +Button.special-button2.cancel.close Cancel
+                    +Button()(type="submit", disabled).special-button2.blue-button.add.add-standard-btn Submit
 
 +ActionForm('standard', 'getStandardTree')#get-standardt-tree-form.x-hidden
-    +Hidden('announcementid', self.getAnnouncementId())
+    +Hidden('announcementid', announcementId)
     +Hidden('standardid', null)
-    +Hidden('classid', self.getClassId())
+    +Hidden('classid', classId)

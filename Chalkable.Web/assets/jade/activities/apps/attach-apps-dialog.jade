@@ -43,7 +43,7 @@ mixin StandardBlock_(title, announcementId, classId, announcementTypeName)
             .attach-standard.img
             div(data-tooltip=title, data-tooltip-type="overflow").title=title
             .shortdesc
-            +ActionButton('announcement', 'showStandards', announcementTypeName, announcementId, classId)=title
+            +ActionButton('standard', 'showStandards', announcementTypeName, announcementId, classId)=title
 
 mixin AssessmentBlock_(title, announcementId, assessmentAppId, announcementType)
     .announcement-item.application
