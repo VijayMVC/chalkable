@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        PaginatedList<PrivateMessage> IPrivateMessageService.GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool classOnly, DateTime? fromDate, DateTime? toDate)
+        PaginatedList<PrivateMessage> IPrivateMessageService.GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool? classOnly, bool? currentYearOnly)
         {
             throw new NotImplementedException();
         }

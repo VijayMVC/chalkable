@@ -87,7 +87,7 @@ namespace Chalkable.Data.School.DataAccess
         }
 
         private const string SP_GET_SENT_PRIVATE_MESSAGES = "spGetSentMessages";
-        public PaginatedList<SentPrivateMessage> GetSentMessages(int callerId, IList<int> roles, string keyword, int start, int count, bool classOnly, DateTime? fromDate, DateTime? toDate)
+        public PaginatedList<SentPrivateMessage> GetSentMessages(int callerId, IList<int> roles, string keyword, int start, int count, bool? classOnly, DateTime? fromDate, DateTime? toDate)
         {
             var param = new Dictionary<string, object>()
             {

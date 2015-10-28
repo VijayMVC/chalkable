@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void SendMessageToClass(int classId, string subject, string body);
         void SendMessageToPerson(int personId, string subject, string body);
-        PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool classOnly, DateTime? fromDate, DateTime? toDate);
+        PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool? classOnly, bool? currentYearOnly);
         void MarkAsRead(IList<int> ids, bool read);
         void Delete(IList<int> id, PrivateMessageType type);
         IncomePrivateMessage GetIncomeMessage(int messageId);
@@ -97,11 +97,22 @@ namespace Chalkable.BusinessLogic.Services.School
             return messageId;
         }
         
-        public PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool classOnly, DateTime? fromDate, DateTime? toDate)
+        public PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool? classOnly, bool? currentYearOnly)
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolLocalId.HasValue);
-            
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            DateTime? fromDate = null;
+            DateTime? toDate = null;
+            if (currentYearOnly.HasValue && currentYearOnly.Value)
+            {
+                var currSchoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(Context.SchoolYearId.Value);               
+                var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYearsByAcadYear(currSchoolYear.AcadYear);
+                fromDate = schoolYears.Min(x => x.StartDate);
+                toDate = schoolYears.Max(x => x.EndDate);
+            }
+
             PrivateMessageSecurity.EnsureMessgingPermission(Context);
             using (var uow = Read())
             {
