@@ -11,7 +11,7 @@ namespace Chalkable.Data.School.Model
         public const string END_DATE_FIELD = "EndDate";
         public const string SCHOOL_REF_FIELD = "SchoolRef";
         public const string ARCHIVE_DATE = "ArchiveDate";
-
+        public const string ACAD_YEAR_FIELD = "AcadYear";
 
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
@@ -21,11 +21,9 @@ namespace Chalkable.Data.School.Model
         public DateTime? EndDate { get; set; }
         public DateTime? ArchiveDate { get; set; }
         public int SchoolRef { get; set; }
+        public int AcadYear { get; set; }
 
         [NotDbFieldAttr]
-        public bool IsActive
-        {
-            get { return !ArchiveDate.HasValue; }
-        }
+        public bool IsActive => !ArchiveDate.HasValue;
     }
 }
