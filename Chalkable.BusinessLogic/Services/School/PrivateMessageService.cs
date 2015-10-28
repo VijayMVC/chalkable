@@ -75,6 +75,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private int CreatePrivateMessage(IList<int> personIds, int? classId, string subject, string body, UnitOfWork uow)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
 
             var da = new PrivateMessageDataAccess(uow);
             var message = new PrivateMessage
@@ -110,10 +111,10 @@ namespace Chalkable.BusinessLogic.Services.School
                 switch (type)
                 {
                     case PrivateMessageType.Income:
-                        var inMsg = da.GetIncomeMessages(Context.PersonId.Value, null, rolesIds, keyword, read,  start, count);
+                        var inMsg = da.GetIncomeMessages(Context.PersonId.Value, rolesIds, keyword, read,  start, count);
                         return new PaginatedList<PrivateMessage>(inMsg.Select(x => x), inMsg.PageIndex, inMsg.PageSize, inMsg.TotalCount);
                     case PrivateMessageType.Sent:
-                        var sentMsg = da.GetSentMessages(Context.PersonId.Value, null, rolesIds, keyword, start, count, classOnly);
+                        var sentMsg = da.GetSentMessages(Context.PersonId.Value, rolesIds, keyword, start, count, classOnly);
                         return new PaginatedList<PrivateMessage>(sentMsg.Select(x => x), sentMsg.PageIndex, sentMsg.PageSize, sentMsg.TotalCount);
                     default:
                         throw new ChalkableException(ChlkResources.ERR_PRIVATE_MESSAGE_INVALID_TYPE);
