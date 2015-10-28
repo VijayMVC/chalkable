@@ -42,11 +42,9 @@ if self.needButtons
             'attach',
             self.getId(),
             classId,
-            self.getStandardsUrlComponents(),
-            self.getAssessmentApplicationId(),
-            self.isCanAddStandard(),
             self.getModel().getAnnouncementTypeName(),
-            self.getModel().getType()
+            self.getModel().getType(),
+            self.getStandardsUrlComponents()
         )(type="button")#add-attachments.simple-gray-button Attach
         +ActionLink('announcement', 'addAttribute', self.getId(), self.getModel().getType())(
             class = (!self.getAnnouncementAttributes() || !self.getAnnouncementAttributes().length) ? '' : 'x-hidden'

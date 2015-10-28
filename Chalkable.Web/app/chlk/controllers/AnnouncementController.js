@@ -635,18 +635,14 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.id.AnnouncementId,
             chlk.models.id.ClassId,
             String,
-            chlk.models.id.AppId,
-            Boolean,
-            String,
             chlk.models.announcement.AnnouncementTypeEnum,
-            Number
+            String
         ]],
-        function attachAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
-                                           canAddStandard_, announcementTypeName, announcementType, pageIndex_) {
+        function attachAction(announcementId, classId, announcementTypeName, announcementType, appUrlAppend_) {
 
             var result = this.announcementService.getAttachSettings(announcementId, announcementType)
                 .then(function(options){
-                    options.updateByValues(canAddStandard_, null, announcementId, classId, announcementTypeName,
+                    options.updateByValues(null, null, null, announcementId, classId, announcementTypeName,
                         announcementType, null, appUrlAppend_);
                     this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
                     return new chlk.models.common.BaseAttachViewData(options);
@@ -670,16 +666,6 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[
-            chlk.models.id.AnnouncementId,
-            chlk.models.id.ClassId,
-            String,
-            chlk.models.id.AppId,
-            Boolean,
-            String,
-            chlk.models.announcement.AnnouncementTypeEnum,
-            Number
-        ]],
         function attachAppsDistrictAdminAction() {
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
@@ -701,16 +687,6 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[
-            chlk.models.id.AnnouncementId,
-            chlk.models.id.ClassId,
-            String,
-            chlk.models.id.AppId,
-            Boolean,
-            String,
-            chlk.models.announcement.AnnouncementTypeEnum,
-            Number
-        ]],
         function attachAppsTeacherAction() {
 
             var userId = this.getCurrentPerson().getId();
@@ -732,16 +708,27 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
         function fileAttachAction(announcementId, announcementType, assignedAttributeId_){
-            var data = new chlk.models.announcement.FileAttachViewData(announcementId, announcementType, null, assignedAttributeId_);
-            var res =  new ria.async.DeferredData(data);
-            return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, res);
+            var result = this.announcementService.getAttachSettings(announcementId, announcementType)
+                .then(function(options){
+                    options.updateByValues(false, false, false, announcementId, null, null,
+                        announcementType, assignedAttributeId_);
+                    this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
+                    return new chlk.models.common.BaseAttachViewData(options);
+                }, this);
+
+            return this.ShadeOrUpdateView(chlk.activities.announcement.AttachFilesDialog, result);
         },
 
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
-        function fileAttachStudentAction(announcementId, announcementType, assignedAttributeId_){
-            var data = new chlk.models.apps.InstalledAppsViewData.$createForStudent(announcementId, announcementType);
-            var res =  new ria.async.DeferredData(data);
-            return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, res);
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function fileAttachStudentAction(announcementId, announcementType){
+            var result = this.announcementService.getAttachSettings(announcementId, announcementType)
+                .then(function(options){
+                    options.updateByValues(null, null, null, announcementId, null, null, announcementType);
+                    this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
+                    return new chlk.models.common.BaseAttachViewData(options);
+                }, this);
+
+            return this.ShadeOrUpdateView(chlk.activities.announcement.AttachFilesDialog, result);
         },
 
         //todo move attribute methods to separate controller
