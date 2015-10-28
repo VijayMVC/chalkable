@@ -1,0 +1,7 @@
+mixin ActionCheckbox(name, val, isReadOnly, withLabel, controller, checkAction, unCheckAction, params_)
+    -self.prepareData(attributes)
+    .action-checkbox-container(class=attributes.containerCls)
+        +Checkbox(name, val, isReadOnly, withLabel)(attributes).action-checkbox
+        +ActionLinkWithPrepend(controller, checkAction, params_).check-link.x-hidden
+        +ActionLinkWithPrepend(controller, unCheckAction, params_).un-check-link.x-hidden
+
