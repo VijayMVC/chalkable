@@ -12,7 +12,7 @@ mixin AttachDialogSidebar(tpl, name)
     .attach-sidebar
         +ActionLink('announcement', 'attachFiles')(class = name == 'upload' ? 'active pressed' : '').upload Upload
         if options.isFileCabinetEnabled()
-            +ActionLink('announcement', 'attachApps')(class = name == 'uploaded' ? 'active pressed' : '').uploaded Uploaded
+            +ActionLink('announcement', 'fileCabinet')(class = name == 'uploaded' ? 'active pressed' : '').uploaded Uploaded
         if options.isStandardAttachEnabled()
             +ActionLink('announcement', 'attachApps')(class = name == 'standard' ? 'active pressed' : '').standard Standard
         if options.isShowApps()

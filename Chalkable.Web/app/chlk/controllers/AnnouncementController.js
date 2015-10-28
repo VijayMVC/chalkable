@@ -672,7 +672,6 @@ NAMESPACE('chlk.controllers', function (){
 
             var start = 0, count = 12;
 
-
             var result = this.appMarketService
                 .getInstalledApps(userId, start, null, count)
                 .attach(this.validateResponse_())
@@ -695,7 +694,6 @@ NAMESPACE('chlk.controllers', function (){
             var start = 0, count = 12;
             var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
 
-
             var result = this.appMarketService
                 .getAppsForAttach(userId, options.getClassId(), mp.getId(), start, count)
                 .attach(this.validateResponse_())
@@ -704,6 +702,39 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
 
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, result);
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN,
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
+        //---File Cabinet---
+        [chlk.controllers.SidebarButton('add-new')],
+        function fileCabinetAction(){
+            return this.getAttachments_();
+        },
+
+        [[String, chlk.models.attachment.SortAttachmentType, Number, Number]],
+        function getAttachments_(filter_, sortType_, start_, count_){
+            var res = this.attachmentService.getAttachments(filter_, sortType_, start_, count_)
+                .attach(this.validateResponse_())
+                .then(function(atts){
+
+                    atts.getItems().forEach(function(attachment){
+                        if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
+                            attachment.setThumbnailUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, 170, 110));
+                            attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, null, null));
+                        }
+                        if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){
+                            attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), true, null, null));
+                        }
+                    }, this);
+
+                    var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
+
+                    return new chlk.models.attachment.FileCabinetViewData(options, atts, sortType_, filter_);
+                }, this);
+            return this.ShadeOrUpdateView(chlk.activities.announcement.FileCabinetDialog, res);
         },
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
@@ -780,18 +811,6 @@ NAMESPACE('chlk.controllers', function (){
                 this.fetchAddAttributeFuture_(announcementId, announcementType), 'add-attribute');
         },
 
-
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DISTRICTADMIN,
-            chlk.models.common.RoleEnum.TEACHER
-        ])],
-        //---File Cabinet---
-        [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
-        function fileCabinetAction(announcementId, announcementType, assignedAtributeId_){
-            return this.getAttachments_(announcementId, announcementType, assignedAtributeId_);
-        },
-
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DISTRICTADMIN,
             chlk.models.common.RoleEnum.TEACHER
@@ -800,9 +819,6 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.attachment.FileCabinetPostData]],
         function listAttachmentsAction(postData){
             return this.getAttachments_(
-                postData.getAnnouncementId(),
-                postData.getAnnouncementType(),
-                postData.getAssignedAttributeId(),
                 postData.getFilter(),
                 postData.getSortType(),
                 postData.getStart(),
@@ -816,52 +832,13 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [chlk.controllers.SidebarButton('add-new')],
         [[
-            chlk.models.id.AnnouncementId,
-            chlk.models.announcement.AnnouncementTypeEnum,
-            chlk.models.id.AnnouncementAssignedAttributeId,
             String,
             chlk.models.attachment.SortAttachmentType,
             Number,
             Number
         ]],
-        function pageAttachmentsAction(announcementId, announcementType, assignedAtributeId_, filter_, sortType_, start_, count_){
-            return this.getAttachments_(announcementId, announcementType, assignedAtributeId_, filter_, sortType_, start_, count_);
-        },
-
-        [[
-            chlk.models.id.AnnouncementId,
-            chlk.models.announcement.AnnouncementTypeEnum,
-            chlk.models.id.AnnouncementAssignedAttributeId,
-            String,
-            chlk.models.attachment.SortAttachmentType,
-            Number,
-            Number
-        ]],
-        function getAttachments_(announcementId, announcementType, assignedAtributeId_,filter_, sortType_, start_, count_){
-            var res = this.attachmentService.getAttachments(filter_, sortType_, start_, count_)
-                .attach(this.validateResponse_())
-                .then(function(atts){
-
-                    atts.getItems().forEach(function(attachment){
-                        if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
-                            attachment.setThumbnailUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, 170, 110));
-                            attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, null, null));
-                        }
-                        if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){
-                            attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), true, null, null));
-                        }
-                    }, this);
-
-                    return new chlk.models.attachment.FileCabinetViewData(
-                        announcementId,
-                        announcementType,
-                        atts,
-                        sortType_,
-                        filter_,
-                        assignedAtributeId_
-                    )
-                }, this);
-            return this.ShadeOrUpdateView(chlk.activities.announcement.FileCabinetDialog, res);
+        function pageAttachmentsAction(filter_, sortType_, start_, count_){
+            return this.getAttachments_(filter_, sortType_, start_, count_);
         },
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, Boolean]],
