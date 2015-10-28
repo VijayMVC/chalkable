@@ -1,14 +1,14 @@
 mixin RolesGroupButtonsForMsg(isInbox, keyword, role, classOnly, currentYearOnly)
     +ActionButton('message', 'page', true, isInbox, '', keyword)(class= !role || role == '' ? 'pressed' : '') All
     +ActionButton('message', 'page', true, isInbox, 'parent', keyword)(class= role == 'parent' ? 'pressed' : '') Parent
-    +ActionButton('message', 'page', true, isInbox, 'student', keyword)(class= role == 'student' ? 'pressed' : '') Student
-    +ActionButton('message', 'page', true, isInbox, 'teacher', keyword)(class= role == 'teacher' ? 'pressed' : '') Teacher
-    +ActionButton('message', 'page', true, isInbox, 'districtadmin', keyword)(
+    +ActionButton('message', 'page', true, isInbox, 'student', keyword, false, currentYearOnly)(class= role == 'student' ? 'pressed' : '') Student
+    +ActionButton('message', 'page', true, isInbox, 'teacher', keyword, false, currentYearOnly)(class= role == 'teacher' ? 'pressed' : '') Teacher
+    +ActionButton('message', 'page', true, isInbox, 'districtadmin', keyword, false, currentYearOnly)(
     class= role == 'districtadmin' ? 'pressed' : ''
     ) Admin
     if !isInbox && !self.getUserRole().isStudent()
-        +ActionButton('message', 'page', true, isInbox, '', keyword, 0, true)(class= classOnly ? 'pressed' : '') Class
-    +ActionButton('message', 'page', true, isInbox, '', keyword, 0, true, true)(class= currentYearOnly ? 'pressed' : '') Current Year
+        +ActionButton('message', 'page', true, isInbox, '', keyword, 0, true, currentYearOnly)(class= classOnly ? 'pressed' : '') Class
+    +ActionButton('message', 'page', true, isInbox, '', keyword, 0, classOnly, true)(class= currentYearOnly ? 'pressed' : '') Current Year
 
 
 
@@ -38,7 +38,7 @@ h2.page-title Messages
     DIV(class=items.length ? '' : 'no-messages').grid-container
         input(name="selectedIds", type="hidden")#selectedIds
         +Hidden('start', self.getStart())
-        +Grid('message', 'page', self.getMessages(), [true, self.isInbox(), self.getRole(), self.getKeyword(), self.isClassOnly()])
+        +Grid('message', 'page', self.getMessages(), [true, self.isInbox(), self.getRole(), self.getKeyword(), self.isClassOnly(), self.isCurrentYearOnly()])
             +GridBody()
                 .buttons
                     .left

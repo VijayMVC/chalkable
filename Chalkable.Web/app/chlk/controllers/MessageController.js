@@ -24,8 +24,8 @@ NAMESPACE('chlk.controllers', function (){
             chlk.services.PersonService, 'personService',
 
             [chlk.controllers.SidebarButton('messages')],
-            [[Boolean, Boolean, String, String, Number, Boolean, Boolean, Boolean]],
-            function pageAction(postback_, inbox_, role_, keyword_, start_, classOnly_, currentYearOnly_) {
+            [[Boolean, Boolean, String, String, Boolean, Boolean, Number]],
+            function pageAction(postback_, inbox_, role_, keyword_, classOnly_, currentYearOnly_, start_) {
                 inbox_ = inbox_ || false;
                 var result = this.getMessages_(inbox_, role_, keyword_, start_, classOnly_, currentYearOnly_);
                 return this.PushOrUpdateView(chlk.activities.messages.MessageListPage, result);
