@@ -21,13 +21,13 @@ NAMESPACE('chlk.controllers', function () {
             chlk.services.StandardService, 'standardService',
 
             [chlk.controllers.NotChangedSidebarButton()],
-            [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
-            function showStandardsAction(typeName, announcementId, classId){
+            function showStandardsAction(){
                 var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []);
-                var res = this.standardService.getSubjects(classId)
+                var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
+                var res = this.standardService.getSubjects(options.getClassId())
                     .attach(this.validateResponse_())
                     .then(function(subjects){
-                        return new chlk.models.announcement.AddStandardViewData(typeName, announcementId, classId, subjects, standardIds);
+                        return new chlk.models.announcement.AddStandardViewData(options, subjects, standardIds);
                     }, this);
                 return this.ShadeView(chlk.activities.announcement.AddStandardsDialog, res);
             },

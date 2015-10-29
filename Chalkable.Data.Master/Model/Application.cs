@@ -53,6 +53,10 @@ namespace Chalkable.Data.Master.Model
         public int? InternalScore { get; set; }
         public string InternalDescription { get; set; }
 
+        public bool HasTeacherExternalAttach { get; set; }
+        public bool HasStudentExternalAttach { get; set; }
+        public bool HasAdminExternalAttach { get; set; }
+
         [NotDbFieldAttr]
         public bool? Ban { get; set; }
         [NotDbFieldAttr]

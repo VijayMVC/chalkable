@@ -1,26 +1,17 @@
 REQUIRE('chlk.models.standard.StandardSubject');
-REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.common.BaseAttachViewData');
 
 NAMESPACE('chlk.models.announcement', function(){
     /**@class chlk.models.announcement.AddStandardViewData*/
-    CLASS('AddStandardViewData', [
-
-        String, 'announcementTypeName',
+    CLASS('AddStandardViewData', EXTENDS(chlk.models.common.BaseAttachViewData), [
 
         ArrayOf(chlk.models.standard.StandardSubject), 'itemStandards',
 
-        chlk.models.id.AnnouncementId, 'announcementId',
-
-        chlk.models.id.ClassId, 'classId',
-
         Array, 'standardIds',
 
-        [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId, ArrayOf(chlk.models.standard.StandardSubject), Array]],
-        function $(announcementTypeName, announcementId, classId, itemStandards, standardIds){
-            BASE();
-            this.setAnnouncementId(announcementId);
-            this.setAnnouncementTypeName(announcementTypeName);
-            this.setClassId(classId);
+        [[chlk.models.common.AttachOptionsViewData, ArrayOf(chlk.models.standard.StandardSubject), Array]],
+        function $(options, itemStandards, standardIds){
+            BASE(options);
             this.setItemStandards(itemStandards);
             this.setStandardIds(standardIds);
         }

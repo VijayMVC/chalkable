@@ -188,6 +188,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return Context.Role.Id == CoreRoles.STUDENT_ROLE.Id && application.HasStudentMyApps;
         }
 
+        public bool HasExternalAttachMode(Application application)
+        {
+            return BaseSecurity.IsDistrictAdmin(ServiceLocator.Context) && application.HasAdminExternalAttach
+                    || Context.Role == CoreRoles.TEACHER_ROLE && application.HasTeacherExternalAttach
+                    || Context.Role == CoreRoles.STUDENT_ROLE && application.HasStudentExternalAttach;
+        }
+
         public IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count)
         {
             using (var uow = Read())
