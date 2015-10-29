@@ -686,19 +686,20 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        function attachAppsTeacherAction() {
+        [[Number]],
+        function attachAppsTeacherAction(start_) {
 
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
 
-            var start = 0, count = 12;
+            var start = start_ || 0, count = 12;
             var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
 
             var result = this.appMarketService
                 .getAppsForAttach(userId, options.getClassId(), mp.getId(), start, count)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return new chlk.models.apps.InstalledAppsViewData(options, data);
+                    return new chlk.models.apps.InstalledAppsViewData(options, data, start);
                 }, this);
 
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, result);

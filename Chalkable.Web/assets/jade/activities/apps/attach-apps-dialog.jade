@@ -75,5 +75,4 @@ announcementType = options.getAnnouncementType()
                         +AppIconLink_(announcementId, app, app.needToInstall(), self.getAppIconToolTip(app), announcementType, options.getAppUrlAppend())
 
                 .paging
-                    +Paginator2('announcement', 'attachApps', self.apps, [announcementId, classId, options.getAppUrlAppend(),
-                        options.getAssessmentAppId(), options.isStandardAttachEnabled(), announcementTypeName, announcementType])
+                    +Paginator2('announcement', 'attachApps', self.apps)

@@ -10,10 +10,13 @@ NAMESPACE('chlk.models.apps', function () {
 
             chlk.models.common.PaginatedList, 'apps',
 
-            [[chlk.models.common.AttachOptionsViewData, chlk.models.common.PaginatedList]],
-            function $(options, apps){
+            Number, 'start',
+
+            [[chlk.models.common.AttachOptionsViewData, chlk.models.common.PaginatedList, Number]],
+            function $(options, apps, start_){
                 BASE(options);
                 this.setApps(apps);
+                this.setStart(start_ || 0);
             }
         ]);
 });
