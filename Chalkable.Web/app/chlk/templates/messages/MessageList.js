@@ -29,6 +29,9 @@ NAMESPACE('chlk.templates.messages', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'classOnly',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'currentYearOnly',
+
             function getNoMessagesText(){
                 if(this.isClassOnly())
                     return 'No messages sent to classes';

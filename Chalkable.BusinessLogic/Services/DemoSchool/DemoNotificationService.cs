@@ -39,16 +39,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<Notification> GetUnshownNotifications()
         {
-            return GetNotifications(new NotificationQuery { Shown = false, PersonId = Context.PersonId });
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+
+            return GetNotifications(new NotificationQuery
+            {
+                Shown = false,
+                PersonId = Context.PersonId.Value,
+                RoleId = Context.RoleId
+            });
         }
 
         public IList<Notification> GetNotifications(NotificationQuery notificationQuery)
         {
             var notifications = NotificationStorage.GetData().Select(x => x.Value);
+            notifications = notifications.Where(x => x.PersonRef == notificationQuery.PersonId && x.RoleRef == notificationQuery.RoleId);
+
             if (notificationQuery.Id.HasValue)
                 notifications = notifications.Where(x => x.Id == notificationQuery.Id);
-            if (notificationQuery.PersonId.HasValue)
-                notifications = notifications.Where(x => x.PersonRef == notificationQuery.PersonId);
             if (notificationQuery.Shown.HasValue)
                 notifications = notifications.Where(x => x.Shown == notificationQuery.Shown);
 
@@ -65,9 +73,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public PaginatedList<NotificationDetails> GetNotifications(int start, int count)
         {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+
             return GetPaginatedNotificationsDetails(new NotificationQuery
             {
-                PersonId = Context.PersonId,
+                PersonId = Context.PersonId.Value,
                 Start = start,
                 Count = count,
                 SchoolId = Context.SchoolLocalId.Value
@@ -116,7 +127,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void MarkAsShown(int[] notificationIds)
         {
-            var notifications = GetNotifications(new NotificationQuery { Shown = false, PersonId = Context.PersonId });
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+
+            var notifications = GetUnshownNotifications();
             foreach (var notificationId in notificationIds)
             {
                 var notification = notifications.FirstOrDefault(x => x.Id == notificationId);
