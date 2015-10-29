@@ -6,7 +6,6 @@ announcementType = options.getAnnouncementType()
 .dialog.chlk-attach-dialog
     .x-window-header
         h1=announcementTypeName + ' STANDARDS'
-        span Choose a standard that describes the item
         a.close.close-btn
     .attach-content
         +AttachDialogSidebar(self, 'standard')
@@ -17,8 +16,9 @@ announcementType = options.getAnnouncementType()
                 +Hidden('standardid', null)
                 +Hidden('standardIds', self.getStandardIds().join(',')).standard-ids
                 +SearchBox(chlk.services.StandardService, "searchStandardsByClassId", chlk.templates.standard.StandardAutoCompleteTpl, options.getClassId(), true)(
-                name="filter", placeholder="Find a Standard"
+                    name="filter", placeholder="Find a Standard"
                 ).search-standard
+                .clear-fix
                 .standards-list-container
                     standardSubjects = self.getItemStandards() || []
                         table
