@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.SqlClient;
-using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -56,7 +54,7 @@ namespace Chalkable.Data.School.DataAccess
                     typeof (MarkingPeriod)
                 };
 
-            //TODO: think how to rewrtite this
+            //TODO: think how to rewrtite this ... move this to stored procedure 
             var sql = $@"select distinct {Orm.ComplexResultSetQuery(tables)}, 
                                PrivateMessage.*,
                                PrivateMessageRecipient.[{PrivateMessageRecipient.READ_FIELD}] as [{PrivateMessageRecipient.READ_FIELD}],
@@ -161,21 +159,14 @@ namespace Chalkable.Data.School.DataAccess
             return ReadPaginatedResult(q, query.Start, query.Count, ReadListNotifcationDetails);
         }
 
-        public int GetUnshownNotificationsCount(int personId)
+        public int GetUnshownNotificationsCount(int personId, int roleId)
         {
-            var sql = string.Format("select count(*) as UnshownCount from Notification where {0} =@{0} and {1} = @{1}"
-                , Notification.SHOWN_FIELD, Notification.PERSON_REF_FIELD);
-            IDictionary<string, object> ps = new Dictionary<string, object>
+            return Count<Notification>(new AndQueryCondition
             {
                 {Notification.SHOWN_FIELD, false},
                 {Notification.PERSON_REF_FIELD, personId},
-            };
-            using (var reader = ExecuteReaderParametrized(sql, ps))
-            {
-                reader.Read();
-                var res = SqlTools.ReadInt32(reader, "UnshownCount");
-                return res;
-            }
+                {Notification.ROLE_REF_FIELD, roleId}
+            });
         }
     }
 
