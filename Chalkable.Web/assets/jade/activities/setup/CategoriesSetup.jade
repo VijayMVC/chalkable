@@ -1,0 +1,51 @@
+mixin ReportCell(value)
+    .cell
+        div(data-tooltip=value, data-tooltip-type="overflow").text=value
+
+.setup-page
+    -var topData = self.getTopData();
+    -var selectedId = topData.getSelectedItemId();
+
+    h2.page-title=Msg.Setup
+
+    +ClassesToolBar(topData, 'setup', 'categoriesSetup')
+
+    .action-bar
+        .items
+            +ActionLink('setup', 'categoriesSetup').pressed=Msg.Category(true)
+            +ActionLink('setup', 'commentsSetup')=Msg.Comment(true)
+            +ActionLink('setup', 'classroomOptionSetup')=Msg.Options
+
+    if !selectedId || !selectedId.valueOf()
+        .choose-class
+    else
+        +ActionForm('setup', 'deleteAnnouncementTypes')
+            .chlk-grid-container
+                .grid
+                    .row.header
+                        .cell
+                            +Checkbox('allchecks', false).all-checkboxes
+                        .cell= Msg.Name
+                        .cell= Msg.Description
+                        .cell= Msg.HS_to_drop
+                        .cell= Msg.LS_to_drop
+                        .cell= Msg.Percent
+                        .cell= Msg.Is_system
+                    each category in self.getCategories()
+                        .row
+                            div(data-id=category.getId()).cell.check-container
+                                +Checkbox('categoryId', false, category.isSystem() || !self.isAbleEdit()).item-check
+                            .cell
+                                +ActionLink('setup', 'addEditCategory', selectedId, category.getId())(data-tooltip=category.getName(), data-tooltip-type="overflow").text=category.getName()
+                            +ReportCell(category.getDescription())
+                            +ReportCell(category.getHighScoresToDrop())
+                            +ReportCell(category.getLowScoresToDrop())
+                            +ReportCell(category.getPercentage().toFixed(3))
+                            .cell
+                                .text #{category.isSystem() ? '+' : ''}
+            +Hidden('categoryIds', '').categoty-ids
+            +Hidden('classid', selectedId)
+            +Hidden('ids', '').ids-to-delete
+            .buttons-block
+                +ActionButton('setup', 'addEditCategory', selectedId)(type="button", disabled = !self.isAbleEdit(), class = !self.isAbleEdit() ? "disabled" : "" ).chlk-button.blue-button=Msg.Add
+                BUTTON(type="submit", disabled='disabled').chlk-button.negative-button.delete-button=Msg.Delete
