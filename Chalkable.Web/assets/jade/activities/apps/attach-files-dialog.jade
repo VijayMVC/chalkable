@@ -1,0 +1,46 @@
+mixin FileAttachBlock_(title, announcementId, announcementType, assignedAttributeId)
+    .announcement-item.application(data-tooltip=title, data-tooltip-type="overflow")
+        .wrapper
+            .attach-file.img
+            .title(data-tooltip=title, data-tooltip-type="overflow")= title
+            .shortdesc
+            div.simple-gray-button.download-link.file=title
+                +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType, assignedAttributeId])#add-file-attachment.simple-gray-button
+
+mixin AttachDialogSidebar(tpl, name)
+    -var options = tpl.getAttachOptions()
+    .attach-sidebar
+        +ActionLink('announcement', 'attachFiles')(class = name == 'upload' ? 'active pressed' : '').upload Upload
+        if options.isFileCabinetEnabled()
+            +ActionLink('announcement', 'fileCabinet')(class = name == 'uploaded' ? 'active pressed' : '').uploaded Uploaded
+        if options.isStandardAttachEnabled()
+            +ActionLink('standard', 'showStandards')(class = name == 'standard' ? 'active pressed' : '').standard Standard
+        if options.isShowApps()
+            +ActionLink('announcement', 'attachApps')(class = name == 'apps' ? 'active pressed' : '').apps Apps
+            if options.isAssessmentAttachEnabled()
+                +ActionLink('apps', 'attachAssessmentApp', options.getAnnouncementId()
+                    , options.getAssessmentAppId(), options.getAnnouncementType()
+                    , options.getAppUrlAppend())(class = name == options.getAssessmentAppId() ? 'active pressed' : '').assessment Assessment
+            each app in options.getExternalAttachApps()
+                +ActionLink('apps', 'viewExternalAttachApp', options.getAnnouncementId()
+                    , app.getId(), options.getAnnouncementType()
+                    , options.getAppUrlAppend())(class = name == app.getId() ? 'active pressed' : '').apps= app.getName()
+
+
+options = self.getAttachOptions()
+announcementId = options.getAnnouncementId() && options.getAnnouncementId().valueOf()
+announcementType = options.getAnnouncementType()
+
+-var assignedAttributeId = options.getAssignedAttributeId();
+
+.dialog.chlk-attach-dialog
+    .x-window-header
+        h1
+        a.close.close-btn
+    .attach-content
+        +AttachDialogSidebar(self, 'upload')
+        .attach-main
+            .attachments-and-applications
+                +FileAttachBlock_("Attach a file", announcementId, announcementType, assignedAttributeId)
+
+

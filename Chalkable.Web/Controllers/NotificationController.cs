@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Web.ActionFilters;
@@ -42,8 +39,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Super Admin,DistrictAdmin, Teacher, Student")]
         public ActionResult GetUnShownCount()
         {
-            var cnt = SchoolLocator.NotificationService.GetUnshownNotificationsCount();
-            return Json(cnt);
+            return Json(SchoolLocator.NotificationService.GetUnshownNotificationsCount());
         }
 
         [AuthorizationFilter("Super Admin,DistrictAdmin, Teacher, Student")]

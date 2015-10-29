@@ -44,7 +44,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         public int GetUnshownNotificationsCount()
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(uow => new NotificationDataAccess(uow).GetUnshownNotificationsCount(Context.PersonId.Value));
+            return DoRead(uow => new NotificationDataAccess(uow).GetUnshownNotificationsCount(Context.PersonId.Value, Context.RoleId));
         }
 
         public IList<Notification> GetUnshownNotifications()

@@ -4,7 +4,8 @@ NAMESPACE('chlk.models.apps', function(){
         EDIT: 'editurl',
         VIEW: 'viewurl',
         MYAPPSVIEW: 'myappsurl',
-        GRADINGVIEW: 'gradingviewurl'
+        GRADINGVIEW: 'gradingviewurl',
+        ATTACH: 'attach'
     });
 })
 
