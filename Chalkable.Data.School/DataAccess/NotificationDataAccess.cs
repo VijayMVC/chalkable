@@ -19,7 +19,11 @@ namespace Chalkable.Data.School.DataAccess
 
         private AndQueryCondition BuildShortConditions(NotificationQuery query)
         {
-            var res = new AndQueryCondition { { Notification.PERSON_REF_FIELD, query.PersonId } };
+            var res = new AndQueryCondition
+            {
+                { Notification.PERSON_REF_FIELD, query.PersonId },
+                { Notification.ROLE_REF_FIELD, query.RoleId }
+            };
             if (query.Id.HasValue)
                 res.Add(Notification.ID_FIELD, query.Id);
             if(query.Shown.HasValue)
@@ -178,7 +182,8 @@ namespace Chalkable.Data.School.DataAccess
     public class NotificationQuery
     {
         public int? Id { get; set; }
-        public int? PersonId { get; set; }
+        public int PersonId { get; set; }
+        public int RoleId { get; set; }
         public bool? Shown { get; set; }
         public int Start { get; set; }
         public int Count { get; set; }

@@ -49,18 +49,18 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         public IList<Notification> GetUnshownNotifications()
         {
-            if(!Context.SchoolLocalId.HasValue)
-                throw new UnassignedUserException();
-            using (var uow = Read())
-            {
-                var da = new NotificationDataAccess(uow);
-                return da.GetNotifications(new NotificationQuery
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
+
+            return DoRead(u => new NotificationDataAccess(u)
+                    .GetNotifications(new NotificationQuery
                     {
                         Shown = false,
-                        PersonId = Context.PersonId, 
+                        PersonId = Context.PersonId.Value,
+                        RoleId = Context.RoleId,
                         SchoolId = Context.SchoolLocalId.Value
-                    });
-            }
+                    }));
+
         }
 
         public PaginatedList<NotificationDetails> GetNotifications(int start, int count)
@@ -75,11 +75,13 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         private PaginatedList<NotificationDetails> GetNotifications(NotificationQuery query)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
-            
+            Trace.Assert(Context.PersonId.HasValue);
+
             using (var uow = Read())
             {
                 query.SchoolId = Context.SchoolLocalId.Value;
-                query.PersonId = Context.PersonId;
+                query.PersonId = Context.PersonId.Value;
+                query.RoleId = Context.RoleId;
                 var notifications = new NotificationDataAccess(uow).GetPaginatedNotificationsDetails(query, !Context.MessagingDisabled);
                 var classIds = notifications.Where(x => x.AnnouncementRef.HasValue && x.Announcement is ClassAnnouncement)
                                    .Select(x => (x.Announcement as ClassAnnouncement).ClassRef)
@@ -106,8 +108,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         public void MarkAsShown(int[] notificationIds)
         {
-            if (!Context.SchoolLocalId.HasValue)
-                throw new UnassignedUserException();
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
 
             using (var uow = Update())
             {
@@ -115,8 +117,9 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                 var notifications = da.GetNotifications(new NotificationQuery
                         {
                             Shown = false,
-                            PersonId = Context.PersonId,
-                            SchoolId = Context.SchoolLocalId.Value
+                            PersonId = Context.PersonId.Value,
+                            SchoolId = Context.SchoolLocalId.Value,
+                            RoleId = Context.RoleId
                         });
                 foreach (var notificationId in notificationIds)
                 {
@@ -167,8 +170,6 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                     return res;
                 })); 
             }
-
-
             var notification = peopleToNotify.Select(x => builder.BuildAnnouncementNewAttachmentNotificationToPerson(Context.NowSchoolTime, announcement, x, fromPerson)).ToList();
             AddNotifications(notification);
         }
@@ -229,11 +230,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         }
         private void AddNotifications(IList<Notification> notifications)
         {
-            using (var uow = Update())
-            {
-                new NotificationDataAccess(uow).Insert(notifications);
-                uow.Commit();
-            }
+            DoUpdate(u=> new NotificationDataAccess(u).Insert(notifications));
         }
 
         public void AddPrivateMessageNotification(int privateMessageId)
@@ -258,6 +255,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             throw new NotImplementedException();
         }
 
+        //TODO: those 3 methods are obsolete  ... investigate do we need them
         public void AddEndMarkingPeriodNotification(int toPersonId, int markingPeriodId, int endDays, bool isNextMpNotExist,
                                                     bool isNextMpNotAssignedToClass)
         {
@@ -267,10 +265,10 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                 isNextMpNotExist, isNextMpNotAssignedToClass);
             AddNotification(notification);
         }
-
+        
         public void AddAttendanceNotification(int toPersonId, IList<Person> persons)
         {
-            //TODO: think about security
+            //TODO: think about security ... 
             var toSchoolPerson = ServiceLocator.PersonService.GetPerson(toPersonId);
             var notification = builder.BuildAttendanceNotificationToAdmin(Context.NowSchoolTime, toSchoolPerson, persons);
             AddNotification(notification);
