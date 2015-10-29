@@ -36,7 +36,7 @@ namespace Chalkable.Data.School.DataAccess
         private const string SP_GET_INCOME_MESSAGES = "spGetIncomeMessages";
         private const string SP_GET_INCOME_MESSAGE_BY_ID = "spGetIncomeMessageById";
 
-        public PaginatedList<IncomePrivateMessage> GetIncomeMessages(int personId, IList<int> roles, string keyword, bool? read, int start, int count)
+        public PaginatedList<IncomePrivateMessage> GetIncomeMessages(int personId, IList<int> roles, string keyword, bool? read, int start, int count, DateTime? fromDate, DateTime? toDate)
         {
             var param = new Dictionary<string, object>()
             {
@@ -45,7 +45,9 @@ namespace Chalkable.Data.School.DataAccess
                 ["filter"] = keyword,
                 ["read"] = read,
                 ["start"] = start,
-                ["count"] = count
+                ["count"] = count,
+                ["fromDate"] = fromDate,
+                ["toDate"] = toDate
             };
             return ExecuteStoredProcedurePaginated(SP_GET_INCOME_MESSAGES, param, r => ReadList(r, ReadIncomePrivateMessage), start, count);
         }
@@ -85,7 +87,7 @@ namespace Chalkable.Data.School.DataAccess
         }
 
         private const string SP_GET_SENT_PRIVATE_MESSAGES = "spGetSentMessages";
-        public PaginatedList<SentPrivateMessage> GetSentMessages(int callerId, IList<int> roles, string keyword, int start, int count, bool classOnly)
+        public PaginatedList<SentPrivateMessage> GetSentMessages(int callerId, IList<int> roles, string keyword, int start, int count, bool? classOnly, DateTime? fromDate, DateTime? toDate)
         {
             var param = new Dictionary<string, object>()
             {
@@ -94,7 +96,9 @@ namespace Chalkable.Data.School.DataAccess
                 ["filter"] = keyword,
                 ["start"] = start,
                 ["count"] = count,
-                ["classOnly"] = classOnly
+                ["classOnly"] = classOnly,
+                ["fromDate"] = fromDate,
+                ["toDate"] = toDate
             };
             return ExecuteStoredProcedurePaginated(SP_GET_SENT_PRIVATE_MESSAGES, param, ReadSentMessages, start, count);
         }

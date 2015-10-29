@@ -21,7 +21,8 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 Name = x.Name,
                 SchoolRef = x.SchoolID,
                 StartDate = x.StartDate,
-                ArchiveDate = x.ArchiveDate
+                ArchiveDate = x.ArchiveDate,
+                AcadYear = x.AcadYear
             };
         }
 
