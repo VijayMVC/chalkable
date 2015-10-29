@@ -1,4 +1,5 @@
 var ChlkSessionConstants = {
+    ATTACH_OPTIONS: 'attachOptions',
     FIRST_LOGIN: 'firstLogin',
     SCHOOL_YEAR:'schoolYear',
     USER_ROLE: 'role',
