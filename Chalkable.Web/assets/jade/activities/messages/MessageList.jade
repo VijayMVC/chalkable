@@ -1,5 +1,6 @@
 mixin RolesGroupButtonsForMsg(isInbox, keyword, role, classOnly, currentYearOnly)
-    +ActionButton('message', 'page', true, isInbox, '', keyword)(class= !role || role == '' ? 'pressed' : '') All
+    -var isAllPressed = (!role || role == '') && !classOnly && !currentYearOnly
+    +ActionButton('message', 'page', true, isInbox, '', keyword, false, false)(class= isAllPressed ? 'pressed' : '') All
     +ActionButton('message', 'page', true, isInbox, 'parent', keyword)(class= role == 'parent' ? 'pressed' : '') Parent
     +ActionButton('message', 'page', true, isInbox, 'student', keyword, false, currentYearOnly)(class= role == 'student' ? 'pressed' : '') Student
     +ActionButton('message', 'page', true, isInbox, 'teacher', keyword, false, currentYearOnly)(class= role == 'teacher' ? 'pressed' : '') Teacher
@@ -7,8 +8,8 @@ mixin RolesGroupButtonsForMsg(isInbox, keyword, role, classOnly, currentYearOnly
     class= role == 'districtadmin' ? 'pressed' : ''
     ) Admin
     if !isInbox && !self.getUserRole().isStudent()
-        +ActionButton('message', 'page', true, isInbox, '', keyword, 0, true, currentYearOnly)(class= classOnly ? 'pressed' : '') Class
-    +ActionButton('message', 'page', true, isInbox, '', keyword, 0, classOnly, true)(class= currentYearOnly ? 'pressed' : '') Current Year
+        +ActionButton('message', 'page', true, isInbox, '', keyword, true, currentYearOnly)(class= classOnly ? 'pressed' : '') Class
+    +ActionButton('message', 'page', true, isInbox, '', keyword, classOnly, true)(class= currentYearOnly ? 'pressed' : '') Current Year
 
 
 

@@ -37,7 +37,7 @@ NAMESPACE('chlk.controllers', function (){
                 keyword_ = keyword_ || null;
 
                 return this.messageService
-                    .getMessages(start_ | 0, null, inbox_, role_, keyword_, classOnly_)
+                    .getMessages(start_ | 0, null, inbox_, role_, keyword_, classOnly_, currentYearOnly_)
                     .attach(this.validateResponse_())
                     .then(function(model){
                         this.getContext().getSession().set(ChlkSessionConstants.CURRENT_MESSAGES, model.getItems());
