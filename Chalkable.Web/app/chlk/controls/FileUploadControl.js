@@ -24,10 +24,10 @@ NAMESPACE('chlk.controls', function () {
                             node.on('change', function(target, event){
                                 var files = target.valueOf()[0].files;
                                 var state = that.context.getState();
-                                params.push(files);
+                                var p = params.slice(); p.push(files);
                                 state.setController(controller);
                                 state.setAction(action);
-                                state.setParams(params);
+                                state.setParams(p);
                                 state.setPublic(false);
                                 that.context.stateUpdated();
                             })
