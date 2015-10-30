@@ -296,6 +296,22 @@ namespace Chalkable.Data.Common
             }
         }
 
+        protected PaginatedList<T> ExecuteStoredProcedurePaginated<T>(string name,
+            IDictionary<string, object> parameters, Func<DbDataReader, IList<T>> readFunc, int start, int count) where T : new()
+        {
+            using (var reader = ExecuteStoredProcedureReader(name, parameters))
+            {
+                if (reader.Read())
+                {
+                    var allCount = SqlTools.ReadInt32(reader, ALL_COUNT_FIELD);
+                    reader.NextResult();
+                    var res = readFunc(reader);
+                    return new PaginatedList<T>(res, start/count, count, allCount);
+                }
+                return new PaginatedList<T>(new List<T>(), start / count, count, 0);
+            }
+            
+        }
         public IList<T> ExecuteStoredProcedureList<T>(string name, IDictionary<string, object> parameters, int? timeout = null) where T : new()
         {
             using (var reader = ExecuteStoredProcedureReader(name, parameters, timeout))
