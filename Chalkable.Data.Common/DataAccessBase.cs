@@ -313,7 +313,18 @@ namespace Chalkable.Data.Common
         protected int Count(DbQuery query)
         {
             var q = Orm.Orm.CountSelect(query, ALL_COUNT_FIELD);
-            return Read(q, reader => reader.Read() ? SqlTools.ReadInt32(reader, ALL_COUNT_FIELD) : 0);
+            return ReadCount(q);
+        }
+
+        protected int Count<T>(QueryCondition conditions) where T : new()
+        {
+            var q = Orm.Orm.CountSelect<T>(conditions, ALL_COUNT_FIELD);
+            return ReadCount(q);
+        }
+
+        private int ReadCount(DbQuery query)
+        {
+            return Read(query, reader => reader.Read() ? SqlTools.ReadInt32(reader, ALL_COUNT_FIELD) : 0);
         }
 
         protected bool Exists<T>(QueryCondition conditions) where T : new()

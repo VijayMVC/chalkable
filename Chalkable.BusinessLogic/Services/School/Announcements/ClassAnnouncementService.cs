@@ -186,6 +186,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 ann.Expires = inputAnnData.ExpiresDate.Value.Date;
             if (inputAnnData.ClassAnnouncementTypeId.HasValue)
             {
+                var classAnnType = ServiceLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypeById(inputAnnData.ClassAnnouncementTypeId.Value);
+                if (classAnnType.ClassRef != inputAnnData.ClassId)
+                    throw  new ChalkableException("Invalid Class Announcement type id");
                 ann.ClassAnnouncementTypeRef = inputAnnData.ClassAnnouncementTypeId.Value;
                 ann.MaxScore = inputAnnData.MaxScore;
                 ann.IsScored = inputAnnData.MaxScore > 0;

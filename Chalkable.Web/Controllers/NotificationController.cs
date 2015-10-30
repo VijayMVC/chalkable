@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Web.ActionFilters;
@@ -36,14 +33,13 @@ namespace Chalkable.Web.Controllers
             var groupedNotifications = personNotifications.GroupBy(x => x.Created.Date).ToList();
             var dictionary = groupedNotifications.Skip(str).Take(dayCount).ToDictionary(x => x.Key, t => t.ToList());
             var resCount = groupedNotifications.Count;
-            return Json(new PaginatedList<NotificationsByDateViewData>(NotificationsByDateViewData.Create(dictionary), str, dayCount, resCount));
+            return Json(new PaginatedList<NotificationsByDateViewData>(NotificationsByDateViewData.Create(dictionary), str / dayCount, dayCount, resCount));
         }
 
         [AuthorizationFilter("Super Admin,DistrictAdmin, Teacher, Student")]
         public ActionResult GetUnShownCount()
         {
-            var cnt = SchoolLocator.NotificationService.GetUnshownNotificationsCount();
-            return Json(cnt);
+            return Json(SchoolLocator.NotificationService.GetUnshownNotificationsCount());
         }
 
         [AuthorizationFilter("Super Admin,DistrictAdmin, Teacher, Student")]
