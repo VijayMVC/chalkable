@@ -10,49 +10,6 @@ mixin AppIconLink_(announcementId, app, needToInstall, iconTooltip, announcement
             else
                 +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, appId, announcementType, appUrlAppend) Attach
 
-mixin FileAttachBlock_(title, announcementId, announcementType, assignedAttributeId)
-    .announcement-item.application(data-tooltip=title, data-tooltip-type="overflow")
-        .wrapper
-            .attach-file.img
-            .title(data-tooltip=title, data-tooltip-type="overflow")= title
-            .shortdesc
-            div.simple-gray-button.download-link.file=title
-                +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType, assignedAttributeId])#add-file-attachment.simple-gray-button
-
-
-mixin FileCabinetBlock_(title, announcementId, announcementType, assignedAttributeId)
-    .announcement-item.application
-        .wrapper
-            .file-cabinet.img
-            div(data-tooltip=title, data-tooltip-type="overflow").title=title
-            .shortdesc
-            +ActionButton('announcement', 'fileCabinet', announcementId, announcementType, assignedAttributeId)#add-file-from-cabinet.simple-gray-button=title
-
-
-mixin AttributeBlock_(title, announcementId, announcementType)
-    .announcement-item.application
-        .wrapper
-            .attach-attribute.img
-            div(data-tooltip=title, data-tooltip-type="overflow").title=title
-            .shortdesc
-            +ActionButton('announcement', 'addAttribute', announcementId, announcementType)=title
-
-mixin StandardBlock_(title, announcementId, classId, announcementTypeName)
-    .announcement-item.application
-        .wrapper
-            .attach-standard.img
-            div(data-tooltip=title, data-tooltip-type="overflow").title=title
-            .shortdesc
-            +ActionButton('standard', 'showStandards', announcementTypeName, announcementId, classId)=title
-
-mixin AssessmentBlock_(title, announcementId, assessmentAppId, announcementType)
-    .announcement-item.application
-        .wrapper
-            .attach-assessment.img
-            div(data-tooltip=title, data-tooltip-type="overflow").title=title
-            .shortdesc
-            +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, assessmentAppId, announcementType)#add-assesment.simple-gray-button=title
-
 options = self.getAttachOptions()
 announcementId = options.getAnnouncementId() && options.getAnnouncementId().valueOf()
 classId = options.getClassId() && options.getClassId().valueOf()

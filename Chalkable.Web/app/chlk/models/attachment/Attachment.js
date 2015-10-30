@@ -2,6 +2,7 @@ REQUIRE('ria.serialize.SJX');
 REQUIRE('ria.serialize.IDeserializable');
 REQUIRE('chlk.models.id.AnnouncementAttachmentId');
 REQUIRE('chlk.models.id.AttachmentId');
+REQUIRE('chlk.models.id.AnnouncementId');
 
 NAMESPACE('chlk.models.attachment', function () {
     "use strict";
@@ -33,6 +34,19 @@ NAMESPACE('chlk.models.attachment', function () {
                 this.url = SJX.fromValue(raw.attachment.url, String);
             },
 
+            [[Number, Number, Number, String]],
+            function $(fileIndex_, total_, loaded_, name_){
+                BASE();
+                if(fileIndex_ || fileIndex_ === 0)
+                    this.setFileIndex(fileIndex_);
+                if(total_)
+                    this.setTotal(total_);
+                if(loaded_)
+                    this.setLoaded(loaded_);
+                if(name_)
+                    this.setName(name_);
+            },
+
             chlk.models.id.AnnouncementAttachmentId, 'id',
             chlk.models.id.AttachmentId, 'attachmentId',
 
@@ -44,7 +58,12 @@ NAMESPACE('chlk.models.attachment', function () {
             String, 'thumbnailUrl',
             String, 'bigUrl',
             chlk.models.attachment.AttachmentTypeEnum, 'type',
-            String, 'url'
+            String, 'url',
+            Number, 'fileIndex',
+            Number, 'total',
+            Number, 'loaded',
+            chlk.models.id.AnnouncementId, 'announcementId',
+            chlk.models.announcement.AnnouncementTypeEnum, 'announcementType'
         ]);
 
     CLASS(

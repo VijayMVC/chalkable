@@ -5,7 +5,9 @@ mixin FileAttachBlock_(title, announcementId, announcementType, assignedAttribut
             .title(data-tooltip=title, data-tooltip-type="overflow")= title
             .shortdesc
             div.simple-gray-button.download-link.file=title
-                +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType, assignedAttributeId])#add-file-attachment.simple-gray-button
+                +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType, assignedAttributeId])(
+                    needFileIndex = true
+                )#add-file-attachment.simple-gray-button
 
 mixin AttachDialogSidebar(tpl, name)
     -var options = tpl.getAttachOptions()
@@ -42,5 +44,7 @@ announcementType = options.getAnnouncementType()
         .attach-main
             .attachments-and-applications
                 +FileAttachBlock_("Attach a file", announcementId, announcementType, assignedAttributeId)
+            .files-container
+    +ActionLink('announcement', 'refreshAttachments', announcementId, announcementType).refresh-attachments.x-hidden
 
 

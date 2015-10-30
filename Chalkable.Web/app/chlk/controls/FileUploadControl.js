@@ -15,7 +15,8 @@ NAMESPACE('chlk.controls', function () {
                 attrs.id = attrs.id || ria.dom.Dom.GID();
                 var that = this, params = attrs['data-params'] || [],
                     controller = attrs['data-controller'],
-                    action = attrs['data-action'];
+                    action = attrs['data-action'],
+                    needFileIndex = attrs.needFileIndex, index = 0;
                 if (controller)
                 {
                     this.context.getDefaultView()
@@ -24,7 +25,10 @@ NAMESPACE('chlk.controls', function () {
                             node.on('change', function(target, event){
                                 var files = target.valueOf()[0].files;
                                 var state = that.context.getState();
-                                var p = params.slice(); p.push(files);
+                                var p = params.slice();
+                                if(needFileIndex)
+                                    p.push(index++);
+                                p.push(files);
                                 state.setController(controller);
                                 state.setAction(action);
                                 state.setParams(p);
