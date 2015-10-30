@@ -115,6 +115,9 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
         +RenderWith(attributesList, chlk.templates.announcement.AnnouncementAttributesTpl)(
             userRole = userRole
         )
+    .attach-btn-area.attributes-attach-area(class = announcement.getAnnouncementAttributes().length ? '' : 'x-hidden')
+        +ActionLink('announcement', 'addAttribute', announcement.getId(), announcement.getType()).attach-attribute-btn Add Attribute
+            span.plus +
 
     if !isAdmin
         .suggested-apps

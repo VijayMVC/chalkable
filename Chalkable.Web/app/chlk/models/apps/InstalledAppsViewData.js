@@ -21,7 +21,6 @@ NAMESPACE('chlk.models.apps', function () {
 
             Boolean, 'fileCabinetEnabled',
             Boolean, 'standardAttachEnabled',
-            Boolean, 'attributesEnabled',
             Boolean, 'showApps',
 
             chlk.models.id.AnnouncementAssignedAttributeId, 'assignedAttributeId',
@@ -46,7 +45,6 @@ NAMESPACE('chlk.models.apps', function () {
                 this.setClassId(classId);
                 this.setAppUrlAppend(appUrlAppend);
                 this.setFileCabinetEnabled(true);
-                this.setAttributesEnabled(true);
                 this.setStandardAttachEnabled(canAddStandard);
                 var hasApps = (apps.getItems() || []).length > 0 && studyCenterEnabled;
                 this.setShowApps(hasApps);
@@ -66,7 +64,6 @@ NAMESPACE('chlk.models.apps', function () {
                 BASE();
                 this.setAnnouncementId(announcementId);
                 this.setAnnouncementType(announcementType);
-                this.setAttributesEnabled(false);
                 this.setFileCabinetEnabled(true);
                 this.setStandardAttachEnabled(false);
                 this.setShowApps(false);
@@ -82,7 +79,6 @@ NAMESPACE('chlk.models.apps', function () {
             function $createForAdmin(announcementId, announcementType, assessmentAppId_){
                 BASE();
                 this.setAnnouncementId(announcementId);
-                this.setAttributesEnabled(true);
                 this.setFileCabinetEnabled(false);
                 this.setStandardAttachEnabled(false);
                 this.setShowApps(false);
@@ -98,7 +94,6 @@ NAMESPACE('chlk.models.apps', function () {
             function $createForStudent(announcementId, announcementType){
                 BASE();
                 this.setAnnouncementId(announcementId);
-                this.setAttributesEnabled(false);
                 this.setFileCabinetEnabled(false);
                 this.setStandardAttachEnabled(false);
                 this.setShowApps(false);

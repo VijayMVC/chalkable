@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -13,10 +14,10 @@ namespace Chalkable.Web.Controllers
     public partial class PrivateMessageController : ChalkableController
     {
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult List(int? start, int? count, bool? read, bool? income, string role, string keyword, bool classOnly)
+        public ActionResult List(int? start, int? count, bool? read, bool? income, string role, string keyword, bool? classOnly, bool? currentYearOnly)
         {
             var messageType = (income ?? true) ? PrivateMessageType.Income : PrivateMessageType.Sent;
-            var res = SchoolLocator.PrivateMessageService.GetMessages(start ?? 0, count ?? 10, read, messageType, role, keyword, classOnly);
+            var res = SchoolLocator.PrivateMessageService.GetMessages(start ?? 0, count ?? 10, read, messageType, role, keyword, classOnly, currentYearOnly);
             return Json(res.Transform(PrivateMessageComplexViewData.Create));
         }
 

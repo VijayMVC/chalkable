@@ -169,6 +169,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return SchoolYearStorage.GetAll();
         }
 
+        public IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true)
+        {
+            var res = SchoolYearStorage.GetAll().Where(x => x.AcadYear == year);
+            if (activeOnly)
+                res = res.Where(x => x.IsActive);
+            return res.ToList();
+        }
+
         public IList<StudentSchoolYear> GetStudentAssignments(int personId)
         {
             return StudentSchoolYearStorage.GetAll(personId);
