@@ -15,6 +15,8 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             String, 'url',
             [ria.templates.ModelPropertyBind],
-            String, 'title'
+            String, 'title',
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.AnnouncementApplicationId, 'announcementApplicationId'
         ]);
 });

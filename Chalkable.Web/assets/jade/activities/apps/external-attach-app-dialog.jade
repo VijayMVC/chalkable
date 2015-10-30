@@ -6,3 +6,13 @@
         +AttachDialogSidebar(self, self.getApp().getId())
         .attach-main
             iframe(src=self.getUrl(), height="100%", width="100%", border=0, style="border: none; min-height: 500px")
+
+            - console.info(self.getApp().getId(), self.getAttachOptions().getAssessmentAppId())
+            if self.getApp().getId().valueOf() == self.getAttachOptions().getAssessmentAppId().valueOf()
+                div(style="text-align:right")
+                    button#add-app(
+                        data-announcement-app-id=self.getAnnouncementApplicationId().valueOf()
+                        data-announcement-id=self.getAttachOptions().getAnnouncementId().valueOf()
+                        data-announcement-type=self.getAttachOptions().getAnnouncementType().valueOf()
+                        data-advanced-app=1
+                        ) Attach

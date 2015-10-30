@@ -160,7 +160,7 @@ NAMESPACE('chlk.services', function () {
                     }, this);
             },
 
-            [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementType]],
+            [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementTypeEnum]],
             ria.async.Future, function attachApp(appAnnouncementId, announcementType_) {
               return this
                   .post('Application/Attach.json', chlk.models.announcement.FeedAnnouncementViewData, {

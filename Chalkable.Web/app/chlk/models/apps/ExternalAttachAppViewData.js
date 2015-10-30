@@ -11,14 +11,16 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.apps.Application, 'app',
             String, 'url',
             String, 'title',
+            chlk.models.id.AnnouncementApplicationId, 'announcementApplicationId',
 
-            [[chlk.models.common.AttachOptionsViewData, chlk.models.apps.Application, String, String]],
-            function $(options, app, url, title){
+            [[chlk.models.common.AttachOptionsViewData, chlk.models.apps.Application, String, String, chlk.models.id.AnnouncementApplicationId]],
+            function $(options, app, url, title, announcementApplicationId_){
                 BASE(options);
 
                 this.setApp(app);
                 this.setUrl(url);
                 this.setTitle(title);
+                announcementApplicationId_ && this.setAnnouncementApplicationId(announcementApplicationId_);
             }
         ]);
 });

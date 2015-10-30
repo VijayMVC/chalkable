@@ -1,4 +1,4 @@
-REQUIRE('chlk.activities.lib.TemplateDialog');
+REQUIRE('chlk.activities.apps.AppWrapperDialog');
 REQUIRE('chlk.templates.apps.ExternalAttachAppDialogTpl');
 
 NAMESPACE('chlk.activities.apps', function () {
@@ -8,7 +8,7 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.ActivityGroup('AttachDialog')],
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.apps.ExternalAttachAppDialogTpl)],
-        'ExternalAttachAppDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
+        'ExternalAttachAppDialog', EXTENDS(chlk.activities.apps.AppWrapperDialog), [
 
         ]);
 });

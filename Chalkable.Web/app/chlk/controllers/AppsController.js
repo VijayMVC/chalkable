@@ -565,11 +565,15 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(app){
-                    var viewUrl = app.getEditUrl() + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
+                    var viewUrl = app.getEditUrl()
+                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                        + '&code=' + app.getOauthCode()
+                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
 
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
 
-                    return new chlk.models.apps.ExternalAttachAppViewData(options, app, viewUrl, 'Attach ' + appData.getName());
+                    return new chlk.models.apps.ExternalAttachAppViewData(options, app
+                        , viewUrl, 'Attach ' + app.getName(), app.getAnnouncementApplicationId());
                 }, this);
 
             return this.ShadeView(chlk.activities.apps.ExternalAttachAppDialog, result);
