@@ -24,8 +24,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 await ConnectorLocator.GradebookConnector.Calculate(classId);
             var standardScores = ConnectorLocator.StandardScoreConnector.GetStandardScores(classId, null, gradingPeriodId);
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
+            standards = standards.Where(s => s.IsActive || standardScores.Any(ss => ss.StandardId == s.Id && ss.HasScore)).ToList();
             var res = GradingStandardInfo.Create(standardScores, standards);
-            return res.Where(x => x.Standard.IsActive || x.HasScore).ToList();
+            return res;
         }
         public GradingStandardInfo SetGrade(int studentId, int standardId, int classId, int gradingPeriodId, int? alphaGradeId, string note)
         {
