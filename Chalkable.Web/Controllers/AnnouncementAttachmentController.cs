@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Web;
 using System.Web.Mvc;
@@ -7,6 +8,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Data.Common.Enums;
+using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.ActionResults;
@@ -37,9 +39,9 @@ namespace Chalkable.Web.Controllers
                 {
                     return Json(new ChalkableException(ChlkResources.ERR_FILE_REQUIRED));
                 }
-                var announcement = SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementType)announcementType, bin, name);
-                AnnouncementViewData res = PrepareFullAnnouncementViewData(announcement.Id, (AnnouncementType)announcementType);
-                return Json(res, HTML_CONTENT_TYPE, 6);
+                var attachment = SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementType)announcementType, bin, name);
+                var res = SchoolLocator.AnnouncementAttachmentService.TransformToAttachmentsInfo(new List<AnnouncementAttachment> {attachment}, new List<int> {Context.PersonId.Value});
+                return Json(AnnouncementAttachmentViewData.Create(res[0], true), HTML_CONTENT_TYPE, 6);
             }
             catch (Exception exception)
             {
@@ -58,11 +60,11 @@ namespace Chalkable.Web.Controllers
             
             var bin = new byte[length];
             Request.InputStream.Read(bin, 0, (int)length);
-            var announcement = SchoolLocator.AnnouncementAttachmentService
-                .UploadAttachment(announcementId, (AnnouncementType)announcementType, bin, fileName);
+            
+            var attachment = SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementType)announcementType, bin, fileName);
+            var res = SchoolLocator.AnnouncementAttachmentService.TransformToAttachmentsInfo(new List<AnnouncementAttachment> { attachment }, new List<int> { Context.PersonId.Value });
 
-            var res = PrepareFullAnnouncementViewData(announcement.Id, (AnnouncementType)announcementType);
-            return Json(res);
+            return Json(AnnouncementAttachmentViewData.Create(res[0], true));
         }
 
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
