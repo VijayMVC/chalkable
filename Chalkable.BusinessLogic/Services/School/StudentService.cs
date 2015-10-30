@@ -169,12 +169,14 @@ namespace Chalkable.BusinessLogic.Services.School
             var standards = ServiceLocator.StandardService.GetStandards(null, null, null);
             IList<int> importanActivitiesIds = new List<int>();
             IList<AnnouncementComplex> announcements = new List<AnnouncementComplex>();
-            IList<StandardScore> inowStandardScores = new List<StandardScore>();
+            IList<StandardScore> standardScores = new List<StandardScore>();
             IList<StudentAverage> mostRecentAverages = new List<StudentAverage>();
             if (inowStExpolorer != null)
             {
                 mostRecentAverages = inowStExpolorer.Averages.Where(x => x.IsGradingPeriodAverage && (x.HasGrade)).OrderBy(x => x.GradingPeriodId).ToList();
-                inowStandardScores = inowStExpolorer.Standards.ToList();
+                standardScores = inowStExpolorer.Standards.ToList();
+                standards = standards.Where(s => s.IsActive || standardScores.Any(ss => ss.StandardId == s.Id && ss.HasScore)).ToList();
+
                 if (inowStExpolorer.Activities != null && inowStExpolorer.Activities.Any())
                 {
                     foreach (var classDetailse in classes)
@@ -188,7 +190,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     announcements = DoRead(uow => new ClassAnnouncementForTeacherDataAccess(uow, Context.SchoolYearId.Value).GetByActivitiesIds(importanActivitiesIds, Context.PersonId.Value));
                 }
             }
-            return StudentExplorerInfo.Create(student, classes, mostRecentAverages, inowStandardScores, announcements, standards);
+            return StudentExplorerInfo.Create(student, classes, mostRecentAverages, standardScores, announcements, standards);
         }
     }
 }

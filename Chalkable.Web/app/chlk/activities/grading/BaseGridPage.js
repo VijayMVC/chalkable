@@ -692,8 +692,9 @@ NAMESPACE('chlk.activities.grading', function () {
 
             function strcmp_(_1, _2) {
                 var v1 = _1[1], v2 = _2[1];
-                v1 = v1 != null ? v1 : Number.NEGATIVE_INFINITY;
-                v2 = v2 != null ? v2 : Number.NEGATIVE_INFINITY;
+                var def = typeof v1 === 'string' || typeof v2 === 'string' ? '' : Number.NEGATIVE_INFINITY;
+                v1 = v1 != null ? v1 : def;
+                v2 = v2 != null ? v2 : def;
                 return v1 < v2 ? -1 : v1 > v2 ? 1 : _1[0] - _2[0];
             },
 
