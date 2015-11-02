@@ -1,13 +1,15 @@
 mixin FileAttachBlock_(announcementId, announcementType, assignedAttributeId)
-    .announcement-item.application
-        .wrapper
-            .attach-file.img
-            .title Drag here
-            .or or
-            div(class= assignedAttributeId ? 'for-attribute' : '').simple-gray-button.download-link.file Choose File
-                +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType, assignedAttributeId])(
-                    needFileIndex = true
-                )#add-file-attachment.simple-gray-button
+    .upload-button
+        .announcement-item.application
+            .wrapper
+                .attach-file.img
+                .title Drag here
+                .or or
+                div(class= assignedAttributeId ? 'for-attribute' : '').simple-gray-button.download-link.file Choose File
+                    +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType, assignedAttributeId])(
+                        needFileIndex = true
+                        dropAreaSelector = '.upload-button'
+                    )#add-file-attachment.simple-gray-button
 
 mixin AttachDialogSidebar(tpl, name)
     -var options = tpl.getAttachOptions()
@@ -45,8 +47,7 @@ announcementType = options.getAnnouncementType()
         +Hidden('isForAttribute', assignedAttributeId ? true : '')#is-for-attribute
         +AttachDialogSidebar(self, 'upload')
         .attach-main
-            .upload-button
-                +FileAttachBlock_(announcementId, announcementType, assignedAttributeId)
+            +FileAttachBlock_(announcementId, announcementType, assignedAttributeId)
             .files-container
                 .files-uploaded
                     span.files-count 0
