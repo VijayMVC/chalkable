@@ -52,7 +52,9 @@ NAMESPACE('chlk.controls', function () {
                                 .on('dragleave', function (e) {
                                     e.stopPropagation();
                                     e.preventDefault();
-                                    dropAreaSelector && $dropArea.css({'border-style': ''});
+
+                                    if (dropAreaSelector && !$.contains(this, e.target))
+                                        $dropArea.css({'border-style': ''});
                                 })
                                 .on('drop', function (e) {
                                     e.preventDefault();
