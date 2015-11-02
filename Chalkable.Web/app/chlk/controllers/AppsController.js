@@ -542,7 +542,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
 
-                    return new chlk.models.apps.ExternalAttachAppViewData(options, appData, viewUrl, 'Attach file from ' + appData.getName());
+                    return new chlk.models.apps.ExternalAttachAppViewData(options, appData, viewUrl, 'Attach ' + appData.getName() + ' File');
                 }, this);
 
             return this.ShadeView(chlk.activities.apps.ExternalAttachAppDialog, result);
