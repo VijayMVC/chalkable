@@ -136,9 +136,9 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_());
         },
 
-        function prepareAttachment(attachment){
+        function prepareAttachment(attachment, width_, height_){
             if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
-                attachment.setThumbnailUrl(this.announcementAttachmentService.getAttachmentUri(attachment.getId(), false, 170, 110));
+                attachment.setThumbnailUrl(this.announcementAttachmentService.getAttachmentUri(attachment.getId(), false, width_ || 170, height_ || 110));
                 attachment.setUrl(this.announcementAttachmentService.getAttachmentUri(attachment.getId(), false, null, null));
             }
             if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){
@@ -146,15 +146,15 @@ NAMESPACE('chlk.controllers', function (){
             }
         },
 
-        [[chlk.models.announcement.AnnouncementAttributeViewData]],
-        function prepareAttribute(attribute){
+        [[chlk.models.announcement.AnnouncementAttributeViewData, Number, Number]],
+        function prepareAttribute(attribute, width_, height_){
 
             var attributeAttachment = attribute.getAttributeAttachment();
 
             if (!attributeAttachment) return;
 
             if(attributeAttachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
-                attributeAttachment.setThumbnailUrl(this.assignedAttributeService.getAttributeAttachmentUri(attribute.getId(), attribute.getAnnouncementType(), false, 170, 110));
+                attributeAttachment.setThumbnailUrl(this.assignedAttributeService.getAttributeAttachmentUri(attribute.getId(), attribute.getAnnouncementType(), false, width_ || 170, width_ || 110));
                 attributeAttachment.setUrl(this.assignedAttributeService.getAttributeAttachmentUri(attribute.getId(), attribute.getAnnouncementType(), false, null, null));
             }
             if(attributeAttachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){
@@ -1150,7 +1150,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(attribute){
                     attribute.setAnnouncementType(announcementType);
-                    this.prepareAttribute(attribute);
+                    this.prepareAttribute(attribute, 51, 33);
                     var attachment = attribute.getAttributeAttachment();
 
                     var model = new chlk.models.attachment.AnnouncementAttachment(0, null, null, files[0].name);
@@ -1196,7 +1196,7 @@ NAMESPACE('chlk.controllers', function (){
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(attachment){
-                    this.prepareAttachment(attachment);
+                    this.prepareAttachment(attachment, 51, 33);
                     attachment.setAnnouncementId(announcementId);
                     attachment.setAnnouncementType(announcementType);
                     attachment.setFileIndex(fileIndex || 0);

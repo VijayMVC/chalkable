@@ -1,6 +1,6 @@
 .attachment-file(data-index = self.getFileIndex(), class=self.getId() ? '' : 'pending')
     .icon
-        +LoadingImage(src=self.getThumbnailUrl(), width="51px", height="33px", id="loading-image-" + self.getFileIndex())
+        +LoadingImage(src=self.getThumbnailUrl() ? self.getThumbnailUrl().replace('110x170', '33x51') : '', id="loading-image-" + self.getFileIndex())
     .name(data-tooltip=self.getName(), data-tooltip-type="overflow")=self.getName()
         span.size &#32;(#{self.getSize()})
     .progress-wrapper
