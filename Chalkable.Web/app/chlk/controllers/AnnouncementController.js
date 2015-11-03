@@ -198,6 +198,7 @@ NAMESPACE('chlk.controllers', function (){
                     studentAnnouncement.isAbsent(),
                     studentAnnouncement.isIncomplete(),
                     studentAnnouncement.isExempt(),
+                    studentAnnouncement.isCommentChanged(),
                     fromGrid_ ? chlk.models.announcement.ShortStudentAnnouncementViewData : null
                 );
             return result;
