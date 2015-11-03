@@ -1137,6 +1137,9 @@ NAMESPACE('chlk.controllers', function (){
             var firstModel = new chlk.models.attachment.AnnouncementAttachment(0, files[0].size, null, files[0].name);
             this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'attachment-progress');
 
+            if(files.length > 1)
+                this.ShowMsgBox('Please drop only one file at time', 'whoa.');
+
             var result = this.assignedAttributeService
                 .uploadAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeId, [files[0]])
                 .handleProgress(function(event){
@@ -1164,37 +1167,30 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Object, Boolean, Number]],
         function uploadAttachmentAction(announcementId, announcementType, files, onCreate_, fileIndex_) {
-            var firstModel = new chlk.models.attachment.AnnouncementAttachment(fileIndex_, files[0].size, null, files[0].name);
-            this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'attachment-progress');
+
+            var fileIndex = fileIndex_ || 0;
+
+            var result = this.uploadAttachment_(announcementId, files[0], announcementType, fileIndex);
 
             if(files.length > 1)
-                this.ShowMsgBox('Please drop only one file at time', 'whoa.');
-
-            var result = this.announcementAttachmentService
-                .uploadAttachment(announcementId, [files[0]], announcementType)
-                .handleProgress(function(event){
-                    var model = new chlk.models.attachment.AnnouncementAttachment(fileIndex_, event.total, event.loaded, files[0].name);
-                    this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, model, 'attachment-progress');
-                }, this)
-                .catchError(this.handleNoAnnouncementException_, this)
-                .attach(this.validateResponse_())
-                .then(function(attachment){
-                    this.prepareAttachment(attachment);
-                    attachment.setAnnouncementId(announcementId);
-                    attachment.setAnnouncementType(announcementType);
-                    attachment.setFileIndex(fileIndex_ || 0);
-                    attachment.setTotal(files[0].size);
-                    return attachment;
-                }, this);
+                for(var i = 1; i < files.length; i++){
+                    this.uploadAttachment_(announcementId, files[i], announcementType, fileIndex + i)
+                        .then(function(attachment){
+                            this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, attachment, chlk.activities.lib.DontShowLoader());
+                        }, this);
+                }
 
             return this.UpdateView(chlk.activities.announcement.AttachFilesDialog, result, chlk.activities.lib.DontShowLoader());
         },
 
-        /*function uploadAttachmentFuture_(announcementId, file, announcementType, fileIndex_){
+        function uploadAttachment_(announcementId, file, announcementType, fileIndex){
+            var firstModel = new chlk.models.attachment.AnnouncementAttachment(fileIndex, file.size, null, file.name);
+            this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'attachment-progress');
+
             return this.announcementAttachmentService
                 .uploadAttachment(announcementId, [file], announcementType)
                 .handleProgress(function(event){
-                    var model = new chlk.models.attachment.AnnouncementAttachment(fileIndex_, event.total, event.loaded, file.name);
+                    var model = new chlk.models.attachment.AnnouncementAttachment(fileIndex, event.total, event.loaded, file.name);
                     this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, model, 'attachment-progress');
                 }, this)
                 .catchError(this.handleNoAnnouncementException_, this)
@@ -1203,11 +1199,11 @@ NAMESPACE('chlk.controllers', function (){
                     this.prepareAttachment(attachment);
                     attachment.setAnnouncementId(announcementId);
                     attachment.setAnnouncementType(announcementType);
-                    attachment.setFileIndex(fileIndex_ || 0);
+                    attachment.setFileIndex(fileIndex || 0);
                     attachment.setTotal(file.size);
                     return attachment;
                 }, this);
-        },*/
+        },
 
         [[chlk.models.id.AnnouncementId]],
         function applyAutoGradeAction(announcementId){
