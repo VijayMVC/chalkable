@@ -28,9 +28,9 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.GradingService*/
     CLASS(
         'GradingService', EXTENDS(chlk.services.BaseService), [
-            [[chlk.models.id.AnnouncementId, chlk.models.id.SchoolPersonId, String, String, Boolean, Boolean, Boolean, Boolean, Boolean, Object]],
+            [[chlk.models.id.AnnouncementId, chlk.models.id.SchoolPersonId, String, String, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Object]],
             ria.async.Future, function updateItem(announcementId, studentId, gradeValue, comment, dropped, late, absent,
-                      incomplete, exempt, model_) {
+                      incomplete, exempt, commentWasChanged, model_) {
                 return this.get('Grading/UpdateItem', model_ || chlk.models.announcement.StudentAnnouncement, {
                     announcementId: announcementId && announcementId.valueOf(),
                     studentId: studentId && studentId.valueOf(),
@@ -41,6 +41,7 @@ NAMESPACE('chlk.services', function () {
                     absent: absent,
                     incomplete: incomplete,
                     exempt: exempt,
+                    commentWasChanged: commentWasChanged,
                     callFromGradeBook: !!model_
                 });
             },
