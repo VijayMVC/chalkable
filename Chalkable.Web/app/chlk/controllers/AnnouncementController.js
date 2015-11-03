@@ -1138,7 +1138,7 @@ NAMESPACE('chlk.controllers', function (){
             this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'attachment-progress');
 
             var result = this.assignedAttributeService
-                .uploadAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeId, files)
+                .uploadAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeId, [files[0]])
                 .handleProgress(function(event){
                     var model = new chlk.models.attachment.AnnouncementAttachment(0, event.total, event.loaded, files[0].name);
                     this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, model, 'attachment-progress');
@@ -1167,8 +1167,11 @@ NAMESPACE('chlk.controllers', function (){
             var firstModel = new chlk.models.attachment.AnnouncementAttachment(fileIndex_, files[0].size, null, files[0].name);
             this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'attachment-progress');
 
+            if(files.length > 1)
+                this.ShowMsgBox('Please drop only one file at time', 'whoa.');
+
             var result = this.announcementAttachmentService
-                .uploadAttachment(announcementId, files, announcementType)
+                .uploadAttachment(announcementId, [files[0]], announcementType)
                 .handleProgress(function(event){
                     var model = new chlk.models.attachment.AnnouncementAttachment(fileIndex_, event.total, event.loaded, files[0].name);
                     this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, model, 'attachment-progress');
@@ -1186,6 +1189,25 @@ NAMESPACE('chlk.controllers', function (){
 
             return this.UpdateView(chlk.activities.announcement.AttachFilesDialog, result, chlk.activities.lib.DontShowLoader());
         },
+
+        /*function uploadAttachmentFuture_(announcementId, file, announcementType, fileIndex_){
+            return this.announcementAttachmentService
+                .uploadAttachment(announcementId, [file], announcementType)
+                .handleProgress(function(event){
+                    var model = new chlk.models.attachment.AnnouncementAttachment(fileIndex_, event.total, event.loaded, file.name);
+                    this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, model, 'attachment-progress');
+                }, this)
+                .catchError(this.handleNoAnnouncementException_, this)
+                .attach(this.validateResponse_())
+                .then(function(attachment){
+                    this.prepareAttachment(attachment);
+                    attachment.setAnnouncementId(announcementId);
+                    attachment.setAnnouncementType(announcementType);
+                    attachment.setFileIndex(fileIndex_ || 0);
+                    attachment.setTotal(file.size);
+                    return attachment;
+                }, this);
+        },*/
 
         [[chlk.models.id.AnnouncementId]],
         function applyAutoGradeAction(announcementId){
