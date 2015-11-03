@@ -113,6 +113,11 @@ NAMESPACE('chlk.models.apps', function () {
                 return this.getState() && this.getState().getStateId() == chlk.models.apps.AppStateEnum.LIVE;
             },
 
+            String, function getExternalAttachPictureUrl(){
+                var dims = chlk.models.apps.AppPicture.EXTERNAL_ATTACH_ICON_DIMS();
+                return window.azurePictureUrl + valueOf(this.getExternalAttachPictureId()) + '-' + dims.width + 'x' + dims.height;
+            },
+
             String, function getIconPictureUrl(){
                 var dims = chlk.models.apps.AppPicture.ICON_DIMS();
                 return window.azurePictureUrl + valueOf(this.getSmallPictureId()) + '-' + dims.width + 'x' + dims.height;

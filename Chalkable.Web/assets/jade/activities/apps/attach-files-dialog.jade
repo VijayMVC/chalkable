@@ -28,7 +28,7 @@ mixin AttachDialogSidebar(tpl, name)
                     , options.getAppUrlAppend())(class = name == options.getAssessmentAppId() ? 'active pressed' : '').assessment Assessment
             each app in options.getExternalAttachApps()
                 style(inline=true type="text/css")
-                    | .#{app.getId().valueOf()}::before { background: url(#{app.getIconPictureUrl()}) 50% 50% no-repeat; background-size: 24px; }
+                    | .#{app.getId().valueOf()}::before { background: url(#{app.getExternalAttachPictureUrl()}) 50% 50% no-repeat; background-size: 24px; }
                 +ActionLink('apps', 'viewExternalAttachApp', options.getAnnouncementId()
                     , app.getId(), options.getAnnouncementType()
                     , options.getAppUrlAppend())(class = [name == app.getId() ? 'active pressed' : '', app.getId()])= app.getName()
