@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;

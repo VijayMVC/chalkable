@@ -16,6 +16,7 @@ using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Common;
+using Chalkable.Web.Extensions;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
 using Chalkable.Web.Models.ApplicationsViewData;
@@ -175,6 +176,12 @@ namespace Chalkable.Web.Controllers
         {
             PrepareStudentJsonData();
             return View();
+        }
+
+        [HttpGet]
+        public ActionResult UiLibraryUrl()
+        {
+            return Redirect(Url.StaticContent("/Content/ui-library.css"));
         }
 
         private District PrepareCommonViewData()
