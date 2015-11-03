@@ -318,6 +318,9 @@
   <data name="ERR_ANNOUNCEMENT_NOT_ASSIGNED_TO_CLASS" xml:space="preserve">
     <value>This annoncement is not assignment to any classes</value>
   </data>
+  <data name="ERR_APP_ATTACH_ICON_MISSING" xml:space="preserve">
+    <value>Appilcation icon for attach dialog is missing</value>
+  </data>
   <data name="ERR_APP_DEV_INFO_MISSING" xml:space="preserve">
     <value>Developer name or website is missing</value>
   </data>

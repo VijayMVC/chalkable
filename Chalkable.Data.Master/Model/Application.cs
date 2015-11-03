@@ -25,6 +25,8 @@ namespace Chalkable.Data.Master.Model
         public string VideoUrl { get; set; }
         public Guid? SmallPictureRef { get; set; }
         public Guid? BigPictureRef { get; set; }
+        public Guid? ExternalAttachPictureRef { get; set; }
+
         public const string DEVELOPER_REF_FIELD = "DeveloperRef";
         public Guid DeveloperRef { get; set; }
         public const string STATE_FIELD = "State";
@@ -56,6 +58,7 @@ namespace Chalkable.Data.Master.Model
         public bool HasTeacherExternalAttach { get; set; }
         public bool HasStudentExternalAttach { get; set; }
         public bool HasAdminExternalAttach { get; set; }
+
 
         [NotDbFieldAttr]
         public bool? Ban { get; set; }
