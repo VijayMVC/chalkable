@@ -83,7 +83,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             var assesmentId = MasterLocator.ApplicationService.GetAssessmentId();
             var type = (AnnouncementType?)announcementType ?? AnnouncementType.Class;
             var canAddStandard = SchoolLocator.GetAnnouncementService(type).CanAddStandard(announcementId);
-            var isAppEnabled = Context.SCEnabled;
+            var isAppEnabled = BaseSecurity.IsDistrictOrTeacher(Context) && Context.SCEnabled;
             var isFileCabinetEnabled = Context.Role == CoreRoles.TEACHER_ROLE; //only teacher can use file cabinet for now
             //TODO: get external attach apps
 
