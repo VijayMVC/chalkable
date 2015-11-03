@@ -19,6 +19,7 @@ NAMESPACE('chlk.models.messages', function () {
             String, 'selectedIds',
             String, 'submitType',
             Boolean, 'disabledMessaging',
-            Boolean, 'classOnly'
+            Boolean, 'classOnly',
+            Boolean, 'currentYearOnly'
         ]);
 });

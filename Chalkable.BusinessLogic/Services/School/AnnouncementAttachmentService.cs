@@ -2,11 +2,9 @@
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors;
@@ -16,7 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IAnnouncementAttachmentService
     {
         IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, IList<int> attachmentOwnersIds, int toAnnouncementId);
-        Announcement UploadAttachment(int announcementId, AnnouncementType type, byte[] content, string name);
+        AnnouncementAttachment UploadAttachment(int announcementId, AnnouncementType type, byte[] content, string name);
         Announcement Add(int announcementId, AnnouncementType type, int attachmentId);
         void Delete(int announcementAttachmentId);
         IList<AnnouncementAttachment> GetAnnouncementAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true);
@@ -108,7 +106,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return annDetails;
         }
 
-        public Announcement UploadAttachment(int announcementId, AnnouncementType type, byte[] content, string name)
+        public AnnouncementAttachment UploadAttachment(int announcementId, AnnouncementType type, byte[] content, string name)
         {
             var annDetails = ServiceLocator.GetAnnouncementService(type).GetAnnouncementDetails(announcementId);
             Trace.Assert(Context.PersonId.HasValue);
@@ -126,7 +124,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     Order = ServiceLocator.GetAnnouncementService(type).GetNewAnnouncementItemOrder(annDetails),
                     AttachmentRef = att.Id,
                 };
-                new AnnouncementAttachmentDataAccess(uow).Insert(annAtt);
+                var da = new AnnouncementAttachmentDataAccess(uow);
+                var attId = da.InsertWithEntityId(annAtt);
                 uow.Commit();
                 bool notifyUsers = !annDetails.IsOwner
                                    || (annDetails.ClassAnnouncementData != null && annDetails.ClassAnnouncementData.VisibleForStudent)
@@ -134,8 +133,9 @@ namespace Chalkable.BusinessLogic.Services.School
                                    || annDetails.AdminAnnouncementData != null;
                 if (notifyUsers)
                     NotifyUsers(annDetails, type);
+
+                return da.GetById(attId, Context.PersonId.Value, Context.RoleId);
             }
-            return annDetails;
         }
 
         private void NotifyUsers(Announcement announcement, AnnouncementType type)

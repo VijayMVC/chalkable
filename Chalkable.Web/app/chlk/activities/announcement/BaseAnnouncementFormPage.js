@@ -259,10 +259,16 @@ NAMESPACE('chlk.activities.announcement', function () {
                 if (msg_){
                     if (msg_ == 'remove-attribute'){
                         this.dom.find('#assigned-attr-' + model.getId()).removeSelf();
+                        if(!this.dom.find('.attribute-item').count()){
+                            this.dom.find('.attributes-attach-area').addClass('x-hidden');
+                            this.dom.find('.main-attach-attribute-btn').removeClass('x-hidden');
+                        }
                     }
                     if (msg_ == 'add-attribute'){
                         var attrDom = new ria.dom.Dom().fromHTML(tpl.render());
                         attrDom.appendTo('.attributes-block');
+                        this.dom.find('.attributes-attach-area').removeClass('x-hidden');
+                        this.dom.find('.main-attach-attribute-btn').addClass('x-hidden');
                     }
 
                     if (msg_ == 'add-attribute-attachment'){

@@ -313,6 +313,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var commentInput = cell.find('.comment-value');
                 var comment = (node.parent('.popup-bubble').find('textarea').getValue() || '').trim();
                 commentInput.setValue(comment).setData('comment', comment);
+                cell.find('[name=isCommentChanged]').setValue(true);
                 node.parent('.popup-bubble.comment').hide();
                 setTimeout(function(){
                     cell.find('input').trigger('focus');
