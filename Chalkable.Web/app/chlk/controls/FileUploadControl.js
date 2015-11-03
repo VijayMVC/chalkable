@@ -28,8 +28,11 @@ NAMESPACE('chlk.controls', function () {
                                 var files = target.valueOf()[0].files;
                                 var state = that.context.getState();
                                 var p = params.slice();
-                                if(needFileIndex)
-                                    p.push(index++);
+                                if(needFileIndex){
+                                    p.push(index);
+                                    index = index + files.length;
+                                }
+
                                 p.push(files);
                                 state.setController(controller);
                                 state.setAction(action);
@@ -65,8 +68,10 @@ NAMESPACE('chlk.controls', function () {
 
                                     var state = that.context.getState();
                                     var p = params.slice();
-                                    if (needFileIndex)
-                                        p.push(index++);
+                                    if(needFileIndex){
+                                        p.push(index);
+                                        index = index + files.length;
+                                    }
                                     p.push(files);
                                     state.setController(controller);
                                     state.setAction(action);

@@ -8,7 +8,8 @@ mixin FileAttachBlock_(announcementId, announcementType, assignedAttributeId)
                 div(class= assignedAttributeId ? 'for-attribute' : '').simple-gray-button.download-link.file Choose File
                     +FileUpload('announcement', 'uploadAttachmentOnCreate', [announcementId, announcementType, assignedAttributeId])(
                         needFileIndex = true
-                        dropAreaSelector = '.upload-button'
+                        dropAreaSelector = '.upload-button',
+                        multiple = !assignedAttributeId
                     )#add-file-attachment.simple-gray-button
 
 mixin AttachDialogSidebar(tpl, name)
