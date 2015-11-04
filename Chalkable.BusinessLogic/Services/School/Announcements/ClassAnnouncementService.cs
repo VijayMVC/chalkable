@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
@@ -606,7 +607,22 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId)
         {
-            SetAnnouncementsAsComplete(tillDateToUpdate, true);
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            DateTime? toDate = tillDateToUpdate;
+
+            if (!tillDateToUpdate.HasValue)
+            {
+                var feedEndDateSetting = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value,
+                    Context.SchoolYearId.Value,
+                    new List<string>() {PersonSetting.FEED_END_DATE});
+                if (feedEndDateSetting.Count > 0 && feedEndDateSetting[PersonSetting.FEED_END_DATE] != null)
+                    toDate = DateTime.ParseExact(feedEndDateSetting[PersonSetting.FEED_END_DATE], Constants.DATE_FORMAT,
+                        CultureInfo.InvariantCulture);
+                else toDate = Context.SchoolYearEndDate;
+            }
+            SetAnnouncementsAsComplete(toDate, true);
         }
     }
 }
