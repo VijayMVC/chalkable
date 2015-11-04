@@ -14,7 +14,7 @@ NAMESPACE('chlk.controls', function () {
             VOID, function checkImage(timeOut, img){
                 var parent = img.parent();
                 setTimeout(function(){
-                    if(img.height() <= parent.height()/2){
+                    if(img.width() <= parent.width()/2){
                         img.setCss('visibility', 'hidden');
                         parent.addClass('loading');
                         var src = img.getAttr('src');
