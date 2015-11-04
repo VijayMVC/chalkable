@@ -25,6 +25,8 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.oldLate = SJX.fromValue(raw.oldLate, Boolean);
                 this.oldIncomplete = SJX.fromValue(raw.oldIncomplete, Boolean);
                 this.oldExempt = SJX.fromValue(raw.oldExempt, Boolean);
+                if(raw.isCommentChanged)
+                    this.commentChanged = SJX.fromValue(raw.isCommentChanged, Boolean);
             },
 
             ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'attachments',
@@ -37,6 +39,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'oldLate',
             Boolean, 'oldIncomplete',
             Boolean, 'oldExempt',
+            Boolean, 'commentChanged',
 
             Object, function getGrade(value){
                 return value;//GradingStyler.getLetterByGrade(value, this.getGradingMapping(), this.getGradingStyle())

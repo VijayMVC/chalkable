@@ -316,6 +316,7 @@
     <Compile Include="Logic\ApplicationLogic.cs" />
     <Compile Include="Logic\ClassLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
+    <Compile Include="Models\AbToCCMappingViewData.cs" />
     <Compile Include="Models\AddressViewData.cs" />
     <Compile Include="Models\AlphaGradeViewData.cs" />
     <Compile Include="Models\AlternateScoreViewData.cs" />
@@ -335,6 +336,7 @@
     <Compile Include="Models\AnnouncementsViewData\StandardViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\MiniQuizAppInfoViewData.cs" />
     <Compile Include="Models\AttachmentViewData.cs" />
+    <Compile Include="Models\AttachSettingsViewData.cs" />
     <Compile Include="Models\AttendanceSeatingChartViewData.cs" />
     <Compile Include="Models\AttendancesViewData\AttendanceMonthViewData.cs" />
     <Compile Include="Models\AttendancesViewData\StudentAttendanceSummaryViewData.cs" />

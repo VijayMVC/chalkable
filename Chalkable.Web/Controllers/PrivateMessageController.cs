@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -13,10 +14,10 @@ namespace Chalkable.Web.Controllers
     public partial class PrivateMessageController : ChalkableController
     {
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult List(int? start, int? count, bool? read, bool? income, string role, string keyword)
+        public ActionResult List(int? start, int? count, bool? read, bool? income, string role, string keyword, bool? classOnly, bool? currentYearOnly)
         {
             var messageType = (income ?? true) ? PrivateMessageType.Income : PrivateMessageType.Sent;
-            var res = SchoolLocator.PrivateMessageService.GetMessages(start ?? 0, count ?? 10, read, messageType, role, keyword);
+            var res = SchoolLocator.PrivateMessageService.GetMessages(start ?? 0, count ?? 10, read, messageType, role, keyword, classOnly, currentYearOnly);
             return Json(res.Transform(PrivateMessageComplexViewData.Create));
         }
 
@@ -71,6 +72,14 @@ namespace Chalkable.Web.Controllers
 
             var possibleRecipients = SchoolLocator.PrivateMessageService.GetPossibleMessageRecipients(filter);
             return Json(PossibleMessageRecipientViewData.Create(possibleRecipients));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult CanSendMessage(int? personId, int? classId)
+        {
+            return Json((personId.HasValue && SchoolLocator.PrivateMessageService.CanSendMessageToPerson(personId.Value))
+                     || (classId.HasValue && SchoolLocator.PrivateMessageService.CanSendMessageToClass(classId.Value))
+                    );
         }
     }
 }

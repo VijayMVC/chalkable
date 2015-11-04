@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        PaginatedList<PrivateMessage> IPrivateMessageService.GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword)
+        PaginatedList<PrivateMessage> IPrivateMessageService.GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool? classOnly, bool? currentYearOnly)
         {
             throw new NotImplementedException();
         }
@@ -78,6 +78,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         public PossibleMessageRecipients GetPossibleMessageRecipients(string filter)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CanSendMessageToClass(int classId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool CanSendMessageToPerson(int personId)
         {
             throw new NotImplementedException();
         }

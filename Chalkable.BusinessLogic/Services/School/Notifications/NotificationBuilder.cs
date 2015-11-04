@@ -84,6 +84,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             {
                 PersonRef = recipient.Id,
                 Person = recipient,
+                RoleRef = recipient.RoleRef,
                 Shown = false,
                 Type = type,
                 Created = serviceLocator.Context.NowSchoolTime

@@ -313,6 +313,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 var commentInput = cell.find('.comment-value');
                 var comment = (node.parent('.popup-bubble').find('textarea').getValue() || '').trim();
                 commentInput.setValue(comment).setData('comment', comment);
+                cell.find('[name=isCommentChanged]').setValue(true);
                 node.parent('.popup-bubble.comment').hide();
                 setTimeout(function(){
                     cell.find('input').trigger('focus');
@@ -434,7 +435,11 @@ NAMESPACE('chlk.activities.grading', function () {
                     var left = cellOffset.left - gradesPageOffset.left;
                     popUp.setCss('top', top);
                     popUp.setCss('left', left);
-                    popUp.show();
+
+                    setTimeout(function(){
+                        popUp.show();
+                    }, 10);
+
                     this.hideDropDown();
                     return false;
                 }
@@ -688,8 +693,9 @@ NAMESPACE('chlk.activities.grading', function () {
 
             function strcmp_(_1, _2) {
                 var v1 = _1[1], v2 = _2[1];
-                v1 = v1 != null ? v1 : Number.NEGATIVE_INFINITY;
-                v2 = v2 != null ? v2 : Number.NEGATIVE_INFINITY;
+                var def = typeof v1 === 'string' || typeof v2 === 'string' ? '' : Number.NEGATIVE_INFINITY;
+                v1 = v1 != null ? v1 : def;
+                v2 = v2 != null ? v2 : def;
                 return v1 < v2 ? -1 : v1 > v2 ? 1 : _1[0] - _2[0];
             },
 

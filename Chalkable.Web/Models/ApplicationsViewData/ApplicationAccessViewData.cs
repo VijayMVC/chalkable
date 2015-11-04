@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Chalkable.Data.Master.Model;
+﻿using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Web.Models.ApplicationsViewData
 {
@@ -12,6 +8,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public bool HasTeacherMyApps { get; set; }
         public bool HasAdminMyApps { get; set; }
         public bool HasParentMyApps { get; set; }
+        public bool HasTeacherExternalAttach { get; set; }
+        public bool HasStudentExternalAttach { get; set; }
+        public bool HasAdminExternalAttach { get; set; }
         public bool CanAttach { get; set; }
         public bool ShowInGradeView { get; set; }
      
@@ -23,6 +22,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                     HasStudentMyApps = application.HasStudentMyApps,
                     HasTeacherMyApps = application.HasTeacherMyApps,
                     HasParentMyApps = application.HasParentMyApps,
+                    HasAdminExternalAttach = application.HasAdminExternalAttach,
+                    HasTeacherExternalAttach = application.HasTeacherExternalAttach,
+                    HasStudentExternalAttach = application.HasStudentExternalAttach,
                     CanAttach = application.CanAttach,
                     ShowInGradeView = application.ShowInGradeView,
                 };

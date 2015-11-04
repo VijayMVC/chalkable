@@ -1,6 +1,6 @@
 mixin ActionLinkOrNull_(isActionLink, date, classId, periodOrder)
     if isActionLink
-        +ActionLink('calendar', 'showWeekBarPopUp', date, classId, '', periodOrder)(attributes)
+        +ActionLink('calendar', 'showDayPopUp', date, classId, periodOrder)(attributes)
             block
     else
         A(href="javascript:;")(attributes)

@@ -15,13 +15,14 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void SendMessageToClass(int classId, string subject, string body);
         void SendMessageToPerson(int personId, string subject, string body);
-        PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword);
+        PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool? classOnly, bool? currentYearOnly);
         void MarkAsRead(IList<int> ids, bool read);
         void Delete(IList<int> id, PrivateMessageType type);
         IncomePrivateMessage GetIncomeMessage(int messageId);
         SentPrivateMessage GetSentMessage(int messageId);
-
         PossibleMessageRecipients GetPossibleMessageRecipients(string filter);
+        bool CanSendMessageToClass(int classId);
+        bool CanSendMessageToPerson(int personId);
     }
 
     public enum PrivateMessageType
@@ -40,18 +41,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void SendMessageToClass(int classId, string subject, string body)
         {
-            if(!BaseSecurity.IsTeacher(Context))
-                throw new ChalkableSecurityException("Only teacher can send message to class");
+            if(!CanSendMessageToClass(classId))
+                throw new ChalkableSecurityException("Current user have no right for sending message to class");
 
             using (var uow = Update())
             {
-                PrivateMessageSecurity.EnsureMessgingPermission(Context);
-                if (!Context.TeacherStudentMessaginEnabled)
-                    throw new ChalkableSecurityException("Teacher has no rights for sending messages to students");
-
-                if (Context.TeacherClassMessagingOnly && !new ClassTeacherDataAccess(uow).Exists(classId, Context.PersonId))
-                    throw new ChalkableSecurityException("Teacher has no right for sending messages to current class. He can send message only to his own classes");
-
                 var studentsIds = new ClassPersonDataAccess(uow).GetClassPersons(classId).Select(cp=>cp.PersonRef).Distinct().ToList();
                 var messageId = CreatePrivateMessage(studentsIds, classId, subject, body, uow);
                 uow.Commit();
@@ -59,6 +53,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             
         }
+
         public void SendMessageToPerson(int personId, string subject, string body)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -66,11 +61,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
             using (var uow = Update())
             {
-                var toPerson = new PersonDataAccess(uow).GetPersonDetails(personId, Context.SchoolLocalId.Value);
-                if(BaseSecurity.IsTeacher(Context))
-                    EnsureTeacherMessagingPermission(toPerson, uow);
-                if(Context.Role == CoreRoles.STUDENT_ROLE)
-                    EnsureStudentMessagingPermission(toPerson, uow);
+                if (!CanSendMessageToPerson(personId, uow))
+                    throw new ChalkableSecurityException("Current user has no rights for sending message to person");
 
                 var messageId = CreatePrivateMessage(new List<int> {personId}, null, subject, body, uow);
                 uow.Commit();
@@ -80,53 +72,10 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        private void EnsureTeacherMessagingPermission(Person toPerson, UnitOfWork uow)
-        {
-            if (!Context.TeacherStudentMessaginEnabled)
-                throw new ChalkableSecurityException("Current teacher has no right for sending message to student");
-            if (Context.TeacherClassMessagingOnly)
-            {
-                var currentPersonClasses = new ClassTeacherDataAccess(uow).GetClassTeachers(null, Context.PersonId);
-                var toPersonClasses = new ClassPersonDataAccess(uow).GetClassPersons(new ClassPersonQuery { PersonId = toPerson.Id });
-                if (!currentPersonClasses.Any(x => toPersonClasses.Any(y => x.ClassRef == y.ClassRef)))
-                    throw new ChalkableSecurityException("Teacher can send message only to his students");
-            }
-        }
-
-        private void EnsureStudentMessagingPermission(Person toPerson, UnitOfWork uow)
-        {
-            
-            if (toPerson.RoleRef == Context.RoleId)
-            {
-                if (!Context.StudentMessagingEnabled)
-                    throw new ChalkableSecurityException("Current student has no rights for sending message to student");
-                if (Context.StudentClassMessagingOnly)
-                {
-                    //TODO: add filtering by school year 
-                    var currentPersonClasses = new ClassPersonDataAccess(uow).GetClassPersons(new ClassPersonQuery { PersonId = Context.PersonId });
-                    var toPersonClasses = new ClassPersonDataAccess(uow).GetClassPersons(new ClassPersonQuery { PersonId = toPerson.Id });
-                    if (!toPersonClasses.Any(x => currentPersonClasses.Any(y => y.ClassRef == x.ClassRef)))
-                        throw new ChalkableSecurityException("Current student can send messages only to student that are in the same classes.");
-                }
-            }
-            if (toPerson.RoleRef == CoreRoles.TEACHER_ROLE.Id)
-            {
-                if (!Context.TeacherStudentMessaginEnabled)
-                    throw new ChalkableSecurityException("Current student has no rights for sending message to teacher");
-                if (Context.TeacherClassMessagingOnly)
-                {
-                    //TODO: add filtering by school year 
-                    var toPersonClasses = new ClassTeacherDataAccess(uow).GetClassTeachers(null, toPerson.Id);
-                    var currentPersonClasses = new ClassPersonDataAccess(uow).GetClassPersons(new ClassPersonQuery { PersonId = Context.PersonId });
-                    if (!currentPersonClasses.Any(x => toPersonClasses.Any(y => x.ClassRef == y.ClassRef)))
-                        throw new ChalkableSecurityException("Current student can send messages only to his teachers.");
-                }
-            }
-        }
-
         private int CreatePrivateMessage(IList<int> personIds, int? classId, string subject, string body, UnitOfWork uow)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
 
             var da = new PrivateMessageDataAccess(uow);
             var message = new PrivateMessage
@@ -148,11 +97,22 @@ namespace Chalkable.BusinessLogic.Services.School
             return messageId;
         }
         
-        public PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword)
+        public PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool? classOnly, bool? currentYearOnly)
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolLocalId.HasValue);
-            
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            DateTime? fromDate = null;
+            DateTime? toDate = null;
+            if (currentYearOnly.HasValue && currentYearOnly.Value)
+            {
+                var currSchoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(Context.SchoolYearId.Value);               
+                var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYearsByAcadYear(currSchoolYear.AcadYear);
+                fromDate = schoolYears.Min(x => x.StartDate);
+                toDate = schoolYears.Max(x => x.EndDate);
+            }
+
             PrivateMessageSecurity.EnsureMessgingPermission(Context);
             using (var uow = Read())
             {
@@ -162,10 +122,10 @@ namespace Chalkable.BusinessLogic.Services.School
                 switch (type)
                 {
                     case PrivateMessageType.Income:
-                        var inMsg = da.GetIncomeMessages(Context.PersonId.Value, null, rolesIds, keyword, read,  start, count);
+                        var inMsg = da.GetIncomeMessages(Context.PersonId.Value, rolesIds, keyword, read,  start, count, fromDate, toDate);
                         return new PaginatedList<PrivateMessage>(inMsg.Select(x => x), inMsg.PageIndex, inMsg.PageSize, inMsg.TotalCount);
                     case PrivateMessageType.Sent:
-                        var sentMsg = da.GetSentMessages(Context.PersonId.Value, null, rolesIds, keyword, start, count);
+                        var sentMsg = da.GetSentMessages(Context.PersonId.Value, rolesIds, keyword, start, count, classOnly, fromDate, toDate);
                         return new PaginatedList<PrivateMessage>(sentMsg.Select(x => x), sentMsg.PageIndex, sentMsg.PageSize, sentMsg.TotalCount);
                     default:
                         throw new ChalkableException(ChlkResources.ERR_PRIVATE_MESSAGE_INVALID_TYPE);
@@ -267,7 +227,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     Context.SchoolYearId.Value,
                     Context.TeacherStudentMessaginEnabled,
                     Context.TeacherClassMessagingOnly,
-                    Context.TeacherStudentMessaginEnabled,
+                    Context.StudentMessagingEnabled,
                     Context.StudentClassMessagingOnly,
                     f1, f2, f3
                 ));
@@ -279,6 +239,104 @@ namespace Chalkable.BusinessLogic.Services.School
             PrivateMessageSecurity.EnsureMessgingPermission(Context);
             return DoRead(u => new PrivateMessageDataAccess(u).GetIncomePrivateMessage(messageId, Context.PersonId.Value));
         }
-        
+
+        public bool CanSendMessageToClass(int classId)
+        {
+            return DoRead(u => CanSendMessageToClass(classId, u));
+        }
+
+        private bool CanSendMessageToClass(int classId, UnitOfWork uow)
+        {
+            return PrivateMessageSecurity.CanSendMessage(Context) && BaseSecurity.IsTeacher(Context) && Context.TeacherStudentMessaginEnabled &&
+                   (!Context.TeacherClassMessagingOnly || new ClassTeacherDataAccess(uow).Exists(classId, Context.PersonId));
+        }
+
+        public bool CanSendMessageToPerson(int personId)
+        {
+            using (var uow = Read())
+            {
+                return CanSendMessageToPerson(personId, uow);
+            }
+        }
+
+        private bool CanSendMessageToPerson(int personId, UnitOfWork uow)
+        {
+            if (BaseSecurity.IsTeacher(Context))
+                return CanTeacherSendMessage(personId, uow) && PrivateMessageSecurity.CanSendMessage(Context);
+            if (Context.Role == CoreRoles.STUDENT_ROLE)
+                return CanStudentSendMessage(personId, uow) && PrivateMessageSecurity.CanSendMessage(Context);
+            return PrivateMessageSecurity.CanSendMessage(Context);
+        }
+
+        private bool CanTeacherSendMessage(int personId, UnitOfWork uow)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+
+            bool canSend = false;
+            var toPerson = new PersonDataAccess(uow).GetPersonDetails(personId, Context.SchoolLocalId.Value);
+
+            if (toPerson == null)
+                return false;
+
+            if (toPerson.RoleRef == CoreRoles.TEACHER_ROLE.Id)
+                return true;
+
+            if (toPerson.RoleRef == CoreRoles.STUDENT_ROLE.Id)
+                if (Context.TeacherStudentMessaginEnabled)
+                {
+                    canSend = true;
+                    if (Context.TeacherClassMessagingOnly)
+                    {
+                        var toPersonClasses = new ClassDataAccess(uow).GetStudentClasses(Context.SchoolYearId.Value,
+                            personId, null);
+                        var currPersonClasses = new ClassDataAccess(uow).GetTeacherClasses(Context.SchoolYearId.Value,
+                            Context.PersonId.Value, null);
+
+                        canSend = currPersonClasses.Any(x => toPersonClasses.Any(y => x.Id == y.Id));
+                    }
+                }
+
+            return canSend;
+        }
+
+        private bool CanStudentSendMessage(int personId, UnitOfWork uow)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+
+            bool canSend = false;
+            var toPerson = new PersonDataAccess(uow).GetPersonDetails(personId, Context.SchoolLocalId.Value);
+            if (toPerson == null)
+                return false;
+            var currPersonClasses = new ClassDataAccess(uow).GetStudentClasses(Context.SchoolYearId.Value,
+                Context.PersonId.Value, null);
+
+            if (toPerson.RoleRef == CoreRoles.TEACHER_ROLE.Id && Context.TeacherStudentMessaginEnabled)
+                if (Context.TeacherClassMessagingOnly)
+                {
+                    var toPersonClasses = new ClassDataAccess(uow).GetTeacherClasses(Context.SchoolYearId.Value,
+                            personId, null);
+
+                    canSend = currPersonClasses.Any(x => toPersonClasses.Any(y => x.Id == y.Id));
+                }
+                else
+                    return true;
+
+            if (toPerson.RoleRef == CoreRoles.STUDENT_ROLE.Id)
+                if (Context.StudentMessagingEnabled)
+                {
+                    canSend = true;
+                    if (Context.StudentClassMessagingOnly)
+                    {
+                        var toPersonClasses = new ClassDataAccess(uow).GetStudentClasses(Context.SchoolYearId.Value,
+                            personId, null);
+
+                        canSend = currPersonClasses.Any(x => toPersonClasses.Any(y => x.Id == y.Id));
+                    }
+                }
+
+            return canSend;
+        }
     }
 }

@@ -184,9 +184,9 @@ namespace Chalkable.BusinessLogic.Services.School
             var ccStandardService = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService;
             foreach (var standard in standards.Where(standard => standard.AcademicBenchmarkId.HasValue))
             {
-                standard.CCStandardCode = ccStandardService.GetStandardCodeByABId(standard.AcademicBenchmarkId.Value);
+                standard.CCStandardCodes = ccStandardService.GetStandardCodesByABId(standard.AcademicBenchmarkId.Value);
             }
-            return standards;
+            return standards.OrderBy(x => x.Name).ToList();
         }
 
         public IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId)

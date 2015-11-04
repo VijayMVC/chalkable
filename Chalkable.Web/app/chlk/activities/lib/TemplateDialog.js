@@ -5,6 +5,7 @@ NAMESPACE('chlk.activities.lib', function () {
     var UNDER_OVERLAY_CLASS = 'under-overlay';
     var HIDDEN_CLASS = 'x-hidden';
     var INNER_PARTIAL_UPDATE_CLASS = "partial-update-inner";
+    var STOP_SCROLLING_CLASS = 'stop-scrolling';
 
     /** @class chlk.activities.lib.FixedTop */
     ANNOTATION(
@@ -31,6 +32,11 @@ NAMESPACE('chlk.activities.lib', function () {
                 }
             },
 
+            OVERRIDE, VOID, function onStart_() {
+                BASE();
+                ria.dom.Dom('body').addClass(STOP_SCROLLING_CLASS);
+            },
+
             function afterRefresh_() {
                 if (this._fixedTopOffest !== false) {
                     this.dom.find('.dialog')
@@ -55,10 +61,12 @@ NAMESPACE('chlk.activities.lib', function () {
 
             OVERRIDE, VOID, function onResume_() {
                 BASE();
+                ria.dom.Dom('body').addClass(STOP_SCROLLING_CLASS);
                 this._dialogsHolder.removeClass(HIDDEN_CLASS);
                 this._overlay
                     .removeClass(HIDDEN_CLASS)
                     .on('click.overlay', this.onCloseBtnClick.bind(this));
+                this._dialogsHolder.on('click.overlay', this.onDialogClick.bind(this));
                 this.dom.removeClass(UNDER_OVERLAY_CLASS);
             },
 
@@ -73,7 +81,19 @@ NAMESPACE('chlk.activities.lib', function () {
                 this._overlay
                     .addClass(HIDDEN_CLASS)
                     .off('click.overlay');
+
+                this._dialogsHolder.off('click.overlay');
+
+                ria.dom.Dom('body').removeClass(STOP_SCROLLING_CLASS);
+
                 BASE();
+            },
+
+            function onDialogClick(node, event) {
+                if(ria.dom.Dom(event.target).is('#chlk-dialogs>DIV')){
+                    this.close();
+                    return false;
+                }
             },
 
             [ria.mvc.DomEventBind('click', '.close')],

@@ -62,11 +62,18 @@ namespace Chalkable.BusinessLogic.Model
 
         private static IList<GradingStandardInfo> OrderGradingStandards(IList<GradingStandardInfo> gradingStandards)
         {
-            gradingStandards = gradingStandards.OrderBy(x => x.Standard.Name).ToList();
-            var graded = gradingStandards.Where(x => !string.IsNullOrEmpty(x.AlphaGradeName)).ToList();
-            if (graded.Count > 0)
-                graded = graded.OrderBy(x => x.AlphaGradeName, new AlphaGradeNameComperator()).ThenBy(x => x.Standard.Name).ToList();
-            return graded.Concat(gradingStandards.Where(x => string.IsNullOrEmpty(x.AlphaGradeName))).ToList();
+            if (gradingStandards.Count > 0)
+            {
+                gradingStandards = gradingStandards.OrderBy(x => x.Standard.Name).ToList();
+                var graded = gradingStandards.Where(x => !string.IsNullOrEmpty(x.AlphaGradeName)).ToList();
+                if (graded.Count > 0)
+                    graded =
+                        graded.OrderBy(x => x.AlphaGradeName, new AlphaGradeNameComperator())
+                            .ThenBy(x => x.Standard.Name)
+                            .ToList();
+                return graded.Concat(gradingStandards.Where(x => string.IsNullOrEmpty(x.AlphaGradeName))).ToList();
+            }
+            return new List<GradingStandardInfo>();
         } 
 
         private static IList<StudentClassExplorerInfo> OrderClassGradeInfo(

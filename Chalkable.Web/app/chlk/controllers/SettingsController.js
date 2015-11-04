@@ -100,14 +100,19 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [chlk.controllers.SidebarButton('settings')],
             function dashboardAdminAction() {
-                var adminSettings = this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_SETTINGS, null);
-                return this.PushView(chlk.activities.settings.AdminPage, ria.async.DeferredData(adminSettings));
+                var messagingSettings = this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_SETTINGS, null);
+                var hasPermission = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS);
+                var res = new chlk.models.settings.MessagingSettingsViewData(messagingSettings, hasPermission);
+                return this.PushView(chlk.activities.settings.AdminPage, ria.async.DeferredData(res));
             },
 
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.DISTRICTADMIN
             ])],
-            [chlk.controllers.SidebarButton('settings')],
+            [chlk.controllers.Permissions([
+                [chlk.models.people.UserPermissionEnum.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS]
+            ])],
+            [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.settings.AdminMessaging]],
             function updateMessagingSettingsAction(model) {
                 this.getContext().getSession().set(ChlkSessionConstants.MESSAGING_SETTINGS, model);

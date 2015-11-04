@@ -74,5 +74,10 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// </summary>
         public int StudentId { get; set; }
 
+
+        public bool HasScore
+            =>
+                !string.IsNullOrWhiteSpace(EnteredScoreAlphaGradeName) || EnteredScoreAveragingEquivalent.HasValue ||
+                !string.IsNullOrWhiteSpace(ComputedScoreAlphaGradeName) || ComputedScore.HasValue;
     }
 }

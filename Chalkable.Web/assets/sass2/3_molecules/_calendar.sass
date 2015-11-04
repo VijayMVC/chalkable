@@ -153,16 +153,22 @@
         background-color: #2f7790
 
       position: relative
-      &.with-anns::after
-        content: ' '
-        position: absolute
-        bottom: 9px
-        left: 50%
-        margin-left: -4px
-        border-radius: 50%
-        background: #2f7790
-        width: 8px
-        height: 8px
+
+      &.with-anns
+        A:not(.lesson-plan-item):after
+          background: #2f7790
+          content: ' '
+          position: absolute
+          bottom: 9px
+          left: 50%
+          margin-left: -4px
+          border-radius: 50%
+          width: 8px
+          height: 8px
+
+      &.with-anns.with-admin-anns
+        A:not(.lesson-plan-item):after
+          margin-left: 9px
 
       &.with-admin-anns::before
         content: ' '
@@ -176,11 +182,12 @@
         height: 24px
 
       &.with-anns.with-admin-anns
-        &::after
-          margin-left: 9px
-
         &::before
           margin-left: -20px
+
+      &.today.with-anns
+        A::after
+          background: #fff
 
       &.today.with-anns::after
         background-color: #fff

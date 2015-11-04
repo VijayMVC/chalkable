@@ -3,7 +3,7 @@ REQUIRE('chlk.templates.settings.AdminMessagingTpl');
 
 NAMESPACE('chlk.activities.settings', function () {
 
-    var timer;
+    var timer, needToSubmit;
 
     /** @class chlk.activities.settings.AdminPage */
     CLASS(
@@ -16,9 +16,19 @@ NAMESPACE('chlk.activities.settings', function () {
             VOID, function checkboxSelect(node, event, selected_){
                 clearTimeout(timer);
 
+                needToSubmit = true;
+
                 timer = setTimeout(function(){
                     node.parent('form').trigger('submit');
+                    needToSubmit = false;
                 }, 2000);
+            },
+
+            OVERRIDE, VOID, function onStop_() {
+                if(needToSubmit)
+                    this.dom.find('form').trigger('submit');
+                needToSubmit = false;
+                BASE();
             },
 
             [ria.mvc.DomEventBind('change', '.all-students, .teachers-to-students')],
@@ -27,12 +37,12 @@ NAMESPACE('chlk.activities.settings', function () {
                 var node2 = node.hasClass('all-students') ? this.dom.find('[name=studenttoclassmessagingonly]') : this.dom.find('[name=teachertoclassmessagingonly]');
                 var checkbox2 = node.hasClass('all-students') ? this.dom.find('[type=checkbox][name=studenttoclassmessagingonly]') : this.dom.find('[type=checkbox][name=teachertoclassmessagingonly]');
                 if(node.checked()){
-                    node2.removeAttr('readonly');
-                    node2.parent('.slide-checkbox').removeAttr('readonly');
+                    node2.removeAttr('disabled');
+                    node2.parent('.slide-checkbox').removeAttr('disabled');
                 }
                 else{
-                    node2.setAttr('readonly', 'readonly');
-                    node2.parent('.slide-checkbox').setAttr('readonly', 'readonly');
+                    node2.setAttr('disabled', 'disabled');
+                    node2.parent('.slide-checkbox').setAttr('disabled', 'disabled');
                     checkbox2.setValue(false);
                 }
             }

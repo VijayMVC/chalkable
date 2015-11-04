@@ -10,7 +10,7 @@ REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.activities.apps.AppMarketPage');
 REQUIRE('chlk.activities.apps.AppMarketDetailsPage');
 REQUIRE('chlk.activities.apps.MyAppsPage');
-REQUIRE('chlk.activities.apps.AttachDialog');
+REQUIRE('chlk.activities.apps.AttachAppsDialog');
 REQUIRE('chlk.activities.apps.InstallAppDialog');
 REQUIRE('chlk.activities.apps.QuickAppInstallDialog');
 
@@ -84,7 +84,7 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             var result = this.appCategoryService
-                .getCategories()
+                .getAllAppCategories()
                 .attach(this.validateResponse_())
                 .then(function(data){
                     return data.getItems();
@@ -214,7 +214,7 @@ NAMESPACE('chlk.controllers', function (){
                     }
 
                     var result = ria.async.wait([
-                        this.appCategoryService.getCategories(),
+                        this.appCategoryService.getAllAppCategories(),
                         this.appMarketService.getPersonBalance(this.getCurrentPerson().getId())
                     ])
                         .attach(this.validateResponse_())

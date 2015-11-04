@@ -1,7 +1,7 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ApplicationService');
 REQUIRE('chlk.models.common.Button');
-REQUIRE('chlk.activities.apps.AttachDialog');
+REQUIRE('chlk.activities.apps.AttachAppsDialog');
 
 
 NAMESPACE('chlk.controllers', function (){
@@ -78,7 +78,7 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(result){
                         this.BackgroundCloseView(chlk.activities.apps.AppWrapperDialog);
-                        this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
+                        this.BackgroundCloseView(chlk.activities.apps.AttachAppsDialog);
                         return this.Redirect('announcement', 'addAppAttachment', [result]);
                     }, this);
             },
@@ -101,12 +101,19 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('add-new')],
             [[Object]],
             function closeCurrentAppAction(data){
+                if (data.refresh_attached_files)
+                    this.BackgroundNavigate('announcement', 'refreshAttachments'
+                        , [data.announcementId, data.announcementType]);
+
                 this.getView().getCurrent().close();
                 return null;
             },
 
             [[Object]],
             function closeMeAction(data){
+                if (data.force)
+                    return this.closeCurrentAppAction(data);
+
                 return this.ShowMsgBox('Close without attaching the app?', 'just checking.', [{
                     text: 'CANCEL',
                     color: chlk.models.common.ButtonColor.GREEN.valueOf()

@@ -19,6 +19,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.id.AnnouncementId, 'id',
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
+
+            [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
 
             [ria.templates.ModelPropertyBind],
@@ -58,7 +61,12 @@ NAMESPACE('chlk.templates.announcement', function () {
             Boolean, 'canAddStandard',
 
             String, function getStandardsUrlComponents() {
-                return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&')
+                var standardsWithMoreCodes = (this.standards || []).filter(function(item){
+                    var codes = item.getCommonCoreStandardCodesArray();
+                    return codes && codes.length > 1;
+                });
+                var isAllStandardCodes = standardsWithMoreCodes.length > 0;
+                return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&') + '&isAllStandardCodes=' + isAllStandardCodes;
             }
         ]);
 });

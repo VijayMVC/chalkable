@@ -37,19 +37,13 @@ NAMESPACE('chlk.controllers', function (){
                 .getMonthDayInfo(date)
                 .attach(this.validateResponse_())
                 .then(function(model){
-                    if(!this.userIsAdmin()){
-                        var gp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD);
-                        var startDate = gp.getStartDate();
-                        var endDate = gp.getEndDate();
-                        if(date.getDate() < startDate.getDate() || date.getDate() > endDate.getDate())
-                            if(model.getAnnouncements().length || model.getAdminAnnouncements().length)
-                                model.setNoPlusButton(true);
-                            else
-                                return ria.async.BREAK;
-                    }else{
-                        if(!model.getAnnouncements().length && !model.getAdminAnnouncements().length)
-                            return ria.async.BREAK;
-                    }
+
+                    model.setNoPlusButton(this.userIsStudent() || (this.userIsTeacher() && !this.getCurrentGradingPeriod().isDateInPeriod(date)));
+
+                    var annCount = model.getAnnouncements().length;
+                    var adminAnnCount = model.getAdminAnnouncements().length;
+                    if(!annCount && !adminAnnCount && model.isNoPlusButton())
+                        return ria.async.BREAK;
 
                     model.setTarget(chlk.controls.getActionLinkControlLastNode());
 
@@ -73,52 +67,16 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.calendar.announcement.MonthDayLessonPlansPopUp, result);
         },
 
-        /*[chlk.controllers.SidebarButton('calendar')],
-        [[chlk.models.common.ChlkDate, Number, chlk.models.id.ClassId]],
-        function showDayPopUpAction(date, periodNumber, classId_) {
-            var result = this.calendarService
-                .getDayPopupInfo(date, periodNumber)
-                .attach(this.validateResponse_())
-                .then(function(model){
-                    model.setTarget(chlk.controls.getActionLinkControlLastNode());
-                    model.setDate(date);
-                    if(classId_)
-                        model.setSelectedClassId(classId_);
-                    return model;
-                });
-            return this.ShadeView(chlk.activities.calendar.announcement.DayPeriodPopUp, result);
-        },*/
 
         [chlk.controllers.SidebarButton('calendar')],
-        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId, chlk.models.id.ClassId, Number]],
-        function showWeekBarPopUpAction(date, periodClassId_, classId_, periodOrder_) {
-            var model = this.calendarService
-                .getWeekDayInfo(date, periodClassId_, periodOrder_);
+        [[chlk.models.common.ChlkDate, chlk.models.id.ClassId, Number]],
+        function showDayPopUpAction(date, classId, periodOrder_){
 
-            if(!this.userIsAdmin()){
-                var gp = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIOD);
-                var startDate = gp.getStartDate();
-                var endDate = gp.getEndDate();
-                if(date.getDate() < startDate.getDate() || date.getDate() > endDate.getDate())
-                    if(model.getAnnouncements().length)
-                        model.setNoPlusButton(true);
-                    else
-                        return null;
-            }
-            //Assert(model);
-
+            var model = this.calendarService.getAnnouncementPeriod(date, classId, periodOrder_);
+            model.setDate(date);
+            model.setSelectedClassId(classId);
             model.setTarget(chlk.controls.getActionLinkControlLastNode());
-            if(periodClassId_ != undefined)
-                model.setDate(date);
-
-            if(classId_)
-                model.setSelectedClassId(classId_);
-
-            var result = new ria.async.DeferredData(model);
-            if(periodClassId_ != undefined)
-                return this.ShadeView(chlk.activities.calendar.announcement.WeekDayPopUp, result);
-
-            return this.ShadeView(chlk.activities.calendar.announcement.WeekBarPopUp, result);
+            return this.ShadeView(chlk.activities.calendar.announcement.WeekDayPopUp, new ria.async.DeferredData(model));
         },
 
         [chlk.controllers.SidebarButton('calendar')],

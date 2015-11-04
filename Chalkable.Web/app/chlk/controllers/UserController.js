@@ -35,7 +35,7 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.TeacherService, 'teacherService',
 
-            [[chlk.models.common.PaginatedList, Number, Boolean, String, Boolean]],
+            [[chlk.models.common.PaginatedList, Number, Boolean, String, String, Boolean]],
             chlk.models.people.UsersList, function prepareUsersModel(users, selectedIndex, byLastName, filter_, rolesText_, isMy_){
                 var hasAccess = true; //this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_PERSON);
                 var disableMessaging, isStudent = this.getCurrentRole().isStudent();

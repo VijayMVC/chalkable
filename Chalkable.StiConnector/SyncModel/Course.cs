@@ -20,6 +20,7 @@ namespace Chalkable.StiConnector.SyncModel
         public short? MinGradeLevelID { get; set; }
         public short? MaxGradeLevelID { get; set; }
         public short CourseTypeID { get; set; }
+        [NullableForeignKey]
         public int? PrimaryTeacherID { get; set; }
         public int? RoomID { get; set; }
         public string AllowedGenders { get; set; }

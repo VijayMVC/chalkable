@@ -7,7 +7,6 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
@@ -68,7 +67,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public Announcement UploadAttachment(int announcementId, AnnouncementType type, byte[] content, string name)
+        public AnnouncementAttachment UploadAttachment(int announcementId, AnnouncementType type, byte[] content, string name)
         {
             throw new NotImplementedException();
         }
@@ -102,7 +101,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 if (ann.IsOwner)
                     ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId, annType);
                 else
-                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToTeachers(announcementId, annType, Context.PersonId.Value);
+                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToOwner(announcementId, annType, Context.PersonId.Value);
             }
             return ann;
         }

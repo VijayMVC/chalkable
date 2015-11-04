@@ -11,15 +11,17 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.MessageService*/
     CLASS(
         'MessageService', EXTENDS(chlk.services.BaseService), [
-            [[Number, Boolean, Boolean, String, String]],
-            ria.async.Future, function getMessages(start_, read_, income_, role_, keyword_) {
+            [[Number, Boolean, Boolean, String, String, Boolean, Boolean]],
+            ria.async.Future, function getMessages(start_, read_, income_, role_, keyword_, classOnly_, currentYearOnly_) {
                 return this.getPaginatedList('PrivateMessage/List.json', chlk.models.messages.Message, {
                     start: start_,
                     count: 10,
                     read: read_,
                     income: income_ !== false,
                     role: role_ ? role_ : "",
-                    keyword: keyword_
+                    keyword: keyword_,
+                    classOnly: classOnly_ || false,
+                    currentYearOnly: currentYearOnly_
                 });
             },
 
@@ -49,7 +51,6 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId]],
             ria.async.Future, function canSendMessage(personId_, classId_) {
-                return ria.async.DeferredData(true);
                 return this.get('PrivateMessage/CanSendMessage.json', Boolean,{
                     personId: personId_ && personId_.valueOf(),
                     classId: classId_ && classId_.valueOf()

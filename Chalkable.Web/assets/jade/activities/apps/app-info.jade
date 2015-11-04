@@ -37,6 +37,19 @@ mixin MyAppsPermissions(myAppsAccess, appName, readOnly)
             +MyAppsPermission("Can Parents Launch", appName, "in My Apps?", "short")
             +SlideCheckbox("parentMyAppsEnabled", myAppsAccess.isParentMyAppsEnabled(), readOnly)
 
+mixin ExternalAttachPermissions(appsAccess, appName, readOnly)
+    .external-attach-apps
+        .permission
+            +MyAppsPermission("Can Teachers Launch", appName, "in External Attach Mode?")
+            +SlideCheckbox("teacherExternalAttachEnabled", myAppsAccess.isTeacherExternalAttachEnabled(), readOnly)
+        .permission
+            +MyAppsPermission("Can Students Launch", appName, "in External Attach Mode?")
+            +SlideCheckbox("studentExternalAttachEnabled", myAppsAccess.isStudentExternalAttachEnabled(), readOnly)
+        .permission
+            +MyAppsPermission("Can Admins Launch", appName, "in External Attach Mode?")
+            +SlideCheckbox("adminExternalAttachEnabled", myAppsAccess.isAdminExternalAttachEnabled(), readOnly)
+
+
 mixin AppPricing(appPrice, isReadOnly)
     isFreeApp = (appPrice.getPrice() || appPrice.getPricePerSchool() || appPrice.getPricePerClass() || 0 ) == 0
     isSchoolFlatRateEnabled =  appPrice.getPricePerSchool() > 0
@@ -165,6 +178,9 @@ simpleApp = !app.isAdvancedApp()
             .elem
                 label.top.hint My Apps:
                 +MyAppsPermissions(myAppsAccess, app.getName(), self.isReadOnly())
+            .elem
+                lebel.top.hint External Attach Apps:
+                +ExternalAttachPermissions(myAppsAccess, app.getName(), self.isReadOnly())
         .section.small.advanced(class = simpleApp ?  "x-hidden" : undefined)
             .elem.first
                 label.hint New Item:
@@ -243,6 +259,8 @@ simpleApp = !app.isAdvancedApp()
                            +RenderWith(app.getIconPicture(), chlk.templates.apps.AppPicture)
                         .banner
                            +RenderWith(app.getBannerPicture(), chlk.templates.apps.AppPicture)
+                        .external-attach-picture
+                            +RenderWith(app.getExternalAttachPicture(), chlk.templates.apps.AppPicture)
         .section.last
             .pictures
                 .elem.screenshots

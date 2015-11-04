@@ -48,9 +48,11 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                                 each item in announcement.getCategories()
                                                     +Option(item.getId().valueOf(), item.getName())
                                         BUTTON(type="submit", value="changeCategory", name="submitType").validate-skip#changeCategoryUpdate.x-hidden
+                                if self.isStudyCenterEnabled()
+                                    .import-from-template
+                                        +ActionButton('lessonplangallery', 'lessonPlanTemplatesList', classId).special-button2.add + Import from new Item Gallery
                                 .add-category
-                                    +ActionButton('lessonplangallery', 'lessonPlanTemplatesList', classId).special-button2.add + Import from new Item Gallery
-                                    +ActionButton('lpgallerycategory', 'editCategories').special-button2.add + Add Category +                 
+                                    +ActionButton('lpgallerycategory', 'editCategories').special-button2.add + Add Category
                             +TextArea(name="content", placeholder="Assignment")= announcement.getContent()
                             if needStandardsBlock
                                 .add-standards-container
@@ -101,17 +103,18 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                     label(for="ann-hidefromstudents")=Msg.Hide_from_Students
                                     +SlideCheckbox('hidefromstudents', lessonPlan.isHiddenFromStudents(), false)
                                     .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
-                                .check-box-container
-                                    label(for="add-to-gallery-check") Add to Lesson Plan Gallery
-                                    +SlideCheckbox('addtogallery', !!lessonPlan.getGalleryCategoryId(), null, !announcement.getCategories().length)#add-to-gallery
-                                .category-container.new-input-container
-                                    BUTTON#add-to-galelry-btn.validate-skip.x-hidden(name="submitType", value="saveNoUpdate", type="submit" )
-                                    BUTTON#check-title-btn.validate-skip.x-hidden(name="submitType", value="addToGallery", type="submit" )
-                                    label(for="galleryCategoryId") Category:
-                                    SPAN#galleryCategoryIdContainer
-                                        +Select('galleryCategoryId')(disabled=!!lessonPlan.getGalleryCategoryId() ? false : "disabled")#galleryCategoryId
-                                            each item in announcement.getCategories()
-                                                +Option(item.getId().valueOf(), item.getName(), lessonPlan.getGalleryCategoryId() && item.getId() == lessonPlan.getGalleryCategoryId())
+                                if self.isStudyCenterEnabled()
+                                    .check-box-container
+                                        label(for="add-to-gallery-check") Add to Lesson Plan Gallery
+                                        +SlideCheckbox('addtogallery', !!lessonPlan.getGalleryCategoryId(), null, !announcement.getCategories().length)#add-to-gallery
+                                    .category-container.new-input-container
+                                        BUTTON#add-to-galelry-btn.validate-skip.x-hidden(name="submitType", value="saveNoUpdate", type="submit" )
+                                        BUTTON#check-title-btn.validate-skip.x-hidden(name="submitType", value="addToGallery", type="submit" )
+                                        label(for="galleryCategoryId") Category:
+                                        SPAN#galleryCategoryIdContainer
+                                            +Select('galleryCategoryId')(disabled=!!lessonPlan.getGalleryCategoryId() ? false : "disabled")#galleryCategoryId
+                                                each item in announcement.getCategories()
+                                                    +Option(item.getId().valueOf(), item.getName(), lessonPlan.getGalleryCategoryId() && item.getId() == lessonPlan.getGalleryCategoryId())
 
                 .apps-attachments-bock.attachments-and-applications
                     ann = announcement
@@ -127,6 +130,9 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                     +RenderWith(attributesList, chlk.templates.announcement.AnnouncementAttributesTpl)(
                         userRole = userRole
                     )
+                .attach-btn-area.attributes-attach-area(class = announcement.getAnnouncementAttributes().length ? '' : 'x-hidden')
+                    +ActionLink('announcement', 'addAttribute', announcement.getId(), announcement.getType()).attach-attribute-btn Add Attribute
+                        span.plus +
                 .suggested-apps
                     if announcement.getStandards() && announcement.getStandards().length > 0 && self.isStudyCenterEnabled()
                         +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)

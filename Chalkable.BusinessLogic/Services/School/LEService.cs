@@ -99,7 +99,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public LEParams GetLEParams()
         {
-            bool enabled = HasLEAccess();
+            bool hasLeAccess = HasLEAccess();
             return new LEParams
             {
                 LEEnabled = Context.LEEnabled,
@@ -108,8 +108,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 LEBaseUrl = GetBaseUrl(),
                 AwardLECredits = HasLECreditsPermission(),
                 AwardLECreditsClassroom = HasLECreditsClassroomPermission(),
-                IssueLECreditsEnabled = enabled,
-                LEAccessEnabled = enabled,
+                IssueLECreditsEnabled = hasLeAccess && BaseSecurity.IsTeacher(Context),
+                LEAccessEnabled = hasLeAccess,
             };
         }
 
@@ -126,7 +126,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private bool HasLEAccess()
         {
-            return HasLECreditsPermission() || HasLECreditsClassroomPermission();
+            return HasLECreditsPermission() || HasLECreditsClassroomPermission() || CoreRoles.STUDENT_ROLE == Context.Role;
         }
 
         private bool HasLECreditsPermission()

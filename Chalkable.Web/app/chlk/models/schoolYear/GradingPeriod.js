@@ -29,6 +29,11 @@ NAMESPACE('chlk.models.schoolYear', function () {
             READONLY, Boolean, 'ablePostGradeBook',
             READONLY, chlk.models.id.MarkingPeriodId, 'markingPeriodId',
 
+            [[chlk.models.common.ChlkDate]],
+            Boolean, function isDateInPeriod(date){
+                return this.getStartDate().getDate() <= date.getDate() && date.getDate() <= this.getEndDate().getDate();
+            },
+
             String, function getFinalTitleText(){
                 var res = this.getName() + ': ' + this.getStartDate().format('m/d/y - ')
                     + this.getEndDate().format('m/d/y');

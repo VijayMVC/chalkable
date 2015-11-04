@@ -75,9 +75,13 @@ NAMESPACE('chlk.models.people', function () {
                 else alerts.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.MEDICAL_ALERT, Msg.Alert_Medical_text))
             },
 
+            Boolean, function showSpedStatus(){
+                return !!this.getSpedStatus() && this.getSpedStatus() == 'Active';
+            },
+
             Boolean, function showAlerts(){
                 var res = this.isWithMedicalAlert() || this.isAllowedInetAccess()
-                    || this.getSpecialInstructions() || this.getSpedStatus() && this.getSpedStatus() != 'Inactive';
+                    || this.getSpecialInstructions() || this.showSpedStatus();
                 return !!res;
             },
 
@@ -92,7 +96,7 @@ NAMESPACE('chlk.models.people', function () {
                     this.addMedicalAlerts_(res);
                 if(this.getSpecialInstructions())
                     res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPECIAL_INSTRUCTIONS_ALERT, this.getSpecialInstructions()));
-                if(this.getSpedStatus() && this.getSpedStatus() != 'Inactive')
+                if(this.showSpedStatus())
                     res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPED_STATUS_ALERT, Msg.Alert_Sped_text));
                 return new chlk.models.common.Alerts(res);
             },

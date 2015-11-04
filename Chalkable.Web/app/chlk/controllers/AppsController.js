@@ -14,6 +14,7 @@ REQUIRE('chlk.activities.apps.AppGeneralInfoPage');
 REQUIRE('chlk.activities.apps.AddAppDialog');
 REQUIRE('chlk.activities.apps.AppWrapperDialog');
 REQUIRE('chlk.activities.apps.AddCCStandardDialog');
+REQUIRE('chlk.activities.apps.ExternalAttachAppDialog');
 
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppPostData');
@@ -152,6 +153,12 @@ NAMESPACE('chlk.controllers', function (){
                     app_.setBannerPicture(new chlk.models.apps.AppPicture(appBannerId, bannerUrl,
                         bannerDims.width, bannerDims.height, 'Banner', !readOnly));
 
+                    var attachIconDims = chlk.models.apps.AppPicture.EXTERNAL_ATTACH_ICON_DIMS();
+                    var attachIconId = app_.getExternalAttachPictureId() || new chlk.models.id.PictureId('');
+                    var attachIconUrl = this.pictureService.getPictureUrl(attachIconId, attachIconDims.width, attachIconDims.height);
+                    app_.setExternalAttachPicture(new chlk.models.apps.AppPicture(attachIconId, attachIconUrl,
+                        attachIconDims.width, attachIconDims.height, 'ExternalAttachPicture', !readOnly));
+
 
                     var screenshots = app_.getScreenshotIds() || [];
                     var screenshotDims = chlk.models.apps.AppPicture.SCREENSHOT_DIMS();
@@ -169,7 +176,7 @@ NAMESPACE('chlk.controllers', function (){
                     }, this);
 
                     app_.setScreenshotPictures(new chlk.models.apps.AppScreenShots(screenshotPictures, readOnly));
-		    
+
                     return new chlk.models.apps.AppInfoViewData(app_, readOnly, cats, gradeLevels, permissions, platforms, isDraft);
 
                 }, this);
@@ -511,6 +518,73 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.apps.AppWrapperDialog, result);
         },
 
+        [chlk.controllers.StudyCenterEnabled()],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.DISTRICTADMIN
+        ])],
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
+        function viewExternalAttachAppAction(announcementId, appId, announcementType, appUrlAppend_) {
+            if(!this.isStudyCenterEnabled())
+                return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+
+            var mode = chlk.models.apps.AppModes.ATTACH;
+
+            var result = this.appsService
+                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                .catchError(function(error_){
+                    throw new chlk.lib.exception.AppErrorException(error_);
+                })
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var appData = data.getApplication();
+
+                    var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
+                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                        + '&code=' + data.getAuthorizationCode()
+                        + '&announcementId=' + encodeURIComponent(announcementId.valueOf())
+                        + '&announcementType=' + encodeURIComponent(announcementType.valueOf())
+                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
+
+                    var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
+
+                    return new chlk.models.apps.ExternalAttachAppViewData(options, appData, viewUrl, 'Attach ' + appData.getName() + ' File');
+                }, this);
+
+            return this.ShadeView(chlk.activities.apps.ExternalAttachAppDialog, result);
+        },
+
+        [chlk.controllers.StudyCenterEnabled()],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.DISTRICTADMIN
+        ])],
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
+        function attachAssessmentAppAction(announcementId, appId, announcementType, appUrlAppend_) {
+            if(!this.isStudyCenterEnabled())
+                return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+
+            var result = this.appsService
+                .addToAnnouncement(this.getCurrentPerson().getId(), appId, announcementId, announcementType)
+                .catchError(function(error_){
+                    throw new chlk.lib.exception.AppErrorException(error_);
+                }, this)
+                .attach(this.validateResponse_())
+                .then(function(app){
+                    var viewUrl = app.getEditUrl()
+                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                        + '&code=' + app.getOauthCode()
+                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
+
+                    var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
+
+                    return new chlk.models.apps.ExternalAttachAppViewData(options, app
+                        , viewUrl, 'Attach ' + app.getName(), app.getAnnouncementApplicationId());
+                }, this);
+
+            return this.ShadeView(chlk.activities.apps.ExternalAttachAppDialog, result);
+        },
+
         [chlk.controllers.SidebarButton('add-new')],
         [chlk.controllers.StudyCenterEnabled()],
         [chlk.controllers.AccessForRoles([
@@ -660,18 +734,20 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.apps.AppPostData]],
         function updateDeveloperAction(model){
 
-
-
             var appAccess = model.isAdvancedApp() ? new chlk.models.apps.AppAccess(
                 model.isStudentMyAppsEnabled(),
                 model.isTeacherMyAppsEnabled(),
                 model.isAdminMyAppsEnabled(),
                 model.isParentMyAppsEnabled(),
                 model.isAttachEnabled(),
-                model.isShowInGradingViewEnabled()
+                model.isShowInGradingViewEnabled(),
+                null,
+                model.isStudentExternalAttachEnabled(),
+                model.isTeacherExternalAttachEnabled(),
+                model.isAdminExternalAttachEnabled()
 
             ) : new chlk.models.apps.AppAccess(
-                true, true, true, true, true, false
+                true, true, true, true, true, false, false, false, false
             );
 
              var shortAppData = new chlk.models.apps.ShortAppInfo(
@@ -682,7 +758,8 @@ NAMESPACE('chlk.controllers', function (){
                 model.getLongDescription(),
                 model.isAdvancedApp(),
                 model.getAppIconId(),
-                model.getAppBannerId()
+                model.getAppBannerId(),
+                model.getAppExternalAttachPictureId()
              );
 
              var isFreeApp = model.isFree();
@@ -719,9 +796,17 @@ NAMESPACE('chlk.controllers', function (){
                     if (appBannerId.length == 0) appBannerId = null;
                 }
 
+                var externalAttachPictureId = null;
+                if(model.getAppExternalAttachPictureId()){
+                    externalAttachPictureId = model.getAppExternalAttachPictureId().valueOf();
+                    if(externalAttachPictureId.length == 0) externalAttachPictureId = null;
+                }
+
                 if (appIconId == null || appBannerId == null){
                     return this.ShowAlertBox('You need to upload icon and banner picture for you app', 'Error'), null;
                 }
+
+                //todo : check for externalAttach picture
 
                 var developerWebsite = model.getDeveloperWebSite();
                 var developerName = model.getDeveloperName();

@@ -102,6 +102,14 @@ NAMESPACE('chlk.services', function () {
                     expiresDate: expiresDate_ ? expiresDate_.valueOf() : null
                 });
             },
+
+            [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function getAttachSettings(announcementId, announcementType) {
+                return this.get('Announcement/AttachSettings.json', chlk.models.common.AttachOptionsViewData, {
+                    announcementId: announcementId.valueOf(),
+                    announcementType: announcementType.valueOf()
+                });
+            },
             
             [[chlk.models.id.ClassId, Number, chlk.models.id.SchoolPersonId]],
             ria.async.Future, function listLast(classId, classAnnouncementTypeId, schoolPersonId) {
