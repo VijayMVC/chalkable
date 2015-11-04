@@ -43,13 +43,9 @@ namespace Chalkable.BusinessLogic.Model
             foreach (var standardScore in standardScores)
             {
                 var standard = standards.FirstOrDefault(st => st.Id == standardScore.StandardId);
-                res.Add(Create(standardScore, standard));
+                if(standard!=null)
+                    res.Add(Create(standardScore, standard));
             }
-            //var stScores = standardScores.Where(s => s.StandardId == 37 && 
-            //    (!string.IsNullOrEmpty(s.EnteredScoreAlphaGradeName) 
-            //    || !string.IsNullOrEmpty(s.ComputedScoreAlphaGradeName)
-            //    || s.EnteredScoreAveragingEquivalent.HasValue
-            //    || s.ComputedScore.HasValue)).ToList();
             return res;
 
         }

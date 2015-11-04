@@ -16,7 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         IList<StudentAnnouncementDetails> GetStudentAnnouncements(int announcementId);
         StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment
-            , bool dropped, bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null);
+            , bool dropped, bool late, bool exempt, bool incomplete, bool commentWasChanged, GradingStyleEnum? gradingStyle = null);
         AutoGrade SetAutoGrade(int announcementApplicationId, int? recepientId, string value);
         IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId);
         IList<AutoGrade> GetAutoGrades(int announcementApplicationId);
@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         //TODO : needs testing 
         public StudentAnnouncement SetGrade(int announcementId, int studentId, string value, string extraCredits, string comment, bool dropped,
-                                            bool late, bool exempt, bool incomplete, GradingStyleEnum? gradingStyle = null)
+                                            bool late, bool exempt, bool incomplete, bool commentWasChanged, GradingStyleEnum? gradingStyle = null)
         {
             var ann = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
             if(!ann.IsSubmitted)
@@ -64,7 +64,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (stAnn.AlternateScoreId.HasValue)
                 stAnn.AlternateScore = ServiceLocator.AlternateScoreService.GetAlternateScore(stAnn.AlternateScoreId.Value);
             
-            if (ann.VisibleForStudent && !string.IsNullOrWhiteSpace(value))
+            if (ann.VisibleForStudent && !string.IsNullOrWhiteSpace(value) && !(commentWasChanged && string.IsNullOrWhiteSpace(comment)))
                 ServiceLocator.NotificationService.AddAnnouncementSetGradeNotificationToStudent(announcementId, stAnn.StudentId);
             return stAnn;
         }

@@ -6,6 +6,7 @@ NAMESPACE('chlk.activities.announcement', function(){
 
     /**@class chlk.activities.announcement.AddStandardsDialog*/
     CLASS(
+        [ria.mvc.ActivityGroup('AttachDialog')],
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.PartialUpdateRule(chlk.templates.standard.StandardsListTpl, '', '.standards-row', ria.mvc.PartialUpdateRuleActions.Append)],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AddStandardsTpl)],
@@ -24,6 +25,12 @@ NAMESPACE('chlk.activities.announcement', function(){
                     standardIdNode.setValue(id);
                     formNode.trigger('submit');
                 }
+            },
+
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
+                BASE(model, msg_);
+                this.dom.find('.standards-list-container').scrollTop(0);
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.standard.StandardsListTpl, 'rebuild-standard-tree', '', ria.mvc.PartialUpdateRuleActions.Replace)],

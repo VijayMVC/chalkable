@@ -76,7 +76,7 @@ NAMESPACE('chlk.models.people', function () {
             },
 
             Boolean, function showSpedStatus(){
-                return this.getSpedStatus() && this.getSpedStatus() == 'Active';
+                return !!this.getSpedStatus() && this.getSpedStatus() == 'Active';
             },
 
             Boolean, function showAlerts(){

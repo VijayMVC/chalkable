@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
@@ -10,6 +7,7 @@ using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using GCObjectRenderer;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -21,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
         PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue);
         void Delete(IList<int> schoolYearIds);
         SchoolYear GetCurrentSchoolYear();
-        IList<SchoolYear> GetSortedYears();
+        IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true); 
         IList<StudentSchoolYear> GetStudentAssignments();
         void AssignStudent(IList<StudentSchoolYear> studentAssignments);
         void UnassignStudents(IList<StudentSchoolYear> studentSchoolYears);
@@ -59,10 +57,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 return res ?? da.GetLast(nowDate, Context.SchoolLocalId.Value);
             }
         }
-
-        public IList<SchoolYear> GetSortedYears()
+        
+        public IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true)
         {
-            return DoRead(u => new SchoolYearDataAccess(u).GetAll());
+            var conds = new AndQueryCondition {{SchoolYear.ACAD_YEAR_FIELD, year}};
+            if(activeOnly)
+                conds.Add(SchoolYear.ARCHIVE_DATE, null);
+            return DoRead(u=> new SchoolYearDataAccess(u).GetAll(conds));
         }
 
         public IList<SchoolYear> Add(IList<SchoolYear> schoolYears)

@@ -266,10 +266,10 @@ namespace Chalkable.Web.Controllers
         //[AuthorizationFilter("Teacher", Preference.API_DESCR_GRADE_UPDATE_ITEM, true, CallType.Get, new[] { AppPermissionType.Grade, AppPermissionType.Announcement })]
         [AuthorizationFilter("Teacher")]
         public ActionResult UpdateItem(int announcementId, int studentId, string gradeValue, string extraCredits
-            , string comment, bool dropped, bool? exempt, bool? incomplete, bool? late, bool? callFromGradeBook)
+            , string comment, bool dropped, bool? exempt, bool? incomplete, bool? late, bool? callFromGradeBook, bool? commentWasChanged)
         {
             var studentAnn = SchoolLocator.StudentAnnouncementService.SetGrade(announcementId, studentId, gradeValue, extraCredits
-                , comment, dropped, late ?? false, exempt ?? false, incomplete ?? false
+                , comment, dropped, late ?? false, exempt ?? false, incomplete ?? false, commentWasChanged ?? false
                 , (int)GradingStyleEnum.Numeric100);
             return Json(ShortStudentAnnouncementViewData.Create(studentAnn));
         }

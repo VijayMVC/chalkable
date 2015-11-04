@@ -63,6 +63,12 @@ NAMESPACE('chlk.models.apps', function () {
                     cls = "screenshot-item";
                     tplImgType = 3;
                 }
+
+                if(this.getWidth() == chlk.models.apps.AppPicture.EXTERNAL_ATTACH_ICON_DIMS()){
+                    cls = "external-attach-icon-item"
+                    tplImgType = 4;
+                }
+
                 this.setPictureClass(cls);
                 this.setTemplateDownloadLink(tplDownloadLinkUrl + tplImgType);
 
@@ -81,6 +87,13 @@ NAMESPACE('chlk.models.apps', function () {
                 return {
                     width: 170,
                     height: 110
+                }
+            },
+
+            function EXTERNAL_ATTACH_ICON_DIMS(){
+                return {
+                    width: 24,
+                    height: 24
                 }
             },
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
@@ -437,7 +438,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public override bool CanAddStandard(int announcementId)
         {
-            return DoRead(u => CreateClassAnnouncementDataAccess(u).CanAddStandard(announcementId));
+            return DoRead(u => BaseSecurity.IsTeacher(Context) && CreateClassAnnouncementDataAccess(u).CanAddStandard(announcementId));
         }
 
 
@@ -606,6 +607,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId)
         {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            
             SetAnnouncementsAsComplete(tillDateToUpdate, true);
         }
     }

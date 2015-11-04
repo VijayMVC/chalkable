@@ -89,7 +89,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
                 var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(annQnA.AnnouncementRef);
                 bool visibleForStudent = (ann is LessonPlan && (ann as LessonPlan).VisibleForStudent) ||
-                                         (ann is ClassAnnouncement && (ann as ClassAnnouncement).VisibleForStudent);
+                                         (ann is ClassAnnouncement && (ann as ClassAnnouncement).VisibleForStudent) ||
+                                         (ann is AdminAnnouncement);
                 if (visibleForStudent)
                     ServiceLocator.NotificationService.AddAnnouncementNotificationAnswerToStudent(annQnA.Id, annQnA.AnnouncementRef, announcementType);
                 return annQnA;

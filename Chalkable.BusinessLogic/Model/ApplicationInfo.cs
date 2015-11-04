@@ -70,10 +70,11 @@ namespace Chalkable.BusinessLogic.Model
         public string VideoDemoUrl { get; set; }
         public Guid? SmallPictureId { get; set; }
         public Guid? BigPictureId { get; set; }
+        public Guid? ExternalAttachPictureId { get; set; }
         public bool AdvancedApp { get; set; }
 
         public static ShortApplicationInfo Create(string name, string url, string shortDescription
-            , string description, string videoDemoUrl, bool advancedApp, Guid? smallPictureId, Guid? bigPictureId)
+            , string description, string videoDemoUrl, bool advancedApp, Guid? smallPictureId, Guid? bigPictureId, Guid? externalAttachPictureId)
         {
             return new ShortApplicationInfo
             {
@@ -84,6 +85,7 @@ namespace Chalkable.BusinessLogic.Model
                 VideoDemoUrl = videoDemoUrl,
                 SmallPictureId = smallPictureId,
                 BigPictureId = bigPictureId,
+                ExternalAttachPictureId = externalAttachPictureId,
                 AdvancedApp = advancedApp
             };
         }
@@ -94,6 +96,7 @@ namespace Chalkable.BusinessLogic.Model
             return new ShortApplicationInfo
             {
                 Name = application.Name,
+                ExternalAttachPictureId = application.ExternalAttachPictureRef,
                 BigPictureId = application.BigPictureRef,
                 Description = application.Description,
                 ShortDescription = application.ShortDescription,
@@ -137,9 +140,14 @@ namespace Chalkable.BusinessLogic.Model
         public bool HasTeacherMyApps { get; set; }
         public bool HasAdminMyApps { get; set; }
         public bool HasParentMyApps { get; set; }
+        public bool HasTeacherExternalAttach { get; set; }
+        public bool HasStudentExternalAttach { get; set; }
+        public bool HasAdminExternalAttach { get; set; }
+
         public bool CanAttach { get; set; }
         public bool ShowInGradeView { get; set; }
-        public static ApplicationAccessInfo Create(bool hasStudentMyApps, bool hasTeacherMyApps, bool hasAdminMyApps, bool hasParentMyApps, bool canAttach, bool showInGradeView)
+        public static ApplicationAccessInfo Create(bool hasStudentMyApps, bool hasTeacherMyApps, bool hasAdminMyApps, bool hasParentMyApps
+            , bool canAttach, bool showInGradeView, bool hasTeacherExternalAttach, bool hasStudentExternalAttach, bool hasAdminExternalAttach)
         {
             return new ApplicationAccessInfo
             {
@@ -147,6 +155,9 @@ namespace Chalkable.BusinessLogic.Model
                 HasTeacherMyApps = hasTeacherMyApps,
                 HasAdminMyApps = hasAdminMyApps,
                 HasParentMyApps = hasParentMyApps,
+                HasAdminExternalAttach = hasAdminExternalAttach,
+                HasTeacherExternalAttach = hasTeacherExternalAttach,
+                HasStudentExternalAttach = hasStudentExternalAttach,
                 CanAttach = canAttach,
                 ShowInGradeView = showInGradeView
             };
@@ -161,6 +172,9 @@ namespace Chalkable.BusinessLogic.Model
                 HasStudentMyApps = application.HasStudentMyApps,
                 HasTeacherMyApps = application.HasTeacherMyApps,
                 HasParentMyApps = application.HasParentMyApps,
+                HasAdminExternalAttach = application.HasAdminExternalAttach,
+                HasTeacherExternalAttach = application.HasTeacherExternalAttach,
+                HasStudentExternalAttach = application.HasStudentExternalAttach,
                 ShowInGradeView = application.ShowInGradeView
             };
         }
