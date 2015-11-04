@@ -6,7 +6,6 @@ NAMESPACE('chlk.activities.apps', function () {
     /** @class chlk.activities.apps.QuickAppInstallDialog*/
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
-        [chlk.activities.lib.FixedTop(80)],
         [ria.mvc.PartialUpdateRule(chlk.templates.TransactionCompleteTpl, '', '.details-info', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.TemplateBind(chlk.templates.apps.QuickAppInstallDialogTpl)],
 
