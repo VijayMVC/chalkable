@@ -39,8 +39,10 @@ NAMESPACE('chlk.models.apps', function () {
                 this.description = SJX.fromValue(raw.description, String);
                 this.smallPictureId = SJX.fromValue(raw.smallpictureid, chlk.models.id.PictureId);
                 this.bigPictureId = SJX.fromValue(raw.bigpictureid, chlk.models.id.PictureId);
+                this.externalAttachPictureId = SJX.fromValue(raw.externalattachpictureid, chlk.models.id.PictureId);
                 this.iconPicture = SJX.fromDeserializable(raw.iconpicture, chlk.models.apps.AppPicture);
                 this.bannerPicture = SJX.fromDeserializable(raw.bannerPicture, chlk.models.apps.AppPicture);
+                this.externalAttachPicture = SJX.fromDeserializable(raw.externalattachpicture, chlk.models.apps.AppPicture);
                 this.screenshotPictures = SJX.fromDeserializable(raw.screenshotpictures, chlk.models.apps.AppScreenShots);
                 this.myAppsUrl = SJX.fromValue(raw.myappsurl, String);
                 this.secretKey = SJX.fromValue(raw.secretkey, String);
@@ -77,8 +79,12 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'description',
             chlk.models.id.PictureId, 'smallPictureId',
             chlk.models.id.PictureId, 'bigPictureId',
+            chlk.models.id.PictureId, 'externalAttachPictureId',
+
             chlk.models.apps.AppPicture, 'iconPicture',
             chlk.models.apps.AppPicture, 'bannerPicture',
+            chlk.models.apps.AppPicture, 'externalAttachPicture',
+
             chlk.models.apps.AppScreenShots,  'screenshotPictures',
             String, 'myAppsUrl',
             String, 'secretKey',
@@ -105,6 +111,11 @@ NAMESPACE('chlk.models.apps', function () {
             READONLY, Boolean, 'live',
             Boolean, function isLive(){
                 return this.getState() && this.getState().getStateId() == chlk.models.apps.AppStateEnum.LIVE;
+            },
+
+            String, function getExternalAttachPictureUrl(){
+                var dims = chlk.models.apps.AppPicture.EXTERNAL_ATTACH_ICON_DIMS();
+                return window.azurePictureUrl + valueOf(this.getExternalAttachPictureId()) + '-' + dims.width + 'x' + dims.height;
             },
 
             String, function getIconPictureUrl(){

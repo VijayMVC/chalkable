@@ -10,5 +10,12 @@ NAMESPACE('chlk.activities.apps', function () {
         [ria.mvc.TemplateBind(chlk.templates.apps.ExternalAttachAppDialogTpl)],
         'ExternalAttachAppDialog', EXTENDS(chlk.activities.apps.AppWrapperDialog), [
 
+            [[Object]],
+            OVERRIDE, VOID, function onRefresh_(data) {
+                BASE(data);
+                this.dom.find('iframe').$.load(function () {
+                    this.unfreeze(null, null)
+                }.bind(this))
+            }
         ]);
 });

@@ -21,6 +21,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public string Description { get; set; }
         public Guid? SmallPictureId { get; set; }
         public Guid? BigPictureId { get; set; }
+        public Guid? ExternalAttachPictureId { get; set; }
         public string MyAppsUrl { get; set; }
         public string SecretKey { get; set; }
         public int State { get; set; }
@@ -48,6 +49,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             ShortDescription = StringTools.BuildShortText(application.ShortDescription, SHORT_LENGHT);
             SmallPictureId = application.SmallPictureRef;
             BigPictureId = application.BigPictureRef;
+            ExternalAttachPictureId = application.ExternalAttachPictureRef;
             ApplicationAccess = ApplicationAccessViewData.Create(application);
             ApplicationPrice = ApplicationPriceViewData.Create(application);
             LiveAppId = application.OriginalRef;

@@ -20,6 +20,7 @@ namespace Chalkable.Web.Controllers
         private const string ICON_TEMPLATES_URL_FORMAT = "/Content/icons-templates/{0}";
         private const string ICON_FILENAME = "icon.psd";
         private const string BANNER_FILENAME = "banner.psd";
+        private const string ATTACH_ICON_FIELNAME = "attachIcon.psd";
         private const string SCREENSHOT_FILENAME = "screenshot.psd";
         private const string ATTACHMENT_CONTENT_TYPE = "attachment";
         private const string CONTENT_LENGTH = "Content-Length";
@@ -125,6 +126,7 @@ namespace Chalkable.Web.Controllers
             {
                 case 1: name = ICON_FILENAME; break;
                 case 2: name = BANNER_FILENAME; break;
+                case 4: name = ATTACH_ICON_FIELNAME; break;
                 default: name = SCREENSHOT_FILENAME; break;
             }
             vPath = String.Format(vPath, name);

@@ -153,6 +153,12 @@ NAMESPACE('chlk.controllers', function (){
                     app_.setBannerPicture(new chlk.models.apps.AppPicture(appBannerId, bannerUrl,
                         bannerDims.width, bannerDims.height, 'Banner', !readOnly));
 
+                    var attachIconDims = chlk.models.apps.AppPicture.EXTERNAL_ATTACH_ICON_DIMS();
+                    var attachIconId = app_.getExternalAttachPictureId() || new chlk.models.id.PictureId('');
+                    var attachIconUrl = this.pictureService.getPictureUrl(attachIconId, attachIconDims.width, attachIconDims.height);
+                    app_.setExternalAttachPicture(new chlk.models.apps.AppPicture(attachIconId, attachIconUrl,
+                        attachIconDims.width, attachIconDims.height, 'ExternalAttachPicture', !readOnly));
+
 
                     var screenshots = app_.getScreenshotIds() || [];
                     var screenshotDims = chlk.models.apps.AppPicture.SCREENSHOT_DIMS();
@@ -728,18 +734,20 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.apps.AppPostData]],
         function updateDeveloperAction(model){
 
-
-
             var appAccess = model.isAdvancedApp() ? new chlk.models.apps.AppAccess(
                 model.isStudentMyAppsEnabled(),
                 model.isTeacherMyAppsEnabled(),
                 model.isAdminMyAppsEnabled(),
                 model.isParentMyAppsEnabled(),
                 model.isAttachEnabled(),
-                model.isShowInGradingViewEnabled()
+                model.isShowInGradingViewEnabled(),
+                null,
+                model.isStudentExternalAttachEnabled(),
+                model.isTeacherExternalAttachEnabled(),
+                model.isAdminExternalAttachEnabled()
 
             ) : new chlk.models.apps.AppAccess(
-                true, true, true, true, true, false
+                true, true, true, true, true, false, false, false, false
             );
 
              var shortAppData = new chlk.models.apps.ShortAppInfo(
@@ -750,7 +758,8 @@ NAMESPACE('chlk.controllers', function (){
                 model.getLongDescription(),
                 model.isAdvancedApp(),
                 model.getAppIconId(),
-                model.getAppBannerId()
+                model.getAppBannerId(),
+                model.getAppExternalAttachPictureId()
              );
 
              var isFreeApp = model.isFree();
@@ -787,9 +796,17 @@ NAMESPACE('chlk.controllers', function (){
                     if (appBannerId.length == 0) appBannerId = null;
                 }
 
+                var externalAttachPictureId = null;
+                if(model.getAppExternalAttachPictureId()){
+                    externalAttachPictureId = model.getAppExternalAttachPictureId().valueOf();
+                    if(externalAttachPictureId.length == 0) externalAttachPictureId = null;
+                }
+
                 if (appIconId == null || appBannerId == null){
                     return this.ShowAlertBox('You need to upload icon and banner picture for you app', 'Error'), null;
                 }
+
+                //todo : check for externalAttach picture
 
                 var developerWebsite = model.getDeveloperWebSite();
                 var developerName = model.getDeveloperName();

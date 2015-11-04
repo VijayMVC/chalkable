@@ -54,6 +54,10 @@
     width: 100%
     vertical-align: top
 
+  .iframe-wrap
+    overflow-y: hidden
+    overflow-x: hidden
+
 .files-container
   border-top: 1px solid #e7e6e2
   padding-top: 7px
@@ -104,7 +108,7 @@
       overflow: hidden
       text-overflow: ellipsis
 
-    .loading
+    .img-loader
       background: image-url("images2/loaders/circular-grey.gif") no-repeat right 5px center
       background-size: 20px
       width: 25px
@@ -115,7 +119,7 @@
       display: none
 
     &.pending
-      .loading
+      .img-loader
         display: inline-block
 
     &.deleting
