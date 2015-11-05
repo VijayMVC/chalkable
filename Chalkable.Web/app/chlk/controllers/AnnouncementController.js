@@ -670,12 +670,11 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        [[Number]],
-        function attachAppsDistrictAdminAction(start_) {
+        function attachAppsDistrictAdminAction() {
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
 
-            var start = start_ || 0, count = 12;
+            var start = 0, count = 12;
 
             var result = this.appMarketService
                 .getInstalledApps(userId, start, null, count)
