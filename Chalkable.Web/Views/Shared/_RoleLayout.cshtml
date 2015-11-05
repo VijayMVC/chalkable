@@ -287,7 +287,7 @@ else
             var markingPeriods =  getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.MARKING_PERIODS));
             var gradingPeriod = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADING_PERIOD));
             var gradingPeriods = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADING_PERIODS));
-            var finalizedClassesIds = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.FINALIZED_CLASSES_IDS)); 
+            var finalizedClassesIds = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.FINALIZED_CLASSES_IDS));
             var attendanceReasons = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.ATTENDANCE_REASONS));
             var gradeLevels = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADE_LEVELS));
             var userClaims = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.USER_CLAIMS));
@@ -305,7 +305,7 @@ else
             var districtId = @ViewData.GetJsConstantValueOrNull(ViewConstants.DISTRICT_ID) || '';
             var redirectUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.REDIRECT_URL_KEY) || '';
             var schoolYear = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.SCHOOL_YEAR));
-            
+            var years = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.YEARS));
         </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)

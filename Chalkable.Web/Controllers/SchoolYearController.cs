@@ -24,12 +24,5 @@ namespace Chalkable.Web.Controllers
             var res = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             return Json(SchoolYearViewData.Create(res));
         }
-
-        public ActionResult ListYears()
-        {
-            var schoolYears = SchoolLocator.SchoolYearService.GetSchoolYears();
-            var res = schoolYears.Select(x => x.AcadYear).Distinct().OrderBy(x => x).ToList();
-            return Json(res);
-        }
  }
 }

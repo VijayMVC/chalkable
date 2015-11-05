@@ -73,5 +73,6 @@ var ChlkSessionConstants = {
     LESSON_PLAN_CATEGORY_FOR_SEARCH: 'lessonPlanCategoryForSearch',
     ANNOUNCEMENT_ATTRIBUTES: 'announcementAttributes',
     ANNOUNCEMENT_ASSIGNED_ATTRIBUTES: 'announcementAssignedAttributes',
-    MESSAGING_DISABLED: 'messagingDisabled'
+    MESSAGING_DISABLED: 'messagingDisabled',
+    YEARS: 'years'
 };

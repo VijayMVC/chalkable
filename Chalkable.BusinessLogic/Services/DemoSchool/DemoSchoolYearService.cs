@@ -105,6 +105,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return new PaginatedList<SchoolYear>(schoolYears, start/count, count, schoolYears.Count);
         }
 
+        public IList<int> GetYears()
+        {
+            var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYears();
+            return schoolYears.Select(x => x.AcadYear).Distinct().OrderBy(x => x).ToList();
+        }
+
         public void Delete(IList<int> schoolYearIds)
         {
             SchoolYearStorage.Delete(schoolYearIds);

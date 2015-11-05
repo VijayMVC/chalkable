@@ -7,7 +7,6 @@ using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
-using GCObjectRenderer;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -17,6 +16,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<SchoolYear> Edit(IList<SchoolYear> schoolYears); 
         SchoolYear GetSchoolYearById(int id);
         PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue);
+        IList<int> GetYears(); 
         void Delete(IList<int> schoolYearIds);
         SchoolYear GetCurrentSchoolYear();
         IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true); 
@@ -43,7 +43,13 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new SchoolYearDataAccess(u).GetPage(start, count));
         }
 
-       
+        public IList<int> GetYears()
+        {
+            var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYears();
+            return schoolYears.Select(x => x.AcadYear).Distinct().OrderBy(x => x).ToList();
+        }
+
+
         public SchoolYear GetCurrentSchoolYear()
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);

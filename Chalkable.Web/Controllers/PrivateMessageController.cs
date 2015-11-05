@@ -11,7 +11,7 @@ using Chalkable.Web.Models;
 namespace Chalkable.Web.Controllers
 {
     [RequireHttps, TraceControllerFilter]
-    public partial class PrivateMessageController : ChalkableController
+    public class PrivateMessageController : ChalkableController
     {
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult List(int? start, int? count, bool? read, bool? income, string role, string keyword, bool? classOnly, int? acadYear)

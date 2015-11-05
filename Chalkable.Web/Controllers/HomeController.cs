@@ -249,6 +249,7 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(MarkingPeriodViewData.Create(mps), ViewConstants.MARKING_PERIODS);
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);
+            PrepareJsonData(SchoolLocator.SchoolYearService.GetYears(), ViewConstants.YEARS);
             return district;
         }
         
