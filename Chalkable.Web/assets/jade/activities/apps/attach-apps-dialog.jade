@@ -1,0 +1,35 @@
+mixin AppIconLink_(announcementId, app, needToInstall, iconTooltip, announcementType, appUrlAppend)
+    -var appId = app.getId().valueOf()
+    .announcement-item.application(data-tooltip=iconTooltip)
+        .wrapper
+            +LoadingImage(src=app.getBannerPictureUrl(), id="loading-image-" + appId)
+            .title(data-tooltip=app.getName(), data-tooltip-type="overflow")= app.getName()
+            .shortdesc= app.getShortDescription()
+            if needToInstall
+                +ActionButton('appmarket', 'details', app.getId(), true) Install
+            else
+                +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, appId, announcementType, appUrlAppend) Attach
+
+options = self.getAttachOptions()
+announcementId = options.getAnnouncementId() && options.getAnnouncementId().valueOf()
+classId = options.getClassId() && options.getClassId().valueOf()
+announcementTypeName = options.getAnnouncementTypeName() || ''
+announcementType = options.getAnnouncementType()
+
+.dialog.chlk-attach-dialog
+    .x-window-header
+        h1 Attach application
+        a.close.close-btn
+    .attach-content
+        +AttachDialogSidebar(self, 'apps')
+        .attach-main
+            .attachments-and-applications
+                if self.getUserRole().isAdmin()
+                    each app in self.apps.getItems()
+                        +AppIconLink_(announcementId, app, false, null, announcementType, options.getAppUrlAppend())
+                else
+                    each app in self.apps.getItems()
+                        +AppIconLink_(announcementId, app, app.needToInstall(), self.getAppIconToolTip(app), announcementType, options.getAppUrlAppend())
+
+                .paging
+                    +Paginator2('announcement', 'attachApps', self.apps)
