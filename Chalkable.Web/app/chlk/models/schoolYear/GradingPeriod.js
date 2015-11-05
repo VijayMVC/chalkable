@@ -31,7 +31,7 @@ NAMESPACE('chlk.models.schoolYear', function () {
 
             [[chlk.models.common.ChlkDate]],
             Boolean, function isDateInPeriod(date){
-                return this.getStartDate() <= date && date <= this.getEndDate();
+                return this.getStartDate().getDate() <= date.getDate() && date.getDate() <= this.getEndDate().getDate();
             },
 
             String, function getFinalTitleText(){

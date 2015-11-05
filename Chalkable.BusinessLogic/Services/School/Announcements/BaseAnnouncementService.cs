@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -169,8 +171,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public void SetComplete(int? classId, MarkDoneOptions option)
         {
-            if (!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
 
             DateTime? tillDateToUpdate;
             switch (option)
@@ -182,12 +184,22 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     tillDateToUpdate = Context.NowSchoolTime.AddDays(-1);
                     break;
                 default:
-                    tillDateToUpdate = null;
+                    tillDateToUpdate = GetEndDateFromFeedSettings();
                     break;
-            }
 
+            }
             SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, tillDateToUpdate, classId);
-        } 
+        }
+
+        private DateTime? GetEndDateFromFeedSettings()
+        {
+            var feedEndDateSetting = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value,
+                new List<string> { PersonSetting.FEED_END_DATE });
+            if (feedEndDateSetting.Count > 0 && !string.IsNullOrWhiteSpace(feedEndDateSetting[PersonSetting.FEED_END_DATE]))
+                return DateTime.ParseExact(feedEndDateSetting[PersonSetting.FEED_END_DATE], Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
+         
+           return Context.SchoolYearEndDate;
+        }
 
         protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId);
     }

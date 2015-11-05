@@ -11,7 +11,6 @@ NAMESPACE('chlk.activities.apps', function () {
     CLASS(
         [ria.mvc.ActivityGroup('MiniQuizDialog')],
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
-        [chlk.activities.lib.FixedTop(80)],
         [ria.mvc.TemplateBind(chlk.templates.apps.MiniQuizDialog)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.MiniQuizDialog, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         'MiniQuizDialog', EXTENDS(chlk.activities.apps.AppWrapperDialog), [

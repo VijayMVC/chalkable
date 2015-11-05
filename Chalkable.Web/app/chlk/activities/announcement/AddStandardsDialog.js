@@ -27,6 +27,12 @@ NAMESPACE('chlk.activities.announcement', function(){
                 }
             },
 
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
+                BASE(model, msg_);
+                this.dom.find('.standards-list-container').scrollTop(0);
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.standard.StandardsListTpl, 'rebuild-standard-tree', '', ria.mvc.PartialUpdateRuleActions.Replace)],
             [[Object, Object, String]],
             VOID, function reBuildStandardTree(tpl, model, msg_) {
