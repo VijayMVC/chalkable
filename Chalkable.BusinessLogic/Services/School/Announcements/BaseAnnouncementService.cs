@@ -193,11 +193,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         private DateTime? GetEndDateFromFeedSettings()
         {
-            var feedEndDateSetting = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value,
-                new List<string> { PersonSetting.FEED_END_DATE });
-            if (feedEndDateSetting.Count > 0 && !string.IsNullOrWhiteSpace(feedEndDateSetting[PersonSetting.FEED_END_DATE]))
-                return DateTime.ParseExact(feedEndDateSetting[PersonSetting.FEED_END_DATE], Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
-         
+            var feedEndDateSetting = ServiceLocator.AnnouncementFetchService.GetSettingsForFeed().ToDate;
+                //ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value,
+                //new List<string> { PersonSetting.FEED_END_DATE });
+            if (feedEndDateSetting.HasValue)
+                return feedEndDateSetting;
+
            return Context.SchoolYearEndDate;
         }
 
