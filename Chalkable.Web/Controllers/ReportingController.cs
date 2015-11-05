@@ -86,6 +86,14 @@ namespace Chalkable.Web.Controllers
             return Report(lessonPlanReportInputModel, SchoolLocator.ReportService.GetLessonPlanReport, "LessonPlanReport");
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult FeedReport(FeedReportInputModel feedReportInput)
+        {
+            //TODO: save report settings 
+            var report = SchoolLocator.ReportService.GetFeedReport(feedReportInput);
+            return DownloadReportFile(report, "Feed Report", feedReportInput.FormatTyped ?? ReportingFormat.Pdf);
+        }
+
         private ActionResult Report<TReport>(TReport reportInputModel
             , Func<TReport, byte[]> reportAction, string reportFileName) where TReport : BaseReportInputModel
         {
@@ -95,7 +103,7 @@ namespace Chalkable.Web.Controllers
         private ActionResult DownloadReportFile(byte[] report, string reportFileName, ReportingFormat formatType)
         {
             var extension = formatType.AsFileExtension();
-            var fileName = string.Format("{0}.{1}", reportFileName, extension);
+            var fileName = $"{reportFileName}.{extension}";
             MasterLocator.UserTrackingService.CreatedReport(Context.Login, reportFileName);
             return File(report, MimeHelper.GetContentTypeByExtension(extension), fileName);
         }
