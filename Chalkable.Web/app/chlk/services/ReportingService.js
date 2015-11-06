@@ -306,6 +306,29 @@ NAMESPACE('chlk.services', function () {
                 gradingPeriodId: gradingPeriodId.valueOf(),
                 studentComments: studentComments
             });
+        },
+
+        ria.async.Future, function getFeedReportSettings(classId_) {
+            return this.get('Reporting/FeedReportSettings.json', chlk.models.feed.FeedPrintingViewData, {
+                classId: classId_ && classId_.valueOf()
+            });
+        },
+
+        [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
+        String, function submitFeedReportSettings(startDate, endDate, lessonPlanOnly_, includeDetails_, includeAttachments_,
+                                                  includeHiddenActivities_, includeHiddenAttributes_, complete_, announcementType_, classId_) {
+            return this.getUrl('Reporting/StudentComprehensiveProgressReport.json', {
+                startDate: startDate.toStandardFormat(),
+                endDate: endDate.toStandardFormat(),
+                lessonPlanOnly: lessonPlanOnly_,
+                includeDetails: includeDetails_,
+                includeAttachments: includeAttachments_,
+                includeHiddenActivities: includeHiddenActivities_,
+                includeHiddenAttributes: includeHiddenAttributes_,
+                complete: complete_,
+                announcementType: announcementType_,
+                classId: classId_ && classId_.valueOf()
+            });
         }
     ])
 });

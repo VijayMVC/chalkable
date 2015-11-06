@@ -6,6 +6,7 @@ REQUIRE('chlk.services.FeedService');
 REQUIRE('chlk.services.NotificationService');
 REQUIRE('chlk.activities.feed.FeedListPage');
 REQUIRE('chlk.activities.feed.FeedListAdminPage');
+REQUIRE('chlk.activities.feed.FeedPrintingDialog');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.GradingPeriodService');
@@ -235,6 +236,18 @@ NAMESPACE('chlk.controllers', function (){
 
                     return model;
                 }, this);
+        },
+
+        [chlk.controllers.SidebarButton('inbox')],
+        function feedPrintingAction() {
+            var result = ria.async.DeferredData(new chlk.models.feed.FeedPrintingViewData());
+            return this.ShadeView(chlk.activities.feed.FeedPrintingDialog, result);
+        },
+
+        [chlk.controllers.SidebarButton('inbox')],
+        [[chlk.models.feed.FeedPrintingViewData]],
+        function submitFeedPrintingReportAction(model){
+            return null;
         }
     ])
 });
