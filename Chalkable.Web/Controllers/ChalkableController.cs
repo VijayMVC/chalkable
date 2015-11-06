@@ -138,11 +138,12 @@ namespace Chalkable.Web.Controllers
                 var sl = User.Identity.Name.Split(new []{Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
                 var userName = sl[0];
                 int? schoolYearId = null;
-                if (sl.Length > 1)
-                    schoolYearId = int.Parse(sl[1]);
+                int roleId = int.Parse(sl[1]);
+                if (sl.Length > 2)
+                    schoolYearId = int.Parse(sl[2]);
                 var masterL = ServiceLocatorFactory.CreateMasterSysAdmin();
                 var user = masterL.UserService.GetByLogin(userName);
-                InitServiceLocators(user, schoolYearId);
+                InitServiceLocators(user, CoreRoles.GetById(roleId), schoolYearId);
                 var claims = (User.Identity as ClaimsIdentity).Claims;
                 var actor = claims.First(x => x.ClaimType.EndsWith(ACTOR_SUFFIX)).Value.Split(',').FirstOrDefault();
                 SchoolLocator.Context.IsOAuthUser = true;
@@ -168,7 +169,7 @@ namespace Chalkable.Web.Controllers
             InitServiceLocators(context);
         }
 
-        private void InitServiceLocators(User user, int? schoolYearId = null)
+        private void InitServiceLocators(User user, CoreRole role, int? schoolYearId = null)
         {
             if (user.SchoolUsers == null || user.SchoolUsers.Count == 0)
                 throw new ChalkableException(ChlkResources.ERR_USER_IS_NOT_ASSIGNED_TO_SCHOOL);
@@ -184,10 +185,12 @@ namespace Chalkable.Web.Controllers
                 schoolYear = schoolL.SchoolYearService.GetSchoolYearById(schoolYearId.Value);
                 schoolUser = user.SchoolUsers.FirstOrDefault(x => x.School.LocalId == schoolYear.SchoolRef);
                 if(schoolUser == null)
-                    throw new ChalkableException(string.Format("There is no school in current District with such schoolYearId : {0}", schoolYear.Id));
+                    throw new ChalkableException($"There is no school in current District with such schoolYearId : {schoolYear.Id}");
             }
             SchoolLocator = ServiceLocatorFactory.CreateSchoolLocator(schoolUser, schoolYear);
-            MasterLocator = SchoolLocator.ServiceLocatorMaster;       
+            MasterLocator = SchoolLocator.ServiceLocatorMaster;
+            Context.Role = role;
+            Context.RoleId = role.Id;
         }
 
 
