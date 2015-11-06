@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net.Http;
+using System.Web;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -107,7 +108,7 @@ namespace Chalkable.StiConnector.Connectors
             var nvc = new NameValueCollection();
             if(date.HasValue)
                 nvc.Add("date", date.Value.ToString(Constants.DATE_FORMAT));
-            Put<Object>(url, null);
+            Post<Object>(url, null, nvc, HttpMethod.Put);
         }
 
         public void CompleteTeacherActivities(int acadSessionId, int teacherId, bool complete, DateTime? date)
