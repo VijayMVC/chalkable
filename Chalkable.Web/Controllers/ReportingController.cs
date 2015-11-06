@@ -122,5 +122,11 @@ namespace Chalkable.Web.Controllers
             var studentComments = SchoolLocator.ReportService.GetProgressReportComments(classId, gradingPeriodId);
             return Json(StudentCommentViewData.Create(studentComments));
         }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult FeedReportSettings()
+        {
+            return FakeJson("~/fakeData/feedReport.json");
+        }
     }
 }

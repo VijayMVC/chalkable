@@ -23,7 +23,7 @@ NAMESPACE('chlk.models.feed', function () {
                 this.editableLPOption = SJX.fromValue(raw.editablelpoption, Boolean);
                 this.complete = SJX.fromValue(raw.complete, Boolean);
                 this.announcementType = SJX.fromValue(raw.announcementtype, chlk.models.announcement.AnnouncementTypeEnum);
-                this.classId = SJX.fromValue(raw.classId, chlk.models.id.ClassId);
+                this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
             },
 
             chlk.models.common.ChlkDate, 'startDate',
