@@ -26,6 +26,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     btn.setAttr('disabled', 'disabled');
                     btn.setProp('disabled', true);
                     btn.parent('.for-attribute').addClass('disabled-upload');
+                    btn.parent('.upload-button').removeClass('enabled');
                 }
             },
 
@@ -38,6 +39,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     btn.removeAttr('disabled');
                     btn.setProp('disabled', false);
                     btn.parent('.for-attribute').removeClass('disabled-upload');
+                    btn.parent('.upload-button').addClass('enabled');
                 }
 
                 var countNode = this.dom.find('.files-count');

@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void SendMessageToClass(int classId, string subject, string body);
         void SendMessageToPerson(int personId, string subject, string body);
-        PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool? classOnly, bool? currentYearOnly);
+        PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool? classOnly, int? acadYear);
         void MarkAsRead(IList<int> ids, bool read);
         void Delete(IList<int> id, PrivateMessageType type);
         IncomePrivateMessage GetIncomeMessage(int messageId);
@@ -97,7 +97,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return messageId;
         }
         
-        public PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool? classOnly, bool? currentYearOnly)
+        public PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool? classOnly, int? acadYear)
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolLocalId.HasValue);
@@ -105,10 +105,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
             DateTime? fromDate = null;
             DateTime? toDate = null;
-            if (currentYearOnly.HasValue && currentYearOnly.Value)
-            {
-                var currSchoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(Context.SchoolYearId.Value);               
-                var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYearsByAcadYear(currSchoolYear.AcadYear);
+            if (acadYear.HasValue)
+            {             
+                var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYearsByAcadYear(acadYear.Value);
                 fromDate = schoolYears.Min(x => x.StartDate);
                 toDate = schoolYears.Max(x => x.EndDate);
             }

@@ -20,6 +20,7 @@ NAMESPACE('chlk.models.messages', function () {
             String, 'submitType',
             Boolean, 'disabledMessaging',
             Boolean, 'classOnly',
-            Boolean, 'currentYearOnly'
+            Number, 'year',
+            ArrayOf(Number), 'years'
         ]);
 });

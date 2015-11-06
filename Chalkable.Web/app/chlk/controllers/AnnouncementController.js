@@ -670,11 +670,12 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [chlk.controllers.SidebarButton('add-new')],
-        function attachAppsDistrictAdminAction() {
+        [[Number]],
+        function attachAppsDistrictAdminAction(start_) {
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
 
-            var start = 0, count = 12;
+            var start = start_ || 0, count = 12;
 
             var result = this.appMarketService
                 .getInstalledApps(userId, start, null, count)
@@ -1132,6 +1133,15 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getView().getCurrent().getClass(), result, 'update-attachments');
         },
 
+        function uploadDisabledAction(){
+            this.showAttributesFilesUploadMsg_();
+            return null;
+        },
+
+        function showAttributesFilesUploadMsg_(){
+            this.ShowMsgBox('You can add only 1 attachment to attribute', 'Error');
+        },
+
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, Object, Number]],
         function addAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId, files, fileIndex_) {
@@ -1139,7 +1149,7 @@ NAMESPACE('chlk.controllers', function (){
             this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'attachment-progress');
 
             if(files.length > 1)
-                this.ShowMsgBox('Please drop only one file at time', 'whoa.');
+                this.showAttributesFilesUploadMsg_();
 
             var result = this.assignedAttributeService
                 .uploadAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeId, [files[0]])
@@ -2234,7 +2244,8 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         function attributeAttachmentExistsAction() {
-            return this.ShowMsgBox('You can add only 1 attachment to attribute', 'Error'), null;
+            this.showAttributesFilesUploadMsg_();
+            return null;
         }
     ])
 });

@@ -16,6 +16,9 @@ NAMESPACE('chlk.controls', function () {
                 var that = this, params = attrs['data-params'] || [],
                     controller = attrs['data-controller'],
                     action = attrs['data-action'],
+                    disabledMsgController = attrs['disabledMsgController'],
+                    disabledMsgAction = attrs['disabledMsgAction'],
+                    disabledMsgParams = attrs['disabledMsgParams'] || [],
                     needFileIndex = attrs.needFileIndex,
                     index = 0,
                     dropAreaSelector = attrs.dropAreaSelector;
@@ -60,24 +63,32 @@ NAMESPACE('chlk.controls', function () {
                                         $dropArea.css({'border-style': ''});
                                 })
                                 .on('drop', function (e) {
+                                    var state = that.context.getState();
                                     e.preventDefault();
 
-                                    dropAreaSelector && $dropArea.css({'border-style': ''});
+                                    if(ria.dom.Dom('#' + attrs.id).is(':disabled')){
+                                        state.setController(disabledMsgController);
+                                        state.setAction(disabledMsgAction);
+                                        state.setParams(disabledMsgParams);
+                                        state.setPublic(false);
+                                        that.context.stateUpdated();
+                                    }else{
+                                        dropAreaSelector && $dropArea.css({'border-style': ''});
 
-                                    var files = e.originalEvent.dataTransfer.files;
+                                        var files = e.originalEvent.dataTransfer.files;
 
-                                    var state = that.context.getState();
-                                    var p = params.slice();
-                                    if(needFileIndex){
-                                        p.push(index);
-                                        index = index + files.length;
+                                        var p = params.slice();
+                                        if(needFileIndex){
+                                            p.push(index);
+                                            index = index + files.length;
+                                        }
+                                        p.push(files);
+                                        state.setController(controller);
+                                        state.setAction(action);
+                                        state.setParams(p);
+                                        state.setPublic(false);
+                                        that.context.stateUpdated();
                                     }
-                                    p.push(files);
-                                    state.setController(controller);
-                                    state.setAction(action);
-                                    state.setParams(p);
-                                    state.setPublic(false);
-                                    that.context.stateUpdated();
                                 });
 
                         }.bind(this));

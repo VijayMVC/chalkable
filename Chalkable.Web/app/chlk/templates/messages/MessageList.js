@@ -30,7 +30,11 @@ NAMESPACE('chlk.templates.messages', function () {
             Boolean, 'classOnly',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'currentYearOnly',
+            Number, 'year',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(Number), 'years',
+
 
             function getNoMessagesText(){
                 if(this.isClassOnly())

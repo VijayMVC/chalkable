@@ -74,7 +74,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public GradingPeriod GetGradingPeriodDetails(int schoolYearId, DateTime date)
         {
-            using (var uow = Update())
+            using (var uow = Read())
             {
                 var da = new GradingPeriodDataAccess(uow);
                 var gradingPeriodQuery = new GradingPeriodQuery
@@ -91,7 +91,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public GradingPeriod GetGradingPeriodById(int id)
         {
-            using (var uow = Update())
+            using (var uow = Read())
             {
                 return new GradingPeriodDataAccess(uow)
                     .GetGradingPeriodsDetails(new GradingPeriodQuery

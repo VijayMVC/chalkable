@@ -11,13 +11,13 @@ using Chalkable.Web.Models;
 namespace Chalkable.Web.Controllers
 {
     [RequireHttps, TraceControllerFilter]
-    public partial class PrivateMessageController : ChalkableController
+    public class PrivateMessageController : ChalkableController
     {
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult List(int? start, int? count, bool? read, bool? income, string role, string keyword, bool? classOnly, bool? currentYearOnly)
+        public ActionResult List(int? start, int? count, bool? read, bool? income, string role, string keyword, bool? classOnly, int? acadYear)
         {
             var messageType = (income ?? true) ? PrivateMessageType.Income : PrivateMessageType.Sent;
-            var res = SchoolLocator.PrivateMessageService.GetMessages(start ?? 0, count ?? 10, read, messageType, role, keyword, classOnly, currentYearOnly);
+            var res = SchoolLocator.PrivateMessageService.GetMessages(start ?? 0, count ?? 10, read, messageType, role, keyword, classOnly, acadYear);
             return Json(res.Transform(PrivateMessageComplexViewData.Create));
         }
 

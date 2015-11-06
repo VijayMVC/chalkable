@@ -43,7 +43,8 @@ namespace Chalkable.BusinessLogic.Model
             foreach (var standardScore in standardScores)
             {
                 var standard = standards.FirstOrDefault(st => st.Id == standardScore.StandardId);
-                res.Add(Create(standardScore, standard));
+                if(standard!=null)
+                    res.Add(Create(standardScore, standard));
             }
             return res;
 

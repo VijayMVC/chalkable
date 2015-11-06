@@ -143,6 +143,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.GRADE_LEVELS, ArrayOf(chlk.models.grading.GradeLevel));
                 this.saveInSession(session, ChlkSessionConstants.ANNOUNCEMENT_ATTRIBUTES, ArrayOf(chlk.models.announcement.AnnouncementAttributeType));
                 this.saveInSession(session, ChlkSessionConstants.MESSAGING_DISABLED, Boolean);
+                this.saveInSession(session, ChlkSessionConstants.YEARS, ArrayOf(Number));
 
                 this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
 
