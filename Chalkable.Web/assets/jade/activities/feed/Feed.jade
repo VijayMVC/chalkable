@@ -1,0 +1,112 @@
+-var noComplete = self.completeOnly && !self.items.length
+-var typesEnum = chlk.models.announcement.AnnouncementTypeEnum
+
+div(class = noComplete ? "no-complete" : "").feed-container
+    -var topData = self.getTopData()
+    -var isAdmin = self.getUserRole().isAdmin()
+    if isAdmin
+        +GradesToolBarWithAll(topData, 'feed', 'list', [true, self.importantOnly])
+        -var selected = topData.getSelectedIds()
+    else
+        +ClassesToolBarWithAll(topData, 'feed', 'list', [true, self.importantOnly])
+        -var selected = topData.getSelectedItemId();
+    h2.page-title Feed
+    .action-bar
+        .items
+            if self.importantOnly
+                .pressed= Msg.ToDo
+                +ActionLinkButton('feed', 'list', selected || '', true, false, 0)= Msg.All
+            else
+                +ActionLinkButton('feed', 'list', selected || '', true, true, 0)= Msg.ToDo
+                .pressed= Msg.All
+    //+ActionLink('feed', 'stopNotificationsInterval')#stop-notifications-interval.x-hidden
+    if noComplete
+        label#feed-arrow.blue-arrow.left-up-arrow=Msg.See_more_items
+        label#no-items.blue-arrow.gray.div=Msg.No_items_marked_important
+    else
+        +ActionForm('feed', 'getAnnouncements').wrapper.no-working
+            input(type="hidden", name="start", value=(self.getStart() || 0))
+            input(type="hidden", name="count", value=10)
+            input(type="hidden", name="importantOnly", value=self.importantOnly && self.importantOnly.toString())
+            input(type="hidden", name="sorttype", value=self.isLatest()).latest-earliest-input
+            input(type="submit", name="submitType", value="sort")#sort-submit.x-hidden
+            +Hidden('toSet', false).to-set
+            if isAdmin
+                input(type="hidden", name="gradeLevels", value=topData.getSelectedIds())
+            else
+                input(type="hidden", name="classId", value=topData.getSelectedItemId())
+
+            .left-buttons-block(class=self.hasFilters() ? '' : 'hidden')
+                if self.isImportantOnly() && self.items.length
+                    input(type="submit", name="submitType", value="markDone")#mark-done-submit.x-hidden
+                    +Select('markDoneOption')(data-placeholder = 'Mark Done', value = 0).markDoneSelect
+                        +Option(0, '', false)
+                        +Option(1, 'Items due before today', false)
+                        +Option(2, 'Items older than 30 days', false)
+                        +Option(3, 'All Items', false)
+                +Select('gradingperiodid')(data-placeholder = self.getStartDate() && (self.getStartDate().format('M d - ') + self.getEndDate().format('M d')), value = 0).gradingPeriodSelect
+                    +Option(-2, '', !!self.getStartDate())
+                    +Option(null, 'Any Time', (!self.getGradingPeriodId() || !self.getGradingPeriodId().valueOf()) && !self.getStartDate())
+                    each gp in self.getGradingPeriods()
+                        +Option(gp.getId().valueOf(), gp.getName(), self.getGradingPeriodId() == gp.getId())
+                    +Option(-1, 'Custom Range...', false)
+                div(class = self.isImportantOnly() ? 'important-only' : '').date-range-popup.popup-bubble.top.hidden
+                    .date-range
+                        +DatePicker('fromdate', self.getStartDate())(
+                            data-options={
+                                showOtherMonths: true,
+                                selectOtherMonths: true,
+                                inCurrentSchoolYear: true,
+                                dateFormat: 'M d, yy',
+                                onClose: function( selectedDate ) {
+                                    $( "#toDate" ).datepicker( "option", "minDate", selectedDate );
+                                },
+                                maxDate: self.getEndDate() && self.getEndDate().getDate()
+                            },
+                            data-value=self.getStartDate() ? self.getStartDate().format('mm/dd/yy') : ''
+                        )#fromDate.start-end-picker
+                        | -
+                        +DatePicker('todate', self.getEndDate())(
+                            data-options={
+                                showOtherMonths: true,
+                                selectOtherMonths: true,
+                                inCurrentSchoolYear: true,
+                                dateFormat: 'M d, yy',
+                                onClose: function( selectedDate ) {
+                                    $( "#fromDate" ).datepicker( "option", "maxDate", selectedDate );
+                                },
+                                minDate: self.getStartDate() && self.getStartDate().getDate()
+                            },
+                            data-value=self.getEndDate() ? self.getEndDate().format('mm/dd/yy') : ''
+                        )#toDate.start-end-picker
+                        br
+                        Button(type="submit", name="submitType", value="sort", disabled = !self.getStartDate() || self.getEndDate())#date-ok-button.blue-button=Msg.OK
+                if !isAdmin
+                    +Select('announcementtype')(data-placeholder = 'Any Type').annTypeSelect.submit-after-select
+                        +Option(null, 'All Types', !self.getAnnType())
+                        +Option(typesEnum.CLASS_ANNOUNCEMENT.valueOf(), 'Activities Only', typesEnum.CLASS_ANNOUNCEMENT == self.getAnnType())
+                        +Option(typesEnum.LESSON_PLAN.valueOf(), 'Lesson Plan Only', typesEnum.LESSON_PLAN == self.getAnnType())
+                if self.hasFilters()
+                    .clear-filters Clear Filters
+                //input(type="text", readonly)#sort-select-input
+                //#sort-select.chosen-container.chosen-container-single
+                    a(href="javascript:void(0)").chosen-single
+                        span Sort
+                        div
+                            b
+                    .chosen-drop
+                        ul.chosen-results
+                            li(class = self.isLatest() ? "" : "highlighted", data-value=false).latest-earliest-option.active-result Due Date: Earliest
+                            li(class = self.isLatest() ? "highlighted" : "", data-value=true).latest-earliest-option.active-result Due Date: Latest
+            .right-buttons-block
+                +ActionButton('feed', 'feedPrinting', topData.getSelectedItemId(), self.completeOnly).report-btn
+                    .report-link
+                Button(type="button", class=self.hasFilters() ? 'active' : '').feed-tools Feed Tools
+            +ListView(self.items)(
+                infiniteScroll = true,
+                needGoToButton = true,
+                pageSize = 10
+            )
+                Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
+                each item in self.items
+                    +FeedItem(item)
