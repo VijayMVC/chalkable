@@ -6,7 +6,7 @@
   "includeattachments":true,
   "includehiddenactivities":false,
   "includehiddenattributes":true,
-  "editablelpoption":true,
+  "editablelpoption":false,
   "classid":123,
-  "announcementtype": null
+  "announcementtype": 3
 },"success":true}
