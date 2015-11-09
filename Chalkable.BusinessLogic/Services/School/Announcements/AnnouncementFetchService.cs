@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
@@ -244,15 +245,5 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
     {
         public IList<AnnouncementComplex> Announcements { get; set; }
         public FeedSettings SettingsForFeed { get; set; }
-    }
-
-    public class FeedSettings
-    {
-        public int? AnnouncementType { get; set; }
-        public bool? SortType { get; set; }
-        public DateTime? FromDate { get; set; }
-        public DateTime? ToDate { get; set; }
-        public int? GradingPeriodId { get; set; }
-        public bool ToSet { get; set; }
     }
 }
