@@ -47,6 +47,27 @@ NAMESPACE('chlk.activities.messages', function () {
                 var unReadNode = node.parent();
                 if(unReadNode.hasClass('unread') && unReadNode.getData('can-read'))
                     unReadNode.removeClass('unread').addClass('read');
+            },
+
+
+
+            [ria.mvc.DomEventBind('keypress', '.search-input')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function SearchPress(node, event) {
+                if (event.keyCode == ria.dom.Keys.ENTER) {
+                    this.submitForm_(node);
+                }
+            },
+
+            [ria.mvc.DomEventBind('change', '.year-select')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function SelectYear(node, event, options) {
+                this.submitForm_(node);
+            },
+
+            [[ria.dom.Dom]],
+            VOID, function submitForm_(childNode){
+                childNode.parent('form').trigger('submit');
             }
         ]);
 });

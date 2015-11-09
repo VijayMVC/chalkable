@@ -10,7 +10,7 @@ REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.activities.apps.AppMarketPage');
 REQUIRE('chlk.activities.apps.AppMarketDetailsPage');
 REQUIRE('chlk.activities.apps.MyAppsPage');
-REQUIRE('chlk.activities.apps.AttachDialog');
+REQUIRE('chlk.activities.apps.AttachAppsDialog');
 REQUIRE('chlk.activities.apps.InstallAppDialog');
 REQUIRE('chlk.activities.apps.QuickAppInstallDialog');
 

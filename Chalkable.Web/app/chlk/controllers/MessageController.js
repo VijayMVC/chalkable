@@ -24,24 +24,25 @@ NAMESPACE('chlk.controllers', function (){
             chlk.services.PersonService, 'personService',
 
             [chlk.controllers.SidebarButton('messages')],
-            [[Boolean, Boolean, String, String, Boolean, Number]],
-            function pageAction(postback_, inbox_, role_, keyword_, classOnly_, start_) {
+            [[Boolean, Boolean, String, String, Boolean, Number, Number]],
+            function pageAction(postback_, inbox_, role_, keyword_, classOnly_, year_, start_) {
                 inbox_ = inbox_ || false;
-                var result = this.getMessages_(inbox_, role_, keyword_, start_, classOnly_);
+                var result = this.getMessages_(inbox_, role_, keyword_, start_, classOnly_, year_);
                 return this.PushOrUpdateView(chlk.activities.messages.MessageListPage, result);
             },
 
-            [[Boolean, String, String, Number, Boolean]],
-            ria.async.Future, function getMessages_(inbox_, role_, keyword_, start_, classOnly_){
+            [[Boolean, String, String, Number, Boolean, Number]],
+            ria.async.Future, function getMessages_(inbox_, role_, keyword_, start_, classOnly_, year_){
                 role_ = role_ || null;
                 keyword_ = keyword_ || null;
 
                 return this.messageService
-                    .getMessages(start_ | 0, null, inbox_, role_, keyword_, classOnly_)
+                    .getMessages(start_ | 0, null, inbox_, role_, keyword_, classOnly_, year_)
                     .attach(this.validateResponse_())
                     .then(function(model){
+                        var years = this.getContext().getSession().get(ChlkSessionConstants.YEARS, []);
                         this.getContext().getSession().set(ChlkSessionConstants.CURRENT_MESSAGES, model.getItems());
-                        return this.convertModel(model, inbox_, role_, keyword_, start_ || 0, classOnly_);
+                        return this.convertModel(model, years, inbox_, role_, keyword_, start_ || 0, classOnly_, year_);
                     }, this);
             },
 
@@ -60,16 +61,16 @@ NAMESPACE('chlk.controllers', function (){
                 if(res){
                     res = res.attach(this.validateResponse_())
                         .then(function(x){
-                            return this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), model.getStart(), model.isClassOnly());
+                            return this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), model.getStart(), model.isClassOnly(), model.getYear());
                         }, this);
                 }else{
-                    res = this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), 0, model.isClassOnly());
+                    res = this.getMessages_(model.isInbox(), model.getRole(), model.getKeyword(), 0, model.isClassOnly(), model.getYear());
                 }
                 return  this.UpdateView(chlk.activities.messages.MessageListPage, res);
             },
 
-            [[chlk.models.common.PaginatedList, Boolean, String, String, Number, Boolean]],
-            function convertModel(list_, inbox_, role_, keyword_, start_, classOnly_)
+            [[chlk.models.common.PaginatedList, ArrayOf(Number), Boolean, String, String, Number, Boolean, Number]],
+            function convertModel(list_, years_, inbox_, role_, keyword_, start_, classOnly_, selectedYear_)
             {
                 var result = new chlk.models.messages.MessageList();
                 result.setMessages(list_);
@@ -79,6 +80,10 @@ NAMESPACE('chlk.controllers', function (){
                 result.setStart(start_);
                 result.setDisabledMessaging(this.isDisabledToMessage());
                 result.setClassOnly(classOnly_ || false);
+                if(years_ != undefined)
+                    result.setYears(years_);
+                if(selectedYear_ != undefined)
+                    result.setYear(selectedYear_);
                 return new ria.async.DeferredData(result);
             },
 

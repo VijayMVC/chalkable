@@ -68,7 +68,8 @@ NAMESPACE('chlk.activities.setup', function () {
                 var model = new chlk.models.common.InfoMsg('This screen contains unsaved information. \n Are you sure you want to navigate away?', Msg.Whoa.capitalize(), buttonsModel);
                 var tpl = new chlk.templates.common.InfoMsg();
                 tpl.assign(model);
-                tpl.renderTo(new ria.dom.Dom('#chlk-dialogs'));
+                new ria.dom.Dom('#chlk-dialogs').appendChild('<div class="info-msg-dialog"></div>');
+                tpl.renderTo(new ria.dom.Dom('.info-msg-dialog'));
                 new ria.dom.Dom('#chlk-overlay, #chlk-dialogs').removeClass('x-hidden');
                 var that = this;
 
@@ -84,7 +85,7 @@ NAMESPACE('chlk.activities.setup', function () {
 
             function removeLeavePopUp(){
                 new ria.dom.Dom('#chlk-overlay, #chlk-dialogs').addClass('x-hidden');
-                new ria.dom.Dom('#chlk-dialogs').find('.info-msg').remove();
+                new ria.dom.Dom('#chlk-dialogs').find('.info-msg-dialog').remove();
             }
         ]);
 });

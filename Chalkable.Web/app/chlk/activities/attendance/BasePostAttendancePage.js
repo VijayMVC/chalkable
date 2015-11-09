@@ -51,7 +51,8 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var model = new chlk.models.common.InfoMsg(chart_ ? 'Seating chart isn\'t saved' : Msg.Click_post_to_save, Msg.Whoa.capitalize(), buttonsModel, 'attendance-leave');
                 var tpl = new chlk.templates.common.InfoMsg();
                 tpl.assign(model);
-                tpl.renderTo(new ria.dom.Dom('#chlk-dialogs'));
+                new ria.dom.Dom('#chlk-dialogs').appendChild('<div class="info-msg-dialog"></div>');
+                tpl.renderTo(new ria.dom.Dom('.info-msg-dialog'));
                 new ria.dom.Dom('#chlk-overlay, #chlk-dialogs').removeClass('x-hidden');
                 var that = this;
 
@@ -72,7 +73,7 @@ NAMESPACE('chlk.activities.attendance', function () {
 
             function removeLeavePopUp(){
                 new ria.dom.Dom('#chlk-overlay, #chlk-dialogs').addClass('x-hidden');
-                new ria.dom.Dom('#chlk-dialogs').find('.info-msg').remove();
+                new ria.dom.Dom('#chlk-dialogs').find('.info-msg-dialog').remove();
             },
 
             OVERRIDE, VOID, function onRender_(model){

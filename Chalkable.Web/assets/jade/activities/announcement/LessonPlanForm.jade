@@ -130,6 +130,9 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                     +RenderWith(attributesList, chlk.templates.announcement.AnnouncementAttributesTpl)(
                         userRole = userRole
                     )
+                .attach-btn-area.attributes-attach-area(class = announcement.getAnnouncementAttributes().length ? '' : 'x-hidden')
+                    +ActionLink('announcement', 'addAttribute', announcement.getId(), announcement.getType()).attach-attribute-btn Add Attribute
+                        span.plus +
                 .suggested-apps
                     if announcement.getStandards() && announcement.getStandards().length > 0 && self.isStudyCenterEnabled()
                         +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)

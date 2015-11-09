@@ -22,6 +22,6 @@ NAMESPACE('chlk.templates.standard', function(){
             chlk.models.id.AnnouncementId, 'announcementId',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.standard.StandardsTable, 'standardsTable',
+            chlk.models.standard.StandardsTable, 'standardsTable'
     ]);
 });

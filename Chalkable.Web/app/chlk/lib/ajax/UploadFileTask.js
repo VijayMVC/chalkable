@@ -10,6 +10,12 @@ NAMESPACE('chlk.lib.ajax', function () {
             function $(url, files) {
                 BASE(url, ria.ajax.Method.POST);
                 this._files = files;
+
+                if (this._xhr.upload) {
+                    this._xhr.upload.addEventListener("progress", this.updateProgress_, false);
+                    this._xhr.upload.addEventListener("error", this.transferFailed_, false);
+                    //this._xhr.upload.addEventListener("abort", this.transferCanceled_, false);
+                }
             },
 
             OVERRIDE, ria.async.Future, function run() {

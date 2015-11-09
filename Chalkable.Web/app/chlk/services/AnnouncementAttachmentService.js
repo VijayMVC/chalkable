@@ -23,7 +23,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.AnnouncementId, Object, chlk.models.announcement.AnnouncementTypeEnum]],
             ria.async.Future, function uploadAttachment(announcementId, files, announcementType) {
-                return this.uploadFiles('AnnouncementAttachment/UploadAnnouncementAttachment', files, chlk.models.announcement.FeedAnnouncementViewData, {
+                return this.uploadFiles('AnnouncementAttachment/UploadAnnouncementAttachment', files, chlk.models.attachment.AnnouncementAttachment, {
                     announcementId: announcementId.valueOf(),
                     announcementType: announcementType.valueOf()
                 });

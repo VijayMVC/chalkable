@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         void SendMessageToClass(int classId, string subject, string body);
         void SendMessageToPerson(int personId, string subject, string body);
-        PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool classOnly);
+        PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool? classOnly, int? acadYear);
         void MarkAsRead(IList<int> ids, bool read);
         void Delete(IList<int> id, PrivateMessageType type);
         IncomePrivateMessage GetIncomeMessage(int messageId);
@@ -47,6 +47,8 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var studentsIds = new ClassPersonDataAccess(uow).GetClassPersons(classId).Select(cp=>cp.PersonRef).Distinct().ToList();
+                if(studentsIds.Count == 0)
+                    throw new ChalkableException("Invalid classId param. Selected class has no students.");
                 var messageId = CreatePrivateMessage(studentsIds, classId, subject, body, uow);
                 uow.Commit();
                 ServiceLocator.NotificationService.AddPrivateMessageNotification(messageId);
@@ -75,6 +77,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private int CreatePrivateMessage(IList<int> personIds, int? classId, string subject, string body, UnitOfWork uow)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
 
             var da = new PrivateMessageDataAccess(uow);
             var message = new PrivateMessage
@@ -96,11 +99,21 @@ namespace Chalkable.BusinessLogic.Services.School
             return messageId;
         }
         
-        public PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool classOnly)
+        public PaginatedList<PrivateMessage> GetMessages(int start, int count, bool? read, PrivateMessageType type, string role, string keyword, bool? classOnly, int? acadYear)
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolLocalId.HasValue);
-            
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            DateTime? fromDate = null;
+            DateTime? toDate = null;
+            if (acadYear.HasValue)
+            {             
+                var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYearsByAcadYear(acadYear.Value);
+                fromDate = schoolYears.Min(x => x.StartDate);
+                toDate = schoolYears.Max(x => x.EndDate);
+            }
+
             PrivateMessageSecurity.EnsureMessgingPermission(Context);
             using (var uow = Read())
             {
@@ -110,10 +123,10 @@ namespace Chalkable.BusinessLogic.Services.School
                 switch (type)
                 {
                     case PrivateMessageType.Income:
-                        var inMsg = da.GetIncomeMessages(Context.PersonId.Value, null, rolesIds, keyword, read,  start, count);
+                        var inMsg = da.GetIncomeMessages(Context.PersonId.Value, rolesIds, keyword, read,  start, count, fromDate, toDate);
                         return new PaginatedList<PrivateMessage>(inMsg.Select(x => x), inMsg.PageIndex, inMsg.PageSize, inMsg.TotalCount);
                     case PrivateMessageType.Sent:
-                        var sentMsg = da.GetSentMessages(Context.PersonId.Value, null, rolesIds, keyword, start, count, classOnly);
+                        var sentMsg = da.GetSentMessages(Context.PersonId.Value, rolesIds, keyword, start, count, classOnly, fromDate, toDate);
                         return new PaginatedList<PrivateMessage>(sentMsg.Select(x => x), sentMsg.PageIndex, sentMsg.PageSize, sentMsg.TotalCount);
                     default:
                         throw new ChalkableException(ChlkResources.ERR_PRIVATE_MESSAGE_INVALID_TYPE);
@@ -235,7 +248,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private bool CanSendMessageToClass(int classId, UnitOfWork uow)
         {
-            return PrivateMessageSecurity.CanSendMessage(Context) && BaseSecurity.IsTeacher(Context) && Context.TeacherStudentMessaginEnabled &&
+            return PrivateMessageSecurity.CanSendMessage(Context) && 
+                   BaseSecurity.IsTeacher(Context) && Context.TeacherStudentMessaginEnabled &&
                    (!Context.TeacherClassMessagingOnly || new ClassTeacherDataAccess(uow).Exists(classId, Context.PersonId));
         }
 

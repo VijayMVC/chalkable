@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.BusinessLogic.Services.School.Announcements;
@@ -52,7 +53,7 @@ namespace Chalkable.Web.Controllers
             return new FeedComplexViewData()
             {
                 AnnoucementViewDatas = AnnouncementViewData.Create(announcements.Announcements, annApps, apps),
-                SettingsForFeed = announcements.SettingsForFeed
+                SettingsForFeed = FeedSettingsViewData.Create(announcements.SettingsForFeed)
             };
         }
 
