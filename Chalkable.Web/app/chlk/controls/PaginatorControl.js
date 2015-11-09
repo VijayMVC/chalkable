@@ -35,6 +35,19 @@ NAMESPACE('chlk.controls', function () {
                 return false;
             },
 
+            [ria.mvc.DomEventBind('change', '.page-value')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function pageSelect(node, event) {
+                var pageSize = this.getConfigs().pageSize,
+                    totalPages = this.getConfigs().totalPages;
+                var pageValue = jQuery('[name=current_page]').val();
+                if(pageValue < 1)
+                    pageValue = 1;
+                if(pageValue > totalPages)
+                    pageValue = totalPages;
+                node.parent('form').find('[name=start]').setValue(pageSize * (pageValue - 1));
+            },
+
             Object, 'configs',
 
             Object, 'linkParams',
