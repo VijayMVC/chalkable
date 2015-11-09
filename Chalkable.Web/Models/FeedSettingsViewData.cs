@@ -1,4 +1,5 @@
 ﻿using System;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 
 namespace Chalkable.Web.Models
