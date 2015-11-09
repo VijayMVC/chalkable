@@ -5,7 +5,7 @@ NAMESPACE('chlk.activities.setup', function () {
 
     /** @class chlk.activities.setup.CommentDialog*/
     CLASS(
-        [ria.mvc.DomAppendTo('#main')],
+        [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.setup.CommentWindowTpl)],
         'CommentDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 

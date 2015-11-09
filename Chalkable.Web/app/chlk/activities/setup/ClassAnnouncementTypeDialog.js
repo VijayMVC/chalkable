@@ -5,7 +5,7 @@ NAMESPACE('chlk.activities.setup', function () {
 
     /** @class chlk.activities.setup.ClassAnnouncementTypeDialog*/
     CLASS(
-        [ria.mvc.DomAppendTo('#main')],
+        [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.setup.ClassAnnouncementTypeWindowTpl)],
         'ClassAnnouncementTypeDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
