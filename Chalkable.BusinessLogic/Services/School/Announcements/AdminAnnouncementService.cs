@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -258,34 +259,20 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             Trace.Assert(Context.PersonId.HasValue);
 
-            DateTime feedStartDate;
-            DateTime feedEndDate;
-
             //get or set settings
             if (settings.ToSet)
                 SetAdminSettingsForFeed(settings);
             else
-                GetAdminSettingsForFeed(out settings);
-            
+                settings = GetAdminSettingsForFeed();
 
-            //if items should be from certain grading period
-            if (settings.GradingPeriodId.HasValue)
-            {
-                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(settings.GradingPeriodId.Value);
-                feedStartDate = gp.StartDate;
-                feedEndDate = gp.EndDate;
-            }
-            else
-            {
-                feedStartDate = settings.FromDate ?? Context.SchoolYearStartDate ?? DateTime.MinValue;
-                feedEndDate = settings.ToDate ?? Context.SchoolYearEndDate ?? DateTime.MaxValue;
-            }
+            var feedStartDate = settings.FromDate ?? Context.SchoolYearStartDate ?? DateTime.MinValue;
+            var feedEndDate = settings.ToDate ?? Context.SchoolYearEndDate ?? DateTime.MaxValue;
 
             var fc = new FeedComplex()
             {
                 SettingsForFeed = settings
             };
-            if (!settings.SortType.Value)
+            if (settings.SortType.HasValue && !settings.SortType.Value)
                 fc.Announcements =
                     DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
                     {
@@ -316,9 +303,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return fc;
         }
 
-        private void GetAdminSettingsForFeed(out FeedSettings settings)
+        private FeedSettings GetAdminSettingsForFeed()
         {
-            settings = new FeedSettings();
+            var settings = new FeedSettings();
             var query = new List<string>
             {
                 PersonSetting.FEED_START_DATE,
@@ -333,18 +320,19 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var sort = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_SORTING);
             var grPeriodId = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_GRADING_PERIOD_ID);
 
-            if (!string.IsNullOrWhiteSpace(grPeriodId.Value))
+            if (!string.IsNullOrWhiteSpace(grPeriodId.Value) && !string.IsNullOrWhiteSpace(startDate.Value) && !string.IsNullOrWhiteSpace(endDate.Value))
             {
                 settings.GradingPeriodId = int.Parse(grPeriodId.Value);
-                settings.FromDate = null;
-                settings.ToDate = null;
-            }
-            else if (!string.IsNullOrWhiteSpace(startDate.Value) && !string.IsNullOrWhiteSpace(endDate.Value))
-            {
                 settings.FromDate = DateTime.ParseExact(startDate.Value, Constants.DATE_FORMAT,
                     CultureInfo.InvariantCulture);
                 settings.ToDate = DateTime.ParseExact(endDate.Value, Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
+            }
+            else if (!string.IsNullOrWhiteSpace(startDate.Value) && !string.IsNullOrWhiteSpace(endDate.Value))
+            {
                 settings.GradingPeriodId = null;
+                settings.FromDate = DateTime.ParseExact(startDate.Value, Constants.DATE_FORMAT,
+                    CultureInfo.InvariantCulture);
+                settings.ToDate = DateTime.ParseExact(endDate.Value, Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
             }
             else
             {
@@ -354,14 +342,29 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
 
             settings.SortType = !string.IsNullOrWhiteSpace(sort.Value) && bool.Parse(sort.Value);
+
+            return settings;
         }
 
         private void SetAdminSettingsForFeed(FeedSettings settings)
         {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            var fromDate = settings.FromDate;
+            var toDate = settings.ToDate;
+
+            if (settings.GradingPeriodId.HasValue)
+            {
+                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(settings.GradingPeriodId.Value);
+                fromDate = gp.StartDate;
+                toDate = gp.EndDate;
+            }
+
             ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, new Dictionary<string, object>()
             {
-                {PersonSetting.FEED_START_DATE, settings.FromDate },
-                {PersonSetting.FEED_END_DATE, settings.ToDate },
+                {PersonSetting.FEED_START_DATE, fromDate },
+                {PersonSetting.FEED_END_DATE, toDate },
                 {PersonSetting.FEED_GRADING_PERIOD_ID, settings.GradingPeriodId },
                 {PersonSetting.FEED_SORTING, settings.SortType }
             });

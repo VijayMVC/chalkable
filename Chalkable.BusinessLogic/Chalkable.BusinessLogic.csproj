@@ -135,6 +135,7 @@
     <Compile Include="Model\Attendances\ClassAttendance.cs" />
     <Compile Include="Model\AttributeAttachmentContentInfo.cs" />
     <Compile Include="Model\EmailInfo.cs" />
+    <Compile Include="Model\FeedSettings.cs" />
     <Compile Include="Model\FinalGradeInfo.cs" />
     <Compile Include="Model\GradingStandardInfo.cs" />
     <Compile Include="Model\LEParams.cs" />
