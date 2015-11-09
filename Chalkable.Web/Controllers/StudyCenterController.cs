@@ -68,7 +68,7 @@ namespace Chalkable.Web.Controllers
                     : new Application[]{};
             var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
 
-            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(miniQuizApp.Url, Context.Login, Context.SchoolYearId);
+            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(miniQuizApp.Url, Context.Login, Context.SchoolYearId, Context.Role);
 
             return Json(MiniQuizAppInfoViewData.Create(miniQuizApp, suggestedApps, appInstallations, hasMyAppDic, Context.PersonId, authorizationCode));
         }
