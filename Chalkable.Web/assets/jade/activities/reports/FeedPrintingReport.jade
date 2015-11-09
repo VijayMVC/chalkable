@@ -25,7 +25,9 @@
                                     },
                                     minDate: minDate && minDate.getDate(),
                                     maxDate: maxDate && maxDate.getDate()
-                                })#start-printing-date
+                                },
+                                class='validate[required]'
+                            )#start-printing-date
 
                         TD.item-2
                             h3=Msg.To
@@ -39,16 +41,18 @@
                                     },
                                     minDate: minDate && minDate.getDate(),
                                     maxDate: maxDate && maxDate.getDate()
-                                })#end-printing-date
+                                },
+                                class='validate[required]'
+                            )#end-printing-date
                     TR
                         TD.item-2
                             .print-item.print-activity-details
-                                label(for="include-details") Print activity details
                                 input(type = "radio", id="include-details", name = "includedetails", value=true, checked = self.isIncludeDetails())
+                                label(for="include-details") Print activity details
                         TD.item-2
                             .print-item.print-list-of-activities
-                                label(for="include-list") Print list of activities
                                 input(type = "radio", id="include-list", name = "includedetails", value=false, checked = !self.isIncludeDetails())
+                                label(for="include-list") Print list of activities
                     TR
                         TD.item-2
                             .check-title Print hidden activities
@@ -60,7 +64,8 @@
                         TD.item-2
                             .check-title Lesson Plans Only
                             +SlideCheckbox('lessonplanonly', self.isLessonPlanOnly(), !self.isEditableLPOption())(
-                                class = self.isEditableLPOption() ? "" : "disabled"
+                                class = self.isEditableLPOption() ? "" : "disabled",
+                                data-tooltip=self.getTooltip()
                             )
                         TD.item-2
                             .check-title Print attachments

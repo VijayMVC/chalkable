@@ -1,4 +1,48 @@
 .feed-printing-dialog
+  .dialog
+    .report-bottom
+      text-align: right
+
+      button
+        font-size: 14px
+        font-weight: bold
+        padding: 2px 10px
+        min-width: 123px
+
+  tr:nth-child(2)
+    td
+      border-bottom: 1px solid #e7e6e2
+
+  .print-activity-details
+    label
+      background: url(images2/icons-24/activity-details.png) 7px center no-repeat
+
+    input:checked + label
+      background: url(images2/icons-24/check.png) 195px 12px no-repeat, url(images2/icons-24/activity-details.png) 7px center no-repeat, #f7f7f5
+
+  .print-list-of-activities
+    label
+      background: url(images2/icons-24/activities-list.png) 7px center no-repeat
+
+    input:checked + label
+      background: url(images2/icons-24/check.png) 195px 12px no-repeat, url(images2/icons-24/activities-list.png) 7px center no-repeat, #f7f7f5
+
+  .print-item
+    position: relative
+    margin: 9px 0 17px
+
+    label
+      display: inline-block
+      width: 178px
+      height: 44px
+      line-height: 44px
+      padding: 0 10px 0 40px
+      cursor: pointer
+
+    input
+      position: absolute
+      opacity: 0
+
   .slide-checkbox.disabled
     opacity: 0.5
 
@@ -14,8 +58,14 @@
       padding-left: 18px
 
     .hasDatepicker
-      width: 220px
+      width: 204px
+      padding: 4px 10px
       line-height: 38px
+      background: url(images2/icons-24/calendar.png) 194px center no-repeat
+      font: bold 14px "Open Sans"
+      opacity: 0.6
+      border-color: gray
+      color: #505050
 
     .x-window-body
       width: 540px
@@ -33,6 +83,7 @@
     display: inline-block
     width: 146px
     vertical-align: middle
+    margin-top: 13px
 
 .worksheet-report-dialog
   .report-window

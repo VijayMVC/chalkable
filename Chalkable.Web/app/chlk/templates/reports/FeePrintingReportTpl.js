@@ -45,6 +45,20 @@ NAMESPACE('chlk.templates.reports', function () {
             chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.ClassId, 'classId'
+            chlk.models.id.ClassId, 'classId',
+
+            function getTooltip(){
+                if(!this.isEditableLPOption()){
+                    var res = "The feed is configured to only show ";
+
+                    if(this.getAnnouncementType() == chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN)
+                        return res + "lesson plans";
+
+                    if(this.getAnnouncementType() == chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT)
+                        return res + "activities";
+                }
+
+                return null;
+            }
         ])
 });
