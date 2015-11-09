@@ -47,6 +47,8 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Update())
             {
                 var studentsIds = new ClassPersonDataAccess(uow).GetClassPersons(classId).Select(cp=>cp.PersonRef).Distinct().ToList();
+                if(studentsIds.Count == 0)
+                    throw new ChalkableException("Invalid classId param. Selected class has no students.");
                 var messageId = CreatePrivateMessage(studentsIds, classId, subject, body, uow);
                 uow.Commit();
                 ServiceLocator.NotificationService.AddPrivateMessageNotification(messageId);
@@ -246,7 +248,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private bool CanSendMessageToClass(int classId, UnitOfWork uow)
         {
-            return PrivateMessageSecurity.CanSendMessage(Context) && BaseSecurity.IsTeacher(Context) && Context.TeacherStudentMessaginEnabled &&
+            return PrivateMessageSecurity.CanSendMessage(Context) && 
+                   BaseSecurity.IsTeacher(Context) && Context.TeacherStudentMessaginEnabled &&
                    (!Context.TeacherClassMessagingOnly || new ClassTeacherDataAccess(uow).Exists(classId, Context.PersonId));
         }
 
