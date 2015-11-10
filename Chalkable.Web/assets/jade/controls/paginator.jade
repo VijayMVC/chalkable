@@ -11,7 +11,7 @@ mixin Paginator(controller, action, data, params, noDisplaying)
                     input(name='current_page', value=pagingData.pageIndex).page-value
                     span
                         | of #{pagingData.totalPages || 1}
-                    input(type="submit")
+                    input(type="submit", name="submitType", value="pageSelect")
                     input(type="hidden", name="controller", value=controller).controller-name
                     input(type="hidden", name="action", value=action).action-name
             +ActionLinkWithPrepend(controller, action, params, pagingData.nextPageStart)(class = 'next-page' + (pagingData.hasNextPage ? '' : ' disabled'))

@@ -336,6 +336,7 @@
     <Compile Include="Models\AnnouncementsViewData\StandardViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\MiniQuizAppInfoViewData.cs" />
     <Compile Include="Models\AttachmentViewData.cs" />
+    <Compile Include="Models\AttachSettingsViewData.cs" />
     <Compile Include="Models\AttendanceSeatingChartViewData.cs" />
     <Compile Include="Models\AttendancesViewData\AttendanceMonthViewData.cs" />
     <Compile Include="Models\AttendancesViewData\StudentAttendanceSummaryViewData.cs" />
@@ -394,6 +395,7 @@
     <Compile Include="Models\AppTesterViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineTypeSummaryViewData.cs" />
+    <Compile Include="Models\FeedSettingsViewData.cs" />
     <Compile Include="Models\GradedItemViewData.cs" />
     <Compile Include="Models\GradingViewData\StudentProfileGradingDetailViewData.cs" />
     <Compile Include="Models\GradingViewData\StudentProfileGradingSummaryViewData.cs" />

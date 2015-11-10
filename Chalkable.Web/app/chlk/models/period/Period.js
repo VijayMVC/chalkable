@@ -1,3 +1,4 @@
+REQUIRE('ria.serialize.SJX');
 REQUIRE('chlk.models.id.PeriodId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.common.ChlkTime');
@@ -7,53 +8,64 @@ REQUIRE('chlk.models.id.ClassId');
 NAMESPACE('chlk.models.period', function () {
     "use strict";
 
+
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.period.Period*/
     CLASS(
-        'Period', [
+        'Period', IMPLEMENTS(ria.serialize.IDeserializable), [
+
+
+            VOID, function deserialize(raw){
+                this.id = SJX.fromValue(raw.id, chlk.models.id.PeriodId);
+                this.name = SJX.fromValue(raw.name, String);
+                this.startTime = SJX.fromDeserializable(raw.starttime, chlk.models.common.ChlkTime);
+                this.endTime = SJX.fromDeserializable(raw.endtime, chlk.models.common.ChlkTime);
+                this.order = SJX.fromValue(raw.order, Number);
+                this.markingPeriodId = SJX.fromValue(raw.markingperiodid, chlk.models.id.MarkingPeriodId);
+                this.roomId = SJX.fromValue(raw.roomid, Number);
+                this.roomNumber = SJX.fromValue(raw.roomnumber, String);
+                this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
+                this.classNumber = SJX.fromValue(raw.classname, String);
+                this.className = SJX.fromValue(raw.classname, String);
+                this.departmentId = SJX.fromValue(raw.departmentid, chlk.models.id.DepartmentId);
+                this.teacherId = SJX.fromValue(raw.teacherid, chlk.models.id.SchoolPersonId);
+                this.teacherDisplayName = SJX.fromValue(raw.teacherdisplayname, String);
+                this.teaching = SJX.fromValue(raw.teaching, Boolean);
+                this.currentSection = SJX.fromValue(raw.currentsection, String);
+            },
+
             chlk.models.id.PeriodId, 'id',
 
-            [ria.serialize.SerializeProperty('starttime')],
+            String, 'name',
+
             chlk.models.common.ChlkTime, 'startTime',
 
-            [ria.serialize.SerializeProperty('endtime')],
             chlk.models.common.ChlkTime, 'endTime',
 
             Number, 'order',
 
-            [ria.serialize.SerializeProperty('markingperiodid')],
             chlk.models.id.MarkingPeriodId, 'markingPeriodId',
 
-            [ria.serialize.SerializeProperty('roomnumber')],
-            String, 'roomNumber',
-
-            [ria.serialize.SerializeProperty('classnumber')],
-            String, 'classNumber',
-
-            [ria.serialize.SerializeProperty('classname')],
-            String, 'className',
-
-            [ria.serialize.SerializeProperty('roomid')],
             Number, 'roomId',
 
-            [ria.serialize.SerializeProperty('departmentid')],
-            chlk.models.id.DepartmentId, 'departmentId',
+            String, 'roomNumber',
 
-            [ria.serialize.SerializeProperty('classid')],
             chlk.models.id.ClassId, 'classId',
 
-            [ria.serialize.SerializeProperty('cancreateitem')],
-            Boolean, 'teaching',
+            String, 'classNumber',
 
-            [ria.serialize.SerializeProperty('teacherdisplayname')],
-            String, 'teacherDisplayName',
+            String, 'className',
 
-            [ria.serialize.SerializeProperty('teacherid')],
+            chlk.models.id.DepartmentId, 'departmentId',
+
             chlk.models.id.SchoolPersonId, 'teacherId',
 
-            [ria.serialize.SerializeProperty('iscurrentsection')],
-            Boolean, 'currentSection',
+            Boolean, 'teaching',
 
-            String, 'name',
+            String, 'teacherDisplayName',
+
+            Boolean, 'currentSection',
 
             String, function getSerialOrder(){
                 var order = this.getOrder();

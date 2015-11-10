@@ -4,6 +4,7 @@ REQUIRE('ria.async.Future');
 NAMESPACE('chlk.services', function () {
     "use strict";
 
+
     /** @class chlk.services.Account */
     CLASS(
         'AccountService', EXTENDS(chlk.services.BaseService), [

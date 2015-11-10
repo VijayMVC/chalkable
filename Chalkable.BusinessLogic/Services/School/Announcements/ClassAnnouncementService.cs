@@ -438,7 +438,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public override bool CanAddStandard(int announcementId)
         {
-            return DoRead(u => CreateClassAnnouncementDataAccess(u).CanAddStandard(announcementId));
+            return DoRead(u => BaseSecurity.IsTeacher(Context) && CreateClassAnnouncementDataAccess(u).CanAddStandard(announcementId));
         }
 
 

@@ -250,7 +250,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var sy = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
             var student = ServiceLocator.StudentService.GetById(studentId, sy.Id);
             var periods = ServiceLocator.PeriodService.GetPeriods(sy.Id);
-            var classes = ServiceLocator.ClassService.GetClasses(sy.Id, studentId, null);
+            var classes = ServiceLocator.ClassService.GetStudentClasses(sy.Id, studentId);
             var stiAttendanceDetails = ConnectorLocator.StudentConnector.GetStudentAttendanceDetailDashboard(studentId, sy.Id, startDate, endDate);
             var res = new List<StudentDateAttendance>();
             var currentDate = startDate;

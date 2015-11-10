@@ -20,6 +20,7 @@ namespace Chalkable.Web.Controllers
         private const string ICON_TEMPLATES_URL_FORMAT = "/Content/icons-templates/{0}";
         private const string ICON_FILENAME = "icon.psd";
         private const string BANNER_FILENAME = "banner.psd";
+        private const string ATTACH_ICON_FIELNAME = "attachIcon.psd";
         private const string SCREENSHOT_FILENAME = "screenshot.psd";
         private const string ATTACHMENT_CONTENT_TYPE = "attachment";
         private const string CONTENT_LENGTH = "Content-Length";
@@ -63,7 +64,7 @@ namespace Chalkable.Web.Controllers
                 if (ChalkableApiExplorerLogic.IsValidApiRole(roleName))
                 {
                     var context = MasterLocator.UserService.DemoLogin(roleName, Context.UserId.ToString());
-                    var token = GetAccessTokenFor(context.Login, context.SchoolYearId);
+                    var token = GetAccessTokenFor(context.Login, context.SchoolYearId, Context.Role);
                     var viewData = ApiExplorerViewData.Create(description.Value, token, description.Key);
                     result.Add(viewData);
                 }
@@ -74,14 +75,14 @@ namespace Chalkable.Web.Controllers
 
         private const string AcsUrlFormat = "https://{0}.accesscontrol.windows.net/v2/OAuth2-13/";
 
-        private string GetAccessTokenFor(string userName, int? schoolYearId)
+        private string GetAccessTokenFor(string userName, int? schoolYearId, CoreRole role)
         {
             var clientId = Settings.ApiExplorerClientId;
             var clientSecret = Settings.ApiExplorerSecret;
             var redirectUri = Settings.ApiExplorerRedirectUri;
             var accessTokenUri = string.Format(AcsUrlFormat, Settings.WindowsAzureOAuthServiceNamespace);
             var scope = Settings.ApiExplorerScope;
-            return MasterLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId, clientSecret, userName, schoolYearId, scope);
+            return MasterLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId, clientSecret, userName, schoolYearId, role, scope);
         }
 
         public ActionResult DeveloperDocs()
@@ -125,6 +126,7 @@ namespace Chalkable.Web.Controllers
             {
                 case 1: name = ICON_FILENAME; break;
                 case 2: name = BANNER_FILENAME; break;
+                case 4: name = ATTACH_ICON_FIELNAME; break;
                 default: name = SCREENSHOT_FILENAME; break;
             }
             vPath = String.Format(vPath, name);

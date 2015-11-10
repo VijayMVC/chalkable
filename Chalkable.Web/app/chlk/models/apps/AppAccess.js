@@ -15,6 +15,11 @@ NAMESPACE('chlk.models.apps', function () {
                 this.adminMyAppsEnabled = SJX.fromValue(raw.hasadminmyapps, Boolean);
                 this.parentMyAppsEnabled = SJX.fromValue(raw.hasparentmyapps, Boolean);
                 this.attachEnabled = SJX.fromValue(raw.canattach, Boolean);
+
+                this.studentExternalAttachEnabled = SJX.fromValue(raw.hasstudentexternalattach, Boolean);
+                this.teacherExternalAttachEnabled = SJX.fromValue(raw.hasteacherexternalattach, Boolean);
+                this.adminExternalAttachEnabled = SJX.fromValue(raw.hasadminexternalattach, Boolean);
+
                 this.visibleInGradingView = SJX.fromValue(raw.showingradeview, Boolean);
                 this.adjustedToStandards = SJX.fromValue(raw.adjustedtostandards, Boolean);
                 this.myAppsForCurrentRoleEnabled = SJX.fromValue(raw.myappsforcurrentroleenabled, Boolean);
@@ -23,6 +28,12 @@ NAMESPACE('chlk.models.apps', function () {
             Boolean, 'teacherMyAppsEnabled',
             Boolean, 'adminMyAppsEnabled',
             Boolean, 'parentMyAppsEnabled',
+
+            Boolean, 'studentExternalAttachEnabled',
+            Boolean, 'teacherExternalAttachEnabled',
+            Boolean, 'adminExternalAttachEnabled',
+
+
             Boolean, 'attachEnabled',
             Boolean, 'visibleInGradingView',
             Boolean, 'adjustedToStandards',
@@ -35,13 +46,19 @@ NAMESPACE('chlk.models.apps', function () {
                     hasadminmyapps: this.isAdminMyAppsEnabled(),
                     hasparentmyapps: this.isParentMyAppsEnabled(),
                     canattach: this.isAttachEnabled(),
+
+                    hasstudentexternalattach: this.isStudentExternalAttachEnabled(),
+                    hasteacherexternalattach: this.isTeacherExternalAttachEnabled(),
+                    hasadminexternalattach: this.isAdminExternalAttachEnabled(),
+
                     showingradeview: this.isVisibleInGradingView(),
                     adjustedtostandarts: this.isAdjustedToStandards()
                 }
             },
 
-            [[Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
-            function $(hasStudentMyApps_, hasTeacherMyApps_, hasAdminMyApps_, hasParentMyApps_, canAttach_, showInGradeView_, adjustedToStandarts_){
+            [[Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean, Boolean]],
+            function $(hasStudentMyApps_, hasTeacherMyApps_, hasAdminMyApps_, hasParentMyApps_, canAttach_, showInGradeView_, adjustedToStandarts_
+            , hasStudentExternalAttach_, hasTeacherExternalAttach_, hasAdminExternalAttach_){
                 BASE();
                 if (hasStudentMyApps_)
                     this.setStudentMyAppsEnabled(hasStudentMyApps_);
@@ -56,7 +73,15 @@ NAMESPACE('chlk.models.apps', function () {
                 if (showInGradeView_)
                     this.setVisibleInGradingView(showInGradeView_);
                 if (adjustedToStandarts_)
-                    this.setAdjustedToStandarts(adjustedToStandarts_);
+                    this.setAdjustedToStandards(adjustedToStandarts_);
+
+                if(hasStudentExternalAttach_)
+                    this.setStudentExternalAttachEnabled(hasStudentExternalAttach_);
+                if(hasTeacherExternalAttach_)
+                    this.setTeacherExternalAttachEnabled(hasTeacherExternalAttach_);
+                if(hasAdminExternalAttach_)
+                    this.setAdminExternalAttachEnabled(hasAdminExternalAttach_);
+
             }
 
         ]);

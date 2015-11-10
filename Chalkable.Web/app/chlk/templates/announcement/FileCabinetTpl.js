@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.ChlkTemplate');
+REQUIRE('chlk.templates.common.BaseAttachTpl');
 REQUIRE('chlk.models.attachment.FileCabinetViewData');
 
 NAMESPACE('chlk.templates.announcement', function () {
@@ -7,13 +7,7 @@ NAMESPACE('chlk.templates.announcement', function () {
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/announcement/FileCabinetView.jade')],
         [ria.templates.ModelBind(chlk.models.attachment.FileCabinetViewData)],
-        'FileCabinetTpl', EXTENDS(chlk.templates.ChlkTemplate), [
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.AnnouncementId, 'announcementId',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
+        'FileCabinetTpl', EXTENDS(chlk.templates.common.BaseAttachTpl), [
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'attachments',
@@ -22,10 +16,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.attachment.SortAttachmentType, 'sortType',
 
             [ria.templates.ModelPropertyBind],
-            String, 'filter',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.AnnouncementAssignedAttributeId, 'assignedAttributeId',
-
+            String, 'filter'
         ]);
 });

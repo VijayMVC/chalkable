@@ -11,8 +11,8 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.MessageService*/
     CLASS(
         'MessageService', EXTENDS(chlk.services.BaseService), [
-            [[Number, Boolean, Boolean, String, String, Boolean]],
-            ria.async.Future, function getMessages(start_, read_, income_, role_, keyword_, classOnly_) {
+            [[Number, Boolean, Boolean, String, String, Boolean, Number]],
+            ria.async.Future, function getMessages(start_, read_, income_, role_, keyword_, classOnly_, year_) {
                 return this.getPaginatedList('PrivateMessage/List.json', chlk.models.messages.Message, {
                     start: start_,
                     count: 10,
@@ -20,7 +20,8 @@ NAMESPACE('chlk.services', function () {
                     income: income_ !== false,
                     role: role_ ? role_ : "",
                     keyword: keyword_,
-                    classOnly: classOnly_ || false
+                    classOnly: classOnly_ || false,
+                    acadYear: year_
                 });
             },
 
