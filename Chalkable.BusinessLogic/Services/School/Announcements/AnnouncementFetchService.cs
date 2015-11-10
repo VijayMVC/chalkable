@@ -39,8 +39,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             else
                 settings = GetSettingsForFeed();          
 
-            var feedStartDate = settings.FromDate ?? (Context.SchoolYearStartDate ?? DateTime.MinValue);
-            var feedEndDate = settings.ToDate ?? (Context.SchoolYearEndDate ?? DateTime.MaxValue);
+            var feedStartDate = settings.FromDate ??  DateTime.MinValue;
+            var feedEndDate = settings.ToDate ??  DateTime.MaxValue;
             
 
             if (BaseSecurity.IsDistrictAdmin(Context))
@@ -150,8 +150,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
             else
             {
-                settings.FromDate = null;
-                settings.ToDate = null;
+                settings.FromDate = Context.SchoolYearStartDate;
+                settings.ToDate = Context.SchoolYearEndDate;
                 settings.GradingPeriodId = null;
             }
 

@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.Common;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Models;
 using Chalkable.Web.Models.PersonViewDatas;
 using Newtonsoft.Json;
 
@@ -126,7 +127,10 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult FeedReportSettings()
         {
-            return FakeJson("~/fakeData/feedReport.json");
+            var feedSettings = SchoolLocator.AnnouncementFetchService.GetSettingsForFeed();
+            var feedReportSettings = SchoolLocator.ReportService.GetFeedReportSettings();
+            return Json(FeedReportSettingsViewData.Create(feedReportSettings, feedSettings));
+                //FakeJson("~/fakeData/feedReport.json");
         }
     }
 }

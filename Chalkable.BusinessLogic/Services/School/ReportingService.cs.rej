@@ -1,0 +1,32 @@
+--- ReportingService.cs
++++ ReportingService.cs
+@@ -1,5 +1,8 @@
+-﻿using System.Collections.Generic;
++﻿using System;
++using System.Collections.Generic;
++using System.Diagnostics;
++using System.Globalization;
+ using System.Linq;
+ using Chalkable.BusinessLogic.Model;
+ using Chalkable.BusinessLogic.Model.Reports;
+ using Chalkable.Common;
+@@ -2,7 +5,9 @@
+ using System.Linq;
+ using Chalkable.BusinessLogic.Model;
+ using Chalkable.BusinessLogic.Model.Reports;
+ using Chalkable.Common;
++using Chalkable.Data.School.Model;
++using Chalkable.Data.School.Model.Announcements;
+ using Chalkable.StiConnector.Connectors.Model.Reports;
+ 
+ namespace Chalkable.BusinessLogic.Services.School
+@@ -26,6 +31,9 @@
+         byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel);
+ 
+         byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
++
++        FeedReportSettingsInputModel GetFeedReportSettings();
++        void SetFeedReportSettings(FeedReportSettingsInputModel settings);
+     }
+ 
+     public class ReportingService : SisConnectedService, IReportingService

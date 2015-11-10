@@ -1,8 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.Common;
+using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model.Reports;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -26,6 +31,8 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel);
         byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
         byte[] GetFeedReport(FeedReportInputModel inputModel);
+        FeedReportSettingsInputModel GetFeedReportSettings();
+        void SetFeedReportSettings(FeedReportSettingsInputModel feedReportSettings);
     }
 
     public class ReportingService : SisConnectedService, IReportingService
@@ -390,6 +397,68 @@ namespace Chalkable.BusinessLogic.Services.School
         public byte[] GetFeedReport(FeedReportInputModel inputModel)
         {
             throw new System.NotImplementedException();
+        }
+
+        public FeedReportSettingsInputModel GetFeedReportSettings()
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            var settings = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value,
+                Context.SchoolYearId.Value, new List<string>()
+                {
+                    PersonSetting.FEED_REPORT_START_DATE,
+                    PersonSetting.FEED_REPORT_END_DATE,
+                    PersonSetting.FEED_REPORT_INCLUDE_DETAILS,
+                    PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ACTIVITIES,
+                    PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ATTRIBUTES,
+                    PersonSetting.FEED_REPORT_LP_ONLY,
+                    PersonSetting.FEED_REPORT_INCLUDE_ATTACHMENTS
+                });
+
+            var startDate = settings.FirstOrDefault(x => x.Key == PersonSetting.FEED_REPORT_START_DATE);
+            var endDate = settings.FirstOrDefault(x => x.Key == PersonSetting.FEED_REPORT_END_DATE);
+            var includeDetails = settings.FirstOrDefault(x => x.Key == PersonSetting.FEED_REPORT_INCLUDE_DETAILS);
+            var incHiddenActiv = settings.FirstOrDefault(x => x.Key == PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ACTIVITIES);
+            var incHiddenAttr = settings.FirstOrDefault(x => x.Key == PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ATTRIBUTES);
+            var includeAttachments = settings.FirstOrDefault(x => x.Key == PersonSetting.FEED_REPORT_INCLUDE_ATTACHMENTS);
+            var lpOnly = settings.FirstOrDefault(x => x.Key == PersonSetting.FEED_REPORT_LP_ONLY);
+
+            FeedReportSettingsInputModel res = new FeedReportSettingsInputModel();
+
+            if (!string.IsNullOrWhiteSpace(startDate.Value))
+                res.StartDate = DateTime.ParseExact(startDate.Value, Constants.DATE_FORMAT,
+                    CultureInfo.InvariantCulture);
+            else res.StartDate = null;
+
+            if (!string.IsNullOrWhiteSpace(endDate.Value))
+                res.EndDate = DateTime.ParseExact(endDate.Value, Constants.DATE_FORMAT,
+                    CultureInfo.InvariantCulture);
+            else res.EndDate = null;
+
+            res.IncludeDetails = !string.IsNullOrWhiteSpace(includeDetails.Value) && bool.Parse(includeDetails.Value);
+            res.IncludeAttachments = !string.IsNullOrWhiteSpace(includeAttachments.Value) && bool.Parse(includeAttachments.Value);
+            res.IncludeHiddenActivities = !string.IsNullOrWhiteSpace(incHiddenActiv.Value) && bool.Parse(incHiddenActiv.Value);
+            res.IncludeHiddenAttributes = !string.IsNullOrWhiteSpace(incHiddenAttr.Value) && bool.Parse(incHiddenAttr.Value);
+
+            return res;
+        }
+
+        public void SetFeedReportSettings(FeedReportSettingsInputModel settings)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, new Dictionary<string, object>()
+            {
+                [PersonSetting.FEED_REPORT_START_DATE] = settings.StartDate,
+                [PersonSetting.FEED_REPORT_END_DATE] = settings.EndDate,
+                [PersonSetting.FEED_REPORT_INCLUDE_DETAILS] = settings.IncludeDetails,
+                [PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ACTIVITIES] = settings.IncludeHiddenActivities,
+                [PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ATTRIBUTES] = settings.IncludeHiddenAttributes,
+                [PersonSetting.FEED_REPORT_LP_ONLY] = settings.LpOnly,
+                [PersonSetting.FEED_REPORT_INCLUDE_ATTACHMENTS] = settings.IncludeAttachments
+            });
         }
     }
 

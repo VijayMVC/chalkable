@@ -395,6 +395,8 @@
     <Compile Include="Models\AppTesterViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineTypeSummaryViewData.cs" />
+    <Compile Include="Models\FeedReportSettingsViewData.cs" />
+    <Compile Include="Models\FeedReportViewData.cs" />
     <Compile Include="Models\FeedSettingsViewData.cs" />
     <Compile Include="Models\GradedItemViewData.cs" />
     <Compile Include="Models\GradingViewData\StudentProfileGradingDetailViewData.cs" />
