@@ -15,7 +15,7 @@
                         -var maxDate = self.getMaxEnd()
                         TD.item-2
                             h3=Msg.From
-                            +DatePicker('startdate', self.getStartDate() && self.getStartDate().getDate())(
+                            +DatePicker('startdate', self.getStartDate())(
                                 data-options={
                                     showOtherMonths: true,
                                     selectOtherMonths: true,
@@ -31,7 +31,7 @@
 
                         TD.item-2
                             h3=Msg.To
-                            +DatePicker('enddate', self.getEndDate() && self.getEndDate().getDate())(
+                            +DatePicker('enddate', self.getEndDate())(
                                 data-options={
                                     showOtherMonths: true,
                                     selectOtherMonths: true,

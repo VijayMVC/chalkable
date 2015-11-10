@@ -99,7 +99,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                             li(class = self.isLatest() ? "" : "highlighted", data-value=false).latest-earliest-option.active-result Due Date: Earliest
                             li(class = self.isLatest() ? "highlighted" : "", data-value=true).latest-earliest-option.active-result Due Date: Latest
             .right-buttons-block
-                +ActionButton('feed', 'feedPrinting', topData.getSelectedItemId(), self.completeOnly).report-btn
+                +ActionButton('feed', 'feedPrinting', topData.getSelectedItemId(), self.importantOnly).report-btn
                     .report-link
                 Button(type="button", class=self.hasFilters() ? 'active' : '').feed-tools Feed Tools
             +ListView(self.items)(
