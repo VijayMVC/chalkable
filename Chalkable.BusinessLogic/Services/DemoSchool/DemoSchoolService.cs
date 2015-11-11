@@ -144,5 +144,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
             return startupData;
         }
+
+        public int GetSchoolsCountByAcadYear(int acadYear)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

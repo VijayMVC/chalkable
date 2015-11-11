@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -99,6 +101,23 @@ namespace Chalkable.Data.School.DataAccess
         {
             public int AlphaGradeId { get; set; }
             public int ClassId { get; set; }
+        }
+
+        private const string SP_GET_SCHOOLS_BY_ACAD_YEAR = "spGetSchoolsCountByAcadYear";
+        private const string SCHOOLS_COUNT_FIELD = "SchoolsCount";
+
+        public int GetSchoolsCountByAcadYear(int acadYear)
+        {
+            var param = new Dictionary<string, object>()
+            {
+                ["@acadYear"] = acadYear
+            };
+
+            using (var reader = ExecuteStoredProcedureReader(SP_GET_SCHOOLS_BY_ACAD_YEAR, param))
+                if(reader.Read())
+                    return SqlTools.ReadInt32(reader, SCHOOLS_COUNT_FIELD);
+
+            return 0;
         }
     }
 

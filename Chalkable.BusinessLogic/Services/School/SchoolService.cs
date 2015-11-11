@@ -25,6 +25,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteSchoolOptions(IList<SchoolOption> schoolOptions);
         SchoolOption GetSchoolOption();
         StartupData GetStartupData();
+        int GetSchoolsCountByAcadYear(int acadYear);
     }
 
     public class SchoolService : SchoolServiceBase, ISchoolService
@@ -129,6 +130,11 @@ namespace Chalkable.BusinessLogic.Services.School
             //TODO: add this to storage procedure
             res.GradingPeriods = ServiceLocator.GradingPeriodService.GetGradingPeriodsDetails(Context.SchoolYearId.Value);
             return res;
+        }
+
+        public int GetSchoolsCountByAcadYear(int acadYear)
+        {
+            return DoRead(u => new SchoolDataAccess(u).GetSchoolsCountByAcadYear(acadYear));
         }
     }
 }
