@@ -26,7 +26,9 @@ namespace Chalkable.BusinessLogic.Model.Reports
         Excel = 2,
         Html = 3,
         Tiff = 4,
-        Xml = 5
+        Xml = 5,
+        Json = 6,
+        Word = 7
     }
     public static class ReportingFormatExtension
     {
@@ -36,6 +38,32 @@ namespace Chalkable.BusinessLogic.Model.Reports
         private const string EXT_CSV = "csv";
         private const string EXT_XML = "xml";
         private const string EXT_HTML = "html";
+        private const string EXT_JSON = "json";
+        private const string EXT_DOC = "doc";
+        
+        
+        private const string EXCEL = "Excel";
+        private const string PDF = "Pdf";
+        private const string WORD = "Word";
+        private const string CSV = "Csv";
+        private const string JSON = "JSON";
+
+
+        public static string AsString(this ReportingFormat format)
+        {
+            if (format == ReportingFormat.Excel)
+                return EXCEL;
+            if (format == ReportingFormat.Pdf)
+                return PDF;
+            if (format == ReportingFormat.Word)
+                return WORD;
+            if (format == ReportingFormat.Csv)
+                return CSV;
+            if (format == ReportingFormat.Json)
+                return JSON;
+            throw new Exception(ChlkResources.ERR_INVALID_REPORT_FORMAT);
+        }
+
 
         public static string AsFileExtension(this ReportingFormat format)
         {
@@ -47,6 +75,8 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 case ReportingFormat.Tiff: return EXT_TIFF;
                 case ReportingFormat.Html: return EXT_HTML;
                 case ReportingFormat.Xml: return EXT_XML;
+                case ReportingFormat.Json: return EXT_JSON;
+                case ReportingFormat.Word: return EXT_DOC;
                 default:
                     throw new Exception(ChlkResources.ERR_INVALID_REPORT_FORMAT);
             }

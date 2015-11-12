@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
+using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model.Reports;
@@ -30,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetGradeVerificationReport(GradeVerificationInputModel inputModel);
         byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel);
         byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
-        byte[] GetFeedReport(FeedReportInputModel inputModel);
+        byte[] GetFeedReport(FeedReportInputModel inputModel, string path);
         FeedReportSettingsInputModel GetFeedReportSettings();
         void SetFeedReportSettings(FeedReportSettingsInputModel feedReportSettings);
     }
@@ -283,7 +286,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var ps = new AttendanceRegisterReportParams
                 {
                     AcadSessionId = gp.SchoolYearRef,
-                    AbsenceReasonIds = inputModel.AbsenceReasonIds != null ? inputModel.AbsenceReasonIds.ToArray() : null,
+                    AbsenceReasonIds = inputModel.AbsenceReasonIds?.ToArray(),
                     IdToPrint = inputModel.IdToPrint,
                     IncludeTardies = inputModel.IncludeTardies,
                     MonthId = inputModel.MonthId,
@@ -299,7 +302,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
             var ps = new AttendanceProfileReportParams
                 {
-                    AbsenceReasonIds = inputModel.AbsenceReasons != null ? inputModel.AbsenceReasons.ToArray() : null,
+                    AbsenceReasonIds = inputModel.AbsenceReasons?.ToArray(),
                     AcadSessionId = gp.SchoolYearRef,
                     IncludeNote = inputModel.DisplayNote,
                     IncludePeriodAbsences = inputModel.DisplayPeriodAbsences,
@@ -312,7 +315,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     IdToPrint = inputModel.IdToPrint,
                     IncludeUnlisted = inputModel.IncludeUnlisted,
                     IncludeCheckInCheckOut = inputModel.IncludeCheckInCheckOut,
-                    TermIds = inputModel.MarkingPeriodIds != null ? inputModel.MarkingPeriodIds.ToArray() : null,
+                    TermIds = inputModel.MarkingPeriodIds?.ToArray(),
                 };
             if (inputModel.StudentIds == null)
             {
@@ -334,15 +337,15 @@ namespace Chalkable.BusinessLogic.Services.School
                     AcadSessionId = gp.SchoolYearRef,
                     GradeType = inputModel.GradeType,
                     SectionId = inputModel.ClassId,
-                    GradedItemIds = inputModel.GradedItemId != null ? inputModel.GradedItemId.ToArray() : null,
-                    GradingPeriodIds = inputModel.GradingPeriodIds != null ? inputModel.GradingPeriodIds.ToArray() : new []{ gp.Id },
+                    GradedItemIds = inputModel.GradedItemId?.ToArray(),
+                    GradingPeriodIds = inputModel.GradingPeriodIds?.ToArray() ?? new []{ gp.Id },
                     IncludeComments = inputModel.IncludeCommentsAndLegend,
                     IncludeSignature = inputModel.IncludeSignature,
                     IncludeNotes = inputModel.IncludeNotes,
                     IncludeWithdrawn = inputModel.IncludeWithdrawn,
                     IdToPrint = inputModel.IdToPrint,
                     StudentOrder = inputModel.StudentOrder,
-                    StudentIds = inputModel.StudentIds != null ? inputModel.StudentIds.ToArray() : null
+                    StudentIds = inputModel.StudentIds?.ToArray()
                 };
             return ConnectorLocator.ReportConnector.GradeVerificationReport(ps);
         }
@@ -394,9 +397,17 @@ namespace Chalkable.BusinessLogic.Services.School
             return ConnectorLocator.ReportConnector.StudentComprehensiveProgressReport(studentId, ps);
         }
 
-        public byte[] GetFeedReport(FeedReportInputModel inputModel)
+        public byte[] GetFeedReport(FeedReportInputModel inputModel, string path)
         {
-            throw new System.NotImplementedException();
+            var handler = new ShortFeedReportHandler();
+            var format = inputModel.FormatTyped ?? ReportingFormat.Pdf;
+            var dataSet = handler.PrepareDataSource(inputModel, format, ServiceLocator, ServiceLocator.ServiceLocatorMaster);
+            var definition = Path.Combine(path, handler.GetReportDefinitionFile());
+            if (!File.Exists(definition))
+                throw new ChalkableException(string.Format(ChlkResources.ERR_REPORT_DEFINITION_FILE_NOT_FOUND, definition));
+
+            var renderer = new DefaultRenderer();
+            return renderer.Render(dataSet, definition, format, null);
         }
 
         public FeedReportSettingsInputModel GetFeedReportSettings()

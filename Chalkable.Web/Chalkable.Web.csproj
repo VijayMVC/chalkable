@@ -619,6 +619,7 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
     <EmbeddedResource Include="Reports\FeedReport\FeedShortReport.rdlc" />
   </ItemGroup>
   <PropertyGroup>

@@ -256,6 +256,24 @@ namespace Chalkable.Web.Controllers
             return Context.SchoolYearId.Value;
         }
 
+        public string ApplicationPath
+        {
+            get
+            {
+                var res = Request.ApplicationPath;
+                if (!string.IsNullOrWhiteSpace(res))
+                {
+                    res = res.ToLower();
+                    if (res == "/") //a site
+                        res = "/";
+                    else if (!res.EndsWith(@"/")) //a virtual
+                        res += @"/";
+                }
+                return res;
+
+            }
+        }
+
         protected int NowTimeInMinutes
         {
             get

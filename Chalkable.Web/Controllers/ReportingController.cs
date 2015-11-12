@@ -91,7 +91,8 @@ namespace Chalkable.Web.Controllers
         public ActionResult FeedReport(FeedReportInputModel feedReportInput)
         {
             //TODO: save report settings 
-            var report = SchoolLocator.ReportService.GetFeedReport(feedReportInput);
+            var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
+            var report = SchoolLocator.ReportService.GetFeedReport(feedReportInput, path);
             return DownloadReportFile(report, "Feed Report", feedReportInput.FormatTyped ?? ReportingFormat.Pdf);
         }
 

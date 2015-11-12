@@ -1,6 +1,5 @@
 ﻿using System;
 using Chalkable.BusinessLogic.Model;
-using Chalkable.BusinessLogic.Services.School;
 
 namespace Chalkable.Web.Models
 {

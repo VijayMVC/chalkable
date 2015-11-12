@@ -314,6 +314,7 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
+
         [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate]],
         String, function submitFeedReportSettings(startDate, endDate, lessonPlanOnly_, includeDetails_, includeAttachments_,
                                                   includeHiddenActivities_, includeHiddenAttributes_, complete_, announcementType_, classId_) {

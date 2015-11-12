@@ -33,55 +33,26 @@ namespace Chalkable.Data.School.Model.Announcements
         public virtual DateTime Created { get; set; }
         public virtual AnnouncementState State { get; set; }
         public virtual string Title { get; set; }
-
         [NotDbFieldAttr]
         public bool IsOwner { get; set; }
-
         [NotDbFieldAttr]
-        public virtual int OwnereId { get { return 0; } }
-
+        public virtual int OwnereId => 0;
         [NotDbFieldAttr]
-        public bool IsDraft
-        {
-            get { return State == AnnouncementState.Draft; }
-        }
-        
+        public bool IsDraft => State == AnnouncementState.Draft;
         [NotDbFieldAttr]
-        public virtual bool IsSubmitted
-        {
-            get { return State == AnnouncementState.Created; }
-        }
-
+        public virtual bool IsSubmitted => State == AnnouncementState.Created;
         [NotDbFieldAttr]
-        public virtual string AnnouncementTypeName
-        {
-            get { return null; }
-        }
+        public virtual string AnnouncementTypeName => null;
         [NotDbFieldAttr]
-        public virtual AnnouncementType Type
-        {
-            get { return AnnouncementType.None; }
-        }
+        public virtual AnnouncementType Type => AnnouncementType.None;
     }
 
     public class AnnouncementComplex : Announcement
     {
-        public override bool IsSubmitted
-        {
-            get { return announcementData.IsSubmitted; }
-        }
-        public override AnnouncementType Type
-        {
-            get { return announcementData.Type; }
-        }
-        public override string AnnouncementTypeName
-        {
-            get { return announcementData.AnnouncementTypeName; }
-        }
-        public override int OwnereId
-        {
-            get { return announcementData.OwnereId; }
-        }
+        public override bool IsSubmitted => announcementData.IsSubmitted;
+        public override AnnouncementType Type => announcementData.Type;
+        public override string AnnouncementTypeName => announcementData.AnnouncementTypeName;
+        public override int OwnereId => announcementData.OwnereId;
 
         private Announcement announcementData;
         private LessonPlan lessonPlanData;
@@ -90,9 +61,8 @@ namespace Chalkable.Data.School.Model.Announcements
 
         private int? classId;
         private int? adminId;
-
-        public int? ClassRef { get { return classId; } }
-        public int? AdminRef { get { return adminId; } }
+        public int? ClassRef => classId;
+        public int? AdminRef => adminId;
 
         public Announcement AnnouncementData
         {
@@ -110,11 +80,9 @@ namespace Chalkable.Data.School.Model.Announcements
                     adminId = adminAnnouncementData.AdminRef;
             }
         }
-        
-        public LessonPlan LessonPlanData { get { return lessonPlanData; } }
-        public ClassAnnouncement ClassAnnouncementData { get { return classAnnouncementData; } }
-        public AdminAnnouncement AdminAnnouncementData { get { return adminAnnouncementData; } }
-
+        public LessonPlan LessonPlanData => lessonPlanData;
+        public ClassAnnouncement ClassAnnouncementData => classAnnouncementData;
+        public AdminAnnouncement AdminAnnouncementData => adminAnnouncementData;
 
         public bool Complete { get; set; }
         public int QnACount { get; set; }
@@ -125,22 +93,8 @@ namespace Chalkable.Data.School.Model.Announcements
         public int GradingStudentsCount { get; set; }
         public int ApplicationCount { get; set; }
 
-        public bool Gradable { get { return GradableType && ClassAnnouncementData.IsScored; } }
-        public bool GradableType { get { return ClassAnnouncementData != null; } }
-
-
-    }
-
-    public class AnnouncementSummaryData
-    {
-        public int AnnouncementId { get; set; }
-        public int QnACount { get; set; }
-        public int StudentsCount { get; set; }
-        public int AttachmentsCount { get; set; }
-        public int OwnerAttachmentsCount { get; set; }
-        public int StudentsCountWithAttachments { get; set; }
-        public int GradingStudentsCount { get; set; }
-        public int ApplicationCount { get; set; }
+        public bool Gradable => GradableType && ClassAnnouncementData.IsScored;
+        public bool GradableType => ClassAnnouncementData != null;
     }
 
     public class AnnouncementDetails : AnnouncementComplex
