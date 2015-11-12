@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.SchoolsViewData;
 
 namespace Chalkable.Web.Controllers
 {
@@ -27,7 +28,12 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult Schools(string filter, int? start, int? count)
         {
-            return FakeJson("~/fakeData/districtSummary.json");
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            var currSchoolYear = SchoolLocator.SchoolYearService.GetSchoolYearById(Context.SchoolYearId.Value);
+            var schools = SchoolLocator.SchoolService.GetShortSchoolSummariesByAcadYear(currSchoolYear.AcadYear, start,
+                count);
+            return Json(LocalSchoolSummaryViewData.Create(schools));
         }
     }
 }
