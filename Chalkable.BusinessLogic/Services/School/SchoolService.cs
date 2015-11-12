@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
@@ -26,6 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         SchoolOption GetSchoolOption();
         StartupData GetStartupData();
         int GetSchoolsCountByAcadYear(int acadYear);
+        PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesByAcadYear(int acadYear, int? start, int? count);
     }
 
     public class SchoolService : SchoolServiceBase, ISchoolService
@@ -135,6 +137,20 @@ namespace Chalkable.BusinessLogic.Services.School
         public int GetSchoolsCountByAcadYear(int acadYear)
         {
             return DoRead(u => new SchoolDataAccess(u).GetSchoolsCountByAcadYear(acadYear));
+        }
+
+        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesByAcadYear(int acadYear, int? start, int? count)
+        {
+            start = start ?? 0;
+            count = count ?? int.MaxValue;
+
+            //TODO: waiting iNow API
+            var res =
+                SchoolSummaryInfo.Create(
+                    DoRead(
+                        u =>
+                            new SchoolDataAccess(u).GetShortSchoolSummariesByAcadYear(acadYear, start.Value, count.Value)));
+            return res;
         }
     }
 }

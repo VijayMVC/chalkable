@@ -12,7 +12,11 @@ namespace Chalkable.Data.School.Model
         public bool IsChalkableEnabled{ get; set; }
         public bool IsLEEnabled { get; set; }
         public bool IsLESyncComplete { get; set; }
-        
+    }
 
+
+    public class ShortSchoolSummary : School
+    {
+        public int StudentsCount { get; set; }
     }
 }

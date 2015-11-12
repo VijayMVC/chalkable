@@ -91,7 +91,7 @@ namespace Chalkable.Data.School.DataAccess
         {
             var param = new Dictionary<string, object>()
             {
-                ["@acadYear"] = acadYear
+                ["acadYear"] = acadYear
             };
 
             using (var reader = ExecuteStoredProcedureReader(SP_GET_STUDENTS_BY_ACAD_YEAR, param))
