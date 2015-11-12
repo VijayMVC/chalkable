@@ -22,7 +22,7 @@ namespace Chalkable.Web.Controllers
             var currSchoolYear = SchoolLocator.SchoolYearService.GetSchoolYearById(Context.SchoolYearId.Value);
             var schoolsCount = SchoolLocator.SchoolService.GetSchoolsCountByAcadYear(currSchoolYear.AcadYear);
             var studentsCount = SchoolLocator.StudentService.GetStudentsCountByAcadYear(currSchoolYear.AcadYear);
-            return Json(ShortDistrictSummaryViewData.Create(district, schoolsCount, studentsCount));
+            return Json(ShortDistrictSummaryViewData.Create(district, studentsCount, schoolsCount));
         }
 
         [AuthorizationFilter("DistrictAdmin")]
