@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -146,6 +147,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         public int GetSchoolsCountByAcadYear(int acadYear)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesByAcadYear(int acadYear, int? start, int? count)
         {
             throw new System.NotImplementedException();
         }

@@ -153,6 +153,7 @@
     <Compile Include="Model\Reports\ProgressReportInputModel.cs" />
     <Compile Include="Model\Reports\SeatingChartReportInputModel.cs" />
     <Compile Include="Model\Reports\WorksheetReportInputModel.cs" />
+    <Compile Include="Model\SchoolSummaryInfo.cs" />
     <Compile Include="Model\SeatingChartInfo.cs" />
     <Compile Include="Model\StudentCommentInfo.cs" />
     <Compile Include="Model\StudentExplorerInfo.cs" />

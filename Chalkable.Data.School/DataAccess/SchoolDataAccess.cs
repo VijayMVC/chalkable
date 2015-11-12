@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -118,6 +119,22 @@ namespace Chalkable.Data.School.DataAccess
                     return SqlTools.ReadInt32(reader, SCHOOLS_COUNT_FIELD);
 
             return 0;
+        }
+
+        private const string SP_GET_SHORT_SCHOOL_SUMMARIES_BY_ACAD_YEAR = "spGetShortSchoolSummariesByAcadYear";
+
+        public PaginatedList<ShortSchoolSummary> GetShortSchoolSummariesByAcadYear(int acadYear, int start, int count)
+        {
+            var param = new Dictionary<string, object>()
+            {
+                ["acadYear"] = acadYear,
+                ["start"] = start,
+                ["count"] = count
+            };
+
+            var res = ExecuteStoredProcedurePaginated<ShortSchoolSummary>(SP_GET_SHORT_SCHOOL_SUMMARIES_BY_ACAD_YEAR, param, start, count);
+
+            return res;
         }
     }
 
