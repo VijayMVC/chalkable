@@ -256,7 +256,19 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('inbox')],
         [[chlk.models.feed.FeedPrintingViewData]],
-        function submitFeedPrintingReportAction(model){
+        function submitFeedPrintingReportAction(reportViewData){
+            var src = this.reportingService.submitFeedReport(
+                reportViewData.getStartDate(),
+                reportViewData.getEndDate(),
+                reportViewData.isLessonPlanOnly(),
+                reportViewData.isIncludeAttachments(),
+                reportViewData.isIncludeDetails(),
+                reportViewData.isIncludeHiddenAttributes(),
+                reportViewData.isIncludeHiddenActivities(),
+                reportViewData.getClassId()
+            );
+            this.BackgroundCloseView(chlk.activities.feed.FeedPrintingDialog);
+            this.getContext().getDefaultView().submitToIFrame(src);
             return null;
         }
     ])
