@@ -1,0 +1,26 @@
+-var topData = self.getTopData()
+-var selectedId = topData.getSelectedItemId()
+-var action = self.getAction() || "summary"
+-var gridAction = self.getGridAction() || "summaryGrid"
+
+.grading-summary-grid.grades-page
+
+    h2.page-title=Msg.Standard(true)
+
+    +ClassesToolBarWithAll(topData, 'grading', action, null, null, null)
+
+    .action-bar
+        .items
+            +ActionLink('grading', "summary", selectedId)(class = (action == "summary") ? "pressed" : "")=Msg.Item(true)
+            +ActionLink('grading', "standards", selectedId)(class = (action == "summary") ? "" : "pressed")=Msg.Standard(true)
+            +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
+            if self.isLEIntegrated() && self.isHasAccessToLE()
+                +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
+
+    .buttons-group
+        +ActionButton('grading', action, selectedId)(data-tooltip=Msg.Box(true)).boxes.pressed=Msg.Box(true)
+        +ActionButton('grading', gridAction, selectedId)(data-tooltip=Msg.Grid).grid=Msg.Grid
+
+    +RenderWith(self.getSummaryPart(), chlk.templates.grading.GradingClassSummaryPartTpl)(
+        gradingPeriodId = self.getGradingPeriodId()
+    )

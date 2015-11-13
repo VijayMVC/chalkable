@@ -1,0 +1,41 @@
+.chlk-grid
+  .grid-focus
+    height: 0
+    width: 0
+    border: none
+    position: absolute
+
+  .grid-header
+    background: #f7f7f5
+
+    .cell
+      font-weight: bold
+
+  .grid-content
+    display: table
+    table-layout: fixed
+    width: 100%
+    border-collapse: collapse
+
+  .grid-row
+    display: table-row
+
+    &:first-child
+      .cell
+        border-top: none
+
+    &:last-child
+      .cell
+        border-bottom: none
+
+  .cell
+    display: table-cell
+    height: 50px
+    border: 1px solid #c7c8c3
+    vertical-align: middle
+
+    &:first-child
+      border-left: none
+
+    &:last-child
+      border-right: none
