@@ -20,6 +20,7 @@ NAMESPACE('chlk.models.common', function () {
             Number, 'totalPages',
             Boolean, 'hasNextPage',
             Boolean, 'hasPreviousPage',
+            String, 'filter',
 
             VOID, function setItems(values) {
                 VALIDATE_ARG('value', [ArrayOf(this.itemClass)], values);

@@ -1,20 +1,5 @@
--var schools = self.getSchoolsStatistic().getItems()
-
-.chlk-calendar.chlk-grid
-    .header
-        .grid-arrow.prev-arrow
-        .grid-arrow.next-arrow
-    .grid-content
-        .grid-header.grid-row
-            .cell.name=Msg.Schools
-            .cell.students=Msg.Students
-            .cell.attendance=Msg.Attendance
-            .cell.discipline=Msg.Discipline
-            .cell.grades=Msg.Grades
-        each school in schools
-            .grid-row
-                .cell.name=school.getName()
-                .cell.students=school.getStudentsCount()
-                .cell.attendance=school.getAbsences()
-                .cell.discipline=school.getInfractionsCount()
-                .cell.grades=school.getAvg()
+.form-container
+    +ActionForm('district', 'schoolsStatisticFilter').school-statistic-form
+        input(type="text", name="filter", placeholder="Search for a school...").statistic-filter
+.grid-container
+    +RenderWith(self.getSchoolsStatistic(), chlk.templates.district.SchoolsStatisticTpl)

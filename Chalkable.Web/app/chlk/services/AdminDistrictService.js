@@ -14,8 +14,8 @@ NAMESPACE('chlk.services', function () {
                 return this.get('AdminDistrict/DistrictSummary.json', chlk.models.district.DistrictShortSummaryViewData, {});
             },
 
-            [[Number, Number, String]],
-            ria.async.Future, function getSchoolStatistic(start_, count_, filter_) {
+            [[Number, String, Number]],
+            ria.async.Future, function getSchoolStatistic(start_, filter_, count_) {
                 return this.getPaginatedList('AdminDistrict/Schools.json', chlk.models.school.SchoolStatistic, {
                     start:start_ || 0,
                     count: count_ || 10,
