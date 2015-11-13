@@ -19,7 +19,10 @@
                 .cell.grades=Msg.Grades
         each school in schools
             .grid-row
-                .cell.name=school.getName()
+                .cell.name
+                    .icon
+                        .pic
+                    span=school.getName()
                 .cell.students=school.getStudentsCount()
                 if isNotEmptyAttendances
                     .cell.attendance=school.getAbsences()
@@ -27,4 +30,4 @@
                     .cell.discipline=school.getInfractionsCount()
                 if isNotEmptyGrades
                     .cell.grades=school.getAvg()
-    .footer Page #{self.getPageIndex() + 1} of #{self.getTotalPages()}
+    .footer Page #{self.getTotalPages() ? self.getPageIndex() + 1 : 0} of #{self.getTotalPages()}
