@@ -1,3 +1,30 @@
+$blue: #2f7790
+
+.district-summary-page
+  .info-block
+    margin: -13px 0 20px
+    padding-bottom: 22px
+
+  .filter-input
+    float: right
+    width: 165px
+    border-color: #e7e6e2
+    box-shadow: none
+    background: image-url("images2/icons-24/search-glass.png") 5px center no-repeat
+    padding-left: 30px
+
+  .info-item
+    display: inline-block
+    font-size: 16px
+    margin-right: 25px
+
+    .name
+      color: $blue
+      font-weight: 600
+
+    .value
+      color: #83827e
+
 .chlk-grid
   .cell:not(.name)
     text-align: center
@@ -9,6 +36,26 @@
 
     &.students
       width: 12%
+
+    a
+      color: $blue
+      text-decoration: none
+
+    .icon
+      display: inline-block
+      width: 32px
+      height: 32px
+      line-height: 32px
+      background: #e7e6e2
+      border-radius: 16px
+      vertical-align: middle
+      margin-right: 15px
+
+    .pic
+      +icons-24-sprite(education)
+      width: 24px
+      height: 24px
+      margin: 4px
 
   .grid-arrow
     vertical-align: middle
