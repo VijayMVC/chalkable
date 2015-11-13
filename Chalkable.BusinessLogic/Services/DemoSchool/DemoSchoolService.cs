@@ -151,7 +151,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new System.NotImplementedException();
         }
 
-        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesByAcadYear(int acadYear, int? start, int? count)
+        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesByAcadYear(int acadYear, int? start, int? count, string filter)
         {
             throw new System.NotImplementedException();
         }

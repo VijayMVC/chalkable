@@ -123,11 +123,12 @@ namespace Chalkable.Data.School.DataAccess
 
         private const string SP_GET_SHORT_SCHOOL_SUMMARIES_BY_ACAD_YEAR = "spGetShortSchoolSummariesByAcadYear";
 
-        public PaginatedList<ShortSchoolSummary> GetShortSchoolSummariesByAcadYear(int acadYear, int start, int count)
+        public PaginatedList<ShortSchoolSummary> GetShortSchoolSummariesByAcadYear(int acadYear, int start, int count, string filter)
         {
             var param = new Dictionary<string, object>()
             {
                 ["acadYear"] = acadYear,
+                ["filter"] = "%" + filter + "%",
                 ["start"] = start,
                 ["count"] = count
             };

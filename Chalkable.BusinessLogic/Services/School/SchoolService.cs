@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         SchoolOption GetSchoolOption();
         StartupData GetStartupData();
         int GetSchoolsCountByAcadYear(int acadYear);
-        PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesByAcadYear(int acadYear, int? start, int? count);
+        PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesByAcadYear(int acadYear, int? start, int? count, string filter);
     }
 
     public class SchoolService : SchoolServiceBase, ISchoolService
@@ -139,7 +139,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new SchoolDataAccess(u).GetSchoolsCountByAcadYear(acadYear));
         }
 
-        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesByAcadYear(int acadYear, int? start, int? count)
+        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesByAcadYear(int acadYear, int? start, int? count, string filter)
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
@@ -149,7 +149,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 SchoolSummaryInfo.Create(
                     DoRead(
                         u =>
-                            new SchoolDataAccess(u).GetShortSchoolSummariesByAcadYear(acadYear, start.Value, count.Value)));
+                            new SchoolDataAccess(u).GetShortSchoolSummariesByAcadYear(acadYear, start.Value, count.Value, filter)));
             return res;
         }
     }

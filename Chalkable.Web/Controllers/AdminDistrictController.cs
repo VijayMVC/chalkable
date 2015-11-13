@@ -32,7 +32,7 @@ namespace Chalkable.Web.Controllers
 
             var currSchoolYear = SchoolLocator.SchoolYearService.GetSchoolYearById(Context.SchoolYearId.Value);
             var schools = SchoolLocator.SchoolService.GetShortSchoolSummariesByAcadYear(currSchoolYear.AcadYear, start,
-                count);
+                count, filter);
             return Json(LocalSchoolSummaryViewData.Create(schools));
         }
     }
