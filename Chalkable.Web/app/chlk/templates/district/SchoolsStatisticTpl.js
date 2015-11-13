@@ -1,0 +1,26 @@
+REQUIRE('chlk.templates.PaginatedList');
+REQUIRE('chlk.models.school.SchoolStatistic');
+
+NAMESPACE('chlk.templates.district', function () {
+
+    /** @class chlk.templates.district.SchoolsStatisticTpl*/
+    CLASS(
+        [ria.templates.TemplateBind('~/assets/jade/activities/district/DistrictSummaryGrid.jade')],
+        [ria.templates.ModelBind(chlk.models.common.PaginatedList)],
+        'SchoolsStatisticTpl', EXTENDS(chlk.templates.PaginatedList), [
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.school.SchoolStatistic), 'items',
+
+            Boolean, function isNotEmptyAttendances(){
+                return this.getItems().filter(function(school){return school.getAbsences()}).length > 0
+            },
+
+            Boolean, function isNotEmptyDisciplines(){
+                return this.getItems().filter(function(school){return school.getInfractionsCount()}).length > 0
+            },
+
+            Boolean, function isNotEmptyGrades(){
+                return this.getItems().filter(function(school){return school.getAvg()}).length > 0
+            }
+        ])
+});

@@ -1,0 +1,5 @@
+.form-container
+    +ActionForm('district', 'schoolsStatisticFilter').school-statistic-form
+        input(type="text", name="filter", placeholder="Search for a school...").statistic-filter
+.grid-container
+    +RenderWith(self.getSchoolsStatistic(), chlk.templates.district.SchoolsStatisticTpl)
