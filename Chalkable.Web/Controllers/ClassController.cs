@@ -100,5 +100,11 @@ namespace Chalkable.Web.Controllers
             return Json(res);
         }
 
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult ClassesStats(int schoolId, string filter, int? start, int? count)
+        {
+            return FakeJson("~/fakeData/classesStats.json");
+        }
+
     }
 }
