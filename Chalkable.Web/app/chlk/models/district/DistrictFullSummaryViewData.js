@@ -9,13 +9,16 @@ NAMESPACE('chlk.models.district', function () {
         'DistrictFullSummaryViewData', [
             chlk.models.common.PaginatedList, 'schoolsStatistic',
             chlk.models.district.DistrictShortSummaryViewData, 'shortSummary',
+            String, 'filter',
 
-            function $(shortSummary_, schoolsStatistic_){
+            function $(shortSummary_, schoolsStatistic_, filter_){
                 BASE();
                 if(shortSummary_)
                     this.setShortSummary(shortSummary_);
                 if(schoolsStatistic_)
                     this.setSchoolsStatistic(schoolsStatistic_);
+                if(filter_)
+                    this.setFilter(filter_);
             }
         ]);
 });

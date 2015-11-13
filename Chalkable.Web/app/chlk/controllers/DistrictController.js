@@ -98,6 +98,25 @@ NAMESPACE('chlk.controllers', function (){
                 })
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.district.DistrictSummaryPage, result);
+        },
+
+        [chlk.controllers.SidebarButton('classes')],
+        [[chlk.models.district.DistrictFullSummaryViewData]],
+        function schoolsStatisticFilterAction(model){
+            return this.schoolsStatisticAction(0, model.getFilter());
+        },
+
+        [chlk.controllers.SidebarButton('classes')],
+        [[Number, String]],
+        function schoolsStatisticAction(pageIndex, filter_){
+            var start = 10 * pageIndex;
+            var result = this.adminDistrictService.getSchoolStatistic(start, filter_)
+                .then(function(model){
+                    filter_ && model.setFilter(filter_);
+                    return model;
+                })
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.district.DistrictSummaryPage, result);
         }
 
     ])
