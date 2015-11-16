@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
@@ -88,7 +90,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public static IList<ClassDetails> ReadClasses(SqlDataReader reader)
+        public static IList<ClassDetails> ReadClasses(DbDataReader reader)
         {
             var classes = new List<ClassDetails>();
             while (reader.Read())
@@ -132,5 +134,20 @@ namespace Chalkable.Data.School.DataAccess
             };
             ExecuteStoredProcedure("spDeleteClasses", ps);
         }
+
+        private const string SP_GET_CLASSES_BY_SCHOOL_YEAR = "spGetClassesBySchoolYear";
+
+        public PaginatedList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int start, int count, string filter)
+        {
+            var param = new Dictionary<string, object>()
+            {
+                ["schoolYearId"] = schoolYearId,
+                ["filter"] = string.IsNullOrWhiteSpace(filter) ? null : filter,
+                ["start"] = start,
+                ["count"] = count
+            };
+
+            return ExecuteStoredProcedurePaginated(SP_GET_CLASSES_BY_SCHOOL_YEAR, param, ReadClasses, start, count);
+        } 
     }
 }

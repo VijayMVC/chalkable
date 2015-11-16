@@ -12,9 +12,9 @@ namespace Chalkable.Web.Controllers
     public class SchoolYearController : ChalkableController
     {
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Schedule })]
-        public ActionResult List(int? start, int? count)
+        public ActionResult List(int? schoolId, int? start, int? count)
         {
-            var res = SchoolLocator.SchoolYearService.GetSchoolYears(start ?? 0, count ?? 10);
+            var res = SchoolLocator.SchoolYearService.GetSchoolYears(start ?? 0, count ?? 10, schoolId);
             return Json(res.Transform(SchoolYearViewData.Create));
         }
 

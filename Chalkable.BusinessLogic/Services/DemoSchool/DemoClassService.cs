@@ -385,6 +385,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
+        public PaginatedList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter)
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<ClassDetails> GetClassesSortedByPeriod()
         {
             IList<ClassDetails> classes;
