@@ -25,7 +25,7 @@ namespace Chalkable.Web.Models.ClassesViewData
                 Name = classDetails.Name,
                 DepartmentRef = classDetails.ChalkableDepartmentRef,
 
-                PrimaryTeacherDisplayName = classDetails.PrimaryTeacher.FullName(false, true),
+                PrimaryTeacherDisplayName = classDetails.PrimaryTeacher?.FullName(false, true),
                 StudentsCount = classDetails.StudentsCount,
 
                 AttendancesCount = null,
