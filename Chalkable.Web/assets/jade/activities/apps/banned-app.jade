@@ -1,0 +1,5 @@
+btnTitle = self.isBanned() ? "Unban this app" : "Ban this app"
+cls = self.isBanned() ? "ban-app-btn" : "ban-app-btn negative-button"
+action = self.isBanned() ? "unbanApp" : "banApp"
+
++ActionButton('appmarket', action, self.getId(), self.isFromNewItem())(class=cls)=btnTitle

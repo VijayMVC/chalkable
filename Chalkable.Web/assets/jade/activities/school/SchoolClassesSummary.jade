@@ -1,0 +1,13 @@
+.admin-summary-page
+    h2.page-title=self.getSchoolName()
+    .action-bar
+        .items
+            +ActionLink('schools', "classesSummary", self.getSchoolName(), self.getSchoolId()).pressed=Msg.Classes
+            +ActionLink('schools', "classesSummary", self.getSchoolName(), self.getSchoolId())=Msg.Teachers
+    .form-container
+        +ActionForm('schools', 'classesStatisticFilter').school-statistic-form
+            input(type="text", name="filter", placeholder="Search a Class...").statistic-filter.filter-input
+            +Hidden('schoolId', self.getSchoolId().valueOf())
+            .clear-fix
+    .grid-container
+        +RenderWith(self.getClassesStatistic(), chlk.templates.school.SchoolClassesStatisticTpl)
