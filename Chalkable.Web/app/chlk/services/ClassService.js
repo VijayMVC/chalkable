@@ -142,10 +142,10 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Class/AllSchoolsActiveClasses.json', chlk.models.classes.AllSchoolsActiveClasses, {})
             },
 
-            [[chlk.models.id.SchoolId, Number, String, Number]],
-            ria.async.Future, function getClassesStatistic(schoolId, start_, filter_, count_) {
+            [[chlk.models.id.SchoolYearId, Number, String, Number]],
+            ria.async.Future, function getClassesStatistic(schoolYearId, start_, filter_, count_) {
                 return this.getPaginatedList('Class/ClassesStats.json', chlk.models.school.SchoolClassesStatisticViewData.OF(chlk.models.id.SchoolId), {
-                    schoolId: schoolId.valueOf(),
+                    schoolYearId: schoolYearId.valueOf(),
                     start:start_ || 0,
                     count: count_ || 10,
                     filter: filter_

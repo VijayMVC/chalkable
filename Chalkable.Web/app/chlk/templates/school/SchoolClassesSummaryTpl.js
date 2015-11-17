@@ -15,6 +15,12 @@ NAMESPACE('chlk.templates.school', function () {
             chlk.models.id.SchoolId, 'schoolId',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.id.SchoolYearId, 'schoolYearId',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.schoolYear.Year), 'schoolYears',
+
+            [ria.templates.ModelPropertyBind],
             String, 'schoolName'
         ])
 });

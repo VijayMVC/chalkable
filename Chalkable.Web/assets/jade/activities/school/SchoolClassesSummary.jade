@@ -6,6 +6,10 @@
             +ActionLink('schools', "classesSummary", self.getSchoolName(), self.getSchoolId())=Msg.Teachers
     .form-container
         +ActionForm('schools', 'classesStatisticFilter').school-statistic-form
+            +Select("schoolYearId")#school-year-select
+                each year in self.getSchoolYears()
+                    +Option(year.getId(), year.getName(), self.getSchoolYearId() == year.getId())
+
             input(type="text", name="filter", placeholder="Search a Class...").statistic-filter.filter-input
             +Hidden('schoolId', self.getSchoolId().valueOf())
             .clear-fix

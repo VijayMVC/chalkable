@@ -5,6 +5,7 @@ REQUIRE('chlk.services.AccountService');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.DistrictService');
 REQUIRE('chlk.services.ClassService');
+REQUIRE('chlk.services.SchoolYearService');
 
 REQUIRE('chlk.activities.school.SchoolDetailsPage');
 REQUIRE('chlk.activities.school.SchoolPeoplePage');
@@ -37,6 +38,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
+
+        [ria.mvc.Inject],
+        chlk.services.SchoolYearService, 'schoolYearService',
 
         [ria.mvc.Inject],
         chlk.services.AccountService, 'accountService',
@@ -258,33 +262,38 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('classes')],
         [[chlk.models.id.SchoolId, String]],
         function classesSummaryAction(schoolId, schoolName){
-            var result = this.classService.getClassesStatistic(schoolId)
-                .then(function(classes){
-                    var clazz = classes.getItems()[0];
-                    if(clazz)
-                        clazz.setSchoolId(schoolId);
-                    return new chlk.models.school.SchoolClassesSummaryViewData(schoolName, schoolId, classes);
-                })
+            var result = this.schoolYearService.list(schoolId)
+                .then(function(years){
+                    var currentSchoolYearId = years[0].getId();
+                    return this.classService.getClassesStatistic(currentSchoolYearId)
+                        .then(function(classes){
+                            var clazz = classes.getItems()[0];
+                            if(clazz)
+                                clazz.setSchoolYearId(currentSchoolYearId);
+                            return new chlk.models.school.SchoolClassesSummaryViewData(schoolName, schoolId, currentSchoolYearId, years, classes);
+                        })
+                }, this)
                 .attach(this.validateResponse_());
+
             return this.PushView(chlk.activities.school.SchoolClassesSummaryPage, result);
         },
 
         [chlk.controllers.SidebarButton('classes')],
         [[chlk.models.school.SchoolClassesSummaryViewData]],
         function classesStatisticFilterAction(model){
-            return this.classesStatisticAction(0, model.getFilter(), model.getSchoolId());
+            return this.classesStatisticAction(0, model.getFilter(), model.getSchoolYearId());
         },
 
         [chlk.controllers.SidebarButton('classes')],
-        [[Number, String, chlk.models.id.SchoolId]],
-        function classesStatisticAction(pageIndex, filter_, schoolId_){
+        [[Number, String, chlk.models.id.SchoolYearId]],
+        function classesStatisticAction(pageIndex, filter_, schoolYearId_){
             var start = 10 * pageIndex;
-            var result = this.classService.getClassesStatistic(schoolId_, start, filter_)
+            var result = this.classService.getClassesStatistic(schoolYearId_, start, filter_)
                 .then(function(model){
                     filter_ && model.setFilter(filter_);
                     var clazz = model.getItems()[0];
                     if(clazz)
-                        clazz.setSchoolId(schoolId_);
+                        clazz.setSchoolYearId(schoolYearId_);
                     return model;
                 })
                 .attach(this.validateResponse_());
