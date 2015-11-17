@@ -101,9 +101,15 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult ClassesStats(int schoolId, string filter, int? start, int? count)
+        public ActionResult ClassesStats(int schoolYearId, string filter, int? start, int? count)
         {
-            return FakeJson("~/fakeData/classesStats.json");
+            var classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYearId, start,
+                count, filter);
+            
+            //TODO: Waiting iNow API for attendance, discipline and avarage
+
+            return
+                Json(ClassStatsViewData.Create(classes));
         }
 
     }

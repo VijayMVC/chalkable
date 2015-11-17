@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
@@ -38,6 +39,8 @@ namespace Chalkable.BusinessLogic.Services.School
         Class GetById(int id);
         IList<Class> GetAll();
         IList<ClassDetails> GetAllSchoolsActiveClasses();
+
+        PaginatedList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter);
     }
 
     public class ClassService : SchoolServiceBase, IClassService
@@ -203,5 +206,15 @@ namespace Chalkable.BusinessLogic.Services.School
                 classes = GetTeacherClasses(schoolYearId, teacherId.Value, markingPeriodId);
             return classes;
         }
+
+        public PaginatedList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter)
+        {
+
+            return
+                DoRead(
+                    u =>
+                        new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start ?? 0, count ?? int.MaxValue,
+                            filter));
+        }  
     }
 }

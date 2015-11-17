@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<SchoolYear> Add(IList<SchoolYear> schoolYears); 
         IList<SchoolYear> Edit(IList<SchoolYear> schoolYears); 
         SchoolYear GetSchoolYearById(int id);
-        PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue);
+        PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue, int? schoolId = null);
         IList<int> GetYears(); 
         void Delete(IList<int> schoolYearIds);
         SchoolYear GetCurrentSchoolYear();
@@ -38,9 +38,13 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new SchoolYearDataAccess(u).GetById(id));
         }
 
-        public PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue)
+        public PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue, int? schoolId = null)
         {
-            return DoRead(u => new SchoolYearDataAccess(u).GetPage(start, count));
+            return DoRead(u =>
+            {
+                var syDa = new SchoolYearDataAccess(u);
+                return (schoolId.HasValue ? syDa.GetBySchool(schoolId.Value) : syDa.GetPage(start, count));
+            });
         }
 
         public IList<int> GetYears()
