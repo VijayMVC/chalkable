@@ -142,7 +142,7 @@ namespace Chalkable.Data.School.DataAccess
             var param = new Dictionary<string, object>()
             {
                 ["schoolYearId"] = schoolYearId,
-                ["filter"] = string.IsNullOrWhiteSpace(filter) ? null : filter,
+                ["filter"] = string.IsNullOrWhiteSpace(filter) ? null : '%'+ filter+ '%',
                 ["start"] = start,
                 ["count"] = count
             };
