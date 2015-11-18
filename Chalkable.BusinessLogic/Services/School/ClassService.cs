@@ -41,6 +41,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassDetails> GetAllSchoolsActiveClasses();
 
         PaginatedList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter);
+
+        IList<ClassDetails> GetClassesByTeachers(int schoolYearId, IList<int> teacherIds, int? start, int? count);
     }
 
     public class ClassService : SchoolServiceBase, IClassService
@@ -215,6 +217,15 @@ namespace Chalkable.BusinessLogic.Services.School
                     u =>
                         new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start ?? 0, count ?? int.MaxValue,
                             filter));
-        }  
+        }
+
+        public IList<ClassDetails> GetClassesByTeachers(int schoolYearId, IList<int> teacherIds, int? start, int? count)
+        {
+            return
+                DoRead(
+                    u =>
+                        new ClassDataAccess(u).GetClassesByTeachers(schoolYearId, teacherIds, start ?? 0,
+                            count ?? int.MaxValue));
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace Chalkable.BusinessLogic.Model
         public ShortSchoolSummary SchoolDetails { get; set; }
         public int? AttendanceCount { get; set; }
         public int? DisciplinCount { get; set; }
-        public int? Avarage { get; set; }
+        public double? Avarage { get; set; }
 
         public static SchoolSummaryInfo Create(ShortSchoolSummary schoolSummary)
         {

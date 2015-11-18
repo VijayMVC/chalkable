@@ -9,7 +9,7 @@ namespace Chalkable.Web.Models.SchoolsViewData
         public int? AttendancesCount { get; set; }
         public int StudentsCount { get; set; }
         public int? DisciplinesCount { get; set; }
-        public int? Avarage { get; set; }
+        public double? Avarage { get; set; }
 
         public static LocalSchoolSummaryViewData Create(SchoolSummaryInfo school)
         {

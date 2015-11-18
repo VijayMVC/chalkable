@@ -15,7 +15,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         public int StudentsCount { get; set; }
         public int? AttendancesCount { get; set; }
         public int? DisciplinesCount { get; set; }
-        public int? Avarage { get; set; }
+        public double? Avarage { get; set; }
 
         public static ClassStatsViewData Create(ClassDetails classDetails)
         {
@@ -25,7 +25,7 @@ namespace Chalkable.Web.Models.ClassesViewData
                 Name = classDetails.Name,
                 DepartmentRef = classDetails.ChalkableDepartmentRef,
 
-                PrimaryTeacherDisplayName = classDetails.PrimaryTeacher?.FullName(false, true),
+                PrimaryTeacherDisplayName = classDetails.PrimaryTeacher?.FullName(upper : false, withSalutation: true),
                 StudentsCount = classDetails.StudentsCount,
 
                 AttendancesCount = null,

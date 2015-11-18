@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
@@ -50,6 +51,18 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var res = SchoolLocator.StaffService.SearchStaff(Context.SchoolYearId.Value, classId, studentId, filter,
                 byLastName == false, start ?? 0, count ?? 10);
             return Json(res.Transform(StaffViewData.Create));
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult TeacherStats(int schoolYearId, string filter, int? start, int? count)
+        {
+            var teachers = SchoolLocator.StaffService.SearchStaff(schoolYearId, null, null, filter, true, start ?? 0,
+                count ?? int.MaxValue);
+
+            var classes = SchoolLocator.ClassService.GetClassesByTeachers(schoolYearId,
+                teachers.Select(x => x.Id).ToList(), start, count);
+
+            return Json(TeacherStatsViewData.Create(teachers, classes));
         }
     }
 }
