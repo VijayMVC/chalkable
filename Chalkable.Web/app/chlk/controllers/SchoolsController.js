@@ -259,12 +259,24 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
+        function getCurrentYearId_(years){
+            if(!years)
+                return null;
+
+            var dt = getDate(), currentSchoolYearId;
+            years.forEach(function(year){
+                if(year.getStartDate() && year.getStartDate().getDate() <= dt)
+                    currentSchoolYearId = year.getId();
+            });
+            return currentSchoolYearId;
+        },
+
         [chlk.controllers.SidebarButton('classes')],
         [[chlk.models.id.SchoolId, String]],
         function classesSummaryAction(schoolId, schoolName){
             var result = this.schoolYearService.list(schoolId)
                 .then(function(years){
-                    var currentSchoolYearId = years[0].getId();
+                    var currentSchoolYearId = this.getCurrentYearId_(years);
                     return this.classService.getClassesStatistic(currentSchoolYearId)
                         .then(function(classes){
                             var clazz = classes.getItems()[0];

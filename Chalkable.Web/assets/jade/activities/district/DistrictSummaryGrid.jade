@@ -27,13 +27,22 @@
                     .cell.students=school.getStudentsCount()
                     if isNotEmptyAttendances
                         .cell.attendance
-                            .circle(data-tooltip=school.getStudentsCount() + ' Students,' + school.getAbsences() + ' Absent')=school.getAbsences()
+                            .circle(
+                                data-tooltip = school.getStudentsCount() + ' Students, ' + school.getAbsences() + ' Absent',
+                                class = school.getAbsencesClass()
+                            )=school.getAbsences()
                     if isNotEmptyDisciplines
                         .cell.discipline
-                            .circle(data-tooltip=school.getInfractionsCount() + ' Discipline Infractions Today')=school.getInfractionsCount()
+                            .circle(
+                                data-tooltip=school.getInfractionsCount() + ' Discipline Infractions Today',
+                                class = school.getInfractionsClass()
+                            )=school.getInfractionsCount()
                     if isNotEmptyGrades
                         .cell.grades
-                            .circle(data-tooltip=school.getAvg() + '% Average')=school.getAvg()
+                            .circle(
+                                data-tooltip=school.getAvg() + '% Average',
+                                class = school.getAvgClass()
+                            )=school.getAvg()
         else
             .no-items-text There are no schools
     .footer Page #{self.getTotalPages() ? self.getPageIndex() + 1 : 0} of #{self.getTotalPages()}

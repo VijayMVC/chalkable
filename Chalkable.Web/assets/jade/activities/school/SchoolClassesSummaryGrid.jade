@@ -31,13 +31,22 @@
                     .cell.students=clazz.getStudentsCount()
                     if isNotEmptyAttendances
                         .cell.attendance
-                            .circle(data-tooltip=clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent')=clazz.getAbsences()
+                            .circle(
+                                data-tooltip = clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent',
+                                class = clazz.getAbsencesClass()
+                            )=clazz.getAbsences()
                     if isNotEmptyDisciplines
                         .cell.discipline
-                            .circle(data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today')=clazz.getInfractionsCount()
+                            .circle(
+                                data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today',
+                                class = clazz.getInfractionsClass()
+                            )=clazz.getInfractionsCount()
                     if isNotEmptyGrades
                         .cell.grades
-                            .circle(data-tooltip=clazz.getAvg() + '% Average')=clazz.getAvg()
+                            .circle(
+                                data-tooltip=clazz.getAvg() + '% Average',
+                                class = clazz.getAvgClass()
+                            )=clazz.getAvg()
         else
             .no-items-text There are no classes
     .footer Page #{self.getTotalPages() ? self.getPageIndex() + 1 : 0} of #{self.getTotalPages()}

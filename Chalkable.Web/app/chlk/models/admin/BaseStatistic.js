@@ -28,6 +28,27 @@ NAMESPACE('chlk.models.admin', function () {
 
             Number, 'studentsCount',
 
+            function getAbsencesClass(){
+                if(this.getAbsences() && this.getAbsences() / this.getStudentsCount() > 0.1)
+                    return 'red';
+
+                return 'green';
+            },
+
+            function getInfractionsClass(){
+                if(this.getInfractionsCount() && this.getInfractionsCount() / this.getStudentsCount() > 0.01)
+                    return 'red';
+
+                return 'green';
+            },
+
+            function getAvgClass(){
+                if(this.getAvg() < 65)
+                    return 'red';
+
+                return 'green';
+            },
+
             VOID, function deserialize(raw){
                 this.id = SJX.fromValue(raw.id, chlk.models.id.SchoolId);
                 this.name = SJX.fromValue(raw.name, String);
