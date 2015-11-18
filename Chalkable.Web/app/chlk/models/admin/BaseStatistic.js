@@ -31,9 +31,9 @@ NAMESPACE('chlk.models.admin', function () {
             VOID, function deserialize(raw){
                 this.id = SJX.fromValue(raw.id, chlk.models.id.SchoolId);
                 this.name = SJX.fromValue(raw.name, String);
-                this.absences = SJX.fromValue(raw.attendancescount || 100 * Math.random(100).toFixed(2), Number);
-                this.infractionsCount = SJX.fromValue(raw.disciplinescount || 100 * Math.random(100).toFixed(2), Number);
-                this.avg = SJX.fromValue(raw.average || 100 * Math.random(100).toFixed(2), Number);
+                this.absences = SJX.fromValue(raw.attendancescount, Number);
+                this.infractionsCount = SJX.fromValue(raw.disciplinescount, Number);
+                this.avg = SJX.fromValue(raw.average, Number);
                 this.absencesPassed = SJX.fromValue(raw.absencespassed, Boolean);
                 this.infractionsPassed = SJX.fromValue(raw.infractionspassed, Boolean);
                 this.avgPassed = SJX.fromValue(raw.avgpassed , Boolean);
