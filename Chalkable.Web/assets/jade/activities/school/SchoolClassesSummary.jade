@@ -6,7 +6,7 @@
             +ActionLink('schools', "classesSummary", self.getSchoolName(), self.getSchoolId())=Msg.Teachers
     .form-container
         +ActionForm('schools', 'classesStatisticFilter').school-statistic-form
-            +Select("schoolYearId")#school-year-select
+            +Select("schoolYearId")#school-year-select.flat
                 each year in self.getSchoolYears()
                     +Option(year.getId(), year.getName(), self.getSchoolYearId() == year.getId())
 

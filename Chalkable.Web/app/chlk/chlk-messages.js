@@ -446,6 +446,7 @@ var Msg = {
     GOT_IT: 'Got It',
     GPA: 'GPA',
     GradeLevel: 'GradeLevel',
+    Grade_Avg: 'Grade Avg',
     Grade_book: 'Grade book',
     Grade_Book_Report: 'Grade Book Report',
     Grade_Level: 'Grade Level',

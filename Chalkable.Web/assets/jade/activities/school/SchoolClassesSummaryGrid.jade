@@ -19,22 +19,25 @@
                 if isNotEmptyDisciplines
                     .cell.discipline=Msg.Discipline
                 if isNotEmptyGrades
-                    .cell.grades=Msg.Grades
+                    .cell.grades=Msg.Grade_Avg
             each clazz in classes
                 .grid-row
                     .cell.name
                         .icon
                             .pic
                                 +ClassImg(clazz, 24, 43)
-                        span=clazz.getName()
+                        +ActionLink('class', 'info', clazz.getId())=clazz.getName()
                     .cell.teacher-name=clazz.getPrimaryTeacherName()
                     .cell.students=clazz.getStudentsCount()
                     if isNotEmptyAttendances
-                        .cell.attendance=clazz.getAbsences()
+                        .cell.attendance
+                            .circle(data-tooltip=clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent')=clazz.getAbsences()
                     if isNotEmptyDisciplines
-                        .cell.discipline=clazz.getInfractionsCount()
+                        .cell.discipline
+                            .circle(data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today')=clazz.getInfractionsCount()
                     if isNotEmptyGrades
-                        .cell.grades=clazz.getAvg()
+                        .cell.grades
+                            .circle(data-tooltip=clazz.getAvg() + '% Average')=clazz.getAvg()
         else
             .no-items-text There are no classes
     .footer Page #{self.getTotalPages() ? self.getPageIndex() + 1 : 0} of #{self.getTotalPages()}

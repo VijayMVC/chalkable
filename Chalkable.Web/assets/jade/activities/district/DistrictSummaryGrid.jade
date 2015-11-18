@@ -26,11 +26,14 @@
                         +ActionLink('schools', 'classesSummary', school.getId(), school.getName())=school.getName()
                     .cell.students=school.getStudentsCount()
                     if isNotEmptyAttendances
-                        .cell.attendance=school.getAbsences()
+                        .cell.attendance
+                            .circle(data-tooltip=school.getStudentsCount() + ' Students,' + school.getAbsences() + ' Absent')=school.getAbsences()
                     if isNotEmptyDisciplines
-                        .cell.discipline=school.getInfractionsCount()
+                        .cell.discipline
+                            .circle(data-tooltip=school.getInfractionsCount() + ' Discipline Infractions Today')=school.getInfractionsCount()
                     if isNotEmptyGrades
-                        .cell.grades=school.getAvg()
+                        .cell.grades
+                            .circle(data-tooltip=school.getAvg() + '% Average')=school.getAvg()
         else
             .no-items-text There are no schools
     .footer Page #{self.getTotalPages() ? self.getPageIndex() + 1 : 0} of #{self.getTotalPages()}
