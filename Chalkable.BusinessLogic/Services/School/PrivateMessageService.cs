@@ -108,8 +108,11 @@ namespace Chalkable.BusinessLogic.Services.School
             DateTime? fromDate = null;
             DateTime? toDate = null;
             if (acadYear.HasValue)
-            {             
+            {
                 var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYearsByAcadYear(acadYear.Value);
+                if(schoolYears.Count == 0)
+                    return new PaginatedList<PrivateMessage>(new List<PrivateMessage>(), start / count, count);
+
                 fromDate = schoolYears.Min(x => x.StartDate);
                 toDate = schoolYears.Max(x => x.EndDate);
             }
