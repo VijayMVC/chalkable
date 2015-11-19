@@ -1,0 +1,18 @@
+
+
+
+announcementAppId = self.app && self.app.getAnnouncementApplicationId() ? self.app.getAnnouncementApplicationId().valueOf() : ""
+announcementId = self.app && self.app.getAnnouncementId() ? self.app.getAnnouncementId().valueOf() : ""
+advancedApp = self.app && self.app.isAdvancedApp()
+
+if self.isMyAppsError()
+    +AttachmentDialogMsg(self.getErrorTitle(), self.getErrorMessage())
+else if self.isBanned()
+    +AppBannedDialog()
+else if self.isAppError()
+    +AppErrorDialog()
+else
+    +AttachmentDialog(self.getUrl(), self.getToolbarButtons(), announcementId, announcementAppId, self.getType(), advancedApp, self.getAnnouncementType()).app-wrapper
+
+
+
