@@ -3,7 +3,7 @@
     .action-bar
         .items
             +ActionLink('schools', "classesSummary", self.getSchoolName(), self.getSchoolId()).pressed=Msg.Classes
-            +ActionLink('schools', "classesSummary", self.getSchoolName(), self.getSchoolId())=Msg.Teachers
+            +ActionLink('schools', "teachersSummary", self.getSchoolName(), self.getSchoolId())=Msg.Teachers
     .form-container
         +ActionForm('schools', 'classesStatisticFilter').school-statistic-form
             +Select("schoolYearId")#school-year-select.flat
@@ -14,4 +14,4 @@
             +Hidden('schoolId', self.getSchoolId().valueOf())
             .clear-fix
     .grid-container
-        +RenderWith(self.getClassesStatistic(), chlk.templates.school.SchoolClassesStatisticTpl)
+        +RenderWith(self.getItemsStatistic(), chlk.templates.school.SchoolClassesStatisticTpl)

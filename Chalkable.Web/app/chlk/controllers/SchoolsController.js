@@ -6,6 +6,7 @@ REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.DistrictService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.SchoolYearService');
+REQUIRE('chlk.services.TeacherService');
 
 REQUIRE('chlk.activities.school.SchoolDetailsPage');
 REQUIRE('chlk.activities.school.SchoolPeoplePage');
@@ -16,6 +17,7 @@ REQUIRE('chlk.activities.school.SchoolsListPage');
 REQUIRE('chlk.activities.school.ImportSchoolDialog');
 REQUIRE('chlk.activities.school.UpgradeDistrictsPage');
 REQUIRE('chlk.activities.school.SchoolClassesSummaryPage');
+REQUIRE('chlk.activities.school.SchoolTeachersSummaryPage');
 
 REQUIRE('chlk.models.school.SchoolPeople');
 REQUIRE('chlk.models.district.District');
@@ -38,6 +40,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
+
+        [ria.mvc.Inject],
+        chlk.services.TeacherService, 'teacherService',
 
         [ria.mvc.Inject],
         chlk.services.SchoolYearService, 'schoolYearService',
@@ -282,7 +287,7 @@ NAMESPACE('chlk.controllers', function (){
                             var clazz = classes.getItems()[0];
                             if(clazz)
                                 clazz.setSchoolYearId(currentSchoolYearId);
-                            return new chlk.models.school.SchoolClassesSummaryViewData(schoolName, schoolId, currentSchoolYearId, years, classes);
+                            return new chlk.models.school.SchoolSummaryViewData(schoolName, schoolId, currentSchoolYearId, years, classes);
                         })
                 }, this)
                 .attach(this.validateResponse_());
@@ -291,7 +296,7 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('classes')],
-        [[chlk.models.school.SchoolClassesSummaryViewData]],
+        [[chlk.models.school.SchoolSummaryViewData]],
         function classesStatisticFilterAction(model){
             return this.classesStatisticAction(0, model.getFilter(), model.getSchoolYearId());
         },
@@ -310,6 +315,47 @@ NAMESPACE('chlk.controllers', function (){
                 })
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.school.SchoolClassesSummaryPage, result);
+        },
+
+        [chlk.controllers.SidebarButton('classes')],
+        [[chlk.models.id.SchoolId, String]],
+        function teachersSummaryAction(schoolId, schoolName){
+            var result = this.schoolYearService.list(schoolId)
+                .then(function(years){
+                    var currentSchoolYearId = this.getCurrentYearId_(years);
+                    return this.teacherService.getTeachersStats(currentSchoolYearId)
+                        .then(function(classes){
+                            var clazz = classes.getItems()[0];
+                            if(clazz)
+                                clazz.setSchoolYearId(currentSchoolYearId);
+                            return new chlk.models.school.SchoolSummaryViewData(schoolName, schoolId, currentSchoolYearId, years, classes);
+                        })
+                }, this)
+                .attach(this.validateResponse_());
+
+            return this.PushView(chlk.activities.school.SchoolTeachersSummaryPage, result);
+        },
+
+        [chlk.controllers.SidebarButton('classes')],
+        [[chlk.models.school.SchoolSummaryViewData]],
+        function teachersStatisticFilterAction(model){
+            return this.teachersStatisticAction(0, model.getFilter(), model.getSchoolYearId());
+        },
+
+        [chlk.controllers.SidebarButton('classes')],
+        [[Number, String, chlk.models.id.SchoolYearId]],
+        function teachersStatisticAction(pageIndex, filter_, schoolYearId_){
+            var start = 10 * pageIndex;
+            var result = this.teacherService.getTeachersStats(schoolYearId_, start, filter_)
+                .then(function(model){
+                    filter_ && model.setFilter(filter_);
+                    var clazz = model.getItems()[0];
+                    if(clazz)
+                        clazz.setSchoolYearId(schoolYearId_);
+                    return model;
+                })
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.school.SchoolTeachersSummaryPage, result);
         }
 
     ])

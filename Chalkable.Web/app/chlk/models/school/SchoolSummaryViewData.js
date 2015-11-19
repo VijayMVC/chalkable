@@ -6,10 +6,10 @@ REQUIRE('chlk.models.schoolYear.Year');
 NAMESPACE('chlk.models.school', function () {
     "use strict";
 
-    /** @class chlk.models.school.SchoolClassesSummaryViewData*/
+    /** @class chlk.models.school.SchoolSummaryViewData*/
     CLASS(
-        'SchoolClassesSummaryViewData', [
-            chlk.models.common.PaginatedList, 'classesStatistic',
+        'SchoolSummaryViewData', [
+            chlk.models.common.PaginatedList, 'itemsStatistic',
             String, 'schoolName',
             chlk.models.id.SchoolId, 'schoolId',
             chlk.models.id.SchoolYearId, 'schoolYearId',
@@ -17,7 +17,7 @@ NAMESPACE('chlk.models.school', function () {
             String, 'filter',
 
             [[String, chlk.models.id.SchoolId, chlk.models.id.SchoolYearId, ArrayOf(chlk.models.schoolYear.Year), chlk.models.common.PaginatedList, String]],
-            function $(schoolName_, schoolId_, schoolYearId_, schoolYears_, classesStatistic_, filter_){
+            function $(schoolName_, schoolId_, schoolYearId_, schoolYears_, itemsStatistic_, filter_){
                 BASE();
                 if(schoolName_)
                     this.setSchoolName(schoolName_);
@@ -27,8 +27,8 @@ NAMESPACE('chlk.models.school', function () {
                     this.setSchoolYearId(schoolYearId_);
                 if(schoolYears_)
                     this.setSchoolYears(schoolYears_);
-                if(classesStatistic_)
-                    this.setClassesStatistic(classesStatistic_);
+                if(itemsStatistic_)
+                    this.setItemsStatistic(itemsStatistic_);
                 if(filter_)
                     this.setFilter(filter_);
             }
