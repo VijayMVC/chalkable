@@ -1,0 +1,39 @@
+@import "compass/css3/animation"
+
+@mixin shake-keyframes($name, $x: 0, $y: 0, $rot: 0deg, $steps:10, $opacity:false)
+  $r:0deg
+  $h:0px
+  $v:0px
+
+  +keyframes($name)
+    $interval: $steps
+    $step: 0%
+
+    @while $step < 100% 
+      @if $rot != 0deg
+        $r : random($rot) - $rot/2
+      @else
+        $r : 0deg
+
+      @if $x != 0px
+        $h : random($x) - $x/2
+      @else
+        $h : 0px
+
+      @if $y != 0px
+        $v : random($y) - $y/2
+      @else
+        $v : 0px
+
+      @if $step == 0%
+        #{$step}
+          +transform(translate(0px, 0px) rotate(0deg))
+          @if $opacity
+            opacity: random(10)/10
+      @else
+        #{$step}
+          +transform(translate($h, $v) rotate($r))
+          @if $opacity
+            opacity: random(10)/10
+
+      $step: $step + $interval
