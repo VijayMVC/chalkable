@@ -91,6 +91,22 @@ module.exports = function(grunt) {
           to: buildNumber
         }]
       },
+      chakable_database_master_version: {
+        src: ['Chalkable.Database.Master\Chalkable.Database.Master.sqlproj'],
+        dest: ['Chalkable.Database.Master\Chalkable.Database.Master.sqlproj'],
+        replacements: [{
+          from: '1.0.0.0',
+          to: buildNumber
+        }]
+      },
+      chakable_database_master_version: {
+        src: ['Chalkable.Database.School\Chalkable.Database.School.sqlproj'],
+        dest: ['Chalkable.Database.School\Chalkable.Database.School.sqlproj'],
+        replacements: [{
+          from: '1.0.0.0',
+          to: buildNumber
+        }]
+      },
       raygun_deployment_version: {
         src: ['Release.tpl.yaml'],
         dest: ['Release.yaml'],
