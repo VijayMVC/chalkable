@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
@@ -140,7 +141,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void Delete(IList<Class> classes)
         {
-            DoUpdate(uow => new ClassDataAccess(uow).Delete(classes));
+            DoUpdate(uow => new ClassDataAccess(uow).Delete(classes.Select(x=>x.Id).ToList()));
         }
 
         public void DeleteMarkingPeriodClasses(IList<MarkingPeriodClass> markingPeriodClasses)

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
@@ -38,16 +39,24 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<Notification> GetUnshownNotifications()
         {
-            return GetNotifications(new NotificationQuery { Shown = false, PersonId = Context.PersonId });
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+
+            return GetNotifications(new NotificationQuery
+            {
+                Shown = false,
+                PersonId = Context.PersonId.Value,
+                RoleId = Context.RoleId
+            });
         }
 
         public IList<Notification> GetNotifications(NotificationQuery notificationQuery)
         {
             var notifications = NotificationStorage.GetData().Select(x => x.Value);
+            notifications = notifications.Where(x => x.PersonRef == notificationQuery.PersonId && x.RoleRef == notificationQuery.RoleId);
+
             if (notificationQuery.Id.HasValue)
                 notifications = notifications.Where(x => x.Id == notificationQuery.Id);
-            if (notificationQuery.PersonId.HasValue)
-                notifications = notifications.Where(x => x.PersonRef == notificationQuery.PersonId);
             if (notificationQuery.Shown.HasValue)
                 notifications = notifications.Where(x => x.Shown == notificationQuery.Shown);
 
@@ -64,9 +73,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public PaginatedList<NotificationDetails> GetNotifications(int start, int count)
         {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+
             return GetPaginatedNotificationsDetails(new NotificationQuery
             {
-                PersonId = Context.PersonId,
+                PersonId = Context.PersonId.Value,
                 Start = start,
                 Count = count,
                 SchoolId = Context.SchoolLocalId.Value
@@ -90,9 +102,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
 
 
-                if (notificationDetails.PrivateMessageRef.HasValue)
-                    notificationDetails.PrivateMessage =
-                        ServiceLocator.PrivateMessageService.GetMessage(notificationDetails.PrivateMessageRef.Value);
+                //if (notificationDetails.PrivateMessageRef.HasValue)
+                //    notificationDetails.PrivateMessage =
+                //        ServiceLocator.PrivateMessageService.GetMessage(notificationDetails.PrivateMessageRef.Value);
 
                 if (notificationDetails.QuestionPersonRef.HasValue)
                     notificationDetails.QuestionPerson = ServiceLocator.PersonService.GetPersonDetails(notificationDetails.QuestionPersonRef.Value);
@@ -115,7 +127,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void MarkAsShown(int[] notificationIds)
         {
-            var notifications = GetNotifications(new NotificationQuery { Shown = false, PersonId = Context.PersonId });
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+
+            var notifications = GetUnshownNotifications();
             foreach (var notificationId in notificationIds)
             {
                 var notification = notifications.FirstOrDefault(x => x.Id == notificationId);
@@ -139,7 +154,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             AddNotifications(notifications);
         }
 
-        public void AddAnnouncementNewAttachmentNotificationToTeachers(int announcementId, AnnouncementType announcementType, int fromPersonId)
+        public void AddAnnouncementNewAttachmentNotificationToOwner(int announcementId, AnnouncementType announcementType, int fromPersonId)
         {
             throw new NotImplementedException();
             //var announcement = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
@@ -180,12 +195,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void AddPrivateMessageNotification(int privateMessageId)
         {
-            if (!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
-
-            var privateMessage = ServiceLocator.PrivateMessageService.GetMessage(privateMessageId);
-            var notification = builder.BuildPrivateMessageNotification(Context.NowSchoolTime, privateMessage, privateMessage.Sender, privateMessage.Recipient);
-            NotificationStorage.Add(notification);
+            Trace.Assert(Context.PersonId.HasValue);
+            var privateMessage = ServiceLocator.PrivateMessageService.GetSentMessage(privateMessageId);
+            var notifications = privateMessage.RecipientPersons.Select( x => builder.BuildPrivateMessageNotification(Context.NowSchoolTime, privateMessage, privateMessage.Sender, x));
+            NotificationStorage.Add(notifications.ToList());
         }
 
         public void AddApplicationNotification(IList<Person> toPerson, Person fromPerson, Guid applicationId)

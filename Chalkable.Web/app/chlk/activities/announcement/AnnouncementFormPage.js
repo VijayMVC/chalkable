@@ -323,8 +323,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                         var classId = $target.getAttr('classId');
                         that.dom.find('input[name=classId]').setValue(classId);
                         var defaultType = $target.getData('default-announcement-type-id');
-                        if(defaultType)
-                            that.dom.find('input[name=announcementTypeId]').setValue(defaultType);
+                        that.dom.find('input[name=announcementTypeId]').setValue(defaultType);
                     }
 
                     if($target.getAttr('type') == 'submit'){

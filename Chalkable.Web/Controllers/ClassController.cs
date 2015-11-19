@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
@@ -73,11 +74,12 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("System Admin, DistrictAdmin, Teacher, Student")]
-        public ActionResult Explorer(int classId)
+        public async Task<ActionResult> Explorer(int classId)
         {
             var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var gradingStandards = SchoolLocator.GradingStandardService.GetGradingStandards(classId, null, false);
-            return Json(ClassExpolorerViewData.Create(c, gradingStandards));
+            var gradingStandardsTask = SchoolLocator.GradingStandardService.GetGradingStandards(classId, null, false);
+            MasterLocator.UserTrackingService.UsedStandardsExplorer(Context.Login, "class explorer");
+            return Json(ClassExpolorerViewData.Create(c, await gradingStandardsTask));
         }
 
         [AuthorizationFilter("DistrictAdmin")]

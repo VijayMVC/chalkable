@@ -9,12 +9,13 @@ namespace Chalkable.UserTracking
             DateTime? firstLoginDate, string ip);
 
         void IdentifyDistrictAdmin(string email, string firstName, string lastName, string schoolName,
-            DateTime? firstLoginDate, string timeZoneId, string role, string ip);
+            DateTime? firstLoginDate, string timeZoneId, string role, string ip, bool isStudyCenterEnabled);
 
         void IdentifyStudent(string email, string firstName, string lastName, string schoolName, 
-            string grade, DateTime? firstLoginDate, string timeZoneId, string ip);
+            string grade, DateTime? firstLoginDate, string timeZoneId, string ip, bool isStudyCenterEnabled);
 
-        void IdentifyTeacher(string email, string firstName, string lastName, string schoolName, List<string> classes, DateTime? firstLoginDate, string timeZoneId, string ip);
+        void IdentifyTeacher(string email, string firstName, string lastName, string schoolName, List<string> classes,
+            DateTime? firstLoginDate, string timeZoneId, string ip, bool isStudyCenterEnabled);
 
         void IdentifyDeveloper(string email, string userName,
             DateTime? firstLoginDate, string timeZoneId, string ip);
@@ -35,18 +36,25 @@ namespace Chalkable.UserTracking
         void ResetPassword(string email);
         void ChangedPassword(string email);
         void ChangedEmail(string email, string newEmail);
-        void UserLoggedInForFirstTime(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate, string timeZoneId, string role);
+        void UserLoggedInForFirstTime(string email, string firstName, string lastName, string schoolName, 
+            DateTime? firstLoginDate, string timeZoneId, string role, bool isStudyCenterEnabled);
         void SentMessageTo(string email, string userName);
+
         void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached);
         void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached);
         void CreateNewAdminItem(string email, string adminName, int appsAttached, int docsAttached);
         void CreatedReport(string email, string reportType);
         void SetDiscipline(string login, int? classId, DateTime date, string description, int studentId);
         void SetFinalGrade(string login, int classId, int studentId, int gradingPeriodId, string averageValue, bool exempt, string note);
-        void SetScore(string login, int announcementId, int studentId, string gradeValue, string extraCredits, bool callFromGradeBook);
         void SetAttendance(string login, int classId);
         void PostedGrades(string login, int classId, int gradingPeriodId);
-        void LoggedInFromChalkable(string login);
-        void LoggedInFromINow(string login);
+        void LoggedIn(string login);
+        void AttachedAssessment(string login, int announcementId);
+        void AttachedStandard(string login, string name);
+        void UsedStandardsExplorer(string login, string explorerType);
+        void AutoGradedItem(string login, int announcementId, int studentId, string grade);
+
+        void CopiedLessonPlanFromGallery(string login);
+        void SavedLessonPlanToGallery(string login, string lessonPlanTitle);
     }
 }

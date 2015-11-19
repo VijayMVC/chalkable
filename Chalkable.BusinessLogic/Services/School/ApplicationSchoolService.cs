@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
@@ -27,8 +25,10 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds, bool onlyActive = false);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false);
         Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementType type);
-
         IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying);
+
+        void BanUnBanApplication(Guid applicationId, bool ban);
+        IList<ApplicationBanHistory> GetApplicationBanHistory(Guid applicationId);
     }
 
     public class ApplicationSchoolService : SchoolServiceBase, IApplicationSchoolService
@@ -187,7 +187,21 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => CopyAnnApplications(annAppsForCopying, new List<int> {toAnnouncementId}, u));
         }
 
-        public IList<AnnouncementApplication> CopyAnnApplications(IList<AnnouncementApplication> annAppsForCopying, IList<int> toAnnouncementIds, UnitOfWork unitOfWork)
+        public void BanUnBanApplication(Guid applicationId, bool ban)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.DistrictId.HasValue);
+            ServiceLocator.ServiceLocatorMaster.ApplicationService.SetApplicationDistrictOptions(applicationId, Context.DistrictId.Value, ban);
+            DoUpdate(u=> new ApplicationBanHistoryDataAccess(u).Insert(new ApplicationBanHistory
+            {
+                ApplicationRef = applicationId,
+                Banned = ban,
+                Date = Context.NowSchoolTime,
+                PersonRef = Context.PersonId.Value,
+            }));
+        }
+
+        public static IList<AnnouncementApplication> CopyAnnApplications(IList<AnnouncementApplication> annAppsForCopying, IList<int> toAnnouncementIds, UnitOfWork unitOfWork)
         {
             var da = new AnnouncementApplicationDataAccess(unitOfWork);
             foreach (var toAnnouncementId in toAnnouncementIds)
@@ -214,6 +228,11 @@ namespace Chalkable.BusinessLogic.Services.School
                     res = res.Where(x => x.Active).ToList();
                 return res;
             }
+        }
+
+        public IList<ApplicationBanHistory> GetApplicationBanHistory(Guid applicationId)
+        {
+            return DoRead(u => new ApplicationBanHistoryDataAccess(u).GetApplicationBanHistory(applicationId));
         }
     }
 }

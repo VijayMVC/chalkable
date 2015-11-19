@@ -20,6 +20,7 @@ REQUIRE('chlk.activities.profile.ScheduleMonthPage');
 REQUIRE('chlk.activities.student.StudentProfileExplorerPage');
 REQUIRE('chlk.activities.attendance.StudentDayAttendancePopup');
 REQUIRE('chlk.activities.discipline.StudentDayDisciplinePopup');
+REQUIRE('chlk.activities.student.StudentProfileGradingPopup');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.teacher.StudentsList');
@@ -78,7 +79,7 @@ NAMESPACE('chlk.controllers', function (){
                         .attach(this.validateResponse_());
                 }
                 result = result.then(function(users){
-                        var usersModel = this.prepareUsersModel(users, 0, true);
+                        var usersModel = this.prepareUsersModel(users, 0, true, null, null, isMy);
                         var topModel = new chlk.models.classes.ClassesForTopBar(null, classId_);
                         return new chlk.models.teacher.StudentsList(usersModel, topModel, isMy, null, this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS));
                     }, this);
@@ -132,7 +133,7 @@ NAMESPACE('chlk.controllers', function (){
 
                 result = result.then(function(usersData){
                     if(isScroll)  return this.prepareUsers(usersData, start);
-                    return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter(), rolesText);
+                    return this.prepareUsersModel(usersData, 0, model.isByLastName(), model.getFilter(), rolesText, model.isMy());
                 }, this);
 
                 if(isScroll){
@@ -320,6 +321,20 @@ NAMESPACE('chlk.controllers', function (){
                 return this.PushView(chlk.activities.student.StudentProfileGradingPage, res);
             },
 
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId]],
+            function loadGradingDetailsAction(studentId, gradingPeriodId){
+                var res = this.studentService.getGradingDetailsForPeriod(studentId, gradingPeriodId)
+                    .attach(this.validateResponse_());
+                return this.UpdateView(chlk.activities.student.StudentProfileGradingPage, res);
+            },
+
+            [[Number, chlk.models.id.ClassId]],
+            function showGradingActivitiesForStudentAction(announcementTypeId, classId){
+                var model = this.studentService.getGradingActivitiesForStudent(announcementTypeId, classId);
+                model.setTarget(chlk.controls.getActionLinkControlLastNode());
+                return this.ShadeView(chlk.activities.student.StudentProfileGradingPopup, ria.async.DeferredData(model));
+            },
+
             [[chlk.models.id.SchoolPersonId, chlk.models.common.ChlkDate]],
             function dayScheduleAction(personId, date_){
                 return this.schedule_(
@@ -381,7 +396,7 @@ NAMESPACE('chlk.controllers', function (){
                     .getAppsInfo(personId, 0, 10000)
                     .attach(this.validateResponse_())
                     .then(function (model) {
-                        return new chlk.models.people.UserProfileAppsViewData(this.getCurrentRole(), model);
+                        return new chlk.models.people.UserProfileAppsViewData(this.getCurrentRole(), model, this.getUserClaims_());
                     }, this);
                 return this.PushView(chlk.activities.profile.SchoolPersonAppsPage, res);
             }

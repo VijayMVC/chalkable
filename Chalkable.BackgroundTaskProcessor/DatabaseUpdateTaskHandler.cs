@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BackgroundTaskProcessor.Parallel;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
@@ -19,35 +20,38 @@ namespace Chalkable.BackgroundTaskProcessor
                 var data = task.GetData<DatabaseUpdateTaskData>();
                 var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
                 var districts = sl.DistrictService.GetDistricts();
-                foreach (var updateSql in data.Sqls)
+                var masterSqls = data.Sqls.Where(x => x.RunOnMaster).ToList();
+                var districtSqls = data.Sqls.Where(x => !x.RunOnMaster).ToList();
+
+                using (var uow = new UnitOfWork(Settings.MasterConnectionString, true))
                 {
-                    if (updateSql.RunOnMaster)
+                    foreach (var updateSql in masterSqls)
                     {
-                        using (var uow = new UnitOfWork(Settings.MasterConnectionString, false))
+                        var cmd = uow.GetTextCommandWithParams(updateSql.Sql, new Dictionary<string, object>());
+                        cmd.CommandTimeout = Settings.DbUpdateTimeout;
+                        cmd.ExecuteNonQuery();
+                    }
+                    uow.Commit();
+                }
+
+
+                foreach (var dbServer in Settings.ChalkableSchoolDbServers)
+                {
+                    using (var uow = new UnitOfWork(Settings.GetSchoolTemplateConnectionString(dbServer), true))
+                    {
+                        foreach (var updateSql in districtSqls)
                         {
                             var cmd = uow.GetTextCommandWithParams(updateSql.Sql, new Dictionary<string, object>());
                             cmd.CommandTimeout = Settings.DbUpdateTimeout;
                             cmd.ExecuteNonQuery();
                         }
+                        uow.Commit();
                     }
-                    else
-                    {
-                        foreach (var dbServer in Settings.ChalkableSchoolDbServers)
-                        {
-                            using (var uow = new UnitOfWork(Settings.GetSchoolTemplateConnectionString(dbServer), false))
-                            {
-                                var cmd = uow.GetTextCommandWithParams(updateSql.Sql, new Dictionary<string, object>());
-                                cmd.CommandTimeout = Settings.DbUpdateTimeout;
-                                cmd.ExecuteNonQuery();
-                            }
-                        }
-                        var runer = new AllSchoolRunner<string>();
-                        if (!runer.Run(districts, updateSql.Sql, log, ExecSql, task1 => AllSchoolRunner<string>.TaskStatusEnum.Completed))
-                        {
-                            res = false;
-                            break;
-                        }
-                    }
+                }
+                var runer = new AllSchoolRunner<IEnumerable<UpdateSql>>();
+                if (!runer.Run(districts, districtSqls, log, ExecSql, task1 => AllSchoolRunner<IEnumerable<UpdateSql>>.TaskStatusEnum.Completed))
+                {
+                    res = false;
                 }
             }
             catch (Exception ex)
@@ -65,14 +69,18 @@ namespace Chalkable.BackgroundTaskProcessor
 
         }
 
-        private string ExecSql(AllSchoolRunner<string>.Task task)
+        private string ExecSql(AllSchoolRunner<IEnumerable<UpdateSql>>.Task task)
         {
             string connectionString = Settings.GetSchoolConnectionString(task.Server, task.Database);
-            using (var uow = new UnitOfWork(connectionString, false))
+            using (var uow = new UnitOfWork(connectionString, true))
             {
-                var cmd = uow.GetTextCommandWithParams(task.Data, new Dictionary<string, object>());
-                cmd.CommandTimeout = Settings.DbUpdateTimeout;
-                cmd.ExecuteNonQuery();
+                foreach (var updateSql in task.Data)
+                {
+                    var cmd = uow.GetTextCommandWithParams(updateSql.Sql, new Dictionary<string, object>());
+                    cmd.CommandTimeout = Settings.DbUpdateTimeout;
+                    cmd.ExecuteNonQuery();
+                }
+                uow.Commit();
             }
             return string.Empty;
         }

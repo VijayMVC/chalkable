@@ -17,5 +17,7 @@ namespace Chalkable.StiConnector.SyncModel
         public bool IsSystem { get; set; }
         public Guid DistrictGuid { get; set; }
         public int? InFocusUserId { get; set; }
+
+        public override int DefaultOrder => 3;
     }
 }

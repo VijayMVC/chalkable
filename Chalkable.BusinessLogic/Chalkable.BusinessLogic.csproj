@@ -50,30 +50,33 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Data.Edm, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Data.Edm.5.6.2\lib\net40\Microsoft.Data.Edm.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Data.OData, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Data.OData.5.6.2\lib\net40\Microsoft.Data.OData.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.2\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+    <Reference Include="Microsoft.Azure.KeyVault.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.2.0.3\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+    <Reference Include="Microsoft.Data.Edm, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Edm.5.6.4\lib\net40\Microsoft.Data.Edm.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.ServiceRuntime, Version=2.4.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
-    <Reference Include="Microsoft.WindowsAzure.Storage, Version=4.3.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\WindowsAzure.Storage.4.3.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    <Reference Include="Microsoft.Data.OData, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.OData.5.6.4\lib\net40\Microsoft.Data.OData.dll</HintPath>
+      <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.5\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Microsoft.Data.Services.Client, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.4\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.1.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=5.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.5.0.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -81,9 +84,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Runtime.Caching" />
-    <Reference Include="System.Spatial, Version=5.6.2.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\System.Spatial.5.6.2\lib\net40\System.Spatial.dll</HintPath>
+    <Reference Include="System.Spatial, Version=5.6.4.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Spatial.5.6.4\lib\net40\System.Spatial.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -100,6 +103,7 @@
     <Compile Include="Mapping\GradingStyleMapper.cs" />
     <Compile Include="Mapping\ModelMappers\ActivityToAnnouncementMapper.cs" />
     <Compile Include="Mapping\ModelMappers\AnnouncementComplexToActivityMapper.cs" />
+    <Compile Include="Mapping\ModelMappers\AttachmentToStiAttachmentMapper.cs" />
     <Compile Include="Mapping\ModelMappers\BaseMapper.cs" />
     <Compile Include="Mapping\ModelMappers\ClassDisciplineToDisciplineReferralMapper.cs" />
     <Compile Include="Mapping\ModelMappers\ActivityAssignedAttrToAnnouncementAssignedAttrMapper.cs" />
@@ -111,6 +115,7 @@
     <Compile Include="Model\AnnouncementInfo.cs" />
     <Compile Include="Model\ApplicationInfo.cs" />
     <Compile Include="Model\ApplicationTotalPriceInfo.cs" />
+    <Compile Include="Model\AssignedAttributeInputModel.cs" />
     <Compile Include="Model\AttachmentContentInfo.cs" />
     <Compile Include="Model\Attendances\AttendanceSummary.cs" />
     <Compile Include="Model\Attendances\ClassPeriodAttendance.cs" />
@@ -130,6 +135,7 @@
     <Compile Include="Model\Attendances\ClassAttendance.cs" />
     <Compile Include="Model\AttributeAttachmentContentInfo.cs" />
     <Compile Include="Model\EmailInfo.cs" />
+    <Compile Include="Model\FeedSettings.cs" />
     <Compile Include="Model\FinalGradeInfo.cs" />
     <Compile Include="Model\GradingStandardInfo.cs" />
     <Compile Include="Model\LEParams.cs" />
@@ -142,13 +148,12 @@
     <Compile Include="Model\Reports\ComprehensiveProgressInputModel.cs" />
     <Compile Include="Model\Reports\GradebookReportInputModel.cs" />
     <Compile Include="Model\Reports\GradeVerificationInputModel.cs" />
-    <Compile Include="Model\Reports\LassonPlanReportInputModel.cs" />
+    <Compile Include="Model\Reports\LessonPlanReportInputModel.cs" />
     <Compile Include="Model\Reports\MissingAssignmentsInputModel.cs" />
     <Compile Include="Model\Reports\ProgressReportInputModel.cs" />
     <Compile Include="Model\Reports\SeatingChartReportInputModel.cs" />
     <Compile Include="Model\Reports\WorksheetReportInputModel.cs" />
     <Compile Include="Model\SeatingChartInfo.cs" />
-    <Compile Include="Model\StandardDetailsInfo.cs" />
     <Compile Include="Model\StudentCommentInfo.cs" />
     <Compile Include="Model\StudentExplorerInfo.cs" />
     <Compile Include="Model\StudentSummaryInfo.cs" />
@@ -247,6 +252,7 @@
     <Compile Include="Services\School\Announcements\BaseAnnouncementService.cs" />
     <Compile Include="Services\School\Announcements\ClassAnnouncementService.cs" />
     <Compile Include="Services\School\Announcements\LessonPlanService.cs" />
+    <Compile Include="Services\School\AttachmentService.cs" />
     <Compile Include="Services\School\AttendanceMonthService.cs" />
     <Compile Include="Services\School\BellScheduleService.cs" />
     <Compile Include="Services\School\ClassAnnouncementTypeService.cs" />
@@ -300,6 +306,7 @@
     <Compile Include="Services\School\PeriodService.cs" />
     <Compile Include="Services\School\PersonEmailService.cs" />
     <Compile Include="Services\School\PersonService.cs" />
+    <Compile Include="Services\School\PersonSettingService.cs" />
     <Compile Include="Services\School\PhoneService.cs" />
     <Compile Include="Services\School\PracticeGradeService.cs" />
     <Compile Include="Services\School\PrivateMessageService.cs" />
@@ -365,7 +372,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(SolutionDir)\.nuget\nuget.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

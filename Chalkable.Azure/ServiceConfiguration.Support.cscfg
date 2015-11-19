@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ServiceConfiguration serviceName="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2014-06.2.4">
+<ServiceConfiguration serviceName="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2015-04.2.6">
   <Role name="Chalkable.Web">
     <Instances count="1" />
     <ConfigurationSettings>
@@ -35,6 +35,12 @@
       <Setting name="mixpanel-token" value="" />
       <!-- other settings -->
       <Setting name="home-redirect-url" value="/Home/Index" />
+      <!--application insight-->
+      <Setting name="verbosity" value="Verbose" />
+      <Setting name="instrumentationKey" value="dcbaf516-4b5f-401d-90b4-64c3be2f62cb" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablesupport;AccountKey=NK4huhmFj2oSzOX20F2d2wJ98KufGfleLNK+qKtUp6bzDJcq3CRn0q2G8YOJFq8LC9ucmarxzjzAyDvf0gFtAw==" />
+      <!--WebClient Timeout Settings-->
+      <Setting name ="WebClientTimeout" value="300000"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
@@ -66,6 +72,11 @@
       <Setting name="PictureProcessorCount" value="1" />
       <!--tracking-->
       <Setting name="mixpanel-token" value="" />
+      <!--application insight-->
+      <Setting name="verbosity" value="verbose" />
+      <Setting name="instrumentationKey" value="4d8d5f75-4ddd-4ae0-860e-db761617c5f9" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablesupport;AccountKey=NK4huhmFj2oSzOX20F2d2wJ98KufGfleLNK+qKtUp6bzDJcq3CRn0q2G8YOJFq8LC9ucmarxzjzAyDvf0gFtAw==" />
+      <Setting name ="WebClientTimeout" value="300000"/>
     </ConfigurationSettings>
   </Role>
   <Role name="Chalkable.BackgroundTaskProducer">
@@ -100,6 +111,8 @@
       <Setting name="TaskProducer.DbBackupProducer.IntervalEnd" value="86400" />
       <!--tracking-->
       <Setting name="mixpanel-token" value="" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablesupport;AccountKey=NK4huhmFj2oSzOX20F2d2wJ98KufGfleLNK+qKtUp6bzDJcq3CRn0q2G8YOJFq8LC9ucmarxzjzAyDvf0gFtAw==" />
+      <Setting name ="WebClientTimeout" value="300000"/>
     </ConfigurationSettings>
   </Role>
 </ServiceConfiguration>

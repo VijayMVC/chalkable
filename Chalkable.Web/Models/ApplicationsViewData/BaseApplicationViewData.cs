@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Web.Models.SchoolsViewData;
 
 namespace Chalkable.Web.Models.ApplicationsViewData
 {
@@ -19,6 +21,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public string Description { get; set; }
         public Guid? SmallPictureId { get; set; }
         public Guid? BigPictureId { get; set; }
+        public Guid? ExternalAttachPictureId { get; set; }
         public string MyAppsUrl { get; set; }
         public string SecretKey { get; set; }
         public int State { get; set; }
@@ -46,6 +49,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             ShortDescription = StringTools.BuildShortText(application.ShortDescription, SHORT_LENGHT);
             SmallPictureId = application.SmallPictureRef;
             BigPictureId = application.BigPictureRef;
+            ExternalAttachPictureId = application.ExternalAttachPictureRef;
             ApplicationAccess = ApplicationAccessViewData.Create(application);
             ApplicationPrice = ApplicationPriceViewData.Create(application);
             LiveAppId = application.OriginalRef;
@@ -109,21 +113,21 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public ApplicationRatingViewData ApplicationRating { get; set; }
         public bool IsInstalledOnlyForMe { get; set; }
         public IList<InstalledForPersonsGroupViewData> InstalledForPersonsGroup { get; set; } 
-        public IList<ApplicationInstallHistoryViewData> ApplicationInstallHistory { get; set; }
+        public IList<ApplicationActionHistoryViewData> ApplicationHistory { get; set; }
 
         protected ApplicationDetailsViewData(Application application,  IList<Category> categories, bool canGetSecretKey) 
             : base(application, categories, canGetSecretKey, null)
         {
         }
         public static ApplicationDetailsViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories, IList<ApplicationRating> appRatings
-            , IList<ApplicationInstallHistory> applicationInstallHistory)
+            , IList<ApplicationInstallHistory> applicationInstallHistory, IList<ApplicationBanHistory> applicationBanHistory)
         {
             var res = new ApplicationDetailsViewData(application, categories, false)
                 {
                     ApplicationRating = ApplicationRatingViewData.Create(appRatings),
                 };
-            if (applicationInstallHistory != null)
-                res.ApplicationInstallHistory = ApplicationInstallHistoryViewData.Create(applicationInstallHistory);
+            if (applicationInstallHistory != null || applicationBanHistory != null)
+                res.ApplicationHistory = ApplicationActionHistoryViewData.Create(applicationInstallHistory, applicationBanHistory);
             return res;
         }
     }
@@ -152,32 +156,62 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         }
     }
 
-    public class ApplicationInstallHistoryViewData
+    public class ApplicationActionHistoryViewData
     {
-        public int SchoolId { get; set; }
-        public string SchoolName { get; set; }
+        public IList<IdNameViewData<int>> Schools { get; set; }
+        //public int? SchoolId { get; set; }
+        //public string SchoolName { get; set; }
         public int PersonId { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
         public int OwnerRoleId { get; set; }
-        public DateTime InstallDate { get; set; }
-        public int InstalledCount { get; set; }
-        public decimal Price { get; set; }
-        public decimal Remains { get; set; }
+        public DateTime Date { get; set; }
+        public int? InstalledCount { get; set; }
+        public int Action { get; set; }
+        public decimal? Price { get; set; }
+        public decimal? Remains { get; set; }
 
-        public static IList<ApplicationInstallHistoryViewData> Create(IList<ApplicationInstallHistory> history)
+        public static IList<ApplicationActionHistoryViewData> Create(IList<ApplicationInstallHistory> appInstallhistory, IList<ApplicationBanHistory> applicationBanHistory)
         {
-            return history.Select(x => new ApplicationInstallHistoryViewData
+            var res = new List<ApplicationActionHistoryViewData>();
+            if (applicationBanHistory != null)
             {
-                FirstName = x.FirstName,
-                InstalledCount = x.InstalledCount,
-                LastName = x.LastName,
-                PersonId = x.PersonId,
-                SchoolId = x.SchoolId,
-                SchoolName = x.SchoolName,
-                OwnerRoleId = x.OwnerRoleId,
-                InstallDate = x.InstallDate
-            }).ToList();
+                var historyDic = appInstallhistory.GroupBy(x => x.ApplicationInstallActionId).ToDictionary(x=>x.Key, x=>x.ToList());
+                res.AddRange(historyDic.Select(x =>
+                {
+                    var historyRecord = x.Value.First();
+                    return new ApplicationActionHistoryViewData
+                    {
+                        Schools = x.Value.Select(y=>IdNameViewData<int>.Create(y.SchoolId, y.SchoolName)).ToList(),
+                        FirstName = historyRecord.FirstName,
+                        InstalledCount = x.Value.Sum(y => y.PersonCount),
+                        LastName = historyRecord.LastName,
+                        PersonId = historyRecord.PersonId,
+                        OwnerRoleId = historyRecord.OwnerRoleId,
+                        Date = historyRecord.Date,
+                        Action = (int) (historyRecord.Installed ? ApplicationActionEnum.Install : ApplicationActionEnum.UnInstall)
+                    };
+                }).ToList());
+            } 
+            if(applicationBanHistory != null)
+                res.AddRange(applicationBanHistory.Select(x=> new ApplicationActionHistoryViewData
+                {
+                    FirstName = x.PersonFirstName,
+                    LastName = x.PersonLastName,
+                    PersonId = x.PersonRef,
+                    OwnerRoleId = CoreRoles.DISTRICT_ADMIN_ROLE.Id,
+                    Action = (int)(x.Banned ? ApplicationActionEnum.Ban : ApplicationActionEnum.UnBan),
+                    Date = x.Date,
+                }));
+            return res.OrderByDescending(x=>x.Date).ToList();
         }
+    }
+
+    public enum ApplicationActionEnum
+    {
+        Install = 0,
+        UnInstall = 1,
+        Ban = 2,
+        UnBan = 3
     }
 }

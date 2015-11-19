@@ -1,5 +1,7 @@
 REQUIRE('chlk.BaseApp');
 
+REQUIRE('chlk.controllers.LpGalleryCategoryController');
+REQUIRE('chlk.controllers.LessonPlanGalleryController');
 REQUIRE('chlk.controllers.AnnouncementController');
 REQUIRE('chlk.controllers.AppMarketController');
 REQUIRE('chlk.controllers.AppsController');
@@ -16,6 +18,7 @@ REQUIRE('chlk.controllers.TeachersController');
 REQUIRE('chlk.controllers.MessageController');
 REQUIRE('chlk.controllers.DisciplineController');
 REQUIRE('chlk.controllers.NotificationController');
+REQUIRE('chlk.controllers.StandardController');
 REQUIRE('chlk.services.SearchService');
 REQUIRE('chlk.templates.search.SiteSearch');
 

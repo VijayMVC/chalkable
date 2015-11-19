@@ -1,18 +1,21 @@
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.announcement.AnnouncementType*/
     CLASS(
-        'AnnouncementType', [
+        UNSAFE, 'AnnouncementType', IMPLEMENTS(ria.serialize.IDeserializable), [
 
             function $(){
                 BASE();
                 this._description = null;
             },
 
-            [ria.serialize.SerializeProperty('cancreate')],
             Boolean, 'canCreate',
+
             String, 'description',
+
             [[String]],
             VOID, function setDescription(description){
                 this._description = description;
@@ -21,11 +24,18 @@ NAMESPACE('chlk.models.announcement', function () {
                 return this._description || this.getName()
             },
 
-            [ria.serialize.SerializeProperty('announcementtypeid')],
             Number, 'announcementTypeId',
 
-            [ria.serialize.SerializeProperty('issystem')],
             Boolean, 'system',
-            String, 'name'
+
+            String, 'name',
+
+            VOID, function deserialize(raw){
+                this.canCreate = SJX.fromValue(raw.cancreate, Boolean);
+                this.description = SJX.fromValue(raw.description, String);
+                this.announcementTypeId = SJX.fromValue(raw.announcementtypeid, Number);
+                this.system = SJX.fromValue(raw.issystem, Boolean);
+                this.name = SJX.fromValue(raw.name, String);
+            }
         ]);
 });

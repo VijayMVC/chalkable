@@ -13,5 +13,6 @@ namespace Chalkable.StiConnector.SyncModel
         public bool IsActive { get; set; }
         public bool IsSystem { get; set; }
         public bool? VisibleInClassroom { get; set; }
+        public override int DefaultOrder => 39;
     }
 }

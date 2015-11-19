@@ -20,6 +20,40 @@ NAMESPACE('chlk.templates.feed', function () {
             Number, 'importantCount',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'newNotificationCount'
+            Number, 'newNotificationCount',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'start',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'count',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.ChlkDate, 'startDate',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.ChlkDate, 'endDate',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.AnnouncementTypeEnum, 'annType',
+
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.GradingPeriodId, 'gradingPeriodId',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'latest',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'submitType',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'gradeLevels',
+
+            function hasFilters(){
+                return this.getAnnType() || this.getGradingPeriodId() || this.getStartDate() || this.getEndDate()
+            }
         ])
 });

@@ -11,5 +11,6 @@
         public string NCESCode { get; set; }
         public bool IsActive { get; set; }
         public bool IsSystem { get; set; }
+        public override int DefaultOrder => 45;
     }
 }

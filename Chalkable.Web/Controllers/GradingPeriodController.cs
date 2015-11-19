@@ -2,6 +2,7 @@
 using System.Web.Mvc;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.GradingViewData;
 
 namespace Chalkable.Web.Controllers
 {

@@ -18,6 +18,7 @@ NAMESPACE('chlk.models.schoolYear', function () {
                 this.startDate = SJX.fromDeserializable(raw.startdate, chlk.models.common.ChlkDate);
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
                 this.ablePostGradeBook = SJX.fromValue(raw.allowgradeposting, Boolean);
+                this.markingPeriodId = SJX.fromValue(raw.markingperiodid, chlk.models.id.MarkingPeriodId);
             },
 
             READONLY, chlk.models.id.GradingPeriodId, 'id',
@@ -26,6 +27,12 @@ NAMESPACE('chlk.models.schoolYear', function () {
             READONLY, chlk.models.common.ChlkDate, 'startDate',
             READONLY, chlk.models.common.ChlkDate, 'endDate',
             READONLY, Boolean, 'ablePostGradeBook',
+            READONLY, chlk.models.id.MarkingPeriodId, 'markingPeriodId',
+
+            [[chlk.models.common.ChlkDate]],
+            Boolean, function isDateInPeriod(date){
+                return this.getStartDate().getDate() <= date.getDate() && date.getDate() <= this.getEndDate().getDate();
+            },
 
             String, function getFinalTitleText(){
                 var res = this.getName() + ': ' + this.getStartDate().format('m/d/y - ')

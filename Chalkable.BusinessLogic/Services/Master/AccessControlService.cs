@@ -12,9 +12,9 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IAccessControlService
     {
         string GetAccessToken(string accessTokenUrl, string redirectUrl, string clientId,
-            string clientSecret, string userName, int? schoolYear, string scope);
+            string clientSecret, string userName, int? schoolYear, CoreRole role, string scope);
 
-        string GetAuthorizationCode(string clientId, string userName, int? schoolYear, string scope = null);
+        string GetAuthorizationCode(string clientId, string userName, int? schoolYear, CoreRole role, string scope = null);
         ApplicationRegistration GetApplication(string clientId);
         bool RegisterApplication(string clientId, string appSecretKey, string appUrl, string appName);
         void RemoveApplication(string clientId);
@@ -110,9 +110,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
         public string GetAccessToken(string accessTokenUrl, string redirectUrl, string clientId,
-            string clientSecret, string userName, int? schoolYearId, string scope)
+            string clientSecret, string userName, int? schoolYearId, CoreRole role, string scope)
         {
-            var authorizationCode = GetAuthorizationCode(clientId, userName, schoolYearId, scope);
+            var authorizationCode = GetAuthorizationCode(clientId, userName, schoolYearId, role, scope);
             var response = Authorize(new Uri(accessTokenUrl), clientId, clientSecret, scope, new Uri(redirectUrl), authorizationCode);
             if (response != null)
                 return response.AccessToken;
@@ -120,10 +120,11 @@ namespace Chalkable.BusinessLogic.Services.Master
                 , accessTokenUrl, redirectUrl, clientId, authorizationCode));
         }
 
-        public string GetAuthorizationCode(string clientId, string userName, int? schoolYearId, string scope = null)
+        public string GetAuthorizationCode(string clientId, string userName, int? schoolYearId, CoreRole role, string scope = null)
         {
             if (string.IsNullOrEmpty(scope))
                 scope = Settings.ApiExplorerScope; //TODO: this is wrong approach
+            userName = userName + Environment.NewLine + role.Id;
             if (schoolYearId.HasValue)
                 userName = userName + Environment.NewLine + schoolYearId;
             return regService.GetAuthorizationCode(clientId,

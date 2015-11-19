@@ -18,7 +18,7 @@ NAMESPACE('chlk.models.apps', function() {
             chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
 
             [[chlk.models.id.ClassId, chlk.models.id.AnnouncementId, ArrayOf(chlk.models.apps.ApplicationForAttach),
-                ArrayOf(chlk.models.standard.Standard), chlk.models.announcement.AnnouncementTypeEnum]],
+                ArrayOf(chlk.models.standard.Standard), String, chlk.models.announcement.AnnouncementTypeEnum]],
             function $(classId_, announcementId_, suggestedApps_, standards_, standardUrlComponents_, announcementType_){
                 BASE();
                 if(classId_)

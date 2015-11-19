@@ -9,7 +9,7 @@ REQUIRE('chlk.models.common.ChlkDate');
 
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.ClassId');
-REQUIRE('chlk.models.id.GalleryCategoryId');
+REQUIRE('chlk.models.id.LpGalleryCategoryId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
 
@@ -28,31 +28,6 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            ria.async.Future, function listCategories() {
-                return this.get('LPGalleryCategory/ListCategories.json', ArrayOf(chlk.models.announcement.CategoryViewData));
-            },
-
-            [[String]],
-            ria.async.Future, function addCategory(name) {
-                return this.get('LPGalleryCategory/CreateCategory.json', Boolean, {
-                    name: name
-                });
-            },
-
-            [[Number, String]],
-            ria.async.Future, function updateCategory(categoryId, name) {
-                return this.get('LPGalleryCategory/UpdateCategory.json', Boolean, {
-                    name: name,
-                    categoryId: categoryId
-                });
-            },
-
-            [[Number, String]],
-            ria.async.Future, function deleteCategory(categoryId) {
-                return this.get('LPGalleryCategory/DeleteCategory.json', Boolean, {
-                    categoryId: categoryId
-                });
-            },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
             ria.async.Future, function createFromTemplate(lessonPlanTplId, classId) {
@@ -62,11 +37,51 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String, Object]],
-            ria.async.Future, function searchLessonPlansTemplates(filter_, galleryCategoryId_) {
-                return this.get('LessonPlan/SearchLessonPlansTemplates.json', ArrayOf(chlk.models.announcement.LessonPlanViewData), {
-                    galleryCategoryId: this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, galleryCategoryId_),
-                    filter: filter_
+            [[
+                chlk.models.id.LpGalleryCategoryId,
+                String,
+                chlk.models.attachment.SortAttachmentType,
+                chlk.models.announcement.StateEnum,
+                Number,
+                Number
+            ]],
+            ria.async.Future, function getLessonPlanTemplatesList(categoryType_, filter_, sortType_, state_, start_, count_) {
+                return this.getPaginatedList('LessonPlan/LessonPlanTemplates.json', chlk.models.announcement.LessonPlanViewData, {
+                    start: start_ | 0,
+                    count: count_ | 12,
+                    filter: filter_,
+                    sortType: sortType_ && sortType_.valueOf(),
+                    state: state_ && state_.valueOf(),
+                    categoryType: categoryType_ && categoryType_.valueOf()
+                });
+            },
+
+
+
+            [[String, chlk.models.id.LpGalleryCategoryId]],
+            ria.async.Future, function getLessonPlanTemplateByTitle(title){
+                var MAX_INT = -(1 << 31) - 1;
+                return this.getLessonPlanTemplatesList(null, title, null, null, 0, MAX_INT)
+                    .then(function(data){
+                        var res = data.getItems().filter(function(item){
+                            return item.getTitle() == title;
+                        });
+                        return res.length > 0 ? res[0] : null;
+                    });
+            },
+
+            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementId]],
+            ria.async.Future, function replaceLessonPlanInGallery(oldLessonPlanId, newLessonPlanId){
+                return this.post('LessonPlan/ReplaceLessonPlanInGallery', Boolean, {
+                    oldLessonPlanId : oldLessonPlanId.valueOf(),
+                    newLessonPlanId : newLessonPlanId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId]],
+            ria.async.Future, function removeLessonPlanFromGallery(lessonPlanId){
+                return this.post('LessonPlan/RemoveLessonPlanFromGallery', Boolean,{
+                    lessonPlanId: lessonPlanId.valueOf()
                 });
             },
 
@@ -116,7 +131,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, Number
+            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, chlk.models.id.LpGalleryCategoryId
                 , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean,
                 Array
             ]],
@@ -135,7 +150,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, Number
+            [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, String, String, chlk.models.id.LpGalleryCategoryId
                 , chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean,
                 Array]],
             ria.async.Future, function submitLessonPlan(id, classId_, title_, content_, galleryCategoryId_

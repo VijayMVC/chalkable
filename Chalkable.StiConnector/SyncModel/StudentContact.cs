@@ -14,5 +14,6 @@
         public bool IsResponsibleForBill { get; set; }
         public bool ReceivesBill { get; set; }
         public bool StudentVisibleInHome { get; set; }
+        public override int DefaultOrder => 48;
     }
 }

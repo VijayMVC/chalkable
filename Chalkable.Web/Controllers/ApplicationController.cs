@@ -115,7 +115,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult BanApp(Guid applicationId)
         {
             Trace.Assert(Context.DistrictId.HasValue);
-            MasterLocator.ApplicationService.SetApplicationDistrictOptions(applicationId, Context.DistrictId.Value, true);
+            SchoolLocator.ApplicationSchoolService.BanUnBanApplication(applicationId, true);
             return Json(true);
         }
 
@@ -123,7 +123,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult UnbanApp(Guid applicationId)
         {
             Trace.Assert(Context.DistrictId.HasValue);
-            MasterLocator.ApplicationService.SetApplicationDistrictOptions(applicationId, Context.DistrictId.Value, false);
+            SchoolLocator.ApplicationSchoolService.BanUnBanApplication(applicationId, false);
             return Json(true);
         }
 
@@ -187,6 +187,12 @@ namespace Chalkable.Web.Controllers
             var res = SchoolLocator.ApplicationSchoolService.AddToAnnouncement(announcementId, (AnnouncementType) announcementType,applicationId);
             var appInstalls = SchoolLocator.AppMarketService.GetInstallations(applicationId, Context.PersonId.Value, false);
             var app = MasterLocator.ApplicationService.GetApplicationById(applicationId);
+
+
+            var assessmentApp = MasterLocator.ApplicationService.GetAssessmentApplication();
+            if (assessmentApp != null && applicationId == assessmentApp.Id)
+                MasterLocator.UserTrackingService.AttachedAssessment(Context.Login, announcementId);
+
             return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.PersonId));
         }
 
@@ -216,15 +222,24 @@ namespace Chalkable.Web.Controllers
 
 
         [AuthorizationFilter]
-        public ActionResult GetOauthCode(string applicationUrl)
+        public ActionResult GetOauthCode(string applicationUrl, Guid? applicationId)
         {
             //TODO: check if app is installed??
            
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
-            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(applicationUrl, SchoolLocator.Context.Login, SchoolLocator.Context.SchoolYearId);
+
+            var app = !string.IsNullOrWhiteSpace(applicationUrl) 
+                    ? MasterLocator.ApplicationService.GetApplicationByUrl(applicationUrl) : 
+                applicationId.HasValue 
+                    ? MasterLocator.ApplicationService.GetApplicationById(applicationId.Value) : null;
+
+            if (app == null)
+                throw new ChalkableException("Application not found");
+
+            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, Context.Login, Context.SchoolYearId, Context.Role);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
-            var app = MasterLocator.ApplicationService.GetApplicationByUrl(applicationUrl);
+            
             var appInstall = SchoolLocator.AppMarketService.GetInstallationForPerson(app.Id, Context.PersonId.Value);
             var hasMyApps = MasterLocator.ApplicationService.HasMyApps(app);
             var applicationInstalls = new List<ApplicationInstall>();

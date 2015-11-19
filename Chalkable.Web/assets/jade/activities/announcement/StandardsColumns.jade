@@ -3,7 +3,7 @@ mixin StandardColumn(tplObj, standards)
         td.name-td
             .standards-names.column
                 each standard in standards
-                    +ActionLink('announcement', 'showStandardsByCategory', tplObj.getClassId(), tplObj.getSubjectId(), standard.getDescription(), standard.getStandardId())(
+                    +ActionLink('standard', 'showStandardsByCategory', tplObj.getClassId(), tplObj.getSubjectId(), standard.getDescription(), standard.getStandardId())(
                     data-id=standard.getStandardId(),
                     class= standard.isSelected() ? 'active' : ''
                     ).standard-name.column-cell

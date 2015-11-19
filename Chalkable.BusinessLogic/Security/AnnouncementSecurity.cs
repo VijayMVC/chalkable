@@ -36,7 +36,7 @@ namespace Chalkable.BusinessLogic.Security
 
         public static bool CanDeleteAttachment(AnnouncementAttachment announcementAttachment, UserContext context)
         {
-            return BaseSecurity.IsSysAdmin(context) || announcementAttachment.PersonRef == context.PersonId;
+            return BaseSecurity.IsSysAdmin(context) || announcementAttachment.Attachment.PersonRef == context.PersonId;
         }
 
     }

@@ -14,7 +14,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.announcement.AnnouncementTypeEnum, 'type',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
+            ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.ClassAnnouncementViewData, 'classAnnouncementData'

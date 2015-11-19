@@ -1,4 +1,6 @@
 var ChlkSessionConstants = {
+    ATTACH_OPTIONS: 'attachOptions',
+    ATTRIBUTES_WITH_FILES: 'attributesWithFiles',
     FIRST_LOGIN: 'firstLogin',
     SCHOOL_YEAR:'schoolYear',
     USER_ROLE: 'role',
@@ -7,7 +9,9 @@ var ChlkSessionConstants = {
     MARKING_PERIODS: 'markingPeriods',
     NEXT_MARKING_PERIOD: 'nextMarkingPeriod',
     GRADING_PERIOD: 'gradingPeriod',
+    GRADING_PERIODS: 'gradingPeriods',
     FINALIZED_CLASS_IDS: 'finalizedClassesIds',
+    MESSAGING_SETTINGS: 'messagingSettings',
     CURRENT_CHLK_PERSON: 'currentChlkPerson',
     CURRENT_DEVELOPER: 'currentDeveloper',
     CURRENT_PERSON: 'currentPerson',
@@ -38,6 +42,7 @@ var ChlkSessionConstants = {
     CURRENT_APP_ID: 'currentAppId',
     CURRENT_APP: 'currentApp',
     CACHED_APP_CATEGORIES: 'cachedCategories',
+    ALL_APP_CATEGORIES: 'all_app_categories',
     API_CACHED: 'apiCached',
     API_ROLES: 'apiRoles',
     CURRENT_MESSAGES: 'currentMessages',
@@ -69,5 +74,6 @@ var ChlkSessionConstants = {
     LESSON_PLAN_CATEGORY_FOR_SEARCH: 'lessonPlanCategoryForSearch',
     ANNOUNCEMENT_ATTRIBUTES: 'announcementAttributes',
     ANNOUNCEMENT_ASSIGNED_ATTRIBUTES: 'announcementAssignedAttributes',
-    MESSAGING_DISABLED: 'messagingDisabled'
+    MESSAGING_DISABLED: 'messagingDisabled',
+    YEARS: 'years'
 };

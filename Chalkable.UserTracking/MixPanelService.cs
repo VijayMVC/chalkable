@@ -62,7 +62,7 @@ namespace Chalkable.UserTracking
             try
             {
                 var engage = GetEngage();
-                var properties = PrepareBasicProperties(email, firstName, lastName, "", firstLoginDate, "", CoreRoles.SUPER_ADMIN_ROLE.LoweredName);
+                var properties = PrepareBasicProperties(email, firstName, lastName, "", firstLoginDate, "", CoreRoles.SUPER_ADMIN_ROLE.LoweredName, false);
                 engage.Set(MakeId(email), ip, properties);
             }
             catch (Exception ex)
@@ -73,12 +73,12 @@ namespace Chalkable.UserTracking
         }
 
         public void IdentifyDistrictAdmin(string email, string firstName, string lastName, string schoolName,
-            DateTime? firstLoginDate, string timeZoneId, string role, string ip)
+            DateTime? firstLoginDate, string timeZoneId, string role, string ip, bool isStudyCenterEnabled)
         {
             try
             {
                 var engage = GetEngage();
-                var properties = PrepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, role);
+                var properties = PrepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, role, isStudyCenterEnabled);
                 engage.Set(MakeId(email), ip, properties);
             }
             catch (Exception ex)
@@ -90,12 +90,13 @@ namespace Chalkable.UserTracking
 
         private const string GRADE = "grade";
         public void IdentifyStudent(string email, string firstName, string lastName, string schoolName, 
-            string grade, DateTime? firstLoginDate, string timeZoneId, string ip)
+            string grade, DateTime? firstLoginDate, string timeZoneId, string ip, bool isStudyCenterEnabled)
         {
             try
             {
                 var engage = GetEngage();
-                var properties = PrepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, CoreRoles.STUDENT_ROLE.LoweredName);
+                var properties = PrepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, 
+                    timeZoneId, CoreRoles.STUDENT_ROLE.LoweredName, isStudyCenterEnabled);
                 properties[GRADE] = grade;
                 engage.Set(MakeId(email), ip, properties);
             }
@@ -107,12 +108,13 @@ namespace Chalkable.UserTracking
         }
 
         private const string TEACHER_ROLE = "teacher";
-        public void IdentifyTeacher(string email, string firstName, string lastName, string schoolName, List<string> classes, DateTime? firstLoginDate, string timeZoneId, string ip)
+        public void IdentifyTeacher(string email, string firstName, string lastName, string schoolName, List<string> classes, 
+            DateTime? firstLoginDate, string timeZoneId, string ip, bool isStudyCenterEnabled)
         {
             try
             {
                 var engage = GetEngage();
-                var properties = PrepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, "student");
+                var properties = PrepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, "student", isStudyCenterEnabled);
                 properties[CLASSES] = classes;
                 properties[ROLE] = TEACHER_ROLE;
                 //created at
@@ -130,16 +132,21 @@ namespace Chalkable.UserTracking
         private const string EMAIL_MIX = "$email";
         private const string LAST_LOGIN_MIX = "$last_login";
         private const string CREATED_MIX = "$created";
+        private const string IS_STUDYCENTER_CUSTOMER = "Study Center Customer";
 
-        private static Dictionary<string, object> PrepareBasicProperties(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate, string timeZoneId, string role)
+        private static Dictionary<string, object> PrepareBasicProperties(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate, string timeZoneId, string role, bool isStudyCenterCustomer)
         {
-            var properties = new Dictionary<string, object>();
+            var properties = new Dictionary<string, object>
+            {
+                [IS_STUDYCENTER_CUSTOMER] = isStudyCenterCustomer.ToString()
+            };
+
 
             if (string.IsNullOrEmpty(lastName))
             {
                 if (!string.IsNullOrEmpty(firstName))
                 {
-                    if (!String.Equals(email, firstName, StringComparison.CurrentCultureIgnoreCase))
+                    if (!string.Equals(email, firstName, StringComparison.CurrentCultureIgnoreCase))
                     {
                         var parts = Regex.Split(firstName.Trim(), @"\W+");
                         if (parts.Length > 1)
@@ -196,7 +203,7 @@ namespace Chalkable.UserTracking
             try
             {
                 var engage = GetEngage();
-                var properties = PrepareBasicProperties(email, userName, "", "", firstLoginDate, timeZoneId, CoreRoles.DEVELOPER_ROLE.LoweredName);
+                var properties = PrepareBasicProperties(email, userName, "", "", firstLoginDate, timeZoneId, CoreRoles.DEVELOPER_ROLE.LoweredName, false);
                 engage.Set(MakeId(email), ip, properties);
             }
             catch (Exception ex)
@@ -211,7 +218,7 @@ namespace Chalkable.UserTracking
             try
             {
                 var engage = GetEngage();
-                var properties = PrepareBasicProperties(email, firstName, lastName, "", firstLoginDate, "", CoreRoles.PARENT_ROLE.LoweredName);
+                var properties = PrepareBasicProperties(email, firstName, lastName, "", firstLoginDate, "", CoreRoles.PARENT_ROLE.LoweredName, false);
                 //created at
                 engage.Set(MakeId(email), ip, properties);
             }
@@ -360,9 +367,10 @@ namespace Chalkable.UserTracking
             SendEvent(email, UserTrackingEvents.ChangedEmail, properties);
         }
 
-        public void UserLoggedInForFirstTime(string email, string firstName, string lastName, string schoolName, DateTime? firstLoginDate, string timeZoneId, string role)
+        public void UserLoggedInForFirstTime(string email, string firstName, string lastName, string schoolName, 
+            DateTime? firstLoginDate, string timeZoneId, string role, bool isStudyCenterEnabled)
         {
-            var properties = PrepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, role);
+            var properties = PrepareBasicProperties(email, firstName, lastName, schoolName, firstLoginDate, timeZoneId, role, isStudyCenterEnabled);
             SendEvent(email, UserTrackingEvents.LoggedInForTheFirstTime, properties);
         }
 
@@ -423,7 +431,7 @@ namespace Chalkable.UserTracking
         {
             var properties = new Dictionary<string, object>();
             properties[DESCRIPTION] = description;
-            properties[CLASS] = classId.HasValue ? classId.Value.ToString(CultureInfo.InvariantCulture) : "";
+            properties[CLASS] = classId?.ToString(CultureInfo.InvariantCulture) ?? "";
             properties[STUDENT_ID] = studentId.ToString(CultureInfo.InvariantCulture);
             SendEvent(login, UserTrackingEvents.SetDiscipline, properties);
         }
@@ -450,17 +458,6 @@ namespace Chalkable.UserTracking
         private const string EXTRA_CREDITS = "extraCredits";
         private const string CALLED_FROM = "calledFrom";
 
-        public void SetScore(string login, int announcementId, int studentId, string gradeValue, string extraCredits, bool callFromGradeBook)
-        {
-            var properties = new Dictionary<string, object>();
-            properties[ANNOUNCEMENT_ID] = announcementId;
-            properties[STUDENT_ID] = studentId;
-            properties[GRADE] = gradeValue;
-            properties[EXTRA_CREDITS] = extraCredits;
-            properties[CALLED_FROM] = callFromGradeBook ? "Gradebook" : "Announcement View";
-            SendEvent(login, UserTrackingEvents.SetScore, properties);
-        }
-
         public void SetAttendance(string login, int classId)
         {
             var properties = new Dictionary<string, object>();
@@ -472,20 +469,62 @@ namespace Chalkable.UserTracking
         {
             var properties = new Dictionary<string, object>();
             properties[CLASS] = classId;
-            properties[GRADING_PERIOD_ID] = GRADING_PERIOD_ID;
+            properties[GRADING_PERIOD_ID] = gradingPeriodId;
             SendEvent(login, UserTrackingEvents.PostedGrades, properties);
         }
 
-        public void LoggedInFromChalkable(string login)
+        public void LoggedIn(string login)
         {
             var properties = new Dictionary<string, object>();
-            SendEvent(login, UserTrackingEvents.LoggedInFromChalkable, properties);
+            SendEvent(login, UserTrackingEvents.LoggedIn, properties);
         }
 
-        public void LoggedInFromINow(string login)
+        public void AttachedAssessment(string login, int announcementId)
         {
             var properties = new Dictionary<string, object>();
-            SendEvent(login, UserTrackingEvents.LoggedInFromINow, properties);
+            properties[ANNOUNCEMENT_ID] = announcementId;
+            SendEvent(login, UserTrackingEvents.AttachedAssessment, properties);
+        }
+
+        private const string STANDARD_NAME = "standard-name";
+        public void AttachedStandard(string login, string standardName)
+        {
+            var properties = new Dictionary<string, object>();
+            properties[STANDARD_NAME] = standardName;
+            SendEvent(login, UserTrackingEvents.AttachedStandard, properties);
+        }
+
+        private const string STANDARD_EXPLORER_TYPE = "explorer-type";
+        public void UsedStandardsExplorer(string login, string explorerType)
+        {
+            var properties = new Dictionary<string, object>();
+            properties[STANDARD_EXPLORER_TYPE] = explorerType;
+            SendEvent(login, UserTrackingEvents.UsedStandardsExplorer, properties);
+        }
+
+        public void AutoGradedItem(string login, int announcementId, int studentId, string grade)
+        {
+            var properties = new Dictionary<string, object>
+            {
+                [ANNOUNCEMENT_ID] = announcementId,
+                [STUDENT_ID] = studentId,
+                [GRADE] = grade
+            };
+            SendEvent(login, UserTrackingEvents.AutoGradedItem, properties);
+        }
+
+        public void CopiedLessonPlanFromGallery(string email)
+        {
+            var properties = new Dictionary<string, object>();
+            SendEvent(email, UserTrackingEvents.CopiedLessonPlanFromGallery, properties);
+        }
+
+
+        private const string LESSON_PLAN_TITLE = "lesson plan title";
+        public void SavedLessonPlanToGallery(string email, string lessonPlanTitle)
+        {
+            var properties = new Dictionary<string, object> {[LESSON_PLAN_TITLE] = lessonPlanTitle};
+            SendEvent(email, UserTrackingEvents.SavedLessonPlanToGallery, properties);
         }
 
         private const string DISTINCT_ID = "distinct_id";

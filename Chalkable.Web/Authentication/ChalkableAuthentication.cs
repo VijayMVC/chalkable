@@ -8,6 +8,7 @@ using System.Web.Security;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
+using Newtonsoft.Json;
 
 namespace Chalkable.Web.Authentication
 {
@@ -68,11 +69,14 @@ namespace Chalkable.Web.Authentication
             var ticket = new FormsAuthenticationTicket(1, context.Login, now, now.Add(FormsAuthentication.Timeout),
                 remember, context.ToString(), FormsAuthentication.FormsCookiePath);
 
-            GlobalCache.SetAuth(sessionKey, FormsAuthentication.Encrypt(ticket), FormsAuthentication.Timeout);            
-            GlobalCache.SetClaims(sessionKey, new JavaScriptSerializer().Serialize(context.Claims), FormsAuthentication.Timeout);
+            var userData = new GlobalCache.UserInfo
+            {
+                Auth = FormsAuthentication.Encrypt(ticket),
+                Claims = JsonConvert.SerializeObject(context.Claims),
+                SisToken = context.SisToken
+            };
 
-            if (!string.IsNullOrWhiteSpace(context.SisToken))
-                GlobalCache.SetSisToken(sessionKey, context.SisToken, FormsAuthentication.Timeout);
+            GlobalCache.SetUserInfo(sessionKey, userData, FormsAuthentication.Timeout);
         }
 
         public static void SignOut()
@@ -80,41 +84,30 @@ namespace Chalkable.Web.Authentication
             CleanSession();
         }
 
-        public static bool IsPersistentAuthentication()
-        {
-            var sessionKey = GetSessionKey();
-            if (sessionKey == null) return false;
-
-            var sl = GlobalCache.GetAuth(sessionKey);
-            if (sl == null) return false;
-
-            var ticket = FormsAuthentication.Decrypt(sl);
-            return ticket != null && ticket.IsPersistent;
-        }
-
         public static ChalkablePrincipal GetUser()
         {
             var sessionKey = GetSessionKey();
             if (sessionKey == null) return null;
 
-            var sl = GlobalCache.GetAuth(sessionKey);
-            if (sl == null) return null;
+            var userInfo = GlobalCache.GetUserInfo(sessionKey);
+            if (userInfo == null) return null;
 
-            var ticket = FormsAuthentication.Decrypt(sl);
+            var ticket = FormsAuthentication.Decrypt(userInfo.Auth);
             if (ticket == null || ticket.UserData == null)
                 return null;
 
-            var cntx = UserContext.FromString(ticket.UserData);
-            cntx.SisToken = GlobalCache.GetSisToken(sessionKey);
-
+            UserContext cntx;
+            if (!UserContext.TryConvertFromString(ticket.UserData, out cntx))
+                return null;
             if (!string.IsNullOrEmpty(cntx.DistrictServerUrl) && !Settings.ChalkableSchoolDbServers.Contains(cntx.DistrictServerUrl))
                 return null;
 
-            var userPermissionData = GlobalCache.GetClaims(sessionKey);
+            cntx.SisToken = userInfo.SisToken;
+
+            var userPermissionData = userInfo.Claims;
             if (!string.IsNullOrEmpty(userPermissionData))
             {
-                var serializer = new JavaScriptSerializer();
-                cntx.Claims = serializer.Deserialize<IList<ClaimInfo>>(userPermissionData);
+                cntx.Claims = JsonConvert.DeserializeObject<IList<ClaimInfo>>(userPermissionData);
             }
 
             return new ChalkablePrincipal(cntx);

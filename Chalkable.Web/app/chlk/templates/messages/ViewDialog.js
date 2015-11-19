@@ -24,13 +24,16 @@ NAMESPACE('chlk.templates.messages', function () {
             chlk.models.people.User, 'sender',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.people.User, 'recipient',
+            chlk.models.people.User, 'recipientPerson',
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'replay',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'sent',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'disabledMessaging',
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'inbox'

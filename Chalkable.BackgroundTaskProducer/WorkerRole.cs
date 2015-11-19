@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using Chalkable.BackgroundTaskProducer.Producers;
+using Chalkable.Common;
 using Chalkable.Web.Tools;
 using Microsoft.WindowsAzure.ServiceRuntime;
 using Mindscape.Raygun4Net;
@@ -38,7 +39,7 @@ namespace Chalkable.BackgroundTaskProducer
 #if !DEBUG
                     try
                     {
-                        raygunClient.SendInBackground(ex);
+                        raygunClient.SendInBackground(ex, new []{ Settings.WindowsAzureOAuthRelyingPartyName, "task-producer" });
                     }
                     catch (Exception) { }
 #else

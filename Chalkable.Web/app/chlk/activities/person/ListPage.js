@@ -8,8 +8,10 @@ NAMESPACE('chlk.activities.person', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.teacher.StudentsList)],
         [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersGridTpl, '', '.grid-container', ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersForGridTpl, chlk.activities.lib.DontShowLoader(), '.people-list', ria.mvc.PartialUpdateRuleActions.Append)],
+        //[ria.mvc.PartialUpdateRule(chlk.templates.people.UsersForGridTpl, chlk.activities.lib.DontShowLoader(), '.people-list', ria.mvc.PartialUpdateRuleActions.Append)],
         'ListPage', EXTENDS(chlk.activities.person.PersonGrid), [
+
+            Boolean, 'messagingDisabled',
 
             [[Object, String]],
             OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
@@ -20,6 +22,21 @@ NAMESPACE('chlk.activities.person', function () {
                     var newText = model.getUsers().getTotalCount() + oldText.slice(oldText.indexOf(' '));
                     totalNode.setHTML(newText);
                 }
+            },
+
+            [[Object]],
+            OVERRIDE, VOID, function onRefresh_(model) {
+                BASE(model);
+                this.setMessagingDisabled(model.getUsersList().isMessagingDisabled() || false);
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.people.UsersForGridTpl, chlk.activities.lib.DontShowLoader())],
+            VOID, function usersForGridAppend(tpl, model, msg_) {
+                tpl.options({
+                    messagingDisabled: this.isMessagingDisabled()
+                });
+                ria.dom.Dom(tpl.render()).appendTo(this.dom.find('.people-list'));
+                //this.dom.find('.people-list').appendChild(tpl.render());
             }
         ]);
 });

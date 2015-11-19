@@ -12,5 +12,6 @@ namespace Chalkable.StiConnector.SyncModel
         public short StartTime { get; set; }
         public short EndTime { get; set; }
         public Guid DistrictGuid { get; set; }
+        public override int DefaultOrder => 32;
     }
 }

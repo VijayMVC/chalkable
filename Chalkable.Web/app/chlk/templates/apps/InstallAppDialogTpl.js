@@ -27,6 +27,9 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'fromNewItem',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'fromSuggestedApps',
+
             Object, function calculateClassesTree_() {
                 var data = this.allClasses, isInstalled = this.isAlreadyInstalled_;
 
@@ -103,16 +106,16 @@ NAMESPACE('chlk.templates.apps', function () {
             [[chlk.models.id.ClassId]],
             Boolean, function isAlreadyInstalled_(classId) {
                 return this.app.getInstalledForGroups().some(function (_) {
-                    return _.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ
-                        && _.getId().valueOf() == classId.valueOf()
-                        && _.isInstalled();
+                    return _.grouptype == chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ.valueOf()
+                        && _.id == classId.valueOf()
+                        && _.isinstalled;
                 })
             },
 
             Boolean, function isAlreadyInstalledForMe_() {
                 return this.app.getInstalledForGroups().some(function (_) {
-                    return _.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER
-                        && _.isInstalled();
+                    return _.grouptype == chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER.valueOf()
+                        && _.isinstalled;
                 })
             }
         ])

@@ -14,7 +14,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             OVERRIDE, VOID, function deserialize(raw){
                 BASE(raw);
-                this.attachments = SJX.fromArrayOfDeserializables(raw.attachments, chlk.models.attachment.Attachment);
+                this.attachments = SJX.fromArrayOfDeserializables(raw.attachments, chlk.models.attachment.AnnouncementAttachment);
                 this.studentInfo = SJX.fromDeserializable(raw.studentinfo, chlk.models.people.User);
                 this.owner = SJX.fromDeserializable(raw.owner, chlk.models.people.User);
                 this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.Standard);
@@ -25,9 +25,11 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.oldLate = SJX.fromValue(raw.oldLate, Boolean);
                 this.oldIncomplete = SJX.fromValue(raw.oldIncomplete, Boolean);
                 this.oldExempt = SJX.fromValue(raw.oldExempt, Boolean);
+                if(raw.isCommentChanged)
+                    this.commentChanged = SJX.fromValue(raw.isCommentChanged, Boolean);
             },
 
-            ArrayOf(chlk.models.attachment.Attachment), 'attachments',
+            ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'attachments',
             chlk.models.people.User, 'studentInfo',
             chlk.models.people.User, 'owner',
             ArrayOf(chlk.models.standard.Standard), 'standards',
@@ -37,6 +39,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'oldLate',
             Boolean, 'oldIncomplete',
             Boolean, 'oldExempt',
+            Boolean, 'commentChanged',
 
             Object, function getGrade(value){
                 return value;//GradingStyler.getLetterByGrade(value, this.getGradingMapping(), this.getGradingStyle())

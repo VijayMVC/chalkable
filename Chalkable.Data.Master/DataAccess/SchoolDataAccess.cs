@@ -85,5 +85,38 @@ namespace Chalkable.Data.Master.DataAccess
                 };
             ExecuteStoredProcedure("spUpdateMessagingDisabled", ps);
         }
+
+        public void UpdateMessagingSettings(Guid? districtId, Guid? schoolId, bool studentMessaging,
+            bool studentToClassOnly, bool teacherToStudentMessaging, bool teacherToClassOnly)
+        {
+            Trace.Assert(districtId.HasValue != schoolId.HasValue);
+            IDictionary<string, object> ps = new Dictionary<string, object>
+                {
+                    {"@districtId", districtId},
+                    {"@schoolId", schoolId},
+                    {"@studentMessaging", studentMessaging},
+                    {"@studentToClassOnly", studentToClassOnly},
+                    {"@teacherToStudentMessaging", teacherToStudentMessaging},
+                    {"@teacherToClassOnly", teacherToClassOnly}
+                };
+            ExecuteStoredProcedure("spUpdateMessagingSettings", ps);
+
+        }
+
+        public MessagingSettings GetDistrictMessagingSettings(Guid districtId)
+        {
+            var res = new DbQuery();
+            var schoolN = nameof(School);
+            res.Sql.Append($@"Select
+	                             cast(Min(cast(School.StudentMessagingEnabled as int)) as bit) as StudentMessagingEnabled,
+	                             cast(Min(cast(School.StudentToClassMessagingOnly as int)) as bit) as StudentToClassMessagingOnly,
+	                             cast(Min(cast(School.TeacherToStudentMessaginEnabled as int)) as bit) as TeacherToStudentMessaginEnabled,
+	                             cast(Min(cast(School.TeacherToClassMessagingOnly as int)) as bit) as TeacherToClassMessagingOnly
+                              From School
+                          ");
+            new AndQueryCondition {{School.DISTRICT_REF_FIELD, districtId}}.BuildSqlWhere(res, schoolN);
+            res.Sql.Append($" Group by {schoolN}.{School.DISTRICT_REF_FIELD}");
+            return ReadOne<MessagingSettings>(res);
+        }
     }
 }

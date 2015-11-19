@@ -39,10 +39,10 @@
                                     .circle.white
                         each standard, i in classItem.getStandards()
                             -var abId = standard.getAcademicBenchmarkId()
-                            +ActionLink('appmarket', 'getSuggestedApps', classItem.getClazz().getId(), abId, standard.getUrlComponents())(
+                            +ActionLink('appmarket', 'getSuggestedApps', classItem.getClazz().getId(), abId, standard.getUrlComponents(null, true))(
                                 class = (self.showStandard(classItem, i) ? '' : 'hidden-item ') + (abId ? 'with-code' : '')
                             ).block-item.standard
-                                .left-block(data-tooltip-type="overflow", data-tooltip=standard.getDescription())=standard.getName()
+                                .left-block(data-tooltip=standard.getDescription())=standard.getName()
                                 -var value = standard.getStandardGrading().getGradeValue()
                                 .right-block
                                     -var numeric = standard.getStandardGrading().getNumericGrade()

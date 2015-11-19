@@ -2,6 +2,7 @@ REQUIRE('chlk.models.id.DailyAttendanceId');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.common.ChlkTime');
 REQUIRE('chlk.models.attendance.ClassAttendance');
+REQUIRE('chlk.models.attendance.CheckIn');
 
 NAMESPACE('chlk.models.attendance', function () {
     "use strict";
@@ -13,9 +14,6 @@ NAMESPACE('chlk.models.attendance', function () {
 
             chlk.models.common.ChlkDate, 'date',
 
-            [ria.serialize.SerializeProperty('arrivaltime')],
-            chlk.models.common.ChlkTime, 'arrivalTime',
-
             [ria.serialize.SerializeProperty('checkintime')],
             chlk.models.common.ChlkTime, 'checkInTime',
 
@@ -23,6 +21,11 @@ NAMESPACE('chlk.models.attendance', function () {
             Boolean, 'checkIn',
 
             [ria.serialize.SerializeProperty('periodattendances')],
-            ArrayOf(chlk.models.attendance.ClassAttendance), 'periodAttendances'
+            ArrayOf(chlk.models.attendance.ClassAttendance), 'periodAttendances',
+
+
+            [ria.serialize.SerializeProperty('checkincheckouts')],
+            ArrayOf(chlk.models.attendance.CheckIn), 'checkInCheckOuts'
+
         ]);
 });

@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.common.attachments.ToolbarButton');
 REQUIRE('chlk.models.id.AnnouncementId');
+REQUIRE('chlk.models.attachment.Attachment');
 
 NAMESPACE('chlk.models.common.attachments', function () {
     "use strict";
@@ -11,9 +12,9 @@ NAMESPACE('chlk.models.common.attachments', function () {
 
             String, 'url',
 
-            Number, 'type',
+            chlk.models.attachment.AttachmentTypeEnum, 'type',
 
-            [[String, ArrayOf(chlk.models.common.attachments.ToolbarButton), Number]],
+            [[String, ArrayOf(chlk.models.common.attachments.ToolbarButton), chlk.models.attachment.AttachmentTypeEnum]],
             function $(url, buttons, type_){
                 BASE();
                 this.setUrl(url);

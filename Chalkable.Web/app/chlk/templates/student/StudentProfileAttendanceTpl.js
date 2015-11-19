@@ -27,7 +27,7 @@ NAMESPACE('chlk.templates.student', function(){
                 for(var i = 0; i < hoverItems.length; i++){
                     items.push({
                         data: hoverItems[i],
-                        total: hoverItems[i].getValue(),
+                        total: hoverItems[i].getValue() || 0,
                         summary: hoverItems[i].getClassName()
                     });
                 }

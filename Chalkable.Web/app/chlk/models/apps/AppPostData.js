@@ -23,6 +23,11 @@ NAMESPACE('chlk.models.apps', function () {
             Boolean, 'studentMyAppsEnabled',
             Boolean, 'parentMyAppsEnabled',
             Boolean, 'attachEnabled',
+
+            Boolean, 'studentExternalAttachEnabled',
+            Boolean, 'teacherExternalAttachEnabled',
+            Boolean, 'adminExternalAttachEnabled',
+
             Boolean, 'showInGradingViewEnabled',
             Boolean, 'advancedApp',
 
@@ -36,6 +41,8 @@ NAMESPACE('chlk.models.apps', function () {
 
             chlk.models.id.PictureId, 'appIconId',
             chlk.models.id.PictureId, 'appBannerId',
+            chlk.models.id.PictureId, 'appExternalAttachPictureId',
+
             String, 'appScreenshots',
 
 

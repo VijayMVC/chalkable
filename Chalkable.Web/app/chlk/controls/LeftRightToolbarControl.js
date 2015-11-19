@@ -98,7 +98,8 @@ NAMESPACE('chlk.controls', function () {
 
                             var elements = thirdContainer.find('>*');
                             var elWidthWithoutBorders = configs.elWidth || elements.width();
-                            var elWidth = elWidthWithoutBorders + parseInt(elements.getCss('border-right-width'), 10) + parseInt(elements.getCss('border-left-width'), 10);
+                            var elWidth = elWidthWithoutBorders + parseInt(elements.getCss('border-right-width'), 10) + parseInt(elements.getCss('border-left-width'), 10)
+                                + parseInt(elements.getCss('padding-left'), 10) + parseInt(elements.getCss('padding-right'), 10);
                             var baseMargin = configs.baseMargin;
                             var baseAllWidth = elWidth + baseMargin;
                             var allWidth = width + baseMargin;

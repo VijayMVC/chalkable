@@ -26,7 +26,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             OVERRIDE, VOID, function deserialize(raw) {
                 BASE(raw);
-                this.announcementAttachments = SJX.fromArrayOfDeserializables(raw.announcementattachments, chlk.models.attachment.Attachment);
+                this.announcementAttachments = SJX.fromArrayOfDeserializables(raw.announcementattachments, chlk.models.attachment.AnnouncementAttachment);
                 this.announcementAttributes = SJX.fromArrayOfDeserializables(raw.announcementattributes, chlk.models.announcement.AnnouncementAttributeViewData);
                 this.announcementAssignedAttrs = SJX.fromValue(raw.announcementAssignedAttrs, String);
                 this.announcementQnAs = SJX.fromArrayOfDeserializables(raw.announcementqnas, chlk.models.announcement.AnnouncementQnA);
@@ -50,19 +50,18 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.announcement.CategoryViewData);
 
                 this.submitType = SJX.fromValue(raw.submitType, String);
-                this.galleryCategoryId = SJX.fromValue(raw.galleryCategoryId, Number);
-                this.hiddenFromStudents = SJX.fromValue(raw.hidefromstudents, Boolean);
+                this.galleryCategoryId = SJX.fromValue(raw.galleryCategoryId, chlk.models.id.LpGalleryCategoryId);
+                this.hiddenFromStudents = this.isFeedItemHidden_(raw);
                 this.announcementTypeId = SJX.fromValue(raw.announcementTypeId, Number);
                 this.maxScore = SJX.fromValue(raw.maxscore, Number);
                 this.weightMultiplier = SJX.fromValue(raw.weightmultiplier, Number);
                 this.weightAddition = SJX.fromValue(raw.weightaddition, Number);
-                this.hiddenFromStudents = SJX.fromValue(raw.hidefromstudents, Boolean);
                 this.expiresDate = SJX.fromDeserializable(raw.expiresdate, chlk.models.common.ChlkDate);
                 this.startDate = SJX.fromDeserializable(raw.startdate, chlk.models.common.ChlkDate);
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
                 this.classId = SJX.fromValue(raw.classId, chlk.models.id.ClassId);
                 this.ableDropStudentScore = SJX.fromValue(raw.candropstudentscore, Boolean);
-                this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, Number);
+                this.galleryCategoryForSearch = SJX.fromValue(raw.galleryCategoryForSearch, chlk.models.id.LpGalleryCategoryId);
                 this.filter = SJX.fromValue(raw.filter, String);
                 this.announcementForTemplateId = SJX.fromValue(raw.announcementForTemplateId, chlk.models.id.AnnouncementId);
 
@@ -89,7 +88,7 @@ NAMESPACE('chlk.models.announcement', function () {
 
             ArrayOf(chlk.models.announcement.AnnouncementAttributeViewData), 'announcementAttributes',
             String, 'announcementAssignedAttrs',
-            ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
+            ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
             ArrayOf(chlk.models.announcement.AnnouncementQnA), 'announcementQnAs',
             ArrayOf(chlk.models.apps.AppAttachment), 'applications',
             ArrayOf(chlk.models.standard.Standard), 'standards',
@@ -114,8 +113,8 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'ableEdit',
             chlk.models.id.MarkingPeriodId, 'markingPeriodId',
             ArrayOf(chlk.models.apps.AppAttachment), 'gradeViewApps',
-            Number, 'galleryCategoryId',
-            Number, 'galleryCategoryForSearch',
+            chlk.models.id.LpGalleryCategoryId, 'galleryCategoryId',
+            chlk.models.id.LpGalleryCategoryId, 'galleryCategoryForSearch',
             String, 'filter',
             Boolean, 'hiddenFromStudents',
             chlk.models.common.ChlkDate, 'expiresDate',
@@ -127,6 +126,19 @@ NAMESPACE('chlk.models.announcement', function () {
             Boolean, 'ableDropStudentScore',
             chlk.models.id.ClassId, 'classId',
             chlk.models.id.AnnouncementId, 'announcementForTemplateId',
+
+
+            [[Object]],
+            Boolean, function isFeedItemHidden_(raw){
+                var viewData = raw.classannouncementdata;
+                if (!viewData)
+                    viewData = raw.lessonplandata;
+                if (!viewData)
+                    viewData = raw.adminannouncementdata;
+                if (!viewData)
+                    viewData = {hidefromstudents : raw.hidefromstudents || false};
+                return SJX.fromValue(viewData.hidefromstudents, Boolean);
+            },
 
             function getTitleModel(){
                 var title = this.getClassAnnouncementData() ? this.getClassAnnouncementData().getTitle() :

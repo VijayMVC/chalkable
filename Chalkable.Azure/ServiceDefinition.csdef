@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ServiceDefinition name="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2014-06.2.4">
+<ServiceDefinition name="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceDefinition" schemaVersion="2015-04.2.6">
   <WebRole name="Chalkable.Web" vmsize="Medium">
     <Sites>
       <Site name="Web">
@@ -50,6 +50,12 @@
       <Setting name="mixpanel-token" />
       <!-- other settings -->
       <Setting name="home-redirect-url" />
+      <!--application insight-->
+      <Setting name="verbosity" />
+      <Setting name="instrumentationKey" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <!--WebClient Timeout Setting-->
+      <Setting name ="WebClientTimeout"/>
     </ConfigurationSettings>
   </WebRole>
   <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Medium">
@@ -78,6 +84,11 @@
       <Setting name="PictureProcessorCount" />
       <!--tracking-->
       <Setting name="mixpanel-token" />
+      <!--application insight-->
+      <Setting name="verbosity" />
+      <Setting name="instrumentationKey" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name ="WebClientTimeout"/>
     </ConfigurationSettings>
   </WorkerRole>
   <WorkerRole name="Chalkable.BackgroundTaskProducer" vmsize="ExtraSmall">
@@ -112,6 +123,8 @@
       <Setting name="TaskProducer.DbBackupProducer.IntervalEnd" />
       <!--tracking-->
       <Setting name="mixpanel-token" />
+      <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
+      <Setting name ="WebClientTimeout"/>
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>

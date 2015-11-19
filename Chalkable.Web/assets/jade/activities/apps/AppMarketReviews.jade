@@ -16,7 +16,7 @@ if !self.userRole.isStudent()
         +ActionForm('appmarket', 'writeReview')#submit-review-form
             +Hidden('appId', app.getId().valueOf())
             .review-area
-                textarea(class="validate[required]").review-text(placeholder="Write a review", name="reviewText")=review
+                +TextArea(class="validate[required]").review-text(placeholder="Write a review", name="reviewText")=review
                 .review-container
                     +Rating('newRating', rating, true)
                     .rating-hint

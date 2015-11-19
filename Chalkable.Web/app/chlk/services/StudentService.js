@@ -13,6 +13,11 @@ NAMESPACE('chlk.services', function () {
     /** @class chlk.services.StudentService*/
     CLASS(
         'StudentService', EXTENDS(chlk.services.BaseService), [
+
+            chlk.models.student.StudentGradingInfo, 'currentStudentGradingSummary',
+
+            ArrayOf(chlk.models.grading.ClassPersonGradingInfo), 'classPersonGradingInfo',
+
             [[chlk.models.id.ClassId, String, Boolean, Boolean, Number, Number]],
             ria.async.Future, function getStudents(classId_, filter_, myStudentsOnly_, byLastName_, start_, count_) {
                 return this.getPaginatedList('Student/GetStudents.json', chlk.models.people.User, {
@@ -76,7 +81,43 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Student/GradingSummary.json', chlk.models.student.StudentGradingInfo, {
                     studentId: studentId && studentId.valueOf(),
                     gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf()
-                });
+                }).then(function(model){
+                    this.setCurrentStudentGradingSummary(model);
+                    return model;
+                }, this);
+            },
+
+            [[chlk.models.id.SchoolPersonId, chlk.models.id.GradingPeriodId]],
+            ria.async.Future, function getGradingDetailsForPeriod(studentId, gradingPeriodId){
+                return this.get('Student/GradingDetails.json', Object, {
+                    studentId: studentId && studentId.valueOf(),
+                    gradingPeriodId: gradingPeriodId.valueOf()
+                }).then(function(items){
+                    items = ria.serialize.SJX.fromArrayOfDeserializables(items.classavgs, chlk.models.grading.ClassPersonGradingInfo);
+                    this.setClassPersonGradingInfo(items);
+                    var model = this.getCurrentStudentGradingSummary().getGradesByGradingPeriod().filter(function(item){return item.getGradingPeriod().getId() == gradingPeriodId })[0];
+                    model.getStudentGradings().forEach(function(item, i){
+                        var current = items.filter(function(gradingItem){
+                            return item.getClazz().getId() == gradingItem.getClassId()
+                        })[0];
+                        if(current){
+                            var info = current.getGradingByAnnouncementTypes();
+                            info && item.setGradingByAnnouncementTypes(info);
+                        }
+                    });
+                    console.info(model);
+                    return model;
+                }, this);
+            },
+
+            [[Number, chlk.models.id.ClassId]],
+            chlk.models.grading.ClassPersonGradingItem, function getGradingActivitiesForStudent(announcementTypeId, classId){
+                var item = this.getClassPersonGradingInfo().filter(function(classInfo){
+                    return classInfo.getClassId() == classId
+                })[0].getGradingByAnnouncementTypes().filter(function(typeInfo){
+                        return typeInfo.getAnnouncementType().getId() == announcementTypeId
+                    })[0];
+                return item;
             },
 
             [[chlk.models.id.SchoolPersonId]],

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -13,6 +15,13 @@ using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
+    public enum MarkDoneOptions
+    {
+        TillToday = 1,
+        Till30Days,
+        All
+    }
+
     public interface IBaseAnnouncementService 
     {
         Announcement GetAnnouncementById(int id);
@@ -24,6 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
         void SetComplete(int id, bool complete);
+        void SetComplete(int? classId, MarkDoneOptions option);
         void SetAnnouncementsAsComplete(DateTime? date, bool complete);
         bool CanAddStandard(int announcementId);
 
@@ -157,6 +167,41 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
         {
             return DoRead(u => new AnnouncementStandardDataAccess(u).GetAnnouncementStandardsByClassId(classId));
-        }    
+        }
+
+        public void SetComplete(int? classId, MarkDoneOptions option)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            DateTime? tillDateToUpdate;
+            switch (option)
+            {
+                case MarkDoneOptions.Till30Days:
+                    tillDateToUpdate = Context.NowSchoolTime.AddMonths(-1);
+                    break;
+                case MarkDoneOptions.TillToday:
+                    tillDateToUpdate = Context.NowSchoolTime.AddDays(-1);
+                    break;
+                default:
+                    tillDateToUpdate = GetEndDateFromFeedSettings();
+                    break;
+
+            }
+            SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, tillDateToUpdate, classId);
+        }
+
+        private DateTime? GetEndDateFromFeedSettings()
+        {
+            var feedEndDateSetting = ServiceLocator.AnnouncementFetchService.GetSettingsForFeed().ToDate;
+                //ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value,
+                //new List<string> { PersonSetting.FEED_END_DATE });
+            if (feedEndDateSetting.HasValue)
+                return feedEndDateSetting;
+
+           return Context.SchoolYearEndDate;
+        }
+
+        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId);
     }
 }

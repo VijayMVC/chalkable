@@ -1,6 +1,7 @@
 REQUIRE('chlk.controllers.BaseController');
 
 REQUIRE('chlk.services.GroupService');
+REQUIRE('chlk.services.ClassService');
 
 REQUIRE('chlk.activities.announcement.GroupStudentsFilterDialog');
 
@@ -13,6 +14,9 @@ NAMESPACE('chlk.controllers', function () {
             [ria.mvc.Inject],
             chlk.services.GroupService, 'groupService',
 
+            [ria.mvc.Inject],
+            chlk.services.ClassService, 'classService',
+
             [[chlk.models.group.AnnouncementGroupsViewData]],
             function showAction(model) {
                 var res = this.groupService.list()
@@ -23,7 +27,7 @@ NAMESPACE('chlk.controllers', function () {
                     }, this)
                     .attach(this.validateResponse_());
 
-                return this.ShadeView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
+                return this.ShadeOrUpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
             },
 
             [[chlk.models.id.GroupId]],
@@ -166,32 +170,34 @@ NAMESPACE('chlk.controllers', function () {
                 return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
             },
 
-            function editGroupsAction() {
+            [[chlk.models.id.AnnouncementId]],
+            function editGroupsAction(announcementId) {
                 var res = this.groupService.list()
                     .then(function (groups) {
-                        return new chlk.models.group.GroupsListViewData(groups);
+                        return new chlk.models.group.GroupsListViewData(groups, announcementId);
                     })
                     .attach(this.validateResponse_());
 
                 return this.ShadeView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
             },
 
-            [[chlk.models.id.GroupId]],
-            function tryDeleteGroupAction(groupId) {
+            [[chlk.models.id.GroupId, chlk.models.id.AnnouncementId]],
+            function tryDeleteGroupAction(groupId, announcementId) {
                 this.ShowConfirmBox('Are you sure you want to delete this group?', "whoa.", null, 'negative-button')
                     .then(function (data) {
-                        return this.BackgroundNavigate('group', 'deleteGroup', [groupId]);
+                        return this.BackgroundNavigate('group', 'deleteGroup', [groupId, announcementId]);
                     }, this);
                 return null;
             },
 
-            [[chlk.models.id.GroupId]],
-            function deleteGroupAction(groupId) {
+            [[chlk.models.id.GroupId, chlk.models.id.AnnouncementId]],
+            function deleteGroupAction(groupId, announcementId) {
                 var res = this.groupService
                     .deleteGroup(groupId)
                     .then(function (groups) {
-                        this.afterGroupEdit_(groups);
-                        return new chlk.models.group.GroupsListViewData(groups);
+                        this.afterGroupEdit_(groups, announcementId);
+                        //this.BackgroundNavigate('announcement', 'showGroups', [announcementId]);
+                        return new chlk.models.group.GroupsListViewData(groups, announcementId);
                     }, this)
                     .attach(this.validateResponse_());
 
@@ -203,8 +209,8 @@ NAMESPACE('chlk.controllers', function () {
                 var res = this.groupService
                     .create(model.getName())
                     .then(function (groups) {
-                        this.afterGroupEdit_(groups);
-                        return new chlk.models.group.GroupsListViewData(groups);
+                        this.afterGroupEdit_(groups, model.getAnnouncementId());
+                        return new chlk.models.group.GroupsListViewData(groups, model.getAnnouncementId());
                     }, this)
                     .attach(this.validateResponse_());
 
@@ -216,8 +222,8 @@ NAMESPACE('chlk.controllers', function () {
                 var res = this.groupService
                     .editName(model.getId(), model.getName())
                     .then(function (groups) {
-                        this.afterGroupEdit_(groups);
-                        return new chlk.models.group.GroupsListViewData(groups);
+                        this.afterGroupEdit_(groups, model.getAnnouncementId());
+                        return new chlk.models.group.GroupsListViewData(groups, model.getAnnouncementId());
                     }, this)
                     .attach(this.validateResponse_());
 
@@ -242,15 +248,20 @@ NAMESPACE('chlk.controllers', function () {
                 return this.Redirect('group', 'showGradeLevelMembers', [model.getGroupId(), model.getSchoolYearId(), model.getGradeLevelId(), model.getClassIds()]);
             },
 
-            function afterGroupEdit_(groups) {
+            function afterGroupEdit_(groups, announcementId) {
+                var groupsIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []);
+                var model = new chlk.models.group.AnnouncementGroupsViewData(groups, announcementId, groupsIds, 'announcement', 'saveGroupsToAnnouncement', 'groupIds', {
+                    id: announcementId
+                });
                 this.getContext().getSession().set(ChlkSessionConstants.GROUPS_LIST, groups);
-                this.BackgroundUpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, groups, 'after-edit');
+                this.BackgroundUpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, model);
             },
 
-            function addGroupAction() {
-                var res = new ria.async.DeferredData(new chlk.models.group.Group);
-
-                return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
+            [[chlk.models.id.AnnouncementId]],
+            function addGroupAction(announcementId) {
+                var group = new chlk.models.group.Group();
+                group.setAnnouncementId(announcementId);
+                return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, new ria.async.DeferredData(group));
             }
         ]);
 

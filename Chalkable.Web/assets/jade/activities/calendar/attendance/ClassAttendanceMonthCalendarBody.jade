@@ -11,10 +11,7 @@
         each line in self.getItemsGroupped()
             .row
                 each item in line
-                    +ActionLink('attendance', 'classList',  item.getClassId(), item.getDate().format('mm-dd-yy'), false, true
-                    )(class = [item.isSunday() ? 'sunday' : '', item.getClassName(), item.getTodayClassName(), item.isWithAttendanceIssues() ? 'with-anns' : '']).gradient-cnt.item
-                        div
-                            h2.number=item.getDay()
-                            .space
+                    span(class = [item.isSunday() ? 'sunday' : '', item.getClassName(), item.getTodayClassName(), item.isWithAttendanceIssues() ? 'with-anns' : ''])
+                        +ActionLink('attendance', 'classList',  item.getClassId(), item.getDate().format('mm-dd-yy'), false, true).number.h2=item.getDay()
 
 

@@ -63,10 +63,10 @@ NAMESPACE('chlk.activities.grading', function () {
                 var option = select.find('[data-code=' + value + ']');
                 if(option.exists()){
                     select.setValue(option.getAttr('value'));
-                    select.trigger('liszt:updated');
+                    select.trigger('chosen:updated');
                 }else{
                     select.setValue('');
-                    select.trigger('liszt:updated');
+                    select.trigger('chosen:updated');
                 }
             },
 
@@ -202,7 +202,8 @@ NAMESPACE('chlk.activities.grading', function () {
                     tpl.options({
                         gradingPeriodId: new chlk.models.id.GradingPeriodId(container.getData('grading-period-id')),
                         ableDisplayAlphaGrades: !!container.getData('able-display-alpha-grades'),
-                        roundDisplayedAverages: !!container.getData('able-round-displayed-averages')
+                        roundDisplayedAverages: !!container.getData('able-round-displayed-averages'),
+                        ableDisplayStudentAverage: !!container.getData('able-display-student-average')
                     });
                     tpl.renderTo(container.setHTML(''));
                 }
@@ -269,7 +270,7 @@ NAMESPACE('chlk.activities.grading', function () {
                 flag.setData('tooltip', model.getTooltipText(maxValue));
             },
 
-            [ria.mvc.DomEventBind('click', '.grading-select + .chzn-container')],
+            [ria.mvc.DomEventBind('click', '.grading-select + .chosen-container')],
             [[ria.dom.Dom, ria.dom.Event]],
             function clickSelect(node, event){
                 event.stopPropagation();

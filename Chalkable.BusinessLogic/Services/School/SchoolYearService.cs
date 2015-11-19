@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
-using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
@@ -19,9 +16,10 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<SchoolYear> Edit(IList<SchoolYear> schoolYears); 
         SchoolYear GetSchoolYearById(int id);
         PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue);
+        IList<int> GetYears(); 
         void Delete(IList<int> schoolYearIds);
         SchoolYear GetCurrentSchoolYear();
-        IList<SchoolYear> GetSortedYears();
+        IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true); 
         IList<StudentSchoolYear> GetStudentAssignments();
         void AssignStudent(IList<StudentSchoolYear> studentAssignments);
         void UnassignStudents(IList<StudentSchoolYear> studentSchoolYears);
@@ -45,7 +43,13 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new SchoolYearDataAccess(u).GetPage(start, count));
         }
 
-       
+        public IList<int> GetYears()
+        {
+            var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYears();
+            return schoolYears.Select(x => x.AcadYear).Distinct().OrderBy(x => x).ToList();
+        }
+
+
         public SchoolYear GetCurrentSchoolYear()
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
@@ -59,10 +63,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 return res ?? da.GetLast(nowDate, Context.SchoolLocalId.Value);
             }
         }
-
-        public IList<SchoolYear> GetSortedYears()
+        
+        public IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true)
         {
-            return DoRead(u => new SchoolYearDataAccess(u).GetAll());
+            var conds = new AndQueryCondition {{SchoolYear.ACAD_YEAR_FIELD, year}};
+            if(activeOnly)
+                conds.Add(SchoolYear.ARCHIVE_DATE, null);
+            return DoRead(u=> new SchoolYearDataAccess(u).GetAll(conds));
         }
 
         public IList<SchoolYear> Add(IList<SchoolYear> schoolYears)

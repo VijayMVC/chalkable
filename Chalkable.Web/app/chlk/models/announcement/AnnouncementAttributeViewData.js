@@ -5,21 +5,22 @@ REQUIRE('chlk.models.id.AnnouncementAssignedAttributeId');
 REQUIRE('chlk.models.id.AnnouncementAssignedAttributeAttachmentId');
 REQUIRE('chlk.models.id.AnnouncementAttributeTypeId');
 REQUIRE('chlk.models.id.SisAssignedAttributeId');
+REQUIRE('chlk.models.attachment.Attachment');
 
 NAMESPACE('chlk.models.announcement', function(){
 
 
     var SJX = ria.serialize.SJX;
 
-    /**@class chlk.models.announcement.AssignedAttributeAttachmentViewData*/
+    /**@class chlk.models.announcement.AnnouncementAttributeAttachmentViewData*/
 
-    UNSAFE, FINAL, CLASS('AnnouncementAttributeAttachmentViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
+    CLASS(UNSAFE, FINAL, 'AnnouncementAttributeAttachmentViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
 
         chlk.models.id.AnnouncementAssignedAttributeAttachmentId, 'id',
         String, 'name',
         String, 'url',
         String, 'thumbnailUrl',
-        Number, 'type',
+        chlk.models.attachment.AttachmentTypeEnum, 'type',
         String, 'uuid',
         String, 'mimeType',
         Boolean, 'stiAttachment',
@@ -38,7 +39,7 @@ NAMESPACE('chlk.models.announcement', function(){
             this.url = SJX.fromValue(raw.url, String);
             this.uuid = SJX.fromValue(raw.uuid, String);
             this.thumbnailUrl = SJX.fromValue(raw.thumbnailurl, String);
-            this.type = SJX.fromValue(raw.type, Number);
+            this.type = SJX.fromValue(raw.type, chlk.models.attachment.AttachmentTypeEnum);
             this.stiAttachment = SJX.fromValue(raw.stiattachment, Boolean);
             this.mimeType = SJX.fromValue(raw.mimetype, String);
         },
@@ -66,7 +67,7 @@ NAMESPACE('chlk.models.announcement', function(){
 
     /**@class chlk.models.announcement.AnnouncementAttributeViewData*/
 
-    UNSAFE, FINAL, CLASS('AnnouncementAttributeViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
+    CLASS(UNSAFE, FINAL, 'AnnouncementAttributeViewData', IMPLEMENTS(ria.serialize.IDeserializable), [
         chlk.models.id.AnnouncementAssignedAttributeId, 'id',
 
         String, 'name',
@@ -120,9 +121,9 @@ NAMESPACE('chlk.models.announcement', function(){
                 visibleforstudents: this.isVisibleForStudents(),
                 attributetypeid: this.getAttributeTypeId().valueOf(),
                 id: this.getId().valueOf(),
-                announcementref: this.getAnnouncementRef().valueOf(),
-                attributeattachment: this.getAttributeAttachment().getId() ? this.getAttributeAttachment().getPostData() : null,
-                sisactivityassignedattributeid: this.getSisActivityAssignedAttributeId() ? this.getSisActivityAssignedAttributeId().valueOf() : null
+                announcementid: this.getAnnouncementRef().valueOf(),
+                attachmentid: this.getAttributeAttachment().getId() ? this.getAttributeAttachment().getId().valueOf() : null,
+                attributeattachment: this.getAttributeAttachment().getId() ? this.getAttributeAttachment().getPostData() : null
             }
         },
 

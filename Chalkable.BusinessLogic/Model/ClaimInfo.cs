@@ -14,6 +14,7 @@ namespace Chalkable.BusinessLogic.Model
         public const string VIEW_HEALTH_CONDITION = "View Health Condition";
         public const string VIEW_MEDICAL = "View Medical";
         public const string CHALKABLE_ADMIN = "Administer Chalkable";
+        public const string MAINTAIN_CHALKABLE_DISTRICT_SETTINGS = "Maintain Chalkable District Settings";
         public const string AWARD_LE_CREDITS_CLASSROOM = "Award LE Credits (Classroom)";
         public const string AWARD_LE_CREDITS = "Award LE Credits";
 

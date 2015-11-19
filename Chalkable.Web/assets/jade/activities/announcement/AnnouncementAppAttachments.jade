@@ -11,7 +11,7 @@ mixin AnnouncementFormAttachmentItem(attachment, i)
                 .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
                 +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getId()) Open
 
-mixin AnnouncementFormApplicationItem(app, i)
+mixin AnnouncementFormApplicationItem(app, i, assessmentAppId_)
     viewUrl = app.getViewUrl()
     appMode = chlk.models.apps.AppModes.VIEW
     appUrl = app.getUrl()
@@ -24,7 +24,8 @@ mixin AnnouncementFormApplicationItem(app, i)
         .wrapper
             +LoadingImage(src=app.getPictureHref(), id="loading-image-" + i)
             .title(data-tooltip=app.getName(), data-tooltip-type="overflow")= app.getName()
-            +ActionButton('apps', 'viewApp', appUrl, viewUrl, appMode, app.getId(), isBanned, null, self.getStandardsUrlComponents()) Open
+            -var isAssessment = assessmentAppId_ && assessmentAppId_ == app.getId()
+            +ActionButton('apps', 'viewApp', appUrl, viewUrl, appMode, app.getId(), isBanned, null, self.getStandardsUrlComponents(), isAssessment) Open
 
 attachments = self.getAnnouncementAttachments() || []
 applications = self.getApplications() || []
@@ -41,15 +42,18 @@ if self.needButtons
             'attach',
             self.getId(),
             classId,
-            self.getStandardsUrlComponents(),
-            self.getAssessmentApplicationId(),
-            self.isCanAddStandard(),
             self.getModel().getAnnouncementTypeName(),
-            self.getModel().getType()
+            self.getModel().getType(),
+            self.getStandardsUrlComponents()
         )(type="button")#add-attachments.simple-gray-button Attach
+        +ActionLink('announcement', 'addAttribute', self.getId(), self.getModel().getType())(
+            class = (!self.getAnnouncementAttributes() || !self.getAnnouncementAttributes().length) ? '' : 'x-hidden'
+        ).attach-attribute-btn.main-attach-attribute-btn Add Attribute
+            span.plus +
+
 each item, i in items
     if item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
         +AnnouncementFormApplicationItem(item, i)
     else
         if item.isTeachersAttachment() || self.getUserRole().isAdmin()
-            +AnnouncementFormAttachmentItem(item, i)
+            +AnnouncementFormAttachmentItem(item, i, self.getAssessmentApplicationId())

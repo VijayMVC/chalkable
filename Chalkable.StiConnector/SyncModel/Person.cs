@@ -26,8 +26,13 @@ namespace Chalkable.StiConnector.SyncModel
         public short? ReligionID { get; set; }
         public short? ResidencyStatusID { get; set; }
         public int? PhotographID { get; set; }
+        [NullableForeignKey]
         public int? MailingAddressID { get; set; }
+
+        [NullableForeignKey]
         public int? PhysicalAddressID { get; set; }
+
+        [NullableForeignKey]
         public int? UserID { get; set; }
         public string CountryOfResidence { get; set; }
         public string EmployerName { get; set; }
@@ -42,5 +47,7 @@ namespace Chalkable.StiConnector.SyncModel
         public bool RecievesDisciplineAlerts { get; set; }
         public bool RecievesGradeAlerts { get; set; }
         public DateTime? PhotoModifiedDate { get; set; }
+
+        public override int DefaultOrder => 5;
     }
 }

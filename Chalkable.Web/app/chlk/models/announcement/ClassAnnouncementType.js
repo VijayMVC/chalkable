@@ -4,9 +4,11 @@ REQUIRE('chlk.models.id.ClassId');
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.announcement.ClassAnnouncementType*/
     CLASS(
-        'ClassAnnouncementType', EXTENDS(chlk.models.announcement.AnnouncementType), [
+        UNSAFE, 'ClassAnnouncementType', EXTENDS(chlk.models.announcement.AnnouncementType), IMPLEMENTS(ria.serialize.IDeserializable), [
             [[Number, String, chlk.models.id.ClassId, Boolean]],
             function $(id_, name_, classId_, ableEdit_){
                 BASE();
@@ -20,20 +22,27 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.setAbleEdit(ableEdit_);
             },
 
+            OVERRIDE, VOID, function deserialize(raw){
+                BASE(raw);
+                this.id = SJX.fromValue(raw.id, Number);
+                this.ids = SJX.fromValue(raw.ids, String);
+                this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
+                this.highScoresToDrop = SJX.fromValue(raw.highscorestodrop, Number);
+                this.lowScoresToDrop = SJX.fromValue(raw.lowscorestodrop, Number);
+                this.percentage = SJX.fromValue(raw.percentage, Number);
+                this.ableEdit = SJX.fromValue(raw.ableEdit, Boolean);
+            },
+
             Number, 'id',
 
             String, 'ids',
 
-            [ria.serialize.SerializeProperty('classid')],
             chlk.models.id.ClassId, 'classId',
 
-            [ria.serialize.SerializeProperty('highscorestodrop')],
             Number, 'highScoresToDrop',
 
-            [ria.serialize.SerializeProperty('lowscorestodrop')],
             Number, 'lowScoresToDrop',
 
-            [ria.serialize.SerializeProperty('percentage')],
             Number, 'percentage',
 
             Boolean, 'ableEdit'

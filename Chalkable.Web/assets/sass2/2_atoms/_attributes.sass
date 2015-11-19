@@ -37,7 +37,7 @@
       .remove-file-attachment
         +icons-24-sprite(remove, 0, -3px, -3px)
         position: absolute
-        right: 4px
+        right: -30px
         top: 8px
         cursor:pointer
 
@@ -106,6 +106,9 @@
   .attribute-item-container
     overflow: hidden
 
+    .mp-data
+      height: 0px
+
   .attribute-details
     padding: 10px 25px
 
@@ -132,6 +135,7 @@
     width: 100%
     box-sizing: border-box
     word-wrap: break-word
+    white-space: pre-wrap
 
   h3
     border-bottom: 1px solid #c8c7c3
@@ -164,7 +168,7 @@
     height: 155px - 2 * $padding
     position: relative
     vertical-align: top
-    overflow: visible // because of CLOSE BUTTON
+    overflow: hidden
 
     .icon
       height: 100%

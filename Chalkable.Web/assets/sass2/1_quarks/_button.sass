@@ -21,11 +21,12 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
     +background-image(linear-gradient(top, #FEFEFE 0%, #F9F9F7 50%, #F3F2EE 100%))
     +box-shadow(transparentize(#000, .55) 0 1px 3px, #FFFFFF 0 1px 0px inset)
 
-    &:hover
-      background: #FFFFFF
+    &:not(.same-on-hover)
+      &:hover
+        background: #FFFFFF
 
-    &:active, &.pressed, &.pressed:hover
-      background: #F2F1ED
+      &:active, &.pressed, &.pressed:hover
+        background: #F2F1ED
 
   &.blue-button
     border-color: #29596E
@@ -35,11 +36,12 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
     +background-image(linear-gradient(top, #558CA6 0%, #447B94 50%, #30677E 100%))
     +box-shadow(transparentize(#000, .55) 0 1px 3px, #82A3B0 0 1px 0px inset)
 
-    &:hover
-      background: #568EA8
+    &:not(.same-on-hover)
+      &:hover
+        background: #568EA8
 
-    &:active, &.pressed, &.pressed:hover
-      background: #2E657C
+      &:active, &.pressed, &.pressed:hover
+        background: #2E657C
 
   &.green-button
     border-color: #327e30
@@ -49,11 +51,12 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
     +background-image(linear-gradient(top, #6BBA71 0%, #4D9B54 50%, #327E30 100%))
     +box-shadow(transparentize(#000, .55) 0 1px 3px, #82B086 0 1px 0px inset)
 
-    &:hover
-      background: #6DBB72
+    &:not(.same-on-hover)
+      &:hover
+        background: #6DBB72
 
-    &:active, &.pressed, &.pressed:hover
-      background: #2E7C35
+      &:active, &.pressed, &.pressed:hover
+        background: #2E7C35
 
   &.negative-button
     border-color: #C84747
@@ -63,11 +66,12 @@ button, input[type=button], input[type=submit], input[type=reset], input[type="f
     +background-image(linear-gradient(top, #DC5D5A 0%,#D15352 50%, #C74A4A 100%))
     +box-shadow(transparentize(#000, .55) 0 1px 3px, #EA9E9D 0 1px 0px inset)
 
-    &:hover
-      background: #DC5E5B
+    &:not(.same-on-hover)
+      &:hover
+        background: #DC5E5B
 
-    &:active, &.pressed, &.pressed:hover
-      background: #C74949
+      &:active, &.pressed, &.pressed:hover
+        background: #C74949
 
 
   &.disabled, &[disabled]

@@ -12,5 +12,6 @@ namespace Chalkable.StiConnector.SyncModel
         public string Category { get; set; }
         public string Setting { get; set; }
         public string Value { get; set; }
+        public override int DefaultOrder => 49;
     }
 }

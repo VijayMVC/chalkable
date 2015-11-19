@@ -6,19 +6,22 @@ REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.services.GradingService');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.AppMarketService');
-REQUIRE('chlk.services.StandardService');
 REQUIRE('chlk.services.MarkingPeriodService');
 REQUIRE('chlk.services.GroupService');
 REQUIRE('chlk.services.LessonPlanService');
+REQUIRE('chlk.services.LpGalleryCategoryService');
 REQUIRE('chlk.services.ClassAnnouncementService');
 REQUIRE('chlk.services.AdminAnnouncementService');
 REQUIRE('chlk.services.AnnouncementAssignedAttributeService');
+REQUIRE('chlk.services.AnnouncementAttachmentService');
+REQUIRE('chlk.services.AttachmentService');
+REQUIRE('chlk.services.AnnouncementQnAService');
 
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.LessonPlanFormPage');
 REQUIRE('chlk.activities.announcement.AnnouncementViewPage');
 REQUIRE('chlk.activities.announcement.AdminAnnouncementFormPage');
-REQUIRE('chlk.activities.apps.AttachDialog');
+REQUIRE('chlk.activities.apps.AttachAppsDialog');
 REQUIRE('chlk.activities.common.attachments.AttachmentDialog');
 REQUIRE('chlk.activities.announcement.AddStandardsDialog');
 REQUIRE('chlk.activities.announcement.AddDuplicateAnnouncementDialog');
@@ -26,6 +29,8 @@ REQUIRE('chlk.activities.announcement.AnnouncementGroupsDialog');
 REQUIRE('chlk.activities.announcement.AnnouncementEditGroupsDialog');
 REQUIRE('chlk.activities.announcement.GroupStudentsFilterDialog');
 REQUIRE('chlk.activities.announcement.AddNewCategoryDialog');
+REQUIRE('chlk.activities.announcement.FileCabinetDialog');
+REQUIRE('chlk.activities.announcement.AttachFilesDialog');
 
 REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.LastMessages');
@@ -33,7 +38,7 @@ REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.apps.InstalledAppsViewData');
 REQUIRE('chlk.models.announcement.ShowGradesToStudents');
-REQUIRE('chlk.models.standard.Standard');
+REQUIRE('chlk.models.announcement.FileAttachViewData');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
@@ -43,24 +48,16 @@ REQUIRE('chlk.models.id.StandardSubjectId');
 REQUIRE('chlk.models.id.StandardId');
 REQUIRE('chlk.models.announcement.QnAForm');
 REQUIRE('chlk.models.common.attachments.BaseAttachmentViewData');
-REQUIRE('chlk.models.announcement.AddStandardViewData');
 REQUIRE('chlk.models.standard.Standard');
-REQUIRE('chlk.models.standard.StandardsListViewData');
 REQUIRE('chlk.models.announcement.AddDuplicateAnnouncementViewData');
-REQUIRE('chlk.models.standard.StandardsTableViewData');
-REQUIRE('chlk.models.standard.GetStandardTreePostData');
 REQUIRE('chlk.models.common.SimpleObject');
+REQUIRE('chlk.models.attachment.FileCabinetViewData');
+REQUIRE('chlk.models.attachment.FileCabinetPostData');
 
 REQUIRE('chlk.lib.exception.AppErrorException');
 
 NAMESPACE('chlk.controllers', function (){
 
-    /** @class chlk.controllers.AttachmentTypeEnum */
-    ENUM('AttachmentTypeEnum', {
-        DOCUMENT: 0,
-        PICTURE: 1,
-        OTHER: 2
-    });
 
     /** @class chlk.controllers.AnnouncementController */
     CLASS(
@@ -71,6 +68,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.LessonPlanService, 'lessonPlanService',
+
+        [ria.mvc.Inject],
+        chlk.services.LpGalleryCategoryService, 'lpGalleryCategoryService',
 
         [ria.mvc.Inject],
         chlk.services.ClassAnnouncementService, 'classAnnouncementService',
@@ -94,9 +94,6 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.GradeLevelService, 'gradeLevelService',
 
         [ria.mvc.Inject],
-        chlk.services.StandardService, 'standardService',
-
-        [ria.mvc.Inject],
         chlk.services.GroupService, 'groupService',
 
         [ria.mvc.Inject],
@@ -105,7 +102,46 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.AnnouncementAssignedAttributeService, 'assignedAttributeService',
 
-        ArrayOf(chlk.models.attachment.Attachment), 'announcementAttachments',
+        [ria.mvc.Inject],
+        chlk.services.AnnouncementAttachmentService, 'announcementAttachmentService',
+
+        [ria.mvc.Inject],
+        chlk.services.AttachmentService, 'attachmentService',
+
+        [ria.mvc.Inject],
+        chlk.services.AnnouncementQnAService, 'announcementQnAService',
+
+        ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
+
+        VOID, function updateAttributesWithFilesList_(announcement){
+            var res = [];
+            announcement.getAnnouncementAttributes().forEach(function(attribute){
+                if(attribute.getAttributeAttachment())
+                    res.push(attribute.getId())
+            });
+
+            this.getContext().getSession().set(ChlkSessionConstants.ATTRIBUTES_WITH_FILES, res);
+        },
+
+        VOID, function afterAttributeFileAttach_(attributeId){
+            var attrs = this.getContext().getSession().get(ChlkSessionConstants.ATTRIBUTES_WITH_FILES, []);
+            if(attrs.indexOf(attributeId) == -1)
+                attrs.push(attributeId);
+
+            this.getContext().getSession().set(ChlkSessionConstants.ATTRIBUTES_WITH_FILES, attrs);
+        },
+
+        VOID, function afterAttributeFileRemove_(attributeId){
+            var attrs = this.getContext().getSession().get(ChlkSessionConstants.ATTRIBUTES_WITH_FILES, []);
+            attrs.splice(attrs.indexOf(attributeId), 1);
+
+            this.getContext().getSession().set(ChlkSessionConstants.ATTRIBUTES_WITH_FILES, attrs);
+        },
+
+        Boolean, function isAttributeWithFile_(attributeId){
+            var attrs = this.getContext().getSession().get(ChlkSessionConstants.ATTRIBUTES_WITH_FILES, []);
+            return attrs.indexOf(attributeId) > -1;
+        },
 
         function getAnnouncementFormPageType_(type_){
             if(this.userInRole(chlk.models.common.RoleEnum.TEACHER)){
@@ -114,8 +150,12 @@ NAMESPACE('chlk.controllers', function (){
                     return chlk.activities.announcement.AnnouncementFormPage;
                 return chlk.activities.announcement.LessonPlanFormPage;
             }
+
             if(this.userInRole(chlk.models.common.RoleEnum.DISTRICTADMIN))
                 return chlk.activities.announcement.AdminAnnouncementFormPage;
+
+            if(this.userInRole(chlk.models.common.RoleEnum.STUDENT))
+                return chlk.activities.announcement.AnnouncementViewPage;
         },
 
         [[chlk.models.announcement.ShowGradesToStudents]],
@@ -125,28 +165,28 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_());
         },
 
-        function prepareAttachment(attachment){
-            if(attachment.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf()){
-                attachment.setThumbnailUrl(this.announcementService.getAttachmentUri(attachment.getId(), false, 170, 110));
-                attachment.setUrl(this.announcementService.getAttachmentUri(attachment.getId(), false, null, null));
+        function prepareAttachment(attachment, width_, height_){
+            if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
+                attachment.setThumbnailUrl(this.announcementAttachmentService.getAttachmentUri(attachment.getId(), false, width_ || 170, height_ || 110));
+                attachment.setUrl(this.announcementAttachmentService.getAttachmentUri(attachment.getId(), false, null, null));
             }
-            if(attachment.getType() == chlk.controllers.AttachmentTypeEnum.OTHER.valueOf()){
-                attachment.setUrl(this.announcementService.getAttachmentUri(attachment.getId(), true, null, null));
+            if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){
+                attachment.setUrl(this.announcementAttachmentService.getAttachmentUri(attachment.getId(), true, null, null));
             }
         },
 
-        [[chlk.models.announcement.AnnouncementAttributeViewData]],
-        function prepareAttribute(attribute){
+        [[chlk.models.announcement.AnnouncementAttributeViewData, Number, Number]],
+        function prepareAttribute(attribute, width_, height_){
 
             var attributeAttachment = attribute.getAttributeAttachment();
 
             if (!attributeAttachment) return;
 
-            if(attributeAttachment.getType() == chlk.controllers.AttachmentTypeEnum.PICTURE.valueOf()){
-                attributeAttachment.setThumbnailUrl(this.assignedAttributeService.getAttributeAttachmentUri(attribute.getId(), attribute.getAnnouncementType(), false, 170, 110));
+            if(attributeAttachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
+                attributeAttachment.setThumbnailUrl(this.assignedAttributeService.getAttributeAttachmentUri(attribute.getId(), attribute.getAnnouncementType(), false, width_ || 170, width_ || 110));
                 attributeAttachment.setUrl(this.assignedAttributeService.getAttributeAttachmentUri(attribute.getId(), attribute.getAnnouncementType(), false, null, null));
             }
-            if(attributeAttachment.getType() == chlk.controllers.AttachmentTypeEnum.OTHER.valueOf()){
+            if(attributeAttachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){
                 attributeAttachment.setUrl(this.assignedAttributeService.getAttributeAttachmentUri(attribute.getId(), attribute.getAnnouncementType(), true, null, null));
             }
 
@@ -191,6 +231,7 @@ NAMESPACE('chlk.controllers', function (){
                     studentAnnouncement.isAbsent(),
                     studentAnnouncement.isIncomplete(),
                     studentAnnouncement.isExempt(),
+                    studentAnnouncement.isCommentChanged(),
                     fromGrid_ ? chlk.models.announcement.ShortStudentAnnouncementViewData : null
                 );
             return result;
@@ -265,6 +306,7 @@ NAMESPACE('chlk.controllers', function (){
             var announcementTypeId_;
             var type = announcement.getType();
             this.cacheAnnouncementType(type);
+            this.updateAttributesWithFilesList_(announcement);
 
             var classes = this.classService.getClassesForTopBarSync();
             var markingPeriods = this.markingPeriodService.getMarkingPeriodsSync();
@@ -277,6 +319,8 @@ NAMESPACE('chlk.controllers', function (){
             if(classAnnouncement)
                 announcementTypeId_ = classAnnouncement.getAnnouncementTypeId();
 
+            var gradingPeriods = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIODS, []);
+
             classes.forEach(function (item) {
                 var currentClassInfo = this.classService.getClassAnnouncementInfo(item.getId());
                 types = currentClassInfo ? currentClassInfo.getTypesByClass() : [];
@@ -285,6 +329,19 @@ NAMESPACE('chlk.controllers', function (){
                 if (currentClassInfo && classId_ && classId_ == item.getId()) {
                     classInfo = currentClassInfo;
                     model.setClassInfo(classInfo);
+
+                    //prepare class schedule date range
+                    model.setClassScheduleDateRanges(
+                        gradingPeriods
+                            .filter(function(gp){
+                                return item.getMarkingPeriodsId().filter(function(mpId){return mpId == gp.getMarkingPeriodId()}).length > 0
+                            })
+                            .map(function (_) {
+                                return {
+                                    start: _.getStartDate().getDate(),
+                                    end: _.getEndDate().getDate()
+                                }
+                            }));
 
                     if(classAnnouncement){
                         if (savedClassInfo && savedClassInfo.getClassId() == item.getId()) {
@@ -301,22 +358,11 @@ NAMESPACE('chlk.controllers', function (){
                         if (currentClassInfo && !currentClassInfo.getTypesByClass().length)
                             throw new chlk.lib.exception.NoClassAnnouncementTypeException();
                     }
-
-                    var classMarkingPeriods = this.classService.getMarkingPeriodRefsOfClass(classId_);
-                    model.setClassScheduleDateRanges(
-                        markingPeriods
-                            .filter(function (mp) {
-                                return classMarkingPeriods.indexOf(mp.getId()) > -1
-                            })
-                            .map(function (_) {
-                                return {
-                                    start: _.getStartDate().getDate(),
-                                    end: _.getEndDate().getDate()
-                                }
-                            }));
                 }
 
             }, this);
+
+           // var currentClass = classes.filter(function(item){ return classId_ && item.getId() == classId_},this);
 
             var classesBarData = new chlk.models.classes.ClassesForTopBar(
                 classes,
@@ -518,6 +564,39 @@ NAMESPACE('chlk.controllers', function (){
                 },this);
         },
 
+        [chlk.controllers.Permissions([
+            [chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        function updateSuggestedAppsAction() {
+            var res = this.announcementService
+                .addAnnouncement()
+                .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(ex){
+                    return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
+                    throw error;
+                }, this)
+                .attach(this.validateResponse_())
+                .then(function(model){
+                    this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
+                    this.BackgroundCloseView(chlk.activities.apps.InstallAppDialog);
+                    var announcement = model.getAnnouncement();
+                    var suggestedApps = announcement.getSuggestedApps();
+                    var suggestedAppsListData = new chlk.models.apps.SuggestedAppsList(
+                        announcement.getClassId(),
+                        announcement.getId(),
+                        suggestedApps,
+                        announcement.getStandards(),
+                        null,
+                        announcement.getType()
+                    );
+                    this.BackgroundUpdateView(this.getAnnouncementFormPageType_(announcement.getType()), suggestedAppsListData);
+                    return model;
+                },this);
+
+            return this.ShadeLoader();
+
+        },
+
         [[chlk.models.announcement.AnnouncementForm]],
         function classAnnouncementFromModel_(model) {
             this.cacheAnnouncementType(chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT);
@@ -526,14 +605,14 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.AnnouncementForm]],
         function getLessonPlanFromModel_(model) {
-            return this.lessonPlanService.listCategories()
+            return this.lpGalleryCategoryService.list()
                 .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(ex){
                     return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
                     throw error;
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(list){
-                    this.cacheLessonPlanCategories(list);
+                    this.lpGalleryCategoryService.cacheLessonPlanCategories(list);
                     this.cacheLessonPlanClassId(model.getAnnouncement().getLessonPlanData().getClassId());
                     model.getAnnouncement().setCategories(list);
                     return model;
@@ -557,7 +636,7 @@ NAMESPACE('chlk.controllers', function (){
             this.getContext().getSession().set('classInfo', null);
             var result = ria.async.wait([
                     this.lessonPlanService.addLessonPlan(classId_),
-                    this.lessonPlanService.listCategories()
+                    this.lpGalleryCategoryService.list()
                 ])
                 .catchException(chlk.lib.exception.NoClassAnnouncementTypeException, function(ex){
                     return this.redirectToErrorPage_(ex.toString(), 'error', 'createAnnouncementError', []);
@@ -569,7 +648,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(model && model.getAnnouncement()){
                         var resModel =  this.addEditAction(model, false);
                         resModel.getAnnouncement().setCategories(result[1]);
-                        this.cacheLessonPlanCategories(result[1]);
+                        this.lpGalleryCategoryService.cacheLessonPlanCategories(result[1]);
                         this.cacheLessonPlanClassId(resModel.getAnnouncement().getLessonPlanData().getClassId());
                         return resModel;
                     }
@@ -582,69 +661,144 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,  chlk.models.common.RoleEnum.DISTRICTADMIN
+            chlk.models.common.RoleEnum.DISTRICTADMIN, chlk.models.common.RoleEnum.TEACHER
         ])],
         [chlk.controllers.SidebarButton('add-new')],
         [[
             chlk.models.id.AnnouncementId,
             chlk.models.id.ClassId,
             String,
-            chlk.models.id.AppId,
-            Boolean,
-            String,
             chlk.models.announcement.AnnouncementTypeEnum,
-            Number
+            String
         ]],
-        function attachAction(announcementId, classId, appUrlAppend_, assessmentAppId_,
-                              canAddStandard, announcementTypeName, announcementType, pageIndex_) {
+        function attachAction(announcementId, classId, announcementTypeName, announcementType, appUrlAppend_) {
+
+            var result = this.announcementService.getAttachSettings(announcementId, announcementType)
+                .then(function(options){
+                    _DEBUG && options.setAssessmentAppId(chlk.models.id.AppId('56c14655-2897-4073-bb48-32dfd61264b5'));
+                    options.updateByValues(null, null, null, announcementId, classId, announcementTypeName,
+                        announcementType, null, appUrlAppend_);
+                    this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
+                    return new chlk.models.common.BaseAttachViewData(options);
+                }, this);
+
+            return this.ShadeOrUpdateView(chlk.activities.announcement.AttachFilesDialog, result);
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN, chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        function attachFilesAction() {
+            var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
+            var result = new ria.async.DeferredData(new chlk.models.common.BaseAttachViewData(options));
+
+            return this.ShadeOrUpdateView(chlk.activities.announcement.AttachFilesDialog, result);
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        [[Number]],
+        function attachAppsDistrictAdminAction(start_) {
             var userId = this.getCurrentPerson().getId();
             var mp = this.getCurrentMarkingPeriod();
 
-            var btnsCount = 2;
+            var start = start_ || 0, count = 12;
 
-            if (canAddStandard) ++btnsCount;
-            if (assessmentAppId_) ++btnsCount;
-
-            var start = pageIndex_ | 0, count = 16 - btnsCount;
-
-            var result;
-            if (this.userIsAdmin()){
-                result = this.appMarketService
-                    .getInstalledApps(userId, start, null, count)
-                    .attach(this.validateResponse_())
-                    .then(function(data){
-                        return new chlk.models.apps.InstalledAppsViewData(announcementId,
-                            classId,
-                            data,
-                            appUrlAppend_ || '',
-                            this.isStudyCenterEnabled(),
-                            canAddStandard,
-                            assessmentAppId_,
-                            announcementTypeName,
-                            announcementType
-                        )}, this);
-            }
-            else {
-                var result = this.appMarketService
-                    .getAppsForAttach(userId, classId, mp.getId(), start, count)
-                    .attach(this.validateResponse_())
-                    .then(function(data){
-                        return new chlk.models.apps.InstalledAppsViewData(announcementId,
-                            classId,
-                            data,
-                            appUrlAppend_ || '',
-                            this.isStudyCenterEnabled(),
-                            canAddStandard,
-                            assessmentAppId_,
-                            announcementTypeName,
-                            announcementType
-                        )}, this);
-            }
-
-            //new ria.async.DeferredData(chlk.models.apps.InstalledAppsViewData.$createForAdmin(announcementId, announcementType, assessmentAppId_));
-
-            return this.ShadeOrUpdateView(chlk.activities.apps.AttachDialog, result);
+            var result = this.appMarketService
+                .getInstalledApps(userId, start, null, count)
+                .attach(this.validateResponse_())
+                .then(function(data) {
+                    var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
+                    return new chlk.models.apps.InstalledAppsViewData(options, data);
+                }, this);
+            return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, result);
         },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        [[Number]],
+        function attachAppsTeacherAction(start_) {
+
+            var userId = this.getCurrentPerson().getId();
+            var mp = this.getCurrentMarkingPeriod();
+
+            var start = start_ || 0, count = 12;
+            var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
+
+            var result = this.appMarketService
+                .getAppsForAttach(userId, options.getClassId(), mp.getId(), start, count)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return new chlk.models.apps.InstalledAppsViewData(options, data, start);
+                }, this);
+
+            return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, result);
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN,
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
+        //---File Cabinet---
+        [chlk.controllers.SidebarButton('add-new')],
+        function fileCabinetAction(){
+            return this.getAttachments_();
+        },
+
+        [[String, chlk.models.attachment.SortAttachmentType, Number, Number]],
+        function getAttachments_(filter_, sortType_, start_, count_){
+            var res = this.attachmentService.getAttachments(filter_, sortType_, start_, count_)
+                .attach(this.validateResponse_())
+                .then(function(atts){
+
+                    atts.getItems().forEach(function(attachment){
+                        if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
+                            attachment.setThumbnailUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, 170, 110));
+                            attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), false, null, null));
+                        }
+                        if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){
+                            attachment.setUrl(this.attachmentService.getDownloadUri(attachment.getId(), true, null, null));
+                        }
+                    }, this);
+
+                    var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
+
+                    return new chlk.models.attachment.FileCabinetViewData(options, atts, sortType_, filter_);
+                }, this);
+            return this.ShadeOrUpdateView(chlk.activities.announcement.FileCabinetDialog, res);
+        },
+
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
+        function fileAttachAction(announcementId, announcementType, assignedAttributeId_){
+            var result = this.announcementService.getAttachSettings(announcementId, announcementType)
+                .then(function(options){
+                    options.updateByValues(false, false, false, announcementId, null, null,
+                        announcementType, assignedAttributeId_);
+                    this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
+                    return new chlk.models.common.BaseAttachViewData(options);
+                }, this);
+
+            return this.ShadeOrUpdateView(chlk.activities.announcement.AttachFilesDialog, result);
+        },
+
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function fileAttachStudentAction(announcementId, announcementType){
+            var result = this.announcementService.getAttachSettings(announcementId, announcementType)
+                .then(function(options){
+                    options.updateByValues(null, null, null, announcementId, null, null, announcementType);
+                    this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
+                    return new chlk.models.common.BaseAttachViewData(options);
+                }, this);
+
+            return this.ShadeOrUpdateView(chlk.activities.announcement.AttachFilesDialog, result);
+        },
+
+        //todo move attribute methods to separate controller
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
         function fetchAddAttributeFuture_(announcementId, announcementType) {
@@ -675,7 +829,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
         function addAttributeTeacherAction(announcementId, announcementType) {
-            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
+            this.BackgroundCloseView(chlk.activities.apps.AttachAppsDialog);
             return this.UpdateView(announcementType == chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN ?
                     chlk.activities.announcement.LessonPlanFormPage :
                     chlk.activities.announcement.AnnouncementFormPage,
@@ -688,10 +842,112 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
         function addAttributeDistrictAdminAction(announcementId, announcementType) {
-            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
+            this.BackgroundCloseView(chlk.activities.apps.AttachAppsDialog);
             return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage,
                 this.fetchAddAttributeFuture_(announcementId, announcementType), 'add-attribute');
         },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN,
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.attachment.FileCabinetPostData]],
+        function listAttachmentsAction(postData){
+            return this.getAttachments_(
+                postData.getFilter(),
+                postData.getSortType(),
+                postData.getStart(),
+                postData.getCount()
+            );
+        },
+
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN,
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        [[
+            String,
+            chlk.models.attachment.SortAttachmentType,
+            Number,
+            Number
+        ]],
+        function pageAttachmentsAction(filter_, sortType_, start_, count_){
+            return this.getAttachments_(filter_, sortType_, start_, count_);
+        },
+
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, Boolean]],
+        function attachFromCabinetAction(announcementId, announcementType, attachmentId, onCreate_){
+            var res = this.announcementAttachmentService
+                .addAttachment(announcementId, announcementType, attachmentId)
+                .catchError(this.handleNoAnnouncementException_, this)
+                .attach(this.validateResponse_())
+                .then(function(announcement){
+                    announcement.setNeedButtons(true);
+                    announcement.setNeedDeleteButton(true);
+                    this.prepareAttachments(announcement);
+                    this.cacheAnnouncement(announcement);
+                    return announcement;
+                }, this);
+            this.BackgroundCloseView(chlk.activities.announcement.FileCabinetDialog);
+            var isStudent =  this.userInRole(chlk.models.common.RoleEnum.STUDENT);
+            return this.UpdateView(!isStudent ? this.getAnnouncementFormPageType_(announcementType) : chlk.activities.announcement.AnnouncementViewPage, res, 'update-attachments');
+
+        },
+
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, chlk.models.id.AnnouncementAssignedAttributeId]],
+        function attachFromCabinetToAttributeAction(announcementId, announcementType, attachmentId, assignedAttributeId){
+            if(this.isAttributeWithFile_(assignedAttributeId))
+                return this.attributeAttachmentExistsAction();
+
+            this.BackgroundCloseView(chlk.activities.announcement.FileCabinetDialog);
+            var res = this.assignedAttributeService
+                .addAttachment(announcementType, announcementId, assignedAttributeId, attachmentId)
+                .catchError(this.handleNoAnnouncementException_, this)
+                .attach(this.validateResponse_())
+                .then(function(attribute){
+                    this.afterAttributeFileAttach_(assignedAttributeId);
+                    return this.prepareAttributeData(announcementId, announcementType, assignedAttributeId, attribute);
+                }, this);
+            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType), res, 'add-attribute-attachment');
+        },
+
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, chlk.models.id.AnnouncementAssignedAttributeId]],
+        function cloneFromCabinetAction(announcementId, announcementType, attachmentId){
+            var res = this.announcementAttachmentService
+                .cloneAttachment(attachmentId, announcementId, announcementType)
+                .catchError(this.handleNoAnnouncementException_, this)
+                .attach(this.validateResponse_())
+                .then(function(announcement){
+                    announcement.setNeedButtons(true);
+                    announcement.setNeedDeleteButton(true);
+                    this.prepareAttachments(announcement);
+                    this.cacheAnnouncement(announcement);
+                    return announcement;
+                }, this);
+            this.BackgroundCloseView(chlk.activities.announcement.FileCabinetDialog);
+            var isStudent =  this.userInRole(chlk.models.common.RoleEnum.STUDENT);
+            return this.UpdateView(!isStudent ? this.getAnnouncementFormPageType_(announcementType) : chlk.activities.announcement.AnnouncementViewPage, res, 'update-attachments');
+        },
+
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, chlk.models.id.AnnouncementAssignedAttributeId]],
+        function cloneFromCabinetToAttributeAction(announcementId, announcementType, attachmentId, assignedAttributeId){
+            if(this.isAttributeWithFile_(assignedAttributeId))
+                return this.attributeAttachmentExistsAction();
+
+            var res = this.assignedAttributeService
+                .cloneAttachmentForAttribute(attachmentId, announcementId, announcementType, assignedAttributeId)
+                .catchError(this.handleNoAnnouncementException_, this)
+                .attach(this.validateResponse_())
+                .then(function(attribute){
+                    this.afterAttributeFileAttach_(assignedAttributeId);
+                    return this.prepareAttributeData(announcementId, announcementType, assignedAttributeId, attribute);
+                }, this);
+            this.BackgroundCloseView(chlk.activities.announcement.FileCabinetDialog);
+            return this.UpdateView(this.getAnnouncementFormPageType_(announcementType), res, 'add-attribute-attachment');
+        },
+
 
         [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementTypeEnum]],
         function fetchRemoveAttributeFuture_(announcementId, attributeId, announcementType) {
@@ -700,6 +956,7 @@ NAMESPACE('chlk.controllers', function (){
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(deleted){
+                    this.afterAttributeFileRemove_(attributeId);
                     var attributes = this.getCachedAnnouncementAttributes().filter(function(attribute){return attribute.getId() != attributeId});
                     this.cacheAnnouncementAttributes(attributes);
                     return new chlk.models.announcement.AnnouncementAttributeViewData.$fromId(attributeId, deleted);
@@ -726,14 +983,6 @@ NAMESPACE('chlk.controllers', function (){
         function removeAttributeDistrictAdminAction(announcementId, attributeId, announcementType) {
             return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage,
                 this.fetchRemoveAttributeFuture_(announcementId, attributeId, announcementType),  'remove-attribute');
-        },
-
-
-        [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId]],
-        function fileCabinetAction(announcementId) {
-            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
-            return null;
         },
 
 
@@ -832,55 +1081,55 @@ NAMESPACE('chlk.controllers', function (){
             throw error;
         },
 
-
-
-
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Object]],
-        function uploadAttachmentOnCreateAction(announcementId, announcementType, files) {
-            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
-            return this.Redirect('announcement', 'uploadAttachment', [announcementId,  announcementType, files, true]);
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId, Number, Object]],
+        function uploadAttachmentOnCreateAction(announcementId, announcementType, assignedAttributeId, fileIndex, files) {
+            this.BackgroundCloseView(chlk.activities.apps.AttachAppsDialog);
+
+            var isStudent =  this.userInRole(chlk.models.common.RoleEnum.STUDENT); //todo remove this later ... this is short fix
+            if(assignedAttributeId && assignedAttributeId.valueOf())
+                return this.Redirect('announcement', 'addAttributeAttachment', [announcementType, announcementId, assignedAttributeId, files, fileIndex]);
+            return this.Redirect('announcement', 'uploadAttachment', [announcementId,  announcementType, files, !isStudent, fileIndex]);
         },
-        
-        [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, Object]],
-        function addAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId, files) {
-            var result = this.assignedAttributeService
-                .uploadAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeId, files)
-                .catchError(this.handleNoAnnouncementException_, this)
-                .attach(this.validateResponse_())
-                .then(function(attribute){
-                    var attachment = attribute.getAttributeAttachment();
-                    attachment.setReadOnly(false);
-                    attachment.setAnnouncementType(announcementType);
-                    attachment.setAnnouncementId(announcementId);
-                    attachment.setAttributeId(announcementAssignedAttributeId);
-                    attribute.setAttributeAttachment(attachment);
-                    attribute.setAttributeTypes(this.assignedAttributeService
-                        .getAnnouncementAttributeTypesList());
-                    attribute.setAnnouncementType(announcementType);
-                    this.prepareAttribute(attribute);
-                    var attributes = this.getCachedAnnouncementAttributes();
-                    var attribute2 = attributes.filter(function(attr){return attr.getId() == attribute.getId()})[0];
-                    attribute2.setAttributeAttachment(attribute.getAttributeAttachment());
-                    attribute2.setAttributeTypes(this.assignedAttributeService
-                        .getAnnouncementAttributeTypesList());
-                    attribute2.setAnnouncementType(announcementType);
-                    this.cacheAnnouncementAttributes(attributes);
-                    return attribute;
-                }, this);
-            return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'add-attribute-attachment');
+
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.announcement.AnnouncementAttributeViewData]],
+        function prepareAttributeData(announcementId, announcementType, announcementAssignedAttributeId, attribute){
+            var attachment = attribute.getAttributeAttachment();
+            attachment.setReadOnly(false);
+            attachment.setAnnouncementType(announcementType);
+            attachment.setAnnouncementId(announcementId);
+            attachment.setAttributeId(announcementAssignedAttributeId);
+            attribute.setAttributeAttachment(attachment);
+            attribute.setAttributeTypes(this.assignedAttributeService
+                .getAnnouncementAttributeTypesList());
+            attribute.setAnnouncementType(announcementType);
+            this.prepareAttribute(attribute);
+            var attributes = this.getCachedAnnouncementAttributes();
+            var attribute2 = attributes.filter(function(attr){return attr.getId() == attribute.getId()})[0];
+            attribute2.setAttributeAttachment(attribute.getAttributeAttachment());
+            attribute2.setAttributeTypes(this.assignedAttributeService
+                .getAnnouncementAttributeTypesList());
+            attribute2.setAnnouncementType(announcementType);
+            this.cacheAnnouncementAttributes(attributes);
+            return attribute;
         },
 
         [chlk.controllers.SidebarButton('add-new')],
-        [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId,
-            chlk.models.id.AnnouncementAssignedAttributeId, chlk.models.id.AnnouncementAssignedAttributeAttachmentId]],
-        function removeAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId, announcementAssignedAttributeAttachmentId) {
+        [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, Number]],
+        function removeAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId, fileIndex_) {
+
+            var fromDialog = fileIndex_ || fileIndex_ === 0;
+
             var result = this.assignedAttributeService
-                .removeAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeAttachmentId)
+                .removeAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeId)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(attribute){
+                    this.afterAttributeFileRemove_(announcementAssignedAttributeId);
+
+                    if(fromDialog)
+                        return new chlk.models.attachment.AnnouncementAttachment(fileIndex_);
+
                     attribute.setAnnouncementType(announcementType);
                     attribute.setAnnouncementId(announcementId);
                     attribute.setReadOnly(false);
@@ -894,38 +1143,122 @@ NAMESPACE('chlk.controllers', function (){
 
                     return attribute;
                 }, this);
+
+            if(fromDialog)
+                return this.UpdateView(chlk.activities.announcement.AttachFilesDialog, result, 'delete-attachment');
+
             return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'remove-attribute-attachment');
         },
 
+        [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Number]],
+        function deleteAttachmentAction(attachmentId, announcementId, announcementType, fileIndex_) {
 
-        [[chlk.models.id.AnnouncementId, Object, chlk.models.announcement.AnnouncementTypeEnum]],
-            ria.async.Future, function fetchUploadAttachmentFuture_(announcementId, files, announcementType) {
+            var fromDialog = fileIndex_ || fileIndex_ === 0;
 
-            return this.announcementService
-                .uploadAttachment(announcementId, files, announcementType)
+            var result = this.announcementAttachmentService
+                .deleteAttachment(attachmentId, announcementId, announcementType)
+                .attach(this.validateResponse_())
+                .then(function(model){
+                    if(fromDialog)
+                        return new chlk.models.attachment.AnnouncementAttachment(fileIndex_);
+
+                    model.setNeedButtons(true);
+                    model.setNeedDeleteButton(true);
+                    this.prepareAttachments(model);
+                    return model;
+                }, this);
+
+            if(fromDialog)
+                return this.UpdateView(chlk.activities.announcement.AttachFilesDialog, result, 'delete-attachment');
+
+            return this.UpdateView(this.getView().getCurrent().getClass(), result, 'update-attachments');
+        },
+
+        function uploadDisabledAction(){
+            this.showAttributesFilesUploadMsg_();
+            return null;
+        },
+
+        function showAttributesFilesUploadMsg_(){
+            this.ShowMsgBox('You can add only 1 attachment to attribute', 'Error');
+        },
+
+        [chlk.controllers.SidebarButton('add-new')],
+        [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, Object, Number]],
+        function addAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId, files, fileIndex_) {
+            if(this.isAttributeWithFile_(announcementAssignedAttributeId))
+                return this.attributeAttachmentExistsAction();
+
+            var firstModel = new chlk.models.attachment.AnnouncementAttachment(0, files[0].size, null, files[0].name);
+            this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'attachment-progress');
+
+            if(files.length > 1)
+                this.showAttributesFilesUploadMsg_();
+
+            var result = this.assignedAttributeService
+                .uploadAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeId, [files[0]])
+                .handleProgress(function(event){
+                    this.afterAttributeFileAttach_(announcementAssignedAttributeId);
+                    var model = new chlk.models.attachment.AnnouncementAttachment(0, event.total, event.loaded, files[0].name);
+                    this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, model, 'attachment-progress');
+                }, this)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
-                .then(function(announcement){
-                    announcement.setNeedButtons(true);
-                    announcement.setNeedDeleteButton(true);
-                    this.prepareAttachments(announcement);
-                    this.cacheAnnouncement(announcement);
-                    return announcement;
+                .then(function(attribute){
+                    attribute.setAnnouncementType(announcementType);
+                    this.prepareAttribute(attribute, 51, 33);
+                    var attachment = attribute.getAttributeAttachment();
+
+                    var model = new chlk.models.attachment.AnnouncementAttachment(0, null, null, files[0].name);
+                    model.setId(new chlk.models.id.AnnouncementAttachmentId(attribute.getId().valueOf()));
+                    model.setThumbnailUrl(attachment.getThumbnailUrl());
+                    model.setAnnouncementId(announcementId);
+                    model.setAnnouncementType(announcementType);
+                    model.setAttributeAttachment(true);
+                    model.setTotal(files[0].size);
+                    return model;
                 }, this);
+            return this.UpdateView(chlk.activities.announcement.AttachFilesDialog, result, chlk.activities.lib.DontShowLoader());
         },
 
-        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Object, Boolean]],
-        function uploadAttachmentAction(announcementId, announcementType, files, onCreate_) {
-            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
-            return this.UpdateView(onCreate_ ? this.getAnnouncementFormPageType_(announcementType) : this.getView().getCurrent().getClass()
-                    , this.fetchUploadAttachmentFuture_(announcementId, files, announcementType), 'update-attachments');
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, Object, Boolean, Number]],
+        function uploadAttachmentAction(announcementId, announcementType, files, onCreate_, fileIndex_) {
+
+            var fileIndex = fileIndex_ || 0;
+
+            var result = this.uploadAttachment_(announcementId, files[0], announcementType, fileIndex);
+
+            if(files.length > 1)
+                for(var i = 1; i < files.length; i++){
+                    this.uploadAttachment_(announcementId, files[i], announcementType, fileIndex + i)
+                        .then(function(attachment){
+                            this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, attachment, chlk.activities.lib.DontShowLoader());
+                        }, this);
+                }
+
+            return this.UpdateView(chlk.activities.announcement.AttachFilesDialog, result, chlk.activities.lib.DontShowLoader());
         },
 
-        [[chlk.models.id.AnnouncementId,  chlk.models.announcement.AnnouncementTypeEnum, Object, Boolean]],
-        function uploadAttachmentDistrictAdminAction(announcementId, announcementType, files, onCreate_) {
-            this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
-            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage
-                    , this.fetchUploadAttachmentFuture_(announcementId, files, announcementType), 'update-attachments');
+        function uploadAttachment_(announcementId, file, announcementType, fileIndex){
+            var firstModel = new chlk.models.attachment.AnnouncementAttachment(fileIndex, file.size, null, file.name);
+            this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'attachment-progress');
+
+            return this.announcementAttachmentService
+                .uploadAttachment(announcementId, [file], announcementType)
+                .handleProgress(function(event){
+                    var model = new chlk.models.attachment.AnnouncementAttachment(fileIndex, event.total, event.loaded, file.name);
+                    this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, model, 'attachment-progress');
+                }, this)
+                .catchError(this.handleNoAnnouncementException_, this)
+                .attach(this.validateResponse_())
+                .then(function(attachment){
+                    this.prepareAttachment(attachment, 51, 33);
+                    attachment.setAnnouncementId(announcementId);
+                    attachment.setAnnouncementType(announcementType);
+                    attachment.setFileIndex(fileIndex || 0);
+                    attachment.setTotal(file.size);
+                    return attachment;
+                }, this);
         },
 
         [[chlk.models.id.AnnouncementId]],
@@ -933,7 +1266,7 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.gradingService
                 .applyAutoGrade(announcementId)
                 .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, result, 'update-attachments');
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, result, 'attachment-uploaded');
         },
 
         [[chlk.models.id.AnnouncementId]],
@@ -967,10 +1300,10 @@ NAMESPACE('chlk.controllers', function (){
             var downloadAttachmentButton = new chlk.models.common.attachments.ToolbarButton(
                 "download-attachment",
                 "Download Attachment",
-                "/AnnouncementAttachment/DownloadAttachment.json?needsDownload=true&announcementAttachmentId=" + attachment.getId().valueOf()
+                this.announcementAttachmentService.getAttachmentUri(attachment.getId(), true, null, null)
             );
 
-            if(attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE.valueOf()){
+            if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
                 attachmentUrl = attachment.getUrl();
                 var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(
                     attachmentUrl,
@@ -980,19 +1313,18 @@ NAMESPACE('chlk.controllers', function (){
                 res = new ria.async.DeferredData(attachmentViewData);
             }else{
                 var buttons = [downloadAttachmentButton];
-                if(this.userInRole(chlk.models.common.RoleEnum.STUDENT) && attachment.isTeachersAttachment())
+                if(this.userInRole(chlk.models.common.RoleEnum.STUDENT) && attachment.isTeachersAttachment() && attachment.getAttachmentId())
                     buttons.push(new chlk.models.common.attachments.ToolbarButton('mark-attachment', 'MARK UP', null, null,
-                        'announcement', 'cloneAttachment', [attachment.getId().valueOf(), announcementId.valueOf()], true));
-                res = this.announcementService
+                        'announcement', 'cloneAttachment', [attachment.getAttachmentId().valueOf(), announcementId.valueOf()], true));
+                res = this.announcementAttachmentService
                     .startViewSession(attachmentId)
                     .then(function(session){
-                        attachmentUrl = 'https://crocodoc.com/view/' + session;
                         return new chlk.models.common.attachments.BaseAttachmentViewData(
-                            attachmentUrl,
+                            this.attachmentService.getViewSessionUrl(session),
                             buttons,
                             attachment.getType()
                         );
-                    });
+                    }, this);
             }
             return this.ShadeView(chlk.activities.common.attachments.AttachmentDialog, res);
         },
@@ -1012,7 +1344,7 @@ NAMESPACE('chlk.controllers', function (){
                     "&announcementType=" +announcementType.valueOf() + "&time=" + getDate().getTime()
             );
 
-            if(attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.PICTURE.valueOf()){
+            if(attachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
                 attachmentUrl = attachment.getUrl() + "&time=" + getDate().getTime();
                 var attachmentViewData = new chlk.models.common.attachments.BaseAttachmentViewData(
                     attachmentUrl,
@@ -1037,9 +1369,9 @@ NAMESPACE('chlk.controllers', function (){
         },
 
 
-        [[chlk.models.id.AnnouncementAttachmentId, chlk.models.id.AnnouncementId]],
+        [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId]],
         function cloneAttachmentAction(attachmentId, announcementId) {
-            var res = this.announcementService
+            var res = this.announcementAttachmentService
                 .cloneAttachment(attachmentId, announcementId)
                 .attach(this.validateResponse_())
                 .then(function(announcement){
@@ -1055,8 +1387,9 @@ NAMESPACE('chlk.controllers', function (){
                     return this.prepareAnnouncementForView(announcement);
                 }, this);
             this.BackgroundCloseView(chlk.activities.common.attachments.AttachmentDialog);
-            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res, 'update-attachments');
         },
+
 
         [[chlk.models.announcement.FeedAnnouncementViewData]],
         function addAppAttachmentAction(announcement) {
@@ -1064,6 +1397,36 @@ NAMESPACE('chlk.controllers', function (){
             announcement.setNeedDeleteButton(true);
             this.prepareAttachments(announcement);
             return this.UpdateView(this.getAnnouncementFormPageType_(), new ria.async.DeferredData(announcement), 'update-attachments');
+        },
+
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function refreshAttachmentsAction(announcementId, announcementType_) {
+            var result = this.announcementService
+                .getAnnouncement(announcementId, announcementType_)
+                .attach(this.validateResponse_())
+                .then(function (announcement) {
+                    announcement.setNeedButtons(true);
+                    announcement.setNeedDeleteButton(true);
+                    this.prepareAttachments(announcement);
+                    this.cacheAnnouncement(announcement);
+                    return announcement
+                }, this);
+
+            return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'update-attachments');
+        },
+
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
+        function refreshAttributeAction(announcementId, announcementType, assignedAttributeId) {
+            var result = this.announcementService
+                .getAnnouncement(announcementId, announcementType)
+                .attach(this.validateResponse_())
+                .then(function (announcement) {
+                    var attribute = announcement.getAnnouncementAttributes().filter(function(a){return a.getId() == assignedAttributeId})[0];
+                    this.cacheAnnouncement(announcement);
+                    return this.prepareAttributeData(announcementId, announcementType, assignedAttributeId, attribute);
+                }, this);
+
+            return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'add-attribute-attachment');
         },
 
         function cancelDeleteAction(){
@@ -1123,20 +1486,6 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
-        [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
-        function deleteAttachmentAction(attachmentId, announcementId, announcementType) {
-            var result = this.announcementService
-                .deleteAttachment(attachmentId, announcementId, announcementType)
-                .attach(this.validateResponse_())
-                .then(function(model){
-                    model.setNeedButtons(true);
-                    model.setNeedDeleteButton(true);
-                    this.prepareAttachments(model);
-                    return model;
-                }, this);
-            return this.UpdateView(this.getView().getCurrent().getClass(), result, 'update-attachments');
-        },
-
         [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementTypeEnum]],
         function deleteAppAction(announcementAppId, announcementType) {
             var result = this.announcementService
@@ -1150,6 +1499,20 @@ NAMESPACE('chlk.controllers', function (){
                     return this.addEditAction(announcementForm, true).getAnnouncement();
                 }, this);
             return this.UpdateView(this.getAnnouncementFormPageType_(), result, 'update-attachments');
+        },
+
+        [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function deleteAppDistrictAdminAction(announcementAppId, announcementType) {
+            var result = this.announcementService
+                .deleteApp(announcementAppId, announcementType)
+                .attach(this.validateResponse_())
+                .then(function(model){
+                    model.setNeedButtons(true);
+                    model.setNeedDeleteButton(true);
+                    this.prepareAnnouncementAttachedItems(model);
+                    return model;
+                }, this);
+            return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, result, 'update-attachments');
         },
 
         Boolean, function isAnnouncementSavingDisabled(){
@@ -1171,14 +1534,7 @@ NAMESPACE('chlk.controllers', function (){
              return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT, new chlk.models.announcement.FeedAnnouncementViewData());
         },
 
-        [[ArrayOf(chlk.models.announcement.CategoryViewData)]],
-        function cacheLessonPlanCategories(categories){
-            this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORIES, categories);
-        },
 
-        ArrayOf(chlk.models.announcement.CategoryViewData), function getCachedLessonPlanCategories(){
-            return this.getContext().getSession().get(ChlkSessionConstants.LESSON_PLAN_CATEGORIES, []);
-        },
 
         [[chlk.models.id.ClassId]],
         function cacheLessonPlanClassId(classId){
@@ -1198,7 +1554,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT);
         },
 
-        [[ArrayOf(chlk.models.attachment.Attachment)]],
+        [[ArrayOf(chlk.models.attachment.AnnouncementAttachment)]],
         function cacheAnnouncementAttachments(attachments){
             this.getContext().getSession().set(ChlkSessionConstants.ANNOUNCEMENT_ATTACHMENTS, attachments);
         },
@@ -1391,7 +1747,7 @@ NAMESPACE('chlk.controllers', function (){
             if (submitType == 'save'){
                 model.setAnnouncementAttachments(this.getCachedAnnouncementAttachments());
                 model.setApplications(this.getCachedAnnouncementApplications());
-                model.setCategories(this.getCachedLessonPlanCategories());
+                model.setCategories(this.lpGalleryCategoryService.getLessonPlanCategoriesSync());
                 model.setAnnouncementAttributes(this.getCachedAnnouncementAttributes());
                 var announcementForm =  chlk.models.announcement.AnnouncementForm.$createFromAnnouncement(model);
                 return this.saveLessonPlanAction(model, announcementForm);
@@ -1403,7 +1759,7 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             if (submitType == 'changeCategory'){
-                this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, model.getGalleryCategoryForSearch() || '');
+                this.getContext().getSession().set(ChlkSessionConstants.LESSON_PLAN_CATEGORY_FOR_SEARCH, model.getGalleryCategoryForSearch() || null);
                 return null;
                 //return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, ria.async.DeferredData(model), 'search');
             }
@@ -1422,7 +1778,7 @@ NAMESPACE('chlk.controllers', function (){
         function createFromTemplateAction(announcementId, classId){
             var result = ria.async.wait([
                     this.lessonPlanService.createFromTemplate(announcementId, classId),
-                    this.lessonPlanService.listCategories()
+                    this.lpGalleryCategoryService.list()
                 ])
                 .attach(this.validateResponse_())
                 .then(function(result){
@@ -1430,7 +1786,7 @@ NAMESPACE('chlk.controllers', function (){
                     if(model && model.getAnnouncement()){
                         var resModel =  this.addEditAction(model, false);
                         resModel.getAnnouncement().setCategories(result[1]);
-                        this.cacheLessonPlanCategories(result[1]);
+                        this.lpGalleryCategoryService.cacheLessonPlanCategories(result[1]);
                         this.cacheLessonPlanClassId(resModel.getAnnouncement().getLessonPlanData().getClassId());
                         return resModel;
                     }
@@ -1466,12 +1822,31 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
         function checkLessonPlanTitleAction(model, isAddToGallery_){
             var res = this.lessonPlanService
-                .existsInGallery(model.getTitle(), model.getId())
+                .getLessonPlanTemplateByTitle(model.getTitle())
                 .attach(this.validateResponse_())
-                .then(function(exists){
-                    if(exists)
-                        this.ShowMsgBox('There is Lesson Plan with that title in gallery', 'whoa.');
-                    return new chlk.models.Success(exists);
+                .then(function(lpInGallery){
+
+                    var success = !!lpInGallery;
+                    if(lpInGallery){
+                        if(lpInGallery.isAnnOwner() || this.getCurrentPerson().hasPermission(chlk.models.people.UserPermissionEnum.CHALKABLE_ADMIN)){
+                            return this.ShowMsgBox('You are replacing the existing lesson plan \- do you want to continue ?', null,
+                                    [{text: 'Continue', clazz: 'blue-button', value: 'ok'},
+                                    {text: 'NO'}]
+                                )
+                                .then(function(msResult){
+                                    if(msResult){
+                                        return this.lessonPlanService.replaceLessonPlanInGallery(lpInGallery.getId(), model.getId())
+                                                   .attach(this.validateResponse_())
+                                                   .then(function(data){return new chlk.models.Success(!data)});
+                                    }
+                                    return new chlk.models.Success(true);
+                                }, this);
+                        }
+                        else{
+                            this.ShowMsgBox('There is Lesson Plan with that title in gallery', 'whoa.');
+                        }
+                    }
+                    return new chlk.models.Success(success);
                 }, this);
 
             return this.UpdateView(chlk.activities.announcement.LessonPlanFormPage, res, isAddToGallery_ ? 'addToGallery' : chlk.activities.lib.DontShowLoader());
@@ -1526,8 +1901,16 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.FeedAnnouncementViewData, Boolean]],
         function submitLessonPlan(model, isEdit){
-            if(model.getStartDate() > model.getEndDate()){
-                this.ShowMsgBox('Lesson Plan are no valid. Start date is greater the end date', 'whoa.');
+            if(model.getStartDate().compare(model.getEndDate()) == 1){
+                this.ShowMsgBox('Lesson Plan is no valid. Start date is greater the end date', 'whoa.');
+                return null;
+            }
+
+            var gradingPeriods = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIODS, []);
+
+            if(!gradingPeriods.filter(function(_){return model.getStartDate().getDate() >= _.getStartDate().getDate() && model.getStartDate().getDate() <= _.getEndDate().getDate()
+                    && model.getEndDate().getDate() >= _.getStartDate().getDate() && model.getEndDate().getDate() <= _.getEndDate().getDate()}).length){
+                this.ShowMsgBox('Lesson Plan is no valid. Start date and End date can\'t be in different grading periods', 'whoa.');
                 return null;
             }
 
@@ -1548,7 +1931,7 @@ NAMESPACE('chlk.controllers', function (){
             res = res.then(function(saved){
                 if(saved){
                     this.cacheAnnouncement(null);
-                    this.cacheLessonPlanCategories(null);
+                    this.lpGalleryCategoryService.emptyLessonPlanCategoriesCache();
                     this.cacheLessonPlanClassId(null);
                     this.cacheAnnouncementAttachments(null);
                     this.cacheAnnouncementApplications(null);
@@ -1574,6 +1957,9 @@ NAMESPACE('chlk.controllers', function (){
             var announcementTypeId = model.getAnnouncementTypeId();
             var announcementTypeName = model.getAnnouncementTypeName();
             var classId = model.getClassId();
+
+            if(!announcementTypeId)
+                return this.Redirect('announcement', 'lessonPlan', [classId])
 
             model.setMarkingPeriodId(this.getCurrentMarkingPeriod().getId());
 
@@ -1760,7 +2146,7 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.announcement.QnAForm]],
         function askQuestionAction(model) {
-            var ann = this.announcementService
+            var ann = this.announcementQnAService
                 .askQuestion(model.getAnnouncementId(), model.getQuestion())
                 .attach(this.validateResponse_())
                 .catchError(this.handleNoAnnouncementException_, this);
@@ -1773,76 +2159,30 @@ NAMESPACE('chlk.controllers', function (){
             if (model.getQuestion()){
                 var updateType = model.getUpdateType();
                 if(updateType ==  "editQuestion"){
-                    ann = this.announcementService
+                    ann = this.announcementQnAService
                         .editQuestion(model.getId(), model.getQuestion())
                         .catchError(this.handleNoAnnouncementException_, this)
                         .attach(this.validateResponse_());
                 }
                 if(updateType == "answer"){
-                    ann = this.announcementService
+                    ann = this.announcementQnAService
                         .answerQuestion(model.getId(), model.getQuestion(), model.getAnswer())
                         .catchError(this.handleNoAnnouncementException_, this)
                         .attach(this.validateResponse_());
                 }
                 if(updateType == "editAnswer"){
-                    ann = this.announcementService
+                    ann = this.announcementQnAService
                         .editAnswer(model.getId(),  model.getAnswer())
                         .catchError(this.handleNoAnnouncementException_, this)
                         .attach(this.validateResponse_());
                 }
             }
             else
-                ann = this.announcementService
+                ann = this.announcementQnAService
                     .deleteQnA(model.getAnnouncementId(), model.getId())
                     .catchError(this.handleNoAnnouncementException_, this)
                     .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, ann, 'update-qna');
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[String, chlk.models.id.AnnouncementId, chlk.models.id.ClassId]],
-        function showStandardsAction(typeName, announcementId, classId){
-            var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []);
-            var res = this.standardService.getSubjects(classId)
-                .then(function(subjects){
-                    return new chlk.models.announcement.AddStandardViewData(typeName, announcementId, classId, subjects, standardIds);
-                }, this)
-                .attach(this.validateResponse_());
-            return this.ShadeView(chlk.activities.announcement.AddStandardsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.ClassId, chlk.models.id.StandardSubjectId, String, chlk.models.id.StandardId]],
-        function showStandardsByCategoryAction(classId, subjectId, description_, standardId_){
-            var res = this.standardService.getStandardColumn(classId, subjectId, standardId_)
-                .then(function(standards){
-                    var standardTable = new chlk.models.standard.StandardsTable.$createOneColumnTable(standards);
-                    return new chlk.models.standard.StandardsTableViewData(description_, classId, subjectId, standardTable);
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.standard.GetStandardTreePostData]],
-        function getStandardTreeAction(data){
-            var res = this.standardService.getStandardParentsSubTree(data.getStandardId())
-                .then(function(standardsTable){
-                    var description, subjectId;
-                    if(standardsTable && standardsTable.getStandardsColumns() && standardsTable.getStandardsColumns().length > 0){
-                        var columns = standardsTable.getStandardsColumns();
-                        var subjectId = columns[0][0].getSubjectId();
-                        var lastSelected = columns[columns.length - 1].filter(function (s){return s.isSelected();});
-                        if(lastSelected.length > 0){
-                            description = lastSelected[0].getDescription();
-                            standardsTable.addColumn([]);
-                        }
-                    }
-                    var res = new chlk.models.standard.StandardsTableViewData(description, data.getClassId(), subjectId, standardsTable, data.getAnnouncementId());
-                    return res
-                }, this)
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res, 'rebuild-standard-tree');
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
@@ -1867,6 +2207,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(announcement){
                     this.saveStandardIds(announcement);
                     //return chlk.models.standard.StandardsListViewData(null, null, null, announcement.getStandards(), announcement.getId());
+                    this.prepareAttachments(announcement);
                     return announcement;
                 }, this)
                 .attach(this.validateResponse_());
@@ -1913,328 +2254,12 @@ NAMESPACE('chlk.controllers', function (){
 
 
         [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId]],
-        function showGroupMembersAction(groupId){
-            var res = this.groupService.groupExplorer(groupId)
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId, String]],
-        function showGradeLevelMembersAction(groupId, schoolYearId, gradeLevelId, classIds_){
-            var res = this.groupService.studentForGroup(groupId, schoolYearId, gradeLevelId, classIds_ && this.getIdsList(classIds_, chlk.models.id.ClassId))
-                .then(function(students){
-                    return new chlk.models.group.StudentsForGroupViewData(groupId, gradeLevelId, schoolYearId, students);
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res, classIds_ ? 'after-filter' : '');
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId]],
-        function assignGradeLevelAction(groupId, schoolYearId, gradeLevelId){
-            var res = this.groupService.assignGradeLevel(groupId, schoolYearId, gradeLevelId)
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId]],
-        function unAssignGradeLevelAction(groupId, schoolYearId, gradeLevelId){
-            var res = this.groupService.unassignGradeLevel(groupId, schoolYearId, gradeLevelId)
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolPersonId]],
-        function assignStudentAction(groupId, studentId){
-            if(!studentId)
-                return null;
-            var res = this.groupService.assignStudents(groupId, [studentId])
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolPersonId]],
-        function unAssignStudentAction(groupId, studentId){
-            if(!studentId)
-                return null;
-            var res = this.groupService.unassignStudents(groupId, [studentId])
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId]],
-        function assignSchoolAction(groupId, schoolYearId){
-            var res = this.groupService.assignSchool(groupId, schoolYearId)
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId]],
-        function unAssignSchoolAction(groupId, schoolYearId){
-            var res = this.groupService.unassignSchool(groupId, schoolYearId)
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId]],
-        function assignAllSchoolsAction(groupId){
-            var res = this.groupService.assignAllSchools(groupId)
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId]],
-        function unAssignAllSchoolsAction(groupId){
-            var res = this.groupService.unassignAllSchools(groupId)
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.GradeLevelId, chlk.models.id.SchoolYearId, String]],
-        function assignAllStudentsAction(groupId, gradeLevelId, schoolYearId, studentIds){
-            if(!studentIds)
-                return null;
-
-            var res = this.groupService.assignStudents(groupId, this.getIdsList(studentIds, chlk.models.id.SchoolPersonId))
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.GradeLevelId, chlk.models.id.SchoolYearId, String]],
-        function unAssignAllStudentsAction(groupId, gradeLevelId, schoolYearId, studentIds){
-            if(!studentIds)
-                return null;
-
-            var res = this.groupService.unassignStudents(groupId, this.getIdsList(studentIds, chlk.models.id.SchoolPersonId))
-                .then(function(model){
-                    return new chlk.models.Success();
-                })
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId, chlk.models.id.SchoolYearId, chlk.models.id.GradeLevelId]],
-        function selectStudentFiltersAction(groupId, schoolYearId, gradeLevelId){
-            var res = this.classService.detailedCourseTypes(schoolYearId, gradeLevelId)
-                .then(function(courseTypes){
-                    return new chlk.models.announcement.GroupStudentsFilterViewData(groupId, schoolYearId, gradeLevelId, courseTypes)
-                })
-                .attach(this.validateResponse_());
-
-            return this.ShadeView(chlk.activities.announcement.GroupStudentsFilterDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.announcement.GroupStudentsFilterViewData]],
-        function filterStudentsAction(model){
-            this.BackgroundCloseView(chlk.activities.announcement.GroupStudentsFilterDialog);
-            return this.Redirect('announcement', 'showGradeLevelMembers', [model.getGroupId(), model.getSchoolYearId(), model.getGradeLevelId(), model.getClassIds()]);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        function editGroupsAction(){
-            var res = this.groupService.list()
-                .then(function(groups){
-                    return new chlk.models.group.GroupsListViewData(groups);
-                })
-                .attach(this.validateResponse_());
-
-            return this.ShadeView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
-        },
-
-        function afterGroupEdit(groups){
-            this.getContext().getSession().set(ChlkSessionConstants.GROUPS_LIST, groups);
-            var announcementId = this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_ID, null);
-            var groupsIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []);
-            var model = new chlk.models.group.AnnouncementGroupsViewData(groups, groupsIds, announcementId);
-            this.BackgroundUpdateView(chlk.activities.announcement.AnnouncementGroupsDialog, model);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        function addGroupAction(){
-            var res = new ria.async.DeferredData(new chlk.models.group.Group);
-
-            return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId]],
-        function tryDeleteGroupAction(groupId) {
-            this.ShowConfirmBox('Are you sure you want to delete this group?', "whoa.", null, 'negative-button')
-                .then(function (data) {
-                    return this.BackgroundNavigate('announcement', 'deleteGroup', [groupId]);
-                }, this);
-            return null;
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.id.GroupId]],
-        function deleteGroupAction(groupId){
-            var res = this.groupService.deleteGroup(groupId)
-                .then(function(groups){
-                    this.afterGroupEdit(groups);
-                    return new chlk.models.group.GroupsListViewData(groups);
-                }, this)
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.group.Group]],
-        function createGroupAction(model){
-            var res = this.groupService.create(model.getName())
-                .then(function(groups){
-                    this.afterGroupEdit(groups);
-                    return new chlk.models.group.GroupsListViewData(groups);
-                }, this)
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.group.Group]],
-        function editGroupNameAction(model){
-            var res = this.groupService.editName(model.getId(), model.getName())
-                .then(function(groups){
-                    this.afterGroupEdit(groups);
-                    return new chlk.models.group.GroupsListViewData(groups);
-                }, this)
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AnnouncementEditGroupsDialog, res);
-        },
-
-        function editCategoriesAction(){
-            var res = this.lessonPlanService.listCategories()
-                .then(function(list){
-                    return new chlk.models.announcement.CategoriesListViewData(list);
-                })
-                .attach(this.validateResponse_());
-            return this.ShadeView(chlk.activities.announcement.AddNewCategoryDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        function addCategoryAction(){
-            var res = new ria.async.DeferredData(new chlk.models.announcement.CategoryViewData);
-
-            return this.UpdateView(chlk.activities.announcement.AddNewCategoryDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[Number]],
-        function tryDeleteCategoryAction(categoryId) {
-            this.ShowConfirmBox('Are you sure you want to delete this category?', "whoa.", null, 'negative-button')
-                .then(function (data) {
-                    return this.BackgroundNavigate('announcement', 'deleteCategory', [categoryId]);
-                }, this);
-            return null;
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[Number]],
-        function deleteCategoryAction(categoryId){
-            var res = this.lessonPlanService.deleteCategory(categoryId)
-                .thenCall(this.lessonPlanService.listCategories, [])
-                .then(function(list){
-                    this.afterGroupEditAction(list);
-                    return new chlk.models.announcement.CategoriesListViewData(list);
-                }, this)
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AddNewCategoryDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.announcement.CategoryViewData]],
-        function createCategoryAction(model){
-            var res = this.lessonPlanService.addCategory(model.getName())
-                .then(function(data){
-                    if(!data)
-                        this.ShowMsgBox("Category with this name already exists");
-                    return this.lessonPlanService.listCategories();
-                }, this)
-                .then(function(list){
-                    this.afterGroupEditAction(list);
-                    return new chlk.models.announcement.CategoriesListViewData(list);
-                }, this)
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AddNewCategoryDialog, res);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.announcement.CategoryViewData]],
-        function editCategoryNameAction(model){
-            var res = this.lessonPlanService.updateCategory(Number(model.getId()), model.getName())
-                .then(function(data){
-                    if(!data)
-                        this.ShowMsgBox("Category with this name already exists");
-                    return this.lessonPlanService.listCategories();
-                }, this)
-                .then(function(list){
-                    this.afterGroupEditAction(list);
-                    return new chlk.models.announcement.CategoriesListViewData(list);
-                }, this)
-                .attach(this.validateResponse_());
-
-            return this.UpdateView(chlk.activities.announcement.AddNewCategoryDialog, res);
-        },
-
-        function afterGroupEditAction(list){
-            var model = new chlk.models.announcement.FeedAnnouncementViewData();
-            model.setCategories(list);
-            this.BackgroundUpdateView(chlk.activities.announcement.LessonPlanFormPage, model, 'right-categories');
-            this.BackgroundUpdateView(chlk.activities.announcement.LessonPlanFormPage, model, 'categories');
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.AnnouncementId, chlk.models.id.GroupId]],
         function removeRecipientAction(announcementId, recipientId){
 
-            var res = this.groupService.list()
+            var res = this.ShowConfirmBox('Are you sure you want to remove that group from announcement?', '')
+                .thenCall(this.groupService.list, [])
+                .attach(this.validateResponse_())
                 .then(function(groups){
                     var groupIds = this.getContext().getSession().get(ChlkSessionConstants.GROUPS_IDS, []);
                     groupIds = groupIds.filter(function(id){
@@ -2258,14 +2283,14 @@ NAMESPACE('chlk.controllers', function (){
                         .then(function(){
                             return model;
                         }, this)
-                }, this)
-                .attach(this.validateResponse_());
+                }, this);
 
             return this.UpdateView(chlk.activities.announcement.AdminAnnouncementFormPage, res, 'recipients');
         },
 
         function attributeAttachmentExistsAction() {
-            return this.ShowMsgBox('You can add only 1 attachment to attribute', 'Error'), null;
+            this.showAttributesFilesUploadMsg_();
+            return null;
         }
     ])
 });

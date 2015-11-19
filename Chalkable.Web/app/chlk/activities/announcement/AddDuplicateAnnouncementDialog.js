@@ -6,8 +6,8 @@ NAMESPACE('chlk.activities.announcement', function(){
 
     /**@class chlk.activities.announcement.AddDuplicateAnnouncementDialog*/
     CLASS(
-        [ria.mvc.DomAppendTo('body')],
-//        [ria.mvc.DomAppendTo('#chlk-dialogs')],
+        //[ria.mvc.DomAppendTo('body')],
+        [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.announcement.AddDuplicateAnnouncementTpl)],
         'AddDuplicateAnnouncementDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
 

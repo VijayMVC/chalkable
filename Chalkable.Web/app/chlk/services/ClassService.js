@@ -62,8 +62,8 @@ NAMESPACE('chlk.services', function () {
 
             [[ArrayOf(chlk.models.id.ClassId)]],
             ria.async.Future, function updateClassAnnouncementTypes(classIds){
-                return this.getContext().getService(chlk.services.AnnouncementService)
-                    .getClassAnnouncementTypes(classIds)
+                return this.getContext().getService(chlk.services.AnnouncementTypeService)
+                    .list(classIds)
                     .then(function (classAnnTypes){
                         var classesInfoMap = this.getContext().getSession().get(ChlkSessionConstants.CLASSES_INFO, {});
                         for(var i = 0; i < classIds.length; i++){

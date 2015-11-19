@@ -59,6 +59,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             application.Description = applicationInfo.ShortApplicationInfo.Description;
             application.SmallPictureRef = applicationInfo.ShortApplicationInfo.SmallPictureId;
             application.BigPictureRef = applicationInfo.ShortApplicationInfo.BigPictureId;
+            application.ExternalAttachPictureRef = applicationInfo.ShortApplicationInfo.ExternalAttachPictureId;
             application.Description = applicationInfo.ShortApplicationInfo.Description;
             application.VideoUrl = applicationInfo.ShortApplicationInfo.VideoDemoUrl;
             application.IsAdvanced = applicationInfo.ShortApplicationInfo.AdvancedApp;
@@ -66,12 +67,17 @@ namespace Chalkable.BusinessLogic.Services.Master
             application.Price = applicationInfo.ApplicationPrices.Price;
             application.PricePerClass = applicationInfo.ApplicationPrices.PricePerClass;
             application.PricePerSchool = applicationInfo.ApplicationPrices.PricePerSchool;
+
             application.HasStudentMyApps = applicationInfo.ApplicationAccessInfo.HasStudentMyApps;
             application.HasTeacherMyApps = applicationInfo.ApplicationAccessInfo.HasTeacherMyApps;
             application.HasParentMyApps = applicationInfo.ApplicationAccessInfo.HasParentMyApps;
             application.HasAdminMyApps = applicationInfo.ApplicationAccessInfo.HasAdminMyApps;
             application.CanAttach = applicationInfo.ApplicationAccessInfo.CanAttach;
             application.ShowInGradeView = applicationInfo.ApplicationAccessInfo.ShowInGradeView;
+            application.HasAdminExternalAttach = applicationInfo.ApplicationAccessInfo.HasAdminExternalAttach;
+            application.HasTeacherExternalAttach = applicationInfo.ApplicationAccessInfo.HasTeacherExternalAttach;
+            application.HasStudentExternalAttach = applicationInfo.ApplicationAccessInfo.HasStudentExternalAttach;
+
             application.State = state;
 
             using (var uow = Update())
@@ -179,6 +185,13 @@ namespace Chalkable.BusinessLogic.Services.Master
                     throw new ChalkableException(ChlkResources.ERR_APP_SMALL_ICON_MISSING);        
             }
 
+            if ((appInfo.ApplicationAccessInfo.HasStudentExternalAttach
+                || appInfo.ApplicationAccessInfo.HasTeacherExternalAttach
+                || appInfo.ApplicationAccessInfo.HasAdminExternalAttach)
+                && !appInfo.ShortApplicationInfo.ExternalAttachPictureId.HasValue)
+            {
+                throw new ChalkableException(ChlkResources.ERR_APP_ATTACH_ICON_MISSING);
+            }
             var developer = application.Developer;
             if (string.IsNullOrEmpty(developer.Name) || string.IsNullOrEmpty(developer.WebSite))
                 throw new ChalkableException(ChlkResources.ERR_APP_DEV_INFO_MISSING);
@@ -187,7 +200,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             ServiceLocator.EmailService.SendApplicationEmailToSysadmin(application); 
             return application;    
         }
-
+        
         public bool ApproveReject(Guid applicationId, bool isApprove)
         {
             if (!BaseSecurity.IsSysAdmin(Context) && !BaseSecurity.IsAppTester(Context))

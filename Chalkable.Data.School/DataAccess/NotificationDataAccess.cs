@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.Common;
-using System.Data.SqlClient;
-using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -19,7 +17,11 @@ namespace Chalkable.Data.School.DataAccess
 
         private AndQueryCondition BuildShortConditions(NotificationQuery query)
         {
-            var res = new AndQueryCondition { { Notification.PERSON_REF_FIELD, query.PersonId } };
+            var res = new AndQueryCondition
+            {
+                { Notification.PERSON_REF_FIELD, query.PersonId },
+                { Notification.ROLE_REF_FIELD, query.RoleId }
+            };
             if (query.Id.HasValue)
                 res.Add(Notification.ID_FIELD, query.Id);
             if(query.Shown.HasValue)
@@ -44,9 +46,25 @@ namespace Chalkable.Data.School.DataAccess
             var conds = BuildShortConditions(query);
             if(!includeMessages)
                 conds.Add(Notification.TYPE_FIELD, NotificationType.Message, ConditionRelation.NotEqual);
-            //TODO: think how to rewrtite this
-            var sql = @"select {0}, 
-                               vwPrivateMessage.*,
+
+            var tables = new List<Type>
+                {
+                    typeof (Notification),
+                    typeof (Announcement),
+                    typeof (MarkingPeriod)
+                };
+
+            //TODO: think how to rewrtite this ... move this to stored procedure 
+            var sql = $@"select distinct {Orm.ComplexResultSetQuery(tables)}, 
+                               PrivateMessage.*,
+                               PrivateMessageRecipient.[{PrivateMessageRecipient.READ_FIELD}] as [{PrivateMessageRecipient.READ_FIELD}],
+                               PrivateMessageRecipient.[{PrivateMessageRecipient.DELETED_BY_RECIPIENT_FIELD}] as [{PrivateMessageRecipient.DELETED_BY_RECIPIENT_FIELD}],
+                               {"MessageSender"}.{Person.ID_FIELD} as {"Sender"}{Person.ID_FIELD},
+                               {"MessageSender"}.{Person.FIRST_NAME_FIELD} as {"Sender"}{Person.FIRST_NAME_FIELD},
+                               {"MessageSender"}.{Person.LAST_NAME_FIELD} as {"Sender"}{Person.LAST_NAME_FIELD},
+                               {"MessageSender"}.{Person.SALUTATION_FIELD} as {"Sender"}{Person.SALUTATION_FIELD},
+                               {"MessageSender"}.{Person.ROLE_REF_FIELD} as {"Sender"}{Person.ROLE_REF_FIELD},
+                               {"MessageSender"}.{Person.GENDER_FIELD} as {"Sender"}{Person.GENDER_FIELD},
                                toPerson.Id as ToPerson_Id,
                                toPerson.FirstName as ToPerson_FirstName,
                                toPerson.LastName as ToPerson_LastName,
@@ -62,25 +80,18 @@ namespace Chalkable.Data.School.DataAccess
                         from [Notification]
                         left join Announcement on Announcement.Id  = [Notification].AnnouncementRef
                         left join MarkingPeriod on MarkingPeriod.Id = [Notification].MarkingPeriodRef
-                        left join vwPrivateMessage on vwPrivateMessage.PrivateMessage_Id = [Notification].PrivateMessageRef
+                        left join PrivateMessage on PrivateMessage.Id = [Notification].PrivateMessageRef
+                        left join PrivateMessageRecipient on PrivateMessageRecipient.PrivateMessageRef = PrivateMessage.Id
+                        left join {Person.VW_PERSON} MessageSender on MessageSender.Id = PrivateMessage.{PrivateMessage.FROM_PERSON_REF_FIELD}
                         join vwPerson toPerson on toPerson.Id = [Notification].PersonRef
                         left join vwPerson QuestionPerson on QuestionPerson.Id = [Notification].QuestionPersonRef";
 
-            var b = new StringBuilder();
-            var tables = new List<Type>
-                {
-                    typeof (Notification),
-                    typeof (Announcement),
-                    typeof (MarkingPeriod)
-                };
-            b.AppendFormat(sql, Orm.ComplexResultSetQuery(tables));
-            var res = new DbQuery(b, new Dictionary<string, object>());
+            var res = new DbQuery(sql, new Dictionary<string, object>());
             conds.BuildSqlWhere(res, tables[0].Name);
             res.Sql.AppendFormat(
                 " and (toPerson.[{0}] =@{0} and (QuestionPerson.[{0}] is null or QuestionPerson.[{0}] =@{0}))"
                 , SchoolPerson.SCHOOL_REF_FIELD);
-            res.Sql.AppendFormat(" and (PrivateMessage_Id is null or (PrivateMessage_SenderSchoolRef = @{0} and PrivateMessage_RecipientSchoolRef = @{0}))"
-                , SchoolPerson.SCHOOL_REF_FIELD);
+            //res.Sql.AppendFormat(" and (PrivateMessage_Id is null or (PrivateMessage_SenderSchoolRef = @{0} and PrivateMessage_RecipientSchoolRef = @{0}))", SchoolPerson.SCHOOL_REF_FIELD);
             res.Parameters.Add(SchoolPerson.SCHOOL_REF_FIELD, query.SchoolId);
             return res;
         }
@@ -99,7 +110,7 @@ namespace Chalkable.Data.School.DataAccess
             var res = reader.Read<NotificationDetails>(true);
             res.Person = ReadNotificationPerson(reader, "ToPerson");
             if (res.Type == NotificationType.Message)
-                res.PrivateMessage = PrivateMessageDataAccess.ReadPrivateMessageDetails(reader);
+                res.PrivateMessage = PrivateMessageDataAccess.ReadIncomePrivateMessage(reader);
             if (res.Type == NotificationType.Question)
                 res.QuestionPerson = ReadNotificationPerson(reader, "QuestionPerson");
             if (res.Type == NotificationType.Announcement || res.Type == NotificationType.Question || res.Type == NotificationType.ItemToGrade)
@@ -148,28 +159,22 @@ namespace Chalkable.Data.School.DataAccess
             return ReadPaginatedResult(q, query.Start, query.Count, ReadListNotifcationDetails);
         }
 
-        public int GetUnshownNotificationsCount(int personId)
+        public int GetUnshownNotificationsCount(int personId, int roleId)
         {
-            var sql = string.Format("select count(*) as UnshownCount from Notification where {0} =@{0} and {1} = @{1}"
-                , Notification.SHOWN_FIELD, Notification.PERSON_REF_FIELD);
-            IDictionary<string, object> ps = new Dictionary<string, object>
+            return Count<Notification>(new AndQueryCondition
             {
                 {Notification.SHOWN_FIELD, false},
                 {Notification.PERSON_REF_FIELD, personId},
-            };
-            using (var reader = ExecuteReaderParametrized(sql, ps))
-            {
-                reader.Read();
-                var res = SqlTools.ReadInt32(reader, "UnshownCount");
-                return res;
-            }
+                {Notification.ROLE_REF_FIELD, roleId}
+            });
         }
     }
 
     public class NotificationQuery
     {
         public int? Id { get; set; }
-        public int? PersonId { get; set; }
+        public int PersonId { get; set; }
+        public int RoleId { get; set; }
         public bool? Shown { get; set; }
         public int Start { get; set; }
         public int Count { get; set; }

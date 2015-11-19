@@ -1,5 +1,5 @@
 REQUIRE('ria.mvc.DefaultApplication');
-REQUIRE('ria.dom.jQueryDom');
+REQUIRE('chlk.lib.dom.jQueryDom');
 REQUIRE('ria.dom.ready');
 REQUIRE('chlk.activities.lib.TemplatePage');
 
@@ -36,7 +36,6 @@ REQUIRE('chlk.controls.VideoControl');
 REQUIRE('chlk.controls.PayCheckControl');
 REQUIRE('chlk.controls.ScrollBoxControl');
 REQUIRE('chlk.controls.MultipleSelectControl');
-REQUIRE('chlk.controls.MaskedInputControl');
 REQUIRE('chlk.controls.SimplePayCheckControl');
 REQUIRE('chlk.controls.CloseOpenControl');
 REQUIRE('chlk.controls.ClassesBarControl');
@@ -58,6 +57,7 @@ REQUIRE('chlk.models.grading.AvgComment');
 REQUIRE('chlk.models.school.SchoolOption');
 REQUIRE('chlk.models.school.LEParams');
 REQUIRE('chlk.models.announcement.AnnouncementAttributeType');
+REQUIRE('chlk.models.settings.AdminMessaging');
 
 REQUIRE('chlk.models.id.SchoolId');
 REQUIRE('chlk.models.id.DistrictId');
@@ -71,6 +71,8 @@ REQUIRE('chlk.lib.mvc.ChlkView');
 REQUIRE('chlk.controllers.ErrorController');
 
 NAMESPACE('chlk', function (){
+
+    var Raygun = window.Raygun || null;
 
     /** @class chlk.ConvertersFactory */
     CLASS(
@@ -112,8 +114,10 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
                 this.saveInSession(session, ChlkSessionConstants.MARKING_PERIODS, ArrayOf(chlk.models.schoolYear.MarkingPeriod));
                 this.saveInSession(session, ChlkSessionConstants.GRADING_PERIOD, chlk.models.schoolYear.GradingPeriod);
+                this.saveInSession(session, ChlkSessionConstants.GRADING_PERIODS, ArrayOf(chlk.models.schoolYear.GradingPeriod));
                 this.saveInSession(session, ChlkSessionConstants.SCHOOL_YEAR, chlk.models.schoolYear.Year, null);
                 this.saveInSession(session, ChlkSessionConstants.NEXT_MARKING_PERIOD, chlk.models.schoolYear.MarkingPeriod);
+                this.saveInSession(session, ChlkSessionConstants.MESSAGING_SETTINGS, chlk.models.settings.AdminMessaging);
                 this.saveInSession(session, ChlkSessionConstants.FINALIZED_CLASS_IDS);
                 this.saveInSession(session, ChlkSessionConstants.CURRENT_CHLK_PERSON, chlk.models.people.User, ChlkSessionConstants.CURRENT_PERSON);
 
@@ -139,6 +143,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.GRADE_LEVELS, ArrayOf(chlk.models.grading.GradeLevel));
                 this.saveInSession(session, ChlkSessionConstants.ANNOUNCEMENT_ATTRIBUTES, ArrayOf(chlk.models.announcement.AnnouncementAttributeType));
                 this.saveInSession(session, ChlkSessionConstants.MESSAGING_DISABLED, Boolean);
+                this.saveInSession(session, ChlkSessionConstants.YEARS, ArrayOf(Number));
 
                 this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
 
@@ -308,6 +313,15 @@ NAMESPACE('chlk', function (){
                             $node.find('input[type=checkbox]').trigger('click')
                     });
 
+                ria.dom.Dom()
+                    .on('mousedown', '#search-glass', function($node, event) {
+                        /*var select = jQuery('#siteSearch');
+                        var val = select.val();
+                        if(val)
+                            jQuery('#siteSearch').autocomplete( "search", val)*/
+                        return false;
+                    });
+
                 ria.dom.Dom('#demo-footer')
                     .on('click', '[data-rolename]', function($node, event) {
                         if(!$node.hasClass('pressed')) {
@@ -357,6 +371,23 @@ NAMESPACE('chlk', function (){
 
             OVERRIDE, VOID, function onStop_() {
                 this.apiHost_.onStop();
+            },
+
+            OVERRIDE, VOID, function onError_(error) {
+                if ((!(error instanceof ria.mvc.UncaughtException) || _DEBUG) && console && error)
+                    Raygun ? Raygun.send(Raygun.fetchRaygunError(error.toString())) : console.error(error.toString());
+
+                if (error instanceof ria.mvc.MvcException) {
+                    _DEBUG && console.error(error.toString());
+                    var state = this.getContext().getState();
+                    state.setController('error');
+                    state.setAction('error404');
+                    state.setParams([error.toString()]);
+                    state.setPublic(false);
+                    this.getContext().stateUpdated();
+
+                    window.appInsights && window.appInsights.ChalkableTrackException(error.toString());
+                }
             }
 
         ]);

@@ -10,6 +10,7 @@ using Chalkable.Web.Authentication;
 using Chalkable.Web.Logic.ApiExplorer;
 using Chalkable.Web.Models.Binders;
 using Chalkable.Web.Tools;
+using Microsoft.ApplicationInsights.Extensibility;
 using Mindscape.Raygun4Net;
 
 
@@ -46,6 +47,8 @@ namespace Chalkable.Web
             }
             ConfigureDiagnostics();
             PrepareBaseServiceData();
+            
+            TelemetryConfiguration.Active.InstrumentationKey = Settings.InstrumentationKey;            
         }
 
 
@@ -101,13 +104,15 @@ namespace Chalkable.Web
                 }
             }
 
-            httpResponse.Redirect(
-                String.Format("http{0}://{1}{2}{3}",
-                              httpRequest.IsSecureConnection ? "s" : "",
-                              ensureDomain,
-                              "", // leave default port http or https
-                              httpRequest.Url.PathAndQuery
-                    ));
+            if (httpRequest.Url.PathAndQuery.ToLowerInvariant().StartsWith("/autodiscover/"))
+            {
+                var path = httpRequest.Url.PathAndQuery.Substring("/autodiscover".Length);
+                httpResponse.Redirect($"http{(httpRequest.IsSecureConnection ? "s" : "")}://webmail.chalkable.com{path}");
+
+                return;
+            }
+
+            httpResponse.Redirect($"http{(httpRequest.IsSecureConnection ? "s" : "")}://{ensureDomain}{httpRequest.Url.PathAndQuery}");
         }
 
         protected void Application_Error(object sender, EventArgs e)
@@ -130,7 +135,7 @@ namespace Chalkable.Web
 
 #if !DEBUG
                 RaygunClient.SendInBackground(exc);
-#endif
+#endif            
         }
     }
 

@@ -107,5 +107,11 @@ namespace Chalkable.BusinessLogic.Security
         {
             return context.Role == CoreRoles.APP_TESTER_ROLE;
         }
+        
+        public static void EnsureStudyCenterEnabled(UserContext context)
+        {
+            if(!context.SCEnabled)
+                throw new StudyCenterDisabledException();
+        }
     }
 }

@@ -13,62 +13,67 @@
 <html xmlns="http://www.w3.org/1999/xhtml"  itemscope itemtype="Education">
 <head>
     <title>@ViewBag.Title</title>
-    @ChlkHelpers.RenderPageMetadata()
     <meta itemprop="image" content="@Url.Content("~/favicon.ico")">
     <link rel="icon" href="@Url.Content("~/favicon.ico")" />
     <!--Fonts-->
-    <link href='https://fonts.googleapis.com/css?family=Reenie+Beanie' rel='stylesheet' type='text/css' />
-    <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css' />
-    <link href='https://fonts.googleapis.com/css?family=Oswald' rel='stylesheet' type='text/css' />
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+    <link href="//fonts.googleapis.com/css?family=Reenie+Beanie" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Pacifico" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Oswald" rel="stylesheet" type="text/css" />
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700" rel="stylesheet" type="text/css"/>
     <!-- Whole Site CSS -->
     <link href="@Url.StaticContent("/Content/" + ViewData[ViewConstants.ROLE_NAME] + ".css")" rel="stylesheet" media="screen, projection" type="text/css" />
+
 @if (isDemoSchool || isDeveloperSchool)
 {
     <link href="@Url.StaticContent("/Content/demo.css")" rel="stylesheet" media="screen, projection" type="text/css" />
 }
-    <link href='//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700' rel='stylesheet' type='text/css'>
-    <link href="@Url.StaticContent("/app/jquery/choosen/chosen.min.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.StaticContent("/app/jquery/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css" />
-    <link href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet" />
+    
+    <!-- build:css /Content/role-layout.min.css -->
+    <link build:href="/app/bower/chosen/chosen.min.css" href="@Url.StaticContent("/app/bower/chosen/chosen.min.css")" rel="stylesheet" type="text/css"/>
+    <link build:href="/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" href="@Url.StaticContent("/app/bower/jquery-ui/themes/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css"/>
+    <link build:href="/app/jquery/snippet/jquery.snippet.min.css" href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css"/>
+    <link build:href="/app/chlk/index/prettify.css" href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet"/>
+    <!-- endbuild -->
+
 
     <!-- Page specific CSS -->
     @RenderSection("Styles", false)
-    @if (!Chalkable.Web.Tools.CompilerHelper.IsDebug)
-    {
-        ChlkHelpers.GoogleAnalytics();
-        ChlkHelpers.Olark();
-    }
+
     @ChlkHelpers.RenderSiteRoot(Url)
-    
-    
-    <script type="text/javascript" src="@Url.StaticContent("/app/lib/es5-shim.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/shared.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-messages.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/lib/date-en-US.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-1.11.1.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.autosize-min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.autoresize.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.scrollTo.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/choosen/chosen.jquery.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/carousel/jquery.jcarousel.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/carousel/jquery.carouFredSel-6.2.1-packed.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery-ui.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/languages/jquery.validationEngine-en.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.validationEngine.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.validate.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/highcharts/highcharts.js")"></script>
-    <script type="text/javascript" src="~/Scripts/api/chlk-post-message-api.js"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.signaturepad.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.menu-aim.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.quicksand.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/validation/jquery.creditCardValidator.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.maskedinput-1.3.1.min.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
-    <script type="text/javascript" src="@Url.StaticContent("/app/jquery/jquery.youtube.js")"></script>
+
+    @{Html.RenderPartial("Telemetry");}
+
+    <!-- build:js /app/role-layout.min.js -->
+    <script build:src="/app/bower/DateJS/build/date-en-US.js" src="@Url.StaticContent("/app/bower/DateJS/build/date-en-US.js")"></script>
+    <script build:src="/app/bower/Autolinker.js/dist/Autolinker.js" src="@Url.StaticContent("/app/bower/Autolinker.js/dist/Autolinker.js")"></script>
+    <script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
+    <script build:src="/app/bower/autosize/dist/autosize.js" src="@Url.StaticContent("/app/bower/autosize/dist/autosize.js")"></script>
+    <script build:src="/app/bower/chosen/chosen.jquery.min.js" src="@Url.StaticContent("/app/bower/chosen/chosen.jquery.min.js")"></script>
+    <script build:src="/app/bower/jcarousel/dist/jquery.jcarousel.js" src="@Url.StaticContent("/app/bower/jcarousel/dist/jquery.jcarousel.js")"></script>
+    <script build:src="/app/bower/jquery-ui/jquery-ui.js" src="@Url.StaticContent("/app/bower/jquery-ui/jquery-ui.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/languages/jquery.validationEngine-en.js")"></script>
+    <script build:src="/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js" src="@Url.StaticContent("/app/bower/jQuery-Validation-Engine/js/jquery.validationEngine.js")"></script>
+    <script build:src="/app/jquery/snippet/jquery.snippet.min.js" src="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.js")"></script>
+    <script build:src="/app/bower/jquery-validation/dist/jquery.validate.js" src="@Url.StaticContent("/app/bower/jquery-validation/dist/jquery.validate.js")"></script>
+    <script build:src="/app/bower/jQuery-menu-aim/jquery.menu-aim.js" src="@Url.StaticContent("/app/bower/jQuery-menu-aim/jquery.menu-aim.js")"></script>    
+    <script build:src="/app/chlk/index/prettify.js" src="@Url.StaticContent("/app/chlk/index/prettify.js")"></script>
+    <script build:src="/app/bower/highcharts/highcharts.js" src="@Url.StaticContent("/app/bower/highcharts/highcharts.js")"></script>
+    <script build:src="/app/bower/raygun4js/dist/raygun.vanilla.js"></script>
+    <script build:src="/app/chlk/shared.js" src='@Url.StaticContent("/app/chlk/shared.js")'></script>
+    <script build:src="/app/chlk/chlk-messages.js" src='@Url.StaticContent("/app/chlk/chlk-messages.js")'></script>
+    <script build:src="/app/chlk/chlk-constants.js" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
+    <!-- endbuild -->
+
+@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+{
+    <script type="text/javascript" src="/Scripts/api/chlk-post-message-api.min.js"></script>
+}
+else
+{
+    <!-- build:js /Scripts/api/chlk-post-message-api.min.js -->
+    <script type="text/javascript" src="/Scripts/api/chlk-post-message-api.js"></script>
+    <!-- endbuild -->
+}
 
 </head>
 <body class ="@ViewData[ViewConstants.ROLE_NAME]">
@@ -93,9 +98,10 @@
                 <div id="sidebar"></div
                 ><div id="main">@RenderBody()</div>
             </div>
-            
-            
-            @ChlkHelpers.RenderChlkCopyrightYear()
+
+            <footer>
+                @ChlkHelpers.RenderChlkCopyrightYearAndVersion()
+            </footer>
         </div>
         
         @if (isDemoSchool || isDeveloperSchool)
@@ -134,7 +140,6 @@
             <div class="tooltip-triangle"></div>
         </div>
         <div class="alerts-pop-up popup-bubble"></div>
-        @RenderSection("MixPanelTracking", false)
         
 <script type="text/json" id="application-value" class="valuable-script">
     @Html.Raw(@ViewData[ViewConstants.DEFAULT_APPLICATION])
@@ -281,7 +286,8 @@
             var markingPeriod =  getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.MARKING_PERIOD));
             var markingPeriods =  getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.MARKING_PERIODS));
             var gradingPeriod = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADING_PERIOD));
-            var finalizedClassesIds = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.FINALIZED_CLASSES_IDS)); 
+            var gradingPeriods = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADING_PERIODS));
+            var finalizedClassesIds = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.FINALIZED_CLASSES_IDS));
             var attendanceReasons = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.ATTENDANCE_REASONS));
             var gradeLevels = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.GRADE_LEVELS));
             var userClaims = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.USER_CLAIMS));
@@ -291,30 +297,31 @@
             var announcementAttributes = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.ANNOUNCEMENT_ATTRIBUTES));
             var studyCenterEnabled = '@ViewData.GetJsConstantValueOrNull(ViewConstants.STUDY_CENTER_ENABLED)';
             var leParams = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.LE_PARAMS));
-            var messagingDisabled = '@ViewData.GetJsConstantValueOrNull(ViewConstants.MESSAGIN_DISABLED)';
-            
+            var messagingDisabled = '@ViewData.GetJsConstantValueOrNull(ViewConstants.MESSAGING_DISABLED)';
+            var messagingSettings = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.MESSAGING_SETTINGS));
+
             var DEMO_SCHOOL = @isDemoSchool.ToString().ToLowerInvariant();
             var DEMO_SCHOOL_PICTURE_DISTRICT = @demoSchoolPictureDistrictRef;
             var districtId = @ViewData.GetJsConstantValueOrNull(ViewConstants.DISTRICT_ID) || '';
             var redirectUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.REDIRECT_URL_KEY) || '';
             var schoolYear = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.SCHOOL_YEAR));
-            
+            var years = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.YEARS));
         </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
     {
-        <script src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/app/ria/_bootstrap.js" type="text/javascript">
+        <script src="@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/app/bower/emp.ria-framework/_bootstrap.js" type="text/javascript">
             ria.__CFG = {
                 "prettyStackTraces": true,
                 "checkedMode": true,
                 "enablePipelineMethodCall": true,
                 "AssertWithExceptions": false,
-                "stackTraceJs": "lib/stacktrace.js",
 
                 "#require": {
                     "plugins": ["~/assets/jade.js"],
                     "appRoot": "@Chalkable.Web.Tools.CompilerHelper.ScriptsRoot/",
                     "libs": {
+                        "ria/": "~/app/bower/emp.ria-framework/"
                     }
                 },
 
@@ -346,10 +353,11 @@
             })(roleAppScript);
         </script>
     }
+
+
+    @ChlkHelpers.RaygunInit()
+    
+    @ChlkHelpers.GoogleAnalytics()
     @ChlkHelpers.MixPanel() 
-    @RenderSection("BottomScripts", false)
-    
-    
-    
-    </body> 
+</body> 
 </html>

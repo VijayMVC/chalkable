@@ -9,11 +9,21 @@ REQUIRE('chlk.models.apps.AppRating');
 REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.common.ChlkDate');
 
+REQUIRE('chlk.models.common.NameId');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
 
     var SJX = ria.serialize.SJX;
+
+
+    /** @class chlk.models.apps.ApplicationActionEnum */
+    ENUM('ApplicationActionEnum',{
+        INSTALL:0,
+        UNINSTALL:1,
+        BAN:2,
+        UN_BAN:3
+    });
 
     /** @class chlk.models.apps.ApplicationInstallRecord */
     CLASS(
@@ -29,10 +39,10 @@ NAMESPACE('chlk.models.apps', function () {
                 this.price = SJX.fromValue(raw.price, Number);
                 this.remains = SJX.fromValue(raw.remains, Number);
 
-                this.schoolId = SJX.fromValue(raw.schoolid, chlk.models.id.SchoolId);
-                this.schoolName = SJX.fromValue(raw.schoolname, String);
+                this.schools = SJX.fromArrayOfDeserializables(raw.schools, chlk.models.common.NameId);
 
-                this.installDate = SJX.fromDeserializable(raw.installdate, chlk.models.common.ChlkDate);
+                this.installDate = SJX.fromDeserializable(raw.date, chlk.models.common.ChlkDate);
+                this.action = SJX.fromValue(raw.action, chlk.models.apps.ApplicationActionEnum);
             },
 
             chlk.models.id.SchoolPersonId, 'personId',
@@ -44,10 +54,26 @@ NAMESPACE('chlk.models.apps', function () {
             Number, 'price',
             Number, 'remains',
 
-            chlk.models.id.SchoolId, 'schoolId',
-            String, 'schoolName',
+            ArrayOf(chlk.models.common.NameId), 'schools',
 
             chlk.models.common.ChlkDate, 'installDate',
+
+            chlk.models.apps.ApplicationActionEnum, 'action',
+
+            String, function getActionName(){
+                switch (this.getAction()){
+                    case chlk.models.apps.ApplicationActionEnum.INSTALL:  return 'Installed';
+                    case chlk.models.apps.ApplicationActionEnum.UNINSTALL: return 'Uninstalled';
+                    case chlk.models.apps.ApplicationActionEnum.BAN: return 'Banned';
+                    case chlk.models.apps.ApplicationActionEnum.UN_BAN: return 'UnBanned'
+                }
+                return null;
+            },
+
+            Boolean, function isBanUnBanAction(){
+                var action = this.getAction();
+                return action == chlk.models.apps.ApplicationActionEnum.BAN || action == chlk.models.apps.ApplicationActionEnum.UN_BAN;
+            },
 
             String, function getFullName() {
                 return [this.firstName, this.lastName].filter(function (_) { return _ }).join(' ');
@@ -60,7 +86,7 @@ NAMESPACE('chlk.models.apps', function () {
             
             OVERRIDE, VOID, function deserialize(raw){
                 BASE(raw);
-                this.installedForGroups = SJX.fromArrayOfDeserializables(raw.installedforpersonsgroup, chlk.models.apps.AppInstallGroup);
+                this.installedForGroups = raw.installedforpersonsgroup
                 this.installedOnlyForCurrentUser = SJX.fromValue(raw.isinstalledonlyforme, Boolean);
                 this.alreadyInstalled = SJX.fromValue(raw.alreadyinstalled, Boolean);
                 this.applicationInstalls = SJX.fromArrayOfDeserializables(raw.applicationinstalls, chlk.models.apps.AppInstallInfo);
@@ -69,9 +95,9 @@ NAMESPACE('chlk.models.apps', function () {
                 this.personal = SJX.fromValue(raw.personal, Boolean);
                 this.applicationInstallIds = SJX.fromValue(raw.applicationinstallids, String);
                 this.applicationRating = SJX.fromDeserializable(raw.applicationrating, chlk.models.apps.AppRating);
-                this.applicationInstallHistory = SJX.fromArrayOfDeserializables(raw.applicationinstallhistory, chlk.models.apps.ApplicationInstallRecord);
+                this.applicationHistory = SJX.fromArrayOfDeserializables(raw.applicationhistory, chlk.models.apps.ApplicationInstallRecord);
             },
-            ArrayOf(chlk.models.apps.AppInstallGroup), 'installedForGroups',
+            Array, 'installedForGroups',
             Boolean, 'installedOnlyForCurrentUser',
             ArrayOf(chlk.models.apps.AppInstallInfo), 'applicationInstalls',
             Boolean, 'uninstallable',
@@ -80,7 +106,7 @@ NAMESPACE('chlk.models.apps', function () {
             String,  'applicationInstallIds',
             Boolean, 'alreadyInstalled',
             chlk.models.apps.AppRating, 'applicationRating',
-            ArrayOf(chlk.models.apps.ApplicationInstallRecord), 'applicationInstallHistory'
+            ArrayOf(chlk.models.apps.ApplicationInstallRecord), 'applicationHistory'
         ]);
 
 

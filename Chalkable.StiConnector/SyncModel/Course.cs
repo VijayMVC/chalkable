@@ -20,6 +20,7 @@ namespace Chalkable.StiConnector.SyncModel
         public short? MinGradeLevelID { get; set; }
         public short? MaxGradeLevelID { get; set; }
         public short CourseTypeID { get; set; }
+        [NullableForeignKey]
         public int? PrimaryTeacherID { get; set; }
         public int? RoomID { get; set; }
         public string AllowedGenders { get; set; }
@@ -42,5 +43,7 @@ namespace Chalkable.StiConnector.SyncModel
         public int? ReportingSchoolID { get; set; }
         public bool AreFeesPosted { get; set; }
         public bool MergeRostersForAttendance { get; set; }
+
+        public override int DefaultOrder => 23;
     }
 }

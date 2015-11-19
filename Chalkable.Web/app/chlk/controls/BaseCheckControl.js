@@ -45,10 +45,7 @@ NAMESPACE('chlk.controls', function () {
             Object, function getInstallData(){
                 return {
                     appId : null,
-                    departments: null,
                     classes: null,
-                    roles: null,
-                    gradeLevels: null,
                     currentUserId: null,
                     installForJustMe : null
                 }
@@ -59,10 +56,7 @@ NAMESPACE('chlk.controls', function () {
                 this.getAppMarketService()
                     .getApplicationTotalPrice(
                     installData.appId,
-                    installData.departments,
                     installData.classes,
-                    installData.roles,
-                    installData.gradeLevels,
                     installData.currentUserId
                 )
                 .then(function(data){

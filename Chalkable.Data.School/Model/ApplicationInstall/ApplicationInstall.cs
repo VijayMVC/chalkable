@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model.ApplicationInstall
@@ -25,5 +21,6 @@ namespace Chalkable.Data.School.Model.ApplicationInstall
         public int OwnerRef { get; set; }
         public bool Active { get; set; }
         public int AppInstallActionRef { get; set; }
+        public int? AppUninstallActionRef { get;set; } 
     }
 }

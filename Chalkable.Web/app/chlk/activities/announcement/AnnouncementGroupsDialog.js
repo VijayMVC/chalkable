@@ -11,12 +11,22 @@ NAMESPACE('chlk.activities.announcement', function(){
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.group.AnnouncementGroupsTpl)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.group.AnnouncementGroupsTpl, null, null , ria.mvc.PartialUpdateRuleActions.Replace)],
         'AnnouncementGroupsDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
 
             [ria.mvc.PartialUpdateRule(chlk.templates.group.StudentsForGroupTpl)],
             VOID, function updateStudents(tpl, model, msg_) {
                 tpl.renderTo(this.dom.find('.column.students').setHTML('').removeClass('filtered'));
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.group.AnnouncementGroupsTpl)],
+            VOID, function updateDialog(tpl, model, msg_) {
+                var selected = [];
+                this.dom.find('.group-check:checked').forEach(function(checkbox){
+                    selected.push(new chlk.models.id.GroupId(parseInt(checkbox.getData('id'), 10)));
+                });
+                model.setSelected(selected);
+                tpl.setSelected(selected);
+                tpl.renderTo(this.dom.setHTML(''));
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.group.StudentsForGroupTpl, 'after-filter')],

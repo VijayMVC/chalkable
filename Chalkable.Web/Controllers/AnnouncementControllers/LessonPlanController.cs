@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
-using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.AnnouncementsViewData;
+using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
 {
@@ -20,16 +23,20 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult SearchLessonPlansTemplates(int? galleryCategoryId, int? classId, string filter)
+        public ActionResult LessonPlanTemplates(string filter, int? categoryType, int? sortType, int? state, int? start, int? count)
         {
-            var lessonPlans = SchoolLocator.LessonPlanService.GetLessonPlansTemplates(galleryCategoryId, filter, classId);
-            return Json(LessonPlanViewData.Create(lessonPlans));
+            var st = start ?? 0;
+            var cnt = count ?? 12;
+            var sort = (AttachmentSortTypeEnum?) sortType ?? AttachmentSortTypeEnum.OldestUploaded;
+            var lessonPlans = SchoolLocator.LessonPlanService.GetLessonPlansTemplates(categoryType, filter, null, sort, st, cnt, (AnnouncementState?)state);
+            return Json(lessonPlans.Transform(LessonPlanViewData.Create));
         }
         
         [AuthorizationFilter("Teacher")]
         public ActionResult CreateFromTemplate(int lessonPlanTplId, int classId)
         {
             var res = SchoolLocator.LessonPlanService.CreateFromTemplate(lessonPlanTplId, classId);
+            MasterLocator.UserTrackingService.CopiedLessonPlanFromGallery(Context.Login);
             return Json(PrepareCreateAnnouncementViewData(res));
         }
 
@@ -39,6 +46,11 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.LessonPlan, lessonPlanId, attributes);
             var res = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents);
+
+            if (res.LessonPlanData?.GalleryCategoryRef != null)
+            {
+                MasterLocator.UserTrackingService.SavedLessonPlanToGallery(Context.Login, title);
+            }
             return Json(PrepareAnnouncmentViewDataForEdit(res));
         }
 
@@ -90,6 +102,20 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult DuplicateLessonPlan(int lessonPlanId, IntList classIds)
         {
             SchoolLocator.LessonPlanService.DuplicateLessonPlan(lessonPlanId, classIds);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)
+        {
+            SchoolLocator.LessonPlanService.ReplaceLessonPlanInGallery(oldLessonPlanId, newLessonPlanId);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("Teacher")]
+        public ActionResult RemoveLessonPlanFromGallery(int lessonPlanId)
+        {
+            SchoolLocator.LessonPlanService.RemoveFromGallery(lessonPlanId);
             return Json(true);
         }
     }

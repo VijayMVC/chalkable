@@ -16,13 +16,14 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
 
             if (activityAttribute.Attachment != null)
             {
-                if(announcementAttribute.SisAttributeAttachmentId != activityAttribute.Attachment.AttachmentId)
-                    announcementAttribute.Uuid = activityAttribute.Attachment.CrocoDocId.HasValue
-                        ? activityAttribute.Attachment.CrocoDocId.ToString()
-                        : "";
-                announcementAttribute.SisAttributeAttachmentId = activityAttribute.Attachment.AttachmentId;
-                announcementAttribute.SisAttachmentMimeType = activityAttribute.Attachment.MimeType;
-                announcementAttribute.SisAttachmentName = activityAttribute.Attachment.Name;
+                if (announcementAttribute.Attachment == null)
+                    announcementAttribute.Attachment = new Attachment();
+                MapperFactory.GetMapper<Attachment, StiAttachment>().Map(announcementAttribute.Attachment, activityAttribute.Attachment);
+            }
+            else
+            {
+                announcementAttribute.Attachment = null;
+                announcementAttribute.AttachmentRef = null;
             }
         }
     }

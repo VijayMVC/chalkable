@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BackgroundTaskProcessor
@@ -26,10 +27,16 @@ namespace Chalkable.BackgroundTaskProcessor
 
         public void Process()
         {
+
             var sl = ServiceLocatorFactory.CreateMasterSysAdmin();
             var task = sl.BackgroundTaskService.GetTaskToProcess(DateTime.UtcNow);
             if (task == null)
                 return;
+
+            var requestTimer = Stopwatch.StartNew();            
+            var requestStartTime = DateTimeOffset.UtcNow;
+            var requestName = "ProcessTask";
+
             int logFlushSize = 100;
             if (task.DistrictRef.HasValue)
             {
@@ -45,15 +52,19 @@ namespace Chalkable.BackgroundTaskProcessor
                 try
                 {
                     var res = handlers[task.Type].Handle(task, log);
-                    if (res)
+                    if (res) {
+                        Telemetry.DispatchRequest(requestName, task.Type.ToString(), requestStartTime, requestTimer.Elapsed, true, Verbosity.Info, task.DistrictRef.ToString(), task.Id.ToString());
                         log.LogInfo(string.Format("Task {0} processing succesfully completed", task.Id));
-                    else
+                    }
+                    else {
+                        Telemetry.DispatchRequest(requestName, task.Type.ToString(), requestStartTime, requestTimer.Elapsed, false, Verbosity.Error, task.DistrictRef.ToString(), task.Id.ToString());
                         log.LogError(string.Format("Task {0} processing failed", task.Id));
+                    }
                     sl.BackgroundTaskService.Complete(task.Id, res);
                 }
                 catch (Exception ex)
-                {
-                    log.LogException(ex);
+                {                    
+                    log.LogException(ex, task.DistrictRef.ToString(), task.Id.ToString());
                     sl.BackgroundTaskService.Complete(task.Id, false);
                 }    
             }

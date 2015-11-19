@@ -26,17 +26,45 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<ApplicationInstall> GetInstalled(int personId, int schoolYearId)
         {
-            var sql = string.Format("select * from ApplicationInstall where ({0}=@{0} or {1} = @{1}) and {2}=1 and {3}=@{3}"
-                                    , ApplicationInstall.OWNER_REF_FIELD, ApplicationInstall.PERSON_REF_FIELD
-                                    , ApplicationInstall.ACTIVE_FIELD, ApplicationInstall.SCHOOL_YEAR_REF_FIELD);
-            var ps = new Dictionary<string, object>
-                {
-                    {ApplicationInstall.PERSON_REF_FIELD, personId},
-                    {ApplicationInstall.OWNER_REF_FIELD, personId},
-                    {ApplicationInstall.SCHOOL_YEAR_REF_FIELD, schoolYearId}
-                };
-            return ReadMany<ApplicationInstall>(new DbQuery(sql, ps));
+            var conds = new AndQueryCondition
+            {
+                {ApplicationInstall.SCHOOL_YEAR_REF_FIELD, schoolYearId },
+                {ApplicationInstall.ACTIVE_FIELD, true },
+                new OrQueryCondition
+                    {
+                        {ApplicationInstall.OWNER_REF_FIELD, personId },
+                        { ApplicationInstall.PERSON_REF_FIELD, personId}
+                    }
+            };
+            return SelectMany<ApplicationInstall>(conds);
         }
+
+        public IList<ApplicationInstall> GetInstalledForAdmin(int personId, DateTime curentDate)
+        {
+            var conds = new AndQueryCondition
+            {
+                {ApplicationInstall.ACTIVE_FIELD, true},
+                new OrQueryCondition
+                {
+                    {ApplicationInstall.OWNER_REF_FIELD, personId},
+                    {ApplicationInstall.PERSON_REF_FIELD, personId}
+                }
+            };
+            var query = Orm.SimpleSelect<ApplicationInstall>(conds);
+            var syQuery = new DbQuery();
+            syQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, SchoolYear.ID_FIELD, typeof (SchoolYear).Name);
+            var syConds = new AndQueryCondition
+            {
+                {SchoolYear.ARCHIVE_DATE, null, ConditionRelation.Equal},
+                {SchoolYear.START_DATE_FIELD, curentDate.Date, ConditionRelation.LessEqual },
+                {SchoolYear.END_DATE_FIELD, curentDate.Date, ConditionRelation.GreaterEqual }
+            };
+            syConds.BuildSqlWhere(syQuery, typeof(SchoolYear).Name);
+
+            query.Sql.AppendFormat(" and {0} in ({1})", ApplicationInstall.SCHOOL_YEAR_REF_FIELD, syQuery.Sql);
+            query.AddParameters(syQuery.Parameters);
+            return ReadMany<ApplicationInstall>(query);
+        } 
 
         public IDictionary<Guid, int> GetNotInstalledStudentsCountPerApplication(int staffId, int classId, int markingPeriodId)
         {
@@ -136,26 +164,4 @@ namespace Chalkable.Data.School.DataAccess
         }
     }
 
-    public class ApplicationInstallActionGradeLevelDataAccess : DataAccessBase<ApplicationInstallActionGradeLevel, int>
-    {
-        public ApplicationInstallActionGradeLevelDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
-        {
-        }
-    }
-
-    public class ApplicationInstallActionDepartmentDataAccess : DataAccessBase<ApplicationInstallActionDepartment, int>
-    {
-        public ApplicationInstallActionDepartmentDataAccess(UnitOfWork unitOfWork)
-            : base(unitOfWork)
-        {
-        }
-    }
-
-    public class ApplicationInstallActionRoleDataAccess : DataAccessBase<ApplicationInstallActionRole, int>
-    {
-        public ApplicationInstallActionRoleDataAccess(UnitOfWork unitOfWork)
-            : base(unitOfWork)
-        {
-        }
-    }
 }

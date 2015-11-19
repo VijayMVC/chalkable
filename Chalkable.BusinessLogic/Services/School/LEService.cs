@@ -42,6 +42,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public string BuildLECreditsUrl(int? classId)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
 
             if (!CanGiveCredits())
@@ -55,7 +56,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 studentIds = ServiceLocator.ClassService.GetClassPersons(null, classId.Value, null, null).Select(x => x.PersonRef).Distinct().ToList();
 
             var clsPersons = studentIds.JoinString(",");
-            var integratedSignOnUrl = string.Format(GetBaseUrl() + "sti/give_credits?districtGUID={0}&sti_session_variable={1}&studentIds={2}", Context.DistrictId, Context.SisToken, clsPersons);
+            var integratedSignOnUrl = string.Format(GetBaseUrl() + "sti/give_credits?districtGUID={0}&sti_session_variable={1}&studentIds={2}&sti_school_id={3}"
+                , Context.DistrictId, Context.SisToken, clsPersons, Context.SchoolLocalId.Value);
             return integratedSignOnUrl;
         }
 
@@ -73,18 +75,19 @@ namespace Chalkable.BusinessLogic.Services.School
         public string BuildIntegratedSingOnUrl()
         {
             Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
             if(!CanSignOn())
                 throw new ChalkableSecurityException();
 
-            var syId = Context.SchoolYearId.Value;
-            IList<int> studentIds = new List<int>();
-            if (BaseSecurity.IsTeacher(Context))
-                studentIds = ServiceLocator.StudentService.GetTeacherStudents(Context.PersonId.Value, syId).Select(x => x.Id).ToList();
+            //var syId = Context.SchoolYearId.Value;
+            //IList<int> studentIds = new List<int>();
+            //if (BaseSecurity.IsTeacher(Context))
+            //    studentIds = ServiceLocator.StudentService.GetTeacherStudents(Context.PersonId.Value, syId).Select(x => x.Id).ToList();
             
-            else studentIds.Add(Context.PersonId.Value);
-            return string.Format(GetBaseUrl() + "sti/auth?districtGUID={0}&sti_session_variable={1}&studentIds={2}"
-                , Context.DistrictId, Context.SisToken, studentIds.JoinString(","));
+            //else studentIds.Add(Context.PersonId.Value);
+            return string.Format(GetBaseUrl() + "sti/auth?districtGUID={0}&sti_session_variable={1}&sti_school_id={2}"
+                , Context.DistrictId, Context.SisToken, Context.SchoolLocalId.Value);
         }
 
         public string BuildNonIntegratedSingOnUlr(int schoolId, int userId, string firstName, string lastName)
@@ -96,7 +99,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public LEParams GetLEParams()
         {
-            bool enabled = HasLEAccess();
+            bool hasLeAccess = HasLEAccess();
             return new LEParams
             {
                 LEEnabled = Context.LEEnabled,
@@ -105,8 +108,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 LEBaseUrl = GetBaseUrl(),
                 AwardLECredits = HasLECreditsPermission(),
                 AwardLECreditsClassroom = HasLECreditsClassroomPermission(),
-                IssueLECreditsEnabled = enabled,
-                LEAccessEnabled = enabled,
+                IssueLECreditsEnabled = hasLeAccess && BaseSecurity.IsTeacher(Context),
+                LEAccessEnabled = hasLeAccess,
             };
         }
 
@@ -123,7 +126,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private bool HasLEAccess()
         {
-            return HasLECreditsPermission() || HasLECreditsClassroomPermission();
+            return HasLECreditsPermission() || HasLECreditsClassroomPermission() || CoreRoles.STUDENT_ROLE == Context.Role;
         }
 
         private bool HasLECreditsPermission()

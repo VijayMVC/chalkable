@@ -1,12 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.School.Announcements;
+using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.UserTracking;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Models;
 using Chalkable.Web.Models.AnnouncementsViewData;
+using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
 {
@@ -22,14 +28,16 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             var draft = SchoolLocator.AnnouncementFetchService.GetLastDraft();
             if (draft != null)
             {
-                if (draft.Type == AnnouncementType.Class)
+                if (draft is ClassAnnouncement)
                 {
                     var classAnn = draft as ClassAnnouncement;
                     var classAnnType = classId.HasValue ? null : classAnn.ClassAnnouncementTypeRef;
                     classId = classId ?? classAnn.ClassRef;
-                    return Redirect<ClassAnnouncementController>(c => c.CreateClassAnnouncement(classAnnType, classId.Value, null));
+                    var classAnnTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId.Value);
+                    if(classAnnTypes.Count > 0)
+                        return Redirect<ClassAnnouncementController>(c => c.CreateClassAnnouncement(classAnnType, classId.Value, null));
                 }
-                if (draft.Type == AnnouncementType.LessonPlan)
+                if (draft is LessonPlan)
                     classId = classId ?? (draft as LessonPlan).ClassRef;
             }
             if(classId.HasValue)
@@ -68,6 +76,26 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult AttachSettings(int announcementId, int? announcementType)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+
+            var assesmentId = MasterLocator.ApplicationService.GetAssessmentId();
+            var type = (AnnouncementType?)announcementType ?? AnnouncementType.Class;
+            var canAddStandard = SchoolLocator.GetAnnouncementService(type).CanAddStandard(announcementId);
+            var isAppEnabled = BaseSecurity.IsDistrictOrTeacher(Context) && Context.SCEnabled;
+            var isFileCabinetEnabled = Context.Role == CoreRoles.TEACHER_ROLE; //only teacher can use file cabinet for now
+            //TODO: get external attach apps
+
+            var installedAppsIds = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value)
+                                                .GroupBy(x=>x.ApplicationRef).Select(x=>x.Key).ToList();
+
+            var apps = MasterLocator.ApplicationService.GetApplicationsByIds(installedAppsIds);
+            apps = apps.Where(app => MasterLocator.ApplicationService.HasExternalAttachMode(app)).ToList();
+            return Json(AttachSettingsViewData.Create(assesmentId, canAddStandard, isAppEnabled, isFileCabinetEnabled, apps));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Complete(int announcementId, int announcementType, bool? complete)
         {
             if (!complete.HasValue)
@@ -79,11 +107,33 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return Json(true);
         }
 
-        
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult Done(int? classId, int option, int? annType)
+        {
+            MarkDoneOptions mdo = (MarkDoneOptions) option;
+            if (!annType.HasValue)
+            {
+                SchoolLocator.AdminAnnouncementService.SetComplete(classId, mdo);
+                SchoolLocator.LessonPlanService.SetComplete(classId, mdo);
+                SchoolLocator.ClassAnnouncementService.SetComplete(classId, mdo);
+            }
+            else
+            {
+                if((AnnouncementType)annType == AnnouncementType.Class)
+                    SchoolLocator.ClassAnnouncementService.SetComplete(classId, mdo);
+                if ((AnnouncementType)annType == AnnouncementType.LessonPlan)
+                    SchoolLocator.LessonPlanService.SetComplete(classId, mdo);
+            }
+
+
+            return Json(true);
+        }
+
         [AuthorizationFilter("Teacher")]
         public ActionResult AddStandard(int announcementId, int standardId, int? announcementType)
         {
-            SchoolLocator.GetAnnouncementService((AnnouncementType?)announcementType).AddAnnouncementStandard(announcementId, standardId);
+            var standard = SchoolLocator.GetAnnouncementService((AnnouncementType?)announcementType).AddAnnouncementStandard(announcementId, standardId);
+            MasterLocator.UserTrackingService.AttachedStandard(Context.Login, standard.Name);
             return Json(PrepareFullAnnouncementViewData(announcementId, announcementType));
         }
 
@@ -137,7 +187,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             }
             if (ann.AttachmentsCount > 0)
             {
-                var docs = ann.AnnouncementAttachments.Select(x => x.Name).ToList();
+                var docs = ann.AnnouncementAttachments.Select(x => x.Attachment.Name).ToList();
                 MasterLocator.UserTrackingService.AttachedDocument(Context.Login, docs);
             }
         }

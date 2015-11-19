@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Connectors.Model.Attendances;
@@ -25,7 +26,7 @@ namespace Chalkable.StiConnector.Connectors
             Post(url, sectionAttendance);
         }
 
-        public IList<SectionAttendanceSummary> GetSectionAttendanceSummary(IList<int> sectionIds, DateTime start, DateTime end)
+        public async Task<IList<SectionAttendanceSummary>> GetSectionAttendanceSummary(IList<int> sectionIds, DateTime start, DateTime end)
         {
             var parmeters = new NameValueCollection
                 {
@@ -33,15 +34,15 @@ namespace Chalkable.StiConnector.Connectors
                     {"end", end.ToString(Constants.DATE_FORMAT)}
                 };
             for(int i = 0; i < sectionIds.Count; i++)
-                parmeters.Add(string.Format("sectionIds[{0}]", i.ToString()), sectionIds[i].ToString());
+                parmeters.Add(string.Format("sectionIds[{0}]", i), sectionIds[i].ToString());
             string url = string.Format("{0}chalkable/attendance/summary", BaseUrl);
-            return Call<IList<SectionAttendanceSummary>>(url, parmeters);
+            return await CallAsync<IList<SectionAttendanceSummary>>(url, parmeters);
         } 
         
-        public IList<PostedAttendance> GetPostedAttendances(int acadSessionId, DateTime date)
+        public async Task<IList<PostedAttendance>> GetPostedAttendances(int acadSessionId, DateTime date)
         {
             string url = string.Format("{0}chalkable/{1}/postedattendance/{2}", BaseUrl, acadSessionId, date.ToString(Constants.DATE_FORMAT));
-            return Call<IList<PostedAttendance>>(url);
+            return await CallAsync<IList<PostedAttendance>>(url);
         }
     }
 }

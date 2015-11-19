@@ -183,10 +183,12 @@ NAMESPACE('chlk.controls', function () {
                             var form = jQuery('#' + attributes.id);
                             form.validationEngine('attach', {
                                 onFieldSuccess: function(field){
-                                    field.parent().addClass('validate-ok');
+                                    if (field !== undefined)
+                                        field.parent().addClass('validate-ok');
                                 },
                                 onFieldFailure: function(field){
-                                    field.parent().removeClass('validate-ok');
+                                    if (field !== undefined)
+                                        field.parent().removeClass('validate-ok');
                                 }
                             });
                         }.bind(this));

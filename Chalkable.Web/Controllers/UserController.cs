@@ -20,7 +20,7 @@ namespace Chalkable.Web.Controllers
             var context = LogOn(false, us => us.SisLogIn(districtId, token, expiresTime, acadSessionId));
             if (context != null)
             {
-                MasterLocator.UserTrackingService.LoggedInFromINow(context.Login);
+                MasterLocator.UserTrackingService.LoggedIn(context.Login);
                 return RedirectToHome(context.Role); 
             }
             return Redirect<HomeController>(x => x.Index());
@@ -48,8 +48,16 @@ namespace Chalkable.Web.Controllers
             if (context == null)
                 return Json(new ChalkableException(error ?? ""));
             
-            MasterLocator.UserTrackingService.LoggedInFromChalkable(context.Login);
-            return Json(new { Role = context.Role.LoweredName });            
+            MasterLocator.UserTrackingService.LoggedIn(context.Login);
+
+            if (Request.IsAjaxRequest())
+                return Json(new { Role = context.Role.LoweredName });
+
+            var role = context.Role.LoweredName;
+            if (role == "admingrade" || role == "adminview" || role == "adminedit")
+                role = "admin";
+
+            return Redirect("/Home/" + role + ".aspx");
         }
 
         [AuthorizationFilter("Teacher")]
@@ -68,9 +76,8 @@ namespace Chalkable.Web.Controllers
 
         private void SwitchToRole(CoreRole role)
         {
-            var isPersistentAuth = ChalkableAuthentication.IsPersistentAuthentication();
             var context = MasterLocator.UserService.SwitchToRole(role);
-            ChalkableAuthentication.SignIn(context, isPersistentAuth);
+            ChalkableAuthentication.SignIn(context, false);
         }
 
         public ActionResult LogOut()
@@ -152,7 +159,7 @@ namespace Chalkable.Web.Controllers
             {
                 InitServiceLocators(context);
                 MasterLocator.UserTrackingService.UserLoggedInForFirstTime(context.Login, "", "", Context.DistrictId.ToString(), 
-                        DateTime.UtcNow.ConvertFromUtc(Context.DistrictTimeZone), Context.DistrictTimeZone, Context.Role.Name);
+                        DateTime.UtcNow.ConvertFromUtc(Context.DistrictTimeZone), Context.DistrictTimeZone, Context.Role.Name, Context.SCEnabled);
                 return redirectAction(context);
             }
             return Redirect<HomeController>(c => c.Index());
@@ -169,7 +176,7 @@ namespace Chalkable.Web.Controllers
             var context = logOnAction(userService);
             if (context != null)
             {
-                ChalkableAuthentication.SignIn(context, remember);
+                ChalkableAuthentication.SignIn(context, false);
                 if (context.DeveloperId.HasValue && !DemoUserService.IsDemoUser(context))
                     DeveloperAuthentication.SignIn(context, remember);
             }
@@ -189,7 +196,7 @@ namespace Chalkable.Web.Controllers
                     return Json(new
                     {
                         token = serviceLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId,
-                                                           clientSecret, login, context.SchoolYearId, scope)
+                                                           clientSecret, login, context.SchoolYearId, context.Role, scope)
                     }, 5);
                 }
             }

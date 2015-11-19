@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -17,7 +18,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AnnouncementDetails Create(int classId, DateTime? startDate, DateTime? endDate);
         AnnouncementDetails CreateFromTemplate(int lessonPlanTemplateId, int classId);
         AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content, DateTime? startDate, DateTime? endDate, bool visibleForStudent);
-        IList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId); 
+        PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created); 
         IList<string> GetLastFieldValues(int classId);
         bool Exists(string title, int? excludedLessonPlaId);
         bool ExistsInGallery(string title, int? exceludedLessonPlanId);
@@ -30,6 +31,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         LessonPlan GetLastDraft();
 
         void DuplicateLessonPlan(int lessonPlanId, IList<int> classIds);
+        void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId);
+        void RemoveFromGallery(int lessonPlanId);
     }
 
     public class LessonPlanService : BaseAnnouncementService<LessonPlan>, ILessonPlanService
@@ -71,20 +74,28 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public AnnouncementDetails CreateFromTemplate(int lessonPlanTemplateId, int classId)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            BaseSecurity.EnsureStudyCenterEnabled(Context);
             BaseSecurity.EnsureTeacher(Context);
+
             AnnouncementDetails res;
             var annApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(lessonPlanTemplateId, true);
             var appIds = annApps.Select(aa => aa.ApplicationRef).ToList();
             //get only simple apps
             var apps = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(appIds).Where(a=>!a.IsAdvanced).ToList();
             annApps = annApps.Where(aa => apps.Any(a => a.Id == aa.ApplicationRef)).ToList();
-
+            
             using (var u = Update())
             {
-                res = CreateLessonPlanDataAccess(u).CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
-                res.AnnouncementAttachments = ((AnnouncementAttachmentService)ServiceLocator.AnnouncementAttachmentService).CopyAttachments(lessonPlanTemplateId, new List<int>{res.Id}, u);
-                res.AnnouncementAttributes = ((AnnouncementAssignedAttributeService)ServiceLocator.AnnouncementAssignedAttributeService).CopyNonStiAttributes(lessonPlanTemplateId, new List<int>{res.Id}, u);
-                res.AnnouncementApplications = ((ApplicationSchoolService)ServiceLocator.ApplicationSchoolService).CopyAnnApplications(annApps, new List<int>{res.Id}, u);
+                var da = CreateLessonPlanDataAccess(u);
+                var lp = da.GetLessonPlanTemplate(lessonPlanTemplateId, Context.PersonId.Value);
+                if (lp.IsDraft)
+                    throw new ChalkableException("Current lesson plan in gallery is not submitted yet. You can't create lesson plan from not submitted template");
+
+                res = da.CreateFromTemplate(lessonPlanTemplateId, Context.PersonId.Value, classId);
+                var teachers = new ClassTeacherDataAccess(u).GetClassTeachers(lp.ClassRef, null).Select(x=>x.PersonRef).ToList();
+                res.AnnouncementAttachments = AnnouncementAttachmentService.CopyAnnouncementAttachments(lessonPlanTemplateId, teachers, new List<int> { res.Id }, u, ServiceLocator, ConnectorLocator);
+                res.AnnouncementAttributes = AnnouncementAssignedAttributeService.CopyNonStiAttributes(lessonPlanTemplateId, new List<int>{res.Id}, u, ServiceLocator, ConnectorLocator);
+                res.AnnouncementApplications = ApplicationSchoolService.CopyAnnApplications(annApps, new List<int> { res.Id }, u);
                 u.Commit();
             }
             return PrepareStandardsWithCode(res); 
@@ -93,6 +104,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public void DuplicateLessonPlan(int lessonPlanId, IList<int> classIds)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
             var lessonPlan = GetLessonPlanById(lessonPlanId); // security check
             BaseSecurity.EnsureTeacher(Context);
             if (lessonPlan.IsDraft)
@@ -104,14 +116,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             //get only simple apps
             var apps = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(appIds).Where(a => !a.IsAdvanced).ToList();
             annApps = annApps.Where(aa => apps.Any(a => a.Id == aa.ApplicationRef)).ToList();
-
-
+            
             using (var u = Update())
             {
+                var teachers = new ClassTeacherDataAccess(u).GetClassTeachers(lessonPlan.ClassRef, null).Select(x => x.PersonRef).ToList();
                 var resIds = CreateLessonPlanDataAccess(u).DuplicateLessonPlan(lessonPlanId, classIds, Context.NowSchoolYearTime);
-                ((AnnouncementAttachmentService)ServiceLocator.AnnouncementAttachmentService).CopyAttachments(lessonPlanId, resIds, u);
-                ((AnnouncementAssignedAttributeService)ServiceLocator.AnnouncementAssignedAttributeService).CopyNonStiAttributes(lessonPlanId, resIds, u);
-                ((ApplicationSchoolService)ServiceLocator.ApplicationSchoolService).CopyAnnApplications(annApps, resIds, u);
+                AnnouncementAttachmentService.CopyAnnouncementAttachments(lessonPlanId, teachers, resIds, u, ServiceLocator, ConnectorLocator);
+                AnnouncementAssignedAttributeService.CopyNonStiAttributes(lessonPlanId, resIds, u, ServiceLocator, ConnectorLocator);
+                ApplicationSchoolService.CopyAnnApplications(annApps, resIds, u);
                 u.Commit();
             }
         }
@@ -143,8 +155,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 lessonPlan.StartDate = startDate;
                 lessonPlan.EndDate = endDate;
                 lessonPlan.VisibleForStudent = visibleForStudent;
-                lessonPlan.GalleryCategoryRef = galleryCategoryId;
-                if(lessonPlan.IsSubmitted)
+
+                if (Context.SCEnabled) // if only when study center enabled user may add lp to gallery
+                    lessonPlan.GalleryCategoryRef = galleryCategoryId;
+
+                if (lessonPlan.IsSubmitted)
                     ValidateLessonPlan(lessonPlan, da);
                 da.Update(lessonPlan);
                 uow.Commit();
@@ -196,14 +211,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        private void ValidateLessonPlan(LessonPlan lessonPlan, LessonPlanDataAccess da)
+        private static void ValidateLessonPlan(LessonPlan lessonPlan, LessonPlanDataAccess da)
         {
             if(!lessonPlan.StartDate.HasValue)
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "LessonPlan start date "));
             if(!lessonPlan.EndDate.HasValue)
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "LessonPlan end date "));
             if(lessonPlan.StartDate > lessonPlan.EndDate)
-                throw new ChalkableException("Lesson Plan are no valid. Start date is greater the end date");
+                throw new ChalkableException("Lesson Plan is not valid. Start date is greater than end date");
 
             if (string.IsNullOrEmpty(lessonPlan.Title))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "LessonPlan Title "));
@@ -288,7 +303,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected override void SetComplete(Announcement announcement, bool complete)
         {
-            DoUpdate(u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, Context.PersonId.Value, complete));
+            DoUpdate(
+                u =>
+                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementType.LessonPlan, null,
+                        Context.PersonId.Value, null, complete, null, null));
         }
 
         public override void SetAnnouncementsAsComplete(DateTime? toDate, bool complete)
@@ -306,19 +324,41 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     .Announcements;
                 var da = new AnnouncementRecipientDataDataAccess(u);
                 foreach (var ann in anns)
-                    da.UpdateAnnouncementRecipientData(ann.Id, personId, complete);
+                    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementType.LessonPlan, null, personId, null, complete, null, null);
             });
         }
 
         public override bool CanAddStandard(int announcementId)
         {
-            return DoRead(u => CreateLessonPlanDataAccess(u).CanAddStandard(announcementId));
+            return DoRead(u => BaseSecurity.IsTeacher(Context) && CreateLessonPlanDataAccess(u).CanAddStandard(announcementId));
         }
 
         
-        public IList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId)
+        public PaginatedList<LessonPlan> GetLessonPlansTemplates(int? galleryCategoryId, string title, int? classId, AttachmentSortTypeEnum sortType, int start, int count, AnnouncementState? state = AnnouncementState.Created)
         {
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(galleryCategoryId, title, classId));
+            Trace.Assert(Context.PersonId.HasValue);
+            BaseSecurity.EnsureStudyCenterEnabled(Context);
+
+            var lessonPlans = DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlanTemplates(galleryCategoryId, title, classId, state, Context.PersonId.Value));
+
+            switch (sortType)
+            {
+                case AttachmentSortTypeEnum.NewestUploaded:
+                        lessonPlans = lessonPlans.OrderByDescending(x => x.Created).ToList();
+                    break;
+
+                case AttachmentSortTypeEnum.RecentlySent:
+                    lessonPlans = lessonPlans.OrderByDescending(x => x.Created).ToList();
+                    break;
+
+                case AttachmentSortTypeEnum.OldestUploaded:
+                    lessonPlans = lessonPlans.OrderBy(x => x.Created).ToList();
+                    break;
+            }
+
+            var totalCount = lessonPlans.Count;
+            var res = lessonPlans.Skip(start).Take(count).ToList();
+            return new PaginatedList<LessonPlan>(res, start / count, count, totalCount);
         }
         
         public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? galleryCategoryId)
@@ -360,6 +400,52 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public bool ExistsInGallery(string title, int? exceludedLessonPlanId)
         {
             return DoRead(u => CreateLessonPlanDataAccess(u).ExistsInGallery(title, exceludedLessonPlanId));
+        }
+
+        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId)
+        {
+            DoUpdate(
+                u =>
+                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementType.LessonPlan,schoolYearId,
+                        personId, roleId, true, tillDateToUpdate, classId));
+        }
+
+        public void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)
+        {
+            BaseSecurity.EnsureStudyCenterEnabled(Context); // only study center custumers can use lesson plan gallery 
+
+            var newLessonPlan = GetLessonPlanById(newLessonPlanId);
+            DoUpdate(u =>
+            {
+                var da = CreateLessonPlanDataAccess(u);
+                var oldLessonPlan = da.GetLessonPlanTemplate(oldLessonPlanId, Context.PersonId.Value);
+
+                if (!oldLessonPlan.GalleryCategoryRef.HasValue)
+                    throw new ChalkableException($@"'{oldLessonPlan.Title}' was deleted from Gallery.");
+
+                if (!oldLessonPlan.IsOwner && !ClaimInfo.HasPermission(Context.Claims, ClaimInfo.CHALKABLE_ADMIN))
+                    throw new ChalkableSecurityException("Current user has no access to replace lesson plan in gallery!");
+
+                newLessonPlan.GalleryCategoryRef = oldLessonPlan.GalleryCategoryRef;
+                oldLessonPlan.GalleryCategoryRef = null;
+                CreateLessonPlanDataAccess(u).Update(new[] {oldLessonPlan, newLessonPlan});
+            });
+        }
+
+        public void RemoveFromGallery(int lessonPlanId)
+        {
+            BaseSecurity.EnsureStudyCenterEnabled(Context); // only study center custumers can use lesson plan gallery 
+
+            Trace.Assert(Context.PersonId.HasValue);
+            DoUpdate(u =>
+            {
+                var da = CreateLessonPlanDataAccess(u);
+                var lp = da.GetLessonPlanTemplate(lessonPlanId, Context.PersonId.Value);
+                if (!lp.IsOwner && !ClaimInfo.HasPermission(Context.Claims, ClaimInfo.CHALKABLE_ADMIN))
+                    throw new ChalkableSecurityException("Current user has no access to remove lesson plan from gallery!");
+                lp.GalleryCategoryRef = null;
+                da.Update(lp);
+            });
         }
     }
 }

@@ -622,6 +622,7 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             Boolean, function gradeMouseDown(node, event){
                 node.parent().find('.grading-input-popup').show();
+                this.hideDropDown();
                 return false;
             },
 

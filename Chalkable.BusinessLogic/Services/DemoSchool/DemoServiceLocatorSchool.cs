@@ -67,6 +67,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IGroupService groupService;
         private ICourseTypeService courseTypeService;
         private ISettingsService settingsService;
+        private IPersonSettingService personSettingService;
         private ILPGalleryCategoryService lpGalleryCategoryService { get; set; }
         private IAnnouncementAssignedAttributeService announcementAssignedAttributeService;
 
@@ -128,6 +129,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             settingsService = new DemoSettingsService(this);
             announcementAssignedAttributeService = new DemoAnnouncementAssignedAttributeService(this);
             lpGalleryCategoryService = new LPGalleryCategoryService(this);
+            personSettingService = new PersonSettingService(this);
         }
 
         public bool IsInitialized { get; private set; }
@@ -205,6 +207,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public ICourseTypeService CourseTypeService { get { return courseTypeService; } }
 
         public ISettingsService SettingsService { get { return settingsService; } }
+        public IPersonSettingService PersonSettingService { get { return personSettingService; } }
         public ILPGalleryCategoryService LPGalleryCategoryService { get { return lpGalleryCategoryService; } }
 
         private void AddAttendances()
@@ -1838,6 +1841,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+        public IAttachementService AttachementService { get { throw new NotImplementedException(); } }
 
         public ILEService LeService { get { throw new NotImplementedException(); } }
     }

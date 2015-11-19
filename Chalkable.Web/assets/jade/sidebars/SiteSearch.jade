@@ -16,14 +16,14 @@ li(data-title = self.getDescription(), data-value = self.getId().valueOf() + '|'
                             +ClassImg(self, 45, 80).avatar
                         div.title= self.getDescription()
             when chlk.models.search.SearchTypeEnum.ATTACHMENTS
-                +ActionLink('announcement', 'view', self.getAnnouncementId()).image-container.white.shadow
+                +ActionLink('announcement', 'view', self.getAnnouncementId(), self.getAnnouncementType()).image-container.white.shadow
                     div.site-search-attachment.search-item
                         .icon-item
                             .img-wrapper
                                  img(src=self.getDocumentThumbnailUrl(), width="47", height="47").avatar
                         div.title= self.getDescription()
             when chlk.models.search.SearchTypeEnum.ANNOUNCEMENTS
-                +ActionLink('announcement', 'view', self.getId()).image-container.white.shadow
+                +ActionLink('announcement', 'view', self.getId(), self.getAnnouncementType()).image-container.white.shadow
                     div.site-search-announcement.search-item
                         .icon-item
                             .icon.blue.image

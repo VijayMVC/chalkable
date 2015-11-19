@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
@@ -22,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<GradeLevel> GetGradeLevels()
         {
-            return DoRead(u => new DataAccessBase<GradeLevel>(u).GetAll());
+            return DoRead(u => new DataAccessBase<GradeLevel>(u).GetAll().OrderBy(x=>x.Number).ToList());
         }
         
         public void Add(IList<GradeLevel> gradeLevels)

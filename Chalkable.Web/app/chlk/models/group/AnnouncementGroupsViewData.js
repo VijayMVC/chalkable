@@ -18,6 +18,21 @@ NAMESPACE('chlk.models.group', function(){
             String, 'resultHidden',
             Object, 'hiddenParams',
 
+            [[ArrayOf(chlk.models.group.Group), chlk.models.id.AnnouncementId, ArrayOf(chlk.models.id.GroupId), String, String, String, Object]],
+            function $(groups_, announcementId_, selected_, controller_, action_, resultHidden_, hiddenParams_){
+                BASE(groups_, announcementId_);
+                if(selected_)
+                    this.setSelected(selected_);
+                if(controller_)
+                    this.setController(controller_);
+                if(action_)
+                    this.setAction(action_);
+                if(resultHidden_)
+                    this.setResultHidden(resultHidden_);
+                if(hiddenParams_)
+                    this.setHiddenParams(hiddenParams_);
+            },
+
             OVERRIDE, VOID, function deserialize(raw){
                 BASE(raw);
                 this.selected = SJX.fromArrayOfValues(raw.selected, chlk.models.id.GroupId) || [];

@@ -16,9 +16,11 @@ NAMESPACE('chlk.models.apps', function () {
             [ria.serialize.SerializeProperty('bigpictureid')],
             chlk.models.id.PictureId, 'bigPictureId',
 
+            [ria.serialize.SerializeProperty('externalattachpictureid')],
+            chlk.models.id.PictureId, 'externalAttachPictureId',
 
-            [[String, String, String, String, String, Boolean, chlk.models.id.PictureId, chlk.models.id.PictureId]],
-            function $(name, url, videoDemoUrl, shortDescr, descr, advancedApp, smallPictureId_, bigPictureId_){
+            [[String, String, String, String, String, Boolean, chlk.models.id.PictureId, chlk.models.id.PictureId, chlk.models.id.PictureId]],
+            function $(name, url, videoDemoUrl, shortDescr, descr, advancedApp, smallPictureId_, bigPictureId_, externalAttachPictureId_){
                 BASE();
                 this.setName(name);
                 this.setUrl(url);
@@ -29,6 +31,8 @@ NAMESPACE('chlk.models.apps', function () {
                     this.setSmallPictureId(smallPictureId_);
                 if (bigPictureId_)
                     this.setBigPictureId(bigPictureId_);
+                if(externalAttachPictureId_)
+                    this.setExternalAttachPictureId(externalAttachPictureId_);
                 this.setAdvancedApp(advancedApp);
             },
 
@@ -41,6 +45,7 @@ NAMESPACE('chlk.models.apps', function () {
                     description: this.getDescription(),
                     smallpictureid: this.getSmallPictureId() ? this.getSmallPictureId().valueOf() : null,
                     bigpictureid: this.getBigPictureId() ? this.getBigPictureId().valueOf(): null,
+                    externalattachpictureid: this.getExternalAttachPictureId() ? this.getExternalAttachPictureId().valueOf() : null,
                     advancedapp: this.isAdvancedApp()
                 }
             }

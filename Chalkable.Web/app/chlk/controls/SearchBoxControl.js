@@ -70,10 +70,13 @@ NAMESPACE('chlk.controls', function () {
                 var id = node.getAttr("id");
                 var tpl = new tplClass();
 
-                var selectHandler = function( event, ui, triggerChange) {
+                var selectHandler = attrs.attrs || function( event, ui, triggerChange) {
                     var item = ui.item;
                     var li = jQuery(event.currentTarget).find("[data-id=" + item.dataId + "]");
-                    ria.dom.Dom('#' + id + '-hidden').setValue(attrs.idValue ? item['get' + attrs.idValue.capitalize()]().valueOf() : li.data('value'));
+                    var value = attrs.idValue ? item['get' + attrs.idValue.capitalize()]().valueOf() : li.data('value');
+                    if(Array.isArray(value))
+                        value = JSON.stringify(value);
+                    ria.dom.Dom('#' + id + '-hidden').setValue(value);
                     node.setValue(attrs.textValue ? item['get' + attrs.textValue.capitalize()]() : li.data('title'));
                     if (triggerChange)
                         node.trigger('change', {selected: item});
@@ -156,6 +159,8 @@ NAMESPACE('chlk.controls', function () {
                 return {
                     minLength: this.getMinLength(),
                     source: function( request, response ) {
+                        var node = this.element;
+                        node.addClass('pending');
                         serviceF(request.term)
                             .then(function(data){
                                 if(data instanceof chlk.models.common.PaginatedList)
@@ -219,6 +224,10 @@ NAMESPACE('chlk.controls', function () {
                         var top = parseInt(menu.getCss('top'));
                         if(top + mHeight > wHeight)
                             menu.setCss('top', top - mHeight - 35);
+                    },
+
+                    response: function(){
+                        jQuery(this).removeClass('pending');
                     }
                 };
             }

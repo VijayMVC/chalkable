@@ -14,10 +14,7 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.StandardId');
 REQUIRE('chlk.models.id.MarkingPeriodId');
 REQUIRE('chlk.models.id.SchoolPersonId');
-REQUIRE('chlk.models.id.AnnouncementAssignedAttributeAttachmentId');
-REQUIRE('chlk.models.id.AnnouncementAttachmentId');
-REQUIRE('chlk.models.announcement.AnnouncementQnA');
-REQUIRE('chlk.models.id.AnnouncementQnAId');
+
 REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
 REQUIRE('chlk.models.announcement.AnnouncementAttributeType');
 
@@ -38,84 +35,55 @@ NAMESPACE('chlk.services', function () {
             Object, 'cache',
             Number, 'importantCount',
 
-            [[Number, chlk.models.id.ClassId, Boolean]],
-            ria.async.Future, function getAnnouncements(pageIndex_, classId_, importantOnly_) {
-                return this.get('Feed/List.json', ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), {
-                    start: pageIndex_|0,
+            [[Number, chlk.models.id.ClassId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function markDone(option, classId_, annType_) {
+                return this.get('Announcement/Done.json', Boolean, {
+                    option: option.valueOf(),
+                    classId: classId_ && classId_.valueOf(),
+                    annType: annType_ && annType_.valueOf(),
+                });
+            },
+
+            [[Number, chlk.models.id.ClassId, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
+                chlk.models.announcement.AnnouncementTypeEnum, Boolean, Boolean]],
+            ria.async.Future, function getAnnouncements(start_, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_) {
+                return this.get('Feed/List.json', chlk.models.feed.Feed, {
+                    start: start_ || 0,
                     classId: classId_ ? classId_.valueOf() : null,
-                    complete: importantOnly_ ? false : null
+                    complete: importantOnly_ ? false : null,
+                    fromDate: startDate_ && startDate_.toStandardFormat(),
+                    toDate: endDate_ && endDate_.toStandardFormat(),
+                    announcementType: annType_ && annType_.valueOf(),
+                    gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf(),
+                    sortType: latest_,
+                    lessonPlansOnly: false,
+                    toSet: toSet_ || !!startDate_ || !!endDate_ || !!annType_ || !!gradingPeriodId_ || false,
+                    count: 10
                 });
 
             },
 
-            [[Number, String, Boolean]],
-            ria.async.Future, function getAnnouncementsForAdmin(pageIndex_, gradeLevels_, importantOnly_) {
-                return this.get('Feed/DistrictAdminFeed.json', ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), {
+            [[Number, String, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
+                chlk.models.announcement.AnnouncementTypeEnum, Boolean, Boolean]],
+            ria.async.Future, function getAnnouncementsForAdmin(start_, gradeLevels_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_) {
+                return this.get('Feed/DistrictAdminFeed.json', chlk.models.feed.FeedAdmin, {
                     gradeLevelIds : gradeLevels_,
-                    start: pageIndex_|0,
-                    complete: importantOnly_ ? false : null
+                    start: start_ || 0,
+                    complete: importantOnly_ ? false : null,
+                    fromDate: startDate_ && startDate_.toStandardFormat(),
+                    toDate: endDate_ && endDate_.toStandardFormat(),
+                    announcementType: annType_ && annType_.valueOf(),
+                    gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf(),
+                    sortType: latest_,
+                    toSet: toSet_ || !!startDate_ || !!endDate_ || !!annType_ || !!gradingPeriodId_ || false,
+                    count: 10
                 });
 
-            },
-
-            [[chlk.models.id.AnnouncementId, Object, chlk.models.announcement.AnnouncementTypeEnum]],
-                ria.async.Future, function uploadAttachment(announcementId, files, announcementType) {
-                return this.uploadFiles('AnnouncementAttachment/AddAttachment', files, chlk.models.announcement.FeedAnnouncementViewData, {
-                        announcementId: announcementId.valueOf(),
-                        announcementType: announcementType.valueOf()
-                });
-            },
-
-
-            [[String]],
-            ria.async.Future, function getGradeComments(query_) {
-                return this.get('Grading/GetGridComments', ArrayOf(String), {
-                    schoolYearId: this.getContext().getSession().get(ChlkSessionConstants.CURRENT_SCHOOL_YEAR_ID, null).valueOf()
-                }).then(function(data){
-                    var comments = data || [];
-
-                });
-            },
-
-            [[chlk.models.id.AnnouncementAttachmentId]],
-            ria.async.Future, function startViewSession(announcementAttachmentId) {
-                return this.get('AnnouncementAttachment/StartViewSession', String, {
-                    announcementAttachmentId: announcementAttachmentId.valueOf(),
-                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
-                });
-            },
-
-            [[chlk.models.id.AnnouncementAttachmentId, chlk.models.id.AnnouncementId]],
-            ria.async.Future, function cloneAttachment(attachmentId, announcementId) {
-                return this.get('AnnouncementAttachment/CloneAttachment', chlk.models.announcement.AnnouncementView, {
-                    originalAttachmentId: attachmentId.valueOf(),
-                    announcementId: announcementId.valueOf(),
-                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
-                });
             },
 
             [[chlk.models.id.AnnouncementId, Boolean]],
             ria.async.Future, function setShowGradesToStudents(announcementId, value) {
                 return ria.async.DeferredData(true);
-            },
-
-            [[chlk.models.id.AnnouncementAttachmentId, Boolean, Number, Number]],
-            String, function getAttachmentUri(announcementAttachmentId, needsDownload, width, height) {
-                return this.getUrl('AnnouncementAttachment/DownloadAttachment', {
-                    announcementAttachmentId: announcementAttachmentId.valueOf(),
-                    needsDownload: needsDownload,
-                    width: width,
-                    height: height
-                });
-            },
-
-            [[chlk.models.id.AttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
-            ria.async.Future, function deleteAttachment(attachmentId, announcementId, announcementType) {
-                return this.get('AnnouncementAttachment/DeleteAttachment.json', chlk.models.announcement.FeedAnnouncementViewData, {
-                    announcementAttachmentId: attachmentId.valueOf(),
-                    announcementId: announcementId.valueOf(),
-                    announcementType: announcementType.valueOf()
-                });
             },
 
             [[chlk.models.id.AnnouncementApplicationId, chlk.models.announcement.AnnouncementTypeEnum]],
@@ -132,6 +100,14 @@ NAMESPACE('chlk.services', function () {
                     classId: classId_ ? classId_.valueOf() : null,
                     classAnnouncementTypeId: classAnnouncementTypeId_,
                     expiresDate: expiresDate_ ? expiresDate_.valueOf() : null
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function getAttachSettings(announcementId, announcementType) {
+                return this.get('Announcement/AttachSettings.json', chlk.models.common.AttachOptionsViewData, {
+                    announcementId: announcementId.valueOf(),
+                    announcementType: announcementType.valueOf()
                 });
             },
             
@@ -180,6 +156,11 @@ NAMESPACE('chlk.services', function () {
                 }, this);
             },
 
+            [[chlk.models.id.AnnouncementId]],
+            chlk.models.announcement.AnnouncementView, function getAnnouncementSync(id){
+                return this.cache[id.valueOf()];
+            },
+
             [[chlk.models.id.AnnouncementId, Boolean, chlk.models.announcement.AnnouncementTypeEnum]],
             ria.async.Future, function checkItem(announcementId, complete_, type_) {
                 this.setImportantCount(this.getImportantCount() + (complete_ ? 1 : -1));
@@ -188,76 +169,6 @@ NAMESPACE('chlk.services', function () {
                     complete: complete_,
                     announcementType: type_ && type_.valueOf(),
                 });
-            },
-
-            [[chlk.models.id.AnnouncementId, String]],
-            ria.async.Future, function askQuestion(announcementId, question) {
-                return this.post('AnnouncementQnA/Ask', chlk.models.announcement.AnnouncementQnA, {
-                    announcementId: announcementId.valueOf(),
-                    question: question,
-                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
-                }).then(function(qna){
-                    var result =this.cache[qna.getAnnouncementId().valueOf()];
-                    result.getAnnouncementQnAs().push(qna);
-                    return result;
-                }, this);
-            },
-
-
-            [[chlk.models.id.AnnouncementQnAId, String, String]],
-            ria.async.Future, function answerQuestion(announcementQnAId, question, answer) {
-                return this.post('AnnouncementQnA/Answer', chlk.models.announcement.AnnouncementQnA, {
-                    announcementQnAId: announcementQnAId.valueOf(),
-                    question: question,
-                    answer: answer,
-                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
-                }).then(function(qna){
-                        return this.editCacheAnnouncementQnAs_(qna);
-                }, this);
-            },
-
-
-            [[chlk.models.id.AnnouncementQnAId, String]],
-            ria.async.Future, function editQuestion(announcementQnAId, question) {
-                return this.post('AnnouncementQnA/EditQuestion', chlk.models.announcement.AnnouncementQnA, {
-                    announcementQnAId: announcementQnAId.valueOf(),
-                    question: question
-                }).then(function(qna){
-                        return this.editCacheAnnouncementQnAs_(qna);
-                    }, this);
-            },
-
-            [[chlk.models.id.AnnouncementQnAId, String]],
-            ria.async.Future, function editAnswer(announcementQnAId, answer) {
-                return this.post('AnnouncementQnA/EditAnswer', chlk.models.announcement.AnnouncementQnA, {
-                    announcementQnAId: announcementQnAId.valueOf(),
-                    answer: answer
-                }).then(function(qna){
-                            return this.editCacheAnnouncementQnAs_(qna);
-                    }, this);
-            },
-
-            [[chlk.models.announcement.AnnouncementQnA]],
-            Object, function editCacheAnnouncementQnAs_(qna){
-                var result =this.cache[qna.getAnnouncementId().valueOf()];
-                for (var i = 0; i < result.getAnnouncementQnAs().length; i++)
-                    if (result.getAnnouncementQnAs()[i].getId() == qna.getId())
-                    {
-                        result.getAnnouncementQnAs()[i] = qna;
-                        break;
-                    }
-                return result;
-            },
-
-            [[chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementQnAId]],
-            ria.async.Future, function deleteQnA(announcementId, announcementQnAId) {
-                return this.post('AnnouncementQnA/Delete', ArrayOf(chlk.models.announcement.AnnouncementQnA), {
-                    announcementQnAId: announcementQnAId.valueOf()
-                }).then(function(qnas){
-                    var result =this.cache[announcementId.valueOf()];
-                    result.setAnnouncementQnAs(qnas);
-                    return result;
-                }, this);
             },
 
             [[chlk.models.id.AnnouncementId, chlk.models.id.StandardId]],
@@ -276,52 +187,7 @@ NAMESPACE('chlk.services', function () {
                     standardId: standardId.valueOf(),
                     announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
                 });
-            },
+            }
 
-            [[ArrayOf(chlk.models.id.ClassId)]],
-            ria.async.Future, function getClassAnnouncementTypes(classIds){
-                return this.get('AnnouncementType/ListByClasses.json', ArrayOf(chlk.models.announcement.ClassAnnouncementType),{
-                    classIds: this.arrayToCsv(classIds)
-                });
-            },
-
-            [[chlk.models.id.ClassId, String, String, Number, Number, Boolean, Number]],
-            ria.async.Future, function createAnnouncementTypes(classId, description_, name_, highScoresToDrop_, lowScoresToDrop_, isSystem_, percentage_){
-                return this.get('AnnouncementType/Create.json', chlk.models.announcement.ClassAnnouncementType,{
-                    classId: classId.valueOf(),
-                    description: description_,
-                    name: name_,
-                    highScoresToDrop: highScoresToDrop_,
-                    lowScoresToDrop: lowScoresToDrop_,
-                    isSystem: isSystem_,
-                    percentage: percentage_
-                });
-            },
-
-            [[chlk.models.id.ClassId, String, String, Number, Number, Boolean, Number, Number]],
-            ria.async.Future, function updateAnnouncementTypes(classId, description_, name_, highScoresToDrop_, lowScoresToDrop_, isSystem_, percentage_, classAnnouncementTypeId_){
-                return this.get('AnnouncementType/Update.json', chlk.models.announcement.ClassAnnouncementType,{
-                    classAnnouncementTypeId: classAnnouncementTypeId_,
-                    classId: classId.valueOf(),
-                    description: description_,
-                    name: name_,
-                    highScoresToDrop: highScoresToDrop_,
-                    lowScoresToDrop: lowScoresToDrop_,
-                    isSystem: isSystem_,
-                    percentage: percentage_
-                });
-            },
-
-            [[Array]],
-            ria.async.Future, function deleteAnnouncementTypes(ids){
-                return this.get('AnnouncementType/Delete.json', Boolean,{
-                    classAnnouncementTypeIds: this.arrayToCsv(ids),
-                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
-                });
-            },
-
-
-
-
-        ])
+        ]);
 });

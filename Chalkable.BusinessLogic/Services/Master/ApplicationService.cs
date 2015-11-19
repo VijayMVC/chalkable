@@ -15,9 +15,7 @@ namespace Chalkable.BusinessLogic.Services.Master
     {
         IList<AppPermissionType> GetPermisions(string applicationUrl);
         PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true);
-        
         PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
-        
         PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode
             , AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue);
 
@@ -29,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IList<ApplicationRating> GetRatings(Guid applicationId);
         bool CanGetSecretKey(IList<Application> applications);
         bool HasMyApps(Application application);
-
+        bool HasExternalAttachMode(Application application);
         Application GetPracticeGradesApplication();
         Application GetAssessmentApplication();
         Guid? GetPracticeGradeId();
@@ -197,6 +195,13 @@ namespace Chalkable.BusinessLogic.Services.Master
             return Context.Role.Id == CoreRoles.STUDENT_ROLE.Id && application.HasStudentMyApps;
         }
 
+        public bool HasExternalAttachMode(Application application)
+        {
+            return BaseSecurity.IsDistrictAdmin(ServiceLocator.Context) && application.HasAdminExternalAttach
+                   || Context.Role == CoreRoles.TEACHER_ROLE && application.HasTeacherExternalAttach
+                   || Context.Role == CoreRoles.STUDENT_ROLE && application.HasStudentExternalAttach;
+        }
+
 
         public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode, AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue)
         {
@@ -256,7 +261,10 @@ namespace Chalkable.BusinessLogic.Services.Master
         public void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban)
         {
             BaseSecurity.EnsureDistrictAdmin(Context);
-            DoUpdate(uow => new ApplicationDataAccess(uow).SetDistrictOption(applicationId, districtId, ban));
+            DoUpdate(uow =>
+            {
+                new ApplicationDataAccess(uow).SetDistrictOption(applicationId, districtId, ban);
+            });
         }
 
 

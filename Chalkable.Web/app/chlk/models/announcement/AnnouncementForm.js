@@ -13,6 +13,7 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'selectedTypeId',
             String, 'adminRecipientId',
             Array, 'classScheduleDateRanges',
+            Boolean, 'studyCenterEnabled',
 
             [[chlk.models.classes.ClassesForTopBar, Boolean]],
             function $create(classes, isDraft){

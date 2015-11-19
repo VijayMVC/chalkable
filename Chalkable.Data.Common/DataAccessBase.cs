@@ -13,7 +13,7 @@ namespace Chalkable.Data.Common
     public class DataAccessBase<TEntity> where TEntity : new()
     {
         protected const string FILTER_FORMAT = "%{0}%";
-        private const string ALL_COUNT_FIELD = "AllCount";
+        private const string ALL_COUNT_FIELD = Orm.Orm.ALL_COUNT_FIELD;
 
         private UnitOfWork unitOfWork;
         public DataAccessBase(UnitOfWork unitOfWork)
@@ -259,10 +259,10 @@ namespace Chalkable.Data.Common
         }
 
         protected PaginatedList<T> PaginatedSelect<T>(DbQuery innerSelect, string orderByColumn, int start, int count,
-                                                      Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc) where T : new()
+                                                      Orm.Orm.OrderType orderType = Orm.Orm.OrderType.Asc, bool complexResult = false) where T : new()
         {
             var q = Orm.Orm.PaginationSelect(innerSelect, orderByColumn,orderType, start, count);
-            return ReadPaginatedResult(q, start, count, x => x.ReadList<T>());
+            return ReadPaginatedResult(q, start, count, x => x.ReadList<T>(complexResult));
         }
 
         protected PaginatedList<T> ReadPaginatedResult<T>(DbQuery dbQuery, int start, int count,
@@ -296,6 +296,22 @@ namespace Chalkable.Data.Common
             }
         }
 
+        protected PaginatedList<T> ExecuteStoredProcedurePaginated<T>(string name,
+            IDictionary<string, object> parameters, Func<DbDataReader, IList<T>> readFunc, int start, int count) where T : new()
+        {
+            using (var reader = ExecuteStoredProcedureReader(name, parameters))
+            {
+                if (reader.Read())
+                {
+                    var allCount = SqlTools.ReadInt32(reader, ALL_COUNT_FIELD);
+                    reader.NextResult();
+                    var res = readFunc(reader);
+                    return new PaginatedList<T>(res, start/count, count, allCount);
+                }
+                return new PaginatedList<T>(new List<T>(), start / count, count, 0);
+            }
+            
+        }
         public IList<T> ExecuteStoredProcedureList<T>(string name, IDictionary<string, object> parameters, int? timeout = null) where T : new()
         {
             using (var reader = ExecuteStoredProcedureReader(name, parameters, timeout))
@@ -313,7 +329,18 @@ namespace Chalkable.Data.Common
         protected int Count(DbQuery query)
         {
             var q = Orm.Orm.CountSelect(query, ALL_COUNT_FIELD);
-            return Read(q, reader => reader.Read() ? SqlTools.ReadInt32(reader, ALL_COUNT_FIELD) : 0);
+            return ReadCount(q);
+        }
+
+        protected int Count<T>(QueryCondition conditions) where T : new()
+        {
+            var q = Orm.Orm.CountSelect<T>(conditions, ALL_COUNT_FIELD);
+            return ReadCount(q);
+        }
+
+        private int ReadCount(DbQuery query)
+        {
+            return Read(query, reader => reader.Read() ? SqlTools.ReadInt32(reader, ALL_COUNT_FIELD) : 0);
         }
 
         protected bool Exists<T>(QueryCondition conditions) where T : new()

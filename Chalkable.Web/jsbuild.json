@@ -1,5 +1,11 @@
 {
-	"version": "3.0",
+    "version": "3.0",
+
+    "framework": "./app/bower/emp.ria-framework",
+
+    "libs": {
+        "ria": "~/app/bower/emp.ria-framework/"
+    },
 
     "options": {
 		"uglifyjs": {
@@ -13,6 +19,12 @@
 			}
 		}
 	},
+
+    "assets": {
+        "jade": { "compiler": "../node_modules/emp.ria-jade/index.js", "options": { "client": true, "compileDebug": false, "self": true } },
+        "txt": {},
+        "json": {}
+    },
 
     "modules": [{
         "name": "SysAdmin",

@@ -18,7 +18,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'filter',
 
             [ria.templates.ModelPropertyBind],
-            Number, 'galleryCategoryForSearch'
+            chlk.models.id.LpGalleryCategoryId, 'galleryCategoryForSearch'
 
         ])
 });

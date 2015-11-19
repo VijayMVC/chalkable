@@ -31,7 +31,7 @@
         h3 Lesson Plans
         .announcements-list
             .day-announcements
-                each item in announcements
+                each item in lessonPlans
                     .items
                         +ActionLink('announcement', 'view', item.getId(), chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN).pop-up-announcement
                             div

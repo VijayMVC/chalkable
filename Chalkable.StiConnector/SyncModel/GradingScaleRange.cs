@@ -9,5 +9,6 @@ namespace Chalkable.StiConnector.SyncModel
         public int AveragingEquivalent { get; set; }
         public bool AwardGradCredit { get; set; }
         public bool IsPassing { get; set; }
+        public override int DefaultOrder => 40;
     }
 }

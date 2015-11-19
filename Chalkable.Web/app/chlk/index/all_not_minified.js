@@ -1,23 +1,5 @@
 //All homepage misc. scripts
 $(window).load(function () {
-    $('.cycle').hide().fadeIn(500);
-    try{
-        $('.cycle').cycle({
-            //fx: 'toss',// choose your transition type, ex: fade, scrollUp, shuffle, etc...
-            fx: 'turnDown',
-            animOut: {
-                bottom:  140
-            },
-            speedIn:  300,
-            speedOut: 300,
-            speed:  150,
-            delay: 0,
-            timeout:1500
-        });
-    }catch(e){
-
-    }
-
     $('.signupbutton').click(function(){
         $('form').submit();
         return false;
@@ -50,7 +32,7 @@ jQuery(document).ready(function() {
 
 //navbar sticky and highlight
 
-    google.setOnLoadCallback(function() {
+    $(function() {
         $(window).scroll(sticky_relocate);
         sticky_relocate();
     });
@@ -89,13 +71,6 @@ jQuery(document).ready(function() {
         $('html,body').animate({scrollTop:$(this.hash).offset().top}, 600);
     });
 
-    //show current page
-    var title =	$(document).attr('title');
-    olark('api.chat.onBeginConversation', function(){
-        olark('api.chat.sendNotificationToOperator', {body: "viewing " + title})
-    });
-    olark.identify('7960-903-10-2178');/*]]>{/literal}*/
-
 //remove space in email input
     $(function(){
         var txt = $("input#UserName");
@@ -107,27 +82,6 @@ jQuery(document).ready(function() {
         txt.keyup(func).blur(func);
     });
 
-//fancybox
-    jQuery(".fancybox-media").fancybox({
-        helpers : {
-            media: true
-        },
-        youtube : {
-            autoplay: 1
-        },
-        padding : 0,
-        closeBtn: false,
-        close  : [27], // escape key
-        toggle : [70],  // letter "f" - toggle fullscreen
-        height: 480,
-        width: 853,
-        showNavArrows : false
-        //interval: 0,
-
-
-    });
-
-
     $(window).scroll(function () {
         if ($(this).scrollTop() < 1344) {
             $('.fixed-sider').stop().animate({opacity: 0 , visibility : "hidden"}, 600);
@@ -136,32 +90,5 @@ jQuery(document).ready(function() {
             $('.fixed-sider').stop().animate({opacity: 1, visibility : "visible"}, 600);
         }
     });
-
-    //----navbar
-    try{
-        // Do our DOM lookups beforehand
-        var nav_container = $("#demo_top_wrapper");
-        var nav = $("#sticky_navigation");
-        nav_container.waypoint({
-            handler: function(event, direction) {
-                nav.toggleClass('sticky', direction=='down');
-                if (direction == 'down') nav_container.css({ 'height':nav.outerHeight() });
-                else nav_container.css({ 'height':'auto' });
-            },
-            offset: 0
-        });
-        $.waypoints.settings.scrollThrottle = 0;
-        $('#newtoppanel').waypoint(function(event, direction) {
-            $('.top').toggleClass('hidden', direction === "up");
-        }, {
-            offset: 0
-        }).find('#demo_top_wrapper').waypoint(function(event, direction) {
-                $(this).parent().toggleClass('sticky', direction === "down");
-                event.stopPropagation();
-            });
-    }catch(e){
-
-    }
-
 });
 

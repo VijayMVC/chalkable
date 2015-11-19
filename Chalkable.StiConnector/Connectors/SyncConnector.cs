@@ -43,10 +43,9 @@ namespace Chalkable.StiConnector.Connectors
                     var jsonReader = new JsonTextReader(reader);
                     
                     
-                    var resType = (typeof(SyncResult<>)).MakeGenericType(new[] { type });
+                    var resType = (typeof(SyncResult<>)).MakeGenericType(type);
                     var res = serializer.Deserialize(jsonReader, resType);
-                    if (unzipped != null)
-                        unzipped.Dispose();
+                    unzipped?.Dispose();
                     return res;
 
                 }
@@ -56,8 +55,14 @@ namespace Chalkable.StiConnector.Connectors
                 if (ex.Response is HttpWebResponse &&
                     (ex.Response as HttpWebResponse).StatusCode == HttpStatusCode.NotFound)
                     return null;
-                var reader = new StreamReader(ex.Response.GetResponseStream());
-                var msg = reader.ReadToEnd();
+                
+                string msg = ex.Message;
+                var stream = ex.Response?.GetResponseStream();
+                if (stream != null)
+                {
+                    var reader = new StreamReader(stream);
+                    msg = reader.ReadToEnd();
+                }
                 throw new Exception(msg);
             }
         }

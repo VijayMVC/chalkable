@@ -33,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId);
 
 
-        StandardTreePath GetStandardParentsSubTree(int standardId);
+        StandardTreePath GetStandardParentsSubTree(int standardId, int? classId);
     }
     public class StandardService : SchoolServiceBase, IStandardService
     {
@@ -184,9 +184,9 @@ namespace Chalkable.BusinessLogic.Services.School
             var ccStandardService = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService;
             foreach (var standard in standards.Where(standard => standard.AcademicBenchmarkId.HasValue))
             {
-                standard.CCStandardCode = ccStandardService.GetStandardCodeByABId(standard.AcademicBenchmarkId.Value);
+                standard.CCStandardCodes = ccStandardService.GetStandardCodesByABId(standard.AcademicBenchmarkId.Value);
             }
-            return standards;
+            return standards.OrderBy(x => x.Name).ToList();
         }
 
         public IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId)
@@ -203,9 +203,9 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public StandardTreePath GetStandardParentsSubTree(int standardId)
+        public StandardTreePath GetStandardParentsSubTree(int standardId, int? classId)
         {
-            return DoRead(uow => new StandardDataAccess(uow).GetStandardParentsSubTree(standardId));
+            return DoRead(uow => new StandardDataAccess(uow).GetStandardParentsSubTree(standardId, classId));
         }
     }
 }

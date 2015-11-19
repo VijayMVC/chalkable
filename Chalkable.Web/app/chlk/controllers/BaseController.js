@@ -14,7 +14,23 @@ REQUIRE('chlk.lib.exception.NoClassAnnouncementTypeException');
 REQUIRE('chlk.lib.exception.AppErrorException');
 REQUIRE('chlk.lib.exception.InvalidPictureException');
 
+REQUIRE('chlk.services.UserTrackingService');
+
+
 NAMESPACE('chlk.controllers', function (){
+
+    var Raygun = window.Raygun || null;
+
+    if (Raygun) {
+        Raygun.fetchRaygunError = function (error) {
+            var lines = error.split(/[\n\r]{1,2}/);
+            var message = lines.filter(function (_) { return !/^\s+at/.test(_); });
+            return {
+                message: message.join('\n'),
+                stack: error
+            };
+        }
+    }
 
     /** @class chlk.controllers.SidebarButton */
     ANNOTATION(
@@ -102,6 +118,9 @@ NAMESPACE('chlk.controllers', function (){
    CLASS(ABSTRACT,
        'BaseController', EXTENDS(ria.mvc.Controller), [
 
+           [ria.mvc.Inject],
+           chlk.services.UserTrackingService, 'userTrackingService',
+
            function $() {
                BASE();
                this.notAblePressSidebarButton = null;
@@ -119,7 +138,9 @@ NAMESPACE('chlk.controllers', function (){
                    .catchException(chlk.lib.exception.NotAuthorizedException, function (exception) {
                        document.location.href = WEB_SITE_ROOT;
                    })
-                   .catchException(chlk.lib.exception.ChalkableException, function(exception){
+                   .catchException(chlk.lib.exception.ChalkableException, function(exception) {
+                        Raygun ? Raygun.send(Raygun.fetchRaygunError(exception.toString())) : console.error(exception.toString());
+
                        return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
@@ -133,7 +154,7 @@ NAMESPACE('chlk.controllers', function (){
                    }, this)
                    .catchException(chlk.lib.exception.ChalkableSisException, function(exception){
                        var msg = this.mapSisErrorMessage(exception.getMessage());
-
+                       Raygun ? Raygun.send(Raygun.fetchRaygunError(exception.toString())) : console.error(exception.toString());
                        return this.ShowMsgBox(msg, 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
@@ -160,8 +181,9 @@ NAMESPACE('chlk.controllers', function (){
 
            [[Object]],
            function handleServerError(error){
+               Raygun ? Raygun.send(Raygun.fetchRaygunError(error.toString())) : console.error(error.toString());
                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
-               return this.redirectToErrorPage_(error.toString(), 'error', 'error404', []);
+               return this.redirectToErrorPage_(error.toString(), 'error', 'error404', [error.toString()]);
            },
 
 
@@ -187,7 +209,6 @@ NAMESPACE('chlk.controllers', function (){
 
            [[String, String, String, Array]],
            function redirectToErrorPage_(error, controller, action, params){
-               console.error(error);
                return this.redirectToPage_(controller, action, params);
            },
 
@@ -300,6 +321,13 @@ NAMESPACE('chlk.controllers', function (){
                    this.userInRole(chlk.models.common.RoleEnum.DISTRICTADMIN);
            },
 
+           Boolean, function userIsTeacher(){
+               return this.userInRole(chlk.models.common.RoleEnum.TEACHER);
+           },
+
+           Boolean, function userIsStudent(){
+               return this.userInRole(chlk.models.common.RoleEnum.STUDENT);
+           },
 
            Boolean, function isDemoSchool(){
                return this.getContext().getSession().get(ChlkSessionConstants.DEMO_SCHOOL, false);
@@ -458,6 +486,8 @@ NAMESPACE('chlk.controllers', function (){
                }
 
                this.setNotAblePressSidebarButton(false);
+               this.userTrackingService.clickedAction(state.getController() + "/" + state.getAction());
+               window.appInsights && window.appInsights.ChalkableTrackPageView(methodReflector.getName());
            },
 
 

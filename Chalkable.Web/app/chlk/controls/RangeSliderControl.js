@@ -40,7 +40,8 @@ NAMESPACE('chlk.controls', function () {
                         that.onStop(node, event, ui);
                     }
                 }).each(function() {
-                    var opt = jQuery(this).data()['uiSlider'].options;
+                    var data = jQuery(this).data();
+                    var opt = (data['uiSlider'] || data['ui-slider']).options;
                     var vals = opt.max - opt.min;
                     for (var i = 0; i <= vals; i++) {
                         var el = jQuery('<label>'+(i+opt.min)+'</label>').css('left',(i/vals*100)+'%');

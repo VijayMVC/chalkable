@@ -11,7 +11,7 @@ namespace Chalkable.Data.School.Model
         public const string SHOWN_FIELD = "Shown";
         public const string CREATED_FIELD = "Created";
         public const string PERSON_REF_FIELD = "PersonRef";
-
+        public const string ROLE_REF_FIELD = "RoleRef";
 
         [IdentityFieldAttr]
         [PrimaryKeyFieldAttr]
@@ -27,6 +27,7 @@ namespace Chalkable.Data.School.Model
         public DateTime Created { get; set; }
         public int? MarkingPeriodRef { get; set; }
         public bool WasSend { get; set; }
+        public int RoleRef { get; set; }
     }
 
 
@@ -35,7 +36,7 @@ namespace Chalkable.Data.School.Model
         public Person Person { get; set; }
         public Announcement Announcement { get; set; }
         public ClassAnnouncementType ClassAnnouncementType { get; set; }
-        public PrivateMessageDetails PrivateMessage { get; set; }
+        public PrivateMessage PrivateMessage { get; set; }
         public Person QuestionPerson { get; set; }
         public MarkingPeriod MarkingPeriod { get; set; }
     }

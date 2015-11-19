@@ -77,13 +77,14 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         private const string ROLE_ADMIN = "Admin";
 
         private Notification BuildNotificationFromTemplate(string templateName, NotificationType type, Person recipient, Announcement announcement = null
-            , Guid? applicationId = null, MarkingPeriod markingPeriod = null, PrivateMessageDetails privateMessage = null, Person asker = null, object other = null, string baseUrl = null)
+            , Guid? applicationId = null, MarkingPeriod markingPeriod = null, PrivateMessage privateMessage = null, Person asker = null, object other = null, string baseUrl = null)
         {
             var parameters = new List<string> {GetBaseUrlByRole(recipient, baseUrl)};
             var notification = new NotificationDetails
             {
                 PersonRef = recipient.Id,
                 Person = recipient,
+                RoleRef = recipient.RoleRef,
                 Shown = false,
                 Type = type,
                 Created = serviceLocator.Context.NowSchoolTime
@@ -153,13 +154,28 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             return null;
         }
 
+        private string GetAnnouncementType(AnnouncementType at)
+        {
+            switch (at)
+            {
+                case AnnouncementType.LessonPlan:
+                    return "lesson plan";
+                case AnnouncementType.Class:
+                    return "activity";
+                case AnnouncementType.Admin:
+                    return "admin announcement";
+                default:
+                    return "announcement";
+            }
+        }
+
         //TODO: implement builders 
 
         public Notification BuildAnnouncementNewAttachmentNotification(DateTime created, AnnouncementComplex announcement, Person recipient)
         {
             return BuildNotificationFromTemplate(NotificationTemplateProvider.ANNOUNCEMENT_NEW_ATTACHMENT_NOTIFICATION,
                                                  NotificationType.Announcement, recipient, announcement, null, null,
-                                                 null, null, new { AnnouncementTitle = announcement.Title});
+                                                 null, null, new { AnnouncementTitle = announcement.Title, AnnouncementType = GetAnnouncementType(announcement.Type)});
         }
         public Notification BuildAnnouncementNewAttachmentNotificationToPerson(DateTime created, AnnouncementDetails announcement, Person toPerson, Person fromschoolPerson)
         {
@@ -219,7 +235,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         }
 
 
-        public Notification BuildPrivateMessageNotification(DateTime created, PrivateMessageDetails privateMessage, Person fromPerson, Person toPerson)
+        public Notification BuildPrivateMessageNotification(DateTime created, PrivateMessage privateMessage, Person fromPerson, Person toPerson)
         {
             var fromPersonRole = CoreRoles.GetById(fromPerson.RoleRef);
             var otherModel = new

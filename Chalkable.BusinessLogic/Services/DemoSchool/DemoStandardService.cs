@@ -61,7 +61,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 var word = words[i];
                 res = res.Union(standards.Where(s => (!string.IsNullOrEmpty(s.Name) && s.Name.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
-                                           || (!string.IsNullOrEmpty(s.CCStandardCode) && s.Name.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
+                                           || (s?.CCStandardCodes.Count > 0  && s.CCStandardCodes.Any(x=> !string.IsNullOrWhiteSpace(x) && x.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0))
                                            || (!string.IsNullOrEmpty(s.Description) && s.Name.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
                                 ));
             }
@@ -233,7 +233,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var standardId = 0; //GetStandards(null, null, null).Max(x => x.Id);
             IDictionary<Guid, int> ccStandardsIdsDic = new Dictionary<Guid, int>();
             var ccStandards = new List<CommonCoreStandard>();
-            foreach (var ccStandard in abToccMapper.Values)
+            foreach (var ccStandard in abToccMapper.Values.SelectMany(x=>x))
             {
                 if (!ccStandardsIdsDic.ContainsKey(ccStandard.Id))
                 {
@@ -253,7 +253,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     {
                         Id = ccStandardsIdsDic[ccStandard.Id],
                         AcademicBenchmarkId = ccStandard.AcademicBenchmarkId,
-                        CCStandardCode = ccStandard.Code,
+                        CCStandardCodes = abToccMapper[ccStandard.AcademicBenchmarkId.Value].Select(x=>x.Code).ToList(),
                         Description = ccStandard.Description,
                         IsActive = true,
                         Name = ccStandard.Code,
@@ -386,7 +386,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }).ToList();
         }
 
-        public StandardTreePath GetStandardParentsSubTree(int standardId)
+        public StandardTreePath GetStandardParentsSubTree(int standardId, int? classId)
         {
             return StandardStorage.GetStandardParentsSubTree(standardId);
         }

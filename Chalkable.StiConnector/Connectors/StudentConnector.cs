@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
+using System.Runtime.Remoting.Contexts;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Connectors.Model.Attendances;
@@ -13,6 +15,7 @@ namespace Chalkable.StiConnector.Connectors
         private const string START_DATE_PARAM = "startDate";
         private const string END_DATE_PARAM = "endDate";
         private const string DATE_PARAM = "date";
+        private const string DATE_TIME_FORMAT = "yyyy-MM-ddThh:mm:ss";
 
         public StudentConnector(ConnectorLocator locator) : base(locator)
         {
@@ -24,10 +27,14 @@ namespace Chalkable.StiConnector.Connectors
             return Call<IList<StudentCondition>>(url);
         }
 
-        public NowDashboard GetStudentNowDashboard(int acadSessionId, int studentId)
+        public NowDashboard GetStudentNowDashboard(int acadSessionId, int studentId, DateTime nowSchoolTime)
         {
+            var nvc = new NameValueCollection
+            {
+                [DATE_PARAM] = nowSchoolTime.ToString(DATE_TIME_FORMAT, CultureInfo.InvariantCulture)
+            };
             var url = string.Format("{0}chalkable/{1}/students/{2}/dashboard/now", BaseUrl, acadSessionId, studentId);
-            return Call<NowDashboard>(url);
+            return Call<NowDashboard>(url, nvc);
         }
 
         public StudentExplorerDashboard GetStudentExplorerDashboard(int acadSessionId, int studentId, DateTime? date = null)

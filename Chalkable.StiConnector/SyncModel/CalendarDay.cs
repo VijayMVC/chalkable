@@ -14,5 +14,7 @@ namespace Chalkable.StiConnector.SyncModel
         public bool InSchool { get; set; }
         public bool IsInstructional { get; set; }
         public bool IsNonMembershipDay { get; set; }
+
+        public override int DefaultOrder => 19;
     }
 }

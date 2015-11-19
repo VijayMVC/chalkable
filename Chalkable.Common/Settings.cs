@@ -104,6 +104,7 @@ namespace Chalkable.Common
         public static int TaskProcessorDelay { get { return Int32.Parse(Get("TaskProcessorDelay")); } }
         public static string DbBackupServiceUrl { get { return Get("DbBackupServiceUrl"); } }
         public static int PictureProcessorCount { get { return Int32.Parse(Get("PictureProcessorCount")); } }
+        public static string InstrumentationKey { get { return Get("instrumentationKey"); } }
 
         public static ProducerConfigSection GetProducerConfig(string sectionName)
         {
@@ -116,25 +117,48 @@ namespace Chalkable.Common
 
         /* Web Config */
 
-        public static int MinPasswordLength
-        {
-            get
-            {
-                int value;
-                int.TryParse(GetWebConfig("minPasswordLength"), out value);
-                return value;
-            }
-        }
+        public static int MinPasswordLength => int.Parse(GetWebConfig("minPasswordLength"));
 
-        public static string HomeRedirectUrl { get { return Get("home-redirect-url"); } }
+        public static string HomeRedirectUrl => Get("home-redirect-url");
 
         private static string GetWebConfig(string field)
         {
             return ConfigurationManager.AppSettings[field];
         }
 
+        public static int WebClientTimeout => int.Parse(Get("WebClientTimeout"));
+
         /* Global Cache */
 
-        public static string RedisCacheConnectionString { get { return Get("RedisCache.ConnectionString"); } }
+        public static string RedisCacheConnectionString => Get("RedisCache.ConnectionString");
+
+        private static Verbosity configuredVerbosity;
+        private static bool verbositySet = false;
+
+        public static Verbosity Verbosity {
+            get {
+                if (!verbositySet) {
+                    // set the default verbosity
+                    configuredVerbosity = Verbosity.Off;
+
+                    // Get the configured setting
+                    var verbositySetting = RoleEnvironment.GetConfigurationSettingValue("verbosity");
+
+                    if (!string.IsNullOrWhiteSpace(verbositySetting)) {
+                        // Ensure the case of the config setting
+                        verbositySetting = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(verbositySetting);
+                    }
+
+                    // TryParse will work with properly cased values or integers
+                    Enum.TryParse(verbositySetting, out configuredVerbosity);
+
+                    // Ensure that we only rertrieve this value once
+                    verbositySet = true;
+                }
+                return configuredVerbosity;
+            }
+        }
+
+        public static string RaygunJsApiKey => "WV05DNwmIzBvTiSQ8pgNXQ==";
     }
 }

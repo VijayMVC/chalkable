@@ -16,6 +16,9 @@ NAMESPACE('chlk.templates.apps', function () {
             chlk.models.id.ClassId, 'classId',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.id.SchoolPersonId, 'personId',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'announcementId',
 
             [ria.templates.ModelPropertyBind],

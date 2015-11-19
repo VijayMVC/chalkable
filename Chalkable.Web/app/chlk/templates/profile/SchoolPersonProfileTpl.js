@@ -77,7 +77,8 @@ NAMESPACE('chlk.templates.profile', function(){
                 var permissionEnum = chlk.models.people.UserPermissionEnum;
                 var isStudentController = controller == this._studentControllerName;
                 var canViewInfo = userId == this.getCurrentUser().getId().valueOf()
-                    || (!this.getUserRole().isStudent() && this.hasUserPermission_(permissionEnum.VIEW_ADDRESS));
+                           || (isStudentController && !this.getUserRole().isStudent() && this.hasUserPermission_(permissionEnum.VIEW_ADDRESS));
+
                 var res = [
                     this.createActionLinkModel_(controller, 'details', 'Now', pressedLinkName, [userId]),
                     this.createActionLinkModel_(controller, 'info', 'Info', pressedLinkName, [userId], !canViewInfo)
@@ -85,7 +86,7 @@ NAMESPACE('chlk.templates.profile', function(){
 //                     || (isStudentController && !this.hasUserPermission_(permissionEnum.VIEW_ADDRESS)))
                 ];
                 if(isStudentController){
-                    res.push(this.createActionLinkModel_(controller, 'grading', 'Grading', pressedLinkName, [userId], true));
+                    res.push(this.createActionLinkModel_(controller, 'grading', 'Grading', pressedLinkName, [userId], false));
                 }
                 if(controller == this._teacherControllerName || controller == this._studentControllerName){
                     res.push(this.createActionLinkModel_(controller, 'daySchedule', 'Schedule', pressedLinkName, [userId], false));

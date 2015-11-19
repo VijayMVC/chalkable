@@ -14,7 +14,7 @@ mixin AttributeAttachment_(attachment)
                 +ActionLink('announcement', 'viewAttributeAttachment', attachment.getAttributeId(), attachment.getAnnouncementType(),
                 attachment.getAnnouncementId()).attachment-name=attachment.getName()
             +ActionLink('announcement', 'removeAttributeAttachment', attachment.getAnnouncementType(),
-            attachment.getAnnouncementId(), attachment.getAttributeId(), attachment.getId()).remove-file-attachment
+            attachment.getAnnouncementId(), attachment.getAttributeId()).remove-file-attachment
     else
         .attribute-attachment
             if attachment.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.OTHER

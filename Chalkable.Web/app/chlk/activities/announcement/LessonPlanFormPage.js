@@ -69,7 +69,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                     select.find('[selected], :selected').setAttr('selected', false);
                     select.find('[selected], :selected').setProp('selected', false);
                 }
-                select.trigger('liszt:updated');
+                select.trigger('chosen:updated');
             },
 
             [ria.mvc.DomEventBind('change', '#galleryCategoryId')],
@@ -118,11 +118,22 @@ NAMESPACE('chlk.activities.announcement', function () {
             VOID, function doUpdateCategories(tpl, model, msg_) {
                 tpl.renderTo(this.dom.find('#galleryCategoryIdContainer').setHTML(''));
                 setTimeout(function(){
-                    if(!this.dom.find('#add-to-gallery').checked()){
+                    var node = this.dom.find('#add-to-gallery');
+                    if(!node.checked()){
                         var select = this.dom.find('#galleryCategoryId');
                         select.setAttr('disabled', 'disabled');
                         select.setProp('disabled', true);
-                        select.trigger('liszt:updated');
+                        select.trigger('chosen:updated');
+                    }
+                    if(model.getCategories().length){
+                        node.removeAttr('disabled');
+                        node.previous().removeAttr('disabled');
+                        node.parent('.slide-checkbox').removeAttr('disabled');
+                    }
+                    else{
+                        node.setAttr('disabled', 'disabled');
+                        node.previous().setAttr('disabled', 'disabled');
+                        node.parent('.slide-checkbox').setAttr('disabled', 'disabled');
                     }
                 }.bind(this), 1);
 

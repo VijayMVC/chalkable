@@ -74,7 +74,7 @@ NAMESPACE('chlk.activities.grading', function () {
                         })
                     },
                     deactivate: function(){
-                        this.clearRow();
+                        this.clearRow && this.clearRow();
                         jQuery('.ann-grade-pop-up').remove();
                     }
                 });

@@ -8,5 +8,7 @@ namespace Chalkable.StiConnector.SyncModel
         public bool AwardCredit { get; set; }
         public short? MaximumStudentEnrollment { get; set; }
         public Guid DistrictGuid { get; set; }
+
+        public override int DefaultOrder => 28;
     }
 }

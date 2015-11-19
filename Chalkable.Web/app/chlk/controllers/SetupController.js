@@ -6,10 +6,10 @@ REQUIRE('chlk.services.FinalGradeService');
 REQUIRE('chlk.services.CalendarService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.PreferenceService');
-REQUIRE('chlk.services.AnnouncementService');
 REQUIRE('chlk.services.TeacherCommentService');
 REQUIRE('chlk.services.GradingService');
 REQUIRE('chlk.services.ClassroomOptionService');
+REQUIRE('chlk.services.AnnouncementTypeService');
 
 REQUIRE('chlk.activities.setup.HelloPage');
 REQUIRE('chlk.activities.setup.VideoPage');
@@ -58,7 +58,7 @@ NAMESPACE('chlk.controllers', function (){
             chlk.services.PreferenceService, 'preferenceService',
 
             [ria.mvc.Inject],
-            chlk.services.AnnouncementService, 'announcementService',
+            chlk.services.AnnouncementTypeService, 'announcementTypeService',
 
             [ria.mvc.Inject],
             chlk.services.ClassroomOptionService, 'classroomOptionService',
@@ -162,26 +162,9 @@ NAMESPACE('chlk.controllers', function (){
             function submitClassAnnouncementAction(model){
                 var res;
                 if(model.getId() && model.getId().valueOf())
-                    res = this.announcementService.updateAnnouncementTypes(
-                        model.getClassId(),
-                        model.getDescription(),
-                        model.getName(),
-                        model.getHighScoresToDrop(),
-                        model.getLowScoresToDrop(),
-                        model.isSystem(),
-                        model.getPercentage(),
-                        model.getId()
-                    ).attach(this.validateResponse_());
+                    res = this.updateClassAnnouncementType_(model)
                 else
-                    res = this.announcementService.createAnnouncementTypes(
-                        model.getClassId(),
-                        model.getDescription(),
-                        model.getName(),
-                        model.getHighScoresToDrop(),
-                        model.getLowScoresToDrop(),
-                        model.isSystem(),
-                        model.getPercentage()
-                    ).attach(this.validateResponse_());
+                    res = this.createClassAnnouncementType_(model)
                 res.thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
                     .attach(this.validateResponse_())
                     .then(function(data){
@@ -191,13 +174,41 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             },
 
+
+            [[chlk.models.announcement.ClassAnnouncementType]],
+            ria.async.Future, function createClassAnnouncementType_(model){
+                return this.announcementTypeService.create(
+                    model.getClassId(),
+                    model.getDescription(),
+                    model.getName(),
+                    model.getHighScoresToDrop(),
+                    model.getLowScoresToDrop(),
+                    model.isSystem(),
+                    model.getPercentage()
+                ).attach(this.validateResponse_());
+            },
+
+            [[chlk.models.announcement.ClassAnnouncementType]],
+            function updateClassAnnouncementType_(model){
+                return this.announcementTypeService.update(
+                    model.getClassId(),
+                    model.getDescription(),
+                    model.getName(),
+                    model.getHighScoresToDrop(),
+                    model.getLowScoresToDrop(),
+                    model.isSystem(),
+                    model.getPercentage(),
+                    model.getId()
+                ).attach(this.validateResponse_());
+            },
+
             [chlk.controllers.Permissions([
                 [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN]
             ])],
             [[chlk.models.announcement.ClassAnnouncementType]],
             function deleteAnnouncementTypesAction(model){
                 this.ShowConfirmBox('Do You really want to delete ' + (model.getIds().length > 1 ? 'these categories?' : 'this category?'), "whoa.", null, 'negative-button')
-                    .thenCall(this.announcementService.deleteAnnouncementTypes, [model.getIds().split(',')])
+                    .thenCall(this.announcementTypeService.deleteTypes, [model.getIds().split(',')])
                     .attach(this.validateResponse_())
                     .thenCall(this.classService.updateClassAnnouncementTypes, [[model.getClassId()]])
                     .attach(this.validateResponse_())
@@ -218,9 +229,7 @@ NAMESPACE('chlk.controllers', function (){
                         var canEdit = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_GRADE_BOOK_COMMENTS);
                         return new chlk.models.setup.CommentsSetupViewData(items, canEdit);
                     }, this);
-
-                var result = new ria.async.DeferredData(res);
-                return this.PushOrUpdateView(chlk.activities.setup.CommentsSetupPage, result);
+                return this.PushOrUpdateView(chlk.activities.setup.CommentsSetupPage, res);
             },
 
             [chlk.controllers.Permissions([
@@ -246,18 +255,13 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [[chlk.models.grading.TeacherCommentViewData]],
             function submitCommentAction(model){
-                var res;
-                if(model.getCommentId() && model.getCommentId().valueOf())
-                    res = this.teacherCommentService.updateComment(
-                        model.getCommentId(),
-                        model.getComment()
-                    ).attach(this.validateResponse_());
-                else
-                    res = this.teacherCommentService.createComment(
-                        model.getComment()
-                    ).attach(this.validateResponse_());
-                this.BackgroundCloseView(chlk.activities.setup.CommentDialog);
-                return this.Redirect('setup', 'commentsSetup', []);
+                return this.teacherCommentService
+                    .createOrUpdateComment(model.getCommentId(), model.getComment())
+                    .attach(this.validateResponse_())
+                    .then(function (comment){
+                        this.BackgroundCloseView(chlk.activities.setup.CommentDialog);
+                        return this.Redirect('setup', 'commentsSetup', []);
+                    }, this);
             },
 
             [chlk.controllers.Permissions([

@@ -11,7 +11,6 @@ NAMESPACE('chlk.activities.apps', function () {
     CLASS(
         [ria.mvc.ActivityGroup('MiniQuizDialog')],
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
-        [chlk.activities.lib.FixedTop(80)],
         [ria.mvc.TemplateBind(chlk.templates.apps.MiniQuizDialog)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.MiniQuizDialog, '', null , ria.mvc.PartialUpdateRuleActions.Replace)],
         'MiniQuizDialog', EXTENDS(chlk.activities.apps.AppWrapperDialog), [
@@ -57,19 +56,21 @@ NAMESPACE('chlk.activities.apps', function () {
             function addNew(node, event, selected_){
                 var name = node.getValue();
                 var id = this.dom.find('[type=hidden][name=filter]').getValue();
-                var standardNode = this.dom.find('.standard-link[data-id=' + id + ']');
-                if(standardNode.exists()){
-                    standardNode.trigger('click');
-                    node.setValue('');
-                    return false;
-                }
+                if(id){
+                    var standardNode = this.dom.find('.standard-link[data-id=' + id + ']');
+                    if(standardNode.exists()){
+                        standardNode.trigger('click');
+                        node.setValue('');
+                        return false;
+                    }
 
-                var standard = new chlk.models.standard.Standard(new chlk.models.id.StandardId(id), name);
-                var idsInput = this.dom.find('.standard-ids');
-                var ids = JSON.parse(idsInput.getValue());
-                ids.unshift(parseInt(id, 10));
-                idsInput.setValue(JSON.stringify(ids));
-                idsInput.parent('form').trigger('submit');
+                    var standard = new chlk.models.standard.Standard(new chlk.models.id.StandardId(id), name);
+                    var idsInput = this.dom.find('.standard-ids');
+                    var ids = JSON.parse(idsInput.getValue());
+                    ids.unshift(parseInt(id, 10));
+                    idsInput.setValue(JSON.stringify(ids));
+                    idsInput.parent('form').trigger('submit');
+                }
             }
         ]);
 });

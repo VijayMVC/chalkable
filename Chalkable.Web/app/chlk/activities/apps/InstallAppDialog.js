@@ -6,7 +6,6 @@ NAMESPACE('chlk.activities.apps', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],
         [ria.mvc.TemplateBind(chlk.templates.apps.InstallAppDialogTpl)],
-        [chlk.activities.lib.FixedTop(80)],
         [chlk.activities.lib.ModelWaitClass('install-app-dialog-model-wait dialog-model-wait')],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.InstallAppDialogTpl, '', null, ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.apps.InstallAppPriceTpl, 'getAppPrice', '.calculated-price', ria.mvc.PartialUpdateRuleActions.Replace)],
@@ -32,36 +31,31 @@ NAMESPACE('chlk.activities.apps', function () {
                     id: chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ,
                     name: 'classes'
                 }, {
-                    id:chlk.models.apps.AppInstallGroupTypeEnum.GRADELEVEL,
-                    name: 'gradeLevels'
-                }, {
-                    id: chlk.models.apps.AppInstallGroupTypeEnum.DEPARTMENT,
-                    name: 'departments'
-                }, {
-                    id: chlk.models.apps.AppInstallGroupTypeEnum.ROLE,
-                    name: 'roles'
-                }, {
-                    id: chlk.models.apps.AppInstallGroupTypeEnum.ALL,
-                    name: 'forAll'
-                }, {
                     id: chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
                     name: 'currentPerson'
-                }, {
-                    id: chlk.models.apps.AppInstallGroupTypeEnum.GROUP,
-                    name: 'groups'
                 }];
 
-                for(var i = 0; i < ids.length; ++i){
-                    var selectedIds = [];
-                    var groupType = ids[i].id.valueOf();
-                    var checkedBoxes = this.dom.find('input[install-group="' + groupType + '"]:checked:not(:disabled)') || [];
-                    checkedBoxes.forEach(function(elem){
-                        var elemId = elem.getAttr('name').split('chk-').pop();
-                        selectedIds.push(elemId);
-                    });
-
-                    this.dom.find('input[name=' + ids[i].name + ']').setValue(selectedIds.join(','));
+                var allType = chlk.models.apps.AppInstallGroupTypeEnum.ALL.valueOf();
+                if(this.dom.find('input[install-group="' + allType + '"]:checked:not(:disabled)').exists()){
+                    var checkedBoxes = this.dom.find('input[install-group="' + ids[0].id.valueOf() + '"]:not(:disabled)') || [];
+                    this.preparePostDataBySelectedBoxes_(checkedBoxes, ids[0].name)
                 }
+                else{
+                    for(var i = 0; i < ids.length; ++i){
+                        var checkedBoxes = this.dom.find('input[install-group="' + ids[i].id.valueOf() + '"]:checked:not(:disabled)') || [];
+                        this.preparePostDataBySelectedBoxes_(checkedBoxes, ids[i].name);
+                    }
+                }
+            },
+
+            [[ria.dom.Dom, String]],
+            function preparePostDataBySelectedBoxes_(checkedBoxes, groupName){
+                var selectedIds = [];
+                checkedBoxes.forEach(function(elem){
+                    var elemId = elem.getAttr('name').split('chk-').pop();
+                    selectedIds.push(elemId);
+                });
+                this.dom.find('input[name=' + groupName + ']').setValue(selectedIds.join(','));
             },
 
             OVERRIDE, VOID, function onPause_() {

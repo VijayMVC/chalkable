@@ -2,13 +2,13 @@ namespace Chalkable.UserTracking
 {
     public static class UserTrackingEvents
     {
-        public static string LoggedInForTheFirstTime = "logged in for the first time";
-        public static string SubmittedAppForApproval = "Submitted app for approval";
-        public static string SelectedLive = "Selected \"Live\"";
-        public static string CreatedApp = "Created App";
-        public static string UpdatedDraft = "Updated draft";
-        public static string LoggedInFromINow = "Logged in from INow";
-        public static string LoggedInFromChalkable = "Logged in from Chalkable";
+        public const string LoggedInForTheFirstTime = "logged in for the first time";
+        public const string SubmittedAppForApproval = "Submitted app for approval";
+        public const string SelectedLive = "Selected \"Live\"";
+        public const string CreatedApp = "Created App";
+        public const string UpdatedDraft = "Updated draft";
+        public const string LoggedIn = "Logged in";
+        public const string AutoGradedItem = "Auto Graded Item";
         public const string AttachedDocument = "Attached document";
         public const string AttachedApp = "Attached App";
         public const string OpenedAnnouncement = "opened announcement";
@@ -31,5 +31,10 @@ namespace Chalkable.UserTracking
         public const string SetScore = "set score";
         public const string SetAttendance = "set attendance";
         public const string PostedGrades = "posted grades";
+        public const string AttachedStandard = "attached standard";
+        public const string AttachedAssessment = "attached assessment";
+        public const string UsedStandardsExplorer = "used standards explorer";
+        public const string CopiedLessonPlanFromGallery = "copied lesson plan from gallery";
+        public const string SavedLessonPlanToGallery = "saved lesson plan to gallery";
     }
 }

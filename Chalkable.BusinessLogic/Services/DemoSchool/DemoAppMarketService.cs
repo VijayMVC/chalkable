@@ -34,30 +34,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
     }
 
-    public class DemoApplicationInstallActionRoleStorage : BaseDemoIntStorage<ApplicationInstallActionRole>
-    {
-        public DemoApplicationInstallActionRoleStorage()
-            : base(x => x.Id, true)
-        {
-        }
-    }
-
-    public class DemoApplicationInstallActionGradeLevelStorage : BaseDemoIntStorage<ApplicationInstallActionGradeLevel>
-    {
-        public DemoApplicationInstallActionGradeLevelStorage()
-            : base(x => x.Id, true)
-        {
-        }
-    }
-
-    public class DemoApplicationInstallActionDepartmentStorage : BaseDemoIntStorage<ApplicationInstallActionDepartment>
-    {
-        public DemoApplicationInstallActionDepartmentStorage()
-            : base(x => x.Id, true)
-        {
-        }
-    }
-
     public class DemoApplicationInstallStorage : BaseDemoIntStorage<ApplicationInstall>
     {
         public DemoApplicationInstallStorage()
@@ -307,42 +283,43 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return ApplicationInstallStorage.GetInstalledByAppId(applicationId, sy.Id);
         }
 
-        public ApplicationInstallAction Install(Guid applicationId, int? personId, IList<int> classIds, int schoolYearId, DateTime dateTime)
+        public ApplicationInstallAction Install(Guid applicationId, int? personId, IList<int> classIds, DateTime dateTime)
         {
-            if (!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
+            throw new NotImplementedException();
+            //if (!Context.PersonId.HasValue)
+            //    throw new UnassignedUserException();
 
-            if (!CanInstall(applicationId, personId, classIds))
-                throw new ChalkableException(ChlkResources.ERR_APP_NOT_ENOUGH_MONEY);
-            ChargeMoneyForAppInstall(applicationId, personId, classIds);
+            //if (!CanInstall(applicationId, personId, classIds))
+            //    throw new ChalkableException(ChlkResources.ERR_APP_NOT_ENOUGH_MONEY);
+            //ChargeMoneyForAppInstall(applicationId, personId, classIds);
 
-            var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
-            var persons = GetPersonsForApplicationInstall(applicationId, Context.PersonId.Value, personId, classIds, Context.Role.Id
-                                               , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, schoolYearId);
-            var spIds = persons.Select(x => x.PersonId).Distinct().ToList();
-            var schoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
-            var res = RegisterApplicationInstallAction(app, personId, classIds);
-            var appInstalls = new List<ApplicationInstall>();
+            //var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
+            //var persons = GetPersonsForApplicationInstall(applicationId, Context.PersonId.Value, personId, classIds, Context.Role.Id
+            //                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, schoolYearId);
+            //var spIds = persons.Select(x => x.PersonId).Distinct().ToList();
+            //var schoolYear = ServiceLocator.SchoolYearService.GetSchoolYearById(schoolYearId);
+            //var res = RegisterApplicationInstallAction(app, personId, classIds);
+            //var appInstalls = new List<ApplicationInstall>();
 
-            foreach (var spId in spIds)
-            {
-                appInstalls.Add(new ApplicationInstall
-                {
-                    ApplicationRef = app.Id,
-                    PersonRef = spId,
-                    OwnerRef = Context.PersonId.Value,
-                    Active = true,
-                    SchoolYearRef = schoolYear.Id,
-                    InstallDate = dateTime,
-                    AppInstallActionRef = res.Id
-                });
-            }
-            ApplicationInstallStorage.Add(appInstalls);
+            //foreach (var spId in spIds)
+            //{
+            //    appInstalls.Add(new ApplicationInstall
+            //    {
+            //        ApplicationRef = app.Id,
+            //        PersonRef = spId,
+            //        OwnerRef = Context.PersonId.Value,
+            //        Active = true,
+            //        SchoolYearRef = schoolYear.Id,
+            //        InstallDate = dateTime,
+            //        AppInstallActionRef = res.Id
+            //    });
+            //}
+            //ApplicationInstallStorage.Add(appInstalls);
 
             
 
-            res.ApplicationInstalls = appInstalls;
-            return res;
+            //res.ApplicationInstalls = appInstalls;
+            //return res;
         }
 
         private ApplicationInstallAction RegisterApplicationInstallAction(Application app, int? personId, IList<int> classids)

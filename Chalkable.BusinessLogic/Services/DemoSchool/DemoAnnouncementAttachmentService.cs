@@ -7,7 +7,6 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.Common;
 using Chalkable.Data.Common.Storage;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
@@ -63,7 +62,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return null;
         }
 
-        public IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, int toAnnouncementId)
+        public IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, IList<int> attachmentOwnersIds, int toAnnouncementId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public AnnouncementAttachment UploadAttachment(int announcementId, AnnouncementType type, byte[] content, string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Announcement Add(int announcementId, AnnouncementType type, int attachmentId)
         {
             throw new NotImplementedException();
         }
@@ -80,10 +89,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var annAtt = new AnnouncementAttachment
             {
                 AnnouncementRef = ann.Id,
-                PersonRef = Context.PersonId.Value,
                 AttachedDate = Context.NowSchoolTime,
-                Name = name,
-                Uuid = uuid,
                 Order = ServiceLocator.GetAnnouncementService(annType).GetNewAnnouncementItemOrder(ann)
             };
 
@@ -95,7 +101,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 if (ann.IsOwner)
                     ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotification(announcementId, annType);
                 else
-                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToTeachers(announcementId, annType, Context.PersonId.Value);
+                    ServiceLocator.NotificationService.AddAnnouncementNewAttachmentNotificationToOwner(announcementId, annType, Context.PersonId.Value);
             }
             return ann;
         }
@@ -105,14 +111,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public void DeleteAttachment(int announcementAttachmentId)
+        public void Delete(int announcementAttachmentId)
         {
             var annAtt = AnnouncementAttachmentStorage.GetById(announcementAttachmentId);
             if (!AnnouncementSecurity.CanDeleteAttachment(annAtt, Context))
                 throw new ChalkableSecurityException();
 
             AnnouncementAttachmentStorage.Delete(annAtt.Id);
-            if (!annAtt.SisAttachmentId.HasValue)
+            if (!annAtt.Attachment.SisAttachmentId.HasValue)
                 ServiceLocator.StorageBlobService.DeleteBlob(ATTACHMENT_CONTAINER_ADDRESS, annAtt.Id.ToString(CultureInfo.InvariantCulture));
         }
 
@@ -187,7 +193,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             //return attachments.ToList();
         }
 
-        public IList<AnnouncementAttachment> GetAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)
+        public IList<AnnouncementAttachment> GetAnnouncementAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true)
         {
              var attachments = GetAttachmentsQuery(new AnnouncementAttachmentQuery
             {
@@ -201,7 +207,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return new PaginatedList<AnnouncementAttachment>(attachments, start / count, count, AnnouncementAttachmentStorage.GetData().Count);
         }
 
-        public AnnouncementAttachment GetAttachmentById(int announcementAttachmentId)
+        public AnnouncementAttachment GetAnnouncementAttachmentById(int announcementAttachmentId)
         {
             return GetAttachmentsQuery(new AnnouncementAttachmentQuery
             {
@@ -211,19 +217,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }).First();
         }
 
-        public AttachmentContentInfo GetAttachmentContent(int announcementAttachmentId)
+        public IList<AnnouncementAttachmentInfo> TransformToAttachmentsInfo(IList<AnnouncementAttachment> announcementAttachments, IList<int> teacherIds)
         {
-            var att = GetAttachmentById(announcementAttachmentId);
-            return GetAttachmentContent(att);
+            throw new NotImplementedException();
         }
 
-        public AttachmentContentInfo GetAttachmentContent(AnnouncementAttachment announcementAttachment)
-        {
-            var content = ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS, announcementAttachment.Id.ToString());
-            return AttachmentContentInfo.Create(announcementAttachment, content);
-        }
-
-        public IList<AnnouncementAttachment> GetAttachments(string filter)
+        public IList<AnnouncementAttachment> GetAnnouncementAttachments(string filter)
         {
             return GetAttachmentsQuery(new AnnouncementAttachmentQuery
             {
@@ -265,17 +264,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 var content = ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS,
                     sourceAnnouncementAttachment.Id.ToString(CultureInfo.InvariantCulture));
-                AddAttachment(toAnnouncementId, AnnouncementType.Class, content, sourceAnnouncementAttachment.Name);
+                AddAttachment(toAnnouncementId, AnnouncementType.Class, content, sourceAnnouncementAttachment.Attachment.Name);
             }
-            return GetAttachments(toAnnouncementId);
+            return GetAnnouncementAttachments(toAnnouncementId);
         }
 
         public void DeleteAttachments(int id)
         {
-            var attachments = ServiceLocator.AnnouncementAttachmentService.GetAttachments(id);
+            var attachments = ServiceLocator.AnnouncementAttachmentService.GetAnnouncementAttachments(id);
             foreach (var announcementAttachment in attachments)
             {
-                ServiceLocator.AnnouncementAttachmentService.DeleteAttachment(announcementAttachment.Id);
+                ServiceLocator.AnnouncementAttachmentService.Delete(announcementAttachment.Id);
             }
         }
     }

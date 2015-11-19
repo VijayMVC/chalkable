@@ -4,6 +4,8 @@ REQUIRE('chlk.models.student.StudentProfileGradingViewData');
 NAMESPACE('chlk.templates.student', function(){
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /**@class chlk.templates.student.StudentProfileGradingTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/student/StudentProfileGradingView.jade')],

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -64,12 +63,13 @@ namespace Chalkable.Web.Logic
             , int personId, int classId, IList<Guid> abIds, int markingPeriodId, int? start = null, int? count = null)
         {
             start = start ?? 0;
-            count = count ?? 3;
             var studentCountPerApp = schooLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
             var installedAppsIds = studentCountPerApp.Select(x => x.Key).Distinct().ToList();
             var applications = masterLocator.ApplicationService.GetSuggestedApplications(abIds, installedAppsIds, 0, int.MaxValue);
-            applications = applications.Where(a => a.CanAttach).ToList()
-                                        .Skip(start.Value).Take(count.Value).ToList();
+            applications = applications.Where(a => a.CanAttach).ToList();
+            if(count != null)
+                applications = applications.Skip(start.Value).Take(count.Value).ToList();
+                                        
             var classSize = schooLocator.ClassService.GetClassPersons(null, classId, true, markingPeriodId).Count;
             foreach (var application in applications)
             {

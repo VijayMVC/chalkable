@@ -2,7 +2,7 @@ if chlk.templates.search && chlk.templates.search.SiteSearch
     .wrapper
         +SearchBox(chlk.services.SearchService, "search", chlk.templates.search.SiteSearch)#siteSearch(
             name="siteSearch"
-            clearAfterSelect = true
+            clearAfterSelect = false
             withButton = true,
             listCls = "site-search"
         )

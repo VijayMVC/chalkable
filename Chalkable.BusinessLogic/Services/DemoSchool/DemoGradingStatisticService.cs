@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School;
@@ -30,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             GradeBookStorage = new DemoGradeBookStorage();
         }
 
-        public ChalkableGradeBook GetGradeBook(int classId, GradingPeriod gradingPeriod, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
+        public async Task<ChalkableGradeBook> GetGradeBook(int classId, GradingPeriod gradingPeriod, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
         {
             var stiGradeBook = GetBySectionAndGradingPeriod(classId, classAnnouncementType, gradingPeriod.Id, standardId);
             return GetGradeBooks(classId, gradingPeriod, stiGradeBook);
@@ -226,9 +227,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return GetGradebookComments(schoolYearId, teacherId);
         }
 
-        public TeacherClassGrading GetClassGradingSummary(int classId, GradingPeriod gradingPeriod)
+        public async Task<TeacherClassGrading> GetClassGradingSummary(int classId, GradingPeriod gradingPeriod)
         {
-            var gradeBook = ServiceLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriod);
+            var gradeBook = await ServiceLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriod);
             var gradedCAnnTypes = ServiceLocator.ClassAnnouncementTypeService.CalculateAnnouncementTypeAvg(classId, gradeBook.Announcements);
             return new TeacherClassGrading
             {
@@ -315,14 +316,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return ChalkableStudentAverage.Create(studentAverage);
         }
 
-        public IList<ShortClassGradesSummary> GetClassesGradesSummary(int teacherId, int gradingPeriodId)
+        public async Task<IList<ShortClassGradesSummary>> GetClassesGradesSummary(int teacherId, GradingPeriod gradingPeriod)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
-            var gradingPeriod = ServiceLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             var classesDetails = ServiceLocator.ClassService.GetTeacherClasses(gradingPeriod.SchoolYearRef, teacherId, gradingPeriod.MarkingPeriodRef);
             var classesIds = classesDetails.Select(x => x.Id).ToList();
-
-            var stiSectionsGrades = GetSectionGradesSummary(classesIds, gradingPeriodId);
+            var stiSectionsGrades = GetSectionGradesSummary(classesIds, gradingPeriod.Id);
             var students = ServiceLocator.StudentService.GetTeacherStudents(teacherId, Context.SchoolYearId.Value);
             var res = new List<ShortClassGradesSummary>();
             foreach (var sectionGrade in stiSectionsGrades)
@@ -389,10 +388,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             };
         }
 
-        public FinalGradeInfo GetFinalGrade(int classId, GradingPeriod gradingPeriod)
+        public async Task<FinalGradeInfo> GetFinalGrade(int classId, GradingPeriod gradingPeriod)
         {
         
-            var gradeBook = GetGradeBook(classId, gradingPeriod, null, null, false);
+            var gradeBook = await GetGradeBook(classId, gradingPeriod, null, null, false);
             var averageDashBoard = GetAveragesDashboard(gradeBook, classId);
             var infractions = ServiceLocator.InfractionService.GetInfractions();
             return new FinalGradeInfo
@@ -409,6 +408,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public void PostStandards(int classId, int? gradingPeriodId)
         {
 
+        }
+
+        public StudentGrading GetStudentGradingSummary(int schoolYearId, int studentId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public StudentGradingDetails GetStudentGradingDetails(int schoolYearId, int studentId, int gradingPeriodId)
+        {
+            throw new NotImplementedException();
         }
 
         public void AddGradeBook(Gradebook gradebook)

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
@@ -11,6 +12,7 @@ using Chalkable.Web.Authentication;
 using Chalkable.Web.Controllers;
 using Chalkable.Web.Tools;
 using Mindscape.Raygun4Net;
+using Mindscape.Raygun4Net.Messages;
 
 
 namespace Chalkable.Web.ActionFilters
@@ -20,17 +22,46 @@ namespace Chalkable.Web.ActionFilters
         private static RaygunClient raygunClient = new RaygunClient();
         static AjaxHandleErrorAttribute()
         {
-            raygunClient.ApplicationVersion = Settings.Domain + CompilerHelper.Version;
+            raygunClient.ApplicationVersion = CompilerHelper.Version;
         }
 
         public override void OnException(ExceptionContext filterContext)
         {
             Trace.TraceError(ChlkResources.ERR_MESSAGE_WITH_STACKTRACE, filterContext.Exception.Message, filterContext.Exception.StackTrace);
-#if !DEBUG
-            if (filterContext.HttpContext != null && filterContext.HttpContext.User != null)
-                raygunClient.User = filterContext.HttpContext.User.Identity.Name;
-            raygunClient.SendInBackground(filterContext.Exception);
-#endif
+
+            if (CompilerHelper.IsProduction)
+            {
+                var tags = new List<string> { Settings.Domain };
+                if (filterContext.HttpContext?.User != null)
+                {
+                    raygunClient.User = filterContext.HttpContext.User.Identity.Name;
+
+                    try
+                    {
+                        var chlkUser = filterContext.HttpContext.User as ChalkablePrincipal;
+                        if (chlkUser?.Context != null)
+                        {
+                            var context = chlkUser.Context;
+                            raygunClient.UserInfo =
+                                new RaygunIdentifierMessage(context.DistrictId + ":" + context.PersonId)
+                                {
+                                    Email = context.Login,
+                                    UUID = context.UserId.ToString()
+                                };
+                            tags.Add(context.Role.LoweredName);
+
+                            if (context.DeveloperId != null)
+                                tags.Add("developer");
+                        }
+                    }
+                    catch
+                    {
+                        // ignored
+                    }
+                }
+                raygunClient.SendInBackground(filterContext.Exception, tags);
+            }
+
             if (filterContext.Exception.InnerException != null)
                 Trace.TraceError(ChlkResources.ERR_INNER_MESSAGE_WITH_STACKTRACE, filterContext.Exception.InnerException.Message, filterContext.Exception.InnerException.StackTrace);
 

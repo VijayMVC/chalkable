@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         IList<Notification> GetNotificationsByTypes(int personId, IList<int> types, bool? wasSent = null);
 
         void AddAnnouncementNewAttachmentNotification(int announcementId, AnnouncementType announcementType);
-        void AddAnnouncementNewAttachmentNotificationToTeachers(int announcementId, AnnouncementType announcementType, int fromPersonId);
+        void AddAnnouncementNewAttachmentNotificationToOwner(int announcementId, AnnouncementType announcementType, int fromPersonId);
         void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId, AnnouncementType announcementType);
         void AddAnnouncementNotificationAnswerToStudent(int announcementQnAId, int announcementId, AnnouncementType announcementType);
         void AddAnnouncementSetGradeNotificationToStudent(int announcement, int recipient);
@@ -44,23 +44,23 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         public int GetUnshownNotificationsCount()
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(uow => new NotificationDataAccess(uow).GetUnshownNotificationsCount(Context.PersonId.Value));
+            return DoRead(uow => new NotificationDataAccess(uow).GetUnshownNotificationsCount(Context.PersonId.Value, Context.RoleId));
         }
 
         public IList<Notification> GetUnshownNotifications()
         {
-            if(!Context.SchoolLocalId.HasValue)
-                throw new UnassignedUserException();
-            using (var uow = Read())
-            {
-                var da = new NotificationDataAccess(uow);
-                return da.GetNotifications(new NotificationQuery
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
+
+            return DoRead(u => new NotificationDataAccess(u)
+                    .GetNotifications(new NotificationQuery
                     {
                         Shown = false,
-                        PersonId = Context.PersonId, 
+                        PersonId = Context.PersonId.Value,
+                        RoleId = Context.RoleId,
                         SchoolId = Context.SchoolLocalId.Value
-                    });
-            }
+                    }));
+
         }
 
         public PaginatedList<NotificationDetails> GetNotifications(int start, int count)
@@ -74,13 +74,14 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         private PaginatedList<NotificationDetails> GetNotifications(NotificationQuery query)
         {
-            if (!Context.SchoolLocalId.HasValue)
-                throw new UnassignedUserException();
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
 
             using (var uow = Read())
             {
                 query.SchoolId = Context.SchoolLocalId.Value;
-                query.PersonId = Context.PersonId;
+                query.PersonId = Context.PersonId.Value;
+                query.RoleId = Context.RoleId;
                 var notifications = new NotificationDataAccess(uow).GetPaginatedNotificationsDetails(query, !Context.MessagingDisabled);
                 var classIds = notifications.Where(x => x.AnnouncementRef.HasValue && x.Announcement is ClassAnnouncement)
                                    .Select(x => (x.Announcement as ClassAnnouncement).ClassRef)
@@ -107,8 +108,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         public void MarkAsShown(int[] notificationIds)
         {
-            if (!Context.SchoolLocalId.HasValue)
-                throw new UnassignedUserException();
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
 
             using (var uow = Update())
             {
@@ -116,8 +117,9 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                 var notifications = da.GetNotifications(new NotificationQuery
                         {
                             Shown = false,
-                            PersonId = Context.PersonId,
-                            SchoolId = Context.SchoolLocalId.Value
+                            PersonId = Context.PersonId.Value,
+                            SchoolId = Context.SchoolLocalId.Value,
+                            RoleId = Context.RoleId
                         });
                 foreach (var notificationId in notificationIds)
                 {
@@ -144,22 +146,32 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotifications(notifications);
         }
 
-        public void AddAnnouncementNewAttachmentNotificationToTeachers(int announcementId, AnnouncementType announcementType, int fromPersonId)
+        public void AddAnnouncementNewAttachmentNotificationToOwner(int announcementId, AnnouncementType announcementType, int fromPersonId)
         {
-            var announcement = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(announcementId);
+            List<Person> peopleToNotify = new List<Person>();
+
             var fromPerson = ServiceLocator.PersonService.GetPerson(fromPersonId);
-            var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            
-            //TODO : implement this later
-            //var teachers = ServiceLocator.StaffService.SearchStaff(syId, announcement.ClassRef, null, null, false, 0, int.MaxValue);
-            //var persons = teachers.Select(x => 
-            //    { 
-            //        var res = ServiceLocator.PersonService.GetPerson(x.Id);
-            //        res.RoleRef = CoreRoles.TEACHER_ROLE.Id;
-            //        return res;
-            //    });
-            //var notification = persons.Select(x => builder.BuildAnnouncementNewAttachmentNotificationToPerson(Context.NowSchoolTime, announcement, x, fromPerson)).ToList();
-            //AddNotifications(notification);
+            var announcement = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
+
+            if (announcement.AdminRef.HasValue)
+            {
+                var admin = ServiceLocator.PersonService.GetPerson(announcement.AdminRef.Value);
+                admin.RoleRef = CoreRoles.DISTRICT_ADMIN_ROLE.Id;
+                peopleToNotify.Add(admin);
+            }
+            else if(announcement.ClassRef.HasValue)
+            {
+                var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+                var teachers = ServiceLocator.StaffService.SearchStaff(syId, announcement.ClassRef, null, null, false, 0, int.MaxValue);
+                peopleToNotify.AddRange(teachers.Select(x =>
+                {
+                    var res = ServiceLocator.PersonService.GetPerson(x.Id);
+                    res.RoleRef = CoreRoles.TEACHER_ROLE.Id;
+                    return res;
+                })); 
+            }
+            var notification = peopleToNotify.Select(x => builder.BuildAnnouncementNewAttachmentNotificationToPerson(Context.NowSchoolTime, announcement, x, fromPerson)).ToList();
+            AddNotifications(notification);
         }
 
 
@@ -218,23 +230,17 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         }
         private void AddNotifications(IList<Notification> notifications)
         {
-            using (var uow = Update())
-            {
-                new NotificationDataAccess(uow).Insert(notifications);
-                uow.Commit();
-            }
+            DoUpdate(u=> new NotificationDataAccess(u).Insert(notifications));
         }
 
         public void AddPrivateMessageNotification(int privateMessageId)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             using (var uow = Update())
             {
-                if (!Context.PersonId.HasValue)
-                    throw new UnassignedUserException();
-
-                var privateMessage = new PrivateMessageDataAccess(uow).GetDetailsById(privateMessageId, Context.PersonId.Value);
-                var notification = builder.BuildPrivateMessageNotification(Context.NowSchoolTime, privateMessage, privateMessage.Sender, privateMessage.Recipient);
-                new NotificationDataAccess(uow).Insert(notification);
+                var msg = new PrivateMessageDataAccess(uow).GetSentPrivateMessage(privateMessageId, Context.PersonId.Value);
+                var notifications = msg.RecipientPersons.Select(x=> builder.BuildPrivateMessageNotification(Context.NowSchoolTime, msg, msg.Sender, x)).ToList();
+                new NotificationDataAccess(uow).Insert(notifications);
                 uow.Commit();
             }
         }
@@ -249,6 +255,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             throw new NotImplementedException();
         }
 
+        //TODO: those 3 methods are obsolete  ... investigate do we need them
         public void AddEndMarkingPeriodNotification(int toPersonId, int markingPeriodId, int endDays, bool isNextMpNotExist,
                                                     bool isNextMpNotAssignedToClass)
         {
@@ -258,10 +265,10 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                 isNextMpNotExist, isNextMpNotAssignedToClass);
             AddNotification(notification);
         }
-
+        
         public void AddAttendanceNotification(int toPersonId, IList<Person> persons)
         {
-            //TODO: think about security
+            //TODO: think about security ... 
             var toSchoolPerson = ServiceLocator.PersonService.GetPerson(toPersonId);
             var notification = builder.BuildAttendanceNotificationToAdmin(Context.NowSchoolTime, toSchoolPerson, persons);
             AddNotification(notification);

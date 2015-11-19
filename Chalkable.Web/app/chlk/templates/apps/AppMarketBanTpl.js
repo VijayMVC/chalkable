@@ -13,7 +13,9 @@ NAMESPACE('chlk.templates.apps', function () {
             Boolean, 'banned',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.AppId, 'id'
+            chlk.models.id.AppId, 'id',
+
+            Boolean, 'fromNewItem'
 
         ])
 });

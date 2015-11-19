@@ -94,6 +94,25 @@
   .group-header
     width: 200px
     padding-right: 25px
+    color: #6f6f6f
+
+  .more-button
+    display: block
+    width: 100%
+    border-radius: 4px
+    padding: 0 10px 0 14px
+    line-height: 35px
+    height: 38px
+    border: 1px solid #b4b4b4
+    text-align: center
+    margin-left: 50px
+    font-size: 14px
+    color: #818181
+    background: #f6f6f6
+    cursor: pointer
+
+    &:hover
+      background: #e6e6e6
 
   .permission
     display: inline-block
@@ -282,6 +301,16 @@
 
   .app-install-history
     width: 100%
+
+    .table-row
+      height: 35px
+      color: #6f6f6f
+
+      &.hidden-row
+        display: none
+
+      &.half-header
+        height: 15px
 
     .desc span
       font-weight: 600

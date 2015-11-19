@@ -10,5 +10,6 @@ namespace Chalkable.StiConnector.SyncModel
         public string Description { get; set; }
         public bool IsDailyAttendancePeriod { get; set; }
         public Guid DistrictGuid { get; set; }
+        public override int DefaultOrder => 30;
     }
 }

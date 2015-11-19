@@ -38,7 +38,7 @@ namespace Chalkable.BackgroundTaskProcessor
                 SisUrl = district.SisUrl,
                 SisUserName = district.SisUserName
             };
-            var importService = new ImportService(district.Id, info, log);
+            var importService = new ImportService(district.Id, info, log, task.Id);
             importService.Import();
         }
     }

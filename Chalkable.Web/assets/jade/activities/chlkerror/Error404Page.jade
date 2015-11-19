@@ -3,3 +3,7 @@
     .text Ooops, seems there was a problem loading that page
     .error-content
         h2 Please try another page
+
+    if self.msg
+        h3 Error details:
+        pre(style="color:gray;overflow-x:auto")= window.Raygun ? window.Raygun.fetchRaygunError(self.msg).message : self.msg

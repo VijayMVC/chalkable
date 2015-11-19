@@ -10,7 +10,7 @@ REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.activities.apps.AppMarketPage');
 REQUIRE('chlk.activities.apps.AppMarketDetailsPage');
 REQUIRE('chlk.activities.apps.MyAppsPage');
-REQUIRE('chlk.activities.apps.AttachDialog');
+REQUIRE('chlk.activities.apps.AttachAppsDialog');
 REQUIRE('chlk.activities.apps.InstallAppDialog');
 REQUIRE('chlk.activities.apps.QuickAppInstallDialog');
 
@@ -84,7 +84,7 @@ NAMESPACE('chlk.controllers', function (){
             }
 
             var result = this.appCategoryService
-                .getCategories()
+                .getAllAppCategories()
                 .attach(this.validateResponse_())
                 .then(function(data){
                     return data.getItems();
@@ -166,12 +166,9 @@ NAMESPACE('chlk.controllers', function (){
             return app;
         },
 
-        //todo: refactor
-        [chlk.controllers.SidebarButton('apps')],
-        [chlk.controllers.StudyCenterEnabled()],
         [[chlk.models.id.AppId, Boolean]],
-        function detailsAction(id, fromNewItem_) {
-            var result = this.appMarketService
+        function getApp(id, fromNewItem_){
+            return this.appMarketService
                 .getDetails(id)
                 .attach(this.validateResponse_())
                 .then(function(app){
@@ -179,13 +176,13 @@ NAMESPACE('chlk.controllers', function (){
                     var appPermissions = app.getPermissions() || [];
 
                     appPermissions = appPermissions.map(function(permission){
-                         switch(permission.getId().valueOf()){
-                             case chlk.models.apps.AppPermissionTypeEnum.MESSAGE.valueOf() : permission.setName("Messaging");
-                                 break;
-                             case chlk.models.apps.AppPermissionTypeEnum.GRADE.valueOf(): permission.setName("Grading");
-                                 break;
-                         }
-                         return permission;
+                        switch(permission.getId().valueOf()){
+                            case chlk.models.apps.AppPermissionTypeEnum.MESSAGE.valueOf() : permission.setName("Messaging");
+                                break;
+                            case chlk.models.apps.AppPermissionTypeEnum.GRADE.valueOf(): permission.setName("Grading");
+                                break;
+                        }
+                        return permission;
                     });
 
                     var filteredPermissions = appPermissions.filter(function(permission){
@@ -194,10 +191,10 @@ NAMESPACE('chlk.controllers', function (){
                             && permission.getId() != chlk.models.apps.AppPermissionTypeEnum.CLAZZ;
                     });
 
-                     if (appPermissions.length > filteredPermissions.length){
-                         filteredPermissions.unshift(new chlk.models.apps.AppPermission(
-                             chlk.models.apps.AppPermissionTypeEnum.UNKNOWN, 'Basic info'));
-                     }
+                    if (appPermissions.length > filteredPermissions.length){
+                        filteredPermissions.unshift(new chlk.models.apps.AppPermission(
+                            chlk.models.apps.AppPermissionTypeEnum.UNKNOWN, 'Basic info'));
+                    }
                     app.setPermissions(filteredPermissions);
 
                     var appRating = app.getApplicationRating();
@@ -217,25 +214,33 @@ NAMESPACE('chlk.controllers', function (){
                     }
 
                     var result = ria.async.wait([
-                        this.appCategoryService.getCategories(),
+                        this.appCategoryService.getAllAppCategories(),
                         this.appMarketService.getPersonBalance(this.getCurrentPerson().getId())
                     ])
-                    .attach(this.validateResponse_())
-                    .then(function(res){
-                        var categories = res[0].getItems();
-                        var balance = res[1].getBalance();
-                        return new chlk.models.apps.AppMarketDetailsViewData(
-                            app,
-                            installBtnTitle,
-                            categories,
-                            this.gradeLevelService.getGradeLevels(),
-                            balance,
-                            isAlreadyInstalledForStudent,
-                            fromNewItem_
-                        );
-                    },this);
+                        .attach(this.validateResponse_())
+                        .then(function(res){
+                            var categories = res[0].getItems();
+                            var balance = res[1].getBalance();
+                            return new chlk.models.apps.AppMarketDetailsViewData(
+                                app,
+                                installBtnTitle,
+                                categories,
+                                this.gradeLevelService.getGradeLevels(),
+                                balance,
+                                isAlreadyInstalledForStudent,
+                                fromNewItem_
+                            );
+                        },this);
                     return result;
                 }, this);
+        },
+
+        //todo: refactor
+        [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.StudyCenterEnabled()],
+        [[chlk.models.id.AppId, Boolean]],
+        function detailsAction(id, fromNewItem_) {
+            var result = this.getApp(id, fromNewItem_);
             return this.PushView(chlk.activities.apps.AppMarketDetailsPage, result);
         },
 
@@ -263,30 +268,31 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.apps.AppMarketApplication]],
         chlk.models.apps.AppMarketApplication, function prepareApplicationInstallGroups_(app){
             var installedForGroups = app.getInstalledForGroups() || [];
-            installedForGroups.unshift(new chlk.models.apps.AppInstallGroup(
-                new chlk.models.id.AppInstallGroupId(this.getCurrentPerson().getId().valueOf()),
-                chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER,
-                app.isInstalledOnlyForCurrentUser(), Msg.Just_me
-            ));
+            installedForGroups.unshift({
+                id: this.getCurrentPerson().getId().valueOf(),
+                grouptype: chlk.models.apps.AppInstallGroupTypeEnum.CURRENT_USER.valueOf(),
+                isinstalled: app.isInstalledOnlyForCurrentUser(),
+                description: Msg.Just_me
+            });
             var installedCount = 0;
             installedForGroups = installedForGroups.map(function(item){
-                if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.ALL){
-                    item.setId(new chlk.models.id.AppInstallGroupId('all'));
+                if (item.grouptype == chlk.models.apps.AppInstallGroupTypeEnum.ALL.valueOf()){
+                    item.id = 'all';
                 }
 
-                if (item.isInstalled()) ++installedCount;
+                if (item.isinstalled) ++installedCount;
 
-                if (item.getGroupType() == chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ){
-                    var cls = this.classService.getClassById(new chlk.models.id.ClassId(item.getId().valueOf()));
+                if (item.grouptype == chlk.models.apps.AppInstallGroupTypeEnum.CLAZZ.valueOf()){
+                    var cls = this.classService.getClassById(new chlk.models.id.ClassId(item.id));
                     var classNumber = cls && cls.getClassNumber() ? cls.getClassNumber()+ " " : "";
-                    item.setTooltipHint(classNumber + item.getDescription());
+                    item.tooltiphint = classNumber + item.description;
                 }
                 return item;
             }, this);
 
             if (this.userInRole(chlk.models.common.RoleEnum.STUDENT)){
                 installedForGroups = installedForGroups.filter(function(item){
-                    return item.getGroupType() != chlk.models.apps.AppInstallGroupTypeEnum.ALL;
+                    return item.grouptype != chlk.models.apps.AppInstallGroupTypeEnum.ALL.valueOf();
                 });
             }
 
@@ -295,24 +301,24 @@ NAMESPACE('chlk.controllers', function (){
             return app;
         },
 
-        [chlk.controllers.SidebarButton('apps')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [chlk.controllers.StudyCenterEnabled()],
-        [[chlk.models.id.AppId, Boolean]],
-        function tryToInstallAction(appId, fromNewItem_) {
+        [[chlk.models.id.AppId, Boolean, Boolean]],
+        function tryToInstallAction(appId, fromNewItem_, fromSuggestedApps_) {
             var appInfo = this.appMarketService
                 .getDetails(appId)
                 .attach(this.validateResponse_())
                 .then(function(app){
                     app = this.prepareAppPictures_(app);
                     app = this.prepareApplicationInstallGroups_(app);
-                    return new chlk.models.apps.AppMarketInstallViewData(app, null, fromNewItem_);
+                    return new chlk.models.apps.AppMarketInstallViewData(app, null, fromNewItem_, fromSuggestedApps_);
                 }, this);
             return this.ShadeOrUpdateView(chlk.activities.apps.InstallAppDialog, appInfo);
         },
 
         [chlk.controllers.SidebarButton('apps')],
         [chlk.controllers.StudyCenterEnabled()],
-        [[chlk.models.id.AppId]],
+        [[chlk.models.id.AppId, Boolean]],
         function tryToInstallDistrictAdminAction(appId, fromNewItem_) {
                 var appInfo = ria.async.wait(
                     this.appMarketService.getDetails(appId).attach(this.validateResponse_()),
@@ -328,8 +334,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('apps')],
         [chlk.controllers.StudyCenterEnabled()],
-        [[chlk.models.id.AppId, chlk.models.apps.AppTotalPrice, chlk.models.id.ClassId, chlk.models.id.AnnouncementId]],
-        function tryToQuickInstallAction(applicationId, appTotalPrice, classId, announcementId_){
+        [[chlk.models.id.AppId, chlk.models.apps.AppTotalPrice, chlk.models.id.ClassId, chlk.models.id.AnnouncementId, chlk.models.id.SchoolPersonId]],
+        function tryToQuickInstallAction(applicationId, appTotalPrice, classId_, announcementId_, personId_){
             var res = this.appMarketService
                 .getDetails(applicationId)
                 .attach(this.validateResponse_())
@@ -337,7 +343,7 @@ NAMESPACE('chlk.controllers', function (){
                     var screenshotDims = chlk.models.apps.AppPicture.SCREENSHOT_DIMS();
                     var screenshots = this.pictureService.getAppPicturesByIds(app.getScreenshotIds(), screenshotDims.width, screenshotDims.height);
                     app.setScreenshotPictures(new chlk.models.apps.AppScreenShots(screenshots, false));
-                    return new chlk.models.apps.ShortAppInstallViewData(app, appTotalPrice, classId, announcementId_);
+                    return new chlk.models.apps.ShortAppInstallViewData(app, appTotalPrice, classId_, announcementId_, personId_);
                 }, this);
             return this.ShadeView(chlk.activities.apps.QuickAppInstallDialog, res);
         },
@@ -361,6 +367,39 @@ NAMESPACE('chlk.controllers', function (){
                 params: [],
                 color: chlk.models.common.ButtonColor.GREEN.valueOf()
             }], 'center'), null;
+        },
+
+
+        [chlk.controllers.SidebarButton('apps')],
+        [[Boolean, chlk.models.id.AppId]],
+        function installCompleteFroNewItemAction(result, appId) {
+            var title = result ? "Installation successful" : "Error while installing app.";
+            return this.ShowMsgBox(title, '', [{
+                text: 'Ok',
+                controller: 'appmarket',
+                action: 'back',
+                params: [],
+                color: chlk.models.common.ButtonColor.GREEN.valueOf()
+            }], 'center'), null;
+        },
+
+        [chlk.controllers.SidebarButton('apps')],
+        [[Boolean, chlk.models.id.AppId]],
+        function installCompleteFromSuggestedAppsAction(result, appId) {
+            var title = result ? "Installation successful" : "Error while installing app.";
+            return this.ShowMsgBox(title, '', [{
+                text: 'Ok',
+                controller: 'announcement',
+                action: 'updateSuggestedApps',
+                params: [],
+                color: chlk.models.common.ButtonColor.GREEN.valueOf()
+            }], 'center'), null;
+        },
+
+        [chlk.controllers.NotChangedSidebarButton()],
+        function backAction(){
+            window.history.back();
+            return null;
         },
 
         [chlk.controllers.SidebarButton('apps')],
@@ -418,9 +457,10 @@ NAMESPACE('chlk.controllers', function (){
         function installAction(appInstallData) {
             switch(appInstallData.getSubmitActionType()){
                 case 'install':
-                    var res = this.install_(appInstallData, 'installComplete', null, 'installFail', null);
+                    var res = this.install_(appInstallData, appInstallData.isFromSuggestedApps() ? 'installCompleteFromSuggestedApps' :
+                        (appInstallData.isFromNewItem() ? 'installCompleteFroNewItem' : 'installComplete'), null, 'installFail', null);
                     if(appInstallData.isFromNewItem())
-                        return this.Redirect('announcement', 'add');
+                        return this.ShadeLoader();
                     return this.UpdateView(chlk.activities.apps.InstallAppDialog, res);
 
                 case 'getAppPrice':
@@ -443,11 +483,7 @@ NAMESPACE('chlk.controllers', function (){
         Array, function prepareAppTotalPriceCallParams_(appInstallData){
             return [
                 appInstallData.getAppId(),
-                this.getIdsList(appInstallData.getDepartments(), chlk.models.id.AppInstallGroupId),
                 this.getIdsList(appInstallData.getClasses(), chlk.models.id.AppInstallGroupId),
-                this.getIdsList(appInstallData.getRoles(), chlk.models.id.AppInstallGroupId),
-                this.getIdsList(appInstallData.getGradeLevels(), chlk.models.id.AppInstallGroupId),
-                this.getIdsList(appInstallData.getGroups(), chlk.models.id.AppInstallGroupId),
                 appInstallData.getCurrentPerson()
             ];
         },
@@ -575,36 +611,30 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.ADMINGRADE,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
-        [[chlk.models.id.AppId]],
-        function banAppAction(appId){
-            var result = this.ShowConfirmBox('Banning this App will hide the app in the store for all users in your district. If the app was already installed by a user, it will not be uninstalled.', null, 'Ban', 'negative-button')
+        [[chlk.models.id.AppId, Boolean]],
+        function banAppAction(appId, fromNewItem_){
+            var result = this.ShowConfirmBox('Banning this App will hide the app in the store for all users in your district. If the app was already installed by a user, it will not be uninstalled.', null, 'OK', 'negative-button')
                 .thenCall(this.appsService.banApp, [appId])
                 .attach(this.validateResponse_())
                 .then(function(data) {
-                    var res = new chlk.models.apps.AppMarketApplication;
-                    res.setId(appId);
-                    res.setBanned(true);
-                    return res;
-                });
-            return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result, 'banApp');
+                    return this.getApp(appId, fromNewItem_);
+                }, this);
+            return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result);
         },
 
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.ADMINGRADE,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
-        [[chlk.models.id.AppId]],
-        function unbanAppAction(appId){
-            var result = this.ShowConfirmBox('Un ban this app?', null, 'Yes')
+        [[chlk.models.id.AppId, Boolean]],
+        function unbanAppAction(appId, fromNewItem_){
+            var result = this.ShowConfirmBox('Un-ban this app?', null, 'Yes')
                 .thenCall(this.appsService.unbanApp, [appId])
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    var res = new chlk.models.apps.AppMarketApplication;
-                    res.setId(appId);
-                    res.setBanned(false);
-                    return res;
-                });
-            return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result, 'banApp');
+                    return this.getApp(appId, fromNewItem_);
+                }, this);
+            return this.UpdateView(chlk.activities.apps.AppMarketDetailsPage, result);
         }
     ])
 });

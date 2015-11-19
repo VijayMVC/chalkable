@@ -23,5 +23,7 @@ namespace Chalkable.StiConnector.SyncModel
         public bool IsVisibleInHomePortal { get; set; }
         public DateTime? ArchiveDate { get; set; }
         public short? AcadSessionTypeID { get; set; }
+
+        public override int DefaultOrder => 13;
     }
 }

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.Web", "Chalkable.Web\Chalkable.Web.csproj", "{60802BF0-AF2E-47F8-A792-7135DC7565D0}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -21,13 +21,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.Tests", "Chalkable.Tests\Chalkable.Tests.csproj", "{695B971A-58CB-4713-8E28-056BF6F1C913}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.Common", "Chalkable.Common\Chalkable.Common.csproj", "{3615F16A-B37F-40B4-B58D-CC39FA8F6646}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{FB56BD81-FA00-49E7-B0CD-36F2B0BF5638}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.BackgroundTaskProducer", "Chalkable.BackgroundTaskProducer\Chalkable.BackgroundTaskProducer.csproj", "{6086E0A9-9729-4E4A-A28C-261582F83827}"
 EndProject

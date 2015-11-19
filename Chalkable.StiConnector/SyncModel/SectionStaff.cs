@@ -10,5 +10,7 @@ namespace Chalkable.StiConnector.SyncModel
         public bool IsPrimary { get; set; }
         public short? StaffRoleID { get; set; }
         public Guid DistrictGuid { get; set; }
+
+        public override int DefaultOrder => 24;
     }
 }
