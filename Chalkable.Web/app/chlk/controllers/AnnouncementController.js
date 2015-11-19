@@ -1160,7 +1160,8 @@ NAMESPACE('chlk.controllers', function (){
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(attribute){
-                    attribute.setAnnouncementType(announcementType);
+                    this.BackgroundCloseView(chlk.activities.announcement.AttachFilesDialog);
+                    /*attribute.setAnnouncementType(announcementType);
                     this.prepareAttribute(attribute, 51, 33);
                     var attachment = attribute.getAttributeAttachment();
 
@@ -1171,7 +1172,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.setAnnouncementType(announcementType);
                     model.setAttributeAttachment(true);
                     model.setTotal(files[0].size);
-                    return model;
+                    return model;*/
                 }, this);
             return this.UpdateView(chlk.activities.announcement.AttachFilesDialog, result, chlk.activities.lib.DontShowLoader());
         },
