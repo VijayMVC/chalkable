@@ -113,6 +113,35 @@ NAMESPACE('chlk.controllers', function (){
 
         ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
 
+        VOID, function updateAttributesWithFilesList_(announcement){
+            var res = [];
+            announcement.getAnnouncementAttributes().forEach(function(attribute){
+                if(attribute.getAttributeAttachment())
+                    res.push(attribute.getId())
+            });
+
+            this.getContext().getSession().set(ChlkSessionConstants.ATTRIBUTES_WITH_FILES, res);
+        },
+
+        VOID, function afterAttributeFileAttach_(attributeId){
+            var attrs = this.getContext().getSession().get(ChlkSessionConstants.ATTRIBUTES_WITH_FILES, []);
+            if(attrs.indexOf(attributeId) == -1)
+                attrs.push(attributeId);
+
+            this.getContext().getSession().set(ChlkSessionConstants.ATTRIBUTES_WITH_FILES, attrs);
+        },
+
+        VOID, function afterAttributeFileRemove_(attributeId){
+            var attrs = this.getContext().getSession().get(ChlkSessionConstants.ATTRIBUTES_WITH_FILES, []);
+            attrs.splice(attrs.indexOf(attributeId), 1);
+
+            this.getContext().getSession().set(ChlkSessionConstants.ATTRIBUTES_WITH_FILES, attrs);
+        },
+
+        Boolean, function isAttributeWithFile_(attributeId){
+            var attrs = this.getContext().getSession().get(ChlkSessionConstants.ATTRIBUTES_WITH_FILES, []);
+            return attrs.indexOf(attributeId) > -1;
+        },
 
         function getAnnouncementFormPageType_(type_){
             if(this.userInRole(chlk.models.common.RoleEnum.TEACHER)){
@@ -277,6 +306,7 @@ NAMESPACE('chlk.controllers', function (){
             var announcementTypeId_;
             var type = announcement.getType();
             this.cacheAnnouncementType(type);
+            this.updateAttributesWithFilesList_(announcement);
 
             var classes = this.classService.getClassesForTopBarSync();
             var markingPeriods = this.markingPeriodService.getMarkingPeriodsSync();
@@ -868,12 +898,16 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, chlk.models.id.AnnouncementAssignedAttributeId]],
         function attachFromCabinetToAttributeAction(announcementId, announcementType, attachmentId, assignedAttributeId){
+            if(this.isAttributeWithFile_(assignedAttributeId))
+                return this.attributeAttachmentExistsAction();
+
             this.BackgroundCloseView(chlk.activities.announcement.FileCabinetDialog);
             var res = this.assignedAttributeService
                 .addAttachment(announcementType, announcementId, assignedAttributeId, attachmentId)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(attribute){
+                    this.afterAttributeFileAttach_(assignedAttributeId);
                     return this.prepareAttributeData(announcementId, announcementType, assignedAttributeId, attribute);
                 }, this);
             return this.UpdateView(this.getAnnouncementFormPageType_(announcementType), res, 'add-attribute-attachment');
@@ -899,11 +933,15 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AttachmentId, chlk.models.id.AnnouncementAssignedAttributeId]],
         function cloneFromCabinetToAttributeAction(announcementId, announcementType, attachmentId, assignedAttributeId){
+            if(this.isAttributeWithFile_(assignedAttributeId))
+                return this.attributeAttachmentExistsAction();
+
             var res = this.assignedAttributeService
                 .cloneAttachmentForAttribute(attachmentId, announcementId, announcementType, assignedAttributeId)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(attribute){
+                    this.afterAttributeFileAttach_(assignedAttributeId);
                     return this.prepareAttributeData(announcementId, announcementType, assignedAttributeId, attribute);
                 }, this);
             this.BackgroundCloseView(chlk.activities.announcement.FileCabinetDialog);
@@ -918,6 +956,7 @@ NAMESPACE('chlk.controllers', function (){
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(deleted){
+                    this.afterAttributeFileRemove_(attributeId);
                     var attributes = this.getCachedAnnouncementAttributes().filter(function(attribute){return attribute.getId() != attributeId});
                     this.cacheAnnouncementAttributes(attributes);
                     return new chlk.models.announcement.AnnouncementAttributeViewData.$fromId(attributeId, deleted);
@@ -1086,6 +1125,8 @@ NAMESPACE('chlk.controllers', function (){
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(attribute){
+                    this.afterAttributeFileRemove_(announcementAssignedAttributeId);
+
                     if(fromDialog)
                         return new chlk.models.attachment.AnnouncementAttachment(fileIndex_);
 
@@ -1145,6 +1186,9 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementId, chlk.models.id.AnnouncementAssignedAttributeId, Object, Number]],
         function addAttributeAttachmentAction(announcementType, announcementId, announcementAssignedAttributeId, files, fileIndex_) {
+            if(this.isAttributeWithFile_(announcementAssignedAttributeId))
+                return this.attributeAttachmentExistsAction();
+
             var firstModel = new chlk.models.attachment.AnnouncementAttachment(0, files[0].size, null, files[0].name);
             this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'attachment-progress');
 
@@ -1154,13 +1198,15 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.assignedAttributeService
                 .uploadAttributeAttachment(announcementType, announcementId, announcementAssignedAttributeId, [files[0]])
                 .handleProgress(function(event){
+                    this.afterAttributeFileAttach_(announcementAssignedAttributeId);
                     var model = new chlk.models.attachment.AnnouncementAttachment(0, event.total, event.loaded, files[0].name);
                     this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, model, 'attachment-progress');
                 }, this)
                 .catchError(this.handleNoAnnouncementException_, this)
                 .attach(this.validateResponse_())
                 .then(function(attribute){
-                    attribute.setAnnouncementType(announcementType);
+                    this.BackgroundCloseView(chlk.activities.announcement.AttachFilesDialog);
+                    /*attribute.setAnnouncementType(announcementType);
                     this.prepareAttribute(attribute, 51, 33);
                     var attachment = attribute.getAttributeAttachment();
 
@@ -1171,7 +1217,7 @@ NAMESPACE('chlk.controllers', function (){
                     model.setAnnouncementType(announcementType);
                     model.setAttributeAttachment(true);
                     model.setTotal(files[0].size);
-                    return model;
+                    return model;*/
                 }, this);
             return this.UpdateView(chlk.activities.announcement.AttachFilesDialog, result, chlk.activities.lib.DontShowLoader());
         },

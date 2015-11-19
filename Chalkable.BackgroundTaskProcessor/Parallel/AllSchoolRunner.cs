@@ -9,7 +9,7 @@ namespace Chalkable.BackgroundTaskProcessor.Parallel
     public class AllSchoolRunner<T>
     {
         private const int TIMEOUT = 10000;
-        private const int SCHOOLS_PER_THREAD = 20;
+        private const int SCHOOLS_PER_THREAD = 2;
         public class Task
         {
             public T Data { get; set; }
