@@ -105,9 +105,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return new PaginatedList<SchoolYear>(schoolYears, start/count, count, schoolYears.Count);
         }
 
-        public IList<int> GetYears()
+        public IList<int> GetYears(bool activeOnly = true, bool withDateRange = true)
         {
-            var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYears();
+            var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYears().ToList();
+            if (activeOnly)
+                schoolYears = schoolYears.Where(x => x.IsActive).ToList();
+            if (withDateRange)
+                schoolYears = schoolYears.Where(x => x.StartDate.HasValue && x.EndDate.HasValue).ToList();
             return schoolYears.Select(x => x.AcadYear).Distinct().OrderBy(x => x).ToList();
         }
 
@@ -175,11 +179,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return SchoolYearStorage.GetAll();
         }
 
-        public IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true)
+        public IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true, bool withDateRange = true)
         {
             var res = SchoolYearStorage.GetAll().Where(x => x.AcadYear == year);
             if (activeOnly)
                 res = res.Where(x => x.IsActive);
+            if (withDateRange)
+                res = res.Where(x => x.StartDate.HasValue && x.EndDate.HasValue).ToList();
             return res.ToList();
         }
 
