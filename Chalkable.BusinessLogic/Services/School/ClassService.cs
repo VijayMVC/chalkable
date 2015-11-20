@@ -40,7 +40,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Class> GetAll();
         IList<ClassDetails> GetAllSchoolsActiveClasses();
 
-        PaginatedList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter);
+        PaginatedList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId);
 
         IList<ClassDetails> GetClassesByTeachers(int schoolYearId, IList<int> teacherIds, int? start, int? count);
     }
@@ -209,14 +209,14 @@ namespace Chalkable.BusinessLogic.Services.School
             return classes;
         }
 
-        public PaginatedList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter)
+        public PaginatedList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId)
         {
 
             return
                 DoRead(
                     u =>
                         new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start ?? 0, count ?? int.MaxValue,
-                            filter));
+                            filter, teacherId));
         }
 
         public IList<ClassDetails> GetClassesByTeachers(int schoolYearId, IList<int> teacherIds, int? start, int? count)
