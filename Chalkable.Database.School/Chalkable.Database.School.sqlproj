@@ -91,9 +91,6 @@
     <Build Include="Tables\ApplicationInstall.sql" />
     <Build Include="Tables\ApplicationInstallAction.sql" />
     <Build Include="Tables\ApplicationInstallActionClasses.sql" />
-    <Build Include="Tables\ApplicationInstallActionDepartment.sql" />
-    <Build Include="Tables\ApplicationInstallActionGradeLevel.sql" />
-    <Build Include="Tables\ApplicationInstallActionRole.sql" />
     <Build Include="Tables\AttendanceLevelReason.sql" />
     <Build Include="Tables\AttendanceMonth.sql" />
     <Build Include="Tables\AttendanceReason.sql" />
@@ -225,9 +222,6 @@
     <Build Include="User Defined Types\TApplicationInstall.sql" />
     <Build Include="User Defined Types\TApplicationInstallAction.sql" />
     <Build Include="User Defined Types\TApplicationInstallActionClasses.sql" />
-    <Build Include="User Defined Types\TApplicationInstallActionDepartment.sql" />
-    <Build Include="User Defined Types\TApplicationInstallActionGradeLevel.sql" />
-    <Build Include="User Defined Types\TApplicationInstallActionRole.sql" />
     <Build Include="User Defined Types\TAttendanceLevelReason.sql" />
     <Build Include="User Defined Types\TAttendanceMonth.sql" />
     <Build Include="User Defined Types\TAttendanceReason.sql" />
@@ -288,5 +282,24 @@
     <Build Include="User Defined Types\TSyncVersion.sql" />
     <Build Include="User Defined Types\TSystemSetting.sql" />
     <Build Include="User Defined Types\TUserSchool.sql" />
+    <Build Include="Tables\PrivateMessageRecipient.sql" />
+    <Build Include="Tables\PersonSetting.sql" />
+    <Build Include="Tables\Attachment.sql" />
+    <Build Include="Tables\ApplicationBanHistory.sql" />
+    <Build Include="Views\vwIncomeMessage.sql" />
+    <Build Include="Views\vwAnnouncementAttachment.sql" />
+    <Build Include="Views\vwAnnouncementAssignedAttribute.sql" />
+    <Build Include="Stored Procedures\spSearchStudentBySchoolYear.sql" />
+    <Build Include="Stored Procedures\spGetSentMessages.sql" />
+    <Build Include="Stored Procedures\spGetSentMessageById.sql" />
+    <Build Include="Stored Procedures\spGetPossibleMessageRecipients.sql" />
+    <Build Include="Stored Procedures\spGetPersonSettings.sql" />
+    <Build Include="Stored Procedures\spGetMessageRecipients.sql" />
+    <Build Include="Stored Procedures\spGetIncomeMessages.sql" />
+    <Build Include="Stored Procedures\spGetIncomeMessageById.sql" />
+    <Build Include="Stored Procedures\spGetApplicationBanHistory.sql" />
+    <Build Include="Stored Procedures\spDeletePersons.sql" />
+    <Build Include="Stored Procedures\spDeleteClasses.sql" />
+    <Build Include="User Defined Types\TPrivateMessageRecipient.sql" />
   </ItemGroup>
 </Project>

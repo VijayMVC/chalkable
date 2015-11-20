@@ -134,5 +134,6 @@
     <Build Include="User Defined Types\Tstring.sql" />
     <Build Include="User Defined Types\TUser.sql" />
     <Build Include="User Defined Types\TUserLoginInfo.sql" />
+    <Build Include="Stored Procedures\spUpdateMessagingSettings.sql" />
   </ItemGroup>
 </Project>
