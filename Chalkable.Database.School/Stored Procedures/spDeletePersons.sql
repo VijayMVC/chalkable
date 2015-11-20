@@ -26,14 +26,24 @@ as
 	Delete from ApplicationInstallActionClasses Where AppInstallActionRef in
 		(Select Id From ApplicationInstallAction where PersonRef in (Select value from @personIds as ids)
 											or OwnerRef in (Select value from @personIds as ids))
-	
-	Delete From Notification where PrivateMessageRef in 
-		(Select Id From PrivateMessage where FromPersonRef in (Select value from @personIds as ids)
-								or ToPersonRef in (Select value from @personIds as ids))
 
-	Delete From PrivateMessage where FromPersonRef in (Select value from @personIds as ids)
-								or ToPersonRef in (Select value from @personIds as ids)
-	
+
+	Delete From PrivateMessageRecipient where RecipientRef in (Select value from @personIds as ids) 
+
+	declare @messagesToDelete TInt32;
+
+	Insert Into @messagesToDelete
+	Select Id From PrivateMessage where FromPersonRef in (Select value from @personIds as ids)
+
+	Insert Into @messagesToDelete
+	Select Id From PrivateMessage where not exists(Select * From PrivateMessageRecipient where PrivateMessageRef = PrivateMessage.Id)
+
+
+	Delete From Notification where PrivateMessageRef in
+	(Select value From @messagesToDelete)
+
+	Delete From PrivateMessage where id in (Select value From @messagesToDelete)
+
 	Delete From Notification where PersonRef in (Select value from @personIds as ids)
 									or QuestionPersonRef in (Select value from @personIds as ids)
 
@@ -50,5 +60,7 @@ as
 	Delete AnnouncementAssignedAttribute where AnnouncementRef in (Select Id From AdminAnnouncement where AdminRef in (Select value from @personIds as ids))
 	Delete Announcement where Id in (Select Id From AdminAnnouncement where AdminRef in (Select value from @personIds as ids))
 	Delete From AdminAnnouncement where AdminRef in (Select value from @personIds as ids)
-	
+
 	Delete From Attachment Where PersonRef in (Select value From @personIds as ids)
+
+	Delete from Person Where Id in (Select value From @personIds as ids)

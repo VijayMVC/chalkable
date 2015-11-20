@@ -155,7 +155,6 @@
     <Build Include="Views\vwLessonPlan.sql" />
     <Build Include="Views\vwLPGalleryCategory.sql" />
     <Build Include="Views\vwPerson.sql" />
-    <Build Include="Views\vwPrivateMessage.sql" />
     <Build Include="Functions\Split.sql" />
     <Build Include="Stored Procedures\spAfterRestore.sql" />
     <Build Include="Stored Procedures\spAssigAllToGroup.sql" />
