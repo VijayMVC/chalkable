@@ -399,7 +399,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetFeedReport(FeedReportInputModel inputModel, string path)
         {
-            var handler = new ShortFeedReportHandler();
+            IReportHandler<FeedReportInputModel> handler;
+            if (inputModel.IncludeDetails)
+                handler = new FeedDetailsReportHandler(ConnectorLocator);
+            else
+                handler = new ShortFeedReportHandler();
+
             var format = inputModel.FormatTyped ?? ReportingFormat.Pdf;
             var dataSet = handler.PrepareDataSource(inputModel, format, ServiceLocator, ServiceLocator.ServiceLocatorMaster);
             var definition = Path.Combine(path, handler.GetReportDefinitionFile());

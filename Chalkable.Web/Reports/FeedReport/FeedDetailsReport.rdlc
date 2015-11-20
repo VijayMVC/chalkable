@@ -347,64 +347,11 @@
                                           </TablixColumns>
                                           <TablixRows>
                                             <TablixRow>
-                                              <Height>0.33333in</Height>
+                                              <Height>0.57292in</Height>
                                               <TablixCells>
                                                 <TablixCell>
                                                   <CellContents>
-                                                    <Rectangle Name="Rectangle12">
-                                                      <ReportItems>
-                                                        <Textbox Name="Textbox27">
-                                                          <CanGrow>true</CanGrow>
-                                                          <KeepTogether>true</KeepTogether>
-                                                          <Paragraphs>
-                                                            <Paragraph>
-                                                              <TextRuns>
-                                                                <TextRun>
-                                                                  <Value>Standards</Value>
-                                                                  <Style>
-                                                                    <FontSize>12pt</FontSize>
-                                                                    <FontWeight>Bold</FontWeight>
-                                                                  </Style>
-                                                                </TextRun>
-                                                              </TextRuns>
-                                                              <Style />
-                                                            </Paragraph>
-                                                          </Paragraphs>
-                                                          <rd:DefaultName>Textbox19</rd:DefaultName>
-                                                          <Top>0.04167in</Top>
-                                                          <Height>0.25in</Height>
-                                                          <Width>1.82292in</Width>
-                                                          <Style>
-                                                            <Border>
-                                                              <Style>None</Style>
-                                                            </Border>
-                                                            <PaddingLeft>2pt</PaddingLeft>
-                                                            <PaddingRight>2pt</PaddingRight>
-                                                            <PaddingTop>2pt</PaddingTop>
-                                                            <PaddingBottom>2pt</PaddingBottom>
-                                                          </Style>
-                                                        </Textbox>
-                                                      </ReportItems>
-                                                      <KeepTogether>true</KeepTogether>
-                                                      <Style>
-                                                        <Border>
-                                                          <Style>None</Style>
-                                                        </Border>
-                                                        <BottomBorder>
-                                                          <Style>Solid</Style>
-                                                        </BottomBorder>
-                                                      </Style>
-                                                    </Rectangle>
-                                                  </CellContents>
-                                                </TablixCell>
-                                              </TablixCells>
-                                            </TablixRow>
-                                            <TablixRow>
-                                              <Height>0.46354in</Height>
-                                              <TablixCells>
-                                                <TablixCell>
-                                                  <CellContents>
-                                                    <Rectangle Name="Rectangle13">
+                                                    <Rectangle Name="Rectangle1">
                                                       <ReportItems>
                                                         <Textbox Name="Textbox39">
                                                           <CanGrow>true</CanGrow>
@@ -421,10 +368,9 @@
                                                             </Paragraph>
                                                           </Paragraphs>
                                                           <rd:DefaultName>Textbox39</rd:DefaultName>
-                                                          <Top>0.09375in</Top>
-                                                          <Left>0.03156in</Left>
+                                                          <Top>0.14063in</Top>
                                                           <Height>0.19792in</Height>
-                                                          <Width>0.98958in</Width>
+                                                          <Width>1.04166in</Width>
                                                           <Style>
                                                             <Border>
                                                               <Style>None</Style>
@@ -450,8 +396,8 @@
                                                             </Paragraph>
                                                           </Paragraphs>
                                                           <rd:DefaultName>StandardDescription</rd:DefaultName>
-                                                          <Top>0.09375in</Top>
-                                                          <Left>1.23958in</Left>
+                                                          <Top>0.14063in</Top>
+                                                          <Left>1.20802in</Left>
                                                           <Height>0.19792in</Height>
                                                           <Width>5.18813in</Width>
                                                           <ZIndex>1</ZIndex>
@@ -473,6 +419,7 @@
                                                         </Border>
                                                       </Style>
                                                     </Rectangle>
+                                                    <rd:Selected>true</rd:Selected>
                                                   </CellContents>
                                                 </TablixCell>
                                               </TablixCells>
@@ -487,12 +434,10 @@
                                         <TablixRowHierarchy>
                                           <TablixMembers>
                                             <TablixMember>
-                                              <KeepWithGroup>After</KeepWithGroup>
-                                            </TablixMember>
-                                            <TablixMember>
                                               <Group Name="StandardId">
                                                 <GroupExpressions>
                                                   <GroupExpression>=Fields!StandardId.Value</GroupExpression>
+                                                  <GroupExpression>=Fields!AnnouncementId.Value</GroupExpression>
                                                 </GroupExpressions>
                                               </Group>
                                               <SortExpressions>
@@ -501,14 +446,20 @@
                                                 </SortExpression>
                                               </SortExpressions>
                                               <TablixMembers>
-                                                <TablixMember />
+                                                <TablixMember>
+                                                  <TablixMembers>
+                                                    <TablixMember>
+                                                      <Group Name="Group1" />
+                                                    </TablixMember>
+                                                  </TablixMembers>
+                                                </TablixMember>
                                               </TablixMembers>
                                             </TablixMember>
                                           </TablixMembers>
                                         </TablixRowHierarchy>
                                         <DataSetName>MainDataSet</DataSetName>
                                         <Left>0.16667in</Left>
-                                        <Height>0.79688in</Height>
+                                        <Height>0.57292in</Height>
                                         <Width>6.42771in</Width>
                                         <Style>
                                           <Border>
@@ -691,9 +642,121 @@
                                         </TablixRowHierarchy>
                                         <Top>1.51562in</Top>
                                         <Left>0.19823in</Left>
-                                        <Height>2.17188in</Height>
+                                        <Height>2.17187in</Height>
                                         <Width>6.42771in</Width>
                                         <ZIndex>1</ZIndex>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                        </Style>
+                                      </Tablix>
+                                      <Tablix Name="Tablix1">
+                                        <TablixBody>
+                                          <TablixColumns>
+                                            <TablixColumn>
+                                              <Width>6.36459in</Width>
+                                            </TablixColumn>
+                                          </TablixColumns>
+                                          <TablixRows>
+                                            <TablixRow>
+                                              <Height>0.55208in</Height>
+                                              <TablixCells>
+                                                <TablixCell>
+                                                  <CellContents>
+                                                    <Textbox Name="StandardName">
+                                                      <CanGrow>true</CanGrow>
+                                                      <KeepTogether>true</KeepTogether>
+                                                      <Paragraphs>
+                                                        <Paragraph>
+                                                          <TextRuns>
+                                                            <TextRun>
+                                                              <Value>=Fields!StandardName.Value</Value>
+                                                              <Style />
+                                                            </TextRun>
+                                                          </TextRuns>
+                                                          <Style />
+                                                        </Paragraph>
+                                                      </Paragraphs>
+                                                      <rd:DefaultName>StandardName</rd:DefaultName>
+                                                      <Style>
+                                                        <Border>
+                                                          <Style>None</Style>
+                                                        </Border>
+                                                        <PaddingLeft>2pt</PaddingLeft>
+                                                        <PaddingRight>2pt</PaddingRight>
+                                                        <PaddingTop>2pt</PaddingTop>
+                                                        <PaddingBottom>2pt</PaddingBottom>
+                                                      </Style>
+                                                    </Textbox>
+                                                  </CellContents>
+                                                </TablixCell>
+                                              </TablixCells>
+                                            </TablixRow>
+                                          </TablixRows>
+                                        </TablixBody>
+                                        <TablixColumnHierarchy>
+                                          <TablixMembers>
+                                            <TablixMember />
+                                          </TablixMembers>
+                                        </TablixColumnHierarchy>
+                                        <TablixRowHierarchy>
+                                          <TablixMembers>
+                                            <TablixMember>
+                                              <Group Name="StandardId1">
+                                                <GroupExpressions>
+                                                  <GroupExpression>=Fields!StandardId.Value</GroupExpression>
+                                                </GroupExpressions>
+                                              </Group>
+                                              <SortExpressions>
+                                                <SortExpression>
+                                                  <Value>=Fields!StandardId.Value</Value>
+                                                </SortExpression>
+                                              </SortExpressions>
+                                              <TablixHeader>
+                                                <Size>1in</Size>
+                                                <CellContents>
+                                                  <Textbox Name="StandardId1">
+                                                    <CanGrow>true</CanGrow>
+                                                    <KeepTogether>true</KeepTogether>
+                                                    <Paragraphs>
+                                                      <Paragraph>
+                                                        <TextRuns>
+                                                          <TextRun>
+                                                            <Value>=Fields!StandardId.Value</Value>
+                                                            <Style />
+                                                          </TextRun>
+                                                        </TextRuns>
+                                                        <Style />
+                                                      </Paragraph>
+                                                    </Paragraphs>
+                                                    <rd:DefaultName>StandardId1</rd:DefaultName>
+                                                    <Style>
+                                                      <Border>
+                                                        <Style>None</Style>
+                                                      </Border>
+                                                      <PaddingLeft>2pt</PaddingLeft>
+                                                      <PaddingRight>2pt</PaddingRight>
+                                                      <PaddingTop>2pt</PaddingTop>
+                                                      <PaddingBottom>2pt</PaddingBottom>
+                                                    </Style>
+                                                  </Textbox>
+                                                </CellContents>
+                                              </TablixHeader>
+                                              <TablixMembers>
+                                                <TablixMember>
+                                                  <Group Name="Details1" />
+                                                </TablixMember>
+                                              </TablixMembers>
+                                            </TablixMember>
+                                          </TablixMembers>
+                                        </TablixRowHierarchy>
+                                        <DataSetName>MainDataSet</DataSetName>
+                                        <Top>0.77084in</Top>
+                                        <Left>0.19823in</Left>
+                                        <Height>0.55208in</Height>
+                                        <Width>7.36459in</Width>
+                                        <ZIndex>2</ZIndex>
                                         <Style>
                                           <Border>
                                             <Style>None</Style>
@@ -771,7 +834,7 @@
         <DataSetName>MainDataSet</DataSetName>
         <Top>0.06944in</Top>
         <Left>0.24875in</Left>
-        <Height>5.96056in</Height>
+        <Height>5.96055in</Height>
         <Width>7.59438in</Width>
         <Style>
           <Border>

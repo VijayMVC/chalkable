@@ -67,21 +67,30 @@ namespace Chalkable.BusinessLogic.Services.Reporting
 
             var person = serviceLocator.PersonService.GetPerson(context.PersonId.Value);
             var sy = serviceLocator.SchoolYearService.GetCurrentSchoolYear();
+            var school = serviceLocator.SchoolService.GetSchool(context.SchoolLocalId.Value);
+
             var isStudent = context.Role == CoreRoles.STUDENT_ROLE;
-            var teacherId = isStudent ? null : (int?)person.Id;
-            var studentId = isStudent ? (int?)person.Id : null;
+            
             var classes = settings.ClassId.HasValue
                 ? new List<ClassDetails> { serviceLocator.ClassService.GetClassDetailsById(settings.ClassId.Value) }
                 : (isStudent
                         ? serviceLocator.ClassService.GetStudentClasses(sy.Id, person.Id)
                         : serviceLocator.ClassService.GetTeacherClasses(sy.Id, person.Id)
                   );
+            var classTeachers = classes.SelectMany(x => x.ClassTeachers.Select(y => y)).ToList();
+
             var anns = serviceLocator.AnnouncementFetchService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, true, settings.ClassId);
             var appIds = anns.SelectMany(x => x.AnnouncementApplications.Select(y => y.ApplicationRef)).Distinct().ToList();
             var apps = masterLocator.ApplicationService.GetApplicationsByIds(appIds);
-           
-            throw new NotImplementedException();
-            //return FeedDetailsExportModel.Create(person, Con)
+            var staffIds = classTeachers.Select(x => x.PersonRef).Distinct().ToList();
+            var staffs = staffIds.Select(y => serviceLocator.StaffService.GetStaff(y)).ToList();
+
+            //todo get schedules and fix performence issue in getting schedules 
+            var teacherId = isStudent ? null : (int?)person.Id;
+            var studentId = isStudent ? (int?)person.Id : null;
+            var schedules = new List<ScheduleItem>();
+
+            return FeedDetailsExportModel.Create(person, school.Name, sy.Name, anns, classTeachers, staffs, schedules, apps);
         }
 
         public string GetReportDefinitionFile()
