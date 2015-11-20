@@ -1,4 +1,5 @@
-﻿create procedure spDeleteDistrictData 
+﻿
+create procedure [dbo].[spDeleteDistrictData] 
 	@districtId uniqueidentifier
 as
 begin transaction

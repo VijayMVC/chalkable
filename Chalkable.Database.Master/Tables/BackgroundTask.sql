@@ -14,6 +14,8 @@
 );
 
 
+
+
 GO
 CREATE NONCLUSTERED INDEX [IX_BackgroundTas_Domain]
     ON [dbo].[BackgroundTask]([Domain] ASC);
@@ -35,13 +37,9 @@ CREATE NONCLUSTERED INDEX [IX_BackgroundTask_State]
 
 
 GO
-CREATE NONCLUSTERED INDEX [IX_BackgroundTask_State_Scheduled]
-    ON [dbo].[BackgroundTask]([State] ASC, [Scheduled] ASC)
-    INCLUDE([Id], [Domain]);
+
 
 
 GO
-CREATE NONCLUSTERED INDEX [nci_wi_BackgroundTask_9BE38EE6-2E55-45B4-ADC4-8A83BD0583A5]
-    ON [dbo].[BackgroundTask]([DistrictRef] ASC, [Completed] ASC)
-    INCLUDE([Id]);
+
 

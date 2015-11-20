@@ -1,9 +1,9 @@
-﻿CREATE Procedure [dbo].[spGetBackgroundTaskForProcessing]
+﻿
+CREATE Procedure spGetBackgroundTaskForProcessing
 	@currentTime DateTime2
 as
 declare @id uniqueidentifier = null
-SET TRANSACTION ISOLATION LEVEL SNAPSHOT
-begin transaction
+
 update 
 	BackgroundTask 
 set [State] = 1, 
@@ -20,5 +20,5 @@ where Id in
 			Scheduled
 	)
 
-commit
+
 select * from BackgroundTask where Id = @id
