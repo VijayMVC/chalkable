@@ -99,7 +99,7 @@ module.exports = function(grunt) {
           to: buildNumber
         }]
       },
-      chakable_database_master_version: {
+      chakable_database_school_version: {
         src: ['Chalkable.Database.School\Chalkable.Database.School.sqlproj'],
         dest: ['Chalkable.Database.School\Chalkable.Database.School.sqlproj'],
         replacements: [{
@@ -336,7 +336,7 @@ module.exports = function(grunt) {
   ]);
   
   // js concat/minify
-  grunt.registerTask('version', ['replace:chakable_web_version']);
+  grunt.registerTask('version', ['replace:chakable_web_version', 'replace:chakable_database_master_version', 'replace:chakable_database_school_version']);
 
   // general tasks
   grunt.registerTask('deploy-artifacts', ['azure-cdn-deploy']);  
