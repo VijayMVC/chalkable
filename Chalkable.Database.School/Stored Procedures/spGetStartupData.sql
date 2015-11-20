@@ -1,4 +1,7 @@
-﻿CREATE Procedure [dbo].[spGetStartupData]
+﻿
+
+
+CREATE Procedure [dbo].[spGetStartupData]
 @schoolYearId int,
 @personId int,
 @roleId int,
@@ -58,12 +61,14 @@ select * from GradingComment where SchoolRef = @schoolId
 
 exec spGetAttendanceReasons null
 
-select
+Select
 count(*) as UnshownNotificationsCount
-from
+From
 [Notification]
-where
-Shown = 0 and PersonRef = @personId
+Where
+Shown = 0 And
+PersonRef = @personId And
+RoleRef = @roleId
 
 
 select

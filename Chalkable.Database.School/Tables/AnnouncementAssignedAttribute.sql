@@ -3,15 +3,16 @@
     [Name]                           NVARCHAR (255) NOT NULL,
     [Text]                           NVARCHAR (MAX) NOT NULL,
     [AnnouncementRef]                INT            NOT NULL,
-    [Uuid]                           NVARCHAR (255) NULL,
     [AttributeTypeId]                INT            NOT NULL,
     [VisibleForStudents]             BIT            NOT NULL,
-    [SisAttributeAttachmentId]       INT            NULL,
-    [SisAttachmentName]              NVARCHAR (255) NULL,
-    [SisAttachmentMimeType]          NVARCHAR (255) NULL,
     [SisActivityAssignedAttributeId] INT            NULL,
+    [AttachmentRef]                  INT            NULL,
+    [SisActivityId]                  INT            NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_AnnouncementAssignedAttribute_Announcement] FOREIGN KEY ([AnnouncementRef]) REFERENCES [dbo].[Announcement] ([Id]),
+    CONSTRAINT [FK_AnnouncementAssignedAttribute_Attachment] FOREIGN KEY ([AttachmentRef]) REFERENCES [dbo].[Attachment] ([Id]),
     CONSTRAINT [FK_AnnouncementAssignedAttribute_AttributeTypeId] FOREIGN KEY ([AttributeTypeId]) REFERENCES [dbo].[AnnouncementAttribute] ([Id])
 );
+
+
 

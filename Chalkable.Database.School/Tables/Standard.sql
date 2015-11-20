@@ -15,3 +15,10 @@
     CONSTRAINT [FK_Standard_UpperGradeLevel] FOREIGN KEY ([UpperGradeLevelRef]) REFERENCES [dbo].[GradeLevel] ([Id])
 );
 
+
+
+
+GO
+CREATE NONCLUSTERED INDEX [IX_Standard_AcademicBenchmarkId]
+    ON [dbo].[Standard]([AcademicBenchmarkId] ASC);
+

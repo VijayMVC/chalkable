@@ -6,7 +6,10 @@
     [StartDate]   DATETIME2 (7)   NULL,
     [EndDate]     DATETIME2 (7)   NULL,
     [ArchiveDate] DATETIME2 (7)   NULL,
+    [AcadYear]    INT             NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_SchoolYear_School] FOREIGN KEY ([SchoolRef]) REFERENCES [dbo].[School] ([Id])
 );
+
+
 

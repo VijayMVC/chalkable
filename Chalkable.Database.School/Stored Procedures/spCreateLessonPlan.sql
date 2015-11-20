@@ -1,9 +1,8 @@
-﻿
-CREATE Procedure [dbo].[spCreateLessonPlan] @schoolYearId int, @classId int, @personId int, @created datetime2, @startDate datetime2, @endDate datetime2, @state int
+﻿CREATE Procedure [dbo].[spCreateLessonPlan] @schoolYearId int, @classId int, @personId int, @created datetime2, @startDate datetime2, @endDate datetime2, @state int
 As
 Begin Transaction
 --Only Teacher can create Lesson Plan--
-Declare @callerRole int =2
+Declare @callerRole int = 2
 Declare @isDraft bit = 0
 Declare @announcementId int
 
@@ -11,7 +10,9 @@ if @state = 0
 Begin
 Select Top 1 @announcementId = Id
 From vwLessonPlan
-Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) and [State] = 0 and SchoolYearRef  = @schoolYearId
+Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId) and [State] = 0
+and SchoolYearRef  = @schoolYearId
+and ClassRef = @classId
 Order By Created Desc
 
 If @announcementId is not null

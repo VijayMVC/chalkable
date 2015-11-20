@@ -1,28 +1,14 @@
-﻿
-CREATE Procedure [dbo].[spSearchStudents]
+﻿Create Procedure spSearchStudentBySchoolYear
+@schoolYearId int,
 @start int,
 @count int,
-@classId int,
-@teacherId int,
-@classmatesToid int,
-@schoolYearId int,
 @filter1 nvarchar(50),
 @filter2 nvarchar(50),
 @filter3 nvarchar(50),
-@orderByFirstName bit,
-@markingPeriod int
+@orderByFirstName bit
+
 As
 
-If @classId is null and @teacherId is null and @classmatesToid is null and @markingPeriod is null
-Begin
-exec spSearchStudentBySchoolYear @schoolYearId, @start, @count, @filter1, @filter2, @filter3, @orderByFirstName
-End
-Else Begin
-
-Declare @includeWithdraw bit = 1
-If @classId is not null
-Set @includeWithdraw = (Select Top 1 ClassroomOption.IncludeWithdrawnStudents
-From ClassroomOption Where Id = @classId)
 Declare @t Table
 (
 [Id] [int] NOT NULL,
@@ -54,33 +40,17 @@ Student.SpecialInstructions,
 Student.SpEdStatus,
 Student.PhotoModifiedDate,
 Student.UserId,
-Cast (Case
-When min(StudentSchoolYear.EnrollmentStatus) <> 0 or (max(cast(cs.IsEnrolled As int)) = 0 and @classId is not null) Then 1
-Else
-0
-End As bit) As IsWithdrawn,
+Cast (Case When StudentSchoolYear.EnrollmentStatus <> 0 Then 1 Else 0 End As bit) As IsWithdrawn,
 Total = count(*) over()
 From
 Student
 join StudentSchoolYear
 on Student.Id = StudentSchoolYear.StudentRef
-left join (select * from ClassPerson join Class on ClassPerson.ClassRef = Class.Id) as cs
-on Student.Id = cs.PersonRef and StudentSchoolYear.SchoolYearRef = cs.SchoolYearRef
-left join MarkingPeriod
-on MarkingPeriod.Id = cs.markingPeriodRef and
-MarkingPeriod.SchoolYearRef = @schoolYearId
 Where
 StudentSchoolYear.SchoolYearRef = @schoolYearId
-and (@teacherId is null
-or cs.ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where ClassTeacher.PersonRef = @teacherId))
-and (@classmatesToid is null
-or cs.ClassRef in (Select ClassPerson.ClassRef From ClassPerson Where ClassPerson.PersonRef = @classmatesToid))
-and (@classId is null or cs.ClassRef = @classId)
 and ((@filter1 is null or FirstName like @filter1 or LastName like @filter1)
 and (@filter2 is null or FirstName like @filter2 or LastName like @filter2)
 and (@filter3 is null or FirstName like @filter3 or LastName like @filter3))
-and (@markingPeriod is null or MarkingPeriod.Id = @markingPeriod)
-and (@includeWithdraw = 1 or @includeWithdraw is null or (cs.IsEnrolled = 1 and StudentSchoolYear.EnrollmentStatus = 0))
 Group by
 Student.Id,
 Student.FirstName,
@@ -92,7 +62,8 @@ Student.IsAllowedInetAccess,
 Student.SpecialInstructions,
 Student.SpEdStatus,
 Student.PhotoModifiedDate,
-Student.UserId
+Student.UserId,
+StudentSchoolYear.EnrollmentStatus
 Order By
 Case
 When @orderByFirstName = 1 Then FirstName
@@ -121,4 +92,3 @@ Select
 IsWithdrawn
 From
 @t
-End

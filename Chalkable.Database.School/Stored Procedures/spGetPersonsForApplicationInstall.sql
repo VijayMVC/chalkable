@@ -1,6 +1,4 @@
-﻿
-
-CREATE Procedure [dbo].[spGetPersonsForApplicationInstall]
+﻿CREATE Procedure [dbo].[spGetPersonsForApplicationInstall]
 @applicationId uniqueidentifier, @callerId int, @personId int, @classIds TInt32 readonly, @callerRoleId int
 , @hasAdminMyApps bit, @hasTeacherMyApps bit, @hasStudentMyApps bit, @canAttach bit, @schoolYearId int
 as
@@ -25,9 +23,6 @@ end
 
 declare @canInstallForTeacher bit = @hasTeacherMyApps | @canAttach
 declare @canInstallForStudent bit = @hasStudentMyApps | @canAttach
-declare @installForAll bit = 0
-if not exists (select * from @classIds) and @personId is null
-set @installForAll = 1
 
 declare @canInstall bit = 0
 if (
@@ -64,39 +59,23 @@ Select Distinct
 end
 if  @callerRoleId = 10 or @callerRoleId = 2
 begin
-
--- get all school classes if classIds and personId parameters are not set
-if @installForAll = 1
-begin
--- if caller is admin get all class from school
-if @callerRoleId = 10
-insert into @classIdsT
-select Id from Class where SchoolYearRef = @schoolYearId
-
--- if caller is teacher get all teacher classes
 if @callerRoleId = 2
-insert into @classIdsT
-select Class.Id from Class
-join ClassTeacher on ClassTeacher.ClassRef = Class.Id
-where Class.SchoolYearRef = @schoolYearId and PersonRef = @callerId
-end
---filter classes if caller is teahcer
-else if @callerRoleId = 2
 delete from @classIdsT
-where value not in (select ClassRef from ClassTeacher where PersonRef = @callerId)
-
+where not exists(
+Select *
+From ClassTeacher
+Join Class on Class.Id = ClassTeacher.ClassRef
+Where PersonRef = @callerId and Class.SchoolYearRef = @schoolYearId and ClassTeacher.ClassRef = value
+)
 
 if @canInstallForStudent = 1
 begin
 Insert Into @preResult
 ([type], groupId, SchoolYearId, PersonId)
-Select Distinct
-3, Class.Id, Class.SchoolYearRef, ClassPerson.PersonRef
-From
-ClassPerson
+Select Distinct 3, Class.Id, Class.SchoolYearRef, ClassPerson.PersonRef
+From ClassPerson
 join Class on ClassPerson.ClassRef = Class.id
 join @classIdsT Ids on Ids.value = Class.Id
-where Class.SchoolYearRef = @schoolYearId
 end
 
 if @canInstallForTeacher = 1
@@ -109,7 +88,6 @@ From
 Class
 join ClassTeacher on Class.Id = ClassTeacher.ClassRef
 join @classIdsT Ids on Ids.value = Class.Id
-where Class.SchoolYearRef = @schoolYearId
 end
 
 if @personId is not null and not exists (select * from @preResult where personId = @personId)
@@ -122,15 +100,15 @@ end
 end
 end
 
-declare @a int
-select @a = count(*) from @preResult
-print(@a)
+Declare @a int
+Select @a = count(*) From @preResult
+Print(@a)
 
-select
+Select
 x.*
-from
+From
 @preResult x
-left join (select * from ApplicationInstall where ApplicationInstall.Active = 1 and ApplicationInstall.ApplicationRef = @applicationId) A
-on x.PersonId = A.PersonRef and x.SchoolYearId = A.SchoolYearRef
+Left join (Select * From ApplicationInstall Where ApplicationInstall.Active = 1 and ApplicationInstall.ApplicationRef = @applicationId) A
+On x.PersonId = A.PersonRef and x.SchoolYearId = A.SchoolYearRef
 Where
 A.Id is null

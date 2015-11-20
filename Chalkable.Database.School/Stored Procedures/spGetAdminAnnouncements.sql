@@ -49,7 +49,7 @@ exists
 (
 select * from AnnouncementGroup ar
 join StudentGroup on StudentGroup.GroupRef = ar.GroupRef
-where StudentGroup.StudentRef = @studentId
+where StudentGroup.StudentRef = @studentId and AnnouncementRef = vwAdminAnnouncement.Id
 )
 )
 )
@@ -86,7 +86,7 @@ exists
 (
 select * from AnnouncementGroup ar
 join StudentGroup on StudentGroup.GroupRef = ar.GroupRef
-where StudentGroup.StudentRef = @studentId
+where StudentGroup.StudentRef = @studentId and AnnouncementRef = vwAdminAnnouncement.Id
 )
 )
 order by Created desc

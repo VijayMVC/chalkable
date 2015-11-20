@@ -27,7 +27,8 @@ Student
 join ClassPerson on Student.Id = ClassPerson.PersonRef
 join MarkingPeriod on ClassPerson.MarkingPeriodRef = MarkingPeriod.Id
 join StudentSchoolYear on ClassPerson.PersonRef = StudentSchoolYear.StudentRef and StudentSchoolYear.SchoolYearRef = MarkingPeriod.SchoolYearRef
+join ClassTeacher on ClassTeacher.ClassRef = ClassPerson.ClassRef
 where
 MarkingPeriod.SchoolYearRef = @schoolYearId
-and ClassPerson.ClassRef in (select ClassTeacher.ClassRef from ClassTeacher where ClassTeacher.PersonRef = @teacherId)
+and ClassTeacher.PersonRef = @teacherId
 end
