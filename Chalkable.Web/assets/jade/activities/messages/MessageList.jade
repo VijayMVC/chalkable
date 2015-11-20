@@ -16,7 +16,7 @@ items = self.getMessages().getItems()
 h2.page-title Messages
 +ActionForm('message', 'do').message-filter-form
     input(name="role", type="hidden", value=self.getRole())
-    input(name="classOnly", type="hidden", value=self.isClassOnly())
+    input(name="classOnly", type="hidden", value=self.isClassOnly().toString())
     input(name="inbox", type="hidden", value=self.isInbox().toString())
 
     .right.wrapper
@@ -37,7 +37,7 @@ h2.page-title Messages
 
 +ActionForm('message', 'do').message-action-form
     input(name="role", type="hidden", value=self.getRole())
-    input(name="classOnly", type="hidden", value=self.isClassOnly())
+    input(name="classOnly", type="hidden", value=self.isClassOnly().toString())
     input(name="year", type="hidden", value=selectedYear)
     input(name="inbox", type="hidden", value=self.isInbox().toString())
 
