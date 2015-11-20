@@ -3,11 +3,13 @@
 -var isNotEmptyDisciplines = self.isNotEmptyDisciplines()
 -var isNotEmptyGrades = self.isNotEmptyGrades()
 -var schoolYearId = teachers[0] && teachers[0].getSchoolYearId()
+-var schoolId = teachers[0] && teachers[0].getSchoolId()
+-var schoolName = teachers[0] && teachers[0].getSchoolName()
 
 .chlk-calendar.chlk-grid
     .header
-        +ActionLink('schools', 'teachersStatistic', self.getPageIndex() - 1, self.getFilter(), schoolYearId).grid-arrow.prev-arrow(class = self.isHasPreviousPage() ? "" : "disabled")
-        +ActionLink('schools', 'teachersStatistic', self.getPageIndex() + 1, self.getFilter(), schoolYearId).grid-arrow.next-arrow(class = self.isHasNextPage() ? "" : "disabled")
+        +ActionLink('schools', 'teachersStatistic', self.getPageIndex() - 1, schoolId, schoolName, self.getFilter(), schoolYearId).grid-arrow.prev-arrow(class = self.isHasPreviousPage() ? "" : "disabled")
+        +ActionLink('schools', 'teachersStatistic', self.getPageIndex() + 1, schoolId, schoolName, self.getFilter(), schoolYearId).grid-arrow.next-arrow(class = self.isHasNextPage() ? "" : "disabled")
     .grid-content
         if teachers.length
             .grid-header.grid-row
@@ -25,7 +27,7 @@
                     .cell.name
                         .icon
                             +PersonImg(teacher, 32)
-                        span=teacher.getName()
+                        +ActionLink('schools', "classesSummary", schoolId, schoolName, teacher.getName())=teacher.getName()
                     .cell.classes
                         .classes-container(data-tooltip=teacher.getClassesText(), data-tooltip-type="overflow")
                             -var classes = teacher.getClasses()

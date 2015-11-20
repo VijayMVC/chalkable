@@ -21,6 +21,9 @@ NAMESPACE('chlk.templates.school', function () {
             ArrayOf(chlk.models.schoolYear.Year), 'schoolYears',
 
             [ria.templates.ModelPropertyBind],
-            String, 'schoolName'
+            String, 'schoolName',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'filter'
         ])
 });

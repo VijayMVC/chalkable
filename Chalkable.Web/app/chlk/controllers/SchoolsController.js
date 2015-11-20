@@ -277,13 +277,14 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('classes')],
-        [[chlk.models.id.SchoolId, String]],
-        function classesSummaryAction(schoolId, schoolName){
+        [[chlk.models.id.SchoolId, String, String]],
+        function classesSummaryAction(schoolId, schoolName, filter_){
             var result = this.schoolYearService.list(schoolId)
                 .then(function(years){
                     var currentSchoolYearId = this.getCurrentYearId_(years);
-                    return this.classService.getClassesStatistic(currentSchoolYearId)
+                    return this.classService.getClassesStatistic(currentSchoolYearId, 0, filter_)
                         .then(function(classes){
+                            filter_ && classes.setFilter(filter_);
                             var clazz = classes.getItems()[0];
                             if(clazz)
                                 clazz.setSchoolYearId(currentSchoolYearId);
@@ -324,11 +325,15 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(years){
                     var currentSchoolYearId = this.getCurrentYearId_(years);
                     return this.teacherService.getTeachersStats(currentSchoolYearId)
-                        .then(function(classes){
-                            var clazz = classes.getItems()[0];
-                            if(clazz)
-                                clazz.setSchoolYearId(currentSchoolYearId);
-                            return new chlk.models.school.SchoolSummaryViewData(schoolName, schoolId, currentSchoolYearId, years, classes);
+                        .then(function(teachers){
+                            var teacher = teachers.getItems()[0];
+                            if(teacher){
+                                teacher.setSchoolYearId(currentSchoolYearId);
+                                teacher.setSchoolId(schoolId);
+                                teacher.setSchoolName(schoolName);
+                            }
+
+                            return new chlk.models.school.SchoolSummaryViewData(schoolName, schoolId, currentSchoolYearId, years, teachers);
                         })
                 }, this)
                 .attach(this.validateResponse_());
@@ -339,19 +344,23 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('classes')],
         [[chlk.models.school.SchoolSummaryViewData]],
         function teachersStatisticFilterAction(model){
-            return this.teachersStatisticAction(0, model.getFilter(), model.getSchoolYearId());
+            return this.teachersStatisticAction(0, model.getSchoolId(), model.getSchoolName(), model.getFilter(), model.getSchoolYearId());
         },
 
         [chlk.controllers.SidebarButton('classes')],
-        [[Number, String, chlk.models.id.SchoolYearId]],
-        function teachersStatisticAction(pageIndex, filter_, schoolYearId_){
+        [[Number, chlk.models.id.SchoolId, String, String, chlk.models.id.SchoolYearId]],
+        function teachersStatisticAction(pageIndex, schoolId, schoolName, filter_, schoolYearId_){
             var start = 10 * pageIndex;
             var result = this.teacherService.getTeachersStats(schoolYearId_, start, filter_)
                 .then(function(model){
                     filter_ && model.setFilter(filter_);
-                    var clazz = model.getItems()[0];
-                    if(clazz)
-                        clazz.setSchoolYearId(schoolYearId_);
+                    var teacher = model.getItems()[0];
+                    if(teacher){
+                        teacher.setSchoolYearId(currentSchoolYearId);
+                        teacher.setSchoolId(schoolId);
+                        teacher.setSchoolName(schoolName);
+                    }
+
                     return model;
                 })
                 .attach(this.validateResponse_());
