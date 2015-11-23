@@ -21,9 +21,9 @@ namespace Chalkable.BusinessLogic.Model
 
         public ClassAnnouncementInfo()
         {
-            MaxScore = 100;
-            WeightAddition = 0;
-            WeightMultiplier = 1;
+            MaxScore = ClassAnnouncement.DEFAULT_MAX_SCORE;
+            WeightAddition = ClassAnnouncement.DEFAULT_WEIGHT_ADDITION;
+            WeightMultiplier = ClassAnnouncement.DEFAULT_WEGIHT_MULTIPLIER;
         }
 
         public static ClassAnnouncementInfo Create(ClassAnnouncement announcement)

@@ -290,7 +290,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             //TODO: rewrite this later 
             var lps =  GetLessonPlans(startDate, toDate, classId, null);
-            return DoRead(u => lps.Select(x => GetDetails(CreateLessonPlanDataAccess(u), x.Id))).ToList();
+            return lps.Select(x => DoRead(u => GetDetails(CreateLessonPlanDataAccess(u), x.Id))).ToList();
         }
 
         private AnnouncementDetails GetDetails(BaseAnnouncementDataAccess<LessonPlan> dataAccess, int announcementId)

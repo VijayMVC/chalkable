@@ -47,11 +47,11 @@
                     TR
                         TD.item-2
                             .print-item.print-activity-details
-                                input(type = "radio", id="include-details", name = "includedetails", value=true, checked = self.isIncludeDetails())
+                                input(type = "radio", id="include-details", name = "includedetails", value="true", checked = self.isIncludeDetails())
                                 label(for="include-details") Print activity details
                         TD.item-2
                             .print-item.print-list-of-activities
-                                input(type = "radio", id="include-list", name = "includedetails", value=false, checked = !self.isIncludeDetails())
+                                input(type = "radio", id="include-list", name = "includedetails", value="false", checked = !self.isIncludeDetails())
                                 label(for="include-list") Print list of activities
                     TR
                         TD.item-2

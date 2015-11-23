@@ -170,9 +170,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var res = new List<AnnouncementDetails>();
             if(CoreRoles.DISTRICT_ADMIN_ROLE == Context.Role || CoreRoles.STUDENT_ROLE == Context.Role)
                 res.AddRange(ServiceLocator.AdminAnnouncementService.GetAnnouncementDetailses(fromDate, toDate, classId, onlyOwners));
-            if(CoreRoles.DISTRICT_ADMIN_ROLE != Context.Role)
+            if (CoreRoles.DISTRICT_ADMIN_ROLE != Context.Role)
+            {
                 res.AddRange(ServiceLocator.ClassAnnouncementService.GetAnnouncementDetailses(fromDate, toDate, classId, onlyOwners));
                 res.AddRange(ServiceLocator.LessonPlanService.GetAnnouncementDetailses(fromDate, toDate, classId, onlyOwners));
+            }
             return res;
         }
 

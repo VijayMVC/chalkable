@@ -79,7 +79,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 uow.Commit();
                 var sy = new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime, Context.SchoolLocalId.Value);
                 annDa.ReorderAnnouncements(sy.Id, classAnnType.Id, res.ClassAnnouncementData.ClassRef);
-                res = GetDetails(annDa, res.Id);// annDa.GetDetails(res.Id, Context.PersonId.Value, Context.RoleId);
+                res = GetDetails(annDa, res.Id);
                 var classAnnData = res.ClassAnnouncementData;
                 if (classAnnData.ClassAnnouncementTypeRef.HasValue)
                 {
@@ -312,12 +312,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var activities = GetActivities(classId, startDate, toDate, 0, int.MaxValue, null);
             var anns = GetByActivitiesIds(activities.Select(x => x.Id).ToList());
             var res = new List<AnnouncementDetails>();
-            using (var uow = Read())
+            
+            foreach (var activity in activities)
             {
-                var da = CreateClassAnnouncementDataAccess(uow);
-                foreach (var activity in activities)
+                var ann = anns.FirstOrDefault(x => x.ClassAnnouncementData.SisActivityId == activity.Id);
+                using (var uow = Read())
                 {
-                    var ann = anns.FirstOrDefault(x => x.ClassAnnouncementData.SisActivityId == activity.Id);
+                    var da = CreateClassAnnouncementDataAccess(uow);
                     var details = ann != null ? GetDetails(da, ann.Id) : new AnnouncementDetails();
                     MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(details, activity);
                     res.Add(details);

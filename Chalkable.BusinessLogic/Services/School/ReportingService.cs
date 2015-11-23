@@ -401,7 +401,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             IReportHandler<FeedReportInputModel> handler;
             if (inputModel.IncludeDetails)
-                handler = new FeedDetailsReportHandler(ConnectorLocator);
+                handler = new FeedDetailsReportHandler();
             else
                 handler = new ShortFeedReportHandler();
 
