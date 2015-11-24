@@ -308,7 +308,7 @@ NAMESPACE('chlk.controllers', function (){
             model.setAbleRePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE));
             model.setAbleChangeReasons(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ABSENCE_REASONS)
                 || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN));
-            model.setAblePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE)
+            model.setAblePost(this.isClassTeacher_(classId) && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE)
                 || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN));
             model.setTopData(topModel);
             model.setDate(date_);
@@ -416,6 +416,15 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.attendance.SeatingChartPage, res);
         },
 
+        [[chlk.models.id.ClassId]],
+        function isClassTeacher_(classId){
+            var len = this.classService.getClassesForTopBarSync().filter(function(clazz){
+                return clazz.getId() == classId;
+            }).length;
+
+            return len > 0;
+        },
+
         [chlk.controllers.Permissions([
             [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN]
         ])],
@@ -453,7 +462,7 @@ NAMESPACE('chlk.controllers', function (){
                         true,
                         this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []),
                         this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE) && !this.userIsAdmin(),
-                        (this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE)
+                        (this.isClassTeacher_(classId) && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE)
                             || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN)) && !this.userIsAdmin(),
                         (this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ABSENCE_REASONS)
                             || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN)) && !this.userIsAdmin(),

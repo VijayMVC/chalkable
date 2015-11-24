@@ -8,8 +8,7 @@
     "url": "ssh://hg@bitbucket.org/chalkable/chalkable"
   },
   "dependencies": {
-    "emp.ria-framework": "^0.1.15",
-    "grunt-contrib-crypt": "^0.1.0"
+    "emp.ria-framework": "^0.1.15"
   },
   "devDependencies": {
     "azure-mgmt-compute": "^0.9.16",
@@ -26,9 +25,9 @@
     "grunt-contrib-clean": "^0.6.0",
     "grunt-contrib-compass": "^1.0.3",
     "grunt-contrib-concat": "^0.5.1",
-    "grunt-contrib-crypt": "0.1.0",
+    "grunt-contrib-crypt": "^0.1.0",
     "grunt-contrib-cssmin": "^0.13.0",
-    "grunt-contrib-imagemin": "^0.9.4",
+    "grunt-contrib-imagemin": "^1.0.0",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-uglify": "^0.9.2",
     "grunt-raygun-deployment": "^1.1.1",
