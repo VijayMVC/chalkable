@@ -9,16 +9,19 @@
           <xs:element minOccurs="0" maxOccurs="1" name="AnnouncementType" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" name="IsLessonPlan" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="IsAdminAnnouncement" type="xs:boolean" />
+          <xs:element minOccurs="1" maxOccurs="1" name="ShowScoreSettings" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="TotalPoint" nillable="true" type="xs:double" />
-          <xs:element minOccurs="1" maxOccurs="1" name="WeightAddition" type="xs:double" />
-          <xs:element minOccurs="1" maxOccurs="1" name="WeigntMultiplier" type="xs:double" />
+          <xs:element minOccurs="1" maxOccurs="1" name="WeightAddition" nillable="true" type="xs:double" />
+          <xs:element minOccurs="1" maxOccurs="1" name="WeigntMultiplier" nillable="true" type="xs:double" />
           <xs:element minOccurs="1" maxOccurs="1" name="StandardId" nillable="true" type="xs:int" />
           <xs:element minOccurs="0" maxOccurs="1" name="StandardName" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="StandardDescription" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" name="AnnouncementAttachmentId" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" maxOccurs="1" name="AnnouncementAttachmentImage" type="xs:base64Binary" />
           <xs:element minOccurs="0" maxOccurs="1" name="AnnouncementAttachmentName" type="xs:string" />
+          <xs:element minOccurs="1" maxOccurs="1" name="AnnouncementAttachmentOrder" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="Document" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="AttributeId" nillable="true" type="xs:int" />
+          <xs:element minOccurs="1" maxOccurs="1" name="SisAttributeId" nillable="true" type="xs:int" />
           <xs:element minOccurs="0" maxOccurs="1" name="AttributeName" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="AttributeDescription" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="AttributeAttachmentName" type="xs:string" />

@@ -145,7 +145,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool ownerOnly = false)
         {
-            throw new NotImplementedException();
+            var anns = GetAdminAnnouncements(null, startDate, toDate, null);
+            return DoRead(u => anns.Select(x => CreateDataAccess(u).GetDetails(x.Id, Context.PersonId.Value, Context.RoleId))).ToList();
         }
 
         public override void DeleteAnnouncement(int announcementId)

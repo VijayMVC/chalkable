@@ -21,6 +21,10 @@ namespace Chalkable.Data.School.Model.Announcements
         
         //todo remove this later
 
+        public const int DEFAULT_MAX_SCORE = 100;
+        public const int DEFAULT_WEIGHT_ADDITION = 0;
+        public const int DEFAULT_WEGIHT_MULTIPLIER = 1;
+
         public DateTime Expires { get; set; }
         public int? ClassAnnouncementTypeRef { get; set; }
         public int ClassRef { get; set; }

@@ -79,7 +79,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 uow.Commit();
                 var sy = new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime, Context.SchoolLocalId.Value);
                 annDa.ReorderAnnouncements(sy.Id, classAnnType.Id, res.ClassAnnouncementData.ClassRef);
-                res = GetDetails(annDa, res.Id);// annDa.GetDetails(res.Id, Context.PersonId.Value, Context.RoleId);
+                res = GetDetails(annDa, res.Id);
                 var classAnnData = res.ClassAnnouncementData;
                 if (classAnnData.ClassAnnouncementTypeRef.HasValue)
                 {
@@ -246,10 +246,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
 
-        public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool ownerOnly = false)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public override void DeleteAnnouncement(int announcementId)
         {
@@ -308,6 +305,26 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public override Announcement GetAnnouncementById(int id)
         {
             return GetClassAnnouncemenById(id);
+        }
+
+        public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool ownerOnly = false)
+        {
+            var activities = GetActivities(classId, startDate, toDate, 0, int.MaxValue, null);
+            var anns = GetByActivitiesIds(activities.Select(x => x.Id).ToList());
+            var res = new List<AnnouncementDetails>();
+            
+            foreach (var activity in activities)
+            {
+                var ann = anns.FirstOrDefault(x => x.ClassAnnouncementData.SisActivityId == activity.Id);
+                using (var uow = Read())
+                {
+                    var da = CreateClassAnnouncementDataAccess(uow);
+                    var details = ann != null ? GetDetails(da, ann.Id) : new AnnouncementDetails();
+                    MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(details, activity);
+                    res.Add(details);
+                }
+            }
+            return res;
         }
 
         public override AnnouncementDetails GetAnnouncementDetails(int announcementId)

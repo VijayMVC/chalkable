@@ -227,10 +227,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     
         }
 
-        public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool ownerOnly = false)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         public override void DeleteAnnouncement(int announcementId)
         {
@@ -288,7 +285,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.PersonId.HasValue);
             return DoRead(u =>  GetDetails(CreateDataAccess(u), announcementId));
         }
-        
+
+        public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool ownerOnly = false)
+        {
+            //TODO: rewrite this later 
+            var lps =  GetLessonPlans(startDate, toDate, classId, null);
+            return lps.Select(x => DoRead(u => GetDetails(CreateLessonPlanDataAccess(u), x.Id))).ToList();
+        }
+
         private AnnouncementDetails GetDetails(BaseAnnouncementDataAccess<LessonPlan> dataAccess, int announcementId)
         {
             Trace.Assert(Context.PersonId.HasValue);
