@@ -18,7 +18,6 @@ namespace Chalkable.Web.Controllers
     {
         private const string HEADER_FORMAT = "inline; filename={0}";
         private const string CONTENT_DISPOSITION = "Content-Disposition";       
-        private const string HTML_CONTENT_TYPE = "text/html";
 
         [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult UploadAttachment(int announcementType, int announcementId, int assignedAttributeId)
@@ -40,15 +39,7 @@ namespace Chalkable.Web.Controllers
             }
             catch (Exception exception)
             {
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = 500;
-                Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
-                return new ChalkableJsonResult(false)
-                {
-                    Data = ExceptionViewData.Create(exception, exception.InnerException),
-                    ContentType = HTML_CONTENT_TYPE,
-                    SerializationDepth = 4
-                };
+                return HandleAttachmentException(exception);
             }
         }
 
@@ -159,15 +150,7 @@ namespace Chalkable.Web.Controllers
             }
             catch (Exception exception)
             {
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = 500;
-                Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
-                return new ChalkableJsonResult(false)
-                {
-                    Data = ExceptionViewData.Create(exception, exception.InnerException),
-                    ContentType = HTML_CONTENT_TYPE,
-                    SerializationDepth = 4
-                };
+                return HandleAttachmentException(exception);
             }
         }
 

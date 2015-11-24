@@ -257,19 +257,22 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('inbox')],
         [[chlk.models.feed.FeedPrintingViewData]],
         function submitFeedPrintingReportAction(reportViewData){
-            var src = this.reportingService.submitFeedReport(
-                reportViewData.getStartDate(),
-                reportViewData.getEndDate(),
-                reportViewData.isLessonPlanOnly(),
-                reportViewData.isIncludeAttachments(),
-                reportViewData.isIncludeDetails(),
-                reportViewData.isIncludeHiddenAttributes(),
-                reportViewData.isIncludeHiddenActivities(),
-                reportViewData.getClassId()
-            );
-            this.BackgroundCloseView(chlk.activities.feed.FeedPrintingDialog);
-            this.getContext().getDefaultView().submitToIFrame(src);
-            return null;
+            var result = this.reportingService.submitFeedReport(
+                    reportViewData.getStartDate(),
+                    reportViewData.getEndDate(),
+                    reportViewData.isLessonPlanOnly(),
+                    reportViewData.isIncludeAttachments(),
+                    reportViewData.isIncludeDetails(),
+                    reportViewData.isIncludeHiddenAttributes(),
+                    reportViewData.isIncludeHiddenActivities(),
+                    reportViewData.getClassId()
+                )
+                .attach(this.validateResponse_())
+                .then(function () {
+                    this.BackgroundCloseView(chlk.activities.feed.FeedPrintingDialog);
+                }, this)
+                .thenBreak();
+            return this.UpdateView(chlk.activities.feed.FeedPrintingDialog, result);
         }
     ])
 });

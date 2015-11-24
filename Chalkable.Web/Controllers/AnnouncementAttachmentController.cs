@@ -21,8 +21,6 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class AnnouncementAttachmentController : AnnouncementBaseController
     {
-        private const string HTML_CONTENT_TYPE = "text/html";
-
         private const string HEADER_FORMAT = "inline; filename={0}";
         private const string CONTENT_DISPOSITION = "Content-Disposition";
         
@@ -139,19 +137,6 @@ namespace Chalkable.Web.Controllers
                 return HandleAttachmentException(exception);
             }
         }
-        private ActionResult HandleAttachmentException(Exception exception)
-        {
-            Response.TrySkipIisCustomErrors = true;
-            Response.StatusCode = 500;
-            Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
-            return new ChalkableJsonResult(false)
-            {
-                Data = ExceptionViewData.Create(exception, exception.InnerException),
-                ContentType = HTML_CONTENT_TYPE,
-                SerializationDepth = 4
-            };
-        }
-
 
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult CloneAttachment(int originalAttachmentId, int announcementId, int announcementType)
