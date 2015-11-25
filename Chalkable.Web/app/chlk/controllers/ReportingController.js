@@ -32,13 +32,17 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.reports.SubmitStudentReportViewData]],
         function submitStudentComprehensiveProgressReportAction(reportViewData){
-            var src = this.reportingService.submitStudentComprehensiveProgressReport(
-                reportViewData.getGradingPeriodId(),
-                this.getCurrentPerson().getId()
-            );
-            this.BackgroundCloseView(chlk.activities.reports.StudentReportDialog);
-            this.getContext().getDefaultView().submitToIFrame(src);
-            return null;
+            var result = this.reportingService.submitStudentComprehensiveProgressReport(
+                    reportViewData.getGradingPeriodId(),
+                    this.getCurrentPerson().getId()
+                )
+                .attach(this.validateResponse_())
+                .then(function () {
+                    this.BackgroundCloseView(chlk.activities.reports.StudentReportDialog);
+                }, this)
+                .thenBreak();
+
+            return this.UpdateView(chlk.activities.reports.StudentReportDialog, result);
         }
 
     ])

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -89,11 +91,19 @@ namespace Chalkable.Web.Controllers
         private ActionResult Report<TReport>(TReport reportInputModel
             , Func<TReport, byte[]> reportAction, string reportFileName) where TReport : BaseReportInputModel
         {
-            var res = reportAction(reportInputModel);
-            return DownloadReportFile(res, reportFileName, reportInputModel.FormatTyped);
+            try
+            {
+                var res = reportAction(reportInputModel);
+                return DownloadReportFile(res, reportFileName, reportInputModel.FormatTyped);
+            }
+            catch (Exception exception)
+            {
+                return HandleAttachmentException(exception);
+            }
         }
         private ActionResult DownloadReportFile(byte[] report, string reportFileName, ReportingFormat formatType)
         {
+            Response.AppendCookie(new HttpCookie("chlk-iframe-ready", Guid.NewGuid().ToString()));
             var extension = formatType.AsFileExtension();
             var fileName = string.Format("{0}.{1}", reportFileName, extension);
             MasterLocator.UserTrackingService.CreatedReport(Context.Login, reportFileName);

@@ -16,6 +16,7 @@ mixin FileAttachBlock_(announcementId, announcementType, assignedAttributeId)
 
 mixin AttachDialogSidebar(tpl, name)
     -var options = tpl.getAttachOptions()
+    -var prefix = "pref"
     .attach-sidebar
         +ActionLink('announcement', 'attachFiles')(class = name == 'upload' ? 'active pressed' : '').upload Upload
         if options.isFileCabinetEnabled()
@@ -30,10 +31,10 @@ mixin AttachDialogSidebar(tpl, name)
                     , options.getAppUrlAppend())(class = name == options.getAssessmentAppId() ? 'active pressed' : '').assessment Assessment
             each app in options.getExternalAttachApps()
                 style(inline=true type="text/css")
-                    | .#{app.getId().valueOf()}::before { background: url(#{app.getExternalAttachPictureUrl()}) 50% 50% no-repeat; background-size: 24px; }
+                    | .#{prefix + app.getId().valueOf()}::before { background: url(#{app.getExternalAttachPictureUrl()}) 50% 50% no-repeat; background-size: 24px; }
                 +ActionLink('apps', 'viewExternalAttachApp', options.getAnnouncementId()
                     , app.getId(), options.getAnnouncementType()
-                    , options.getAppUrlAppend())(class = [name == app.getId() ? 'active pressed' : '', app.getId()])= app.getName()
+                    , options.getAppUrlAppend())(class = [name == app.getId() ? 'active pressed' : '', prefix + app.getId()])= app.getName()
 
 
 options = self.getAttachOptions()
