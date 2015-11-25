@@ -311,7 +311,7 @@
     <Compile Include="Services\School\DisciplineService.cs" />
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
-    <Compile Include="Model\FeedReportSettingsInputModel.cs" />
+    <Compile Include="Model\FeedReportSettingsInfo.cs" />
     <Compile Include="Services\School\GradedItemService.cs" />
     <Compile Include="Services\School\GradingCommentService.cs" />
     <Compile Include="Services\School\GradingScaleService.cs" />

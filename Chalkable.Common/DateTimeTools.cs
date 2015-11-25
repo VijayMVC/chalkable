@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace Chalkable.Common
@@ -56,6 +57,11 @@ namespace Chalkable.Common
             var timeZoneId = tzdbSource.MapTimeZoneId(tzi);
 
             return tzdbSource.CanonicalIdMap.ContainsKey(timeZoneId) ? tzdbSource.CanonicalIdMap[timeZoneId] : "Etc/UTC";
+        }
+
+        public static DateTime? ParseExactNullable(string s, string dateFormat = Constants.DATE_FORMAT)
+        {
+            return !string.IsNullOrWhiteSpace(s) ? (DateTime?)null : DateTime.ParseExact(s, dateFormat, CultureInfo.InvariantCulture);
         }
     }
 }

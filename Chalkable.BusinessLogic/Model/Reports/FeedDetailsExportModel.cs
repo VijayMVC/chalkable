@@ -19,6 +19,9 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public double? TotalPoint { get; set; }
         public double? WeightAddition { get; set; }
         public double? WeigntMultiplier { get; set; }
+        public bool HasStandards { get; set; }
+        public bool HasAttachments { get; set; }
+        public bool HasAttributes { get; set; }
 
         public int? StandardId { get; set; }
         public string StandardName { get; set; }
@@ -29,13 +32,13 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public byte[] AnnouncementAttachmentImage { get; set; }
         public int AnnouncementAttachmentOrder { get; set; }
         public bool Document { get; set; }
+        
 
         public int? AttributeId { get; set; }
         public int? SisAttributeId { get; set; }
         public string AttributeName { get; set; }
         public string AttributeDescription { get; set; }
         public string AttributeAttachmentName { get; set; }
-        public byte[] AttrinuteAttachmentImage { get; set; }
 
         private class AttachmentItem
         {
@@ -49,8 +52,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public FeedDetailsExportModel() { }
 
         protected FeedDetailsExportModel(Person person, string schoolName, string sy, AnnouncementDetails ann
-            , IList<ClassTeacher> classTeachers, IList<Staff> staffs, Standard standard
-            , AnnouncementAssignedAttribute attribute, IDictionary<int, byte[]> attributeImage)
+            , IList<ClassTeacher> classTeachers, IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute)
             : base(person, schoolName, sy)
         {
             AnnouncementId = ann.Id;
@@ -58,6 +60,9 @@ namespace Chalkable.BusinessLogic.Model.Reports
             AnnouncementName = ann.Title;
             AnnouncementDescription = ann.Content;
             Complete = ann.Complete;
+            HasStandards = ann.AnnouncementStandards.Count > 0;
+            HasAttachments = ann.AnnouncementAttachments.Count + ann.AnnouncementApplications.Count > 0;
+            HasAttributes = ann.AnnouncementAttributes.Count > 0;
             if (ann.LessonPlanData != null)
             {
                 IsLessonPlan = true;
@@ -101,7 +106,6 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 if (attribute.Attachment != null)
                 {
                     AttributeAttachmentName = attribute.Attachment.Name;
-                    AttrinuteAttachmentImage = attributeImage.ContainsKey(attribute.Attachment.Id) ? attributeImage[attribute.Attachment.Id] : null;
                 }
             }
         }
@@ -115,7 +119,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
         public static IList<FeedDetailsExportModel> Create(Person person, string schoolName, string schoolYear,
             IList<AnnouncementDetails> anns, IList<ClassTeacher> classTeachers, IList<Staff> staffs,
-            IList<ScheduleItem> scheduleItems, IList<Application> apps, IDictionary<Guid, byte[]> appsImages, IDictionary<int, byte[]> attsImages)
+            IList<ScheduleItem> scheduleItems, IList<Application> apps, IDictionary<Guid, byte[]> appsImages)
         {
             foreach (var scheduleItem in scheduleItems)
             {
@@ -124,11 +128,11 @@ namespace Chalkable.BusinessLogic.Model.Reports
             var res = new List<FeedDetailsExportModel>();
             foreach (var ann in anns)
             {
-                var attachmentItems = PrepareAttachmentItems(ann.AnnouncementAttachments, ann.AnnouncementApplications, apps, appsImages, attsImages);
+                var attachmentItems = PrepareAttachmentItems(ann.AnnouncementAttachments, ann.AnnouncementApplications, apps, appsImages);
                 var items = ann.AnnouncementStandards.SelectMany(
                             sa => ann.AnnouncementAttributes.SelectMany(
                             aa => attachmentItems.Select(
-                            attItem => Create(person, schoolName, schoolYear, ann, classTeachers, staffs, sa.Standard, aa, attItem, attsImages)
+                            attItem => Create(person, schoolName, schoolYear, ann, classTeachers, staffs, sa.Standard, aa, attItem)
                             ))).ToList();
                 res.AddRange(items);
             }
@@ -136,21 +140,22 @@ namespace Chalkable.BusinessLogic.Model.Reports
         }
 
         private static FeedDetailsExportModel Create(Person person, string schoolName, string sy, AnnouncementDetails ann, IList<ClassTeacher> classTeachers
-            , IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute, AttachmentItem attachmentItem, IDictionary<int, byte[]> attsImages)
+            , IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute, AttachmentItem attachmentItem)
         {
-            var res = new FeedDetailsExportModel(person, schoolName, sy, ann, classTeachers, staffs, standard, attribute, attsImages);
+            var res = new FeedDetailsExportModel(person, schoolName, sy, ann, classTeachers, staffs, standard, attribute);
             if (attachmentItem != null)
             {
                 res.AnnouncementAttachmentId = attachmentItem.Id;
                 res.AnnouncementAttachmentName = attachmentItem.Name;
                 res.Document = attachmentItem.Document;
                 res.AnnouncementAttachmentImage = attachmentItem.Image;
+                res.AnnouncementAttachmentOrder = attachmentItem.Order;
             }
             return res;
         }
 
         private static IList<AttachmentItem> PrepareAttachmentItems(IList<AnnouncementAttachment> annAtts, IList<AnnouncementApplication> annApps
-            , IList<Application> apps, IDictionary<Guid, byte[]> appsImages, IDictionary<int, byte[]> attsImages)
+            , IList<Application> apps, IDictionary<Guid, byte[]> appsImages)
         {
 
             var res = new List<AttachmentItem>();
@@ -160,8 +165,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
                     Id = x.Id,
                     Name = x.Attachment.Name,
                     Order = x.Order,
-                    Document = x.Attachment.IsDocument,
-                    Image = attsImages.ContainsKey(x.AttachmentRef) ? attsImages[x.AttachmentRef] : null
+                    Document = true
                 }));
             if (annApps != null && annApps.Count > 0 && apps != null && apps.Count > 0)
             {
@@ -179,7 +183,12 @@ namespace Chalkable.BusinessLogic.Model.Reports
                     });
                 }
             }
-            return res.OrderBy(x => x.Order).ToList();
+            res = res.OrderBy(x => x.Order).ToList();
+            
+            //reset order
+            for (int i = 0; i < res.Count; i++)
+                res[i].Order = i;
+            return res;
         }
     }
 }

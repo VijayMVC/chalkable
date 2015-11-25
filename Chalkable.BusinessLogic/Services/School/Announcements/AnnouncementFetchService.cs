@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AnnouncementType GetAnnouncementType(int announcementId);
         void SetSettingsForFeed(FeedSettings settings);
         FeedSettings GetSettingsForFeed();
-        IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? fromDate, DateTime toDate, bool onlyOwners = true, int? classId = null);
+        IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? fromDate, DateTime? toDate, bool onlyOwners = true, int? classId = null);
     }
 
     public class AnnouncementFetchService : SchoolServiceBase, IAnnouncementFetchService
@@ -165,7 +165,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return settings;
         }
 
-        public IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? fromDate, DateTime toDate, bool onlyOwners = true, int? classId = null)
+        public IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? fromDate, DateTime? toDate, bool onlyOwners = true, int? classId = null)
         {
             var res = new List<AnnouncementDetails>();
             if(CoreRoles.DISTRICT_ADMIN_ROLE == Context.Role || CoreRoles.STUDENT_ROLE == Context.Role)

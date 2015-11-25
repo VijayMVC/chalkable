@@ -17,7 +17,7 @@ namespace Chalkable.Web.Models
         public bool LessonPlanOnly { get; set; }
         public bool EditableLPOption { get; set; }
 
-        public static FeedReportViewData Create(FeedReportSettingsInputModel feedReportSettings,
+        public static FeedReportViewData Create(FeedReportSettingsInfo feedReportSettings,
             FeedSettings feedSettings)
         {
             var res = new FeedReportViewData();

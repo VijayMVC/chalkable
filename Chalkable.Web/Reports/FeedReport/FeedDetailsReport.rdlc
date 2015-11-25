@@ -6,12 +6,12 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>7.49022in</Width>
+              <Width>7.56897in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
             <TablixRow>
-              <Height>7.9241in</Height>
+              <Height>7.01054in</Height>
               <TablixCells>
                 <TablixCell>
                   <CellContents>
@@ -36,9 +36,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox19</rd:DefaultName>
                           <Top>0.10639in</Top>
-                          <Left>0.16667in</Left>
+                          <Left>0.13538in</Left>
                           <Height>0.25in</Height>
-                          <Width>3.78125in</Width>
+                          <Width>3.0625in</Width>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -67,10 +67,10 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox20</rd:DefaultName>
-                          <Top>0.41889in</Top>
-                          <Left>0.16667in</Left>
+                          <Top>0.40639in</Top>
+                          <Left>0.13538in</Left>
                           <Height>0.1625in</Height>
-                          <Width>3.78125in</Width>
+                          <Width>3.0625in</Width>
                           <ZIndex>1</ZIndex>
                           <Style>
                             <Border>
@@ -100,13 +100,13 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox20</rd:DefaultName>
-                          <Top>0.61333in</Top>
-                          <Left>0.16667in</Left>
+                          <Top>0.58833in</Top>
+                          <Left>0.13538in</Left>
                           <Height>0.17362in</Height>
-                          <Width>3.78125in</Width>
+                          <Width>3.0625in</Width>
                           <ZIndex>2</ZIndex>
                           <Visibility>
-                            <Hidden>=(Fields!IsLessonPlan.Value) And (Fields!ShowScoreSettings.Value)</Hidden>
+                            <Hidden>=(Fields!IsLessonPlan.Value) Or Not((Fields!ShowScoreSettings.Value))</Hidden>
                           </Visibility>
                           <Style>
                             <Border>
@@ -139,8 +139,8 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox20</rd:DefaultName>
-                          <Top>0.63695in</Top>
-                          <Left>4.33397in</Left>
+                          <Top>0.6272in</Top>
+                          <Left>4.30886in</Left>
                           <Height>0.15in</Height>
                           <Width>3.10417in</Width>
                           <ZIndex>3</ZIndex>
@@ -175,9 +175,9 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox20</rd:DefaultName>
-                          <Top>0.40639in</Top>
-                          <Left>5.84438in</Left>
-                          <Height>0.1875in</Height>
+                          <Top>0.45914in</Top>
+                          <Left>5.81927in</Left>
+                          <Height>0.1375in</Height>
                           <Width>1.59375in</Width>
                           <ZIndex>4</ZIndex>
                           <Style>
@@ -207,9 +207,9 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox24</rd:DefaultName>
-                          <Top>1.01264in</Top>
-                          <Left>0.16667in</Left>
-                          <Height>0.25in</Height>
+                          <Top>0.95014in</Top>
+                          <Left>0.13538in</Left>
+                          <Height>0.125in</Height>
                           <Width>7.27146in</Width>
                           <ZIndex>5</ZIndex>
                           <Style>
@@ -243,8 +243,8 @@
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox25</rd:DefaultName>
-                          <Top>0.10639in</Top>
-                          <Left>6.15911in</Left>
+                          <Top>0.17164in</Top>
+                          <Left>6.084in</Left>
                           <Height>0.24306in</Height>
                           <Width>1.33112in</Width>
                           <ZIndex>6</ZIndex>
@@ -274,17 +274,19 @@
                                   </Style>
                                 </TextRun>
                               </TextRuns>
-                              <Style />
+                              <Style>
+                                <TextAlign>Right</TextAlign>
+                              </Style>
                             </Paragraph>
                           </Paragraphs>
                           <rd:DefaultName>Textbox26</rd:DefaultName>
-                          <Top>0.10639in</Top>
-                          <Left>4.77084in</Left>
-                          <Height>0.13889in</Height>
-                          <Width>0.65625in</Width>
+                          <Top>0.15707in</Top>
+                          <Left>4.77198in</Left>
+                          <Height>0.19237in</Height>
+                          <Width>0.53125in</Width>
                           <ZIndex>7</ZIndex>
                           <Visibility>
-                            <Hidden>=Fields!Complete.Value</Hidden>
+                            <Hidden>=Not(Fields!Complete.Value)</Hidden>
                           </Visibility>
                           <Style>
                             <Border>
@@ -300,13 +302,13 @@
                           <Source>Embedded</Source>
                           <Value>invisible</Value>
                           <Sizing>FitProportional</Sizing>
-                          <Top>0.16194in</Top>
-                          <Left>5.6007in</Left>
-                          <Height>0.3125in</Height>
-                          <Width>0.31188in</Width>
+                          <Top>0.15012in</Top>
+                          <Left>5.43115in</Left>
+                          <Height>0.30208in</Height>
+                          <Width>0.30146in</Width>
                           <ZIndex>8</ZIndex>
                           <Visibility>
-                            <Hidden>=Fields!IsHidden.Value</Hidden>
+                            <Hidden>=Not(Fields!IsHidden.Value)</Hidden>
                           </Visibility>
                           <Style>
                             <Border>
@@ -323,7 +325,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.26041in</Height>
+                                <Height>0.17605in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -347,8 +349,9 @@
                                             </Paragraphs>
                                             <rd:DefaultName>Textbox39</rd:DefaultName>
                                             <Top>0.02813in</Top>
-                                            <Height>0.19792in</Height>
-                                            <Width>1.21874in</Width>
+                                            <Left>0in</Left>
+                                            <Height>0.13542in</Height>
+                                            <Width>2.14583in</Width>
                                             <Style>
                                               <Border>
                                                 <Style>None</Style>
@@ -378,11 +381,14 @@
                                               </Paragraph>
                                             </Paragraphs>
                                             <rd:DefaultName>StandardDescription</rd:DefaultName>
-                                            <Top>0.05313in</Top>
+                                            <Top>0.04063in</Top>
                                             <Left>2.46844in</Left>
-                                            <Height>0.17292in</Height>
+                                            <Height>0.12292in</Height>
                                             <Width>4.80271in</Width>
                                             <ZIndex>1</ZIndex>
+                                            <Visibility>
+                                              <Hidden>=(IsNothing(Fields!StandardDescription.Value)) Or (Trim(Fields!StandardDescription.Value) = "")</Hidden>
+                                            </Visibility>
                                             <Style>
                                               <Border>
                                                 <Style>None</Style>
@@ -436,9 +442,9 @@
                             </TablixMembers>
                           </TablixRowHierarchy>
                           <DataSetName>MainDataSet</DataSetName>
-                          <Top>1.76576in</Top>
-                          <Left>0.16667in</Left>
-                          <Height>0.26041in</Height>
+                          <Top>1.66124in</Top>
+                          <Left>0.14156in</Left>
+                          <Height>0.17605in</Height>
                           <Width>7.27146in</Width>
                           <ZIndex>9</ZIndex>
                           <Style>
@@ -456,7 +462,7 @@
                             </TablixColumns>
                             <TablixRows>
                               <TablixRow>
-                                <Height>0.31683in</Height>
+                                <Height>0.34633in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -497,7 +503,7 @@
                                 </TablixCells>
                               </TablixRow>
                               <TablixRow>
-                                <Height>2.73351in</Height>
+                                <Height>2.37068in</Height>
                                 <TablixCells>
                                   <TablixCell>
                                     <CellContents>
@@ -520,7 +526,9 @@
                                                         </Style>
                                                       </TextRun>
                                                     </TextRuns>
-                                                    <Style />
+                                                    <Style>
+                                                      <TextAlign>Left</TextAlign>
+                                                    </Style>
                                                   </Paragraph>
                                                 </Paragraphs>
                                                 <rd:DefaultName>Textbox48</rd:DefaultName>
@@ -532,6 +540,7 @@
                                                   <Border>
                                                     <Style>None</Style>
                                                   </Border>
+                                                  <VerticalAlign>Middle</VerticalAlign>
                                                   <PaddingLeft>2pt</PaddingLeft>
                                                   <PaddingRight>2pt</PaddingRight>
                                                   <PaddingTop>2pt</PaddingTop>
@@ -555,7 +564,7 @@
                                                 <rd:DefaultName>Textbox49</rd:DefaultName>
                                                 <Top>0.47309in</Top>
                                                 <Left>0.13068in</Left>
-                                                <Height>0.47223in</Height>
+                                                <Height>0.25348in</Height>
                                                 <Width>6.79167in</Width>
                                                 <ZIndex>1</ZIndex>
                                                 <Style>
@@ -592,7 +601,7 @@
                                                     <Top>0.16667in</Top>
                                                     <Left>0.15656in</Left>
                                                     <Height>0.69792in</Height>
-                                                    <Width>1.08333in</Width>
+                                                    <Width>1.07083in</Width>
                                                     <Style>
                                                       <Border>
                                                         <Style>None</Style>
@@ -633,7 +642,7 @@
                                                   </Textbox>
                                                 </ReportItems>
                                                 <KeepTogether>true</KeepTogether>
-                                                <Top>1.06512in</Top>
+                                                <Top>0.81512in</Top>
                                                 <Left>0.13068in</Left>
                                                 <Height>1.329in</Height>
                                                 <Width>1.38572in</Width>
@@ -648,7 +657,7 @@
                                             </ReportItems>
                                             <KeepTogether>true</KeepTogether>
                                             <Top>0.16667in</Top>
-                                            <Height>2.51651in</Height>
+                                            <Height>2.20401in</Height>
                                             <Width>7.27147in</Width>
                                             <Style>
                                               <Border>
@@ -673,7 +682,11 @@
                           </TablixBody>
                           <TablixColumnHierarchy>
                             <TablixMembers>
-                              <TablixMember />
+                              <TablixMember>
+                                <Visibility>
+                                  <Hidden>=Not(Fields!HasAttributes.Value)</Hidden>
+                                </Visibility>
+                              </TablixMember>
                             </TablixMembers>
                           </TablixColumnHierarchy>
                           <TablixRowHierarchy>
@@ -695,11 +708,10 @@
                               </TablixMember>
                             </TablixMembers>
                           </TablixRowHierarchy>
-                          <KeepTogether>true</KeepTogether>
                           <DataSetName>MainDataSet</DataSetName>
-                          <Top>4.47756in</Top>
-                          <Left>0.15625in</Left>
-                          <Height>3.05035in</Height>
+                          <Top>4.29006in</Top>
+                          <Left>0.12496in</Left>
+                          <Height>2.71701in</Height>
                           <Width>7.27147in</Width>
                           <ZIndex>10</ZIndex>
                           <Style>
@@ -708,35 +720,127 @@
                             </Border>
                           </Style>
                         </Tablix>
-                        <Rectangle Name="Rectangle8">
+                        <Textbox Name="Textbox31">
+                          <CanGrow>true</CanGrow>
+                          <KeepTogether>true</KeepTogether>
+                          <Paragraphs>
+                            <Paragraph>
+                              <TextRuns>
+                                <TextRun>
+                                  <Value>Standards</Value>
+                                  <Style>
+                                    <FontSize>12pt</FontSize>
+                                    <FontWeight>Bold</FontWeight>
+                                  </Style>
+                                </TextRun>
+                              </TextRuns>
+                              <Style />
+                            </Paragraph>
+                          </Paragraphs>
+                          <rd:DefaultName>Textbox31</rd:DefaultName>
+                          <Top>1.29632in</Top>
+                          <Left>0.14326in</Left>
+                          <Height>0.20798in</Height>
+                          <Width>1.75473in</Width>
+                          <ZIndex>11</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                            <PaddingLeft>2pt</PaddingLeft>
+                            <PaddingRight>2pt</PaddingRight>
+                            <PaddingTop>2pt</PaddingTop>
+                            <PaddingBottom>2pt</PaddingBottom>
+                          </Style>
+                        </Textbox>
+                        <Line Name="Line3">
+                          <Top>1.60882in</Top>
+                          <Left>0.12874in</Left>
+                          <Height>0in</Height>
+                          <Width>7.27147in</Width>
+                          <ZIndex>12</ZIndex>
+                          <Style>
+                            <Border>
+                              <Color>Silver</Color>
+                              <Style>Solid</Style>
+                            </Border>
+                          </Style>
+                        </Line>
+                        <Rectangle Name="Rectangle7">
                           <ReportItems>
+                            <Textbox Name="Textbox15">
+                              <CanGrow>true</CanGrow>
+                              <KeepTogether>true</KeepTogether>
+                              <Paragraphs>
+                                <Paragraph>
+                                  <TextRuns>
+                                    <TextRun>
+                                      <Value>Attachments</Value>
+                                      <Style>
+                                        <FontSize>12pt</FontSize>
+                                        <FontWeight>Bold</FontWeight>
+                                      </Style>
+                                    </TextRun>
+                                  </TextRuns>
+                                  <Style />
+                                </Paragraph>
+                              </Paragraphs>
+                              <rd:DefaultName>Textbox15</rd:DefaultName>
+                              <Left>0in</Left>
+                              <Height>0.25347in</Height>
+                              <Width>1.5164in</Width>
+                              <Visibility>
+                                <Hidden>=Not(Fields!HasAttachments.Value)</Hidden>
+                              </Visibility>
+                              <Style>
+                                <Border>
+                                  <Style>None</Style>
+                                </Border>
+                                <PaddingLeft>2pt</PaddingLeft>
+                                <PaddingRight>2pt</PaddingRight>
+                                <PaddingTop>2pt</PaddingTop>
+                                <PaddingBottom>2pt</PaddingBottom>
+                              </Style>
+                            </Textbox>
+                            <Line Name="Line2">
+                              <Top>0.37638in</Top>
+                              <Height>0in</Height>
+                              <Width>7.27147in</Width>
+                              <ZIndex>1</ZIndex>
+                              <Style>
+                                <Border>
+                                  <Color>Silver</Color>
+                                  <Style>Solid</Style>
+                                </Border>
+                              </Style>
+                            </Line>
                             <Tablix Name="Tablix3">
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>1.72349in</Width>
+                                    <Width>1.82702in</Width>
                                   </TablixColumn>
                                 </TablixColumns>
                                 <TablixRows>
                                   <TablixRow>
-                                    <Height>1.51181in</Height>
+                                    <Height>1.61181in</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
-                                          <Rectangle Name="Rectangle12">
+                                          <Rectangle Name="Rectangle3">
                                             <ReportItems>
                                               <Rectangle Name="Rectangle13">
                                                 <ReportItems>
-                                                  <Image Name="Image9">
+                                                  <Image Name="DocumentImage1">
                                                     <Source>Embedded</Source>
                                                     <Value>attachfile1</Value>
                                                     <Sizing>FitProportional</Sizing>
-                                                    <Top>0.21945in</Top>
-                                                    <Left>0.13527in</Left>
-                                                    <Height>0.76041in</Height>
-                                                    <Width>1.19364in</Width>
+                                                    <Top>0.18195in</Top>
+                                                    <Left>0.24354in</Left>
+                                                    <Height>0.69791in</Height>
+                                                    <Width>1.06568in</Width>
                                                     <Visibility>
-                                                      <Hidden>=Fields!Document.Value</Hidden>
+                                                      <Hidden>=Not(Fields!Document.Value)</Hidden>
                                                     </Visibility>
                                                     <Style>
                                                       <Border>
@@ -759,10 +863,10 @@
                                                       </Paragraph>
                                                     </Paragraphs>
                                                     <rd:DefaultName>Textbox29</rd:DefaultName>
-                                                    <Top>1.10347in</Top>
-                                                    <Left>0.13527in</Left>
-                                                    <Height>0.2625in</Height>
-                                                    <Width>1.19364in</Width>
+                                                    <Top>0.99098in</Top>
+                                                    <Left>0.09195in</Left>
+                                                    <Height>0.18958in</Height>
+                                                    <Width>1.3592in</Width>
                                                     <ZIndex>1</ZIndex>
                                                     <Style>
                                                       <Border>
@@ -774,11 +878,31 @@
                                                       <PaddingBottom>2pt</PaddingBottom>
                                                     </Style>
                                                   </Textbox>
+                                                  <Image Name="AnnouncementAttachmentImage">
+                                                    <Source>Database</Source>
+                                                    <Value>=Fields!AnnouncementAttachmentImage.Value</Value>
+                                                    <MIMEType>image/png</MIMEType>
+                                                    <Sizing>Fit</Sizing>
+                                                    <Top>0.20695in</Top>
+                                                    <Left>0.24372in</Left>
+                                                    <Height>0.63541in</Height>
+                                                    <Width>1.0625in</Width>
+                                                    <ZIndex>2</ZIndex>
+                                                    <Visibility>
+                                                      <Hidden>=Fields!Document.Value</Hidden>
+                                                    </Visibility>
+                                                    <Style>
+                                                      <Border>
+                                                        <Style>None</Style>
+                                                      </Border>
+                                                    </Style>
+                                                  </Image>
                                                 </ReportItems>
                                                 <KeepTogether>true</KeepTogether>
-                                                <Left>0.125in</Left>
-                                                <Height>1.45556in</Height>
-                                                <Width>1.44349in</Width>
+                                                <Top>0.13612in</Top>
+                                                <Left>0.12617in</Left>
+                                                <Height>1.30903in</Height>
+                                                <Width>1.57774in</Width>
                                                 <Style>
                                                   <Border>
                                                     <Color>Silver</Color>
@@ -787,7 +911,9 @@
                                                 </Style>
                                               </Rectangle>
                                             </ReportItems>
-                                            <KeepTogether>true</KeepTogether>
+                                            <Visibility>
+                                              <Hidden>=IsNothing(Fields!AnnouncementAttachmentOrder.Value)</Hidden>
+                                            </Visibility>
                                             <Style>
                                               <Border>
                                                 <Style>None</Style>
@@ -805,27 +931,46 @@
                                   <TablixMember>
                                     <Group Name="AnnouncementAttachmentId">
                                       <GroupExpressions>
-                                        <GroupExpression>=Fields!AnnouncementAttachmentId.Value</GroupExpression>
+                                        <GroupExpression>=Str(Fields!AnnouncementId.Value) + "-" + Str(Fields!AnnouncementAttachmentOrder.Value Mod 4)</GroupExpression>
                                       </GroupExpressions>
                                     </Group>
                                     <SortExpressions>
                                       <SortExpression>
-                                        <Value>=Fields!AnnouncementAttachmentId.Value</Value>
+                                        <Value>=Fields!AnnouncementAttachmentOrder.Value</Value>
                                       </SortExpression>
                                     </SortExpressions>
+                                    <Visibility>
+                                      <Hidden>=Not(Fields!HasAttachments.Value)</Hidden>
+                                    </Visibility>
                                   </TablixMember>
                                 </TablixMembers>
                               </TablixColumnHierarchy>
                               <TablixRowHierarchy>
                                 <TablixMembers>
-                                  <TablixMember />
+                                  <TablixMember>
+                                    <Group Name="Group1">
+                                      <GroupExpressions>
+                                        <GroupExpression>=Str(Fields!AnnouncementId.Value) + "-" + Str(Fields!AnnouncementAttachmentOrder.Value \ 4)</GroupExpression>
+                                      </GroupExpressions>
+                                    </Group>
+                                    <SortExpressions>
+                                      <SortExpression>
+                                        <Value>=Fields!AnnouncementAttachmentOrder.Value</Value>
+                                      </SortExpression>
+                                    </SortExpressions>
+                                  </TablixMember>
                                 </TablixMembers>
                               </TablixRowHierarchy>
-                              <KeepTogether>true</KeepTogether>
-                              <Top>0.15625in</Top>
-                              <Left>0.12026in</Left>
-                              <Height>1.51181in</Height>
-                              <Width>1.72349in</Width>
+                              <SortExpressions>
+                                <SortExpression>
+                                  <Value>=Fields!AnnouncementAttachmentOrder.Value</Value>
+                                </SortExpression>
+                              </SortExpressions>
+                              <Top>0.38869in</Top>
+                              <Left>0.0625in</Left>
+                              <Height>1.61181in</Height>
+                              <Width>1.82702in</Width>
+                              <ZIndex>2</ZIndex>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -833,110 +978,20 @@
                               </Style>
                             </Tablix>
                           </ReportItems>
-                          <KeepTogether>true</KeepTogether>
-                          <Top>2.58972in</Top>
-                          <Left>0.16635in</Left>
-                          <Height>1.76806in</Height>
-                          <Width>7.1149in</Width>
-                          <ZIndex>11</ZIndex>
+                          <Top>1.94807in</Top>
+                          <Left>0.13158in</Left>
+                          <Height>2.00171in</Height>
+                          <Width>7.27147in</Width>
+                          <ZIndex>13</ZIndex>
+                          <Visibility>
+                            <Hidden>=Not(Fields!HasAttachments.Value)</Hidden>
+                          </Visibility>
                           <Style>
                             <Border>
                               <Style>None</Style>
                             </Border>
                           </Style>
                         </Rectangle>
-                        <Textbox Name="Textbox15">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Attachments</Value>
-                                  <Style>
-                                    <FontSize>12pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox15</rd:DefaultName>
-                          <Top>2.13486in</Top>
-                          <Left>0.16635in</Left>
-                          <Height>0.25347in</Height>
-                          <Width>1.5164in</Width>
-                          <ZIndex>12</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Line Name="Line2">
-                          <Top>2.52028in</Top>
-                          <Left>0.16603in</Left>
-                          <Height>0in</Height>
-                          <Width>7.27147in</Width>
-                          <ZIndex>13</ZIndex>
-                          <Style>
-                            <Border>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                          </Style>
-                        </Line>
-                        <Textbox Name="Textbox31">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>Standards</Value>
-                                  <Style>
-                                    <FontSize>12pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox31</rd:DefaultName>
-                          <Top>1.38834in</Top>
-                          <Left>0.18485in</Left>
-                          <Height>0.20798in</Height>
-                          <Width>1.75473in</Width>
-                          <ZIndex>14</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Line Name="Line3">
-                          <Top>1.71333in</Top>
-                          <Left>0.16635in</Left>
-                          <Height>0in</Height>
-                          <Width>7.27147in</Width>
-                          <ZIndex>15</ZIndex>
-                          <Style>
-                            <Border>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                          </Style>
-                        </Line>
                       </ReportItems>
                       <KeepTogether>true</KeepTogether>
                       <Style>
@@ -979,10 +1034,9 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>MainDataSet</DataSetName>
-        <Top>0.04167in</Top>
-        <Left>0.24875in</Left>
-        <Height>7.9241in</Height>
-        <Width>7.49022in</Width>
+        <Left>0.50083in</Left>
+        <Height>7.01054in</Height>
+        <Width>7.56897in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -990,13 +1044,13 @@
         </Style>
       </Tablix>
     </ReportItems>
-    <Height>8.5977in</Height>
+    <Height>7.03137in</Height>
     <Style />
   </Body>
-  <Width>8.00445in</Width>
+  <Width>8.42397in</Width>
   <Page>
     <PageHeader>
-      <Height>0.78125in</Height>
+      <Height>0.625in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <Style>
@@ -1006,7 +1060,7 @@
       </Style>
     </PageHeader>
     <PageFooter>
-      <Height>1.73833in</Height>
+      <Height>0.83208in</Height>
       <PrintOnFirstPage>true</PrintOnFirstPage>
       <PrintOnLastPage>true</PrintOnLastPage>
       <ReportItems>
@@ -1099,9 +1153,9 @@
           </Paragraphs>
           <rd:DefaultName>Textbox1</rd:DefaultName>
           <Top>0.25in</Top>
-          <Left>6.09313in</Left>
+          <Left>5.84313in</Left>
           <Height>0.16667in</Height>
-          <Width>1.75in</Width>
+          <Width>2.25in</Width>
           <ZIndex>2</ZIndex>
           <Style>
             <Border>
@@ -1135,9 +1189,9 @@
           </Paragraphs>
           <rd:DefaultName>Textbox2</rd:DefaultName>
           <Top>0.48958in</Top>
-          <Left>6.09313in</Left>
+          <Left>5.84313in</Left>
           <Height>0.13542in</Height>
-          <Width>1.75in</Width>
+          <Width>2.25in</Width>
           <ZIndex>3</ZIndex>
           <Style>
             <Border>
@@ -1156,6 +1210,7 @@
         </Border>
       </Style>
     </PageFooter>
+    <PageWidth>9in</PageWidth>
     <LeftMargin>1in</LeftMargin>
     <RightMargin>1in</RightMargin>
     <TopMargin>1in</TopMargin>
@@ -1275,6 +1330,18 @@
           <DataField>WeigntMultiplier</DataField>
           <rd:TypeName>System.Double</rd:TypeName>
         </Field>
+        <Field Name="HasStandards">
+          <DataField>HasStandards</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="HasAttachments">
+          <DataField>HasAttachments</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
+        <Field Name="HasAttributes">
+          <DataField>HasAttributes</DataField>
+          <rd:TypeName>System.Boolean</rd:TypeName>
+        </Field>
         <Field Name="StandardId">
           <DataField>StandardId</DataField>
           <rd:TypeName>System.Int32</rd:TypeName>
@@ -1294,6 +1361,10 @@
         <Field Name="AnnouncementAttachmentName">
           <DataField>AnnouncementAttachmentName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="AnnouncementAttachmentImage">
+          <DataField>AnnouncementAttachmentImage</DataField>
+          <rd:TypeName>System.Byte[]</rd:TypeName>
         </Field>
         <Field Name="AnnouncementAttachmentOrder">
           <DataField>AnnouncementAttachmentOrder</DataField>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -90,12 +91,16 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult FeedReport(FeedReportInputModel feedReportInput)
+        public ActionResult FeedReport(FeedReportSettingsInfo settings, int? classId, int? format)
         {
             //TODO: save report settings 
+            SchoolLocator.ReportService.SetFeedReportSettings(settings);
+
             var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
-            var report = SchoolLocator.ReportService.GetFeedReport(feedReportInput, path);
-            return DownloadReportFile(report, "Feed Report", feedReportInput.FormatTyped ?? ReportingFormat.Pdf);
+            var formatType = (ReportingFormat?) format ?? ReportingFormat.Pdf;
+            var reportInput = new FeedReportInputModel {ClassId = classId, Format = format, Settings = settings};
+            var report = SchoolLocator.ReportService.GetFeedReport(reportInput,  path);
+            return DownloadReportFile(report, "Feed Report", formatType);
         }
 
         private ActionResult Report<TReport>(TReport reportInputModel
