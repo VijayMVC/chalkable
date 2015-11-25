@@ -232,7 +232,7 @@ namespace Chalkable.Web.Controllers
             return false;
         }
 
-        private const string HTML_CONTENT_TYPE = "text/html";
+        protected const string HTML_CONTENT_TYPE = "text/html";
         protected ActionResult UploadPicture(IPictureService pictureService, Guid id, int? width, int? height)
         {
             byte[] bin;
@@ -277,6 +277,22 @@ namespace Chalkable.Web.Controllers
             if (role == CoreRoles.STUDENT_ROLE)
                 return Redirect<HomeController>(x => x.Student());
             return Redirect<HomeController>(x => x.Index());
+        }
+
+        protected ActionResult HandleAttachmentException(Exception exception)
+        {
+            Response.TrySkipIisCustomErrors = true;
+            Response.StatusCode = 500;
+            Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
+            return new ChalkableJsonResult(false)
+            {
+                Data = new ChalkableJsonResponce(ExceptionViewData.Create(exception, exception.InnerException))
+                {
+                    Success = false
+                },
+                ContentType = HTML_CONTENT_TYPE,
+                SerializationDepth = 4
+            };
         }
     }
 }
