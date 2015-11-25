@@ -23,6 +23,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void EditEmailForCurrentUser(string email, out string error);
         IList<Person> GetAll();
         PaginatedList<Person> SearchPersons(string filter, bool orderByFirstName, int start, int count);
+
+        CoreRole GetPersonRole(int personId);
     }
 
     public class PersonService : SisConnectedService, IPersonService
@@ -164,6 +166,19 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             DoUpdate(uow => new PersonDataAccess(uow).UpdateForImport(persons));
         }
-        
+
+        public CoreRole GetPersonRole(int personId)
+        {
+            var isTeacher = DoRead(u => new StaffDataAccess(u).GetByIdOrNull(personId));
+            var isStudent = DoRead(u => new StudentDataAccess(u).GetByIdOrNull(personId));
+
+            if (isTeacher != null)
+                return CoreRoles.TEACHER_ROLE;
+
+            if (isStudent != null)
+                return CoreRoles.STUDENT_ROLE;
+
+            return null;
+        }
     }
 }
