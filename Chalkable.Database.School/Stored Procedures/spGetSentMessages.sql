@@ -1,5 +1,6 @@
 ﻿
 
+
 CREATE Procedure [dbo].[spGetSentMessages]
 @personId int,
 @roles TInt32 readonly,
@@ -147,6 +148,8 @@ pm.[Id],
 [DeletedBySender]
 From
 @SentMsg pm
+Order By [Sent] Desc
+
 
 insert into @MsgIds
 select [Id] from @SentMsg

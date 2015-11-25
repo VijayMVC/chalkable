@@ -1,44 +1,55 @@
-﻿
+﻿CREATE PROCEDURE [dbo].[spGetNotInstalledStudentsCountPerApplication]
+@staffId INT,
+@classId INT,
+@markingPeriodId INT
+AS
 
-CREATE procedure [dbo].[spGetNotInstalledStudentsCountPerApplication] @staffId int, @classId int, @markingPeriodId int
-as
-declare @schoolYearId int = (select SchoolYearRef from MarkingPeriod where Id = @markingPeriodId)
+DECLARE @schoolYearId INT
 
-declare @appsIdsT table(id uniqueidentifier)
-insert into @appsIdsT
-select ApplicationRef from ApplicationInstall
-where PersonRef = @staffId and Active = 1 and SchoolYearRef = @schoolYearId
+SELECT @schoolYearId = SchoolYearRef
+FROM MarkingPeriod
+WHERE Id = @markingPeriodId;
 
-declare @personIdsT table(id int)
-insert into @personIdsT
-select PersonRef from ClassPerson
-join StudentSchoolYear ssy on ssy.StudentRef = ClassPerson.PersonRef
-where ClassPerson.ClassRef = @classId
-and ClassPerson.MarkingPeriodRef = @markingPeriodId
-and ClassPerson.IsEnrolled = 1
-and ssy.EnrollmentStatus = 0
-and ssy.SchoolYearRef = @schoolYearId
-group by ClassPerson.PersonRef
-
-declare @classStudentCount int = (select count(*) from @personIdsT)
-if @classStudentCount = 0
-begin
-select id as ApplicationId, 0 as NotInstalledStudentCount from @appsIdsT app
-end
-else
-begin
-declare @appStudentT table(appId uniqueidentifier, studentCount int)
-insert into @appStudentT
-select ApplicationRef, count(PersonRef) from ApplicationInstall
-where Active = 1
-and ApplicationRef in (select app.id from @appsIdsT app)
-and SchoolYearRef = @schoolYearId
-and PersonRef in (select id from @personIdsT)
-group by ApplicationRef
-
-
-select app.id as ApplicationId,
-(case when appSt.appId is null then @classStudentCount else @classStudentCount - appSt.studentCount end) as NotInstalledStudentCount
-from @appsIdsT app
-left join @appStudentT appSt on appSt.appId = app.id
-end
+WITH Applications AS(
+SELECT
+ApplicationRef
+FROM
+ApplicationInstall
+WHERE
+PersonRef = @staffId
+AND Active = 1
+AND SchoolYearRef = @schoolYearId
+GROUP BY ApplicationRef
+),
+Roster AS (
+SELECT
+PersonRef
+FROM
+ClassPerson cp
+JOIN StudentSchoolYear ssy ON ssy.StudentRef = cp.PersonRef
+WHERE
+cp.ClassRef = @classId
+AND cp.MarkingPeriodRef = @markingPeriodId
+AND cp.IsEnrolled = 1
+AND ssy.EnrollmentStatus = 0
+AND ssy.SchoolYearRef = @schoolYearId
+GROUP BY cp.PersonRef
+),
+ApplicationsCount AS (
+SELECT
+a.ApplicationRef,
+NotInstalledStudentCount = SUM(CASE WHEN ai.Id IS NULL THEN 1 ELSE 0 END)
+FROM
+Applications a
+CROSS JOIN Roster r
+LEFT JOIN ApplicationInstall ai ON ai.ApplicationRef = a.ApplicationRef AND ai.PersonRef = r.PersonRef
+AND ai.Active = 1
+AND ai.SchoolYearRef= @SchoolYearId
+GROUP By a.ApplicationRef
+)
+SELECT
+ApplicationId = a.ApplicationRef,
+NotInstalledStudentCount = COALESCE(NotInstalledStudentCount, 0)
+FROM
+Applications a
+LEFT JOIN ApplicationsCount ac ON ac.ApplicationRef = a.ApplicationRef
