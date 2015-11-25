@@ -5,6 +5,7 @@ module.exports = function(grunt) {
   var buildNumber = grunt.option("build.number");
   var vcsRevision = grunt.option("vcs.revision");
   var vcsBranch = grunt.option("vcs.branch");
+  var buildCounter = buildNumber.split('-').pop();
   
   var today = new Date().toISOString().slice(0, 10);
   
@@ -96,7 +97,7 @@ module.exports = function(grunt) {
         dest: ['Chalkable.Database.Master/Chalkable.Database.Master.sqlproj'],
         replacements: [{
           from: '1.0.0.0',
-          to: buildNumber
+          to: '1.0.0.' + buildCounter
         }]
       },
       chakable_database_school_version: {
@@ -104,7 +105,7 @@ module.exports = function(grunt) {
         dest: ['Chalkable.Database.School/Chalkable.Database.School.sqlproj'],
         replacements: [{
           from: '1.0.0.0',
-          to: buildNumber
+          to: '1.0.0.' + buildCounter
         }]
       },
       raygun_deployment_version: {
