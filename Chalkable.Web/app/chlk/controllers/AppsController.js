@@ -991,7 +991,7 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('assessment')],
         [[String]],
         function assessmentSettingsAction(appUrlAppend_) {
-            var mode = 'SysAdminView',
+            var mode = 'sysadminview',
                 appId = chlk.models.id.AppId('e989ccfe-f658-4f89-81e7-f3efa0251b28');
 
             var result = this.appsService
