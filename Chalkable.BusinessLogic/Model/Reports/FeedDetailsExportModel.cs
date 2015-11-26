@@ -14,7 +14,6 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public string AnnouncementType { get; set; }
 
         public bool IsLessonPlan { get; set; }
-        public bool IsAdminAnnouncement { get; set; }
         public bool ShowScoreSettings { get; set; } 
         public double? TotalPoint { get; set; }
         public double? WeightAddition { get; set; }
@@ -48,49 +47,26 @@ namespace Chalkable.BusinessLogic.Model.Reports
             public int Order { get; set; }
             public bool Document { get; set; }
         }
-
+        
         public FeedDetailsExportModel() { }
 
         protected FeedDetailsExportModel(Person person, string schoolName, string sy, AnnouncementDetails ann
-            , IList<ClassTeacher> classTeachers, IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute)
-            : base(person, schoolName, sy)
+            , ClassDetails classDetails, IList<DayType> dayTypes, IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute)
+            : base(person, schoolName, sy, classDetails, dayTypes, staffs, ann)
         {
-            AnnouncementId = ann.Id;
             AnnouncementType = ann.AnnouncementTypeName;
-            AnnouncementName = ann.Title;
             AnnouncementDescription = ann.Content;
-            Complete = ann.Complete;
             HasStandards = ann.AnnouncementStandards.Count > 0;
             HasAttachments = ann.AnnouncementAttachments.Count + ann.AnnouncementApplications.Count > 0;
             HasAttributes = ann.AnnouncementAttributes.Count > 0;
-            if (ann.LessonPlanData != null)
-            {
-                IsLessonPlan = true;
-                StartDate = ann.LessonPlanData.StartDate;
-                EndDate = ann.LessonPlanData.EndDate;
-                IsHidden = !ann.LessonPlanData.VisibleForStudent;
-                ClassId = ann.LessonPlanData.ClassRef;
-                ClassName = ann.LessonPlanData.FullClassName;
-                var currentClassTeachers = classTeachers.Where(x => x.ClassRef == ClassId).ToList();
-                ClassTeacherNames = BuildTeachersNames(ann.LessonPlanData.PrimaryTeacherRef, currentClassTeachers, staffs);
-            }
+            IsLessonPlan = ann.LessonPlanData != null;
+
             if (ann.ClassAnnouncementData != null)
             {
-                EndDate = ann.ClassAnnouncementData.Expires;
-                IsHidden = !ann.ClassAnnouncementData.VisibleForStudent;
-                ClassId = ann.ClassAnnouncementData.ClassRef;
-                ClassName = ann.ClassAnnouncementData.FullClassName;
-                var currentClassTeachers = classTeachers.Where(x => x.ClassRef == ClassId).ToList();
-                ClassTeacherNames = BuildTeachersNames(ann.ClassAnnouncementData.PrimaryTeacherRef, currentClassTeachers, staffs);
                 TotalPoint = (double?) ann.ClassAnnouncementData.MaxScore;
                 WeightAddition = (double?) ann.ClassAnnouncementData.WeightAddition;
                 WeigntMultiplier = (double?) ann.ClassAnnouncementData.WeightMultiplier;
                 ShowScoreSettings = CanShowScoreSettings(ann.ClassAnnouncementData);
-            }
-            if (ann.AdminAnnouncementData != null)
-            {
-                IsAdminAnnouncement = true;
-                EndDate = ann.AdminAnnouncementData.Expires;
             }
             if (standard != null)
             {
@@ -118,31 +94,47 @@ namespace Chalkable.BusinessLogic.Model.Reports
         }
 
         public static IList<FeedDetailsExportModel> Create(Person person, string schoolName, string schoolYear,
-            IList<AnnouncementDetails> anns, IList<ClassTeacher> classTeachers, IList<Staff> staffs,
-            IList<ScheduleItem> scheduleItems, IList<Application> apps, IDictionary<Guid, byte[]> appsImages)
+            IList<AnnouncementDetails> anns, IList<ClassDetails> classDetailses, IList<DayType> dayTypes,
+            IList<Staff> staffs, IList<Application> apps, IDictionary<Guid, byte[]> appsImages)
         {
-            foreach (var scheduleItem in scheduleItems)
-            {
-                
-            }
+            
             var res = new List<FeedDetailsExportModel>();
-            foreach (var ann in anns)
+            foreach (var c in classDetailses)
             {
-                var attachmentItems = PrepareAttachmentItems(ann.AnnouncementAttachments, ann.AnnouncementApplications, apps, appsImages);
-                var items = ann.AnnouncementStandards.SelectMany(
-                            sa => ann.AnnouncementAttributes.SelectMany(
-                            aa => attachmentItems.Select(
-                            attItem => Create(person, schoolName, schoolYear, ann, classTeachers, staffs, sa.Standard, aa, attItem)
-                            ))).ToList();
-                res.AddRange(items);
+                var selectedAnns = anns.Where(x => x.ClassRef == c.Id).ToList();
+                if(selectedAnns.Count == 0) continue;
+                selectedAnns = selectedAnns.OrderBy(x =>
+                {
+                    if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
+                    return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
+                }).ToList();
+                res.AddRange(CreateGroupOfItems(person, schoolName, schoolYear, selectedAnns, c, dayTypes, staffs, apps, appsImages));
+            }
+
+            var adminAnns = anns.Where(x => x.AdminAnnouncementData != null).ToList();
+            if (adminAnns.Count > 0)
+            {
+                adminAnns = adminAnns.OrderBy(x => x.AdminAnnouncementData.Expires).ToList();
+                res.AddRange(CreateGroupOfItems(person, schoolName, schoolYear, adminAnns, null, dayTypes, staffs, apps, appsImages));
             }
             return res;
         }
 
-        private static FeedDetailsExportModel Create(Person person, string schoolName, string sy, AnnouncementDetails ann, IList<ClassTeacher> classTeachers
+        private static IList<FeedDetailsExportModel> CreateGroupOfItems(Person person, string schoolName, string sy,
+            IList<AnnouncementDetails> anns, ClassDetails classDetails, IList<DayType> dayTypes, IList<Staff> staffs, IList<Application> apps, IDictionary<Guid, byte[]> appsImages)
+        {
+            var items = (from a in anns
+                         from sa in a.AnnouncementStandards.DefaultIfEmpty()
+                         from aa in a.AnnouncementAttributes.DefaultIfEmpty()
+                         from attItem in PrepareAttachmentItems(a.AnnouncementAttachments, a.AnnouncementApplications, apps, appsImages).DefaultIfEmpty()
+                         select Create(person, schoolName, sy, a, classDetails, dayTypes, staffs, sa?.Standard, aa, attItem)).ToList();
+            return items;
+        }
+
+        private static FeedDetailsExportModel Create(Person person, string schoolName, string sy, AnnouncementDetails ann, ClassDetails classDetails, IList<DayType> dayTypes 
             , IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute, AttachmentItem attachmentItem)
         {
-            var res = new FeedDetailsExportModel(person, schoolName, sy, ann, classTeachers, staffs, standard, attribute);
+            var res = new FeedDetailsExportModel(person, schoolName, sy, ann, classDetails, dayTypes, staffs, standard, attribute);
             if (attachmentItem != null)
             {
                 res.AnnouncementAttachmentId = attachmentItem.Id;

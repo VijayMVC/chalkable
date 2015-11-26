@@ -29,16 +29,15 @@ namespace Chalkable.Web.Models
                 IncludeDetails = feedReportSettings.IncludeDetails,
                 IncludeHiddenActivities = feedReportSettings.IncludeHiddenActivities,
                 IncludeHiddenAttributes = feedReportSettings.IncludeHiddenAttributes,
-                LessonPlanOnly =
-                    ((AnnouncementType?) feedSettings.AnnouncementType) ==
-                    Data.School.Model.Announcements.AnnouncementType.LessonPlan,
                 MinDate = feedSettings.FromDate ?? DateTime.MinValue,
                 MaxDate = feedSettings.ToDate ?? DateTime.MaxValue
             };
-
+            res.LessonPlanOnly = feedSettings.AnnouncementType.HasValue
+                    && (AnnouncementTypeEnum) feedSettings.AnnouncementType.Value == AnnouncementTypeEnum.LessonPlan
+                    || feedReportSettings.LessonPlanOnly;
+                
             res.StartDate = feedReportSettings.StartDate ?? res.MinDate;
             res.EndDate = feedReportSettings.EndDate ?? res.MaxDate;
-
             return res;
         }
     }

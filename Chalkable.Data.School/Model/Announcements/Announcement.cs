@@ -10,7 +10,7 @@ namespace Chalkable.Data.School.Model.Announcements
         Created = 1
     }
 
-    public enum AnnouncementType
+    public enum AnnouncementTypeEnum
     {
         None = 0,
         Class = 1,
@@ -44,13 +44,13 @@ namespace Chalkable.Data.School.Model.Announcements
         [NotDbFieldAttr]
         public virtual string AnnouncementTypeName => null;
         [NotDbFieldAttr]
-        public virtual AnnouncementType Type => AnnouncementType.None;
+        public virtual AnnouncementTypeEnum Type => AnnouncementTypeEnum.None;
     }
 
     public class AnnouncementComplex : Announcement
     {
         public override bool IsSubmitted => announcementData.IsSubmitted;
-        public override AnnouncementType Type => announcementData.Type;
+        public override AnnouncementTypeEnum Type => announcementData.Type;
         public override string AnnouncementTypeName => announcementData.AnnouncementTypeName;
         public override int OwnereId => announcementData.OwnereId;
 

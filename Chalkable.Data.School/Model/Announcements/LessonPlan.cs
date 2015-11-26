@@ -39,7 +39,7 @@ namespace Chalkable.Data.School.Model.Announcements
         [NotDbFieldAttr]
         public override string AnnouncementTypeName => LESSON_PLAN;
         [NotDbFieldAttr]
-        public override AnnouncementType Type => AnnouncementType.LessonPlan;
+        public override AnnouncementTypeEnum Type => AnnouncementTypeEnum.LessonPlan;
         [NotDbFieldAttr]
         public override int OwnereId => PrimaryTeacherRef;
     }

@@ -14,8 +14,8 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IAnnouncementAttachmentService
     {
         IList<AnnouncementAttachment> CopyAttachments(int fromAnnouncementId, IList<int> attachmentOwnersIds, int toAnnouncementId);
-        AnnouncementAttachment UploadAttachment(int announcementId, AnnouncementType type, byte[] content, string name);
-        Announcement Add(int announcementId, AnnouncementType type, int attachmentId);
+        AnnouncementAttachment UploadAttachment(int announcementId, AnnouncementTypeEnum type, byte[] content, string name);
+        Announcement Add(int announcementId, AnnouncementTypeEnum type, int attachmentId);
         void Delete(int announcementAttachmentId);
         IList<AnnouncementAttachment> GetAnnouncementAttachments(int announcementId, int start = 0, int count = int.MaxValue, bool needsAllAttachments = true);
         IList<AnnouncementAttachment> GetAnnouncementAttachments(string filter);
@@ -75,7 +75,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public Announcement Add(int announcementId, AnnouncementType type, int attachmentId)
+        public Announcement Add(int announcementId, AnnouncementTypeEnum type, int attachmentId)
         {
             var annDetails = ServiceLocator.GetAnnouncementService(type).GetAnnouncementDetails(announcementId);
             Trace.Assert(Context.PersonId.HasValue);
@@ -106,7 +106,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return annDetails;
         }
 
-        public AnnouncementAttachment UploadAttachment(int announcementId, AnnouncementType type, byte[] content, string name)
+        public AnnouncementAttachment UploadAttachment(int announcementId, AnnouncementTypeEnum type, byte[] content, string name)
         {
             var annDetails = ServiceLocator.GetAnnouncementService(type).GetAnnouncementDetails(announcementId);
             Trace.Assert(Context.PersonId.HasValue);
@@ -138,7 +138,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        private void NotifyUsers(Announcement announcement, AnnouncementType type)
+        private void NotifyUsers(Announcement announcement, AnnouncementTypeEnum type)
         {
             if (!announcement.IsDraft)
             {

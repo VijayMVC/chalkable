@@ -67,17 +67,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public AnnouncementAttachment UploadAttachment(int announcementId, AnnouncementType type, byte[] content, string name)
+        public AnnouncementAttachment UploadAttachment(int announcementId, AnnouncementTypeEnum type, byte[] content, string name)
         {
             throw new NotImplementedException();
         }
 
-        public Announcement Add(int announcementId, AnnouncementType type, int attachmentId)
+        public Announcement Add(int announcementId, AnnouncementTypeEnum type, int attachmentId)
         {
             throw new NotImplementedException();
         }
 
-        public Announcement AddAttachment(int announcementId, AnnouncementType annType, byte[] content, string name)
+        public Announcement AddAttachment(int announcementId, AnnouncementTypeEnum annType, byte[] content, string name)
         {
             var ann = ServiceLocator.GetAnnouncementService(annType).GetAnnouncementDetails(announcementId);
             if (!Context.PersonId.HasValue)
@@ -264,7 +264,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 var content = ServiceLocator.StorageBlobService.GetBlobContent(ATTACHMENT_CONTAINER_ADDRESS,
                     sourceAnnouncementAttachment.Id.ToString(CultureInfo.InvariantCulture));
-                AddAttachment(toAnnouncementId, AnnouncementType.Class, content, sourceAnnouncementAttachment.Attachment.Name);
+                AddAttachment(toAnnouncementId, AnnouncementTypeEnum.Class, content, sourceAnnouncementAttachment.Attachment.Name);
             }
             return GetAnnouncementAttachments(toAnnouncementId);
         }

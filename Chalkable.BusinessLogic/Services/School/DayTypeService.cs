@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -10,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Add(IList<DayType> dayTypes); 
         void Edit(IList<DayType> dayTypes);
         void Delete(IList<DayType> dayTypes);
+        IList<DayType> GetDayTypes();
     }
 
     public class DayTypeService : SchoolServiceBase, IDayTypeService
@@ -34,6 +38,13 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(u => new DataAccessBase<DayType>(u).Delete(dayTypes));
+        }
+
+        public IList<DayType> GetDayTypes()
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            var conds = new AndQueryCondition {{DayType.SCHOOL_YEAR_REF, Context.SchoolYearId}};
+            return DoRead(u => new DataAccessBase<DayType>(u).GetAll(conds));
         }
     }
 }

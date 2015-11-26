@@ -314,7 +314,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             DoUpdate(
                 u =>
-                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementType.LessonPlan, null,
+                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.LessonPlan, null,
                         Context.PersonId.Value, null, complete, null, null));
         }
 
@@ -333,7 +333,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     .Announcements;
                 var da = new AnnouncementRecipientDataDataAccess(u);
                 foreach (var ann in anns)
-                    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementType.LessonPlan, null, personId, null, complete, null, null);
+                    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementTypeEnum.LessonPlan, null, personId, null, complete, null, null);
             });
         }
 
@@ -415,7 +415,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             DoUpdate(
                 u =>
-                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementType.LessonPlan,schoolYearId,
+                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementTypeEnum.LessonPlan,schoolYearId,
                         personId, roleId, true, tillDateToUpdate, classId));
         }
 

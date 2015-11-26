@@ -8,7 +8,6 @@
           <xs:element minOccurs="0" maxOccurs="1" name="AnnouncementDescription" type="xs:string" />
           <xs:element minOccurs="0" maxOccurs="1" name="AnnouncementType" type="xs:string" />
           <xs:element minOccurs="1" maxOccurs="1" name="IsLessonPlan" type="xs:boolean" />
-          <xs:element minOccurs="1" maxOccurs="1" name="IsAdminAnnouncement" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="ShowScoreSettings" type="xs:boolean" />
           <xs:element minOccurs="1" maxOccurs="1" name="TotalPoint" nillable="true" type="xs:double" />
           <xs:element minOccurs="1" maxOccurs="1" name="WeightAddition" nillable="true" type="xs:double" />
@@ -40,9 +39,11 @@
       <xs:element minOccurs="0" maxOccurs="1" name="PersonLastName" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="SchoolName" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="SchoolYear" type="xs:string" />
-      <xs:element minOccurs="1" maxOccurs="1" name="ClassId" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="IsAdminAnnouncement" type="xs:boolean" />
+      <xs:element minOccurs="1" maxOccurs="1" name="ClassId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="1" maxOccurs="1" name="AdminId" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" maxOccurs="1" name="ClassName" type="xs:string" />
-      <xs:element minOccurs="0" maxOccurs="1" name="ClassTeacherNames" type="xs:string" />
+      <xs:element minOccurs="0" maxOccurs="1" name="Owners" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="DayTypes" type="xs:string" />
       <xs:element minOccurs="0" maxOccurs="1" name="Periods" type="xs:string" />
       <xs:element minOccurs="1" maxOccurs="1" name="AnnouncementId" type="xs:int" />

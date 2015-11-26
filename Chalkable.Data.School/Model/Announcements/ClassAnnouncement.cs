@@ -47,7 +47,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public override string AnnouncementTypeName => ClassAnnouncementTypeName;
 
         [NotDbFieldAttr]
-        public override AnnouncementType Type => AnnouncementType.Class;
+        public override AnnouncementTypeEnum Type => AnnouncementTypeEnum.Class;
 
         public bool Gradable => true;
 

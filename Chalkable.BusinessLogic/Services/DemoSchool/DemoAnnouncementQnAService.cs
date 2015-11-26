@@ -57,7 +57,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             };
         }
 
-        public AnnouncementQnA AskQuestion(int announcementId, AnnouncementType announcementType, string question)
+        public AnnouncementQnA AskQuestion(int announcementId, AnnouncementTypeEnum announcementType, string question)
         {
             Trace.Assert(Context.PersonId.HasValue);
 
@@ -109,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     && ((DemoClassService)ServiceLocator.ClassService).ClassTeacherExists(announcementQnA.ClassRef.Value, Context.PersonId.Value));
         }
 
-        public AnnouncementQnA Answer(int announcementQnAId, AnnouncementType announcementType, string question, string answer)
+        public AnnouncementQnA Answer(int announcementQnAId, AnnouncementTypeEnum announcementType, string question, string answer)
         {
             if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();

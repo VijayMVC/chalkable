@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -10,7 +9,6 @@ using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
-using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.Reporting
 {
@@ -32,18 +30,36 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             var isStudent = context.Role == CoreRoles.STUDENT_ROLE;
             var teacherId = isStudent ? null : (int?)person.Id;
             var studentId = isStudent ? (int?) person.Id : null;
+            var dayTypes = serviceLocator.DayTypeService.GetDayTypes();
+
             var classes = inputModel.ClassId.HasValue
                 ? new List<ClassDetails> { serviceLocator.ClassService.GetClassDetailsById(inputModel.ClassId.Value)}
-                : ( isStudent 
-                        ? serviceLocator.ClassService.GetStudentClasses(sy.Id, person.Id)
-                        : serviceLocator.ClassService.GetTeacherClasses(sy.Id, person.Id)
-                  );
+                : serviceLocator.ClassService.GetClasses(sy.Id, studentId, teacherId);
+                  
+            var classTeachers = classes.SelectMany(x => x.ClassTeachers.Select(y => y)).ToList();
+            var staffIds = classTeachers.Select(x => x.PersonRef).Distinct().ToList();
+            var staffs = staffIds.Select(y => serviceLocator.StaffService.GetStaff(y)).ToList();
 
-            var anns = serviceLocator.AnnouncementFetchService.GetAnnouncementComplexList(settings.StartDate, settings.EndDate, true, inputModel.ClassId);
             
+            var anns = new List<AnnouncementComplex>();
+            if (settings.LessonPlanOnly && !BaseSecurity.IsDistrictAdmin(serviceLocator.Context))
+            {
+                anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, null));
+            }
+            else
+            {
+                if (BaseSecurity.IsDistrictAdmin(serviceLocator.Context) || serviceLocator.Context.Role == CoreRoles.STUDENT_ROLE)
+                    anns.AddRange(serviceLocator.AdminAnnouncementService.GetAnnouncementsComplex(settings.StartDate, settings.EndDate, null, null, 0, int.MaxValue, false));
+                if (BaseSecurity.IsTeacher(serviceLocator.Context) || serviceLocator.Context.Role == CoreRoles.STUDENT_ROLE)
+                {
+                    anns.AddRange(serviceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(settings.StartDate, settings.EndDate, inputModel.ClassId, null));
+                    anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, null));
+                }
+            }
+            if (!settings.IncludeHiddenActivities)
+                anns = anns.Where(x => x.ClassAnnouncementData == null || x.ClassAnnouncementData.VisibleForStudent).ToList();
 
-            var schedules = new List<ScheduleItem>();//serviceLocator.ClassPeriodService.GetSchedule(teacherId, studentId, settings.ClassId, settings.StartDate, settings.EndDate);
-            return ShortFeedExportModel.Create(person, school.Name, sy.Name, classes, schedules, anns);
+            return ShortFeedExportModel.Create(person, school.Name, sy.Name, classes, staffs, dayTypes, anns);
         }
 
         public string GetReportDefinitionFile()
@@ -69,24 +85,29 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             var person = serviceLocator.PersonService.GetPerson(context.PersonId.Value);
             var sy = serviceLocator.SchoolYearService.GetCurrentSchoolYear();
             var school = serviceLocator.SchoolService.GetSchool(context.SchoolLocalId.Value);
+            var dayTypes = serviceLocator.DayTypeService.GetDayTypes();
 
             var isStudent = context.Role == CoreRoles.STUDENT_ROLE;
+            var teacherId = isStudent ? null : (int?)person.Id;
+            var studentId = isStudent ? (int?)person.Id : null;
             
             var classes = inputModel.ClassId.HasValue
-                ? new List<ClassDetails> { serviceLocator.ClassService.GetClassDetailsById(inputModel.ClassId.Value) }
-                : (isStudent
-                        ? serviceLocator.ClassService.GetStudentClasses(sy.Id, person.Id)
-                        : serviceLocator.ClassService.GetTeacherClasses(sy.Id, person.Id)
-                  );
+             ? new List<ClassDetails> { serviceLocator.ClassService.GetClassDetailsById(inputModel.ClassId.Value) }
+             : serviceLocator.ClassService.GetClasses(sy.Id, studentId, teacherId);
+
             var classTeachers = classes.SelectMany(x => x.ClassTeachers.Select(y => y)).ToList();
             var staffIds = classTeachers.Select(x => x.PersonRef).Distinct().ToList();
             var staffs = staffIds.Select(y => serviceLocator.StaffService.GetStaff(y)).ToList();
-
+            
+            //Getting and Preparing Announcements details info 
             IList<AnnouncementDetails> anns;
             if (settings.LessonPlanOnly && !BaseSecurity.IsDistrictAdmin(serviceLocator.Context))
-                anns = serviceLocator.LessonPlanService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId, true);
+                anns = serviceLocator.LessonPlanService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId);
             else 
-                anns = serviceLocator.AnnouncementFetchService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, true, inputModel.ClassId);
+                anns = serviceLocator.AnnouncementFetchService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, false, inputModel.ClassId);
+
+            if (!settings.IncludeHiddenActivities)
+                anns = anns.Where(x => x.ClassAnnouncementData == null || x.ClassAnnouncementData.VisibleForStudent).ToList();
 
             if (!settings.IncludeAttachments)
                 anns = anns.Select(x =>
@@ -112,14 +133,8 @@ namespace Chalkable.BusinessLogic.Services.Reporting
                 var image = masterLocator.ApplicationPictureService.GetPicture(app.BigPictureRef.Value, 170, 110);
                 appsImages.Add(app.Id, image);
             }
-            
-            //todo get schedules and fix performence issue in getting schedules 
-            var teacherId = isStudent ? null : (int?)person.Id;
-            var studentId = isStudent ? (int?)person.Id : null;
-
-            //var schedules = new List<ScheduleItem>();
-            var schedules = serviceLocator.ClassPeriodService.GetSchedule(teacherId, studentId, inputModel.ClassId, settings.StartDate ?? sy.StartDate.Value, settings.EndDate ?? sy.EndDate.Value);
-            return FeedDetailsExportModel.Create(person, school.Name, sy.Name, anns, classTeachers, staffs, schedules, apps, appsImages);
+           
+            return FeedDetailsExportModel.Create(person, school.Name, sy.Name, anns, classes, dayTypes, staffs, apps, appsImages);
         }
 
         public string GetReportDefinitionFile()

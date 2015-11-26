@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Chalkable.BusinessLogic.Common;
-using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
@@ -18,9 +17,11 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public string SchoolName { get; set; }
         public string SchoolYear { get; set; }
 
-        public int ClassId { get; set; }
+        public bool IsAdminAnnouncement { get; set; }
+        public int? ClassId { get; set; }
+        public int? AdminId { get; set; }
         public string ClassName { get; set; }
-        public string ClassTeacherNames { get; set; }
+        public string Owners { get; set; }
         public string DayTypes { get; set; }
         public string Periods { get; set; }
         public int AnnouncementId { get; set; }
@@ -39,17 +40,45 @@ namespace Chalkable.BusinessLogic.Model.Reports
             SchoolYear = sy;
         }
 
-        protected ShortFeedExportModel(Person person, string schoolName, string sy, ClassDetails c, IList<Staff> teachers
-            , Announcement announcement, bool complete)
+        protected ShortFeedExportModel(Person person, string schoolName, string sy, ClassDetails c, IList<DayType> dayTypes, IList<Staff> teachers
+            , AnnouncementComplex announcement)
             : this(person, schoolName, sy)
         {
-            ClassId = c.Id;
-            ClassName = c.Name;
-            if(c.PrimaryTeacherRef.HasValue)
-                ClassTeacherNames = BuildTeachersNames(c.PrimaryTeacherRef.Value, c.ClassTeachers, teachers);
+            if (c != null)
+            {
+                ClassId = c.Id;
+                ClassName = c.Name;
+                if (c.PrimaryTeacherRef.HasValue)
+                    Owners = BuildTeachersNames(c.PrimaryTeacherRef.Value, c.ClassTeachers, teachers);
+
+                DayTypes = dayTypes.Where(x => c.ClassPeriods.Any(y => y.DayTypeRef == x.Id))
+                                            .Select(x => x.Name.ToString())
+                                            .Distinct()
+                                            .JoinString(",");
+                Periods = c.ClassPeriods.Select(x => x.Period.Order.ToString()).Distinct().JoinString(",");
+            }
             AnnouncementId = announcement.Id;
             AnnouncementName = announcement.Title;
-            Complete = complete;
+            Complete = announcement.Complete;
+            if (announcement.ClassAnnouncementData != null)
+            {
+                StartDate = null;
+                EndDate = announcement.ClassAnnouncementData.Expires;
+                IsHidden = !announcement.ClassAnnouncementData.VisibleForStudent;
+            }
+            if (announcement.LessonPlanData != null)
+            {
+                StartDate = announcement.LessonPlanData.StartDate;
+                EndDate = announcement.LessonPlanData.EndDate;
+                IsHidden = !announcement.LessonPlanData.VisibleForStudent;
+            }
+            if (announcement.AdminAnnouncementData != null)
+            {
+                EndDate = announcement.AdminAnnouncementData.Expires;
+                IsAdminAnnouncement = true;
+                Owners = announcement.AdminAnnouncementData.AdminName;
+                AdminId = announcement.AdminRef;
+            }
         }
 
         protected string BuildTeachersNames(int primeryTeacherId, IList<ClassTeacher> classTeachers, IList<Staff> staffs)
@@ -61,42 +90,32 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 .OrderBy(x => x.LastName)
                 .ThenBy(x => x.FirstName)
                 .Select(x => x.FullName());
-            b.Append(primaryTeacher.FullName()).Append(",")
-                .Append(secondaryTeachers.JoinString(","));
+            b.Append(primaryTeacher.FullName()).Append(", ")
+                .Append(secondaryTeachers.JoinString(", "));
             return b.ToString();
         }
-
+        
         public ShortFeedExportModel() { }
 
         public static IList<ShortFeedExportModel> Create(Person person, string schoolName, string sy
-            , IList<ClassDetails> classes, IList<ScheduleItem> schedules, AnnouncementComplexList announcements)
+            , IList<ClassDetails> classes, IList<Staff> staffs, IList<DayType> dayTypes, IList<AnnouncementComplex> announcements)
         {
-            var res = new List<ShortFeedExportModel>();
-            foreach (var classDetailse in classes)
+            var res = new List<ShortFeedExportModel>(); 
+            foreach (var c in classes)
             {
-                var classAnns = announcements.ClassAnnouncements.Where(x => x.ClassRef == classDetailse.Id).ToList();
-                var lps = announcements.LessonPlans.Where(x => x.ClassRef == classDetailse.Id).ToList();
-                if(lps.Count == 0 && classAnns.Count == 0) continue;
-
-                foreach (var lessonPlan in lps)
+                var anns = announcements.Where(x => x.ClassRef == c.Id).ToList();
+                if (anns.Count == 0) continue;
+                anns = anns.OrderBy(x =>
                 {
-                    res.Add(new ShortFeedExportModel(person, schoolName, sy, classDetailse, new List<Staff>(), lessonPlan, true)
-                    {
-                        StartDate = lessonPlan.StartDate,
-                        EndDate = lessonPlan.EndDate,
-                        IsHidden = !lessonPlan.VisibleForStudent,
-                    });
-                }
-                foreach (var ann in classAnns)
-                {
-                    res.Add(new ShortFeedExportModel(person, schoolName, sy, classDetailse, new List<Staff>(), ann, true)
-                    {
-                        StartDate = null,
-                        EndDate = ann.Expires,
-                        IsHidden = !ann.VisibleForStudent
-                    });
-                }            
+                    if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
+                    return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
+                }).ToList();
+                res.AddRange(anns.Select(a=> new ShortFeedExportModel(person, schoolName, sy, c, dayTypes, staffs, a)).ToList());
             }
+            var adminAnns = announcements.Where(x => x.AdminAnnouncementData != null)
+                                         .OrderBy(x=>x.AdminAnnouncementData.Expires)
+                                         .ToList();
+            res.AddRange(adminAnns.Select(x => new ShortFeedExportModel(person, schoolName, sy, null, dayTypes, staffs, x)));            
             return res;
         }
     }

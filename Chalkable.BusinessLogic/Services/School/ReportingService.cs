@@ -423,7 +423,7 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.SchoolYearId.HasValue);
 
             var settings = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value,
-                Context.SchoolYearId.Value, new List<string>()
+                Context.SchoolYearId.Value, new List<string>
                 {
                     PersonSetting.FEED_REPORT_START_DATE,
                     PersonSetting.FEED_REPORT_END_DATE,

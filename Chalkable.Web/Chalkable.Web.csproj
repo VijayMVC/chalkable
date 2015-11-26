@@ -644,7 +644,7 @@
     <None Include="Reports\FeedReport\FeedDetailsDataSet.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Reports\FeedReport\MainDataSet.xsd">
+    <None Include="Reports\FeedReport\FeedShortDataSet.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>

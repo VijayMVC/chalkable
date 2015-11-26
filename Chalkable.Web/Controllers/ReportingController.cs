@@ -140,7 +140,7 @@ namespace Chalkable.Web.Controllers
             return Json(StudentCommentViewData.Create(studentComments));
         }
 
-        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult FeedReportSettings()
         {
             var feedSettings = SchoolLocator.AnnouncementFetchService.GetSettingsForFeed();

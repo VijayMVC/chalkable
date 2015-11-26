@@ -25,6 +25,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AdminAnnouncement GetAdminAnnouncementById(int adminAnnouncementId);
         bool Exists(string title, int? excludedLessonPlaId);
 
+        IList<AnnouncementComplex> GetAnnouncementsComplex(DateTime? startDate, DateTime? endDate, IList<int> gradeLevels, bool? complete, int start = 0, int count = int.MaxValue, bool ownedOnly = true); 
         FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, FeedSettings settings, int start = 0, int count = int.MaxValue, bool ownedOnly = true);
         IList<AdminAnnouncement> GetAdminAnnouncements(IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? studentId);
         IList<AdminAnnouncement> GetAdminAnnouncementsByFilter(string filter); 
@@ -146,7 +147,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool ownerOnly = false)
         {
             var anns = GetAdminAnnouncements(null, startDate, toDate, null);
-            return DoRead(u => anns.Select(x => CreateDataAccess(u).GetDetails(x.Id, Context.PersonId.Value, Context.RoleId))).ToList();
+            return anns.Select(x => DoRead(u => CreateDataAccess(u).GetDetails(x.Id, Context.PersonId.Value, Context.RoleId))).ToList();
         }
 
         public override void DeleteAnnouncement(int announcementId)
@@ -227,6 +228,23 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateAdminAnnouncementDataAccess(u).Exists(title, Context.PersonId.Value, excludedLessonPlaId));
         }
 
+        public IList<AnnouncementComplex> GetAnnouncementsComplex(DateTime? startDate, DateTime? endDate, IList<int> gradeLevels, bool? complete
+            , int start = 0, int count = int.MaxValue, bool ownedOnly = true)
+        {
+            return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
+            {
+                Complete = complete,
+                FromDate = startDate,
+                ToDate = endDate,
+                Start = start,
+                Count = count,
+                PersonId = Context.PersonId,
+                RoleId = Context.RoleId,
+                GradeLevelsIds = gradeLevels,
+                OwnedOnly = ownedOnly
+            })).Announcements;
+        }
+
         public override void SetAnnouncementsAsComplete(DateTime? toDate, bool complete)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -243,7 +261,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     .Announcements;
                 var da = new AnnouncementRecipientDataDataAccess(u);
                 foreach (var ann in anns)
-                    da.UpdateAnnouncementRecipientData(ann.Id, (int) AnnouncementType.Admin ,null, personId, null, complete, null, null);
+                    da.UpdateAnnouncementRecipientData(ann.Id, (int) AnnouncementTypeEnum.Admin ,null, personId, null, complete, null, null);
             });
         }
 
@@ -251,7 +269,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             DoUpdate(
                 u =>
-                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementType.Admin, null,
+                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.Admin, null,
                         Context.PersonId.Value, null, complete, null, null));
         }
 
@@ -407,7 +425,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             DoUpdate(
                 u =>
-                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementType.Admin,schoolYearId,
+                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementTypeEnum.Admin,schoolYearId,
                         personId, roleId, true, tillDateToUpdate, null));
         }
     }
