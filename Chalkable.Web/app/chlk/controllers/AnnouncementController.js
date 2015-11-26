@@ -675,7 +675,7 @@ NAMESPACE('chlk.controllers', function (){
 
             var result = this.announcementService.getAttachSettings(announcementId, announcementType)
                 .then(function(options){
-                    _DEBUG && options.setAssessmentAppId(chlk.models.id.AppId('56c14655-2897-4073-bb48-32dfd61264b5'));
+                    //_DEBUG && options.setAssessmentAppId(chlk.models.id.AppId('56c14655-2897-4073-bb48-32dfd61264b5'));
                     options.updateByValues(null, null, null, announcementId, classId, announcementTypeName,
                         announcementType, null, appUrlAppend_);
                     this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
