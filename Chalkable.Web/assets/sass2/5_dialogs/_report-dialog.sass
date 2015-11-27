@@ -13,19 +13,33 @@
     td
       border-bottom: 1px solid #e7e6e2
 
-  .print-activity-details
+  .print-list-of-activities, .print-activity-details
     label
-      background: url(images2/icons-24/activity-details.png) 7px center no-repeat
+      &::after
+        left: 7px
+        top: 10px
+
+      &::before, &::after
+        content: " "
+        width: 24px
+        height: 24px
+        position: absolute
 
     input:checked + label
-      background: url(images2/icons-24/check.png) 195px 12px no-repeat, url(images2/icons-24/activity-details.png) 7px center no-repeat, #f7f7f5
+      background: #f7f7f5
+
+      &::before
+        +icons-24-sprite(check)
+        right: 9px
+        top: 12px
+
+  .print-activity-details
+    label::after
+      +icons-24-sprite(activity-details)
 
   .print-list-of-activities
-    label
-      background: url(images2/icons-24/activities-list.png) 7px center no-repeat
-
-    input:checked + label
-      background: url(images2/icons-24/check.png) 195px 12px no-repeat, url(images2/icons-24/activities-list.png) 7px center no-repeat, #f7f7f5
+    label::after
+      +icons-24-sprite(activities-list)
 
   .print-item
     position: relative
