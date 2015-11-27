@@ -12,7 +12,6 @@ namespace Chalkable.BusinessLogic.Model.Reports
     {
         public string AnnouncementDescription { get; set; }
         public string AnnouncementType { get; set; }
-
         public bool IsLessonPlan { get; set; }
         public bool ShowScoreSettings { get; set; } 
         public double? TotalPoint { get; set; }
@@ -31,7 +30,6 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public byte[] AnnouncementAttachmentImage { get; set; }
         public int AnnouncementAttachmentOrder { get; set; }
         public bool Document { get; set; }
-        
 
         public int? AttributeId { get; set; }
         public int? SisAttributeId { get; set; }
