@@ -107,6 +107,7 @@
     <Compile Include="Connectors\ActivityScoreConnector.cs" />
     <Compile Include="Connectors\AttachmentConnector.cs" />
     <Compile Include="Connectors\AttendanceConnector.cs" />
+    <Compile Include="Connectors\ClassesDashboardConnector.cs" />
     <Compile Include="Connectors\ClassroomOptionConnector.cs" />
     <Compile Include="Connectors\ConnectorBase.cs">
       <SubType>Component</SubType>
@@ -153,6 +154,8 @@
     <Compile Include="Connectors\Model\Attendances\StudentSectionAbsenceSummary.cs" />
     <Compile Include="Connectors\Model\GradebookCommect.cs" />
     <Compile Include="Connectors\Model\Reports\StudentComprehensiveProgressParams.cs" />
+    <Compile Include="Connectors\Model\SchoolSummary.cs" />
+    <Compile Include="Connectors\Model\SectionSummary.cs" />
     <Compile Include="Connectors\Model\StudentExplorerDashboard.cs" />
     <Compile Include="Connectors\Model\Gradebook.cs" />
     <Compile Include="Connectors\Model\Reports\GradebookReportParams.cs" />
@@ -173,6 +176,7 @@
     <Compile Include="Connectors\Model\StudentCondition.cs" />
     <Compile Include="Connectors\Model\Reports\StudentProgressReportComment.cs" />
     <Compile Include="Connectors\Model\StudentTotalPoints.cs" />
+    <Compile Include="Connectors\Model\TeacherSummary.cs" />
     <Compile Include="Connectors\Model\User.cs" />
     <Compile Include="Connectors\Model\Reports\WorksheetReportParams.cs" />
     <Compile Include="Connectors\ReportConnector.cs" />

@@ -19,9 +19,8 @@ namespace Chalkable.Web.Controllers
             Trace.Assert(Context.SchoolYearId.HasValue);
 
             var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
-            var currSchoolYear = SchoolLocator.SchoolYearService.GetSchoolYearById(Context.SchoolYearId.Value);
-            var schoolsCount = SchoolLocator.SchoolService.GetSchoolsCountByAcadYear(currSchoolYear.AcadYear);
-            var studentsCount = SchoolLocator.StudentService.GetStudentsCountByAcadYear(currSchoolYear.AcadYear);
+            var schoolsCount = SchoolLocator.SchoolService.GetSchoolsCount();
+            var studentsCount = SchoolLocator.StudentService.GetEnrolledStudentsCount();
             return Json(ShortDistrictSummaryViewData.Create(district, studentsCount, schoolsCount));
         }
 
@@ -30,9 +29,9 @@ namespace Chalkable.Web.Controllers
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
 
-            var currSchoolYear = SchoolLocator.SchoolYearService.GetSchoolYearById(Context.SchoolYearId.Value);
-            var schools = SchoolLocator.SchoolService.GetShortSchoolSummariesByAcadYear(currSchoolYear.AcadYear, start,
+            var schools = SchoolLocator.SchoolService.GetShortSchoolSummariesInfo(start,
                 count, filter);
+
             return Json(LocalSchoolSummaryViewData.Create(schools));
         }
     }

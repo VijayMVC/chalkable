@@ -10,6 +10,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -26,11 +27,11 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteSchoolOptions(IList<SchoolOption> schoolOptions);
         SchoolOption GetSchoolOption();
         StartupData GetStartupData();
-        int GetSchoolsCountByAcadYear(int acadYear);
-        PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesByAcadYear(int acadYear, int? start, int? count, string filter);
+        PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter);
+        int GetSchoolsCount(string filter = null);
     }
 
-    public class SchoolService : SchoolServiceBase, ISchoolService
+    public class SchoolService : SisConnectedService, ISchoolService
     {
         public SchoolService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -134,23 +135,25 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public int GetSchoolsCountByAcadYear(int acadYear)
-        {
-            return DoRead(u => new SchoolDataAccess(u).GetSchoolsCountByAcadYear(acadYear));
-        }
-
-        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesByAcadYear(int acadYear, int? start, int? count, string filter)
+        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter)
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
 
-            //TODO: waiting iNow API
-            var res =
-                SchoolSummaryInfo.Create(
-                    DoRead(
-                        u =>
-                            new SchoolDataAccess(u).GetShortSchoolSummariesByAcadYear(acadYear, start.Value, count.Value, filter)));
-            return res;
+            var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSchoolsSummaries(Context.NowSchoolTime,
+                start.Value, count.Value, filter);
+
+            if (iNowRes == null)
+                return SchoolSummaryInfo.Create(DoRead( u => new SchoolDataAccess(u).GetShortSchoolSummaries(start.Value, count.Value, filter)));
+
+            var allSchoolCount = GetSchoolsCount(filter);
+
+            return SchoolSummaryInfo.Create(iNowRes, start.Value, count.Value, allSchoolCount);
+        }
+
+        public int GetSchoolsCount(string filter = null)
+        {
+            return DoRead(u => new SchoolDataAccess(u).GetShoolsCount(filter));
         }
     }
 }

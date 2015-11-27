@@ -50,6 +50,7 @@ namespace Chalkable.StiConnector.Connectors
             LearningEarningsConnector = new LearningEarningsConnector(this);
             ActivityAssignedAttributeConnector = new ActivityAssignedAttributeConnector(this);
             GradingConnector = new GradingConnector(this);
+            ClassesDashboardConnector = new ClassesDashboardConnector(this);
         }
 
 
@@ -74,6 +75,7 @@ namespace Chalkable.StiConnector.Connectors
         public SectionDashboardConnector SectionDashboardConnector { get; private set; }
         public LearningEarningsConnector LearningEarningsConnector { get; private set; }
         public GradingConnector GradingConnector { get; private set; }
+        public ClassesDashboardConnector ClassesDashboardConnector { get; private set; }
 
         public class TokenModel
         {

@@ -104,38 +104,34 @@ namespace Chalkable.Data.School.DataAccess
             public int ClassId { get; set; }
         }
 
-        private const string SP_GET_SCHOOLS_BY_ACAD_YEAR = "spGetSchoolsCountByAcadYear";
-        private const string SCHOOLS_COUNT_FIELD = "SchoolsCount";
+        private const string SP_GET_SHORT_SCHOOL_SUMMARIES = "spGetShortSchoolSummaries";
 
-        public int GetSchoolsCountByAcadYear(int acadYear)
+        public PaginatedList<ShortSchoolSummary> GetShortSchoolSummaries(int start, int count, string filter)
         {
             var param = new Dictionary<string, object>()
             {
-                ["@acadYear"] = acadYear
-            };
-
-            using (var reader = ExecuteStoredProcedureReader(SP_GET_SCHOOLS_BY_ACAD_YEAR, param))
-                if(reader.Read())
-                    return SqlTools.ReadInt32(reader, SCHOOLS_COUNT_FIELD);
-
-            return 0;
-        }
-
-        private const string SP_GET_SHORT_SCHOOL_SUMMARIES_BY_ACAD_YEAR = "spGetShortSchoolSummariesByAcadYear";
-
-        public PaginatedList<ShortSchoolSummary> GetShortSchoolSummariesByAcadYear(int acadYear, int start, int count, string filter)
-        {
-            var param = new Dictionary<string, object>()
-            {
-                ["acadYear"] = acadYear,
                 ["filter"] = "%" + filter + "%",
                 ["start"] = start,
                 ["count"] = count
             };
 
-            var res = ExecuteStoredProcedurePaginated<ShortSchoolSummary>(SP_GET_SHORT_SCHOOL_SUMMARIES_BY_ACAD_YEAR, param, start, count);
+            var res = ExecuteStoredProcedurePaginated<ShortSchoolSummary>(SP_GET_SHORT_SCHOOL_SUMMARIES, param, start, count);
 
             return res;
+        }
+
+        public int GetShoolsCount(string filter)
+        {   
+            var param = new Dictionary<string, object>()
+            {
+                ["filter"] = "%" + filter + "%",
+                ["start"] = 0,
+                ["count"] = 1
+            };
+
+            var res = ExecuteStoredProcedurePaginated<ShortSchoolSummary>(SP_GET_SHORT_SCHOOL_SUMMARIES, param, 0, 1);
+
+            return res.TotalCount;
         }
     }
 

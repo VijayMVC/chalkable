@@ -270,7 +270,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             
         }
 
-        public int GetStudentsCountByAcadYear(int acadYear)
+        public int GetEnrolledStudentsCount()
         {
             throw new NotImplementedException();
         }

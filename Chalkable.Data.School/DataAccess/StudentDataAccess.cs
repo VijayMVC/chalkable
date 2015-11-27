@@ -84,21 +84,14 @@ namespace Chalkable.Data.School.DataAccess
             return SelectMany<StudentSchoolYear>(conds).Select(x => x.StudentRef).ToList();
         }
 
-        private const string SP_GET_STUDENTS_BY_ACAD_YEAR = "spGetStudentsCountByAcadYear";
-        private const string STUDENTS_COUNT_FIELD = "StudentsCount";
-
-        public int GetStudentsCountByAcadYear(int acadYear)
+        public int GetEnrolledStudentsCount()
         {
-            var param = new Dictionary<string, object>()
-            {
-                ["acadYear"] = acadYear
-            };
-
-            using (var reader = ExecuteStoredProcedureReader(SP_GET_STUDENTS_BY_ACAD_YEAR, param))
-                if(reader.Read())
-                    return SqlTools.ReadInt32(reader, STUDENTS_COUNT_FIELD);
-
-            return 0;
+            var conds = new AndQueryCondition
+                {
+                    {StudentSchoolYear.ENROLLMENT_STATUS_FIELD, StudentEnrollmentStatusEnum.CurrentlyEnrolled}
+                };
+            
+            return SelectMany<StudentSchoolYear>(conds).Count;
         }
     }
 }

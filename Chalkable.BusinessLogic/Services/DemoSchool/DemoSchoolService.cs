@@ -146,12 +146,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return startupData;
         }
 
-        public int GetSchoolsCountByAcadYear(int acadYear)
+        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter)
         {
             throw new System.NotImplementedException();
         }
 
-        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesByAcadYear(int acadYear, int? start, int? count, string filter)
+        public int GetSchoolsCount(string filter = null)
         {
             throw new System.NotImplementedException();
         }

@@ -226,6 +226,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     u =>
                         new ClassDataAccess(u).GetClassesByTeachers(schoolYearId, teacherIds, start ?? 0,
                             count ?? int.MaxValue));
+
+           
         }
     }
 }

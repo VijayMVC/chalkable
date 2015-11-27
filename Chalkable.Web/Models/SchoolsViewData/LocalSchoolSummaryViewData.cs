@@ -1,15 +1,17 @@
 ﻿using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
+using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.Web.Models.SchoolsViewData
 {
     public class LocalSchoolSummaryViewData : LocalSchoolViewData
     {
-        public int? AttendancesCount { get; set; }
+        public decimal? AttendancesCount { get; set; }
         public int StudentsCount { get; set; }
-        public int? DisciplinesCount { get; set; }
-        public double? Avarage { get; set; }
+        public decimal? DisciplinesCount { get; set; }
+        public decimal? Avarage { get; set; }
 
         public static LocalSchoolSummaryViewData Create(SchoolSummaryInfo school)
         {
