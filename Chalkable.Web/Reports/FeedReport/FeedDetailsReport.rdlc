@@ -6,7 +6,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>7.42584in</Width>
+              <Width>7.44735in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -17,180 +17,6 @@
                   <CellContents>
                     <Rectangle Name="Rectangle4">
                       <ReportItems>
-                        <Textbox Name="Textbox19">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=IIF(Fields!IsAdminAnnouncement.Value, Fields!AnnouncementName.Value, Fields!ClassName.Value + " - " + Fields!AnnouncementName.Value)</Value>
-                                  <Style>
-                                    <FontSize>12pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>#2b2a28</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox19</rd:DefaultName>
-                          <Top>0.10639in</Top>
-                          <Left>0.13538in</Left>
-                          <Height>0.25in</Height>
-                          <Width>3.0625in</Width>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="Textbox20">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=IIf(Fields!IsLessonPlan.Value, Format(Fields!StartDate.Value, "MMMM d, yyyy") + " - " + Format(Fields!EndDate.Value, "MMMM d, yyyy"), Format(Fields!EndDate.Value, "MMMM d, yyyy"))</Value>
-                                  <Style>
-                                    <FontStyle>Italic</FontStyle>
-                                    <Color>#9e9c96</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox20</rd:DefaultName>
-                          <Top>0.40639in</Top>
-                          <Left>0.13538in</Left>
-                          <Height>0.1625in</Height>
-                          <Width>3.0625in</Width>
-                          <ZIndex>1</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="Textbox21">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>="Total Points: " + Str(Round(Fields!TotalPoint.Value, 2))+ " Weight Addition: " + Str(Round(Fields!WeightAddition.Value, 2)) + " Weight Multiplier: " + Str(Round(Fields!WeigntMultiplier.Value,2))</Value>
-                                  <Style>
-                                    <FontStyle>Italic</FontStyle>
-                                    <Color>#9e9c96</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style />
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox20</rd:DefaultName>
-                          <Top>0.58833in</Top>
-                          <Left>0.13538in</Left>
-                          <Height>0.17362in</Height>
-                          <Width>3.79154in</Width>
-                          <ZIndex>2</ZIndex>
-                          <Visibility>
-                            <Hidden>=(Fields!IsLessonPlan.Value) Or (Not(Fields!ShowScoreSettings.Value))</Hidden>
-                          </Visibility>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="Textbox22">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!Owners.Value</Value>
-                                  <Style>
-                                    <FontStyle>Italic</FontStyle>
-                                    <FontSize>9pt</FontSize>
-                                    <Color>#9e9c96</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox20</rd:DefaultName>
-                          <Top>0.6272in</Top>
-                          <Left>3.88178in</Left>
-                          <Height>0.15in</Height>
-                          <Width>3.54406in</Width>
-                          <ZIndex>3</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>5pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="Textbox23">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!DayTypes.Value + IIF(IsNothing(Fields!PersonId.Value), "" , " Period(s): " + Fields!Periods.Value)</Value>
-                                  <Style>
-                                    <FontStyle>Italic</FontStyle>
-                                    <FontSize>9pt</FontSize>
-                                    <Color>#9e9c96</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox20</rd:DefaultName>
-                          <Top>0.45914in</Top>
-                          <Left>3.19788in</Left>
-                          <Height>0.1375in</Height>
-                          <Width>4.22765in</Width>
-                          <ZIndex>4</ZIndex>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>5pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
                         <Textbox Name="Textbox24">
                           <CanGrow>true</CanGrow>
                           <KeepTogether>true</KeepTogether>
@@ -211,10 +37,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox24</rd:DefaultName>
                           <Top>0.95014in</Top>
-                          <Left>0.13538in</Left>
+                          <Left>0.15658in</Left>
                           <Height>0.125in</Height>
-                          <Width>7.27765in</Width>
-                          <ZIndex>5</ZIndex>
+                          <Width>7.24768in</Width>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -225,101 +50,6 @@
                             <PaddingBottom>2pt</PaddingBottom>
                           </Style>
                         </Textbox>
-                        <Textbox Name="Textbox25">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>=Fields!AnnouncementType.Value</Value>
-                                  <Style>
-                                    <FontSize>11pt</FontSize>
-                                    <FontWeight>Bold</FontWeight>
-                                    <Color>Teal</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Center</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox25</rd:DefaultName>
-                          <Top>0.17164in</Top>
-                          <Left>5.75761in</Left>
-                          <Height>0.24306in</Height>
-                          <Width>1.64501in</Width>
-                          <ZIndex>6</ZIndex>
-                          <Style>
-                            <Border>
-                              <Color>Silver</Color>
-                              <Style>Solid</Style>
-                            </Border>
-                            <VerticalAlign>Middle</VerticalAlign>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                            <Direction>LTR</Direction>
-                          </Style>
-                        </Textbox>
-                        <Textbox Name="Textbox26">
-                          <CanGrow>true</CanGrow>
-                          <KeepTogether>true</KeepTogether>
-                          <Paragraphs>
-                            <Paragraph>
-                              <TextRuns>
-                                <TextRun>
-                                  <Value>="Complete"</Value>
-                                  <Style>
-                                    <FontSize>8pt</FontSize>
-                                    <Color>#9e9c96</Color>
-                                  </Style>
-                                </TextRun>
-                              </TextRuns>
-                              <Style>
-                                <TextAlign>Right</TextAlign>
-                              </Style>
-                            </Paragraph>
-                          </Paragraphs>
-                          <rd:DefaultName>Textbox26</rd:DefaultName>
-                          <Top>0.25707in</Top>
-                          <Left>4.65948in</Left>
-                          <Height>0.19237in</Height>
-                          <Width>0.53125in</Width>
-                          <ZIndex>7</ZIndex>
-                          <Visibility>
-                            <Hidden>=Not(Fields!Complete.Value)</Hidden>
-                          </Visibility>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                            <PaddingLeft>2pt</PaddingLeft>
-                            <PaddingRight>2pt</PaddingRight>
-                            <PaddingTop>2pt</PaddingTop>
-                            <PaddingBottom>2pt</PaddingBottom>
-                          </Style>
-                        </Textbox>
-                        <Image Name="Image1">
-                          <Source>Embedded</Source>
-                          <Value>invisible</Value>
-                          <Sizing>FitProportional</Sizing>
-                          <Top>0.20707in</Top>
-                          <Left>5.33115in</Left>
-                          <Height>0.29513in</Height>
-                          <Width>0.30146in</Width>
-                          <ZIndex>8</ZIndex>
-                          <Visibility>
-                            <Hidden>=Not(Fields!IsHidden.Value)</Hidden>
-                          </Visibility>
-                          <Style>
-                            <Border>
-                              <Style>None</Style>
-                            </Border>
-                          </Style>
-                        </Image>
                         <Tablix Name="Tablix5">
                           <TablixBody>
                             <TablixColumns>
@@ -585,7 +315,7 @@
                           <Left>0.12496in</Left>
                           <Height>3.08506in</Height>
                           <Width>7.27147in</Width>
-                          <ZIndex>9</ZIndex>
+                          <ZIndex>1</ZIndex>
                           <Style>
                             <Border>
                               <Style>None</Style>
@@ -803,7 +533,7 @@
                           <Left>0.13158in</Left>
                           <Height>2.17879in</Height>
                           <Width>7.27147in</Width>
-                          <ZIndex>10</ZIndex>
+                          <ZIndex>2</ZIndex>
                           <Visibility>
                             <Hidden>=Not(Fields!HasAttachments.Value)</Hidden>
                           </Visibility>
@@ -1004,7 +734,7 @@
                           <Left>0.14156in</Left>
                           <Height>0.64062in</Height>
                           <Width>7.28428in</Width>
-                          <ZIndex>11</ZIndex>
+                          <ZIndex>3</ZIndex>
                           <Visibility>
                             <Hidden>=Not(Fields!HasStandards.Value)</Hidden>
                           </Visibility>
@@ -1014,6 +744,387 @@
                             </Border>
                           </Style>
                         </Rectangle>
+                        <Tablix Name="Tablix1">
+                          <TablixBody>
+                            <TablixColumns>
+                              <TablixColumn>
+                                <Width>3.33509in</Width>
+                              </TablixColumn>
+                              <TablixColumn>
+                                <Width>1.52093in</Width>
+                              </TablixColumn>
+                              <TablixColumn>
+                                <Width>0.40786in</Width>
+                              </TablixColumn>
+                              <TablixColumn>
+                                <Width>1.97597in</Width>
+                              </TablixColumn>
+                            </TablixColumns>
+                            <TablixRows>
+                              <TablixRow>
+                                <Height>0.37848in</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox7">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=IIF(Fields!IsAdminAnnouncement.Value, Fields!AnnouncementName.Value, Fields!ClassName.Value + " - " + Fields!AnnouncementName.Value)</Value>
+                                                <Style>
+                                                  <FontSize>11pt</FontSize>
+                                                  <FontWeight>Bold</FontWeight>
+                                                  <Color>#2b2a28</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox7</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <VerticalAlign>Middle</VerticalAlign>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox18">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>Complete</Value>
+                                                <Style>
+                                                  <FontStyle>Italic</FontStyle>
+                                                  <FontSize>8pt</FontSize>
+                                                  <Color>#9e9c96</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Right</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value />
+                                                <Style>
+                                                  <FontStyle>Italic</FontStyle>
+                                                  <FontSize>8pt</FontSize>
+                                                  <Color>#9e9c96</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox18</rd:DefaultName>
+                                        <Visibility>
+                                          <Hidden>=Not(Fields!Complete.Value)</Hidden>
+                                        </Visibility>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <VerticalAlign>Bottom</VerticalAlign>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>10pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Rectangle Name="Rectangle11">
+                                        <ReportItems>
+                                          <Image Name="Image5">
+                                            <Source>Embedded</Source>
+                                            <Value>invisible1</Value>
+                                            <Sizing>Fit</Sizing>
+                                            <Top>0.0875in</Top>
+                                            <Left>0.0875in</Left>
+                                            <Height>0.24098in</Height>
+                                            <Width>0.29276in</Width>
+                                            <Style>
+                                              <Border>
+                                                <Style>None</Style>
+                                              </Border>
+                                            </Style>
+                                          </Image>
+                                        </ReportItems>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                        </Style>
+                                      </Rectangle>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Rectangle Name="Rectangle10">
+                                        <ReportItems>
+                                          <Textbox Name="Textbox25">
+                                            <CanGrow>true</CanGrow>
+                                            <KeepTogether>true</KeepTogether>
+                                            <Paragraphs>
+                                              <Paragraph>
+                                                <TextRuns>
+                                                  <TextRun>
+                                                    <Value>=Fields!AnnouncementType.Value</Value>
+                                                    <Style>
+                                                      <FontSize>11pt</FontSize>
+                                                      <FontWeight>Bold</FontWeight>
+                                                      <Color>Teal</Color>
+                                                    </Style>
+                                                  </TextRun>
+                                                </TextRuns>
+                                                <Style>
+                                                  <TextAlign>Center</TextAlign>
+                                                </Style>
+                                              </Paragraph>
+                                            </Paragraphs>
+                                            <rd:DefaultName>Textbox25</rd:DefaultName>
+                                            <Top>0.05in</Top>
+                                            <Left>0.29502in</Left>
+                                            <Height>0.29306in</Height>
+                                            <Width>1.63251in</Width>
+                                            <Style>
+                                              <Border>
+                                                <Color>Silver</Color>
+                                                <Style>Solid</Style>
+                                              </Border>
+                                              <VerticalAlign>Middle</VerticalAlign>
+                                              <PaddingLeft>2pt</PaddingLeft>
+                                              <PaddingRight>2pt</PaddingRight>
+                                              <PaddingTop>2pt</PaddingTop>
+                                              <PaddingBottom>2pt</PaddingBottom>
+                                              <Direction>LTR</Direction>
+                                            </Style>
+                                          </Textbox>
+                                        </ReportItems>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                        </Style>
+                                      </Rectangle>
+                                    </CellContents>
+                                  </TablixCell>
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>0.19514in</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox8">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=IIf(Fields!IsLessonPlan.Value, Format(Fields!StartDate.Value, "MMMM d, yyyy") + " - " + Format(Fields!EndDate.Value, "MMMM d, yyyy"), Format(Fields!EndDate.Value, "MMMM d, yyyy"))</Value>
+                                                <Style>
+                                                  <FontStyle>Italic</FontStyle>
+                                                  <FontSize>9pt</FontSize>
+                                                  <Color>#9e9c96</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox8</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>1pt</PaddingTop>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox6">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!DayTypes.Value + IIF(IsNothing(Fields!Periods.Value), "" , " Period(s): " + Fields!Periods.Value)</Value>
+                                                <Style>
+                                                  <FontStyle>Italic</FontStyle>
+                                                  <FontSize>9pt</FontSize>
+                                                  <Color>#9e9c96</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Right</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox6</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                      <ColSpan>3</ColSpan>
+                                      <rd:Selected>true</rd:Selected>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell />
+                                  <TablixCell />
+                                </TablixCells>
+                              </TablixRow>
+                              <TablixRow>
+                                <Height>0.19036in</Height>
+                                <TablixCells>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Textbox9">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>="Total Points: " + Str(Round(Fields!TotalPoint.Value, 2))+ " Weight Addition: " + Str(Round(Fields!WeightAddition.Value, 2)) + " Weight Multiplier: " + Str(Round(Fields!WeigntMultiplier.Value,2))</Value>
+                                                <Style>
+                                                  <FontStyle>Italic</FontStyle>
+                                                  <FontSize>9pt</FontSize>
+                                                  <Color>#9e9c96</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style />
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Textbox9</rd:DefaultName>
+                                        <Visibility>
+                                          <Hidden>=(Fields!IsLessonPlan.Value) Or (Not(Fields!ShowScoreSettings.Value))</Hidden>
+                                        </Visibility>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>1pt</PaddingTop>
+                                        </Style>
+                                      </Textbox>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell>
+                                    <CellContents>
+                                      <Textbox Name="Owners">
+                                        <CanGrow>true</CanGrow>
+                                        <KeepTogether>true</KeepTogether>
+                                        <Paragraphs>
+                                          <Paragraph>
+                                            <TextRuns>
+                                              <TextRun>
+                                                <Value>=Fields!Owners.Value</Value>
+                                                <Style>
+                                                  <FontStyle>Italic</FontStyle>
+                                                  <FontSize>9pt</FontSize>
+                                                  <Color>#9e9c96</Color>
+                                                </Style>
+                                              </TextRun>
+                                            </TextRuns>
+                                            <Style>
+                                              <TextAlign>Right</TextAlign>
+                                            </Style>
+                                          </Paragraph>
+                                        </Paragraphs>
+                                        <rd:DefaultName>Owners</rd:DefaultName>
+                                        <Style>
+                                          <Border>
+                                            <Style>None</Style>
+                                          </Border>
+                                          <PaddingLeft>2pt</PaddingLeft>
+                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingTop>2pt</PaddingTop>
+                                          <PaddingBottom>2pt</PaddingBottom>
+                                        </Style>
+                                      </Textbox>
+                                      <ColSpan>3</ColSpan>
+                                    </CellContents>
+                                  </TablixCell>
+                                  <TablixCell />
+                                  <TablixCell />
+                                </TablixCells>
+                              </TablixRow>
+                            </TablixRows>
+                          </TablixBody>
+                          <TablixColumnHierarchy>
+                            <TablixMembers>
+                              <TablixMember />
+                              <TablixMember />
+                              <TablixMember />
+                              <TablixMember />
+                            </TablixMembers>
+                          </TablixColumnHierarchy>
+                          <TablixRowHierarchy>
+                            <TablixMembers>
+                              <TablixMember>
+                                <Group Name="ClassId">
+                                  <GroupExpressions>
+                                    <GroupExpression>=Fields!ClassId.Value</GroupExpression>
+                                    <GroupExpression>=Fields!AdminId.Value</GroupExpression>
+                                  </GroupExpressions>
+                                </Group>
+                                <TablixMembers>
+                                  <TablixMember />
+                                  <TablixMember />
+                                  <TablixMember />
+                                </TablixMembers>
+                              </TablixMember>
+                            </TablixMembers>
+                          </TablixRowHierarchy>
+                          <DataSetName>MainDataSet</DataSetName>
+                          <Top>0.11888in</Top>
+                          <Left>0.15658in</Left>
+                          <Height>0.76398in</Height>
+                          <Width>7.23985in</Width>
+                          <ZIndex>4</ZIndex>
+                          <Style>
+                            <Border>
+                              <Style>None</Style>
+                            </Border>
+                          </Style>
+                        </Tablix>
                       </ReportItems>
                       <KeepTogether>true</KeepTogether>
                       <Style>
@@ -1051,9 +1162,9 @@
           </TablixMembers>
         </TablixRowHierarchy>
         <DataSetName>MainDataSet</DataSetName>
-        <Left>0.50083in</Left>
+        <Left>0.47901in</Left>
         <Height>7.37512in</Height>
-        <Width>7.42584in</Width>
+        <Width>7.44735in</Width>
         <Style>
           <Border>
             <Style>None</Style>
@@ -1064,7 +1175,7 @@
     <Height>7.37512in</Height>
     <Style />
   </Body>
-  <Width>8.19338in</Width>
+  <Width>8.14726in</Width>
   <Page>
     <PageHeader>
       <Height>1.10292in</Height>
@@ -1517,6 +1628,12 @@ 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</ImageData>
+    </EmbeddedImage>
+    <EmbeddedImage Name="invisible1">
+      <MIMEType>image/png</MIMEType>
+      <ImageData>iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6OEQzMzRDOTBBMjJBMTFFNEFGNTQ5N0E0NzJDNDU5QkMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6OEQzMzRDOTFBMjJBMTFFNEFGNTQ5N0E0NzJDNDU5QkMiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo4RDMzNEM4RUEyMkExMUU0QUY1NDk3QTQ3MkM0
+NTlCQyIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo4RDMzNEM4RkEyMkExMUU0QUY1NDk3QTQ3MkM0NTlCQyIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PhGidj4AAANhSURBVHjaYvz//z8DLQETA43B0LeABZkTHhaQDqT0gThn5aoN/6BiIEdYArEpEIsA8RsgPgPEx4Fq/hKygBE5koGGeTIyMq4TF5c49vfvX+/Xr1+lAYVLgVgGw+tMTM+BejuAeBrQoj9EWQAC3V1tMRcunJsLZP768+cPDyEXcnJyXv/373/EosUrLhFlAdAXvkBfrACKc8HE5OUVbppbWF2UlpL+8PTZU4GTJ47pP3z4QB0mz8zM/FNSUiqlt2/yEkJBFAGkQIqYYWK8vLzv+vqnzuDj47sM5IJc+QGIBYA+LT9z5lQc3CBGxn+qauqlzc0dfVgtABruB6TWIRsOjItHnz59EuLi4notLSNjceniBVCieA4Mc7CmtNT4wx8/frRBtkTfwLCgsrJuMkoyBRquDaSWIhsOAi6u7kdz8wpbvn//JnD1yuVHQKGnwODYV1lRzAqSBxreiawe6FimK5cv9cyfP9sbPR8sBGKMCFVUVHprbGy6XkhIOBGYqthBYkDawd7BqRqq9ya6HmDCYDt18sRMIFMM2YKZ2FLA+3fvQBH97smTx4eA3v8IExcRFhEHUpLQfIEBzM0tzwGpALgFwDCdLSoqugZd4cmTx9VAKREo/15WTt7G0dFlk7Cw8PNp0yZHTp82SRYo54euR0dX70xCYgrIgrPokcwsJia+/9Wrl7bwbM7C8isyKjbHx8d/NlRI6Natm4b9fV0zv337Kvrz509moH5umHolZZWrwFS0FqjvFJC7FSOZNjbWcHz88GHn06dP7GBi7Ozs3wQFhUpevHg+B+iT30CHsHJwcKT9
++PFjCrLL1dTUL1XXNG4CyoGS8log/oc1o127eoVlzZqVC65duxIJShVISfArkP8MyJQAZQ9kPRoamhcaGts2AtVcBHI3gdICPBM2NDSgWCAqJvYPmErW//7z59nbt28MgEHBD5ViA2JhkKdgaoFB+kRYWOTFo0cPVX//+rUfGP6zYS7HWVSgAektWzbmnj9/1unli+dS379/5wKWPd/EJSSfWVvbXXVycnn4+/evpxUVJXHPnz01B+bktMbGtgWkWAAvjkAJBJo0QZH6FZSjgfgKED9cvXoFy6lTJ7Zoamj9SEpOA5W+t0m1gBjACMTeUIvP0sKCYVonAwQYAO5XcdUbz0JKAAAAAElFTkSuQmCC</ImageData>
     </EmbeddedImage>
   </EmbeddedImages>
   <rd:ReportUnitType>Inch</rd:ReportUnitType>
