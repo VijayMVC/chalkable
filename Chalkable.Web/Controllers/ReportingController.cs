@@ -4,12 +4,14 @@ using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
+using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.PersonViewDatas;
+using Microsoft.Reporting.WebForms;
 using Newtonsoft.Json;
 
 namespace Chalkable.Web.Controllers
@@ -100,6 +102,32 @@ namespace Chalkable.Web.Controllers
             var formatType = (ReportingFormat?) format ?? ReportingFormat.Pdf;
             var reportInput = new FeedReportInputModel {ClassId = classId, Format = format, Settings = settings};
             return Report(() => SchoolLocator.ReportService.GetFeedReport(reportInput, path), "Feed Report", formatType);
+        }
+
+        public ActionResult FakeReport()
+        {
+            try
+            {
+                var report = new LocalReport { ReportPath = string.Empty };
+                var dataSource = new ReportDataSource("MainDataSet", new {});
+                report.DataSources.Add(dataSource);
+
+                string deviceInfo =
+                  "<DeviceInfo>" +
+                  "  <PageWidth>9in</PageWidth>" +
+                  "  <PageHeight>12in</PageHeight>" +
+                  "  <MarginTop>0.05in</MarginTop>" +
+                  "  <MarginLeft>0.05in</MarginLeft>" +
+                  "  <MarginRight>0.05in</MarginRight>" +
+                  "  <MarginBottom>0.05in</MarginBottom>" +
+                  "</DeviceInfo>";
+                var res = report.Render("html", deviceInfo);
+                return File(res, "application/octetstrem");
+            }
+            catch (Exception e)
+            {
+                return HandleAttachmentException(e);                
+            }
         }
 
         private ActionResult Report<TReport>(TReport reportInputModel
