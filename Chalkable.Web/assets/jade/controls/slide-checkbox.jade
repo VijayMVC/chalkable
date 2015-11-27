@@ -5,7 +5,7 @@ mixin SlideCheckbox(name, val, isReadOnly, disabled)
     .slide-checkbox(attributes)
         -attributes.id = id
         -attributes = self.prepareData(attributes, val)
-        .wrapper
+        .wrapper(class=disabled ? 'disabled' : '')
             +Checkbox(name, val, disabled, null, isReadOnly)(attributes)
             if !isReadOnly
                 label(for=attributes.id)

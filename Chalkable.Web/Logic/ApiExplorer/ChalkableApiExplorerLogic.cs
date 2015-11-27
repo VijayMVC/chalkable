@@ -78,7 +78,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
             RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.List(DateTime.Today, DemoSchoolConstants.AlgebraClassId, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.Week(DateTime.Today, DemoSchoolConstants.AlgebraClassId, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AnnouncementCalendarController>(x => x.Day(DateTime.Today, null), ApiMethodCallType.Get);
-            RegisterApiMethodDefaults<AnnouncementController>(x => x.Read(1, (int)AnnouncementType.Class), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<AnnouncementController>(x => x.Read(1, (int)AnnouncementTypeEnum.Class), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AnnouncementTypeController>(x => x.List(DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<ClassController>(x => 
                 x.List(DemoSchoolConstants.CurrentSchoolYearId, DemoSchoolConstants.FirstMarkingPeriodId, DemoSchoolConstants.TeacherId, null, null), ApiMethodCallType.Post);

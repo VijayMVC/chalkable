@@ -39,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var keys = settings.Keys.ToList();
             if (!IsAvailableSettings(keys))
                 throw new ArgumentException("Not recognized settings");
-
+            
             var ps = GetSettingsForPerson(personId, schoolYearId, keys);
             var toSet =
                 ps.Select(

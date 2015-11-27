@@ -18,9 +18,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null);
         IList<Announcement> GetAnnouncementsByFilter(string filter);
         Announcement GetLastDraft();
-        AnnouncementType GetAnnouncementType(int announcementId);
+        AnnouncementTypeEnum GetAnnouncementType(int announcementId);
         void SetSettingsForFeed(FeedSettings settings);
         FeedSettings GetSettingsForFeed();
+        IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? fromDate, DateTime? toDate, bool onlyOwners = true, int? classId = null);
     }
 
     public class AnnouncementFetchService : SchoolServiceBase, IAnnouncementFetchService
@@ -39,8 +40,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             else
                 settings = GetSettingsForFeed();          
 
-            var feedStartDate = settings.FromDate ?? (Context.SchoolYearStartDate ?? DateTime.MinValue);
-            var feedEndDate = settings.ToDate ?? (Context.SchoolYearEndDate ?? DateTime.MaxValue);
+            var feedStartDate = settings.FromDate ??  DateTime.MinValue;
+            var feedEndDate = settings.ToDate ??  DateTime.MaxValue;
             
 
             if (BaseSecurity.IsDistrictAdmin(Context))
@@ -83,13 +84,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(feedStartDate,
                         feedEndDate, null, classId, complete, true));
                 }
-                else switch ((AnnouncementType) settings.AnnouncementType.Value)
+                else switch ((AnnouncementTypeEnum) settings.AnnouncementType.Value)
                 {
-                    case AnnouncementType.LessonPlan:
+                    case AnnouncementTypeEnum.LessonPlan:
                         anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(feedStartDate, feedEndDate, null, classId,
                             complete, true, start, count));
                         break;
-                    case AnnouncementType.Class:
+                    case AnnouncementTypeEnum.Class:
                         anns.AddRange(ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate, feedEndDate,
                             classId, complete, true, null, start, count));
                         break;
@@ -114,7 +115,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 }).ToList();
             return res;
         }
-
+        
         public FeedSettings GetSettingsForFeed()
         {
             var settings = new FeedSettings();
@@ -150,8 +151,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
             else
             {
-                settings.FromDate = null;
-                settings.ToDate = null;
+                settings.FromDate = Context.SchoolYearStartDate;
+                settings.ToDate = Context.SchoolYearEndDate;
                 settings.GradingPeriodId = null;
             }
 
@@ -162,6 +163,19 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             settings.SortType = !string.IsNullOrWhiteSpace(sort.Value) && bool.Parse(sort.Value);
 
             return settings;
+        }
+
+        public IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? fromDate, DateTime? toDate, bool onlyOwners = true, int? classId = null)
+        {
+            var res = new List<AnnouncementDetails>();
+            if(CoreRoles.DISTRICT_ADMIN_ROLE == Context.Role || CoreRoles.STUDENT_ROLE == Context.Role)
+                res.AddRange(ServiceLocator.AdminAnnouncementService.GetAnnouncementDetailses(fromDate, toDate, classId, onlyOwners));
+            if (CoreRoles.DISTRICT_ADMIN_ROLE != Context.Role)
+            {
+                res.AddRange(ServiceLocator.ClassAnnouncementService.GetAnnouncementDetailses(fromDate, toDate, classId, onlyOwners));
+                res.AddRange(ServiceLocator.LessonPlanService.GetAnnouncementDetailses(fromDate, toDate, classId, onlyOwners));
+            }
+            return res;
         }
 
         public void SetSettingsForFeed(FeedSettings settings)
@@ -227,7 +241,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return ServiceLocator.ClassAnnouncementService.GetLastDraft() ?? (Announcement) ServiceLocator.LessonPlanService.GetLastDraft();
         }
 
-        public AnnouncementType GetAnnouncementType(int announcementId)
+        public AnnouncementTypeEnum GetAnnouncementType(int announcementId)
         {
             return DoRead(u => new AnnouncementDataAccess(u).GetAnnouncementType(announcementId));
         }

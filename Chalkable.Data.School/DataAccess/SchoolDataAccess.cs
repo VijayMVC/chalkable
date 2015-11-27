@@ -46,7 +46,7 @@ namespace Chalkable.Data.School.DataAccess
                 reader.NextResult();
                 res.Person = PersonDataAccess.ReadPersonDetailsData(reader);
                 reader.NextResult();
-                allClasses = ClassDataAccess.ReadClasses(reader);
+                allClasses = ClassDataAccess.ReadClasses(reader, false);
                 reader.NextResult();
                 schedule = reader.ReadList<ScheduleItem>().OrderBy(x => x.PeriodOrder).ThenBy(x => x.ClassName);
                 reader.NextResult();

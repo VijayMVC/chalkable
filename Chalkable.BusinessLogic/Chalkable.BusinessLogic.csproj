@@ -66,6 +66,22 @@
       <HintPath>..\packages\Microsoft.Data.Services.Client.5.6.4\lib\net40\Microsoft.Data.Services.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.ReportViewer.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.Runtime.12.0.2.2402\lib\Microsoft.ReportViewer.Common.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.ProcessingObjectModel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.Runtime.12.0.2.2402\lib\Microsoft.ReportViewer.ProcessingObjectModel.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportViewer.2015.Runtime.12.0.2.2402\lib\Microsoft.ReportViewer.WebForms.DLL</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.11.0.2\lib\net20\Microsoft.SqlServer.Types.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.WindowsAzure.Configuration, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.1.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
       <Private>True</Private>
@@ -146,12 +162,15 @@
     <Compile Include="Model\Reports\BaseReportInputModel.cs" />
     <Compile Include="Model\Reports\BirthdayReportInputModel.cs" />
     <Compile Include="Model\Reports\ComprehensiveProgressInputModel.cs" />
+    <Compile Include="Model\Reports\FeedDetailsExportModel.cs" />
+    <Compile Include="Model\Reports\FeedReportInputModel.cs" />
     <Compile Include="Model\Reports\GradebookReportInputModel.cs" />
     <Compile Include="Model\Reports\GradeVerificationInputModel.cs" />
     <Compile Include="Model\Reports\LessonPlanReportInputModel.cs" />
     <Compile Include="Model\Reports\MissingAssignmentsInputModel.cs" />
     <Compile Include="Model\Reports\ProgressReportInputModel.cs" />
     <Compile Include="Model\Reports\SeatingChartReportInputModel.cs" />
+    <Compile Include="Model\Reports\ShortFeedExportModel.cs" />
     <Compile Include="Model\Reports\WorksheetReportInputModel.cs" />
     <Compile Include="Model\SchoolSummaryInfo.cs" />
     <Compile Include="Model\SeatingChartInfo.cs" />
@@ -242,6 +261,10 @@
     <Compile Include="Services\Master\ServiceLocatorMaster.cs" />
     <Compile Include="Services\Master\BackgroundTaskService.cs" />
     <Compile Include="Services\Master\UserService.cs" />
+    <Compile Include="Services\Reporting\DefaultRenderer.cs" />
+    <Compile Include="Services\Reporting\IReportRenderer.cs" />
+    <Compile Include="Services\Reporting\ReportHandler.cs" />
+    <Compile Include="Services\Reporting\ShortFeedReportHandler.cs" />
     <Compile Include="Services\School\AddressService.cs" />
     <Compile Include="Services\School\AlphaGradeService.cs" />
     <Compile Include="Services\School\AlternateScoreService.cs" />
@@ -289,6 +312,7 @@
     <Compile Include="Services\School\DisciplineService.cs" />
     <Compile Include="Services\School\ClassPeriodService.cs" />
     <Compile Include="Services\School\ClassService.cs" />
+    <Compile Include="Model\FeedReportSettingsInfo.cs" />
     <Compile Include="Services\School\GradedItemService.cs" />
     <Compile Include="Services\School\GradingCommentService.cs" />
     <Compile Include="Services\School\GradingScaleService.cs" />
@@ -332,6 +356,7 @@
     <Compile Include="Services\StorageBlobService.cs" />
     <Compile Include="Services\UserContext.cs" />
     <Compile Include="Services\ServiceLocator.cs" />
+    <Compile Include="SqlServerTypes\Loader.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
@@ -367,10 +392,28 @@
       <Name>WindowsAzure.Acs.Oauth2</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\msvcr100.dll">
+      <Link>SqlServerTypes\x64\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x64\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x64\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x86\msvcr100.dll">
+      <Link>SqlServerTypes\x86\msvcr100.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\packages\Microsoft.SqlServer.Types.11.0.2\nativeBinaries\x86\SqlServerSpatial110.dll">
+      <Link>SqlServerTypes\x86\SqlServerSpatial110.dll</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="SqlServerTypes\readme.htm" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
