@@ -99,23 +99,28 @@ namespace Chalkable.Web.Controllers
             var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
             var formatType = (ReportingFormat?) format ?? ReportingFormat.Pdf;
             var reportInput = new FeedReportInputModel {ClassId = classId, Format = format, Settings = settings};
-            var report = SchoolLocator.ReportService.GetFeedReport(reportInput,  path);
-            return DownloadReportFile(report, "Feed Report", formatType);
+            return Report(() => SchoolLocator.ReportService.GetFeedReport(reportInput, path), "Feed Report", formatType);
         }
 
         private ActionResult Report<TReport>(TReport reportInputModel
             , Func<TReport, byte[]> reportAction, string reportFileName) where TReport : BaseReportInputModel
         {
+            return Report(() => reportAction(reportInputModel), reportFileName, reportInputModel.FormatTyped);
+        }
+
+        private ActionResult Report(Func<byte[]> reportAction, string reportFileName, ReportingFormat formatType)
+        {
             try
             {
-                var res = reportAction(reportInputModel);
-                return DownloadReportFile(res, reportFileName, reportInputModel.FormatTyped);
+                var res = reportAction();
+                return DownloadReportFile(res, reportFileName, formatType);
             }
             catch (Exception exception)
             {
                 return HandleAttachmentException(exception);
             }
         }
+
         private ActionResult DownloadReportFile(byte[] report, string reportFileName, ReportingFormat formatType)
         {
             Response.AppendCookie(new HttpCookie("chlk-iframe-ready", Guid.NewGuid().ToString()));
