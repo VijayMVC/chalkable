@@ -108,7 +108,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public static IList<ClassDetails> ReadClasses(SqlDataReader reader, bool withPeriods = true)
+        public static IList<ClassDetails> ReadClasses(DbDataReader reader, bool withPeriods = true)
         {
             var classes = new List<ClassDetails>();
             while (reader.Read())
@@ -185,7 +185,7 @@ namespace Chalkable.Data.School.DataAccess
                 ["teacherId"] = teacherId
             };
 
-            return ExecuteStoredProcedurePaginated(SP_GET_CLASSES_BY_SCHOOL_YEAR, param, ReadClasses, start, count);
+            return ExecuteStoredProcedurePaginated(SP_GET_CLASSES_BY_SCHOOL_YEAR, param, x=>ReadClasses(x), start, count);
         } 
     }
 }
