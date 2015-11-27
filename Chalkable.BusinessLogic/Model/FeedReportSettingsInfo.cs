@@ -20,10 +20,10 @@ namespace Chalkable.BusinessLogic.Model
 
         public FeedReportSettingsInfo(IDictionary<string, string> keyValue)
         {
-            if (keyValue.ContainsKey(PersonSetting.FEED_START_DATE))
-                StartDate = DateTimeTools.ParseExactNullable(keyValue[PersonSetting.FEED_START_DATE]);
-            if (keyValue.ContainsKey(PersonSetting.FEED_END_DATE))
-                EndDate = DateTimeTools.ParseExactNullable(keyValue[PersonSetting.FEED_END_DATE]);
+            if (keyValue.ContainsKey(PersonSetting.FEED_REPORT_START_DATE))
+                StartDate = DateTimeTools.ParseExactNullable(keyValue[PersonSetting.FEED_REPORT_START_DATE]);
+            if (keyValue.ContainsKey(PersonSetting.FEED_REPORT_END_DATE))
+                EndDate = DateTimeTools.ParseExactNullable(keyValue[PersonSetting.FEED_REPORT_END_DATE]);
             
             IncludeDetails = GetBoolFromDictionary(PersonSetting.FEED_REPORT_INCLUDE_DETAILS, keyValue);
             IncludeAttachments = GetBoolFromDictionary(PersonSetting.FEED_REPORT_INCLUDE_ATTACHMENTS, keyValue);

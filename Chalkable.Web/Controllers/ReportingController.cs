@@ -146,7 +146,6 @@ namespace Chalkable.Web.Controllers
             var feedSettings = SchoolLocator.AnnouncementFetchService.GetSettingsForFeed();
             var feedReportSettings = SchoolLocator.ReportService.GetFeedReportSettings();
             return Json(FeedReportSettingsViewData.Create(feedReportSettings, feedSettings));
-                //FakeJson("~/fakeData/feedReport.json");
         }
     }
 }

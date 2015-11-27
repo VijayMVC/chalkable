@@ -6,7 +6,7 @@
         <TablixBody>
           <TablixColumns>
             <TablixColumn>
-              <Width>7.44672in</Width>
+              <Width>7.42584in</Width>
             </TablixColumn>
           </TablixColumns>
           <TablixRows>
@@ -143,7 +143,7 @@
                           <Top>0.6272in</Top>
                           <Left>3.88178in</Left>
                           <Height>0.15in</Height>
-                          <Width>3.53125in</Width>
+                          <Width>3.54406in</Width>
                           <ZIndex>3</ZIndex>
                           <Style>
                             <Border>
@@ -153,7 +153,6 @@
                             <PaddingRight>5pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
                             <PaddingBottom>2pt</PaddingBottom>
-                            <Direction>RTL</Direction>
                           </Style>
                         </Textbox>
                         <Textbox Name="Textbox23">
@@ -163,7 +162,7 @@
                             <Paragraph>
                               <TextRuns>
                                 <TextRun>
-                                  <Value>=Fields!DayTypes.Value + " " + Fields!Periods.Value</Value>
+                                  <Value>=Fields!DayTypes.Value + IIF(IsNothing(Fields!PersonId.Value), "" , " Period(s): " + Fields!Periods.Value)</Value>
                                   <Style>
                                     <FontStyle>Italic</FontStyle>
                                     <FontSize>9pt</FontSize>
@@ -178,9 +177,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox20</rd:DefaultName>
                           <Top>0.45914in</Top>
-                          <Left>5.81927in</Left>
+                          <Left>3.19788in</Left>
                           <Height>0.1375in</Height>
-                          <Width>1.59375in</Width>
+                          <Width>4.22765in</Width>
                           <ZIndex>4</ZIndex>
                           <Style>
                             <Border>
@@ -190,7 +189,6 @@
                             <PaddingRight>5pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
                             <PaddingBottom>2pt</PaddingBottom>
-                            <Direction>LTR</Direction>
                           </Style>
                         </Textbox>
                         <Textbox Name="Textbox24">
@@ -215,7 +213,7 @@
                           <Top>0.95014in</Top>
                           <Left>0.13538in</Left>
                           <Height>0.125in</Height>
-                          <Width>7.27146in</Width>
+                          <Width>7.27765in</Width>
                           <ZIndex>5</ZIndex>
                           <Style>
                             <Border>
@@ -249,9 +247,9 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox25</rd:DefaultName>
                           <Top>0.17164in</Top>
-                          <Left>5.81927in</Left>
+                          <Left>5.75761in</Left>
                           <Height>0.24306in</Height>
-                          <Width>1.59585in</Width>
+                          <Width>1.64501in</Width>
                           <ZIndex>6</ZIndex>
                           <Style>
                             <Border>
@@ -263,7 +261,7 @@
                             <PaddingRight>2pt</PaddingRight>
                             <PaddingTop>2pt</PaddingTop>
                             <PaddingBottom>2pt</PaddingBottom>
-                            <Direction>RTL</Direction>
+                            <Direction>LTR</Direction>
                           </Style>
                         </Textbox>
                         <Textbox Name="Textbox26">
@@ -287,7 +285,7 @@
                           </Paragraphs>
                           <rd:DefaultName>Textbox26</rd:DefaultName>
                           <Top>0.25707in</Top>
-                          <Left>4.85948in</Left>
+                          <Left>4.65948in</Left>
                           <Height>0.19237in</Height>
                           <Width>0.53125in</Width>
                           <ZIndex>7</ZIndex>
@@ -309,7 +307,7 @@
                           <Value>invisible</Value>
                           <Sizing>FitProportional</Sizing>
                           <Top>0.20707in</Top>
-                          <Left>5.45615in</Left>
+                          <Left>5.33115in</Left>
                           <Height>0.29513in</Height>
                           <Width>0.30146in</Width>
                           <ZIndex>8</ZIndex>
@@ -1055,7 +1053,7 @@
         <DataSetName>MainDataSet</DataSetName>
         <Left>0.50083in</Left>
         <Height>7.37512in</Height>
-        <Width>7.44672in</Width>
+        <Width>7.42584in</Width>
         <Style>
           <Border>
             <Style>None</Style>

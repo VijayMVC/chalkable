@@ -61,7 +61,7 @@ namespace Chalkable.Common
 
         public static DateTime? ParseExactNullable(string s, string dateFormat = Constants.DATE_FORMAT)
         {
-            return !string.IsNullOrWhiteSpace(s) ? (DateTime?)null : DateTime.ParseExact(s, dateFormat, CultureInfo.InvariantCulture);
+            return string.IsNullOrWhiteSpace(s) ? (DateTime?)null : DateTime.ParseExact(s, dateFormat, CultureInfo.InvariantCulture);
         }
     }
 }

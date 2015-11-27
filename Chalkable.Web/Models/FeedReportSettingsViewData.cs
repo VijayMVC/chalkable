@@ -35,9 +35,14 @@ namespace Chalkable.Web.Models
             res.LessonPlanOnly = feedSettings.AnnouncementType.HasValue
                     && (AnnouncementTypeEnum) feedSettings.AnnouncementType.Value == AnnouncementTypeEnum.LessonPlan
                     || feedReportSettings.LessonPlanOnly;
-                
-            res.StartDate = feedReportSettings.StartDate ?? res.MinDate;
-            res.EndDate = feedReportSettings.EndDate ?? res.MaxDate;
+
+            res.StartDate = feedReportSettings.StartDate.HasValue && feedReportSettings.StartDate.Value > res.MinDate
+                ? feedReportSettings.StartDate.Value
+                : res.MinDate;
+
+            res.EndDate = feedReportSettings.EndDate.HasValue && feedReportSettings.EndDate.Value < res.MaxDate
+                ? feedReportSettings.EndDate.Value
+                : res.MaxDate;
             return res;
         }
     }
