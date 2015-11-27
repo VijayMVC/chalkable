@@ -619,8 +619,8 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
-    <EmbeddedResource Include="Reports\FeedReport\FeedShortReport.rdlc" />
+    <Content Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
+    <Content Include="Reports\FeedReport\FeedShortReport.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
