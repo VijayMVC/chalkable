@@ -17,11 +17,11 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAnnouncementAssignedAttributeService
     {
-        void Edit(AnnouncementType announcementType, int announcementId, IList<AssignedAttributeInputModel> attributes);
+        void Edit(AnnouncementTypeEnum announcementType, int announcementId, IList<AssignedAttributeInputModel> attributes);
         void Delete(int announcementAssignedAttributeId);
-        AnnouncementAssignedAttribute Add(AnnouncementType announcementType, int announcementId, int attributeTypeId);
-        AnnouncementAssignedAttribute UploadAttachment(AnnouncementType announcementType, int announcementId, int assignedAttributeId, byte[] bin, string name);
-        AnnouncementAssignedAttribute AddAttachment(AnnouncementType announcementType, int announcementId, int assignedAttributeId, int attachmentId);
+        AnnouncementAssignedAttribute Add(AnnouncementTypeEnum announcementType, int announcementId, int attributeTypeId);
+        AnnouncementAssignedAttribute UploadAttachment(AnnouncementTypeEnum announcementType, int announcementId, int assignedAttributeId, byte[] bin, string name);
+        AnnouncementAssignedAttribute AddAttachment(AnnouncementTypeEnum announcementType, int announcementId, int assignedAttributeId, int attachmentId);
         AnnouncementAssignedAttribute GetAssignedAttributeById(int announcementAssignedAttributeId);
         AnnouncementAssignedAttribute RemoveAttachment(int announcementAssignedAttributeId);
         IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, int toAnnouncementId);
@@ -34,7 +34,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public void Edit(AnnouncementType announcementType, int announcementId, IList<AssignedAttributeInputModel> inputAttributes)
+        public void Edit(AnnouncementTypeEnum announcementType, int announcementId, IList<AssignedAttributeInputModel> inputAttributes)
         {
             BaseSecurity.EnsureAdminOrTeacher(Context);
             Trace.Assert(Context.PersonId.HasValue);
@@ -85,7 +85,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return AnnouncementSecurity.CanModifyAnnouncement(ann, Context);
         }
 
-        public AnnouncementAssignedAttribute Add(AnnouncementType announcementType, int announcementId, int attributeTypeId)
+        public AnnouncementAssignedAttribute Add(AnnouncementTypeEnum announcementType, int announcementId, int attributeTypeId)
         {
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(announcementId);
             Trace.Assert(Context.PersonId.HasValue);
@@ -109,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     Name = attributeType.Name
                 };
 
-                if (announcementType == AnnouncementType.Class)
+                if (announcementType == AnnouncementTypeEnum.Class)
                 {
                     var announcement = ServiceLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
                     if (announcement.SisActivityId.HasValue)
@@ -129,7 +129,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public AnnouncementAssignedAttribute UploadAttachment(AnnouncementType announcementType, int announcementId, int assignedAttributeId, byte[] bin, string name)
+        public AnnouncementAssignedAttribute UploadAttachment(AnnouncementTypeEnum announcementType, int announcementId, int assignedAttributeId, byte[] bin, string name)
         {
             Trace.Assert(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue);
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(announcementId);
@@ -144,7 +144,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (assignedAttribute.AttachmentRef > 0)
                     throw new ChalkableSisException("You can't attach more than one file to an attribute");
 
-                var isStiAttribute = assignedAttribute.IsStiAttribute || announcementType == AnnouncementType.Class;
+                var isStiAttribute = assignedAttribute.IsStiAttribute || announcementType == AnnouncementTypeEnum.Class;
                 var attachment = AttachmentService.Upload(name, bin, isStiAttribute, uow, ServiceLocator, ConnectorLocator);
                 assignedAttribute.AttachmentRef = attachment.Id;
                 assignedAttribute.Attachment = attachment;
@@ -164,7 +164,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public AnnouncementAssignedAttribute AddAttachment(AnnouncementType announcementType, int announcementId, int assignedAttributeId, int attachmentId)
+        public AnnouncementAssignedAttribute AddAttachment(AnnouncementTypeEnum announcementType, int announcementId, int assignedAttributeId, int attachmentId)
         {
             Trace.Assert(Context.PersonId.HasValue);
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(announcementId);
@@ -187,7 +187,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 attribute.Attachment = attachment;
                 da.Update(attribute);
 
-                if (announcementType == AnnouncementType.Class)
+                if (announcementType == AnnouncementTypeEnum.Class)
                 {
                     if (!attachment.SisAttachmentId.HasValue)
                     {

@@ -40,6 +40,7 @@ namespace Chalkable.Data.School.Model
         public SchoolYear SchoolYear { get; set; }
         public IList<MarkingPeriodClass> MarkingPeriodClasses { get; set; }
         public IList<ClassTeacher> ClassTeachers { get; set; }
+        public IList<ClassPeriod> ClassPeriods { get; set; } 
         public int StudentsCount { get; set; }
     }
 

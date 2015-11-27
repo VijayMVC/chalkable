@@ -88,6 +88,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return new PaginatedList<Person>(persons.ToList(), start / count, count);
         }
 
+        public CoreRole GetPersonRole(int personId)
+        {
+            throw new NotImplementedException();
+        }
+
         public PersonQueryResult GetPersons(PersonQuery query)
         {
             query.CallerId = Context.PersonId;

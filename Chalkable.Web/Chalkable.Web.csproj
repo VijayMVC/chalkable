@@ -395,6 +395,8 @@
     <Compile Include="Models\AppTesterViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineTypeSummaryViewData.cs" />
+    <Compile Include="Models\FeedReportSettingsViewData.cs" />
+    <Compile Include="Models\FeedReportViewData.cs" />
     <Compile Include="Models\FeedSettingsViewData.cs" />
     <Compile Include="Models\GradedItemViewData.cs" />
     <Compile Include="Models\GradingViewData\StudentProfileGradingDetailViewData.cs" />
@@ -615,6 +617,18 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
+    <EmbeddedResource Include="Reports\FeedReport\FeedShortReport.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Reports\FeedReport\FeedDetailsDataSet.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Reports\FeedReport\FeedShortDataSet.xsd">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

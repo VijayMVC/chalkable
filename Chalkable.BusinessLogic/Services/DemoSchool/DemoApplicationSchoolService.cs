@@ -77,7 +77,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             //return res;
         }
 
-        public AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementType announcementType, Guid applicationId)
+        public AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementTypeEnum announcementType, Guid applicationId)
         {
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
@@ -100,7 +100,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return AnnouncementApplicationStorage.GetById(announcementAppId);
         }
 
-        public void AttachAppToAnnouncement(int announcementAppId, AnnouncementType announcementType)
+        public void AttachAppToAnnouncement(int announcementAppId, AnnouncementTypeEnum announcementType)
         {
             var aa = GetAnnouncementApplication(announcementAppId);
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(aa.AnnouncementRef);
@@ -140,7 +140,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             //return announcementApplications.ToList();
         }
 
-        public Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementType announcementType)
+        public Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementTypeEnum announcementType)
         {
             try
             {

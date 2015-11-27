@@ -88,7 +88,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public static IList<ClassDetails> ReadClasses(SqlDataReader reader)
+        public static IList<ClassDetails> ReadClasses(SqlDataReader reader, bool withPeriods = true)
         {
             var classes = new List<ClassDetails>();
             while (reader.Read())
@@ -98,6 +98,7 @@ namespace Chalkable.Data.School.DataAccess
                     c.PrimaryTeacher = reader.Read<Person>(true);
                 if (c.SchoolYearRef.HasValue)
                     c.SchoolYear = reader.Read<SchoolYear>(true);
+                c.ClassPeriods = new List<ClassPeriod>();
                 classes.Add(c);
             }
             reader.NextResult();
@@ -112,8 +113,26 @@ namespace Chalkable.Data.School.DataAccess
             {
                 classDetailse.ClassTeachers = classTeachers.Where(cTeacher => cTeacher.ClassRef == classDetailse.Id).ToList();
             }
-            return classes;
+            if (withPeriods)
+            {
+                reader.NextResult();
+                var classPeriods = reader.ReadList<ClassPeriod>();
+                foreach (var classDetailse in classes)
+                {
+                    classDetailse.ClassPeriods = classPeriods.Where(cPeriod => cPeriod.ClassRef == classDetailse.Id).ToList();
+                }
+            }
+            return SortClasses(classes);
         }
+
+        private static IList<ClassDetails> SortClasses(IList<ClassDetails> classDetailses)
+        {
+            var res = classDetailses.Where(x => x.ClassPeriods != null && x.ClassPeriods.Count > 0).ToList();
+            res = res.OrderBy(x => x.ClassPeriods.Min(y => y.Period.Order)).ThenBy(x=>x.Name).ToList();
+            res.AddRange(classDetailses.Where(x=> x.ClassPeriods == null || x.ClassPeriods.Count == 0).OrderBy(x=>x.Name).ToList());
+            return res;
+        } 
+
 
         public IList<ClassDetails> GetAllSchoolsActiveClasses()
         {

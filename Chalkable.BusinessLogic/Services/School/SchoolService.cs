@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<Data.School.Model.School> schools);
         void Delete(IList<Data.School.Model.School> schools);
         IList<Data.School.Model.School> GetSchools();
-
+        Data.School.Model.School GetSchool(int schoolId);
         void AddSchoolOptions(IList<SchoolOption> schoolOptions);
         void EditSchoolOptions(IList<SchoolOption> schoolOptions);
         void DeleteSchoolOptions(IList<SchoolOption> schoolOptions);
@@ -47,6 +47,13 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new SchoolDataAccess(uow);
                 return da.GetAll();
             }
+        }
+
+        public Data.School.Model.School GetSchool(int schoolId)
+        {
+            if(!(BaseSecurity.IsDistrictAdmin(Context) || Context.SchoolLocalId == schoolId))
+                throw new ChalkableSecurityException();
+            return DoRead(u => new SchoolDataAccess(u).GetById(schoolId));
         }
 
         public void Add(IList<Data.School.Model.School> schools)

@@ -19,7 +19,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Ask(int announcementId, int announcementType, string question)
         {
-            var qna = SchoolLocator.AnnouncementQnAService.AskQuestion(announcementId, (AnnouncementType)announcementType, question);
+            var qna = SchoolLocator.AnnouncementQnAService.AskQuestion(announcementId, (AnnouncementTypeEnum)announcementType, question);
             var res = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnA(qna.Id);
             return Json(AnnouncementQnAViewData.Create(res), 5);
         }
@@ -27,7 +27,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Answer(int announcementQnAId, int announcementType, string question, string answer)
         {
-            var qna = SchoolLocator.AnnouncementQnAService.Answer(announcementQnAId, (AnnouncementType)announcementType, question, answer);
+            var qna = SchoolLocator.AnnouncementQnAService.Answer(announcementQnAId, (AnnouncementTypeEnum)announcementType, question, answer);
             var res = SchoolLocator.AnnouncementQnAService.GetAnnouncementQnA(qna.Id);
             return Json(AnnouncementQnAViewData.Create(res), 5);
         }

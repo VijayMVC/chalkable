@@ -24,7 +24,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult Save(int adminAnnouncementId, string title, string content, DateTime? expiresDate, IList<AssignedAttributeInputModel> attributes)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.Admin, adminAnnouncementId, attributes);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Admin, adminAnnouncementId, attributes);
             var res = SchoolLocator.AdminAnnouncementService.Edit(adminAnnouncementId, title, content, expiresDate);
             return Json(PrepareAnnouncmentViewDataForEdit(res));
         }
@@ -36,7 +36,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             if (string.IsNullOrEmpty(title))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "Announcement Title "));
             
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.Admin, adminAnnouncementId, attributes);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Admin, adminAnnouncementId, attributes);
             var res = SchoolLocator.AdminAnnouncementService.Edit(adminAnnouncementId, title, content, expiresDate);
             SchoolLocator.AdminAnnouncementService.Submit(adminAnnouncementId);
             SchoolLocator.AdminAnnouncementService.DeleteDrafts(Context.PersonId.Value);
@@ -60,7 +60,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult EditTitle(int announcementId, string title)
         {
-            return EditTitle(announcementId, AnnouncementType.Admin, title, t => SchoolLocator.AdminAnnouncementService.Exists(t, announcementId));
+            return EditTitle(announcementId, AnnouncementTypeEnum.Admin, title, t => SchoolLocator.AdminAnnouncementService.Exists(t, announcementId));
         }
     }
 }

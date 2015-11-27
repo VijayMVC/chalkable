@@ -142,7 +142,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             NotificationStorage.Update(notifications);
         }
 
-        public void AddAnnouncementNewAttachmentNotification(int announcementId, AnnouncementType announcementType)
+        public void AddAnnouncementNewAttachmentNotification(int announcementId, AnnouncementTypeEnum announcementType)
         {
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
             var persons = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementRecipientPersons(announcementId);
@@ -154,7 +154,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             AddNotifications(notifications);
         }
 
-        public void AddAnnouncementNewAttachmentNotificationToOwner(int announcementId, AnnouncementType announcementType, int fromPersonId)
+        public void AddAnnouncementNewAttachmentNotificationToOwner(int announcementId, AnnouncementTypeEnum announcementType, int fromPersonId)
         {
             throw new NotImplementedException();
             //var announcement = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
@@ -166,7 +166,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
 
-        public void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId, AnnouncementType announcementType)
+        public void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId, AnnouncementTypeEnum announcementType)
         {
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
             throw new NotImplementedException();
@@ -177,7 +177,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             //AddNotifications(notifications);
         }
 
-        public void AddAnnouncementNotificationAnswerToStudent(int announcementQnAId, int announcementId, AnnouncementType announcementType)
+        public void AddAnnouncementNotificationAnswerToStudent(int announcementQnAId, int announcementId, AnnouncementTypeEnum announcementType)
         {
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
             var annQnA = ann.AnnouncementQnAs.First(x => x.Id == announcementQnAId);

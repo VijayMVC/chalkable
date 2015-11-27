@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using ISchoolService = Chalkable.BusinessLogic.Services.School.ISchoolService;
 
@@ -85,6 +87,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IList<Data.School.Model.School> GetSchools()
         {
             return SchoolStorage.GetAll();
+        }
+
+        public Data.School.Model.School GetSchool(int schoolId)
+        {
+            if (!(BaseSecurity.IsDistrictAdmin(Context) || Context.SchoolLocalId == schoolId))
+                throw new ChalkableSecurityException();
+            return  SchoolStorage.GetById(schoolId);
         }
 
         public void AddSchoolOptions(IList<SchoolOption> schoolOptions)

@@ -17,16 +17,16 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         protected void EnsureAnnouncementExsists(int announcementId, int? announcementType)
         {
-            SchoolLocator.GetAnnouncementService((AnnouncementType?)announcementType).GetAnnouncementById(announcementId);
+            SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum?)announcementType).GetAnnouncementById(announcementId);
         }
 
         protected AnnouncementViewData PrepareFullAnnouncementViewData(int announcementId, int? announcementType, bool forRead = false)
         {
-            var type = (AnnouncementType?) announcementType ?? SchoolLocator.AnnouncementFetchService.GetAnnouncementType(announcementId);
+            var type = (AnnouncementTypeEnum?) announcementType ?? SchoolLocator.AnnouncementFetchService.GetAnnouncementType(announcementId);
             return PrepareFullAnnouncementViewData(announcementId, type, forRead);
         }
 
-        protected AnnouncementViewData PrepareFullAnnouncementViewData(int announcementId, AnnouncementType? announcementType, bool forRead = false)
+        protected AnnouncementViewData PrepareFullAnnouncementViewData(int announcementId, AnnouncementTypeEnum? announcementType, bool forRead = false)
         {
             Trace.Assert(Context.PersonId.HasValue);
             var annDetails = SchoolLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);

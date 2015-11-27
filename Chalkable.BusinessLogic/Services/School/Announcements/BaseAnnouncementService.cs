@@ -42,7 +42,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         void RemoveAllAnnouncementStandards(int standardId);
         IList<AnnouncementStandard> GetAnnouncementStandards(int classId);
         IList<Person> GetAnnouncementRecipientPersons(int announcementId);
-
+        IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool ownerOnly = false);
     }
 
 
@@ -53,8 +53,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         public abstract AnnouncementDetails GetAnnouncementDetails(int announcementId);
+        public abstract IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool ownerOnly = false);
         public abstract void DeleteAnnouncement(int announcementId);
-
         public abstract Announcement GetAnnouncementById(int id);
         public abstract Announcement EditTitle(int announcementId, string title);
         public abstract void Submit(int announcementId);
@@ -82,7 +82,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.PersonId.HasValue);
             return DoRead(u => CreateDataAccess(u).GetAnnouncementRecipientPersons(announcementId, Context.PersonId.Value));
         }
-       
+
+        
         public int GetNewAnnouncementItemOrder(AnnouncementDetails announcement)
         {
             var attOrder = announcement.AnnouncementAttachments.Max(x => (int?)x.Order);
