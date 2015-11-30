@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Protocols;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.BusinessLogic.Services.Reporting;
@@ -150,12 +151,14 @@ namespace Chalkable.Web.Controllers
                 Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = 500;
                 Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
-
-                var ex = exception.InnerException ?? exception;
                 
                 return new ChalkableJsonResult(false)
                 {
-                    Data = new ChalkableJsonResponce(ExceptionViewData.Create(ex, ex.InnerException))
+                    Data = new ChalkableJsonResponce(new
+                    {
+                        Exception = ExceptionViewData.Create(exception, exception.InnerException),
+                        InnerException = exception.InnerException != null ? ExceptionViewData.Create(exception, exception.InnerException) : null,
+                    })
                     {
                         Success = false
                     },
