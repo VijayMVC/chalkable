@@ -926,7 +926,7 @@
       <rd:DataSetInfo>
         <rd:DataSetName>NewDataSet</rd:DataSetName>
         <rd:TableName>ShortFeedExportModel</rd:TableName>
-		<rd:ObjectDataSourceType>Chalkable.BusinessLogic.Model.Reports.ShortFeedExportModel, Chalkable.BusinessLoogic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
+        <rd:ObjectDataSourceType>Chalkable.BusinessLogic.Model.Reports.ShortFeedExportModel, Chalkable.BusinessLoogic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>
