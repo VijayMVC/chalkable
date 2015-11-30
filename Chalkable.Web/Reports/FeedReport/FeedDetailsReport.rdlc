@@ -1558,7 +1558,6 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>NewDataSet</rd:DataSetName>
-        <rd:SchemaPath>D:\Work\chalkable-v1\Chalkable.Web\Reports\FeedReport\FeedDetailsDataSet.xsd</rd:SchemaPath>
         <rd:TableName>FeedDetailsExportModel</rd:TableName>
       </rd:DataSetInfo>
     </DataSet>
