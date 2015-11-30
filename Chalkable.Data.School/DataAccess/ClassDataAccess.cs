@@ -7,6 +7,7 @@ using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
+using Newtonsoft.Json.Serialization;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -186,6 +187,24 @@ namespace Chalkable.Data.School.DataAccess
             };
 
             return ExecuteStoredProcedurePaginated(SP_GET_CLASSES_BY_SCHOOL_YEAR, param, x=>ReadClasses(x), start, count);
+        }
+
+        private const string SP_GET_CLASSES_BY_IDS = "spGetClassesByIds";
+
+        public IList<Class> GetClassesByIds(IList<int> ids)
+        {
+            if(ids == null || ids.Count == 0)
+                return new List<Class>();
+
+            var param = new Dictionary<string, object>()
+            {
+                ["ids"] = ids
+            };
+
+            using (var reader = ExecuteStoredProcedureReader(SP_GET_CLASSES_BY_IDS, param))
+            {
+                return reader.ReadList<Class>();
+            }
         } 
     }
 }

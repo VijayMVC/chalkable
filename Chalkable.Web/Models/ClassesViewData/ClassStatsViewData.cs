@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Chalkable.BusinessLogic.Common;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 
@@ -13,28 +14,28 @@ namespace Chalkable.Web.Models.ClassesViewData
         public Guid? DepartmentRef { get; set; }
         public string PrimaryTeacherDisplayName { get; set; }
         public int StudentsCount { get; set; }
-        public int? AttendancesCount { get; set; }
+        public decimal? AttendancesCount { get; set; }
         public int? DisciplinesCount { get; set; }
-        public double? Avarage { get; set; }
+        public decimal? Avarage { get; set; }
 
-        public static ClassStatsViewData Create(ClassDetails classDetails)
+        public static ClassStatsViewData Create(ClassStatsInfo classDetails)
         {
             return new ClassStatsViewData()
             {
                 Id = classDetails.Id,
                 Name = classDetails.Name,
-                DepartmentRef = classDetails.ChalkableDepartmentRef,
+                DepartmentRef = classDetails.DepartmentRef,
 
-                PrimaryTeacherDisplayName = classDetails.PrimaryTeacher?.FullName(upper : false, withSalutation: true),
+                PrimaryTeacherDisplayName = classDetails.PrimaryTeacherDisplayName,
                 StudentsCount = classDetails.StudentsCount,
 
-                AttendancesCount = null,
-                Avarage = null,
-                DisciplinesCount = null
+                AttendancesCount = classDetails.AttendancesCount,
+                Avarage = classDetails.Avarage,
+                DisciplinesCount = classDetails.DisciplinesCount
             };
         }
 
-        public static PaginatedList<ClassStatsViewData> Create(PaginatedList<ClassDetails> classesDetails)
+        public static PaginatedList<ClassStatsViewData> Create(PaginatedList<ClassStatsInfo> classesDetails)
         {
             return new PaginatedList<ClassStatsViewData>(classesDetails.Select(Create), classesDetails.PageIndex,
                 classesDetails.PageSize, classesDetails.TotalCount);

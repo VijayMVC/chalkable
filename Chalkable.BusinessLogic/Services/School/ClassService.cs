@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -40,12 +42,12 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Class> GetAll();
         IList<ClassDetails> GetAllSchoolsActiveClasses();
 
-        PaginatedList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId);
+        PaginatedList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId);
 
         IList<ClassDetails> GetClassesByTeachers(int schoolYearId, IList<int> teacherIds, int? start, int? count);
     }
 
-    public class ClassService : SchoolServiceBase, IClassService
+    public class ClassService : SisConnectedService, IClassService
     {
         public ClassService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -209,14 +211,23 @@ namespace Chalkable.BusinessLogic.Services.School
             return classes;
         }
 
-        public PaginatedList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId)
+        public PaginatedList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId)
         {
+            start = start ?? 0;
+            count = count ?? int.MaxValue;
 
-            return
-                DoRead(
-                    u =>
-                        new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start ?? 0, count ?? int.MaxValue,
-                            filter, teacherId));
+            var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value, count.Value);
+
+            if (iNowRes == null)
+                return ClassStatsInfo.Create(
+                    DoRead(u => new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start ?? 0, count ?? int.MaxValue, filter, teacherId)));
+
+            var classes = DoRead(u => new ClassDataAccess(u).GetClassesByIds(iNowRes.Select(x => x.SectionId).ToList()));
+
+            var res = iNowRes.Select(x => ClassStatsInfo.Create(x, classes.FirstOrDefault(y => y.Id == x.SectionId))).ToList();
+
+            //TODO: FIX THIS AFTER API UPDATE
+            return new PaginatedList<ClassStatsInfo>(res.Skip(start.Value).Take(count.Value), start.Value/count.Value, count.Value, res.Count);
         }
 
         public IList<ClassDetails> GetClassesByTeachers(int schoolYearId, IList<int> teacherIds, int? start, int? count)

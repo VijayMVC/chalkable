@@ -54,7 +54,8 @@ namespace Chalkable.BusinessLogic.Common
         public static string FullName(this Staff staff, bool upper = true, bool withSalutation = false)
         {
             if (withSalutation)
-                FullName(staff.FirstName, staff.LastName, false, staff.Gender);
+                return FullName(staff.FirstName, staff.LastName, false, staff.Gender);
+
             return FullName(staff.FirstName, staff.LastName, upper);
         }
 
