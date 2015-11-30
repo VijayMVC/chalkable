@@ -151,13 +151,22 @@ namespace Chalkable.Web.Controllers
                 Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = 500;
                 Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
-                
+
+                var errorMessages = new List<string>() {exception.Message};
+                var ex = exception.InnerException;
+                while (ex != null)
+                {
+                    errorMessages.Add(ex.Message);
+                    ex = ex.InnerException;
+                }
+
                 return new ChalkableJsonResult(false)
                 {
                     Data = new ChalkableJsonResponce(new
                     {
                         Exception = ExceptionViewData.Create(exception, exception.InnerException),
                         InnerException = exception.InnerException != null ? ExceptionViewData.Create(exception, exception.InnerException) : null,
+                        Messages = errorMessages
                     })
                     {
                         Success = false
