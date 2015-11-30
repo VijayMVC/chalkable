@@ -9,6 +9,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.ActionResults;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.PersonViewDatas;
 using Microsoft.Reporting.WebForms;
@@ -143,10 +144,27 @@ namespace Chalkable.Web.Controllers
                 var res = reportAction();
                 return DownloadReportFile(res, reportFileName, formatType);
             }
+            catch (LocalProcessingException exception)
+            {
+                //TODO: remove this later 
+                Response.TrySkipIisCustomErrors = true;
+                Response.StatusCode = 500;
+                Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
+                return new ChalkableJsonResult(false)
+                {
+                    Data = new ChalkableJsonResponce(exception)
+                    {
+                        Success = false
+                    },
+                    ContentType = HTML_CONTENT_TYPE,
+                    SerializationDepth = 4
+                };
+            }
             catch (Exception exception)
             {
                 return HandleAttachmentException(exception);
             }
+            
         }
 
         private ActionResult DownloadReportFile(byte[] report, string reportFileName, ReportingFormat formatType)
