@@ -153,12 +153,12 @@ namespace Chalkable.Web.Controllers
                 
                 return new ChalkableJsonResult(false)
                 {
-                    Data = new ChalkableJsonResponce(exception)
+                    Data = new ChalkableJsonResponce(ExceptionViewData.Create(exception, exception.InnerException))
                     {
                         Success = false
                     },
                     ContentType = HTML_CONTENT_TYPE,
-                    SerializationDepth = 10
+                    SerializationDepth = 4
                 };
             }
             catch (Exception exception)
