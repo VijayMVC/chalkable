@@ -16,14 +16,14 @@ namespace Chalkable.Common.Exceptions
             if (inner != null)
             {
                 exceptionViewData.InnerMessage = inner.Message;
-#if DEBUG
+//#if DEBUG
                 exceptionViewData.InnerStackTrace = inner.StackTrace;
-#endif
+//#endif
             }
             exceptionViewData.Message = outer.Message;
-#if DEBUG
+//#if DEBUG
             exceptionViewData.StackTrace = outer.StackTrace;
-#endif
+//#endif
             exceptionViewData.ExceptionType = outer.GetType().Name;
             return exceptionViewData;
         }
