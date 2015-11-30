@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Services.Protocols;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.BusinessLogic.Services.Reporting;
@@ -153,7 +154,11 @@ namespace Chalkable.Web.Controllers
                 
                 return new ChalkableJsonResult(false)
                 {
-                    Data = new ChalkableJsonResponce(ExceptionViewData.Create(exception, exception.InnerException))
+                    Data = new ChalkableJsonResponce(new
+                    {
+                        Exception = ExceptionViewData.Create(exception, exception.InnerException),
+                        InnerException = exception.InnerException != null ? ExceptionViewData.Create(exception, exception.InnerException) : null,
+                    })
                     {
                         Success = false
                     },

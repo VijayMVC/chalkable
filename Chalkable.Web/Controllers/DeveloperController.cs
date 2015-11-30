@@ -85,8 +85,9 @@ namespace Chalkable.Web.Controllers
             return MasterLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId, clientSecret, userName, schoolYearId, role, scope);
         }
 
-        public ActionResult DeveloperDocs()
+        public ActionResult DeveloperDocs(bool InFrame = false)
         {
+            ViewBag.InFrame = InFrame;
             return View();
         }
 
