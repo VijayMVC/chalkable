@@ -1837,7 +1837,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             get { throw new NotImplementedException(); }
         }
 
-        public School.Announcements.IBaseAnnouncementService GetAnnouncementService(Data.School.Model.Announcements.AnnouncementType? type)
+        public School.Announcements.IBaseAnnouncementService GetAnnouncementService(Data.School.Model.Announcements.AnnouncementTypeEnum? type)
         {
             throw new NotImplementedException();
         }

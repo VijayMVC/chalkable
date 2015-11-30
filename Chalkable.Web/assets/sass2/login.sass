@@ -116,12 +116,17 @@ A
         margin-top: 25px
 
     label.error
-        color: $red
+        color: white
+        bottom: 50px
+        border-radius: 5px
         text-align: right
         display: block !important
         position: absolute
-        top: -20px
         right: 0
+        background: rgba(0, 0, 0, 0.7)
+
+        &:not(:empty)
+            padding: 10px
 
     input, button
         display: block

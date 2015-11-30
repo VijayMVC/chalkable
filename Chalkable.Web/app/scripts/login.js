@@ -30,7 +30,7 @@
 
 +function ($, WEB_SITE_ROOT, mixpanel, location) {
     function showFormBanner($form, msg) {
-        $form.find('.banner').text(msg).show();
+        $form.find('.banner').html(msg).show();
     }
 
     function hideFormBanner($form) {
@@ -112,7 +112,7 @@
 
 +function ($, WEB_SITE_ROOT, mixpanel, location) {
     function showFormBanner($form, msg, infoMsg) {
-        $form.find('.banner').text(msg).toggleClass('info', infoMsg).show();
+        $form.find('.banner').html(msg).toggleClass('info', infoMsg).show();
     }
 
     function hideFormBanner($form) {

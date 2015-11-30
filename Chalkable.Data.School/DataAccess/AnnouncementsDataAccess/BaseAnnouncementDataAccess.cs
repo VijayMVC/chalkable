@@ -141,7 +141,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
         }
 
-        public AnnouncementType GetAnnouncementType(int announcementId)
+        public AnnouncementTypeEnum GetAnnouncementType(int announcementId)
         {
             var dbQuery = new DbQuery();
             dbQuery.Sql.AppendFormat(@"select  LessonPlan.Id as LessonPlan_Id,
@@ -157,11 +157,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 {
                     reader.Read();
                     if(!reader.IsDBNull(reader.GetOrdinal("LessonPlan_Id")))
-                        return AnnouncementType.LessonPlan;
+                        return AnnouncementTypeEnum.LessonPlan;
                     if(!reader.IsDBNull(reader.GetOrdinal("AdminAnnouncement_Id")))
-                        return AnnouncementType.Admin;
+                        return AnnouncementTypeEnum.Admin;
                     if(!reader.IsDBNull(reader.GetOrdinal("ClassAnnouncement_Id")))
-                        return AnnouncementType.Class;
+                        return AnnouncementTypeEnum.Class;
                     throw new NoAnnouncementException();
                 });
         }

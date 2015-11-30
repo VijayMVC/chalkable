@@ -56,14 +56,14 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Delete(int announcementId, int? announcementType)
         {
-            SchoolLocator.GetAnnouncementService((AnnouncementType?)announcementType).DeleteAnnouncement(announcementId);
+            SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum?)announcementType).DeleteAnnouncement(announcementId);
             return Json(true);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult DeleteDrafts(int personId, int announcementType)
         {
-            SchoolLocator.GetAnnouncementService((AnnouncementType)announcementType).DeleteDrafts(personId);
+            SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum)announcementType).DeleteDrafts(personId);
             return Json(true);
         }
 
@@ -81,7 +81,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             Trace.Assert(Context.PersonId.HasValue);
 
             var assesmentId = MasterLocator.ApplicationService.GetAssessmentId();
-            var type = (AnnouncementType?)announcementType ?? AnnouncementType.Class;
+            var type = (AnnouncementTypeEnum?)announcementType ?? AnnouncementTypeEnum.Class;
             var canAddStandard = SchoolLocator.GetAnnouncementService(type).CanAddStandard(announcementId);
             var isAppEnabled = BaseSecurity.IsDistrictOrTeacher(Context) && Context.SCEnabled;
             var isFileCabinetEnabled = Context.Role == CoreRoles.TEACHER_ROLE; //only teacher can use file cabinet for now
@@ -100,10 +100,10 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         {
             if (!complete.HasValue)
             {
-                var prev = SchoolLocator.GetAnnouncementService((AnnouncementType)announcementType).GetAnnouncementDetails(announcementId).Complete;
+                var prev = SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum)announcementType).GetAnnouncementDetails(announcementId).Complete;
                 complete = !prev;
             }
-            SchoolLocator.GetAnnouncementService((AnnouncementType)announcementType).SetComplete(announcementId, complete.Value);
+            SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum)announcementType).SetComplete(announcementId, complete.Value);
             return Json(true);
         }
 
@@ -119,9 +119,9 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             }
             else
             {
-                if((AnnouncementType)annType == AnnouncementType.Class)
+                if((AnnouncementTypeEnum)annType == AnnouncementTypeEnum.Class)
                     SchoolLocator.ClassAnnouncementService.SetComplete(classId, mdo);
-                if ((AnnouncementType)annType == AnnouncementType.LessonPlan)
+                if ((AnnouncementTypeEnum)annType == AnnouncementTypeEnum.LessonPlan)
                     SchoolLocator.LessonPlanService.SetComplete(classId, mdo);
             }
 
@@ -132,7 +132,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("Teacher")]
         public ActionResult AddStandard(int announcementId, int standardId, int? announcementType)
         {
-            var standard = SchoolLocator.GetAnnouncementService((AnnouncementType?)announcementType).AddAnnouncementStandard(announcementId, standardId);
+            var standard = SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum?)announcementType).AddAnnouncementStandard(announcementId, standardId);
             MasterLocator.UserTrackingService.AttachedStandard(Context.Login, standard.Name);
             return Json(PrepareFullAnnouncementViewData(announcementId, announcementType));
         }
@@ -140,7 +140,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("Teacher")]
         public ActionResult RemoveStandard(int announcementId, int standardId, int? announcementType)
         {
-            SchoolLocator.GetAnnouncementService((AnnouncementType?)announcementType).RemoveStandard(announcementId, standardId);
+            SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum?)announcementType).RemoveStandard(announcementId, standardId);
             return Json(PrepareFullAnnouncementViewData(announcementId, announcementType));
         }
 
@@ -151,7 +151,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return Json(AnnouncementAttributeViewData.Create(res));
         }
 
-        protected ActionResult EditTitle(int announcementId, AnnouncementType announcementType, string title, Func<string, bool> existsAction)
+        protected ActionResult EditTitle(int announcementId, AnnouncementTypeEnum announcementType, string title, Func<string, bool> existsAction)
         {
             if (!existsAction(title))
             {

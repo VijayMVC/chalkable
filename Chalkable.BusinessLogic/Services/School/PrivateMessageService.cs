@@ -311,13 +311,12 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.SchoolLocalId.HasValue);
 
             bool canSend = false;
-            var toPerson = new PersonDataAccess(uow).GetPersonDetails(personId, Context.SchoolLocalId.Value);
-            if (toPerson == null)
-                return false;
+            var toPersonRole = ServiceLocator.PersonService.GetPersonRole(personId);
+
             var currPersonClasses = new ClassDataAccess(uow).GetStudentClasses(Context.SchoolYearId.Value,
                 Context.PersonId.Value, null);
 
-            if (toPerson.RoleRef == CoreRoles.TEACHER_ROLE.Id && Context.TeacherStudentMessaginEnabled)
+            if (toPersonRole == CoreRoles.TEACHER_ROLE && Context.TeacherStudentMessaginEnabled)
                 if (Context.TeacherClassMessagingOnly)
                 {
                     var toPersonClasses = new ClassDataAccess(uow).GetTeacherClasses(Context.SchoolYearId.Value,
@@ -328,7 +327,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 else
                     return true;
 
-            if (toPerson.RoleRef == CoreRoles.STUDENT_ROLE.Id)
+            if (toPersonRole == CoreRoles.STUDENT_ROLE)
                 if (Context.StudentMessagingEnabled)
                 {
                     canSend = true;

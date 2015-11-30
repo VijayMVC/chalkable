@@ -53,6 +53,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             DayTypeStorage.Delete(dayTypes);
         }
 
+        public IList<DayType> GetDayTypes()
+        {
+            return DayTypeStorage.GetAll().Where(x => x.SchoolYearRef == Context.SchoolYearId).ToList();
+        }
+
         public bool Exists(int schoolYearId)
         {
             return DayTypeStorage.Exists(schoolYearId);

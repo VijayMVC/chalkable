@@ -52,7 +52,7 @@ NAMESPACE('chlk.controllers', function (){
         function seatingChartReportAction(gradingPeriodId, classId){
             if (this.isDemoSchool())
                 return this.ShowMsgBox('Not available for demo', 'Error'), null;
-            
+
             var res = new ria.async.DeferredData(new chlk.models.reports.BaseReportViewData(classId, gradingPeriodId, null, null, null, this.hasUserPermission_(chlk.models.people.UserPermissionEnum.SEATING_CHART_REPORT)));
             return this.ShadeView(chlk.activities.reports.SeatingChartAttendanceReportDialog, res);
         },
@@ -96,16 +96,20 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.reports.SubmitSeatingChartReportViewData]],
         function submitSeatingChartReportAction(reportViewData){
 
-            var src = this.reportingService.submitSeatingChartReport(
-                reportViewData.getClassId(),
-                reportViewData.getGradingPeriodId(),
-                reportViewData.getFormat(),
-                reportViewData.isDisplayStudentPhoto()
-            );
-            this.BackgroundCloseView(chlk.activities.reports.SeatingChartAttendanceReportDialog);
-            this.BackgroundCloseView(chlk.activities.reports.SeatingChartReportDialog);
-            this.getContext().getDefaultView().submitToIFrame(src);
-            return null;
+            var result = this.reportingService.submitSeatingChartReport(
+                    reportViewData.getClassId(),
+                    reportViewData.getGradingPeriodId(),
+                    reportViewData.getFormat(),
+                    reportViewData.isDisplayStudentPhoto()
+                )
+                .attach(this.validateResponse_())
+                .then(function () {
+                    this.BackgroundCloseView(chlk.activities.reports.SeatingChartAttendanceReportDialog);
+                    this.BackgroundCloseView(chlk.activities.reports.SeatingChartReportDialog);
+                }, this)
+                .thenBreak();
+
+            return this.UpdateView(this.getView().getCurrent().getClass(), result);
         },
 
         [chlk.controllers.Permissions([
@@ -127,27 +131,31 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShowAlertBox("You should select at least one term", "Error"), null;
             }
 
-            var src = this.reportingService.submitAttendanceProfileReport(
-                reportViewData.getClassId(),
-                reportViewData.getGradingPeriodId(),
-                reportViewData.getFormat(),
-                reportViewData.getStartDate(),
-                reportViewData.getEndDate(),
-                reportViewData.getGroupBy(),
-                reportViewData.getIdToPrint(),
-                this.getIdsList(reportViewData.getAbsenceReasons(), chlk.models.id.AttendanceReasonId),
-                this.getIdsList(reportViewData.getTerms(), chlk.models.id.MarkingPeriodId),
-                reportViewData.isDisplayPeriodAbsences(),
-                reportViewData.isDisplayReasonTotals(),
-                reportViewData.isIncludeCheck(),
-                reportViewData.isIncludeUnlisted(),
-                reportViewData.isDisplayNote(),
-                reportViewData.isDisplayWithdrawnStudents(),
-                reportViewData.getStudentIds()
-            );
-            this.BackgroundCloseView(chlk.activities.reports.AttendanceProfileReportDialog);
-            this.getContext().getDefaultView().submitToIFrame(src);
-            return null;
+            var result = this.reportingService.submitAttendanceProfileReport(
+                    reportViewData.getClassId(),
+                    reportViewData.getGradingPeriodId(),
+                    reportViewData.getFormat(),
+                    reportViewData.getStartDate(),
+                    reportViewData.getEndDate(),
+                    reportViewData.getGroupBy(),
+                    reportViewData.getIdToPrint(),
+                    this.getIdsList(reportViewData.getAbsenceReasons(), chlk.models.id.AttendanceReasonId),
+                    this.getIdsList(reportViewData.getTerms(), chlk.models.id.MarkingPeriodId),
+                    reportViewData.isDisplayPeriodAbsences(),
+                    reportViewData.isDisplayReasonTotals(),
+                    reportViewData.isIncludeCheck(),
+                    reportViewData.isIncludeUnlisted(),
+                    reportViewData.isDisplayNote(),
+                    reportViewData.isDisplayWithdrawnStudents(),
+                    reportViewData.getStudentIds()
+                )
+                .attach(this.validateResponse_())
+                .then(function () {
+                    this.BackgroundCloseView(chlk.activities.reports.AttendanceProfileReportDialog);
+                }, this)
+                .thenBreak();
+
+            return this.UpdateView(chlk.activities.reports.AttendanceProfileReportDialog, result);
         },
 
         [chlk.controllers.Permissions([chlk.models.people.UserPermissionEnum.CLASSROOM_ATTENDANCE_REGISTER_REPORT])],
@@ -159,31 +167,36 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShowAlertBox("Absence Reasons is a required field. Please make sure that you enter data in all required fields", "Error"), null;
             }
 
-            var src = this.reportingService.submitAttendanceRegisterReport(
-                reportViewData.getClassId(),
-                reportViewData.getGradingPeriodId(),
-                reportViewData.getFormat(),
-                reportViewData.getIdToPrint(),
-                reportViewData.getReportType(),
-                this.getIdsList(reportViewData.getAbsenceReasons(), chlk.models.id.AttendanceReasonId),
-                reportViewData.getMonthId(),
-                reportViewData.isShowLocalReasonCode(),
-                reportViewData.isIncludeTardies()
-            );
-            this.BackgroundCloseView(chlk.activities.reports.AttendanceRegisterReportDialog);
-            this.getContext().getDefaultView().submitToIFrame(src);
-            return null;
+            var result = this.reportingService.submitAttendanceRegisterReport(
+                    reportViewData.getClassId(),
+                    reportViewData.getGradingPeriodId(),
+                    reportViewData.getFormat(),
+                    reportViewData.getIdToPrint(),
+                    reportViewData.getReportType(),
+                    this.getIdsList(reportViewData.getAbsenceReasons(), chlk.models.id.AttendanceReasonId),
+                    reportViewData.getMonthId(),
+                    reportViewData.isShowLocalReasonCode(),
+                    reportViewData.isIncludeTardies()
+                )
+                .attach(this.validateResponse_())
+                .then(function () {
+                    this.BackgroundCloseView(chlk.activities.reports.AttendanceRegisterReportDialog);
+                }, this)
+                .thenBreak();
+
+            return this.UpdateView(chlk.activities.reports.AttendanceRegisterReportDialog, result);
         },
 
         [chlk.controllers.Permissions([
-            [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN]
+            [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE,
+                chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN]
         ])],
         [chlk.controllers.SidebarButton('attendance')],
         function summaryAction() {
             var result = this.attendanceService
                 .getSummary()
                 .attach(this.validateResponse_())
-                .then(function(summary){
+                .then(function(summary) {
                     var res = this.attendanceService
                         .getNotTakenAttendanceClasses()
                         .attach(this.validateResponse_())
@@ -196,6 +209,7 @@ NAMESPACE('chlk.controllers', function (){
                     var topModel = new chlk.models.classes.ClassesForTopBar(null);
                     return new chlk.models.attendance.SummaryPage(topModel, summary, gp);
                 }, this);
+
             return this.PushView(chlk.activities.attendance.SummaryPage, result);
         },
 
@@ -294,7 +308,7 @@ NAMESPACE('chlk.controllers', function (){
             model.setAbleRePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE));
             model.setAbleChangeReasons(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ABSENCE_REASONS)
                 || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN));
-            model.setAblePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE)
+            model.setAblePost(this.isClassTeacher_(classId) && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE)
                 || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN));
             model.setTopData(topModel);
             model.setDate(date_);
@@ -402,6 +416,15 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(chlk.activities.attendance.SeatingChartPage, res);
         },
 
+        [[chlk.models.id.ClassId]],
+        function isClassTeacher_(classId){
+            var len = this.classService.getClassesForTopBarSync().filter(function(clazz){
+                return clazz.getId() == classId;
+            }).length;
+
+            return len > 0;
+        },
+
         [chlk.controllers.Permissions([
             [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN]
         ])],
@@ -439,7 +462,7 @@ NAMESPACE('chlk.controllers', function (){
                         true,
                         this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []),
                         this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE) && !this.userIsAdmin(),
-                        (this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE)
+                        (this.isClassTeacher_(classId) && this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE)
                             || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN)) && !this.userIsAdmin(),
                         (this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ABSENCE_REASONS)
                             || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN)) && !this.userIsAdmin(),
