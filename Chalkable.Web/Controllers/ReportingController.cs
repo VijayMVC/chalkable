@@ -150,6 +150,7 @@ namespace Chalkable.Web.Controllers
                 Response.TrySkipIisCustomErrors = true;
                 Response.StatusCode = 500;
                 Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
+                
                 return new ChalkableJsonResult(false)
                 {
                     Data = new ChalkableJsonResponce(exception)
@@ -157,7 +158,7 @@ namespace Chalkable.Web.Controllers
                         Success = false
                     },
                     ContentType = HTML_CONTENT_TYPE,
-                    SerializationDepth = 4
+                    SerializationDepth = 10
                 };
             }
             catch (Exception exception)
