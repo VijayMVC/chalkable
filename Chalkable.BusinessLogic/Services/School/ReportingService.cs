@@ -241,7 +241,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var stiModel = new MissingAssignmentsParams
                 {
                     AcadSessionId = gradingPeriod.SchoolYearRef,
-                    AlternateScoreIds = missingAssignmentsInput.AlternateScoreIds != null ? missingAssignmentsInput.AlternateScoreIds.ToArray() : null,
+                    AlternateScoreIds = missingAssignmentsInput.AlternateScoreIds?.ToArray(),
                     AlternateScoresOnly = missingAssignmentsInput.AlternateScoresOnly,
                     EndDate = missingAssignmentsInput.EndDate,
                     ConsiderZerosAsMissingGrades = missingAssignmentsInput.ConsiderZerosAsMissingGrades,
@@ -379,8 +379,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     SectionId = inputModel.ClassId,
                     SortActivities = inputModel.SortItems,
                     SortSections = inputModel.SortClasses,
-                    ActivityAttributeIds = inputModel.AnnouncementAttributes != null ? inputModel.AnnouncementAttributes.ToArray() : null,
-                    ActivityCategoryIds = inputModel.AnnouncementTypes != null ? inputModel.AnnouncementTypes.ToArray() : null,
+                    ActivityAttributeIds = inputModel.AnnouncementAttributes?.ToArray(),
+                    ActivityCategoryIds = inputModel.AnnouncementTypes?.ToArray(),
                     MaxCount = inputModel.MaxCount
                 };
             return ConnectorLocator.ReportConnector.LessonPlanReport(ps);
@@ -399,9 +399,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public byte[] GetFeedReport(FeedReportInputModel inputModel, string path)
         {
-            IReportHandler<FeedReportInputModel> handler;
             if(inputModel.Settings == null) 
                 throw new ChalkableException("Empty report settings parameter");
+            ValidateDateRange(inputModel.Settings.StartDate, inputModel.Settings.EndDate);
+
+            IReportHandler<FeedReportInputModel> handler;
             if (inputModel.Settings.IncludeDetails)
                 handler = new FeedDetailsReportHandler();
             else
@@ -413,8 +415,7 @@ namespace Chalkable.BusinessLogic.Services.School
             if (!File.Exists(definition))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_REPORT_DEFINITION_FILE_NOT_FOUND, definition));
 
-            var renderer = new DefaultRenderer();
-            return renderer.Render(dataSet, definition, format, null);
+            return new DefaultRenderer().Render(dataSet, definition, format, null);
         }
 
         public FeedReportSettingsInfo GetFeedReportSettings()
@@ -440,7 +441,14 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
+            ValidateDateRange(settings.StartDate, settings.EndDate);
             ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, settings.ToDictionary());
+        }
+
+        private static void ValidateDateRange(DateTime? startDate, DateTime? endDate)
+        {
+            if (startDate.HasValue && endDate.HasValue && startDate > endDate)
+                throw new ChalkableException("Invalid date range. Start date is greater than end date");
         }
     }
 

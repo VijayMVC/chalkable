@@ -529,6 +529,7 @@
                               </Style>
                             </Tablix>
                           </ReportItems>
+                          <KeepTogether>true</KeepTogether>
                           <Top>1.94807in</Top>
                           <Left>0.13158in</Left>
                           <Height>2.17879in</Height>
@@ -549,76 +550,37 @@
                               <TablixBody>
                                 <TablixColumns>
                                   <TablixColumn>
-                                    <Width>7.27146in</Width>
+                                    <Width>7.26976in</Width>
                                   </TablixColumn>
                                 </TablixColumns>
                                 <TablixRows>
                                   <TablixRow>
-                                    <Height>0.17605in</Height>
+                                    <Height>0.19239in</Height>
                                     <TablixCells>
                                       <TablixCell>
                                         <CellContents>
                                           <Rectangle Name="Rectangle1">
                                             <ReportItems>
-                                              <Textbox Name="Textbox39">
+                                              <Textbox Name="Textbox11">
                                                 <CanGrow>true</CanGrow>
                                                 <KeepTogether>true</KeepTogether>
                                                 <Paragraphs>
                                                   <Paragraph>
                                                     <TextRuns>
                                                       <TextRun>
-                                                        <Value>=Fields!StandardName.Value</Value>
-                                                        <Style>
-                                                          <FontWeight>Bold</FontWeight>
-                                                          <Color>#2b2a28</Color>
-                                                        </Style>
+                                                        <Value>= "&lt;ul&gt;&lt;li&gt;&lt;b&gt; " &amp; Fields!StandardName.Value &amp; " &lt;/b&gt; &lt;span&gt;" &amp; IIF((IsNothing(Fields!StandardDescription.Value)) Or (Trim(Fields!StandardDescription.Value) = ""), "", "&lt;i&gt; - " &amp; Fields!StandardDescription.Value) &amp; " &lt;/i&gt;" &amp; "&lt;/span&gt; &lt;/li&gt;&lt;/ul&gt;"</Value>
+                                                        <MarkupType>HTML</MarkupType>
+                                                        <Style />
                                                       </TextRun>
                                                     </TextRuns>
                                                     <Style />
                                                   </Paragraph>
                                                 </Paragraphs>
-                                                <rd:DefaultName>Textbox39</rd:DefaultName>
-                                                <Top>0.02813in</Top>
-                                                <Height>0.13542in</Height>
-                                                <Width>2.14583in</Width>
-                                                <Style>
-                                                  <Border>
-                                                    <Style>None</Style>
-                                                  </Border>
-                                                  <PaddingLeft>2pt</PaddingLeft>
-                                                  <PaddingRight>2pt</PaddingRight>
-                                                  <PaddingTop>2pt</PaddingTop>
-                                                  <PaddingBottom>2pt</PaddingBottom>
-                                                </Style>
-                                              </Textbox>
-                                              <Textbox Name="StandardDescription">
-                                                <CanGrow>true</CanGrow>
-                                                <KeepTogether>true</KeepTogether>
-                                                <Paragraphs>
-                                                  <Paragraph>
-                                                    <TextRuns>
-                                                      <TextRun>
-                                                        <Value>= " - " + Fields!StandardDescription.Value</Value>
-                                                        <Style>
-                                                          <FontStyle>Italic</FontStyle>
-                                                          <Color>#9e9c96</Color>
-                                                        </Style>
-                                                      </TextRun>
-                                                    </TextRuns>
-                                                    <Style>
-                                                      <LineHeight>2pt</LineHeight>
-                                                    </Style>
-                                                  </Paragraph>
-                                                </Paragraphs>
-                                                <rd:DefaultName>StandardDescription</rd:DefaultName>
-                                                <Top>0.04063in</Top>
-                                                <Left>2.16844in</Left>
-                                                <Height>0.12292in</Height>
-                                                <Width>5.02146in</Width>
-                                                <ZIndex>1</ZIndex>
-                                                <Visibility>
-                                                  <Hidden>=(IsNothing(Fields!StandardDescription.Value)) Or (Trim(Fields!StandardDescription.Value) = "")</Hidden>
-                                                </Visibility>
+                                                <rd:DefaultName>Textbox11</rd:DefaultName>
+                                                <Top>0.03251in</Top>
+                                                <Left>0.038in</Left>
+                                                <Height>0.15988in</Height>
+                                                <Width>7.15391in</Width>
                                                 <Style>
                                                   <Border>
                                                     <Style>None</Style>
@@ -673,9 +635,9 @@
                               </TablixRowHierarchy>
                               <DataSetName>MainDataSet</DataSetName>
                               <Top>0.46457in</Top>
-                              <Left>0.01282in</Left>
-                              <Height>0.17605in</Height>
-                              <Width>7.27146in</Width>
+                              <Left>0.01452in</Left>
+                              <Height>0.19239in</Height>
+                              <Width>7.26976in</Width>
                               <Style>
                                 <Border>
                                   <Style>None</Style>
@@ -732,7 +694,7 @@
                           <KeepTogether>true</KeepTogether>
                           <Top>1.19667in</Top>
                           <Left>0.14156in</Left>
-                          <Height>0.64062in</Height>
+                          <Height>0.67223in</Height>
                           <Width>7.28428in</Width>
                           <ZIndex>3</ZIndex>
                           <Visibility>
@@ -1001,7 +963,6 @@
                                         </Style>
                                       </Textbox>
                                       <ColSpan>3</ColSpan>
-                                      <rd:Selected>true</rd:Selected>
                                     </CellContents>
                                   </TablixCell>
                                   <TablixCell />
