@@ -106,32 +106,6 @@ namespace Chalkable.Web.Controllers
             return Report(() => SchoolLocator.ReportService.GetFeedReport(reportInput, path), "Feed Report", formatType);
         }
 
-        public ActionResult FakeReport()
-        {
-            try
-            {
-                var report = new LocalReport { ReportPath = string.Empty };
-                var dataSource = new ReportDataSource("MainDataSet", new {});
-                report.DataSources.Add(dataSource);
-
-                string deviceInfo =
-                  "<DeviceInfo>" +
-                  "  <PageWidth>9in</PageWidth>" +
-                  "  <PageHeight>12in</PageHeight>" +
-                  "  <MarginTop>0.05in</MarginTop>" +
-                  "  <MarginLeft>0.05in</MarginLeft>" +
-                  "  <MarginRight>0.05in</MarginRight>" +
-                  "  <MarginBottom>0.05in</MarginBottom>" +
-                  "</DeviceInfo>";
-                var res = report.Render("html", deviceInfo);
-                return File(res, "application/octetstrem");
-            }
-            catch (Exception e)
-            {
-                return HandleAttachmentException(e);                
-            }
-        }
-
         private ActionResult Report<TReport>(TReport reportInputModel
             , Func<TReport, byte[]> reportAction, string reportFileName) where TReport : BaseReportInputModel
         {
@@ -165,7 +139,7 @@ namespace Chalkable.Web.Controllers
                     Data = new ChalkableJsonResponce(new
                     {
                         Exception = ExceptionViewData.Create(exception, exception.InnerException),
-                        InnerException = exception.InnerException != null ? ExceptionViewData.Create(exception, exception.InnerException) : null,
+                        InnerException = exception.InnerException != null ? ExceptionViewData.Create(exception.InnerException, exception.InnerException.InnerException) : null,
                         Messages = errorMessages
                     })
                     {

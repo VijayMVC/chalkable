@@ -529,6 +529,7 @@
                               </Style>
                             </Tablix>
                           </ReportItems>
+                          <KeepTogether>true</KeepTogether>
                           <Top>1.94807in</Top>
                           <Left>0.13158in</Left>
                           <Height>2.17879in</Height>
