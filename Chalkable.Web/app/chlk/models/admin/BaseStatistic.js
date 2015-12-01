@@ -29,14 +29,14 @@ NAMESPACE('chlk.models.admin', function () {
             Number, 'studentsCount',
 
             function getAbsencesClass(){
-                if(this.getAbsences() && this.getAbsences() / this.getStudentsCount() > 0.1)
+                if(this.getAbsences() !== null && (this.getAbsences() / this.getStudentsCount() > 0.1))
                     return 'red';
 
                 return 'green';
             },
 
             function getInfractionsClass(){
-                if(this.getInfractionsCount() && this.getInfractionsCount() / this.getStudentsCount() > 0.01)
+                if(this.getInfractionsCount() !== null && (this.getInfractionsCount() / this.getStudentsCount() > 0.01))
                     return 'red';
 
                 return 'green';

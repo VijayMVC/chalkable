@@ -13,7 +13,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public int StudentsCount { get; set; }
         public int? DisciplinesCount { get; set; }
         public int? AttendancesCount { get; set; }
-        public double? Avarage { get; set; }
+        public double? Average { get; set; }
 
         protected TeacherStatsViewData(Staff staff) : base(staff)
         {
@@ -24,7 +24,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
             return new TeacherStatsViewData(teacher)
             {
                 AttendancesCount = null,
-                Avarage = null,
+                Average = null,
                 DisciplinesCount = null,
 
                 DisplayName = teacher.FullName(false, true),

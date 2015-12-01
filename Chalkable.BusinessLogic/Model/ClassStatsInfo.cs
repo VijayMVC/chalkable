@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Model
         public int StudentsCount { get; set; }
         public decimal? AttendancesCount { get; set; }
         public int? DisciplinesCount { get; set; }
-        public decimal? Avarage { get; set; }
+        public decimal? Average { get; set; }
 
         public static ClassStatsInfo Create(SectionSummary section, Class clazz)
         {
@@ -29,7 +29,7 @@ namespace Chalkable.BusinessLogic.Model
                 Name = section.SectionName,
                 PrimaryTeacherDisplayName = section.TeacherName,
                 StudentsCount = section.EnrollmentCount,
-                Avarage = section.Average,
+                Average = section.Average,
                 DisciplinesCount = section.DisciplineCount,
                 AttendancesCount = section.AbsenceCount,
                 DepartmentRef = clazz.ChalkableDepartmentRef
@@ -48,7 +48,7 @@ namespace Chalkable.BusinessLogic.Model
                 StudentsCount = classDetails.StudentsCount,
 
                 AttendancesCount = null,
-                Avarage = null,
+                Average = null,
                 DisciplinesCount = null
             };
         }

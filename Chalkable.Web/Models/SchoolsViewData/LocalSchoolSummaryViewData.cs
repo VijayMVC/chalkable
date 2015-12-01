@@ -11,7 +11,7 @@ namespace Chalkable.Web.Models.SchoolsViewData
         public decimal? AttendancesCount { get; set; }
         public int StudentsCount { get; set; }
         public decimal? DisciplinesCount { get; set; }
-        public decimal? Avarage { get; set; }
+        public decimal? Average { get; set; }
 
         public static LocalSchoolSummaryViewData Create(SchoolSummaryInfo school)
         {
@@ -21,7 +21,7 @@ namespace Chalkable.Web.Models.SchoolsViewData
                 Name = school.SchoolDetails.Name,
                 StudentsCount = school.SchoolDetails.StudentsCount,
                 AttendancesCount = school.AttendanceCount,
-                Avarage = school.Avarage,
+                Average = school.Average,
                 DisciplinesCount = school.DisciplinCount,
             };
         }

@@ -14,14 +14,14 @@ namespace Chalkable.BusinessLogic.Model
         public ShortSchoolSummary SchoolDetails { get; set; }
         public decimal? AttendanceCount { get; set; }
         public decimal? DisciplinCount { get; set; }
-        public decimal? Avarage { get; set; }
+        public decimal? Average { get; set; }
 
         public static SchoolSummaryInfo Create(ShortSchoolSummary schoolSummary)
         {
             return new SchoolSummaryInfo()
             {
                 AttendanceCount = null,
-                Avarage = null,
+                Average = null,
                 DisciplinCount = null,
                 SchoolDetails = schoolSummary
             };
@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Model
             return new SchoolSummaryInfo()
             {
                 AttendanceCount = schoolSummary.AbsenceCount,
-                Avarage = schoolSummary.Average,
+                Average = schoolSummary.Average,
                 DisciplinCount = schoolSummary.DisciplineCount,
                 SchoolDetails = new ShortSchoolSummary()
                 {
