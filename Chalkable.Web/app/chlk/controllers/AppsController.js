@@ -965,7 +965,7 @@ NAMESPACE('chlk.controllers', function (){
             if(!this.isStudyCenterEnabled())
                 return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
 
-            var mode = chlk.models.apps.AppModes.MYAPPSVIEW,
+            var mode = "myview",
                 appId = chlk.models.id.AppId('e989ccfe-f658-4f89-81e7-f3efa0251b28');
 
             var result = this.appsService
