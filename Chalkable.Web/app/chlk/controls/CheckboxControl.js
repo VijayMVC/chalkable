@@ -57,6 +57,7 @@ NAMESPACE('chlk.controls', function () {
                 var hidden = node.parent().find('.hidden-checkbox');
                 hidden.setData('value', value);
                 hidden.setValue(value);
+                node.setAttr('value', value);
                 var parent = node.parent('.slide-checkbox');
                 if(value){
                     node.setProp('checked', true);
