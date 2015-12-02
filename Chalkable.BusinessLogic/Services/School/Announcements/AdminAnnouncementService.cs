@@ -24,9 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         void SubmitGroupsToAnnouncement(int adminAnnouncementId, IList<int> groupsIds);
         AdminAnnouncement GetAdminAnnouncementById(int adminAnnouncementId);
         bool Exists(string title, int? excludedLessonPlaId);
-
-        IList<AnnouncementComplex> GetAnnouncementsComplex(DateTime? startDate, DateTime? endDate, IList<int> gradeLevels, bool? complete, int start = 0, int count = int.MaxValue, bool ownedOnly = true); 
-        FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, FeedSettingsInfo settingsInfo, int start = 0, int count = int.MaxValue, bool ownedOnly = true);
+        IList<AnnouncementComplex> GetAnnouncementsComplex(DateTime? startDate, DateTime? endDate, IList<int> gradeLevels, bool? complete, bool ownedOnly = true, int start = 0, int count = int.MaxValue); 
         IList<AdminAnnouncement> GetAdminAnnouncements(IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? studentId);
         IList<AdminAnnouncement> GetAdminAnnouncementsByFilter(string filter); 
         AdminAnnouncement GetLastDraft();
@@ -228,8 +226,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateAdminAnnouncementDataAccess(u).Exists(title, Context.PersonId.Value, excludedLessonPlaId));
         }
 
-        public IList<AnnouncementComplex> GetAnnouncementsComplex(DateTime? startDate, DateTime? endDate, IList<int> gradeLevels, bool? complete
-            , int start = 0, int count = int.MaxValue, bool ownedOnly = true)
+        public IList<AnnouncementComplex> GetAnnouncementsComplex(DateTime? startDate, DateTime? endDate, IList<int> gradeLevels, bool? complete, bool ownedOnly = true
+            , int start = 0, int count = int.MaxValue)
         {
             return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
             {
@@ -277,123 +275,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             return DoRead(u => BaseSecurity.IsDistrictAdmin(Context) && CreateAdminAnnouncementDataAccess(u).CanAddStandard(announcementId));
         }
-
-
-        public FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, FeedSettingsInfo settingsInfo, int start = 0, int count = int.MaxValue, bool ownedOnly = true)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-
-            //get or set settings
-            if (settingsInfo.ToSet)
-                SetAdminSettingsForFeed(settingsInfo);
-            else
-                settingsInfo = GetAdminSettingsForFeed();
-
-            var feedStartDate = settingsInfo.FromDate ?? Context.SchoolYearStartDate ?? DateTime.MinValue;
-            var feedEndDate = settingsInfo.ToDate ?? Context.SchoolYearEndDate ?? DateTime.MaxValue;
-
-            var fc = new FeedComplex()
-            {
-                SettingsForFeed = settingsInfo
-            };
-            if (settingsInfo.SortType.HasValue && !settingsInfo.SortType.Value)
-                fc.Announcements =
-                    DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
-                    {
-                        Complete = complete,
-                        FromDate = feedStartDate,
-                        ToDate = feedEndDate,
-                        Start = start,
-                        Count = count,
-                        PersonId = Context.PersonId,
-                        RoleId = Context.RoleId,
-                        GradeLevelsIds = gradeLevels,
-                        OwnedOnly = ownedOnly
-                    })).Announcements.OrderBy(x => x.AdminAnnouncementData.Expires).ToList();
-            else
-                fc.Announcements =
-                    DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
-                    {
-                        Complete = complete,
-                        FromDate = feedStartDate,
-                        ToDate = feedEndDate,
-                        Start = start,
-                        Count = count,
-                        PersonId = Context.PersonId,
-                        RoleId = Context.RoleId,
-                        GradeLevelsIds = gradeLevels,
-                        OwnedOnly = ownedOnly
-                    })).Announcements.OrderByDescending(x => x.AdminAnnouncementData.Expires).ToList();
-            return fc;
-        }
-
-        private FeedSettingsInfo GetAdminSettingsForFeed()
-        {
-            var settings = new FeedSettingsInfo();
-            var query = new List<string>
-            {
-                PersonSetting.FEED_START_DATE,
-                PersonSetting.FEED_END_DATE,
-                PersonSetting.FEED_SORTING,
-                PersonSetting.FEED_GRADING_PERIOD_ID
-            };
-
-            var sett = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, query);
-            var startDate = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_START_DATE);
-            var endDate = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_END_DATE);
-            var sort = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_SORTING);
-            var grPeriodId = sett.FirstOrDefault(x => x.Key == PersonSetting.FEED_GRADING_PERIOD_ID);
-
-            if (!string.IsNullOrWhiteSpace(grPeriodId.Value) && !string.IsNullOrWhiteSpace(startDate.Value) && !string.IsNullOrWhiteSpace(endDate.Value))
-            {
-                settings.GradingPeriodId = int.Parse(grPeriodId.Value);
-                settings.FromDate = DateTime.ParseExact(startDate.Value, Constants.DATE_FORMAT,
-                    CultureInfo.InvariantCulture);
-                settings.ToDate = DateTime.ParseExact(endDate.Value, Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
-            }
-            else if (!string.IsNullOrWhiteSpace(startDate.Value) && !string.IsNullOrWhiteSpace(endDate.Value))
-            {
-                settings.GradingPeriodId = null;
-                settings.FromDate = DateTime.ParseExact(startDate.Value, Constants.DATE_FORMAT,
-                    CultureInfo.InvariantCulture);
-                settings.ToDate = DateTime.ParseExact(endDate.Value, Constants.DATE_FORMAT, CultureInfo.InvariantCulture);
-            }
-            else
-            {
-                settings.FromDate = null;
-                settings.ToDate = null;
-                settings.GradingPeriodId = null;
-            }
-
-            settings.SortType = !string.IsNullOrWhiteSpace(sort.Value) && bool.Parse(sort.Value);
-
-            return settings;
-        }
-
-        private void SetAdminSettingsForFeed(FeedSettingsInfo settingsInfo)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-            Trace.Assert(Context.SchoolYearId.HasValue);
-
-            var fromDate = settingsInfo.FromDate;
-            var toDate = settingsInfo.ToDate;
-
-            if (settingsInfo.GradingPeriodId.HasValue)
-            {
-                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(settingsInfo.GradingPeriodId.Value);
-                fromDate = gp.StartDate;
-                toDate = gp.EndDate;
-            }
-
-            ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, new Dictionary<string, object>()
-            {
-                {PersonSetting.FEED_START_DATE, fromDate },
-                {PersonSetting.FEED_END_DATE, toDate },
-                {PersonSetting.FEED_GRADING_PERIOD_ID, settingsInfo.GradingPeriodId },
-                {PersonSetting.FEED_SORTING, settingsInfo.SortType }
-            });
-        }
-
+        
         public IList<AdminAnnouncement> GetAdminAnnouncements(IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? studentId)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -423,8 +305,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId)
         {
-            DoUpdate(
-                u =>
+            DoUpdate( u =>
                     new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementTypeEnum.Admin,schoolYearId,
                         personId, roleId, true, tillDateToUpdate, null));
         }
