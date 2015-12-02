@@ -1,82 +1,88 @@
 ﻿
 
+
+
 CREATE Procedure spBeforeRestore
-as	
-	begin transaction
-	declare @chalkableTables table
-	(name nvarchar(2048))
+as
+begin transaction
+declare @chalkableTables table
+(name nvarchar(2048))
 
-	insert into @chalkableTables
-		(name)
-	values
-		('Announcement'),
-		('AdminAnnouncement'),
-		('AnnouncementApplication'),
-		('AnnouncementAssignedAttribute'),
-		('AnnouncementAttachment'),
-		('AnnouncementGroup'),
-		('AnnouncementQnA'),
-		('AnnouncementRecipientData'),
-		('AnnouncementStandard'),
-		('ApplicationInstall'),
-		('ApplicationInstallAction'),
-		('ApplicationInstallActionClasses'),
-		('AutoGrade'),
-		('Notification'),
-		('ClassAnnouncement'),
-		('Group'),
-		('LessonPlan'),
-		('LPGalleryCategory'),
-		('PracticeGrade'),
-		('PrivateMessage'),
-		('StudentGroup'),
-		('Attachment'),
-		('ApplicationBanHistory')
+insert into @chalkableTables
+(name)
+values
+('PersonSetting'),
+('Notification'),
+('AutoGrade'),
+('PracticeGrade'),
+('AnnouncementApplication'),
+('Attachment'),
+('AnnouncementAttachment'),
+('AnnouncementQnA'),
+('ApplicationInstall'),
+('ApplicationInstallActionClasses'),
+('ApplicationInstallAction'),
+('PrivateMessageRecipient'),
+('PrivateMessage'),
+('LPGalleryCategory'),
 
-	--Disable all FKs
-	declare @table nvarchar(2048)
-	declare  TableCursor cursor local for
-		SELECT Table_Name FROM 
-			information_schema.tables
-		where 
-			Table_Type = 'BASE TABLE'
-			
+('AnnouncementAssignedAttribute'),
+('AnnouncementGroup'),
+('AnnouncementRecipientData'),
+('AnnouncementStandard'),
+('StudentGroup'),
+('Group'),
 
-	open TableCursor
-	fetch next from TableCursor
-		into @table
+('AdminAnnouncement'),
+('ClassAnnouncement'),
+('LessonPlan'),
+('Announcement'),
+('ApplicationBanHistory')
 
-
-	while @@FETCH_STATUS = 0
-	begin
-		declare @sql nvarchar(3072)
-		set @sql = 'ALTER TABLE [' + @table + '] NOCHECK CONSTRAINT ALL'
-		
-		exec sp_executesql @sql
-
-		fetch next from TableCursor
-			into @table
-	end
-
-	CLOSE TableCursor;
-	
-	--Truncate table data
-	open TableCursor
-	fetch next from TableCursor
-		into @table
+--Disable all FKs
+declare @table nvarchar(2048)
+declare  TableCursor cursor local for
+SELECT Table_Name FROM
+information_schema.tables
+where
+Table_Type = 'BASE TABLE'
 
 
-	while @@FETCH_STATUS = 0
-	begin
-		if not exists(select * from @chalkableTables where name = @table) 
-		begin
-			set @sql = 'Delete from [' + @table	+ ']'
-			exec sp_executesql @sql			
-		end
-		fetch next from TableCursor
-			into @table
-	end
-	CLOSE TableCursor;
-	DEALLOCATE TableCursor;
+open TableCursor
+fetch next from TableCursor
+into @table
 
-	commit
+
+while @@FETCH_STATUS = 0
+begin
+declare @sql nvarchar(3072)
+set @sql = 'ALTER TABLE [' + @table + '] NOCHECK CONSTRAINT ALL'
+
+exec sp_executesql @sql
+
+fetch next from TableCursor
+into @table
+end
+
+CLOSE TableCursor;
+
+--Truncate table data
+open TableCursor
+fetch next from TableCursor
+into @table
+
+
+while @@FETCH_STATUS = 0
+begin
+if not exists(select * from @chalkableTables where name = @table)
+begin
+set @sql = 'Delete from [' + @table	+ ']'
+exec sp_executesql @sql
+end
+fetch next from TableCursor
+into @table
+end
+CLOSE TableCursor;
+DEALLOCATE TableCursor;
+
+commit
