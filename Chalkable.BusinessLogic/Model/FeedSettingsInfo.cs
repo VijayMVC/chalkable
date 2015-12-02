@@ -13,6 +13,7 @@ namespace Chalkable.BusinessLogic.Model
         public DateTime? ToDate { get; set; }
         public int? GradingPeriodId { get; set; }
         public bool AnyDate { get; set; }
+        public bool ToSet { get; set; }
 
         public FeedSettingsInfo() { }
 
