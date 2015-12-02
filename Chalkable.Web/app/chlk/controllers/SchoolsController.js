@@ -356,7 +356,7 @@ NAMESPACE('chlk.controllers', function (){
                     filter_ && model.setFilter(filter_);
                     var teacher = model.getItems()[0];
                     if(teacher){
-                        teacher.setSchoolYearId(currentSchoolYearId);
+                        teacher.setSchoolYearId(schoolYearId_);
                         teacher.setSchoolId(schoolId);
                         teacher.setSchoolName(schoolName);
                     }
