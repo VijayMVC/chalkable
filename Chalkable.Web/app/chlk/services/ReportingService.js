@@ -348,6 +348,30 @@ NAMESPACE('chlk.services', function () {
                 gradingPeriodId: gradingPeriodId.valueOf(),
                 studentComments: studentComments
             });
+        },
+
+        ria.async.Future, function getFeedReportSettings(classId_) {
+            return this.get('Reporting/FeedReportSettings.json', chlk.models.feed.FeedPrintingViewData, {
+                classId: classId_ && classId_.valueOf()
+            });
+        },
+
+        [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Boolean, Boolean, Boolean, Boolean, chlk.models.id.ClassId]],
+        ria.async.Future, function submitFeedReport(startDate, endDate, lessonPlanOnly_, includeAttachments_, includeDetails_,
+                                                  includeHiddenAttributes_, includeHiddenActivities_, classId_) {
+
+            var url = this.getUrl('Reporting/FeedReport.json', {
+                startDate: startDate.toStandardFormat(),
+                endDate: endDate.toStandardFormat(),
+                lessonPlanOnly: lessonPlanOnly_,
+                includeAttachments: includeAttachments_,
+                includeDetails: includeDetails_,
+                includeHiddenAttributes: includeHiddenAttributes_,
+                includeHiddenActivities: includeHiddenActivities_,
+                classId: classId_ && classId_.valueOf()
+            });
+
+            return this.getWithIframe_(url);
         }
     ])
 });

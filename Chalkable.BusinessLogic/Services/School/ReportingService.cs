@@ -1,8 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
+using Chalkable.BusinessLogic.Services.Reporting;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model.Reports;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -24,8 +32,10 @@ namespace Chalkable.BusinessLogic.Services.School
         byte[] GetSeatingChartReport(SeatingChartReportInputModel inputModel);
         byte[] GetGradeVerificationReport(GradeVerificationInputModel inputModel);
         byte[] GetLessonPlanReport(LessonPlanReportInputModel inputModel);
-
         byte[] GetStudentComprehensiveReport(int studentId, int gradingPeriodId);
+        byte[] GetFeedReport(FeedReportInputModel inputModel, string path);
+        FeedReportSettingsInfo GetFeedReportSettings();
+        void SetFeedReportSettings(FeedReportSettingsInfo feedReportSettings);
     }
 
     public class ReportingService : SisConnectedService, IReportingService
@@ -231,7 +241,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var stiModel = new MissingAssignmentsParams
                 {
                     AcadSessionId = gradingPeriod.SchoolYearRef,
-                    AlternateScoreIds = missingAssignmentsInput.AlternateScoreIds != null ? missingAssignmentsInput.AlternateScoreIds.ToArray() : null,
+                    AlternateScoreIds = missingAssignmentsInput.AlternateScoreIds?.ToArray(),
                     AlternateScoresOnly = missingAssignmentsInput.AlternateScoresOnly,
                     EndDate = missingAssignmentsInput.EndDate,
                     ConsiderZerosAsMissingGrades = missingAssignmentsInput.ConsiderZerosAsMissingGrades,
@@ -276,7 +286,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var ps = new AttendanceRegisterReportParams
                 {
                     AcadSessionId = gp.SchoolYearRef,
-                    AbsenceReasonIds = inputModel.AbsenceReasonIds != null ? inputModel.AbsenceReasonIds.ToArray() : null,
+                    AbsenceReasonIds = inputModel.AbsenceReasonIds?.ToArray(),
                     IdToPrint = inputModel.IdToPrint,
                     IncludeTardies = inputModel.IncludeTardies,
                     MonthId = inputModel.MonthId,
@@ -292,7 +302,7 @@ namespace Chalkable.BusinessLogic.Services.School
             var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(inputModel.GradingPeriodId);
             var ps = new AttendanceProfileReportParams
                 {
-                    AbsenceReasonIds = inputModel.AbsenceReasons != null ? inputModel.AbsenceReasons.ToArray() : null,
+                    AbsenceReasonIds = inputModel.AbsenceReasons?.ToArray(),
                     AcadSessionId = gp.SchoolYearRef,
                     IncludeNote = inputModel.DisplayNote,
                     IncludePeriodAbsences = inputModel.DisplayPeriodAbsences,
@@ -305,7 +315,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     IdToPrint = inputModel.IdToPrint,
                     IncludeUnlisted = inputModel.IncludeUnlisted,
                     IncludeCheckInCheckOut = inputModel.IncludeCheckInCheckOut,
-                    TermIds = inputModel.MarkingPeriodIds != null ? inputModel.MarkingPeriodIds.ToArray() : null,
+                    TermIds = inputModel.MarkingPeriodIds?.ToArray(),
                 };
             if (inputModel.StudentIds == null)
             {
@@ -327,15 +337,15 @@ namespace Chalkable.BusinessLogic.Services.School
                     AcadSessionId = gp.SchoolYearRef,
                     GradeType = inputModel.GradeType,
                     SectionId = inputModel.ClassId,
-                    GradedItemIds = inputModel.GradedItemId != null ? inputModel.GradedItemId.ToArray() : null,
-                    GradingPeriodIds = inputModel.GradingPeriodIds != null ? inputModel.GradingPeriodIds.ToArray() : new []{ gp.Id },
+                    GradedItemIds = inputModel.GradedItemId?.ToArray(),
+                    GradingPeriodIds = inputModel.GradingPeriodIds?.ToArray() ?? new []{ gp.Id },
                     IncludeComments = inputModel.IncludeCommentsAndLegend,
                     IncludeSignature = inputModel.IncludeSignature,
                     IncludeNotes = inputModel.IncludeNotes,
                     IncludeWithdrawn = inputModel.IncludeWithdrawn,
                     IdToPrint = inputModel.IdToPrint,
                     StudentOrder = inputModel.StudentOrder,
-                    StudentIds = inputModel.StudentIds != null ? inputModel.StudentIds.ToArray() : null
+                    StudentIds = inputModel.StudentIds?.ToArray()
                 };
             return ConnectorLocator.ReportConnector.GradeVerificationReport(ps);
         }
@@ -369,8 +379,8 @@ namespace Chalkable.BusinessLogic.Services.School
                     SectionId = inputModel.ClassId,
                     SortActivities = inputModel.SortItems,
                     SortSections = inputModel.SortClasses,
-                    ActivityAttributeIds = inputModel.AnnouncementAttributes != null ? inputModel.AnnouncementAttributes.ToArray() : null,
-                    ActivityCategoryIds = inputModel.AnnouncementTypes != null ? inputModel.AnnouncementTypes.ToArray() : null,
+                    ActivityAttributeIds = inputModel.AnnouncementAttributes?.ToArray(),
+                    ActivityCategoryIds = inputModel.AnnouncementTypes?.ToArray(),
                     MaxCount = inputModel.MaxCount
                 };
             return ConnectorLocator.ReportConnector.LessonPlanReport(ps);
@@ -385,6 +395,60 @@ namespace Chalkable.BusinessLogic.Services.School
                     GradingPeriodIds = new[] { gradingPeriodId }
                 };
             return ConnectorLocator.ReportConnector.StudentComprehensiveProgressReport(studentId, ps);
+        }
+
+        public byte[] GetFeedReport(FeedReportInputModel inputModel, string path)
+        {
+            if(inputModel.Settings == null) 
+                throw new ChalkableException("Empty report settings parameter");
+            ValidateDateRange(inputModel.Settings.StartDate, inputModel.Settings.EndDate);
+
+            IReportHandler<FeedReportInputModel> handler;
+            if (inputModel.Settings.IncludeDetails)
+                handler = new FeedDetailsReportHandler();
+            else
+                handler = new ShortFeedReportHandler();
+
+            var format = inputModel.FormatTyped ?? ReportingFormat.Pdf;
+            var dataSet = handler.PrepareDataSource(inputModel, format, ServiceLocator, ServiceLocator.ServiceLocatorMaster);
+            var definition = Path.Combine(path, handler.GetReportDefinitionFile());
+            if (!File.Exists(definition))
+                throw new ChalkableException(string.Format(ChlkResources.ERR_REPORT_DEFINITION_FILE_NOT_FOUND, definition));
+
+            return new DefaultRenderer().Render(dataSet, definition, format, null);
+        }
+
+        public FeedReportSettingsInfo GetFeedReportSettings()
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            var settings = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value,
+                Context.SchoolYearId.Value, new List<string>
+                {
+                    PersonSetting.FEED_REPORT_START_DATE,
+                    PersonSetting.FEED_REPORT_END_DATE,
+                    PersonSetting.FEED_REPORT_INCLUDE_DETAILS,
+                    PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ACTIVITIES,
+                    PersonSetting.FEED_REPORT_INCLUDE_HIDDEN_ATTRIBUTES,
+                    PersonSetting.FEED_REPORT_LP_ONLY,
+                    PersonSetting.FEED_REPORT_INCLUDE_ATTACHMENTS
+                });
+            return new FeedReportSettingsInfo(settings);
+        }
+
+        public void SetFeedReportSettings(FeedReportSettingsInfo settings)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            ValidateDateRange(settings.StartDate, settings.EndDate);
+            ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, settings.ToDictionary());
+        }
+
+        private static void ValidateDateRange(DateTime? startDate, DateTime? endDate)
+        {
+            if (startDate.HasValue && endDate.HasValue && startDate > endDate)
+                throw new ChalkableException("Invalid date range. Start date is greater than end date");
         }
     }
 

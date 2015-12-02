@@ -44,7 +44,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult Save(int lessonPlanId, int classId, string title, string content, int? galleryCategoryId,
             DateTime? startDate, DateTime? endDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes)
         {
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.LessonPlan, lessonPlanId, attributes);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, lessonPlanId, attributes);
             var res = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents);
 
             if (res.LessonPlanData?.GalleryCategoryRef != null)
@@ -58,7 +58,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult Submit(int lessonPlanId, int classId, string title, string content, int? galleryCategoryId,
             DateTime? startDate, DateTime? endDate, bool hideFromStudents, IList<AssignedAttributeInputModel> attributes)
         {
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.LessonPlan, lessonPlanId, attributes);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.LessonPlan, lessonPlanId, attributes);
             var ann = SchoolLocator.LessonPlanService.Edit(lessonPlanId, classId, galleryCategoryId, title, content, startDate, endDate, !hideFromStudents);
             SchoolLocator.LessonPlanService.Submit(lessonPlanId);
             var lessonPlan = SchoolLocator.LessonPlanService.GetLessonPlanById(lessonPlanId);
@@ -70,7 +70,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("Teacher")]
         public ActionResult EditTitle(int announcementId, string title)
         {
-            return EditTitle(announcementId, AnnouncementType.LessonPlan, title, t => SchoolLocator.LessonPlanService.ExistsInGallery(t, announcementId));              
+            return EditTitle(announcementId, AnnouncementTypeEnum.LessonPlan, title, t => SchoolLocator.LessonPlanService.ExistsInGallery(t, announcementId));              
         }
 
         [AuthorizationFilter("Teacher")]

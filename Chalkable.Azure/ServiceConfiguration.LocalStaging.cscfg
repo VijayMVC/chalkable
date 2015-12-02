@@ -10,15 +10,15 @@
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
-      <Setting name="ChalkableSchoolDbServers" value="me0buyg8np.database.windows.net" />
-
+      <Setting name="ChalkableSchoolDbServers" value="me0buyg8np.database.windows.net" />   
+      
       <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
       <Setting name="DbUpdateTimeout" value="3600" />
       <!-- Redis Cache -->
-      <Setting name="RedisCache.ConnectionString" value="chlk-qa.redis.cache.windows.net,abortConnect=false,ssl=true,password=mOiq0phviZ0/SiUAuwCj/9hsWReh4YFzCYQWYln7uZw=" />
+      <Setting name="RedisCache.ConnectionString" value="localhost,abortConnect=false,ssl=false" />
       <!-- CDN and content settings-->
       <Setting name="Domain" value="" />
-      <Setting name="ScriptsRoot" value="" />
+      <Setting name="ScriptsRoot" value="//localhost:5001" />
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="/C4mMnNlyqjKQgE5uimJM/jjLQ6M14BEcCRMHvaXzo4=" />
       <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="https://localhost/chalkable" />

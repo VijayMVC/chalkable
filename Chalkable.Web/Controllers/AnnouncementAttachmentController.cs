@@ -37,7 +37,7 @@ namespace Chalkable.Web.Controllers
                 {
                     return Json(new ChalkableException(ChlkResources.ERR_FILE_REQUIRED));
                 }
-                var attachment = SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementType)announcementType, bin, name);
+                var attachment = SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementTypeEnum)announcementType, bin, name);
                 var res = SchoolLocator.AnnouncementAttachmentService.TransformToAttachmentsInfo(new List<AnnouncementAttachment> {attachment}, new List<int> {Context.PersonId.Value});
                 return Json(AnnouncementAttachmentViewData.Create(res[0], true), HTML_CONTENT_TYPE, 6);
             }
@@ -59,7 +59,7 @@ namespace Chalkable.Web.Controllers
             var bin = new byte[length];
             Request.InputStream.Read(bin, 0, (int)length);
             
-            var attachment = SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementType)announcementType, bin, fileName);
+            var attachment = SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementTypeEnum)announcementType, bin, fileName);
             var res = SchoolLocator.AnnouncementAttachmentService.TransformToAttachmentsInfo(new List<AnnouncementAttachment> { attachment }, new List<int> { Context.PersonId.Value });
 
             return Json(AnnouncementAttachmentViewData.Create(res[0], true));
@@ -69,8 +69,8 @@ namespace Chalkable.Web.Controllers
         public ActionResult Add(int announcementId, int announcementType, int attachmentId)
         {
             EnsureAnnouncementExsists(announcementId, announcementType);
-            SchoolLocator.AnnouncementAttachmentService.Add(announcementId, (AnnouncementType)announcementType, attachmentId);
-            var res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementType) announcementType);
+            SchoolLocator.AnnouncementAttachmentService.Add(announcementId, (AnnouncementTypeEnum)announcementType, attachmentId);
+            var res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementTypeEnum) announcementType);
             return Json(res, 6);
         }
 
@@ -149,9 +149,9 @@ namespace Chalkable.Web.Controllers
             {
                 byte[] bin = attContentInfo.Content;
                 string name = attContentInfo.Attachment.Name;
-                SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementType)announcementType, bin, name);
+                SchoolLocator.AnnouncementAttachmentService.UploadAttachment(announcementId, (AnnouncementTypeEnum)announcementType, bin, name);
             }
-            AnnouncementViewData res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementType)announcementType);
+            AnnouncementViewData res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementTypeEnum)announcementType);
             return Json(res, 6);
         }
 
@@ -165,7 +165,7 @@ namespace Chalkable.Web.Controllers
             if (attachment != null && attachment.AnnouncementRef == announcementId)
                 SchoolLocator.AnnouncementAttachmentService.Delete(announcementAttachmentId);
 
-            var res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementType)announcementType);
+            var res = PrepareFullAnnouncementViewData(announcementId, (AnnouncementTypeEnum)announcementType);
             return Json(res, 6);
         }
         

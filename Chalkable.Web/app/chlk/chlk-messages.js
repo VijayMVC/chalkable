@@ -120,6 +120,7 @@ var Msg = {
     Fill: 'Fill',
     Filter: 'Filter',
     First: 'First',
+    From: 'From',
     Gender: 'Gender',
     Grade: oneOrMany('Grade'),
     Graded: 'Graded',
@@ -181,6 +182,7 @@ var Msg = {
     Post: 'Post',
     Pricing: 'Pricing',
     PrimaryPhone: 'Phone',
+    Print: 'Print',
     Private: 'Private',
     Profile: 'Profile',
     Public: 'Public',
@@ -411,6 +413,7 @@ var Msg = {
     Dont_attach: 'Don\'t attach',
     Download_original: 'Download original',
     Download_marked_up: 'Download marked-up PDF',
+    Download_PDF: 'Download PDF',
     Download_Template: 'Download Template',
     Due_days_ago: function(days){
         return String.format("Due {0} days ago", days);

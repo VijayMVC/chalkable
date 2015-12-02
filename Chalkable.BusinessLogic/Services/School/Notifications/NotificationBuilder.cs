@@ -154,15 +154,15 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             return null;
         }
 
-        private string GetAnnouncementType(AnnouncementType at)
+        private string GetAnnouncementType(AnnouncementTypeEnum at)
         {
             switch (at)
             {
-                case AnnouncementType.LessonPlan:
+                case AnnouncementTypeEnum.LessonPlan:
                     return "lesson plan";
-                case AnnouncementType.Class:
+                case AnnouncementTypeEnum.Class:
                     return "activity";
-                case AnnouncementType.Admin:
+                case AnnouncementTypeEnum.Admin:
                     return "admin announcement";
                 default:
                     return "announcement";

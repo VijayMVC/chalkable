@@ -24,10 +24,7 @@ namespace Chalkable.Data.School.Model
         public int? SisActivityId { get; set; }
 
         [NotDbFieldAttr]
-        public bool IsStiAttribute
-        {
-            get { return SisActivityId.HasValue && SisActivityAssignedAttributeId.HasValue; }
-        }
+        public bool IsStiAttribute => SisActivityId.HasValue && SisActivityAssignedAttributeId.HasValue;
 
         [NotDbFieldAttr]
         public Attachment Attachment { get; set; }

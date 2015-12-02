@@ -21,13 +21,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
            
         }
 
-        public void Edit(AnnouncementType announcementType, int announcementId, IList<AssignedAttributeInputModel> attributes)
+        public void Edit(AnnouncementTypeEnum announcementType, int announcementId, IList<AssignedAttributeInputModel> attributes)
         {
             throw new System.NotImplementedException();
         }
 
 
-        public AnnouncementDetails Edit(AnnouncementType announcementType, int announcementId, IList<AnnouncementAssignedAttribute> announcementAttributes)
+        public AnnouncementDetails Edit(AnnouncementTypeEnum announcementType, int announcementId, IList<AnnouncementAssignedAttribute> announcementAttributes)
         {
             throw new System.NotImplementedException();
         }
@@ -47,17 +47,17 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
            
         }
 
-        public void Delete(AnnouncementType announcementType, int announcementId, int assignedAttributeId)
+        public void Delete(AnnouncementTypeEnum announcementType, int announcementId, int assignedAttributeId)
         {
             throw new System.NotImplementedException();
         }
 
-        public AnnouncementAssignedAttribute Add(AnnouncementType announcementType, int announcementId, int attributeTypeId)
+        public AnnouncementAssignedAttribute Add(AnnouncementTypeEnum announcementType, int announcementId, int attributeTypeId)
         {
             throw new System.NotImplementedException();
         }
 
-        public AnnouncementAssignedAttribute AddAttributeAttachment(AnnouncementType announcementType, int announcementId,
+        public AnnouncementAssignedAttribute AddAttributeAttachment(AnnouncementTypeEnum announcementType, int announcementId,
             int assignedAttributeId, byte[] bin, string name, string uuid)
         {
             throw new System.NotImplementedException();
@@ -89,13 +89,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new System.NotImplementedException();
         }
 
-        public AnnouncementAssignedAttribute RemoveAttributeAttachment(AnnouncementType announcementType, int announcementId,
+        public AnnouncementAssignedAttribute RemoveAttributeAttachment(AnnouncementTypeEnum announcementType, int announcementId,
             int assignedAttributeId)
         {
             throw new System.NotImplementedException();
         }
 
-        public AttributeAttachmentContentInfo GetAttributeAttachmentContent(int assignedAttributeId, AnnouncementType announcementType)
+        public AttributeAttachmentContentInfo GetAttributeAttachmentContent(int assignedAttributeId, AnnouncementTypeEnum announcementType)
         {
             throw new System.NotImplementedException();
         }
@@ -128,12 +128,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new System.NotImplementedException();
         }
 
-        public AnnouncementAssignedAttribute UploadAttachment(AnnouncementType announcementType, int announcementId, int assignedAttributeId, byte[] bin, string name)
+        public AnnouncementAssignedAttribute UploadAttachment(AnnouncementTypeEnum announcementType, int announcementId, int assignedAttributeId, byte[] bin, string name)
         {
             throw new System.NotImplementedException();
         }
 
-        public AnnouncementAssignedAttribute AddAttachment(AnnouncementType announcementType, int announcementId, int assignedAttributeId, int attachmentId)
+        public AnnouncementAssignedAttribute AddAttachment(AnnouncementTypeEnum announcementType, int announcementId, int assignedAttributeId, int attachmentId)
         {
             throw new System.NotImplementedException();
         }

@@ -13,6 +13,7 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
         void DeletePicture(Guid id, int? width, int? height);
         void UploadPicture(Guid id, byte[] content);
         void DeletePicture(Guid id);
+        byte[] GetPicture(Guid id, int? width, int? height);
 
         void UploadPicture(string name, byte[] content, int? height, int? width);
         void DeletePicture(string name, int? height, int? width);
@@ -59,25 +60,25 @@ namespace Chalkable.BusinessLogic.Services.Master.PictureServices
                 name += "-" + width + "x" + height;
             return name;
         }
-
         public virtual void UploadPicture(Guid id, byte[] content, int? width, int? height)
         {
             UploadPicture(id.ToString(), content, width, height);
         }
-
         public virtual void DeletePicture(Guid id, int? width, int? height)
         {
             DeletePicture(id.ToString(), width, height);
         }
-
         public virtual void UploadPicture(Guid id, byte[] content)
         {
             UploadPicture(id.ToString(), content);
         }
-
         public virtual void DeletePicture(Guid id)
         {
             DeletePicture(id.ToString());
+        }
+        public byte[] GetPicture(Guid id, int? width, int? height)
+        {
+            return GetPicture(id.ToString(), height, width);
         }
 
         public virtual void UploadPicture(string name, byte[] content, int? height, int? width)
