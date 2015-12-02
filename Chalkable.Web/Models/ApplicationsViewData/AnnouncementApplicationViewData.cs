@@ -26,7 +26,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         }
 
         public static AnnouncementApplicationViewData Create(AnnouncementApplication announcementApplication,
-            Application application, IList<ApplicationInstall> installs, int? currentPersonId, AnnouncementType announcementType)
+            Application application, IList<ApplicationInstall> installs, int? currentPersonId, AnnouncementTypeEnum announcementType)
         {
             //Todo: think how to build urls for annAppViewData if there are no applicationInstalls
             var appInstallId = installs != null && installs.Any() ? installs.First().Id : (int?)null;
@@ -48,7 +48,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         }
 
         public static IList<AnnouncementApplicationViewData> Create(IList<AnnouncementApplication> annApps
-            , IList<Application> applications, IList<ApplicationInstall> installs, int? currentPersonId, AnnouncementType announcementType)
+            , IList<Application> applications, IList<ApplicationInstall> installs, int? currentPersonId, AnnouncementTypeEnum announcementType)
         {
             var res = new List<AnnouncementApplicationViewData>();
             foreach (var annApp in annApps)
