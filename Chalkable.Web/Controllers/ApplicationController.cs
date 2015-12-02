@@ -193,7 +193,7 @@ namespace Chalkable.Web.Controllers
             if (assessmentApp != null && applicationId == assessmentApp.Id)
                 MasterLocator.UserTrackingService.AttachedAssessment(Context.Login, announcementId);
 
-            return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.PersonId));
+            return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.PersonId, (AnnouncementType)announcementType));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
@@ -216,8 +216,9 @@ namespace Chalkable.Web.Controllers
         public ActionResult GetAnnouncementApplication(int announcementApplicationId)
         {
             var res = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
+            var announcementType = SchoolLocator.AnnouncementFetchService.GetAnnouncementType(res.AnnouncementRef);
             var app = MasterLocator.ApplicationService.GetApplicationById(res.ApplicationRef);
-            return Json(AnnouncementApplicationViewData.Create(res, app, null, null));
+            return Json(AnnouncementApplicationViewData.Create(res, app, null, null, announcementType));
         }
 
 

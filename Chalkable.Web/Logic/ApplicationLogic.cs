@@ -22,8 +22,9 @@ namespace Chalkable.Web.Logic
             if(assessmentApp != null && applications.All(x=>x.Id != assessmentApp.Id))
                 applications.Add(assessmentApp);
             var annApps = schoolLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId, true);
+            var announcementType = schoolLocator.AnnouncementFetchService.GetAnnouncementType(announcementId);
             var installs = schoolLocator.AppMarketService.ListInstalledAppInstalls(schoolLocator.Context.PersonId ?? 0);
-            return AnnouncementApplicationViewData.Create(annApps, applications, installs, schoolLocator.Context.PersonId);
+            return AnnouncementApplicationViewData.Create(annApps, applications, installs, schoolLocator.Context.PersonId, announcementType);
         } 
 
         public static IList<InstalledForPersonsGroupViewData> PrepareInstalledForPersonGroupData(
