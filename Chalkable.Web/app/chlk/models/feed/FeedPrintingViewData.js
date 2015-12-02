@@ -13,8 +13,8 @@ NAMESPACE('chlk.models.feed', function () {
             VOID, function deserialize(raw) {
                 this.startDate = SJX.fromDeserializable(raw.startdate, chlk.models.common.ChlkDate);
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
-                this.minStart = SJX.fromDeserializable(raw.minstart, chlk.models.common.ChlkDate);
-                this.maxEnd = SJX.fromDeserializable(raw.maxend, chlk.models.common.ChlkDate);
+                this.minStart = SJX.fromDeserializable(raw.mindate, chlk.models.common.ChlkDate);
+                this.maxEnd = SJX.fromDeserializable(raw.maxdate, chlk.models.common.ChlkDate);
                 this.lessonPlanOnly = SJX.fromValue(raw.lessonplanonly, Boolean);
                 this.includeDetails = SJX.fromValue(raw.includedetails, Boolean);
                 this.includeAttachments = SJX.fromValue(raw.includeattachments, Boolean);

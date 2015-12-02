@@ -18,12 +18,12 @@ namespace Chalkable.Web.Models
         public bool EditableLPOption { get; set; }
 
         public static FeedReportViewData Create(FeedReportSettingsInfo feedReportSettings,
-            FeedSettings feedSettings)
+            FeedSettingsInfo feedSettingsInfo)
         {
             var res = new FeedReportViewData();
 
             if (!feedReportSettings.StartDate.HasValue)
-                res.StartDate = feedSettings.FromDate.Value;
+                res.StartDate = feedSettingsInfo.FromDate.Value;
 
             return res;
         }

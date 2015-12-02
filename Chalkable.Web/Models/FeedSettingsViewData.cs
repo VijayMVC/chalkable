@@ -13,7 +13,7 @@ namespace Chalkable.Web.Models
         public int? GradingPeriodId { get; set; }
         public bool ToSet { get; set; }
 
-        public static FeedSettingsViewData Create(FeedSettings feedSett)
+        public static FeedSettingsViewData Create(FeedSettingsInfo feedSett)
         {
             return new FeedSettingsViewData()
             {
