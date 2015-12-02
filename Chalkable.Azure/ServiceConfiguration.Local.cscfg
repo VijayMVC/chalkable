@@ -6,18 +6,18 @@
       <!-- DB Settings -->
       <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />-->
       <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
-      <Setting name="ChalkableMaster" value="Data Source=me0buyg8np.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
+      <Setting name="ChalkableMaster" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
-      <Setting name="ChalkableSchoolDbServers" value="me0buyg8np.database.windows.net" />
-      <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
+      <Setting name="ChalkableSchoolDbServers" value="uhjc12n4yc.database.windows.net" />
+      <Setting name="ChalkableSchoolTemplateDbName" value="83009FE9-8594-4E33-A09E-1EF4F81D0E8D" />
       <Setting name="DbUpdateTimeout" value="3600" />
       <!-- Redis Cache -->
-      <Setting name="RedisCache.ConnectionString" value="chlk-qa.redis.cache.windows.net,abortConnect=false,ssl=true,password=mOiq0phviZ0/SiUAuwCj/9hsWReh4YFzCYQWYln7uZw=" />
+      <Setting name="RedisCache.ConnectionString" value="localhost,abortConnect=false,ssl=false" />
       <!-- CDN and content settings-->
       <Setting name="Domain" value="" />
-      <Setting name="ScriptsRoot" value="" />
+      <Setting name="ScriptsRoot" value="//localhost:5001" />
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="/C4mMnNlyqjKQgE5uimJM/jjLQ6M14BEcCRMHvaXzo4=" />
       <Setting name="WindowsAzure.OAuth.RelyingPartyName" value="https://localhost/chalkable" />
@@ -52,12 +52,12 @@
       <!-- DB Settings -->
       <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />-->
       <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
-      <Setting name="ChalkableMaster" value="Data Source=me0buyg8np.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
+      <Setting name="ChalkableMaster" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
-      <Setting name="ChalkableSchoolDbServers" value="me0buyg8np.database.windows.net" />
-      <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
+      <Setting name="ChalkableSchoolDbServers" value="uhjc12n4yc.database.windows.net" />
+      <Setting name="ChalkableSchoolTemplateDbName" value="83009FE9-8594-4E33-A09E-1EF4F81D0E8D" />
       <Setting name="DbUpdateTimeout" value="3600" />
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="/C4mMnNlyqjKQgE5uimJM/jjLQ6M14BEcCRMHvaXzo4=" />
@@ -85,12 +85,12 @@
       <!-- DB Settings -->
       <!--<Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />-->
       <Setting name="ChalkableStorage.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkable1;AccountKey=36ZVZRUN4/lFmMlCSCZlT62HvoqK6d/ISCCm40UAuamGk+ICzwmIw2e9+bncfCzBEGiXXOz2GczAmRqnYQwr3Q==" />
-      <Setting name="ChalkableMaster" value="Data Source=me0buyg8np.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
+      <Setting name="ChalkableMaster" value="Data Source=uhjc12n4yc.database.windows.net;Initial Catalog=ChalkableMaster;UID=chalkableadmin;Pwd=Hellowebapps1!" />
       <Setting name="ChalkableSchool" value="Data Source={0};Initial Catalog={1};UID={2};Pwd={3}" />
       <Setting name="ChalkableSchoolDbUser" value="chalkableadmin" />
       <Setting name="ChalkableSchoolDbPwd" value="Hellowebapps1!" />
-      <Setting name="ChalkableSchoolDbServers" value="me0buyg8np.database.windows.net" />
-      <Setting name="ChalkableSchoolTemplateDbName" value="ChalkableSchoolTemplate" />
+      <Setting name="ChalkableSchoolDbServers" value="uhjc12n4yc.database.windows.net" />
+      <Setting name="ChalkableSchoolTemplateDbName" value="83009FE9-8594-4E33-A09E-1EF4F81D0E8D" />
       <Setting name="DbUpdateTimeout" value="3600" />
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="/C4mMnNlyqjKQgE5uimJM/jjLQ6M14BEcCRMHvaXzo4=" />
