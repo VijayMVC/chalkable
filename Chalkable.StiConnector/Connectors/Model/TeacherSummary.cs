@@ -43,10 +43,4 @@ namespace Chalkable.StiConnector.Connectors.Model
         public string TeacherName { get; set; }
 
     }
-
-    public class Section
-    {
-        public int Id { get; set; }
-        public string Name { get; set; }
-    }
 }

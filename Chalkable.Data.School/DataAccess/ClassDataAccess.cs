@@ -34,14 +34,12 @@ namespace Chalkable.Data.School.DataAccess
 
         private const string SP_GET_CLASSES_BY_TEACHERS = "spGetClassesByTeachers";
 
-        public IList<ClassDetails> GetClassesByTeachers(int schoolYearId, IList<int> teacherIds, int start, int count)
+        public IList<ClassDetails> GetClassesByTeachers(int schoolYearId, IList<int> teacherIds)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>()
             {
                 ["schoolYearId"] = schoolYearId,
-                ["teacherIds"] = teacherIds ?? new List<int>(),
-                ["start"] = start,
-                ["count"] = count
+                ["teacherIds"] = teacherIds ?? new List<int>()
             };
             using (var reader = ExecuteStoredProcedureReader(SP_GET_CLASSES_BY_TEACHERS, ps))
             {

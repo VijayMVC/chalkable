@@ -151,8 +151,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
             else
             {
-                settings.FromDate = Context.SchoolYearStartDate;
-                settings.ToDate = Context.SchoolYearEndDate;
+                settings.FromDate = null;
+                settings.ToDate = null;
                 settings.GradingPeriodId = null;
             }
 

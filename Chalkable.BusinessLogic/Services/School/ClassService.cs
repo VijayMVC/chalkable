@@ -43,8 +43,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassDetails> GetAllSchoolsActiveClasses();
 
         PaginatedList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId);
-
-        IList<ClassDetails> GetClassesByTeachers(int schoolYearId, IList<int> teacherIds, int? start, int? count);
     }
 
     public class ClassService : SisConnectedService, IClassService
@@ -228,17 +226,6 @@ namespace Chalkable.BusinessLogic.Services.School
 
             //TODO: FIX THIS AFTER API UPDATE
             return new PaginatedList<ClassStatsInfo>(res.Skip(start.Value).Take(count.Value), start.Value/count.Value, count.Value, res.Count);
-        }
-
-        public IList<ClassDetails> GetClassesByTeachers(int schoolYearId, IList<int> teacherIds, int? start, int? count)
-        {
-            return
-                DoRead(
-                    u =>
-                        new ClassDataAccess(u).GetClassesByTeachers(schoolYearId, teacherIds, start ?? 0,
-                            count ?? int.MaxValue));
-
-           
         }
     }
 }

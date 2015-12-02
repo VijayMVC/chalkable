@@ -391,11 +391,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new NotImplementedException();
         }
 
-        public IList<ClassDetails> GetClassesByTeachers(int schoolYearId, IList<int> teacherIds, int? start, int? count)
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<ClassDetails> GetClassesSortedByPeriod()
         {
             IList<ClassDetails> classes;

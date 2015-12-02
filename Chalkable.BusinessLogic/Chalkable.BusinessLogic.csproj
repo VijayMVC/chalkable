@@ -175,10 +175,12 @@
     <Compile Include="Model\Reports\WorksheetReportInputModel.cs" />
     <Compile Include="Model\SchoolSummaryInfo.cs" />
     <Compile Include="Model\SeatingChartInfo.cs" />
+    <Compile Include="Model\ShortClassInfo.cs" />
     <Compile Include="Model\StudentCommentInfo.cs" />
     <Compile Include="Model\StudentExplorerInfo.cs" />
     <Compile Include="Model\StudentSummaryInfo.cs" />
     <Compile Include="Model\TeacherComment.cs" />
+    <Compile Include="Model\TeacherStatsInfo.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AnnouncementSecurity.cs" />

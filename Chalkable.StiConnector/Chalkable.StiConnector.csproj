@@ -155,6 +155,7 @@
     <Compile Include="Connectors\Model\GradebookCommect.cs" />
     <Compile Include="Connectors\Model\Reports\StudentComprehensiveProgressParams.cs" />
     <Compile Include="Connectors\Model\SchoolSummary.cs" />
+    <Compile Include="Connectors\Model\Section.cs" />
     <Compile Include="Connectors\Model\SectionSummary.cs" />
     <Compile Include="Connectors\Model\StudentExplorerDashboard.cs" />
     <Compile Include="Connectors\Model\Gradebook.cs" />
