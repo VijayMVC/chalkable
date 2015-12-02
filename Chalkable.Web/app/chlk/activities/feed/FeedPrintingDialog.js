@@ -17,9 +17,7 @@ NAMESPACE('chlk.activities.feed', function(){
                 var nodes = this.dom.find('[name="includehiddenattributes"], [name="includeattachments"]');
                 var checkNodes = this.dom.find('[type=checkbox][name="includehiddenattributes"], [type=checkbox][name="includeattachments"]');
                 checkNodes.setValue(false);
-                nodes.parent().toggleClass('disabled');
-                nodes.setAttr('disabled', value ? false : 'disabled');
-                nodes.setProp('disabled', value ? false : true);
+                checkNodes.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), [!value]);
             }
         ]);
 });

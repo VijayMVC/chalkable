@@ -12,6 +12,7 @@ namespace Chalkable.BusinessLogic.Model
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public int? GradingPeriodId { get; set; }
+        public bool AnyDate { get; set; }
 
         public FeedSettingsInfo() { }
 
@@ -29,6 +30,7 @@ namespace Chalkable.BusinessLogic.Model
                 AnnouncementType = int.Parse(kv[PersonSetting.FEED_ANNOUNCEMENT_TYPE]);
 
             SortType = GetBoolFromDictionary(PersonSetting.FEED_SORTING, kv);
+            AnyDate = !GradingPeriodId.HasValue && !FromDate.HasValue && !ToDate.HasValue;
         }
 
         private static bool GetBoolFromDictionary(string key, IDictionary<string, string> keyValue)

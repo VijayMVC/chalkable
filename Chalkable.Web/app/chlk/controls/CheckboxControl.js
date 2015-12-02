@@ -4,7 +4,9 @@ NAMESPACE('chlk.controls', function () {
 
     /** @class chlk.controls.CheckBoxEvents */
     ENUM('CheckBoxEvents', {
-        CHANGE_VALUE: 'changevalue'
+        CHANGE_VALUE: 'changevalue',
+        DISABLED_STATE: 'disabledstate',
+        ENABLE: 'enablecheckbox'
     });
 
     /** @class chlk.controls.CheckboxControl */
@@ -69,6 +71,25 @@ NAMESPACE('chlk.controls', function () {
                     parent.setProp('checked', false);
                     node.removeAttr('checked');
                     parent.removeAttr('checked');
+                }
+            },
+
+            [ria.mvc.DomEventBind(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), '.checkbox')],
+            [[ria.dom.Dom, ria.dom.Event, Boolean]],
+            VOID, function disableState(node, event, value) {
+                var wrapper = node.parent('.wrapper'),
+                    parent = node.parent('.slide-checkbox'),
+                    input = wrapper.find('input');
+                if(value){
+                    input.setAttr('disabled', 'disabled');
+                    input.setProp('disabled', true);
+                    wrapper.addClass('disabled');
+                    parent.setAttr('disabled', 'disabled');
+                }else{
+                    input.removeAttr('disabled');
+                    input.setProp('disabled', false);
+                    wrapper.removeClass('disabled');
+                    parent.removeAttr('disabled');
                 }
             },
 
