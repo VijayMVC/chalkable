@@ -37,12 +37,10 @@ NAMESPACE('chlk.activities.settings', function () {
                 var node2 = node.hasClass('all-students') ? this.dom.find('[name=studenttoclassmessagingonly]') : this.dom.find('[name=teachertoclassmessagingonly]');
                 var checkbox2 = node.hasClass('all-students') ? this.dom.find('[type=checkbox][name=studenttoclassmessagingonly]') : this.dom.find('[type=checkbox][name=teachertoclassmessagingonly]');
                 if(node.checked()){
-                    node2.removeAttr('disabled');
-                    node2.parent('.slide-checkbox').removeAttr('disabled');
+                    node2.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), [false]);
                 }
                 else{
-                    node2.setAttr('disabled', 'disabled');
-                    node2.parent('.slide-checkbox').setAttr('disabled', 'disabled');
+                    node2.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), [true]);
                     checkbox2.setValue(false);
                 }
             }

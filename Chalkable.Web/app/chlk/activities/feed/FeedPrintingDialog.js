@@ -15,9 +15,9 @@ NAMESPACE('chlk.activities.feed', function(){
             function includeDetailsChange(node, event){
                 var value = JSON.parse(node.getValue());
                 var nodes = this.dom.find('[name="includehiddenattributes"], [name="includeattachments"]');
-                nodes.parent().toggleClass('disabled');
-                nodes.setAttr('disabled', value ? false : 'disabled');
-                nodes.setProp('disabled', value ? false : true);
+                var checkNodes = this.dom.find('[type=checkbox][name="includehiddenattributes"], [type=checkbox][name="includeattachments"]');
+                checkNodes.setValue(false);
+                checkNodes.trigger(chlk.controls.CheckBoxEvents.DISABLED_STATE.valueOf(), [!value]);
             }
         ]);
 });

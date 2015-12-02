@@ -49,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             else
             {
                 if (BaseSecurity.IsDistrictAdmin(serviceLocator.Context) || serviceLocator.Context.Role == CoreRoles.STUDENT_ROLE)
-                    anns.AddRange(serviceLocator.AdminAnnouncementService.GetAnnouncementsComplex(settings.StartDate, settings.EndDate, null, null, 0, int.MaxValue, false));
+                    anns.AddRange(serviceLocator.AdminAnnouncementService.GetAnnouncementsComplex(settings.StartDate, settings.EndDate, null, null, false));
                 if (BaseSecurity.IsTeacher(serviceLocator.Context) || serviceLocator.Context.Role == CoreRoles.STUDENT_ROLE)
                 {
                     anns.AddRange(serviceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(settings.StartDate, settings.EndDate, inputModel.ClassId, null));
