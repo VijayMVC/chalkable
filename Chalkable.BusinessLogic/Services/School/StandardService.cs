@@ -18,7 +18,6 @@ namespace Chalkable.BusinessLogic.Services.School
         Standard GetStandardById(int id);
         Standard GetStandardByABId(Guid id);
         IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true, bool activeOnly = false);
-        
         IList<Standard> GetStandards(IList<int> standardIds);
         IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false); 
 
@@ -27,12 +26,9 @@ namespace Chalkable.BusinessLogic.Services.School
         void AddStandardSubjects(IList<StandardSubject> standardSubjects);
         void EditStandardSubjects(IList<StandardSubject> standardSubjects);
         IList<StandardSubject> GetStandardSubjects(int? classId);
-
         void DeleteStandardSubjects(IList<int> ids);
         void DeleteClassStandards(IList<ClassStandard> classStandards);
         IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId);
-
-
         StandardTreePath GetStandardParentsSubTree(int standardId, int? classId);
     }
     public class StandardService : SchoolServiceBase, IStandardService

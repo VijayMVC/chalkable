@@ -18,13 +18,13 @@ namespace Chalkable.BusinessLogic.Services.School
     public interface IApplicationSchoolService
     {
         IList<int> GetAssignedUserIds(Guid appId, int? announcementAppId);
-        AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementType type, Guid applicationId);
+        AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementTypeEnum type, Guid applicationId);
         AnnouncementApplication GetAnnouncementApplication(int announcementAppId);
-        void AttachAppToAnnouncement(int announcementAppId, AnnouncementType type);
+        void AttachAppToAnnouncement(int announcementAppId, AnnouncementTypeEnum type);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds, bool onlyActive = false);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false);
-        Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementType type);
+        Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementTypeEnum type);
         IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying);
 
         void BanUnBanApplication(Guid applicationId, bool ban);
@@ -72,7 +72,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementType type, Guid applicationId)
+        public AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementTypeEnum type, Guid applicationId)
         {
             if (!Context.SCEnabled)
                 throw new StudyCenterDisabledException();
@@ -109,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(uow => new AnnouncementApplicationDataAccess(uow).GetById(announcementAppId));
         }
 
-        public void AttachAppToAnnouncement(int announcementAppId, AnnouncementType announcementType)
+        public void AttachAppToAnnouncement(int announcementAppId, AnnouncementTypeEnum announcementType)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
             Trace.Assert(Context.PersonId.HasValue);
@@ -159,7 +159,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementType type)
+        public Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementTypeEnum type)
         {
             try
             {

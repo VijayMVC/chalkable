@@ -184,7 +184,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult AddToAnnouncement(int announcementId, int announcementType, Guid applicationId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            var res = SchoolLocator.ApplicationSchoolService.AddToAnnouncement(announcementId, (AnnouncementType) announcementType,applicationId);
+            var res = SchoolLocator.ApplicationSchoolService.AddToAnnouncement(announcementId, (AnnouncementTypeEnum) announcementType,applicationId);
             var appInstalls = SchoolLocator.AppMarketService.GetInstallations(applicationId, Context.PersonId.Value, false);
             var app = MasterLocator.ApplicationService.GetApplicationById(applicationId);
 
@@ -199,17 +199,17 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult RemoveFromAnnouncement(int announcementApplicationId, int announcementType)
         {
-            var ann = SchoolLocator.ApplicationSchoolService.RemoveFromAnnouncement(announcementApplicationId, (AnnouncementType)announcementType);
-            return Json(PrepareFullAnnouncementViewData(ann.Id, (AnnouncementType)announcementType), 6);
+            var ann = SchoolLocator.ApplicationSchoolService.RemoveFromAnnouncement(announcementApplicationId, (AnnouncementTypeEnum)announcementType);
+            return Json(PrepareFullAnnouncementViewData(ann.Id, (AnnouncementTypeEnum)announcementType), 6);
         }
 
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Attach(int announcementApplicationId, int announcementType)
         {
-            SchoolLocator.ApplicationSchoolService.AttachAppToAnnouncement(announcementApplicationId, (AnnouncementType)announcementType);
+            SchoolLocator.ApplicationSchoolService.AttachAppToAnnouncement(announcementApplicationId, (AnnouncementTypeEnum)announcementType);
             var aa = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
-            return Json(PrepareFullAnnouncementViewData(aa.AnnouncementRef, (AnnouncementType)announcementType));
+            return Json(PrepareFullAnnouncementViewData(aa.AnnouncementRef, (AnnouncementTypeEnum)announcementType));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]

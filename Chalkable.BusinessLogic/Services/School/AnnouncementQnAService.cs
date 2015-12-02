@@ -14,8 +14,8 @@ namespace Chalkable.BusinessLogic.Services.School
 
     public interface IAnnouncementQnAService
     {
-        AnnouncementQnA AskQuestion(int announcementId, AnnouncementType announcementType, string question);
-        AnnouncementQnA Answer(int announcementQnAId, AnnouncementType announcementType, string question, string answer);
+        AnnouncementQnA AskQuestion(int announcementId, AnnouncementTypeEnum announcementType, string question);
+        AnnouncementQnA Answer(int announcementQnAId, AnnouncementTypeEnum announcementType, string question, string answer);
         AnnouncementQnA EditAnswer(int announcementQnAId, string question);
         AnnouncementQnA EditQuestion(int announcementQnAId, string answer);
         void Delete(int announcementQnAId);
@@ -33,7 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School
         
         //TODO : notification sending 
         
-        public AnnouncementQnA AskQuestion(int announcementId, AnnouncementType announcementType, string question)
+        public AnnouncementQnA AskQuestion(int announcementId, AnnouncementTypeEnum announcementType, string question)
         {
             Trace.Assert(Context.PersonId.HasValue && Context.SchoolLocalId.HasValue);
             
@@ -63,7 +63,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public AnnouncementQnA Answer(int announcementQnAId, AnnouncementType announcementType, string question, string answer)
+        public AnnouncementQnA Answer(int announcementQnAId, AnnouncementTypeEnum announcementType, string question, string answer)
         {
             Trace.Assert(Context.PersonId.HasValue); 
    

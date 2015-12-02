@@ -65,7 +65,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult SaveAnnouncement(ClassAnnouncementInfo classAnnouncementInfo, int? classId, IList<AssignedAttributeInputModel> attributes)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.Class, classAnnouncementInfo.AnnouncementId, attributes);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Class, classAnnouncementInfo.AnnouncementId, attributes);
             var ann = SchoolLocator.ClassAnnouncementService.Edit(classAnnouncementInfo);
             return Json(PrepareAnnouncmentViewDataForEdit(ann));
         }
@@ -73,7 +73,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("Teacher")]
         public ActionResult SubmitAnnouncement(ClassAnnouncementInfo classAnnouncementInfo, IList<AssignedAttributeInputModel> attributes)
         {
-            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementType.Class, classAnnouncementInfo.AnnouncementId, attributes);
+            SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Class, classAnnouncementInfo.AnnouncementId, attributes);
             var annDetails = SchoolLocator.ClassAnnouncementService.Edit(classAnnouncementInfo);
             SchoolLocator.ClassAnnouncementService.Submit(annDetails.Id);
             SchoolLocator.ClassAnnouncementService.DeleteAnnouncements(classAnnouncementInfo.ClassId, annDetails.ClassAnnouncementData.ClassAnnouncementTypeRef, AnnouncementState.Draft);
@@ -113,7 +113,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult EditTitle(int announcementId, string title)
         {
             var ann = SchoolLocator.ClassAnnouncementService.GetClassAnnouncemenById(announcementId);
-            return EditTitle(announcementId, AnnouncementType.Class, title, t => AnnouncementExists(t, ann.ClassRef, ann.Expires, announcementId));
+            return EditTitle(announcementId, AnnouncementTypeEnum.Class, title, t => AnnouncementExists(t, ann.ClassRef, ann.Expires, announcementId));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]

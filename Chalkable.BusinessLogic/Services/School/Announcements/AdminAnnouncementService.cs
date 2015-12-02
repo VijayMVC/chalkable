@@ -25,7 +25,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AdminAnnouncement GetAdminAnnouncementById(int adminAnnouncementId);
         bool Exists(string title, int? excludedLessonPlaId);
 
-        FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, FeedSettings settings, int start = 0, int count = int.MaxValue, bool ownedOnly = true);
+        IList<AnnouncementComplex> GetAnnouncementsComplex(DateTime? startDate, DateTime? endDate, IList<int> gradeLevels, bool? complete, int start = 0, int count = int.MaxValue, bool ownedOnly = true); 
+        FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, FeedSettingsInfo settingsInfo, int start = 0, int count = int.MaxValue, bool ownedOnly = true);
         IList<AdminAnnouncement> GetAdminAnnouncements(IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? studentId);
         IList<AdminAnnouncement> GetAdminAnnouncementsByFilter(string filter); 
         AdminAnnouncement GetLastDraft();
@@ -143,6 +144,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         }
 
+        public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool ownerOnly = false)
+        {
+            var anns = GetAdminAnnouncements(null, startDate, toDate, null);
+            return anns.Select(x => DoRead(u => CreateDataAccess(u).GetDetails(x.Id, Context.PersonId.Value, Context.RoleId))).ToList();
+        }
+
         public override void DeleteAnnouncement(int announcementId)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -221,6 +228,23 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateAdminAnnouncementDataAccess(u).Exists(title, Context.PersonId.Value, excludedLessonPlaId));
         }
 
+        public IList<AnnouncementComplex> GetAnnouncementsComplex(DateTime? startDate, DateTime? endDate, IList<int> gradeLevels, bool? complete
+            , int start = 0, int count = int.MaxValue, bool ownedOnly = true)
+        {
+            return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
+            {
+                Complete = complete,
+                FromDate = startDate,
+                ToDate = endDate,
+                Start = start,
+                Count = count,
+                PersonId = Context.PersonId,
+                RoleId = Context.RoleId,
+                GradeLevelsIds = gradeLevels,
+                OwnedOnly = ownedOnly
+            })).Announcements;
+        }
+
         public override void SetAnnouncementsAsComplete(DateTime? toDate, bool complete)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -237,7 +261,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     .Announcements;
                 var da = new AnnouncementRecipientDataDataAccess(u);
                 foreach (var ann in anns)
-                    da.UpdateAnnouncementRecipientData(ann.Id, (int) AnnouncementType.Admin ,null, personId, null, complete, null, null);
+                    da.UpdateAnnouncementRecipientData(ann.Id, (int) AnnouncementTypeEnum.Admin ,null, personId, null, complete, null, null);
             });
         }
 
@@ -245,7 +269,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             DoUpdate(
                 u =>
-                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementType.Admin, null,
+                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.Admin, null,
                         Context.PersonId.Value, null, complete, null, null));
         }
 
@@ -255,24 +279,24 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
 
-        public FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, FeedSettings settings, int start = 0, int count = int.MaxValue, bool ownedOnly = true)
+        public FeedComplex GetAdminAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, FeedSettingsInfo settingsInfo, int start = 0, int count = int.MaxValue, bool ownedOnly = true)
         {
             Trace.Assert(Context.PersonId.HasValue);
 
             //get or set settings
-            if (settings.ToSet)
-                SetAdminSettingsForFeed(settings);
+            if (settingsInfo.ToSet)
+                SetAdminSettingsForFeed(settingsInfo);
             else
-                settings = GetAdminSettingsForFeed();
+                settingsInfo = GetAdminSettingsForFeed();
 
-            var feedStartDate = settings.FromDate ?? Context.SchoolYearStartDate ?? DateTime.MinValue;
-            var feedEndDate = settings.ToDate ?? Context.SchoolYearEndDate ?? DateTime.MaxValue;
+            var feedStartDate = settingsInfo.FromDate ?? Context.SchoolYearStartDate ?? DateTime.MinValue;
+            var feedEndDate = settingsInfo.ToDate ?? Context.SchoolYearEndDate ?? DateTime.MaxValue;
 
             var fc = new FeedComplex()
             {
-                SettingsForFeed = settings
+                SettingsForFeed = settingsInfo
             };
-            if (settings.SortType.HasValue && !settings.SortType.Value)
+            if (settingsInfo.SortType.HasValue && !settingsInfo.SortType.Value)
                 fc.Announcements =
                     DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
                     {
@@ -303,9 +327,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return fc;
         }
 
-        private FeedSettings GetAdminSettingsForFeed()
+        private FeedSettingsInfo GetAdminSettingsForFeed()
         {
-            var settings = new FeedSettings();
+            var settings = new FeedSettingsInfo();
             var query = new List<string>
             {
                 PersonSetting.FEED_START_DATE,
@@ -346,17 +370,17 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return settings;
         }
 
-        private void SetAdminSettingsForFeed(FeedSettings settings)
+        private void SetAdminSettingsForFeed(FeedSettingsInfo settingsInfo)
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
 
-            var fromDate = settings.FromDate;
-            var toDate = settings.ToDate;
+            var fromDate = settingsInfo.FromDate;
+            var toDate = settingsInfo.ToDate;
 
-            if (settings.GradingPeriodId.HasValue)
+            if (settingsInfo.GradingPeriodId.HasValue)
             {
-                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(settings.GradingPeriodId.Value);
+                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(settingsInfo.GradingPeriodId.Value);
                 fromDate = gp.StartDate;
                 toDate = gp.EndDate;
             }
@@ -365,8 +389,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 {PersonSetting.FEED_START_DATE, fromDate },
                 {PersonSetting.FEED_END_DATE, toDate },
-                {PersonSetting.FEED_GRADING_PERIOD_ID, settings.GradingPeriodId },
-                {PersonSetting.FEED_SORTING, settings.SortType }
+                {PersonSetting.FEED_GRADING_PERIOD_ID, settingsInfo.GradingPeriodId },
+                {PersonSetting.FEED_SORTING, settingsInfo.SortType }
             });
         }
 
@@ -401,7 +425,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             DoUpdate(
                 u =>
-                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementType.Admin,schoolYearId,
+                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementTypeEnum.Admin,schoolYearId,
                         personId, roleId, true, tillDateToUpdate, null));
         }
     }

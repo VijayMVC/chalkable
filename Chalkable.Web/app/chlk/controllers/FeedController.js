@@ -6,9 +6,11 @@ REQUIRE('chlk.services.FeedService');
 REQUIRE('chlk.services.NotificationService');
 REQUIRE('chlk.activities.feed.FeedListPage');
 REQUIRE('chlk.activities.feed.FeedListAdminPage');
+REQUIRE('chlk.activities.feed.FeedPrintingDialog');
 REQUIRE('chlk.services.GradeLevelService');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.GradingPeriodService');
+REQUIRE('chlk.services.ReportingService');
 REQUIRE('chlk.models.classes.ClassesForTopBar');
 REQUIRE('chlk.models.feed.Feed');
 REQUIRE('chlk.models.id.ClassId');
@@ -32,6 +34,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.ClassService, 'classService',
+
+        [ria.mvc.Inject],
+        chlk.services.ReportingService, 'reportingService',
 
         [ria.mvc.Inject],
         chlk.services.NotificationService, 'notificationService',
@@ -235,6 +240,39 @@ NAMESPACE('chlk.controllers', function (){
 
                     return model;
                 }, this);
+        },
+
+        [chlk.controllers.SidebarButton('inbox')],
+        [[chlk.models.id.ClassId, Boolean]],
+        function feedPrintingAction(classId_, complete_) {
+            var result = this.reportingService.getFeedReportSettings(classId_)
+                .then(function(model){
+                    complete_ &&  model.setComplete(complete_);
+                    classId_ &&  model.setClassId(classId_);
+                    return model;
+                });
+            return this.ShadeView(chlk.activities.feed.FeedPrintingDialog, result);
+        },
+
+        [chlk.controllers.SidebarButton('inbox')],
+        [[chlk.models.feed.FeedPrintingViewData]],
+        function submitFeedPrintingReportAction(reportViewData){
+            var result = this.reportingService.submitFeedReport(
+                    reportViewData.getStartDate(),
+                    reportViewData.getEndDate(),
+                    reportViewData.isLessonPlanOnly(),
+                    reportViewData.isIncludeAttachments(),
+                    reportViewData.isIncludeDetails(),
+                    reportViewData.isIncludeHiddenAttributes(),
+                    reportViewData.isIncludeHiddenActivities(),
+                    reportViewData.getClassId()
+                )
+                .attach(this.validateResponse_())
+                .then(function () {
+                    this.BackgroundCloseView(chlk.activities.feed.FeedPrintingDialog);
+                }, this)
+                .thenBreak();
+            return this.UpdateView(chlk.activities.feed.FeedPrintingDialog, result);
         }
     ])
 });

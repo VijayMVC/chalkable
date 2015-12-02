@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Chalkable.BusinessLogic.Model
 {
-    public class FeedSettings
+    public class FeedSettingsInfo
     {
         public int? AnnouncementType { get; set; }
         public bool? SortType { get; set; }

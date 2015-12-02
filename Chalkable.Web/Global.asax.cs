@@ -48,7 +48,9 @@ namespace Chalkable.Web
             ConfigureDiagnostics();
             PrepareBaseServiceData();
             
-            TelemetryConfiguration.Active.InstrumentationKey = Settings.InstrumentationKey;            
+            TelemetryConfiguration.Active.InstrumentationKey = Settings.InstrumentationKey;
+
+            SqlServerTypes.Utilities.LoadNativeAssemblies(Server.MapPath("~/bin"));
         }
 
 

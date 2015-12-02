@@ -3,6 +3,7 @@
 
 @{
     ViewBag.Title = "Developer Documentation";
+    ViewBag.Target = ViewBag.InFrame ? "_blank" : "_self";
 }
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -125,19 +126,20 @@
         }
 
     </style>
-    
+    @ViewBag.IsTeacher
 </head>
 <body>
 
 <a href="#top" class="text-muted back-to-top"><i class="fa fa-toggle-up"></i>&nbsp;Back to top</a>
 <div class="container"><div class="row"><div class="col-md-3"><nav id="nav" class="hidden-sm hidden-xs affix nav">
 
+    @if(!ViewBag.InFrame){
+        <a href="@Url.Content("~/Developer/Info")" class='lg' style="margin: 0 0 10px 0">Back to Developers</a>
+    }
 
-    <a href="@Url.Content("~/Developer/Info")" class='lg' style="margin: 0 0 10px 0">Back to Developers</a>
 
 
-
-    <div class="list-group"><a href="#access-authorization-and-control" class="list-group-item heading" style="margin-top: 10px;">Access Authorization and Control</a><a href="#access-authorization-and-control-authorization" class="list-group-item"><i class="fa fa-plus-square"></i>&nbsp;Authorization</a></div><div class="list-group"><a href="#using-the-chalkable-api" class="list-group-item heading">Using the Chalkable API</a></div><div class="list-group"><a href="#person" class="list-group-item heading">Person</a><a href="#person-person" class="list-group-item"><i class="fa fa-arrow-circle-down"></i>&nbsp;Person</a></div><div class="list-group"><a href="#announcement" class="list-group-item heading">Announcement</a><a href="#announcement-announcement" class="list-group-item"><i class="fa fa-arrow-circle-down"></i>&nbsp;Announcement</a></div><div class="list-group"><a href="#class" class="list-group-item heading">Class</a><a href="#class-class" class="list-group-item"><i class="fa fa-arrow-circle-down"></i>&nbsp;Class</a></div><div class="list-group"><a href="#javascript" class="list-group-item heading">Javascript</a></div><div class="list-group"><a href="#concepts" class="list-group-item heading">Concepts</a></div><p style="text-align: center"><a href="https://chalkable.com">https://chalkable.com</a></p></nav></div><div class="col-md-9"><div><header><div class="page-header"><h1 id="top">Chalkable API Documentation</h1></div></header><div class="description"><p>This guide describes integrating your web app for use within Chalkable. Your app will be displayed within an iframe
+    <div class="list-group"><a href="#access-authorization-and-control" class="list-group-item heading" style="margin-top: 10px;">Access Authorization and Control</a><a href="#access-authorization-and-control-authorization" class="list-group-item"><i class="fa fa-plus-square"></i>&nbsp;Authorization</a></div><div class="list-group"><a href="#using-the-chalkable-api" class="list-group-item heading">Using the Chalkable API</a></div><div class="list-group"><a href="#person" class="list-group-item heading">Person</a><a href="#person-person" class="list-group-item"><i class="fa fa-arrow-circle-down"></i>&nbsp;Person</a></div><div class="list-group"><a href="#announcement" class="list-group-item heading">Announcement</a><a href="#announcement-announcement" class="list-group-item"><i class="fa fa-arrow-circle-down"></i>&nbsp;Announcement</a></div><div class="list-group"><a href="#class" class="list-group-item heading">Class</a><a href="#class-class" class="list-group-item"><i class="fa fa-arrow-circle-down"></i>&nbsp;Class</a></div><div class="list-group"><a href="#javascript" class="list-group-item heading">Javascript</a></div><div class="list-group"><a href="#concepts" class="list-group-item heading">Concepts</a></div><p style="text-align: center"><a target=@ViewBag.Target href="https://chalkable.com">https://chalkable.com</a></p></nav></div><div class="col-md-9"><div><header><div class="page-header"><h1 id="top">Chalkable API Documentation</h1></div></header><div class="description"><p>This guide describes integrating your web app for use within Chalkable. Your app will be displayed within an iframe
  and should utilize platform data via the Chalkable API to provide a great experience.</p>
 <p>Integrating your web app with Chalkable gives you the opportunity to be listed in the Chalkable App Store, collect payments,
 and deeply integrate into the core Chalkable experience. Using the API, your app will be able to leverage the Chalkable platform
@@ -155,7 +157,7 @@ and deeply integrate into the core Chalkable experience. Using the API, your app
 <p>Where applicable this API uses the JSON media-type to represent resources states and affordances.</p>
 <p>Requests with a message-body are using plain JSON to set or update resource states.</p>
 <h2 id="error-states">Error States</h2>
-<p>The common <a href="https://github.com/for-GET/know-your-http-well/blob/master/status-codes.md">HTTP Response Status Codes</a> are used.</p>
+<p>The common <a target=@ViewBag.Target href="https://github.com/for-GET/know-your-http-well/blob/master/status-codes.md">HTTP Response Status Codes</a> are used.</p>
 <h2 id="authentication">Authentication</h2>
 <p>Chalkable’s API uses the OAuth 2.0 protocol for simple, but effective authentication and authorization.
 OAuth 2.0 is much easier to use than previous schemes; developers can start using the Chalkable API immediately.
@@ -1278,7 +1280,7 @@ You can see a full list of available methods inside the Chalkable Developer Port
    </span>}
 ]
 </code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="javascript">Javascript&nbsp;<a href="#javascript"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><p>In this section we will describe in detail the JavaScript interaction between your app and Chalkable.</p>
-<p><strong>IMPORTANT:</strong> You will need to include a link to our Javascript file <a href="@Url.Content("~/Scripts/api/chlk-post-message-api.js")">@Url.Content("~/Scripts/api/chlk-post-message-api.js")</a> in your project. This script takes of the communication between your app inside the iframe and Chalkable, via the postMessage() method.</p>
+<p><strong>IMPORTANT:</strong> You will need to include a link to our Javascript file <a target=@ViewBag.Target href="@Url.Content("~/Scripts/api/chlk-post-message-api.js")">@Url.Content("~/Scripts/api/chlk-post-message-api.js")</a> in your project. This script takes of the communication between your app inside the iframe and Chalkable, via the postMessage() method.</p>
 <p>As described below, you will be able to access the {CHLK_MESSENGER} object to <em>attach</em> your application to an item.</p>
 <p>We <strong>highly</strong> recommend using the hosted version as it is subject to updates.</p>
 <pre><code><span class="hljs-tag">&lt;<span class="hljs-title">script</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"text/javascript"</span> <span class="hljs-attribute">src</span>=<span class="hljs-value">"@Url.Content("~/Scripts/api/chlk-post-message-api.js")"</span>&gt;</span><span class="javascript"></span><span class="hljs-tag">&lt;/<span class="hljs-title">script</span>&gt;</span>
@@ -1342,12 +1344,12 @@ This will let Chalkable know which function of yours to call.</li>
 <p>Teachers use the Chalkable platform to send assignments to their students. Teachers can attach your app directly into these assignments and students can interact with your application.</p>
 <p><strong>Adding an app to a New Item:</strong></p>
 <p>Your app will be embedded into assignments that students will use, simply by clicking the “Attach” button at the top of the frame.
-<em>Remember to include the</em> <a href="@Url.Content("~/Scripts/api/chlk-post-message-api.js")">@Url.Content("~/Scripts/api/chlk-post-message-api.js")</a> <em>script in your app and call it on document ready, as explained above.</em></p>
+<em>Remember to include the</em> <a target=@ViewBag.Target href="@Url.Content("~/Scripts/api/chlk-post-message-api.js")">@Url.Content("~/Scripts/api/chlk-post-message-api.js")</a> <em>script in your app and call it on document ready, as explained above.</em></p>
 <p><strong>App Info:</strong></p>
 <p>The page in your developer account where you submit information about your app to Chalkable. This information includes descriptions, artwork, and definitions of which users will be using the app and what data the app will access.</p>
 <p><strong>Submitting your app:</strong></p>
 <p>Sign up and receive an API key immediately. In our developer portal you can interact with the API Explorer, and when you’re ready you can submit your app by filling out a short form and uploading your icons.</p>
-</div></div></div></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 19 Jun 2014</p><div id="localFile" style="display: none; position: absolute; top: 0; left: 0; width: 100%; color: white; background: red; font-size: 150%; text-align: center; padding: 1em;">This page may not display correctly when opened as a local file. Instead, view it from a web server.
+</div></div></div></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a target=@ViewBag.Target href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 19 Jun 2014</p><div id="localFile" style="display: none; position: absolute; top: 0; left: 0; width: 100%; color: white; background: red; font-size: 150%; text-align: center; padding: 1em;">This page may not display correctly when opened as a local file. Instead, view it from a web server.
 
 </div><!--outer wrap-->
 
