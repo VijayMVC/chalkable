@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Services.Protocols;
@@ -103,58 +104,38 @@ namespace Chalkable.Web.Controllers
             var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
             var formatType = (ReportingFormat?) format ?? ReportingFormat.Pdf;
             var reportInput = new FeedReportInputModel {ClassId = classId, Format = format, Settings = settings};
-            return Report(() => SchoolLocator.ReportService.GetFeedReport(reportInput, path), "Feed Report", formatType);
+            return Report(() => SchoolLocator.ReportService.GetFeedReport(reportInput, path), "Feed Report", formatType, DownloadReportFile);
         }
 
         private ActionResult Report<TReport>(TReport reportInputModel
             , Func<TReport, byte[]> reportAction, string reportFileName) where TReport : BaseReportInputModel
         {
-            return Report(() => reportAction(reportInputModel), reportFileName, reportInputModel.FormatTyped);
+            return Report(() => reportAction(reportInputModel), reportFileName, reportInputModel.FormatTyped, DownloadReportFile);
         }
 
-        private ActionResult Report(Func<byte[]> reportAction, string reportFileName, ReportingFormat formatType)
+        private ActionResult Report(Func<byte[]> reportAction, string reportFileName, ReportingFormat formatType
+            , Func<byte[], string, ReportingFormat, ActionResult> loadAction)
         {
             try
             {
                 var res = reportAction();
-                return DownloadReportFile(res, reportFileName, formatType);
+                return loadAction(res, reportFileName, formatType);
             }
             catch (LocalProcessingException exception)
             {
-                //TODO: remove this later 
-                Response.TrySkipIisCustomErrors = true;
-                Response.StatusCode = 500;
-                Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
-
-                var errorMessages = new List<string>() {exception.Message};
-                var ex = exception.InnerException;
-                while (ex != null)
-                {
-                    errorMessages.Add(ex.Message);
-                    ex = ex.InnerException;
-                }
-
-                return new ChalkableJsonResult(false)
-                {
-                    Data = new ChalkableJsonResponce(new
-                    {
-                        Exception = ExceptionViewData.Create(exception, exception.InnerException),
-                        InnerException = exception.InnerException != null ? ExceptionViewData.Create(exception.InnerException, exception.InnerException.InnerException) : null,
-                        Messages = errorMessages
-                    })
-                    {
-                        Success = false
-                    },
-                    ContentType = HTML_CONTENT_TYPE,
-                    SerializationDepth = 4
-                };
+                return HandlReportProcessingException(exception);
             }
             catch (Exception exception)
             {
                 return HandleAttachmentException(exception);
             }
-            
+         }
+
+        private ActionResult PrintReportFile(byte[] report, string fileName, ReportingFormat formatType)
+        {
+            throw new NotImplementedException();
         }
+
 
         private ActionResult DownloadReportFile(byte[] report, string reportFileName, ReportingFormat formatType)
         {
@@ -164,6 +145,38 @@ namespace Chalkable.Web.Controllers
             MasterLocator.UserTrackingService.CreatedReport(Context.Login, reportFileName);
             return File(report, MimeHelper.GetContentTypeByExtension(extension), fileName);
         }
+        
+        private ActionResult HandlReportProcessingException(LocalProcessingException exception)
+        {
+            //TODO: remove this later 
+            Response.TrySkipIisCustomErrors = true;
+            Response.StatusCode = 500;
+            Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
+
+            var errorMessages = new List<string>() { exception.Message };
+            var ex = exception.InnerException;
+            while (ex != null)
+            {
+                errorMessages.Add(ex.Message);
+                ex = ex.InnerException;
+            }
+
+            return new ChalkableJsonResult(false)
+            {
+                Data = new ChalkableJsonResponce(new
+                {
+                    Exception = ExceptionViewData.Create(exception, exception.InnerException),
+                    InnerException = exception.InnerException != null ? ExceptionViewData.Create(exception.InnerException, exception.InnerException.InnerException) : null,
+                    Messages = errorMessages
+                })
+                {
+                    Success = false
+                },
+                ContentType = HTML_CONTENT_TYPE,
+                SerializationDepth = 4
+            };
+        }
+
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult SetStudentProgressReportComments(int classId, int gradingPeriodId, string studentComments)
