@@ -122,12 +122,26 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             };
             var settings = ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, query);
             var res = new FeedSettingsInfo(settings);
-            if (!res.GradingPeriodId.HasValue)
+            if (res.GradingPeriodId.HasValue)
+            {
+                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(res.GradingPeriodId.Value);
+                res.FromDate = gp.StartDate;
+                res.ToDate = gp.EndDate;
+            }
+            else if(res.AnyDate)
             {
                 res.FromDate = Context.SchoolYearStartDate;
                 res.ToDate = Context.SchoolYearEndDate;
             }
             return res;
+        }
+
+        public void SetSettingsForFeed(FeedSettingsInfo settings)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            
+            ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, settings.ToDictionary());
         }
 
         public IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? fromDate, DateTime? toDate, bool onlyOwners = true, int? classId = null)
@@ -143,22 +157,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return res;
         }
 
-        public void SetSettingsForFeed(FeedSettingsInfo settings)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-            Trace.Assert(Context.SchoolYearId.HasValue);
-
-            var dic = settings.ToDictionary();
-
-            if (settings.GradingPeriodId.HasValue)
-            {
-                var gp = ServiceLocator.GradingPeriodService.GetGradingPeriodById(settings.GradingPeriodId.Value);
-                dic[PersonSetting.FEED_START_DATE] = gp.StartDate;
-                dic[PersonSetting.FEED_END_DATE] = gp.EndDate;
-            }
-            
-            ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, dic);
-        }
+        
 
         public AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null)
         {
