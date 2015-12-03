@@ -44,16 +44,16 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             var anns = new List<AnnouncementComplex>();
             if (settings.LessonPlanOnly && !BaseSecurity.IsDistrictAdmin(serviceLocator.Context))
             {
-                anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, null));
+                anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, inputModel.Complete));
             }
             else
             {
                 if (BaseSecurity.IsDistrictAdmin(serviceLocator.Context) || isStudent)
-                    anns.AddRange(serviceLocator.AdminAnnouncementService.GetAnnouncementsComplex(settings.StartDate, settings.EndDate, null, null, !isStudent));
+                    anns.AddRange(serviceLocator.AdminAnnouncementService.GetAnnouncementsComplex(settings.StartDate, settings.EndDate, null, inputModel.Complete, !isStudent));
                 if (BaseSecurity.IsTeacher(serviceLocator.Context) || isStudent)
                 {
-                    anns.AddRange(serviceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(settings.StartDate, settings.EndDate, inputModel.ClassId, null, !isStudent));
-                    anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, null, !isStudent));
+                    anns.AddRange(serviceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, !isStudent));
+                    anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, inputModel.Complete, !isStudent));
                 }
             }
             if (!settings.IncludeHiddenActivities)
@@ -102,9 +102,9 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             //Getting and Preparing Announcements details info 
             IList<AnnouncementDetails> anns;
             if (settings.LessonPlanOnly && !BaseSecurity.IsDistrictAdmin(serviceLocator.Context))
-                anns = serviceLocator.LessonPlanService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId);
+                anns = serviceLocator.LessonPlanService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, !isStudent);
             else 
-                anns = serviceLocator.AnnouncementFetchService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, isStudent, inputModel.ClassId);
+                anns = serviceLocator.AnnouncementFetchService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, isStudent);
 
             if (!settings.IncludeHiddenActivities)
                 anns = anns.Where(x => x.ClassAnnouncementData == null || x.ClassAnnouncementData.VisibleForStudent).ToList();

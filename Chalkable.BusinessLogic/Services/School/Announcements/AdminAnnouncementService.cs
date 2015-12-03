@@ -142,9 +142,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         }
 
-        public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool ownerOnly = false)
+        public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false)
         {
-            var anns = GetAdminAnnouncements(null, startDate, toDate, null);
+            var anns = GetAnnouncementsComplex(startDate, toDate, null, complete, ownerOnly);
             return anns.Select(x => DoRead(u => CreateDataAccess(u).GetDetails(x.Id, Context.PersonId.Value, Context.RoleId))).ToList();
         }
 

@@ -92,6 +92,7 @@ namespace Chalkable.Web.Controllers
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifySysAdmin(sysUser.Login, "", "", null, ip);
             ViewData[ViewConstants.ROLE_NAME] = CoreRoles.SUPER_ADMIN_ROLE.LoweredName;
+            ViewData[ViewConstants.ASSESSMENT_APLICATION_ID] = PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID);
             return View();
         }
 
@@ -220,6 +221,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.SCHOOL_YEAR_SERVER_TIME] = Context.NowSchoolYearTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.STUDY_CENTER_ENABLED] = Context.SCEnabled;
             ViewData[ViewConstants.MESSAGING_DISABLED] = Context.MessagingDisabled;
+            ViewData[ViewConstants.ASSESSMENT_APLICATION_ID] = PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID);
 
             var leParams = SchoolLocator.LeService.GetLEParams();
 

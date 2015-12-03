@@ -89,9 +89,10 @@ namespace Chalkable.BusinessLogic.Model.Reports
             var secondaryTeachers = staffs.Where(t => t.Id != primaryTeacher.Id && classTeachers.Any(ct=>ct.PersonRef == t.Id))
                 .OrderBy(x => x.LastName)
                 .ThenBy(x => x.FirstName)
-                .Select(x => x.FullName());
-            b.Append(primaryTeacher.FullName()).Append(", ")
-                .Append(secondaryTeachers.JoinString(", "));
+                .Select(x => x.FullName(false, true)).ToList();
+            b.Append(primaryTeacher.FullName(false, true));
+            if(secondaryTeachers.Count > 0)
+                b.Append(", ").Append(secondaryTeachers.JoinString(", "));
             return b.ToString();
         }
         
