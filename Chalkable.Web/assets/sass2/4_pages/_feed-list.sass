@@ -1,0 +1,101 @@
+.feed-list-page, .feed-list-admin-page
+  .clear-filters
+    display: inline-block
+    color: grey
+    font-weight: 600
+    cursor: pointer
+    margin-top: 5px
+
+  .left-buttons-block
+    position: absolute
+    left: 0
+    top: -45px
+
+    .chosen-container
+      width: 140px !important
+      margin-right: 10px
+
+    &.hidden
+      display: none
+
+  button.active
+    background: #56554f
+    color: white
+    +box-shadow(none)
+
+  .date-range-popup
+    position: absolute
+    top: 40px
+
+    &.important-only
+      left: 145px
+
+    &.hidden
+      display: none
+
+  .right-buttons-block
+    position: absolute
+    right: 0
+    top: -100px
+
+    button
+      vertical-align: middle
+
+    .report-btn
+      margin: 0 10px
+      height: 30px
+      width: 40px
+
+    .report-link
+      position: relative
+      top: 0
+      right: 5px
+
+
+    //.report-link
+      position: static
+      margin: 0 10px
+      height: 30px
+      width: 40px
+      background-size: auto
+      background-position: 5px -701px
+
+      //&:hover
+        +icons-32-sprite(printer-icon, 0)
+        background-position: 5px -701px
+        height: 30px
+        width: 40px
+        background-color: #fff
+
+  //.markDoneSelect +DIV
+    width: 127px !important
+
+    .chosen-drop
+      width: 187px
+      margin-left: -60px
+
+  .markDoneSelect+DIV, #sort-select
+    li
+      line-height: 20px
+
+    .chosen-drop
+      margin-top: 0
+      border-top: 1px solid #aaa
+      border-radius: 4px
+      z-index: 999
+
+  .date-range
+    text-align: right
+
+    .hasDatepicker
+      //border: none
+      //box-shadow: none
+      width: 85px
+      margin-left: 4px
+      cursor: pointer
+
+  .wrapper
+    width: 100%
+
+  .chlk-grid
+    margin-top: 50px
