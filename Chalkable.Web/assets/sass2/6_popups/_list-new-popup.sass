@@ -1,0 +1,23 @@
+.list-new-popup
+  z-index: 999
+  position: relative
+
+  .list-new
+    width: 300px
+    +box-shadow(transparentize(#000, .8) 0 0 16px)
+    +transform(translate(-50%, 0))
+
+    &::before
+      left: 50%
+      margin-left: 5px
+
+  .image
+    padding-right: 16px
+
+  .row
+    margin-bottom: 16px
+
+    .inner-content
+      white-space: normal
+      margin-bottom: 20px
+      word-wrap: break-word
