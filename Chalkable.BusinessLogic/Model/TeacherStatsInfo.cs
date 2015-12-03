@@ -54,9 +54,9 @@ namespace Chalkable.BusinessLogic.Model
             };
         }
 
-        public static PaginatedList<TeacherStatsInfo> Create(IList<TeacherSummary> teachers, int start, int count)
+        public static PaginatedList<TeacherStatsInfo> Create(IList<TeacherSummary> teachers, int start, int count, int allCount)
         {
-            return new PaginatedList<TeacherStatsInfo>(teachers.Select(Create).Skip(start).Take(count), start/count, count, teachers.Count);
+            return new PaginatedList<TeacherStatsInfo>(teachers.Select(Create), start/count, count, allCount);
         }
 
         public static PaginatedList<TeacherStatsInfo> Create(PaginatedList<Staff> teachers, IList<ClassDetails> classes)

@@ -17,13 +17,13 @@ namespace Chalkable.StiConnector.Connectors
         {
         }
 
-        public IList<SectionSummary> GetSectionsSummaries(int acadSessionId, DateTime tillDate, int start, int count)
+        public IList<SectionSummary> GetSectionsSummaries(int acadSessionId, DateTime tillDate, int start, int count, string filter)
         {
             var param = new NameValueCollection()
             {
                 ["start"] = start.ToString(),
-                ["count"] = count.ToString()
-
+                ["end"] = (start+count).ToString(),
+                ["search"] = string.IsNullOrWhiteSpace(filter) ? "" : filter
             };
             return
                 Call<IList<SectionSummary>>(
@@ -31,12 +31,11 @@ namespace Chalkable.StiConnector.Connectors
                     param);
         }
 
-        public IList<SchoolSummary> GetSchoolsSummaries(DateTime tillDate, int start, int count, string filter)
+        public IList<SchoolSummary> GetSchoolsSummaries(DateTime tillDate, string filter)
         {
             var param = new NameValueCollection()
             {
-                ["start"] = start.ToString(),
-                ["count"] = count.ToString(),
+                ["search"] = string.IsNullOrWhiteSpace(filter) ? "" : filter
             };
 
             if(!string.IsNullOrWhiteSpace(filter))
@@ -45,12 +44,13 @@ namespace Chalkable.StiConnector.Connectors
             return Call<IList<SchoolSummary>>($"{BaseUrl}chalkable/classes/dashboard/schools/{tillDate.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture)}", param);
         }
 
-        public IList<TeacherSummary> GetTeachersSummaries(int acadSessionId, DateTime tillDate, int start, int count)
+        public IList<TeacherSummary> GetTeachersSummaries(int acadSessionId, DateTime tillDate, int start, int count, string filter)
         {
             var param = new NameValueCollection()
             {
                 ["start"] = start.ToString(),
-                ["count"] = count.ToString()
+                ["end"] = (start + count).ToString(),
+                ["search"] = string.IsNullOrWhiteSpace(filter) ? "" : filter
 
             };
             return

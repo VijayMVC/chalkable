@@ -147,8 +147,7 @@ namespace Chalkable.BusinessLogic.Services.School
             start = start ?? 0;
             count = count ?? int.MaxValue;
 
-            var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSchoolsSummaries(Context.NowSchoolTime,
-                start.Value, count.Value, filter);
+            var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSchoolsSummaries(Context.NowSchoolTime, filter);
 
             if (iNowRes == null)
                 return SchoolSummaryInfo.Create(DoRead( u => new SchoolDataAccess(u).GetShortSchoolSummaries(start.Value, count.Value, filter)));

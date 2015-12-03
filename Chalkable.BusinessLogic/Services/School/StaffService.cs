@@ -94,7 +94,7 @@ namespace Chalkable.BusinessLogic.Services.School
             count = count ?? int.MaxValue;
 
             var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetTeachersSummaries(schoolYearId,
-                Context.NowSchoolYearTime, start.Value, count.Value);
+                Context.NowSchoolYearTime, start.Value, count.Value, filter);
 
             if (iNowRes == null)
             {
@@ -105,7 +105,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 return TeacherStatsInfo.Create(teachers, classes);
             }
 
-            return TeacherStatsInfo.Create(iNowRes, start.Value, count.Value);
+            var teacherCount = SearchStaff(schoolYearId, null, null, filter, true, 0, 1).TotalCount;
+
+            return TeacherStatsInfo.Create(iNowRes, start.Value, count.Value, teacherCount);
         }
 
     }

@@ -51,7 +51,6 @@ namespace Chalkable.BusinessLogic.Model
 
         public static PaginatedList<SchoolSummaryInfo> Create(IList<SchoolSummary> schoolSummaries, int start, int count, int allCount)
         {
-            //TODO: Fix it after iNow API will be with start and count param
             return new PaginatedList<SchoolSummaryInfo>(schoolSummaries.Select(Create).Skip(start).Take(count), start/count, count, allCount);
         } 
     }

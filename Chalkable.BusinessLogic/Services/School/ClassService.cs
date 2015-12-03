@@ -214,7 +214,7 @@ namespace Chalkable.BusinessLogic.Services.School
             start = start ?? 0;
             count = count ?? int.MaxValue;
 
-            var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value, count.Value);
+            var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value, count.Value, filter);
 
             if (iNowRes == null)
                 return ClassStatsInfo.Create(
@@ -222,10 +222,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
             var classes = DoRead(u => new ClassDataAccess(u).GetClassesByIds(iNowRes.Select(x => x.SectionId).ToList()));
 
+            var classesCount =
+                DoRead( u => new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, 0, 1, filter, teacherId)).TotalCount;
+
             var res = iNowRes.Select(x => ClassStatsInfo.Create(x, classes.FirstOrDefault(y => y.Id == x.SectionId))).ToList();
 
-            //TODO: FIX THIS AFTER API UPDATE
-            return new PaginatedList<ClassStatsInfo>(res.Skip(start.Value).Take(count.Value), start.Value/count.Value, count.Value, res.Count);
+            return new PaginatedList<ClassStatsInfo>(res, start.Value/count.Value, count.Value, classesCount);
         }
     }
 }
