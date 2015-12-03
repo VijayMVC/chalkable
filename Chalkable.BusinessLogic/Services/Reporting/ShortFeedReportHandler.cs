@@ -40,20 +40,20 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             var staffIds = classTeachers.Select(x => x.PersonRef).Distinct().ToList();
             var staffs = staffIds.Select(y => serviceLocator.StaffService.GetStaff(y)).ToList();
 
-            
+            var onlyOwner = !isStudent;
             var anns = new List<AnnouncementComplex>();
             if (settings.LessonPlanOnly && !BaseSecurity.IsDistrictAdmin(serviceLocator.Context))
             {
-                anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, inputModel.Complete));
+                anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, inputModel.Complete, onlyOwner));
             }
             else
             {
                 if (BaseSecurity.IsDistrictAdmin(serviceLocator.Context) || isStudent)
-                    anns.AddRange(serviceLocator.AdminAnnouncementService.GetAnnouncementsComplex(settings.StartDate, settings.EndDate, null, inputModel.Complete, !isStudent));
+                    anns.AddRange(serviceLocator.AdminAnnouncementService.GetAnnouncementsComplex(settings.StartDate, settings.EndDate, null, inputModel.Complete, onlyOwner));
                 if (BaseSecurity.IsTeacher(serviceLocator.Context) || isStudent)
                 {
-                    anns.AddRange(serviceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, !isStudent));
-                    anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, inputModel.Complete, !isStudent));
+                    anns.AddRange(serviceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, onlyOwner));
+                    anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, inputModel.Complete, onlyOwner));
                 }
             }
             if (!settings.IncludeHiddenActivities)
@@ -100,11 +100,12 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             var staffs = staffIds.Select(y => serviceLocator.StaffService.GetStaff(y)).ToList();
             
             //Getting and Preparing Announcements details info 
+            var onlyOwner = !isStudent;
             IList<AnnouncementDetails> anns;
             if (settings.LessonPlanOnly && !BaseSecurity.IsDistrictAdmin(serviceLocator.Context))
-                anns = serviceLocator.LessonPlanService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, !isStudent);
+                anns = serviceLocator.LessonPlanService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, onlyOwner);
             else 
-                anns = serviceLocator.AnnouncementFetchService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, isStudent);
+                anns = serviceLocator.AnnouncementFetchService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, onlyOwner);
 
             if (!settings.IncludeHiddenActivities)
                 anns = anns.Where(x => x.ClassAnnouncementData == null || x.ClassAnnouncementData.VisibleForStudent).ToList();
