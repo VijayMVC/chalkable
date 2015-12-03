@@ -15,6 +15,7 @@ REQUIRE('chlk.activities.apps.AddAppDialog');
 REQUIRE('chlk.activities.apps.AppWrapperDialog');
 REQUIRE('chlk.activities.apps.AddCCStandardDialog');
 REQUIRE('chlk.activities.apps.ExternalAttachAppDialog');
+REQUIRE('chlk.activities.apps.AppWrapperPage');
 
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppPostData');
@@ -951,6 +952,66 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .thenCall(this.BackgroundNavigate, ['apps', 'details', [app.getId()]]);
             return null;
+        },
+
+        [chlk.controllers.StudyCenterEnabled()],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN,
+            chlk.models.common.RoleEnum.TEACHER
+        ])],
+        [chlk.controllers.SidebarButton('assessment')],
+        [[String]],
+        function assessmentAction(appUrlAppend_) {
+            if(!this.isStudyCenterEnabled())
+                return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+
+            var mode = "myview",
+                appId = chlk.models.id.AppId('e989ccfe-f658-4f89-81e7-f3efa0251b28');
+
+            var result = this.appsService
+                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                .catchError(function(error_){
+                    throw new chlk.lib.exception.AppErrorException(error_);
+                })
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var appData = data.getApplication();
+
+                    var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
+                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                        + '&code=' + data.getAuthorizationCode()
+                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
+
+                    return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');
+                }, this);
+
+            return this.PushOrUpdateView(chlk.activities.apps.AppWrapperPage, result);
+        },
+
+        [chlk.controllers.SidebarButton('assessment')],
+        [[String]],
+        function assessmentSettingsAction(appUrlAppend_) {
+            var mode = 'sysadminview',
+                appId = chlk.models.id.AppId('e989ccfe-f658-4f89-81e7-f3efa0251b28');
+
+            var result = this.appsService
+                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                .catchError(function(error_){
+                    throw new chlk.lib.exception.AppErrorException(error_);
+                })
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var appData = data.getApplication();
+
+                    var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
+                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                        + '&code=' + data.getAuthorizationCode()
+                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
+
+                    return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');
+                }, this);
+
+            return this.PushOrUpdateView(chlk.activities.apps.AppWrapperPage, result);
         }
     ])
 });
