@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
@@ -7,6 +8,7 @@ using Chalkable.Data.Common.Backup;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
+using Microsoft.SqlServer.Dac;
 
 namespace Chalkable.Web.Controllers
 {
@@ -41,6 +43,83 @@ namespace Chalkable.Web.Controllers
             MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.DatabaseUpdate, DateTime.UtcNow, null, data.ToString(), BackgroundTask.GLOBAL_DOMAIN);
             return Json(true);
 
+        }
+
+        [AuthorizationFilter("SysAdmin")]
+        public ActionResult DatabaseDeployDacpac(string key)
+        {
+            var dbDeployOptions = new DacDeployOptions
+            {
+                BlockOnPossibleDataLoss = true
+            };
+
+            var masterDacpac = DacPackage.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Chalkable.Database.Master.dacpac"));
+            var schoolDacpac = DacPackage.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Chalkable.Database.School.dacpac"));
+            
+            var masterDeployScript = DeployDacPackAndGenerateDeployScript(
+                masterDacpac, 
+                Settings.MasterConnectionString, 
+                "ChalkableMaster", 
+                dbDeployOptions);
+
+            var serversDeployments = new Dictionary<string, string>();
+            foreach (var server in Settings.ChalkableSchoolDbServers)
+            {
+                try
+                {
+                    var templateDeployScript = DeployDacPackAndGenerateDeployScript(
+                        schoolDacpac,
+                        Settings.GetSchoolTemplateConnectionString(server),
+                        Settings.SchoolTemplateDbName,
+                        dbDeployOptions);
+                    serversDeployments.Add(server, templateDeployScript);
+                }
+                catch (Exception e)
+                {
+                    serversDeployments.Add(server, e.ToString());
+                }
+            }
+
+            var schoolDeployScripts = new Dictionary<string, string>();
+            foreach (var district in MasterLocator.DistrictService.GetDistricts())
+            {
+                try
+                {
+                    var schoolDeployScript = DeployDacPackAndGenerateDeployScript(
+                        schoolDacpac,
+                        Settings.GetSchoolConnectionString(district.ServerUrl, district.Name),
+                        district.Name,
+                        dbDeployOptions);
+
+                    schoolDeployScripts.Add(district.Name, schoolDeployScript);
+                }
+                catch (Exception e)
+                {
+                    schoolDeployScripts.Add(district.Name, e.ToString());
+                }
+            }
+
+            return Json(new 
+            {
+                masterDeployScript,
+                serversDeployments,
+                schoolDeployScripts
+            });
+
+        }
+
+        private static string DeployDacPackAndGenerateDeployScript(DacPackage dp, string conStr, string targetDb,
+            DacDeployOptions dbDeployOptions)
+        {
+            var dbServices = new DacServices(conStr);
+
+            var deployScript = dbServices.GenerateDeployScript(dp, targetDb, dbDeployOptions);
+            //var deployReport = dbServices.GenerateDeployReport(dp, targetDb, dbDeployOptions);
+
+            dbServices.Deploy(dp, targetDb, true, dbDeployOptions);
+
+            //var driftReport = dbServices.GenerateDriftReport(targetDb);
+            return deployScript;
         }
 
         [AuthorizationFilter("SysAdmin")]

@@ -1,0 +1,21 @@
+﻿CREATE TYPE [dbo].[TAnnouncement] AS TABLE (
+    [Id]                       INT            NOT NULL,
+    [Content]                  NVARCHAR (MAX) NULL,
+    [Created]                  DATETIME2 (7)  NOT NULL,
+    [Expires]                  DATETIME2 (7)  NOT NULL,
+    [ClassAnnouncementTypeRef] INT            NOT NULL,
+    [State]                    INT            NOT NULL,
+    [GradingStyle]             INT            NOT NULL,
+    [Subject]                  NVARCHAR (255) NULL,
+    [ClassRef]                 INT            NOT NULL,
+    [Order]                    INT            NOT NULL,
+    [Dropped]                  BIT            NOT NULL,
+    [SchoolRef]                INT            NOT NULL,
+    [SisActivityId]            INT            NULL,
+    [MaxScore]                 DECIMAL (18)   NULL,
+    [WeightAddition]           DECIMAL (18)   NULL,
+    [WeightMultiplier]         DECIMAL (18)   NULL,
+    [MayBeDropped]             BIT            NOT NULL,
+    [Title]                    NVARCHAR (30)  NULL,
+    [VisibleForStudent]        BIT            NOT NULL);
+
