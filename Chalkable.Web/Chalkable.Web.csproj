@@ -110,9 +110,18 @@
       <HintPath>..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.26\lib\net40\Microsoft.Diagnostics.Tracing.TraceEvent.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Data.Tools.Schema.Sql">
+      <HintPath>..\packages\Microsoft.SqlServer.Dac.1.0.1\lib\Microsoft.Data.Tools.Schema.Sql.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Data.Tools.Utilities">
+      <HintPath>..\packages\Microsoft.SqlServer.Dac.1.0.1\lib\Microsoft.Data.Tools.Utilities.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.IdentityModel, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\packages\Microsoft.IdentityModel.6.1.7600.16394\lib\net35\Microsoft.IdentityModel.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Dac">
+      <HintPath>..\packages\Microsoft.SqlServer.Dac.1.0.1\lib\Microsoft.SqlServer.Dac.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ReportViewer.2015.Runtime.12.0.2.2402\lib\Microsoft.ReportViewer.Common.dll</HintPath>
@@ -570,6 +579,14 @@
       <Project>{c5753c2a-f2bc-4f96-846b-548fc67191b2}</Project>
       <Name>Chalkable.Data.School</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Database.Master\Chalkable.Database.Master.sqlproj">
+      <Project>{1d736e07-c8ef-4282-9d37-2e33ba2ecb00}</Project>
+      <Name>Chalkable.Database.Master</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Database.School\Chalkable.Database.School.sqlproj">
+      <Project>{be01fdc7-65d4-4d0a-8fae-ed6d67e47a44}</Project>
+      <Name>Chalkable.Database.School</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chalkable.StiConnector\Chalkable.StiConnector.csproj">
       <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>
       <Name>Chalkable.StiConnector</Name>
@@ -708,12 +725,12 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>xcopy /Y /C $(SolutionDir)\Chalkable.Database.Master\bin\$(ConfigurationName)\Chalkable.Database.Master.dacpac $(TargetDir)
+xcopy /Y /C $(SolutionDir)\Chalkable.Database.School\bin\$(ConfigurationName)\Chalkable.Database.School.dacpac $(TargetDir)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
+    <PreBuildEvent>del /Q $(TargetDir)\Chalkable.Database.Master.dacpac
+del /Q  $(TargetDir)\Chalkable.Database.School.dacpac</PreBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.26\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets" Condition="Exists('..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.26\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

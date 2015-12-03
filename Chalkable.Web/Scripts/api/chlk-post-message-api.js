@@ -119,14 +119,25 @@ var CHLK_MESSENGER = (function () {
                 this.requestOrigin({url:this.parentURL});
             }
             var that = this;
-            function callback(e){
-                if (e.data.action === ChlkActionTypes.ADD_YOURSELF) {
-                    var attach = !!e.data.attach;
-                    var result = fn(e.data);
-                    var data = e.data;
-                    data.appReady = result;
-                    attach === true ? CHLK_MESSENGER.addMe(data)
-                                    : CHLK_MESSENGER.saveMe(data);
+            function callback(e) {
+                var data = e.data;
+                var attach = !!e.data.attach;
+                var isfirst = true;
+
+                function appReadyCb(result) {
+                    if (isfirst) {
+                        data.appReady = result;
+                        attach === true ? CHLK_MESSENGER.addMe(data)
+                            : CHLK_MESSENGER.saveMe(data);
+                    }
+                    isfirst = false;
+                }
+
+                if (e.data.action === ChlkActionTypes.ADD_YOURSELF) {                    
+                    var result = fn(e.data, appReadyCb);
+                    
+                    if (typeof result !== 'undefined')
+                        appReadyCb(result);
                 }
                 if (e.data.action === ChlkActionTypes.UPDATE_ORIGIN){
                     that.updateOrigin(e.origin);

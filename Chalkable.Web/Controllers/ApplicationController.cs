@@ -193,7 +193,7 @@ namespace Chalkable.Web.Controllers
             if (assessmentApp != null && applicationId == assessmentApp.Id)
                 MasterLocator.UserTrackingService.AttachedAssessment(Context.Login, announcementId);
 
-            return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.PersonId));
+            return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.PersonId, (AnnouncementTypeEnum)announcementType));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
@@ -216,17 +216,21 @@ namespace Chalkable.Web.Controllers
         public ActionResult GetAnnouncementApplication(int announcementApplicationId)
         {
             var res = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
+            var announcementType = SchoolLocator.AnnouncementFetchService.GetAnnouncementType(res.AnnouncementRef);
             var app = MasterLocator.ApplicationService.GetApplicationById(res.ApplicationRef);
-            return Json(AnnouncementApplicationViewData.Create(res, app, null, null));
+            return Json(AnnouncementApplicationViewData.Create(res, app, null, null, announcementType));
         }
 
 
         [AuthorizationFilter]
         public ActionResult GetOauthCode(string applicationUrl, Guid? applicationId)
         {
+            if (User.IsInRole("SysAdmin") && !Context.PersonId.HasValue)
+                return GetOauthCodeForSysAdmin(applicationUrl, applicationId);
+
             //TODO: check if app is installed??
-           
-            if(!Context.PersonId.HasValue)
+
+            if (!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
 
             var app = !string.IsNullOrWhiteSpace(applicationUrl) 
@@ -250,6 +254,28 @@ namespace Chalkable.Web.Controllers
                                 AuthorizationCode = authorizationCode,
                                 ApplicationInfo = appView
                              });
+        }
+
+        private ActionResult GetOauthCodeForSysAdmin(string applicationUrl, Guid? applicationId)
+        {
+            var app = !string.IsNullOrWhiteSpace(applicationUrl)
+                    ? MasterLocator.ApplicationService.GetApplicationByUrl(applicationUrl) :
+                applicationId.HasValue
+                    ? MasterLocator.ApplicationService.GetApplicationById(applicationId.Value) : null;
+
+            if (app == null)
+                throw new ChalkableException("Application not found");
+
+            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, Context.Login, null, Context.Role);
+            authorizationCode = HttpUtility.UrlEncode(authorizationCode);
+
+            var hasMyApps = MasterLocator.ApplicationService.HasMyApps(app);
+            var appView = InstalledApplicationViewData.Create(new List<ApplicationInstall>(), null, app, hasMyApps);
+            return Json(new
+            {
+                AuthorizationCode = authorizationCode,
+                ApplicationInfo = appView
+            });
         }
 
         private const string CONTENT_TYPE = "text/html";

@@ -58,6 +58,9 @@
       </runner>
       <runner id="RUNNER_8" name="client compile" type="jonnyzzz.grunt">
         <parameters>
+          <param name="jonnyzzz.commandLine"><![CDATA[--vcs.revision=%build.vcs.number%
+--build.number=%build.number%
+--vcs.branch=%teamcity.build.branch%]]></param>
           <param name="jonnyzzz.grunt.mode" value="npm" />
           <param name="jonnyzzz.grunt.tasks" value="pre-release" />
           <param name="teamcity.step.mode" value="default" />
