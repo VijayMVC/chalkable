@@ -720,12 +720,12 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y /C $(SolutionDir)Chalkable.Database.Master\bin\Output\Chalkable.Database.Master.dacpac $(TargetDir)
-xcopy /Y /C $(SolutionDir)Chalkable.Database.School\bin\Output\Chalkable.Database.School.dacpac $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>start xcopy /Y /C $(SolutionDir)Chalkable.Database.Master\bin\Output\Chalkable.Database.Master.dacpac $(TargetDir)
+start xcopy /Y /C $(SolutionDir)Chalkable.Database.School\bin\Output\Chalkable.Database.School.dacpac $(TargetDir)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>del /Q $(TargetDir)\Chalkable.Database.Master.dacpac
-del /Q  $(TargetDir)\Chalkable.Database.School.dacpac</PreBuildEvent>
+    <PreBuildEvent>start del /Q $(TargetDir)\Chalkable.Database.Master.dacpac
+start del /Q  $(TargetDir)\Chalkable.Database.School.dacpac</PreBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.26\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets" Condition="Exists('..\packages\Microsoft.Diagnostics.Tracing.TraceEvent.1.0.26\build\Microsoft.Diagnostics.Tracing.TraceEvent.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
