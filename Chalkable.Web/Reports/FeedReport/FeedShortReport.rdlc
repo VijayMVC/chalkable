@@ -441,7 +441,7 @@
                                             <Height>0.27847in</Height>
                                             <Width>0.30208in</Width>
                                             <Visibility>
-                                              <Hidden>=Fields!IsHidden.Value</Hidden>
+                                              <Hidden>=Not(Fields!IsHidden.Value)</Hidden>
                                             </Visibility>
                                             <Style>
                                               <Border>
@@ -719,10 +719,11 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Format(Globals!ExecutionTime, "mm/dd/yyyy")</Value>
+                  <Value>=Globals!ExecutionTime</Value>
                   <Style>
                     <FontSize>8pt</FontSize>
                     <FontWeight>Bold</FontWeight>
+                    <Format>MM/dd/yyyy</Format>
                     <Color>#888888</Color>
                   </Style>
                 </TextRun>
