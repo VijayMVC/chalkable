@@ -30,7 +30,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
             input(type="hidden", name="importantOnly", value=self.importantOnly && self.importantOnly.toString())
             input(type="hidden", name="sorttype", value=self.isLatest()).latest-earliest-input
             input(type="submit", name="submitType", value="sort")#sort-submit.x-hidden
-            +Hidden('toSet', false).to-set
+            +Hidden('toSet', '').to-set
             if isAdmin
                 input(type="hidden", name="gradeLevels", value=topData.getSelectedIds())
             else
