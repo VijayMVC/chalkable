@@ -966,7 +966,8 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
 
             var mode = "myview",
-                appId = chlk.models.id.AppId('e989ccfe-f658-4f89-81e7-f3efa0251b28');
+                // TODO: move to session
+                appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
 
             var result = this.appsService
                 .getOauthCode(this.getCurrentPerson().getId(), null, appId)
@@ -992,7 +993,8 @@ NAMESPACE('chlk.controllers', function (){
         [[String]],
         function assessmentSettingsAction(appUrlAppend_) {
             var mode = 'sysadminview',
-                appId = chlk.models.id.AppId('e989ccfe-f658-4f89-81e7-f3efa0251b28');
+                // TODO: move to session
+                appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
 
             var result = this.appsService
                 .getOauthCode(this.getCurrentPerson().getId(), null, appId)

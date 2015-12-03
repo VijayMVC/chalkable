@@ -725,8 +725,8 @@
     </VisualStudio>
   </ProjectExtensions>
   <PropertyGroup>
-    <PostBuildEvent>xcopy /Y /C $(SolutionDir)\Chalkable.Database.Master\bin\$(ConfigurationName)\Chalkable.Database.Master.dacpac $(TargetDir)
-xcopy /Y /C $(SolutionDir)\Chalkable.Database.School\bin\$(ConfigurationName)\Chalkable.Database.School.dacpac $(TargetDir)</PostBuildEvent>
+    <PostBuildEvent>xcopy /Y /C $(SolutionDir)Chalkable.Database.Master\bin\Output\Chalkable.Database.Master.dacpac $(TargetDir)
+xcopy /Y /C $(SolutionDir)Chalkable.Database.School\bin\Output\Chalkable.Database.School.dacpac $(TargetDir)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>del /Q $(TargetDir)\Chalkable.Database.Master.dacpac

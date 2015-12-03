@@ -2,6 +2,7 @@
 {
     public static class ViewConstants
     {
+        public const string ASSESSMENT_APLICATION_ID = "AssessmentApplicationId";
         public const string LE_PARAMS = "leParams";
         public const string YEARS = "Years";
         public const string GRADING_PERIODS = "GradingPeriods";

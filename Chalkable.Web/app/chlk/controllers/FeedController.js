@@ -239,10 +239,10 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('inbox')],
         [[chlk.models.id.ClassId, Boolean]],
-        function feedPrintingAction(classId_, complete_) {
+        function feedPrintingAction(classId_, importantOnly_) {
             var result = this.reportingService.getFeedReportSettings(classId_)
                 .then(function(model){
-                    complete_ &&  model.setComplete(complete_);
+                    model.setImportantOnly(importantOnly_ || false);
                     classId_ &&  model.setClassId(classId_);
                     return model;
                 });
@@ -260,7 +260,8 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.isIncludeDetails(),
                     reportViewData.isIncludeHiddenAttributes(),
                     reportViewData.isIncludeHiddenActivities(),
-                    reportViewData.getClassId()
+                    reportViewData.getClassId(),
+                    reportViewData.isImportantOnly()
                 )
                 .attach(this.validateResponse_())
                 .then(function () {

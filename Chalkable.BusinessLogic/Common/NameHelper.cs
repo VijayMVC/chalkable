@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Common
         {
             var fn = upper ? firstName.ToUpper() : firstName;
             var ln = upper ? lastName.ToUpper() : lastName;
-            var gn = string.IsNullOrWhiteSpace(gender) ? ResolveSalutation(gender) : "";
+            var gn = string.IsNullOrWhiteSpace(gender) ? "" : ResolveSalutation(gender);
             return gn + fn + " " + ln;
         }
 
@@ -53,10 +53,7 @@ namespace Chalkable.BusinessLogic.Common
 
         public static string FullName(this Staff staff, bool upper = true, bool withSalutation = false)
         {
-            if (withSalutation)
-                return FullName(staff.FirstName, staff.LastName, false, staff.Gender);
-
-            return FullName(staff.FirstName, staff.LastName, upper);
+            return FullName(staff.FirstName, staff.LastName, upper, withSalutation ? staff.Gender : null);
         }
 
         public static string FullName(this Student student, bool upper = true)
@@ -64,10 +61,8 @@ namespace Chalkable.BusinessLogic.Common
             return FullName(student.FirstName, student.LastName, upper);
         }
 
-        public static string FullName(this Person person, bool upper = true, bool withSalutation = false)
+        public static string FullName(this Person person, bool upper = true)
         {
-            if (withSalutation)
-                FullName(person.FirstName, person.LastName, false, person.Gender);
             return FullName(person.FirstName, person.LastName, upper);
         }
 
