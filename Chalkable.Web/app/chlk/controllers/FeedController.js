@@ -156,7 +156,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.Redirect('feed', 'list', [model.getClassId(), null, model.isImportantOnly(), 0, model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.isLatest(), model.isToSet()]);
 
             var result = this.announcementService
-                .getAnnouncements(model.getStart(), model.getClassId(), model.isImportantOnly(), model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.isLatest())
+                .getAnnouncements(model.getStart(), model.getClassId(), model.isImportantOnly(), model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.isLatest(), model.isToSet())
                 .attach(this.validateResponse_())
                 .then(function(model){
                     return new chlk.models.feed.FeedItems(model.getItems());
@@ -177,7 +177,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.Redirect('feed', 'list', [model.getGradeLevels(), null, true, 0, model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.isLatest(), model.isToSet()]);
 
             var result = this.announcementService
-                .getAnnouncementsForAdmin(model.getStart(), model.getGradeLevels(), model.isImportantOnly(), model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.isLatest())
+                .getAnnouncementsForAdmin(model.getStart(), model.getGradeLevels(), model.isImportantOnly(), model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.isLatest(), model.isToSet())
                 .attach(this.validateResponse_())
                 .then(function(model){
                     return new chlk.models.feed.FeedItems(model.getItems());
@@ -207,11 +207,6 @@ NAMESPACE('chlk.controllers', function (){
 
                     model.setGradingPeriods(gradingPeriods);
                     var classBarItemsMdl = new chlk.models.classes.ClassesForTopBar(null, classId_);
-                    var gp = this.getCurrentGradingPeriod();
-                    if(model.getStartDate() && (model.getStartDate().getDate() < gp.getStartDate().getDate() || model.getStartDate().getDate() > gp.getEndDate().getDate()))
-                        model.setStartDate(gp.getStartDate());
-                    if(model.getEndDate() && (model.getEndDate().getDate() > gp.getEndDate().getDate() || model.getEndDate().getDate() < gp.getStartDate().getDate()))
-                        model.setEndDate(gp.getEndDate());
                     model.setTopData(classBarItemsMdl);
                     importantOnly_ !== undefined && model.setImportantOnly(importantOnly_);
 
