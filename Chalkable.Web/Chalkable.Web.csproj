@@ -546,8 +546,6 @@
     <Content Include="pathfinder\teacher_methods.xml" />
     <Content Include="Scripts\api\chlk-post-message-api.min.js" />
     <Content Include="SqlServerTypes\readme.htm" />
-    <Content Include="TraceEvent.ReadMe.txt" />
-    <Content Include="TraceEvent.ReleaseNotes.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -686,9 +684,6 @@
   <ItemGroup>
     <Content Include="Reports\FeedReport\FeedDetailsReport.rdlc" />
     <Content Include="Reports\FeedReport\FeedShortReport.rdlc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="_TraceEventProgrammersGuide.docx" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
