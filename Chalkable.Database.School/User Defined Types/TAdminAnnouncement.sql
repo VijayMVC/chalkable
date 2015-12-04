@@ -7,7 +7,7 @@
     [Expires]      DATETIME2 (7)  NOT NULL,
     [AdminRef]     INT            NOT NULL,
     [AdminName]    NVARCHAR (MAX) NULL,
-    [AdminGendeer] NVARCHAR (MAX) NULL,
+    [AdminGender] NVARCHAR (MAX) NULL,
     [IsOwner]      BIT            NULL,
     [Complete]     BIT            NULL,
     [AllCount]     INT            NULL);
