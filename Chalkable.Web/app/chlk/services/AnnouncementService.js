@@ -57,7 +57,7 @@ NAMESPACE('chlk.services', function () {
                     gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf(),
                     sortType: latest_,
                     lessonPlansOnly: false,
-                    toSet: toSet_ || !!startDate_ || !!endDate_ || !!annType_ || !!gradingPeriodId_ || false,
+                    toSet: toSet_ || false,
                     count: 10
                 });
 

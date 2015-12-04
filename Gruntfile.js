@@ -5,6 +5,7 @@ module.exports = function(grunt) {
   var buildNumber = grunt.option("build.number");
   var vcsRevision = grunt.option("vcs.revision");
   var vcsBranch = grunt.option("vcs.branch");
+  var buildCounter = buildNumber.split('-').pop();
   
   var today = new Date().toISOString().slice(0, 10);
   
@@ -89,6 +90,22 @@ module.exports = function(grunt) {
         replacements: [{
           from: 'private-build',
           to: buildNumber
+        }]
+      },
+      chakable_database_master_version: {
+        src: ['Chalkable.Database.Master/Chalkable.Database.Master.sqlproj'],
+        dest: ['Chalkable.Database.Master/Chalkable.Database.Master.sqlproj'],
+        replacements: [{
+          from: '1.0.0.0',
+          to: '1.0.0.' + buildCounter
+        }]
+      },
+      chakable_database_school_version: {
+        src: ['Chalkable.Database.School/Chalkable.Database.School.sqlproj'],
+        dest: ['Chalkable.Database.School/Chalkable.Database.School.sqlproj'],
+        replacements: [{
+          from: '1.0.0.0',
+          to: '1.0.0.' + buildCounter
         }]
       },
       raygun_deployment_version: {
@@ -320,7 +337,7 @@ module.exports = function(grunt) {
   ]);
   
   // js concat/minify
-  grunt.registerTask('version', ['replace:chakable_web_version']);
+  grunt.registerTask('version', ['replace:chakable_web_version', 'replace:chakable_database_master_version', 'replace:chakable_database_school_version']);
 
   // general tasks
   grunt.registerTask('deploy-artifacts', ['azure-cdn-deploy']);  

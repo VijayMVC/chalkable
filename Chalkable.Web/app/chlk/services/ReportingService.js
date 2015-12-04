@@ -356,9 +356,9 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
-        [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Boolean, Boolean, Boolean, Boolean, chlk.models.id.ClassId]],
+        [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Boolean, Boolean, Boolean, Boolean, chlk.models.id.ClassId, Boolean]],
         ria.async.Future, function submitFeedReport(startDate, endDate, lessonPlanOnly_, includeAttachments_, includeDetails_,
-                                                  includeHiddenAttributes_, includeHiddenActivities_, classId_) {
+                                                  includeHiddenAttributes_, includeHiddenActivities_, classId_, importantOnly_) {
 
             var url = this.getUrl('Reporting/FeedReport.json', {
                 startDate: startDate.toStandardFormat(),
@@ -368,7 +368,8 @@ NAMESPACE('chlk.services', function () {
                 includeDetails: includeDetails_,
                 includeHiddenAttributes: includeHiddenAttributes_,
                 includeHiddenActivities: includeHiddenActivities_,
-                classId: classId_ && classId_.valueOf()
+                classId: classId_ && classId_.valueOf(),
+                complete: importantOnly_ ? false : null
             });
 
             return this.getWithIframe_(url);

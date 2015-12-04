@@ -8,4 +8,4 @@ mixin ActionForm(controller, action)
 
 mixin Hidden(hidName, hidValue)
     -var hidValueFixed = hidValue && hidValue.valueOf ? hidValue.valueOf() : hidValue
-    input(type="hidden", name=hidName, value='boolean' === typeof hidValueFixed ? hidValueFixed|0 : hidValueFixed)(attributes)
+    input(type="hidden", name=hidName, value=('boolean' === typeof hidValueFixed ? hidValueFixed|0 : hidValueFixed))(attributes)

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.BusinessLogic.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.Web.Models.ApplicationsViewData
@@ -13,6 +12,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
     {
         public int AnnouncementApplicationId { get; set; }
         public int AnnouncementId { get; set; }
+        public int AnnouncementType { get; set; }
         public int? CurrentPersonId { get; set; }
         public bool Active { get; set; }
         public string ViewUrl { get; set; }
@@ -26,7 +26,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         }
 
         public static AnnouncementApplicationViewData Create(AnnouncementApplication announcementApplication,
-            Application application, IList<ApplicationInstall> installs, int? currentPersonId)
+            Application application, IList<ApplicationInstall> installs, int? currentPersonId, AnnouncementTypeEnum announcementType)
         {
             //Todo: think how to build urls for annAppViewData if there are no applicationInstalls
             var appInstallId = installs != null && installs.Any() ? installs.First().Id : (int?)null;
@@ -35,6 +35,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                     AnnouncementApplicationId = announcementApplication.Id,
                     Active = announcementApplication.Active,
                     AnnouncementId = announcementApplication.AnnouncementRef,
+                    AnnouncementType = (int)announcementType,
                     EditUrl = AppTools.BuildAppUrl(application, announcementApplication.Id, appInstallId, AppMode.Edit),
                     ViewUrl = AppTools.BuildAppUrl(application, announcementApplication.Id, appInstallId, AppMode.View),
                     GradingViewUrl = AppTools.BuildAppUrl(application, announcementApplication.Id, appInstallId, AppMode.GradingView),
@@ -47,7 +48,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         }
 
         public static IList<AnnouncementApplicationViewData> Create(IList<AnnouncementApplication> annApps
-            , IList<Application> applications, IList<ApplicationInstall> installs, int? currentPersonId)
+            , IList<Application> applications, IList<ApplicationInstall> installs, int? currentPersonId, AnnouncementTypeEnum announcementType)
         {
             var res = new List<AnnouncementApplicationViewData>();
             foreach (var annApp in annApps)
@@ -56,7 +57,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                 if (app != null)
                 {
                     var currentAppInstalls = installs.Where(x => x.ApplicationRef == app.Id).ToList();
-                    res.Add(Create(annApp, app, currentAppInstalls, currentPersonId));    
+                    res.Add(Create(annApp, app, currentAppInstalls, currentPersonId, announcementType));
                 }
             }
             return res;

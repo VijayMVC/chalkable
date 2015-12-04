@@ -105,20 +105,6 @@ namespace Chalkable.Web.Controllers
             return Json(developers.Select(DeveloperViewData.Create).ToList());
         }
 
-        public string ApplicationPath
-        {
-            get
-            {
-                string res = Request.ApplicationPath.ToLower();
-                if (res == "/")      //a site
-                    res = "/";
-                else if (!res.EndsWith(@"/")) //a virtual
-                    res += @"/";
-                return res;
-
-            }
-        }
-
         public ActionResult DownloadPictureTemplate(int type)
         {
             var vPath = ApplicationPath + ICON_TEMPLATES_URL_FORMAT;

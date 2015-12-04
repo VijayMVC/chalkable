@@ -21,11 +21,12 @@ namespace Chalkable.BusinessLogic.Common
             return ResolveSalutation(gender) + ln;
         }
         
-        private static string FullName(string firstName, string lastName, bool upper = true)
+        public static string FullName(string firstName, string lastName, bool upper = true, string gender = null)
         {
             var fn = upper ? firstName.ToUpper() : firstName;
             var ln = upper ? lastName.ToUpper() : lastName;
-            return fn + " " + ln;
+            var gn = string.IsNullOrWhiteSpace(gender) ? "" : ResolveSalutation(gender);
+            return gn + fn + " " + ln;
         }
 
         public static string TeacherDisplayName(this ScheduleItem staff, bool upper = true)
@@ -50,9 +51,9 @@ namespace Chalkable.BusinessLogic.Common
             return StaffDisplayName(person.LastName, person.Gender, upper);
         }
 
-        public static string FullName(this Staff staff, bool upper = true)
+        public static string FullName(this Staff staff, bool upper = true, bool withSalutation = false)
         {
-            return FullName(staff.FirstName, staff.LastName, upper);
+            return FullName(staff.FirstName, staff.LastName, upper, withSalutation ? staff.Gender : null);
         }
 
         public static string FullName(this Student student, bool upper = true)
