@@ -17,8 +17,8 @@ namespace Chalkable.Data.School.Model
         public int? AttachmentRef { get; set; }
  
         public string Name { get; set; }
-
         private string _text;
+
         public string Text
         {
             get { return _text ?? ""; }
