@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Common
             return ResolveSalutation(gender) + ln;
         }
         
-        private static string FullName(string firstName, string lastName, bool upper = true, string gender = null)
+        public static string FullName(string firstName, string lastName, bool upper = true, string gender = null)
         {
             var fn = upper ? firstName.ToUpper() : firstName;
             var ln = upper ? lastName.ToUpper() : lastName;
