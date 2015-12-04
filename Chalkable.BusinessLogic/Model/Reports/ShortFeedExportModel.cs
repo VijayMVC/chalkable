@@ -72,11 +72,12 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 EndDate = announcement.LessonPlanData.EndDate;
                 IsHidden = !announcement.LessonPlanData.VisibleForStudent;
             }
-            if (announcement.AdminAnnouncementData != null)
+            var adminAnn = announcement.AdminAnnouncementData;
+            if (adminAnn != null)
             {
-                EndDate = announcement.AdminAnnouncementData.Expires;
+                EndDate = adminAnn.Expires;
                 IsAdminAnnouncement = true;
-                Owners = announcement.AdminAnnouncementData.AdminName;
+                Owners =  NameHelper.FullName(adminAnn.AdminName, "", false, adminAnn.AdminGender);
                 AdminId = announcement.AdminRef;
             }
         }
