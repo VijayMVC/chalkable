@@ -44,7 +44,7 @@ namespace Chalkable.BusinessLogic.Model
                 Name = classDetails.Name,
                 DepartmentRef = classDetails.ChalkableDepartmentRef,
 
-                PrimaryTeacherDisplayName = classDetails.PrimaryTeacher?.FullName(upper: false, withSalutation: true),
+                PrimaryTeacherDisplayName = classDetails.PrimaryTeacher?.FullName(upper: false),
                 StudentsCount = classDetails.StudentsCount,
 
                 AttendancesCount = null,
