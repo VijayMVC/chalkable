@@ -4,7 +4,7 @@
   <description />
   <settings>
     <options>
-      <option name="artifactRules" value="Chalkable.Database.Master\bin\Staging\Chalkable.Database.Master.dacpac =&gt; /Chalkable.Database.Master.%build.number%.dacpac&#xA;Chalkable.Database.School\bin\Staging\Chalkable.Database.School.dacpac =&gt; /Chalkable.Database.School.%build.number%.dacpac&#xA;Chalkable.Azure\bin\Release\app.publish\Chalkable.Azure.cspkg =&gt; /ReleasePackage.%build.number%.zip&#xA;Chalkable.Azure\ServiceConfiguration.*.cscfg =&gt; /ReleasePackage.%build.number%.zip&#xA;Chalkable.Database.*\bin\Release\*.dacpac =&gt; /ReleasePackage.%build.number%.zip" />
+      <option name="artifactRules" value="Chalkable.Database.Master\bin\Release\Chalkable.Database.Master.dacpac =&gt; /Chalkable.Database.Master.%build.number%.dacpac&#xA;Chalkable.Database.School\bin\Release\Chalkable.Database.School.dacpac =&gt; /Chalkable.Database.School.%build.number%.dacpac&#xA;Chalkable.Azure\bin\Release\app.publish\Chalkable.Azure.cspkg =&gt; /ReleasePackage.%build.number%.zip&#xA;Chalkable.Azure\ServiceConfiguration.*.cscfg =&gt; /ReleasePackage.%build.number%.zip" />
       <option name="buildNumberPattern" value="0-7-%system.build.vcs.number%-%build.counter%" />
       <option name="checkoutMode" value="ON_AGENT" />
     </options>
