@@ -73,7 +73,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IClassAnnouncementService ClassAnnouncementService { get; }
         IAdminAnnouncementService AdminAnnouncementService { get; }
         IAnnouncementFetchService AnnouncementFetchService { get; }
-        IBaseAnnouncementService GetAnnouncementService(AnnouncementType? type);
+        IBaseAnnouncementService GetAnnouncementService(AnnouncementTypeEnum? type);
 
         IAttachementService AttachementService { get; } 
         ILEService LeService { get; }
@@ -291,15 +291,15 @@ namespace Chalkable.BusinessLogic.Services.School
         public IAdminAnnouncementService AdminAnnouncementService { get { return adminAnnouncementService; } }
         public IAnnouncementFetchService AnnouncementFetchService { get { return announcementFetchService; } }
 
-        public IBaseAnnouncementService GetAnnouncementService(AnnouncementType? type)
+        public IBaseAnnouncementService GetAnnouncementService(AnnouncementTypeEnum? type)
         {
             if (!type.HasValue)
                 return classAnnouncementService;
             switch (type.Value)
             {
-                case AnnouncementType.Class: return classAnnouncementService;
-                case AnnouncementType.Admin: return adminAnnouncementService;
-                case AnnouncementType.LessonPlan: return lessonPlanService;
+                case AnnouncementTypeEnum.Class: return classAnnouncementService;
+                case AnnouncementTypeEnum.Admin: return adminAnnouncementService;
+                case AnnouncementTypeEnum.LessonPlan: return lessonPlanService;
                 default : throw new ChalkableException("Not supported announcement type"); //todo implement NotSupportedChalkableException
             }
         }

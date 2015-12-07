@@ -21,6 +21,10 @@ namespace Chalkable.Data.School.Model.Announcements
         
         //todo remove this later
 
+        public const int DEFAULT_MAX_SCORE = 100;
+        public const int DEFAULT_WEIGHT_ADDITION = 0;
+        public const int DEFAULT_WEGIHT_MULTIPLIER = 1;
+
         public DateTime Expires { get; set; }
         public int? ClassAnnouncementTypeRef { get; set; }
         public int ClassRef { get; set; }
@@ -35,33 +39,17 @@ namespace Chalkable.Data.School.Model.Announcements
         public bool VisibleForStudent { get; set; }
         public bool MayBeDropped { get; set; }
 
-        
         [NotDbFieldAttr]
-        public override bool IsSubmitted
-        {
-            get { return SisActivityId.HasValue && base.IsSubmitted; }
-        }
-
-        public override int OwnereId
-        {
-            get { return PrimaryTeacherRef; }
-        }
+        public override bool IsSubmitted => SisActivityId.HasValue && base.IsSubmitted;
+        public override int OwnereId => PrimaryTeacherRef;
 
         [NotDbFieldAttr]
-        public override string AnnouncementTypeName
-        {
-            get { return ClassAnnouncementTypeName; }
-        }
-        [NotDbFieldAttr]
-        public override AnnouncementType Type
-        {
-            get { return AnnouncementType.Class; }
-        }
+        public override string AnnouncementTypeName => ClassAnnouncementTypeName;
 
-        public bool Gradable
-        {
-            get { return true; }
-        }
+        [NotDbFieldAttr]
+        public override AnnouncementTypeEnum Type => AnnouncementTypeEnum.Class;
+
+        public bool Gradable => true;
 
         [NotDbFieldAttr]
         public bool MayBeExempt { get; set; }
@@ -99,8 +87,8 @@ namespace Chalkable.Data.School.Model.Announcements
             get
             {
                 return !string.IsNullOrEmpty(ClassAnnouncementTypeName)
-                           ? string.Format("{0} {1}", ClassAnnouncementTypeName, Order)
-                           : null;
+                           ? $"{ClassAnnouncementTypeName} {Order}"
+                    : null;
             }
         }
 

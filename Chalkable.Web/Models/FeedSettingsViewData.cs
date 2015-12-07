@@ -13,15 +13,15 @@ namespace Chalkable.Web.Models
         public int? GradingPeriodId { get; set; }
         public bool ToSet { get; set; }
 
-        public static FeedSettingsViewData Create(FeedSettings feedSett)
+        public static FeedSettingsViewData Create(FeedSettingsInfo feedSett)
         {
-            return new FeedSettingsViewData()
+            return new FeedSettingsViewData
             {
                 AnnouncementType = feedSett.AnnouncementType,
-                FromDate = feedSett.GradingPeriodId.HasValue ? null : feedSett.FromDate,
+                FromDate = feedSett.GradingPeriodId.HasValue || feedSett.AnyDate ? null : feedSett.FromDate,
                 GradingPeriodId = feedSett.GradingPeriodId,
                 SortType = feedSett.SortType,
-                ToDate = feedSett.GradingPeriodId.HasValue ? null : feedSett.ToDate,
+                ToDate = feedSett.GradingPeriodId.HasValue || feedSett.AnyDate ? null : feedSett.ToDate,
             };
         }
     }

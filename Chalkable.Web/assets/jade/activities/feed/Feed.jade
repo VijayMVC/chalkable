@@ -58,9 +58,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                                 selectOtherMonths: true,
                                 inCurrentSchoolYear: true,
                                 dateFormat: 'M d, yy',
-                                onClose: function( selectedDate ) {
-                                    $( "#toDate" ).datepicker( "option", "minDate", selectedDate );
-                                },
+                                endRangeSelector: "#toDate",
                                 maxDate: self.getEndDate() && self.getEndDate().getDate()
                             },
                             data-value=self.getStartDate() ? self.getStartDate().format('mm/dd/yy') : ''
@@ -72,9 +70,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                                 selectOtherMonths: true,
                                 inCurrentSchoolYear: true,
                                 dateFormat: 'M d, yy',
-                                onClose: function( selectedDate ) {
-                                    $( "#fromDate" ).datepicker( "option", "maxDate", selectedDate );
-                                },
+                                startRangeSelector: "#fromDate",
                                 minDate: self.getStartDate() && self.getStartDate().getDate()
                             },
                             data-value=self.getEndDate() ? self.getEndDate().format('mm/dd/yy') : ''
@@ -99,6 +95,8 @@ div(class = noComplete ? "no-complete" : "").feed-container
                             li(class = self.isLatest() ? "" : "highlighted", data-value=false).latest-earliest-option.active-result Due Date: Earliest
                             li(class = self.isLatest() ? "highlighted" : "", data-value=true).latest-earliest-option.active-result Due Date: Latest
             .right-buttons-block
+                +ActionButton('feed', 'feedPrinting', topData.getSelectedItemId(), self.importantOnly).report-btn
+                    .report-link
                 Button(type="button", class=self.hasFilters() ? 'active' : '').feed-tools Feed Tools
             +ListView(self.items)(
                 infiniteScroll = true,

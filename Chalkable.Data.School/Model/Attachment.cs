@@ -1,4 +1,5 @@
 ﻿using System;
+using Chalkable.Common.Web;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
@@ -28,6 +29,9 @@ namespace Chalkable.Data.School.Model
         public string RelativeBlobAddress { get; set; }
 
         [NotDbFieldAttr]
-        public bool IsStiAttachment { get { return SisAttachmentId.HasValue; } }
+        public bool IsDocument => MimeHelper.GetTypeByName(Name) == MimeHelper.AttachmenType.Document;
+
+        [NotDbFieldAttr]
+        public bool IsStiAttachment => SisAttachmentId.HasValue;
     }
 }

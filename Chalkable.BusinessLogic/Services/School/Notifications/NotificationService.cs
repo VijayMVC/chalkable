@@ -18,10 +18,10 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         PaginatedList<NotificationDetails> GetNotifications(int start, int count);
         IList<Notification> GetNotificationsByTypes(int personId, IList<int> types, bool? wasSent = null);
 
-        void AddAnnouncementNewAttachmentNotification(int announcementId, AnnouncementType announcementType);
-        void AddAnnouncementNewAttachmentNotificationToOwner(int announcementId, AnnouncementType announcementType, int fromPersonId);
-        void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId, AnnouncementType announcementType);
-        void AddAnnouncementNotificationAnswerToStudent(int announcementQnAId, int announcementId, AnnouncementType announcementType);
+        void AddAnnouncementNewAttachmentNotification(int announcementId, AnnouncementTypeEnum announcementType);
+        void AddAnnouncementNewAttachmentNotificationToOwner(int announcementId, AnnouncementTypeEnum announcementType, int fromPersonId);
+        void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId, AnnouncementTypeEnum announcementType);
+        void AddAnnouncementNotificationAnswerToStudent(int announcementQnAId, int announcementId, AnnouncementTypeEnum announcementType);
         void AddAnnouncementSetGradeNotificationToStudent(int announcement, int recipient);
         void AddPrivateMessageNotification(int privateMessageId);
         void AddApplicationNotification(IList<Person> toPerson, Person fromPerson, Guid applicationId);
@@ -134,7 +134,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             }
         }
 
-        public void AddAnnouncementNewAttachmentNotification(int announcementId, AnnouncementType announcementType)
+        public void AddAnnouncementNewAttachmentNotification(int announcementId, AnnouncementTypeEnum announcementType)
         {
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
             var persons = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementRecipientPersons(announcementId);
@@ -146,7 +146,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotifications(notifications);
         }
 
-        public void AddAnnouncementNewAttachmentNotificationToOwner(int announcementId, AnnouncementType announcementType, int fromPersonId)
+        public void AddAnnouncementNewAttachmentNotificationToOwner(int announcementId, AnnouncementTypeEnum announcementType, int fromPersonId)
         {
             List<Person> peopleToNotify = new List<Person>();
 
@@ -175,7 +175,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         }
 
 
-        public void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId, AnnouncementType announcementType)
+        public void AddAnnouncementNotificationQnToAuthor(int announcementQnAId, int announcementId, AnnouncementTypeEnum announcementType)
         {
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
             var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
@@ -207,7 +207,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
             AddNotifications(notifications);
         }
 
-        public void AddAnnouncementNotificationAnswerToStudent(int announcementQnAId, int announcementId, AnnouncementType announcementType)
+        public void AddAnnouncementNotificationAnswerToStudent(int announcementQnAId, int announcementId, AnnouncementTypeEnum announcementType)
         {
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
             var annQnA = ann.AnnouncementQnAs.First(x => x.Id == announcementQnAId);

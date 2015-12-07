@@ -1,5 +1,6 @@
 var ChlkSessionConstants = {
     ATTACH_OPTIONS: 'attachOptions',
+    ATTRIBUTES_WITH_FILES: 'attributesWithFiles',
     FIRST_LOGIN: 'firstLogin',
     SCHOOL_YEAR:'schoolYear',
     USER_ROLE: 'role',
