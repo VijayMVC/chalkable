@@ -1347,7 +1347,7 @@
                   <Style>
                     <FontSize>8pt</FontSize>
                     <FontWeight>Bold</FontWeight>
-                    <Format>MM/dd/yyyy</Format>
+                    <Format>g</Format>
                     <Color>#888888</Color>
                   </Style>
                 </TextRun>
