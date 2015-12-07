@@ -59,9 +59,9 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
             if (ann.ClassAnnouncementData != null)
             {
-                TotalPoint = (double?) ann.ClassAnnouncementData.MaxScore;
-                WeightAddition = (double?) ann.ClassAnnouncementData.WeightAddition;
-                WeigntMultiplier = (double?) ann.ClassAnnouncementData.WeightMultiplier;
+                TotalPoint = (double?) ann.ClassAnnouncementData.MaxScore ?? ClassAnnouncement.DEFAULT_MAX_SCORE;
+                WeightAddition = (double?) ann.ClassAnnouncementData.WeightAddition ?? ClassAnnouncement.DEFAULT_WEIGHT_ADDITION;
+                WeigntMultiplier = (double?) ann.ClassAnnouncementData.WeightMultiplier ?? ClassAnnouncement.DEFAULT_WEGIHT_MULTIPLIER;
                 ShowScoreSettings = CanShowScoreSettings(ann.ClassAnnouncementData);
             }
             if (standard != null)
@@ -84,7 +84,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
         private static bool CanShowScoreSettings(ClassAnnouncement ann)
         {
-            return ann.MaxScore.HasValue && ann.WeightAddition.HasValue && ann.WeightMultiplier.HasValue
+            return ann.WeightAddition.HasValue && ann.WeightMultiplier.HasValue
                    && (ann.WeightAddition != ClassAnnouncement.DEFAULT_WEIGHT_ADDITION ||
                        ann.WeightMultiplier != ClassAnnouncement.DEFAULT_WEGIHT_MULTIPLIER);
         }
