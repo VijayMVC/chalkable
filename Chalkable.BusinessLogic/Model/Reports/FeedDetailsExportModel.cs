@@ -11,7 +11,6 @@ namespace Chalkable.BusinessLogic.Model.Reports
     public class FeedDetailsExportModel : ShortFeedExportModel
     {
         public string AnnouncementDescription { get; set; }
-        public string AnnouncementType { get; set; }
         public bool IsLessonPlan { get; set; }
         public bool ShowScoreSettings { get; set; } 
         public double? TotalPoint { get; set; }
@@ -52,7 +51,6 @@ namespace Chalkable.BusinessLogic.Model.Reports
             , ClassDetails classDetails, IList<DayType> dayTypes, IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute)
             : base(person, schoolName, sy, classDetails, dayTypes, staffs, ann)
         {
-            AnnouncementType = ann.AnnouncementTypeName;
             AnnouncementDescription = ann.Content;
             HasStandards = ann.AnnouncementStandards.Count > 0;
             HasAttachments = ann.AnnouncementAttachments.Count + ann.AnnouncementApplications.Count > 0;
