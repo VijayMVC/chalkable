@@ -938,7 +938,6 @@
       </Fields>
       <rd:DataSetInfo>
         <rd:DataSetName>NewDataSet</rd:DataSetName>
-        <rd:SchemaPath>D:\Work\chalkable-v1\Chalkable.Web\Reports\FeedReport\ShortFeedReportDataSet.xsd</rd:SchemaPath>
         <rd:TableName>ShortFeedExportModel</rd:TableName>
       </rd:DataSetInfo>
     </DataSet>
