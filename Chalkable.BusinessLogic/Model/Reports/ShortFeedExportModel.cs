@@ -26,6 +26,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public string Periods { get; set; }
         public int AnnouncementId { get; set; }
         public string AnnouncementName { get; set; }
+        public string AnnouncementType { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public bool Complete { get; set; }
@@ -59,6 +60,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
             }
             AnnouncementId = announcement.Id;
             AnnouncementName = announcement.Title;
+            AnnouncementType = announcement.AnnouncementTypeName;
             Complete = announcement.Complete;
             if (announcement.ClassAnnouncementData != null)
             {
