@@ -59,7 +59,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             if (!settings.IncludeHiddenActivities)
                 anns = anns.Where(x => x.ClassAnnouncementData == null || x.ClassAnnouncementData.VisibleForStudent).ToList();
 
-            return ShortFeedExportModel.Create(person, school.Name, sy.Name, classes, staffs, dayTypes, anns);
+            return ShortFeedExportModel.Create(person, school.Name, sy.Name, serviceLocator.Context.NowSchoolTime, classes, staffs, dayTypes, anns);
         }
 
         public string GetReportDefinitionFile()
@@ -135,7 +135,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
                 appsImages.Add(app.Id, image);
             }
            
-            return FeedDetailsExportModel.Create(person, school.Name, sy.Name, anns, classes, dayTypes, staffs, apps, appsImages);
+            return FeedDetailsExportModel.Create(person, school.Name, sy.Name, serviceLocator.Context.NowSchoolTime, anns, classes, dayTypes, staffs, apps, appsImages);
         }
 
         public string GetReportDefinitionFile()

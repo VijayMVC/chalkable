@@ -963,7 +963,7 @@
                                             <Style>None</Style>
                                           </Border>
                                           <PaddingLeft>2pt</PaddingLeft>
-                                          <PaddingRight>2pt</PaddingRight>
+                                          <PaddingRight>4pt</PaddingRight>
                                           <PaddingTop>2pt</PaddingTop>
                                           <PaddingBottom>2pt</PaddingBottom>
                                         </Style>
@@ -1343,7 +1343,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Globals!ExecutionTime</Value>
+                  <Value>=First(Fields!ExecutionDateTime.Value, "MainDataSet")</Value>
                   <Style>
                     <FontSize>8pt</FontSize>
                     <FontWeight>Bold</FontWeight>
@@ -1424,6 +1424,10 @@
           <DataField>SchoolYear</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="ExecutionDateTime">
+          <DataField>ExecutionDateTime</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
         <Field Name="IsAdminAnnouncement">
           <DataField>IsAdminAnnouncement</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
@@ -1460,6 +1464,10 @@
           <DataField>AnnouncementName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="AnnouncementType">
+          <DataField>AnnouncementType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="StartDate">
           <DataField>StartDate</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
@@ -1478,10 +1486,6 @@
         </Field>
         <Field Name="AnnouncementDescription">
           <DataField>AnnouncementDescription</DataField>
-          <rd:TypeName>System.String</rd:TypeName>
-        </Field>
-        <Field Name="AnnouncementType">
-          <DataField>AnnouncementType</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
         <Field Name="IsLessonPlan">
