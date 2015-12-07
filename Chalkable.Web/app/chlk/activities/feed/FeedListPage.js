@@ -83,7 +83,10 @@ NAMESPACE('chlk.activities.feed', function () {
             [ria.mvc.DomEventBind('change', '.submit-after-select')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function submitAfterSelect(node, event, selected_){
-                this.dom.find('#sort-submit').trigger('click');
+                if(!node.hasClass('prepared'))
+                    setTimeout(function(){
+                        this.dom.find('#sort-submit').trigger('click');
+                    }.bind(this), 10);
             },
 
             [ria.mvc.DomEventBind('click', '.gradingPeriodSelect + DIV li:last-child')],
