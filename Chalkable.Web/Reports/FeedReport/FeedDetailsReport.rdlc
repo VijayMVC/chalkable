@@ -999,7 +999,7 @@
                                                 <Style>
                                                   <FontStyle>Italic</FontStyle>
                                                   <FontSize>9pt</FontSize>
-                                                  <Format>0.0;(0.0)</Format>
+                                                  <Format>0.00;(0.00)</Format>
                                                   <Color>#9e9c96</Color>
                                                 </Style>
                                               </TextRun>
@@ -1017,7 +1017,7 @@
                                                 <Style>
                                                   <FontStyle>Italic</FontStyle>
                                                   <FontSize>9pt</FontSize>
-                                                  <Format>0.0;(0.0)</Format>
+                                                  <Format>0.00;(0.00)</Format>
                                                   <Color>#9e9c96</Color>
                                                 </Style>
                                               </TextRun>
@@ -1035,7 +1035,7 @@
                                                 <Style>
                                                   <FontStyle>Italic</FontStyle>
                                                   <FontSize>9pt</FontSize>
-                                                  <Format>0.0;(0.0)</Format>
+                                                  <Format>0.00;(0.00)</Format>
                                                   <Color>#9e9c96</Color>
                                                 </Style>
                                               </TextRun>
