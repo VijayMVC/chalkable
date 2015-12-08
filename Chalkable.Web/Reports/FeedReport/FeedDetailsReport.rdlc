@@ -877,9 +877,9 @@
                                             </Paragraphs>
                                             <rd:DefaultName>Textbox25</rd:DefaultName>
                                             <Top>0.05in</Top>
-                                            <Left>0.33252in</Left>
+                                            <Left>0.14502in</Left>
                                             <Height>0.29306in</Height>
-                                            <Width>1.63251in</Width>
+                                            <Width>1.82001in</Width>
                                             <Style>
                                               <Border>
                                                 <Color>Silver</Color>
@@ -1025,7 +1025,7 @@
                                         </Paragraphs>
                                         <rd:DefaultName>Textbox9</rd:DefaultName>
                                         <Visibility>
-                                          <Hidden>=(Fields!IsLessonPlan.Value)</Hidden>
+                                          <Hidden>=(Fields!IsLessonPlan.Value) Or (Fields!IsAdminAnnouncement.Value)</Hidden>
                                         </Visibility>
                                         <Style>
                                           <Border>
@@ -1088,7 +1088,7 @@
                                         </Paragraphs>
                                         <rd:DefaultName>Textbox20</rd:DefaultName>
                                         <Visibility>
-                                          <Hidden>=(Fields!IsLessonPlan.Value) Or (Not(Fields!ShowScoreSettings.Value))</Hidden>
+                                          <Hidden>=(Fields!IsLessonPlan.Value) Or (Not(Fields!ShowScoreSettings.Value)) Or (Fields!IsAdminAnnouncement.Value)</Hidden>
                                         </Visibility>
                                         <Style>
                                           <Border>
