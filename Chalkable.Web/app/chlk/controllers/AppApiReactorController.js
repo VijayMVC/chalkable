@@ -102,11 +102,11 @@ NAMESPACE('chlk.controllers', function (){
             [[Object]],
             function closeCurrentAppAction(data){
                 if (data.attribute_id)
-                    this.BackgroundNavigate('announcement', 'refreshAttachments'
-                        , [data.announcementId, data.announcementType]);
+                    this.BackgroundNavigate('announcement', 'refreshAttribute'
+                        , [data.announcementId, data.announcementType, data.attribute_id]);
                 else
-                    if (data.attribute_id)
-                        this.BackgroundNavigate('announcement', 'refreshAttribute'
+                    if (data.refresh_attached_files)
+                        this.BackgroundNavigate('announcement', 'refreshAttachments'
                             , [data.announcementId, data.announcementType, data.attribute_id]);
 
                 this.getView().getCurrent().close();
