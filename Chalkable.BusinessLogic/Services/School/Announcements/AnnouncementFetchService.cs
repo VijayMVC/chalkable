@@ -43,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 Announcements = new List<AnnouncementComplex>()
             };
             if (BaseSecurity.IsDistrictAdmin(Context))
-                res.Announcements = ServiceLocator.AdminAnnouncementService.GetAnnouncementsComplex(null, null, gradeLevels, complete, true, start, count);
+                res.Announcements = ServiceLocator.AdminAnnouncementService.GetAnnouncementsComplex(feedStartDate, feedEndDate, gradeLevels, complete, true, start, count);
             
             if (BaseSecurity.IsTeacher(Context) || Context.Role == CoreRoles.STUDENT_ROLE)
             {
