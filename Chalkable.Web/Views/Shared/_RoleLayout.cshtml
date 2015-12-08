@@ -263,6 +263,7 @@ else
             var newNotifications = parseInt(@ViewData.GetJsConstantValueOrNull(ViewConstants.UNSHOWN_NOTIFICATIONS_COUNT), 10) || 0;
             var azurePictureUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.AZURE_PICTURE_URL);
             var demoAzurePictureUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.DEMO_AZURE_PICTURE_URL);
+            var assessmentApplicationId = @ViewData.GetJsConstantValueOrNull(ViewConstants.ASSESSMENT_APLICATION_ID);
 
             var USER_ROLE_EXT = @ViewData.GetJsConstantValueOrNull("Rolename");
             var currentSchoolYearId = @ViewData.GetJsConstantValueOrNull(ViewConstants.CURR_SCHOOL_YEAR_ID);

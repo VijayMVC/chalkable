@@ -3,4 +3,6 @@
 //+ActionLink('funds', 'view').people(title="View Funds") Funds
 if self.isAppStoreEnabled
     +ActionLink('appmarket', 'list').apps(title="View Apps") Apps
+if self.isAppStoreEnabled && (false || self.isAssessmentAppEnabled)
+    +ActionLink('apps', 'assessment').assessment(title="Assessment") Assessment
 +ActionLink('settings', 'dashboardAdmin').settings(title="View Settings") Settings

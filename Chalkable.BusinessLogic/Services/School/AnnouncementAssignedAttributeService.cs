@@ -104,7 +104,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     AnnouncementRef = ann.Id,
                     AttributeTypeId = attributeType.Id,
-                    Text = " ",
+                    Text = "",
                     VisibleForStudents = false,
                     Name = attributeType.Name
                 };

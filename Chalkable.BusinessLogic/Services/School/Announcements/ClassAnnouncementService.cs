@@ -307,9 +307,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return GetClassAnnouncemenById(id);
         }
 
-        public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool ownerOnly = false)
+        public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false)
         {
-            var activities = GetActivities(classId, startDate, toDate, 0, int.MaxValue, null);
+            var activities = GetActivities(classId, startDate, toDate, 0, int.MaxValue, complete);
             var anns = GetByActivitiesIds(activities.Select(x => x.Id).ToList());
             var res = new List<AnnouncementDetails>();
             

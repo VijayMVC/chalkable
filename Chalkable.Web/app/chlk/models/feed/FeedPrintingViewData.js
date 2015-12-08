@@ -21,7 +21,7 @@ NAMESPACE('chlk.models.feed', function () {
                 this.includeHiddenActivities = SJX.fromValue(raw.includehiddenactivities, Boolean);
                 this.includeHiddenAttributes = SJX.fromValue(raw.includehiddenattributes, Boolean);
                 this.editableLPOption = SJX.fromValue(raw.editablelpoption, Boolean);
-                this.complete = SJX.fromValue(raw.complete, Boolean);
+                this.importantOnly = SJX.fromValue(raw.importantonly, Boolean);
                 this.announcementType = SJX.fromValue(raw.announcementtype, chlk.models.announcement.AnnouncementTypeEnum);
                 this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
             },
@@ -46,7 +46,7 @@ NAMESPACE('chlk.models.feed', function () {
 
             Boolean, 'editableLPOption',
 
-            Boolean, 'complete',
+            Boolean, 'importantOnly',
 
             chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',
 

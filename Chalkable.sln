@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 14.0.23107.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.Web", "Chalkable.Web\Chalkable.Web.csproj", "{60802BF0-AF2E-47F8-A792-7135DC7565D0}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1D736E07-C8EF-4282-9D37-2E33BA2ECB00} = {1D736E07-C8EF-4282-9D37-2E33BA2ECB00}
+	EndProjectSection
 EndProject
 Project("{CC5FD16D-436D-48AD-A40C-5A424C6E3E79}") = "Chalkable.Azure", "Chalkable.Azure\Chalkable.Azure.ccproj", "{D0243BCE-6845-4DF4-AFE5-948FF21831B2}"
 EndProject
@@ -37,6 +40,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.UserTracking", "C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.StandardImport", "Chalkable.StandardImport\Chalkable.StandardImport.csproj", "{848DA94F-BF1A-4318-82C0-930FD486C3A9}"
 EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Chalkable.Database.Master", "Chalkable.Database.Master\Chalkable.Database.Master.sqlproj", "{1D736E07-C8EF-4282-9D37-2E33BA2ECB00}"
+EndProject
+Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "Chalkable.Database.School", "Chalkable.Database.School\Chalkable.Database.School.sqlproj", "{BE01FDC7-65D4-4D0A-8FAE-ED6D67E47A44}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -61,6 +68,7 @@ Global
 		{D0243BCE-6845-4DF4-AFE5-948FF21831B2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{D0243BCE-6845-4DF4-AFE5-948FF21831B2}.Staging|Any CPU.ActiveCfg = STAGING|Any CPU
 		{D0243BCE-6845-4DF4-AFE5-948FF21831B2}.Staging|Any CPU.Build.0 = STAGING|Any CPU
+		{D0243BCE-6845-4DF4-AFE5-948FF21831B2}.Staging|Any CPU.Deploy.0 = STAGING|Any CPU
 		{CEB50B03-B84B-4194-9BEE-F1A2EBD17686}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CEB50B03-B84B-4194-9BEE-F1A2EBD17686}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CEB50B03-B84B-4194-9BEE-F1A2EBD17686}.QA|Any CPU.ActiveCfg = QA|Any CPU
@@ -181,6 +189,30 @@ Global
 		{848DA94F-BF1A-4318-82C0-930FD486C3A9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{848DA94F-BF1A-4318-82C0-930FD486C3A9}.Staging|Any CPU.ActiveCfg = Release|Any CPU
 		{848DA94F-BF1A-4318-82C0-930FD486C3A9}.Staging|Any CPU.Build.0 = Release|Any CPU
+		{1D736E07-C8EF-4282-9D37-2E33BA2ECB00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D736E07-C8EF-4282-9D37-2E33BA2ECB00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D736E07-C8EF-4282-9D37-2E33BA2ECB00}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{1D736E07-C8EF-4282-9D37-2E33BA2ECB00}.QA|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D736E07-C8EF-4282-9D37-2E33BA2ECB00}.QA|Any CPU.Build.0 = Debug|Any CPU
+		{1D736E07-C8EF-4282-9D37-2E33BA2ECB00}.QA|Any CPU.Deploy.0 = Debug|Any CPU
+		{1D736E07-C8EF-4282-9D37-2E33BA2ECB00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D736E07-C8EF-4282-9D37-2E33BA2ECB00}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D736E07-C8EF-4282-9D37-2E33BA2ECB00}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{1D736E07-C8EF-4282-9D37-2E33BA2ECB00}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
+		{1D736E07-C8EF-4282-9D37-2E33BA2ECB00}.Staging|Any CPU.Build.0 = Staging|Any CPU
+		{1D736E07-C8EF-4282-9D37-2E33BA2ECB00}.Staging|Any CPU.Deploy.0 = Staging|Any CPU
+		{BE01FDC7-65D4-4D0A-8FAE-ED6D67E47A44}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE01FDC7-65D4-4D0A-8FAE-ED6D67E47A44}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE01FDC7-65D4-4D0A-8FAE-ED6D67E47A44}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{BE01FDC7-65D4-4D0A-8FAE-ED6D67E47A44}.QA|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE01FDC7-65D4-4D0A-8FAE-ED6D67E47A44}.QA|Any CPU.Build.0 = Debug|Any CPU
+		{BE01FDC7-65D4-4D0A-8FAE-ED6D67E47A44}.QA|Any CPU.Deploy.0 = Debug|Any CPU
+		{BE01FDC7-65D4-4D0A-8FAE-ED6D67E47A44}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE01FDC7-65D4-4D0A-8FAE-ED6D67E47A44}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE01FDC7-65D4-4D0A-8FAE-ED6D67E47A44}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{BE01FDC7-65D4-4D0A-8FAE-ED6D67E47A44}.Staging|Any CPU.ActiveCfg = Staging|Any CPU
+		{BE01FDC7-65D4-4D0A-8FAE-ED6D67E47A44}.Staging|Any CPU.Build.0 = Staging|Any CPU
+		{BE01FDC7-65D4-4D0A-8FAE-ED6D67E47A44}.Staging|Any CPU.Deploy.0 = Staging|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

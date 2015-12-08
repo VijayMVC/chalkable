@@ -16,6 +16,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public string PersonLastName { get; set; }
         public string SchoolName { get; set; }
         public string SchoolYear { get; set; }
+        public DateTime ExecutionDateTime { get; set; }
 
         public bool IsAdminAnnouncement { get; set; }
         public int? ClassId { get; set; }
@@ -26,23 +27,26 @@ namespace Chalkable.BusinessLogic.Model.Reports
         public string Periods { get; set; }
         public int AnnouncementId { get; set; }
         public string AnnouncementName { get; set; }
+        public string AnnouncementType { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public bool Complete { get; set; }
         public bool IsHidden { get; set; }
+        
 
-        protected ShortFeedExportModel(Person person, string schoolName, string sy)
+        protected ShortFeedExportModel(Person person, string schoolName, string sy, DateTime nowSchoolTime)
         {
             PersonId = person.Id;
             PersonFirstName = person.FirstName;
             PersonLastName = person.LastName;
             SchoolName = schoolName;
             SchoolYear = sy;
+            ExecutionDateTime = nowSchoolTime;
         }
 
-        protected ShortFeedExportModel(Person person, string schoolName, string sy, ClassDetails c, IList<DayType> dayTypes, IList<Staff> teachers
+        protected ShortFeedExportModel(Person person, string schoolName, string sy, DateTime nowSchoolTime, ClassDetails c, IList<DayType> dayTypes, IList<Staff> teachers
             , AnnouncementComplex announcement)
-            : this(person, schoolName, sy)
+            : this(person, schoolName, sy, nowSchoolTime)
         {
             if (c != null)
             {
@@ -59,6 +63,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
             }
             AnnouncementId = announcement.Id;
             AnnouncementName = announcement.Title;
+            AnnouncementType = announcement.AnnouncementTypeName;
             Complete = announcement.Complete;
             if (announcement.ClassAnnouncementData != null)
             {
@@ -72,11 +77,12 @@ namespace Chalkable.BusinessLogic.Model.Reports
                 EndDate = announcement.LessonPlanData.EndDate;
                 IsHidden = !announcement.LessonPlanData.VisibleForStudent;
             }
-            if (announcement.AdminAnnouncementData != null)
+            var adminAnn = announcement.AdminAnnouncementData;
+            if (adminAnn != null)
             {
-                EndDate = announcement.AdminAnnouncementData.Expires;
+                EndDate = adminAnn.Expires;
                 IsAdminAnnouncement = true;
-                Owners = announcement.AdminAnnouncementData.AdminName;
+                Owners =  NameHelper.FullName(adminAnn.AdminName, "", false, adminAnn.AdminGender);
                 AdminId = announcement.AdminRef;
             }
         }
@@ -89,15 +95,16 @@ namespace Chalkable.BusinessLogic.Model.Reports
             var secondaryTeachers = staffs.Where(t => t.Id != primaryTeacher.Id && classTeachers.Any(ct=>ct.PersonRef == t.Id))
                 .OrderBy(x => x.LastName)
                 .ThenBy(x => x.FirstName)
-                .Select(x => x.FullName());
-            b.Append(primaryTeacher.FullName()).Append(", ")
-                .Append(secondaryTeachers.JoinString(", "));
+                .Select(x => x.FullName(false, true)).ToList();
+            b.Append(primaryTeacher.FullName(false, true));
+            if(secondaryTeachers.Count > 0)
+                b.Append(", ").Append(secondaryTeachers.JoinString(", "));
             return b.ToString();
         }
         
         public ShortFeedExportModel() { }
 
-        public static IList<ShortFeedExportModel> Create(Person person, string schoolName, string sy
+        public static IList<ShortFeedExportModel> Create(Person person, string schoolName, string sy, DateTime nowTime
             , IList<ClassDetails> classes, IList<Staff> staffs, IList<DayType> dayTypes, IList<AnnouncementComplex> announcements)
         {
             var res = new List<ShortFeedExportModel>(); 
@@ -110,12 +117,12 @@ namespace Chalkable.BusinessLogic.Model.Reports
                     if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
                     return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
                 }).ToList();
-                res.AddRange(anns.Select(a=> new ShortFeedExportModel(person, schoolName, sy, c, dayTypes, staffs, a)).ToList());
+                res.AddRange(anns.Select(a=> new ShortFeedExportModel(person, schoolName, sy, nowTime, c, dayTypes, staffs, a)).ToList());
             }
             var adminAnns = announcements.Where(x => x.AdminAnnouncementData != null)
                                          .OrderBy(x=>x.AdminAnnouncementData.Expires)
                                          .ToList();
-            res.AddRange(adminAnns.Select(x => new ShortFeedExportModel(person, schoolName, sy, null, dayTypes, staffs, x)));            
+            res.AddRange(adminAnns.Select(x => new ShortFeedExportModel(person, schoolName, sy, nowTime, null, dayTypes, staffs, x)));            
             return res;
         }
     }

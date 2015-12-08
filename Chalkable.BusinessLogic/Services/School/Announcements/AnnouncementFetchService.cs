@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         AnnouncementTypeEnum GetAnnouncementType(int announcementId);
         void SetSettingsForFeed(FeedSettingsInfo settings);
         FeedSettingsInfo GetSettingsForFeed();
-        IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? fromDate, DateTime? toDate, bool onlyOwners = true, int? classId = null);
+        IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = true);
     }
 
     public class AnnouncementFetchService : SchoolServiceBase, IAnnouncementFetchService
@@ -43,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 Announcements = new List<AnnouncementComplex>()
             };
             if (BaseSecurity.IsDistrictAdmin(Context))
-                res.Announcements = ServiceLocator.AdminAnnouncementService.GetAnnouncementsComplex(null, null, gradeLevels, complete, true, start, count);
+                res.Announcements = ServiceLocator.AdminAnnouncementService.GetAnnouncementsComplex(feedStartDate, feedEndDate, gradeLevels, complete, true, start, count);
             
             if (BaseSecurity.IsTeacher(Context) || Context.Role == CoreRoles.STUDENT_ROLE)
             {
@@ -144,15 +144,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, settings.ToDictionary());
         }
 
-        public IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? fromDate, DateTime? toDate, bool onlyOwners = true, int? classId = null)
+        public IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = true)
         {
             var res = new List<AnnouncementDetails>();
             if(CoreRoles.DISTRICT_ADMIN_ROLE == Context.Role || CoreRoles.STUDENT_ROLE == Context.Role)
-                res.AddRange(ServiceLocator.AdminAnnouncementService.GetAnnouncementDetailses(fromDate, toDate, classId, onlyOwners));
+                res.AddRange(ServiceLocator.AdminAnnouncementService.GetAnnouncementDetailses(fromDate, toDate, classId, complete, onlyOwners));
             if (CoreRoles.DISTRICT_ADMIN_ROLE != Context.Role)
             {
-                res.AddRange(ServiceLocator.ClassAnnouncementService.GetAnnouncementDetailses(fromDate, toDate, classId, onlyOwners));
-                res.AddRange(ServiceLocator.LessonPlanService.GetAnnouncementDetailses(fromDate, toDate, classId, onlyOwners));
+                res.AddRange(ServiceLocator.ClassAnnouncementService.GetAnnouncementDetailses(fromDate, toDate, classId, complete, onlyOwners));
+                res.AddRange(ServiceLocator.LessonPlanService.GetAnnouncementDetailses(fromDate, toDate, classId, complete, onlyOwners));
             }
             return res;
         }

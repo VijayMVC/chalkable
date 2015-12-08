@@ -40,26 +40,26 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             var staffIds = classTeachers.Select(x => x.PersonRef).Distinct().ToList();
             var staffs = staffIds.Select(y => serviceLocator.StaffService.GetStaff(y)).ToList();
 
-            
+            var onlyOwner = !isStudent;
             var anns = new List<AnnouncementComplex>();
             if (settings.LessonPlanOnly && !BaseSecurity.IsDistrictAdmin(serviceLocator.Context))
             {
-                anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, null));
+                anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, inputModel.Complete, onlyOwner));
             }
             else
             {
-                if (BaseSecurity.IsDistrictAdmin(serviceLocator.Context) || serviceLocator.Context.Role == CoreRoles.STUDENT_ROLE)
-                    anns.AddRange(serviceLocator.AdminAnnouncementService.GetAnnouncementsComplex(settings.StartDate, settings.EndDate, null, null, false));
-                if (BaseSecurity.IsTeacher(serviceLocator.Context) || serviceLocator.Context.Role == CoreRoles.STUDENT_ROLE)
+                if (BaseSecurity.IsDistrictAdmin(serviceLocator.Context) || isStudent)
+                    anns.AddRange(serviceLocator.AdminAnnouncementService.GetAnnouncementsComplex(settings.StartDate, settings.EndDate, null, inputModel.Complete, onlyOwner));
+                if (BaseSecurity.IsTeacher(serviceLocator.Context) || isStudent)
                 {
-                    anns.AddRange(serviceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(settings.StartDate, settings.EndDate, inputModel.ClassId, null));
-                    anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, null));
+                    anns.AddRange(serviceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, onlyOwner));
+                    anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, inputModel.Complete, onlyOwner));
                 }
             }
             if (!settings.IncludeHiddenActivities)
                 anns = anns.Where(x => x.ClassAnnouncementData == null || x.ClassAnnouncementData.VisibleForStudent).ToList();
 
-            return ShortFeedExportModel.Create(person, school.Name, sy.Name, classes, staffs, dayTypes, anns);
+            return ShortFeedExportModel.Create(person, school.Name, sy.Name, serviceLocator.Context.NowSchoolTime, classes, staffs, dayTypes, anns);
         }
 
         public string GetReportDefinitionFile()
@@ -100,11 +100,12 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             var staffs = staffIds.Select(y => serviceLocator.StaffService.GetStaff(y)).ToList();
             
             //Getting and Preparing Announcements details info 
+            var onlyOwner = !isStudent;
             IList<AnnouncementDetails> anns;
             if (settings.LessonPlanOnly && !BaseSecurity.IsDistrictAdmin(serviceLocator.Context))
-                anns = serviceLocator.LessonPlanService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId);
+                anns = serviceLocator.LessonPlanService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, onlyOwner);
             else 
-                anns = serviceLocator.AnnouncementFetchService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, false, inputModel.ClassId);
+                anns = serviceLocator.AnnouncementFetchService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, onlyOwner);
 
             if (!settings.IncludeHiddenActivities)
                 anns = anns.Where(x => x.ClassAnnouncementData == null || x.ClassAnnouncementData.VisibleForStudent).ToList();
@@ -134,7 +135,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
                 appsImages.Add(app.Id, image);
             }
            
-            return FeedDetailsExportModel.Create(person, school.Name, sy.Name, anns, classes, dayTypes, staffs, apps, appsImages);
+            return FeedDetailsExportModel.Create(person, school.Name, sy.Name, serviceLocator.Context.NowSchoolTime, anns, classes, dayTypes, staffs, apps, appsImages);
         }
 
         public string GetReportDefinitionFile()

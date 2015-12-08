@@ -39,7 +39,7 @@ NAMESPACE('chlk.templates.reports', function () {
             Boolean, 'editableLPOption',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'complete',
+            Boolean, 'importantOnly',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.announcement.AnnouncementTypeEnum, 'announcementType',

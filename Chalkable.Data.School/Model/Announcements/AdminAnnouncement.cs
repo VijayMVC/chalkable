@@ -16,25 +16,15 @@ namespace Chalkable.Data.School.Model.Announcements
 
         public DateTime Expires { get; set; }
         public int AdminRef { get; set; }
-
         [NotDbFieldAttr]
         public string AdminName { get; set; }
         [NotDbFieldAttr]
         public string AdminGender { get; set; }
         [NotDbFieldAttr]
-        public override string AnnouncementTypeName
-        {
-            get { return ADMIN_ANNOUNCEMENT_TYPE_NAME; }
-        }
+        public override string AnnouncementTypeName => ADMIN_ANNOUNCEMENT_TYPE_NAME;
         [NotDbFieldAttr]
-        public override AnnouncementTypeEnum Type
-        {
-            get { return AnnouncementTypeEnum.Admin; }
-        }
+        public override AnnouncementTypeEnum Type => AnnouncementTypeEnum.Admin;
         [NotDbFieldAttr]
-        public override int OwnereId
-        {
-            get { return AdminRef; }
-        }
+        public override int OwnereId => AdminRef;
     }
 }
