@@ -20,9 +20,6 @@
                                     showOtherMonths: true,
                                     selectOtherMonths: true,
                                     calendarCls: 'for-dialog',
-                                    onClose: function( selectedDate ) {
-                                        $( "#end-printing-date" ).datepicker( "option", "minDate", selectedDate );
-                                    },
                                     minDate: minDate && minDate.getDate(),
                                     maxDate: maxDate && maxDate.getDate()
                                 },
@@ -36,9 +33,6 @@
                                     showOtherMonths: true,
                                     selectOtherMonths: true,
                                     calendarCls: 'for-dialog',
-                                    onClose: function( selectedDate ) {
-                                        $( "#start-printing-date" ).datepicker( "option", "maxDate", selectedDate );
-                                    },
                                     minDate: minDate && minDate.getDate(),
                                     maxDate: maxDate && maxDate.getDate()
                                 },

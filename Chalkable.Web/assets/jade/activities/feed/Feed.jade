@@ -58,9 +58,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                                 selectOtherMonths: true,
                                 inCurrentSchoolYear: true,
                                 dateFormat: 'M d, yy',
-                                onClose: function( selectedDate ) {
-                                    $( "#toDate" ).datepicker( "option", "minDate", selectedDate );
-                                },
+                                endRangeSelector: "#toDate",
                                 maxDate: self.getEndDate() && self.getEndDate().getDate()
                             },
                             data-value=self.getStartDate() ? self.getStartDate().format('mm/dd/yy') : ''
@@ -72,9 +70,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                                 selectOtherMonths: true,
                                 inCurrentSchoolYear: true,
                                 dateFormat: 'M d, yy',
-                                onClose: function( selectedDate ) {
-                                    $( "#fromDate" ).datepicker( "option", "maxDate", selectedDate );
-                                },
+                                startRangeSelector: "#fromDate",
                                 minDate: self.getStartDate() && self.getStartDate().getDate()
                             },
                             data-value=self.getEndDate() ? self.getEndDate().format('mm/dd/yy') : ''

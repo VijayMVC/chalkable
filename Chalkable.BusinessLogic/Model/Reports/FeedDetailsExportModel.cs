@@ -11,7 +11,6 @@ namespace Chalkable.BusinessLogic.Model.Reports
     public class FeedDetailsExportModel : ShortFeedExportModel
     {
         public string AnnouncementDescription { get; set; }
-        public string AnnouncementType { get; set; }
         public bool IsLessonPlan { get; set; }
         public bool ShowScoreSettings { get; set; } 
         public double? TotalPoint { get; set; }
@@ -48,11 +47,10 @@ namespace Chalkable.BusinessLogic.Model.Reports
         
         public FeedDetailsExportModel() { }
 
-        protected FeedDetailsExportModel(Person person, string schoolName, string sy, AnnouncementDetails ann
+        protected FeedDetailsExportModel(Person person, string schoolName, string sy, DateTime nowSchoolTime, AnnouncementDetails ann
             , ClassDetails classDetails, IList<DayType> dayTypes, IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute)
-            : base(person, schoolName, sy, classDetails, dayTypes, staffs, ann)
+            : base(person, schoolName, sy, nowSchoolTime, classDetails, dayTypes, staffs, ann)
         {
-            AnnouncementType = ann.AnnouncementTypeName;
             AnnouncementDescription = ann.Content;
             HasStandards = ann.AnnouncementStandards.Count > 0;
             HasAttachments = ann.AnnouncementAttachments.Count + ann.AnnouncementApplications.Count > 0;
@@ -61,9 +59,9 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
             if (ann.ClassAnnouncementData != null)
             {
-                TotalPoint = (double?) ann.ClassAnnouncementData.MaxScore;
-                WeightAddition = (double?) ann.ClassAnnouncementData.WeightAddition;
-                WeigntMultiplier = (double?) ann.ClassAnnouncementData.WeightMultiplier;
+                TotalPoint = (double?) ann.ClassAnnouncementData.MaxScore ?? ClassAnnouncement.DEFAULT_MAX_SCORE;
+                WeightAddition = (double?) ann.ClassAnnouncementData.WeightAddition ?? ClassAnnouncement.DEFAULT_WEIGHT_ADDITION;
+                WeigntMultiplier = (double?) ann.ClassAnnouncementData.WeightMultiplier ?? ClassAnnouncement.DEFAULT_WEGIHT_MULTIPLIER;
                 ShowScoreSettings = CanShowScoreSettings(ann.ClassAnnouncementData);
             }
             if (standard != null)
@@ -86,12 +84,12 @@ namespace Chalkable.BusinessLogic.Model.Reports
 
         private static bool CanShowScoreSettings(ClassAnnouncement ann)
         {
-            return ann.MaxScore.HasValue && ann.WeightAddition.HasValue && ann.WeightMultiplier.HasValue
+            return ann.WeightAddition.HasValue && ann.WeightMultiplier.HasValue
                    && (ann.WeightAddition != ClassAnnouncement.DEFAULT_WEIGHT_ADDITION ||
                        ann.WeightMultiplier != ClassAnnouncement.DEFAULT_WEGIHT_MULTIPLIER);
         }
 
-        public static IList<FeedDetailsExportModel> Create(Person person, string schoolName, string schoolYear,
+        public static IList<FeedDetailsExportModel> Create(Person person, string schoolName, string schoolYear, DateTime nowSchoolTime,
             IList<AnnouncementDetails> anns, IList<ClassDetails> classDetailses, IList<DayType> dayTypes,
             IList<Staff> staffs, IList<Application> apps, IDictionary<Guid, byte[]> appsImages)
         {
@@ -106,33 +104,33 @@ namespace Chalkable.BusinessLogic.Model.Reports
                     if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
                     return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
                 }).ToList();
-                res.AddRange(CreateGroupOfItems(person, schoolName, schoolYear, selectedAnns, c, dayTypes, staffs, apps, appsImages));
+                res.AddRange(CreateGroupOfItems(person, schoolName, schoolYear, nowSchoolTime, selectedAnns, c, dayTypes, staffs, apps, appsImages));
             }
 
             var adminAnns = anns.Where(x => x.AdminAnnouncementData != null).ToList();
             if (adminAnns.Count > 0)
             {
                 adminAnns = adminAnns.OrderBy(x => x.AdminAnnouncementData.Expires).ToList();
-                res.AddRange(CreateGroupOfItems(person, schoolName, schoolYear, adminAnns, null, dayTypes, staffs, apps, appsImages));
+                res.AddRange(CreateGroupOfItems(person, schoolName, schoolYear, nowSchoolTime, adminAnns, null, dayTypes, staffs, apps, appsImages));
             }
             return res;
         }
 
-        private static IList<FeedDetailsExportModel> CreateGroupOfItems(Person person, string schoolName, string sy,
+        private static IList<FeedDetailsExportModel> CreateGroupOfItems(Person person, string schoolName, string sy, DateTime nowSchoolTime,
             IList<AnnouncementDetails> anns, ClassDetails classDetails, IList<DayType> dayTypes, IList<Staff> staffs, IList<Application> apps, IDictionary<Guid, byte[]> appsImages)
         {
             var items = (from a in anns
                          from sa in a.AnnouncementStandards.DefaultIfEmpty()
                          from aa in a.AnnouncementAttributes.DefaultIfEmpty()
                          from attItem in PrepareAttachmentItems(a.AnnouncementAttachments, a.AnnouncementApplications, apps, appsImages).DefaultIfEmpty()
-                         select Create(person, schoolName, sy, a, classDetails, dayTypes, staffs, sa?.Standard, aa, attItem)).ToList();
+                         select Create(person, schoolName, sy, nowSchoolTime, a, classDetails, dayTypes, staffs, sa?.Standard, aa, attItem)).ToList();
             return items;
         }
 
-        private static FeedDetailsExportModel Create(Person person, string schoolName, string sy, AnnouncementDetails ann, ClassDetails classDetails, IList<DayType> dayTypes 
+        private static FeedDetailsExportModel Create(Person person, string schoolName, string sy, DateTime nowSchoolTime, AnnouncementDetails ann, ClassDetails classDetails, IList<DayType> dayTypes 
             , IList<Staff> staffs, Standard standard, AnnouncementAssignedAttribute attribute, AttachmentItem attachmentItem)
         {
-            var res = new FeedDetailsExportModel(person, schoolName, sy, ann, classDetails, dayTypes, staffs, standard, attribute);
+            var res = new FeedDetailsExportModel(person, schoolName, sy, nowSchoolTime, ann, classDetails, dayTypes, staffs, standard, attribute);
             if (attachmentItem != null)
             {
                 res.AnnouncementAttachmentId = attachmentItem.Id;

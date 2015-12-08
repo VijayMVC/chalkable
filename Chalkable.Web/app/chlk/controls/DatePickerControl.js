@@ -8,6 +8,8 @@ NAMESPACE('chlk.controls', function () {
         chlk.controls.DatePickerControl.prototype.updateDatePicker.call(scope, node, value, true);
     };
 
+    var wasChange;
+
     /** @class chlk.controls.DatePickerControl */
     CLASS(
         'DatePickerControl', EXTENDS(chlk.controls.Base), [
@@ -84,6 +86,24 @@ NAMESPACE('chlk.controls', function () {
                     }
                 }
 
+                if(options.endRangeSelector){
+                    options.onClose = function( selectedDate ) {
+                        if(wasChange)
+                            $(options.endRangeSelector).datepicker( "option", "minDate", selectedDate );
+
+                        wasChange = false;
+                    }
+                }
+
+                if(options.startRangeSelector){
+                    options.onClose = function( selectedDate ) {
+                        if(wasChange)
+                            $(options.startRangeSelector).datepicker( "option", "maxDate", selectedDate );
+
+                        wasChange = false;
+                    }
+                }
+
                 this.queueReanimation_(attrs_.id, options, value_);
 
                 return attrs_;
@@ -96,21 +116,26 @@ NAMESPACE('chlk.controls', function () {
                     node.setValue('');
                 node.off('change.datepiker');
                 node.on('change.datepiker', function(node, event){
+                    wasChange = true;
                     var options = node.getData('options');
                     var value = jQuery(node.valueOf()).datepicker('getDate');
                     if(value){
-                        node.next().setValue(value.format('m/d/Y'));
-                        node.setData('value', value.format('m/d/Y'));
                         if(options.minDate){
                             var min = that.getServerDate(options.minDate);
-                            if(value < min)
-                                jQuery(node.getValue()).datepicker('setDate', min);
+                            if(value < min){
+                                value = min;
+                                node.$.datepicker('setDate', min);
+                            }
                         }
                         if(options.maxDate){
                             var max = that.getServerDate(options.maxDate);
-                            if(value > max)
-                                jQuery(node.getValue()).datepicker('setDate', max);
+                            if(value > max){
+                                value = max;
+                                node.$.datepicker('setDate', max);
+                            }
                         }
+                        node.next().setValue(value.format('m/d/Y'));
+                        node.setData('value', value.format('m/d/Y'));
                     }else
                         node.next().setValue('');
                 })
