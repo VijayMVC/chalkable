@@ -719,7 +719,7 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Globals!ExecutionTime</Value>
+                  <Value>=First(Fields!ExecutionDateTime.Value, "MainDataSet")</Value>
                   <Style>
                     <FontSize>8pt</FontSize>
                     <FontWeight>Bold</FontWeight>
@@ -878,6 +878,10 @@
         <Field Name="SchoolYear">
           <DataField>SchoolYear</DataField>
           <rd:TypeName>System.String</rd:TypeName>
+        </Field>
+        <Field Name="ExecutionDateTime">
+          <DataField>ExecutionDateTime</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
         </Field>
         <Field Name="IsAdminAnnouncement">
           <DataField>IsAdminAnnouncement</DataField>
