@@ -107,7 +107,7 @@ NAMESPACE('chlk.controllers', function (){
                 else
                     if (data.refresh_attached_files)
                         this.BackgroundNavigate('announcement', 'refreshAttachments'
-                            , [data.announcementId, data.announcementType, data.attribute_id]);
+                            , [data.announcementId, data.announcementType]);
 
                 this.getView().getCurrent().close();
                 return null;
