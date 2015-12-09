@@ -43,8 +43,7 @@
   "scripts": {
     "bower": "cd Chalkable.Web && node ../node_modules/bower/bin/bower install",
     "compile": "node node_modules/emp.ria-jsbuild3/bin/jsbuild3 --config ./Chalkable.Web/jsbuild.json",
-    "serve-local": "node .local/serve -D ./Chalkable.Web --ssl --cert .certs/127.cert --key .certs/127.key --cors",
-    "serve-chlk": "node .local/serve -D ./Chalkable.Web --ssl --cert .certs/chalkableall.cert.pem --key .certs/chalkableall.key --cors"
+    "serve-local": "node .local/serve -D ./Chalkable.Web --ssl --cert .certs/chalkableall.cert.pem --key .certs/chalkableall.key --cors"
   },
   "author": "Chalkable Team",
   "license": "Proprietary software",
