@@ -533,6 +533,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, Boolean]],
         function addAction(classId_, announcementTypeId_, date_, noDraft_) {
             this.getView().reset();
+            this.getView().pushD(new chlk.activities.lib.PendingActionDialog(), ria.async.Future.$fromData({}));
             this.getContext().getSession().set('classInfo', null);
             return this.announcementService
                 .addAnnouncement(classId_, announcementTypeId_)
