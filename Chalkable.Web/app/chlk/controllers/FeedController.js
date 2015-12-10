@@ -265,7 +265,8 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.isIncludeHiddenAttributes(),
                     reportViewData.isIncludeHiddenActivities(),
                     reportViewData.getClassId(),
-                    reportViewData.isImportantOnly()
+                    reportViewData.isImportantOnly(),
+                    reportViewData.getAnnouncementType()
                 )
                 .attach(this.validateResponse_())
                 .then(function () {
