@@ -49,7 +49,7 @@ namespace Chalkable.API
             {
                 if (items[i].Environment != environment) continue;
 
-                items[i].ConnectionString = ConfigurationManager.ConnectionStrings[environment].ToString();
+                items[i].ConnectionString = ConfigurationManager.ConnectionStrings[environment]?.ToString();
                 return items[i];
             }
 
