@@ -26,7 +26,7 @@ NAMESPACE('chlk.models.period', function () {
                 this.roomId = SJX.fromValue(raw.roomid, Number);
                 this.roomNumber = SJX.fromValue(raw.roomnumber, String);
                 this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
-                this.classNumber = SJX.fromValue(raw.classname, String);
+                this.classNumber = SJX.fromValue(raw.classnumber, String);
                 this.className = SJX.fromValue(raw.classname, String);
                 this.departmentId = SJX.fromValue(raw.departmentid, chlk.models.id.DepartmentId);
                 this.teacherId = SJX.fromValue(raw.teacherid, chlk.models.id.SchoolPersonId);
