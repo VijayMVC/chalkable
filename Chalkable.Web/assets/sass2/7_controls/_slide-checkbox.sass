@@ -1,0 +1,68 @@
+.slide-checkbox
+  padding: 0
+  display: inline-block
+
+  &[readonly], &[disabled]
+    opacity: 0.5
+
+  &[checked]
+    >DIV
+      background: #41b768
+
+      &:before
+        content: 'YES'
+        font: 12px/25px Arial, sans-serif
+        color: #fff
+        position: absolute
+        left: 9px
+        z-index: 0
+        top: 0
+        font-weight: bold
+
+      &:after
+        content: ''
+
+  >DIV
+    width: 60px
+    height: 24px
+    background: #56554f
+    border-radius: 12px
+    position: relative
+
+    &:after 
+      content: 'NO'
+      font: 12px/25px Arial, sans-serif
+      color: #fff
+      position: absolute
+      right: 13px
+      z-index: 0
+      font-weight: bold
+      top: 0
+      text-shadow: 1px 1px 0 rgba(255,255,255,.15)
+  
+    &.disabled
+      opacity: 0.5
+  
+
+    >LABEL
+      display: block
+      padding: 0
+      margin: 0
+      width: 18px
+      height: 18px
+
+      border-radius: 50%
+      +transition(left .4s ease)
+      cursor: pointer
+      position: absolute
+      top: 3px
+      left: 3px
+      z-index: 1
+      background: #fff
+  
+
+    >input
+      visibility: hidden
+
+      &[type=checkbox]:checked + label
+        left: 39px
