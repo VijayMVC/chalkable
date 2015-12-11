@@ -7,8 +7,8 @@ namespace Chalkable.API.Controllers
 {
     public abstract class HomeController: BaseController
     {
-        public async Task<ActionResult> Index(string mode, string code, string apiRoot, int? announcementApplicationId,
-            int? studentId, int? announcementId, int? announcementType, int? attributeId)
+        public virtual async Task<ActionResult> Index(string mode, string code, string apiRoot, int? announcementApplicationId,
+            int? studentId, int? announcementId, int? announcementType, int? attributeId, int? applicationInstallId)
         {
             if (string.IsNullOrWhiteSpace(code) || string.IsNullOrWhiteSpace(apiRoot))
                 return new EmptyResult();
@@ -23,7 +23,7 @@ namespace Chalkable.API.Controllers
                 mode = Settings.MY_VIEW_MODE;
             
             return await ResolveAction(mode, announcementApplicationId, studentId, announcementId, announcementType,
-                attributeId, StandardInfo.FromQuery(Request.Params));
+                attributeId, applicationInstallId, StandardInfo.FromQuery(Request.Params));
         }
 
         public class StandardInfo
@@ -61,7 +61,7 @@ namespace Chalkable.API.Controllers
         }
 
         protected abstract Task<ActionResult> ResolveAction(string mode, int? announcementApplicationId,
-            int? studentId, int? announcementId, int? announcementType, int? attributeId,
+            int? studentId, int? announcementId, int? announcementType, int? attributeId, int? applicationInstallId,
             IEnumerable<StandardInfo> standards);
     }
 }
