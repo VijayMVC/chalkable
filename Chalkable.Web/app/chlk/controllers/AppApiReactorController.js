@@ -101,9 +101,13 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('add-new')],
             [[Object]],
             function closeCurrentAppAction(data){
-                if (data.refresh_attached_files)
-                    this.BackgroundNavigate('announcement', 'refreshAttachments'
-                        , [data.announcementId, data.announcementType]);
+                if (data.attribute_id)
+                    this.BackgroundNavigate('announcement', 'refreshAttribute'
+                        , [data.announcementId, data.announcementType, data.attribute_id]);
+                else
+                    if (data.refresh_attached_files)
+                        this.BackgroundNavigate('announcement', 'refreshAttachments'
+                            , [data.announcementId, data.announcementType]);
 
                 this.getView().getCurrent().close();
                 return null;

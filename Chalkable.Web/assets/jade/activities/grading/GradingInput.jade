@@ -14,7 +14,15 @@ normalValue = self.getModel().getNormalValue()
     +Hidden('announcementid', self.getAnnouncementId())
     +Hidden('studentid', self.getStudentId())
     +Hidden('isCommentChanged', false)
-    input(value=normalValue, name="gradevalue", data-able-put-score=(!self.isNotAblePutScore()).toString() data-grade-value=self.getGradeValue(), type="text").grade-autocomplete.value-input
+    input(
+        value=normalValue,
+        name="gradevalue",
+        data-able-put-score=(!self.isNotAblePutScore()).toString(),
+        data-grade-value=self.getGradeValue(),
+        autofill="off",
+        autocomplete="off",
+        type="text"
+    ).grade-autocomplete.value-input
     if !self.isNotAblePutScore()
         .grading-input-popup.popup-bubble.no-triangle
             if self.isAutoDropped()

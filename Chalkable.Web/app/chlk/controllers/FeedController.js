@@ -252,6 +252,10 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('inbox')],
         [[chlk.models.feed.FeedPrintingViewData]],
         function submitFeedPrintingReportAction(reportViewData){
+            if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
+                return this.ShowAlertBox("Report start time should be less than report end time", "Error"), null;
+            }
+
             var result = this.reportingService.submitFeedReport(
                     reportViewData.getStartDate(),
                     reportViewData.getEndDate(),
@@ -261,7 +265,8 @@ NAMESPACE('chlk.controllers', function (){
                     reportViewData.isIncludeHiddenAttributes(),
                     reportViewData.isIncludeHiddenActivities(),
                     reportViewData.getClassId(),
-                    reportViewData.isImportantOnly()
+                    reportViewData.isImportantOnly(),
+                    reportViewData.getAnnouncementType()
                 )
                 .attach(this.validateResponse_())
                 .then(function () {

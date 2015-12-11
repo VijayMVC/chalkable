@@ -24,7 +24,8 @@ mixin AttachDialogSidebar(tpl, name)
         if options.isStandardAttachEnabled()
             +ActionLink('standard', 'showStandards')(class = name == 'standard' ? 'active pressed' : '').standard Standard
         if options.isShowApps()
-            +ActionLink('announcement', 'attachApps')(class = name == 'apps' ? 'active pressed' : '').apps Apps
+            if options.isAbleAttachApps()
+                +ActionLink('announcement', 'attachApps')(class = name == 'apps' ? 'active pressed' : '').apps Apps
             if options.isAssessmentAttachEnabled()
                 +ActionLink('apps', 'attachAssessmentApp', options.getAnnouncementId()
                     , options.getAssessmentAppId(), options.getAnnouncementType()

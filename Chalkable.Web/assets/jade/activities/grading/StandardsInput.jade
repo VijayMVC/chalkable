@@ -8,6 +8,14 @@
         data-comment = self.getComment()
     ).comment-value
     +Hidden('studentid', self.getStudentId().valueOf())
-    input(value=value, name="gradevalue", data-value=value, class=(value ? "" : "empty-grade" ), type="text").grade-autocomplete.value-input
+    input(
+        value=value,
+        name="gradevalue",
+        data-value=value,
+        class=(value ? "" : "empty-grade" ),
+        autofill="off",
+        autocomplete="off",
+        type="text"
+    ).grade-autocomplete.value-input
     .grading-input-popup.popup-bubble.no-triangle
         +LabeledCheckbox(Msg.Fill, 'fill', false, (self.getGradeValue() === "" || self.getGradeValue() === null))(addCallBack = true, containerClass = "fill-grade-container").fill-grade

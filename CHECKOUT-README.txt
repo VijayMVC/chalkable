@@ -7,7 +7,7 @@ Software prerequirements:
 
 Post checkout steps:
 * gem install compass
-* npm install -g grunt
+* npm install -g grunt-cli
 * npm install -g bower
 
 Post update steps:
