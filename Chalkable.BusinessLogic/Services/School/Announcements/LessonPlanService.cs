@@ -286,10 +286,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u =>  GetDetails(CreateDataAccess(u), announcementId));
         }
 
-        public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool ownerOnly = false)
+        public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false)
         {
             //TODO: rewrite this later 
-            var lps =  GetLessonPlans(startDate, toDate, classId, null);
+            var lps = GetLessonPlansForFeed(startDate, toDate, null, classId, complete, ownerOnly);
             return lps.Select(x => DoRead(u => GetDetails(CreateLessonPlanDataAccess(u), x.Id))).ToList();
         }
 

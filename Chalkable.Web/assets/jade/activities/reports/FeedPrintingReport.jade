@@ -5,9 +5,9 @@
             h1=Msg.Print.valueOf().toUpperCase()
 
         .x-window-body
-            +Hidden('announcementType', self.getAnnouncementType() && self.getAnnouncementType().valueOf())
-            +Hidden('classId', self.getClassId() && self.getClassId().valueOf())
-            +Hidden('complete', self.isComplete())
+            +Hidden('announcementtype', self.getAnnouncementType() && self.getAnnouncementType().valueOf())
+            +Hidden('classid', self.getClassId() && self.getClassId().valueOf())
+            +Hidden('importantonly', self.isImportantOnly())
             .report-content
                 TABLE.report-table
                     TR
@@ -20,9 +20,6 @@
                                     showOtherMonths: true,
                                     selectOtherMonths: true,
                                     calendarCls: 'for-dialog',
-                                    onClose: function( selectedDate ) {
-                                        $( "#end-printing-date" ).datepicker( "option", "minDate", selectedDate );
-                                    },
                                     minDate: minDate && minDate.getDate(),
                                     maxDate: maxDate && maxDate.getDate()
                                 },
@@ -36,9 +33,6 @@
                                     showOtherMonths: true,
                                     selectOtherMonths: true,
                                     calendarCls: 'for-dialog',
-                                    onClose: function( selectedDate ) {
-                                        $( "#start-printing-date" ).datepicker( "option", "maxDate", selectedDate );
-                                    },
                                     minDate: minDate && minDate.getDate(),
                                     maxDate: maxDate && maxDate.getDate()
                                 },

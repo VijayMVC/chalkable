@@ -5,6 +5,7 @@ namespace Chalkable.BusinessLogic.Model.Reports
     public class FeedReportInputModel
     {
         public int? ClassId { get; set; }
+        public bool? Complete { get; set; }
         public FeedReportSettingsInfo Settings { get; set; }
         
         public ReportingFormat? FormatTyped

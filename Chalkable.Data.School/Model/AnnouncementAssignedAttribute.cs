@@ -17,7 +17,13 @@ namespace Chalkable.Data.School.Model
         public int? AttachmentRef { get; set; }
  
         public string Name { get; set; }
-        public string Text { get; set; }
+        private string _text;
+
+        public string Text
+        {
+            get { return _text ?? ""; }
+            set { _text = value; }
+        }
         public bool VisibleForStudents { get; set; }
        
         public int? SisActivityAssignedAttributeId { get; set; }

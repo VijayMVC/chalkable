@@ -419,6 +419,7 @@ NAMESPACE('chlk.controllers', function (){
             });
 
             this.getContext().getSession().set(ChlkSessionConstants.STANDARD_IDS, standardsIds);
+            this.getContext().getSession().set(ChlkSessionConstants.STANDARDS, standards);
         },
 
         [[chlk.models.common.ChlkDate, Boolean, chlk.models.id.ClassId]],
@@ -532,6 +533,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, Boolean]],
         function addAction(classId_, announcementTypeId_, date_, noDraft_) {
             this.getView().reset();
+            this.getView().pushD(new chlk.activities.lib.PendingActionDialog(), ria.async.Future.$fromData({}));
             this.getContext().getSession().set('classInfo', null);
             return this.announcementService
                 .addAnnouncement(classId_, announcementTypeId_)
@@ -774,11 +776,20 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, chlk.models.id.AnnouncementAssignedAttributeId]],
-        function fileAttachAction(announcementId, announcementType, assignedAttributeId_){
+        function fileAttachAction(announcementId, announcementType, assignedAttributeId, appUrlAppend_){
             var result = this.announcementService.getAttachSettings(announcementId, announcementType)
                 .then(function(options){
-                    options.updateByValues(false, false, false, announcementId, null, null,
-                        announcementType, assignedAttributeId_);
+                    var standards = this.getContext().getSession().get(ChlkSessionConstants.STANDARDS, []);
+                    var standardsWithMoreCodes = (standards || []).filter(function(item){
+                        var codes = item.getCommonCoreStandardCodesArray();
+                        return codes && codes.length > 1;
+                    });
+                    var isAllStandardCodes = standardsWithMoreCodes.length > 0;
+                    var appUrlAppend = (standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&')
+                        + '&isAllStandardCodes=' + isAllStandardCodes + '&attributeId=' + assignedAttributeId.valueOf();
+
+                    options.updateByValues(false, false, null, announcementId, null, null,
+                        announcementType, assignedAttributeId, appUrlAppend, false);
                     this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
                     return new chlk.models.common.BaseAttachViewData(options);
                 }, this);

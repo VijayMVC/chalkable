@@ -70,14 +70,15 @@ NAMESPACE('chlk.activities.grading', function () {
 
                     for(var i=0; i<len; i++){
                         var item = items[i];
-                        if(item.getStandard().getStandardId() == model.getStandardId()){
-                            var standards = item.getItems();
+                        if(item.standard.standardid == model.getStandardId().valueOf()){
+                            var standards = item.items;
                             for(var j=0; j<standards.length; j++){
                                 var standard = standards[j];
-                                if(standard.getStudentId() == model.getStudentId()){
-                                    gradeId && standard.setGradeId(new chlk.models.id.GradeId(gradeId));
-                                    standard.setGradeValue(model.getGradeValue());
-                                    standard.setComment(model.getComment());
+                                if(standard.standardid == model.getStandardId().valueOf()){
+                                    if(gradeId)
+                                        standard.gradeid = gradeId;
+                                    standard.gradevalue = model.getGradeValue();
+                                    standard.comment = model.getComment();
                                     break;
                                 }
                             }
@@ -139,12 +140,22 @@ NAMESPACE('chlk.activities.grading', function () {
                 if (model instanceof chlk.models.standard.StandardGrading && this._lastModel) {
                     this._lastModel.getCurrentGradingGrid().getGradingItems()
                         .filter(function (_) {
-                            return _.getStandard().getStandardId() == model.getStandardId();
+                            return _.standard.standardid == model.getStandardId().valueOf();
                         })
                         .forEach(function (_) {
-                            _.setItems(_.getItems().map(function (_) {
-                                return _.getStudentId() == model.getStudentId() ? model : _;
-                            }))
+                            _.items = _.items.map(function (_) {
+                                var o = {
+                                    gradingperiodid: model.getGradingPeriodId().valueOf(),
+                                    standardid: model.getStandardId().valueOf(),
+                                    gradeid: model.getGradeId() && model.getGradeId().valueOf(),
+                                    studentid: model.getStudentId().valueOf(),
+                                    classid: model.getClassId().valueOf(),
+                                    gradevalue: model.getGradeValue(),
+                                    comment: model.getComment(),
+                                    numericgrade: model.getNumericGrade()
+                                };
+                                return _.studentid == model.getStudentId().valueOf() ? o : _;
+                            })
                         });
                 }
 
@@ -172,13 +183,13 @@ NAMESPACE('chlk.activities.grading', function () {
                         break;
 
                     case 'standard':
-                        var sdId = chlk.models.id.StandardId($node.getData('sort-id') | 0);
+                        var sdId = $node.getData('sort-id') | 0;
                         ordered = this._lastModel.getCurrentGradingGrid()
                             .getGradingItems()
-                            .filter(function (_) { return _.getStandard().getStandardId() == sdId })
+                            .filter(function (_) { return _.standard.standardid == sdId })
                             [0]
-                            .getItems()
-                            .map(function (_, index) { return [_.getStudentId(), _.getGradeValue(), index]; });
+                            .items
+                            .map(function (_, index) { return [new chlk.models.id.SchoolPersonId(_.studentid), _.gradevalue, index]; });
                         break;
                     default:
                         return;
@@ -201,11 +212,11 @@ NAMESPACE('chlk.activities.grading', function () {
 
                 this._lastModel.getCurrentGradingGrid().getGradingItems()
                     .forEach(function (_) {
-                        _.setItems(that.reorder_(
-                            _.getItems(),
+                        _.items = that.reorder_(
+                            _.items,
                             remap,
-                            function (_) { return _.getStudentId() }
-                        ))
+                            function (_) { return new chlk.models.id.SchoolPersonId(_.studentid) }
+                        )
                     });
 
                 _DEBUG && console.timeEnd('sorting');
@@ -228,7 +239,7 @@ NAMESPACE('chlk.activities.grading', function () {
                                 case 'name':
                                     this.dom.find('[data-sort-type=name]').setData('sort-order', newSortOrder); break;
                                 case 'standard':
-                                    this.dom.find('[data-sort-type=standard][data-sort-id=' + sdId.valueOf() + ']').setData('sort-order', newSortOrder); break;
+                                    this.dom.find('[data-sort-type=standard][data-sort-id=' + sdId + ']').setData('sort-order', newSortOrder); break;
                             }
                         }.bind(this), 17);
 

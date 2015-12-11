@@ -40,3 +40,4 @@ screens
 psd
 home page
 Chalkable.Web/app/**/*.min.js
+**/Chalkable.Database.*.dbmdl

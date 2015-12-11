@@ -69,7 +69,7 @@
                           <Top>0.49652in</Top>
                           <Left>0.09098in</Left>
                           <Height>0.14583in</Height>
-                          <Width>3.20833in</Width>
+                          <Width>3.18333in</Width>
                           <ZIndex>1</ZIndex>
                           <Style>
                             <Border>
@@ -359,7 +359,7 @@
                                               <Paragraph>
                                                 <TextRuns>
                                                   <TextRun>
-                                                    <Value>=Fields!AnnouncementName.Value</Value>
+                                                    <Value>=IIF(Fields!IsAdminAnnouncement.Value, Fields!AnnouncementName.Value,  Fields!AnnouncementType.Value &amp; " - " &amp; Fields!AnnouncementName.Value)</Value>
                                                     <Style />
                                                   </TextRun>
                                                 </TextRuns>
@@ -441,7 +441,7 @@
                                             <Height>0.27847in</Height>
                                             <Width>0.30208in</Width>
                                             <Visibility>
-                                              <Hidden>=Fields!IsHidden.Value</Hidden>
+                                              <Hidden>=Not(Fields!IsHidden.Value)</Hidden>
                                             </Visibility>
                                             <Style>
                                               <Border>
@@ -719,10 +719,11 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>=Format(Globals!ExecutionTime, "mm/dd/yyyy")</Value>
+                  <Value>=First(Fields!ExecutionDateTime.Value, "MainDataSet")</Value>
                   <Style>
                     <FontSize>8pt</FontSize>
                     <FontWeight>Bold</FontWeight>
+                    <Format>g</Format>
                     <Color>#888888</Color>
                   </Style>
                 </TextRun>
@@ -734,9 +735,9 @@
           </Paragraphs>
           <rd:DefaultName>Textbox23</rd:DefaultName>
           <Top>0.55903in</Top>
-          <Left>7.1911in</Left>
+          <Left>6.63902in</Left>
           <Height>0.14583in</Height>
-          <Width>1in</Width>
+          <Width>1.55208in</Width>
           <ZIndex>1</ZIndex>
           <Style>
             <Border>
@@ -791,7 +792,15 @@
             <Paragraph>
               <TextRuns>
                 <TextRun>
-                  <Value>="Page " + Str(Globals!PageNumber)</Value>
+                  <Value>Page </Value>
+                  <Style>
+                    <FontSize>8pt</FontSize>
+                    <FontWeight>Bold</FontWeight>
+                    <Color>#888888</Color>
+                  </Style>
+                </TextRun>
+                <TextRun>
+                  <Value>=Globals!PageNumber</Value>
                   <Style>
                     <FontSize>8pt</FontSize>
                     <FontWeight>Bold</FontWeight>
@@ -806,9 +815,9 @@
           </Paragraphs>
           <rd:DefaultName>Textbox23</rd:DefaultName>
           <Top>0.34375in</Top>
-          <Left>7.1911in</Left>
+          <Left>6.63902in</Left>
           <Height>0.14583in</Height>
-          <Width>1in</Width>
+          <Width>1.55208in</Width>
           <ZIndex>3</ZIndex>
           <Style>
             <Border>
@@ -870,6 +879,10 @@
           <DataField>SchoolYear</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="ExecutionDateTime">
+          <DataField>ExecutionDateTime</DataField>
+          <rd:TypeName>System.DateTime</rd:TypeName>
+        </Field>
         <Field Name="IsAdminAnnouncement">
           <DataField>IsAdminAnnouncement</DataField>
           <rd:TypeName>System.Boolean</rd:TypeName>
@@ -906,6 +919,10 @@
           <DataField>AnnouncementName</DataField>
           <rd:TypeName>System.String</rd:TypeName>
         </Field>
+        <Field Name="AnnouncementType">
+          <DataField>AnnouncementType</DataField>
+          <rd:TypeName>System.String</rd:TypeName>
+        </Field>
         <Field Name="StartDate">
           <DataField>StartDate</DataField>
           <rd:TypeName>System.DateTime</rd:TypeName>
@@ -926,7 +943,6 @@
       <rd:DataSetInfo>
         <rd:DataSetName>NewDataSet</rd:DataSetName>
         <rd:TableName>ShortFeedExportModel</rd:TableName>
-        <rd:ObjectDataSourceType>Chalkable.BusinessLogic.Model.Reports.ShortFeedExportModel, Chalkable.BusinessLoogic, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null</rd:ObjectDataSourceType>
       </rd:DataSetInfo>
     </DataSet>
   </DataSets>

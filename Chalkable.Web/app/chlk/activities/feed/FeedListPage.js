@@ -26,8 +26,8 @@ NAMESPACE('chlk.activities.feed', function () {
             function prepareSelect(node){
                 var value = parseInt(node.getValue());
                 if(!value || value < 1){
-                    node.setValue('');
                     node.addClass('prepared');
+                    node.setValue('');
                     setTimeout(function(){
                         node.removeClass('prepared');
                     }, 10)
@@ -50,8 +50,9 @@ NAMESPACE('chlk.activities.feed', function () {
 
             [ria.mvc.DomEventBind('change', 'select')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
-            VOID, function chengeSelect(node, event, selected_){
-                this.dom.find('.to-set').setValue('true');
+            VOID, function changeSelect(node, event, selected_){
+                if(!node.hasClass('prepared'))
+                    this.dom.find('.to-set').setValue('true');
             },
 
             [ria.mvc.DomEventBind('change', '.start-end-picker')],
@@ -70,21 +71,22 @@ NAMESPACE('chlk.activities.feed', function () {
                 if(!node.hasClass('prepared'))
                     setTimeout(function(){
                         if(node.getValue() == -1)
-                            this.dom.find('.date-range-popup').removeClass('hidden')
+                            this.dom.find('.date-range-popup').removeClass('hidden');
                         else{
                             this.dom.find('.start-end-picker').next().setValue('');
                             this.dom.find('#sort-submit').trigger('click');
                         }
 
                     }.bind(this), 10);
-
-                node.removeClass('prepared')
             },
 
             [ria.mvc.DomEventBind('change', '.submit-after-select')],
             [[ria.dom.Dom, ria.dom.Event, Object]],
             VOID, function submitAfterSelect(node, event, selected_){
-                this.dom.find('#sort-submit').trigger('click');
+                if(!node.hasClass('prepared'))
+                    setTimeout(function(){
+                        this.dom.find('#sort-submit').trigger('click');
+                    }.bind(this), 10);
             },
 
             [ria.mvc.DomEventBind('click', '.gradingPeriodSelect + DIV li:last-child')],
@@ -157,9 +159,9 @@ NAMESPACE('chlk.activities.feed', function () {
                 var that = this;
                 new ria.dom.Dom().on('click.dates', function (node, event) {
                     var target = new ria.dom.Dom(event.target), dom = that.dom, popup = dom.find('.date-range-popup');
-                    if (!popup.hasClass('hidden') && !target.isOrInside('.date-range-popup') && !target.isOrInside('.ui-datepicker-header') && !target.isOrInside('.ui-datepicker-calendar')) {
+                    if (!target.is('#sort-submit') && !popup.hasClass('hidden') && !target.isOrInside('.date-range-popup') && !target.isOrInside('.ui-datepicker-header') && !target.isOrInside('.ui-datepicker-calendar')) {
                         popup.addClass('hidden');
-                        dom.find('.to-set').setValue('false');
+                        dom.find('.to-set').setValue('');
                     }
                 });
             },
