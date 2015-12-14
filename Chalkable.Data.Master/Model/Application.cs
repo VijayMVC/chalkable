@@ -55,8 +55,13 @@ namespace Chalkable.Data.Master.Model
         public int? InternalScore { get; set; }
         public string InternalDescription { get; set; }
 
+        public const string HAS_TEACHER_EXTERNAL_ATTACH_FIELD = "HasTeacherExternalAttach";
         public bool HasTeacherExternalAttach { get; set; }
+
+        public const string HAS_STUDENT_EXTERNAL_ATTACH_FIELD = "HasStudentExternalAttach";
         public bool HasStudentExternalAttach { get; set; }
+
+        public const string HAS_ADMIN_EXTERNAL_ATTACH_FIELD = "HasAdminExternalAttach";
         public bool HasAdminExternalAttach { get; set; }
 
 

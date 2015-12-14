@@ -97,7 +97,9 @@ namespace Chalkable.Data.School.DataAccess
                 });
         }
 
-        public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, int callerId, int? personId, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
+        public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, int callerId, int? personId, IList<int> classes
+            , int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool hasAdminExternalAttach
+            , bool hasStudentExternalAttach, bool hasTeacherExternalAttach, bool canAttach, int schoolYearId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
                 {
@@ -106,10 +108,12 @@ namespace Chalkable.Data.School.DataAccess
                     {"personId", personId},
                     {"classIds", classes ?? new List<int>()},
                     {"callerRoleId", callerRoleId},
-
                     {"hasAdminMyApps", hasAdminMyApps},
                     {"hasTeacherMyApps", hasTeacherMyApps},
                     {"hasStudentMyApps", hasStudentMyApps},
+                    {"hasStudentExternalAttach", hasStudentExternalAttach},
+                    {"hasTeacherExternalAttach", hasTeacherExternalAttach},
+                    {"hasAdminExternalAttach", hasAdminExternalAttach},
                     {"canAttach", canAttach},
                     {"schoolYearId", schoolYearId}
                 };
@@ -119,7 +123,9 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int callerId, int? personId, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
+        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int callerId, int? personId, IList<int> classes
+            , int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool hasAdminExternalAttach
+            , bool hasStudentExternalAttach, bool hasTeacherExternalAttach, bool canAttach, int schoolYearId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
                 {
@@ -131,7 +137,10 @@ namespace Chalkable.Data.School.DataAccess
                     {"hasAdminMyApps", hasAdminMyApps},
                     {"hasTeacherMyApps", hasTeacherMyApps},
                     {"hasStudentMyApps", hasStudentMyApps},
-                    {"canAttach", canAttach},
+                    {"hasStudentExternalAttach", hasStudentExternalAttach},
+                    {"hasTeacherExternalAttach", hasTeacherExternalAttach},
+                    {"hasAdminExternalAttach", hasAdminExternalAttach},
+                    { "canAttach", canAttach},
                     {"schoolYearId", schoolYearId},
                     {"classIds", classes ?? new List<int>()  }
                 };
