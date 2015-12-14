@@ -22,6 +22,8 @@ NAMESPACE('chlk.templates', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'hasNextPage',
             [ria.templates.ModelPropertyBind],
-            Boolean, 'hasPreviousPage'
+            Boolean, 'hasPreviousPage',
+            [ria.templates.ModelPropertyBind],
+            String, 'filter'
         ])
 });

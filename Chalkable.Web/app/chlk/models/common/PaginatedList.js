@@ -4,13 +4,13 @@ NAMESPACE('chlk.models.common', function () {
     /** @class chlk.models.common.PaginatedList */
     CLASS(
         'PaginatedList', [
-            [[Function]],
             function $(itemClass) {
+                VALIDATE_ARG('itemClass', [Function, ria.__API.SpecifyDescriptor], itemClass);
                 BASE();
                 this.itemClass = itemClass;
             },
 
-            READONLY, Function, 'itemClass',
+            READONLY, Object, 'itemClass',
 
             ArrayOf(Object), 'items',
             Number, 'pageIndex',
@@ -20,10 +20,11 @@ NAMESPACE('chlk.models.common', function () {
             Number, 'totalPages',
             Boolean, 'hasNextPage',
             Boolean, 'hasPreviousPage',
+            String, 'filter',
 
             VOID, function setItems(values) {
                 VALIDATE_ARG('value', [ArrayOf(this.itemClass)], values);
                 this.items = values;
             }
         ])
-})
+});

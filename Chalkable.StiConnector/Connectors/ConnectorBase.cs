@@ -81,7 +81,7 @@ namespace Chalkable.StiConnector.Connectors
 
                 var endTime = DateTime.Now;
                 var time = endTime - startTime;
-                var timeString = string.Format("{0}:{1}.{2}", time.Minutes, time.Seconds, time.Milliseconds);
+                var timeString = $"{time.Minutes}:{time.Seconds}.{time.Milliseconds}";
                 Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
                 return res;
 
@@ -92,8 +92,7 @@ namespace Chalkable.StiConnector.Connectors
             }
             finally
             {
-                if (stream != null)
-                    stream.Dispose();
+                stream?.Dispose();
             }
         }
 

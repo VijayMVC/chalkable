@@ -1,4 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -14,15 +17,15 @@ namespace Chalkable.BusinessLogic.Services.School
         void Delete(IList<Staff> staffs);
         IList<Staff> GetStaffs();
         Staff GetStaff(int staffId);
-
         void AddStaffSchools(IList<StaffSchool> staffSchools);
         void EditStaffSchools(IList<StaffSchool> staffSchools);
         void DeleteStaffSchools(IList<StaffSchool> staffSchools);
         IList<StaffSchool> GetStaffSchools();
         PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName, int start, int count);
+        PaginatedList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count);
     }
 
-    public class StaffService : SchoolServiceBase, IStaffService
+    public class StaffService : SisConnectedService, IStaffService
     {
         public StaffService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -83,6 +86,28 @@ namespace Chalkable.BusinessLogic.Services.School
             schoolYearId = schoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             return DoRead(u => new StaffDataAccess(u).SearchStaff(schoolYearId, classId, studentId, filter, orderByFirstName,
                             start, count));
+        }
+
+        public PaginatedList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count)
+        {
+            start = start ?? 0;
+            count = count ?? int.MaxValue;
+
+            var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetTeachersSummaries(schoolYearId,
+                Context.NowSchoolYearTime, start.Value, count.Value, filter);
+
+            if (iNowRes == null)
+            {
+                var teachers = SearchStaff(schoolYearId, null, null, filter, true, start.Value, count.Value);
+                var classes =
+                    DoRead(u => new ClassDataAccess(u).GetClassesByTeachers(schoolYearId, teachers.Select(x => x.Id).ToList()));
+
+                return TeacherStatsInfo.Create(teachers, classes);
+            }
+
+            var teacherCount = SearchStaff(schoolYearId, null, null, filter, true, 0, 1).TotalCount;
+
+            return TeacherStatsInfo.Create(iNowRes, start.Value, count.Value, teacherCount);
         }
 
     }

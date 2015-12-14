@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Data.Common;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
+using Newtonsoft.Json.Serialization;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -27,6 +31,21 @@ namespace Chalkable.Data.School.DataAccess
                 return ReadClasses(reader);
             }
         }
+
+        private const string SP_GET_CLASSES_BY_TEACHERS = "spGetClassesByTeachers";
+
+        public IList<ClassDetails> GetClassesByTeachers(int schoolYearId, IList<int> teacherIds)
+        {
+            IDictionary<string, object> ps = new Dictionary<string, object>()
+            {
+                ["schoolYearId"] = schoolYearId,
+                ["teacherIds"] = teacherIds ?? new List<int>()
+            };
+            using (var reader = ExecuteStoredProcedureReader(SP_GET_CLASSES_BY_TEACHERS, ps))
+            {
+                return ReadClasses(reader);
+            }
+        } 
 
         public IList<ClassDetails> GetStudentClasses(int schoolYearId, int personId, int? markingPeriodId)
         {
@@ -88,7 +107,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public static IList<ClassDetails> ReadClasses(SqlDataReader reader, bool withPeriods = true)
+        public static IList<ClassDetails> ReadClasses(DbDataReader reader, bool withPeriods = true)
         {
             var classes = new List<ClassDetails>();
             while (reader.Read())
@@ -151,5 +170,39 @@ namespace Chalkable.Data.School.DataAccess
             };
             ExecuteStoredProcedure("spDeleteClasses", ps);
         }
+
+        private const string SP_GET_CLASSES_BY_SCHOOL_YEAR = "spGetClassesBySchoolYear";
+
+        public PaginatedList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int start, int count, string filter, int? teacherId)
+        {
+            var param = new Dictionary<string, object>()
+            {
+                ["schoolYearId"] = schoolYearId,
+                ["filter"] = string.IsNullOrWhiteSpace(filter) ? null : '%'+ filter+ '%',
+                ["start"] = start,
+                ["count"] = count,
+                ["teacherId"] = teacherId
+            };
+
+            return ExecuteStoredProcedurePaginated(SP_GET_CLASSES_BY_SCHOOL_YEAR, param, x=>ReadClasses(x), start, count);
+        }
+
+        private const string SP_GET_CLASSES_BY_IDS = "spGetClassesByIds";
+
+        public IList<Class> GetClassesByIds(IList<int> ids)
+        {
+            if(ids == null || ids.Count == 0)
+                return new List<Class>();
+
+            var param = new Dictionary<string, object>()
+            {
+                ["ids"] = ids
+            };
+
+            using (var reader = ExecuteStoredProcedureReader(SP_GET_CLASSES_BY_IDS, param))
+            {
+                return reader.ReadList<Class>();
+            }
+        } 
     }
 }

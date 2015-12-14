@@ -3,25 +3,7 @@
     .autocomplete-item
       width: auto
 
-.grades-page
-  position: relative
-
-  .marking-period-container
-    position: relative
-
-    &.open
-      .collapse
-        @include transform(rotate(90deg))
-
-  .collapse
-    position: absolute
-    right: 25px
-    top: 26px
-    +icons-24-sprite(arrow, 0, -6px, -4px)
-    width: 12px
-    height: 16px
-    +transition(all .2s ease-in-out)
-
+.chlk-calendar
   .arrows-row
     position: absolute
     left: 0
@@ -51,6 +33,25 @@
     &.disabled
       opacity: 0
       cursor: default
+
+.grades-page
+  position: relative
+
+  .marking-period-container
+    position: relative
+
+    &.open
+      .collapse
+        @include transform(rotate(90deg))
+
+  .collapse
+    position: absolute
+    right: 25px
+    top: 26px
+    +icons-24-sprite(arrow, 0, -6px, -4px)
+    width: 12px
+    height: 16px
+    +transition(all .2s ease-in-out)
 
   .chlk-pop-up-container.codes, .chlk-pop-up-container.comment
     display: none

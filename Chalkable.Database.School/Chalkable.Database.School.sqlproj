@@ -301,5 +301,9 @@
     <Build Include="Stored Procedures\spDeletePersons.sql" />
     <Build Include="Stored Procedures\spDeleteClasses.sql" />
     <Build Include="User Defined Types\TPrivateMessageRecipient.sql" />
+    <Build Include="Stored Procedures\spGetShortSchoolSummaries.sql" />
+    <Build Include="Stored Procedures\spGetClassesByTeachers.sql" />
+    <Build Include="Stored Procedures\spGetClassesBySchoolYear.sql" />
+    <Build Include="Stored Procedures\spGetClassesByIds.sql" />
   </ItemGroup>
 </Project>

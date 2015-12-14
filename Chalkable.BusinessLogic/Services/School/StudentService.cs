@@ -35,6 +35,7 @@ namespace Chalkable.BusinessLogic.Services.School
         StudentSummaryInfo GetStudentSummaryInfo(int studentId);
         StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId);
         //StudentAttendanceDetailsInfo GetStudentAttendanceInfo(int studentId, int markingPeriodId);
+        int GetEnrolledStudentsCount();
     }
 
     public class StudentService : SisConnectedService, IStudentService
@@ -191,6 +192,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
             }
             return StudentExplorerInfo.Create(student, classes, mostRecentAverages, standardScores, announcements, standards);
+        }
+
+        public int GetEnrolledStudentsCount()
+        {
+            return DoRead(u => new StudentDataAccess(u).GetEnrolledStudentsCount());
         }
     }
 }

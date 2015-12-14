@@ -15,11 +15,11 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<SchoolYear> Add(IList<SchoolYear> schoolYears); 
         IList<SchoolYear> Edit(IList<SchoolYear> schoolYears); 
         SchoolYear GetSchoolYearById(int id);
-        PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue);
-        IList<int> GetYears(bool activeOnly = true, bool withDateRange = true); 
+        PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue, int? schoolId = null);
+        IList<int> GetYears(); 
         void Delete(IList<int> schoolYearIds);
         SchoolYear GetCurrentSchoolYear();
-        IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true, bool withDateRange = true); 
+        IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true); 
         IList<StudentSchoolYear> GetStudentAssignments();
         void AssignStudent(IList<StudentSchoolYear> studentAssignments);
         void UnassignStudents(IList<StudentSchoolYear> studentSchoolYears);
@@ -38,18 +38,18 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new SchoolYearDataAccess(u).GetById(id));
         }
 
-        public PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue)
+        public PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue, int? schoolId = null)
         {
-            return DoRead(u => new SchoolYearDataAccess(u).GetPage(start, count));
+            return DoRead(u =>
+            {
+                var syDa = new SchoolYearDataAccess(u);
+                return (schoolId.HasValue ? syDa.GetBySchool(schoolId.Value) : syDa.GetPage(start, count));
+            });
         }
 
-        public IList<int> GetYears(bool activeOnly = true, bool withDateRange = true)
+        public IList<int> GetYears()
         {
-            var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYears().ToList();
-            if (activeOnly)
-                schoolYears = schoolYears.Where(x => x.IsActive).ToList();
-            if (withDateRange)
-                schoolYears = schoolYears.Where(x => x.StartDate.HasValue && x.EndDate.HasValue).ToList();
+            var schoolYears = ServiceLocator.SchoolYearService.GetSchoolYears();
             return schoolYears.Select(x => x.AcadYear).Distinct().OrderBy(x => x).ToList();
         }
 
@@ -68,22 +68,12 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
         
-        public IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true, bool withDateRange = true)
+        public IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true)
         {
             var conds = new AndQueryCondition {{SchoolYear.ACAD_YEAR_FIELD, year}};
             if(activeOnly)
                 conds.Add(SchoolYear.ARCHIVE_DATE, null);
-            if (withDateRange)
-            {
-                conds.Add(SchoolYear.START_DATE_FIELD, null, ConditionRelation.NotEqual);
-                conds.Add(SchoolYear.END_DATE_FIELD, null, ConditionRelation.NotEqual);
-            }
             return DoRead(u=> new SchoolYearDataAccess(u).GetAll(conds));
-        }
-
-        public IList<SchoolYear> GetDescSortedYearsByIds(IList<int> ids)
-        {
-            return DoRead(u => new SchoolYearDataAccess(u).GetByIds(ids).OrderByDescending(x => x.StartDate).ToList());
         }
 
         public IList<SchoolYear> Add(IList<SchoolYear> schoolYears)
@@ -123,6 +113,11 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(u => new DataAccessBase<StudentSchoolYear>(u).Update(studentSchoolYears));
+        }
+
+        public IList<SchoolYear> GetDescSortedYearsByIds(IList<int> ids)
+        {
+            return DoRead(u => new SchoolYearDataAccess(u).GetByIds(ids).OrderByDescending(x => x.StartDate).ToList());
         }
 
         public IList<StudentSchoolYear> GetStudentAssignments()
