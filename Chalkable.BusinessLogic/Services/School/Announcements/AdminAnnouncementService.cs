@@ -113,12 +113,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             Trace.Assert(Context.PersonId.HasValue);
             BaseSecurity.EnsureDistrictAdmin(Context);
+            var res = GetAnnouncementDetails(announcementId);
             using (var uow = Update())
             {
                 var da = CreateAdminAnnouncementDataAccess(uow);
                 var ann = da.GetAnnouncement(announcementId, Context.PersonId.Value);
                 AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
                 ValidateAdminAnnouncemen(ann, uow, da);
+                ServiceLocator.AnnouncementAssignedAttributeService.ValidateAttributes(res.AnnouncementAttributes);
                 if (ann.IsDraft)
                 {
                     ann.Created = Context.NowSchoolTime;
@@ -139,7 +141,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 throw new ChalkableException(string.Format(ChlkResources.ERR_PARAM_IS_MISSING_TMP, "Admin Announcement Title "));
             if (dataAccess.Exists(announcement.Title, Context.PersonId.Value, announcement.Id))
                 throw new ChalkableException("The item with current title already exists");
-
+            
         }
 
         public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false)

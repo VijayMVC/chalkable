@@ -140,6 +140,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 AnnouncementSecurity.EnsureInModifyAccess(res, Context);
                 if (res.ClassAnnouncementData.IsDraft)
                 {
+                    ServiceLocator.AnnouncementAssignedAttributeService.ValidateAttributes(res.AnnouncementAttributes);
                     res.ClassAnnouncementData.State = AnnouncementState.Created;
                     res.ClassAnnouncementData.Created = Context.NowSchoolTime.Date;
                     if (string.IsNullOrEmpty(res.ClassAnnouncementData.Title) 

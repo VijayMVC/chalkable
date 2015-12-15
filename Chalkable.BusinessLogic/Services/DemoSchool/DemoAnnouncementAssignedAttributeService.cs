@@ -105,7 +105,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new System.NotImplementedException();
         }
 
-        
+        public void ValidateAttributes(IList<AnnouncementAssignedAttribute> attributes)
+        {
+            throw new System.NotImplementedException();
+        }
+
+
         public AnnouncementDetails RemoveAttributeAttachment(int announcementType, int announcementId, int assignedAttributeId)
         {
             throw new System.NotImplementedException();
