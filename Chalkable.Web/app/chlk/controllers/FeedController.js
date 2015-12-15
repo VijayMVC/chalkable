@@ -92,10 +92,16 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
-        [chlk.controllers.SidebarButton('inbox')],
         [[chlk.models.id.ClassId, Boolean, Boolean, Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
             chlk.models.id.GradingPeriodId, Object, Boolean, Boolean]],
-        function listAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_) {
+        function listForProfileAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_){
+            return this.listAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_, true);
+        },
+
+        [chlk.controllers.SidebarButton('inbox')],
+        [[chlk.models.id.ClassId, Boolean, Boolean, Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
+            chlk.models.id.GradingPeriodId, Object, Boolean, Boolean, Boolean]],
+        function listAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_, isProfile_) {
 
             //todo : think about go to inow part
             if(!this.canViewFeed()){
@@ -113,8 +119,12 @@ NAMESPACE('chlk.controllers', function (){
             annType_ = annType_ instanceof chlk.models.announcement.AnnouncementTypeEnum ? annType_ : null;
 
             var result = this
-                .getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_)
+                .getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_, isProfile_)
                 .attach(this.validateResponse_());
+
+            if(isProfile_)
+                return this.UpdateView(this.getView().getCurrent().getClass(), result);
+
             return this.PushOrUpdateView(chlk.activities.feed.FeedListPage, result);
         },
 
@@ -143,25 +153,33 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushOrUpdateView(chlk.activities.feed.FeedListAdminPage, result);
         },
 
+        [[chlk.models.feed.Feed]],
+        function getAnnouncementsForProfileAction(model){
+            return this.getAnnouncementsAction(model);
+        },
+
         [chlk.controllers.SidebarButton('inbox')],
         [[chlk.models.feed.Feed]],
         function getAnnouncementsAction(model) {
             if(model.getSubmitType() == 'markDone')
                 return this.announcementService.markDone(model.getMarkDoneOption(), model.getClassId(), model.getAnnType())
                     .then(function(isMarked){
-                        return this.Redirect('feed', 'list', [model.getClassId(), null, true, 0, model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.isLatest()]);
+                        return this.Redirect('feed', 'list', [model.getClassId(), null, true, 0, model.getStartDate(), model.getEndDate(),
+                            model.getGradingPeriodId(), model.getAnnType(), model.isLatest(), null, model.isInProfile()]);
                     }, this);
 
             if(model.getSubmitType() == 'sort')
-                return this.Redirect('feed', 'list', [model.getClassId(), null, model.isImportantOnly(), 0, model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.isLatest(), model.isToSet()]);
+                return this.Redirect('feed', 'list', [model.getClassId(), null, model.isImportantOnly(), 0, model.getStartDate(), model.getEndDate(),
+                    model.getGradingPeriodId(), model.getAnnType(), model.isLatest(), model.isToSet(), model.isInProfile()]);
 
             var result = this.announcementService
-                .getAnnouncements(model.getStart(), model.getClassId(), model.isImportantOnly(), model.getStartDate(), model.getEndDate(), model.getGradingPeriodId(), model.getAnnType(), model.isLatest(), model.isToSet())
+                .getAnnouncements(model.getStart(), model.getClassId(), model.isImportantOnly(), model.getStartDate(), model.getEndDate(),
+                    model.getGradingPeriodId(), model.getAnnType(), model.isLatest(), model.isToSet())
                 .attach(this.validateResponse_())
                 .then(function(model){
                     return new chlk.models.feed.FeedItems(model.getItems());
                 });
-            return this.UpdateView(chlk.activities.feed.FeedListPage, result, chlk.activities.lib.DontShowLoader());
+            return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
         },
 
         [chlk.controllers.SidebarButton('inbox')],
@@ -192,8 +210,8 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[Boolean, Boolean, chlk.models.id.ClassId, Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
-            chlk.models.id.GradingPeriodId, chlk.models.announcement.AnnouncementTypeEnum, Boolean, Boolean]],
-        function getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_){
+            chlk.models.id.GradingPeriodId, chlk.models.announcement.AnnouncementTypeEnum, Boolean, Boolean, Boolean]],
+        function getFeedItems(postback_, importantOnly_, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_, isProfile_){
             return ria.async.wait([
                 this.announcementService.getAnnouncements(start_ | 0, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_),
                 this.gradingPeriodService.getList()
@@ -201,13 +219,20 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(result){
                     var model = result[0], gradingPeriods = result[1];
-                    var feedItems = model.getItems();
-                    if(!postback_ && importantOnly_ && feedItems.length == 0)
-                        return this.getFeedItems(postback_, false, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_);
+
+                    if(isProfile_){
+                        model.setInProfile(true);
+                        model.setClassId(classId_);
+                    }else{
+                        var feedItems = model.getItems();
+                        if(!postback_ && importantOnly_ && feedItems.length == 0)
+                            return this.getFeedItems(postback_, false, classId_, start_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_, isProfile_);
+
+                        var classBarItemsMdl = new chlk.models.classes.ClassesForTopBar(null, classId_);
+                        model.setTopData(classBarItemsMdl);
+                    }
 
                     model.setGradingPeriods(gradingPeriods);
-                    var classBarItemsMdl = new chlk.models.classes.ClassesForTopBar(null, classId_);
-                    model.setTopData(classBarItemsMdl);
                     importantOnly_ !== undefined && model.setImportantOnly(importantOnly_);
 
                     return model;

@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.classes.Class');
+REQUIRE('chlk.models.common.HoverBox');
 
 NAMESPACE('chlk.models.classes', function(){
     "use strict";
