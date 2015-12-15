@@ -82,7 +82,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getSummary(classId) {
-                return this.get('Class/ClassSummary.json', chlk.models.classes.ClassSummary, {
+                return this.get('Class/ClassInfo.json', chlk.models.classes.ClassSummary, {
                     classId: classId.valueOf()
                 });
             },

@@ -52,6 +52,9 @@ NAMESPACE('chlk.templates.feed', function () {
             [ria.templates.ModelPropertyBind],
             String, 'gradeLevels',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'inProfile',
+
             function hasFilters(){
                 return this.getAnnType() || this.getGradingPeriodId() || this.getStartDate() || this.getEndDate()
             }

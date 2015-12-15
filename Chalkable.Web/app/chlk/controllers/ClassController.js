@@ -1,6 +1,8 @@
 REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.AttendanceCalendarService');
+REQUIRE('chlk.services.AnnouncementService');
+REQUIRE('chlk.services.GradingPeriodService');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.classes.ClassScheduleViewData');
@@ -29,18 +31,33 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.AttendanceService, 'attendanceService',
 
+            [ria.mvc.Inject],
+            chlk.services.AnnouncementService, 'announcementService',
+
+            [ria.mvc.Inject],
+            chlk.services.GradingPeriodService, 'gradingPeriodService',
 
             [[chlk.models.id.ClassId]],
             function detailsAction(classId){
-                var result = this.classService
-                    .getSummary(classId)
+                var result = ria.async.wait([
+                    this.classService.getSummary(classId),
+                    this.announcementService.getAnnouncements(0, classId, true),
+                    this.gradingPeriodService.getList()
+                ])
                     .attach(this.validateResponse_())
-                    .then(function(data){
+                    .then(function(result){
+                        var model = result[0], feedModel = result[1], gradingPeriods = result[2];
+                        feedModel.setGradingPeriods(gradingPeriods);
+                        feedModel.setImportantOnly(true);
+                        feedModel.setInProfile(true);
+                        feedModel.setClassId(classId);
+                        model.setFeed(feedModel);
                         return new chlk.models.classes.ClassProfileSummaryViewData(
-                            this.getCurrentRole(), data, this.getUserClaims_(),
+                            this.getCurrentRole(), model, this.getUserClaims_(),
                             this.isAssignedToClass_(classId)
                         );
                     }, this);
+
                 return this.PushView(chlk.activities.classes.SummaryPage, result);
             },
 
