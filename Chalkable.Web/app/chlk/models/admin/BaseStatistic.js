@@ -50,7 +50,7 @@ NAMESPACE('chlk.models.admin', function () {
             },
 
             VOID, function deserialize(raw){
-                this.id = SJX.fromValue(raw.id, TId);
+                this.id = SJX.fromValue(raw.id, this.getSpecsOf('TId'));
                 this.name = SJX.fromValue(raw.name, String);
                 this.absences = SJX.fromValue(raw.attendancescount, Number);
                 this.infractionsCount = SJX.fromValue(raw.disciplinescount, Number);
