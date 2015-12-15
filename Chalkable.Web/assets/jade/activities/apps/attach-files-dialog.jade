@@ -23,19 +23,18 @@ mixin AttachDialogSidebar(tpl, name)
             +ActionLink('announcement', 'fileCabinet')(class = name == 'uploaded' ? 'active pressed' : '').uploaded Uploaded
         if options.isStandardAttachEnabled()
             +ActionLink('standard', 'showStandards')(class = name == 'standard' ? 'active pressed' : '').standard Standard
-        if options.isShowApps()
-            if options.isAbleAttachApps()
-                +ActionLink('announcement', 'attachApps')(class = name == 'apps' ? 'active pressed' : '').apps Apps
+        if options.isAbleAttachApps()
+            +ActionLink('announcement', 'attachApps')(class = name == 'apps' ? 'active pressed' : '').apps Apps
             if options.isAssessmentAttachEnabled()
                 +ActionLink('apps', 'attachAssessmentApp', options.getAnnouncementId()
                     , options.getAssessmentAppId(), options.getAnnouncementType()
                     , options.getAppUrlAppend())(class = name == options.getAssessmentAppId() ? 'active pressed' : '').assessment Assessment
-            each app in options.getExternalAttachApps()
-                style(inline=true type="text/css")
-                    | .#{prefix + app.getId().valueOf()}::before { background: url(#{app.getExternalAttachPictureUrl()}) 50% 50% no-repeat; background-size: 24px; }
-                +ActionLink('apps', 'viewExternalAttachApp', options.getAnnouncementId()
-                    , app.getId(), options.getAnnouncementType()
-                    , options.getAppUrlAppend())(class = [name == app.getId() ? 'active pressed' : '', prefix + app.getId()])= app.getName()
+        each app in options.getExternalAttachApps()
+            style(inline=true type="text/css")
+                | .#{prefix + app.getId().valueOf()}::before { background: url(#{app.getExternalAttachPictureUrl()}) 50% 50% no-repeat; background-size: 24px; }
+            +ActionLink('apps', 'viewExternalAttachApp', options.getAnnouncementId()
+                , app.getId(), options.getAnnouncementType()
+                , options.getAppUrlAppend())(class = [name == app.getId() ? 'active pressed' : '', prefix + app.getId()])= app.getName()
 
 
 options = self.getAttachOptions()
