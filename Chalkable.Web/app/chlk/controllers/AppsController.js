@@ -520,10 +520,6 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.StudyCenterEnabled()],
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,
-            chlk.models.common.RoleEnum.DISTRICTADMIN
-        ])],
         [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
         function viewExternalAttachAppAction(announcementId, appId, announcementType, appUrlAppend_) {
             if(!this.isStudyCenterEnabled())

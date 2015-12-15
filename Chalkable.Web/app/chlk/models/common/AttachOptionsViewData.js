@@ -22,7 +22,6 @@ NAMESPACE('chlk.models.common', function () {
             Boolean, 'assessmentAttachEnabled',
             Boolean, 'fileCabinetEnabled',
             Boolean, 'standardAttachEnabled',
-            Boolean, 'showApps',
             Boolean, 'ableAttachApps',
             chlk.models.id.AnnouncementAssignedAttributeId, 'assignedAttributeId',
             String, 'appUrlAppend',
@@ -34,19 +33,16 @@ NAMESPACE('chlk.models.common', function () {
                     this.assessmentAttachEnabled = true;
                 this.fileCabinetEnabled = SJX.fromValue(raw.isfilecabinetenabled, Boolean);
                 this.standardAttachEnabled = SJX.fromValue(raw.isstandardenabled, Boolean);
-                this.showApps = SJX.fromValue(raw.isappsenabled, Boolean);
                 this.externalAttachApps = SJX.fromArrayOfDeserializables(raw.externalattachapps, chlk.models.apps.Application);
-                this.ableAttachApps = this.showApps;
+                this.ableAttachApps = SJX.fromValue(raw.isappsenabled, Boolean);
             },
 
-            function updateByValues(standardAttachEnabled_, assessmentAttachEnabled_, showApps_, announcementId_, classId_,
+            function updateByValues(standardAttachEnabled_, assessmentAttachEnabled_, announcementId_, classId_,
                                     announcementTypeName_, announcementType_, assignedAttributeId_, appUrlAppend_, ableAttachApps_){
                 if(typeof standardAttachEnabled_ == 'boolean')
                     this.setStandardAttachEnabled(standardAttachEnabled_);
                 if(typeof assessmentAttachEnabled_ == 'boolean')
                     this.setAssessmentAttachEnabled(assessmentAttachEnabled_);
-                if(typeof showApps_ == 'boolean')
-                    this.setShowApps(showApps_);
                 if(typeof ableAttachApps_ == 'boolean')
                     this.setAbleAttachApps(ableAttachApps_);
                 if(announcementId_)
