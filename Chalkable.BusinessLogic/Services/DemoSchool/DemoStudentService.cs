@@ -269,5 +269,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 , inowStExpolorer.Standards.ToList(), announcements, standards);
             
         }
+
+        public int GetEnrolledStudentsCount()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -27,8 +27,8 @@ NAMESPACE('chlk.templates', function () {
                 return this.formatPictureURL_(url, sizeW_, sizeH_);
             },
 
-            function getClosestSize_(size){
-                var pictureSizes = [40, 47, 55, 64, 70, 128, 256];
+            function getClosestSize_(size, picturesSizes_){
+                var pictureSizes = picturesSizes_ || [40, 47, 55, 64, 70, 128, 256];
                 if(pictureSizes.indexOf(size) > -1)
                     return size;
                 var res = pictureSizes[pictureSizes.length - 1];
@@ -56,12 +56,33 @@ NAMESPACE('chlk.templates', function () {
                 return url;
             },
 
+            [[String, Number, Number]],
+            String, function formatClassPictureURL_(url, sizeW_, sizeH_)
+            {
+                sizeW_ = sizeW_ &&  this.getClosestSize_(sizeW_, [45, 92]);
+                sizeH_ = sizeH_ &&  this.getClosestSize_(sizeH_, [80, 164]);
+
+                if (sizeW_ && sizeH_)
+                    return url + '-' + sizeW_ + 'x' + sizeH_;
+                if (sizeW_)
+                    return url + '-' + sizeW_ + 'x' + sizeW_;
+                return url;
+            },
+
             [[Object, Number]],
             String, function getPictureURL(id, sizeW_, sizeH_, notDepartmentSpecific_){
                 if(!id)
                     return null;
                 var url = window.azurePictureUrl + id.valueOf();
                 return this.formatPictureURL_(url, sizeW_, sizeH_, true);
+            },
+
+            [[Object, Number]],
+            String, function getClassPictureURL(id, sizeW_, sizeH_, notDepartmentSpecific_){
+                if(!id)
+                    return null;
+                var url = window.azurePictureUrl + id.valueOf();
+                return this.formatClassPictureURL_(url, sizeW_, sizeH_);
             },
 
             [[Object, Number]],

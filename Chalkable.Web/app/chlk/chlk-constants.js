@@ -57,6 +57,7 @@ var ChlkSessionConstants = {
     ANNOUNCEMENT_ID: 'announcementId',
     ANNOUNCEMENT_TYPE: 'announcementType',
     STANDARD_IDS: 'StandardsIds',
+    STANDARDS: 'Standards',
     CC_STANDARD_CODES: 'StandardCodes',
     CC_STANDARDS: 'CCStandards',
     DONT_SAVE: 'noSave',

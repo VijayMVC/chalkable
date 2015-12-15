@@ -190,7 +190,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId]],
             ria.async.Future, function getClassStandardsGrid(classId, gradingPeriodId) {
-                return this.get('Grading/ClassStandardGrid', chlk.models.grading.GradingClassSummaryGridItems.OF(chlk.models.standard.StandardGradings), {
+                return this.get('Grading/ClassStandardGrid', chlk.models.grading.GradingClassSummaryGridItems.OF(Object), {
                     classId: classId.valueOf(),
                     gradingPeriodId: gradingPeriodId.valueOf()
                 });

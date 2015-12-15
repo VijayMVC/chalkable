@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using Chalkable.Common;
 using Chalkable.Data.Common;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -99,6 +102,36 @@ namespace Chalkable.Data.School.DataAccess
         {
             public int AlphaGradeId { get; set; }
             public int ClassId { get; set; }
+        }
+
+        private const string SP_GET_SHORT_SCHOOL_SUMMARIES = "spGetShortSchoolSummaries";
+
+        public PaginatedList<ShortSchoolSummary> GetShortSchoolSummaries(int start, int count, string filter)
+        {
+            var param = new Dictionary<string, object>()
+            {
+                ["filter"] = "%" + filter + "%",
+                ["start"] = start,
+                ["count"] = count
+            };
+
+            var res = ExecuteStoredProcedurePaginated<ShortSchoolSummary>(SP_GET_SHORT_SCHOOL_SUMMARIES, param, start, count);
+
+            return res;
+        }
+
+        public int GetShoolsCount(string filter)
+        {   
+            var param = new Dictionary<string, object>()
+            {
+                ["filter"] = "%" + filter + "%",
+                ["start"] = 0,
+                ["count"] = 1
+            };
+
+            var res = ExecuteStoredProcedurePaginated<ShortSchoolSummary>(SP_GET_SHORT_SCHOOL_SUMMARIES, param, 0, 1);
+
+            return res.TotalCount;
         }
     }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
@@ -9,6 +10,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -25,9 +27,11 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteSchoolOptions(IList<SchoolOption> schoolOptions);
         SchoolOption GetSchoolOption();
         StartupData GetStartupData();
+        PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter);
+        int GetSchoolsCount(string filter = null);
     }
 
-    public class SchoolService : SchoolServiceBase, ISchoolService
+    public class SchoolService : SisConnectedService, ISchoolService
     {
         public SchoolService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -136,6 +140,26 @@ namespace Chalkable.BusinessLogic.Services.School
             //TODO: add this to storage procedure
             res.GradingPeriods = ServiceLocator.GradingPeriodService.GetGradingPeriodsDetails(Context.SchoolYearId.Value);
             return res;
+        }
+
+        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter)
+        {
+            start = start ?? 0;
+            count = count ?? int.MaxValue;
+
+            var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSchoolsSummaries(Context.NowSchoolTime, filter);
+
+            if (iNowRes == null)
+                return SchoolSummaryInfo.Create(DoRead( u => new SchoolDataAccess(u).GetShortSchoolSummaries(start.Value, count.Value, filter)));
+
+            var allSchoolCount = GetSchoolsCount(filter);
+
+            return SchoolSummaryInfo.Create(iNowRes, start.Value, count.Value, allSchoolCount);
+        }
+
+        public int GetSchoolsCount(string filter = null)
+        {
+            return DoRead(u => new SchoolDataAccess(u).GetShoolsCount(filter));
         }
     }
 }

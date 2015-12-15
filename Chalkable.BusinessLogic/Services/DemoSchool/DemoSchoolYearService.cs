@@ -99,10 +99,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             SchoolYearStorage = new DemoSchoolYearStorage();
         }
 
-        public PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue)
+        public PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue, int? schoolId = null)
         {
             var schoolYears = SchoolYearStorage.GetAll();
             return new PaginatedList<SchoolYear>(schoolYears, start/count, count, schoolYears.Count);
+        }
+
+        public IList<int> GetYears()
+        {
+            throw new NotImplementedException();
         }
 
         public IList<int> GetYears(bool activeOnly = true, bool withDateRange = true)
@@ -123,6 +128,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public SchoolYear GetCurrentSchoolYear()
         {
             return SchoolYearStorage.GetCurrentSchoolYear();
+        }
+
+        public IList<SchoolYear> GetSchoolYearsByAcadYear(int year, bool activeOnly = true)
+        {
+            throw new NotImplementedException();
         }
 
         public static SchoolYear GetDemoSchoolYear()

@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.grading', function () {
     /** @class chlk.templates.grading.ShortGradingClassStandardsGridItemsTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/grading/ShortGradingClassStandardsGridItems.jade')],
-        [ria.templates.ModelBind(chlk.models.grading.GradingClassSummaryGridItems.OF(chlk.models.standard.StandardGradings))],
+        [ria.templates.ModelBind(chlk.models.grading.GradingClassSummaryGridItems.OF(Object))],
         'ShortGradingClassStandardsGridItemsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
@@ -17,7 +17,7 @@ NAMESPACE('chlk.templates.grading', function () {
             ArrayOf(chlk.models.grading.StudentWithAvg), 'students',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.standard.StandardGradings), 'gradingItems',
+            ArrayOf(Object), 'gradingItems',
 
             [ria.templates.ModelPropertyBind],
             Number, 'avg',
@@ -33,10 +33,10 @@ NAMESPACE('chlk.templates.grading', function () {
 
             chlk.models.id.ClassId, 'classId',
 
-            ArrayOf(chlk.models.standard.StandardGradings), function getGradingItemsOrdered() {
+            Array, function getGradingItemsOrdered() {
                 Assert(Array.isArray(this.gradingItems));
                 return (this.gradingItems || []).sort(function (_1, _2) {
-                    return _1.getTitle() < _2.getTitle() ? -1 : _1.getTitle() > _2.getTitle() ? 1 : 0;
+                    return _1.standard.name < _2.standard.name ? -1 : _1.standard.name > _2.standard.name ? 1 : 0;
                 });
             },
 
@@ -48,6 +48,12 @@ NAMESPACE('chlk.templates.grading', function () {
 
             function getTbWidth(){
                 return ria.dom.Dom('#content').width() - 412;
-            }
+            },
+
+            String, function getTooltip(gradingItem){
+                var standard = gradingItem.standard;
+                return standard.description ? standard.name + " | " + standard.description
+                    : standard.name;
+            },
         ]);
 });

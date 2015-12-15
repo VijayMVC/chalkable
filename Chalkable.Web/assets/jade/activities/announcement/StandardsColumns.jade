@@ -10,9 +10,8 @@ mixin StandardColumn(tplObj, standards)
                         .name(data-tooltip=standard.displayTitle(), data-tooltip-type="overflow")=standard.displayTitle()
                         .right-triangle
 
-    else
-        td
-           .standards-description=tplObj.getDescription()
+    td
+       .standards-description=tplObj.getDescription()
 
 
 each standardsList in self.getStandardsTable().getStandardsColumns()

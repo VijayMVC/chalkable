@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
@@ -99,6 +100,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             staffs = orderByFirstName ? staffs.OrderBy(x => x.FirstName) : staffs.OrderBy(x => x.LastName);
             return new PaginatedList<Staff>(staffs.ToList(), start / count, count);
             
+        }
+
+        public PaginatedList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count)
+        {
+            throw new NotImplementedException();
         }
     }
 }

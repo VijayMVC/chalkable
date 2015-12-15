@@ -1,15 +1,20 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
+REQUIRE('chlk.models.id.SchoolId');
+REQUIRE('chlk.models.schoolYear.Year');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
 
 
-    /** @class chlk.services.Account */
+    /** @class chlk.services.SchoolYearService */
     CLASS(
-        'AccountService', EXTENDS(chlk.services.BaseService), [
-            ria.async.Future, function getRoles() {
-                return this.get('chalkable2/app/data/roles.json', ArrayOf(chlk.models.common.NameId));
+        'SchoolYearService', EXTENDS(chlk.services.BaseService), [
+            [[chlk.models.id.SchoolId]],
+            ria.async.Future, function list(schoolId_) {
+                return this.get('SchoolYear/List.json', ArrayOf(chlk.models.schoolYear.Year), {
+                    schoolId: schoolId_ && schoolId_.valueOf()
+                });
             }
         ])
 });
