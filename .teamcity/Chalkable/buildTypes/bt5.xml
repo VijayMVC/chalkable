@@ -16,7 +16,7 @@
       <param name="env.AZURE_STORAGE_ACCESS_KEY" value="zxxda1db24a9e0854386ffb9225581b53b11e8068db01aac7fa326fea8c13c7d40c0c8a7535bb0801a9a16d0aa1c6d74044c021f9e34eb150819c6e8c3320f88eff36cd35d4c321162ec3192c5ba9431098e9520b6646dbdf75775d03cbe80d301b" spec="password display='hidden'" />
       <param name="env.BUILD_BRANCH" value="%vcsroot.branchName%" />
       <param name="env.BUILD_COUNTER" value="%build.counter%" />
-      <param name="env.NUGET_API_KEY" value="17e84fd4-037d-4d65-8812-242f372dfda6" />
+      <param name="env.NUGET_API_KEY" value="zxx75fb5e2c5084ec89c3dd56e5159453ee1f10eaf56173e59497fb821c45f636c5c2ec30e8af0dff7c" spec="password display='hidden'" />
       <param name="env.PEM_ENCRYPTION_SECRET" value="zxxb518bd5a770ce9ee28a6b89b530d041bef9450c060986f1ca2df77aca73da318" spec="password display='hidden'" />
       <param name="env.RAYGUN_AUTHTOKEN" value="zxxdcfd4d7a5253c38f710f6e0d35995be18543f795223130a90ac54ee3bda21c69775d03cbe80d301b" spec="password display='hidden'" />
     </parameters>
