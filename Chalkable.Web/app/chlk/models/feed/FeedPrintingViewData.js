@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 
 NAMESPACE('chlk.models.feed', function () {
     "use strict";
