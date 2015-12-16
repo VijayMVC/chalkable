@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Chalkable.API.Models;
 
 namespace Chalkable.API.Controllers
 {
@@ -28,9 +29,11 @@ namespace Chalkable.API.Controllers
                 attributeId, applicationInstallId, StandardInfo.FromQuery(Request.Params));
         }
 
-        protected virtual async Task<Models.SchoolPerson> GetCurrentUser(string mode)
+        protected virtual async Task<SchoolPerson> GetCurrentUser(string mode)
         {
-            return await new ChalkableConnector(ChalkableAuthorization).Person.GetMe();
+            return mode == Settings.SYSADMIN_MODE
+                ? SchoolPerson.SYSADMIN
+                : await new ChalkableConnector(ChalkableAuthorization).Person.GetMe();
         }
 
         public class StandardInfo
