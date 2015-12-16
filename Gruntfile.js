@@ -325,10 +325,12 @@ module.exports = function(grunt) {
     
     nugetpack: {
         dist: {
-            src: 'Chalkable.API/Chalkable.API.nuspec',
+            src: 'Chalkable.API/Chalkable.API.csproj',
             dest: 'Chalkable.API/',
             options: {
-                symbols: true                
+                build: true,
+                symbols: true,
+                properties: "Configuration=Release"
             }
         }        
     },
