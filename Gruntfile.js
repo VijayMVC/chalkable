@@ -1,11 +1,17 @@
 module.exports = function(grunt) {
 
   var encryptionSecret = process.env.PEM_ENCRYPTION_SECRET;
+  var nugetApiKey = process.env.NUGET_API_KEY;
 
   var buildNumber = grunt.option("build.number");
   var vcsRevision = grunt.option("vcs.revision");
   var vcsBranch = grunt.option("vcs.branch");
   var buildCounter = buildNumber.split('-').pop();
+  var semVer = function () {
+    var x = buildNumber.split('-');
+    x[2] = 0;
+    return x.join('.');
+  }();
   
   var today = new Date().toISOString().slice(0, 10);
   
@@ -123,6 +129,14 @@ module.exports = function(grunt) {
         }, {
           from: '${vcs.branch}',
           to: vcsBranch
+        }]
+      },
+      nuget_version: {
+        src: ['Chalkable.API/Chalkable.API.nuspec'],
+        dest: ['Chalkable.API/Chalkable.API.nuspec'],
+        replacements: [{
+          from: '$version$',
+          to: semVer
         }]
       }
     },
@@ -307,6 +321,23 @@ module.exports = function(grunt) {
           dest: 'Chalkable.Web/Content/images2/'                 
         }]
       }
+    },
+    
+    nugetpack: {
+        dist: {
+            src: 'Chalkable.API/Chalkable.API.nuspec',
+            dest: 'Chalkable.API/'
+        }
+    },
+    
+    nugetpush: {
+        dist: {
+            src: 'Chalkable.API/*.nupkg',
+       
+            options: {
+              apiKey: nugetApiKey
+            }
+        }
     }
   });
 
@@ -325,6 +356,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-usemin');
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
+  grunt.loadNpmTasks('grunt-nuget');
   
   // simple build task 
   grunt.registerTask('usemin-build', [
@@ -348,6 +380,10 @@ module.exports = function(grunt) {
   var postBuildTasks = ['imagemin', 'deploy-artifacts'];
   if (['staging', 'qa'].indexOf(vcsBranch) >= 0) {
     postBuildTasks.push('deploy-to-azure', 'raygun-create-deployment');
+  }
+  
+  if (['qa'].indexOf(vcsBranch) >= 0) {
+    postBuildTasks.push('nugetpack', 'nugetpush');
   }
   
   grunt.registerTask('post-checkout', ['clean', 'compass']);
