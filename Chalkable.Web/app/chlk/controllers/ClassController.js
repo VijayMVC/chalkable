@@ -37,6 +37,16 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.GradingPeriodService, 'gradingPeriodService',
 
+            function isFeedReadonly(clazz){
+                var teacherIds = clazz.getTeachersIds();
+                var currentUserId = this.getCurrentPerson().getId();
+                var permissionEnum = chlk.models.people.UserPermissionEnum;
+                var isLinksEnabled = this.userIsAdmin() && this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ADMIN)
+                    || (this.userIsTeacher() && this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM)
+                    && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
+                return !isLinksEnabled;
+            },
+
             [[chlk.models.id.ClassId]],
             function detailsAction(classId){
                 var result = ria.async.wait([
@@ -51,6 +61,7 @@ NAMESPACE('chlk.controllers', function (){
                         feedModel.setImportantOnly(true);
                         feedModel.setInProfile(true);
                         feedModel.setClassId(classId);
+                        feedModel.setReadonly(this.isFeedReadonly(model));
                         model.setFeed(feedModel);
                         return new chlk.models.classes.ClassProfileSummaryViewData(
                             this.getCurrentRole(), model, this.getUserClaims_(),
