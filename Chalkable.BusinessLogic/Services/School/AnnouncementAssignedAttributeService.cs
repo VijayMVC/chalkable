@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Web.UI.WebControls;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
@@ -25,6 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         AnnouncementAssignedAttribute GetAssignedAttributeById(int announcementAssignedAttributeId);
         AnnouncementAssignedAttribute RemoveAttachment(int announcementAssignedAttributeId);
         IList<AnnouncementAssignedAttribute> CopyNonStiAttributes(int fromAnnouncementId, int toAnnouncementId);
+        void ValidateAttributes(IList<AnnouncementAssignedAttribute> attributes);
     }
 
     public class AnnouncementAssignedAttributeService : SisConnectedService, IAnnouncementAssignedAttributeService
@@ -40,7 +43,7 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolLocalId.HasValue);
 
-            ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(announcementId); // security check
+            var annoncement = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(announcementId); // security check
             if (inputAttributes != null)
             {
                 DoUpdate(u =>
@@ -58,6 +61,7 @@ namespace Chalkable.BusinessLogic.Services.School
                             attribute.AttributeTypeId = inputAttr.AttributeTypeId;
                             attribute.AttachmentRef = inputAttr.AttachmentId;
                         }
+                        if(!annoncement.IsDraft) ValidateAttributes(attributesForUpdate);
                         da.Update(attributesForUpdate);
                     });
             }
@@ -343,5 +347,13 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
+        public void ValidateAttributes(IList<AnnouncementAssignedAttribute> attributes)
+        {
+            foreach (var attr in attributes)
+            {
+                if (string.IsNullOrWhiteSpace(attr.Text))
+                    throw new ChalkableException("Looks like you forgot to include any text with your assignment.");
+            }
+        }
     }
 }

@@ -52,7 +52,7 @@ NAMESPACE('chlk.models.grading', function () {
                 this.roundDisplayedAverages = SJX.fromValue(raw.rounddisplayedaverages, Boolean);
                 this.gradingPeriod = SJX.fromDeserializable(raw.gradingperiod, chlk.models.schoolYear.GradingPeriod);
                 this.students = SJX.fromArrayOfDeserializables(raw.students, chlk.models.grading.StudentWithAvg);
-                this.studentAverages = SJX.fromArrayOfDeserializables(raw.totalavarages, chlk.models.grading.StudentAverageInfo);
+                this.studentAverages = SJX.fromArrayOfDeserializables(raw.totalaverages, chlk.models.grading.StudentAverageInfo);
                 this.studentTotalPoints = SJX.fromArrayOfDeserializables(raw.totalpoints, chlk.models.grading.StudentTotalPoint);
                 this.gradingItems = SJX.fromArrayOfDeserializables(raw.gradingitems, chlk.models.announcement.ShortAnnouncementViewData);
                 this.includeWithdrawnStudents = SJX.fromValue(raw.includewithdrawnstudents, Boolean);

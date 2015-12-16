@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
@@ -27,7 +28,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<SchoolYear> GetDescSortedYearsByIds(IList<int> ids);
     }
 
-    public class SchoolYearService : SchoolServiceBase, ISchoolYearService
+    public class SchoolYearService : SisConnectedService, ISchoolYearService
     {
         public SchoolYearService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -40,11 +41,19 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public PaginatedList<SchoolYear> GetSchoolYears(int start = 0, int count = int.MaxValue, int? schoolId = null)
         {
-            return DoRead(u =>
-            {
-                var syDa = new SchoolYearDataAccess(u);
-                return (schoolId.HasValue ? syDa.GetBySchool(schoolId.Value) : syDa.GetPage(start, count));
-            });
+            var acadSessions = ConnectorLocator.UsersConnector.GetUserAcadSessionsIds(); 
+            
+            var conds = new AndQueryCondition();
+            if(schoolId.HasValue)
+                conds.Add(SchoolYear.SCHOOL_REF_FIELD, schoolId.Value);
+
+            var res = DoRead(u => new SchoolYearDataAccess(u).GetAll(conds));
+            res = res.Where(x => acadSessions.Contains(x.Id)).ToList();
+
+            if (res.Count == 0)
+                throw new ChalkableException("Current user does not have access to any of school acadSessions");
+            
+            return new PaginatedList<SchoolYear>(res, start/count, count, res.Count);
         }
 
         public IList<int> GetYears()

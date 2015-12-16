@@ -207,6 +207,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     ln.Created = Context.NowSchoolTime.Date;
                     da.Update(ln);
                 }
+                ServiceLocator.AnnouncementAssignedAttributeService.ValidateAttributes(res.AnnouncementAttributes);
                 u.Commit();
             }
         }
