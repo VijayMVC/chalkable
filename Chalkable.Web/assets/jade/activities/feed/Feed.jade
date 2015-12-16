@@ -39,11 +39,10 @@ div(class = noComplete ? "no-complete" : "").feed-container
             input(type="hidden", name="sorttype", value=self.isLatest()).latest-earliest-input
             input(type="submit", name="submitType", value="sort")#sort-submit.x-hidden
             +Hidden('toSet', '').to-set
-            if !self.isInProfile()
-                input(type="hidden", name=isAdmin ? "gradeLevels" : "classId", value=selected)
+            input(type="hidden", name=isAdmin && !self.isInProfile() ? "gradeLevels" : "classId", value=selected)
 
             .left-buttons-block(class=self.hasFilters() ? '' : 'hidden')
-                if self.isImportantOnly() && self.items.length
+                if !self.isInProfile() && self.isImportantOnly() && self.items.length
                     input(type="submit", name="submitType", value="markDone")#mark-done-submit.x-hidden
                     +Select('markDoneOption')(data-placeholder = 'Mark Done', value = 0).markDoneSelect
                         +Option(0, '', false)
@@ -111,4 +110,4 @@ div(class = noComplete ? "no-complete" : "").feed-container
             )
                 Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
                 each item in self.items
-                    +FeedItem(item)
+                    +FeedItem(item, self.isReadonly())

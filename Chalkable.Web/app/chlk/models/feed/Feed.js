@@ -51,6 +51,8 @@ NAMESPACE('chlk.models.feed', function () {
 
             ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'items',
 
+            Boolean, 'readonly',
+
             Boolean, 'importantOnly',
 
             Number, 'importantCount',
