@@ -22,7 +22,7 @@ NAMESPACE('chlk.models.feed', function () {
                 this.includeHiddenAttributes = SJX.fromValue(raw.includehiddenattributes, Boolean);
                 this.editableLPOption = SJX.fromValue(raw.editablelpoption, Boolean);
                 this.importantOnly = SJX.fromValue(raw.importantonly, Boolean);
-                this.announcementType = SJX.fromValue(raw.announcementtype, chlk.models.announcement.AnnouncementTypeEnum);
+                this.announcementType = raw.announcementtype ? SJX.fromValue(raw.announcementtype, chlk.models.announcement.AnnouncementTypeEnum) : null;
                 this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
             },
 
