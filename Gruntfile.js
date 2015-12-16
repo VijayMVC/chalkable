@@ -326,13 +326,16 @@ module.exports = function(grunt) {
     nugetpack: {
         dist: {
             src: 'Chalkable.API/Chalkable.API.nuspec',
-            dest: 'Chalkable.API/'
-        }
+            dest: 'Chalkable.API/',
+            options: {
+                symbols: true                
+            }
+        }        
     },
     
     nugetpush: {
         dist: {
-            src: 'Chalkable.API/*.nupkg',
+            src: 'Chalkable.API/Chalkable.API.' + semVer + '.nupkg',
        
             options: {
               apiKey: nugetApiKey
@@ -375,6 +378,7 @@ module.exports = function(grunt) {
   grunt.registerTask('deploy-artifacts', ['azure-cdn-deploy']);  
   grunt.registerTask('deploy-to-azure', ['decrypt', 'azure-cs-deploy']);
   grunt.registerTask('raygun-create-deployment', ['replace:raygun_deployment_version', 'raygun_deployment']);
+  grunt.registerTask('nuget-publish', ['replace:nuget_version', 'nugetpack', 'nugetpush']);
   
   // branch specific tasks
   var postBuildTasks = ['imagemin', 'deploy-artifacts'];
@@ -383,7 +387,7 @@ module.exports = function(grunt) {
   }
   
   if (['qa'].indexOf(vcsBranch) >= 0) {
-    postBuildTasks.push('nugetpack', 'nugetpush');
+    postBuildTasks.push('nuget-publish');
   }
   
   grunt.registerTask('post-checkout', ['clean', 'compass']);
