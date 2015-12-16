@@ -82,7 +82,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     ValidateAdminAnnouncemen(adminAnnouncement, uow, da);
                 da.Update(adminAnnouncement);
                 uow.Commit();
-                return da.GetDetails(adminAnnouncementId, Context.PersonId.Value, Context.RoleId);
+                return InternalGetDetails(da, adminAnnouncementId); // da.GetDetails(adminAnnouncementId, Context.PersonId.Value, Context.RoleId);
             }    
         }
 
@@ -147,7 +147,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false)
         {
             var anns = GetAnnouncementsComplex(startDate, toDate, null, complete, ownerOnly);
-            return anns.Select(x => DoRead(u => CreateDataAccess(u).GetDetails(x.Id, Context.PersonId.Value, Context.RoleId))).ToList();
+            return DoRead(u => InternalGetDetailses(CreateDataAccess(u), anns.Select(x=>x.Id).ToList()));
         }
 
         public override void DeleteAnnouncement(int announcementId)
@@ -175,34 +175,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var ann = GetAnnouncementById(adminAnnouncementId); //security check
             DoUpdate(u => SubmitAnnouncementGroups(ann.Id, groupsIds, u));
         }
-
-        public override Announcement GetAnnouncementById(int id)
-        {
-            return GetAdminAnnouncementById(id);
-        }
         
-        public override AnnouncementDetails GetAnnouncementDetails(int announcementId)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u =>
-                {
-                    var res = CreateDataAccess(u).GetDetails(announcementId, Context.PersonId.Value, Context.RoleId);
-                    if(res == null) 
-                        throw new NoAnnouncementException();
-                    return res;
-                });
-        }
-
         public AdminAnnouncement GetAdminAnnouncementById(int adminAnnouncementId)
         {
-            Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u =>
-            {
-                var res = CreateDataAccess(u).GetAnnouncement(adminAnnouncementId, Context.PersonId.Value);
-                if (res == null)
-                    throw new NoAnnouncementException();
-                return res;
-            });
+            return InternalGetAnnouncementById(adminAnnouncementId);
         }
 
 

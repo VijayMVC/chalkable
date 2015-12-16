@@ -25,6 +25,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
 
         //TODO: rewrite this later
+        
         public override void Update(LessonPlan entity)
         {
             SimpleUpdate<Announcement>(entity);
@@ -91,17 +92,16 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 return res;
             }
         }
-
-        public override AnnouncementDetails GetDetails(int id, int callerId, int? roleId)
+        public override IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId)
         {
             var parameters = new Dictionary<string, object>
                 {
-                    {"lessonPlanId", id},
+                    {"lessonPlanIds", ids},
                     {"callerId", callerId},
                     {"callerRole", roleId},
                     {"schoolYearId", schoolYearId}
                 };
-           return GetDetails("spGetLessonPlanDetails", parameters);
+            return GetDetailses("spGetLessonPlansDetailses", parameters);
         }
 
         protected override LessonPlan ReadAnnouncementData(AnnouncementComplex announcement, SqlDataReader reader)
