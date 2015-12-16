@@ -9,7 +9,10 @@ NAMESPACE('chlk.templates.announcement', function () {
         [ria.templates.ModelBind(chlk.models.feed.FeedItems)],
         'FeedItemsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'items'
+            ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'items',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'readonly'
 
         ]);
 });

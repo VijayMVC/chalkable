@@ -75,6 +75,8 @@ NAMESPACE('chlk.models.feed', function () {
 
             Boolean, 'inProfile',
 
-            Boolean, 'toSet'
+            Boolean, 'toSet',
+
+            Boolean, 'readonly'
         ]);
 });

@@ -112,7 +112,7 @@ namespace Chalkable.Web.Controllers
                 Json(ClassStatsViewData.Create(classes));
         }
 
-        [AuthorizationFilter("DistrictAdmin")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Summary(int classId)
         {
             var clazz = SchoolLocator.ClassService.GetClassDetailsById(classId);

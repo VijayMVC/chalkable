@@ -11,7 +11,29 @@ NAMESPACE('chlk.activities.classes', function () {
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('profile')],
         [ria.mvc.TemplateBind(chlk.templates.classes.ClassSummary)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.feed.Feed, null, '.feed-stats', ria.mvc.PartialUpdateRuleActions.Replace)],
-        [ria.mvc.PartialUpdateRule(chlk.templates.announcement.FeedItemsTpl, null, '.chlk-grid', ria.mvc.PartialUpdateRuleActions.Append)],
-        'SummaryPage', EXTENDS(chlk.activities.feed.BaseFeedPage), [ ]);
+        'SummaryPage', EXTENDS(chlk.activities.feed.BaseFeedPage), [
+
+            Boolean, 'readonly',
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.feed.Feed, null)],
+            VOID, function feedUpdate(tpl, model, msg_) {
+                model.setReadonly(this.isReadonly());
+                tpl.setReadonly(this.isReadonly());
+                tpl.renderTo(this.dom.find('.feed-stats').setHTML(''));
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.FeedItemsTpl, null)],
+            VOID, function feedItemsUpdate(tpl, model, msg_) {
+                model.setReadonly(this.isReadonly());
+                tpl.setReadonly(this.isReadonly());
+                tpl.renderTo(this.dom.find('.chlk-grid'));
+            },
+
+            [[Object]],
+            OVERRIDE, VOID, function onRefresh_(model) {
+                BASE(model);
+                this.setReadonly(model.getClazz().getFeed().isReadonly());
+            }
+
+        ]);
 });

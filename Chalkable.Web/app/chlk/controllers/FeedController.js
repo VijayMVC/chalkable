@@ -164,13 +164,13 @@ NAMESPACE('chlk.controllers', function (){
             if(model.getSubmitType() == 'markDone')
                 return this.announcementService.markDone(model.getMarkDoneOption(), model.getClassId(), model.getAnnType())
                     .then(function(isMarked){
-                        return this.Redirect('feed', 'list', [model.getClassId(), null, true, 0, model.getStartDate(), model.getEndDate(),
-                            model.getGradingPeriodId(), model.getAnnType(), model.isLatest(), null, model.isInProfile()]);
+                        return this.Redirect('feed', model.isInProfile() ? 'listForProfile' : 'list', [model.getClassId(), null, true, 0, model.getStartDate(), model.getEndDate(),
+                            model.getGradingPeriodId(), model.getAnnType(), model.isLatest(), null]);
                     }, this);
 
             if(model.getSubmitType() == 'sort')
-                return this.Redirect('feed', 'list', [model.getClassId(), null, model.isImportantOnly(), 0, model.getStartDate(), model.getEndDate(),
-                    model.getGradingPeriodId(), model.getAnnType(), model.isLatest(), model.isToSet(), model.isInProfile()]);
+                return this.Redirect('feed', model.isInProfile() ? 'listForProfile' : 'list', [model.getClassId(), null, model.isImportantOnly(), 0, model.getStartDate(), model.getEndDate(),
+                    model.getGradingPeriodId(), model.getAnnType(), model.isLatest(), model.isToSet()]);
 
             var result = this.announcementService
                 .getAnnouncements(model.getStart(), model.getClassId(), model.isImportantOnly(), model.getStartDate(), model.getEndDate(),
