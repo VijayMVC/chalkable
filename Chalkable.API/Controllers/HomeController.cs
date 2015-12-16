@@ -21,9 +21,16 @@ namespace Chalkable.API.Controllers
 
             if (string.IsNullOrWhiteSpace(mode))
                 mode = Settings.MY_VIEW_MODE;
-            
+
+            CurrentUser = await GetCurrentUser(mode);
+
             return await ResolveAction(mode, announcementApplicationId, studentId, announcementId, announcementType,
                 attributeId, applicationInstallId, StandardInfo.FromQuery(Request.Params));
+        }
+
+        protected virtual async Task<Models.SchoolPerson> GetCurrentUser(string mode)
+        {
+            return await new ChalkableConnector(ChalkableAuthorization).Person.GetMe();
         }
 
         public class StandardInfo
