@@ -1,7 +1,6 @@
 -var classes = self.getItems()
--var isNotEmptyAttendances = self.isNotEmptyAttendances()
--var isNotEmptyDisciplines = self.isNotEmptyDisciplines()
--var isNotEmptyGrades = self.isNotEmptyGrades()
+-var isNotEmptyStatistic = self.isNotEmptyStatistic()
+
 -var schoolYearId = classes[0] && classes[0].getSchoolYearId()
 
 .chlk-calendar.chlk-grid
@@ -14,11 +13,9 @@
                 .cell.name=Msg.Classes
                 .cell.teacher-name=Msg.Teacher
                 .cell.students=Msg.Students
-                if isNotEmptyAttendances
+                if isNotEmptyStatistic
                     .cell.attendance=Msg.Attendance
-                if isNotEmptyDisciplines
                     .cell.discipline=Msg.Discipline
-                if isNotEmptyGrades
                     .cell.grades=Msg.Grade_Avg
             each clazz in classes
                 .grid-row
@@ -26,25 +23,23 @@
                         .icon
                             .pic
                                 +ClassImg(clazz, 24, 43)
-                        +ActionLink('class', 'info', clazz.getId())=clazz.getName()
+                        +ActionLink('class', 'info', clazz.getId())(data-tooltip = (clazz.getClassNumber() || '') + ' '+  clazz.getName())=clazz.getName()
                     .cell.teacher-name=clazz.getPrimaryTeacherName()
                     .cell.students=clazz.getStudentsCount()
-                    if isNotEmptyAttendances
+                    if isNotEmptyStatistic
                         .cell.attendance
                             .circle(
                                 data-tooltip = clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent',
                                 class = clazz.getAbsencesClass()
                             )=clazz.getAbsences()
-                    if isNotEmptyDisciplines
                         .cell.discipline
                             .circle(
                                 data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today',
                                 class = clazz.getInfractionsClass()
                             )=clazz.getInfractionsCount()
-                    if isNotEmptyGrades
                         .cell.grades
                             .circle(
-                                data-tooltip=clazz.getAvg() + '% Average',
+                                data-tooltip=clazz.getAvg() && (clazz.getAvg() + '% Average'),
                                 class = clazz.getAvgClass()
                             )=clazz.getAvg()
         else

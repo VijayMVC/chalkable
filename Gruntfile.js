@@ -171,6 +171,14 @@ module.exports = function(grunt) {
           expand: true,
           src: 'ServiceConfiguration.{Staging,QA,Support,Release,Sales,Staging2}.cscfg',
           cwd: './Chalkable.Azure/'
+        },{
+          expand: true,
+          src: '*.dacpac',
+          cwd: './Chalkable.Database.Master/bin/Release'
+        },{
+          expand: true,
+          src: '*.dacpac',
+          cwd: './Chalkable.Database.School/bin/Release'
         }]
       },
       statics: {

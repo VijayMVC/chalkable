@@ -17,10 +17,13 @@ NAMESPACE('chlk.models.school', function () {
 
             String, 'primaryTeacherName',
 
+            String, 'classNumber',
+
             OVERRIDE, VOID, function deserialize(raw){
                 BASE(raw);
                 this.departmentId = SJX.fromValue(raw.departmentref, chlk.models.id.DepartmentId);
                 this.primaryTeacherName = SJX.fromValue(raw.primaryteacherdisplayname, String);
+                this.classNumber = SJX.fromValue(raw.classnumber, String);
             }
         ]);
 });

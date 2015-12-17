@@ -11,16 +11,10 @@ NAMESPACE('chlk.templates.district', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.admin.BaseStatistic), 'items',
 
-            Boolean, function isNotEmptyAttendances(){
-                return this.getItems().filter(function(school){return school.getAbsences() !== null}).length > 0
-            },
-
-            Boolean, function isNotEmptyDisciplines(){
-                return this.getItems().filter(function(school){return school.getInfractionsCount() !== null}).length > 0
-            },
-
-            Boolean, function isNotEmptyGrades(){
-                return this.getItems().filter(function(school){return school.getAvg() !== null}).length > 0
+            Boolean, function isNotEmptyStatistic(){
+                return (this.getItems().filter(function(school){return school.getAvg() !== null}).length +
+                    this.getItems().filter(function(school){return school.getInfractionsCount() !== null}).length +
+                    this.getItems().filter(function(school){return school.getAbsences() !== null}).length) > 0
             }
         ])
 });

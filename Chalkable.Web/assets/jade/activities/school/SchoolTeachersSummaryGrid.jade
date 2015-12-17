@@ -1,7 +1,5 @@
 -var teachers = self.getItems()
--var isNotEmptyAttendances = self.isNotEmptyAttendances()
--var isNotEmptyDisciplines = self.isNotEmptyDisciplines()
--var isNotEmptyGrades = self.isNotEmptyGrades()
+-var isNotEmptyStatistic = self.isNotEmptyStatistic()
 -var schoolYearId = teachers[0] && teachers[0].getSchoolYearId()
 -var schoolId = teachers[0] && teachers[0].getSchoolId()
 -var schoolName = teachers[0] && teachers[0].getSchoolName()
@@ -16,11 +14,9 @@
                 .cell.name=Msg.Teacher
                 .cell.classes=Msg.Classes
                 .cell.students=Msg.Students
-                if isNotEmptyAttendances
+                if isNotEmptyStatistic
                     .cell.attendance=Msg.Attendance
-                if isNotEmptyDisciplines
                     .cell.discipline=Msg.Discipline
-                if isNotEmptyGrades
                     .cell.grades=Msg.Grade_Avg
             each teacher in teachers
                 .grid-row
@@ -36,22 +32,20 @@
                                 if i < classes.length - 1
                                     span ,&nbsp;
                     .cell.students=teacher.getStudentsCount()
-                    if isNotEmptyAttendances
+                    if isNotEmptyStatistic
                         .cell.attendance
                             .circle(
                                 data-tooltip = teacher.getStudentsCount() + ' Students, ' + teacher.getAbsences() + ' Absent',
                                 class = teacher.getAbsencesClass()
                             )=teacher.getAbsences()
-                    if isNotEmptyDisciplines
                         .cell.discipline
                             .circle(
                                 data-tooltip=teacher.getInfractionsCount() + ' Discipline Infractions Today',
                                 class = teacher.getInfractionsClass()
                             )=teacher.getInfractionsCount()
-                    if isNotEmptyGrades
                         .cell.grades
                             .circle(
-                                data-tooltip=teacher.getAvg() + '% Average',
+                                data-tooltip=teacher.getAvg() && (teacher.getAvg() + '% Average'),
                                 class = teacher.getAvgClass()
                             )=teacher.getAvg()
         else
