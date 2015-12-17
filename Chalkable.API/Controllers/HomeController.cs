@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Chalkable.API.Models;
 
 namespace Chalkable.API.Controllers
 {
@@ -21,9 +22,18 @@ namespace Chalkable.API.Controllers
 
             if (string.IsNullOrWhiteSpace(mode))
                 mode = Settings.MY_VIEW_MODE;
-            
+
+            CurrentUser = await GetCurrentUser(mode);
+
             return await ResolveAction(mode, announcementApplicationId, studentId, announcementId, announcementType,
                 attributeId, applicationInstallId, StandardInfo.FromQuery(Request.Params));
+        }
+
+        protected virtual async Task<SchoolPerson> GetCurrentUser(string mode)
+        {
+            return mode == Settings.SYSADMIN_MODE
+                ? SchoolPerson.SYSADMIN
+                : await new ChalkableConnector(ChalkableAuthorization).Person.GetMe();
         }
 
         public class StandardInfo

@@ -9,8 +9,9 @@
   overflow: hidden
 
   input[type=checkbox]
-    top: 100px
+    //top: 100px
     position: relative
+    opacity: 0
 
     &.partially-checked+label,  &:checked+label
       position: absolute
@@ -35,10 +36,10 @@
     &.partially-checked+label
       background: #6BBA71
 
-    &[disabled], &[readonly]
-      -webkit-filter: grayscale(100%)
-      filter: grayscale(100%)
-
+    &[disabled], &[readonly], &:disabled
+      & + label
+        -webkit-filter: grayscale(100%)
+        filter: grayscale(100%)
 
 .labeled-checkbox
   display: inline-block

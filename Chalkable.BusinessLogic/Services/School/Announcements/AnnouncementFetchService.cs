@@ -50,9 +50,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 var anns = new List<AnnouncementComplex>();
                 if (!settings.AnnouncementType.HasValue)
                 {
-                    var classAnns =
-                        ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate,
-                            feedEndDate, classId, complete, true, null, start, count + 1);
+                    var classAnns = ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate, feedEndDate, classId, complete, true, null, start, count + 1);
 
                     if (start > 0 && classAnns.Count == 0)
                         return res;
@@ -72,8 +70,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
                     if (Context.Role == CoreRoles.STUDENT_ROLE)
                         anns.AddRange(ServiceLocator.AdminAnnouncementService.GetAnnouncementsComplex(feedStartDate, feedEndDate, gradeLevels, complete, false));
-                    anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(feedStartDate,
-                        feedEndDate, null, classId, complete, true));
+                    anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(feedStartDate, feedEndDate, null, classId, complete, true));
                 }
                 else switch ((AnnouncementTypeEnum) settings.AnnouncementType.Value)
                 {

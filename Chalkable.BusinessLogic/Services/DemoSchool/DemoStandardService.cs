@@ -391,6 +391,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return StandardStorage.GetStandardParentsSubTree(standardId);
         }
 
+        public IList<Standard> PrepareStandardsCodesData(IList<Standard> standards)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<AnnouncementStandardDetails> PrepareAnnouncementStandardsCodes(IList<AnnouncementStandardDetails> announcementStandards)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards)
         {
