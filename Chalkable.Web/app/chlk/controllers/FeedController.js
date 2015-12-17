@@ -92,6 +92,7 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.ClassId, Boolean, Boolean, Number, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate,
             chlk.models.id.GradingPeriodId, Object, Boolean, Boolean]],
         function listForProfileAction(classId_, postback_, importantOnly_, start_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_){
@@ -153,12 +154,13 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushOrUpdateView(chlk.activities.feed.FeedListAdminPage, result);
         },
 
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.feed.Feed]],
         function getAnnouncementsForProfileAction(model){
             return this.getAnnouncementsAction(model);
         },
 
-        [chlk.controllers.SidebarButton('inbox')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.feed.Feed]],
         function getAnnouncementsAction(model) {
             if(model.getSubmitType() == 'markDone')
@@ -182,7 +184,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
         },
 
-        [chlk.controllers.SidebarButton('inbox')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.feed.FeedAdmin]],
         function getAnnouncementsDistrictAdminAction(model) {
             if(model.getSubmitType() == 'markDone')
@@ -262,7 +264,7 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
-        [chlk.controllers.SidebarButton('inbox')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.ClassId, Boolean]],
         function feedPrintingAction(classId_, importantOnly_) {
             var result = this.reportingService.getFeedReportSettings(classId_)
@@ -274,7 +276,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.feed.FeedPrintingDialog, result);
         },
 
-        [chlk.controllers.SidebarButton('inbox')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.feed.FeedPrintingViewData]],
         function submitFeedPrintingReportAction(reportViewData){
             if (Date.compare(reportViewData.getStartDate().getDate() , reportViewData.getEndDate().getDate()) > 0){
