@@ -215,19 +215,18 @@ namespace Chalkable.BusinessLogic.Services.School
             count = count ?? int.MaxValue;
 
             var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value, count.Value, filter);
+            using (var u = Read())
+            {
+                var da = new ClassDataAccess(u);
+                if (iNowRes == null)
+                    return (da.GetClassesBySchoolYear(schoolYearId, start.Value, count.Value, filter, teacherId)).Transform(ClassStatsInfo.Create);
 
-            if (iNowRes == null)
-                return ClassStatsInfo.Create(
-                    DoRead(u => new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start ?? 0, count ?? int.MaxValue, filter, teacherId)));
+                var classes = da.GetClassesByIds(iNowRes.Select(x => x.SectionId).ToList());
+                var classesCount = da.GetClassesBySchoolYear(schoolYearId, 0, 1, filter, teacherId).TotalCount;
 
-            var classes = DoRead(u => new ClassDataAccess(u).GetClassesByIds(iNowRes.Select(x => x.SectionId).ToList()));
-
-            var classesCount =
-                DoRead( u => new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, 0, 1, filter, teacherId)).TotalCount;
-
-            var res = iNowRes.Select(x => ClassStatsInfo.Create(x, classes.FirstOrDefault(y => y.Id == x.SectionId))).ToList();
-
-            return new PaginatedList<ClassStatsInfo>(res, start.Value/count.Value, count.Value, classesCount);
+                var res = iNowRes.Select(x => ClassStatsInfo.Create(x, classes.FirstOrDefault(y => y.Id == x.SectionId))).ToList();
+                return new PaginatedList<ClassStatsInfo>(res, start.Value / count.Value, count.Value, classesCount);
+            }
         }
     }
 }

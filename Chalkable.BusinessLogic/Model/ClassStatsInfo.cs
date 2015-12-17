@@ -38,24 +38,19 @@ namespace Chalkable.BusinessLogic.Model
 
         public static ClassStatsInfo Create(ClassDetails classDetails)
         {
-            return new ClassStatsInfo()
+            return new ClassStatsInfo
             {
                 Id = classDetails.Id,
                 Name = classDetails.Name,
                 DepartmentRef = classDetails.ChalkableDepartmentRef,
 
-                PrimaryTeacherDisplayName = classDetails.PrimaryTeacher?.FullName(upper: false),
+                PrimaryTeacherDisplayName = classDetails.PrimaryTeacher?.FullName(false),
                 StudentsCount = classDetails.StudentsCount,
 
                 AttendancesCount = null,
                 Average = null,
                 DisciplinesCount = null
             };
-        }
-
-        public static PaginatedList<ClassStatsInfo> Create(PaginatedList<ClassDetails> classes)
-        {
-            return new PaginatedList<ClassStatsInfo>(classes.Select(Create), classes.PageIndex, classes.PageSize, classes.TotalCount);
         }
     }
 }
