@@ -44,7 +44,7 @@
                     if isNotEmptyGrades
                         .cell.grades
                             .circle(
-                                data-tooltip=clazz.getAvg() + '% Average',
+                                data-tooltip=clazz.getAvg() && (clazz.getAvg() + '% Average'),
                                 class = clazz.getAvgClass()
                             )=clazz.getAvg()
         else

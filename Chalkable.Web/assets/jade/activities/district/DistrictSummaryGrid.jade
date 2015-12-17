@@ -40,7 +40,7 @@
                     if isNotEmptyGrades
                         .cell.grades
                             .circle(
-                                data-tooltip=school.getAvg() + '% Average',
+                                data-tooltip=school.getAvg() && (school.getAvg() + '% Average'),
                                 class = school.getAvgClass()
                             )=school.getAvg()
         else
