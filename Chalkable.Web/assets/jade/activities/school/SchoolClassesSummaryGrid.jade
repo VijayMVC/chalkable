@@ -26,7 +26,7 @@
                         .icon
                             .pic
                                 +ClassImg(clazz, 24, 43)
-                        +ActionLink('class', 'info', clazz.getId())=clazz.getName()
+                        +ActionLink('class', 'info', clazz.getId())(data-tooltip = (clazz.getClassNumber() || '') + ' '+  clazz.getName())=clazz.getName()
                     .cell.teacher-name=clazz.getPrimaryTeacherName()
                     .cell.students=clazz.getStudentsCount()
                     if isNotEmptyAttendances
