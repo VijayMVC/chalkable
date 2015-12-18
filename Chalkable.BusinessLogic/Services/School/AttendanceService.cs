@@ -25,6 +25,7 @@ namespace Chalkable.BusinessLogic.Services.School
         StudentAttendanceSummary GetStudentAttendanceSummary(int studentId, int? gradingPeriodId);
         ClassAttendanceSummary GetClassAttendanceSummary(int classId, int? gradingPeriodId);
         IList<ClassPeriodAttendance> GetClassPeriodAttendances(int classId, DateTime start, DateTime end);
+        Task<IList<DailyAttendanceSummary>> GetDailyAttendanceSummaries(int classId, DateTime? startDate, DateTime? endDate);
     }
 
     public class AttendanceService : SisConnectedService, IAttendanceService
@@ -383,13 +384,10 @@ namespace Chalkable.BusinessLogic.Services.School
             return null;
         }
 
-        public async Task<IList<DailyAttendanceSummary>> GetDailyAttendanceSummaries(int classId, DateTime? startDate,
-            DateTime? endDate)
+        public async Task<IList<DailyAttendanceSummary>> GetDailyAttendanceSummaries(int classId, DateTime? startDate, DateTime? endDate)
         {
-            return
-                (await
-                    ConnectorLocator.SectionDashboardConnector.GetAttendanceDailySummaries(classId, startDate, endDate))
-                    .Select(DailyAttendanceSummary.Create).ToList();
+            var inowRes = await ConnectorLocator.SectionDashboardConnector.GetAttendanceDailySummaries(classId, startDate, endDate);
+            return inowRes.Select(DailyAttendanceSummary.Create).ToList();
         }
     }
 }

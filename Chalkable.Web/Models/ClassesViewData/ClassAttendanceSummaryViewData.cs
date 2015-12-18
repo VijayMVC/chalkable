@@ -1,37 +1,28 @@
-﻿using System;
-using Chalkable.BusinessLogic.Model.Attendances;
-using Chalkable.Data.School.Model;
+﻿using System.Collections.Generic;
+using Chalkable.Web.Logic;
+using Chalkable.Web.Models.DisciplinesViewData;
 
 namespace Chalkable.Web.Models.ClassesViewData
 {
-    public class ClassAttendanceSummaryViewData : ClassViewData
+    public class ClassAttendanceSummaryViewData
     {
-        public BaseBoxesViewData Absences { get; set; }
-        public BaseBoxesViewData Lates { get; set; }
-        public BaseBoxesViewData Presents { get; set; }
-        
-        protected ClassAttendanceSummaryViewData(ClassDetails classDetails)
-            : base(classDetails)
-        {   
-        }
-        public static ClassAttendanceSummaryViewData Create(ClassDetails classDetails, ClassAttendanceSummary attendanceSummary)
-        {
-            return new ClassAttendanceSummaryViewData(classDetails)
-                {
-                    Absences = BuildBoxViewData(attendanceSummary, x => x.Absences, 5),
-                    Lates = BuildBoxViewData(attendanceSummary, x => x.Tardies, 10),
-                    Presents = BuildBoxViewData(attendanceSummary, x => x.Presents, 101)
-                };
-        }
+        public int ClassId { get; set; }
+        public int DatePerioType { get; set; }
+        public IList<DailyStatsViewData> Absences { get; set; } 
+        public IList<DailyStatsViewData> Lates { get; set; }
+        public IList<DailyStatsViewData> Presents { get; set; }
 
-        private static BaseBoxesViewData BuildBoxViewData(ClassAttendanceSummary attendanceSummary, Func<ClassAttendanceSummary, decimal?> getAttendanceAction, int persents)
+        public static ClassAttendanceSummaryViewData Create(int classId, ClassLogic.DatePeriodTypeEnum datePeriodType
+            , IList<DailyStatsViewData> dailyAbsences, IList<DailyStatsViewData> dailyLates, IList<DailyStatsViewData> dailyPresents)
         {
-            var attIssues = getAttendanceAction(attendanceSummary) ?? 0;
-            return new BaseBoxesViewData
-                {
-                    Title = attIssues.ToString(),
-                    IsPassing = ((attIssues * 100) / attendanceSummary.PosibleAttendanceCount < persents)
-                };
+            return new ClassAttendanceSummaryViewData
+            {
+                ClassId = classId,
+                DatePerioType = (int) datePeriodType,
+                Absences = dailyAbsences,
+                Lates = dailyLates,
+                Presents = dailyPresents
+            };
         }
     }
 }

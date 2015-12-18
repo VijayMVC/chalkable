@@ -26,10 +26,9 @@ namespace Chalkable.Web.Models.DisciplinesViewData
     {
         public DateTime Date { get; set; }
         public string Summary { get; set; }
-        public int Number { get; set; }
-
+        public decimal Number { get; set; }
         
-        public static DailyStatsViewData Create(DateTime date, int number, string format)
+        public static DailyStatsViewData Create(DateTime date, decimal number, string format)
         {
             return new DailyStatsViewData { Date = date, Number = number, Summary = date.ToString(format, CultureInfo.InvariantCulture)};
         }

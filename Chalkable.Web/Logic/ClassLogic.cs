@@ -10,6 +10,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;
 using Chalkable.Web.Models.GradingViewData;
 
@@ -50,14 +51,28 @@ namespace Chalkable.Web.Logic
             //}
             //return res.OrderBy(t => t.MarkingPeriod.StartDate).ToList();
         }
-        
+
+        public static async Task<ClassAttendanceSummaryViewData> GetClassAttendanceSummary(int classId, DatePeriodTypeEnum datePeriodType, IServiceLocatorSchool serviceLocator)
+        {
+            DateTime startDate, endDate;
+            var handler = GetDailStatsHandler(datePeriodType);
+            handler.GetDateRange(out startDate, out endDate, serviceLocator);
+            var attSummaries = await serviceLocator.AttendanceService.GetDailyAttendanceSummaries(classId, startDate, endDate);
+
+            var absences = handler.BuildDailyStats(attSummaries.ToDictionary(x => x.Date, x => x.Absences ?? 0), startDate, endDate);
+            var lates = handler.BuildDailyStats(attSummaries.ToDictionary(x => x.Date, x => (decimal)(x.Tardies ?? 0)), startDate, endDate);
+            var presents = handler.BuildDailyStats(attSummaries.ToDictionary(x => x.Date, x => x.Presents ?? 0), startDate, endDate);
+
+            return ClassAttendanceSummaryViewData.Create(classId, datePeriodType, absences, lates, presents);
+        }
+
         public static async Task<ClassDisciplineSummaryViewData> GetClassDisciplineSummary(int classId, DatePeriodTypeEnum datePeriodType, IServiceLocatorSchool serviceLocator)
         {
             DateTime startDate, endDate;
             var handler = GetDailStatsHandler(datePeriodType);
             handler.GetDateRange(out startDate, out endDate, serviceLocator);
             var disciplineDailySummaries = await serviceLocator.DisciplineService.GetClassDisciplineDailySummary(classId, startDate, endDate);
-            var stats = disciplineDailySummaries.ToDictionary(x => x.Date, x => x.Occurrences);
+            var stats = disciplineDailySummaries.ToDictionary(x => x.Date, x => (decimal) x.Occurrences);
             return ClassDisciplineSummaryViewData.Create(classId, datePeriodType, handler.BuildDailyStats(stats, startDate, endDate));
         }
 
@@ -67,7 +82,7 @@ namespace Chalkable.Web.Logic
                         [DatePeriodTypeEnum.Year] = new DailyStatsForYearHangler(),
                         [DatePeriodTypeEnum.GradingPeriod] = new DailyStatsForGradingPeriodHandler(),
                         [DatePeriodTypeEnum.LastMonth] = new DefaultDailyStatsHandler("MMM dd", 30),
-                        [DatePeriodTypeEnum.LastWeek] = new DefaultDailyStatsHandler("ddd", 7)
+                        [DatePeriodTypeEnum.LastWeek] = new DefaultDailyStatsHandler("ddd", 6)
                     };
         private static IDailyStatsHandler GetDailStatsHandler(DatePeriodTypeEnum datePeriodType)
         {
@@ -90,7 +105,7 @@ namespace Chalkable.Web.Logic
     public interface IDailyStatsHandler
     {
         void GetDateRange(out DateTime startDate, out DateTime endDate, IServiceLocatorSchool serviceLocator);
-        IList<DailyStatsViewData> BuildDailyStats(IDictionary<DateTime, int> dailyStats, DateTime startDate, DateTime endDate);
+        IList<DailyStatsViewData> BuildDailyStats(IDictionary<DateTime, decimal> dailyStats, DateTime startDate, DateTime endDate);
     }
 
     public class DefaultDailyStatsHandler : IDailyStatsHandler
@@ -109,11 +124,11 @@ namespace Chalkable.Web.Logic
             endDate = serviceLocator.Context.NowSchoolYearTime.Date;
         }
 
-        public IList<DailyStatsViewData> BuildDailyStats(IDictionary<DateTime, int> dailyStats, DateTime startDate, DateTime endDate)
+        public IList<DailyStatsViewData> BuildDailyStats(IDictionary<DateTime, decimal> dailyStats, DateTime startDate, DateTime endDate)
         {
             var currentDate = startDate.Date;
             var res = new List<DailyStatsViewData>();
-            while (currentDate < endDate)
+            while (currentDate <= endDate)
             {
                 var sum = dailyStats.ContainsKey(currentDate) ? dailyStats[currentDate] : 0;
                 res.Add(DailyStatsViewData.Create(currentDate, sum, dateFormat));
@@ -134,15 +149,15 @@ namespace Chalkable.Web.Logic
             endDate = serviceLocator.Context.NowSchoolYearTime.Date;
         }
 
-        public IList<DailyStatsViewData> BuildDailyStats(IDictionary<DateTime, int> dailyStats, DateTime startDate, DateTime endDate)
+        public IList<DailyStatsViewData> BuildDailyStats(IDictionary<DateTime, decimal> dailyStats, DateTime startDate, DateTime endDate)
         {
             string dateFormat = "MMM";
             var res  =  new List<DailyStatsViewData>();
             var currentDate = startDate.Date;
             var prevMonth = currentDate.Month;
-            int sum = 0;
+            decimal sum = 0;
 
-            while (currentDate < endDate.Date)
+            while (currentDate <= endDate.Date)
             {
                 sum += dailyStats.ContainsKey(currentDate) ? dailyStats[currentDate] : 0;
                 if (prevMonth != currentDate.Month)
@@ -167,16 +182,16 @@ namespace Chalkable.Web.Logic
             endDate = serviceLocator.Context.NowSchoolYearTime.Date;
         }
 
-        public IList<DailyStatsViewData> BuildDailyStats(IDictionary<DateTime, int> dailyStats, DateTime startDate, DateTime endDate)
+        public IList<DailyStatsViewData> BuildDailyStats(IDictionary<DateTime, decimal> dailyStats, DateTime startDate, DateTime endDate)
         {
-            int sum = 0;
+            decimal sum = 0;
             var res = new List<DailyStatsViewData>();
             var currentDate = startDate.Date;
             var week = 1;
 
             var dayOfWeek = currentDate.DayOfWeek;
 
-            while (currentDate < endDate.Date)
+            while (currentDate <= endDate.Date)
             {
                 sum += dailyStats.ContainsKey(currentDate) ? dailyStats[currentDate] : 0;
                 if (dayOfWeek != currentDate.DayOfWeek)

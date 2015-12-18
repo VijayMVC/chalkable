@@ -16,7 +16,7 @@ namespace Chalkable.BusinessLogic.Model.Attendances
     public class DailyAttendanceSummary
     {
         public decimal? Absences { get; set; }
-        public DateTime? Date { get; set; }
+        public DateTime Date { get; set; }
         public int? Tardies { get; set; }
         public decimal? Presents { get; set; }
         public static DailyAttendanceSummary Create(DateTime date, int tardies, decimal absences)
@@ -26,7 +26,7 @@ namespace Chalkable.BusinessLogic.Model.Attendances
 
         public static DailyAttendanceSummary Create(AttendanceDailySummary att)
         {
-            return new DailyAttendanceSummary()
+            return new DailyAttendanceSummary
             {
                 Absences = att.Absences,
                 Date = att.Date,

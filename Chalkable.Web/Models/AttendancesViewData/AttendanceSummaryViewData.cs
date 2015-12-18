@@ -66,7 +66,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
 
             //get only for last month
             var fromDate = currentDate.AddDays(-31);
-            dailyAttendanceSummaries = dailyAttendanceSummaries.Where(x => x.Date?.Date >= fromDate && x.Date?.Date <= currentDate).ToList();
+            dailyAttendanceSummaries = dailyAttendanceSummaries.Where(x => x.Date >= fromDate && x.Date <= currentDate).ToList();
 
             foreach (var dailyAttendanceSummary in dailyAttendanceSummaries)
             {
@@ -77,15 +77,15 @@ namespace Chalkable.Web.Models.AttendancesViewData
                     attCount = dailyAttendanceSummary.Tardies ?? 0;
 
                 var date = dailyAttendanceSummary.Date;
-                string summary = date?.Day.ToString();
-                if (date.HasValue && prevMonth != date.Value.ToString("MMM"))
+                string summary = date.Day.ToString();
+                if (prevMonth != date.ToString("MMM"))
                 {
-                    prevMonth = date.Value.ToString("MMM");
+                    prevMonth = date.ToString("MMM");
                     summary = prevMonth + " " + summary;
                 }
                 res.Add(new ShortAttendanceStatViewData
                     {
-                        Date = dailyAttendanceSummary.Date ?? new DateTime(0,0,0),
+                        Date = dailyAttendanceSummary.Date,
                         StudentCount = attCount,
                         Summary = summary
                     });

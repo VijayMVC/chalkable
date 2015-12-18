@@ -80,9 +80,17 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("System Admin, DistrictAdmin, Teacher, Student")]
         public ActionResult ClassAttendance(int classId)
         {
-            var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var attendanceSummary = SchoolLocator.AttendanceService.GetClassAttendanceSummary(classId, null);
-            return Json(ClassAttendanceSummaryViewData.Create(c, attendanceSummary));
+            throw new NotImplementedException();
+            //var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
+            //var attendanceSummary = SchoolLocator.AttendanceService.GetClassAttendanceSummary(classId, null);
+            //return Json(ClassAttendanceSummaryViewData.Create(c, attendanceSummary));
+        }
+        
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public async Task<ActionResult> AttendanceSummary(int classId, int? dateType)
+        {
+            var datePeriodType = ((ClassLogic.DatePeriodTypeEnum?)dateType) ?? ClassLogic.DatePeriodTypeEnum.Year;
+            return await Json(ClassLogic.GetClassAttendanceSummary(classId, datePeriodType, SchoolLocator));
         }
 
         [AuthorizationFilter("System Admin, DistrictAdmin, Teacher, Student")]
@@ -91,7 +99,6 @@ namespace Chalkable.Web.Controllers
             var datePeriodType = ((ClassLogic.DatePeriodTypeEnum?)dateType) ?? ClassLogic.DatePeriodTypeEnum.Year;
             return await Json(ClassLogic.GetClassDisciplineSummary(classId, datePeriodType, SchoolLocator));
         }
-        
 
         [AuthorizationFilter("System Admin, DistrictAdmin, Teacher, Student")]
         public async Task<ActionResult> Explorer(int classId)
@@ -130,13 +137,6 @@ namespace Chalkable.Web.Controllers
 
             return
                 Json(ClassStatsViewData.Create(classes));
-        }
-
-
-        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult AttendanceSummary(int classId, DateTime? startDate, DateTime? endDate)
-        {
-            return Json(new NotImplementedException());
-        }
+        }   
     }
 }
