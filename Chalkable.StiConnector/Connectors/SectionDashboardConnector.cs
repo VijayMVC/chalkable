@@ -59,7 +59,7 @@ namespace Chalkable.StiConnector.Connectors
             if(endDate.HasValue)
                 nvc.Add(END_DATE_PARAM, endDate.Value.ToString(Constants.DATE_FORMAT));
 
-            return await CallAsync<IList<AttendanceDailySummary>>(BaseUrl+$"chalkable/sections/{sectionId}/dashboard/discipline/summary",nvc);
+            return await CallAsync<IList<AttendanceDailySummary>>(BaseUrl+$"chalkable/sections/{sectionId}/dashboard/attendance/summary",nvc);
         }
     }
 }

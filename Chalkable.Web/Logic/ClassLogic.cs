@@ -107,11 +107,12 @@ namespace Chalkable.Web.Logic
         void GetDateRange(out DateTime startDate, out DateTime endDate, IServiceLocatorSchool serviceLocator);
         IList<DailyStatsViewData> BuildDailyStats(IDictionary<DateTime, decimal> dailyStats, DateTime startDate, DateTime endDate);
     }
-
+    
     public class DefaultDailyStatsHandler : IDailyStatsHandler
     {
         private int lastDaysCount;
         private string dateFormat;
+
         public DefaultDailyStatsHandler(string dateFormat, int lastDaysCount)
         {
             this.dateFormat = dateFormat;
@@ -154,16 +155,14 @@ namespace Chalkable.Web.Logic
             string dateFormat = "MMM";
             var res  =  new List<DailyStatsViewData>();
             var currentDate = startDate.Date;
-            var prevMonth = currentDate.Month;
             decimal sum = 0;
 
             while (currentDate <= endDate.Date)
             {
                 sum += dailyStats.ContainsKey(currentDate) ? dailyStats[currentDate] : 0;
-                if (prevMonth != currentDate.Month)
+                if (currentDate.AddDays(-1).Month != currentDate.Month)
                 {
                     res.Add(DailyStatsViewData.Create(currentDate, sum, dateFormat));
-                    prevMonth = currentDate.Month;
                     sum = 0;
                 }
                 currentDate = currentDate.AddDays(1).Date;
@@ -188,16 +187,13 @@ namespace Chalkable.Web.Logic
             var res = new List<DailyStatsViewData>();
             var currentDate = startDate.Date;
             var week = 1;
-
-            var dayOfWeek = currentDate.DayOfWeek;
-
+            
             while (currentDate <= endDate.Date)
             {
                 sum += dailyStats.ContainsKey(currentDate) ? dailyStats[currentDate] : 0;
-                if (dayOfWeek != currentDate.DayOfWeek)
+                if (currentDate.AddDays(-1).DayOfWeek == currentDate.DayOfWeek)
                 {
                     res.Add(new DailyStatsViewData {Date = currentDate, Number = sum, Summary = $"Week {week}"});
-                    dayOfWeek = currentDate.DayOfWeek;
                     week++;
                     sum = 0;
                 }
