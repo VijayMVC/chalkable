@@ -35,6 +35,18 @@ namespace Chalkable.Web.Controllers
             return Json(pl.Transform(ClassViewData.Create));
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult Summary(int classId)
+        {
+            var clazz = SchoolLocator.ClassService.GetClassDetailsById(classId);
+            Room classRoom = null;
+
+            if (clazz?.RoomRef != null)
+                classRoom = SchoolLocator.RoomService.GetRoomById(clazz.RoomRef.Value);
+
+            return Json(ClassSummaryViewData.Create(clazz, classRoom));
+        }
+
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult ClassInfo(int classId)
         {
@@ -72,6 +84,14 @@ namespace Chalkable.Web.Controllers
             var attendanceSummary = SchoolLocator.AttendanceService.GetClassAttendanceSummary(classId, null);
             return Json(ClassAttendanceSummaryViewData.Create(c, attendanceSummary));
         }
+
+        [AuthorizationFilter("System Admin, DistrictAdmin, Teacher, Student")]
+        public async Task<ActionResult> DisciplineSummary(int classId, int? dateType)
+        {
+            var datePeriodType = ((ClassLogic.DatePeriodTypeEnum?)dateType) ?? ClassLogic.DatePeriodTypeEnum.Year;
+            return await Json(ClassLogic.GetClassDisciplineSummary(classId, datePeriodType, SchoolLocator));
+        }
+        
 
         [AuthorizationFilter("System Admin, DistrictAdmin, Teacher, Student")]
         public async Task<ActionResult> Explorer(int classId)
@@ -112,17 +132,6 @@ namespace Chalkable.Web.Controllers
                 Json(ClassStatsViewData.Create(classes));
         }
 
-        [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult Summary(int classId)
-        {
-            var clazz = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            Room classRoom = null;
-
-            if (clazz?.RoomRef != null)
-                classRoom = SchoolLocator.RoomService.GetRoomById(clazz.RoomRef.Value);
-
-            return Json(ClassSummaryViewData.Create(clazz, classRoom));
-        }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult AttendanceSummary(int classId, DateTime? startDate, DateTime? endDate)

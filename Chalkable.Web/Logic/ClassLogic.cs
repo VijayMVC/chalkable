@@ -1,10 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.DisciplinesViewData;
 using Chalkable.Web.Models.GradingViewData;
 
 namespace Chalkable.Web.Logic
@@ -43,6 +49,148 @@ namespace Chalkable.Web.Logic
             //    }
             //}
             //return res.OrderBy(t => t.MarkingPeriod.StartDate).ToList();
-        } 
+        }
+
+        
+        public static async Task<ClassDisciplineSummaryViewData> GetClassDisciplineSummary(int classId, DatePeriodTypeEnum datePeriodType, IServiceLocatorSchool serviceLocator)
+        {
+            DateTime startDate, endDate;
+            var handler = GetDailStatsHandler(datePeriodType);
+            handler.GetDateRange(out startDate, out endDate, serviceLocator);
+            var disciplineDailySummaries = await serviceLocator.DisciplineService.GetClassDisciplineDailySummary(classId, startDate, endDate);
+            var stats = disciplineDailySummaries.ToDictionary(x => x.Date, x => x.Occurrences);
+            return ClassDisciplineSummaryViewData.Create(classId, datePeriodType, handler.BuildDailyStats(stats, startDate, endDate));
+        }
+
+        private static IDictionary<DatePeriodTypeEnum, IDailyStatsHandler> handlers
+                    = new Dictionary<DatePeriodTypeEnum, IDailyStatsHandler>
+                    {
+                        [DatePeriodTypeEnum.Year] = new DailyStatsForYearHangler(),
+                        [DatePeriodTypeEnum.GradingPeriod] = new DailyStatsForGradingPeriodHandler(),
+                        [DatePeriodTypeEnum.LastMonth] = new DefaultDailyStatsHandler("MMM dd", 30),
+                        [DatePeriodTypeEnum.LastWeek] = new DefaultDailyStatsHandler("ddd", 7)
+                    };
+        private static IDailyStatsHandler GetDailStatsHandler(DatePeriodTypeEnum datePeriodType)
+        {
+            if(!handlers.ContainsKey(datePeriodType)) 
+                throw new ChalkableException("Invalid date period type");
+            return handlers[datePeriodType];
+        }
+        
+
+        public enum DatePeriodTypeEnum
+        {
+            Year = 0,
+            GradingPeriod = 1,
+            LastMonth = 2,
+            LastWeek = 3
+        }        
     }
+
+
+    public interface IDailyStatsHandler
+    {
+        void GetDateRange(out DateTime startDate, out DateTime endDate, IServiceLocatorSchool serviceLocator);
+        IList<DailyStatsViewData> BuildDailyStats(IDictionary<DateTime, int> dailyStats, DateTime startDate, DateTime endDate);
+    }
+
+    public class DefaultDailyStatsHandler : IDailyStatsHandler
+    {
+        private int lastDaysCount;
+        private string dateFormat;
+        public DefaultDailyStatsHandler(string dateFormat, int lastDaysCount)
+        {
+            this.dateFormat = dateFormat;
+            this.lastDaysCount = lastDaysCount;
+        }
+
+        public void GetDateRange(out DateTime startDate, out DateTime endDate, IServiceLocatorSchool serviceLocator)
+        {
+            startDate = serviceLocator.Context.NowSchoolYearTime.AddDays(-lastDaysCount).Date;
+            endDate = serviceLocator.Context.NowSchoolYearTime.Date;
+        }
+
+        public IList<DailyStatsViewData> BuildDailyStats(IDictionary<DateTime, int> dailyStats, DateTime startDate, DateTime endDate)
+        {
+            var currentDate = startDate.Date;
+            var res = new List<DailyStatsViewData>();
+            while (currentDate < endDate)
+            {
+                var sum = dailyStats.ContainsKey(currentDate) ? dailyStats[currentDate] : 0;
+                res.Add(DailyStatsViewData.Create(currentDate, sum, dateFormat));
+                currentDate = currentDate.AddDays(1).Date;
+            }
+            return res;
+        }
+    }
+
+    public class DailyStatsForYearHangler : IDailyStatsHandler
+    {
+        public void GetDateRange(out DateTime startDate, out DateTime endDate, IServiceLocatorSchool serviceLocator)
+        {
+            var sy = serviceLocator.SchoolYearService.GetCurrentSchoolYear();
+            if(!sy.StartDate.HasValue)
+                throw new ChalkableException("Current school year has no date range ");
+            startDate = sy.StartDate.Value;
+            endDate = serviceLocator.Context.NowSchoolYearTime.Date;
+        }
+
+        public IList<DailyStatsViewData> BuildDailyStats(IDictionary<DateTime, int> dailyStats, DateTime startDate, DateTime endDate)
+        {
+            string dateFormat = "MMM";
+            var res  =  new List<DailyStatsViewData>();
+            var currentDate = startDate.Date;
+            var prevMonth = currentDate.Month;
+            int sum = 0;
+
+            while (currentDate < endDate.Date)
+            {
+                sum += dailyStats.ContainsKey(currentDate) ? dailyStats[currentDate] : 0;
+                if (prevMonth != currentDate.Month)
+                {
+                    res.Add(DailyStatsViewData.Create(currentDate, sum, dateFormat));
+                    prevMonth = currentDate.Month;
+                    sum = 0;
+                }
+                currentDate = currentDate.AddDays(1).Date;
+            }
+            return res;
+        }
+    }
+
+    public class DailyStatsForGradingPeriodHandler : IDailyStatsHandler
+    {
+        public void GetDateRange(out DateTime startDate, out DateTime endDate, IServiceLocatorSchool serviceLocator)
+        {
+            Trace.Assert(serviceLocator.Context.SchoolYearId.HasValue);
+            var gp = serviceLocator.GradingPeriodService.GetGradingPeriodDetails(serviceLocator.Context.SchoolYearId.Value, serviceLocator.Context.NowSchoolYearTime);
+            startDate = gp.StartDate;
+            endDate = serviceLocator.Context.NowSchoolYearTime.Date;
+        }
+
+        public IList<DailyStatsViewData> BuildDailyStats(IDictionary<DateTime, int> dailyStats, DateTime startDate, DateTime endDate)
+        {
+            int sum = 0;
+            var res = new List<DailyStatsViewData>();
+            var currentDate = startDate.Date;
+            var week = 1;
+
+            var dayOfWeek = currentDate.DayOfWeek;
+
+            while (currentDate < endDate.Date)
+            {
+                sum += dailyStats.ContainsKey(currentDate) ? dailyStats[currentDate] : 0;
+                if (dayOfWeek != currentDate.DayOfWeek)
+                {
+                    res.Add(new DailyStatsViewData {DateTime = currentDate, Number = sum, Summary = $"Week {week}"});
+                    dayOfWeek = currentDate.DayOfWeek;
+                    week++;
+                    sum = 0;
+                }
+                currentDate = currentDate.AddDays(1).Date;
+            }
+            return res;
+        }
+    }
+    
 }
