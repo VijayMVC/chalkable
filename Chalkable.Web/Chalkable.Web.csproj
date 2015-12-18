@@ -601,7 +601,7 @@
       <Name>Chalkable.Database.School</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chalkable.Database.Updater\Chalkable.Database.Updater.csproj">
-      <Project>{A4EC8F5B-6715-4653-B549-E84DDA86335F}</Project>
+      <Project>{a4ec8f5b-6715-4653-b549-e84dda86335f}</Project>
       <Name>Chalkable.Database.Updater</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chalkable.StiConnector\Chalkable.StiConnector.csproj">
