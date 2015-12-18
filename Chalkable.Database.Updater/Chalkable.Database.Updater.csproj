@@ -39,9 +39,6 @@
     <ApplicationIcon>favicon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Chalkable.Common">
-      <HintPath>..\Chalkable.Web\Bin\Chalkable.Common.dll</HintPath>
-    </Reference>
     <Reference Include="Hyak.Common, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Hyak.Common.1.0.2\lib\net45\Hyak.Common.dll</HintPath>
       <Private>True</Private>
@@ -135,6 +132,10 @@
     <ProjectReference Include="..\Chalkable.BusinessLogic\Chalkable.BusinessLogic.csproj">
       <Project>{B008FBC2-8AFB-48FF-BA85-97845DDF02D2}</Project>
       <Name>Chalkable.BusinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
+      <Project>{3615f16a-b37f-40b4-b58d-cc39fa8f6646}</Project>
+      <Name>Chalkable.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chalkable.Data.Master\Chalkable.Data.Master.csproj">
       <Project>{C9ACB7A6-1755-424A-B0BB-3B0C5B13EC15}</Project>
