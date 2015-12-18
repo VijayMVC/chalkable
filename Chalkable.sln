@@ -47,6 +47,9 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.API", "Chalkable.API\Chalkable.API.csproj", "{A7272B5D-DC95-4783-888D-3A36E8922226}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Chalkable.Database.Updater", "Chalkable.Database.Updater\Chalkable.Database.Updater.csproj", "{A4EC8F5B-6715-4653-B549-E84DDA86335F}"
+	ProjectSection(ProjectDependencies) = postProject
+		{3615F16A-B37F-40B4-B58D-CC39FA8F6646} = {3615F16A-B37F-40B4-B58D-CC39FA8F6646}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
