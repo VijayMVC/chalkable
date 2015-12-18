@@ -186,7 +186,7 @@ simpleApp = !app.isAdvancedApp()
                 label.hint New Item:
                 .my-apps
                     .permission
-                        +MyAppsPermission("Can Teachers Attach", app.getName(), "in New Items?", "short")
+                        +MyAppsPermission("Can Teachers or Admins Attach", app.getName(), "in New Items?", "short")
                         +SlideCheckbox("attachEnabled", myAppsAccess.isAttachEnabled(), self.isReadOnly())
             .elem
                 label.hint Grading View:
