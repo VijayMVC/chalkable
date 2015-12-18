@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.classes.Class');
-REQUIRE('chlk.models.discipline.ClassDisciplineSummaryViewData');
+REQUIRE('chlk.models.discipline.ClassDisciplineStatsViewData');
 REQUIRE('chlk.models.discipline.ClassDisciplinesViewData');
 
 NAMESPACE('chlk.models.classes', function () {
@@ -11,9 +11,9 @@ NAMESPACE('chlk.models.classes', function () {
 
             chlk.models.discipline.ClassDisciplinesViewData, 'disciplines',
 
-            chlk.models.discipline.ClassDisciplineSummaryViewData, 'stats',
+            chlk.models.discipline.ClassDisciplineStatsViewData, 'stats',
 
-            [[chlk.models.id.ClassId, String, chlk.models.discipline.ClassDisciplinesViewData, chlk.models.discipline.ClassDisciplineSummaryViewData]],
+            [[chlk.models.id.ClassId, String, chlk.models.discipline.ClassDisciplinesViewData, chlk.models.discipline.ClassDisciplineStatsViewData]],
             function $(id_, name_, disciplines_, stats_){
                 BASE();
                 if(id_)

@@ -89,8 +89,7 @@ NAMESPACE('chlk.controllers', function (){
                 var res = ria.async.wait([
                     this.disciplineService.getClassDisciplines(classId, null, 0),
                     this.disciplineTypeService.getDisciplineTypes(),
-                    //this.disciplineService.getClassSummary(classId),
-                    this.classService.getSummary(classId),
+                    this.classService.getDisciplinesStats(classId),
                     this.classService.getDisciplinesSummary(classId)
                 ])
                     .attach(this.validateResponse_())
@@ -101,7 +100,7 @@ NAMESPACE('chlk.controllers', function (){
                             !this.isPageReadonly_(model, 'MAINTAIN_CLASSROOM_DISCIPLINE', 'MAINTAIN_CLASSROOM_DISCIPLINE_ADMIN'), true
                         );
                         model.setDisciplines(disciplines);
-                        //model.setStats(result[2]);
+                        model.setStats(result[2]);
                         this.getContext().getSession().set(ChlkSessionConstants.DISCIPLINE_PAGE_DATA, disciplines);
                         return new chlk.models.classes.ClassProfileSummaryViewData(
                             this.getCurrentRole(), model, this.getUserClaims_(),
@@ -128,6 +127,17 @@ NAMESPACE('chlk.controllers', function (){
                         return disciplines;
 
                     }, this);
+
+                return this.UpdateView(chlk.activities.classes.ClassProfileDisciplinePage, res);
+            },
+
+            [chlk.controllers.Permissions([
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN]
+            ])],
+            [[chlk.models.discipline.DateTypeEnum, chlk.models.id.ClassId]],
+            function changeDisciplineDateTypeAction(dateType, classId){
+                var res = this.classService.getDisciplinesStats(classId, dateType)
+                    .attach(this.validateResponse_());
 
                 return this.UpdateView(chlk.activities.classes.ClassProfileDisciplinePage, res);
             },

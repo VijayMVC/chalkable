@@ -1,6 +1,6 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
-REQUIRE('chlk.models.discipline.ClassDisciplineSummaryViewData');
+REQUIRE('chlk.models.discipline.ClassDisciplineStatsViewData');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.discipline.DisciplineSummary');
 REQUIRE('chlk.models.discipline.Discipline');
@@ -51,14 +51,6 @@ NAMESPACE('chlk.services', function(){
                     date: date_ && date_.toStandardFormat(),
                     start: start_,
                     count: count_
-                });
-            },
-
-            [[chlk.models.id.ClassId, chlk.models.discipline.DateTypeEnum]],
-            ria.async.Future, function getClassSummary(classId, dateType_){
-                return this.get('Discipline/DisciplineSummary.json', chlk.models.discipline.ClassDisciplineSummaryViewData,{
-                    classId: classId.valueOf(),
-                    dateType: dateType_ && dateType_.valueOf()
                 });
             },
 

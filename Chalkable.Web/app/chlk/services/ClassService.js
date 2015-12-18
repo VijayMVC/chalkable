@@ -88,6 +88,14 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.ClassId, chlk.models.discipline.DateTypeEnum]],
+            ria.async.Future, function getDisciplinesStats(classId, dateType_){
+                return this.get('Class/DisciplineSummary.json', chlk.models.discipline.ClassDisciplineStatsViewData,{
+                    classId: classId.valueOf(),
+                    dateType: dateType_ && dateType_.valueOf()
+                });
+            },
+
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getDisciplinesSummary(classId) {
                 return this.get('Class/Summary.json', chlk.models.classes.ClassDisciplinesSummary, {
