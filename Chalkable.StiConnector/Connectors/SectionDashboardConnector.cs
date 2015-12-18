@@ -21,7 +21,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public SectionAttendanceDetailDashboard GetAttendanceDetailDashboard(int sectionId, DateTime startDate, DateTime endDate)
         {
-            var url = string.Format("{0}chalkable/sections/{1}/dashboard/attendance/detail", BaseUrl, sectionId);
+            var url = $"{BaseUrl}chalkable/sections/{sectionId}/dashboard/attendance/detail";
             var nvc = new NameValueCollection
                 {
                     {START_DATE_PARAM, startDate.ToString(Constants.DATE_FORMAT)},
@@ -39,15 +39,15 @@ namespace Chalkable.StiConnector.Connectors
             return Call<SectionAttendanceSummaryDashboard>(url, nvc);
         }
 
-        public IList<DisciplineDailySummary> GetDisciplineSummaryDashboard(int sectionId, DateTime? startDate, DateTime? endDate)
+        public async Task<IList<DisciplineDailySummary>> GetDisciplineSummaryDashboard(int sectionId, DateTime? startDate, DateTime? endDate)
         {
-            var url = $"{BaseUrl}chalkable/sections/{sectionId:int}/dashboard/discipline/summary";
+            var url = $"{BaseUrl}chalkable/sections/{sectionId}/dashboard/discipline/summary";
             var nvc = new NameValueCollection();
             if(startDate.HasValue) 
                 nvc.Add(START_DATE_PARAM, startDate.Value.ToString(Constants.DATE_FORMAT));
             if(endDate.HasValue)
                 nvc.Add(END_DATE_PARAM, endDate.Value.ToString(Constants.DATE_FORMAT));
-            return Call<IList<DisciplineDailySummary>>(url, nvc);
+            return await CallAsync<IList<DisciplineDailySummary>>(url, nvc);
         }
 
 

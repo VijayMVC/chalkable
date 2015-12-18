@@ -383,6 +383,7 @@
     <Compile Include="Models\AutoGradeViewData.cs" />
     <Compile Include="Models\CC_StandardCategoryViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassStatsViewData.cs" />
+    <Compile Include="Models\DisciplinesViewData\DisciplineDailySummaryViewData.cs" />
     <Compile Include="Models\FeedComplexViewData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeInputData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
