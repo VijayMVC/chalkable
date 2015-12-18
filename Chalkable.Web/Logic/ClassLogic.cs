@@ -50,7 +50,6 @@ namespace Chalkable.Web.Logic
             //}
             //return res.OrderBy(t => t.MarkingPeriod.StartDate).ToList();
         }
-
         
         public static async Task<ClassDisciplineSummaryViewData> GetClassDisciplineSummary(int classId, DatePeriodTypeEnum datePeriodType, IServiceLocatorSchool serviceLocator)
         {
@@ -182,7 +181,7 @@ namespace Chalkable.Web.Logic
                 sum += dailyStats.ContainsKey(currentDate) ? dailyStats[currentDate] : 0;
                 if (dayOfWeek != currentDate.DayOfWeek)
                 {
-                    res.Add(new DailyStatsViewData {DateTime = currentDate, Number = sum, Summary = $"Week {week}"});
+                    res.Add(new DailyStatsViewData {Date = currentDate, Number = sum, Summary = $"Week {week}"});
                     dayOfWeek = currentDate.DayOfWeek;
                     week++;
                     sum = 0;

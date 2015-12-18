@@ -24,14 +24,14 @@ namespace Chalkable.Web.Models.DisciplinesViewData
 
     public class DailyStatsViewData
     {
-        public DateTime DateTime { get; set; }
+        public DateTime Date { get; set; }
         public string Summary { get; set; }
         public int Number { get; set; }
 
         
         public static DailyStatsViewData Create(DateTime date, int number, string format)
         {
-            return new DailyStatsViewData {DateTime = date, Number = number, Summary = date.ToString(format, CultureInfo.InvariantCulture)};
+            return new DailyStatsViewData { Date = date, Number = number, Summary = date.ToString(format, CultureInfo.InvariantCulture)};
         }
     }
 }
