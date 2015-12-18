@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -56,10 +57,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         protected ClassAnnouncementDataAccess CreateClassAnnouncementDataAccess(UnitOfWork unitOfWork)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
-            if (Context.Role == CoreRoles.TEACHER_ROLE || BaseSecurity.IsDistrictAdmin(Context))
+            if (Context.Role == CoreRoles.TEACHER_ROLE)
                 return new ClassAnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
             if (Context.Role == CoreRoles.STUDENT_ROLE)
                 return new ClassAnnouncementForStudentDataAccess(unitOfWork, Context.SchoolYearId.Value);
+            if(BaseSecurity.IsDistrictAdmin(Context))
+                return new ClassAnnouncementForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value);
+
             throw new NotImplementedException();
         }
 
@@ -291,14 +295,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public ClassAnnouncement GetClassAnnouncemenById(int classAnnouncementId)
         {
-            Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u =>
-                {
-                    var res = CreateClassAnnouncementDataAccess(u).GetAnnouncement(classAnnouncementId, Context.PersonId.Value);
-                    if(res == null)
-                        throw new NoAnnouncementException();
-                    return res;
-                });
+            return InternalGetAnnouncementById(classAnnouncementId);
         }
         
         public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false)
