@@ -305,5 +305,8 @@
     <Build Include="Stored Procedures\spGetClassesByTeachers.sql" />
     <Build Include="Stored Procedures\spGetClassesBySchoolYear.sql" />
     <Build Include="Stored Procedures\spGetClassesByIds.sql" />
+    <Build Include="Stored Procedures\spGetLessonPlansDetailses.sql" />
+    <Build Include="Stored Procedures\spGetClassAnnouncementDetailses.sql" />
+    <Build Include="Stored Procedures\spGetAdminAnnouncementsDetailses.sql" />
   </ItemGroup>
 </Project>

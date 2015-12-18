@@ -686,10 +686,7 @@ NAMESPACE('chlk.controllers', function (){
 
             return this.ShadeOrUpdateView(chlk.activities.announcement.AttachFilesDialog, result);
         },
-
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DISTRICTADMIN, chlk.models.common.RoleEnum.TEACHER
-        ])],
+            
         [chlk.controllers.SidebarButton('add-new')],
         function attachFilesAction() {
             var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);

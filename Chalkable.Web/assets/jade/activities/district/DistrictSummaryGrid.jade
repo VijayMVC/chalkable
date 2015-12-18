@@ -1,7 +1,5 @@
 -var schools = self.getItems()
--var isNotEmptyAttendances = self.isNotEmptyAttendances()
--var isNotEmptyDisciplines = self.isNotEmptyDisciplines()
--var isNotEmptyGrades = self.isNotEmptyGrades()
+-var isNotEmptyStatistic = self.isNotEmptyStatistic()
 
 .chlk-calendar.chlk-grid
     .header
@@ -12,11 +10,9 @@
             .grid-header.grid-row
                 .cell.name=Msg.Schools
                 .cell.students=Msg.Students
-                if isNotEmptyAttendances
+                if isNotEmptyStatistic
                     .cell.attendance=Msg.Attendance
-                if isNotEmptyDisciplines
                     .cell.discipline=Msg.Discipline
-                if isNotEmptyGrades
                     .cell.grades=Msg.Grades
             each school in schools
                 .grid-row
@@ -25,22 +21,20 @@
                             .pic
                         +ActionLink('schools', 'classesSummary', school.getId(), school.getName())=school.getName()
                     .cell.students=school.getStudentsCount()
-                    if isNotEmptyAttendances
+                    if isNotEmptyStatistic
                         .cell.attendance
                             .circle(
                                 data-tooltip = school.getStudentsCount() + ' Students, ' + school.getAbsences() + ' Absent',
                                 class = school.getAbsencesClass()
                             )=school.getAbsences()
-                    if isNotEmptyDisciplines
                         .cell.discipline
                             .circle(
                                 data-tooltip=school.getInfractionsCount() + ' Discipline Infractions Today',
                                 class = school.getInfractionsClass()
                             )=school.getInfractionsCount()
-                    if isNotEmptyGrades
                         .cell.grades
                             .circle(
-                                data-tooltip=school.getAvg() + '% Average',
+                                data-tooltip=school.getAvg() && (school.getAvg() + '% Average'),
                                 class = school.getAvgClass()
                             )=school.getAvg()
         else

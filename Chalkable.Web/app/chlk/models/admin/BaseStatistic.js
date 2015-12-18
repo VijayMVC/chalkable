@@ -49,12 +49,16 @@ NAMESPACE('chlk.models.admin', function () {
                 return 'green';
             },
 
+            function toFixed_(raw_){
+                return raw_ && Math.round(raw_ * 100)/100;
+            },
+
             VOID, function deserialize(raw){
                 this.id = SJX.fromValue(raw.id, this.getSpecsOf('TId'));
                 this.name = SJX.fromValue(raw.name, String);
                 this.absences = SJX.fromValue(raw.attendancescount, Number);
                 this.infractionsCount = SJX.fromValue(raw.disciplinescount, Number);
-                this.avg = SJX.fromValue(raw.average, Number);
+                this.avg = SJX.fromValue(this.toFixed_(raw.average), Number);
                 this.absencesPassed = SJX.fromValue(raw.absencespassed, Boolean);
                 this.infractionsPassed = SJX.fromValue(raw.infractionspassed, Boolean);
                 this.avgPassed = SJX.fromValue(raw.avgpassed , Boolean);

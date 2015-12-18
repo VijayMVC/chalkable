@@ -6,13 +6,14 @@ module.exports = function(grunt) {
   var buildNumber = grunt.option("build.number");
   var vcsRevision = grunt.option("vcs.revision");
   var vcsBranch = grunt.option("vcs.branch");
-  var buildCounter = buildNumber.split('-').pop();
-  var semVer = function () {
-    var x = buildNumber.split('-');
-    x[2] = 0;
-    return x.join('.');
-  }();
-  
+  if (buildNumber) {
+    var buildCounter = buildNumber.split('-').pop();
+    var semVer = function () {
+      var x = buildNumber.split('-');
+      x[2] = 0;
+      return x.join('.');
+    }();
+  }
   var today = new Date().toISOString().slice(0, 10);
   
   var azureStorageCredentials = ['chalkablestat', process.env.AZURE_STORAGE_ACCESS_KEY];
