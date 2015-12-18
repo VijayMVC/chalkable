@@ -123,5 +123,11 @@ namespace Chalkable.Web.Controllers
 
             return Json(ClassSummaryViewData.Create(clazz, classRoom));
         }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult AttendanceSummary(int classId, DateTime? startDate, DateTime? endDate)
+        {
+            return Json(new NotImplementedException());
+        }
     }
 }

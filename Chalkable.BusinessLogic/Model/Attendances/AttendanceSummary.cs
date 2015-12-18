@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Connectors.Model.Attendances;
 
 namespace Chalkable.BusinessLogic.Model.Attendances
@@ -14,12 +15,24 @@ namespace Chalkable.BusinessLogic.Model.Attendances
 
     public class DailyAttendanceSummary
     {
-        public decimal Absences { get; set; }
-        public DateTime Date { get; set; }
-        public int Tardies { get; set; }
+        public decimal? Absences { get; set; }
+        public DateTime? Date { get; set; }
+        public int? Tardies { get; set; }
+        public decimal? Presents { get; set; }
         public static DailyAttendanceSummary Create(DateTime date, int tardies, decimal absences)
         {
             return new DailyAttendanceSummary { Absences = absences, Tardies = tardies, Date = date };
+        }
+
+        public static DailyAttendanceSummary Create(AttendanceDailySummary att)
+        {
+            return new DailyAttendanceSummary()
+            {
+                Absences = att.Absences,
+                Date = att.Date,
+                Presents = att.Presents,
+                Tardies = att.Tardies
+            };
         }
     }
 

@@ -124,6 +124,7 @@
     <Compile Include="Connectors\Model\ActivityAttribute.cs" />
     <Compile Include="Connectors\Model\ActivityCategory.cs" />
     <Compile Include="Connectors\Model\ActivityStandard.cs" />
+    <Compile Include="Connectors\Model\AttendanceDailySummary.cs" />
     <Compile Include="Connectors\Model\Attendances\DailySectionAbsenceSummary.cs" />
     <Compile Include="Connectors\Model\Attendances\SectionAbsenceSummary.cs" />
     <Compile Include="Connectors\Model\Attendances\SectionAttendanceSummaryDashboard.cs" />

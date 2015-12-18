@@ -382,5 +382,14 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             return null;
         }
+
+        public async Task<IList<DailyAttendanceSummary>> GetDailyAttendanceSummaries(int classId, DateTime? startDate,
+            DateTime? endDate)
+        {
+            return
+                (await
+                    ConnectorLocator.SectionDashboardConnector.GetAttendanceDailySummaries(classId, startDate, endDate))
+                    .Select(DailyAttendanceSummary.Create).ToList();
+        }
     }
 }
