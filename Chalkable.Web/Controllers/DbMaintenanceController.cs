@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Data.Common.Backup;
 using Chalkable.Data.Master.Model;
+using Chalkable.Database.Updater;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
+using Chalkable.Web.Tools;
 using Microsoft.SqlServer.Dac;
 
 namespace Chalkable.Web.Controllers
@@ -43,6 +47,46 @@ namespace Chalkable.Web.Controllers
             MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.DatabaseUpdate, DateTime.UtcNow, null, data.ToString(), BackgroundTask.GLOBAL_DOMAIN);
             return Json(true);
 
+        }
+
+        [AuthorizationFilter("SysAdmin")]
+        public async Task<ActionResult> DatabaseDeploy(string key)
+        {
+            var serverName = "edjb0d1a0ab363747abbc2ee.database.windows.net";
+            var databaseName = "edjb0d1a0ab363747abbc2ee";
+            var userName = "chalkadmin@edjb0d1a0ab363747abbc2ee";
+            var password = "Hellowebapps1!";
+            var dacPacName = "0-7-bacc5da8d5f5-2267"; //CompilerHelper.Version;
+            var dacPacUri = "https://chalkablestat.blob.core.windows.net/artifacts/0-7-bacc5da8d5f5-2267/Chalkable.Database.School.dacpac";
+
+            var job = await DatabaseUpdater.DeploySchoolDacPac(serverName, databaseName, userName, password, dacPacName, dacPacUri);
+
+            return Json(job);
+        }
+
+        [AuthorizationFilter("SysAdmin")]
+        public async Task<ActionResult> DatabaseDeployCancel(Guid jobName)
+        {
+            var serverName = "edjb0d1a0ab363747abbc2ee.database.windows.net";
+            var databaseName = "edjb0d1a0ab363747abbc2ee";
+            var userName = "chalkadmin@edjb0d1a0ab363747abbc2ee";
+            var password = "Hellowebapps1!";
+
+            await DatabaseUpdater.DropJob(serverName, databaseName, userName, password, jobName);
+
+            return Json(new {});
+        }
+
+        public async Task<ActionResult> DatabaseDeployStatus(Guid jobName)
+        {
+            var serverName = "edjb0d1a0ab363747abbc2ee.database.windows.net";
+            var databaseName = "edjb0d1a0ab363747abbc2ee";
+            var userName = "chalkadmin@edjb0d1a0ab363747abbc2ee";
+            var password = "Hellowebapps1!";
+
+            var jobStatus = await DatabaseUpdater.GetJobStatus(serverName, databaseName, userName, password, jobName);
+
+            return Json(jobStatus);
         }
 
         [AuthorizationFilter("SysAdmin")]
