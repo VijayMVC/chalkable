@@ -6,6 +6,7 @@ Create Procedure [dbo].[spGetAdminAnnouncementsDetailses]
 	@callerRole int
 as
 
+
 if @callerRole is null
 	select top 1 @callerRole = RoleRef from SchoolPerson where PersonRef = @callerId
 
