@@ -1,11 +1,8 @@
-﻿
-
-Create Procedure [dbo].[spGetAdminAnnouncementsDetailses] 
+Alter Procedure [dbo].[spGetAdminAnnouncementsDetailses] 
 	@adminAnnouncementIds TInt32 ReadOnly, 
 	@callerId int, 
 	@callerRole int
 as
-
 
 if @callerRole is null
 	select top 1 @callerRole = RoleRef from SchoolPerson where PersonRef = @callerId
@@ -123,3 +120,8 @@ Select
 From AnnouncementGroup
 join [Group] on [Group].Id = AnnouncementGroup.GroupRef
 Where AnnouncementRef in(select Id from @adminAnnouncements)
+
+
+GO
+
+

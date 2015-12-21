@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading.Tasks;
 using System.Web.Mvc;
 using Chalkable.Common;
 using Chalkable.Data.Common.Backup;
 using Chalkable.Data.Master.Model;
-using Chalkable.Database.Updater;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 using Chalkable.Web.Tools;
@@ -18,6 +16,7 @@ namespace Chalkable.Web.Controllers
 {
     public class DbMaintenanceController : ChalkableController
     {
+        [HttpPost]
         [AuthorizationFilter("SysAdmin")]
         public ActionResult Backup()
         {
@@ -26,6 +25,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
+        [HttpPost]
         [AuthorizationFilter("SysAdmin")]
         public ActionResult Restore(long time)
         {
@@ -35,6 +35,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
+        [HttpPost]
         [AuthorizationFilter("SysAdmin")]
         public ActionResult DatabaseUpdate(string masterSql, string schoolSql)
         {
@@ -49,121 +50,29 @@ namespace Chalkable.Web.Controllers
 
         }
 
+        [HttpPost]
         [AuthorizationFilter("SysAdmin")]
-        public async Task<ActionResult> DatabaseDeploy(string key)
+        public ActionResult DatabaseDeploy(string key)
         {
-            var serverName = "edjb0d1a0ab363747abbc2ee.database.windows.net";
-            var databaseName = "edjb0d1a0ab363747abbc2ee";
-            var userName = "chalkadmin@edjb0d1a0ab363747abbc2ee";
-            var password = "Hellowebapps1!";
-            var dacPacName = "0-7-bacc5da8d5f5-2267"; //CompilerHelper.Version;
-            var dacPacUri = "https://chalkablestat.blob.core.windows.net/artifacts/0-7-bacc5da8d5f5-2267/Chalkable.Database.School.dacpac";
+            var dacPacContainer = ConfigurationManager.AppSettings["DatabaseDacPacContainer"];
+            var dacPacName = CompilerHelper.IsProduction ? CompilerHelper.Version : "0-7-84da44f664c1-2270";
+            var dacPacMasterUri = dacPacContainer + dacPacName + "/Chalkable.Database.Master.dacpac";
+            var dacPacSchoolUri = dacPacContainer + dacPacName + "/Chalkable.Database.School.dacpac";
 
-            var job = await DatabaseUpdater.DeploySchoolDacPac(serverName, databaseName, userName, password, dacPacName, dacPacUri);
-
-            return Json(job);
-        }
-
-        [AuthorizationFilter("SysAdmin")]
-        public async Task<ActionResult> DatabaseDeployCancel(Guid jobName)
-        {
-            var serverName = "edjb0d1a0ab363747abbc2ee.database.windows.net";
-            var databaseName = "edjb0d1a0ab363747abbc2ee";
-            var userName = "chalkadmin@edjb0d1a0ab363747abbc2ee";
-            var password = "Hellowebapps1!";
-
-            await DatabaseUpdater.DropJob(serverName, databaseName, userName, password, jobName);
-
-            return Json(new {});
-        }
-
-        public async Task<ActionResult> DatabaseDeployStatus(Guid jobName)
-        {
-            var serverName = "edjb0d1a0ab363747abbc2ee.database.windows.net";
-            var databaseName = "edjb0d1a0ab363747abbc2ee";
-            var userName = "chalkadmin@edjb0d1a0ab363747abbc2ee";
-            var password = "Hellowebapps1!";
-
-            var jobStatus = await DatabaseUpdater.GetJobStatus(serverName, databaseName, userName, password, jobName);
-
-            return Json(jobStatus);
-        }
-
-        [AuthorizationFilter("SysAdmin")]
-        public ActionResult DatabaseDeployDacpac(string key)
-        {
-            var dbDeployOptions = new DacDeployOptions
+            var data = new DatabaseDacPacUpdateTaskData()
             {
-                BlockOnPossibleDataLoss = true
+                ServerName = ConfigurationManager.AppSettings["AzureSqlJobs:ServerName"],
+                DatabaseName = ConfigurationManager.AppSettings["AzureSqlJobs:DatabaseName"],
+                Username = ConfigurationManager.AppSettings["AzureSqlJobs:Username"],
+                Password = ConfigurationManager.AppSettings["AzureSqlJobs:Passwd"],
+                DacPacName = dacPacName,
+                MasterDacPacUri = dacPacMasterUri,
+                SchoolDacPacUri = dacPacSchoolUri
             };
 
-            var masterDacpac = DacPackage.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Chalkable.Database.Master.dacpac"));
-            var schoolDacpac = DacPackage.Load(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "bin", "Chalkable.Database.School.dacpac"));
-            
-            var masterDeployScript = DeployDacPackAndGenerateDeployScript(
-                masterDacpac, 
-                Settings.MasterConnectionString, 
-                "ChalkableMaster", 
-                dbDeployOptions);
+            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.DatabaseDacPacUpdate, DateTime.UtcNow, null, data.ToString(), BackgroundTask.GLOBAL_DOMAIN);
 
-            var serversDeployments = new Dictionary<string, string>();
-            foreach (var server in Settings.ChalkableSchoolDbServers)
-            {
-                try
-                {
-                    var templateDeployScript = DeployDacPackAndGenerateDeployScript(
-                        schoolDacpac,
-                        Settings.GetSchoolTemplateConnectionString(server),
-                        Settings.SchoolTemplateDbName,
-                        dbDeployOptions);
-                    serversDeployments.Add(server, templateDeployScript);
-                }
-                catch (Exception e)
-                {
-                    serversDeployments.Add(server, e.ToString());
-                }
-            }
-
-            var schoolDeployScripts = new Dictionary<string, string>();
-            foreach (var district in MasterLocator.DistrictService.GetDistricts())
-            {
-                try
-                {
-                    var schoolDeployScript = DeployDacPackAndGenerateDeployScript(
-                        schoolDacpac,
-                        Settings.GetSchoolConnectionString(district.ServerUrl, district.Name),
-                        district.Name,
-                        dbDeployOptions);
-
-                    schoolDeployScripts.Add(district.Name, schoolDeployScript);
-                }
-                catch (Exception e)
-                {
-                    schoolDeployScripts.Add(district.Name, e.ToString());
-                }
-            }
-
-            return Json(new 
-            {
-                masterDeployScript,
-                serversDeployments,
-                schoolDeployScripts
-            });
-
-        }
-
-        private static string DeployDacPackAndGenerateDeployScript(DacPackage dp, string conStr, string targetDb,
-            DacDeployOptions dbDeployOptions)
-        {
-            var dbServices = new DacServices(conStr);
-
-            var deployScript = dbServices.GenerateDeployScript(dp, targetDb, dbDeployOptions);
-            //var deployReport = dbServices.GenerateDeployReport(dp, targetDb, dbDeployOptions);
-
-            dbServices.Deploy(dp, targetDb, true, dbDeployOptions);
-
-            //var driftReport = dbServices.GenerateDriftReport(targetDb);
-            return deployScript;
+            return Json(true);
         }
 
         [AuthorizationFilter("SysAdmin")]

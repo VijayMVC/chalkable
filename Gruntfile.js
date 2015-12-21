@@ -172,7 +172,24 @@ module.exports = function(grunt) {
           expand: true,
           src: 'ServiceConfiguration.{Staging,QA,Support,Release,Sales,Staging2}.cscfg',
           cwd: './Chalkable.Azure/'
-        },{
+        }]
+      },
+      {
+      "artifacts-db": {
+        options: {
+          serviceOptions: azureStorageCredentials, // custom arguments to azure.createBlobService    
+          containerName: 'artifacts-db', // container name in blob
+          concurrentUploadThreads: 10, // number of concurrent uploads, choose best for your network condition
+          folder: buildNumber,
+          deleteExistingBlobs: false,
+          zip: false,
+          metadata: {
+            cacheControl: 'public, max-age=31530000', // cache in browser
+            cacheControlHeader: 'public, max-age=31530000' // cache in azure CDN. As this data does not change, we set it to 1 year
+          },
+          testRun: false // test run - means no blobs will be actually deleted or uploaded, see log messages for details
+        },
+        files: [{
           expand: true,
           src: '*.dacpac',
           cwd: './Chalkable.Database.Master/bin/Release'
