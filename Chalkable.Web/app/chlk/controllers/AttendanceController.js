@@ -10,6 +10,7 @@ REQUIRE('chlk.activities.attendance.SummaryPage');
 REQUIRE('chlk.activities.attendance.ClassListPage');
 REQUIRE('chlk.activities.attendance.StudentDayAttendancePopup');
 REQUIRE('chlk.activities.classes.ClassProfileAttendanceListPage');
+REQUIRE('chlk.activities.classes.ClassProfileAttendancePage');
 REQUIRE('chlk.activities.attendance.SeatingChartPage');
 REQUIRE('chlk.activities.attendance.EditSeatingGridDialog');
 REQUIRE('chlk.activities.reports.SeatingChartAttendanceReportDialog');
@@ -234,16 +235,16 @@ NAMESPACE('chlk.controllers', function (){
 
         },
 
-        [chlk.controllers.SidebarButton('attendance')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.attendance.UpdateSeatingChart]],
         function saveFromSeatingChartAction(model){
             var result = this.attendanceService.postSeatingChart(model.getDate(), JSON.parse(model.getSeatingChartInfo()))
-                .then(function(model){
+                .then(function(res){
                     //this.getView().pop();
-                    return new chlk.models.attendance.SeatingChart();
+                    return new chlk.models.attendance.SeatingChart(model.isInProfile());
                 });
             //return this.ShadeLoader();
-            return this.UpdateView(chlk.activities.attendance.SeatingChartPage, result, 'savedChart');
+            return this.UpdateView(model.isInProfile() ? chlk.activities.classes.ClassProfileAttendancePage : chlk.activities.attendance.SeatingChartPage, result, 'savedChart');
         },
 
         VOID, function addStudentClickAction(){
@@ -305,6 +306,7 @@ NAMESPACE('chlk.controllers', function (){
             date_ = date_ || new chlk.models.common.ChlkSchoolYearDate();
             var topModel = new chlk.models.classes.ClassesForTopBar(null);
             topModel.setSelectedItemId(classId);
+            model.setClassId(classId);
             model.setAbleRePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE));
             model.setAbleChangeReasons(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ABSENCE_REASONS)
                 || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN));
@@ -337,11 +339,12 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushView(chlk.activities.attendance.SeatingChartPage, result);
         },
 
-        [chlk.controllers.SidebarButton('attendance')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.attendance.EditSeatingGridViewData]],
         function showEditGridWindowAction(model){
             var result = new ria.async.DeferredData(model);
-            this.BackgroundUpdateView(chlk.activities.attendance.SeatingChartPage, new ria.async.DeferredData(new chlk.models.attendance.SeatingChart()), 'savedChart');
+            this.BackgroundUpdateView(model.isInProfile() ? chlk.activities.classes.ClassProfileAttendancePage : chlk.activities.attendance.SeatingChartPage,
+                new ria.async.DeferredData(new chlk.models.attendance.SeatingChart(model.isInProfile())), 'savedChart');
             return this.ShadeView(chlk.activities.attendance.EditSeatingGridDialog, result);
         },
 
@@ -396,24 +399,30 @@ NAMESPACE('chlk.controllers', function (){
             return resObject;
         },
 
-        [chlk.controllers.SidebarButton('attendance')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.attendance.EditSeatingGridViewData]],
         function editSeatingGridAction(model){
             var seatingChartInfo = JSON.parse(model.getSeatingChartInfo());
             var postInfo = this.prepareSeatingChartEdit(model, seatingChartInfo);
+            var page = model.isInProfile() ? chlk.activities.classes.ClassProfileAttendancePage : chlk.activities.attendance.SeatingChartPage;
             var res = this.attendanceService.postSeatingChartWithInfo(model.getDate(), postInfo)
                 .then(function(resModel){
-                    var res = this.attendanceService
-                        .getNotTakenAttendanceClasses(model.getDate())
-                        .attach(this.validateResponse_())
-                        .then(function(items){
-                            return new chlk.models.attendance.NotTakenAttendanceClassesViewData(items);
-                        }.bind(this));
-                    this.BackgroundUpdateView(chlk.activities.attendance.SeatingChartPage, res, chlk.activities.lib.DontShowLoader());
+                    if(!model.isInProfile()){
+                        var res = this.attendanceService
+                            .getNotTakenAttendanceClasses(model.getDate())
+                            .attach(this.validateResponse_())
+                            .then(function(items){
+                                return new chlk.models.attendance.NotTakenAttendanceClassesViewData(items);
+                            }.bind(this));
+                        this.BackgroundUpdateView(chlk.activities.attendance.SeatingChartPage, res, chlk.activities.lib.DontShowLoader());
+                    }
+
+                    resModel.setInProfile(model.isInProfile());
+
                     return this.prepareSeatingData(resModel, model.getClassId(), model.getDate());
                 }, this);
             this.BackgroundCloseView(chlk.activities.attendance.EditSeatingGridDialog);
-            return this.UpdateView(chlk.activities.attendance.SeatingChartPage, res);
+            return this.UpdateView(page, res);
         },
 
         [[chlk.models.id.ClassId]],
@@ -486,25 +495,26 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
-        [chlk.controllers.SidebarButton('attendance')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.attendance.SetClassListAttendance]],
         function setClassAttendanceListFromSeatingChartAction(model){
             var result = this.attendanceService.setAttendance(model)
                 .attach(this.validateResponse_())
                 .then(function(res){
-                    return new chlk.models.attendance.SeatingChart();
+                    return new chlk.models.attendance.SeatingChart(model.isInProfile());
                 }, this);
-            return this.UpdateView(chlk.activities.attendance.SeatingChartPage, result, 'saved');
+            return this.UpdateView(model.isInProfile() ? chlk.activities.classes.ClassProfileAttendancePage : chlk.activities.attendance.SeatingChartPage, result, 'saved');
         },
 
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.attendance.SetClassListAttendance]],
         function setClassAttendanceListFromPopUpAction(model){
             var result = this.attendanceService.setAttendance(model)
                 .attach(this.validateResponse_())
                 .then(function(res){
-                    return new chlk.models.attendance.SeatingChart();
+                    return new chlk.models.attendance.SeatingChart(model.isInProfile());
                 }, this);
-            return this.UpdateView(chlk.activities.attendance.SeatingChartPage, result, 'saved');
+            return this.UpdateView(model.isInProfile() ? chlk.activities.classes.ClassProfileAttendancePage : chlk.activities.attendance.SeatingChartPage, result, 'saved');
         },
 
         Object, function getActivityClass_(isProfile_){

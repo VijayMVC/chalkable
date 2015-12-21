@@ -9,8 +9,10 @@ REQUIRE('chlk.models.classes.ClassInfo');
 REQUIRE('chlk.models.classes.ClassSchedule');
 REQUIRE('chlk.models.classes.ClassGradingViewData');
 REQUIRE('chlk.models.classes.AllSchoolsActiveClasses');
+REQUIRE('chlk.models.attendance.ClassAttendanceStatsViewData');
 REQUIRE('chlk.models.school.SchoolClassesStatisticViewData');
 REQUIRE('chlk.models.classes.ClassDisciplinesSummary');
+REQUIRE('chlk.models.classes.ClassAttendanceSummary');
 
 REQUIRE('chlk.models.common.ChlkDate');
 
@@ -88,9 +90,17 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.ClassId, chlk.models.discipline.DateTypeEnum]],
+            [[chlk.models.id.ClassId, chlk.models.classes.DateTypeEnum]],
             ria.async.Future, function getDisciplinesStats(classId, dateType_){
                 return this.get('Class/DisciplineSummary.json', chlk.models.discipline.ClassDisciplineStatsViewData,{
+                    classId: classId.valueOf(),
+                    dateType: dateType_ && dateType_.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.classes.DateTypeEnum]],
+            ria.async.Future, function getAttendanceStats(classId, dateType_){
+                return this.get('Class/AttendanceSummary.json', chlk.models.attendance.ClassAttendanceStatsViewData,{
                     classId: classId.valueOf(),
                     dateType: dateType_ && dateType_.valueOf()
                 });
@@ -99,6 +109,13 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getDisciplinesSummary(classId) {
                 return this.get('Class/Summary.json', chlk.models.classes.ClassDisciplinesSummary, {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getAttendanceSummary(classId) {
+                return this.get('Class/Summary.json', chlk.models.classes.ClassAttendanceSummary, {
                     classId: classId.valueOf()
                 });
             },

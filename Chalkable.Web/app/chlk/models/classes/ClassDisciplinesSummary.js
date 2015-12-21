@@ -11,19 +11,6 @@ NAMESPACE('chlk.models.classes', function () {
 
             chlk.models.discipline.ClassDisciplinesViewData, 'disciplines',
 
-            chlk.models.discipline.ClassDisciplineStatsViewData, 'stats',
-
-            [[chlk.models.id.ClassId, String, chlk.models.discipline.ClassDisciplinesViewData, chlk.models.discipline.ClassDisciplineStatsViewData]],
-            function $(id_, name_, disciplines_, stats_){
-                BASE();
-                if(id_)
-                    this.setId(id_);
-                if(name_)
-                    this.setName(name_);
-                if(disciplines_)
-                    this.setDisciplines(disciplines_);
-                if(stats_)
-                    this.setStats(stats_);
-            }
+            chlk.models.discipline.ClassDisciplineStatsViewData, 'stats'
         ]);
 });

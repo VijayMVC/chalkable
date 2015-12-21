@@ -14,7 +14,7 @@ NAMESPACE('chlk.templates.discipline',function(){
             chlk.models.id.ClassId, 'classId',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.discipline.DateTypeEnum, 'dateType',
+            chlk.models.classes.DateTypeEnum, 'dateType',
 
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.common.ChartDateItem), 'dailySummaries',

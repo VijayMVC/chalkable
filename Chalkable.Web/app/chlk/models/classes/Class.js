@@ -11,6 +11,14 @@ NAMESPACE('chlk.models.classes', function () {
 
     var SJX = ria.serialize.SJX;
 
+    /** @class chlk.models.classes.DateTypeEnum*/
+    ENUM('DateTypeEnum', {
+        YEAR: 0,
+        GRADING_PERIOD: 1,
+        LAST_MONTH: 2,
+        LAST_WEEK: 3
+    });
+
     /** @class chlk.models.classes.Class*/
     CLASS(
         UNSAFE, 'Class', IMPLEMENTS(ria.serialize.IDeserializable), [

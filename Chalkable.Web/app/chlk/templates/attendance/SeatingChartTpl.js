@@ -9,6 +9,12 @@ NAMESPACE('chlk.templates.attendance', function () {
         [ria.templates.ModelBind(chlk.models.attendance.SeatingChart)],
         'SeatingChartTpl', EXTENDS(chlk.templates.common.PageWithClasses), [
             [ria.templates.ModelPropertyBind],
+            chlk.models.id.ClassId, 'classId',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'inProfile',
+
+            [ria.templates.ModelPropertyBind],
             Number, 'columns',
 
             [ria.templates.ModelPropertyBind],
@@ -19,6 +25,9 @@ NAMESPACE('chlk.templates.attendance', function () {
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'ablePost',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ableChangeReasons',
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'ableRePost',
@@ -73,7 +82,7 @@ NAMESPACE('chlk.templates.attendance', function () {
                 var res = {
                     columns: this.getColumns(),
                     rows: this.getRows(),
-                    classId: this.getTopData().getSelectedItemId().valueOf()
+                    classId: this.getClassId().valueOf()
                 }, seatingList = [];
                 this.getSeatingList() && this.getSeatingList().forEach(function(items){
                     var seatings = [];

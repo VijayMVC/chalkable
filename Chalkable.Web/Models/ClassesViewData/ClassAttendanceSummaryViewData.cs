@@ -7,7 +7,7 @@ namespace Chalkable.Web.Models.ClassesViewData
     public class ClassAttendanceSummaryViewData
     {
         public int ClassId { get; set; }
-        public int DatePerioType { get; set; }
+        public int DatePeriodType { get; set; }
         public IList<DailyStatsViewData> Absences { get; set; } 
         public IList<DailyStatsViewData> Lates { get; set; }
         public IList<DailyStatsViewData> Presents { get; set; }
@@ -18,7 +18,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             return new ClassAttendanceSummaryViewData
             {
                 ClassId = classId,
-                DatePerioType = (int) datePeriodType,
+                DatePeriodType = (int) datePeriodType,
                 Absences = dailyAbsences,
                 Lates = dailyLates,
                 Presents = dailyPresents

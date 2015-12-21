@@ -4,6 +4,7 @@
         .close.close-btn.dark
     +ActionForm('attendance', 'editSeatingGrid').edit-seating-grid-form.x-window-body
         +Hidden('classId', self.getClassId().valueOf())
+        +Hidden('inProfile', self.isInProfile())
         +Hidden('date', self.getDate().format('mm/dd/yy'))
         +Hidden('seatingChartInfo', self.getSeatingChartInfo())
         .x-form-field

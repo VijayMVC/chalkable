@@ -1,5 +1,6 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.common.ActionLinkModel');
+REQUIRE('chlk.models.profile.BaseProfileViewData');
 
 NAMESPACE('chlk.templates.profile', function(){
     "use strict";
