@@ -76,5 +76,6 @@ var ChlkSessionConstants = {
     ANNOUNCEMENT_ATTRIBUTES: 'announcementAttributes',
     ANNOUNCEMENT_ASSIGNED_ATTRIBUTES: 'announcementAssignedAttributes',
     MESSAGING_DISABLED: 'messagingDisabled',
-    YEARS: 'years'
+    YEARS: 'years',
+    SIS_API_VERSION: 'sisApiVersion'
 };
