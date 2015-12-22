@@ -109,6 +109,7 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(PersonViewData.Create(distictAdmin), ViewConstants.CURRENT_PERSON);
             var gradeLevel = SchoolLocator.GradeLevelService.GetGradeLevels();
             PrepareJsonData(GradeLevelViewData.Create(gradeLevel), ViewConstants.GRADE_LEVELS);
+            PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.GetAll()), ViewConstants.ATTENDANCE_REASONS);
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);
             var announcementAttributes = SchoolLocator.AnnouncementAttributeService.GetList(true);
