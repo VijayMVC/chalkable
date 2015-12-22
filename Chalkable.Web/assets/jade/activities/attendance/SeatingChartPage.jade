@@ -21,10 +21,10 @@ mixin UpdateGridForm(text, rows, columns, minRows, minColumns, classId)
     if !self.isInProfile()
         -var topData = self.getTopData()
         +ClassesToolBarWithAll(topData, 'attendance', 'seatingChart', [self.getDate().format('mm-dd-yy')], false, true).attendance
-        .action-bar
-            .items
-                +ActionLink('attendance', 'classList', selectedId, self.getDate().toStandardFormat())= Msg.List
-                +ActionLink('attendance', 'seatingChart', selectedId, self.getDate().toStandardFormat()).pressed= Msg.Seating_Chart
+    .action-bar
+        .items
+            +ActionLink(self.isInProfile() ? 'class' : 'attendance', self.isInProfile() ? 'attendanceList' : 'classList', selectedId, self.getDate().toStandardFormat())= Msg.List
+            +ActionLink(self.isInProfile() ? 'class' : 'attendance', self.isInProfile() ? 'attendanceSeatingChart' : 'seatingChart', selectedId, self.getDate().toStandardFormat()).pressed= Msg.Seating_Chart
 
     +ActionForm('attendance', 'setClassAttendanceListFromSeatingChart').save-attendances-form
         +Hidden('date', self.getDate().format('mm/dd/yy'))
@@ -36,6 +36,7 @@ mixin UpdateGridForm(text, rows, columns, minRows, minColumns, classId)
         .header
             +ActionForm('attendance', 'saveFromSeatingChart').save-chart-form.table
                 +Hidden('inProfile', self.isInProfile())
+                +ActionLink('attendance', 'attendanceProfileReport', self.getClassId()).report-link
                 if showButtons
                     .l &nbsp;
                     //: +SummaryInfo(self.getPresentStudents().length, seatingList.length)
@@ -43,9 +44,6 @@ mixin UpdateGridForm(text, rows, columns, minRows, minColumns, classId)
                 .title
                     span.date-text=self.getDate().toString('MM dd, yy')
                     -var params = selectedId ? [selectedId.valueOf()] : null
-                    if self.isInProfile()
-                        -params.push(self.isAbleChangeReasons())
-                        -params.push(self.isAblePost())
                     +DatePicker('date', self.getDate())(
                         data-options={
                             showOtherMonths: true,
@@ -53,13 +51,13 @@ mixin UpdateGridForm(text, rows, columns, minRows, minColumns, classId)
                             inCurrentMp: true
                         },
                         data-controller= self.isInProfile() ? "class" : "attendance",
-                        data-action=self.isInProfile() ? "attendanceForDate" : "seatingChart",
+                        data-action=self.isInProfile() ? "seatingChartForDate" : "seatingChart",
                         data-params=params
                     )#attendance-date.tb-date-picker.tr
                     +Hidden('seatingChartInfo', self.getTextForPost()).text-for-post
                 if showButtons
                     .r
-                        +ActionLink('attendance', 'markAll', selectedId.valueOf(), self.getDate().toStandardFormat(), false, true)(
+                        +ActionLink('attendance', 'markAll', selectedId.valueOf(), self.getDate().toStandardFormat(), self.isInProfile(), true)(
                             class=self.getModel().hasSeatingStudents() ? "" : "disabled"
                         )#all-present-link=Msg.Mark_all_Present
                     .r

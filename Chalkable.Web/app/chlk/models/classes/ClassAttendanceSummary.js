@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.classes.Class');
 REQUIRE('chlk.models.attendance.SeatingChart');
+REQUIRE('chlk.models.attendance.ClassList');
 REQUIRE('chlk.models.attendance.ClassAttendanceStatsViewData');
 
 NAMESPACE('chlk.models.classes', function(){
@@ -9,7 +10,9 @@ NAMESPACE('chlk.models.classes', function(){
     CLASS(
         'ClassAttendanceSummary', EXTENDS(chlk.models.classes.Class),[
 
-            chlk.models.attendance.SeatingChart, 'attendances',
+            chlk.models.attendance.SeatingChart, 'seatingChart',
+
+            chlk.models.attendance.ClassList, 'classList',
 
             chlk.models.attendance.ClassAttendanceStatsViewData, 'stats'
     ]);

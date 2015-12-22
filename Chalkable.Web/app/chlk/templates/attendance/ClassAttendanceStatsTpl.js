@@ -46,6 +46,14 @@ NAMESPACE('chlk.templates.attendance',function(){
                         height: 200
                     },
 
+                    plotOptions:{
+                        line: {
+                            marker: {
+                                symbol: 'circle'
+                            }
+                        }
+                    },
+
                     xAxis: {
                         categories: categories,
                         gridLineWidth: 1,

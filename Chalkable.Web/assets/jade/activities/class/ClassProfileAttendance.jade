@@ -9,7 +9,14 @@
                 userRole = self.getUserRole()
             )
         .attendances-container
-            +RenderWith(clazz.getAttendances(), chlk.templates.attendance.SeatingChartTpl)(
-                currentUser = self.getCurrentUser()
-                userRole = self.getUserRole()
-            )
+            if clazz.getSeatingChart()
+                +RenderWith(clazz.getSeatingChart(), chlk.templates.attendance.SeatingChartTpl)(
+                    currentUser = self.getCurrentUser()
+                    userRole = self.getUserRole()
+                )
+
+            if clazz.getClassList()
+                +RenderWith(clazz.getClassList(), chlk.templates.attendance.ClassList)(
+                    currentUser = self.getCurrentUser()
+                    userRole = self.getUserRole()
+                )
