@@ -114,8 +114,13 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);
             var announcementAttributes = SchoolLocator.AnnouncementAttributeService.GetList(true);
             PrepareJsonData(AnnouncementAttributeViewData.Create(announcementAttributes), ViewConstants.ANNOUNCEMENT_ATTRIBUTES);
+            
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(Context.SchoolYearId.Value);
+            var currGradingPeriod =
+                gradingPeriods.FirstOrDefault(x => x.StartDate <= Context.NowSchoolYearTime.Date && x.EndDate >= Context.NowSchoolYearTime.Date);
             PrepareJsonData(GradingPeriodViewData.Create(gradingPeriods), ViewConstants.GRADING_PERIODS);
+            PrepareJsonData(ShortGradingPeriodViewData.Create(currGradingPeriod), ViewConstants.GRADING_PERIOD);
+
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyDistrictAdmin(distictAdmin.Email, "", "", 
                 district.Name, null, Context.DistrictTimeZone, Context.Role.Name, ip, Context.SCEnabled);
