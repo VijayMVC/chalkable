@@ -121,6 +121,9 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(GradingPeriodViewData.Create(gradingPeriods), ViewConstants.GRADING_PERIODS);
             PrepareJsonData(ShortGradingPeriodViewData.Create(currGradingPeriod), ViewConstants.GRADING_PERIOD);
 
+            var mps = SchoolLocator.MarkingPeriodService.GetMarkingPeriods(sy.Id);
+            PrepareJsonData(MarkingPeriodViewData.Create(mps), ViewConstants.MARKING_PERIODS);
+
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyDistrictAdmin(distictAdmin.Email, "", "", 
                 district.Name, null, Context.DistrictTimeZone, Context.Role.Name, ip, Context.SCEnabled);
