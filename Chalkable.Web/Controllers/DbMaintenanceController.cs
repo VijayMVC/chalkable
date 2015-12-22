@@ -54,8 +54,11 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin")]
         public ActionResult DatabaseDeploy(string key)
         {
+            if (!CompilerHelper.IsProduction)
+                throw new Exception("This method only applies to production envs");
+
             var dacPacContainer = ConfigurationManager.AppSettings["DatabaseDacPacContainer"];
-            var dacPacName = CompilerHelper.IsProduction ? CompilerHelper.Version : "0-7-84da44f664c1-2270";
+            var dacPacName = CompilerHelper.Version;
             var dacPacMasterUri = dacPacContainer + dacPacName + "/Chalkable.Database.Master.dacpac";
             var dacPacSchoolUri = dacPacContainer + dacPacName + "/Chalkable.Database.School.dacpac";
 

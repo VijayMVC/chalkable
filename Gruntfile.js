@@ -174,7 +174,6 @@ module.exports = function(grunt) {
           cwd: './Chalkable.Azure/'
         }]
       },
-      {
       "artifacts-db": {
         options: {
           serviceOptions: azureStorageCredentials, // custom arguments to azure.createBlobService    
