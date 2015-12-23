@@ -42,6 +42,7 @@
         public const string NEEDS_TOUR = "NeedsTour";
         public const string UNSHOWN_NOTIFICATIONS_COUNT = "UnshownNotificationsCount";
 
+        public const string SIS_API_VERSION = "SisApiVersion";
         public const string VERSION = "Version";
         public const string LAST_SYNC_DATE = "LastSyncDate";
         public const string CURR_SCHOOL_YEAR_ID = "CurrentSchoolYearId";

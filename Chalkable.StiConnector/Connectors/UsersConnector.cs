@@ -9,33 +9,35 @@ namespace Chalkable.StiConnector.Connectors
             : base(locator)
         {
         }
+
+        
         public User GetMe()
         {
-            var url = string.Format("{0}chalkable/{1}/me", BaseUrl, "users");
+            var url = $"{BaseUrl}chalkable/{"users"}/me";
             return Call<User>(url);
         }
-
+        
         public byte[] GetPhoto(int personId)
         {
-            var url = string.Format("{0}persons/{1}/photo", BaseUrl, personId);
+            var url = $"{BaseUrl}persons/{personId}/photo";
             return Download(url);
         }
-
+        
         public StiPersonEmail GetPrimaryPersonEmail(int personId)
         {
-            var url = string.Format("{0}persons/{1}/emailaddresses/primary", BaseUrl, personId);
+            var url = $"{BaseUrl}persons/{personId}/emailaddresses/primary";
             return Call<StiPersonEmail>(url);
         }
-
+        
         public void UpdatePrimaryPersonEmail(int personId, StiPersonEmail personEmail)
         {
-            var url = string.Format("{0}persons/{1}/emailaddresses/primary", BaseUrl, personId);
+            var url = $"{BaseUrl}persons/{personId}/emailaddresses/primary";
             Put<Object, StiPersonEmail>(url, personEmail);
         }
-
+        
         public int[] GetUserAcadSessionsIds()
         {
-            return Call<int[]>(string.Format("{0}users/me/acadsessions", BaseUrl));
+            return Call<int[]>($"{BaseUrl}users/me/acadsessions");
         } 
     }
 }

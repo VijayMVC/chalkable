@@ -20,8 +20,8 @@ namespace Chalkable.StiConnector.Connectors
         public IEnumerable<StiAttachment> UploadAttachment(string name, byte[] content)
         {
             return PostWithFile<IList<StiAttachment>>(url, name, content, null); 
-        } 
-
+        }
+        
         public void DeleteAttachment(int id)
         {
             Delete(string.Format(urlFormat, id));
@@ -31,13 +31,13 @@ namespace Chalkable.StiConnector.Connectors
         {
             DeleteAttachment(id);
         }
-
+        
         public void UpdateAttachment(int id, string name, byte[] content)
         {
             PostWithFile<StiAttachment>(string.Format(urlFormat, id), name, content, null, HttpMethod.Put);
         }
-
         //Todo: refactor this 
+        
         public byte[] GetAttachmentContent(int id)
         {
             try
