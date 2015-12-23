@@ -13,10 +13,12 @@ namespace Chalkable.StiConnector.Connectors
         {
         }
 
-
-        [RequiredVersion("7.1.0.0")]
+        
         public IList<SectionSummary> GetSectionsSummaries(int acadSessionId, DateTime tillDate, int start, int count, string filter)
         {
+
+            EnsureApiVersion("7.1.6.19573");
+
             var param = new NameValueCollection()
             {
                 ["start"] = start.ToString(),
@@ -29,9 +31,10 @@ namespace Chalkable.StiConnector.Connectors
         }
 
 
-        [RequiredVersion("7.1.0.0")]
         public IList<SchoolSummary> GetSchoolsSummaries(DateTime tillDate, string filter)
         {
+            EnsureApiVersion("7.1.6.19573");
+
             var param = new NameValueCollection
             {
                 ["search"] = string.IsNullOrWhiteSpace(filter) ? "" : filter
@@ -44,9 +47,10 @@ namespace Chalkable.StiConnector.Connectors
         }
 
 
-        [RequiredVersion("7.1.0.0")]
         public IList<TeacherSummary> GetTeachersSummaries(int acadSessionId, DateTime tillDate, int start, int count, string filter)
         {
+            EnsureApiVersion("7.1.6.19573");
+
             var param = new NameValueCollection()
             {
                 ["start"] = start.ToString(),

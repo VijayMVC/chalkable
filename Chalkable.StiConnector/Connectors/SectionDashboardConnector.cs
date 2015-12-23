@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Connectors.Model.Attendances;
-using Chalkable.StiConnector.SyncModel;
 
 namespace Chalkable.StiConnector.Connectors
 {
@@ -42,9 +41,10 @@ namespace Chalkable.StiConnector.Connectors
             return Call<SectionAttendanceSummaryDashboard>(url, nvc);
         }
 
-        [RequiredVersion("7.1.6.19573")]
         public async Task<IList<DisciplineDailySummary>> GetDisciplineSummaryDashboard(int sectionId, DateTime? startDate, DateTime? endDate)
         {
+            EnsureApiVersion("7.1.6.19573");
+
             var url = $"{BaseUrl}chalkable/sections/{sectionId}/dashboard/discipline/summary";
             var nvc = new NameValueCollection();
             if(startDate.HasValue) 
@@ -53,10 +53,11 @@ namespace Chalkable.StiConnector.Connectors
                 nvc.Add(END_DATE_PARAM, endDate.Value.ToString(Constants.DATE_FORMAT));
             return await CallAsync<IList<DisciplineDailySummary>>(url, nvc);
         }
-
-        [RequiredVersion("7.1.6.19573")]
+        
         public async Task<IList<AttendanceDailySummary>> GetAttendanceDailySummaries(int sectionId, DateTime? startDate, DateTime? endDate)
         {
+            EnsureApiVersion("7.1.6.19573");
+
             var nvc = new NameValueCollection();
             if(startDate.HasValue)
                 nvc.Add(START_DATE_PARAM, startDate.Value.ToString(Constants.DATE_FORMAT));

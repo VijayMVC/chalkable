@@ -273,6 +273,13 @@ namespace Chalkable.StiConnector.Connectors
                 };
         }
 
+        protected void EnsureApiVersion(string requiredApiVersion)
+        {
+            VersionHelper.ValidateVersionFormat(requiredApiVersion);
+            if(VersionHelper.CompareVersionTo(requiredApiVersion, ApiVersion) == 1)
+                throw new ChalkableSisNotSupportVersionException(requiredApiVersion, ApiVersion);
+        }
+
         protected string BaseUrl => locator.BaseUrl;
         public string ApiVersion => locator.ApiVersion;
     }
