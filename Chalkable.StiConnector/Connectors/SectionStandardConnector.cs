@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.StiConnector.Connectors
@@ -12,10 +8,10 @@ namespace Chalkable.StiConnector.Connectors
         public SectionStandardConnector(ConnectorLocator locator) : base(locator)
         {
         }
-
+        
         public IList<ActivityStandard> GetStandards(int sectionId)
         {
-            return Call<IList<ActivityStandard>>(string.Format(BaseUrl + "chalkable/sections/{0}/standards", sectionId));
+            return Call<IList<ActivityStandard>>($"{BaseUrl}chalkable/sections/{sectionId}/standards");
         } 
     }
 }

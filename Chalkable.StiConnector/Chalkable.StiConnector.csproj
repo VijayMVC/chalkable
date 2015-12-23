@@ -102,6 +102,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Connectors\AboutConnector.cs" />
     <Compile Include="Connectors\ActivityCategoryConnnector.cs" />
     <Compile Include="Connectors\ActivityConnector.cs" />
     <Compile Include="Connectors\ActivityScoreConnector.cs" />
@@ -119,6 +120,7 @@
     <Compile Include="Connectors\GradebookConnector.cs" />
     <Compile Include="Connectors\LearningEarningsConnector.cs" />
     <Compile Include="Connectors\LinkConnector.cs" />
+    <Compile Include="Connectors\Model\About.cs" />
     <Compile Include="Connectors\Model\Activity.cs" />
     <Compile Include="Connectors\Model\ActivityAttachment.cs" />
     <Compile Include="Connectors\Model\ActivityAttribute.cs" />
@@ -272,6 +274,7 @@
     <Compile Include="SyncModel\UserLogin.cs" />
     <Compile Include="SyncModel\UserPassword.cs" />
     <Compile Include="SyncModel\UserSchool.cs" />
+    <Compile Include="VersionHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.Config" />
