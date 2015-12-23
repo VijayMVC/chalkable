@@ -31,7 +31,7 @@ NAMESPACE('chlk.templates.profile', function(){
 
                 if (isAdminOrTeacher)
                 //!this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ROSTER)),
-                    links.push(this.buildActionLinkModelForClass('details', 'Now', pressedActionName, classId_, true));
+                    links.push(this.buildActionLinkModelForClass('details', 'Now', pressedActionName, classId_, !this.canViewSummary_(teacherIds)));
 
                 links.push(this.buildActionLinkModelForClass('info', 'Info', pressedActionName, classId_));
 
@@ -39,6 +39,7 @@ NAMESPACE('chlk.templates.profile', function(){
 
                 if (isAdminOrTeacher){
                     links.push(this.buildActionLinkModelForClass('attendance', 'Attendance', pressedActionName, classId_, !this.canViewAttendance_(teacherIds)));
+                    links.push(this.buildActionLinkModelForClass('discipline', 'Discipline', pressedActionName, classId_, !this.canViewDiscipline_(teacherIds)));
                     links.push(this.buildActionLinkModelForClass('apps', 'Apps', pressedActionName, classId_, true));
                     links.push(this.buildActionLinkModelForClass('schedule', 'Schedule', pressedActionName, classId_, !this.canViewSchedule_()));
                     //!this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_GRADES))
@@ -46,6 +47,26 @@ NAMESPACE('chlk.templates.profile', function(){
                     links.push(this.buildActionLinkModelForClass('explorer', 'Explorer', pressedActionName, classId_, !this.canViewExplorer_(teacherIds)));
                 }
                 return links;
+            },
+
+            [[ArrayOf(chlk.models.id.SchoolPersonId)]],
+            Boolean, function canViewSummary_(teacherIds){
+                var currentUserId = this.getCurrentUser().getId();
+                var permissionEnum = chlk.models.people.UserPermissionEnum;
+                var canViewSummary = this.getUserRole().isAdmin() && this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN)
+                    || (this.getUserRole().isTeacher() && this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_DISCIPLINE)
+                    && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
+                return canViewSummary;
+            },
+
+            [[ArrayOf(chlk.models.id.SchoolPersonId)]],
+            Boolean, function canViewDiscipline_(teacherIds){
+                var currentUserId = this.getCurrentUser().getId();
+                var permissionEnum = chlk.models.people.UserPermissionEnum;
+                var canViewSummary = this.getUserRole().isAdmin() && this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ADMIN)
+                    || (this.getUserRole().isTeacher() && this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM)
+                    && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
+                return canViewSummary;
             },
 
             Boolean, function canViewSchedule_(){

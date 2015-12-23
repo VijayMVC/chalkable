@@ -51,7 +51,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             if((diffTop > topPadding) && (diffTop < topPadding + height) && (diffLeft > leftPadding) && (diffLeft < leftPadding + width)){
                 jQuery('#submit-chart').show(100);
                 needChartPopUp = true;
-                jQuery('.seating-chart-page').addClass('edited');
+                jQuery('.seating-chart-content').addClass('edited');
                 var droppable = $(this).find('.student-block[data-index=' + index + ']');
                 if(droppable.find('.empty')[0]){
                     droppable.html(draggable.html()).removeClass('empty-box');
@@ -192,7 +192,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                     var chart = new ria.dom.Dom('.seating-chart-people');
                     chart.show();
                     this.dom.addClass('dragging-on');
-                    if(this.dom.hasClass('edited')){
+                    if(this.dom.find('.seating-chart-content').hasClass('edited')){
                         this.dom.find('#submit-chart').show(100);
                         needChartPopUp = true;
                     }
@@ -230,7 +230,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 var isReadOnly = node.getData('is-read-only');
                 if(!this.dom.hasClass('dragging-on') && !isReadOnly && this.dom.find('.page-content').hasClass('can-post')){
                     var popUp = this.dom.find('.seating-chart-popup');
-                    var main = node.parent('.seating-chart-page');
+                    var main = node.parent('.seating-chart-content');
                     var bottom = main.height() + main.offset().top - node.offset().top;
                     var left = node.offset().left - main.offset().left + 10;
                     popUp.setCss('bottom', bottom);
@@ -328,7 +328,7 @@ NAMESPACE('chlk.activities.attendance', function () {
             VOID, function removeStudentClick(node, event){
                 this.dom.find('#submit-chart').show(100);
                 needChartPopUp = true;
-                this.dom.addClass('edited');
+                this.dom.find('.seating-chart-content').addClass('edited');
                 var parent = node.parent('.student-block ');
                 var clone = parent.clone();
                 parent.addClass('empty-box');
@@ -477,13 +477,18 @@ NAMESPACE('chlk.activities.attendance', function () {
                 }, 1);
             },
 
+            function getAttendancesModel(model){
+                return model;
+            },
+
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
-                this._canChangeReasons = model.isAbleChangeReasons();
-                this.setAbleRePost(model.isAbleRePost());
+                var attModel = this.getAttendancesModel(model);
+                this._canChangeReasons = attModel.isAbleChangeReasons();
+                this.setAbleRePost(attModel.isAbleRePost());
 
                 var tpl = new chlk.templates.attendance.SeatingChartPeopleTpl();
-                tpl.assign(model);
+                tpl.assign(attModel);
                 tpl.renderTo(new ria.dom.Dom('body'));
 
                 new ria.dom.Dom().on('click.seating', '.close-people, #submit-chart', function(node, event){
@@ -499,7 +504,7 @@ NAMESPACE('chlk.activities.attendance', function () {
                 new ria.dom.Dom().on('click.seating', '#submit-chart', function(node, event){
                     needChartPopUp = false;
                     this.recalculateChartInfo();
-                    this.dom.removeClass('edited');
+                    this.dom.find('.seating-chart-content').removeClass('edited');
                     node.hide(100);
                     var postButtons = this.dom.find('#submit-attendance-button, #all-present-link');
                     this.dom.find('.save-chart-form').trigger('submit');

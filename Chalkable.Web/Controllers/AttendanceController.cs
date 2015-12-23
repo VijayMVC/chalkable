@@ -118,7 +118,7 @@ namespace Chalkable.Web.Controllers
             return Json(TeacherAttendanceSummaryViewData.Create(attendanceSummary, d));
         }
 
-        [AuthorizationFilter("Teacher", true, new[] { AppPermissionType.Attendance })]
+        [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Attendance })]
         public ActionResult SeatingChart(DateTime? date, int classId)
         {
             return Json(GetSeatingChart(date, classId));
@@ -140,7 +140,7 @@ namespace Chalkable.Web.Controllers
             return null;
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult PostSeatingChart(DateTime? date, SeatingChartInfo seatingChartInfo, Boolean needInfo)
         {
             var d = (date ?? Context.NowSchoolYearTime).Date;

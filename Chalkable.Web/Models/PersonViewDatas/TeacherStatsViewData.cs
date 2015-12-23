@@ -18,6 +18,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public decimal? AttendancesCount { get; set; }
         public decimal? Average { get; set; }
 
+        public string Gender { get; set; }
+
         public static TeacherStatsViewData Create(TeacherStatsInfo teacher)
         {
             return new TeacherStatsViewData
@@ -28,7 +30,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 Average = teacher.Average,
                 StudentsCount = teacher.StudentsCount,
                 Classes = teacher.Classes.Select(ShortClassViewData.Create).ToList(),
-                DisciplinesCount = teacher.DisciplinesCount
+                DisciplinesCount = teacher.DisciplinesCount,
+                Gender = teacher.Gender
             };
         }
     }

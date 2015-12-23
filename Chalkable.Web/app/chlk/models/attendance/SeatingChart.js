@@ -3,6 +3,7 @@ REQUIRE('chlk.models.attendance.ClassAttendanceWithSeatPlace');
 REQUIRE('chlk.models.common.PageWithClasses');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.attendance.AttendanceReason');
+REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.lib.serialize.ChlkJsonSerializer');
 
 
@@ -12,6 +13,10 @@ NAMESPACE('chlk.models.attendance', function () {
     /** @class chlk.models.attendance.SeatingChart*/
     CLASS(
         'SeatingChart', EXTENDS(chlk.models.common.PageWithClasses), IMPLEMENTS(ria.serialize.IDeserializable), [
+            chlk.models.id.ClassId, 'classId',
+
+            Boolean, 'inProfile',
+
             Number, 'columns',
 
             Number, 'rows',
@@ -96,6 +101,12 @@ NAMESPACE('chlk.models.attendance', function () {
 
             Boolean, function canPost(){
                 return this.isAblePost()  && (!this.isPosted() || !!this.isAbleRePost());
+            },
+
+            function $(inProfile_){
+                BASE();
+                if(inProfile_)
+                    this.setInProfile(inProfile_);
             }
 
 

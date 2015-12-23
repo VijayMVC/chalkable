@@ -52,6 +52,8 @@ NAMESPACE('chlk.models.attendance', function () {
 
         Boolean, 'classList',
 
+        Boolean, 'inProfile',
+
         [[String]],
         VOID, function setAttendancesJson(attendancesJson){
             var serializer = new chlk.lib.serialize.ChlkJsonSerializer();

@@ -343,4 +343,21 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return dbQuery;
         }
     }
+
+    public class LessonPlanForAdminDataAccess : LessonPlanDataAccess
+    {
+        public LessonPlanForAdminDataAccess(UnitOfWork unitOfWork, int schoolYearId)
+            : base(unitOfWork, schoolYearId)
+        {
+        }
+
+        protected override DbQuery FilterLessonPlanByCallerId(DbQuery dbQuery, int callerId)
+        {
+            //var callerIdParam = "callerId";
+            //dbQuery.Sql.AppendFormat(" and ClassRef in (select ClassRef from ClassPerson where ClassPerson.PersonRef =@{0})", callerIdParam);
+            //dbQuery.Sql.AppendFormat(" and {0} = 1", LessonPlan.VISIBLE_FOR_STUDENT_FIELD);
+            //dbQuery.Parameters.Add(callerIdParam, callerId);
+            return dbQuery;
+        }
+    }
 }

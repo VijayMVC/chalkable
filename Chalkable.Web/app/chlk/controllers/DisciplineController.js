@@ -84,7 +84,7 @@ NAMESPACE('chlk.controllers', function(){
             },
 
             //TODO: refactor this copy past
-            [chlk.controllers.SidebarButton('discipline')],
+            [chlk.controllers.NotChangedSidebarButton()],
             [[Boolean]],
             function sortStudentsAction(byLastName){
                 var model = this.getContext().getSession().get(ChlkSessionConstants.DISCIPLINE_PAGE_DATA);
@@ -106,7 +106,7 @@ NAMESPACE('chlk.controllers', function(){
                     newModel.setByLastName(byLastName);
                     return newModel;
                 });
-                return this.UpdateView(chlk.activities.discipline.ClassDisciplinesPage, result);
+                return this.UpdateView(this.getView().getCurrent().getClass(), result);
             },
 
             [[Number, Number, chlk.models.common.ChlkDate]],
@@ -183,7 +183,7 @@ NAMESPACE('chlk.controllers', function(){
                         }, this);
             },
 
-            [chlk.controllers.SidebarButton('discipline')],
+            [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.discipline.SetDisciplineModel]],
             function setDisciplineAction(model){
                 var result = this.disciplineService

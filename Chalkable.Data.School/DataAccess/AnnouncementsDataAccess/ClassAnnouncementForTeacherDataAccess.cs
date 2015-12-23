@@ -17,7 +17,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                                                      from [{0}] where [{0}].[{1}] = {2}  and [{0}].[{3}] = [{4}].[{5}])",
                                           "ClassTeacher", ClassTeacher.PERSON_REF_FIELD, callerId, ClassTeacher.CLASS_REF_FIELD,
                                           tableName, ClassAnnouncement.CLASS_REF_FIELD);
-            var selectSet = string.Format("{0}.*, {1} as IsOwner", tableName, classTeacherSql);
+            var selectSet = $"{tableName}.*, {classTeacherSql} as IsOwner";
             dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, selectSet, tableName);
             return dbQuery;
         }

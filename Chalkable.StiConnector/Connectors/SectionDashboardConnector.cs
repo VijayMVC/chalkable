@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 using Chalkable.Common;
+using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Connectors.Model.Attendances;
+using Chalkable.StiConnector.SyncModel;
 
 namespace Chalkable.StiConnector.Connectors
 {
@@ -17,7 +21,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public SectionAttendanceDetailDashboard GetAttendanceDetailDashboard(int sectionId, DateTime startDate, DateTime endDate)
         {
-            var url = string.Format("{0}chalkable/sections/{1}/dashboard/attendance/detail", BaseUrl, sectionId);
+            var url = $"{BaseUrl}chalkable/sections/{sectionId}/dashboard/attendance/detail";
             var nvc = new NameValueCollection
                 {
                     {START_DATE_PARAM, startDate.ToString(Constants.DATE_FORMAT)},
@@ -33,6 +37,29 @@ namespace Chalkable.StiConnector.Connectors
             if(gradingPeriodId.HasValue)
                 nvc.Add(GRADING_PERIOD_ID_PARAM, gradingPeriodId.Value.ToString());
             return Call<SectionAttendanceSummaryDashboard>(url, nvc);
+        }
+
+        public async Task<IList<DisciplineDailySummary>> GetDisciplineSummaryDashboard(int sectionId, DateTime? startDate, DateTime? endDate)
+        {
+            var url = $"{BaseUrl}chalkable/sections/{sectionId}/dashboard/discipline/summary";
+            var nvc = new NameValueCollection();
+            if(startDate.HasValue) 
+                nvc.Add(START_DATE_PARAM, startDate.Value.ToString(Constants.DATE_FORMAT));
+            if(endDate.HasValue)
+                nvc.Add(END_DATE_PARAM, endDate.Value.ToString(Constants.DATE_FORMAT));
+            return await CallAsync<IList<DisciplineDailySummary>>(url, nvc);
+        }
+
+
+        public async Task<IList<AttendanceDailySummary>> GetAttendanceDailySummaries(int sectionId, DateTime? startDate, DateTime? endDate)
+        {
+            var nvc = new NameValueCollection();
+            if(startDate.HasValue)
+                nvc.Add(START_DATE_PARAM, startDate.Value.ToString(Constants.DATE_FORMAT));
+            if(endDate.HasValue)
+                nvc.Add(END_DATE_PARAM, endDate.Value.ToString(Constants.DATE_FORMAT));
+
+            return await CallAsync<IList<AttendanceDailySummary>>(BaseUrl+$"chalkable/sections/{sectionId}/dashboard/attendance/summary",nvc);
         }
     }
 }

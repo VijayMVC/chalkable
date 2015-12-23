@@ -8,6 +8,8 @@ NAMESPACE('chlk.models.attendance', function () {
 
         chlk.models.common.ChlkDate, 'date',
 
+        Boolean, 'inProfile',
+
         Object, 'seatingChartInfo'
     ]);
 });
