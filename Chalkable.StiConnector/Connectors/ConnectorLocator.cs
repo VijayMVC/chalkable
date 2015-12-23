@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Json;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
 using Chalkable.Common.Exceptions;
 using Chalkable.StiConnector.Exceptions;
@@ -16,8 +16,15 @@ namespace Chalkable.StiConnector.Connectors
         public string BaseUrl { get; private set; }
         public string Token { get; private set; }
         public DateTime TokenExpires { get; private set; }
+        public string ApiVersion { get; private set; }
+        
+        public ConnectorLocator(string token, string baseUrl, DateTime tokenExpires) 
+            : this(token, baseUrl, tokenExpires, null)
+        {
+            ApiVersion = Task.Run(() => AboutConnector.GetApiVersion()).Result.Version;
+        }
 
-        public ConnectorLocator(string token, string baseUrl, DateTime tokenExpires)
+        public ConnectorLocator(string token, string baseUrl, DateTime tokenExpires, string apiVersion)
         {
             Token = token;
             if (!baseUrl.EndsWith("/"))
@@ -25,6 +32,7 @@ namespace Chalkable.StiConnector.Connectors
             BaseUrl = baseUrl;
             TokenExpires = tokenExpires;
             InitServices();
+            ApiVersion = apiVersion;
         }
 
         private void InitServices()
@@ -51,6 +59,7 @@ namespace Chalkable.StiConnector.Connectors
             ActivityAssignedAttributeConnector = new ActivityAssignedAttributeConnector(this);
             GradingConnector = new GradingConnector(this);
             ClassesDashboardConnector = new ClassesDashboardConnector(this);
+            AboutConnector = new AboutConnector(this);
         }
 
 
@@ -76,6 +85,7 @@ namespace Chalkable.StiConnector.Connectors
         public LearningEarningsConnector LearningEarningsConnector { get; private set; }
         public GradingConnector GradingConnector { get; private set; }
         public ClassesDashboardConnector ClassesDashboardConnector { get; private set; }
+        public AboutConnector AboutConnector { get; set; }
 
         public class TokenModel
         {
