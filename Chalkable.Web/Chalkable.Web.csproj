@@ -32,6 +32,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <SkipPostSharp>True</SkipPostSharp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -599,10 +600,6 @@
     <ProjectReference Include="..\Chalkable.Database.School\Chalkable.Database.School.sqlproj">
       <Project>{be01fdc7-65d4-4d0a-8fae-ed6d67e47a44}</Project>
       <Name>Chalkable.Database.School</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Chalkable.Database.Updater\Chalkable.Database.Updater.csproj">
-      <Project>{a4ec8f5b-6715-4653-b549-e84dda86335f}</Project>
-      <Name>Chalkable.Database.Updater</Name>
     </ProjectReference>
     <ProjectReference Include="..\Chalkable.StiConnector\Chalkable.StiConnector.csproj">
       <Project>{3D16203E-D19D-41E1-9918-2A9448427BFD}</Project>

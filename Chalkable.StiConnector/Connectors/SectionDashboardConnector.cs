@@ -15,10 +15,13 @@ namespace Chalkable.StiConnector.Connectors
         private const string END_DATE_PARAM = "endDate";
         private const string GRADING_PERIOD_ID_PARAM = "gradingPeriodId";
 
+
+
         public SectionDashboardConnector(ConnectorLocator locator) : base(locator)
         {
         }
 
+        
         public SectionAttendanceDetailDashboard GetAttendanceDetailDashboard(int sectionId, DateTime startDate, DateTime endDate)
         {
             var url = $"{BaseUrl}chalkable/sections/{sectionId}/dashboard/attendance/detail";
@@ -29,16 +32,17 @@ namespace Chalkable.StiConnector.Connectors
                 };
             return Call<SectionAttendanceDetailDashboard>(url, nvc);
         }
-
+        
         public SectionAttendanceSummaryDashboard GetAttendanceSummaryDashboard(int sectionId, int? gradingPeriodId)
         {
-            var url = string.Format(BaseUrl + "chalkable/sections/{0}/dashboard/attendance/summary", sectionId);
+            var url = $"{BaseUrl}chalkable/sections/{sectionId}/dashboard/attendance/summary";
             var nvc = new NameValueCollection();
             if(gradingPeriodId.HasValue)
                 nvc.Add(GRADING_PERIOD_ID_PARAM, gradingPeriodId.Value.ToString());
             return Call<SectionAttendanceSummaryDashboard>(url, nvc);
         }
 
+        [RequiredVersion("7.1.6.19573")]
         public async Task<IList<DisciplineDailySummary>> GetDisciplineSummaryDashboard(int sectionId, DateTime? startDate, DateTime? endDate)
         {
             var url = $"{BaseUrl}chalkable/sections/{sectionId}/dashboard/discipline/summary";
@@ -50,7 +54,7 @@ namespace Chalkable.StiConnector.Connectors
             return await CallAsync<IList<DisciplineDailySummary>>(url, nvc);
         }
 
-
+        [RequiredVersion("7.1.6.19573")]
         public async Task<IList<AttendanceDailySummary>> GetAttendanceDailySummaries(int sectionId, DateTime? startDate, DateTime? endDate)
         {
             var nvc = new NameValueCollection();
@@ -59,7 +63,7 @@ namespace Chalkable.StiConnector.Connectors
             if(endDate.HasValue)
                 nvc.Add(END_DATE_PARAM, endDate.Value.ToString(Constants.DATE_FORMAT));
 
-            return await CallAsync<IList<AttendanceDailySummary>>(BaseUrl+$"chalkable/sections/{sectionId}/dashboard/attendance/summary",nvc);
+            return await CallAsync<IList<AttendanceDailySummary>>($"{BaseUrl}chalkable/sections/{sectionId}/dashboard/attendance/summary",nvc);
         }
     }
 }

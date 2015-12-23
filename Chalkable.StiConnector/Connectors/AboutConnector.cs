@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Chalkable.StiConnector.Connectors.Model;
+﻿using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.StiConnector.Connectors
 {
@@ -9,9 +8,11 @@ namespace Chalkable.StiConnector.Connectors
         {
         }
 
-        public async Task<About> GetApiVersion()
+        public About GetApiVersion()
         {
-            return await CallAsync<About>($"{BaseUrl}about");
+            var res =  Call<About>($"{BaseUrl}about");
+            VersionHelper.ValidateVersionFormat(res.Version);
+            return res;
         }
     }
 }
