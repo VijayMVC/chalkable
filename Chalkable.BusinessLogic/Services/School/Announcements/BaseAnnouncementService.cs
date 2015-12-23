@@ -209,7 +209,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return InternalGetAnnouncementById(id);
         }
 
-        public virtual TAnnouncement InternalGetAnnouncementById(int announcementId)
+        protected virtual TAnnouncement InternalGetAnnouncementById(int announcementId)
         {
             Trace.Assert(Context.PersonId.HasValue);
             return DoRead(u =>

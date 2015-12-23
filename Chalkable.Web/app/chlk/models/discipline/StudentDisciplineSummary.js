@@ -1,7 +1,7 @@
 REQUIRE('chlk.models.people.ShortUserInfo');
 REQUIRE('chlk.models.discipline.StudentDisciplineHoverBoxItem');
 REQUIRE('chlk.models.schoolYear.MarkingPeriod');
-//REQUIRE('chlk.models.discipline.StudentDisciplineHoverBoxItem');
+REQUIRE('chlk.models.common.HoverBox');
 
 NAMESPACE('chlk.models.discipline', function(){
    "use strict";

@@ -1,4 +1,4 @@
-﻿Create Procedure [dbo].[spGetLessonPlansDetailses]
+﻿CREATE Procedure [dbo].[spGetLessonPlansDetailses]
 	@lessonPlanIds TInt32 readonly,
 	@callerId int,
 	@callerRole int,
@@ -29,7 +29,8 @@ Where
 	Id in(Select * From @lessonPlanIds)
 	and SchoolYearRef = @schoolYearId
 	and (@callerRole=2 AND exists(Select * From ClassTeacher Where ClassTeacher.PersonRef = @callerId and ClassTeacher.ClassRef = vwLP.ClassRef)
-		 or @callerRole=3 And exists(Select * From ClassPerson Where ClassPerson.PersonRef = @callerId and ClassPerson.ClassRef = vwLP.ClassRef))
+		 or @callerRole=3 And exists(Select * From ClassPerson Where ClassPerson.PersonRef = @callerId and ClassPerson.ClassRef = vwLP.ClassRef)
+		 or @callerRole = 10)
 
 Declare @count int = (Select count(*) From @lessonPlans)
 
@@ -76,7 +77,7 @@ From
 	vwAnnouncementQnA
 Where 
 	AnnouncementRef in(Select Id From @lessonPlans)
-	and (@callerRole = 1 
+	and (@callerRole = 1 or @callerRole = 10
 		 or @callerId = AnswererId 
 		 or @callerId = AskerId 
 		 or (ClassRef is not null and AnsweredTime is not null
@@ -105,4 +106,4 @@ Where AnnouncementStandard.AnnouncementRef in(Select Id From @lessonPlans)
 
 Select * From vwAnnouncementAttachment
 Where AnnouncementAttachment_AnnouncementRef in(Select Id From @lessonPlans)
-		and (@callerRole = 2 or (@callerRole = 3 and (Attachment_PersonRef = @callerId or exists(Select * From @teacherIds t Where t.value = Attachment_PersonRef))))
+		and (@callerRole = 10 or @callerRole = 2 or (@callerRole = 3 and (Attachment_PersonRef = @callerId or exists(Select * From @teacherIds t Where t.value = Attachment_PersonRef))))

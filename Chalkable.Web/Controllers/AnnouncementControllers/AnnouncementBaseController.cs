@@ -90,7 +90,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann, IList<AnnouncementAttachmentInfo> attachments, IList<AttachmentInfo> attrAttachmentInfo)
         {
-            if (ann.ClassAnnouncementData != null && ann.ClassAnnouncementData.SisActivityId.HasValue)
+            if (ann.ClassAnnouncementData?.SisActivityId != null)
             {
                 ann.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(ann.Id);
                 ann.GradingStudentsCount = ann.StudentAnnouncements.Count(x => x.IsGraded);

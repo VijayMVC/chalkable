@@ -1,6 +1,6 @@
 ﻿
 
-Create Procedure [dbo].[spGetAdminAnnouncementsDetailses] 
+CREATE Procedure [dbo].[spGetAdminAnnouncementsDetailses] 
 	@adminAnnouncementIds TInt32 ReadOnly, 
 	@callerId int, 
 	@callerRole int

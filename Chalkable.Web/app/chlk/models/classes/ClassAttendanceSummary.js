@@ -1,24 +1,19 @@
 REQUIRE('chlk.models.classes.Class');
+REQUIRE('chlk.models.attendance.SeatingChart');
+REQUIRE('chlk.models.attendance.ClassList');
+REQUIRE('chlk.models.attendance.ClassAttendanceStatsViewData');
 
 NAMESPACE('chlk.models.classes', function(){
     "use strict";
 
-    var SJX = ria.serialize.SJX;
-
     /**@class chlk.models.classes.ClassAttendanceSummary*/
     CLASS(
-        UNSAFE, 'ClassAttendanceSummary', EXTENDS(chlk.models.classes.Class), IMPLEMENTS(ria.serialize.IDeserializable),[
-            chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'absentSection',
+        'ClassAttendanceSummary', EXTENDS(chlk.models.classes.Class),[
 
-            chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'lateSection',
+            chlk.models.attendance.SeatingChart, 'seatingChart',
 
-            chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem), 'presentSection',
+            chlk.models.attendance.ClassList, 'classList',
 
-            OVERRIDE, VOID, function deserialize(raw){
-                BASE(raw);
-                this.absentSection = SJX.fromDeserializable(raw.absences, chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem));
-                this.lateSection = SJX.fromDeserializable(raw.lates, chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem));
-                this.presentSection = SJX.fromDeserializable(raw.presents, chlk.models.common.HoverBox.OF(chlk.models.attendance.StudentAttendanceHoverBoxItem));
-            }
+            chlk.models.attendance.ClassAttendanceStatsViewData, 'stats'
     ]);
 });
