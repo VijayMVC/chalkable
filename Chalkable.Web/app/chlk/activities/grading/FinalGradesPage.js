@@ -616,12 +616,17 @@ NAMESPACE('chlk.activities.grading', function () {
 
             ArrayOf(String), 'allScores',
 
+            function prepareGradingModel_(model){
+                return model;
+            },
+
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
-                this.setClassId(model.getTopData().getSelectedItemId());
-                this.setGradingComments(model.getGradingComments());
+                var gradingModel = this.prepareGradingModel_(model);
+                this.setClassId(gradingModel.getClassId());
+                this.setGradingComments(gradingModel.getGradingComments());
                 var allScores = [];
-                model.getAlphaGrades().forEach(function(item){
+                gradingModel.getAlphaGrades().forEach(function(item){
                     allScores.push(item.getName());
                 });
                 this.setAllScores(allScores);

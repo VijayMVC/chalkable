@@ -1,22 +1,29 @@
 .standards-grid.grades-page
     #grading-popup.grading-input-popup.popup-bubble.no-triangle
-    -var topData = self.getTopData()
-    -var selectedId = topData.getSelectedItemId()
+    -var selectedId = self.getClassId()
 
-    h2.page-title=Msg.Standard(true)
-
-    +ClassesToolBarWithAll(topData, 'grading', 'standardsGrid', null, null, null)
     .autocomplete-list
-    .action-bar
-        .items
-            +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
-            +ActionLink('grading', "standardsGrid", selectedId).pressed=Msg.Standard(true)
-            +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
-            if self.isLEIntegrated() && self.isHasAccessToLE()
-                +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
+
+    if self.isInProfile()
+        .buttons-group.right
+            +ActionButton('grading', "summaryGridClassProfile", selectedId)=Msg.Item(true)
+            +ActionButton('grading', "standardsGridClassProfile", selectedId).pressed=Msg.Standard(true)
+            +ActionButton('grading', "finalGradesClassProfile", selectedId)=Msg.Final_Grade(true)
+    else
+        -var topData = self.getTopData()
+        +ClassesToolBarWithAll(topData, 'grading', 'standardsGrid', null, null, null)
+        h2.page-title=Msg.Standard(true)
+        .action-bar
+            .items
+                +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
+                +ActionLink('grading', "standardsGrid", selectedId).pressed=Msg.Standard(true)
+                +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
+                if self.isLEIntegrated() && self.isHasAccessToLE()
+                    +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
     .buttons-group
-        +ActionButton('grading', 'standards', selectedId).boxes=Msg.Box(true)
-        +ActionButton('grading', 'standardsGrid', selectedId).pressed.grid=Msg.Grid
+        +ActionButton('grading', self.isInProfile() ? 'standardsBoxesClassProfile' : 'standards', selectedId).boxes=Msg.Box(true)
+        +ActionButton('grading', self.isInProfile() ? 'standardsGridClassProfile' : 'standardsGrid', selectedId).grid.pressed=Msg.Grid
+
     .mps-container
         .popup-bubble.bottom.comment.centered
             .pop-up-triangle
@@ -44,6 +51,8 @@
                     .buttons-row
                         .grading-selects
                             +ActionForm('grading', 'loadGradingPeriodGridStandards').load-grading-period
+                                +Hidden('ableEdit', item.isAbleEdit())
+                                +Hidden('gradable', item.isGradable())
                                 +Hidden('classId', selectedId)
                                 +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
                         .arrows-row

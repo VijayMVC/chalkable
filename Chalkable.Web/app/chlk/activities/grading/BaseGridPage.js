@@ -890,11 +890,16 @@ NAMESPACE('chlk.activities.grading', function () {
                 jQuery(window).off('resize.grade')
             },
 
+            function prepareGradingModel_(model){
+                return model;
+            },
+
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
-                this.setClassId(model.getTopData().getSelectedItemId());
+                var gradingModel = this.prepareGradingModel_(model);
+                this.setClassId(gradingModel.getClassId());
                 this.openGradingPeriod(this.dom.find('.open.marking-period-container').find('.mp-data'));
-                this.prepareAllScores(model);
+                this.prepareAllScores(gradingModel);
                 this.addEvents();
                 var toolbar = this.dom.find('.grid-toolbar');
                 if(toolbar.exists()){

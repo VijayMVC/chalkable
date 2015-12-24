@@ -37,6 +37,12 @@ NAMESPACE('chlk.templates.grading', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.grading.AvgComment), 'gradingComments',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'inProfile',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ClassId, 'classId',
+
             String, function getTooltipText(item){
                 var res = [];
                 if(item.isLate())

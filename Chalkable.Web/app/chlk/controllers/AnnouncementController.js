@@ -247,12 +247,12 @@ NAMESPACE('chlk.controllers', function (){
                     model.setLate(model.isOldLate());
                     model.setIncomplete(model.isOldIncomplete());
                     model.setExempt(model.isOldExempt());
-                    this.BackgroundUpdateView(chlk.activities.grading.GradingClassSummaryGridPage, model, chlk.activities.lib.DontShowLoader());
+                    this.BackgroundUpdateView(this.getView().getCurrent().getClass(), model, chlk.activities.lib.DontShowLoader());
 
                     throw error;
                 }, this)
                 .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, chlk.activities.lib.DontShowLoader());
+            return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
         },
 
         [[chlk.models.id.AnnouncementApplicationId]],

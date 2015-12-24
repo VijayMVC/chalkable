@@ -13,7 +13,6 @@ REQUIRE('chlk.activities.classes.SummaryPage');
 REQUIRE('chlk.activities.classes.ClassInfoPage');
 REQUIRE('chlk.activities.classes.ClassSchedulePage');
 REQUIRE('chlk.activities.classes.ClassProfileAttendanceSeatingChartPage');
-REQUIRE('chlk.activities.classes.ClassProfileGradingPage');
 REQUIRE('chlk.activities.classes.ClassProfileAppsPage');
 REQUIRE('chlk.activities.classes.ClassExplorerPage');
 REQUIRE('chlk.activities.classes.ClassProfileDisciplinePage');
@@ -45,16 +44,6 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.GradingPeriodService, 'gradingPeriodService',
 
-            function isPageReadonly_(clazz, teacherPermissionName, adminPermissionName){
-                var teacherIds = clazz.getTeachersIds();
-                var currentUserId = this.getCurrentPerson().getId();
-                var permissionEnum = chlk.models.people.UserPermissionEnum;
-                var isLinksEnabled = this.userIsAdmin() && this.hasUserPermission_(permissionEnum[adminPermissionName])
-                    || (this.userIsTeacher() && this.hasUserPermission_(permissionEnum[teacherPermissionName])
-                    && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
-                return !isLinksEnabled;
-            },
-
             [[chlk.models.id.ClassId]],
             function detailsAction(classId){
                 var result = ria.async.wait([
@@ -69,7 +58,7 @@ NAMESPACE('chlk.controllers', function (){
                         feedModel.setImportantOnly(true);
                         feedModel.setInProfile(true);
                         feedModel.setClassId(classId);
-                        feedModel.setReadonly(this.isPageReadonly_(model, 'VIEW_CLASSROOM', 'VIEW_CLASSROOM_ADMIN'));
+                        feedModel.setReadonly(this.isPageReadonly_('VIEW_CLASSROOM', 'VIEW_CLASSROOM_ADMIN', model));
                         model.setFeed(feedModel);
                         return new chlk.models.classes.ClassProfileSummaryViewData(
                             this.getCurrentRole(), model, this.getUserClaims_(),
@@ -86,6 +75,14 @@ NAMESPACE('chlk.controllers', function (){
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
             function attendanceAction(classId){
                 return this.Redirect('class', 'attendanceList', [classId]);
+            },
+
+            [chlk.controllers.Permissions([
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN]
+            ])],
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+            function gradingAction(classId){
+                return this.Redirect('grading', 'summaryGridClassProfile', [classId]);
             },
 
             [chlk.controllers.Permissions([
@@ -114,8 +111,8 @@ NAMESPACE('chlk.controllers', function (){
                             true,
                             this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []),
                             this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE),
-                            !this.isPageReadonly_(model, 'MAINTAIN_CLASSROOM_ATTENDANCE', 'MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN'),
-                            !this.isPageReadonly_(model, 'MAINTAIN_CLASSROOM_ABSENCE_REASONS', 'MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN'),
+                            !this.isPageReadonly_('MAINTAIN_CLASSROOM_ATTENDANCE', 'MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN', model),
+                            !this.isPageReadonly_('MAINTAIN_CLASSROOM_ABSENCE_REASONS', 'MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN', model),
                             this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS_CLASSROOM),
                             true
                         );
@@ -169,14 +166,14 @@ NAMESPACE('chlk.controllers', function (){
                         var date = date_ || new chlk.models.common.ChlkSchoolYearDate();
                         attendances.setClassId(classId);
                         attendances.setAbleRePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE));
-                        attendances.setAbleChangeReasons(!this.isPageReadonly_(model, 'MAINTAIN_CLASSROOM_ABSENCE_REASONS', 'MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN'));
-                        attendances.setAblePost(!this.isPageReadonly_(model, 'MAINTAIN_CLASSROOM_ATTENDANCE', 'MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN'));
+                        attendances.setAbleChangeReasons(!this.isPageReadonly_('MAINTAIN_CLASSROOM_ABSENCE_REASONS', 'MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN', model));
+                        attendances.setAblePost(!this.isPageReadonly_('MAINTAIN_CLASSROOM_ATTENDANCE', 'MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN', model));
                         attendances.setDate(date);
                         attendances.setReasons(this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []));
 
+                        attendances.setInProfile(true);
                         model.setSeatingChart(attendances);
                         model.setStats(result[1]);
-                        attendances.setInProfile(true);
 
                         var res = new chlk.models.classes.BaseClassProfileViewData(
                             this.getCurrentRole(), model, this.getUserClaims_(),
@@ -243,7 +240,7 @@ NAMESPACE('chlk.controllers', function (){
                         var model = result[3];
                         var disciplines = new chlk.models.discipline.ClassDisciplinesViewData(
                             null, classId, result[0], result[1], null, true,
-                            !this.isPageReadonly_(model, 'MAINTAIN_CLASSROOM_DISCIPLINE', 'MAINTAIN_CLASSROOM_DISCIPLINE_ADMIN'), true
+                            !this.isPageReadonly_('MAINTAIN_CLASSROOM_DISCIPLINE', 'MAINTAIN_CLASSROOM_DISCIPLINE_ADMIN', model), true
                         );
                         model.setDisciplines(disciplines);
                         model.setStats(result[2]);
@@ -347,27 +344,6 @@ NAMESPACE('chlk.controllers', function (){
                             this.isAssignedToClass_(classId)
                         );
                     }, this);
-            },
-
-            [[chlk.models.id.ClassId]],
-            ria.async.Future, function gradingAction(classId){
-                var res =
-                    this.classService
-                        .getGrading(classId)
-                        .attach(this.validateResponse_())
-                        .then(function(model){
-                            model.getGradingPerMp().forEach(function(mpData){
-                                mpData.getByAnnouncementTypes().forEach(function(item){
-                                    item.setClassId(classId);
-                                });
-                            });
-                            return new chlk.models.classes.ClassProfileGradingViewData(
-                                this.getCurrentRole(),
-                                model, this.getUserClaims_(),
-                                this.isAssignedToClass_(classId)
-                            );
-                        }, this);
-                return this.PushView(chlk.activities.classes.ClassProfileGradingPage, res);
             },
 
             [[chlk.models.id.ClassId]],
