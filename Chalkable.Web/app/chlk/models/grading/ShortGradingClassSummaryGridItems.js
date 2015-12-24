@@ -56,6 +56,7 @@ NAMESPACE('chlk.models.grading', function () {
                 this.studentTotalPoints = SJX.fromArrayOfDeserializables(raw.totalpoints, chlk.models.grading.StudentTotalPoint);
                 this.gradingItems = SJX.fromArrayOfDeserializables(raw.gradingitems, chlk.models.announcement.ShortAnnouncementViewData);
                 this.includeWithdrawnStudents = SJX.fromValue(raw.includewithdrawnstudents, Boolean);
+                this.inProfile = SJX.fromValue(raw.inProfile, Boolean);
                 if (raw.schoolOptions) {
                     this.schoolOptions = chlk.models.school.SchoolOption.$fromRaw(raw.schoolOptions.allowscoreentryforunexcused);
                 }
@@ -79,6 +80,7 @@ NAMESPACE('chlk.models.grading', function () {
             Boolean, 'includeWithdrawnStudents',
             ArrayOf(chlk.models.grading.StudentAverageInfo), 'studentAverages',
             ArrayOf(chlk.models.grading.StudentTotalPoint), 'studentTotalPoints',
+            Boolean, 'inProfile',
 
             function getTooltipText(){
                 return (this.getAvg() != null ? Msg.Avg + " " + this.getAvg() : 'No grades yet');

@@ -19,10 +19,15 @@
     >SPAN, >SPAN::BEFORE
       background: #393939
 
-  .chart-top-legend
-    position: absolute
-    bottom: -32px
-    right: 54px
+  .stats-container
+    .chart-top-legend
+      position: absolute
+      bottom: -32px
+      right: 54px
+
+      SPAN
+        display: inline-block
+        vertical-align: middle
 
     .chart-legend-item
       float: right
@@ -47,10 +52,6 @@
 
       &.red
         border-color: #d45151
-
-    SPAN
-      display: inline-block
-      vertical-align: middle
 
 
   .stats-container

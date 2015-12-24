@@ -3,6 +3,10 @@ REQUIRE('chlk.models.common.PageWithClassesAndGradingPeriodsViewData');
 REQUIRE('chlk.models.announcement.ShortAnnouncementViewData');
 REQUIRE('chlk.models.grading.ShortGradingClassSummaryGridItems');
 REQUIRE('chlk.models.id.GradingPeriodId');
+REQUIRE('chlk.models.grading.AlternateScore');
+REQUIRE('chlk.models.grading.AvgComment');
+REQUIRE('chlk.models.grading.AlphaGrade');
+REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -29,6 +33,10 @@ NAMESPACE('chlk.models.grading', function () {
 
             ArrayOf(chlk.models.grading.AlternateScore), 'alternateScores',
 
-            ArrayOf(chlk.models.grading.AvgComment), 'gradingComments'
+            ArrayOf(chlk.models.grading.AvgComment), 'gradingComments',
+
+            Boolean, 'inProfile',
+
+            chlk.models.id.ClassId, 'classId'
         ]);
 });

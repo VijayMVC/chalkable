@@ -132,6 +132,16 @@ NAMESPACE('chlk.controllers', function (){
                return this.BackgroundCloseView(this.getView().getCurrent());
            },
 
+           function isPageReadonly_(teacherPermissionName, adminPermissionName, clazz_){
+               var currentUserId = this.getCurrentPerson().getId();
+               var teacherIds = clazz_ ? clazz_.getTeachersIds() : [currentUserId];
+               var permissionEnum = chlk.models.people.UserPermissionEnum;
+               var isLinksEnabled = this.hasUserPermission_(permissionEnum[adminPermissionName])
+                   || (this.userIsTeacher() && this.hasUserPermission_(permissionEnum[teacherPermissionName])
+                   && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
+               return !isLinksEnabled;
+           },
+
            ria.async.Future, function validateResponse_() {
                var head, me = this;
                (head = new ria.async.Future)
