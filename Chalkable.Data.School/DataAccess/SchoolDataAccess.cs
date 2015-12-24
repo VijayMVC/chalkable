@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -32,8 +30,6 @@ namespace Chalkable.Data.School.DataAccess
             IOrderedEnumerable<ScheduleItem> schedule;
             IList<ClassDetails> allClasses;
             IList<GradingPeriod> gps;
-            IList<ClassAlphaGrade> agForClasses;
-            IList<ClassAlphaGrade> agForClassStandards;
             using (var reader = ExecuteStoredProcedureReader("spGetStartupData", ps))
             {
                 res.AlphaGrades = reader.ReadList<AlphaGrade>();
