@@ -47,6 +47,17 @@ namespace Chalkable.Web.Controllers
             return Json(ClassSummaryViewData.Create(clazz, classRoom));
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult Grading(int classId)
+        {
+            var classDetails = SchoolLocator.ClassService.GetClassDetailsById(classId);
+            var alphaGrades = classDetails.GradingScaleRef.HasValue
+                ? SchoolLocator.AlphaGradeService.GetAlphaGradesByClassId(classId)
+                : SchoolLocator.AlphaGradeService.GetAlphaGrades();
+            var alphaGradesForStandards = SchoolLocator.AlphaGradeService.GetStandardsAlphaGradesByClassId(classId);
+            return Json(ClassAlphaGradesViewData.Create(classDetails, alphaGrades, alphaGradesForStandards));
+        }
+
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult ClassInfo(int classId)
         {
@@ -58,15 +69,6 @@ namespace Chalkable.Web.Controllers
             if (classData.ChalkableDepartmentRef.HasValue)
                 department = MasterLocator.ChalkableDepartmentService.GetChalkableDepartmentById(classData.ChalkableDepartmentRef.Value);
             return Json(ClassInfoViewData.Create(classData, room, department));
-        }
-
-        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult ClassGrading(int classId)
-        {
-            var classData = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var canCreateItem = SchoolLocator.Context.PersonId == classData.PrimaryTeacherRef;
-            var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), null, null, canCreateItem);
-            return Json(ClassGradingViewData.Create(classData, gradingPerMp), 8);
         }
 
         [AuthorizationFilter("System Admin, DistrictAdmin, Teacher, Student")]
