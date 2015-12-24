@@ -6,6 +6,7 @@ REQUIRE('chlk.models.id.AnnouncementAssignedAttributeAttachmentId');
 REQUIRE('chlk.models.id.AnnouncementAttributeTypeId');
 REQUIRE('chlk.models.id.SisAssignedAttributeId');
 REQUIRE('chlk.models.attachment.Attachment');
+REQUIRE('chlk.models.announcement.AnnouncementAttributeType');
 
 NAMESPACE('chlk.models.announcement', function(){
 

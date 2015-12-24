@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Net.Http;
-using System.Web;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -37,8 +36,9 @@ namespace Chalkable.StiConnector.Connectors
             if (end.HasValue)
                 activities = activities.Take(end.Value - (start ?? 0)).ToList();
             return activities;
-        } 
+        }
 
+        
         public IList<Activity> GetActivities(int sectionId, int? start, int? end, DateTime? endDate = null, DateTime? startDate = null, bool? complete = false)
         {
             var url = string.Format(BaseUrl + "chalkable/sections/{0}/activities", sectionId);
@@ -54,8 +54,10 @@ namespace Chalkable.StiConnector.Connectors
             if(complete.HasValue)
                 optionalParams.Add(COOMPLETE, complete.Value.ToString());
             return  Call<IList<Activity>>(url, optionalParams);
-        } 
+        }
 
+
+        
         public IList<Activity> GetTeacherActivities(int acadSessionId, int teacherId, int? start = null, int? end = null
             , DateTime? endDate = null, DateTime? startDate = null, bool? complete = false)
         {
@@ -77,7 +79,7 @@ namespace Chalkable.StiConnector.Connectors
         public IList<Activity> GetStudentAcivities(int acadSessionId, int studentId, int? start = null, int? end = null
             , DateTime? endDate = null, DateTime? startDate = null, bool? complete = false, bool? graded = null, int? classId = null)
         {
-            var url = string.Format(BaseUrl + "Chalkable/{0}/students/{1}/activities", acadSessionId, studentId);
+            var url = $"{BaseUrl}Chalkable/{acadSessionId}/students/{studentId}/activities";
             var optinalParams = new NameValueCollection();
             if (start.HasValue)
                 optinalParams.Add(START_PARAM, start.Value.ToString());
@@ -98,13 +100,13 @@ namespace Chalkable.StiConnector.Connectors
 
         public void CompleteActivity(int activityId, bool complete)
         {
-            var url = string.Format(BaseUrl + "chalkable/activities/{0}/complete/{1}", activityId, complete);
+            var url = $"{BaseUrl}chalkable/activities/{activityId}/complete/{complete}";
             Put<Object>(url, null);
         }
 
         public void CompleteStudentActivities(int acadSessionId, int studentId, bool complete, DateTime? date)
         {
-            var url = string.Format(BaseUrl + "chalkable/{0}/students/{1}/activities/complete/{2}", acadSessionId, studentId, complete);
+            var url = $"{BaseUrl}chalkable/{acadSessionId}/students/{studentId}/activities/complete/{complete}";
             var nvc = new NameValueCollection();
             if(date.HasValue)
                 nvc.Add("date", date.Value.ToString(Constants.DATE_FORMAT));
@@ -113,7 +115,7 @@ namespace Chalkable.StiConnector.Connectors
 
         public void CompleteTeacherActivities(int acadSessionId, int teacherId, bool complete, DateTime? date)
         {
-            var url = string.Format(BaseUrl + "chalkable/{0}/teachers/{1}/activities/complete/{2}", acadSessionId, teacherId, complete);
+            var url = $"{BaseUrl}chalkable/{acadSessionId}/teachers/{teacherId}/activities/complete/{complete}";
             var nvc = new NameValueCollection();
             if (date.HasValue)
                 nvc.Add("date", date.Value.ToString(Constants.DATE_FORMAT));
@@ -141,7 +143,7 @@ namespace Chalkable.StiConnector.Connectors
             if (copyToSectionIds != null && copyToSectionIds.Count > 0)
             {
                 for (int i = 0; i < copyToSectionIds.Count; i++)
-                    nvc.Add(string.Format("copyToSectionIds[{0}]", i), copyToSectionIds[i].ToString());    
+                    nvc.Add($"copyToSectionIds[{i}]", copyToSectionIds[i].ToString());    
             }
             Post<Object>(url, null, nvc);
         }

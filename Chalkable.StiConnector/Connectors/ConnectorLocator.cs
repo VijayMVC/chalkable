@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Runtime.Serialization.Json;
@@ -16,8 +15,15 @@ namespace Chalkable.StiConnector.Connectors
         public string BaseUrl { get; private set; }
         public string Token { get; private set; }
         public DateTime TokenExpires { get; private set; }
+        public string ApiVersion { get; private set; }
+        
+        public ConnectorLocator(string token, string baseUrl, DateTime tokenExpires) 
+            : this(token, baseUrl, tokenExpires, null)
+        {
+            ApiVersion = AboutConnector.GetApiVersion().Version;
+        }
 
-        public ConnectorLocator(string token, string baseUrl, DateTime tokenExpires)
+        public ConnectorLocator(string token, string baseUrl, DateTime tokenExpires, string apiVersion)
         {
             Token = token;
             if (!baseUrl.EndsWith("/"))
@@ -25,6 +31,7 @@ namespace Chalkable.StiConnector.Connectors
             BaseUrl = baseUrl;
             TokenExpires = tokenExpires;
             InitServices();
+            ApiVersion = apiVersion;
         }
 
         private void InitServices()
@@ -37,7 +44,7 @@ namespace Chalkable.StiConnector.Connectors
             ActivityScoreConnector = new ActivityScoreConnector(this);
             ReportConnector = new ReportConnector(this);
             SyncConnector = new SyncConnector(this);
-            GradebookConnector = new GradebookConnector(this);
+            GradebookConnector = new GradebookConnector(this); 
             StandardScoreConnector = new StandardScoreConnector(this);
             SeatingChartConnector = new SeatingChartConnector(this);
             LinkConnector = new LinkConnector(this);
@@ -50,8 +57,9 @@ namespace Chalkable.StiConnector.Connectors
             LearningEarningsConnector = new LearningEarningsConnector(this);
             ActivityAssignedAttributeConnector = new ActivityAssignedAttributeConnector(this);
             GradingConnector = new GradingConnector(this);
+            ClassesDashboardConnector = new ClassesDashboardConnector(this);
+            AboutConnector = new AboutConnector(this);
         }
-
 
         public UsersConnector UsersConnector { get; private set; }
         public AttendanceConnector AttendanceConnector { get; private set; }
@@ -74,6 +82,8 @@ namespace Chalkable.StiConnector.Connectors
         public SectionDashboardConnector SectionDashboardConnector { get; private set; }
         public LearningEarningsConnector LearningEarningsConnector { get; private set; }
         public GradingConnector GradingConnector { get; private set; }
+        public ClassesDashboardConnector ClassesDashboardConnector { get; private set; }
+        public AboutConnector AboutConnector { get; set; }
 
         public class TokenModel
         {
@@ -85,13 +95,13 @@ namespace Chalkable.StiConnector.Connectors
         {
             expires = DateTime.Now;
             var client = new WebClient();
-            string credentials = string.Format("{0}:{1}", userName, password);
+            string credentials = $"{userName}:{password}";
             byte[] credentialsBytes = Encoding.UTF8.GetBytes(credentials);
             string credentialsBase64 = Convert.ToBase64String(credentialsBytes);
             client.Headers[HttpRequestHeader.Authorization] = "Basic " + credentialsBase64;
             client.Encoding = Encoding.UTF8;
 
-            var url = string.Format("{0}{1}", baseUrl, "token");
+            var url = $"{baseUrl}{"token"}";
             var x = typeof(TokenModel);
             var ser = new DataContractJsonSerializer(x);
             MemoryStream stream = null;
@@ -123,8 +133,7 @@ namespace Chalkable.StiConnector.Connectors
             }
             finally
             {
-                if(stream != null)
-                    stream.Close();
+                stream?.Close();
             }
         }
 
@@ -136,6 +145,4 @@ namespace Chalkable.StiConnector.Connectors
             return new ConnectorLocator(token, baseUrl, expires);
         }
     }
-
-    
 }

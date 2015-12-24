@@ -14,18 +14,18 @@ namespace Chalkable.StiConnector.Connectors
             : base(locator)
         {
         }
-
+        
         public SectionAttendance GetSectionAttendance(DateTime date, int sectionId)
         {
-            return Call<SectionAttendance>(string.Format("{0}Chalkable/sections/{1}/attendance/{2}", BaseUrl, sectionId, date.ToString(Constants.DATE_FORMAT)));
+            return Call<SectionAttendance>($"{BaseUrl}Chalkable/sections/{sectionId}/attendance/{date.ToString(Constants.DATE_FORMAT)}");
         }
-
+        
         public void SetSectionAttendance(int acadSessionId, DateTime date, int sectionId, SectionAttendance sectionAttendance)
         {
-            string url = string.Format("{0}Chalkable/sections/{1}/attendance/{2}", BaseUrl, sectionId, date.ToString(Constants.DATE_FORMAT));
+            string url = $"{BaseUrl}Chalkable/sections/{sectionId}/attendance/{date.ToString(Constants.DATE_FORMAT)}";
             Post(url, sectionAttendance);
         }
-
+        
         public async Task<IList<SectionAttendanceSummary>> GetSectionAttendanceSummary(IList<int> sectionIds, DateTime start, DateTime end)
         {
             var parmeters = new NameValueCollection
@@ -34,14 +34,14 @@ namespace Chalkable.StiConnector.Connectors
                     {"end", end.ToString(Constants.DATE_FORMAT)}
                 };
             for(int i = 0; i < sectionIds.Count; i++)
-                parmeters.Add(string.Format("sectionIds[{0}]", i), sectionIds[i].ToString());
-            string url = string.Format("{0}chalkable/attendance/summary", BaseUrl);
+                parmeters.Add($"sectionIds[{i}]", sectionIds[i].ToString());
+            string url = $"{BaseUrl}chalkable/attendance/summary";
             return await CallAsync<IList<SectionAttendanceSummary>>(url, parmeters);
-        } 
+        }
         
         public async Task<IList<PostedAttendance>> GetPostedAttendances(int acadSessionId, DateTime date)
         {
-            string url = string.Format("{0}chalkable/{1}/postedattendance/{2}", BaseUrl, acadSessionId, date.ToString(Constants.DATE_FORMAT));
+            string url = $"{BaseUrl}chalkable/{acadSessionId}/postedattendance/{date.ToString(Constants.DATE_FORMAT)}";
             return await CallAsync<IList<PostedAttendance>>(url);
         }
     }

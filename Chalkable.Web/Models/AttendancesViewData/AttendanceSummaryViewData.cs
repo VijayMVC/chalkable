@@ -66,15 +66,15 @@ namespace Chalkable.Web.Models.AttendancesViewData
 
             //get only for last month
             var fromDate = currentDate.AddDays(-31);
-            dailyAttendanceSummaries = dailyAttendanceSummaries.Where(x => x.Date.Date >= fromDate && x.Date.Date <= currentDate).ToList();
+            dailyAttendanceSummaries = dailyAttendanceSummaries.Where(x => x.Date >= fromDate && x.Date <= currentDate).ToList();
 
             foreach (var dailyAttendanceSummary in dailyAttendanceSummaries)
             {
                 var attCount = 0;
                 if (type == AttendanceTypeEnum.Absent)
-                    attCount = (int)dailyAttendanceSummary.Absences;
+                    attCount =(int) (dailyAttendanceSummary.Absences ?? 0);
                 if (type == AttendanceTypeEnum.Tardies)
-                    attCount = dailyAttendanceSummary.Tardies;
+                    attCount = dailyAttendanceSummary.Tardies ?? 0;
 
                 var date = dailyAttendanceSummary.Date;
                 string summary = date.Day.ToString();

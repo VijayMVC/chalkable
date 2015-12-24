@@ -1,11 +1,15 @@
 REQUIRE('chlk.controllers.BaseController');
-REQUIRE('chlk.services.DistrictService');
-REQUIRE('chlk.models.district.District');
+
 REQUIRE('chlk.activities.district.DistrictListPage');
 REQUIRE('chlk.activities.district.DistrictDialog');
-REQUIRE('chlk.models.id.DistrictId');
-REQUIRE('chlk.services.BgTaskService');
+REQUIRE('chlk.activities.district.DistrictSummaryPage');
 
+REQUIRE('chlk.models.district.District');
+REQUIRE('chlk.models.id.DistrictId');
+
+REQUIRE('chlk.services.DistrictService');
+REQUIRE('chlk.services.BgTaskService');
+REQUIRE('chlk.services.AdminDistrictService');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -17,6 +21,8 @@ NAMESPACE('chlk.controllers', function (){
         chlk.services.DistrictService, 'districtService',
         [ria.mvc.Inject],
         chlk.services.BgTaskService, 'bgTaskService',
+        [ria.mvc.Inject],
+        chlk.services.AdminDistrictService, 'adminDistrictService',
 
         [chlk.controllers.SidebarButton('districts')],
 
@@ -79,6 +85,38 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(data){
                     return this.pageAction(0);
                 }, this);
+        },
+
+        [chlk.controllers.SidebarButton('classes')],
+        function summaryAction(){
+            var result = ria.async.wait([
+                    this.adminDistrictService.getDistrictSummary(),
+                    this.adminDistrictService.getSchoolStatistic()
+                ])
+                .then(function(result){
+                    return new chlk.models.district.DistrictFullSummaryViewData(result[0], result[1]);
+                })
+                .attach(this.validateResponse_());
+            return this.PushView(chlk.activities.district.DistrictSummaryPage, result);
+        },
+
+        [chlk.controllers.SidebarButton('classes')],
+        [[chlk.models.district.DistrictFullSummaryViewData]],
+        function schoolsStatisticFilterAction(model){
+            return this.schoolsStatisticAction(0, model.getFilter());
+        },
+
+        [chlk.controllers.SidebarButton('classes')],
+        [[Number, String]],
+        function schoolsStatisticAction(pageIndex, filter_){
+            var start = 10 * pageIndex;
+            var result = this.adminDistrictService.getSchoolStatistic(start, filter_)
+                .then(function(model){
+                    filter_ && model.setFilter(filter_);
+                    return model;
+                })
+                .attach(this.validateResponse_());
+            return this.UpdateView(chlk.activities.district.DistrictSummaryPage, result);
         }
 
     ])

@@ -52,5 +52,10 @@ namespace Chalkable.Data.School.DataAccess
                 sqlQuery.Append(" And ArchiveDate is null");
             return ReadMany<SchoolYear>(new DbQuery(sqlQuery, null));
         }
+
+        public PaginatedList<SchoolYear> GetBySchool(int schoolId)
+        {
+            return PaginatedSelect< SchoolYear>(new SimpleQueryCondition("SchoolRef", schoolId, ConditionRelation.Equal), "Id", 0, int.MaxValue);
+        } 
     }
 }

@@ -10,9 +10,6 @@ if standards.length
                 ).standard-name.column-cell
                     .name(data-tooltip=standard.getDescription(), data-tooltip-type="overflow")=standard.displayTitle()
                     .right-triangle
-    td
-        .standards-description
-else
-    td
-        .standards-description=self.getDescription()
+td
+    .standards-description=self.getDescription()
 

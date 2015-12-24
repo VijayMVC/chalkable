@@ -356,9 +356,9 @@ NAMESPACE('chlk.services', function () {
             });
         },
 
-        [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Boolean, Boolean, Boolean, Boolean, chlk.models.id.ClassId, Boolean]],
+        [[chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Boolean, Boolean, Boolean, Boolean, chlk.models.id.ClassId, Boolean, chlk.models.announcement.AnnouncementTypeEnum]],
         ria.async.Future, function submitFeedReport(startDate, endDate, lessonPlanOnly_, includeAttachments_, includeDetails_,
-                                                  includeHiddenAttributes_, includeHiddenActivities_, classId_, importantOnly_) {
+                                                  includeHiddenAttributes_, includeHiddenActivities_, classId_, importantOnly_, announcementType_) {
 
             var url = this.getUrl('Reporting/FeedReport.json', {
                 startDate: startDate.toStandardFormat(),
@@ -369,7 +369,8 @@ NAMESPACE('chlk.services', function () {
                 includeHiddenAttributes: includeHiddenAttributes_,
                 includeHiddenActivities: includeHiddenActivities_,
                 classId: classId_ && classId_.valueOf(),
-                complete: importantOnly_ ? false : null
+                complete: importantOnly_ ? false : null,
+                announcementType: announcementType_ && announcementType_.valueOf()
             });
 
             return this.getWithIframe_(url);

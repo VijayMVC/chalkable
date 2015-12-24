@@ -1,5 +1,6 @@
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.id.ClassId');
+REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 
 NAMESPACE('chlk.models.feed', function () {
     "use strict";
@@ -22,7 +23,7 @@ NAMESPACE('chlk.models.feed', function () {
                 this.includeHiddenAttributes = SJX.fromValue(raw.includehiddenattributes, Boolean);
                 this.editableLPOption = SJX.fromValue(raw.editablelpoption, Boolean);
                 this.importantOnly = SJX.fromValue(raw.importantonly, Boolean);
-                this.announcementType = SJX.fromValue(raw.announcementtype, chlk.models.announcement.AnnouncementTypeEnum);
+                this.announcementType = raw.announcementtype ? SJX.fromValue(raw.announcementtype, chlk.models.announcement.AnnouncementTypeEnum) : null;
                 this.classId = SJX.fromValue(raw.classid, chlk.models.id.ClassId);
             },
 

@@ -1,5 +1,6 @@
 REQUIRE('chlk.services.BaseService');
 REQUIRE('ria.async.Future');
+REQUIRE('chlk.models.discipline.ClassDisciplineStatsViewData');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.discipline.DisciplineSummary');
 REQUIRE('chlk.models.discipline.Discipline');

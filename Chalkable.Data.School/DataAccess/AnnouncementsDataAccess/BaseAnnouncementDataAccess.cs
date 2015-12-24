@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Linq;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -23,10 +24,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public abstract AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query);
         public abstract IList<TAnnouncement> GetAnnouncements(QueryCondition conds, int callerId); 
         public abstract TAnnouncement GetAnnouncement(int id, int callerId);
-        
         public abstract bool CanAddStandard(int announcementId);
-        public abstract AnnouncementDetails GetDetails(int id, int callerId, int? roleId);
-        
+        public abstract IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId); 
 
 
         public override void Update(TAnnouncement announcement)
@@ -58,45 +57,91 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             ExecuteStoredProcedure("spDeleteAnnouncements", paraments);
         }
 
-        protected AnnouncementDetails GetDetails(string procedureName, IDictionary<string, object> parameters)
+        //protected AnnouncementDetails GetDetails(string procedureName, IDictionary<string, object> parameters)
+        //{
+        //    using (var reader = ExecuteStoredProcedureReader(procedureName, parameters))
+        //    {
+        //        return BuildGetDetailsResult(reader);
+        //    }
+        //}
+
+        protected IList<AnnouncementDetails> GetDetailses(string procedureName, IDictionary<string, object> parameters)
         {
             using (var reader = ExecuteStoredProcedureReader(procedureName, parameters))
             {
-                return BuildGetDetailsResult(reader);
+                return BuildGetDetailsesResult(reader);
             }
+        }
+
+
+        protected virtual IList<AnnouncementDetails> BuildGetDetailsesResult(SqlDataReader reader)
+        {
+            IList<AnnouncementDetails> res = new List<AnnouncementDetails>();
+            while (reader.Read())
+            {
+                var ann = reader.Read<AnnouncementDetails>();
+                ann.AnnouncementData = ReadAnnouncementData(ann, reader);
+                ann.StudentAnnouncements = new List<StudentAnnouncementDetails>();
+                res.Add(ann);
+            }
+
+            reader.NextResult();
+            var owners = reader.ReadList<Person>();
+            reader.NextResult();
+            var announcementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
+            reader.NextResult();
+            var announcementAttributes = AnnouncementAssignedAttributeDataAccess.ReadAttributes(reader);
+            reader.NextResult();
+            var announcementApplications = reader.ReadList<AnnouncementApplication>();
+            reader.NextResult();
+            var announcementStandards = reader.ReadList<AnnouncementStandardDetails>();
+            reader.NextResult();
+            var announcementAttachments = reader.ReadList<AnnouncementAttachment>(true);
+            
+            foreach (var ann in res)
+            {
+                ann.Owner = owners.FirstOrDefault(x => ann.OwnereId == x.Id);
+                ann.AnnouncementQnAs = announcementQnAs.Where(x => x.AnnouncementRef == ann.Id).ToList();
+                ann.AnnouncementAttributes = announcementAttributes.Where(x => x.AnnouncementRef == ann.Id).ToList();
+                ann.AnnouncementApplications = announcementApplications.Where(x => x.AnnouncementRef == ann.Id).ToList();
+                ann.AnnouncementStandards = announcementStandards.Where(x => x.AnnouncementRef == ann.Id).ToList();
+                ann.AnnouncementAttachments = announcementAttachments.Where(x => x.AnnouncementRef == ann.Id).ToList();
+            }
+            return res;
         }
 
         protected abstract TAnnouncement ReadAnnouncementData(AnnouncementComplex announcement, SqlDataReader reader);
 
-
         protected AnnouncementDetails BuildGetDetailsResult(SqlDataReader reader)
         {
-            var announcement = reader.ReadOrNull<AnnouncementDetails>();
-            if (announcement != null)
-            {
-                announcement.AnnouncementData = ReadAnnouncementData(announcement, reader);
-                announcement = ReadAnnouncementAdditionalData(announcement, reader);
-            }
-            return announcement;
+            //var announcement = reader.ReadOrNull<AnnouncementDetails>();
+            //if (announcement != null)
+            //{
+            //    announcement.AnnouncementData = ReadAnnouncementData(announcement, reader);
+            //    announcement = ReadAnnouncementAdditionalData(announcement, reader);
+            //}
+            return BuildGetDetailsesResult(reader).FirstOrDefault();
         }
-        protected virtual AnnouncementDetails ReadAnnouncementAdditionalData(AnnouncementDetails announcement, SqlDataReader reader)
-        {
-            reader.NextResult();
-            if (reader.Read())
-                announcement.Owner = PersonDataAccess.ReadPersonData(reader);
-            reader.NextResult();
-            announcement.AnnouncementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
-            reader.NextResult();
-            announcement.AnnouncementAttributes = AnnouncementAssignedAttributeDataAccess.ReadAttributes(reader);
-            reader.NextResult();
-            announcement.AnnouncementApplications =  reader.ReadList<AnnouncementApplication>();
-            reader.NextResult();
-            announcement.AnnouncementStandards = reader.ReadList<AnnouncementStandardDetails>();
-            reader.NextResult();
-            announcement.AnnouncementAttachments = reader.ReadList<AnnouncementAttachment>(true);
-            announcement.StudentAnnouncements = new List<StudentAnnouncementDetails>();
-            return announcement;
-        }
+
+        //old method
+        //protected virtual AnnouncementDetails ReadAnnouncementAdditionalData(AnnouncementDetails announcement, SqlDataReader reader)
+        //{
+        //    reader.NextResult();
+        //    if (reader.Read())
+        //        announcement.Owner = PersonDataAccess.ReadPersonData(reader);
+        //    reader.NextResult();
+        //    announcement.AnnouncementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
+        //    reader.NextResult();
+        //    announcement.AnnouncementAttributes = AnnouncementAssignedAttributeDataAccess.ReadAttributes(reader);
+        //    reader.NextResult();
+        //    announcement.AnnouncementApplications =  reader.ReadList<AnnouncementApplication>();
+        //    reader.NextResult();
+        //    announcement.AnnouncementStandards = reader.ReadList<AnnouncementStandardDetails>();
+        //    reader.NextResult();
+        //    announcement.AnnouncementAttachments = reader.ReadList<AnnouncementAttachment>(true);
+        //    announcement.StudentAnnouncements = new List<StudentAnnouncementDetails>();
+        //    return announcement;
+        //}
         
         protected AnnouncementQueryResult ReadAnnouncementsQueryResult(SqlDataReader reader, AnnouncementsQuery query)
         {

@@ -15,7 +15,7 @@ NAMESPACE('chlk.templates.grading', function () {
             ArrayOf(chlk.models.grading.AlphaGrade), 'alphaGrades',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.grading.GradingClassSummaryGridItems.OF(chlk.models.standard.StandardGradings), 'currentGradingGrid',
+            chlk.models.grading.GradingClassSummaryGridItems.OF(Object), 'currentGradingGrid',
 
             [ria.templates.ModelPropertyBind],
             Boolean, 'ableEdit',

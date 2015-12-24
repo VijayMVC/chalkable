@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Common;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.PersonViewDatas;
 
@@ -29,6 +30,11 @@ namespace Chalkable.Web.Models.ClassesViewData
         public static ShortClassViewData Create(Class cClass)
         {
             return new ShortClassViewData(cClass);
+        }
+
+        public static ShortClassViewData Create(ShortClassInfo clazz)
+        {
+            return new ShortClassViewData(new Class { Id = clazz.Id, Name = clazz.Name });
         }
     }
 
@@ -62,10 +68,5 @@ namespace Chalkable.Web.Models.ClassesViewData
         {
             return classComplexs.Select(Create).ToList();
         } 
-
-        public static ClassViewData Create(int id, string name)
-        {
-            return new ClassViewData(new ClassDetails {Id = id, Name = name});
-        }
     }
 }

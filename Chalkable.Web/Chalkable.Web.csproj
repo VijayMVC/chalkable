@@ -32,6 +32,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
+    <SkipPostSharp>True</SkipPostSharp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -287,6 +288,7 @@
     <Compile Include="Authentication\OauthAuthenticate.cs" />
     <Compile Include="Common\UrlFormats.cs" />
     <Compile Include="Common\ViewConstants.cs" />
+    <Compile Include="Controllers\AdminDistrictController.cs" />
     <Compile Include="Controllers\AnnouncementAttachmentController.cs" />
     <Compile Include="Controllers\AnnouncementControllers\AdminAnnouncementController.cs" />
     <Compile Include="Controllers\AnnouncementControllers\ClassAnnouncementController.cs" />
@@ -381,6 +383,9 @@
     <Compile Include="Models\AttendancesViewData\StudentPeriodAttendanceViewData.cs" />
     <Compile Include="Models\AutoGradeViewData.cs" />
     <Compile Include="Models\CC_StandardCategoryViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassAlphaGradesViewData.cs" />
+    <Compile Include="Models\ClassesViewData\ClassStatsViewData.cs" />
+    <Compile Include="Models\DisciplinesViewData\DisciplineDailySummaryViewData.cs" />
     <Compile Include="Models\FeedComplexViewData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeInputData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
@@ -419,7 +424,6 @@
     <Compile Include="Models\ClassesViewData\ClassAppsViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassAttendanceSummaryViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassExpolorerViewData.cs" />
-    <Compile Include="Models\ClassesViewData\ClassGradingViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassInfoViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassScheduleViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassSummaryViewData.cs" />
@@ -446,6 +450,7 @@
     <Compile Include="Models\PersonViewDatas\StudentAppsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentContactViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentExplorerViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\TeacherStatsViewData.cs" />
     <Compile Include="Models\PossibleMessageRecipientViewData.cs" />
     <Compile Include="Models\PracticeGradeViewData.cs" />
     <Compile Include="Models\ScheduleItemViewData.cs" />
@@ -497,12 +502,14 @@
     <Compile Include="Models\RoleViewData.cs" />
     <Compile Include="Models\RoomViewData.cs" />
     <Compile Include="Models\ScheduleSectionViewData.cs" />
+    <Compile Include="Models\SchoolsViewData\LocalSchoolSummaryViewData.cs" />
     <Compile Include="Models\SchoolsViewData\LocalSchoolViewData.cs" />
     <Compile Include="Models\SchoolsViewData\SchoolOptionViewData.cs" />
     <Compile Include="Models\SchoolsViewData\SchoolViewData.cs" />
     <Compile Include="Models\SchoolsViewData\ShortSchoolViewData.cs" />
     <Compile Include="Models\SchoolYearViewData.cs" />
     <Compile Include="Models\SearchViewData.cs" />
+    <Compile Include="Models\ShortDistrictSummaryViewData.cs" />
     <Compile Include="Models\StandardSubjectViewData.cs" />
     <Compile Include="Models\StorageMonitorViewData.cs" />
     <Compile Include="Models\StudentAnnouncementViewData.cs" />

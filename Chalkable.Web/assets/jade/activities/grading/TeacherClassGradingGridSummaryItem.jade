@@ -26,33 +26,34 @@ mixin TeacherClassGradingGridSummaryCell(info, maxScore, gradable, canPutOnlyZer
             .edit-cell
 
 mixin StudentAverages(tpl)
-    each studentAvg, i in tpl.getStudentAverages()
-        .dotted-container.grade-container.with-horizontal-dots.avgs-container
-            text = tpl.getModel().displayAvgName(studentAvg)
-            .grading-grid-th
-                div(data-tooltip=text, data-sort-type = "avg", data-sort-avg-index = i).type-name=text
-                .time
-                .max-score.dotted-h
-            each average,i in studentAvg.getAverages()
-                .dotted-h.grade-value.avg-value-container(
-                    row-index=i,
-                    class=((i == tpl.getRowIndex() ? 'active-row ' : '') + (self.isAbleEditAvg() ? 'gradable' : '')),
-                    data-able-display-alpha-grades=self.isAbleDisplayAlphaGrades(),
-                    data-able-round-displayed-averages=self.isRoundDisplayedAverages(),
-                    data-able-display-student-average=self.isAbleDisplayStudentAverage(),
-                    data-average-id=average.getAverageId(),
-                    data-student-name=self.getStudents()[i].getStudentInfo().getDisplayName(),
-                    data-student-id=average.getStudentId().valueOf(),
-                    data-grading-period-id=self.getGradingPeriod().getId().valueOf(),
-                    data-grading-period-name=self.getGradingPeriod().getName())
+    if tpl.getStudentAverages()
+        each studentAvg, i in tpl.getStudentAverages()
+            .dotted-container.grade-container.with-horizontal-dots.avgs-container
+                text = tpl.getModel().displayAvgName(studentAvg)
+                .grading-grid-th
+                    div(data-tooltip=text, data-sort-type = "avg", data-sort-avg-index = i).type-name=text
+                    .time
+                    .max-score.dotted-h
+                each average,i in studentAvg.getAverages()
+                    .dotted-h.grade-value.avg-value-container(
+                        row-index=i,
+                        class=((i == tpl.getRowIndex() ? 'active-row ' : '') + (self.isAbleEditAvg() ? 'gradable' : '')),
+                        data-able-display-alpha-grades=self.isAbleDisplayAlphaGrades(),
+                        data-able-round-displayed-averages=self.isRoundDisplayedAverages(),
+                        data-able-display-student-average=self.isAbleDisplayStudentAverage(),
+                        data-average-id=average.getAverageId(),
+                        data-student-name=self.getStudents()[i].getStudentInfo().getDisplayName(),
+                        data-student-id=average.getStudentId().valueOf(),
+                        data-grading-period-id=self.getGradingPeriod().getId().valueOf(),
+                        data-grading-period-name=self.getGradingPeriod().getName())
 
-                    +RenderWith(average, chlk.templates.grading.StudentAverageTpl)(
-                        ableDisplayAlphaGrades = self.isAbleDisplayAlphaGrades(),
-                        ableDisplayStudentAverage = self.isAbleDisplayStudentAverage(),
-                        roundDisplayedAverages = self.isRoundDisplayedAverages(),
-                        gradingPeriodId = self.getGradingPeriod().getId()
-                    )
-            div(data-average-id=studentAvg.getAverageId()).dotted-h.total-average.grade-value=tpl.getModel().displayAverages(studentAvg.getTotalAverage())
+                        +RenderWith(average, chlk.templates.grading.StudentAverageTpl)(
+                            ableDisplayAlphaGrades = self.isAbleDisplayAlphaGrades(),
+                            ableDisplayStudentAverage = self.isAbleDisplayStudentAverage(),
+                            roundDisplayedAverages = self.isRoundDisplayedAverages(),
+                            gradingPeriodId = self.getGradingPeriod().getId()
+                        )
+                div(data-average-id=studentAvg.getAverageId()).dotted-h.total-average.grade-value=tpl.getModel().displayAverages(studentAvg.getTotalAverage())
 
 mixin DisplayTotalPoints(model)
     -var studentTotalPoints = model.getStudentTotalPoints()

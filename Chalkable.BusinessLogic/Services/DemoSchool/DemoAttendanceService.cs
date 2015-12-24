@@ -442,6 +442,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res;
         }
 
+        public Task<IList<DailyAttendanceSummary>> GetDailyAttendanceSummaries(int classId, DateTime? startDate, DateTime? endDate)
+        {
+            throw new NotImplementedException();
+        }
+
         private StudentPeriodAttendance CreateStudentPeriodAttendnace(StudentClassAttendance studentClassAttendance, Period period, Class cClass)
         {
             return new StudentPeriodAttendance

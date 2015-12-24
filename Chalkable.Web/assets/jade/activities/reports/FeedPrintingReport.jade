@@ -5,7 +5,7 @@
             h1=Msg.Print.valueOf().toUpperCase()
 
         .x-window-body
-            +Hidden('announcementType', self.getAnnouncementType() && self.getAnnouncementType().valueOf())
+            +Hidden('announcementtype', self.getAnnouncementType() && self.getAnnouncementType().valueOf())
             +Hidden('classid', self.getClassId() && self.getClassId().valueOf())
             +Hidden('importantonly', self.isImportantOnly())
             .report-content

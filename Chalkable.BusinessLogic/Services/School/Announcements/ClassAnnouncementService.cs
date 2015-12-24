@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -60,6 +61,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 return new ClassAnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
             if (Context.Role == CoreRoles.STUDENT_ROLE)
                 return new ClassAnnouncementForStudentDataAccess(unitOfWork, Context.SchoolYearId.Value);
+            if(BaseSecurity.IsDistrictAdmin(Context))
+                return new ClassAnnouncementForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value);
+
             throw new NotImplementedException();
         }
 
@@ -79,7 +83,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 uow.Commit();
                 var sy = new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime, Context.SchoolLocalId.Value);
                 annDa.ReorderAnnouncements(sy.Id, classAnnType.Id, res.ClassAnnouncementData.ClassRef);
-                res = GetDetails(annDa, res.Id);
+                res = InternalGetDetails(annDa, res.Id);
                 var classAnnData = res.ClassAnnouncementData;
                 if (classAnnData.ClassAnnouncementTypeRef.HasValue)
                 {
@@ -140,6 +144,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 AnnouncementSecurity.EnsureInModifyAccess(res, Context);
                 if (res.ClassAnnouncementData.IsDraft)
                 {
+                    ServiceLocator.AnnouncementAssignedAttributeService.ValidateAttributes(res.AnnouncementAttributes);
                     res.ClassAnnouncementData.State = AnnouncementState.Created;
                     res.ClassAnnouncementData.Created = Context.NowSchoolTime.Date;
                     if (string.IsNullOrEmpty(res.ClassAnnouncementData.Title) 
@@ -216,7 +221,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         private AnnouncementDetails MergeEditAnnResultWithStiData(ClassAnnouncementDataAccess annDa, ClassAnnouncement ann)
         {
-            var res = GetDetails(annDa, ann.Id);
+            var res = InternalGetDetails(annDa, ann.Id);
             if (ann.IsSubmitted)
             {
                 var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
@@ -244,8 +249,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             res.AnnouncementData = PrepareClassAnnouncementTypeData(res.ClassAnnouncementData);
             return res;
         }
-
-
         
 
         public override void DeleteAnnouncement(int announcementId)
@@ -292,37 +295,24 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public ClassAnnouncement GetClassAnnouncemenById(int classAnnouncementId)
         {
-            Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u =>
-                {
-                    var res = CreateClassAnnouncementDataAccess(u).GetAnnouncement(classAnnouncementId, Context.PersonId.Value);
-                    if(res == null)
-                        throw new NoAnnouncementException();
-                    return res;
-                });
+            return InternalGetAnnouncementById(classAnnouncementId);
         }
-
-        public override Announcement GetAnnouncementById(int id)
-        {
-            return GetClassAnnouncemenById(id);
-        }
-
+        
         public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false)
         {
             var activities = GetActivities(classId, startDate, toDate, 0, int.MaxValue, complete);
             var anns = GetByActivitiesIds(activities.Select(x => x.Id).ToList());
-            var res = new List<AnnouncementDetails>();
+            var res = DoRead(u => InternalGetDetailses(CreateClassAnnouncementDataAccess(u), anns.Select(a => a.Id).ToList()));
             
             foreach (var activity in activities)
             {
-                var ann = anns.FirstOrDefault(x => x.ClassAnnouncementData.SisActivityId == activity.Id);
-                using (var uow = Read())
-                {
-                    var da = CreateClassAnnouncementDataAccess(uow);
-                    var details = ann != null ? GetDetails(da, ann.Id) : new AnnouncementDetails();
-                    MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(details, activity);
-                    res.Add(details);
-                }
+                var ann = res.FirstOrDefault(x => x.ClassAnnouncementData.SisActivityId == activity.Id);
+                bool annExists = ann != null;
+                if(!annExists) 
+                   ann =  new AnnouncementDetails();
+                MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(ann, activity);
+                if(!annExists)
+                    res.Add(ann);
             }
             return res;
         }
@@ -332,7 +322,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             using (var uow = Update())
             {
                 var da = CreateClassAnnouncementDataAccess(uow);
-                var res = GetDetails(da, announcementId);
+                var res = InternalGetDetails(da, announcementId);
                 if (res.ClassAnnouncementData.SisActivityId.HasValue)
                 {
                     var activity = ConnectorLocator.ActivityConnector.GetActivity(res.ClassAnnouncementData.SisActivityId.Value);
@@ -363,17 +353,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         private bool IsMissingAttachment(AnnouncementAssignedAttribute attribute)
         {
             return attribute.Attachment != null && string.IsNullOrEmpty(attribute.Attachment.Uuid) && ServiceLocator.CrocodocService.IsDocument(attribute.Attachment.Name);
-        }
-
-        private AnnouncementDetails GetDetails(ClassAnnouncementDataAccess dataAccess, int announcementId)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-            var ann = dataAccess.GetDetails(announcementId, Context.PersonId.Value, Context.Role.Id);
-            if (ann == null)
-                throw new NoAnnouncementException();
-            var annStandards = ServiceLocator.StandardService.GetAnnouncementStandards(announcementId);
-            ann.AnnouncementStandards = annStandards.Where(x => ann.AnnouncementStandards.Any(y => y.StandardRef == x.StandardRef && y.AnnouncementRef == x.AnnouncementRef)).ToList();
-            return ann;
         }
 
         private ClassAnnouncement PrepareClassAnnouncementTypeData(ClassAnnouncement classAnnouncement)
@@ -516,8 +495,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query, IList<Activity> activities = null)
         {
-            if (Context.Role != CoreRoles.TEACHER_ROLE && Context.Role != CoreRoles.STUDENT_ROLE)
-                throw new NotImplementedException();
+            //if (Context.Role != CoreRoles.TEACHER_ROLE && Context.Role != CoreRoles.STUDENT_ROLE)
+              //  throw new NotImplementedException();
             //TODO: Looks shity....think about this method and whole approach
             if (activities == null)
                 activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count, query.Complete, query.Graded);

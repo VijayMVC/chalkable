@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
@@ -152,6 +153,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             startupData.AlphaGradesForClasses = alphaGradesForClasses;
 
             return startupData;
+        }
+
+        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int GetSchoolsCount(string filter = null)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

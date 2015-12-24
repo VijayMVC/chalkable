@@ -52,10 +52,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
         }
 
-        public abstract AnnouncementDetails GetAnnouncementDetails(int announcementId);
         public abstract IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false);
         public abstract void DeleteAnnouncement(int announcementId);
-        public abstract Announcement GetAnnouncementById(int id);
         public abstract Announcement EditTitle(int announcementId, string title);
         public abstract void Submit(int announcementId);
         public abstract void SetAnnouncementsAsComplete(DateTime? date, bool complete);
@@ -204,5 +202,47 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId);
+
+
+        public Announcement GetAnnouncementById(int id)
+        {
+            return InternalGetAnnouncementById(id);
+        }
+
+        protected virtual TAnnouncement InternalGetAnnouncementById(int announcementId)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            return DoRead(u =>
+            {
+                var res = CreateDataAccess(u).GetAnnouncement(announcementId, Context.PersonId.Value);
+                if (res == null)
+                    throw new NoAnnouncementException();
+                return res;
+            });
+        }
+
+        public virtual AnnouncementDetails GetAnnouncementDetails(int announcementId)
+        {
+            return DoRead(u => InternalGetDetails(CreateDataAccess(u), announcementId));
+        }
+
+        protected virtual AnnouncementDetails InternalGetDetails(BaseAnnouncementDataAccess<TAnnouncement> dataAccess, int announcementId)
+        {
+            var ann = InternalGetDetailses(dataAccess, new List<int> {announcementId}).FirstOrDefault();
+            if(ann == null)
+                throw new NoAnnouncementException();
+            return ann;
+        }
+
+        protected virtual IList<AnnouncementDetails> InternalGetDetailses(BaseAnnouncementDataAccess<TAnnouncement> dataAccess, IList<int> announcementIds)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            var anns = dataAccess.GetDetailses(announcementIds, Context.PersonId.Value, Context.Role.Id);
+            foreach (var ann in anns)
+            {
+                ann.AnnouncementStandards = ServiceLocator.StandardService.PrepareAnnouncementStandardsCodes(ann.AnnouncementStandards);
+            }
+            return anns;
+        } 
     }
 }

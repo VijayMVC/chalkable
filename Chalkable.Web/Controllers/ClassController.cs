@@ -35,6 +35,29 @@ namespace Chalkable.Web.Controllers
             return Json(pl.Transform(ClassViewData.Create));
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult Summary(int classId)
+        {
+            var clazz = SchoolLocator.ClassService.GetClassDetailsById(classId);
+            Room classRoom = null;
+
+            if (clazz?.RoomRef != null)
+                classRoom = SchoolLocator.RoomService.GetRoomById(clazz.RoomRef.Value);
+
+            return Json(ClassSummaryViewData.Create(clazz, classRoom));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult Grading(int classId)
+        {
+            var classDetails = SchoolLocator.ClassService.GetClassDetailsById(classId);
+            var alphaGrades = classDetails.GradingScaleRef.HasValue
+                ? SchoolLocator.AlphaGradeService.GetAlphaGradesByClassId(classId)
+                : SchoolLocator.AlphaGradeService.GetAlphaGrades();
+            var alphaGradesForStandards = SchoolLocator.AlphaGradeService.GetStandardsAlphaGradesByClassId(classId);
+            return Json(ClassAlphaGradesViewData.Create(classDetails, alphaGrades, alphaGradesForStandards));
+        }
+
         [AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
         public ActionResult ClassInfo(int classId)
         {
@@ -48,15 +71,6 @@ namespace Chalkable.Web.Controllers
             return Json(ClassInfoViewData.Create(classData, room, department));
         }
 
-        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult ClassGrading(int classId)
-        {
-            var classData = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var canCreateItem = SchoolLocator.Context.PersonId == classData.PrimaryTeacherRef;
-            var gradingPerMp = ClassLogic.GetGradingSummary(SchoolLocator, classId, GetCurrentSchoolYearId(), null, null, canCreateItem);
-            return Json(ClassGradingViewData.Create(classData, gradingPerMp), 8);
-        }
-
         [AuthorizationFilter("System Admin, DistrictAdmin, Teacher, Student")]
         public ActionResult ClassSchedule(int classId, DateTime? date)
         {
@@ -65,12 +79,18 @@ namespace Chalkable.Web.Controllers
             return Json(ClassScheduleViewData.Create(clazz, schedule), 13);
         }
         
-        [AuthorizationFilter("System Admin, DistrictAdmin, Teacher, Student")]
-        public ActionResult ClassAttendance(int classId)
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public async Task<ActionResult> AttendanceSummary(int classId, int? dateType)
         {
-            var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
-            var attendanceSummary = SchoolLocator.AttendanceService.GetClassAttendanceSummary(classId, null);
-            return Json(ClassAttendanceSummaryViewData.Create(c, attendanceSummary));
+            var datePeriodType = ((ClassLogic.DatePeriodTypeEnum?)dateType) ?? ClassLogic.DatePeriodTypeEnum.Year;
+            return await Json(ClassLogic.GetClassAttendanceSummary(classId, datePeriodType, SchoolLocator));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public async Task<ActionResult> DisciplineSummary(int classId, int? dateType)
+        {
+            var datePeriodType = ((ClassLogic.DatePeriodTypeEnum?)dateType) ?? ClassLogic.DatePeriodTypeEnum.Year;
+            return await Json(ClassLogic.GetClassDisciplineSummary(classId, datePeriodType, SchoolLocator));
         }
 
         [AuthorizationFilter("System Admin, DistrictAdmin, Teacher, Student")]
@@ -100,5 +120,11 @@ namespace Chalkable.Web.Controllers
             return Json(res);
         }
 
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult ClassesStats(int schoolYearId, string filter, int? start, int? count, int? teacherId)
+        {
+            var classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYearId, start, count, filter, teacherId);
+            return Json(ClassStatsViewData.Create(classes));
+        }   
     }
 }

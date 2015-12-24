@@ -30,6 +30,7 @@
     "grunt-contrib-imagemin": "^1.0.0",
     "grunt-contrib-jshint": "^0.11.2",
     "grunt-contrib-uglify": "^0.9.2",
+    "grunt-nuget": "^0.1.5",
     "grunt-raygun-deployment": "^1.1.1",
     "grunt-teamcity": "^0.1.4",
     "grunt-text-replace": "^0.4.0",
@@ -43,8 +44,7 @@
   "scripts": {
     "bower": "cd Chalkable.Web && node ../node_modules/bower/bin/bower install",
     "compile": "node node_modules/emp.ria-jsbuild3/bin/jsbuild3 --config ./Chalkable.Web/jsbuild.json",
-    "serve-local": "node .local/serve -D ./Chalkable.Web --ssl --cert .certs/127.cert --key .certs/127.key --cors",
-    "serve-chlk": "node .local/serve -D ./Chalkable.Web --ssl --cert .certs/chalkableall.cert.pem --key .certs/chalkableall.key --cors"
+    "serve-local": "node .local/serve -D ./Chalkable.Web --ssl --cert .certs/chalkableall.cert.pem --key .certs/chalkableall.key --cors"
   },
   "author": "Chalkable Team",
   "license": "Proprietary software",

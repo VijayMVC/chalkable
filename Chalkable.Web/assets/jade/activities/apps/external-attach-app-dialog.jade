@@ -10,7 +10,7 @@
 
             - console.info(self.getApp().getId(), self.getAttachOptions().getAssessmentAppId())
             if self.getApp().getId().valueOf() == self.getAttachOptions().getAssessmentAppId().valueOf()
-                div(style="text-align:right")
+                div(style="text-align:right;margin-right:18px;margin-top: 5px")
                     button.blue-button.mid-button#add-app(
                         data-announcement-app-id=self.getAnnouncementApplicationId().valueOf()
                         data-announcement-id=self.getAttachOptions().getAnnouncementId().valueOf()

@@ -5,6 +5,7 @@ using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
+using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.ActionResults;
@@ -42,6 +43,23 @@ namespace Chalkable.Web.Controllers
                 return HandleAttachmentException(exception);
             }
         }
+
+        [AcceptVerbs(HttpVerbs.Put), AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult UploadAttachment(int announcementType, int announcementId, int assignedAttributeId, string fileName)
+        {
+            var length = Request.InputStream.Length;
+            if (length == 0)
+                return Json(new ChalkableException(ChlkResources.ERR_FILE_REQUIRED));
+
+            var bin = new byte[length];
+            Request.InputStream.Read(bin, 0, (int)length);
+
+            var attr = SchoolLocator.AnnouncementAssignedAttributeService.UploadAttachment((AnnouncementTypeEnum)announcementType, announcementId, assignedAttributeId, bin, fileName);
+            var attrAttachmentInfo = SchoolLocator.AttachementService.TransformToAttachmentInfo(attr.Attachment);
+            var res = AnnouncementAssignedAttributeViewData.Create(attr, attrAttachmentInfo);
+            return Json(res, HTML_CONTENT_TYPE, 6);
+        }
+
 
         [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult AddAttachment(int announcementType, int announcementId, int assignedAttributeId, int attachmentId)

@@ -3,6 +3,7 @@ REQUIRE('ria.async.Future');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.people.Schedule');
+REQUIRE('chlk.models.school.SchoolTeachersStatisticViewData');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -47,8 +48,7 @@ NAMESPACE('chlk.services', function () {
                     classId: classId.valueOf(),
                     byLastName: byLastName,
                     start: start,
-                    count: count_ || 10,
-
+                    count: count_ || 10
                 });
             },
 
@@ -75,6 +75,16 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getSchedule(personId) {
                 return this.get('Teacher/Schedule.json', chlk.models.people.Schedule, {
                     personId: personId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.SchoolYearId, Number, String, Number]],
+            ria.async.Future, function getTeachersStats(schoolYearId, start_, filter_, count_) {
+                return this.getPaginatedList('Teacher/TeachersStats.json', chlk.models.school.SchoolTeachersStatisticViewData.OF(chlk.models.id.SchoolPersonId), {
+                    schoolYearId: schoolYearId.valueOf(),
+                    start:start_ || 0,
+                    count: count_ || 10,
+                    filter: filter_
                 });
             }
         ])

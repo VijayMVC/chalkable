@@ -9,6 +9,10 @@ REQUIRE('chlk.models.classes.ClassInfo');
 REQUIRE('chlk.models.classes.ClassSchedule');
 REQUIRE('chlk.models.classes.ClassGradingViewData');
 REQUIRE('chlk.models.classes.AllSchoolsActiveClasses');
+REQUIRE('chlk.models.attendance.ClassAttendanceStatsViewData');
+REQUIRE('chlk.models.school.SchoolClassesStatisticViewData');
+REQUIRE('chlk.models.classes.ClassDisciplinesSummary');
+REQUIRE('chlk.models.classes.ClassAttendanceSummary');
 
 REQUIRE('chlk.models.common.ChlkDate');
 
@@ -81,7 +85,37 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getSummary(classId) {
-                return this.get('Class/ClassSummary.json', chlk.models.classes.ClassSummary, {
+                return this.get('Class/Summary.json', chlk.models.classes.ClassSummary, {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.classes.DateTypeEnum]],
+            ria.async.Future, function getDisciplinesStats(classId, dateType_){
+                return this.get('Class/DisciplineSummary.json', chlk.models.discipline.ClassDisciplineStatsViewData,{
+                    classId: classId.valueOf(),
+                    dateType: dateType_ && dateType_.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.classes.DateTypeEnum]],
+            ria.async.Future, function getAttendanceStats(classId, dateType_){
+                return this.get('Class/AttendanceSummary.json', chlk.models.attendance.ClassAttendanceStatsViewData,{
+                    classId: classId.valueOf(),
+                    dateType: dateType_ && dateType_.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getDisciplinesSummary(classId) {
+                return this.get('Class/Summary.json', chlk.models.classes.ClassDisciplinesSummary, {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getAttendanceSummary(classId) {
+                return this.get('Class/Summary.json', chlk.models.classes.ClassAttendanceSummary, {
                     classId: classId.valueOf()
                 });
             },
@@ -139,6 +173,16 @@ NAMESPACE('chlk.services', function () {
 
             ria.async.Future, function getAllSchoolsActiveClasses(){
                 return this.get('Class/AllSchoolsActiveClasses.json', chlk.models.classes.AllSchoolsActiveClasses, {})
+            },
+
+            [[chlk.models.id.SchoolYearId, Number, String, Number]],
+            ria.async.Future, function getClassesStatistic(schoolYearId, start_, filter_, count_) {
+                return this.getPaginatedList('Class/ClassesStats.json', chlk.models.school.SchoolClassesStatisticViewData.OF(chlk.models.id.SchoolId), {
+                    schoolYearId: schoolYearId.valueOf(),
+                    start:start_ || 0,
+                    count: count_ || 10,
+                    filter: filter_
+                });
             }
         ])
 });

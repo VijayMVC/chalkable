@@ -82,6 +82,16 @@ namespace Chalkable.Data.School.DataAccess
             if(gradeLevelId.HasValue)
                 conds.Add(StudentSchoolYear.GRADE_LEVEL_REF_FIELD, gradeLevelId);
             return SelectMany<StudentSchoolYear>(conds).Select(x => x.StudentRef).ToList();
-        } 
+        }
+
+        public int GetEnrolledStudentsCount()
+        {
+            var conds = new AndQueryCondition
+                {
+                    {StudentSchoolYear.ENROLLMENT_STATUS_FIELD, StudentEnrollmentStatusEnum.CurrentlyEnrolled}
+                };
+            
+            return SelectMany<StudentSchoolYear>(conds).Count;
+        }
     }
 }
