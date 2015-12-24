@@ -358,9 +358,7 @@ namespace Chalkable.Web.Controllers
                 {
                     ClassId = classDetails.Id,
                     TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses),
-                    AlphaGrades = classDetails.GradingScaleRef.HasValue
-                                        ? startupData.AlphaGradesForClasses[classDetails.Id]
-                                        : allAlphaGrades,
+                    AlphaGrades = classDetails.GradingScaleRef.HasValue ? startupData.AlphaGradesForClasses[classDetails.Id] : allAlphaGrades,
                     AlphaGradesForStandards = startupData.AlphaGradesForClassStandards[classDetails.Id]
                 });
             }

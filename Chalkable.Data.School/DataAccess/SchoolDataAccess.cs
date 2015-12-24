@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
-using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
@@ -32,8 +30,6 @@ namespace Chalkable.Data.School.DataAccess
             IOrderedEnumerable<ScheduleItem> schedule;
             IList<ClassDetails> allClasses;
             IList<GradingPeriod> gps;
-            IList<ClassAlphaGrade> agForClasses;
-            IList<ClassAlphaGrade> agForClassStandards;
             using (var reader = ExecuteStoredProcedureReader("spGetStartupData", ps))
             {
                 res.AlphaGrades = reader.ReadList<AlphaGrade>();
@@ -60,9 +56,9 @@ namespace Chalkable.Data.School.DataAccess
                 reader.Read();
                 res.UnshownNotificationsCount = SqlTools.ReadInt32(reader, "UnshownNotificationsCount");
                 reader.NextResult();
-                agForClasses = reader.ReadList<ClassAlphaGrade>();
+                res.AlphaGradesForClasses = AlphaGradeDataAccess.ReadAlphaGradesForClasses(reader, allClasses.Select(x=>x.Id).ToList());
                 reader.NextResult();
-                agForClassStandards = reader.ReadList<ClassAlphaGrade>();
+                res.AlphaGradesForClassStandards = AlphaGradeDataAccess.ReadAlphaGradesForClasses(reader, allClasses.Select(x=>x.Id).ToList());
             }
             res.GradingPeriod = gps.FirstOrDefault(x => x.StartDate <= now && x.EndDate >= now);
             if (res.GradingPeriod == null)
@@ -78,30 +74,26 @@ namespace Chalkable.Data.School.DataAccess
             var otherClasses = allClasses.Where(x => todayClasses.All(y => y.Id != x.Id)).OrderBy(x => x.Name).ToList();
             res.Classes = todayClasses.Concat(otherClasses).ToList();
 
-            res.AlphaGradesForClasses = new Dictionary<int, IList<AlphaGrade>>();
-            res.AlphaGradesForClassStandards = new Dictionary<int, IList<AlphaGrade>>();
-            foreach (var classDetail in allClasses)
-            {
-                res.AlphaGradesForClasses.Add(classDetail.Id, new List<AlphaGrade>());
-                res.AlphaGradesForClassStandards.Add(classDetail.Id, new List<AlphaGrade>());
-            }
-            var agDic = res.AlphaGrades.ToDictionary(x => x.Id);
-            foreach (var classAlphaGrade in agForClasses)
-            {
-                res.AlphaGradesForClasses[classAlphaGrade.ClassId].Add(agDic[classAlphaGrade.AlphaGradeId]);
-            }
-            foreach (var classAlphaGrade in agForClassStandards)
-            {
-                res.AlphaGradesForClassStandards[classAlphaGrade.ClassId].Add(agDic[classAlphaGrade.AlphaGradeId]);
-            }
+
+            //res.AlphaGradesForClasses = new Dictionary<int, IList<AlphaGrade>>();
+            //res.AlphaGradesForClassStandards = new Dictionary<int, IList<AlphaGrade>>();
+
+            //foreach (var classDetail in allClasses)
+            //{
+            //    res.AlphaGradesForClasses.Add(classDetail.Id, new List<AlphaGrade>());
+            //    res.AlphaGradesForClassStandards.Add(classDetail.Id, new List<AlphaGrade>());
+            //}
+            //var agDic = res.AlphaGrades.ToDictionary(x => x.Id);
+            //foreach (var classAlphaGrade in agForClasses)
+            //{
+            //    res.AlphaGradesForClasses[classAlphaGrade.ClassId].Add(agDic[classAlphaGrade.AlphaGradeId]);
+            //}
+            //foreach (var classAlphaGrade in agForClassStandards)
+            //{
+            //    res.AlphaGradesForClassStandards[classAlphaGrade.ClassId].Add(agDic[classAlphaGrade.AlphaGradeId]);
+            //}
             res.AttendanceReasons = res.AttendanceReasons.Where(x => x.AttendanceLevelReasons.Count > 0).ToList();
             return res;
-        }
-
-        private class ClassAlphaGrade
-        {
-            public int AlphaGradeId { get; set; }
-            public int ClassId { get; set; }
         }
 
         private const string SP_GET_SHORT_SCHOOL_SUMMARIES = "spGetShortSchoolSummaries";
