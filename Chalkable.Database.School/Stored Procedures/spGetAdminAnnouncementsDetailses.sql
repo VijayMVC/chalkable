@@ -1,6 +1,4 @@
-﻿
-
-CREATE Procedure [dbo].[spGetAdminAnnouncementsDetailses] 
+﻿Create Procedure [dbo].[spGetAdminAnnouncementsDetailses] 
 	@adminAnnouncementIds TInt32 ReadOnly, 
 	@callerId int, 
 	@callerRole int
@@ -36,7 +34,7 @@ Begin
 	Select 
 		vwAA.*, 
 		@isOwner, 
-		adr.Complete, 
+		cast((case when adr.Complete is null then 0 else adr.Complete end) as bit), 
 		@allCount as AllCount
 	From 
 		vwAdminAnnouncement vwAA left join AnnouncementRecipientData adr
@@ -123,3 +121,4 @@ Select
 From AnnouncementGroup
 join [Group] on [Group].Id = AnnouncementGroup.GroupRef
 Where AnnouncementRef in(select Id from @adminAnnouncements)
+
