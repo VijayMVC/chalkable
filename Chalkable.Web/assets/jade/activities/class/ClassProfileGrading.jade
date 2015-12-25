@@ -5,7 +5,7 @@
     +ProfileTopBar(self, 'grading')
     .summary-view
         .grading-container
-            +RenderWith(clazz.getGradingPart(), chlk.templates.grading.GradingClassSummaryTpl)(
+            +RenderWith(clazz.getGradingPart(), self.getTemplateClass())(
                 currentUser = self.getCurrentUser()
                 userRole = self.getUserRole()
             )
