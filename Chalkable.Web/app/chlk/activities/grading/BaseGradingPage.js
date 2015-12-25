@@ -18,10 +18,15 @@ NAMESPACE('chlk.activities.grading', function () {
 
             Array, 'items',
 
+            function prepareGradingModel_(model){
+                return model;
+            },
+
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
-                if (this.getGradingItems_(model))
-                    this.setItems(this.getGradingItems_(model));
+                var resModel = this.prepareGradingModel_(model);
+                if (this.getGradingItems_(resModel))
+                    this.setItems(this.getGradingItems_(resModel));
             },
 
             function getGradingItems_(model){
@@ -153,7 +158,8 @@ NAMESPACE('chlk.activities.grading', function () {
                 var annIndex = node.parent('.announcements-type-item').getData('index');
                 var typeIndex = node.parent('.ann-type-container').getData('index');
                 this.setCurrentIndex(typeIndex);
-                var announcement = this.getItems()[typeIndex].getAnnouncements()[annIndex];
+                if(this.getItems()[typeIndex].getAnnouncements)
+                    var announcement = this.getItems()[typeIndex].getAnnouncements()[annIndex];
                 //console.info(getDate() - dt);
                 return announcement || null;
             },

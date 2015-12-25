@@ -144,7 +144,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.ANNOUNCEMENT_ATTRIBUTES, ArrayOf(chlk.models.announcement.AnnouncementAttributeType));
                 this.saveInSession(session, ChlkSessionConstants.MESSAGING_DISABLED, Boolean);
                 this.saveInSession(session, ChlkSessionConstants.YEARS, ArrayOf(Number));
-
+                this.saveInSession(session, ChlkSessionConstants.SIS_API_VERSION, String);
                 this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
 
 

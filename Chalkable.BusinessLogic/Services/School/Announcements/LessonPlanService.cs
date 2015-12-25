@@ -54,6 +54,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 return new LessonPlanForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
             if (Context.Role == CoreRoles.STUDENT_ROLE)
                 return new LessonPlanForStudentDataAccess(unitOfWork, Context.SchoolYearId.Value);
+            if (BaseSecurity.IsDistrictAdmin(Context))
+                return new LessonPlanForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value);
 
             throw new ChalkableException("Not supported role for lesson plan");
         }

@@ -114,6 +114,7 @@
     <Compile Include="Model\ChalkableDepartment.cs" />
     <Compile Include="Model\CommonCoreStandard.cs" />
     <Compile Include="Model\DatabaseBackupRestoreTaskData.cs" />
+    <Compile Include="Model\DatabaseDacPacUpdateTaskData.cs" />
     <Compile Include="Model\DatabaseUpdateTaskData.cs" />
     <Compile Include="Model\Developer.cs" />
     <Compile Include="Model\District.cs" />

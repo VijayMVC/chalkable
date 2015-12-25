@@ -1,4 +1,4 @@
-REQUIRE('chlk.templates.ChlkTemplate');
+REQUIRE('chlk.templates.discipline.BaseDisciplineTpl');
 REQUIRE('chlk.models.discipline.ClassDisciplinesViewData');
 
 NAMESPACE('chlk.templates.discipline',function(){
@@ -22,6 +22,12 @@ NAMESPACE('chlk.templates.discipline',function(){
             String, 'filter',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.id.ClassId, 'classId',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'inProfile',
+
+            [ria.templates.ModelPropertyBind],
             Boolean, 'ablePostDiscipline',
 
             String, function getTotalText(){
@@ -34,7 +40,7 @@ NAMESPACE('chlk.templates.discipline',function(){
                 return{
                     controller: 'discipline',
                     action: 'classList',
-                    params: JSON.stringify([this.getTopData().getSelectedItemId().valueOf(), this.getDate().toStandardFormat()])
+                    params: JSON.stringify([this.getClassId().valueOf(), this.getDate().toStandardFormat()])
                 }
             },
 

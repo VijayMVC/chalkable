@@ -28,6 +28,12 @@ NAMESPACE('chlk.templates.grading', function () {
             Boolean, 'hasAccessToLE',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'ableEditDirectValue'
+            Boolean, 'ableEditDirectValue',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'inProfile',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ClassId, 'classId'
         ]);
 });

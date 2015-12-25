@@ -9,6 +9,9 @@ NAMESPACE('chlk.templates.attendance', function () {
         [ria.templates.ModelBind(chlk.models.attendance.EditSeatingGridViewData)],
         'EditSeatingGridTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
+            Boolean, 'inProfile',
+
+            [ria.templates.ModelPropertyBind],
             Number, 'columns',
 
             [ria.templates.ModelPropertyBind],

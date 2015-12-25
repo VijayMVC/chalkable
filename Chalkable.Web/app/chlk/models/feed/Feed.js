@@ -16,6 +16,7 @@ NAMESPACE('chlk.models.feed', function () {
                 IMPLEMENTS(ria.serialize.IDeserializable), [
 
             VOID, function deserialize(raw) {
+                this.inProfile = SJX.fromValue(raw.inProfile, Boolean);
                 this.items = SJX.fromArrayOfDeserializables(raw.annoucementviewdatas, chlk.models.announcement.FeedAnnouncementViewData);
                 this.importantOnly = SJX.fromValue(raw.importantOnly, Boolean);
                 this.toSet = SJX.fromValue(raw.toSet, Boolean);
@@ -50,6 +51,8 @@ NAMESPACE('chlk.models.feed', function () {
 
             ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'items',
 
+            Boolean, 'readonly',
+
             Boolean, 'importantOnly',
 
             Number, 'importantCount',
@@ -78,6 +81,8 @@ NAMESPACE('chlk.models.feed', function () {
 
             chlk.models.id.ClassId, 'classId',
 
-            Boolean, 'toSet'
+            Boolean, 'toSet',
+
+            Boolean, 'inProfile'
         ]);
 });

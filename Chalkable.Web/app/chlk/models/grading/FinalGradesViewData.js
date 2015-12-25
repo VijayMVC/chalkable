@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.grading.GradingPeriodFinalGradeViewData');
 REQUIRE('chlk.models.schoolYear.GradingPeriod');
 REQUIRE('chlk.models.common.PageWithClassesAndGradingPeriodsViewData');
+REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -21,6 +22,10 @@ NAMESPACE('chlk.models.grading', function () {
 
         Boolean, 'hasAccessToLE',
 
-        Boolean, 'ableEditDirectValue'
+        Boolean, 'ableEditDirectValue',
+
+        Boolean, 'inProfile',
+
+        chlk.models.id.ClassId, 'classId'
     ]);
 });

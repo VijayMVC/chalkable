@@ -305,5 +305,11 @@
     <Build Include="Stored Procedures\spGetClassesByTeachers.sql" />
     <Build Include="Stored Procedures\spGetClassesBySchoolYear.sql" />
     <Build Include="Stored Procedures\spGetClassesByIds.sql" />
+    <Build Include="Stored Procedures\spGetLessonPlansDetailses.sql" />
+    <Build Include="Stored Procedures\spGetClassAnnouncementDetailses.sql" />
+    <Build Include="Stored Procedures\spGetAdminAnnouncementsDetailses.sql" />
+    <Build Include="Stored Procedures\spGetAlphaGradesBySchool.sql" />
+    <Build Include="Stored Procedures\spGetAlphaGradesForClassStandards.sql" />
+    <Build Include="Stored Procedures\spGetAlphaGradesForClasses.sql" />
   </ItemGroup>
 </Project>

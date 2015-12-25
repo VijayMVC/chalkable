@@ -17,6 +17,7 @@ namespace Chalkable.StiConnector.Connectors
             urlFormat = BaseUrl + "chalkable/sections/{0}/disciplinereferrals/{1}";
         }
 
+        
         public DisciplineReferral Create(DisciplineReferral discipline)
         {
             if(!discipline.SectionId.HasValue)
@@ -24,6 +25,7 @@ namespace Chalkable.StiConnector.Connectors
             return Post(BuildUrl(discipline.SectionId.Value, discipline.Date), discipline);
         }
 
+        
         public void Update(DisciplineReferral discipline)
         {
             if (!discipline.SectionId.HasValue)
@@ -31,16 +33,19 @@ namespace Chalkable.StiConnector.Connectors
             Put(BuildUrl(discipline.SectionId.Value, discipline.Date, discipline.Id), discipline);
         }
 
+        
         public void Delete(int id, int sectionId, DateTime date)
         {
             Delete(BuildUrl(sectionId, date, id));
         }
 
+        
         public DisciplineReferral GetById(int id, int sectionId, DateTime date)
         {
             return Call<DisciplineReferral>(BuildUrl(sectionId, date, id));
         }
 
+        
         public IList<DisciplineReferral> GetList(int sectionId, DateTime date)
         {
             return Call<IList<DisciplineReferral>>(BuildUrl(sectionId, date));

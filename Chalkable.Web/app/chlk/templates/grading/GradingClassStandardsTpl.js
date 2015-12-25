@@ -10,14 +10,14 @@ REQUIRE('chlk.models.grading.GradingClassSummary');
          'GradingClassStandardsTpl', EXTENDS(chlk.templates.common.PageWithClassesAndGradingPeriodsTpl), [
              [ria.templates.ModelPropertyBind],
              chlk.models.grading.GradingClassSummaryPart, 'summaryPart',
- 
-             [ria.templates.ModelPropertyBind],
-             String, 'action',
 
              [ria.templates.ModelPropertyBind],
-             Boolean, 'hasAccessToLE',
+             Boolean, 'inProfile',
 
              [ria.templates.ModelPropertyBind],
-             String, 'gridAction'
+             chlk.models.id.ClassId, 'classId',
+
+             [ria.templates.ModelPropertyBind],
+             Boolean, 'hasAccessToLE'
          ]);
  });

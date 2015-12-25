@@ -208,13 +208,6 @@ NAMESPACE('chlk.activities.attendance', function () {
                    att.setType(type);
                    if(level_)
                         att.setLevel(level_);
-                   /*if(!reasonId){
-                       var level = att.getLevel();
-                       var reasons = att.getReasons().filter(function(item){return item.isDefaultReason(level);});
-                       if(reasons.length > 0){
-                           reasonId = reasons[0].getId().valueOf();
-                       }
-                   }*/
                    if(reasonId){
                        var reason = this._reasons.filter(function(item){return item.getId().valueOf() == reasonId;})[0];
                        att.setAttendanceReasonId(reason.getId());
@@ -311,15 +304,21 @@ NAMESPACE('chlk.activities.attendance', function () {
                 }
             },
 
-            [[chlk.models.attendance.ClassList]],
+            function getListModel(model){
+                return model;
+            },
+
             VOID, function afterRefresh(model){
-                if(model.getItems().filter(function(item){
-                    return item.getType() != this._typesEnum.NA.valueOf()
-                }.bind(this)).length == 0)
-                    this.dom.find('.keyboard-suggestion').show();
-                this._canChangeReasons = model.isAbleChangeReasons();
-                this._reasons = model.getReasons();
-                this._classAttendances = model.getItems();
+                model = this.getListModel(model);
+                if(model){
+                    if(model.getItems().filter(function(item){
+                            return item.getType() != this._typesEnum.NA.valueOf()
+                        }.bind(this)).length == 0)
+                        this.dom.find('.keyboard-suggestion').show();
+                    this._canChangeReasons = model.isAbleChangeReasons();
+                    this._reasons = model.getReasons();
+                    this._classAttendances = model.getItems();
+                }
             },
 
             Array, function getAttendances_(){

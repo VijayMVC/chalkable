@@ -12,12 +12,12 @@ NAMESPACE('chlk.services', function () {
     CLASS(
         'DbMaintenanceService', EXTENDS(chlk.services.BaseService), [
             ria.async.Future, function backup() {
-                return this.get('dbmaintenance/Backup.json', chlk.models.Success, {});
+                return this.post('dbmaintenance/Backup.json', chlk.models.Success, {});
             },
 
             [[String]],
             ria.async.Future, function restore(ticks) {
-                return this.get('dbmaintenance/Restore.json', chlk.models.Success, {
+                return this.post('dbmaintenance/Restore.json', chlk.models.Success, {
                     time: ticks
                 });
             },
@@ -40,8 +40,10 @@ NAMESPACE('chlk.services', function () {
                     start: start_,
                     count: count_
                 });
+            },
+
+            ria.async.Future, function deployDacPac() {
+                return this.post('dbmaintenance/DatabaseDeploy.json', chlk.models.Success, {});
             }
-
-
         ])
 });

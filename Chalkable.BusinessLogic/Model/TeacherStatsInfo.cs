@@ -19,6 +19,7 @@ namespace Chalkable.BusinessLogic.Model
         public int? DisciplinesCount { get; set; }
         public decimal? AttendancesCount { get; set; }
         public decimal? Average { get; set; }
+        public string Gender { get; set; }
 
         public static TeacherStatsInfo Create(TeacherSummary teacher)
         {
@@ -35,7 +36,12 @@ namespace Chalkable.BusinessLogic.Model
                 DisciplinesCount = teacher.DisciplineCount,
 
                 StudentsCount = teacher.EnrollmentCount,
+
+                //TODO: FIX THIS AFTER iNow API UDPATED
+                Gender = "F"
             };
+
+            
         }
 
         public static TeacherStatsInfo Create(Staff teacher, IList<ClassDetails> classes)
@@ -50,7 +56,8 @@ namespace Chalkable.BusinessLogic.Model
 
                 Id = teacher.Id,
 
-                StudentsCount = classes.Sum(x => x.StudentsCount)
+                StudentsCount = classes.Sum(x => x.StudentsCount),
+                Gender = teacher.Gender
             };
         }
 

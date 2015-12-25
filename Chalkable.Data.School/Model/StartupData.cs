@@ -15,7 +15,7 @@ namespace Chalkable.Data.School.Model
         public IList<GradingComment> GradingComments { get; set; } 
         public IList<AttendanceReason> AttendanceReasons { get; set; } 
         public int UnshownNotificationsCount { get; set; }
-        public Dictionary<int, IList<AlphaGrade>> AlphaGradesForClasses { get; set; }
-        public Dictionary<int, IList<AlphaGrade>> AlphaGradesForClassStandards { get; set; }
+        public IDictionary<int, IList<AlphaGrade>> AlphaGradesForClasses { get; set; }
+        public IDictionary<int, IList<AlphaGrade>> AlphaGradesForClassStandards { get; set; }
     }
 }

@@ -92,10 +92,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataAccess\AlphaGradeDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementAssignedAttributeDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementRecipientDataDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\AdminAnnouncementDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\ClassAnnouncementDataAccess.cs" />
+    <Compile Include="DataAccess\AnnouncementsDataAccess\ClassAnnouncementForAdminDataAccess.cs" />
     <Compile Include="DataAccess\ApplicationBanHistoryDataAccess.cs" />
     <Compile Include="DataAccess\ApplicationInstallActionDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanDataAccess.cs" />

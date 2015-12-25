@@ -88,7 +88,11 @@ namespace Chalkable.StiConnector.Connectors
             }
             catch (WebException ex)
             {
-                return HandleInowException<T>(ex); 
+                return HandleInowException<T>(ex);
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
             finally
             {
@@ -269,10 +273,15 @@ namespace Chalkable.StiConnector.Connectors
                 };
         }
 
-        protected string BaseUrl
+        protected void EnsureApiVersion(string requiredApiVersion)
         {
-            get { return locator.BaseUrl; }
+            VersionHelper.ValidateVersionFormat(requiredApiVersion);
+            if(VersionHelper.CompareVersionTo(requiredApiVersion, ApiVersion) == 1)
+                throw new ChalkableSisNotSupportVersionException(requiredApiVersion, ApiVersion);
         }
+
+        protected string BaseUrl => locator.BaseUrl;
+        public string ApiVersion => locator.ApiVersion;
     }
 
 
@@ -287,9 +296,6 @@ namespace Chalkable.StiConnector.Connectors
         public string ErrorMessage { get; set; }
         public InowErrorModelState ModelState { get; set; }
 
-        public IList<string> ModelStates
-        {
-            get { return ModelState != null ? ModelState.States : new List<string>(); }
-        }
+        public IList<string> ModelStates => ModelState != null ? ModelState.States : new List<string>();
     }
 }

@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <SkipPostSharp>True</SkipPostSharp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -151,6 +152,7 @@
     <Compile Include="Model\Attendances\ClassAttendance.cs" />
     <Compile Include="Model\AttributeAttachmentContentInfo.cs" />
     <Compile Include="Model\ClassStatsInfo.cs" />
+    <Compile Include="Model\DisciplineDailySummaryInfo.cs" />
     <Compile Include="Model\EmailInfo.cs" />
     <Compile Include="Model\FeedSettingsInfo.cs" />
     <Compile Include="Model\FinalGradeInfo.cs" />

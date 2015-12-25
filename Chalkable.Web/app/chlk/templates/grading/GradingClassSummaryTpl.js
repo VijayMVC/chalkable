@@ -15,6 +15,12 @@ NAMESPACE('chlk.templates.grading', function () {
             Boolean, 'hasAccessToLE',
 
             [ria.templates.ModelPropertyBind],
+            Boolean, 'inProfile',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ClassId, 'classId',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.grading.GradingClassSummaryItems, 'currentGradingBox'
         ]);
 });

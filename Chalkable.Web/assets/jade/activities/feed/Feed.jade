@@ -4,40 +4,45 @@
 div(class = noComplete ? "no-complete" : "").feed-container
     -var topData = self.getTopData()
     -var isAdmin = self.getUserRole().isAdmin()
-    if isAdmin
-        +GradesToolBarWithAll(topData, 'feed', 'list', [true, self.importantOnly])
-        -var selected = topData.getSelectedIds()
+    -console.info(self, self.isInProfile)
+    -var listAction = self.isInProfile() ? 'listForProfile' : 'list'
+    -var announcementsAction = self.isInProfile() ? 'getAnnouncementsForProfile' : 'getAnnouncements'
+    -var selected
+    if !self.isInProfile()
+        if isAdmin
+            +GradesToolBarWithAll(topData, 'feed', listAction, [true, self.importantOnly])
+            -selected = topData.getSelectedIds()
+        else
+            +ClassesToolBarWithAll(topData, 'feed', listAction, [true, self.importantOnly])
+            -selected = topData.getSelectedItemId();
     else
-        +ClassesToolBarWithAll(topData, 'feed', 'list', [true, self.importantOnly])
-        -var selected = topData.getSelectedItemId();
+        -selected = self.getClassId()
     h2.page-title Feed
     .action-bar
         .items
             if self.importantOnly
                 .pressed= Msg.ToDo
-                +ActionLinkButton('feed', 'list', selected || '', true, false, 0)= Msg.All
+                +ActionLinkButton('feed', listAction, selected || '', true, false, 0)= Msg.All
             else
-                +ActionLinkButton('feed', 'list', selected || '', true, true, 0)= Msg.ToDo
+                +ActionLinkButton('feed', listAction, selected || '', true, true, 0)= Msg.ToDo
                 .pressed= Msg.All
     //+ActionLink('feed', 'stopNotificationsInterval')#stop-notifications-interval.x-hidden
     if noComplete
         label#feed-arrow.blue-arrow.left-up-arrow=Msg.See_more_items
         label#no-items.blue-arrow.gray.div=Msg.No_items_marked_important
     else
-        +ActionForm('feed', 'getAnnouncements').wrapper.no-working
+        +ActionForm('feed', announcementsAction).wrapper.no-working
             input(type="hidden", name="start", value=(self.getStart() || 0))
+            input(type="hidden", name="inProfile", value=self.isInProfile() ? 'true' : '')
             input(type="hidden", name="count", value=10)
             input(type="hidden", name="importantOnly", value=self.importantOnly && self.importantOnly.toString())
             input(type="hidden", name="sorttype", value=self.isLatest()).latest-earliest-input
             input(type="submit", name="submitType", value="sort")#sort-submit.x-hidden
             +Hidden('toSet', '').to-set
-            if isAdmin
-                input(type="hidden", name="gradeLevels", value=topData.getSelectedIds())
-            else
-                input(type="hidden", name="classId", value=topData.getSelectedItemId())
+            input(type="hidden", name=isAdmin && !self.isInProfile() ? "gradeLevels" : "classId", value=selected)
 
             .left-buttons-block(class=self.hasFilters() ? '' : 'hidden')
-                if self.isImportantOnly() && self.items.length
+                if !self.isInProfile() && self.isImportantOnly() && self.items.length
                     input(type="submit", name="submitType", value="markDone")#mark-done-submit.x-hidden
                     +Select('markDoneOption')(data-placeholder = 'Mark Done', value = 0).markDoneSelect
                         +Option(0, '', false)
@@ -77,7 +82,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                         )#toDate.start-end-picker
                         br
                         Button(type="submit", name="submitType", value="sort", disabled = !self.getStartDate() || self.getEndDate())#date-ok-button.blue-button=Msg.OK
-                if !isAdmin
+                if self.isInProfile() || !isAdmin
                     +Select('announcementtype')(data-placeholder = 'Any Type').annTypeSelect.submit-after-select
                         +Option(null, 'All Types', !self.getAnnType())
                         +Option(typesEnum.CLASS_ANNOUNCEMENT.valueOf(), 'Activities Only', typesEnum.CLASS_ANNOUNCEMENT == self.getAnnType())
@@ -95,7 +100,7 @@ div(class = noComplete ? "no-complete" : "").feed-container
                             li(class = self.isLatest() ? "" : "highlighted", data-value=false).latest-earliest-option.active-result Due Date: Earliest
                             li(class = self.isLatest() ? "highlighted" : "", data-value=true).latest-earliest-option.active-result Due Date: Latest
             .right-buttons-block
-                +ActionButton('feed', 'feedPrinting', topData.getSelectedItemId(), self.importantOnly).report-btn
+                +ActionButton('feed', 'feedPrinting', selected, self.importantOnly).report-btn
                     .report-link
                 Button(type="button", class=self.hasFilters() ? 'active' : '').feed-tools Feed Tools
             +ListView(self.items)(
@@ -105,4 +110,4 @@ div(class = noComplete ? "no-complete" : "").feed-container
             )
                 Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
                 each item in self.items
-                    +FeedItem(item)
+                    +FeedItem(item, self.isReadonly())

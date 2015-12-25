@@ -64,6 +64,15 @@ NAMESPACE('chlk.controllers', function (){
                         return this.dbMaintenanceService.getDbListBackupsSync();
                     }, this);
                 return this.UpdateView(chlk.activities.storage.DbMaintenancePage, result);
+            },
+
+            function deployDacPacAction() {
+                return this.ShowConfirmBox('Are you sure you want to deploy DACPAC?', '')
+                    .thenCall(this.dbMaintenanceService.deployDacPac, [])
+                    .attach(this.validateResponse_())
+                    .then(function(success){
+                        return this.Redirect("backgroundtask", "list");
+                    }, this);
             }
         ])
 });

@@ -63,6 +63,9 @@ NAMESPACE('chlk.templates.grading', function () {
 
             chlk.models.id.ClassId, 'classId',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'inProfile',
+
             function getTbWidth(){
                 return ria.dom.Dom('#content').width() - 412;
             },

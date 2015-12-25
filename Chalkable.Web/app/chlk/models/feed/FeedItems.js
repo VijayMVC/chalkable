@@ -6,6 +6,8 @@ REQUIRE('chlk.models.id.ClassId');
 NAMESPACE('chlk.models.feed', function () {
     "use strict";
 
+    var SJX = ria.serialize.SJX;
+
     /** @class chlk.models.feed.FeedItems*/
     CLASS(
         'FeedItems',
@@ -22,6 +24,8 @@ NAMESPACE('chlk.models.feed', function () {
                     this.setItems(items_);
             },
 
-            ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'items'
+            ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'items',
+
+            Boolean, 'readonly'
         ]);
 });

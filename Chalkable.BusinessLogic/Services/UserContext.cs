@@ -58,18 +58,12 @@ namespace Chalkable.BusinessLogic.Services
         
         [Ignore]
         public string SisToken { get; set; }
-        
         public string SisUrl { get; set; }
         public DateTime? SisTokenExpires { get; set; }
+        public string SisApiVersion { get; set; }
 
         [Ignore]
-        public DateTime NowSchoolTime
-        {
-            get
-            {
-                return DateTime.UtcNow.ConvertFromUtc(DistrictTimeZone ?? "UTC");
-            }
-        }
+        public DateTime NowSchoolTime => DateTime.UtcNow.ConvertFromUtc(DistrictTimeZone ?? "UTC");
 
         public DateTime NowSchoolYearTime
         {
