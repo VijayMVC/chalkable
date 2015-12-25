@@ -132,6 +132,11 @@ NAMESPACE('chlk.controllers', function (){
                return this.BackgroundCloseView(this.getView().getCurrent());
            },
 
+           [[chlk.models.id.ClassId]],
+           Boolean, function isAssignedToClass_(classId){
+               return  !!this.classService.getClassById(classId);
+           },
+
            function isPageReadonly_(teacherPermissionName, adminPermissionName, clazz_){
                var currentUserId = this.getCurrentPerson().getId();
                var teacherIds = clazz_ ? clazz_.getTeachersIds() : [currentUserId];

@@ -54,10 +54,13 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(result){
                         var model = result[0], feedModel = result[1], gradingPeriods = result[2];
+                        var teacherIds = model.getTeachersIds(), currentPersonId = this.getCurrentPerson().getId();
+                        var staringEnabled = this.userIsTeacher() && teacherIds.filter(function(id){return id == currentPersonId;}).length > 0;
                         feedModel.setGradingPeriods(gradingPeriods);
                         feedModel.setImportantOnly(true);
                         feedModel.setInProfile(true);
                         feedModel.setClassId(classId);
+                        feedModel.setStaringDisabled(!staringEnabled);
                         feedModel.setReadonly(this.isPageReadonly_('VIEW_CLASSROOM', 'VIEW_CLASSROOM_ADMIN', model));
                         model.setFeed(feedModel);
                         return new chlk.models.classes.ClassProfileSummaryViewData(
@@ -363,11 +366,6 @@ NAMESPACE('chlk.controllers', function (){
                         );
                     }, this);
                 return this.PushView(chlk.activities.classes.ClassProfileAppsPage, res);
-            },
-
-            [[chlk.models.id.ClassId]],
-            Boolean, function isAssignedToClass_(classId){
-               return  !!this.classService.getClassById(classId);
             }
         ]);
 });

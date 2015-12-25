@@ -234,6 +234,11 @@ NAMESPACE('chlk.controllers', function (){
                         model.setTopData(classBarItemsMdl);
                     }
 
+                    if(classId_ && classId_.valueOf()){
+                        var staringEnabled = this.userIsTeacher() && this.isAssignedToClass_(classId_);
+                        model.setStaringDisabled(!staringEnabled);
+                    }
+
                     model.setGradingPeriods(gradingPeriods);
                     importantOnly_ !== undefined && model.setImportantOnly(importantOnly_);
 

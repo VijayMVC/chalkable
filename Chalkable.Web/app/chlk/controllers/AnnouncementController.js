@@ -2129,7 +2129,7 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
-        [chlk.controllers.SidebarButton('inbox')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.AnnouncementId, Boolean, chlk.models.announcement.AnnouncementTypeEnum]],
         function starAction(id, complete_, type_){
             this.announcementService
@@ -2138,7 +2138,7 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
-        [chlk.controllers.SidebarButton('statistic')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.AnnouncementId, Boolean, chlk.models.announcement.AnnouncementTypeEnum]],
         function starFromStudentGradesAction(id, complete_, type_){
             return this.starAction(id, complete_, type_);
