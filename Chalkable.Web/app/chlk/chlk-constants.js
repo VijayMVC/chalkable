@@ -1,6 +1,7 @@
 var ChlkSessionConstants = {
     ATTACH_OPTIONS: 'attachOptions',
     ATTRIBUTES_WITH_FILES: 'attributesWithFiles',
+    CHART_DATE_TYPE: 'chartDateType',
     CLASS_PROFILE_ATTENDANCE_DATA: 'classProfileAttendanceData',
     FIRST_LOGIN: 'firstLogin',
     SCHOOL_YEAR:'schoolYear',

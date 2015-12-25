@@ -88,11 +88,14 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.Permissions([
                 [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN]
             ])],
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-            function attendanceListAction(classId, date_){
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, chlk.models.classes.DateTypeEnum]],
+            function attendanceListAction(classId, date_, byPostButton_){
+                var dateType = this.getContext().getSession().get(ChlkSessionConstants.CHART_DATE_TYPE, chlk.models.classes.DateTypeEnum.LAST_MONTH
+
+                );
                 var res = ria.async.wait(
                     this.attendanceService.getClassList(classId, date_),
-                    this.classService.getAttendanceStats(classId),
+                    this.classService.getAttendanceStats(classId, dateType),
                     this.classService.getAttendanceSummary(classId)
                 )
                     .attach(this.validateResponse_())
@@ -130,14 +133,14 @@ NAMESPACE('chlk.controllers', function (){
 
                         return res;
                     }, this);
-                return this.PushView(chlk.activities.classes.ClassProfileAttendanceListPage, res);
+                return this.PushOrUpdateView(chlk.activities.classes.ClassProfileAttendanceListPage, res, byPostButton_ ? 'saved' : '');
             },
 
             [chlk.controllers.Permissions([
                 [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN]
             ])],
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],
-            function classListForDateAction(classId, date_, byPostButton_){
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
+            function classListForDateAction(classId, date_){
                 var res = this.attendanceService.getClassList(classId, date_)
                     .attach(this.validateResponse_())
                     .then(function(items){
@@ -147,17 +150,18 @@ NAMESPACE('chlk.controllers', function (){
                         return res;
                     }, this);
 
-                return this.UpdateView(chlk.activities.classes.ClassProfileAttendanceListPage, res, byPostButton_ ? 'saved' : '');
+                return this.UpdateView(chlk.activities.classes.ClassProfileAttendanceListPage, res, '');
             },
 
             [chlk.controllers.Permissions([
                 [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN]
             ])],
-            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate]],
-            function attendanceSeatingChartAction(classId, date_){
+            [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],
+            function attendanceSeatingChartAction(classId, date_, byPostButton_){
+                var dateType = this.getContext().getSession().get(ChlkSessionConstants.CHART_DATE_TYPE, chlk.models.classes.DateTypeEnum.LAST_MONTH);
                 var res = ria.async.wait(
                     this.attendanceService.getSeatingChartInfo(classId, date_),
-                    this.classService.getAttendanceStats(classId),
+                    this.classService.getAttendanceStats(classId, dateType),
                     this.classService.getAttendanceSummary(classId)
                 )
                     .attach(this.validateResponse_())
@@ -184,7 +188,7 @@ NAMESPACE('chlk.controllers', function (){
 
                         return res;
                     }, this);
-                return this.PushView(chlk.activities.classes.ClassProfileAttendanceSeatingChartPage, res);
+                return this.PushOrUpdateView(chlk.activities.classes.ClassProfileAttendanceSeatingChartPage, res, byPostButton_ ? 'saved' : '');
             },
 
             [chlk.controllers.Permissions([
@@ -218,6 +222,7 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [[chlk.models.classes.DateTypeEnum, chlk.models.id.ClassId]],
             function changeAttendanceDateTypeAction(dateType, classId){
+                this.getContext().getSession().set(ChlkSessionConstants.CHART_DATE_TYPE, dateType);
                 var res = this.classService.getAttendanceStats(classId, dateType)
                     .attach(this.validateResponse_());
 
