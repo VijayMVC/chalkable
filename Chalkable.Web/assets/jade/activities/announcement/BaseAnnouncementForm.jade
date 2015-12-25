@@ -7,7 +7,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
 
     +Hidden('id', announcement.getId().valueOf())
     +Hidden('announcementTypeId', classAnnouncement && classAnnouncement.getAnnouncementTypeId())#announcement-type-id
-    +Hidden('personId', user.getId().valueOf())
+    +Hidden('personid', user.getId().valueOf())
     //+Hidden('markingperiodid', announcement.getCreated())
     //+Hidden('state', announcement.getState())
     +Hidden('isedit', !!state)(data-isedit = !!state).is-edit

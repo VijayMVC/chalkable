@@ -71,6 +71,12 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher")]
+        public ActionResult ListLast(int classId, int classAnnouncementTypeId)
+        {
+            return Json(SchoolLocator.ClassAnnouncementService.GetLastFieldValues(classId, classAnnouncementTypeId));
+        }
+
+        [AuthorizationFilter("Teacher")]
         public ActionResult SubmitAnnouncement(ClassAnnouncementInfo classAnnouncementInfo, IList<AssignedAttributeInputModel> attributes)
         {
             SchoolLocator.AnnouncementAssignedAttributeService.Edit(AnnouncementTypeEnum.Class, classAnnouncementInfo.AnnouncementId, attributes);

@@ -30,6 +30,15 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.ClassId, Number, chlk.models.id.SchoolPersonId]],
+            ria.async.Future, function listLast(classId, classAnnouncementTypeId, schoolPersonId) {
+                return this.get('ClassAnnouncement/ListLast.json', ArrayOf(String), {
+                    classId: classId.valueOf(),
+                    classAnnouncementTypeId: classAnnouncementTypeId,
+                    personId: schoolPersonId.valueOf()
+                });
+            },
+
             [[chlk.models.id.AnnouncementId, chlk.models.id.ClassId, Number, String, String
                 , chlk.models.common.ChlkDate
                 , Number, Number, Number, Boolean, Boolean,
