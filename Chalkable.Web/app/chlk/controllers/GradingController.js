@@ -334,9 +334,9 @@ NAMESPACE('chlk.controllers', function (){
                         gradingModel.setInProfile(true);
                         classModel.setGradingPart(gradingModel);
 
-                        var res = new chlk.models.classes.BaseClassProfileViewData(
+                        var res = new chlk.models.classes.BaseGradingClassProfileViewData(
                             this.getCurrentRole(), classModel, this.getUserClaims_(),
-                            this.isAssignedToClass_(classId)
+                            this.isAssignedToClass_(classId), chlk.models.classes.GradingPageTypeEnum.FINAL_GRADES
                         );
 
                         return res;
@@ -363,9 +363,9 @@ NAMESPACE('chlk.controllers', function (){
                         gradingModel.setInProfile(true);
                         classModel.setGradingPart(gradingModel);
 
-                        var res = new chlk.models.classes.BaseClassProfileViewData(
+                        var res = new chlk.models.classes.BaseGradingClassProfileViewData(
                             this.getCurrentRole(), classModel, this.getUserClaims_(),
-                            this.isAssignedToClass_(classId)
+                            this.isAssignedToClass_(classId), chlk.models.classes.GradingPageTypeEnum.ITEMS_GRID
                         );
 
                         return res;
@@ -390,9 +390,9 @@ NAMESPACE('chlk.controllers', function (){
                         gradingModel.setInProfile(true);
                         classModel.setGradingPart(gradingModel);
 
-                        var res = new chlk.models.classes.BaseClassProfileViewData(
+                        var res = new chlk.models.classes.BaseGradingClassProfileViewData(
                             this.getCurrentRole(), classModel, this.getUserClaims_(),
-                            this.isAssignedToClass_(classId)
+                            this.isAssignedToClass_(classId), chlk.models.classes.GradingPageTypeEnum.STANDARDS_GRID
                         );
 
                         return res;
@@ -416,9 +416,9 @@ NAMESPACE('chlk.controllers', function (){
                         gradingModel.setInProfile(true);
                         classModel.setGradingPart(gradingModel);
 
-                        var res = new chlk.models.classes.BaseClassProfileViewData(
+                        var res = new chlk.models.classes.BaseGradingClassProfileViewData(
                             this.getCurrentRole(), classModel, this.getUserClaims_(),
-                            this.isAssignedToClass_(classId)
+                            this.isAssignedToClass_(classId), chlk.models.classes.GradingPageTypeEnum.ITEMS_BOXES
                         );
 
                         return res;
@@ -442,9 +442,9 @@ NAMESPACE('chlk.controllers', function (){
                         gradingModel.setInProfile(true);
                         classModel.setGradingPart(gradingModel);
 
-                        var res = new chlk.models.classes.BaseClassProfileViewData(
+                        var res = new chlk.models.classes.BaseGradingClassProfileViewData(
                             this.getCurrentRole(), classModel, this.getUserClaims_(),
-                            this.isAssignedToClass_(classId)
+                            this.isAssignedToClass_(classId), chlk.models.classes.GradingPageTypeEnum.STANDARDS_BOXES
                         );
 
                         return res;

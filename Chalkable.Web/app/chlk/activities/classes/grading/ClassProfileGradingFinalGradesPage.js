@@ -1,5 +1,5 @@
 REQUIRE('chlk.activities.grading.FinalGradesPage');
-REQUIRE('chlk.templates.classes.grading.ClassProfileGradingFinalGradesTpl');
+REQUIRE('chlk.templates.classes.ClassProfileGradingTpl');
 
 NAMESPACE('chlk.activities.classes.grading', function () {
 
@@ -7,7 +7,7 @@ NAMESPACE('chlk.activities.classes.grading', function () {
     CLASS(
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('profile')],
-        [ria.mvc.TemplateBind(chlk.templates.classes.grading.ClassProfileGradingFinalGradesTpl)],
+        [ria.mvc.TemplateBind(chlk.templates.classes.ClassProfileGradingTpl)],
         'ClassProfileGradingFinalGradesPage', EXTENDS(chlk.activities.grading.FinalGradesPage), [
             OVERRIDE, function prepareGradingModel_(model){
                 return model.getClazz().getGradingPart();
