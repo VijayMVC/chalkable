@@ -311,11 +311,6 @@ NAMESPACE('chlk.controllers', function (){
 
             /* CLASS PROFILE */
 
-            [[chlk.models.id.ClassId]],
-            Boolean, function isAssignedToClass_(classId){
-                return  !!this.classService.getClassById(classId);
-            },
-
             [chlk.controllers.Permissions([
                 [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN]
             ])],
