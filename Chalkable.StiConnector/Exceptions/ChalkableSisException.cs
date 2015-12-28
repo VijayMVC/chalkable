@@ -36,7 +36,7 @@ namespace Chalkable.StiConnector.Exceptions
         public ChalkableSisNotSupportVersionException(string message) : base(message) { }
 
         public ChalkableSisNotSupportVersionException(string reuiredVersion, string currentVersion)
-            : base($"Your inow doesn't support current api. This api required inow version {reuiredVersion} or later")
+            : base($"Your InformationNow doesn't support current API. This API requires InformationNow version {reuiredVersion} or later.")
         {
             
         }

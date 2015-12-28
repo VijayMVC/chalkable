@@ -11,6 +11,7 @@ using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors;
+using Chalkable.StiConnector.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -146,15 +147,20 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
-
-            var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSchoolsSummaries(Context.NowSchoolTime, filter);
-
-            if (iNowRes == null)
-                return SchoolSummaryInfo.Create(DoRead( u => new SchoolDataAccess(u).GetShortSchoolSummaries(start.Value, count.Value, filter)));
-
-            var allSchoolCount = GetSchoolsCount(filter);
-
-            return SchoolSummaryInfo.Create(iNowRes, start.Value, count.Value, allSchoolCount);
+            try
+            {
+                var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSchoolsSummaries(Context.NowSchoolTime, filter);
+                var allSchoolCount = GetSchoolsCount(filter);
+                return SchoolSummaryInfo.Create(iNowRes, start.Value, count.Value, allSchoolCount);
+            }
+            catch (ChalkableSisNotSupportVersionException ex)
+            {
+                return SchoolSummaryInfo.Create(DoRead(u => new SchoolDataAccess(u).GetShortSchoolSummaries(start.Value, count.Value, filter)));
+            }
+            catch (Exception e)
+            {               
+                throw e;
+            }
         }
 
         public int GetSchoolsCount(string filter = null)

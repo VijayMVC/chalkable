@@ -9,6 +9,7 @@ REQUIRE('chlk.lib.exception.ChalkableException');
 REQUIRE('chlk.lib.exception.ChalkableSisException');
 REQUIRE('chlk.lib.exception.NoAnnouncementException');
 REQUIRE('chlk.lib.exception.NoClassAnnouncementTypeException');
+REQUIRE('chlk.lib.exception.ChalkableSisNotSupportVersionException');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -56,14 +57,31 @@ NAMESPACE('chlk.services', function () {
             },
 
             function getResponseProcessor_(clazz_) {
+                var baseService = this;
                 return function (response) {
                     var res, dt;
 
+                    var response = baseService.getExceptionProcessor_()(response);
+
+                    if (!clazz_)
+                        return response.data || null;
+
+                    dt = getDate().getTime();
+                    res = Serializer.deserialize(response.data, clazz_);
+                    _DEBUG && console.info('deserialize time', getDate().getTime() - dt);
+                    return res;
+                }
+            },
+
+            function getExceptionProcessor_(){
+                return function (response){
                     if (response.success != true) {
                         var exceptionType = response.data.exceptiontype;
                         switch (exceptionType) {
                             case 'ChalkableSisException':
                                 throw chlk.lib.exception.ChalkableSisException(response.data.message);
+                            case 'ChalkableSisNotSupportVersionException':
+                                throw chlk.lib.exception.ChalkableSisNotSupportVersionException(response.data.message);
                             case 'ChalkableException':
                                 throw chlk.lib.exception.ChalkableException(response.data.message);
                             case 'NoAnnouncementException':
@@ -77,14 +95,7 @@ NAMESPACE('chlk.services', function () {
                                 throw chlk.lib.exception.DataException(exceptionType + ': ' + response.data.message);
                         }
                     }
-
-                    if (!clazz_)
-                        return response.data || null;
-
-                    dt = getDate().getTime();
-                    res = Serializer.deserialize(response.data, clazz_);
-                    _DEBUG && console.info('deserialize time', getDate().getTime() - dt);
-                    return res;
+                    return response;
                 }
             },
 
@@ -167,6 +178,7 @@ NAMESPACE('chlk.services', function () {
                     .requestHeaders(this.prepareDefaultHeaders({}))
                     .disableCache()
                     .run()
+                    .then(this.getExceptionProcessor_())
                     .then(function (data) {
                         var model = new chlk.models.common.PaginatedList(clazz);
                         var dt = getDate().getTime();

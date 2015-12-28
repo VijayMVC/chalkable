@@ -13,6 +13,7 @@ REQUIRE('chlk.lib.exception.NotAuthorizedException');
 REQUIRE('chlk.lib.exception.NoClassAnnouncementTypeException');
 REQUIRE('chlk.lib.exception.AppErrorException');
 REQUIRE('chlk.lib.exception.InvalidPictureException');
+REQUIRE('chlk.lib.exception.ChalkableSisNotSupportVersionException');
 
 REQUIRE('chlk.services.UserTrackingService');
 
@@ -171,6 +172,14 @@ NAMESPACE('chlk.controllers', function (){
                        var msg = this.mapSisErrorMessage(exception.getMessage());
                        Raygun ? Raygun.send(Raygun.fetchRaygunError(exception.toString())) : console.error(exception.toString());
                        return this.ShowMsgBox(msg, 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                           .then(function(){
+                               this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
+                           }, this)
+                           .thenBreak();
+                   }, this)
+                   .catchException(chlk.lib.exception.ChalkableSisNotSupportVersionException, function(exception){
+                       var msg = this.mapSisErrorMessage(exception.getMessage());
+                       return this.ShowMsgBox(msg, 'oops', [{text: Msg.GOT_IT.toUpperCase()}])
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
                            }, this)
