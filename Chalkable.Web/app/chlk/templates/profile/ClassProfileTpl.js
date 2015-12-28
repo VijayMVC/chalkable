@@ -54,7 +54,7 @@ NAMESPACE('chlk.templates.profile', function(){
                 var currentUserId = this.getCurrentUser().getId();
                 var permissionEnum = chlk.models.people.UserPermissionEnum;
                 var canViewSummary = this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ADMIN)
-                    || (this.getUserRole().isTeacher() && this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM)
+                    || (this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM)
                     && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
                 return canViewSummary;
             },
@@ -64,7 +64,7 @@ NAMESPACE('chlk.templates.profile', function(){
                 var currentUserId = this.getCurrentUser().getId();
                 var permissionEnum = chlk.models.people.UserPermissionEnum;
                 var canViewSummary = this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_ADMIN)
-                    || (this.getUserRole().isTeacher() && this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM)
+                    || (this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM)
                     && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
                 return canViewSummary;
             },
@@ -74,7 +74,7 @@ NAMESPACE('chlk.templates.profile', function(){
                 var currentUserId = this.getCurrentUser().getId();
                 var permissionEnum = chlk.models.people.UserPermissionEnum;
                 var canViewSummary = this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN)
-                    || (this.getUserRole().isTeacher() && this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_DISCIPLINE)
+                    || (this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_DISCIPLINE)
                     && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
                 return canViewSummary;
             },
