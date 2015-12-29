@@ -281,15 +281,14 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         private void EnsureDistrictAdminAccess(IList<ClaimInfo> claimInfos)
         {
-            if (!ClaimInfo.HasPermission(claimInfos, ClaimInfo.CHALKABLE_ADMIN))
+            if (!claimInfos.HasPermission(ClaimInfo.CHALKABLE_ADMIN))
                 throw new ChalkableSecurityException(string.Format("User has no required ({0}) permission for using Chalkable {1} Portal", ClaimInfo.CHALKABLE_ADMIN));
         }
 
         private void EnsureTeacherChalkableAccess(IList<ClaimInfo> claimInfos)
         {
             if (!HasTeacherAccessToChalkable(claimInfos))
-                throw new ChalkableException(string.Format("User has no required ({0} , {1}) permission for using Chalkable {2} Portal"
-                           , ClaimInfo.MAINTAIN_CLASSROOM, ClaimInfo.MAINTAIN_CLASSROOM_ADMIN, CoreRoles.TEACHER_ROLE.Name));             
+                throw new ChalkableException($"User has no required ({ClaimInfo.MAINTAIN_CLASSROOM} , {ClaimInfo.MAINTAIN_CLASSROOM_ADMIN}) permission for using Chalkable {CoreRoles.TEACHER_ROLE.Name} Portal");             
         }
 
         private bool HasTeacherAccessToChalkable(IList<ClaimInfo> claimInfos)

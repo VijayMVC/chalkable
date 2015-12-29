@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
@@ -48,10 +49,11 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             }
             else
             {
-                if (BaseSecurity.IsDistrictAdmin(serviceLocator.Context) || isStudent)
+                if ((BaseSecurity.IsDistrictAdmin(serviceLocator.Context) || isStudent) && !inputModel.ClassId.HasValue)
                     anns.AddRange(serviceLocator.AdminAnnouncementService.GetAnnouncementsComplex(settings.StartDate, settings.EndDate, null, inputModel.Complete, onlyOwner));
-                if (BaseSecurity.IsTeacher(serviceLocator.Context) || isStudent)
+                if (BaseSecurity.IsTeacher(serviceLocator.Context) || isStudent || inputModel.ClassId.HasValue)
                 {
+                    onlyOwner = !isStudent && !serviceLocator.Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);
                     anns.AddRange(serviceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, onlyOwner));
                     anns.AddRange(serviceLocator.LessonPlanService.GetLessonPlansForFeed(settings.StartDate, settings.EndDate, null, inputModel.ClassId, inputModel.Complete, onlyOwner));
                 }
@@ -105,7 +107,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             if (settings.LessonPlanOnly && !BaseSecurity.IsDistrictAdmin(serviceLocator.Context))
                 anns = serviceLocator.LessonPlanService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, onlyOwner);
             else 
-                anns = serviceLocator.AnnouncementFetchService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, onlyOwner);
+                anns = serviceLocator.AnnouncementFetchService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete);
 
             if (!settings.IncludeHiddenActivities)
                 anns = anns.Where(x => x.ClassAnnouncementData == null || x.ClassAnnouncementData.VisibleForStudent).ToList();

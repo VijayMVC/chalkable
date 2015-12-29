@@ -131,12 +131,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private bool HasLECreditsPermission()
         {
-            return ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.AWARD_LE_CREDITS});
+            return Context.Claims.HasPermission(ClaimInfo.AWARD_LE_CREDITS);
         }
 
         private bool HasLECreditsClassroomPermission()
         {
-            return ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.AWARD_LE_CREDITS_CLASSROOM});
+            return Context.Claims.HasPermission(ClaimInfo.AWARD_LE_CREDITS_CLASSROOM);
         }
 
     }
