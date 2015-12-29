@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
@@ -8,6 +9,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -213,14 +215,24 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
-
-            var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value, count.Value, filter);
+            IList<SectionSummary> iNowRes;
+            try
+            {
+                iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value, count.Value, filter);
+            }
+            catch (ChalkableSisNotSupportVersionException ex)
+            {
+                return DoRead(u => new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start.Value, count.Value, filter,
+                                teacherId).Transform(ClassStatsInfo.Create));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
             using (var u = Read())
             {
                 var da = new ClassDataAccess(u);
-                if (iNowRes == null)
-                    return (da.GetClassesBySchoolYear(schoolYearId, start.Value, count.Value, filter, teacherId)).Transform(ClassStatsInfo.Create);
-
+                
                 var classes = da.GetClassesByIds(iNowRes.Select(x => x.SectionId).ToList());
                 var classesCount = da.GetClassesBySchoolYear(schoolYearId, 0, 1, filter, teacherId).TotalCount;
 

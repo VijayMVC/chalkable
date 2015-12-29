@@ -309,7 +309,16 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 var ann = res.FirstOrDefault(x => x.ClassAnnouncementData.SisActivityId == activity.Id);
                 bool annExists = ann != null;
                 if(!annExists) 
-                   ann =  new AnnouncementDetails();
+                   ann =  new AnnouncementDetails
+                   {
+                       AnnouncementData = new ClassAnnouncement(),
+                       AnnouncementApplications = new List<AnnouncementApplication>(),
+                       AnnouncementAttachments = new List<AnnouncementAttachment>(),
+                       AnnouncementQnAs = new List<AnnouncementQnAComplex>(),
+                       AnnouncementAttributes = new List<AnnouncementAssignedAttribute>(),
+                       AnnouncementStandards = new List<AnnouncementStandardDetails>(),
+                       StudentAnnouncements = new List<StudentAnnouncementDetails>(),
+                   };
                 MapperFactory.GetMapper<AnnouncementDetails, Activity>().Map(ann, activity);
                 if(!annExists)
                     res.Add(ann);

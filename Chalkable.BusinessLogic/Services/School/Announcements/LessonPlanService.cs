@@ -403,7 +403,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 if (!oldLessonPlan.GalleryCategoryRef.HasValue)
                     throw new ChalkableException($@"'{oldLessonPlan.Title}' was deleted from Gallery.");
 
-                if (!oldLessonPlan.IsOwner && !ClaimInfo.HasPermission(Context.Claims, ClaimInfo.CHALKABLE_ADMIN))
+                if (!oldLessonPlan.IsOwner && !Context.Claims.HasPermission(ClaimInfo.CHALKABLE_ADMIN))
                     throw new ChalkableSecurityException("Current user has no access to replace lesson plan in gallery!");
 
                 newLessonPlan.GalleryCategoryRef = oldLessonPlan.GalleryCategoryRef;
@@ -421,7 +421,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 var da = CreateLessonPlanDataAccess(u);
                 var lp = da.GetLessonPlanTemplate(lessonPlanId, Context.PersonId.Value);
-                if (!lp.IsOwner && !ClaimInfo.HasPermission(Context.Claims, ClaimInfo.CHALKABLE_ADMIN))
+                if (!lp.IsOwner && !Context.Claims.HasPermission(ClaimInfo.CHALKABLE_ADMIN))
                     throw new ChalkableSecurityException("Current user has no access to remove lesson plan from gallery!");
                 lp.GalleryCategoryRef = null;
                 da.Update(lp);

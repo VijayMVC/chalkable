@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Chalkable.BusinessLogic.Model;
@@ -7,6 +8,7 @@ using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -92,23 +94,23 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
-
-            var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetTeachersSummaries(schoolYearId,
-                Context.NowSchoolYearTime, start.Value, count.Value, filter);
-
-            if (iNowRes == null)
+            try
+            {
+                var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetTeachersSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value, count.Value, filter);
+                var teacherCount = SearchStaff(schoolYearId, null, null, filter, true, 0, 1).TotalCount;
+                //TODO: FIX GENDER AFTER iNow API UDPATED
+                return TeacherStatsInfo.Create(iNowRes, start.Value, count.Value, teacherCount);
+            }
+            catch (ChalkableSisNotSupportVersionException ex)
             {
                 var teachers = SearchStaff(schoolYearId, null, null, filter, true, start.Value, count.Value);
-                var classes =
-                    DoRead(u => new ClassDataAccess(u).GetClassesByTeachers(schoolYearId, teachers.Select(x => x.Id).ToList()));
-
+                var classes = DoRead(u => new ClassDataAccess(u).GetClassesByTeachers(schoolYearId, teachers.Select(x => x.Id).ToList()));
                 return TeacherStatsInfo.Create(teachers, classes);
             }
-
-            var teacherCount = SearchStaff(schoolYearId, null, null, filter, true, 0, 1).TotalCount;
-
-            //TODO: FIX GENDER AFTER iNow API UDPATED
-            return TeacherStatsInfo.Create(iNowRes, start.Value, count.Value, teacherCount);
+            catch (Exception e)
+            {
+                throw e;
+            }
         }
 
     }
