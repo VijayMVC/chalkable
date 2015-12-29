@@ -143,7 +143,7 @@ NAMESPACE('chlk.controllers', function (){
                var teacherIds = clazz_ ? clazz_.getTeachersIds() : [currentUserId];
                var permissionEnum = chlk.models.people.UserPermissionEnum;
                var isLinksEnabled = this.hasUserPermission_(permissionEnum[adminPermissionName])
-                   || (this.userIsTeacher() && this.hasUserPermission_(permissionEnum[teacherPermissionName])
+                   || (this.hasUserPermission_(permissionEnum[teacherPermissionName])
                    && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
                return !isLinksEnabled;
            },
