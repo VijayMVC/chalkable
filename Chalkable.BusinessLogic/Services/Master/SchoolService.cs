@@ -152,7 +152,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public bool HasMessagingSettgingsAccess(UserContext context, Guid? districtId)
         {
-            var hasPermission = ClaimInfo.HasPermission(Context.Claims, ClaimInfo.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS);
+            var hasPermission = Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS);
             return (!districtId.HasValue || districtId == Context.DistrictId)
                    && (BaseSecurity.IsSysAdmin(context) || (BaseSecurity.IsDistrictAdmin(context) && hasPermission));
         }

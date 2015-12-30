@@ -247,12 +247,12 @@ NAMESPACE('chlk.controllers', function (){
                     model.setLate(model.isOldLate());
                     model.setIncomplete(model.isOldIncomplete());
                     model.setExempt(model.isOldExempt());
-                    this.BackgroundUpdateView(chlk.activities.grading.GradingClassSummaryGridPage, model, chlk.activities.lib.DontShowLoader());
+                    this.BackgroundUpdateView(this.getView().getCurrent().getClass(), model, chlk.activities.lib.DontShowLoader());
 
                     throw error;
                 }, this)
                 .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.grading.GradingClassSummaryGridPage, result, chlk.activities.lib.DontShowLoader());
+            return this.UpdateView(this.getView().getCurrent().getClass(), result, chlk.activities.lib.DontShowLoader());
         },
 
         [[chlk.models.id.AnnouncementApplicationId]],
@@ -2129,7 +2129,7 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
-        [chlk.controllers.SidebarButton('inbox')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.AnnouncementId, Boolean, chlk.models.announcement.AnnouncementTypeEnum]],
         function starAction(id, complete_, type_){
             this.announcementService
@@ -2138,7 +2138,7 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
-        [chlk.controllers.SidebarButton('statistic')],
+        [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.id.AnnouncementId, Boolean, chlk.models.announcement.AnnouncementTypeEnum]],
         function starFromStudentGradesAction(id, complete_, type_){
             return this.starAction(id, complete_, type_);

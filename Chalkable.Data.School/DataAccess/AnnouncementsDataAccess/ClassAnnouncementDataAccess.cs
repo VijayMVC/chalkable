@@ -211,8 +211,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {ClassAnnouncement.CLASS_ANNOUNCEMENT_TYPE_REF_FIELD, classAnnouncementType},
                     {ClassAnnouncement.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
                 };
-            var dbQuery = Orm.OrderedSelect(AdminAnnouncement.VW_ADMIN_ANNOUNCEMENT_NAME, conds, Announcement.ID_FIELD, Orm.OrderType.Desc, count);
-            var anns = ReadMany<Announcement>(dbQuery);
+            var dbQuery = Orm.OrderedSelect(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, conds, Announcement.ID_FIELD, Orm.OrderType.Desc, count);
+            var anns = ReadMany<ClassAnnouncement>(dbQuery);
             return anns.Count == 0 ? new List<string>() : anns.Select(x => x.Content).Distinct().ToList();
         }
 

@@ -242,13 +242,21 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.attendance.UpdateSeatingChart]],
         function saveFromSeatingChartAction(model){
-            var result = this.attendanceService.postSeatingChart(model.getDate(), JSON.parse(model.getSeatingChartInfo()))
+            var o = JSON.parse(model.getSeatingChartInfo());
+            var result = this.attendanceService.postSeatingChart(model.getDate(), o)
                 .then(function(res){
-                    //this.getView().pop();
+                    if(model.isInProfile()){
+                        //this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
+                        this.redirectToPage_('class', 'attendanceSeatingChart', [new chlk.models.id.ClassId(o.classId), model.getDate(), true]);
+                        return null;
+                    }
+
                     return new chlk.models.attendance.SeatingChart(model.isInProfile());
-                });
-            //return this.ShadeLoader();
-            return this.UpdateView(model.isInProfile() ? chlk.activities.classes.ClassProfileAttendanceSeatingChartPage : chlk.activities.attendance.SeatingChartPage, result, 'savedChart');
+                }, this);
+            if(model.isInProfile())
+                return null;//this.ShadeLoader();
+
+            return this.UpdateView(chlk.activities.attendance.SeatingChartPage, result, 'savedChart');
         },
 
         VOID, function addStudentClickAction(){
@@ -269,10 +277,16 @@ NAMESPACE('chlk.controllers', function (){
                 .markAllPresent(classId, date)
                 .attach(this.validateResponse_())
                 .then(function(success){
-                    if(isSeatingChart_)
+                    if(isSeatingChart_){
+                        if(isInProfile_)
+                            return this.redirectToPage_('class', 'attendanceSeatingChart', [classId, date, true]);
+
                         return null;
+                    }
+
+
                     return this.Redirect(isInProfile_ ? 'class' : 'attendance',
-                        isInProfile_ ? 'classListForDate' : 'classList',
+                        isInProfile_ ? 'attendanceList' : 'classList',
                         [classId, date]);
                 }, this);
 
@@ -495,7 +509,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(res){
                     return this.Redirect(model.isInProfile() ? 'class' : 'attendance',
-                        model.isInProfile() ? 'classListForDate' : 'classList',
+                        model.isInProfile() ? 'attendanceList' : 'classList',
                         [model.getClassId(), model.getDate(), true]);
                 }, this);
         },

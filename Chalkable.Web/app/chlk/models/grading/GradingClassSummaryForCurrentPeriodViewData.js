@@ -15,6 +15,10 @@ NAMESPACE('chlk.models.grading', function () {
 
             Boolean, 'hasAccessToLE',
 
+            Boolean, 'inProfile',
+
+            chlk.models.id.ClassId, 'classId',
+
             [ria.serialize.SerializeProperty('currentgradingbox')],
             chlk.models.grading.GradingClassSummaryItems, 'currentGradingBox'
         ]);

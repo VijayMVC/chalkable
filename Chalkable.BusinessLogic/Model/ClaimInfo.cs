@@ -29,14 +29,19 @@ namespace Chalkable.BusinessLogic.Model
                     Values = claim.Values
                 }).ToList();
         } 
-        public static bool HasPermissions(IList<ClaimInfo> claimInfos, IList<string> claimsValues)
+        
+    }
+
+    public static class ClaimListHelper
+    {
+        public static bool HasPermissions(this IList<ClaimInfo> claimInfos, IList<string> claimsValues)
         {
             return claimInfos != null && claimInfos.Any(claim => claimsValues.All(value => claim.Values.Contains(value)));
         }
 
-        public static bool HasPermission(IList<ClaimInfo> claimInfos, string permission)
+        public static bool HasPermission(this IList<ClaimInfo> claimInfos, string permission)
         {
-            return HasPermissions(claimInfos, new List<string> {permission});
+            return HasPermissions(claimInfos, new List<string> { permission });
         }
     }
 }

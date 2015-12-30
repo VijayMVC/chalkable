@@ -118,10 +118,10 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(AnnouncementAttributeViewData.Create(announcementAttributes), ViewConstants.ANNOUNCEMENT_ATTRIBUTES);
             
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(Context.SchoolYearId.Value);
-            var currGradingPeriod = gradingPeriods.FirstOrDefault(x => x.StartDate <= Context.NowSchoolYearTime.Date && x.EndDate >= Context.NowSchoolYearTime.Date);
+            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(Context.SchoolYearId.Value, Context.NowSchoolYearTime.Date);
 
             PrepareJsonData(GradingPeriodViewData.Create(gradingPeriods), ViewConstants.GRADING_PERIODS);
-            PrepareJsonData(ShortGradingPeriodViewData.Create(currGradingPeriod), ViewConstants.GRADING_PERIOD);
+            PrepareJsonData(ShortGradingPeriodViewData.Create(currentGradingPeriod), ViewConstants.GRADING_PERIOD);
 
             var mps = SchoolLocator.MarkingPeriodService.GetMarkingPeriods(sy.Id);
             PrepareJsonData(MarkingPeriodViewData.Create(mps), ViewConstants.MARKING_PERIODS);
@@ -342,7 +342,7 @@ namespace Chalkable.Web.Controllers
             {
                 ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.PersonId);
                 var personEmail = SchoolLocator.PersonEmailService.GetPersonEmail(person.Id);
-                personView.Email = personEmail == null ? null : personEmail.EmailAddress;
+                personView.Email = personEmail?.EmailAddress;
             }
         }
         
@@ -367,8 +367,8 @@ namespace Chalkable.Web.Controllers
 
         private bool CanTeacherViewChalkable()
         {
-            return ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM})
-                   || ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM_ADMIN});
+            return Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM)
+                   || Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);
         }
 
         

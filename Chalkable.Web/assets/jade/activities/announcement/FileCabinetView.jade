@@ -44,7 +44,7 @@ mixin FileIcon_(announcementId, announcementType, assignedAttributeId, attachmen
                         +Option(sortTypeEnum.OLDEST_UPLOADED.valueOf(), 'Oldest Uploaded', sortTypeEnum.OLDEST_UPLOADED == self.getSortType())
                .right.wrapper
                   .file-search-container
-                     input(type="text", placeholder='Filter list...', name="filter", value=self.getFilter()).file-search.search-input
+                     input(type="text", placeholder='Filter list...', name="filter", value=self.getFilter(), data-value=self.getFilter()).file-search.search-input
                      .search-glass
                      .file-search-imgs
                         label.file-search-img

@@ -9,6 +9,7 @@ NAMESPACE('chlk.activities.classes', function () {
         [ria.mvc.DomAppendTo('#main')],
         [chlk.activities.lib.PageClass('profile')],
         [ria.mvc.TemplateBind(chlk.templates.classes.ClassProfileAttendanceTpl)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.classes.ClassProfileAttendanceTpl, null, null, ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassList, '', '.attendances-container', ria.mvc.PartialUpdateRuleActions.Replace)],
         [ria.mvc.PartialUpdateRule(chlk.templates.attendance.ClassAttendanceStatsTpl, null, '.attendances-chart' , ria.mvc.PartialUpdateRuleActions.Replace)],
         'ClassProfileAttendanceListPage', EXTENDS(chlk.activities.attendance.ClassListPage),[

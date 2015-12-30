@@ -110,4 +110,4 @@ div(class = noComplete ? "no-complete" : "").feed-container
             )
                 Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
                 each item in self.items
-                    +FeedItem(item, self.isReadonly())
+                    +FeedItem(item, self.isReadonly(), false, self.isStaringDisabled())

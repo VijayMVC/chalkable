@@ -291,6 +291,14 @@ NAMESPACE('chlk.controllers', function (){
                             return new chlk.models.school.SchoolSummaryViewData(schoolName, schoolId, currentSchoolYearId, years, classes);
                         })
                 }, this)
+                .catchException(chlk.lib.exception.ChalkableException, function(exception) {
+                    return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                        .then(function(){
+                            this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
+                            this.redirectToPage_('district', 'summary', [])
+                        }, this)
+                        .thenBreak();
+                }, this)
                 .attach(this.validateResponse_());
 
             return this.PushView(chlk.activities.school.SchoolClassesSummaryPage, result);

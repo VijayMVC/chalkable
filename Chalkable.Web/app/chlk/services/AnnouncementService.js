@@ -110,15 +110,6 @@ NAMESPACE('chlk.services', function () {
                     announcementType: announcementType.valueOf()
                 });
             },
-            
-            [[chlk.models.id.ClassId, Number, chlk.models.id.SchoolPersonId]],
-            ria.async.Future, function listLast(classId, classAnnouncementTypeId, schoolPersonId) {
-                return this.get('Announcement/ListLast.json', ArrayOf(String), {
-                    classId: classId.valueOf(),
-                    classAnnouncementTypeId: classAnnouncementTypeId,
-                    personId: schoolPersonId.valueOf()
-                });
-            },
 
             [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
             ria.async.Future, function editAnnouncement(id, announcementType) {

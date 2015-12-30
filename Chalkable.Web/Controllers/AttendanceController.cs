@@ -158,7 +158,7 @@ namespace Chalkable.Web.Controllers
             return FakeJson("~/fakeData/adminAttendanceSummary.json");
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult AttendanceMonthesList()
         {
             var syId = GetCurrentSchoolYearId();

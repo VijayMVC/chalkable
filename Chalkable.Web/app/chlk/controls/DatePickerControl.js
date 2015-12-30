@@ -54,6 +54,24 @@ NAMESPACE('chlk.controls', function () {
                     }
                 }
 
+                if(options.inCurrentGradingPeriods) {
+                    var gradingPeriods = this.getContext().getSession().get(ChlkSessionConstants.GRADING_PERIODS);
+                    var ranges = gradingPeriods
+                        .map(function (_) {
+                            return {
+                                start: _.getStartDate().getDate(),
+                                end: _.getEndDate().getDate()
+                            }
+                        });
+
+                    ranges.sort(function (_1, _2) { return _1.start - _2.start; });
+                    /*options.beforeShowDay = function(date) {
+                        return [ranges.some(function (_) { return _.start <= date && date <= _.end }), ''];
+                    };*/
+                    options.minDate = ranges[0].start;
+                    options.maxDate = ranges[ranges.length - 1].end;
+                }
+
                 if(options.dateRanges) {
                     var ranges = options.dateRanges.sort(function (_1, _2) { return _1.start - _2.start; });
                     delete options.dateRanges;

@@ -1,17 +1,11 @@
-clazz = self.getGradingPart()
-.class-grading.class-profile.loader-container
-    .loader
+-var clazz = self.getClazz()
+
+.profile-page.class-profile
+    h2.page-title=clazz.getName()
     +ProfileTopBar(self, 'grading')
-    .info-view
-        .top-panel
-            h1.info.with-line
-                .class-icon-container
-                    +ClassImg(clazz , 45, 80)
-                =clazz.getName()
-            h2
-                div
-            .grading-section
-                gradingModel = new chlk.models.grading.GradingClassSummaryPart(self.getGradingPart().getGradingPerMp())
-                +RenderWith(gradingModel, chlk.templates.grading.GradingClassSummaryPartTpl, {
-                    userRole: self.getUserRole()
-                })
+    .summary-view
+        .grading-container
+            +RenderWith(clazz.getGradingPart(), self.getTemplateClass())(
+                currentUser = self.getCurrentUser()
+                userRole = self.getUserRole()
+            )

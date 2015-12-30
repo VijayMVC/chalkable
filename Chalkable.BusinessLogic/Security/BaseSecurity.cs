@@ -100,7 +100,7 @@ namespace Chalkable.BusinessLogic.Security
 
         public static bool HasClaim(string claim, UserContext context)
         {
-            return ClaimInfo.HasPermissions(context.Claims, new List<string> {claim});
+            return context.Claims.HasPermission(claim);
         }
 
         public static bool IsAppTester(UserContext context)

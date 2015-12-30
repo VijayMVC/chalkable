@@ -129,6 +129,9 @@ NAMESPACE('chlk.activities.grading', function () {
                 BASE(model, msg_);
 
                 _DEBUG && console.info(model);
+                if (model instanceof chlk.models.classes.BaseClassProfileViewData)
+                    this._lastModel = model.getClazz().getGradingPart();
+
                 if (model instanceof chlk.models.grading.GradingClassStandardsGridForCurrentPeriodViewData)
                     this._lastModel = model;
 

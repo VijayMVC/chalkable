@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.grading.GradingClassSummaryPart');
 REQUIRE('chlk.models.announcement.ClassAnnouncementViewData');
 REQUIRE('chlk.models.common.PageWithClassesAndGradingPeriodsViewData');
+REQUIRE('chlk.models.id.ClassId');
 
 NAMESPACE('chlk.models.grading', function () {
     "use strict";
@@ -9,9 +10,9 @@ NAMESPACE('chlk.models.grading', function () {
         'GradingClassSummary', EXTENDS(chlk.models.common.PageWithClassesAndGradingPeriodsViewData), [
             chlk.models.grading.GradingClassSummaryPart, 'summaryPart',
 
-            String, 'action',
+            Boolean, 'inProfile',
 
-            String, 'gridAction',
+            chlk.models.id.ClassId, 'classId',
 
             Boolean, 'hasAccessToLE',
 

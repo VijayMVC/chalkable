@@ -21,6 +21,10 @@ NAMESPACE('chlk.models.grading', function () {
 
             Boolean, 'hasAccessToLE',
 
-            Boolean, 'ablePostStandards'
+            Boolean, 'ablePostStandards',
+
+            Boolean, 'inProfile',
+
+            chlk.models.id.ClassId, 'classId'
         ]);
 });
