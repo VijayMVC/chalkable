@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
@@ -38,7 +39,8 @@ namespace Chalkable.BusinessLogic.Services.School
         public async Task<ChalkableGradeBook> GetGradeBook(int classId, GradingPeriod gradingPeriod, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
         {
             Task<Gradebook> stiGradeBook;
-            if (needsReCalculate && GradebookSecurity.CanReCalculateGradebook(Context))
+            var isTeacherClass = DoRead(u => new ClassTeacherDataAccess(u).Exists(classId, Context.PersonId));
+            if (needsReCalculate && GradebookSecurity.CanReCalculateGradebook(Context, isTeacherClass))
                 stiGradeBook = ConnectorLocator.GradebookConnector.Calculate(classId, gradingPeriod.Id);
             else
             {

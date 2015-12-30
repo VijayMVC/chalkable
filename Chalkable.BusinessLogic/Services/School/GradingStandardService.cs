@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -20,7 +21,8 @@ namespace Chalkable.BusinessLogic.Services.School
         }
         public async Task<IList<GradingStandardInfo>> GetGradingStandards(int classId, int? gradingPeriodId, bool reCalculateStandards = true)
         {
-            if (reCalculateStandards && GradebookSecurity.CanReCalculateGradebook(Context)) 
+            var isTeacherClass = DoRead(u => new ClassTeacherDataAccess(u).Exists(classId, Context.PersonId));
+            if (reCalculateStandards && GradebookSecurity.CanReCalculateGradebook(Context, isTeacherClass)) 
                 await ConnectorLocator.GradebookConnector.Calculate(classId);
             var standardScores = ConnectorLocator.StandardScoreConnector.GetStandardScores(classId, null, gradingPeriodId);
             var standards = ServiceLocator.StandardService.GetStandards(classId, null, null);
