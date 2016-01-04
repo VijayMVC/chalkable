@@ -99,9 +99,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {"lessonPlanIds", ids},
                     {"callerId", callerId},
                     {"callerRole", roleId},
-                    {"schoolYearId", schoolYearId}
+                    {"schoolYearId", schoolYearId},
+                    {"onlyOwner", true } // HOT FIX
                 };
-            return GetDetailses("spGetLessonPlansDetailses", parameters);
+            return GetDetailses("spGetListOfLessonPlansDetails", parameters);
+//          return GetDetailses("spGetLessonPlansDetailses", parameters);
         }
 
         protected override LessonPlan ReadAnnouncementData(AnnouncementComplex announcement, SqlDataReader reader)

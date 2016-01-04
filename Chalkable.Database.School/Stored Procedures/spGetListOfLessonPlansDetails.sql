@@ -1,56 +1,55 @@
-﻿
-
-
-CREATE Procedure [dbo].[spGetClassAnnouncementDetailses]
-	@classAnnouncementIds TInt32 readonly,
+﻿CREATE Procedure [dbo].[spGetListOfLessonPlansDetails]
+	@lessonPlanIds TInt32 readonly,
 	@callerId int,
 	@callerRole int,
-	@schoolYearId int
+	@schoolYearId int,
+	@onlyOwner bit
 As
 
 Declare @teacherRoleId int = 2,
-		@isOwner bit,
 		@schoolId int
-
-Set @isOwner = cast((Case When @callerRole = @teacherRoleId Then 1 Else 0 End) as Bit)
 
 Select @schoolId = SchoolRef From SchoolYear Where Id = @schoolYearId
 
-Declare @classAnns TClassAnnouncement
+Declare @lessonPlans TLessonPlan
 
-Insert Into @classAnns
-Select 
-	vwCA.*,
-	@isOwner,
-	0, 
+Insert Into @lessonPlans
+Select distinct
+	vwLP.*,
+	cast((Case When exists(Select * From ClassTeacher CT where CT.PersonRef = @callerId and CT.ClassRef = vwLP.ClassRef) then 1 else 0 End) as Bit),
+	cast((Case When ard.Complete is null Then 0 Else 1 End) as Bit) as Complete, 
 	0 as AllCount 
 From 
-	vwClassAnnouncement vwCA
+	vwLessonPlan vwLP
+	left join AnnouncementRecipientData ard
+		on ard.AnnouncementRef = vwLP.Id
 Where
-	Id in(Select * From @classAnnouncementIds)
+	Id in(Select * From @lessonPlanIds)
 	and SchoolYearRef = @schoolYearId
-	and (@callerRole=2 AND exists(Select * From ClassTeacher Where ClassTeacher.PersonRef = @callerId and ClassTeacher.ClassRef = vwCA.ClassRef)
-		 or @callerRole=3 And exists(Select * From ClassPerson Where ClassPerson.PersonRef = @callerId and ClassPerson.ClassRef = vwCA.ClassRef)
-		 or @callerRole = 10)
+	and (@callerRole=2 AND exists(Select * From ClassTeacher Where ClassTeacher.PersonRef = @callerId and ClassTeacher.ClassRef = vwLP.ClassRef)
+		 or @callerRole=3 And exists(Select * From ClassPerson Where ClassPerson.PersonRef = @callerId and ClassPerson.ClassRef = vwLP.ClassRef)
+		 or @callerRole=10 
+		 or @onlyOwner = 0)
 
-Declare @count int = (Select count(*) From @classAnns)
+Declare @count int = (Select count(*) From @lessonPlans)
 
-Update @classAnns
+Update @lessonPlans
 Set AllCount = @count
 
-Exec spSelectClassAnnouncement @classAnns
+Exec spSelectLessonPlans @lessonPlans
 
--------------------------------------------------------------------------------------------------
 
 Declare @teacherIds TInt32
 Insert Into @teacherIds
 Select PersonRef From ClassTeacher 
-Where ClassRef in (Select ca.ClassRef From @classAnns ca)
+Where ClassRef in (Select la.ClassRef From @lessonPlans la)
 
 
 select vwPerson.* from vwPerson
 join @teacherIds tId on tId.value = vwPerson.Id
 where (@schoolId is null or vwPerson.SchoolRef = @schoolId)
+
+-------------------------------------------------------------------------------------------------
 
 Select Distinct
 	vwAnnouncementQnA.Id,
@@ -76,8 +75,8 @@ Select Distinct
 From 
 	vwAnnouncementQnA
 Where 
-	AnnouncementRef in(Select Id From @classAnns)
-	and (@callerRole = 1 or @callerRole = 10
+	AnnouncementRef in(Select Id From @lessonPlans)
+	and (@callerRole = 1 
 		 or @callerId = AnswererId 
 		 or @callerId = AskerId 
 		 or (ClassRef is not null and AnsweredTime is not null
@@ -91,19 +90,24 @@ Order By QuestionTime
 
 Select * From 
 	vwAnnouncementAssignedAttribute attr
-Where AnnouncementAssignedAttribute_AnnouncementRef in(Select * From @classAnnouncementIds) 
+Where AnnouncementAssignedAttribute_AnnouncementRef in(Select Id From @lessonPlans) 
 
 Select aa.* From 
 	AnnouncementApplication aa
 Where 
-	aa.AnnouncementRef in(Select * From @classAnnouncementIds) 
+	aa.AnnouncementRef in(Select Id From @lessonPlans) 
 	and aa.Active = 1
 
 Select * From 
 	AnnouncementStandard join [Standard] 
 		on [Standard].Id = AnnouncementStandard.StandardRef
-Where AnnouncementStandard.AnnouncementRef in(Select * From @classAnnouncementIds) 
+Where AnnouncementStandard.AnnouncementRef in(Select Id From @lessonPlans) 
 
 Select * From vwAnnouncementAttachment
-Where AnnouncementAttachment_AnnouncementRef in(Select * From @classAnnouncementIds)
-		and (@callerRole = 10 or @callerRole = 2 or (@callerRole = 3 and (Attachment_PersonRef = @callerId or exists(Select * From @teacherIds t Where t.value = Attachment_PersonRef))))
+Where AnnouncementAttachment_AnnouncementRef in(Select Id From @lessonPlans)
+		and (@callerRole=10 
+		or @callerRole = 2 
+		or @onlyOwner = 0
+		or (@callerRole = 3 
+		and (Attachment_PersonRef = @callerId 
+		or exists(Select * From @teacherIds t Where t.value = Attachment_PersonRef))))
