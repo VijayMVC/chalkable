@@ -54,7 +54,7 @@ namespace Chalkable.BusinessLogic.Services.School
             int? syId = Context.SchoolYearId;
             if (!syId.HasValue)
                 syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalled(personId, syId.Value));
+            return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalled(personId, syId.Value));     
         }
         
         public IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId)

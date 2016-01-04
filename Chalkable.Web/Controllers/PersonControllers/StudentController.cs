@@ -121,7 +121,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var syId = GetCurrentSchoolYearId();
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
             var currentBalance = FundController.GetPersonBalance(MasterLocator, studentId);
-            var apps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, studentId, null, start, count);
+            var apps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, studentId, null, start, count, null);
             return Json(StudentAppsViewData.Create(student, currentBalance, apps));
         }
 
