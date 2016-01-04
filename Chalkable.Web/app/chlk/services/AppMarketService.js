@@ -109,32 +109,45 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.SchoolPersonId, Number, Number]],
+            ria.async.Future, function getAppsForAttachToAdminAnn(personId, start_, count_){
+                return this
+                    .getPaginatedList('AppMarket/ListInstalledForAdminAttach.json', chlk.models.apps.AppMarketApplication, {
+                        personId: personId.valueOf(),
+                        start: start_ | 0,
+                        count: count_,
+                    })
+                    .then(this.prepareAppsInstalledData_);
+            },
+
             [[chlk.models.id.SchoolPersonId, Number, String, Number]],
-            ria.async.Future, function getInstalledApps(personId, start_, filter_, count_, forAttachOnly_) {
+            ria.async.Future, function getInstalledApps(personId, start_, filter_, count_) {
                 return this
                     .getPaginatedList('AppMarket/ListInstalled.json', chlk.models.apps.AppMarketApplication, {
                         personId: personId.valueOf(),
                         start: start_ | 0,
                         filter: filter_ || "",
-                        count: count_,
-                        forAttach: forAttachOnly_
+                        count: count_
                     })
-                    .then(function(data){
-                        var apps = data.getItems() || [];
-                        apps = apps.map(function(app){
-                            app.setInstalledOnlyForCurrentUser(false);
-                            var appInstalls = app.getApplicationInstalls() || [];
+                    .then(this.prepareAppsInstalledData_);
+            },
 
-                            if (appInstalls.length == 1){
-                                if(appInstalls[0].getPersonId() == appInstalls[0].getInstallationOwnerId()){
-                                    app.setInstalledOnlyForCurrentUser(true);
-                                }
-                            }
-                            return app;
-                        });
-                        data.setItems(apps);
-                        return data;
-                    })
+            [[chlk.models.common.PaginatedList]],
+            chlk.models.common.PaginatedList, function prepareAppsInstalledData_(data){
+                var apps = data.getItems() || [];
+                apps = apps.map(function(app){
+                    app.setInstalledOnlyForCurrentUser(false);
+                    var appInstalls = app.getApplicationInstalls() || [];
+
+                    if (appInstalls.length == 1){
+                        if(appInstalls[0].getPersonId() == appInstalls[0].getInstallationOwnerId()){
+                            app.setInstalledOnlyForCurrentUser(true);
+                        }
+                    }
+                    return app;
+                });
+                data.setItems(apps);
+                return data;
             },
 
             [[chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId, String, String, Number, Boolean]],

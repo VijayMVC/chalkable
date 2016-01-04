@@ -57,7 +57,7 @@ namespace Chalkable.Data.School.DataAccess
             {
                 {SchoolYear.ARCHIVE_DATE, null, ConditionRelation.Equal},
                 {SchoolYear.START_DATE_FIELD, curentDate.Date, ConditionRelation.LessEqual },
-                {SchoolYear.END_DATE_FIELD, curentDate.Date, ConditionRelation.GreaterEqual }
+                {SchoolYear.END_DATE_FIELD, curentDate.AddDays(-1).Date, ConditionRelation.GreaterEqual }
             };
             syConds.BuildSqlWhere(syQuery, typeof(SchoolYear).Name);
 
