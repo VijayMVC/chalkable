@@ -1,0 +1,53 @@
+-var teachers = self.getItems()
+-var isNotEmptyStatistic = self.isNotEmptyStatistic()
+-var schoolYearId = teachers[0] && teachers[0].getSchoolYearId()
+-var schoolId = teachers[0] && teachers[0].getSchoolId()
+-var schoolName = teachers[0] && teachers[0].getSchoolName()
+
+.chlk-calendar.chlk-grid
+    .header
+        +ActionLink('schools', 'teachersStatistic', self.getPageIndex() - 1, schoolId, schoolName, self.getFilter(), schoolYearId).grid-arrow.prev-arrow(class = self.isHasPreviousPage() ? "" : "disabled")
+        +ActionLink('schools', 'teachersStatistic', self.getPageIndex() + 1, schoolId, schoolName, self.getFilter(), schoolYearId).grid-arrow.next-arrow(class = self.isHasNextPage() ? "" : "disabled")
+    .grid-content
+        if teachers.length
+            .grid-header.grid-row
+                .cell.name=Msg.Teacher
+                .cell.classes=Msg.Classes
+                .cell.students=Msg.Students
+                if isNotEmptyStatistic
+                    .cell.attendance=Msg.Attendance
+                    .cell.discipline=Msg.Discipline
+                    .cell.grades=Msg.Grade_Avg
+            each teacher in teachers
+                .grid-row
+                    .cell.name
+                        .icon
+                            +PersonImg(teacher, 32)
+                        +ActionLink('schools', "classesSummary", schoolId, schoolName, teacher.getName())=teacher.getName()
+                    .cell.classes
+                        .classes-container(data-tooltip=teacher.getClassesText(), data-tooltip-type="overflow")
+                            -var classes = teacher.getClasses()
+                            each clazz, i in classes
+                                +ActionLink('class', 'info', clazz.getId())=clazz.getName()
+                                if i < classes.length - 1
+                                    span ,&nbsp;
+                    .cell.students=teacher.getStudentsCount()
+                    if isNotEmptyStatistic
+                        .cell.attendance
+                            .circle(
+                                data-tooltip = teacher.getStudentsCount() + ' Students, ' + teacher.getAbsences() + ' Absent',
+                                class = teacher.getAbsencesClass()
+                            )=teacher.getAbsences()
+                        .cell.discipline
+                            .circle(
+                                data-tooltip=teacher.getInfractionsCount() + ' Discipline Infractions Today',
+                                class = teacher.getInfractionsClass()
+                            )=teacher.getInfractionsCount()
+                        .cell.grades
+                            .circle(
+                                data-tooltip=teacher.getAvg() && (teacher.getAvg() + '% Average'),
+                                class = teacher.getAvgClass()
+                            )=teacher.getAvg()
+        else
+            .no-items-text There are no classes
+    .footer Page #{self.getTotalPages() ? self.getPageIndex() + 1 : 0} of #{self.getTotalPages()}
