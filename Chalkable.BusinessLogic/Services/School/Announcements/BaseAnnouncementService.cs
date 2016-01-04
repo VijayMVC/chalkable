@@ -234,10 +234,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return ann;
         }
 
-        protected virtual IList<AnnouncementDetails> InternalGetDetailses(BaseAnnouncementDataAccess<TAnnouncement> dataAccess, IList<int> announcementIds)
+        protected virtual IList<AnnouncementDetails> InternalGetDetailses(BaseAnnouncementDataAccess<TAnnouncement> dataAccess, IList<int> announcementIds, bool onlyOnwer = true)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            var anns = dataAccess.GetDetailses(announcementIds, Context.PersonId.Value, Context.Role.Id);
+            var anns = dataAccess.GetDetailses(announcementIds, Context.PersonId.Value, Context.Role.Id, onlyOnwer);
             foreach (var ann in anns)
             {
                 ann.AnnouncementStandards = ServiceLocator.StandardService.PrepareAnnouncementStandardsCodes(ann.AnnouncementStandards);

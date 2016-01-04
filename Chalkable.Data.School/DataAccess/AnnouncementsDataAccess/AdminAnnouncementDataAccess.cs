@@ -67,7 +67,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
 
-        public override IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId)
+        public override IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId, bool onlyOwner = true)
         {
             var parameters = new Dictionary<string, object>
                 {

@@ -276,7 +276,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false)
         {
             var lps = GetLessonPlansForFeed(startDate, toDate, null, classId, complete, ownerOnly);
-            return  DoRead(u => InternalGetDetailses(CreateLessonPlanDataAccess(u), lps.Select(lp=>lp.Id).ToList()));
+            return  DoRead(u => InternalGetDetailses(CreateLessonPlanDataAccess(u), lps.Select(lp=>lp.Id).ToList(), ownerOnly));
         }
 
         //TODO: old method

@@ -302,7 +302,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             var activities = GetActivities(classId, startDate, toDate, 0, int.MaxValue, complete);
             var anns = GetByActivitiesIds(activities.Select(x => x.Id).ToList());
-            var res = DoRead(u => InternalGetDetailses(CreateClassAnnouncementDataAccess(u), anns.Select(a => a.Id).ToList()));
+            var res = DoRead(u => InternalGetDetailses(CreateClassAnnouncementDataAccess(u), anns.Select(a => a.Id).ToList(), ownerOnly));
             
             foreach (var activity in activities)
             {
