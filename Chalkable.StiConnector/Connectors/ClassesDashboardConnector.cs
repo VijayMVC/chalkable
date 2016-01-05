@@ -23,7 +23,7 @@ namespace Chalkable.StiConnector.Connectors
             {
                 ["start"] = start.ToString(),
                 ["end"] = (start+count).ToString(),
-                ["search"] = string.IsNullOrWhiteSpace(filter) ? "" : filter
+                ["filter"] = string.IsNullOrWhiteSpace(filter) ? "" : filter
             };
             return Call<IList<SectionSummary>>(
                     $"{BaseUrl}chalkable/{acadSessionId}/classes/dashboard/sections/{tillDate.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture)}",
@@ -37,7 +37,7 @@ namespace Chalkable.StiConnector.Connectors
 
             var param = new NameValueCollection
             {
-                ["search"] = string.IsNullOrWhiteSpace(filter) ? "" : filter
+                ["filter"] = string.IsNullOrWhiteSpace(filter) ? "" : filter
             };
 
             if(!string.IsNullOrWhiteSpace(filter))
@@ -55,7 +55,7 @@ namespace Chalkable.StiConnector.Connectors
             {
                 ["start"] = start.ToString(),
                 ["end"] = (start + count).ToString(),
-                ["search"] = string.IsNullOrWhiteSpace(filter) ? "" : filter
+                ["filter"] = string.IsNullOrWhiteSpace(filter) ? "" : filter
 
             };
             return Call<IList<TeacherSummary>>($"{BaseUrl}chalkable/{acadSessionId}/classes/dashboard/teachers/{tillDate.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture)}", param);
