@@ -1,0 +1,146 @@
+.users-list-container
+  .le-link
+    position: relative
+    top: 97px
+    left: 24px
+
+
+.people-list-container
+  margin: 25px 0
+  border-radius: 5px
+  border: 1px solid #c8c7c3
+  background: #fff
+
+  .header
+    padding: 0 24px
+    border-bottom: 1px solid #c8c7c3
+    +box-shadow(transparentize(#000, .91) 0 2px 3px)
+    color: #56554f
+    +text-shadow(transparentize(#fff, .5) 0 2px 1px)
+    line-height: 63px
+
+  .title
+    text-align: center
+    font-weight: 600
+    font-size: 18px
+    color: #56554f
+    +text-shadow(transparentize(#fff, .5) 0 2px 1px)
+
+.people-list
+
+  &.scroll-freezed
+    .load-all-button
+      opacity: 0.5
+
+  .sub-row
+    display: none
+    background: #f7f7f5
+    border-bottom: 1px solid #c8c7c3
+    z-index: 1
+    position: relative
+    padding: 30px
+
+    &.opened
+      display: block
+
+  .load-all-popup
+    width: 210px
+    height: 93px
+    right: 115px
+    bottom: 90px
+    text-align: center
+
+    .outer-container.new-popup
+      width: 100%
+      height: 100%
+
+    .inner-container
+      position: absolute
+      padding-top: 20px
+      margin-left: 25px
+      left: 0px
+      top: 0px
+
+      .title, .load-all-button
+        position: relative
+
+      .title
+        text-shadow: 1px 1px 0 white
+        font-size: 12px
+        font-weight: bold
+        margin-bottom: 10px
+
+      .load-all-button
+        .chlk-button
+          font-weight: bold
+          padding: 6px 15px 6px 15px
+          BUTTON
+            padding: 0px
+        z-index: 1000
+
+  .back-top, .load-all-popup
+    position: fixed
+    display: inline-block
+    z-index: 100
+
+  .back-top
+    width: 72px
+    height: 72px
+    right: 30px
+    bottom: 100px
+
+    .back-top-arrow
+      display: inline-block
+      width: 26px
+      height: 20px
+      position: absolute
+      top: 24px
+      z-index: 1000
+      left: 23px
+      cursor: pointer
+      +icons-32-sprite(user-grid-top-arrow)
+
+    >A
+      width: 100%
+      display: block
+      height: 100%
+      text-align: center
+      vertical-align: middle
+      cursor: pointer
+
+  .row
+    display: block
+    line-height: 80px
+    vertical-align: middle
+    border-bottom: 1px solid #e7e6e2
+    padding: 0 25px
+    z-index: 8
+    position: relative
+
+    &.selected
+      +box-shadow(transparentize(#000, .82) 0 0 5px)
+      z-index: 100
+      background-color: #fafafa
+
+    &:not(.selected)
+      .message-button
+        display: none
+
+  .avatar-wrapper
+    display: inline-block
+    vertical-align: middle
+
+  .person-img-container
+    margin-right: 24px
+
+  .user-name-container
+    font-size: 20px
+    font-weight: 700
+    color: #2f7790
+    +text-shadow(transparentize(#fff, .5) 0 1px 0)
+    line-height: 80px
+    vertical-align: middle
+
+    p
+      display: inline-block
+      vertical-align: middle
