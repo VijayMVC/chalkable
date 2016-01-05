@@ -42,5 +42,10 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// </summary>
         public string TeacherName { get; set; }
 
+        /// <summary>
+        /// The gender of the primary teacher. 
+        /// </summary>
+        public string TeacherGender { get; set; }
+
     }
 }

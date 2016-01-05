@@ -143,7 +143,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 throw new ChalkableException("The item with current title already exists");
             
         }
-
+        
         public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false)
         {
             var anns = GetAnnouncementsComplex(startDate, toDate, null, complete, ownerOnly);

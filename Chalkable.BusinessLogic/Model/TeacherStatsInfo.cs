@@ -38,7 +38,7 @@ namespace Chalkable.BusinessLogic.Model
                 StudentsCount = teacher.EnrollmentCount,
 
                 //TODO: FIX THIS AFTER iNow API UDPATED
-                Gender = "F"
+                Gender = teacher.TeacherGender
             };
 
             
