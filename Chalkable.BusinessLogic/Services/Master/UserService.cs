@@ -293,7 +293,8 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         private bool HasTeacherAccessToChalkable(IList<ClaimInfo> claimInfos)
         {
-            return claimInfos.Any(x => x.Values.Any(y => y == ClaimInfo.MAINTAIN_CLASSROOM || y == ClaimInfo.MAINTAIN_CLASSROOM_ADMIN));
+            return claimInfos.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM) ||
+                   claimInfos.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN);
         }
 
         private UserContext DemoUserLogin(User user, UnitOfWork uow, int? schoolYearId = null)
