@@ -152,7 +152,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return inowRes.Select(x=> new DisciplineDailySummaryInfo
             {
                 Date = x.Date,
-                Occurrences = x.Occurrences
+                Occurrences = x.Infractions
             }).ToList();
         }
     }

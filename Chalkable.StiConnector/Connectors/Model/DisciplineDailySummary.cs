@@ -12,6 +12,6 @@ namespace Chalkable.StiConnector.Connectors.Model
         /// <summary>
         /// The number of discipline referrals for the date
         /// </summary>
-        public int Occurrences { get; set; }
+        public int Infractions { get; set; }
     }
 }
