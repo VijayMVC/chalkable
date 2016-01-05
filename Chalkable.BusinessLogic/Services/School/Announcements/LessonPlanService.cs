@@ -273,6 +273,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return InternalGetAnnouncementById(lessonPlanId);
         }
 
+        protected override AnnouncementDetails InternalGetDetails(BaseAnnouncementDataAccess<LessonPlan> dataAccess, int announcementId)
+        {
+            var onlyOwner = !Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);
+            return InternalGetDetails(dataAccess, announcementId, onlyOwner);
+        }
+
         public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false)
         {
             var lps = GetLessonPlansForFeed(startDate, toDate, null, classId, complete, ownerOnly);

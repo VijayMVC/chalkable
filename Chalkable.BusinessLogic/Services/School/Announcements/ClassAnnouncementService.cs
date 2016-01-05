@@ -354,6 +354,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
+        protected override AnnouncementDetails InternalGetDetails(BaseAnnouncementDataAccess<ClassAnnouncement> dataAccess, int announcementId)
+        {
+            var onlyOwner = !Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);
+            return InternalGetDetails(dataAccess, announcementId, onlyOwner);
+        }
+
         private bool HasMissingAttributes(AnnouncementDetails ann)
         {
             return ann.AnnouncementAttributes.Any(x => x.Id <= 0 || IsMissingAttachment(x));
