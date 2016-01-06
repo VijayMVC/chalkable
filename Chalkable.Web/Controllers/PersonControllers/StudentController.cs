@@ -53,7 +53,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
 
-            return Json(res, hideSensitiveData: Context.Role == CoreRoles.STUDENT_ROLE);
+            return Json(res);
         }
         
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User })]
