@@ -21,7 +21,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public StudentHoverBoxViewData<StudentSummaryGradeViewData> GradesBox { get; set; }
         public StudentHoverBoxViewData<StudentSummeryRankViewData> RanksBox { get; set; }
 
-        [SensitiveData]
+        //[SensitiveData]
         public IList<StudentHealthConditionViewData> HealthConditions { get; set; }
 
         private const string NO_CLASS_SCHEDULED = "No Class Scheduled";

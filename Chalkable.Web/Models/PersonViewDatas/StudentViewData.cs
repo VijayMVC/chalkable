@@ -7,11 +7,11 @@ namespace Chalkable.Web.Models.PersonViewDatas
 {
     public class StudentViewData : ShortPersonViewData
     {
-        [SensitiveData]
+        //[SensitiveData]
         public bool HasMedicalAlert { get; set; }
-        [SensitiveData]
+        //[SensitiveData]
         public bool IsAllowedInetAccess { get; set; }
-        [SensitiveData]
+        //[SensitiveData]
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
         public bool? IsWithDrawn { get; set; }
