@@ -302,7 +302,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             var activities = GetActivities(classId, startDate, toDate, 0, int.MaxValue, complete);
             var anns = GetByActivitiesIds(activities.Select(x => x.Id).ToList());
-            var res = DoRead(u => InternalGetDetailses(CreateClassAnnouncementDataAccess(u), anns.Select(a => a.Id).ToList()));
+            var res = DoRead(u => InternalGetDetailses(CreateClassAnnouncementDataAccess(u), anns.Select(a => a.Id).ToList(), ownerOnly));
             
             foreach (var activity in activities)
             {
@@ -354,6 +354,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
+        protected override AnnouncementDetails InternalGetDetails(BaseAnnouncementDataAccess<ClassAnnouncement> dataAccess, int announcementId)
+        {
+            var onlyOwner = !Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);
+            return InternalGetDetails(dataAccess, announcementId, onlyOwner);
+        }
+
         private bool HasMissingAttributes(AnnouncementDetails ann)
         {
             return ann.AnnouncementAttributes.Any(x => x.Id <= 0 || IsMissingAttachment(x));
@@ -399,12 +405,35 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public void CopyAnnouncement(int classAnnouncementId, IList<int> classIds)
         {
+            Trace.Assert(Context.PersonId.HasValue);
+
             var ann = GetClassAnnouncemenById(classAnnouncementId);
             if (ann.IsDraft)
                 throw new ChalkableException("Current announcement is not submited yet");
+
             if (!ann.SisActivityId.HasValue)
                 throw new ChalkableException("Current announcement doesn't have activityId");
-            ConnectorLocator.ActivityConnector.CopyActivity(ann.SisActivityId.Value, classIds);
+
+            var inowRes = ConnectorLocator.ActivityConnector.CopyActivity(ann.SisActivityId.Value, classIds);
+            if (inowRes != null && inowRes.Any(x=>x.NewActivityId.HasValue))
+            {
+                var activities = inowRes.Where(x => x.NewActivityId.HasValue)
+                    .Select(x => new Activity {Id = x.NewActivityId.Value, SectionId = x.CopyToSectionId})
+                    .ToList();
+
+                using (var u = Update())
+                {
+                    var da = CreateClassAnnouncementDataAccess(u);
+                    AddActivitiesToChalkable(activities, da);
+                    var resAnnIds = da.GetByActivitiesIds(activities.Select(x => x.Id).ToList(), Context.PersonId.Value).Select(x=>x.Id).ToList();
+
+                    var attOwners = new ClassTeacherDataAccess(u).GetClassTeachers(ann.ClassRef, null).Select(x => x.PersonRef).ToList();
+
+                    AnnouncementAttachmentService.CopyAnnouncementAttachments(classAnnouncementId, attOwners, resAnnIds, u, ServiceLocator, ConnectorLocator);
+
+                    u.Commit();
+                }
+            }
         }
 
         protected override void SetComplete(Announcement announcement, bool complete)
@@ -539,26 +568,30 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         private void AddActivitiesToChalkable(IList<Activity> activities)
         {
+            DoUpdate(u => AddActivitiesToChalkable(activities, CreateClassAnnouncementDataAccess(u)));
+        }
+
+        private void AddActivitiesToChalkable(IList<Activity> activities, BaseAnnouncementDataAccess<ClassAnnouncement> dataAccess)
+        {
             if (activities == null) return;
             EnsureInAnnouncementsExisting(activities);
             IList<ClassAnnouncement> addToChlkAnns = new List<ClassAnnouncement>();
             foreach (var activity in activities)
             {
                 var ann = new ClassAnnouncement
-                    {
-                        Created = Context.NowSchoolTime,
-                        State = AnnouncementState.Created,
-                        SchoolYearRef = Context.SchoolYearId.Value,
-                        SisActivityId = activity.Id,
-                    };
+                {
+                    Created = Context.NowSchoolTime,
+                    State = AnnouncementState.Created,
+                    SchoolYearRef = Context.SchoolYearId.Value,
+                    SisActivityId = activity.Id,
+                };
                 MapperFactory.GetMapper<ClassAnnouncement, Activity>().Map(ann, activity);
                 addToChlkAnns.Add(ann);
             }
             if (addToChlkAnns.Count > 0)
-                DoUpdate(u => CreateClassAnnouncementDataAccess(u).Insert(addToChlkAnns));
-            
+                dataAccess.Insert(addToChlkAnns);
         }
-        
+
         private void EnsureInAnnouncementsExisting(IList<Activity> activities)
         {
             using (var uow = Read())

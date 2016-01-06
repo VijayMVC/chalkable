@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
@@ -51,8 +52,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(schoolPersonId);
             var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList);
             res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
-            return Json(res);
 
+            return Json(res);
         }
         
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User })]
@@ -121,7 +122,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var syId = GetCurrentSchoolYearId();
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
             var currentBalance = FundController.GetPersonBalance(MasterLocator, studentId);
-            var apps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, studentId, null, start, count);
+            var apps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, studentId, null, start, count, null);
             return Json(StudentAppsViewData.Create(student, currentBalance, apps));
         }
 

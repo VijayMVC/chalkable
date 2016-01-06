@@ -136,7 +136,7 @@ namespace Chalkable.StiConnector.Connectors
             Put(string.Format(urlFormat, id), activity);
         }
 
-        public void CopyActivity(int id, IList<int> copyToSectionIds)
+        public IList<ActivityCopyResult> CopyActivity(int id, IList<int> copyToSectionIds)
         {
             var url = string.Format(urlFormat + "/copy", id);
             var nvc = new NameValueCollection();
@@ -145,7 +145,7 @@ namespace Chalkable.StiConnector.Connectors
                 for (int i = 0; i < copyToSectionIds.Count; i++)
                     nvc.Add($"copyToSectionIds[{i}]", copyToSectionIds[i].ToString());    
             }
-            Post<Object>(url, null, nvc);
+            return Post<IList<ActivityCopyResult>>(url, null, nvc);
         }
     }
 }

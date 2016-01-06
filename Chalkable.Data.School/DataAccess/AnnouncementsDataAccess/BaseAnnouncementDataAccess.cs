@@ -25,7 +25,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public abstract IList<TAnnouncement> GetAnnouncements(QueryCondition conds, int callerId); 
         public abstract TAnnouncement GetAnnouncement(int id, int callerId);
         public abstract bool CanAddStandard(int announcementId);
-        public abstract IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId); 
+        public abstract IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId, bool onlyOwner = true); 
 
 
         public override void Update(TAnnouncement announcement)
