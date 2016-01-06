@@ -40,7 +40,7 @@ namespace Chalkable.Web.Controllers
             else base.OnActionExecuting(filterContext);
         }
 
-        public ActionResult Json(object data, int serializationDepth = 10)
+        public ActionResult Json(object data, int serializationDepth = 10, bool hideSensitiveData = true)
         {
             var response = (data is IPaginatedList) 
                     ? new ChalkableJsonPaginatedResponse((IPaginatedList)data) 
@@ -52,7 +52,7 @@ namespace Chalkable.Web.Controllers
                 Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
             }
 
-            return new ChalkableJsonResult(HideSensitiveData())
+            return new ChalkableJsonResult(HideSensitiveData() || hideSensitiveData)
                 {
                     Data = response, 
                     SerializationDepth = serializationDepth

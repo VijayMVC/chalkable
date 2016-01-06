@@ -44,7 +44,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult ListInstalledForAdminAttach(int personId, IntList groupIds, int? start, int? count)
         {
-            throw new NotImplementedException();
+            var installedApps = GetListInstalledApps(SchoolLocator, MasterLocator, personId, null, start, count, true);
+            return Json(installedApps);
         }
 
 
@@ -77,17 +78,17 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult ListInstalled(int personId, string filter, int? start, int? count)
         {
-            var apps = GetListInstalledApps(SchoolLocator, MasterLocator, personId, filter, start, count);
-            return Json(apps);
+            var installedApps = GetListInstalledApps(SchoolLocator, MasterLocator, personId, filter, start, count, null);
+            return Json(installedApps);
         }
 
         public static PaginatedList<InstalledApplicationViewData> GetListInstalledApps(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster masterLocator
-            , int personId, string filter, int? start, int? count)
+            , int personId, string filter, int? start, int? count, bool? forAttach)
         {
             var st = start ?? 0;
             var cnt = count ?? 9;
             var appInstallations = schoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
-            var installedApp = GetApplications(masterLocator, appInstallations.Select(x => x.ApplicationRef).Distinct().ToList(), null, null);
+            var installedApp = GetApplications(masterLocator, appInstallations.Select(x => x.ApplicationRef).Distinct().ToList(), forAttach, null);
             var hasMyAppDic = installedApp.ToDictionary(x => x.Id, x => masterLocator.ApplicationService.HasMyApps(x));
             var res = InstalledApplicationViewData.Create(appInstallations, personId, installedApp, hasMyAppDic);
             var totalCount = res.Count;

@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -228,16 +227,21 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected virtual AnnouncementDetails InternalGetDetails(BaseAnnouncementDataAccess<TAnnouncement> dataAccess, int announcementId)
         {
-            var ann = InternalGetDetailses(dataAccess, new List<int> {announcementId}).FirstOrDefault();
-            if(ann == null)
+            return InternalGetDetails(dataAccess, announcementId, true);
+        }
+
+        protected AnnouncementDetails InternalGetDetails(BaseAnnouncementDataAccess<TAnnouncement> dataAccess, int announcementId, bool onlyOwner)
+        {
+            var ann = InternalGetDetailses(dataAccess, new List<int> { announcementId }, onlyOwner).FirstOrDefault();
+            if (ann == null)
                 throw new NoAnnouncementException();
             return ann;
         }
 
-        protected virtual IList<AnnouncementDetails> InternalGetDetailses(BaseAnnouncementDataAccess<TAnnouncement> dataAccess, IList<int> announcementIds)
+        protected virtual IList<AnnouncementDetails> InternalGetDetailses(BaseAnnouncementDataAccess<TAnnouncement> dataAccess, IList<int> announcementIds, bool onlyOnwer = true)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            var anns = dataAccess.GetDetailses(announcementIds, Context.PersonId.Value, Context.Role.Id);
+            var anns = dataAccess.GetDetailses(announcementIds, Context.PersonId.Value, Context.Role.Id, onlyOnwer);
             foreach (var ann in anns)
             {
                 ann.AnnouncementStandards = ServiceLocator.StandardService.PrepareAnnouncementStandardsCodes(ann.AnnouncementStandards);

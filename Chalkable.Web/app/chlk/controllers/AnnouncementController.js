@@ -707,7 +707,7 @@ NAMESPACE('chlk.controllers', function (){
             var start = start_ || 0, count = 12;
 
             var result = this.appMarketService
-                .getInstalledApps(userId, start, null, count)
+                .getAppsForAttachToAdminAnn(userId, start, count)
                 .attach(this.validateResponse_())
                 .then(function(data) {
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);

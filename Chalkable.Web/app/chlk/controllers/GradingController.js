@@ -239,7 +239,7 @@ NAMESPACE('chlk.controllers', function (){
                 var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
                 if(model.getCurrentGradingGrid()){
                     var canEdit = !this.isPageReadonly_('MAINTAIN_CLASSROOM', 'MAINTAIN_CLASSROOM_ADMIN', clazz_);
-                    var canEditAvg = canEdit || this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_STUDENT_AVERAGES);
+                    var canEditAvg = canEdit ||  !this.isPageReadonly_('MAINTAIN_STUDENT_AVERAGES', 'MAINTAIN_CLASSROOM_ADMIN', clazz_);
                     model.getCurrentGradingGrid().setSchoolOptions(schoolOptions);
                     model.getCurrentGradingGrid().setAbleEdit(canEdit);
                     model.getCurrentGradingGrid().setAbleEditAvg(canEditAvg);

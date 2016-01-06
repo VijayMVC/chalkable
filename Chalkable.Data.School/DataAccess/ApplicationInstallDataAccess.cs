@@ -57,12 +57,13 @@ namespace Chalkable.Data.School.DataAccess
             {
                 {SchoolYear.ARCHIVE_DATE, null, ConditionRelation.Equal},
                 {SchoolYear.START_DATE_FIELD, curentDate.Date, ConditionRelation.LessEqual },
-                {SchoolYear.END_DATE_FIELD, curentDate.Date, ConditionRelation.GreaterEqual }
+                {SchoolYear.END_DATE_FIELD, curentDate.AddDays(-1).Date, ConditionRelation.GreaterEqual }
             };
             syConds.BuildSqlWhere(syQuery, typeof(SchoolYear).Name);
 
             query.Sql.AppendFormat(" and {0} in ({1})", ApplicationInstall.SCHOOL_YEAR_REF_FIELD, syQuery.Sql);
             query.AddParameters(syQuery.Parameters);
+
             return ReadMany<ApplicationInstall>(query);
         } 
 

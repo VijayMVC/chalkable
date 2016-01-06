@@ -153,16 +153,17 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
         
-        public override IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId)
+        public override IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId, bool onlyOwner = true)
         {
             var parameters = new Dictionary<string, object>
                 {
                     {"classAnnouncementIds", ids},
                     {"callerId", callerId},
                     {"callerRole", roleId},
-                    {"schoolYearId", schoolYearId}
+                    {"schoolYearId", schoolYearId},
+                    {"onlyOwner", onlyOwner }
                 };
-            return GetDetailses("spGetClassAnnouncementDetailses", parameters);
+            return GetDetailses("spGetListOfClassAnnouncementDetails", parameters);
         }
 
         protected override ClassAnnouncement ReadAnnouncementData(AnnouncementComplex announcement, SqlDataReader reader)
