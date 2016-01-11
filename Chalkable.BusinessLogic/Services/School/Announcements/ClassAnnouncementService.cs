@@ -37,7 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query, IList<Activity> activities = null);
 
         IList<ClassAnnouncement> GetClassAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, bool onlyOwners = false, bool? graded = null);
-        IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = false, bool? graded = null, int start = 0, int count = int.MaxValue);
+        IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = false, bool? graded = null, int start = 0, int count = int.MaxValue, int sort = 0);
         IList<ClassAnnouncement> GetClassAnnouncementsByFilter(string filter); 
         ClassAnnouncement GetLastDraft();
         IList<AnnouncementComplex> GetByActivitiesIds(IList<int> activitiesIds);
@@ -517,7 +517,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateClassAnnouncementDataAccess(u).GetClassAnnouncementByFilter(filter, Context.PersonId.Value));
         }
 
-        public IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = false, bool? graded = null, int start = 0, int count = int.MaxValue)
+        public IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = false, bool? graded = null, int start = 0, int count = int.MaxValue, int sort = 0)
         {
             return GetAnnouncementsComplex(new AnnouncementsQuery
                 {
@@ -528,7 +528,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     OwnedOnly = onlyOwners,
                     Graded = graded,
                     Start = start,
-                    Count = count
+                    Count = count,
+                    Sort = sort
                 });
         }
 
@@ -538,7 +539,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
               //  throw new NotImplementedException();
             //TODO: Looks shity....think about this method and whole approach
             if (activities == null)
-                activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count, query.Complete, query.Graded);
+                activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count, query.Complete, query.Graded, (ActivitySearchSortOption?)query.Sort);
             else
             {
                 if (query.ClassId.HasValue)
@@ -603,7 +604,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count, bool? complete = false, bool? graded = null, ActivitySearchSortOption sort = ActivitySearchSortOption.DueDateAscending)
+        private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count, bool? complete = false, bool? graded = null, ActivitySearchSortOption? sort = ActivitySearchSortOption.DueDateAscending)
         {
             if (!Context.SchoolYearId.HasValue)
                 throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);

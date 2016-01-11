@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
-using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
+using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
@@ -91,7 +91,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
 
             //sort all items by expires date or start date
-            if (!settings.SortType.HasValue || !settings.SortType.Value)
+            if (!settings.SortType.HasValue || settings.SortType.Value == (int)ActivitySearchSortOption.DueDateAscending)
                 res.Announcements = res.Announcements.OrderBy(x =>
                 {
                     if (x.AdminAnnouncementData != null) return x.AdminAnnouncementData.Expires;
