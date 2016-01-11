@@ -17,6 +17,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
 using Microsoft.Data.OData.Query.SemanticAst;
+using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
@@ -602,7 +603,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count, bool? complete = false, bool? graded = null)
+        private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count, bool? complete = false, bool? graded = null, ActivitySearchSortOption sort = ActivitySearchSortOption.DueDateAscending)
         {
             if (!Context.SchoolYearId.HasValue)
                 throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
@@ -612,7 +613,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if (Context.Role == CoreRoles.STUDENT_ROLE)
                 return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, Context.PersonId.Value, start, end, toDate, fromDate, complete, graded, classId);
             if (classId.HasValue)
-                return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, toDate, fromDate, complete);
+                return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, toDate, fromDate, complete, sort);
             if (Context.Role == CoreRoles.TEACHER_ROLE)
                 return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, Context.PersonId.Value, start, end, toDate, fromDate, complete);
             return new List<Activity>();

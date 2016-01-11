@@ -8,6 +8,16 @@ using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.StiConnector.Connectors
 {
+    public enum ActivitySearchSortOption
+    {
+        DueDateAscending = 0,
+        DueDateDescending = 1,
+        NameAscending = 2,
+        NameDescending = 3,
+        SectionNameAscending = 4,
+        SectionNameDescending = 5
+    }
+
     public class ActivityConnector : ConnectorBase
     {
         private const string END_DATE_PARAM = "endDate";
@@ -16,6 +26,7 @@ namespace Chalkable.StiConnector.Connectors
         private const string END_PARAM = "end";
         private const string COOMPLETE = "complete";
         private const string GRADED = "graded";
+        private const string SORT = "sort";
         private const string SECTION_ID = "sectionId";
         private string urlFormat;
         public ActivityConnector(ConnectorLocator locator) : base(locator)
@@ -39,7 +50,7 @@ namespace Chalkable.StiConnector.Connectors
         }
 
         
-        public IList<Activity> GetActivities(int sectionId, int? start, int? end, DateTime? endDate = null, DateTime? startDate = null, bool? complete = false)
+        public IList<Activity> GetActivities(int sectionId, int? start, int? end, DateTime? endDate = null, DateTime? startDate = null, bool? complete = false, ActivitySearchSortOption? sort = ActivitySearchSortOption.DueDateAscending)
         {
             var url = string.Format(BaseUrl + "chalkable/sections/{0}/activities", sectionId);
             var optionalParams = new NameValueCollection();
@@ -53,11 +64,11 @@ namespace Chalkable.StiConnector.Connectors
                 optionalParams.Add(START_DATE_PARAM, startDate.Value.ToString(Constants.DATE_FORMAT));
             if(complete.HasValue)
                 optionalParams.Add(COOMPLETE, complete.Value.ToString());
+            if (sort.HasValue)
+                optionalParams.Add(SORT, ((int)sort.Value).ToString());
             return  Call<IList<Activity>>(url, optionalParams);
         }
 
-
-        
         public IList<Activity> GetTeacherActivities(int acadSessionId, int teacherId, int? start = null, int? end = null
             , DateTime? endDate = null, DateTime? startDate = null, bool? complete = false)
         {
