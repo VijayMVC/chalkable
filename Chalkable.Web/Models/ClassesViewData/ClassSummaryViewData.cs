@@ -13,6 +13,10 @@ namespace Chalkable.Web.Models.ClassesViewData
         //private const int STUDENT_COUNT = 16;
 
         public RoomViewData Room { get; set; }
+
+        public IList<string> Periods { get; set; }
+
+        public IList<string> DayTypes { get; set; } 
         //public IList<StudentViewData> Students { get; set; }
         //public int ClassSize { get; set; }
 
@@ -60,6 +64,16 @@ namespace Chalkable.Web.Models.ClassesViewData
             return new ClassSummaryViewData(classDetails)
             {
                 Room = RoomViewData.Create(currentRoom)
+            };
+        }
+
+        public static ClassSummaryViewData Create(ClassDetails classDetails, Room currentRoom, IList<Period> periods, IList<DayType> dayTypes)
+        {
+            return new ClassSummaryViewData(classDetails)
+            {
+                Room =currentRoom != null ? RoomViewData.Create(currentRoom) : null,
+                Periods = periods.Select(x => x.Name).ToList(),
+                DayTypes = dayTypes.Select(x => x.Name).ToList()
             };
         }
     }

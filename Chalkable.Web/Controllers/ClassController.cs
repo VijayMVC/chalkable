@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Chalkable.Common;
@@ -44,7 +45,10 @@ namespace Chalkable.Web.Controllers
             if (clazz?.RoomRef != null)
                 classRoom = SchoolLocator.RoomService.GetRoomById(clazz.RoomRef.Value);
 
-            return Json(ClassSummaryViewData.Create(clazz, classRoom));
+            var classPeriods = SchoolLocator.PeriodService.GetPeriods(clazz?.ClassPeriods.Select(x => x.PeriodRef).ToList());
+            var classDayTypes = SchoolLocator.DayTypeService.GetDayTypes(clazz?.ClassPeriods.Select(x => x.DayTypeRef).ToList());
+
+            return Json(ClassSummaryViewData.Create(clazz, classRoom, classPeriods, classDayTypes));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]

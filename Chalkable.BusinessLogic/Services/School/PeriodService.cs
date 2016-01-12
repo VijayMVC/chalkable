@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
@@ -12,6 +13,8 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<Period> periods);
         void AddPeriods(IList<Period> periods); 
         IList<Period> GetPeriods(int schoolYearId);
+
+        IList<Period> GetPeriods(IList<int> ids);
     }
 
     public class PeriodService : SchoolServiceBase, IPeriodService
@@ -23,6 +26,13 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<Period> GetPeriods(int schoolYearId)
         {
             return DoRead(u => new PeriodDataAccess(u).GetPeriods(schoolYearId));
+        }
+
+        public IList<Period> GetPeriods(IList<int> ids)
+        {
+            if(ids != null && ids.Count > 0 )
+                return DoRead(u => new PeriodDataAccess(u).GetByIds(ids));
+            return null;
         }
 
         public void AddPeriods(IList<Period> periods)
