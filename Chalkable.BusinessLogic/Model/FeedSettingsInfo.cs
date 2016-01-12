@@ -13,7 +13,6 @@ namespace Chalkable.BusinessLogic.Model
         public DateTime? ToDate { get; set; }
         public int? GradingPeriodId { get; set; }
         public bool AnyDate { get; set; }
-        public bool ToSet { get; set; }
 
         public FeedSettingsInfo() { }
 
@@ -31,7 +30,7 @@ namespace Chalkable.BusinessLogic.Model
                 AnnouncementType = int.Parse(kv[PersonSetting.FEED_ANNOUNCEMENT_TYPE]);
 
             if (kv.ContainsKey(PersonSetting.FEED_SORTING) && !string.IsNullOrWhiteSpace(kv[PersonSetting.FEED_SORTING]))
-                SortType = int.Parse(kv[PersonSetting.FEED_SORTING]);
+            SortType = int.Parse(kv[PersonSetting.FEED_SORTING]);
 
             AnyDate = !GradingPeriodId.HasValue && !FromDate.HasValue && !ToDate.HasValue;
         }

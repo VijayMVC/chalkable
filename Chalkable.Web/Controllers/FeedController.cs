@@ -18,24 +18,26 @@ namespace Chalkable.Web.Controllers
     public class FeedController : ChalkableController
     {
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
-        public ActionResult List(int? start, int? count, bool? complete, int? classId, FeedSettingsInfo settings)
+        public ActionResult List(int? start, int? count, bool? complete, int? classId)
         {
-            if (settings.ToSet)
-                SchoolLocator.AnnouncementFetchService.SetSettingsForFeed(settings);
-            settings = SchoolLocator.AnnouncementFetchService.GetSettingsForFeed();
+            var settings = SchoolLocator.AnnouncementFetchService.GetSettingsForFeed();
             return Json(GetAnnouncementForFeedList(SchoolLocator, start, count, complete, classId, settings));
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult DistrictAdminFeed(IntList gradeLevelIds, bool? complete, int? start, int? count, FeedSettingsInfo settings)
+        public ActionResult DistrictAdminFeed(IntList gradeLevelIds, bool? complete, int? start, int? count)
         {
-            if(settings.ToSet)
-                SchoolLocator.AnnouncementFetchService.SetSettingsForFeed(settings);
-            settings = SchoolLocator.AnnouncementFetchService.GetSettingsForFeed();
+            var settings = SchoolLocator.AnnouncementFetchService.GetSettingsForFeed();
             var announcements = SchoolLocator.AnnouncementFetchService.GetAnnouncementsForFeed(complete, start ?? 0, count ?? 10, gradeLevelIds, null, settings);
             return Json(PrepareFeedComplexViewData(SchoolLocator, announcements));
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult SetSettings(FeedSettingsInfo settings)
+        {
+            SchoolLocator.AnnouncementFetchService.SetSettingsForFeed(settings);
+            return Json(true);
+        }
         public static FeedComplexViewData GetAnnouncementForFeedList(IServiceLocatorSchool schoolL, int? start, int? count
             , bool? complete, int? classId, FeedSettingsInfo settings)
         {
