@@ -157,10 +157,10 @@ namespace Chalkable.Web.Logic
             var currentDate = startDate.Date;
             decimal sum = 0;
 
-            while (currentDate <= endDate.Date.AddDays(1))
+            while (currentDate <= endDate.Date)
             {
                 sum += dailyStats.ContainsKey(currentDate) ? dailyStats[currentDate] : 0;
-                if (currentDate.AddDays(-1).Month != currentDate.Month)
+                if (currentDate.AddDays(-1).Month != currentDate.Month || currentDate == endDate.Date)
                 {
                     res.Add(DailyStatsViewData.Create(currentDate.AddDays(-1), sum, dateFormat));
                     sum = 0;
