@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteStaffSchools(IList<StaffSchool> staffSchools);
         IList<StaffSchool> GetStaffSchools();
         PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName, int start, int count);
-        PaginatedList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count);
+        IList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count);
     }
 
     public class StaffService : SisConnectedService, IStaffService
@@ -90,15 +90,14 @@ namespace Chalkable.BusinessLogic.Services.School
                             start, count));
         }
 
-        public PaginatedList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count)
+        public IList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count)
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
             try
             {
                 var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetTeachersSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value, count.Value, filter);
-                var teacherCount = SearchStaff(schoolYearId, null, null, filter, true, 0, 1).TotalCount;
-                return TeacherStatsInfo.Create(iNowRes, start.Value, count.Value, teacherCount);
+                return TeacherStatsInfo.Create(iNowRes);
             }
             catch (ChalkableSisNotSupportVersionException ex)
             {
