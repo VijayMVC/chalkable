@@ -41,7 +41,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             var staffIds = classTeachers.Select(x => x.PersonRef).Distinct().ToList();
             var staffs = staffIds.Select(y => serviceLocator.StaffService.GetStaff(y)).ToList();
 
-            var onlyOwner = !isStudent;
+            var onlyOwner = !isStudent && !serviceLocator.Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);
             var anns = new List<AnnouncementComplex>();
             if (settings.LessonPlanOnly && !BaseSecurity.IsDistrictAdmin(serviceLocator.Context))
             {
@@ -102,7 +102,7 @@ namespace Chalkable.BusinessLogic.Services.Reporting
             var staffs = staffIds.Select(y => serviceLocator.StaffService.GetStaff(y)).ToList();
             
             //Getting and Preparing Announcements details info 
-            var onlyOwner = !isStudent;
+            var onlyOwner = !isStudent && !serviceLocator.Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN); ;
             IList<AnnouncementDetails> anns;
             if (settings.LessonPlanOnly && !BaseSecurity.IsDistrictAdmin(serviceLocator.Context))
                 anns = serviceLocator.LessonPlanService.GetAnnouncementDetailses(settings.StartDate, settings.EndDate, inputModel.ClassId, inputModel.Complete, onlyOwner);

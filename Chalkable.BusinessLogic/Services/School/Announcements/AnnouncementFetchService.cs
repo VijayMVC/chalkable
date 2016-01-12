@@ -47,6 +47,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 res.Announcements = ServiceLocator.AdminAnnouncementService.GetAnnouncementsComplex(feedStartDate,
                     feedEndDate, gradeLevels, complete, true, start, count);
             }
+            var isStudent = CoreRoles.STUDENT_ROLE == Context.Role;
+            var onlyOwners = !isStudent && !Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);
 
             if (BaseSecurity.IsTeacher(Context) || Context.Role == CoreRoles.STUDENT_ROLE || (BaseSecurity.IsDistrictAdmin(Context) && classId.HasValue))
             {
@@ -74,17 +76,17 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     if (Context.Role == CoreRoles.STUDENT_ROLE)
                         anns.AddRange(ServiceLocator.AdminAnnouncementService.GetAnnouncementsComplex(feedStartDate, feedEndDate, gradeLevels, complete, false));
                     anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(feedStartDate,
-                        feedEndDate, null, classId, complete, !BaseSecurity.IsDistrictAdmin(Context)));
+                        feedEndDate, null, classId, complete, onlyOwners));
                 }
                 else switch ((AnnouncementTypeEnum) settings.AnnouncementType.Value)
                 {
                     case AnnouncementTypeEnum.LessonPlan:
                         anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(feedStartDate, feedEndDate, null, classId,
-                            complete, true, start, count));
+                            complete, onlyOwners, start, count));
                         break;
                     case AnnouncementTypeEnum.Class:
                         anns.AddRange(ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate, feedEndDate,
-                            classId, complete, true, null, start, count));
+                            classId, complete, onlyOwners, null, start, count));
                         break;
                 }
                 res.Announcements = anns;
