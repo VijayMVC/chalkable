@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.school', function () {
         [ria.templates.ModelBind(chlk.models.school.SchoolSummaryViewData)],
         'SchoolClassesSummaryTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.PaginatedList, 'itemsStatistic',
+            chlk.models.admin.BaseStatisticGridViewData, 'itemsStatistic',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.SchoolId, 'schoolId',

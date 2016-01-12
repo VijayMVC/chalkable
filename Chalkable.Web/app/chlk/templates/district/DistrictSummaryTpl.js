@@ -9,7 +9,7 @@ NAMESPACE('chlk.templates.district', function () {
         [ria.templates.ModelBind(chlk.models.district.DistrictFullSummaryViewData)],
         'DistrictSummaryTpl', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.PaginatedList, 'schoolsStatistic',
+            chlk.models.admin.BaseStatisticGridViewData, 'schoolsStatistic',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.district.DistrictShortSummaryViewData, 'shortSummary'

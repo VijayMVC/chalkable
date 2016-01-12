@@ -1,6 +1,7 @@
 REQUIRE('chlk.activities.lib.TemplatePage');
 REQUIRE('chlk.templates.district.DistrictSummaryTpl');
 REQUIRE('chlk.templates.district.BaseStatisticTpl');
+REQUIRE('chlk.templates.district.BaseStatisticItemsTpl');
 
 NAMESPACE('chlk.activities.district', function () {
     var filterTimeout;
@@ -10,6 +11,7 @@ NAMESPACE('chlk.activities.district', function () {
         [ria.mvc.DomAppendTo('#main')],
         [ria.mvc.TemplateBind(chlk.templates.district.DistrictSummaryTpl)],
         [ria.mvc.PartialUpdateRule(chlk.templates.district.BaseStatisticTpl, '', '.grid-container', ria.mvc.PartialUpdateRuleActions.Replace)],
+        [ria.mvc.PartialUpdateRule(chlk.templates.district.BaseStatisticItemsTpl, chlk.activities.lib.DontShowLoader(), '.grid-content', ria.mvc.PartialUpdateRuleActions.Append)],
         'DistrictSummaryPage', EXTENDS(chlk.activities.lib.TemplatePage), [
 
             [ria.mvc.DomEventBind('keyup change', '.statistic-filter')],
@@ -17,11 +19,12 @@ NAMESPACE('chlk.activities.district', function () {
             function filterKeyUp(node, event){
                 clearTimeout(filterTimeout);
                 var time = event.type == 'change' ? 1 : 1000;
+                var btn = this.dom.find('.filter-submit');
 
                 filterTimeout = setTimeout(function(){
                     var val = node.getValue();
                     if(val != node.getData('value')){
-                        node.parent('form').trigger('submit');
+                        btn.trigger('click');
                         node.setData('value', val);
                     }
 
