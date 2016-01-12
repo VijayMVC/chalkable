@@ -1,0 +1,3 @@
+li(data-title = self.name, data-value = self.name, style="background: white")
+    div.api-list
+        +ActionLink('developer', 'getRequiredApiCalls', self.name, self.isMethod(), self.role).api-list-item=self.name
