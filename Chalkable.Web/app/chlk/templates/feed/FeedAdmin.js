@@ -62,7 +62,7 @@ NAMESPACE('chlk.templates.feed', function () {
             Boolean, 'staringDisabled',
 
             function hasFilters(){
-                return this.getAnnType() || this.getGradingPeriodId() || this.getStartDate() || this.getEndDate()
+                return this.getAnnType() || this.getGradingPeriodId() || this.getStartDate() || this.getEndDate() || this.getSortType() && this.getSortType().valueOf()
             }
         ])
 });
