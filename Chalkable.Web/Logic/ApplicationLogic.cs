@@ -66,7 +66,7 @@ namespace Chalkable.Web.Logic
             start = start ?? 0;
             var studentCountPerApp = schooLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
             var installedAppsIds = studentCountPerApp.Select(x => x.Key).Distinct().ToList();
-            var applications = masterLocator.ApplicationService.GetSuggestedApplications(abIds, installedAppsIds, 0, int.MaxValue);
+            var applications = masterLocator.ApplicationService.GetSuggestedApplications(abIds, installedAppsIds, 0, int.MaxValue);           
             applications = applications.Where(a => a.CanAttach).ToList();
             if(count != null)
                 applications = applications.Skip(start.Value).Take(count.Value).ToList();
@@ -77,7 +77,7 @@ namespace Chalkable.Web.Logic
                 if (!studentCountPerApp.ContainsKey(application.Id))
                     studentCountPerApp.Add(application.Id, classSize);
             }
-            return ApplicationForAttachViewData.Create(applications, studentCountPerApp);
+            return ApplicationForAttachViewData.Create(applications, studentCountPerApp, installedAppsIds);
         }
 
     }
