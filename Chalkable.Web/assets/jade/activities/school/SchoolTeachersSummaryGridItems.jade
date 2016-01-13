@@ -22,14 +22,14 @@ each teacher in teachers
                 .circle(
                 data-tooltip = teacher.getStudentsCount() + ' Students, ' + teacher.getAbsences() + ' Absent',
                 class = teacher.getAbsencesClass()
-                )=teacher.getAbsences()
+                )=teacher.getAbsences() && parseInt(teacher.getAbsences(), 10)
             .cell.discipline
                 .circle(
                 data-tooltip=teacher.getInfractionsCount() + ' Discipline Infractions Today',
                 class = teacher.getInfractionsClass()
-                )=teacher.getInfractionsCount()
+                )=teacher.getInfractionsCount() && parseInt(teacher.getInfractionsCount(), 10)
             .cell.grades
                 .circle(
                 data-tooltip=teacher.getAvg() && (teacher.getAvg() + '% Average'),
                 class = teacher.getAvgClass()
-                )=teacher.getAvg()
+                )=teacher.getAvg() && parseInt(teacher.getAvg(), 10)
