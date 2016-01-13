@@ -12,7 +12,7 @@
             #info-panel.central-block.panel-block
                 -var displayName =clazz.getName()
                 h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
-                .status=clazz.getTeacher().getDisplayName() + '\n' + (clazz.getRoom() ? 'Room ' + clazz.getRoom().getRoomNumber() : "")
+                pre.status=clazz.getStatusText()
         .feed-stats
             +RenderWith(clazz.getFeed(), chlk.templates.feed.Feed)(
                 currentUser = self.getCurrentUser()
