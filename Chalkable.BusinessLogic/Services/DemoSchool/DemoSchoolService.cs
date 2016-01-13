@@ -155,7 +155,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return startupData;
         }
 
-        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter)
+        public IList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter)
         {
             throw new System.NotImplementedException();
         }

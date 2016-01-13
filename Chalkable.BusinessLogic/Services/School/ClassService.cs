@@ -222,11 +222,8 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             catch (ChalkableSisNotSupportVersionException ex)
             {
-                var chalkableRes =
-                    DoRead(
-                        u =>
-                            new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start.Value, count.Value, filter,
-                                teacherId));
+                var chalkableRes = 
+                    DoRead( u => new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start.Value, count.Value, filter, teacherId));
                 return chalkableRes.Select(ClassStatsInfo.Create).ToList();
             }
             catch (Exception ex)
