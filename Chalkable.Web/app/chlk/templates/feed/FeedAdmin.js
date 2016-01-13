@@ -44,7 +44,7 @@ NAMESPACE('chlk.templates.feed', function () {
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'latest',
+            chlk.models.announcement.FeedSortTypeEnum, 'sortType',
 
             [ria.templates.ModelPropertyBind],
             String, 'submitType',
