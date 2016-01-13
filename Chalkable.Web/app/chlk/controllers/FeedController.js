@@ -235,7 +235,7 @@ NAMESPACE('chlk.controllers', function (){
                     }
 
                     if(classId_ && classId_.valueOf()){
-                        var staringEnabled = this.userIsTeacher() && this.isAssignedToClass_(classId_);
+                        var staringEnabled = !this.userIsAdmin() && this.isAssignedToClass_(classId_);
                         model.setStaringDisabled(!staringEnabled);
                     }
 
