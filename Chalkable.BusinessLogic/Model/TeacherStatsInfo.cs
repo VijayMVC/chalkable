@@ -59,11 +59,6 @@ namespace Chalkable.BusinessLogic.Model
             };
         }
 
-        public static IList<TeacherStatsInfo> Create(IList<TeacherSummary> teachers)
-        {
-            return teachers.Select(Create).ToList();
-        }
-
         public static IList<TeacherStatsInfo> Create(PaginatedList<Staff> teachers, IList<ClassDetails> classes)
         {
             var res = new List<TeacherStatsInfo>();

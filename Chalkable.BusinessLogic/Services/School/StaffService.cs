@@ -94,20 +94,18 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
+
             try
             {
-                var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetTeachersSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value, count.Value, filter);
-                return TeacherStatsInfo.Create(iNowRes);
+                var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetTeachersSummaries(schoolYearId,
+                    Context.NowSchoolYearTime, start.Value + 1, start.Value + count.Value, filter);
+                return iNowRes.Select(TeacherStatsInfo.Create).ToList();
             }
-            catch (ChalkableSisNotSupportVersionException ex)
+            catch (ChalkableSisNotSupportVersionException)
             {
                 var teachers = SearchStaff(schoolYearId, null, null, filter, true, start.Value, count.Value);
                 var classes = DoRead(u => new ClassDataAccess(u).GetClassesByTeachers(schoolYearId, teachers.Select(x => x.Id).ToList()));
                 return TeacherStatsInfo.Create(teachers, classes);
-            }
-            catch (Exception e)
-            {
-                throw e;
             }
         }
 

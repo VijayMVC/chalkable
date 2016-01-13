@@ -155,8 +155,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     filter = filter.ToLower();
                     iNowRes = iNowRes.Where(x => x.SchoolName.ToLower().Contains(filter)).ToList();
                 }
-                var allSchoolCount = iNowRes.Count;
-                return iNowRes.Select(SchoolSummaryInfo.Create).ToList();
+                return iNowRes.Select(SchoolSummaryInfo.Create).Skip(start.Value).Take(count.Value).ToList();
             }
             catch (ChalkableSisNotSupportVersionException ex)
             {
