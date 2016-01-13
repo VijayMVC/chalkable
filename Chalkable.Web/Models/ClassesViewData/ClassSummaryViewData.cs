@@ -72,8 +72,8 @@ namespace Chalkable.Web.Models.ClassesViewData
             return new ClassSummaryViewData(classDetails)
             {
                 Room =currentRoom != null ? RoomViewData.Create(currentRoom) : null,
-                Periods = periods.Select(x => x.Name).ToList(),
-                DayTypes = dayTypes.Select(x => x.Name).ToList()
+                Periods = periods?.Select(x => x.Name).ToList(),
+                DayTypes = dayTypes?.Select(x => x.Name).ToList()
             };
         }
     }
