@@ -28,7 +28,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteSchoolOptions(IList<SchoolOption> schoolOptions);
         SchoolOption GetSchoolOption();
         StartupData GetStartupData();
-        PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter);
+        IList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter);
         int GetSchoolsCount(string filter = null);
     }
 
@@ -143,7 +143,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter)
+        public IList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter)
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
@@ -156,11 +156,12 @@ namespace Chalkable.BusinessLogic.Services.School
                     iNowRes = iNowRes.Where(x => x.SchoolName.ToLower().Contains(filter)).ToList();
                 }
                 var allSchoolCount = iNowRes.Count;
-                return SchoolSummaryInfo.Create(iNowRes, start.Value, count.Value, allSchoolCount);
+                return iNowRes.Select(SchoolSummaryInfo.Create).ToList();
             }
             catch (ChalkableSisNotSupportVersionException ex)
             {
-                return SchoolSummaryInfo.Create(DoRead(u => new SchoolDataAccess(u).GetShortSchoolSummaries(start.Value, count.Value, filter)));
+                var chalkableRes = DoRead(u => new SchoolDataAccess(u).GetShortSchoolSummaries(start.Value, count.Value, filter));
+                return chalkableRes.Select(SchoolSummaryInfo.Create).ToList();
             }
             catch (Exception e)
             {               

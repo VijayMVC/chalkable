@@ -102,7 +102,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             
         }
 
-        public PaginatedList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count)
+        public IList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count)
         {
             throw new NotImplementedException();
         }

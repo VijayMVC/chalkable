@@ -16,7 +16,7 @@ NAMESPACE('chlk.services', function () {
 
             [[Number, String, Number]],
             ria.async.Future, function getSchoolStatistic(start_, filter_, count_) {
-                return this.getPaginatedList('AdminDistrict/Schools.json', chlk.models.admin.BaseStatistic.OF(chlk.models.id.SchoolId), {
+                return this.get('AdminDistrict/Schools.json', ArrayOf(chlk.models.admin.BaseStatistic.OF(chlk.models.id.SchoolId)), {
                     start:start_ || 0,
                     count: count_ || 10,
                     filter: filter_

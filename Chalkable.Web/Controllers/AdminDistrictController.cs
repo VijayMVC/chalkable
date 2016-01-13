@@ -32,7 +32,7 @@ namespace Chalkable.Web.Controllers
             var schools = SchoolLocator.SchoolService.GetShortSchoolSummariesInfo(start,
                 count, filter);
 
-            return Json(LocalSchoolSummaryViewData.Create(schools));
+            return Json(schools.Select(LocalSchoolSummaryViewData.Create));
         }
     }
 }

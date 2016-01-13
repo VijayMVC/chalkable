@@ -94,29 +94,23 @@ NAMESPACE('chlk.controllers', function (){
                     this.adminDistrictService.getSchoolStatistic()
                 ])
                 .then(function(result){
-                    return new chlk.models.district.DistrictFullSummaryViewData(result[0], result[1]);
+                    return new chlk.models.district.DistrictFullSummaryViewData(result[0], new chlk.models.admin.BaseStatisticGridViewData(result[1]));
                 })
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.district.DistrictSummaryPage, result);
         },
 
         [chlk.controllers.SidebarButton('classes')],
-        [[chlk.models.district.DistrictFullSummaryViewData]],
-        function schoolsStatisticFilterAction(model){
-            return this.schoolsStatisticAction(0, model.getFilter());
-        },
-
-        [chlk.controllers.SidebarButton('classes')],
-        [[Number, String]],
-        function schoolsStatisticAction(pageIndex, filter_){
-            var start = 10 * pageIndex;
-            var result = this.adminDistrictService.getSchoolStatistic(start, filter_)
+        [[chlk.models.admin.BaseStatisticGridViewData]],
+        function schoolsStatisticAction(model){
+            var isFilter = model.getSubmitType() == 'filter';
+            var start = isFilter ? 0 : model.getStart();
+            var result = this.adminDistrictService.getSchoolStatistic(start, model.getFilter())
                 .then(function(model){
-                    filter_ && model.setFilter(filter_);
-                    return model;
+                    return new chlk.models.admin.BaseStatisticGridViewData(model);
                 })
                 .attach(this.validateResponse_());
-            return this.UpdateView(chlk.activities.district.DistrictSummaryPage, result);
+            return this.UpdateView(chlk.activities.district.DistrictSummaryPage, result, isFilter ? null : chlk.activities.lib.DontShowLoader());
         }
 
     ])

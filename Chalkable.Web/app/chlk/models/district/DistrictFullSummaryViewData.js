@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.district.DistrictShortSummaryViewData');
-REQUIRE('chlk.models.admin.BaseStatistic');
+REQUIRE('chlk.models.admin.BaseStatisticGridViewData');
 
 NAMESPACE('chlk.models.district', function () {
     "use strict";
@@ -7,7 +7,7 @@ NAMESPACE('chlk.models.district', function () {
     /** @class chlk.models.district.DistrictFullSummaryViewData*/
     CLASS(
         'DistrictFullSummaryViewData', [
-            chlk.models.common.PaginatedList, 'schoolsStatistic',
+            chlk.models.admin.BaseStatisticGridViewData, 'schoolsStatistic',
             chlk.models.district.DistrictShortSummaryViewData, 'shortSummary',
             String, 'filter',
 
