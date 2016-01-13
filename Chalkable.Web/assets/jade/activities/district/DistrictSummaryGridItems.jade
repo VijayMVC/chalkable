@@ -13,14 +13,14 @@ each school in schools
                 .circle(
                 data-tooltip = school.getStudentsCount() + ' Students, ' + school.getAbsences() + ' Absent',
                 class = school.getAbsencesClass()
-                )=school.getAbsences()
+                )=school.getAbsences() && parseInt(school.getAbsences(), 10)
             .cell.discipline
                 .circle(
                 data-tooltip=school.getInfractionsCount() + ' Discipline Infractions Today',
                 class = school.getInfractionsClass()
-                )=school.getInfractionsCount()
+                )=school.getInfractionsCount() && parseInt(school.getInfractionsCount(), 10)
             .cell.grades
                 .circle(
                 data-tooltip=school.getAvg() && (school.getAvg() + '% Average'),
                 class = school.getAvgClass()
-                )=school.getAvg()
+                )=school.getAvg() && parseInt(school.getAvg(), 10)

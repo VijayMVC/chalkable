@@ -15,14 +15,14 @@ each clazz in classes
                 .circle(
                 data-tooltip = clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent',
                 class = clazz.getAbsencesClass()
-                )=clazz.getAbsences()
+                )=clazz.getAbsences() && parseInt(clazz.getAbsences(), 10)
             .cell.discipline
                 .circle(
                 data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today',
                 class = clazz.getInfractionsClass()
-                )=clazz.getInfractionsCount()
+                )=clazz.getInfractionsCount() && parseInt(clazz.getInfractionsCount(), 10)
             .cell.grades
                 .circle(
                 data-tooltip=clazz.getAvg() && (clazz.getAvg() + '% Average'),
                 class = clazz.getAvgClass()
-                )=clazz.getAvg()
+                )=clazz.getAvg() && parseInt(clazz.getAvg(), 10)
