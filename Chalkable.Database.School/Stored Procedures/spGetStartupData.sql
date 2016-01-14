@@ -70,3 +70,9 @@ Select c.Class_Id From @class c
 exec spGetAlphaGradesForClasses @classids
 
 exec spGetAlphaGradesForClassStandards @classIds
+
+Declare @schoolIds TInt32
+Insert into @schoolids
+values(@schoolId)
+
+exec spGetAlphaGradesForSchoolStandards @schoolIds

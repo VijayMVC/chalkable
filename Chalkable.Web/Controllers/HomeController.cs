@@ -357,7 +357,9 @@ namespace Chalkable.Web.Controllers
 
                 var alphaGradesForStandars = startupData.AlphaGradesForClassStandards[classDetails.Id];
                 if (alphaGradesForStandars.Count == 0 && Context.SchoolLocalId.HasValue)
-                    alphaGradesForStandars = SchoolLocator.AlphaGradeService.GetStandardsAlphaGradesForSchool(Context.SchoolLocalId.Value);
+                    alphaGradesForStandars = startupData.AlphaGradesForSchoolStandards
+                        .Where( x => x.SchoolId == Context.SchoolLocalId.Value)
+                        .Select(x => x.AlphaGrade).ToList();
 
                 var classAdvanceData = new
                 {

@@ -54,7 +54,7 @@ namespace Chalkable.Data.School.DataAccess
             public int ClassId { get; set; }
         }
 
-        private class SchoolAlphaGrade
+        public class SchoolAlphaGrade
         {
             [DataEntityAttr]
             public AlphaGrade AlphaGrade { get; set; }
