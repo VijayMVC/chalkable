@@ -23,6 +23,10 @@ NAMESPACE('chlk.templates.apps', function () {
                         res = "This application isn't installed for " + notInstalledCount;
                         res += notInstalledCount > 1 ? ' students' : ' student';
                     }
+
+                    if (!app.isInstalled()){
+                        res = "This application isn't installed for current user";
+                    }
                 }
                 return res;
             }
