@@ -31,7 +31,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         {
             var res = applications.Select(app => Create(app, notInstalledStCountPerApp[app.Id])).ToList();
             foreach (var app in res)
-                app.IsInstalled = installedApps.Exists(x => x == app.Id);
+                app.IsInstalled = installedApps?.Exists(x => x == app.Id) ?? false;
                 
 
             return res;
