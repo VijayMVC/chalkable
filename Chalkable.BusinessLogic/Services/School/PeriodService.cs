@@ -30,9 +30,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<Period> GetPeriods(IList<int> ids)
         {
-            if(ids != null && ids.Count > 0 )
-                return DoRead(u => new PeriodDataAccess(u).GetByIds(ids));
-            return null;
+            return DoRead(u => new PeriodDataAccess(u).GetByIds(ids));
         }
 
         public void AddPeriods(IList<Period> periods)

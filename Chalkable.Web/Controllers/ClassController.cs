@@ -59,6 +59,8 @@ namespace Chalkable.Web.Controllers
                 ? SchoolLocator.AlphaGradeService.GetAlphaGradesByClassId(classId)
                 : SchoolLocator.AlphaGradeService.GetAlphaGrades();
             var alphaGradesForStandards = SchoolLocator.AlphaGradeService.GetStandardsAlphaGradesByClassId(classId);
+            if (alphaGradesForStandards.Count == 0 && Context.SchoolLocalId.HasValue)
+                alphaGradesForStandards = SchoolLocator.AlphaGradeService.GetStandardsAlphaGradesForSchool(Context.SchoolLocalId.Value);
             return Json(ClassAlphaGradesViewData.Create(classDetails, alphaGrades, alphaGradesForStandards));
         }
 

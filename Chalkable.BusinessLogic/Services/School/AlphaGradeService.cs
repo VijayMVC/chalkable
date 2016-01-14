@@ -15,6 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AlphaGrade> GetAlphaGrades();
         IList<AlphaGrade> GetAlphaGradesByClassId(int classId);
         IList<AlphaGrade> GetStandardsAlphaGradesByClassId(int classId);
+        IList<AlphaGrade> GetStandardsAlphaGradesForSchool(int schoolId);
     }
 
     public class AlphaGradeService : SchoolServiceBase, IAlphaGradeService
@@ -50,6 +51,12 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var res = DoRead(u => new AlphaGradeDataAccess(u).GetAlphaGradesForClassStandards(new List<int> { classId }));
             return res[classId];
+        }
+
+        public IList<AlphaGrade> GetStandardsAlphaGradesForSchool(int schoolId)
+        {
+            var res = DoRead(u => new AlphaGradeDataAccess(u).GetAlphaGradesForSchoolStandarts(new List<int> {schoolId}));
+            return res[schoolId];
         }
 
         public void EditAlphaGrades(IList<AlphaGrade> alphaGrades)

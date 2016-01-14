@@ -50,9 +50,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<DayType> GetDayTypes(IList<int> ids)
         {
-            if(ids != null && ids.Count > 0)
-                return DoRead(u => new DataAccessBase<DayType, int>(u).GetByIds(ids));
-            return null;
+            return DoRead(u => new DataAccessBase<DayType, int>(u).GetByIds(ids));
         }
     }
 }

@@ -354,13 +354,24 @@ namespace Chalkable.Web.Controllers
             foreach (var classDetails in startupData.Classes)
             {
                 var typesByClasses = classAnnouncementTypes.Where(x => x.ClassRef == classDetails.Id).ToList();
-                classesAdvancedData.Add(new
+
+                var alphaGradesForStandars = startupData.AlphaGradesForClassStandards[classDetails.Id];
+                if (alphaGradesForStandars.Count == 0 && Context.SchoolLocalId.HasValue)
+                    alphaGradesForStandars = SchoolLocator.AlphaGradeService.GetStandardsAlphaGradesForSchool(Context.SchoolLocalId.Value);
+
+                var classAdvanceData = new
                 {
                     ClassId = classDetails.Id,
                     TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses),
-                    AlphaGrades = classDetails.GradingScaleRef.HasValue ? startupData.AlphaGradesForClasses[classDetails.Id] : allAlphaGrades,
-                    AlphaGradesForStandards = startupData.AlphaGradesForClassStandards[classDetails.Id]
-                });
+                    AlphaGrades =
+                        classDetails.GradingScaleRef.HasValue
+                            ? startupData.AlphaGradesForClasses[classDetails.Id]
+                            : allAlphaGrades,
+                    AlphaGradesForStandards = alphaGradesForStandars
+                };
+                classesAdvancedData.Add(classAdvanceData);
+
+                
             }
             PrepareJsonData(classesAdvancedData, ViewConstants.CLASSES_ADV_DATA);
         }

@@ -410,6 +410,9 @@ namespace Chalkable.Data.Common
 
         public virtual IList<TEntity> GetByIds(IList<TParam> keys)
         {
+            if(keys == null || keys.Count==0)
+                return new List<TEntity>();
+
             StringBuilder sql = new StringBuilder();
             sql.AppendFormat(Orm.Orm.SELECT_FORMAT, '*', typeof(TEntity).Name);
 
