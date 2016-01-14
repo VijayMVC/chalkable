@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.BusinessLogic.Model
 {
