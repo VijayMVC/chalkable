@@ -269,15 +269,20 @@ namespace Chalkable.StiConnector.Connectors
             return new Dictionary<string, string>
                 {
                     {HttpRequestHeader.Authorization.ToString(), "Session " + locator.Token},
-                    {"ApplicationKey", string.Format("chalkable {0}", Settings.StiApplicationKey)}
+                    {"ApplicationKey", $"chalkable {Settings.StiApplicationKey}"}
                 };
         }
 
         protected void EnsureApiVersion(string requiredApiVersion)
         {
-            VersionHelper.ValidateVersionFormat(requiredApiVersion);
-            if(VersionHelper.CompareVersionTo(requiredApiVersion, ApiVersion) == 1)
+            if(!IsSupportedApiVersion(requiredApiVersion))
                 throw new ChalkableSisNotSupportVersionException(requiredApiVersion, ApiVersion);
+        }
+
+        protected bool IsSupportedApiVersion(string requiredApiVersion)
+        {
+            VersionHelper.ValidateVersionFormat(requiredApiVersion);
+            return VersionHelper.CompareVersionTo(requiredApiVersion, ApiVersion) != 1;
         }
 
         protected string BaseUrl => locator.BaseUrl;

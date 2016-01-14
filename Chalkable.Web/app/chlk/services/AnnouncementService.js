@@ -40,44 +40,64 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Announcement/Done.json', Boolean, {
                     option: option.valueOf(),
                     classId: classId_ && classId_.valueOf(),
-                    annType: annType_ && annType_.valueOf(),
+                    annType: annType_ && annType_.valueOf()
                 });
             },
 
-            [[Number, chlk.models.id.ClassId, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
-                chlk.models.announcement.AnnouncementTypeEnum, Boolean, Boolean]],
-            ria.async.Future, function getAnnouncements(start_, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_) {
+            [[Number, chlk.models.id.ClassId, Boolean]],
+            ria.async.Future, function getAnnouncementsList_(start_, classId_, importantOnly_) {
                 return this.get('Feed/List.json', chlk.models.feed.Feed, {
                     start: start_ || 0,
                     classId: classId_ ? classId_.valueOf() : null,
                     complete: importantOnly_ ? false : null,
-                    fromDate: startDate_ && startDate_.toStandardFormat(),
-                    toDate: endDate_ && endDate_.toStandardFormat(),
-                    announcementType: annType_ && annType_.valueOf(),
-                    gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf(),
-                    sortType: latest_,
-                    lessonPlansOnly: false,
-                    toSet: toSet_ || false,
                     count: 10
                 });
-
             },
 
-            [[Number, String, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
-                chlk.models.announcement.AnnouncementTypeEnum, Boolean, Boolean]],
-            ria.async.Future, function getAnnouncementsForAdmin(start_, gradeLevels_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, latest_, toSet_) {
+            [[Number, String, Boolean]],
+            ria.async.Future, function getAnnouncementsForAdminList_(start_, gradeLevels_, importantOnly_) {
                 return this.get('Feed/DistrictAdminFeed.json', chlk.models.feed.FeedAdmin, {
                     gradeLevelIds : gradeLevels_,
                     start: start_ || 0,
                     complete: importantOnly_ ? false : null,
-                    fromDate: startDate_ && startDate_.toStandardFormat(),
-                    toDate: endDate_ && endDate_.toStandardFormat(),
-                    announcementType: annType_ && annType_.valueOf(),
-                    gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf(),
-                    sortType: latest_,
-                    toSet: toSet_ || !!startDate_ || !!endDate_ || !!annType_ || !!gradingPeriodId_ || false,
                     count: 10
                 });
+            },
+
+            [[Number, chlk.models.id.ClassId, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
+                chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum, Boolean]],
+            ria.async.Future, function getAnnouncements(start_, classId_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_) {
+                if(toSet_){
+                    return this.get('Feed/SetSettings.json', Boolean, {
+                        announcementType: annType_ && annType_.valueOf(),
+                        sortType: sortType_ && sortType_.valueOf(),
+                        fromDate: startDate_ && startDate_.toStandardFormat(),
+                        toDate: endDate_ && endDate_.toStandardFormat(),
+                        gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf()
+                    }).then(function(){
+                        return this.getAnnouncementsList_(start_, classId_, importantOnly_);
+                    }.bind(this));
+                }else{
+                    return this.getAnnouncementsList_(start_, classId_, importantOnly_);
+                }
+            },
+
+            [[Number, String, Boolean, chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, chlk.models.id.GradingPeriodId,
+                chlk.models.announcement.AnnouncementTypeEnum, chlk.models.announcement.FeedSortTypeEnum, Boolean]],
+            ria.async.Future, function getAnnouncementsForAdmin(start_, gradeLevels_, importantOnly_, startDate_, endDate_, gradingPeriodId_, annType_, sortType_, toSet_) {
+                if(toSet_){
+                    return this.get('Feed/SetSettings.json', Boolean, {
+                        announcementType: annType_ && annType_.valueOf(),
+                        sortType: sortType_ && sortType_.valueOf(),
+                        fromDate: startDate_ && startDate_.toStandardFormat(),
+                        toDate: endDate_ && endDate_.toStandardFormat(),
+                        gradingPeriodId: gradingPeriodId_ && gradingPeriodId_.valueOf()
+                    }).then(function(){
+                        return this.getAnnouncementsForAdminList_(start_, gradeLevels_, importantOnly_);
+                    }.bind(this));
+                }else{
+                    return this.getAnnouncementsForAdminList_(start_, gradeLevels_, importantOnly_);
+                }
 
             },
 
@@ -158,7 +178,7 @@ NAMESPACE('chlk.services', function () {
                 return this.post('Announcement/Complete', chlk.models.announcement.FeedAnnouncementViewData, {
                     announcementId: announcementId.valueOf(),
                     complete: complete_,
-                    announcementType: type_ && type_.valueOf(),
+                    announcementType: type_ && type_.valueOf()
                 });
             },
 

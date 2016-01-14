@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Runtime.Serialization;
 using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model.Announcements

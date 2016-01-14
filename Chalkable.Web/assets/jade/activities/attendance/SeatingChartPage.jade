@@ -48,7 +48,8 @@ mixin UpdateGridForm(text, rows, columns, minRows, minColumns, classId)
                         data-options={
                             showOtherMonths: true,
                             selectOtherMonths: true,
-                            inCurrentGradingPeriods: true
+                            inCurrentGradingPeriods: true,
+                            underOverlay: true
                         },
                         data-controller= self.isInProfile() ? "class" : "attendance",
                         data-action=self.isInProfile() ? "seatingChartForDate" : "seatingChart",

@@ -2,6 +2,7 @@ REQUIRE('chlk.models.district.DistrictShortSummaryViewData');
 REQUIRE('chlk.models.admin.BaseStatistic');
 REQUIRE('chlk.models.id.SchoolId');
 REQUIRE('chlk.models.schoolYear.Year');
+REQUIRE('chlk.models.admin.BaseStatisticGridViewData');
 
 NAMESPACE('chlk.models.school', function () {
     "use strict";
@@ -9,14 +10,14 @@ NAMESPACE('chlk.models.school', function () {
     /** @class chlk.models.school.SchoolSummaryViewData*/
     CLASS(
         'SchoolSummaryViewData', [
-            chlk.models.common.PaginatedList, 'itemsStatistic',
+            chlk.models.admin.BaseStatisticGridViewData, 'itemsStatistic',
             String, 'schoolName',
             chlk.models.id.SchoolId, 'schoolId',
             chlk.models.id.SchoolYearId, 'schoolYearId',
             ArrayOf(chlk.models.schoolYear.Year), 'schoolYears',
             String, 'filter',
 
-            [[String, chlk.models.id.SchoolId, chlk.models.id.SchoolYearId, ArrayOf(chlk.models.schoolYear.Year), chlk.models.common.PaginatedList, String]],
+            [[String, chlk.models.id.SchoolId, chlk.models.id.SchoolYearId, ArrayOf(chlk.models.schoolYear.Year), chlk.models.admin.BaseStatisticGridViewData, String]],
             function $(schoolName_, schoolId_, schoolYearId_, schoolYears_, itemsStatistic_, filter_){
                 BASE();
                 if(schoolName_)

@@ -96,14 +96,21 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult FeedReport(FeedReportSettingsInfo settings, int? classId, int? format, bool? complete)
+        public ActionResult FeedReport(FeedReportSettingsInfo settings, int? classId, int? format, bool? complete, int? announcementType)
         {
             //TODO: save report settings 
             SchoolLocator.ReportService.SetFeedReportSettings(settings);
 
             var path = Server.MapPath(ApplicationPath).Replace("/", "\\");
             var formatType = (ReportingFormat?) format ?? ReportingFormat.Pdf;
-            var reportInput = new FeedReportInputModel {ClassId = classId, Format = format, Settings = settings, Complete = complete};
+            var reportInput = new FeedReportInputModel
+            {
+                ClassId = classId,
+                Format = format,
+                Settings = settings,
+                Complete = complete,
+                AnnouncementType = announcementType
+            };
             return Report(() => SchoolLocator.ReportService.GetFeedReport(reportInput, path), "Feed Report", formatType, DownloadReportFile);
         }
 

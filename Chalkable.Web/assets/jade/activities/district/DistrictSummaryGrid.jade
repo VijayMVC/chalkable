@@ -1,42 +1,23 @@
 -var schools = self.getItems()
 -var isNotEmptyStatistic = self.isNotEmptyStatistic()
 
-.chlk-calendar.chlk-grid
-    .header
-        +ActionLink('district', 'schoolsStatistic', self.getPageIndex() - 1, self.getFilter()).grid-arrow.prev-arrow(class = self.isHasPreviousPage() ? "" : "disabled")
-        +ActionLink('district', 'schoolsStatistic', self.getPageIndex() + 1, self.getFilter()).grid-arrow.next-arrow(class = self.isHasNextPage() ? "" : "disabled")
-    .grid-content
+input(type="hidden", name="start", value=0)
+.chlk-calendar
+    .grid-top-content
         if schools.length
-            .grid-header.grid-row
-                .cell.name=Msg.Schools
-                .cell.students=Msg.Students
-                if isNotEmptyStatistic
-                    .cell.attendance=Msg.Attendance
-                    .cell.discipline=Msg.Discipline
-                    .cell.grades=Msg.Grades
-            each school in schools
-                .grid-row
-                    .cell.name
-                        .icon
-                            .pic
-                        +ActionLink('schools', 'classesSummary', school.getId(), school.getName())=school.getName()
-                    .cell.students=school.getStudentsCount()
-                    if isNotEmptyStatistic
-                        .cell.attendance
-                            .circle(
-                                data-tooltip = school.getStudentsCount() + ' Students, ' + school.getAbsences() + ' Absent',
-                                class = school.getAbsencesClass()
-                            )=school.getAbsences()
-                        .cell.discipline
-                            .circle(
-                                data-tooltip=school.getInfractionsCount() + ' Discipline Infractions Today',
-                                class = school.getInfractionsClass()
-                            )=school.getInfractionsCount()
-                        .cell.grades
-                            .circle(
-                                data-tooltip=school.getAvg() && (school.getAvg() + '% Average'),
-                                class = school.getAvgClass()
-                            )=school.getAvg()
+            +ListView(schools)(
+                infiniteScroll = true,
+                pageSize = 10
+            )
+                Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
+                .grid-content
+                    .grid-header.grid-row
+                        .cell.name=Msg.Schools
+                        .cell.students=Msg.Students
+                        if isNotEmptyStatistic
+                            .cell.attendance=Msg.Attendance
+                            .cell.discipline=Msg.Discipline
+                            .cell.grades=Msg.Grades
+                    +RenderWith(self.getModel(), chlk.templates.district.BaseStatisticItemsTpl)
         else
             .no-items-text There are no schools
-    .footer Page #{self.getTotalPages() ? self.getPageIndex() + 1 : 0} of #{self.getTotalPages()}

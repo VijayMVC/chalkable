@@ -17,6 +17,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
 using Microsoft.Data.OData.Query.SemanticAst;
+using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
@@ -33,10 +34,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         void CopyAnnouncement(int classAnnouncementId, IList<int> classIds);
         ClassAnnouncement SetVisibleForStudent(int classAnnouncementId, bool visible);
 
+        //TOOD : make this method static 
         IList<AnnouncementComplex> GetAnnouncementsComplex(AnnouncementsQuery query, IList<Activity> activities = null);
 
         IList<ClassAnnouncement> GetClassAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, bool onlyOwners = false, bool? graded = null);
-        IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = false, bool? graded = null, int start = 0, int count = int.MaxValue);
+        IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = false, bool? graded = null, int start = 0, int count = int.MaxValue, int sort = 0);
         IList<ClassAnnouncement> GetClassAnnouncementsByFilter(string filter); 
         ClassAnnouncement GetLastDraft();
         IList<AnnouncementComplex> GetByActivitiesIds(IList<int> activitiesIds);
@@ -449,9 +451,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.PersonId.HasValue);
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
             if (CoreRoles.TEACHER_ROLE == Context.Role)
-                ConnectorLocator.ActivityConnector.CompleteTeacherActivities(syId, Context.PersonId.Value, complete, toDate);
+                ConnectorLocator.ActivityConnector.CompleteTeacherActivities(syId, Context.PersonId.Value, null, complete, toDate, DateTime.MinValue);
             if (CoreRoles.STUDENT_ROLE == Context.Role)
-                ConnectorLocator.ActivityConnector.CompleteStudentActivities(syId, Context.PersonId.Value, complete, toDate);
+                ConnectorLocator.ActivityConnector.CompleteStudentActivities(syId, Context.PersonId.Value, null, complete, toDate, DateTime.MinValue);
         }
 
 
@@ -516,7 +518,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateClassAnnouncementDataAccess(u).GetClassAnnouncementByFilter(filter, Context.PersonId.Value));
         }
 
-        public IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = false, bool? graded = null, int start = 0, int count = int.MaxValue)
+        public IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = false, bool? graded = null, int start = 0, int count = int.MaxValue, int sort = 0)
         {
             return GetAnnouncementsComplex(new AnnouncementsQuery
                 {
@@ -527,7 +529,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     OwnedOnly = onlyOwners,
                     Graded = graded,
                     Start = start,
-                    Count = count
+                    Count = count,
+                    Sort = sort
                 });
         }
 
@@ -537,7 +540,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
               //  throw new NotImplementedException();
             //TODO: Looks shity....think about this method and whole approach
             if (activities == null)
-                activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count, query.Complete, query.Graded);
+                activities = GetActivities(query.ClassId, query.FromDate, query.ToDate, query.Start, query.Count, query.Complete, query.Graded, (ActivitySearchSortOption?)query.Sort);
             else
             {
                 if (query.ClassId.HasValue)
@@ -602,7 +605,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count, bool? complete = false, bool? graded = null)
+        private IList<Activity> GetActivities(int? classId, DateTime? fromDate, DateTime? toDate, int start, int count, bool? complete = false, bool? graded = null, ActivitySearchSortOption? sort = ActivitySearchSortOption.DueDateAscending)
         {
             if (!Context.SchoolYearId.HasValue)
                 throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
@@ -612,7 +615,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if (Context.Role == CoreRoles.STUDENT_ROLE)
                 return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, Context.PersonId.Value, start, end, toDate, fromDate, complete, graded, classId);
             if (classId.HasValue)
-                return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, toDate, fromDate, complete);
+                return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, toDate, fromDate, complete, sort);
             if (Context.Role == CoreRoles.TEACHER_ROLE)
                 return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, Context.PersonId.Value, start, end, toDate, fromDate, complete);
             return new List<Activity>();
@@ -648,12 +651,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateClassAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value));
         }
 
-        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId)
+        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            Trace.Assert(Context.SchoolYearId.HasValue);
-            
-            SetAnnouncementsAsComplete(tillDateToUpdate, true);
+            var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
+            if (CoreRoles.TEACHER_ROLE == Context.Role)
+                ConnectorLocator.ActivityConnector.CompleteTeacherActivities(syId, Context.PersonId.Value, classId, true, startDate, endDate);
+            if (CoreRoles.STUDENT_ROLE == Context.Role)
+                ConnectorLocator.ActivityConnector.CompleteStudentActivities(syId, Context.PersonId.Value, classId, true, startDate, endDate);
         }
     }
 }

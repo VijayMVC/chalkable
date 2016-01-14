@@ -11,7 +11,7 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        private const string SP_UPDATE_ADMIN_ANNOUNCEMENT_DATA = "spUpdateAnnouncementRecipientData";
+        private const string SP_UPDATE_ANNOUNCEMENT_RECIPIENT_DATA = "spUpdateAnnouncementRecipientData";
         private const string ANNOUNCEMENT_ID_PARAM = "announcementId";
         private const string PERSON_ID_PARAM = "personId";
         private const string COMPLETE_PARAM = "complete";
@@ -34,7 +34,25 @@ namespace Chalkable.Data.School.DataAccess
                     {ANNOUCEMENT_TYPE, annType },
                     {CLASS_ID, classId }
                 };
-            ExecuteStoredProcedure(SP_UPDATE_ADMIN_ANNOUNCEMENT_DATA, parameters);
+            ExecuteStoredProcedure(SP_UPDATE_ANNOUNCEMENT_RECIPIENT_DATA, parameters);
+        }
+
+        private const string SP_COMPLETE_ANNOUNCEMENT = "spCompleteAnnouncements";
+
+        public void CompleteAnnouncements(int schoolYearId, int personId, int roleId, int? classId, int annType, DateTime fromDate, DateTime toDate)
+        {
+            var param = new Dictionary<string, object>
+            {
+                [PERSON_ID_PARAM] = personId,
+                [ROLE_ID_PARAM] = roleId,
+                [SCHOOL_YEAR_ID_PARAM] = schoolYearId,
+                [CLASS_ID] = classId,
+                ["announcementType"] = annType,
+                ["fromDate"] = fromDate,
+                ["toDate"] = toDate
+            };
+
+            ExecuteStoredProcedure(SP_COMPLETE_ANNOUNCEMENT, param);
         }
     }
 }

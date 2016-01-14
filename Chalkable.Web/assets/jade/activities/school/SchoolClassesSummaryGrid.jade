@@ -1,47 +1,24 @@
 -var classes = self.getItems()
 -var isNotEmptyStatistic = self.isNotEmptyStatistic()
 
--var schoolYearId = classes[0] && classes[0].getSchoolYearId()
-
-.chlk-calendar.chlk-grid
-    .header
-        +ActionLink('schools', 'classesStatistic', self.getPageIndex() - 1, self.getFilter(), schoolYearId).grid-arrow.prev-arrow(class = self.isHasPreviousPage() ? "" : "disabled")
-        +ActionLink('schools', 'classesStatistic', self.getPageIndex() + 1, self.getFilter(), schoolYearId).grid-arrow.next-arrow(class = self.isHasNextPage() ? "" : "disabled")
-    .grid-content
+input(type="hidden", name="start", value=0)
+.chlk-calendar
+    .grid-top-content
         if classes.length
-            .grid-header.grid-row
-                .cell.name=Msg.Classes
-                .cell.teacher-name=Msg.Teacher
-                .cell.students=Msg.Students
-                if isNotEmptyStatistic
-                    .cell.attendance=Msg.Attendance
-                    .cell.discipline=Msg.Discipline
-                    .cell.grades=Msg.Grade_Avg
-            each clazz in classes
-                .grid-row
-                    .cell.name
-                        .icon
-                            .pic
-                                +ClassImg(clazz, 24, 43)
-                        +ActionLink('class', 'info', clazz.getId())(data-tooltip = (clazz.getClassNumber() || '') + ' '+  clazz.getName())=clazz.getName()
-                    .cell.teacher-name=clazz.getPrimaryTeacherName()
-                    .cell.students=clazz.getStudentsCount()
-                    if isNotEmptyStatistic
-                        .cell.attendance
-                            .circle(
-                                data-tooltip = clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent',
-                                class = clazz.getAbsencesClass()
-                            )=clazz.getAbsences()
-                        .cell.discipline
-                            .circle(
-                                data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today',
-                                class = clazz.getInfractionsClass()
-                            )=clazz.getInfractionsCount()
-                        .cell.grades
-                            .circle(
-                                data-tooltip=clazz.getAvg() && (clazz.getAvg() + '% Average'),
-                                class = clazz.getAvgClass()
-                            )=clazz.getAvg()
+            +ListView(classes)(
+                infiniteScroll = true,
+                pageSize = 10
+            )
+                Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
+                .grid-content
+                    .grid-header.grid-row
+                        .cell.name=Msg.Classes
+                        .cell.teacher-name=Msg.Teacher
+                        .cell.students=Msg.Students
+                        if isNotEmptyStatistic
+                            .cell.attendance=Msg.Attendance
+                            .cell.discipline=Msg.Discipline
+                            .cell.grades=Msg.Grade_Avg
+                    +RenderWith(self.getModel(), chlk.templates.school.SchoolClassesStatisticItemsTpl)
         else
             .no-items-text There are no classes
-    .footer Page #{self.getTotalPages() ? self.getPageIndex() + 1 : 0} of #{self.getTotalPages()}

@@ -8,7 +8,7 @@ NAMESPACE('chlk.controls', function () {
         chlk.controls.DatePickerControl.prototype.updateDatePicker.call(scope, node, value, true);
     };
 
-    var wasChange;
+    var wasChange, underOverlayCls = 'under-overlay';
 
     /** @class chlk.controls.DatePickerControl */
     CLASS(
@@ -98,9 +98,13 @@ NAMESPACE('chlk.controls', function () {
                         options.maxDate = sy.getEndDate().getDate();
                 }
 
-                if(options.calendarCls){
+                if(options.calendarCls || options.underOverlay){
                     options.beforeShow = function(){
-                        jQuery('#ui-datepicker-div').addClass(options.calendarCls);
+                        if(options.calendarCls)
+                            jQuery('#ui-datepicker-div').addClass(options.calendarCls);
+
+                        if(options.underOverlay)
+                            jQuery('#ui-datepicker-div').addClass(underOverlayCls);
                     }
                 }
 

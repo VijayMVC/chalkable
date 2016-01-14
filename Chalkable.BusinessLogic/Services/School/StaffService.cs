@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteStaffSchools(IList<StaffSchool> staffSchools);
         IList<StaffSchool> GetStaffSchools();
         PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName, int start, int count);
-        PaginatedList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count);
+        IList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count);
     }
 
     public class StaffService : SisConnectedService, IStaffService
@@ -90,26 +90,22 @@ namespace Chalkable.BusinessLogic.Services.School
                             start, count));
         }
 
-        public PaginatedList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count)
+        public IList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count)
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
+
             try
             {
-                var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetTeachersSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value, count.Value, filter);
-                var teacherCount = SearchStaff(schoolYearId, null, null, filter, true, 0, 1).TotalCount;
-                //TODO: FIX GENDER AFTER iNow API UDPATED
-                return TeacherStatsInfo.Create(iNowRes, start.Value, count.Value, teacherCount);
+                var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetTeachersSummaries(schoolYearId,
+                    Context.NowSchoolYearTime, start.Value + 1, start.Value + count.Value, filter);
+                return iNowRes.Select(TeacherStatsInfo.Create).ToList();
             }
-            catch (ChalkableSisNotSupportVersionException ex)
+            catch (ChalkableSisNotSupportVersionException)
             {
                 var teachers = SearchStaff(schoolYearId, null, null, filter, true, start.Value, count.Value);
                 var classes = DoRead(u => new ClassDataAccess(u).GetClassesByTeachers(schoolYearId, teachers.Select(x => x.Id).ToList()));
                 return TeacherStatsInfo.Create(teachers, classes);
-            }
-            catch (Exception e)
-            {
-                throw e;
             }
         }
 

@@ -44,7 +44,7 @@ NAMESPACE('chlk.templates.feed', function () {
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
             [ria.templates.ModelPropertyBind],
-            Boolean, 'latest',
+            chlk.models.announcement.FeedSortTypeEnum, 'sortType',
 
             [ria.templates.ModelPropertyBind],
             String, 'submitType',
@@ -62,7 +62,7 @@ NAMESPACE('chlk.templates.feed', function () {
             Boolean, 'staringDisabled',
 
             function hasFilters(){
-                return this.getAnnType() || this.getGradingPeriodId() || this.getStartDate() || this.getEndDate()
+                return this.getAnnType() || this.getGradingPeriodId() || this.getStartDate() || this.getEndDate() || this.getSortType() && this.getSortType().valueOf()
             }
         ])
 });

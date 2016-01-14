@@ -239,12 +239,7 @@ namespace Chalkable.Web.Controllers
             var st = start ?? 0;
             var cn = count ?? 10;
             var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(null, null, classId, null, false, true, st, cn);
-            var feedComplex = new FeedComplex
-            {
-                Announcements = anns,
-                SettingsForFeed = SchoolLocator.AnnouncementFetchService.GetSettingsForFeed()
-            };
-            return FeedController.PrepareFeedComplexViewData(SchoolLocator, feedComplex).AnnoucementViewDatas;
+            return FeedController.PrepareAnnouncementsComplexViewData(SchoolLocator, anns);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]

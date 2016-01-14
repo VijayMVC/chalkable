@@ -13,12 +13,15 @@ NAMESPACE('chlk.models.apps', function () {
             OVERRIDE, VOID, function deserialize(raw){
                 BASE(raw);
                 this.notInstalledStudentsCount = SJX.fromValue(raw.notinstalledstudentscount, Number);
+                this.installed = SJX.fromValue(raw.isinstalled, Boolean);
             },
 
             Number, 'notInstalledStudentsCount',
 
+            Boolean, 'installed',
+
             Boolean, function needToInstall(){
-               return this.getNotInstalledStudentsCount() > 0;
+               return this.getNotInstalledStudentsCount() > 0 || !this.isInstalled();
             }
         ]);
 });

@@ -8,11 +8,11 @@ namespace Chalkable.StiConnector
     {
         public static void ValidateVersionFormat(string version)
         {
-            if (!IsValidVersionForamt(version))
+            if (!IsValidVersionFormat(version))
                 throw new ChalkableException("Invalid version format. Version should have next format 0.0.0.0");
         }
 
-        private static bool IsValidVersionForamt(this string version)
+        private static bool IsValidVersionFormat(this string version)
         {
             if (string.IsNullOrWhiteSpace(version)) return false;
 

@@ -401,6 +401,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             if(inputModel.Settings == null) 
                 throw new ChalkableException("Empty report settings parameter");
+
             ValidateDateRange(inputModel.Settings.StartDate, inputModel.Settings.EndDate);
 
             IReportHandler<FeedReportInputModel> handler;
@@ -411,7 +412,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
             var format = inputModel.FormatTyped ?? ReportingFormat.Pdf;
             var dataSet = handler.PrepareDataSource(inputModel, format, ServiceLocator, ServiceLocator.ServiceLocatorMaster);
-            var definition = Path.Combine(path, handler.GetReportDefinitionFile());
+            var definition = Path.Combine(path, handler.ReportDefinitionFile);
             if (!File.Exists(definition))
                 throw new ChalkableException(string.Format(ChlkResources.ERR_REPORT_DEFINITION_FILE_NOT_FOUND, definition));
 

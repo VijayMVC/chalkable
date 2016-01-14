@@ -49,9 +49,22 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 if (currentClass != null && currentClass.RoomRef.HasValue)
                     currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
             }
-            var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(schoolPersonId);
+            
             var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList);
-            res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
+            
+
+            if (Context.Role == CoreRoles.STUDENT_ROLE)
+            {
+                res.IsAllowedInetAccess = false;
+                res.SpecialInstructions = null;
+                res.HasMedicalAlert = false;
+                res.SpEdStatus = null;
+            }
+            else
+            {
+                var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(schoolPersonId);
+                res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
+            }
 
             return Json(res);
         }

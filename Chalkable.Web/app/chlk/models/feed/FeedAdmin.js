@@ -26,7 +26,7 @@ NAMESPACE('chlk.models.feed', function () {
                 this.endDate = SJX.fromDeserializable(raw.settingsforfeed ? raw.settingsforfeed.todate : raw.todate, chlk.models.common.ChlkDate);
                 this.annType = SJX.fromValue(raw.settingsforfeed ? raw.settingsforfeed.announcementtype : raw.announcementtype, chlk.models.announcement.AnnouncementTypeEnum);
                 this.gradingPeriodId = SJX.fromValue(raw.settingsforfeed ? raw.settingsforfeed.gradingperiodid : raw.gradingperiodid, chlk.models.id.GradingPeriodId);
-                this.latest = SJX.fromValue(raw.settingsforfeed ? raw.settingsforfeed.sorttype : raw.sorttype, Boolean);
+                this.sortType = SJX.fromValue(raw.settingsforfeed ? raw.settingsforfeed.sorttype : raw.sorttype, chlk.models.announcement.FeedSortTypeEnum);
                 this.submitType = SJX.fromValue(raw.submitType, String);
                 this.markDoneOption = SJX.fromValue(raw.markDoneOption, Number);
                 this.gradeLevels = SJX.fromValue(raw.gradeLevels, String);
@@ -67,7 +67,7 @@ NAMESPACE('chlk.models.feed', function () {
 
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
-            Boolean, 'latest',
+            chlk.models.announcement.FeedSortTypeEnum, 'sortType',
 
             String, 'submitType',
 

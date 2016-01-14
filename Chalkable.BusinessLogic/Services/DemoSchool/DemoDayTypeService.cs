@@ -58,6 +58,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return DayTypeStorage.GetAll().Where(x => x.SchoolYearRef == Context.SchoolYearId).ToList();
         }
 
+        public IList<DayType> GetDayTypes(IList<int> ids)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public bool Exists(int schoolYearId)
         {
             return DayTypeStorage.Exists(schoolYearId);

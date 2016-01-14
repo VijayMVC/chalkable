@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Chalkable.Data.School.DataAccess;
 
 namespace Chalkable.Data.School.Model
 {
@@ -17,5 +18,6 @@ namespace Chalkable.Data.School.Model
         public int UnshownNotificationsCount { get; set; }
         public IDictionary<int, IList<AlphaGrade>> AlphaGradesForClasses { get; set; }
         public IDictionary<int, IList<AlphaGrade>> AlphaGradesForClassStandards { get; set; }
+        public IList<AlphaGradeDataAccess.SchoolAlphaGrade> AlphaGradesForSchoolStandards { get; set; } 
     }
 }

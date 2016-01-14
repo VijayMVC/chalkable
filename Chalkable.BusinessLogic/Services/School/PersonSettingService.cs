@@ -41,10 +41,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ArgumentException("Not recognized settings");
             
             var ps = GetSettingsForPerson(personId, schoolYearId, keys);
-            var toSet =
-                ps.Select(
-                    x =>
-                        new PersonSetting()
+            var toSet = ps.Select( x => new PersonSetting
                         {
                             PersonRef = personId,
                             SchoolYearRef = schoolYearId,

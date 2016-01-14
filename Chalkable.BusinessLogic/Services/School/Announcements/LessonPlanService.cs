@@ -388,17 +388,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateLessonPlanDataAccess(u).ExistsInGallery(title, exceludedLessonPlanId));
         }
 
-        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId)
+        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId)
         {
-            DoUpdate(
-                u =>
-                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementTypeEnum.LessonPlan,schoolYearId,
-                        personId, roleId, true, tillDateToUpdate, classId));
+            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).CompleteAnnouncements(schoolYearId, personId, roleId,
+                        classId, (int) AnnouncementTypeEnum.LessonPlan, startDate, endDate));
         }
 
         public void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)
         {
-            BaseSecurity.EnsureStudyCenterEnabled(Context); // only study center custumers can use lesson plan gallery 
+            BaseSecurity.EnsureStudyCenterEnabled(Context); // only study center customers can use lesson plan gallery 
 
             var newLessonPlan = GetLessonPlanById(newLessonPlanId);
             DoUpdate(u =>

@@ -24,7 +24,7 @@ namespace Chalkable.BusinessLogic.Model
 
         public static ClassStatsInfo Create(SectionSummary section, Class clazz)
         {
-            return new ClassStatsInfo()
+            return new ClassStatsInfo
             {
                 Id = section.SectionId,
                 Name = section.SectionName,
@@ -33,8 +33,8 @@ namespace Chalkable.BusinessLogic.Model
                 Average = section.Average,
                 DisciplinesCount = section.DisciplineCount,
                 AttendancesCount = section.AbsenceCount,
-                DepartmentRef = clazz.ChalkableDepartmentRef,
-                ClassNumber = clazz.ClassNumber
+                DepartmentRef = clazz?.ChalkableDepartmentRef,
+                ClassNumber = clazz?.ClassNumber
             };
         }
 

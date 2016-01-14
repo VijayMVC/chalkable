@@ -12,6 +12,8 @@ namespace Chalkable.Web.Models.ApplicationsViewData
 
     public class ApplicationForAttachViewData : BaseApplicationViewData
     {
+
+        public bool IsInstalled { get; set; }
         public int NotInstalledStudentsCount { get; set; }
         protected ApplicationForAttachViewData(Application application) : base(application)
         {
@@ -24,7 +26,16 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public static IList<ApplicationForAttachViewData> Create(IList<Application> applications, IDictionary<Guid, int> notInstalledStCountPerApp)
         {
             return applications.Select(app => Create(app, notInstalledStCountPerApp[app.Id])).ToList();
-        } 
+        }
+        public static IList<ApplicationForAttachViewData> Create(IList<Application> applications, IDictionary<Guid, int> notInstalledStCountPerApp, List<Guid> installedApps)
+        {
+            var res = applications.Select(app => Create(app, notInstalledStCountPerApp[app.Id])).ToList();
+            foreach (var app in res)
+                app.IsInstalled = installedApps?.Exists(x => x == app.Id) ?? false;
+                
+
+            return res;
+        }
     }
 
     public class InstalledApplicationViewData : BaseApplicationViewData

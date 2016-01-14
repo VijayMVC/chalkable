@@ -18,6 +18,12 @@ NAMESPACE('chlk.models.announcement', function () {
 
     var SJX = ria.serialize.SJX;
 
+    /** @class chlk.models.announcement.FeedSortTypeEnum*/
+    ENUM('FeedSortTypeEnum', {
+        DUE_DATE_ASCENDING: 0,
+        DUE_DATE_DESCENDING: 1
+    });
+
     /** @class chlk.models.announcement.FeedAnnouncementViewData*/
     CLASS(
         UNSAFE, 'FeedAnnouncementViewData',
