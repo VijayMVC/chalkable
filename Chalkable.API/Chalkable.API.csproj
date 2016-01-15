@@ -49,8 +49,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsAzure.Acs.Oauth2.Client, Version=1.1.88.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAzure.Acs.Oauth2.Client.1.1.88\lib\net40\WindowsAzure.Acs.Oauth2.Client.dll</HintPath>
+    <Reference Include="WindowsAzure.Acs.Oauth2.Client, Version=1.1.91.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Acs.Oauth2.Client.1.1.91\lib\net40\WindowsAzure.Acs.Oauth2.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
