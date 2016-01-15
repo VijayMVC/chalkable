@@ -19,8 +19,9 @@ namespace Chalkable.Web.Controllers
             Trace.Assert(Context.SchoolYearId.HasValue);
 
             var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
-            var schoolsCount = SchoolLocator.SchoolService.GetSchoolsCount();
-            var studentsCount = SchoolLocator.StudentService.GetEnrolledStudentsCount();
+            var schools = SchoolLocator.SchoolService.GetShortSchoolSummariesInfo(0, int.MaxValue, null);
+            var schoolsCount = schools.Count;
+            var studentsCount = schools.Sum(x => x.SchoolDetails.StudentsCount);
             return Json(ShortDistrictSummaryViewData.Create(district, studentsCount, schoolsCount));
         }
 

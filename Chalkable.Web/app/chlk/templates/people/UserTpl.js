@@ -69,7 +69,7 @@ NAMESPACE('chlk.templates.people', function () {
             String, 'salutation',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.SchoolId, 'schoolId',
+            Number, 'schoolId',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.people.Phone, 'primaryPhone',
