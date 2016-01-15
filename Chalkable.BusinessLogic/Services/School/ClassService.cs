@@ -44,7 +44,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<Class> GetAll();
         IList<ClassDetails> GetAllSchoolsActiveClasses();
 
-        PaginatedList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId);
+        IList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId);
     }
 
     public class ClassService : SisConnectedService, IClassService
@@ -211,34 +211,25 @@ namespace Chalkable.BusinessLogic.Services.School
             return classes;
         }
 
-        public PaginatedList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId)
+        public IList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId)
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
             IList<SectionSummary> iNowRes;
             try
             {
-                iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value, count.Value, filter);
+                iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId,
+                    Context.NowSchoolYearTime, start.Value + 1, start.Value + count.Value, filter);
             }
-            catch (ChalkableSisNotSupportVersionException ex)
+            catch (ChalkableSisNotSupportVersionException)
             {
-                return DoRead(u => new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start.Value, count.Value, filter,
-                                teacherId).Transform(ClassStatsInfo.Create));
+                var chalkableRes =
+                    DoRead(u => new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start.Value, count.Value, filter, teacherId));
+                return chalkableRes.Select(ClassStatsInfo.Create).ToList();
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
-            using (var u = Read())
-            {
-                var da = new ClassDataAccess(u);
-                
-                var classes = da.GetClassesByIds(iNowRes.Select(x => x.SectionId).ToList());
-                var classesCount = da.GetClassesBySchoolYear(schoolYearId, 0, 1, filter, teacherId).TotalCount;
 
-                var res = iNowRes.Select(x => ClassStatsInfo.Create(x, classes.FirstOrDefault(y => y.Id == x.SectionId))).ToList();
-                return new PaginatedList<ClassStatsInfo>(res, start.Value / count.Value, count.Value, classesCount);
-            }
+            var classes = DoRead(u => new ClassDataAccess(u).GetClassesByIds(iNowRes.Select(x => x.SectionId).ToList()));
+            return iNowRes.Select(x => ClassStatsInfo.Create(x, classes.FirstOrDefault(y => y.Id == x.SectionId))).ToList();
         }
     }
 }

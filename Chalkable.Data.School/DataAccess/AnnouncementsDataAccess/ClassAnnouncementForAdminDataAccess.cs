@@ -27,13 +27,13 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             conds.BuildSqlWhere(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME);
             FilterClassAnnouncementByCaller(dbQuery, personId);
             Orm.OrderBy(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, Announcement.CREATED_FIELD, Orm.OrderType.Desc);
-            return ReadOneOrNull<ClassAnnouncement>(dbQuery); ;
+            return ReadOneOrNull<ClassAnnouncement>(dbQuery); 
         }
 
         protected override DbQuery SeletClassAnnouncements(string tableName, int callerId)
         {
             var dbQuery = new DbQuery();
-            var selectSet = $"{tableName}.*, cast(1 as bit) as IsOwner";
+            var selectSet = $"{tableName}.*, cast(0 as bit) as IsOwner";
             dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, selectSet, tableName);
             return dbQuery;
         }

@@ -266,7 +266,9 @@
     <Compile Include="Services\Master\ServiceLocatorMaster.cs" />
     <Compile Include="Services\Master\BackgroundTaskService.cs" />
     <Compile Include="Services\Master\UserService.cs" />
+    <Compile Include="Services\Reporting\BaseFeedReportHandler.cs" />
     <Compile Include="Services\Reporting\DefaultRenderer.cs" />
+    <Compile Include="Services\Reporting\FeedDetailsReportHandler.cs" />
     <Compile Include="Services\Reporting\IReportRenderer.cs" />
     <Compile Include="Services\Reporting\ReportHandler.cs" />
     <Compile Include="Services\Reporting\ShortFeedReportHandler.cs" />

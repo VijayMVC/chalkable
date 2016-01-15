@@ -238,6 +238,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         public int? GalleryCategoryId { get; set; }
 
+        public int? Sort { get; set; }
+
         public AnnouncementsQuery()
         {
             Start = 0;

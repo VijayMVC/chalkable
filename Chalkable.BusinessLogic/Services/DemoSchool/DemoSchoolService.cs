@@ -1,12 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using ISchoolService = Chalkable.BusinessLogic.Services.School.ISchoolService;
 
@@ -155,14 +154,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return startupData;
         }
 
-        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter)
+        public IList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public int GetSchoolsCount(string filter = null)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

@@ -40,7 +40,7 @@ namespace Chalkable.Data.School.DataAccess
 
         public void AddPersonSettings(int personId, int schoolYearId, IDictionary<string, object> ps)
         {
-            Insert(ps.Select(pair => new PersonSetting()
+            Insert(ps.Select(pair => new PersonSetting
             {
                 PersonRef = personId,
                 SchoolYearRef = schoolYearId,

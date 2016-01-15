@@ -172,35 +172,40 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
 
-            DateTime? tillDateToUpdate;
+            DateTime toDate;
+            DateTime fromDate;
+            GetDateRangeForMarking(out fromDate, out toDate);
             switch (option)
             {
                 case MarkDoneOptions.Till30Days:
-                    tillDateToUpdate = Context.NowSchoolTime.AddMonths(-1);
+                    if(toDate > Context.NowSchoolTime.AddMonths(-1))
+                        toDate = Context.NowSchoolTime.AddMonths(-1);
                     break;
                 case MarkDoneOptions.TillToday:
-                    tillDateToUpdate = Context.NowSchoolTime.AddDays(-1);
+                    if (toDate > Context.NowSchoolTime.AddDays(-1))
+                        toDate = Context.NowSchoolTime.AddDays(-1);
                     break;
-                default:
-                    tillDateToUpdate = GetEndDateFromFeedSettings();
-                    break;
-
             }
-            SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, tillDateToUpdate, classId);
+            if(fromDate <= toDate)
+                SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, fromDate, toDate, classId);
         }
 
-        private DateTime? GetEndDateFromFeedSettings()
+        private void GetDateRangeForMarking(out DateTime startDate, out DateTime endDate)
         {
-            var feedEndDateSetting = ServiceLocator.AnnouncementFetchService.GetSettingsForFeed().ToDate;
-                //ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value,
-                //new List<string> { PersonSetting.FEED_END_DATE });
-            if (feedEndDateSetting.HasValue)
-                return feedEndDateSetting;
+            var feedSettings = ServiceLocator.AnnouncementFetchService.GetSettingsForFeed();
 
-           return Context.SchoolYearEndDate;
+            if (feedSettings.FromDate.HasValue)
+                startDate = feedSettings.FromDate.Value;
+            else
+                startDate = Context.SchoolYearStartDate ?? DateTime.MinValue;
+
+            if (feedSettings.ToDate.HasValue)
+                endDate = feedSettings.ToDate.Value;
+            else
+                endDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
         }
 
-        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId);
+        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId);
 
 
         public Announcement GetAnnouncementById(int id)

@@ -311,5 +311,10 @@
     <Build Include="Stored Procedures\spGetAlphaGradesForClasses.sql" />
     <Build Include="Stored Procedures\spGetListOfClassAnnouncementDetails.sql" />
     <Build Include="Stored Procedures\spGetListOfLessonPlansDetails.sql" />
+    <Build Include="Stored Procedures\spCompleteAnnouncements.sql" />
+    <Build Include="Stored Procedures\spGetAlphaGradesForSchoolStandards.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
   </ItemGroup>
 </Project>

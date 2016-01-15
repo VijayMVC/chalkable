@@ -14,6 +14,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void Edit(IList<DayType> dayTypes);
         void Delete(IList<DayType> dayTypes);
         IList<DayType> GetDayTypes();
+        IList<DayType> GetDayTypes(IList<int> ids);
     }
 
     public class DayTypeService : SchoolServiceBase, IDayTypeService
@@ -45,6 +46,11 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.SchoolYearId.HasValue);
             var conds = new AndQueryCondition {{DayType.SCHOOL_YEAR_REF, Context.SchoolYearId}};
             return DoRead(u => new DataAccessBase<DayType>(u).GetAll(conds));
+        }
+
+        public IList<DayType> GetDayTypes(IList<int> ids)
+        {
+            return DoRead(u => new DataAccessBase<DayType, int>(u).GetByIds(ids));
         }
     }
 }

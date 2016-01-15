@@ -46,5 +46,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             return PeriodStorage.GetPeriods(schoolYearId);
         }
+
+        public IList<Period> GetPeriods(IList<int> ids)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

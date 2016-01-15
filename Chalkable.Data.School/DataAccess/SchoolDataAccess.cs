@@ -59,6 +59,9 @@ namespace Chalkable.Data.School.DataAccess
                 res.AlphaGradesForClasses = AlphaGradeDataAccess.ReadAlphaGradesForClasses(reader, allClasses.Select(x=>x.Id).ToList());
                 reader.NextResult();
                 res.AlphaGradesForClassStandards = AlphaGradeDataAccess.ReadAlphaGradesForClasses(reader, allClasses.Select(x=>x.Id).ToList());
+                reader.NextResult();
+                res.AlphaGradesForSchoolStandards = reader.ReadList<AlphaGradeDataAccess.SchoolAlphaGrade>();
+                
             }
             res.GradingPeriod = gps.FirstOrDefault(x => x.StartDate <= now && x.EndDate >= now);
             if (res.GradingPeriod == null)

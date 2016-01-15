@@ -173,7 +173,7 @@ namespace Chalkable.Data.School.DataAccess
 
         private const string SP_GET_CLASSES_BY_SCHOOL_YEAR = "spGetClassesBySchoolYear";
 
-        public PaginatedList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int start, int count, string filter, int? teacherId)
+        public IList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int start, int count, string filter, int? teacherId)
         {
             var param = new Dictionary<string, object>()
             {
@@ -184,7 +184,10 @@ namespace Chalkable.Data.School.DataAccess
                 ["teacherId"] = teacherId
             };
 
-            return ExecuteStoredProcedurePaginated(SP_GET_CLASSES_BY_SCHOOL_YEAR, param, x=>ReadClasses(x), start, count);
+            using (var reader = ExecuteStoredProcedureReader(SP_GET_CLASSES_BY_SCHOOL_YEAR, param))
+            {
+                return ReadClasses(reader);
+            }
         }
 
         private const string SP_GET_CLASSES_BY_IDS = "spGetClassesByIds";

@@ -54,6 +54,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             throw new System.NotImplementedException();
         }
 
+        public IList<AlphaGrade> GetStandardsAlphaGradesForSchool(int schoolId)
+        {
+            throw new System.NotImplementedException();
+        }
+
         public AlphaGrade GetAlphaGradeById(int id)
         {
             return AlphaGradeStorage.GetById(id);

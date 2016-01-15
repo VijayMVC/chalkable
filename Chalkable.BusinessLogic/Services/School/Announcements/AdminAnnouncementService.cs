@@ -281,11 +281,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value));
         }
 
-        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId)
+        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId)
         {
-            DoUpdate( u =>
-                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementTypeEnum.Admin,schoolYearId,
-                        personId, roleId, true, tillDateToUpdate, null));
+            DoUpdate(u => new AnnouncementRecipientDataDataAccess(u).CompleteAnnouncements(schoolYearId, personId, roleId, classId,
+                    (int) AnnouncementTypeEnum.Admin, startDate, endDate));
         }
     }
 }

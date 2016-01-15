@@ -28,7 +28,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteSchoolOptions(IList<SchoolOption> schoolOptions);
         SchoolOption GetSchoolOption();
         StartupData GetStartupData();
-        PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter);
+        IList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter);
         int GetSchoolsCount(string filter = null);
     }
 
@@ -138,24 +138,32 @@ namespace Chalkable.BusinessLogic.Services.School
             var res = DoRead(uow =>
                         new SchoolDataAccess(uow).GetStartupData(Context.SchoolYearId.Value, Context.PersonId.Value,
                             Context.RoleId, Context.NowSchoolYearTime.Date));
+
+           
+
             //TODO: add this to storage procedure
             res.GradingPeriods = ServiceLocator.GradingPeriodService.GetGradingPeriodsDetails(Context.SchoolYearId.Value);
             return res;
         }
 
-        public PaginatedList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter)
+        public IList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter)
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
             try
             {
-                var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSchoolsSummaries(Context.NowSchoolTime, filter);
-                var allSchoolCount = GetSchoolsCount(filter);
-                return SchoolSummaryInfo.Create(iNowRes, start.Value, count.Value, allSchoolCount);
+                var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSchoolsSummaries(Context.NowSchoolTime);
+                if (!string.IsNullOrWhiteSpace(filter))
+                {
+                    filter = filter.ToLower();
+                    iNowRes = iNowRes.Where(x => x.SchoolName.ToLower().Contains(filter)).ToList();
+                }
+                return iNowRes.Select(SchoolSummaryInfo.Create).Skip(start.Value).Take(count.Value).ToList();
             }
             catch (ChalkableSisNotSupportVersionException ex)
             {
-                return SchoolSummaryInfo.Create(DoRead(u => new SchoolDataAccess(u).GetShortSchoolSummaries(start.Value, count.Value, filter)));
+                var chalkableRes = DoRead(u => new SchoolDataAccess(u).GetShortSchoolSummaries(start.Value, count.Value, filter));
+                return chalkableRes.Select(SchoolSummaryInfo.Create).ToList();
             }
             catch (Exception e)
             {               

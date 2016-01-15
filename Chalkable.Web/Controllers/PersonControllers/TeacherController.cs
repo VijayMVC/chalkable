@@ -58,7 +58,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         {
             var teachers = SchoolLocator.StaffService.GetTeachersStats(schoolYearId, filter, start, count);
 
-            return Json(teachers.Transform(TeacherStatsViewData.Create));
+            return Json(teachers.Select(TeacherStatsViewData.Create));
         }
     }
 }

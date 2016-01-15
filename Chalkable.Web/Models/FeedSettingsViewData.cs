@@ -7,7 +7,7 @@ namespace Chalkable.Web.Models
     public class FeedSettingsViewData
     {
         public int? AnnouncementType { get; set; }
-        public bool? SortType { get; set; }
+        public int? SortType { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public int? GradingPeriodId { get; set; }

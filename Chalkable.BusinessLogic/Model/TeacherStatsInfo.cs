@@ -36,8 +36,6 @@ namespace Chalkable.BusinessLogic.Model
                 DisciplinesCount = teacher.DisciplineCount,
 
                 StudentsCount = teacher.EnrollmentCount,
-
-                //TODO: FIX THIS AFTER iNow API UDPATED
                 Gender = teacher.TeacherGender
             };
 
@@ -61,19 +59,14 @@ namespace Chalkable.BusinessLogic.Model
             };
         }
 
-        public static PaginatedList<TeacherStatsInfo> Create(IList<TeacherSummary> teachers, int start, int count, int allCount)
-        {
-            return new PaginatedList<TeacherStatsInfo>(teachers.Select(Create), start/count, count, allCount);
-        }
-
-        public static PaginatedList<TeacherStatsInfo> Create(PaginatedList<Staff> teachers, IList<ClassDetails> classes)
+        public static IList<TeacherStatsInfo> Create(PaginatedList<Staff> teachers, IList<ClassDetails> classes)
         {
             var res = new List<TeacherStatsInfo>();
             foreach (var teacher in teachers)
             {
                 res.Add(Create(teacher, classes.Where(x => x.ClassTeachers.Any(y => y.PersonRef == teacher.Id)).ToList()));
             }
-            return new PaginatedList<TeacherStatsInfo>(res, teachers.PageIndex, teachers.PageSize, teachers.TotalCount);
+            return res;
         }
     }
 }

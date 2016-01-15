@@ -14,7 +14,7 @@ namespace Chalkable.StiConnector.Connectors
         }
 
         
-        public IList<SectionSummary> GetSectionsSummaries(int acadSessionId, DateTime tillDate, int start, int count, string filter)
+        public IList<SectionSummary> GetSectionsSummaries(int acadSessionId, DateTime tillDate, int start, int end, string filter)
         {
 
             EnsureApiVersion("7.1.6.19573");
@@ -22,7 +22,7 @@ namespace Chalkable.StiConnector.Connectors
             var param = new NameValueCollection()
             {
                 ["start"] = start.ToString(),
-                ["end"] = (start+count).ToString()
+                ["end"] = end.ToString()
             };
 
             if(!string.IsNullOrWhiteSpace(filter))
@@ -34,27 +34,22 @@ namespace Chalkable.StiConnector.Connectors
         }
 
 
-        public IList<SchoolSummary> GetSchoolsSummaries(DateTime tillDate, string filter)
+        public IList<SchoolSummary> GetSchoolsSummaries(DateTime tillDate)
         {
             EnsureApiVersion("7.1.6.19573");
-
-            var param = new NameValueCollection();
-
-            if (!string.IsNullOrWhiteSpace(filter))
-                param.Add("filter", filter);
-
-            return Call<IList<SchoolSummary>>($"{BaseUrl}chalkable/classes/dashboard/schools/{tillDate.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture)}", param);
+            
+            return Call<IList<SchoolSummary>>($"{BaseUrl}chalkable/classes/dashboard/schools/{tillDate.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture)}");
         }
 
 
-        public IList<TeacherSummary> GetTeachersSummaries(int acadSessionId, DateTime tillDate, int start, int count, string filter)
+        public IList<TeacherSummary> GetTeachersSummaries(int acadSessionId, DateTime tillDate, int start, int end, string filter)
         {
             EnsureApiVersion("7.1.6.19573");
 
             var param = new NameValueCollection()
             {
                 ["start"] = start.ToString(),
-                ["end"] = (start + count).ToString(),
+                ["end"] = end.ToString(),
             };
 
             if (!string.IsNullOrWhiteSpace(filter))

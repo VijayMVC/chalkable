@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Chalkable.Common;
@@ -44,7 +45,10 @@ namespace Chalkable.Web.Controllers
             if (clazz?.RoomRef != null)
                 classRoom = SchoolLocator.RoomService.GetRoomById(clazz.RoomRef.Value);
 
-            return Json(ClassSummaryViewData.Create(clazz, classRoom));
+            var classPeriods = SchoolLocator.PeriodService.GetPeriods(clazz?.ClassPeriods.Select(x => x.PeriodRef).ToList());
+            var classDayTypes = SchoolLocator.DayTypeService.GetDayTypes(clazz?.ClassPeriods.Select(x => x.DayTypeRef).ToList());
+
+            return Json(ClassSummaryViewData.Create(clazz, classRoom, classPeriods, classDayTypes));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
@@ -55,6 +59,8 @@ namespace Chalkable.Web.Controllers
                 ? SchoolLocator.AlphaGradeService.GetAlphaGradesByClassId(classId)
                 : SchoolLocator.AlphaGradeService.GetAlphaGrades();
             var alphaGradesForStandards = SchoolLocator.AlphaGradeService.GetStandardsAlphaGradesByClassId(classId);
+            if (alphaGradesForStandards.Count == 0 && Context.SchoolLocalId.HasValue)
+                alphaGradesForStandards = SchoolLocator.AlphaGradeService.GetStandardsAlphaGradesForSchool(Context.SchoolLocalId.Value);
             return Json(ClassAlphaGradesViewData.Create(classDetails, alphaGrades, alphaGradesForStandards));
         }
 
@@ -124,7 +130,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassesStats(int schoolYearId, string filter, int? start, int? count, int? teacherId)
         {
             var classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYearId, start, count, filter, teacherId);
-            return Json(ClassStatsViewData.Create(classes));
+            return Json(classes.Select(ClassStatsViewData.Create));
         }   
     }
 }
