@@ -53,11 +53,14 @@ NAMESPACE('chlk.controllers', function () {
                         var description, subjectId;
                         if(standardsTable && standardsTable.getStandardsColumns() && standardsTable.getStandardsColumns().length > 0){
                             var columns = standardsTable.getStandardsColumns();
-                            var subjectId = columns[0][0].getSubjectId();
-                            var lastSelected = columns[columns.length - 1].filter(function (s){return s.isSelected();});
-                            if(lastSelected.length > 0){
-                                description = lastSelected[0].getDescription();
-                                standardsTable.addColumn([]);
+                            var subjectId = columns[0][0].getSubjectId(), index = columns.length - 1;
+                            while(index >= 0 && !description){
+                                var lastSelected = columns[index].filter(function (s){return s.isSelected();});
+                                if(lastSelected.length > 0){
+                                    description = lastSelected[0].getDescription();
+                                    standardsTable.addColumn([]);
+                                }
+                                index--;
                             }
                         }
                         return new chlk.models.standard.StandardsTableViewData(
