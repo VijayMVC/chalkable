@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
@@ -16,7 +14,6 @@ using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
-using Microsoft.Data.OData.Query.SemanticAst;
 using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
@@ -613,11 +610,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var end = count + start;
             start = start + 1;
             if (Context.Role == CoreRoles.STUDENT_ROLE)
-                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, Context.PersonId.Value, start, end, toDate, fromDate, complete, graded, classId);
+                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, Context.PersonId.Value, start, end, toDate, fromDate, complete, graded, classId, sort);
             if (classId.HasValue)
                 return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, toDate, fromDate, complete, sort);
             if (Context.Role == CoreRoles.TEACHER_ROLE)
-                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, Context.PersonId.Value, start, end, toDate, fromDate, complete);
+                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, Context.PersonId.Value, start, end, toDate, fromDate, complete, sort);
             return new List<Activity>();
         }
 

@@ -84,7 +84,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 }
                }
 
-            anns = SortAnnouncements(anns, (ActivitySearchSortOption?) settings.AnnouncementType).ToList();
+            anns = SortAnnouncements(anns, (ActivitySearchSortOption?) settings.SortType).ToList();
             return anns;
         }
 
