@@ -27,7 +27,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             conds.BuildSqlWhere(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME);
             FilterClassAnnouncementByCaller(dbQuery, personId);
             Orm.OrderBy(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, Announcement.CREATED_FIELD, Orm.OrderType.Desc);
-            return ReadOneOrNull<ClassAnnouncement>(dbQuery); ;
+            return ReadOneOrNull<ClassAnnouncement>(dbQuery); 
         }
 
         protected override DbQuery SeletClassAnnouncements(string tableName, int callerId)

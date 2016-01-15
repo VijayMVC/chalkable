@@ -56,14 +56,16 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         protected ClassAnnouncementDataAccess CreateClassAnnouncementDataAccess(UnitOfWork unitOfWork)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
-            if (Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN))
-                return new ClassAnnouncementForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value);
-            if(Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM))
-                return new ClassAnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
+            if (BaseSecurity.IsDistrictOrTeacher(Context))
+            {
+                if (Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN))
+                    return new ClassAnnouncementForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value);
+                if (Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM))
+                    return new ClassAnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
+            }
             if (Context.Role == CoreRoles.STUDENT_ROLE)
                 return new ClassAnnouncementForStudentDataAccess(unitOfWork, Context.SchoolYearId.Value);
                 
-
             throw new NotImplementedException();
         }
 
@@ -73,6 +75,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
             Trace.Assert(Context.PersonId.HasValue);
+
             if (!AnnouncementSecurity.CanCreateAnnouncement(Context))
                 throw new ChalkableSecurityException();
 
