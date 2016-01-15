@@ -1,0 +1,23 @@
+-var schools = self.getItems()
+-var isNotEmptyStatistic = self.isNotEmptyStatistic()
+
+input(type="hidden", name="start", value=0)
+.chlk-calendar
+    .grid-top-content
+        if schools.length
+            +ListView(schools)(
+                infiniteScroll = true,
+                pageSize = 10
+            )
+                Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
+                .grid-content
+                    .grid-header.grid-row
+                        .cell.name=Msg.Schools
+                        .cell.students=Msg.Students
+                        if isNotEmptyStatistic
+                            .cell.attendance=Msg.Attendance
+                            .cell.discipline=Msg.Discipline
+                            .cell.grades=Msg.Grades
+                    +RenderWith(self.getModel(), chlk.templates.district.BaseStatisticItemsTpl)
+        else
+            .no-items-text There are no schools
