@@ -33,7 +33,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         protected override DbQuery SeletClassAnnouncements(string tableName, int callerId)
         {
             var dbQuery = new DbQuery();
-            var selectSet = $"{tableName}.*, cast(1 as bit) as IsOwner";
+            var selectSet = $"{tableName}.*, cast(0 as bit) as IsOwner";
             dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, selectSet, tableName);
             return dbQuery;
         }
