@@ -35,7 +35,7 @@ namespace Chalkable.Web.Controllers
 
             var studentCountPerApp = SchoolLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
             var installedApp = GetApplications(MasterLocator, studentCountPerApp.Select(x => x.Key).Distinct().ToList(), true, null);
-            var res = ApplicationForAttachViewData.Create(installedApp, studentCountPerApp);
+            var res = ApplicationForAttachViewData.Create(installedApp, studentCountPerApp, true);
             var totalCount = res.Count;
             res = res.Skip(st).Take(cnt).ToList();
             return Json(new PaginatedList<ApplicationForAttachViewData>(res, st / cnt, cnt, totalCount));

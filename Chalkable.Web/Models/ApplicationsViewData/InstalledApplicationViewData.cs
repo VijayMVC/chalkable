@@ -19,21 +19,17 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         {
         }
         
-        public static ApplicationForAttachViewData Create(Application application, int notInstalledStudentsCount)
+        public static ApplicationForAttachViewData Create(Application application, int notInstalledStudentsCount, bool isInstalled)
         {
-            return new ApplicationForAttachViewData(application) {NotInstalledStudentsCount = notInstalledStudentsCount};
+            return new ApplicationForAttachViewData(application) {NotInstalledStudentsCount = notInstalledStudentsCount, IsInstalled = isInstalled};
         }
-        public static IList<ApplicationForAttachViewData> Create(IList<Application> applications, IDictionary<Guid, int> notInstalledStCountPerApp)
+        public static IList<ApplicationForAttachViewData> Create(IList<Application> applications, IDictionary<Guid, int> notInstalledStCountPerApp, bool isInstalled)
         {
-            return applications.Select(app => Create(app, notInstalledStCountPerApp[app.Id])).ToList();
+            return applications.Select(app => Create(app, notInstalledStCountPerApp[app.Id], isInstalled)).ToList();
         }
         public static IList<ApplicationForAttachViewData> Create(IList<Application> applications, IDictionary<Guid, int> notInstalledStCountPerApp, List<Guid> installedApps)
         {
-            var res = applications.Select(app => Create(app, notInstalledStCountPerApp[app.Id])).ToList();
-            foreach (var app in res)
-                app.IsInstalled = installedApps?.Exists(x => x == app.Id) ?? false;
-                
-
+            var res = applications.Select(app => Create(app, notInstalledStCountPerApp[app.Id], installedApps?.Exists(x => x == app.Id) ?? false)).ToList();
             return res;
         }
     }
