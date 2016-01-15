@@ -67,11 +67,22 @@ NAMESPACE('chlk.templates.attendance',function(){
 
                     tooltip: {
                         positioner: function (labelWidth, labelHeight, point) {
-                            return { x: point.plotX - 3, y: point.plotY - 47 };
+                            return { x: point.plotX - 3, y: point.plotY - 20 - this.label.div.children[0].clientHeight };
                         },
                         formatter: function () {
-                            var index = this.series.index;
-                            return this.y + (index == 0 ? ' Absent' : (index == 1 ? ' Late' : ' Present'));
+                            var pointIndex = this.point.index,
+                                res = [];
+
+                            if(absences[pointIndex] === this.y)
+                                res.push(this.y + ' Absent');
+
+                            if(lates[pointIndex] === this.y)
+                                res.push(this.y + ' Late');
+
+                            if(presents[pointIndex] === this.y)
+                                res.push(this.y + ' Present');
+
+                            return res.join('\n');
                         }
                     },
 
