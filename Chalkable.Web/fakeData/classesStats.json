@@ -1,0 +1,109 @@
+{
+    "data":[{
+        "id": 1,
+        "name": "Ag Bus",
+      "departmentref": null,
+      "primaryteacherref": "Ms. Marianne Golden",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 1,
+        "name": "Ag Bus",
+      "departmentref": null,
+      "primaryteacherref": "Ms. Marianne Golden",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 1,
+        "name": "Ag Bus",
+      "departmentref": null,
+      "primaryteacherref": "Ms. Marianne Golden",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 1,
+        "name": "Ag Bus",
+      "departmentref": null,
+      "primaryteacherref": "Ms. Marianne Golden",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 1,
+        "name": "Ag Bus",
+      "departmentref": null,
+      "primaryteacherref": "Ms. Marianne Golden",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 1,
+        "name": "Ag Bus",
+      "departmentref": null,
+      "primaryteacherref": "Ms. Marianne Golden",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 1,
+        "name": "Ag Bus",
+      "departmentref": null,
+      "primaryteacherref": "Ms. Marianne Golden",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 1,
+        "name": "Ag Bus",
+      "departmentref": null,
+      "primaryteacherref": "Ms. Marianne Golden",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 1,
+        "name": "Ag Bus",
+      "departmentref": null,
+      "primaryteacherref": "Ms. Marianne Golden",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 1,
+        "name": "Ag Bus",
+        "departmentref": null,
+        "primaryteacherref": "Ms. Marianne Golden",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    }],
+    "hasnextpage": true,
+    "haspreviouspage": false,
+    "pageindex": 0,
+    "pagesize": 10,
+    "success": true,
+    "totalcount": 470,
+    "totalpages": 47
+}

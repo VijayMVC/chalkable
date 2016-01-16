@@ -1,0 +1,26 @@
+-var teachers = self.getItems()
+-var isNotEmptyStatistic = self.isNotEmptyStatistic()
+-var schoolId = teachers[0] && teachers[0].getSchoolId()
+-var schoolName = teachers[0] && teachers[0].getSchoolName()
+
+input(type="hidden", name="start", value=0)
+.chlk-calendar
+    .grid-top-content
+        if teachers.length
+            +ListView(teachers)(
+                infiniteScroll = true,
+                pageSize = 10
+            )
+                Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
+                .grid-content
+                    .grid-header.grid-row
+                        .cell.name=Msg.Teacher
+                        .cell.classes=Msg.Classes
+                        .cell.students=Msg.Students
+                        if isNotEmptyStatistic
+                            .cell.attendance=Msg.Attendance
+                            .cell.discipline=Msg.Discipline
+                            .cell.grades=Msg.Grade_Avg
+                    +RenderWith(self.getModel(), chlk.templates.school.SchoolTeachersStatisticItemsTpl)
+        else
+            .no-items-text There are no teachers
