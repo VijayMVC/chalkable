@@ -88,7 +88,7 @@ namespace Chalkable.Data.Common
             return reader.GetGuid(reader.GetOrdinal(field));
         }
 
-        public static object ReadGuidNull(DbDataReader reader, string field)
+        public static Guid? ReadGuidNull(DbDataReader reader, string field)
         {
             if (reader.IsDBNull(reader.GetOrdinal(field)))
                 return null;
