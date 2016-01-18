@@ -12,6 +12,22 @@ NAMESPACE('chlk.controls', function () {
         return lastClickedNode;
     };
 
+    function getParsedApiVersion_(sisApiVersion){
+        return sisApiVersion.split('.').map(function(item){return parseInt(item, 10)});
+    }
+
+    function isApiSupported_(sisApiVersion, linkApiVersion){
+        var supported = true;
+        var linkApiVersionArr = getParsedApiVersion_(linkApiVersion);
+        var sisApiVersionArr = getParsedApiVersion_(sisApiVersion);
+        sisApiVersionArr.forEach(function(item, i){
+            if(supported && linkApiVersionArr[i] > item)
+                supported = false;
+        });
+
+        return supported;
+    }
+
     function s_ (x) {
         if (x === undefined || x === null)
             return null;
@@ -49,6 +65,25 @@ NAMESPACE('chlk.controls', function () {
             [[Array]],
             String, function getLink(values) {
                 return encodeURIComponent(values.map(s).join(','));
+            },
+
+            [[Object]],
+            Object, function prepareAttributes(attrs) {
+                var linkApiVersion = attrs['data-sis-api-version'];
+
+                if(linkApiVersion){
+                    var sisApiVersion = this.getContext().getSession().get(ChlkSessionConstants.SIS_API_VERSION, null);
+                    var supported = isApiSupported_(sisApiVersion, linkApiVersion);
+
+                    attrs['class'] = attrs['class'] || [];
+                    if (!supported){
+                        attrs['class'].push('disabled');
+                        attrs['class'].push('with-events');
+                        attrs['data-tooltip'] = 'Your InformationNow doesn\' support current API. This API requires InformationNow version ' + sisApiVersion + ' or later';
+                    }
+                }
+
+                return attrs;
             },
 
             [[Array]],

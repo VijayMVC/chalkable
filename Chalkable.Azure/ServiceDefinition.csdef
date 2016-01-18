@@ -14,7 +14,6 @@
       <InputEndpoint name="Endpoint1" protocol="http" port="80" />
     </Endpoints>
     <Imports>
-      <Import moduleName="RemoteAccess" />
     </Imports>
     <Certificates>
       <Certificate name="Certificate1" storeLocation="LocalMachine" storeName="My" />
@@ -56,13 +55,11 @@
       <Setting name="instrumentationKey" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <!--WebClient Timeout Setting-->
-      <Setting name="WebClientTimeout" />
+      <Setting name ="WebClientTimeout"/>
     </ConfigurationSettings>
   </WebRole>
   <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Medium">
     <Imports>
-      <Import moduleName="RemoteAccess" />
-      <Import moduleName="RemoteForwarder" />
     </Imports>
     <ConfigurationSettings>
       <!-- DB settings -->
@@ -91,12 +88,11 @@
       <Setting name="verbosity" />
       <Setting name="instrumentationKey" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
-      <Setting name="WebClientTimeout" />
+      <Setting name ="WebClientTimeout"/>
     </ConfigurationSettings>
   </WorkerRole>
   <WorkerRole name="Chalkable.BackgroundTaskProducer" vmsize="ExtraSmall">
     <Imports>
-      <Import moduleName="RemoteAccess" />
     </Imports>
     <ConfigurationSettings>
       <!-- DB settings -->
@@ -128,7 +124,7 @@
       <!--tracking-->
       <Setting name="mixpanel-token" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
-      <Setting name="WebClientTimeout" />
+      <Setting name ="WebClientTimeout"/>
     </ConfigurationSettings>
   </WorkerRole>
 </ServiceDefinition>

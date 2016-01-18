@@ -20,4 +20,4 @@
                         .class-name-td=item.getClassName()
                         .disciplines-td
                             TEXTAREA.disciplines-text(readonly="readonly")=item.getDisciplineTypes().map(function(item){return item.getName()}).join(', ')
-                        div(data-tooltip-type="overflow", data-tooltip=item.getDescription().toLowerCase()).discipline-description-td=item.getDescription()
+                        div(data-tooltip-type="overflow", data-tooltip=item.getDescription()).discipline-description-td=item.getDescription()

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<ServiceConfiguration serviceName="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="4" osVersion="*" schemaVersion="2015-04.2.6">
+<ServiceConfiguration serviceName="Chalkable.Azure" xmlns="http://schemas.microsoft.com/ServiceHosting/2008/10/ServiceConfiguration" osFamily="3" osVersion="*" schemaVersion="2015-04.2.6">
   <Role name="Chalkable.Web">
     <Instances count="1" />
     <ConfigurationSettings>
@@ -40,15 +40,10 @@
       <Setting name="instrumentationKey" value="f759f261-187f-4991-9c52-a74cc315262b" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
       <!--WebClient Timeout Settings-->
-      <Setting name="WebClientTimeout" value="300000" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="false" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="chalkadmin" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEG1gKBmW1hW5Tc6A+XdxcHIwDQYJKoZIhvcNAQEBBQAEggEAGDAT1UoqArFHq+ip+QfYD6ot9bVcPMoh2S4kBBpKkaGkk19usIdEt1+7VEPB2FwAsGbR+kHOKzF65ngP2ga65CvBAmXT7HIPpMzqR6WxZZsQw0hfyGjRvI9aXgEGrB6YONyfQf02/wE5qNjVHFGgQDRyi9JKzTZ++A4ioOzdPKpwMfK9qbjjTRLxIjsD7EmDKdxECdGhj8AEZjkzuoYBF10SfRmZQoN7TSd/giVU0F5ulK+r1d9rntRmOpC11heHWixe7NLTWfX8+VP+kmXpsp/1qFP/ZY0LNeRGqX1IL2rFPEgW5iSsivEu6Ph9Upta0LFK/WL2u5VoEKvB2K95rTAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECEc9P6PAeNSGgBCUZRrgfC+M4zXIcGcBz2jQ" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2017-01-17T23:59:59.0000000+02:00" />
+      <Setting name ="WebClientTimeout" value="300000"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
-      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="9521A4D65563AFCC52B4E8C981A0315F84EC9166" thumbprintAlgorithm="sha1" />
     </Certificates>
   </Role>
   <Role name="Chalkable.BackgroundTaskProcessor">
@@ -81,16 +76,8 @@
       <Setting name="verbosity" value="verbose" />
       <Setting name="instrumentationKey" value="31afde98-0199-4de2-96d1-ba4fbd7f3552" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="WebClientTimeout" value="300000" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="chalkadmin" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEG1gKBmW1hW5Tc6A+XdxcHIwDQYJKoZIhvcNAQEBBQAEggEAGDAT1UoqArFHq+ip+QfYD6ot9bVcPMoh2S4kBBpKkaGkk19usIdEt1+7VEPB2FwAsGbR+kHOKzF65ngP2ga65CvBAmXT7HIPpMzqR6WxZZsQw0hfyGjRvI9aXgEGrB6YONyfQf02/wE5qNjVHFGgQDRyi9JKzTZ++A4ioOzdPKpwMfK9qbjjTRLxIjsD7EmDKdxECdGhj8AEZjkzuoYBF10SfRmZQoN7TSd/giVU0F5ulK+r1d9rntRmOpC11heHWixe7NLTWfX8+VP+kmXpsp/1qFP/ZY0LNeRGqX1IL2rFPEgW5iSsivEu6Ph9Upta0LFK/WL2u5VoEKvB2K95rTAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECEc9P6PAeNSGgBCUZRrgfC+M4zXIcGcBz2jQ" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2017-01-17T23:59:59.0000000+02:00" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteForwarder.Enabled" value="true" />
+      <Setting name ="WebClientTimeout" value="300000"/>
     </ConfigurationSettings>
-    <Certificates>
-      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="9521A4D65563AFCC52B4E8C981A0315F84EC9166" thumbprintAlgorithm="sha1" />
-    </Certificates>
   </Role>
   <Role name="Chalkable.BackgroundTaskProducer">
     <Instances count="1" />
@@ -125,14 +112,7 @@
       <!--tracking-->
       <Setting name="mixpanel-token" value="" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="UseDevelopmentStorage=true" />
-      <Setting name="WebClientTimeout" value="300000" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.Enabled" value="true" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountUsername" value="chalkadmin" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountEncryptedPassword" value="MIIBnQYJKoZIhvcNAQcDoIIBjjCCAYoCAQAxggFOMIIBSgIBADAyMB4xHDAaBgNVBAMME1dpbmRvd3MgQXp1cmUgVG9vbHMCEG1gKBmW1hW5Tc6A+XdxcHIwDQYJKoZIhvcNAQEBBQAEggEAGDAT1UoqArFHq+ip+QfYD6ot9bVcPMoh2S4kBBpKkaGkk19usIdEt1+7VEPB2FwAsGbR+kHOKzF65ngP2ga65CvBAmXT7HIPpMzqR6WxZZsQw0hfyGjRvI9aXgEGrB6YONyfQf02/wE5qNjVHFGgQDRyi9JKzTZ++A4ioOzdPKpwMfK9qbjjTRLxIjsD7EmDKdxECdGhj8AEZjkzuoYBF10SfRmZQoN7TSd/giVU0F5ulK+r1d9rntRmOpC11heHWixe7NLTWfX8+VP+kmXpsp/1qFP/ZY0LNeRGqX1IL2rFPEgW5iSsivEu6Ph9Upta0LFK/WL2u5VoEKvB2K95rTAzBgkqhkiG9w0BBwEwFAYIKoZIhvcNAwcECEc9P6PAeNSGgBCUZRrgfC+M4zXIcGcBz2jQ" />
-      <Setting name="Microsoft.WindowsAzure.Plugins.RemoteAccess.AccountExpiration" value="2017-01-17T23:59:59.0000000+02:00" />
+      <Setting name ="WebClientTimeout" value="300000"/>
     </ConfigurationSettings>
-    <Certificates>
-      <Certificate name="Microsoft.WindowsAzure.Plugins.RemoteAccess.PasswordEncryption" thumbprint="9521A4D65563AFCC52B4E8C981A0315F84EC9166" thumbprintAlgorithm="sha1" />
-    </Certificates>
   </Role>
 </ServiceConfiguration>
