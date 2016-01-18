@@ -1,19 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Web;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.Master;
-using Chalkable.Common.Exceptions;
-using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Common;
-using Chalkable.Web.Models;
-using PayPal;
-using PayPal.Api.Payments;
 
 namespace Chalkable.Web.Controllers
 {
@@ -72,7 +61,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher, Student, Parent")]
         public ActionResult AddViaPayPal(decimal amount)
         {
-            var accessToken = GetAccessToken();
+            return new EmptyResult();
+            /*var accessToken = GetAccessToken();
             System.Web.HttpContext.Current.Response.Cookies.Set(new HttpCookie(ACCESS_TOKEN_PARAM)
                 {
                     Value = accessToken,
@@ -84,12 +74,13 @@ namespace Chalkable.Web.Controllers
             var payment = CreatePayment(amount, returnUrl, cancelUrl, accessToken);
             var approvalUrl = payment.links.First(x => x.rel == APPROVAL_URL_PARAM);
             System.Web.HttpContext.Current.Response.Cookies.Set(new HttpCookie(PAYMENT_ID_PARAM, payment.id));
-            return Json(new { RedirectUrl = approvalUrl.href });
+            return Json(new { RedirectUrl = approvalUrl.href });*/
         }
 
         public ActionResult ExecutePayPalPayment(string token, string PayerID)
         {
-            var paymentEx = new PaymentExecution {payer_id = PayerID};
+            return new EmptyResult();
+            /*var paymentEx = new PaymentExecution {payer_id = PayerID};
             var accessToken = System.Web.HttpContext.Current.Request.Cookies.Get(ACCESS_TOKEN_PARAM);
             if (accessToken == null || string.IsNullOrEmpty(accessToken.Value))
                 return Json(new ChalkableException("There are no accessToken"));
@@ -104,11 +95,12 @@ namespace Chalkable.Web.Controllers
             var isCompleted = payment.transactions.Last().related_resources.First().sale.state == "completed";
             var urlReferrer = System.Web.HttpContext.Current.Request.Cookies.Get(URL_REFERRER_PARAM).Value;
             return Redirect(string.Format("{0}#{1}/{2}", urlReferrer, UrlsConstants.FUNDS_URL, isCompleted.ToString().ToLower()));
+            
         }
 
 
         private static Payment CreatePayment(decimal amount, string returnUrl, string cancelUrl, string accessToken)
-        {
+        {            
             var payer = new Payer { payment_method = PAYPAL_PAYMENT_METHOD };
             var amnt = new Amount { currency = "USD", total = amount.ToString() };
             var tran = new Transaction
@@ -127,7 +119,7 @@ namespace Chalkable.Web.Controllers
                             return_url = returnUrl
                         }
                 };
-            return payment.Create(GetApiContext(accessToken)); 
+            return payment.Create(GetApiContext(accessToken)); */
         }
 
         private static Dictionary<string, string> GetConfig()
@@ -141,7 +133,7 @@ namespace Chalkable.Web.Controllers
             return configMap;
         }
 
-        private static string GetAccessToken()
+        /*private static string GetAccessToken()
         {         
             string client_Id = "AfX6AxDokm5RBqOt4J1E8a3iPC2SukvKPhqJreZ_ED6AVh-lDzRCBN0S0b0w";
             string client_secret = "EO1FrBB8R-_Tx0TF_ox_QugmF1PbTFVERtbHHgrYvdWod28GDGdOWL_S4Plt";
@@ -152,8 +144,8 @@ namespace Chalkable.Web.Controllers
         private static APIContext GetApiContext(string accessToken)
         {
             return new APIContext(accessToken) { Config = GetConfig() };
-        }
-        
+        }*/
+
         [AuthorizationFilter("Teacher, Student, Parent")]
         public ActionResult GetCreditCardInfo(bool needCardInfo)
         {
