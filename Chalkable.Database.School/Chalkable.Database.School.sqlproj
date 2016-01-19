@@ -313,6 +313,7 @@
     <Build Include="Stored Procedures\spGetListOfLessonPlansDetails.sql" />
     <Build Include="Stored Procedures\spCompleteAnnouncements.sql" />
     <Build Include="Stored Procedures\spGetAlphaGradesForSchoolStandards.sql" />
+    <Build Include="Stored Procedures\spGetStandardParentsSubTree.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />

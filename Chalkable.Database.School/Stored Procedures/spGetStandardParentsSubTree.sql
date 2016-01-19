@@ -7,26 +7,34 @@ As
 declare
 	@StandartId int = @StandardIdForSearch,
 	@IsHiden int,
-	@Parrent int,
+	@Parent int,
 	@CurrentStandardId int,
 	@CurrentStandardParent int,
 	@Done bit,
-	@Column int,
-	@Name NVARCHAR(100), 
-	@Description NVARCHAR(MAX), 
-	@StandardSubjectRef int,
-	@LowerGradeLevelRef int, 
-	@UpperGradeLevelRef int, 
-	@IsActive bit,
-	@AcademicBenchmarkId uniqueidentifier
+	@Column int
 
 declare
 	@CurrentClassStandards TStandard
 declare
 	@ResultTable Table (StandartId int, IsHiden int)
 declare
-	@StandardTree table (Id int, ParentStandardRef int, Name NVARCHAR(100), [Description] NVARCHAR(MAX), StandardSubjectRef int, LowerGradeLevelRef int, UpperGradeLevelRef int, IsActive bit, [Column] int, Done bit, IsSelected bit, AcademicBenchmarkId uniqueidentifier)
+	@StandardTree table 
+	(
+		Id int, 
+		ParentStandardRef int, 
+		Name NVARCHAR(100), 
+		[Description] NVARCHAR(MAX), 
+		StandardSubjectRef int, 
+		LowerGradeLevelRef int, 
+		UpperGradeLevelRef int, 
+		IsActive bit, 
+		[Column] int, 
+		Done bit, 
+		IsSelected bit, 
+		AcademicBenchmarkId uniqueidentifier
+	)
 
+--	get active Standards for current Class
 	insert into @CurrentClassStandards 
 	select S.*
 			From Class as C
@@ -34,7 +42,7 @@ declare
 			join [Standard] as S on S.Id = CS.StandardRef
 	where S.IsActive = 1 and C.Id = @CurrentClassId
 
-
+--	get parent for searched standard and whether it is in current class
 	if exists(select * from [Standard] where ParentStandardRef = @StandartId)
 	begin
 		insert into @ResultTable (StandartId, IsHiden) 
@@ -47,7 +55,7 @@ declare
 	end
 
 	select	@CurrentStandardId = Id, @CurrentStandardParent = ParentStandardRef from [Standard] where id = @StandartId
-
+--	get all childs for available standards
 	while @CurrentStandardParent is not null
 	begin
 		insert into @ResultTable (StandartId, IsHiden) 
@@ -58,13 +66,13 @@ declare
 			from [Standard] S
 			where S.ParentStandardRef = @CurrentStandardParent
 
-			select @StandartId = @CurrentStandardParent
+			set @StandartId = @CurrentStandardParent
 			
 			select	@CurrentStandardId = Id, @CurrentStandardParent = ParentStandardRef from [Standard] where id = @StandartId
 	end
 
-	select top 1 @CurrentStandardId = S.StandardSubjectRef from [Standard] S where id = @StandartId
-
+	set @CurrentStandardId = (select top 1 S.StandardSubjectRef from [Standard] S where id = @StandartId)
+--	add root standard
 	insert into @ResultTable (StandartId, IsHiden) 
 	select S.Id,
 			case 
@@ -76,45 +84,55 @@ declare
 	delete from @ResultTable where IsHiden = 1
 
 	declare ResultTableCursor cursor local fast_forward for
-	select * from @ResultTable
-
+		select * from @ResultTable
 	open ResultTableCursor;
 	
 	fetch next from ResultTableCursor into @StandartId, @IsHiden;
-
+--	add available parent for child
 	while @@FETCH_STATUS = 0
 	begin
-		select @CurrentStandardParent = @StandartId
+		set @CurrentStandardParent = @StandartId
 		while(1=1)
 		begin
 			if @IsHiden <> -1
 			begin
-					select @CurrentStandardParent = ParentStandardRef from [Standard] where id = @CurrentStandardParent
+					set @CurrentStandardParent = (select top 1 ParentStandardRef from [Standard] where id = @CurrentStandardParent)
 					if @CurrentStandardParent is null 
 					begin
-						select @Parrent = StandartId from @ResultTable where IsHiden = -1
+						set @Parent = (select StandartId from @ResultTable where IsHiden = -1)
 						break
 					end 
 					if exists(select * from @CurrentClassStandards CC where CC.Id = @CurrentStandardParent)
 					begin
-						select @Parrent = @CurrentStandardParent
+						set @Parent = @CurrentStandardParent
 						break
 					end 
 			end
 			else
 			begin
-				select @Parrent = @IsHiden
+				set @Parent = @IsHiden
 				break
 			end
 		end
 
-		select top 1 @Name = Name, @Description = [Description], @StandardSubjectRef = StandardSubjectRef, @LowerGradeLevelRef = LowerGradeLevelRef, 
-			@UpperGradeLevelRef = UpperGradeLevelRef, @IsActive = IsActive, @AcademicBenchmarkId = AcademicBenchmarkId from @CurrentClassStandards CC where CC.Id = @StandartId
+		insert into @StandardTree 
+			(	Id, 
+				ParentStandardRef, 
+				Name, [Description], 
+				StandardSubjectRef, 
+				LowerGradeLevelRef,
+				UpperGradeLevelRef, 
+				IsActive, 
+				AcademicBenchmarkId, 
+				[Column], 
+				Done, 
+				IsSelected
+			) 
+			select top 1 CC.*, -1, 0, 0 
+			from @CurrentClassStandards CC 
+			where CC.Id = @StandartId
 
-		insert into @StandardTree (Id, ParentStandardRef, Name, [Description], StandardSubjectRef, LowerGradeLevelRef, UpperGradeLevelRef, IsActive, AcademicBenchmarkId, [Column], Done, IsSelected) Values
-			(@StandartId, @Parrent, @Name, @Description, @StandardSubjectRef, @LowerGradeLevelRef, @UpperGradeLevelRef, @IsActive, @AcademicBenchmarkId, -1, 0, 0)
-
-		select @Parrent = null
+		set @Parent = null
 		
 		fetch next from ResultTableCursor into @StandartId, @IsHiden;
 	end
@@ -122,36 +140,47 @@ declare
 	close ResultTableCursor;
 	deallocate ResultTableCursor;
 
-	select top 1 @StandartId = Id, @Parrent = ParentStandardRef, @Done = Done from @StandardTree where Done = 0 order by ParentStandardRef ASC
-
+	select top 1 @StandartId = Id, @Parent = ParentStandardRef, @Done = Done from @StandardTree where Done = 0 order by ParentStandardRef ASC
+--	calculate column for each standard
 	while @StandartId is not null
 	begin
 		set @Column = null
 
-		if @Parrent is null
+		if @Parent is null
 			set @Column = 0
 		else
-			select @Column = ST.[Column] + 1 from @StandardTree ST where ST.Id = @Parrent and ST.Done = 1
+			set @Column = (select ST.[Column] + 1 from @StandardTree ST where ST.Id = @Parent and ST.Done = 1)
 		
 		update @StandardTree set Done = 1, [Column] = @Column where Id = @StandartId
 
-		select @StandartId = null
+		set @StandartId = null
 
-		select top 1 @StandartId = Id, @Parrent = ParentStandardRef, @Done = Done from @StandardTree where Done = 0 order by ParentStandardRef ASC
+		select top 1 @StandartId = Id, @Parent = ParentStandardRef, @Done = Done from @StandardTree where Done = 0 order by ParentStandardRef ASC
 	end
 
-	select top 1 @StandartId = Id, @Parrent = ParentStandardRef from @StandardTree where Id = @StandardIdForSearch
+	select top 1 @StandartId = Id, @Parent = ParentStandardRef from @StandardTree where Id = @StandardIdForSearch
 
 	update @StandardTree set IsSelected = 1 where Id = @StandartId;
-	
-	while @Parrent is not null
+--	set isSelected mark for UI
+	while @Parent is not null
 	begin
-		update @StandardTree set IsSelected = 1 where Id = @Parrent;
-		select top 1 @Parrent = ParentStandardRef from @StandardTree where Id = @Parrent
+		update @StandardTree set IsSelected = 1 where Id = @Parent;
+		set @Parent = (select top 1 ParentStandardRef from @StandardTree where Id = @Parent)
 	end
 	
-	select ST.Id, ST.ParentStandardRef, ST.Name, ST.[Description], ST.StandardSubjectRef, ST.LowerGradeLevelRef, ST.UpperGradeLevelRef, ST.IsActive, ST.AcademicBenchmarkId, ST.[Column], ST.IsSelected, cast(row_number() over (partition by [Column] order by [Column]) as int) as Row
+	select 
+		ST.Id, 
+		ST.ParentStandardRef, 
+		ST.Name, 
+		ST.[Description], 
+		ST.StandardSubjectRef, 
+		ST.LowerGradeLevelRef, 
+		ST.UpperGradeLevelRef, 
+		ST.IsActive, 
+		ST.AcademicBenchmarkId, 
+		ST.[Column], ST.IsSelected, 
+		cast(row_number() over (partition by [Column] order by [Column]) as int) as Row
 	from @StandardTree ST
 	order by [Column] asc
 
-GO
+	GO

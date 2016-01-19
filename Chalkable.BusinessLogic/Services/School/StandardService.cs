@@ -31,7 +31,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId);
         IList<StandardTreeItem> GetStandardParentsSubTree(int standardId, int? classId);
         IList<Standard> PrepareStandardsCodesData(IList<Standard> standardsTreeItem);
-        IList<StandardTreeItem> PrepareStandardTreeItemCodesData(IList<StandardTreeItem> standards);
         IList<AnnouncementStandardDetails> PrepareAnnouncementStandardsCodes(IList<AnnouncementStandardDetails> announcementStandards);
     }
     public class StandardService : SchoolServiceBase, IStandardService
@@ -199,27 +198,25 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<Standard> PrepareStandardsCodesData(IList<Standard> standards)
         {
-            var ccStandardService = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService;
-            foreach (var standard in standards.Where(standard => standard.AcademicBenchmarkId.HasValue))
-            {
-                standard.CCStandardCodes = ccStandardService.GetStandardCodesByABId(standard.AcademicBenchmarkId.Value);
-            }
+            standards = standards.Select(PrepareStandardCodeData).ToList();
             return standards.OrderBy(x => x.Name).ToList();
         }
-        public IList<StandardTreeItem> PrepareStandardTreeItemCodesData(IList<StandardTreeItem> standardsTreeItem)
-        {
-            var ccStandardService = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService;
-            foreach (var standardTi in standardsTreeItem.Where(standardTi => standardTi.Standard.AcademicBenchmarkId.HasValue))
-            {
-                standardTi.Standard.CCStandardCodes = ccStandardService.GetStandardCodesByABId(standardTi.Standard.AcademicBenchmarkId.Value);
-            }
-            return standardsTreeItem.ToList();
-        }
 
+        private Standard PrepareStandardCodeData(Standard standard)
+        {
+            if (standard.AcademicBenchmarkId.HasValue)
+            {
+                var ccStandardService = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService;
+                standard.CCStandardCodes = ccStandardService.GetStandardCodesByABId(standard.AcademicBenchmarkId.Value);
+            }
+            return standard;
+        }
         public IList<StandardTreeItem> GetStandardParentsSubTree(int standardId, int? classId)
         {
-            return DoRead(uow => new StandardDataAccess(uow).GetStandardParentsSubTree(standardId, classId));
+            var res = DoRead(uow => new StandardDataAccess(uow).GetStandardParentsSubTree(standardId, classId));
+            foreach (var item in res)
+                item.Standard = PrepareStandardCodeData(item.Standard);
+            return res;
         }
-
     }
 }
