@@ -7,7 +7,7 @@ NAMESPACE('chlk.models.common', function () {
 
     /** @class chlk.models.common.ChartDateItem*/
     CLASS(
-        'ChartDateItem', [
+        'ChartDateItem', IMPLEMENTS(ria.serialize.IDeserializable), [
             VOID, function deserialize(raw){
                 this.number = SJX.fromValue(raw.number, Number);
                 this.summary = SJX.fromValue(raw.summary, String);
