@@ -6,7 +6,7 @@ user = self.getUser()
         #top-panel
             #avatar-photo-conainer.left-block.panel-block
                 .img-container
-                    +PersonImg(user, 140, true)
+                    +PersonImg(user, 140, !self.getUserRole().isStudent())
                     .grades-container
             #student-info-panel.right-block.panel-block
                 displayName =user.getDisplayName() || user.getFullName()
