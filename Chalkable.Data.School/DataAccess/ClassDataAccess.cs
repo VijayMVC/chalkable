@@ -107,7 +107,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public static IList<ClassDetails> ReadClasses(DbDataReader reader, bool withPeriods = true)
+        public static IList<ClassDetails> ReadClasses(DbDataReader reader, bool withPeriods = true, bool sort = true)
         {
             var classes = new List<ClassDetails>();
             while (reader.Read())
@@ -141,7 +141,7 @@ namespace Chalkable.Data.School.DataAccess
                     classDetailse.ClassPeriods = classPeriods.Where(cPeriod => cPeriod.ClassRef == classDetailse.Id).ToList();
                 }
             }
-            return SortClasses(classes);
+            return sort ? SortClasses(classes) : classes;
         }
 
         private static IList<ClassDetails> SortClasses(IList<ClassDetails> classDetailses)
@@ -186,7 +186,7 @@ namespace Chalkable.Data.School.DataAccess
 
             using (var reader = ExecuteStoredProcedureReader(SP_GET_CLASSES_BY_SCHOOL_YEAR, param))
             {
-                return ReadClasses(reader);
+                return ReadClasses(reader, false, false);
             }
         }
 
