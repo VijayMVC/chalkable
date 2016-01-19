@@ -1,0 +1,45 @@
+.calendar-popup.popup-bubble
+    -var announcements = self.getAnnouncements()
+    -var lessonPlans = self.getLessonPlans()
+    -var period = self.getPeriod()
+    -var roomNumber = period.getRoomNumber()
+    -var teacherDisplayName = period.getTeacherDisplayName();
+    if period.getClassId()
+        .class-name
+            h3.day-day
+                if self.getCurrentUser().getRole().getId() != chlk.models.common.RoleEnum.STUDENT.valueOf()
+                    +ActionLink('class', 'info', period.getClassId())=period.getClassName()
+                else
+                    span=period.getClassName()
+    .info
+        if teacherDisplayName
+            .day-down: +ActionLink('teachers', 'details', period.getTeacherId())= teacherDisplayName
+        if roomNumber
+            .day-down Rm #{roomNumber}
+        .day-down #{period.displayPeriodTimeRange()}
+        .day-down= self.getDate().format('DD, M d')
+    if announcements && announcements.length > 0
+        h3 Announcements
+        .announcements-list
+            .day-announcements
+                each item in announcements
+                    .items
+                        +ActionLink('announcement', 'view', item.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).pop-up-announcement
+                            div
+                                +TooltipWithOverflow(item.getTitle()).item-title
+    if lessonPlans && lessonPlans.length > 0
+        h3 Lesson Plans
+        .announcements-list
+            .day-announcements
+                each item in lessonPlans
+                    .items
+                        +ActionLink('announcement', 'view', item.getId(), chlk.models.announcement.AnnouncementTypeEnum.LESSON_PLAN).pop-up-announcement
+                            div
+                                +TooltipWithOverflow(item.getTitle()).item-title
+
+    if self.getUserRole().isTeacher() && period.isTeaching() !== false
+        -var classId = (self.getSelectedClassId() && self.getSelectedClassId().valueOf()) || (period.getClassId() && period.getClassId().valueOf())
+        +ActionButton('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, classId || '').ann-button.plus-ann New item
+
+
+
