@@ -52,7 +52,7 @@ namespace Chalkable.Web.Models.ClassesViewData
             if (classComplex.PrimaryTeacherRef.HasValue && classComplex.PrimaryTeacher != null)
             {
                 Teacher = ShortPersonViewData.Create(classComplex.PrimaryTeacher);
-                Teacher.DisplayName = classComplex.PrimaryTeacher.DisplayName();
+                Teacher.DisplayName = classComplex.PrimaryTeacher.DisplayName(false);
             }
             if (classComplex.SchoolYear != null)
                 SchoolYear = SchoolYearViewData.Create(classComplex.SchoolYear);
