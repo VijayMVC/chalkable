@@ -123,15 +123,6 @@ namespace Chalkable.Data.School.DataAccess
         }
     }
 
-    public class StandardTreeItem
-    {
-        [DataEntityAttr]
-        public Standard Standard { get; set; }
-        public bool IsSelected { get; set; }
-        public int Column { get; set; }
-        public int Row { get; set; }
-    }
-
     public class StandardSubjectDataAccess : DataAccessBase<StandardSubject, int>
     {
         public StandardSubjectDataAccess(UnitOfWork unitOfWork)

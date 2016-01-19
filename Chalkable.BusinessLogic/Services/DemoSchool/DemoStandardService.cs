@@ -448,19 +448,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return ClassStandardStorage.GetAll().Count(x => x.ClassRef == cls.Id || x.ClassRef == cls.CourseRef) > 0;
         }
 
+        //todo: add preparestadnardsCodeData
         public IList<StandardTreeItem> GetStandardParentsSubTree(int standardId, int? classId)
         {
             return DoRead(uow => new StandardDataAccess(uow).GetStandardParentsSubTree(standardId, classId));
         }
 
-        public IList<StandardTreeItem> PrepareStandardTreeItemCodesData(IList<StandardTreeItem> standardsTreeItem)
-        {
-            var ccStandardService = ServiceLocator.ServiceLocatorMaster.CommonCoreStandardService;
-            foreach (var standardTi in standardsTreeItem.Where(standardTi => standardTi.Standard.AcademicBenchmarkId.HasValue))
-            {
-                standardTi.Standard.CCStandardCodes = ccStandardService.GetStandardCodesByABId(standardTi.Standard.AcademicBenchmarkId.Value);
-            }
-            return standardsTreeItem.ToList();
-        }
     }
 }
