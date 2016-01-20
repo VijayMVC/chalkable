@@ -79,7 +79,7 @@ NAMESPACE('chlk.controls', function () {
                     if (!supported){
                         attrs['class'].push('disabled');
                         attrs['class'].push('with-events');
-                        attrs['data-tooltip'] = 'Your InformationNow doesn\' support current API. This API requires InformationNow version ' + sisApiVersion + ' or later';
+                        attrs['data-tooltip'] = 'Your InformationNow doesn\' support current API. This API requires InformationNow version ' + linkApiVersion + ' or later';
                     }
                 }
 
