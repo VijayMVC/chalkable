@@ -424,6 +424,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     .Select(x => new Activity {Id = x.NewActivityId.Value, SectionId = x.CopyToSectionId})
                     .ToList();
 
+                //get announcementApplications for copying
+                var annApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(classAnnouncementId, true);
+                var appIds = annApps.Select(aa => aa.ApplicationRef).ToList();
+                //get only simple apps
+                var apps = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(appIds).Where(a => !a.IsAdvanced).ToList();
+                annApps = annApps.Where(aa => apps.Any(a => a.Id == aa.ApplicationRef)).ToList();
+                
                 using (var u = Update())
                 {
                     var da = CreateClassAnnouncementDataAccess(u);
@@ -433,6 +440,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     var attOwners = new ClassTeacherDataAccess(u).GetClassTeachers(ann.ClassRef, null).Select(x => x.PersonRef).ToList();
 
                     AnnouncementAttachmentService.CopyAnnouncementAttachments(classAnnouncementId, attOwners, resAnnIds, u, ServiceLocator, ConnectorLocator);
+                    ApplicationSchoolService.CopyAnnApplications(annApps, resAnnIds, u);
 
                     u.Commit();
                 }

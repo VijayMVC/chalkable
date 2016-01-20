@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.DataAccess;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
 {
@@ -70,23 +71,13 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
     public class StandardsTableViewData
     {
         public IList<IList<StandardTableItemViewData>> StandardsColumns { get; set; } 
-        public static StandardsTableViewData Create(StandardTreePath standardTreePath)
-        {
-            var res = new StandardsTableViewData {StandardsColumns = new List<IList<StandardTableItemViewData>>()};
-            var column = 0;
-            if (standardTreePath.AllStandards.Count > 0 && standardTreePath.Path.Count > 0)
-            {
-                for (var i = 0; i < standardTreePath.Path.Count + 1; i++)
-                {
-                    var row = 0;
-                    var standardsColumn = i == 0
-                                        ? standardTreePath.AllStandards.Where(s => !s.ParentStandardRef.HasValue).ToList() 
-                                        : standardTreePath.AllStandards.Where(s => s.ParentStandardRef == standardTreePath.Path[i - 1].Id).ToList();
-                    res.StandardsColumns.Add(standardsColumn.Select(s => StandardTableItemViewData.Create(s, i < standardTreePath.Path.Count && s.Id == standardTreePath.Path[i].Id, ++row, column)).ToList());
-                    column++;         
-                }
 
-            }
+        public static StandardsTableViewData Create(IList<StandardTreeItem> standardsTree)
+        {
+            var res = new StandardsTableViewData { StandardsColumns = new List<IList<StandardTableItemViewData>>() };
+            if (standardsTree.Count > 0)
+                for (var i = 0; i <= standardsTree.Max(s => s.Column); i++)
+                    res.StandardsColumns.Add(standardsTree.Select(s => StandardTableItemViewData.Create(s.Standard, s.IsSelected, s.Row, s.Column)).Where(s => s.Column == i).ToList());
             return res;
         }
     }

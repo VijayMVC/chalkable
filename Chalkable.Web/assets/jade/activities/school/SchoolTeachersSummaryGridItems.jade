@@ -8,7 +8,7 @@ each teacher in teachers
         .cell.name
             .icon
                 +PersonImg(teacher, 32)
-            +ActionLink('schools', "classesSummary", schoolId, schoolName, teacher.getName())=teacher.getName()
+            +ActionLink('schools', "classesSummary", schoolId, schoolName, teacher.getId())=teacher.getName()
         .cell.classes
             .classes-container(data-tooltip=teacher.getClassesText(), data-tooltip-type="overflow")
                 -var classes = teacher.getClasses()

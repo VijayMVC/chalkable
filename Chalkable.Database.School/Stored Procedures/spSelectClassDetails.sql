@@ -5,8 +5,6 @@ Select
 *
 From
 @classes
-Order By
-Class_Id
 
 Select
 mpc.*

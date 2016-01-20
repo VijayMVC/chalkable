@@ -218,18 +218,17 @@ namespace Chalkable.BusinessLogic.Services.School
             IList<SectionSummary> iNowRes;
             try
             {
-                iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId,
-                    Context.NowSchoolYearTime, start.Value + 1, start.Value + count.Value, filter);
+                iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value + 1, start.Value + count.Value, filter, teacherId);
             }
             catch (ChalkableSisNotSupportVersionException)
             {
-                var chalkableRes =
-                    DoRead(u => new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start.Value, count.Value, filter, teacherId));
+                var chalkableRes = DoRead(u => new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start.Value, count.Value, filter, teacherId));
                 return chalkableRes.Select(ClassStatsInfo.Create).ToList();
             }
 
             var classes = DoRead(u => new ClassDataAccess(u).GetClassesByIds(iNowRes.Select(x => x.SectionId).ToList()));
-            return iNowRes.Select(x => ClassStatsInfo.Create(x, classes.FirstOrDefault(y => y.Id == x.SectionId))).ToList();
+            var res = iNowRes.Select(x => ClassStatsInfo.Create(x, classes.FirstOrDefault(y => y.Id == x.SectionId))).ToList();
+            return res.OrderBy(x => x.Name).ToList();
         }
     }
 }

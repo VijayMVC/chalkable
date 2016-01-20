@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Linq;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -14,23 +15,26 @@ namespace Chalkable.StiConnector.Connectors
         }
 
         
-        public IList<SectionSummary> GetSectionsSummaries(int acadSessionId, DateTime tillDate, int start, int end, string filter)
+        public IList<SectionSummary> GetSectionsSummaries(int acadSessionId, DateTime tillDate, int start, int end, string filter, int? teacherId)
         {
 
             EnsureApiVersion("7.1.6.19573");
-
-            var param = new NameValueCollection()
+            
+            var param = new NameValueCollection
             {
-                ["start"] = start.ToString(),
-                ["end"] = end.ToString()
+                ["start"] = (teacherId.HasValue ? 1 : start).ToString(),
+                ["end"] = (teacherId.HasValue ? int.MaxValue : end).ToString()
             };
 
             if(!string.IsNullOrWhiteSpace(filter))
                 param.Add("filter", filter);
 
-            return Call<IList<SectionSummary>>(
-                    $"{BaseUrl}chalkable/{acadSessionId}/classes/dashboard/sections/{tillDate.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture)}",
-                    param);
+            var res = Call<IList<SectionSummary>>($"{BaseUrl}chalkable/{acadSessionId}/classes/dashboard/sections/{tillDate.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture)}", param);
+            // remove this after providing teacherId to api call
+            if (teacherId.HasValue)
+                res = res.Where(x => x.TeacherId == teacherId).Skip(start).Take(end).ToList();
+
+            return res;
         }
 
 

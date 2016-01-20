@@ -103,7 +103,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             catch (ChalkableSisNotSupportVersionException)
             {
-                var teachers = SearchStaff(schoolYearId, null, null, filter, true, start.Value, count.Value);
+                var teachers = SearchStaff(schoolYearId, null, null, filter, false, start.Value, count.Value);
                 var classes = DoRead(u => new ClassDataAccess(u).GetClassesByTeachers(schoolYearId, teachers.Select(x => x.Id).ToList()));
                 return TeacherStatsInfo.Create(teachers, classes);
             }

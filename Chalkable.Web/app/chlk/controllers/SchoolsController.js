@@ -277,12 +277,12 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('classes')],
-        [[chlk.models.id.SchoolId, String, String]],
-        function classesSummaryAction(schoolId, schoolName, filter_){
+        [[chlk.models.id.SchoolId, String, chlk.models.id.SchoolPersonId]],
+        function classesSummaryAction(schoolId, schoolName, teacherId_){
             var result = this.schoolYearService.list(schoolId)
                 .then(function(years){
                     var currentSchoolYearId = this.getCurrentYearId_(years);
-                    return this.classService.getClassesStatistic(currentSchoolYearId, 0, filter_)
+                    return this.classService.getClassesStatistic(currentSchoolYearId, 0, null, teacherId_)
                         .then(function(classes){
                             return new chlk.models.school.SchoolSummaryViewData(schoolName, schoolId, currentSchoolYearId, years, new chlk.models.admin.BaseStatisticGridViewData(classes));
                         })

@@ -216,12 +216,13 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Class/AllSchoolsActiveClasses.json', chlk.models.classes.AllSchoolsActiveClasses, {})
             },
 
-            [[chlk.models.id.SchoolYearId, Number, String, Number]],
-            ria.async.Future, function getClassesStatistic(schoolYearId, start_, filter_, count_) {
+            [[chlk.models.id.SchoolYearId, Number, String, chlk.models.id.SchoolPersonId, Number]],
+            ria.async.Future, function getClassesStatistic(schoolYearId, start_, filter_, teacherId_, count_) {
                 return this.get('Class/ClassesStats.json', ArrayOf(chlk.models.school.SchoolClassesStatisticViewData.OF(chlk.models.id.SchoolId)), {
                     schoolYearId: schoolYearId.valueOf(),
                     start:start_ || 0,
                     count: count_ || 10,
+                    teacherId: teacherId_ && teacherId_.valueOf(),
                     filter: filter_
                 });
             }

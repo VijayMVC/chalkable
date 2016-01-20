@@ -349,11 +349,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public void ValidateAttributes(IList<AnnouncementAssignedAttribute> attributes)
         {
-            foreach (var attr in attributes)
-            {
-                if (string.IsNullOrWhiteSpace(attr.Text))
-                    throw new ChalkableException("Looks like you forgot to include any text with your assignment.");
-            }
+            if (attributes.Any(attr => string.IsNullOrWhiteSpace(attr.Text)))
+                throw new ChalkableException("Looks like you forgot to include text with your attached attribute.");
+            
         }
     }
 }

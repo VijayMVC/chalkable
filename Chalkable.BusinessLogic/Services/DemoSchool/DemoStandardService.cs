@@ -267,8 +267,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             if (standards.Count > 0)
                 StandardStorage.Add(standards);
         }
-
-
+        
         private void InsertDefaultClassStandards()
         {
             var standardsIds = StandardStorage.GetData().Keys.ToList();
@@ -309,7 +308,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             if (standards.Any(IsInvalidStandardModel))
                 throw new ChalkableException("Invalid params. LowerGradeLevelId can not be greater than upperGradeLevelId");
-
             StandardStorage.Add(standards);
         }
 
@@ -339,13 +337,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return StandardStorage.GetById(id);
         }
 
-        
-
         public void AddStandardSubjects(IList<StandardSubject> standardSubjects)
         {
             if (standardSubjects != null && standardSubjects.Count > 0)
-                StandardSubjectStorage.Add(standardSubjects);
-                
+                StandardSubjectStorage.Add(standardSubjects);  
         }
 
         public void EditStandardSubjects(IList<StandardSubject> standardSubjects)
@@ -363,7 +358,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             }
             return res;
         }
-        
+
         public void DeleteStandardSubjects(IList<int> ids)
         {
             StandardSubjectStorage.Delete(ids);
@@ -386,11 +381,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 }).ToList();
         }
 
-        public StandardTreePath GetStandardParentsSubTree(int standardId, int? classId)
-        {
-            return StandardStorage.GetStandardParentsSubTree(standardId);
-        }
-
         public IList<Standard> PrepareStandardsCodesData(IList<Standard> standards)
         {
             throw new NotImplementedException();
@@ -400,8 +390,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
-
-
+        
         public IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards)
         {
             if(!BaseSecurity.IsSysAdmin(Context))
@@ -409,14 +398,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return ClassStandardStorage.Add(classStandards);
         }
 
-
         public Standard GetStandardByABId(Guid id)
         {
             return StandardStorage.GetAll().FirstOrDefault(x => x.AcademicBenchmarkId == id);
         }
-
-
-
+        
         public IList<Standard> GetStandards(IList<int> standardIds)
         {
             if (standardIds == null || standardIds.Count == 0)
@@ -461,5 +447,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             return ClassStandardStorage.GetAll().Count(x => x.ClassRef == cls.Id || x.ClassRef == cls.CourseRef) > 0;
         }
+
+        //todo: add preparestadnardsCodeData
+        public IList<StandardTreeItem> GetStandardParentsSubTree(int standardId, int? classId)
+        {
+            return DoRead(uow => new StandardDataAccess(uow).GetStandardParentsSubTree(standardId, classId));
+        }
+
     }
 }

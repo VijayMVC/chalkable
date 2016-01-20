@@ -1,4 +1,6 @@
-mixin ProfileInfoView(model)
+mixin ProfileInfoView(tpl)
+    model = tpl.getUser()
+    userRole = tpl.getUserRole()
     address = model.getAddress() || null;
     primaryPhone = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
     homePhone = model.getHomePhone() ? model.getHomePhone().getValue() : '';
@@ -7,7 +9,7 @@ mixin ProfileInfoView(model)
         #top-panel
             #avatar-photo-conainer.left-block.panel-block
                 .img-container
-                    +PersonImg(model, 140, true)
+                    +PersonImg(model, 140, !userRole.isStudent())
                     .grades-container
             #student-info-panel.right-block.panel-block
                 displayName =model.getDisplayName() || model.getFullName()
@@ -50,7 +52,9 @@ mixin ProfileInfoView(model)
         if model.isAbleEdit() && !model.isDemoUser()
             +Button().special-button.blue-button#edit-info-button=Msg.Edit
 
-mixin ProfileInfoForm(controller, model)
+mixin ProfileInfoForm(controller, tpl)
+    model = tpl.getUser()
+    userRole = tpl.getUserRole()
     address = model.getAddress() || null;
     primaryPhone = model.getPrimaryPhone()
     primaryPhoneValue = model.getPrimaryPhone() ? model.getPrimaryPhone().getValue() : '';
@@ -60,7 +64,7 @@ mixin ProfileInfoForm(controller, model)
         #top-panel
             #avatar-photo-conainer.left-block.panel-block
                 .img-container
-                    +PersonImg(model, 140, true)
+                    +PersonImg(model, 140, !userRole.isStudent())
                     .grades-container
             #student-info-panel.right-block.panel-block
                 displayName =model.getDisplayName() || model.getFullName()

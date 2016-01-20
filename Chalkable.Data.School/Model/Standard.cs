@@ -35,4 +35,13 @@ namespace Chalkable.Data.School.Model
         public IList<Standard> AllStandards { get; set; }
         public IList<Standard> Path { get; set; } 
     }
+
+    public class StandardTreeItem
+    {
+        [DataEntityAttr]
+        public Standard Standard { get; set; }
+        public bool IsSelected { get; set; }
+        public int Column { get; set; }
+        public int Row { get; set; }
+    }
 }
