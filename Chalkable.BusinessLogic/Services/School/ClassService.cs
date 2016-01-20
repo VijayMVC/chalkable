@@ -218,8 +218,7 @@ namespace Chalkable.BusinessLogic.Services.School
             IList<SectionSummary> iNowRes;
             try
             {
-                iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId,
-                    Context.NowSchoolYearTime, start.Value + 1, start.Value + count.Value, filter);
+                iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value + 1, start.Value + count.Value, filter, teacherId);
             }
             catch (ChalkableSisNotSupportVersionException)
             {
