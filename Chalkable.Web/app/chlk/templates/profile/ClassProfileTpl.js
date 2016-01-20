@@ -43,7 +43,7 @@ NAMESPACE('chlk.templates.profile', function(){
                     links.push(this.buildActionLinkModelForClass('apps', 'Apps', pressedActionName, classId_, true));
                     links.push(this.buildActionLinkModelForClass('schedule', 'Schedule', pressedActionName, classId_, !this.canViewSchedule_()));
                     //!this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_GRADES))
-                    links.push(this.buildActionLinkModelForClass('grading', 'Grading', pressedActionName, classId_, !this.canViewGrading_(teacherIds)));
+                    links.push(this.buildActionLinkModelForClass('grading', 'Grading', pressedActionName, classId_, !this.canViewGrading_(teacherIds), '7.1.6.19573'));
                     links.push(this.buildActionLinkModelForClass('explorer', 'Explorer', pressedActionName, classId_, !this.canViewExplorer_(teacherIds)));
                 }
                 return links;

@@ -6,6 +6,10 @@ REQUIRE('chlk.models.apps.AppModes');
 NAMESPACE('chlk', function(){
     var singletonInstance = null;
 
+    function chlkGetDomain(url) {
+        return (url && url.replace(/(:\d+)\//, '/').split("app").shift().replace(/(http[s]?:\/\/)?(www.)?/i, '').split('/').shift()) || null;
+    }
+
     /** @class chlk.AppApiHost*/
     CLASS('AppApiHost', [
         // $$ - singleton instance factory
@@ -21,11 +25,12 @@ NAMESPACE('chlk', function(){
         [[ria.mvc.IContext]],
         function onStart(context) {
             this.context_ = context;
-            CHLK_MESSENGER.addCallback(this.messengerCallback_);
+
+            jQuery(window).on('message', this.messengerCallback_);
         },
 
         function onStop() {
-            CHLK_MESSENGER.removeCallback(this.messengerCallback_);
+            jQuery(window).off('message', this.messengerCallback_);
         },
 
 
@@ -38,7 +43,10 @@ NAMESPACE('chlk', function(){
                     this.doCallApiReactor_('simpleAppAttach', data);
             }
             else{
-                CHLK_MESSENGER.addApp(rWindow, rURL, data);
+                var res = data || {};
+                res.action = 'addYourself';
+                rWindow.postMessage(res, rURL);
+
                 this.doCallApiReactor_('addAppBegin', {rWindow: rWindow, rURL: rURL, data: data});
             }
         },
@@ -52,38 +60,47 @@ NAMESPACE('chlk', function(){
                     this.doCallApiReactor_('closeMe', data);
             }
             else
-                CHLK_MESSENGER.closeMe(data);
+                this.doCallApiReactor_('closeMe', data);
         },
 
         function messengerCallback_(e){
-            if (e.data && e.data.url){
-                var domain = chlkGetDomain(e.data.url);
-                var rDomain = chlkGetDomain(WEB_SITE_ROOT);
-                if (domain == rDomain){
-                    if (e.data.action == 'requestOrigin'){
-                        e.source.postMessage({action: 'updateOrigin'}, e.origin);
-                    }
-                }
-            }
-                    // TODO: check if following is secure
-                    if (e.data.isApp) {
-                        if (e.data.action) {
-                            switch (e.data.action) {
-                                case chlk.models.apps.AppActionTypes.ADD_ME.valueOf():
-                                case chlk.models.apps.AppActionTypes.CLOSE_ME.valueOf():
-                                case chlk.models.apps.AppActionTypes.SAVE_ME.valueOf():
-                                case chlk.models.apps.AppActionTypes.APP_ERROR.valueOf():
-                                case chlk.models.apps.AppActionTypes.SHOW_PLUS.valueOf():{
-                                    this.doCallApiReactor_(e.data.action, e.data);
-                                    break;
-                                }
+            e = e.originalEvent;
 
-                            }
-                        }
+            var data = e.data,
+                source = e.source,
+                origin = e.origin;
+
+            if (!data || !source || !origin || !data.action)
+                return;
+
+            switch (data.action) {
+                case 'requestOrigin':
+                    if (data.url && data.url.indexOf(window.location.origin) === 0) {
+                        source.postMessage({action: 'updateOrigin'}, origin);
                     }
-                    /*else{
-                    throw new Exception('post-message-api domains differ. Please check your include path.');
-                }*/
+
+                    break;
+
+                case 'appResized':
+                    var iframe = ria.dom.Dom('iframe').valueOf().filter(function (_) {return _.contentWindow === e.source}).shift();
+                    if (iframe) {
+                        var $iframe = ria.dom.Dom(iframe);
+                        if (!$iframe.hasClass('fixed-height'))
+                            $iframe.$.height(data.height + 10 + 'px');
+                    }
+
+                    break;
+
+                default:
+                    try {
+                        var action = chlk.models.apps.AppActionTypes(data.action);
+                        data.__origin = origin;
+                        data.__source = source;
+                        data.isApp && this.doCallApiReactor_(action.valueOf(), data);
+                    } catch (ex) {}
+
+                    break;
+            }
         },
 
         [[String, Object]],

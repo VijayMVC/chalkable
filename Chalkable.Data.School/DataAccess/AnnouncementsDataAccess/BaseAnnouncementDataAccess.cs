@@ -202,7 +202,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         public int? GalleryCategoryId { get; set; }
 
-        public int? Sort { get; set; }
+        public AnnouncementSortOption? Sort { get; set; }
 
         public AnnouncementsQuery()
         {
@@ -210,6 +210,17 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             Count = int.MaxValue;
         }
     }
+
+    public enum AnnouncementSortOption
+    {
+        DueDateAscending = 0,
+        DueDateDescending = 1,
+        NameAscending = 2,
+        NameDescending = 3,
+        SectionNameAscending = 4,
+        SectionNameDescending = 5
+    }
+
     public class AnnouncementQueryResult
     {
         public List<AnnouncementComplex> Announcements { get; set; }
