@@ -143,6 +143,48 @@ NAMESPACE('chlk.controllers', function (){
             [[Object]],
             function appErrorAction(data){
                 return this.Redirect('error', 'appError', []);
+            },
+
+            [[Object]],
+            function showStandardPickerAction(data) {
+                return null;
+            },
+
+            function _replayTo(data) {
+                return function (value) {
+                    data.__source.postMessage({action: 'handleResponse', value: value, reqId: data.reqId}, data.__origin);
+                }
+            },
+
+            [[Object]],
+            function showAlertBoxAction(data) {
+                this.ShowAlertBox(data.text, data.header || null)
+                    .then(this._replayTo(data));
+
+                return null;
+            },
+
+            [[Object]],
+            function showPromptBoxAction(data) {
+                this.ShowPromptBox(data.text
+                    , data.header || null
+                    , data.inputValue || null
+                    , data.inputAttrs || null
+                    , data.inputType || null)
+                    .then(this._replayTo(data));
+
+                return null;
+            },
+
+            [[Object]],
+            function showConfirmBoxAction(data) {
+                this.ShowConfirmBox(data.text
+                    , data.header || null
+                    , data.buttonText || null
+                    , data.buttonClass || null)
+                    .then(this._replayTo(data));
+
+                return null;
             }
         ]);
 });
