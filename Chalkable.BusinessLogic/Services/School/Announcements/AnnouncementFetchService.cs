@@ -43,7 +43,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 anns.AddRange(ServiceLocator.AdminAnnouncementService.GetAnnouncementsComplex(feedStartDate, feedEndDate, gradeLevels, complete, true, start, count));
             }
             var isStudent = CoreRoles.STUDENT_ROLE == Context.Role;
-            var onlyOwners = !isStudent && !Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);
+            //TODO: Refactor this later . . . 
+            var onlyOwners = !isStudent && !(Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN) && classId.HasValue);
 
             if (BaseSecurity.IsTeacher(Context) || Context.Role == CoreRoles.STUDENT_ROLE || classId.HasValue)
             {
