@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Chalkable.Common;
+using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 
@@ -10,6 +11,13 @@ namespace Chalkable.BusinessLogic.Model
     {
         public int? AnnouncementType { get; set; }
         public int? SortType { get; set; }
+
+        public AnnouncementSortOption? SortTypeEnum
+        {
+            get { return (AnnouncementSortOption?) SortType; }
+            set { SortType = (int?) value; }
+        }
+
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public int? GradingPeriodId { get; set; }
