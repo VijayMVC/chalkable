@@ -46,8 +46,8 @@ var CHLK_API = function (window, document, $) {
         REQUEST_ORIGIN: 'requestOrigin',
         ON_CALLBACK: 'handleResponse',
         RESIZED: 'appResized',
-        MODAL_ME: 'modalMe',
-        UN_MODAL_ME: 'unModalMe',
+        SHADE_ME: 'shadeMe',
+        POP_ME: 'popMe',
         STANDARD_PICKER: 'showStandardPicker',
         ON_PAUSED: 'paused',
         ON_RESUME: 'resume',
@@ -174,12 +174,12 @@ var CHLK_API = function (window, document, $) {
             postAction(data, ChlkActionTypes.CLOSE_ME, parentURL);
         },
 
-        modalMe: function (data) {
-            postAction(data, ChlkActionTypes.MODAL_ME, parentURL);
+        shadeMe: function (data) {
+            postAction(data, ChlkActionTypes.SHADE_ME, parentURL);
         },
 
-        unModalMe: function (data) {
-            postAction(data, ChlkActionTypes.UN_MODAL_ME, parentURL);
+        popMe: function (data) {
+            postAction(data, ChlkActionTypes.POP_ME, parentURL);
         },
 
         /* data: {} */

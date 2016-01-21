@@ -524,7 +524,10 @@ NAMESPACE('chlk.lib.dom', function () {
                 return this;
             },
             [[Object]],
-            OVERRIDE, ria.dom.Dom, function updateCss(props) {},
+            OVERRIDE, ria.dom.Dom, function updateCss(props) {
+                this._dom.css(props);
+                return this;
+            },
 
             /* iterator */
 
