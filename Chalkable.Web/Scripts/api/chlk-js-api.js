@@ -5,7 +5,7 @@
 var CHLK_API = function (window, document, $) {
 
     if (typeof $ === 'undefined') {
-        throw Error('CHLK_API requires jQuery')
+        throw Error('CHLK_API requires jQuery');
     }
 
 
@@ -53,7 +53,8 @@ var CHLK_API = function (window, document, $) {
         ON_RESUME: 'resume',
         ALERT_BOX: 'showAlertBox',
         PROMPT_BOX: 'showPromptBox',
-        CONFIRM_BOX: 'showConfirmBox'
+        CONFIRM_BOX: 'showConfirmBox',
+        UPDATE_ZOOM: 'updateZoom'
     };
 
     function postMessage(data, rWindow, rURL){
@@ -65,7 +66,7 @@ var CHLK_API = function (window, document, $) {
     function handleCallback(data) {
         var id = data.reqId;
         if (id && cbs[id] && (typeof cbs[id] === 'function')) {
-            cbs[id](data);
+            cbs[id](data.value);
             delete cbs[id];
         }
     }
@@ -90,6 +91,9 @@ var CHLK_API = function (window, document, $) {
         postAction(data, ChlkActionTypes.REQUEST_ORIGIN, "*");
     }
 
+    function updateZoom(zoom) {
+        (zoom >= 0) && $('html').css('zoom', zoom);
+    }
 
 
     $(function () {
@@ -97,9 +101,14 @@ var CHLK_API = function (window, document, $) {
             .on("message", function (e) {
                 console.log(e, e.originalEvent);
                 e = e.originalEvent;
+
                 switch (e.data.action) {
                     case ChlkActionTypes.UPDATE_ORIGIN:
+                        //noinspection FallThroughInSwitchStatementJS,JSHint
                         updateOrigin(e.origin);
+                        // should fall through
+                    case ChlkActionTypes.UPDATE_ZOOM:
+                        updateZoom(e.data.zoom);
                         break;
                     case ChlkActionTypes.ON_BEFORE_CLOSE:
                         handleOnBeforeClose(e.data);

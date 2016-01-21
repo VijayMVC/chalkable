@@ -10,6 +10,10 @@ NAMESPACE('chlk', function(){
         return (url && url.replace(/(:\d+)\//, '/').split("app").shift().replace(/(http[s]?:\/\/)?(www.)?/i, '').split('/').shift()) || null;
     }
 
+    function zoomLevel() {
+        return parseFloat(ria.dom.Dom('html').$.css('zoom') || '1');
+    }
+
     /** @class chlk.AppApiHost*/
     CLASS('AppApiHost', [
         // $$ - singleton instance factory
@@ -26,7 +30,15 @@ NAMESPACE('chlk', function(){
         function onStart(context) {
             this.context_ = context;
 
-            jQuery(window).on('message', this.messengerCallback_);
+            jQuery(window)
+                .on('message', this.messengerCallback_)
+                .on('resize', function () {
+                    ria.dom.Dom('iframe').valueOf()
+                        .map(function (_) { return _.contentWindow})
+                        .forEach(function (wnd) {
+                            wnd.postMessage({action: 'updateZoom', zoom: zoomLevel()}, "*");
+                        })
+                });
         },
 
         function onStop() {
@@ -76,7 +88,7 @@ NAMESPACE('chlk', function(){
             switch (data.action) {
                 case 'requestOrigin':
                     if (data.url && data.url.indexOf(window.location.origin) === 0) {
-                        source.postMessage({action: 'updateOrigin'}, origin);
+                        source.postMessage({action: 'updateOrigin', zoom: zoomLevel()}, origin);
                     }
 
                     break;
