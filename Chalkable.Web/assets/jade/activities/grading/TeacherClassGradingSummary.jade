@@ -1,0 +1,43 @@
+.class-grading.grades-page
+    -var selectedId = self.getClassId()
+
+    if self.isInProfile()
+        .buttons-group.right
+            +ActionButton('grading', "summaryBoxesClassProfile", selectedId).pressed=Msg.Item(true)
+            +ActionButton('grading', "standardsBoxesClassProfile", selectedId)=Msg.Standard(true)
+            +ActionButton('grading', "finalGradesClassProfile", selectedId)=Msg.Final_Grade(true)
+    else
+        -var topData = self.getTopData()
+        +ClassesToolBarWithAll(topData, 'grading', 'summary', null, null, null)
+        h2.page-title=Msg.Grade(true)
+        .action-bar
+            .items
+                +ActionLink('grading', "summary", selectedId).pressed=Msg.Item(true)
+                +ActionLink('grading', "standards", selectedId)=Msg.Standard(true)
+                +ActionLink('grading', "finalGrades", selectedId)=Msg.Final_Grade(true)
+                if self.isLEIntegrated() && self.isHasAccessToLE()
+                    +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
+    .buttons-group
+        +ActionButton('grading', self.isInProfile() ? 'summaryBoxesClassProfile' : 'summary', selectedId).boxes.pressed=Msg.Box(true)
+        +ActionButton('grading', self.isInProfile() ? 'summaryGridClassProfile' : 'summaryGrid', selectedId).grid=Msg.Grid
+
+    .mps-container
+        each gradingPeriod,i in self.getGradingPeriods()
+            -var item = self.getCurrentGradingBox()
+            -var selectedGradingPeriodId = item.getGradingPeriod().getId()
+            .chlk-calendar.marking-period-container(class=(gradingPeriod.getId() == selectedGradingPeriodId) ? "open" : "", data-index=i)
+                .header.mp-title(
+                    data-tooltip=gradingPeriod.getId() == selectedGradingPeriodId ? item.getTooltipText() : ''
+                )
+                    -var mpName = gradingPeriod.getName()
+                    span(data-tooltip=mpName, data-tooltip-type="overflow").mp-name= mpName
+                    .grading-selects
+                        +ActionForm('grading', 'loadGradingPeriodSummary').load-grading-period
+                            +Hidden('classId', selectedId)
+                            +Hidden('gradingPeriodId', gradingPeriod.getId().valueOf())
+                    //a(href="javascript:").grey-button.comment-button=Msg.Comment
+                    .collapse
+                .mp-data(data-grading-period-id=gradingPeriod.getId())
+                    .grades-container
+                        if gradingPeriod.getId() == selectedGradingPeriodId
+                            +RenderWith(item, chlk.templates.grading.TeacherClassGradingSummaryItemTpl)
