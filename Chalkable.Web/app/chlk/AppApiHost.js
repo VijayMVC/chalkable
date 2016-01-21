@@ -80,10 +80,17 @@ NAMESPACE('chlk', function(){
 
             var data = e.data,
                 source = e.source,
-                origin = e.origin;
+                origin = e.origin,
+                iframe = ria.dom.Dom('iframe').valueOf().filter(function (_) {return _.contentWindow === e.source}).shift();
 
-            if (!data || !source || !origin || !data.action)
+            if (!data || !source || !origin || !data.action || !iframe)
                 return;
+
+            var $iframe = ria.dom.Dom(iframe);
+
+            data.__source = source;
+            data.__origin = origin;
+            data.__iframe = $iframe;
 
             switch (data.action) {
                 case 'requestOrigin':
@@ -94,11 +101,16 @@ NAMESPACE('chlk', function(){
                     break;
 
                 case 'appResized':
-                    var iframe = ria.dom.Dom('iframe').valueOf().filter(function (_) {return _.contentWindow === e.source}).shift();
-                    if (iframe) {
-                        var $iframe = ria.dom.Dom(iframe);
-                        if (!$iframe.hasClass('fixed-height'))
-                            $iframe.$.height(data.height + 10 + 'px');
+                    if (!$iframe.hasClass('fixed-height')) {
+                        $iframe.$.height(data.height + 10 + 'px');
+                    }
+
+                    break;
+
+                case 'shadeMe':
+                case 'popMe':
+                    if ($iframe.$.parents('.app-wrapper-page').Dom().exists()) {
+                        this.doCallApiReactor_(data.action, data);
                     }
 
                     break;
@@ -106,12 +118,8 @@ NAMESPACE('chlk', function(){
                 default:
                     try {
                         var action = chlk.models.apps.AppActionTypes(data.action);
-                        data.__origin = origin;
-                        data.__source = source;
                         data.isApp && this.doCallApiReactor_(action.valueOf(), data);
                     } catch (ex) {}
-
-                    break;
             }
         },
 

@@ -2,7 +2,7 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ApplicationService');
 REQUIRE('chlk.models.common.Button');
 REQUIRE('chlk.activities.apps.AttachAppsDialog');
-
+REQUIRE('chlk.activities.apps.AppShadeDialog');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -191,6 +191,28 @@ NAMESPACE('chlk.controllers', function (){
                     .then(this._replayTo(data));
 
                 return null;
+            },
+
+            [[Object]],
+            function shadeMeAction(data) {
+                var res = ria.async.Future.$fromData(null)
+                    .then(this._replayTo(data))
+                    .then(function () {
+                        return chlk.activities.apps.AppShadeDialogModel.$fromData(data.__iframe);
+                    });
+
+                return this.ShadeView(chlk.activities.apps.AppShadeDialog, res);
+            },
+
+            [[Object]],
+            function popMeAction(data) {
+                var res = ria.async.Future.$fromData(null)
+                    .then(this._replayTo(data))
+                    .then(function () {
+                        return chlk.activities.apps.AppShadeDialogModel.$fromData(data.__iframe);
+                    });
+
+                return this.UpdateView(chlk.activities.apps.AppShadeDialog, res, 'pop-me');
             }
         ]);
 });
