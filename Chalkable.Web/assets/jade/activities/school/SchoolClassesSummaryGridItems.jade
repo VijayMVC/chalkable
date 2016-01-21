@@ -1,0 +1,28 @@
+-var classes = self.getItems()
+-var isNotEmptyStatistic = self.isNotEmptyStatistic()
+
+each clazz in classes
+    .grid-row
+        .cell.name
+            .icon
+                .pic
+                    +ClassImg(clazz, 24, 43)
+            +ActionLink('class', 'info', clazz.getId())(data-tooltip = (clazz.getClassNumber() || '') + ' '+  clazz.getName())=clazz.getName()
+        .cell.teacher-name=clazz.getPrimaryTeacherName()
+        .cell.students=clazz.getStudentsCount()
+        if isNotEmptyStatistic
+            .cell.attendance
+                +ActionLink('class', 'attendanceList', clazz.getId()).circle(
+                    data-tooltip = clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent',
+                    class = clazz.getAbsencesClass()
+                )=clazz.getAbsences() && parseInt(clazz.getAbsences(), 10)
+            .cell.discipline
+                +ActionLink('class', 'discipline', clazz.getId()).circle(
+                    data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today',
+                    class = clazz.getInfractionsClass()
+                )=clazz.getInfractionsCount() && parseInt(clazz.getInfractionsCount(), 10)
+            .cell.grades
+                +ActionLink('class', 'grading', clazz.getId()).circle(
+                    data-tooltip=clazz.getAvg() && (clazz.getAvg() + '% Average'),
+                    class = clazz.getAvgClass()
+                )=clazz.getAvg() && parseInt(clazz.getAvg(), 10)

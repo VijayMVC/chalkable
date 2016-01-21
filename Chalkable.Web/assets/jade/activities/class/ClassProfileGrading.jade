@@ -1,0 +1,11 @@
+-var clazz = self.getClazz()
+
+.profile-page.class-profile
+    h2.page-title=clazz.getName()
+    +ProfileTopBar(self, 'grading')
+    .summary-view
+        .grading-container
+            +RenderWith(clazz.getGradingPart(), self.getTemplateClass())(
+                currentUser = self.getCurrentUser()
+                userRole = self.getUserRole()
+            )

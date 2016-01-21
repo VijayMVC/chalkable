@@ -1,0 +1,64 @@
+.practice-grades-page
+  .choose-class
+    left: 400px
+
+  .grades-container
+    display: table
+    border-collapse: collapse
+    width: 100%
+
+  .row-item
+    display: table-row
+
+    &:first-child
+      background: #f7f7f5
+
+      .td-item
+        border-top: none
+
+    &:last-child
+      .td-item
+        border-bottom: none
+
+  .td-item
+    display: table-cell
+    border: 1px solid #c7c8c3
+    vertical-align: middle
+    font-size: 14px
+    padding: 10px
+
+    &:first-child
+      border-left: none
+
+    &:last-child
+      border-right: none
+
+    &:not(.name-item)
+      text-align: center
+
+    &.title-item
+      height: 36px
+      vertical-align: middle
+      font-weight: bold
+
+    &:not(.title-item)
+      height: 56px
+
+    a
+      text-decoration: none
+
+  .name-item
+    width: 24%
+    padding-left: 18px
+
+  .code-item
+    width: 20%
+
+  .description-item
+    width: 30%
+
+  .grade-item
+    width: 13%
+
+
+
