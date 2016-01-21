@@ -58,15 +58,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.SchoolYearId.HasValue);
             if (BaseSecurity.IsDistrictOrTeacher(Context))
             {
-                if (Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN))
+                if (Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN) || Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN))
                     return new ClassAnnouncementForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value);
-                if (Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM))
+                if (Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM) || Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM))
                     return new ClassAnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
             }
             if (Context.Role == CoreRoles.STUDENT_ROLE)
                 return new ClassAnnouncementForStudentDataAccess(unitOfWork, Context.SchoolYearId.Value);
                 
-            throw new NotImplementedException();
+            throw new ChalkableSecurityException("Current user has no permission to view or edit activities");
         }
 
         

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net;
 using System.Security.Authentication;
+using System.Text;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using WindowsAzure.Acs.Oauth2;
@@ -12,9 +13,9 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IAccessControlService
     {
         string GetAccessToken(string accessTokenUrl, string redirectUrl, string clientId,
-            string clientSecret, string userName, int? schoolYear, CoreRole role, string scope);
+            string clientSecret, string userName, int? schoolYear, CoreRole role, string userSessionKey, string scope);
 
-        string GetAuthorizationCode(string clientId, string userName, int? schoolYear, CoreRole role, string scope = null);
+        string GetAuthorizationCode(string clientId, string userName, int? schoolYear, CoreRole role, string userSessionKey, string scope = null);
         ApplicationRegistration GetApplication(string clientId);
         bool RegisterApplication(string clientId, string appSecretKey, string appUrl, string appName);
         void RemoveApplication(string clientId);
@@ -79,14 +80,15 @@ namespace Chalkable.BusinessLogic.Services.Master
                     }
                     else
                     {
-                        var msg = string.Format("authorize message is null for [{0}] [{1}] [{2}] [{3}] [{4}] [{5}]",
-                                                accessTokenUri, clientId, clientSecret, scope, redirectUri, refreshToken);
+                        var msg =
+                            $"authorize message is null for [{accessTokenUri}] [{clientId}] [{clientSecret}] [{scope}] [{redirectUri}] [{refreshToken}]";
                         throw new ChalkableException(msg);
                     }
                         
                 }
                 else
-                    throw new ChalkableException(string.Format("authorize http request is null for [{0}] [{1}] [{2}] [{3}] [{4}] [{5}]", accessTokenUri, clientId, clientSecret, scope, redirectUri, refreshToken));
+                    throw new ChalkableException(
+                        $"authorize http request is null for [{accessTokenUri}] [{clientId}] [{clientSecret}] [{scope}] [{redirectUri}] [{refreshToken}]");
             }
             catch (WebException webex)
             {
@@ -110,28 +112,37 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
         public string GetAccessToken(string accessTokenUrl, string redirectUrl, string clientId,
-            string clientSecret, string userName, int? schoolYearId, CoreRole role, string scope)
+            string clientSecret, string userName, int? schoolYearId, CoreRole role, string userSessionKey, string scope)
         {
-            var authorizationCode = GetAuthorizationCode(clientId, userName, schoolYearId, role, scope);
+            var authorizationCode = GetAuthorizationCode(clientId, userName, schoolYearId, role, userSessionKey, scope);
             var response = Authorize(new Uri(accessTokenUrl), clientId, clientSecret, scope, new Uri(redirectUrl), authorizationCode);
             if (response != null)
                 return response.AccessToken;
-            throw new ChalkableException(string.Format("can not get authorization token for access token url {0} redirect url {1} client id {2} authorization code {3}"
-                , accessTokenUrl, redirectUrl, clientId, authorizationCode));
+            throw new ChalkableException(
+                $"can not get authorization token for access token url {accessTokenUrl} redirect url {redirectUrl} client id {clientId} authorization code {authorizationCode}");
         }
 
-        public string GetAuthorizationCode(string clientId, string userName, int? schoolYearId, CoreRole role, string scope = null)
+        public string GetAuthorizationCode(string clientId, string userName, int? schoolYearId, CoreRole role, string userSessionKey, string scope = null)
         {
             if (string.IsNullOrEmpty(scope))
                 scope = Settings.ApiExplorerScope; //TODO: this is wrong approach
-            userName = userName + Environment.NewLine + role.Id;
+
+            var nameIdBulder = new StringBuilder();
+            nameIdBulder.Append(userName).Append(Environment.NewLine).Append(role.Id);
+
             if (schoolYearId.HasValue)
-                userName = userName + Environment.NewLine + schoolYearId;
+                nameIdBulder.Append(Environment.NewLine).Append(schoolYearId);
+            else
+                nameIdBulder.Append(Environment.NewLine).Append(-1);
+
+            if (!string.IsNullOrWhiteSpace(userSessionKey))
+                nameIdBulder.Append(Environment.NewLine).Append(userSessionKey);
+
             return regService.GetAuthorizationCode(clientId,
                  new AuthorizationServerIdentity
                  {
                      IdentityProvider = "",
-                     NameIdentifier = userName
+                     NameIdentifier = nameIdBulder.ToString()
                  },
                  scope);
         }

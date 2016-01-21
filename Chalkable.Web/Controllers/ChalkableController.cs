@@ -136,23 +136,20 @@ namespace Chalkable.Web.Controllers
             if (isAuthenticatedByToken)
             {
                 var sl = User.Identity.Name.Split(new []{Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
-                var userName = sl[0];
-                int? schoolYearId = null;
-                int roleId = int.Parse(sl[1]);
-                if (sl.Length > 2)
-                    schoolYearId = int.Parse(sl[2]);
-                var masterL = ServiceLocatorFactory.CreateMasterSysAdmin();
-                var user = masterL.UserService.GetByLogin(userName);
-                InitServiceLocators(user, CoreRoles.GetById(roleId), schoolYearId);
+                string sessionKey = sl[3];
+
+                var user = ChalkableAuthentication.GetUser(sessionKey);
+                InitServiceLocators(user.Context);
+
+                SchoolLocator.Context.IsOAuthUser = true;
+                
                 var claims = (User.Identity as ClaimsIdentity).Claims;
                 var actor = claims.First(x => x.ClaimType.EndsWith(ACTOR_SUFFIX)).Value.Split(',').FirstOrDefault();
-                SchoolLocator.Context.IsOAuthUser = true;
-                SchoolLocator.Context.SisToken = user.LoginInfo.SisToken;
-                SchoolLocator.Context.SisTokenExpires = user.LoginInfo.SisTokenExpires;
                 var app = MasterLocator.ApplicationService.GetApplicationByUrl(actor);
                 SchoolLocator.Context.IsInternalApp = app != null && app.IsInternal;
                 SchoolLocator.Context.OAuthApplication = actor;
                 SchoolLocator.Context.AppPermissions = MasterLocator.ApplicationService.GetPermisions(actor);
+
                 return;
             }
 

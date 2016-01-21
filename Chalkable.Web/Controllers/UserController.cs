@@ -191,12 +191,13 @@ namespace Chalkable.Web.Controllers
                 var context = serviceLocator.UserService.Login(login, password);
                 if (context != null)
                 {
-                    var accessTokenUri = string.Format("https://{0}.accesscontrol.windows.net/v2/OAuth2-13/", Settings.WindowsAzureOAuthServiceNamespace);
+                    var accessTokenUri =
+                        $"https://{Settings.WindowsAzureOAuthServiceNamespace}.accesscontrol.windows.net/v2/OAuth2-13/";
                     var scope = Settings.WindowsAzureOAuthRelyingPartyRealm;
                     return Json(new
                     {
                         token = serviceLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId,
-                                                           clientSecret, login, context.SchoolYearId, context.Role, scope)
+                                                           clientSecret, login, context.SchoolYearId, context.Role, ChalkableAuthentication.GetSessionKey(),scope)
                     }, 5);
                 }
             }
