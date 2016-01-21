@@ -13,7 +13,7 @@ NAMESPACE('chlk.templates.apps', function(){
             ArrayOf(chlk.models.standard.CCStandardCategory), 'items',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.AppId, 'applicationId',
+            String, 'requestId',
 
             [ria.templates.ModelPropertyBind],
             Array, 'standardsIds'

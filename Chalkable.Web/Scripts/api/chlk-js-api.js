@@ -65,7 +65,7 @@ var CHLK_API = function (window, document, $) {
     function handleCallback(data) {
         var id = data.reqId;
         if (id && cbs[id] && (typeof cbs[id] === 'function')) {
-            cbs[id](data);
+            cbs[id](data.value);
             delete cbs[id];
         }
     }
