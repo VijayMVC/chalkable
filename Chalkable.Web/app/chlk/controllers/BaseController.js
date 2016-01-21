@@ -1,4 +1,6 @@
 REQUIRE('ria.mvc.Controller');
+REQUIRE('ria.async.Completer');
+
 REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.people.Claim');
@@ -21,6 +23,8 @@ REQUIRE('chlk.services.UserTrackingService');
 NAMESPACE('chlk.controllers', function (){
 
     var Raygun = window.Raygun || null;
+
+    var WidgetMap = {};
 
     if (Raygun) {
         Raygun.fetchRaygunError = function (error) {
@@ -116,8 +120,8 @@ NAMESPACE('chlk.controllers', function (){
     var SIDEBAR_CONTROLS_ID = '#sidebar';
 
     /** @class chlk.controllers.BaseController */
-   CLASS(ABSTRACT,
-       'BaseController', EXTENDS(ria.mvc.Controller), [
+    CLASS(ABSTRACT,
+        'BaseController', EXTENDS(ria.mvc.Controller), [
 
            [ria.mvc.Inject],
            chlk.services.UserTrackingService, 'userTrackingService',
@@ -543,7 +547,32 @@ NAMESPACE('chlk.controllers', function (){
                    }
                    throw e;
                }
-           }
-   ])
+           },
 
+            [[String, String, Object]],
+            ria.async.Future, function WidgetStart(controller, action, args) {
+                var completer = new ria.async.Completer;
+
+                var requestId = new Date().getTime().toString(36) + Math.random().toString(36);
+
+                this.BackgroundNavigate(controller, action + 'Widget', [requestId].concat(args));
+
+                Assert(WidgetMap[requestId] === undefined);
+                WidgetMap[requestId] = completer;
+
+                return completer.getFuture();
+            },
+
+            VOID, function WidgetComplete(requestId, response) {
+                Assert(WidgetMap[requestId]);
+                WidgetMap[requestId].complete(response);
+                delete WidgetMap[requestId];
+            },
+
+            VOID, function WidgetFail(requestId, error) {
+                Assert(WidgetMap[requestId]);
+                WidgetMap[requestId].fail(error);
+                delete WidgetMap[requestId];
+            }
+    ]);
 });

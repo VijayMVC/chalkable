@@ -25,6 +25,15 @@ NAMESPACE('chlk.models.standard', function () {
                 this.parentStandardId = SJX.fromValue(raw.parentstandardid, chlk.models.id.CommonCoreStandardId);
                 this.standardCode = SJX.fromValue(raw.standardcode, String);
                 this.description = SJX.fromValue(raw.description, String);
+            },
+
+            Object, function serialize() {
+                return {
+                    id: this.id.valueOf(),
+                    parentStandardId: this.parentStandardId.valueOf(),
+                    standardCode: this.standardCode.valueOf(),
+                    description: this.description.valueOf()
+                }
             }
     ]);
 });
