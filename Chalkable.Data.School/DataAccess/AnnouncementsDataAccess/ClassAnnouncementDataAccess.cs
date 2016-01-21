@@ -148,7 +148,10 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 };
             var dbQuery = SeletClassAnnouncements(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, personId);
             conds.BuildSqlWhere(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME);
-            FilterClassAnnouncementByCaller(dbQuery, personId);
+            
+            dbQuery.Sql.Append(@" and (ClassRef in (select ClassTeacher.ClassRef from ClassTeacher where ClassTeacher.PersonRef = @callerId))");
+            dbQuery.Parameters.Add("callerId", personId);
+
             Orm.OrderBy(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, Announcement.CREATED_FIELD, Orm.OrderType.Desc);
             return ReadOneOrNull<ClassAnnouncement>(dbQuery);
         }
