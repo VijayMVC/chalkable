@@ -71,9 +71,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     anns.AddRange(classAnns);
 
                     if (Context.Role == CoreRoles.STUDENT_ROLE)
-                        anns.AddRange(ServiceLocator.AdminAnnouncementService.GetAnnouncementsComplex(feedStartDate, feedEndDate, gradeLevels, complete, false));
+                    {
+                        var aanns = ServiceLocator.AdminAnnouncementService.GetAnnouncementsComplex(feedStartDate, feedEndDate, gradeLevels, complete, false);
+                        aanns = aanns.Where(x => x.AdminAnnouncementData.Expires < feedEndDate).ToList();
+                        anns.AddRange(aanns);
+                    }
 
-                    anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(feedStartDate, feedEndDate, null, classId, complete, onlyOwners));
+                    var lps = ServiceLocator.LessonPlanService.GetLessonPlansForFeed(feedStartDate, feedEndDate, null, classId, complete, onlyOwners);
+                    lps = lps.Where(x => x.LessonPlanData.EndDate < feedEndDate).ToList();
+                    anns.AddRange(lps);
                 }
                 else switch ((AnnouncementTypeEnum) settings.AnnouncementType.Value)
                 {
