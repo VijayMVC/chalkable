@@ -95,11 +95,13 @@ namespace Chalkable.BusinessLogic.Services.School
             var stiScores = stiGradeBook.Scores;
             if (!includeWithdrawnStudents)
                 stiScores = stiScores.Where(x => !x.Withdrawn).ToList();
-            gradeBook.Students = gradeBook.Students.Where(s => stiScores.Any(score => score.StudentId == s.Id)).ToList();
+
+            if (stiScores.Any())
+                gradeBook.Students = gradeBook.Students.Where(s => stiScores.Any(score => score.StudentId == s.Id)).ToList();
      
             gradeBook.Students = gradeBook.Students
-                                .OrderBy(x => x.LastName, StringComparer.OrdinalIgnoreCase)
-                                .ThenBy(x => x.FirstName, StringComparer.OrdinalIgnoreCase).ToList();
+                                    .OrderBy(x => x.LastName, StringComparer.OrdinalIgnoreCase)
+                                    .ThenBy(x => x.FirstName, StringComparer.OrdinalIgnoreCase).ToList();
             if (stiGradeBook.StudentTotalPoints != null)
             {
                 var totalPoints = stiGradeBook.StudentTotalPoints.Where(x => x.GradingPeriodId == gradingPeriod.Id).ToList();
