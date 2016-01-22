@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
@@ -69,7 +70,6 @@ namespace Chalkable.Web.Controllers
                     var viewData = ApiExplorerViewData.Create(description.Value, token, description.Key);
                     result.Add(viewData);
                 }
-                    
             }
             return Json(result, 8);
         }
@@ -83,8 +83,8 @@ namespace Chalkable.Web.Controllers
             var redirectUri = Settings.ApiExplorerRedirectUri;
             var accessTokenUri = string.Format(AcsUrlFormat, Settings.WindowsAzureOAuthServiceNamespace);
             var scope = Settings.ApiExplorerScope;
-            var sessionKey = ChalkableAuthentication.GetSessionKey();
-            return MasterLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId, clientSecret, userName, schoolYearId, role, sessionKey, scope);
+            var userInfo = OAuthUserIdentityInfo.Create(userName, role, schoolYearId, null);
+            return MasterLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId, clientSecret, userInfo, scope);
         }
 
         public ActionResult DeveloperDocs(bool InFrame = false)
