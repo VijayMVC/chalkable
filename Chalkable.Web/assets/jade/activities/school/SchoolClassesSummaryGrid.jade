@@ -1,0 +1,24 @@
+-var classes = self.getItems()
+-var isNotEmptyStatistic = self.isNotEmptyStatistic()
+
+input(type="hidden", name="start", value=0)
+.chlk-calendar
+    .grid-top-content
+        if classes.length
+            +ListView(classes)(
+                infiniteScroll = true,
+                pageSize = 10
+            )
+                Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
+                .grid-content
+                    .grid-header.grid-row
+                        .cell.name=Msg.Classes
+                        .cell.teacher-name=Msg.Teacher
+                        .cell.students=Msg.Students
+                        if isNotEmptyStatistic
+                            .cell.attendance=Msg.Attendance
+                            .cell.discipline=Msg.Discipline
+                            .cell.grades=Msg.Grade_Avg
+                    +RenderWith(self.getModel(), chlk.templates.school.SchoolClassesStatisticItemsTpl)
+        else
+            .no-items-text There are no classes
