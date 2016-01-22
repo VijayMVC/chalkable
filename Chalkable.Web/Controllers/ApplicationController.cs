@@ -242,8 +242,8 @@ namespace Chalkable.Web.Controllers
             if (app == null)
                 throw new ChalkableException("Application not found");
 
-            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, Context.Login, Context.SchoolYearId, Context.Role
-                , ChalkableAuthentication.GetSessionKey());
+            var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, Context.SchoolYearId, ChalkableAuthentication.GetSessionKey());
+            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, userInfo);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
             
             var appInstall = SchoolLocator.AppMarketService.GetInstallationForPerson(app.Id, Context.PersonId.Value);
@@ -268,7 +268,8 @@ namespace Chalkable.Web.Controllers
             if (app == null)
                 throw new ChalkableException("Application not found");
 
-            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, Context.Login, null, Context.Role, ChalkableAuthentication.GetSessionKey());
+            var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, null, ChalkableAuthentication.GetSessionKey());
+            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, userInfo);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
 
             var hasMyApps = MasterLocator.ApplicationService.HasMyApps(app);

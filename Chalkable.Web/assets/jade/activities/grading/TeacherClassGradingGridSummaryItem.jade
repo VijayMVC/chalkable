@@ -71,7 +71,7 @@ mixin DisplayTotalPoints(model)
 .ann-types-container
     +ActionForm('grading', 'changeStudentsOrder').change-order-form
         +Hidden('studentIds', self.getStudentIds()).student-ids
-    if !self.getGradingItems().length || !self.getStudents().length
+    if !self.getGradingItems().length && !self.getStudentAverages() && !self.isAbleDisplayStudentAverage() && !self.isAbleDisplayAlphaGrades() || !self.getStudents().length
         .no-items-text=Msg.No_grades_yet
     else
         .dotted-container.name-container.with-horizontal-dots

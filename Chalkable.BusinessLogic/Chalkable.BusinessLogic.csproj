@@ -158,6 +158,7 @@
     <Compile Include="Model\FinalGradeInfo.cs" />
     <Compile Include="Model\GradingStandardInfo.cs" />
     <Compile Include="Model\LEParams.cs" />
+    <Compile Include="Model\OAuthUserIdentity.cs" />
     <Compile Include="Model\PracticeGradeDetailedInfo.cs" />
     <Compile Include="Model\RecipientInfo.cs" />
     <Compile Include="Model\Reports\AttendanceRegisterInputModel.cs" />
