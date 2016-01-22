@@ -9,7 +9,7 @@
         #top-panel
             #avatar-photo-conainer.left-block.panel-block
                 .img-container
-                    +PersonImg(self.getStudentExplorer(), 140, true)
+                    +PersonImg(self.getStudentExplorer(), 140, !self.getUserRole().isStudent())
                     .grades-container
             #student-info-panel.right-block.panel-block
                 displayName =self.getStudentExplorer().getDisplayName() || self.getStudentExplorer().getFullName()

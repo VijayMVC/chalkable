@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using Chalkable.Common.Exceptions;
@@ -56,15 +55,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             };
             ExecuteStoredProcedure("spDeleteAnnouncements", paraments);
         }
-
-        //protected AnnouncementDetails GetDetails(string procedureName, IDictionary<string, object> parameters)
-        //{
-        //    using (var reader = ExecuteStoredProcedureReader(procedureName, parameters))
-        //    {
-        //        return BuildGetDetailsResult(reader);
-        //    }
-        //}
-
         protected IList<AnnouncementDetails> GetDetailses(string procedureName, IDictionary<string, object> parameters)
         {
             using (var reader = ExecuteStoredProcedureReader(procedureName, parameters))
@@ -114,34 +104,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         protected AnnouncementDetails BuildGetDetailsResult(SqlDataReader reader)
         {
-            //var announcement = reader.ReadOrNull<AnnouncementDetails>();
-            //if (announcement != null)
-            //{
-            //    announcement.AnnouncementData = ReadAnnouncementData(announcement, reader);
-            //    announcement = ReadAnnouncementAdditionalData(announcement, reader);
-            //}
             return BuildGetDetailsesResult(reader).FirstOrDefault();
         }
-
-        //old method
-        //protected virtual AnnouncementDetails ReadAnnouncementAdditionalData(AnnouncementDetails announcement, SqlDataReader reader)
-        //{
-        //    reader.NextResult();
-        //    if (reader.Read())
-        //        announcement.Owner = PersonDataAccess.ReadPersonData(reader);
-        //    reader.NextResult();
-        //    announcement.AnnouncementQnAs = AnnouncementQnADataAccess.ReadAnnouncementQnAComplexes(reader);
-        //    reader.NextResult();
-        //    announcement.AnnouncementAttributes = AnnouncementAssignedAttributeDataAccess.ReadAttributes(reader);
-        //    reader.NextResult();
-        //    announcement.AnnouncementApplications =  reader.ReadList<AnnouncementApplication>();
-        //    reader.NextResult();
-        //    announcement.AnnouncementStandards = reader.ReadList<AnnouncementStandardDetails>();
-        //    reader.NextResult();
-        //    announcement.AnnouncementAttachments = reader.ReadList<AnnouncementAttachment>(true);
-        //    announcement.StudentAnnouncements = new List<StudentAnnouncementDetails>();
-        //    return announcement;
-        //}
         
         protected AnnouncementQueryResult ReadAnnouncementsQueryResult(SqlDataReader reader, AnnouncementsQuery query)
         {
@@ -238,7 +202,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         public int? GalleryCategoryId { get; set; }
 
-        public int? Sort { get; set; }
+        public AnnouncementSortOption? Sort { get; set; }
 
         public AnnouncementsQuery()
         {
@@ -246,6 +210,17 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             Count = int.MaxValue;
         }
     }
+
+    public enum AnnouncementSortOption
+    {
+        DueDateAscending = 0,
+        DueDateDescending = 1,
+        NameAscending = 2,
+        NameDescending = 3,
+        SectionNameAscending = 4,
+        SectionNameDescending = 5
+    }
+
     public class AnnouncementQueryResult
     {
         public List<AnnouncementComplex> Announcements { get; set; }

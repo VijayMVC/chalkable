@@ -9,6 +9,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Authentication;
 using Chalkable.Web.Models;
 using Chalkable.Web.Models.ApplicationsViewData;
 
@@ -68,7 +69,8 @@ namespace Chalkable.Web.Controllers
                     : new Application[]{};
             var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
 
-            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(miniQuizApp.Url, Context.Login, Context.SchoolYearId, Context.Role);
+            var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, Context.SchoolYearId, ChalkableAuthentication.GetSessionKey());
+            var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(miniQuizApp.Url, userInfo);
 
             return Json(MiniQuizAppInfoViewData.Create(miniQuizApp, suggestedApps, appInstallations, hasMyAppDic, Context.PersonId, authorizationCode));
         }

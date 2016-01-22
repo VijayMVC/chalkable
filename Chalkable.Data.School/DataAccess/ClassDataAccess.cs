@@ -107,7 +107,7 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public static IList<ClassDetails> ReadClasses(DbDataReader reader, bool withPeriods = true)
+        public static IList<ClassDetails> ReadClasses(DbDataReader reader, bool withPeriods = true, bool sort = true)
         {
             var classes = new List<ClassDetails>();
             while (reader.Read())
@@ -141,7 +141,7 @@ namespace Chalkable.Data.School.DataAccess
                     classDetailse.ClassPeriods = classPeriods.Where(cPeriod => cPeriod.ClassRef == classDetailse.Id).ToList();
                 }
             }
-            return SortClasses(classes);
+            return sort ? SortClasses(classes) : classes;
         }
 
         private static IList<ClassDetails> SortClasses(IList<ClassDetails> classDetailses)
@@ -172,7 +172,6 @@ namespace Chalkable.Data.School.DataAccess
         }
 
         private const string SP_GET_CLASSES_BY_SCHOOL_YEAR = "spGetClassesBySchoolYear";
-
         public IList<ClassDetails> GetClassesBySchoolYear(int schoolYearId, int start, int count, string filter, int? teacherId)
         {
             var param = new Dictionary<string, object>()
@@ -186,26 +185,17 @@ namespace Chalkable.Data.School.DataAccess
 
             using (var reader = ExecuteStoredProcedureReader(SP_GET_CLASSES_BY_SCHOOL_YEAR, param))
             {
-                return ReadClasses(reader);
+                return ReadClasses(reader, false, false);
             }
         }
 
         private const string SP_GET_CLASSES_BY_IDS = "spGetClassesByIds";
-
         public IList<Class> GetClassesByIds(IList<int> ids)
         {
-            if(ids == null || ids.Count == 0)
-                return new List<Class>();
+            if(ids == null || ids.Count == 0) return new List<Class>();
 
-            var param = new Dictionary<string, object>()
-            {
-                ["ids"] = ids
-            };
-
-            using (var reader = ExecuteStoredProcedureReader(SP_GET_CLASSES_BY_IDS, param))
-            {
-                return reader.ReadList<Class>();
-            }
+            var param = new Dictionary<string, object> {["ids"] = ids};
+            return ExecuteStoredProcedureList<Class>(SP_GET_CLASSES_BY_IDS, param);
         } 
     }
 }

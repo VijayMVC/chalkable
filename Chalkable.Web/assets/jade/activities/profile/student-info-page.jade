@@ -35,8 +35,8 @@ mixin ParentProfileInfoView(contacts)
 .profile-page.view-mode
     h2.page-title=Msg.Student_profile
     +ProfileTopBar(self, 'info')
-    +ProfileInfoView(self.getUser())
+    +ProfileInfoView(self)
         +ParentProfileInfoView(self.getUser().getStudentContacts())
         //todo parent section
-    +ProfileInfoForm('students', self.getUser())
+    +ProfileInfoForm('students', self)
 

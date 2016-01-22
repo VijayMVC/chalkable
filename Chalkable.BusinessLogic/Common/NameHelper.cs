@@ -14,7 +14,6 @@ namespace Chalkable.BusinessLogic.Common
             return !string.IsNullOrEmpty(gender) && gender.ToLower() == GENDER_MALE ? MR : MS;
         }
 
-
         private static string StaffDisplayName(string lastName, string gender, bool upper)
         {
             var ln = upper ? lastName.ToUpper() : lastName;
@@ -23,8 +22,8 @@ namespace Chalkable.BusinessLogic.Common
         
         public static string FullName(string firstName, string lastName, bool upper = true, string gender = null)
         {
-            var fn = upper ? firstName.ToUpper() : firstName;
-            var ln = upper ? lastName.ToUpper() : lastName;
+            var fn = upper ? firstName.ToUpper() : firstName.CapitalizeFirstLetter();
+            var ln = upper ? lastName.ToUpper() : lastName.CapitalizeFirstLetter();
             var gn = string.IsNullOrWhiteSpace(gender) ? "" : ResolveSalutation(gender);
             return gn + fn + " " + ln;
         }
@@ -47,7 +46,7 @@ namespace Chalkable.BusinessLogic.Common
         public static string DisplayName(this Person person, bool upper = true)
         {
             if (person.RoleRef == CoreRoles.STUDENT_ROLE.Id)
-                return FullName(person.FirstName, person.LastName, upper); 
+                return FullName(person.FirstName, person.LastName, upper);
             return StaffDisplayName(person.LastName, person.Gender, upper);
         }
 
@@ -61,9 +60,9 @@ namespace Chalkable.BusinessLogic.Common
             return FullName(student.FirstName, student.LastName, upper);
         }
 
-        public static string FullName(this Person person, bool upper = true)
+        public static string FullName(this Person person, bool upper = true, bool withSalutation = false)
         {
-            return FullName(person.FirstName, person.LastName, upper);
+            return FullName(person.FirstName, person.LastName, upper, withSalutation ? person.Gender : null);
         }
 
     }

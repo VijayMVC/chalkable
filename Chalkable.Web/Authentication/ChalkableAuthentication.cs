@@ -36,7 +36,7 @@ namespace Chalkable.Web.Authentication
             return value;
         }
 
-        private static string GetSessionKey()
+        public static string GetSessionKey()
         {
             var httpCookie = HttpContext.Current.Request.Cookies[SESSION_KEY_COOKIE_NAME];
             if (httpCookie != null)
@@ -87,13 +87,18 @@ namespace Chalkable.Web.Authentication
         public static ChalkablePrincipal GetUser()
         {
             var sessionKey = GetSessionKey();
+            return GetUser(sessionKey);
+        }
+
+        public static ChalkablePrincipal GetUser(string sessionKey)
+        {
             if (sessionKey == null) return null;
 
             var userInfo = GlobalCache.GetUserInfo(sessionKey);
             if (userInfo == null) return null;
 
             var ticket = FormsAuthentication.Decrypt(userInfo.Auth);
-            if (ticket == null || ticket.UserData == null)
+            if (ticket?.UserData == null)
                 return null;
 
             UserContext cntx;

@@ -5,6 +5,7 @@ using System.Net;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
@@ -102,7 +103,7 @@ namespace Chalkable.Web.Controllers
         {
             var appUrl = HttpRuntime.AppDomainAppVirtualPath;
             if (!string.IsNullOrEmpty(appUrl) && appUrl != "/") appUrl += "/";
-            return string.Format("{0}://{1}{2}", Request.Url.Scheme, authority, appUrl);
+            return $"{Request.Url.Scheme}://{authority}{appUrl}";
         }
         protected string GetBaseAppUrl()
         {
@@ -116,17 +117,9 @@ namespace Chalkable.Web.Controllers
         
         public IServiceLocatorMaster MasterLocator { get; protected set; }
         public IServiceLocatorSchool SchoolLocator { get; protected set; }
-        protected UserContext Context
-        {
-            get
-            {
-                if (SchoolLocator != null)
-                    return SchoolLocator.Context;
-                return MasterLocator.Context;
-            }
-        }
+        protected UserContext Context => SchoolLocator != null ? SchoolLocator.Context : MasterLocator.Context;
 
-        protected override void Initialize(System.Web.Routing.RequestContext requestContext)
+        protected override void Initialize(RequestContext requestContext)
         {
             base.Initialize(requestContext);
             var chalkablePrincipal = User as ChalkablePrincipal;
@@ -135,24 +128,20 @@ namespace Chalkable.Web.Controllers
             bool isAuthenticatedByToken = OauthAuthenticate.Instance.TryAuthenticateByToken(requestContext);
             if (isAuthenticatedByToken)
             {
-                var sl = User.Identity.Name.Split(new []{Environment.NewLine}, StringSplitOptions.RemoveEmptyEntries);
-                var userName = sl[0];
-                int? schoolYearId = null;
-                int roleId = int.Parse(sl[1]);
-                if (sl.Length > 2)
-                    schoolYearId = int.Parse(sl[2]);
-                var masterL = ServiceLocatorFactory.CreateMasterSysAdmin();
-                var user = masterL.UserService.GetByLogin(userName);
-                InitServiceLocators(user, CoreRoles.GetById(roleId), schoolYearId);
+                var userData = OAuthUserIdentityInfo.CreateFromString(User.Identity.Name);
+                
+                var user = ChalkableAuthentication.GetUser(userData.SessionKey);
+                InitServiceLocators(user.Context);
+
+                SchoolLocator.Context.IsOAuthUser = true;
+                
                 var claims = (User.Identity as ClaimsIdentity).Claims;
                 var actor = claims.First(x => x.ClaimType.EndsWith(ACTOR_SUFFIX)).Value.Split(',').FirstOrDefault();
-                SchoolLocator.Context.IsOAuthUser = true;
-                SchoolLocator.Context.SisToken = user.LoginInfo.SisToken;
-                SchoolLocator.Context.SisTokenExpires = user.LoginInfo.SisTokenExpires;
                 var app = MasterLocator.ApplicationService.GetApplicationByUrl(actor);
                 SchoolLocator.Context.IsInternalApp = app != null && app.IsInternal;
                 SchoolLocator.Context.OAuthApplication = actor;
                 SchoolLocator.Context.AppPermissions = MasterLocator.ApplicationService.GetPermisions(actor);
+
                 return;
             }
 
@@ -168,32 +157,7 @@ namespace Chalkable.Web.Controllers
             }
             InitServiceLocators(context);
         }
-
-        private void InitServiceLocators(User user, CoreRole role, int? schoolYearId = null)
-        {
-            if (user.SchoolUsers == null || user.SchoolUsers.Count == 0)
-                throw new ChalkableException(ChlkResources.ERR_USER_IS_NOT_ASSIGNED_TO_SCHOOL);
-
-            SchoolYear schoolYear = null;
-            var schoolUser = user.SchoolUsers[0];
-            if (schoolYearId.HasValue)
-            {
-                //todo : needs refactoring
-                var schoolL = user.IsDemoUser
-                    ? ServiceLocatorFactory.CreateSchoolLocator(user.SchoolUsers[0]) 
-                    : ServiceLocatorFactory.CreateMasterSysAdmin().SchoolServiceLocator(user.DistrictRef.Value, null);
-                schoolYear = schoolL.SchoolYearService.GetSchoolYearById(schoolYearId.Value);
-                schoolUser = user.SchoolUsers.FirstOrDefault(x => x.School.LocalId == schoolYear.SchoolRef);
-                if(schoolUser == null)
-                    throw new ChalkableException($"There is no school in current District with such schoolYearId : {schoolYear.Id}");
-            }
-            SchoolLocator = ServiceLocatorFactory.CreateSchoolLocator(schoolUser, schoolYear);
-            MasterLocator = SchoolLocator.ServiceLocatorMaster;
-            Context.Role = role;
-            Context.RoleId = role.Id;
-        }
-
-
+        
         protected void InitServiceLocators(UserContext context)
         {
             SchoolLocator = ServiceLocatorFactory.CreateSchoolLocator(context);

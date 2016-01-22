@@ -64,14 +64,10 @@
     <script build:src="/app/chlk/chlk-constants.js" src="@Url.StaticContent("/app/chlk/chlk-constants.js")"></script>
     <!-- endbuild -->
 
-@if (Chalkable.Web.Tools.CompilerHelper.IsProduction)
+@if (!Chalkable.Web.Tools.CompilerHelper.IsProduction)
 {
-    <script type="text/javascript" src="/Scripts/api/chlk-post-message-api.min.js"></script>
-}
-else
-{
-    <!-- build:js /Scripts/api/chlk-post-message-api.min.js -->
-    <script type="text/javascript" src="/Scripts/api/chlk-post-message-api.js"></script>
+    <!-- build:js /Scripts/api/chlk-js-api.min.js -->
+    <script type="text/javascript" build:src="/Scripts/api/chlk-js-api.js"></script>
     <!-- endbuild -->
 }
 

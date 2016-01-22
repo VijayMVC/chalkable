@@ -28,7 +28,8 @@ Begin
 		vwLessonPlan
 		left join (select * from AnnouncementRecipientData where PersonRef = @personId) as annRecipData on Id = annRecipData.AnnouncementRef
 	Where 
-		(@toDate is null or (EndDate <= @toDate and EndDate >= @fromDate))
+		(@toDate is null or EndDate <= @toDate)
+		and (@fromDate is null or EndDate >= @fromDate)
 		and ((@roleId = @TEACHER_ROLE 
 			  and exists(select * from ClassTeacher where PersonRef = @personId and ClassTeacher.ClassRef = vwLessonPlan.ClassRef))
 			 or (@roleId = @STUDENT_ROLE

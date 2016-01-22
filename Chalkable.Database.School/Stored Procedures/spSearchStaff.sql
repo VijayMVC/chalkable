@@ -16,62 +16,59 @@ select
 count(*) as AllCount
 from
 (
-select
-Staff.Id,
-Staff.FirstName,
-Staff.LastName,
-Staff.BirthDate,
-Staff.Gender,
-Staff.UserId
-from
-Staff
-join UserSchool on Staff.UserId = UserSchool.UserRef
-join ClassTeacher on Staff.Id = ClassTeacher.PersonRef
-join Class on Class.Id = ClassTeacher.ClassRef
-where
-UserSchool.SchoolRef = @schoolId and
-Class.SchoolYearRef = @schoolYearId and
-(@classId is null or ClassTeacher.ClassRef = @classId) and
-(@studentId is null or ClassTeacher.ClassRef in (select ClassPerson.ClassRef from ClassPerson where ClassPerson.PersonRef = @studentId)) and
-(@filter is null or FirstName like @filter or LastName like @filter)
-group by
-Staff.Id,
-Staff.FirstName,
-Staff.LastName,
-Staff.BirthDate,
-Staff.Gender,
-Staff.UserId
+Select
+	Staff.Id,
+	Staff.FirstName,
+	Staff.LastName,
+	Staff.BirthDate,
+	Staff.Gender,
+	Staff.UserId
+From
+	Staff
+	join UserSchool on Staff.UserId = UserSchool.UserRef
+	join ClassTeacher on Staff.Id = ClassTeacher.PersonRef
+	join Class on Class.Id = ClassTeacher.ClassRef
+Where
+	UserSchool.SchoolRef = @schoolId and
+	Class.SchoolYearRef = @schoolYearId and
+	(@classId is null or ClassTeacher.ClassRef = @classId) and
+	(@studentId is null or ClassTeacher.ClassRef in (select ClassPerson.ClassRef from ClassPerson where ClassPerson.PersonRef = @studentId)) and
+	(@filter is null or FirstName like @filter or LastName like @filter)
+Group by
+	Staff.Id,
+	Staff.FirstName,
+	Staff.LastName,
+	Staff.BirthDate,
+	Staff.Gender,
+	Staff.UserId
 ) X
 
 
-select
-Staff.Id,
-Staff.FirstName,
-Staff.LastName,
-Staff.BirthDate,
-Staff.Gender,
-Staff.UserId
-from
-Staff
+Select
+	Staff.Id,
+	Staff.FirstName,
+	Staff.LastName,
+	Staff.BirthDate,
+	Staff.Gender,
+	Staff.UserId
+From Staff
 join UserSchool on Staff.UserId = UserSchool.UserRef
 join ClassTeacher on Staff.Id = ClassTeacher.PersonRef
 join Class on Class.Id = ClassTeacher.ClassRef
-where
-UserSchool.SchoolRef = @schoolId and
-Class.SchoolYearRef = @schoolYearId and
-(@classId is null or ClassTeacher.ClassRef = @classId) and
-(@studentId is null or ClassTeacher.ClassRef in (select ClassPerson.ClassRef from ClassPerson where ClassPerson.PersonRef = @studentId)) and
-(@filter is null or FirstName like @filter or LastName like @filter)
-group by
-Staff.Id,
-Staff.FirstName,
-Staff.LastName,
-Staff.BirthDate,
-Staff.Gender,
-Staff.UserId
-order by
-case when @orderByFirstName = 1
-then FirstName
-else LastName
-end
+Where
+	UserSchool.SchoolRef = @schoolId and
+	Class.SchoolYearRef = @schoolYearId and
+	(@classId is null or ClassTeacher.ClassRef = @classId) and
+	(@studentId is null or ClassTeacher.ClassRef in (select ClassPerson.ClassRef from ClassPerson where ClassPerson.PersonRef = @studentId)) and
+	(@filter is null or FirstName like @filter or LastName like @filter)
+Group by
+	Staff.Id,
+	Staff.FirstName,
+	Staff.LastName,
+	Staff.BirthDate,
+	Staff.Gender,
+	Staff.UserId
+Order by IIF(@orderByFirstName = 1, FirstName, LastName) asc,
+		 IIF(@orderByFirstName <> 1, FirstName, LastName) asc
+
 OFFSET @start ROWS FETCH NEXT @count ROWS ONLY

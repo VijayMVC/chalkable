@@ -1,4 +1,5 @@
-﻿using Chalkable.Data.Common;
+﻿using Chalkable.Common.Exceptions;
+using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model.Announcements;
 
@@ -12,13 +13,13 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         
         public override ClassAnnouncement GetLastDraft(int personId)
         {
-            throw new System.NotImplementedException();
+            throw new ChalkableSecurityException("Student is not able to get drafts");
         }
 
         protected override DbQuery SeletClassAnnouncements(string tableName, int callerId)
         {
             var dbQuery = new DbQuery();
-            var selectSet = string.Format("{0}.*, cast(0 as bit) as IsOwner", tableName);
+            var selectSet = $"{tableName}.*, cast(0 as bit) as IsOwner";
             dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, selectSet, tableName);
             return dbQuery;
         }

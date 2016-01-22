@@ -2,22 +2,13 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.Linq;
 using System.Net.Http;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.StiConnector.Connectors
 {
-    public enum ActivitySearchSortOption
-    {
-        DueDateAscending = 0,
-        DueDateDescending = 1,
-        NameAscending = 2,
-        NameDescending = 3,
-        SectionNameAscending = 4,
-        SectionNameDescending = 5
-    }
+    
 
     public class ActivityConnector : ConnectorBase
     {
@@ -41,17 +32,8 @@ namespace Chalkable.StiConnector.Connectors
             return Call<Activity>(url);
         }
 
-        private IList<Activity> PaginateActivity(IList<Activity> activities, int? start, int? end)
-        {
-            if (start.HasValue)
-                activities = activities.Skip(start.Value).ToList();
-            if (end.HasValue)
-                activities = activities.Take(end.Value - (start ?? 0)).ToList();
-            return activities;
-        }
-
         
-        public IList<Activity> GetActivities(int sectionId, int? start, int? end, DateTime? endDate = null, DateTime? startDate = null, bool? complete = false, ActivitySearchSortOption? sort = ActivitySearchSortOption.DueDateAscending)
+        public IList<Activity> GetActivities(int sectionId, int? start, int? end, int? sort, DateTime? endDate = null, DateTime? startDate = null, bool? complete = false)
         {
             var url = string.Format(BaseUrl + "chalkable/sections/{0}/activities", sectionId);
             var optionalParams = new NameValueCollection();
@@ -66,12 +48,12 @@ namespace Chalkable.StiConnector.Connectors
             if(complete.HasValue)
                 optionalParams.Add(COOMPLETE, complete.Value.ToString());
             if (sort.HasValue)
-                optionalParams.Add(SORT, ((int)sort.Value).ToString());
+                optionalParams.Add(SORT, sort.Value.ToString());
             return  Call<IList<Activity>>(url, optionalParams);
         }
 
-        public IList<Activity> GetTeacherActivities(int acadSessionId, int teacherId, int? start = null, int? end = null
-            , DateTime? endDate = null, DateTime? startDate = null, bool? complete = false, ActivitySearchSortOption? sort = ActivitySearchSortOption.DueDateAscending)
+        public IList<Activity> GetTeacherActivities(int acadSessionId, int teacherId, int? sort, int? start = null, int? end = null
+            , DateTime? endDate = null, DateTime? startDate = null, bool? complete = false)
         {
             var url = string.Format(BaseUrl + "Chalkable/{0}/teachers/{1}/activities", acadSessionId, teacherId);
             var optionalParams = new NameValueCollection();
@@ -86,12 +68,12 @@ namespace Chalkable.StiConnector.Connectors
             if(complete.HasValue)
                 optionalParams.Add(COOMPLETE, complete.Value.ToString());
             if (sort.HasValue)
-                optionalParams.Add(SORT, ((int)sort.Value).ToString());
+                optionalParams.Add(SORT, sort.Value.ToString());
             return Call<IList<Activity>>(url, optionalParams);
         }
 
-        public IList<Activity> GetStudentAcivities(int acadSessionId, int studentId, int? start = null, int? end = null
-            , DateTime? endDate = null, DateTime? startDate = null, bool? complete = false, bool? graded = null, int? classId = null, ActivitySearchSortOption? sort = ActivitySearchSortOption.DueDateAscending)
+        public IList<Activity> GetStudentAcivities(int acadSessionId, int studentId, int? sort, int? start = null, int? end = null
+            , DateTime? endDate = null, DateTime? startDate = null, bool? complete = false, bool? graded = null, int? classId = null)
         {
             var url = $"{BaseUrl}Chalkable/{acadSessionId}/students/{studentId}/activities";
             var optionalParams = new NameValueCollection();
@@ -110,7 +92,7 @@ namespace Chalkable.StiConnector.Connectors
             if(classId.HasValue)
                 optionalParams.Add(SECTION_ID, classId.Value.ToString());
             if (sort.HasValue)
-                optionalParams.Add(SORT, ((int)sort.Value).ToString());
+                optionalParams.Add(SORT, sort.Value.ToString());
             return Call<IList<Activity>>(url, optionalParams);
         }
 

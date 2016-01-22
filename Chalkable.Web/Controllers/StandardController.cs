@@ -53,14 +53,14 @@ namespace Chalkable.Web.Controllers
             return Json(StandardSubjectViewData.Create(subjects));
         }
 
-        [AuthorizationFilter("SysAdmin, Developer")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher, Student")]
         public ActionResult GetCommonCoreStandardCategories()
         {
             var standardCategories = MasterLocator.CommonCoreStandardService.GetCCStandardCategories();
             return Json(CCStandardCategoryViewData.Create(standardCategories));
         }
 
-        [AuthorizationFilter("SysAdmin, Developer")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher, Student")]
         public ActionResult GetCommonCoreStandards(Guid? standardCategoryId, Guid? parentStandardId, bool? allStandards)
         {
             var standards = MasterLocator.CommonCoreStandardService.GetStandards(standardCategoryId, parentStandardId, allStandards ?? false);
@@ -74,6 +74,7 @@ namespace Chalkable.Web.Controllers
             return Json(AbToCCMappingViewData.Create(abtoccMappings));
         }
 
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher, Student")]
         public ActionResult GetCommonCoreStandardsByIds(GuidList standardsIds)
         {
             var standards = MasterLocator.CommonCoreStandardService.GetStandardsByIds(standardsIds ?? new List<Guid>());

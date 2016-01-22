@@ -93,9 +93,7 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, chlk.models.classes.DateTypeEnum]],
             function attendanceListAction(classId, date_, byPostButton_){
-                var dateType = this.getContext().getSession().get(ChlkSessionConstants.CHART_DATE_TYPE, chlk.models.classes.DateTypeEnum.LAST_MONTH
-
-                );
+                var dateType = this.getContext().getSession().get(ChlkSessionConstants.CHART_DATE_TYPE, chlk.models.classes.DateTypeEnum.LAST_MONTH);
                 var res = ria.async.wait(
                     this.attendanceService.getClassList(classId, date_),
                     this.classService.getAttendanceStats(classId, dateType),
@@ -237,10 +235,11 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [[chlk.models.id.ClassId]],
             function disciplineAction(classId){
+                var dateType = this.getContext().getSession().get(ChlkSessionConstants.CHART_DATE_TYPE, chlk.models.classes.DateTypeEnum.LAST_MONTH);
                 var res = ria.async.wait([
                     this.disciplineService.getClassDisciplines(classId, null, 0),
                     this.disciplineTypeService.getDisciplineTypes(),
-                    this.classService.getDisciplinesStats(classId),
+                    this.classService.getDisciplinesStats(classId, dateType),
                     this.classService.getDisciplinesSummary(classId)
                 ])
                     .attach(this.validateResponse_())

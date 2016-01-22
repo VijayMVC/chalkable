@@ -9,15 +9,15 @@ NAMESPACE('chlk.models.standard', function(){
 
         ArrayOf(chlk.models.standard.CCStandardCategory), 'items',
 
-        chlk.models.id.AppId, 'applicationId',
+        String, 'requestId',
 
         Array, 'standardsIds',
 
-        [[chlk.models.id.AppId, ArrayOf(chlk.models.standard.CCStandardCategory), Array]],
-        function $(applicationId,  itemStandards, standardsIds){
+        [[String, ArrayOf(chlk.models.standard.CCStandardCategory), Array]],
+        function $(requestId,  itemStandards, standardsIds){
             BASE();
-            if(applicationId)
-                this.setApplicationId(applicationId);
+            if(requestId)
+                this.setRequestId(requestId);
             if(itemStandards)
                 this.setItems(itemStandards);
             if(standardsIds)

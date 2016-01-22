@@ -43,14 +43,16 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 anns.AddRange(ServiceLocator.AdminAnnouncementService.GetAnnouncementsComplex(feedStartDate, feedEndDate, gradeLevels, complete, true, start, count));
             }
             var isStudent = CoreRoles.STUDENT_ROLE == Context.Role;
-            var onlyOwners = !isStudent && !Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);
+            //TODO: Refactor this later . . . 
+            var onlyOwners = !isStudent && !(Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN) && classId.HasValue);
 
             if (BaseSecurity.IsTeacher(Context) || Context.Role == CoreRoles.STUDENT_ROLE || classId.HasValue)
             {
                 if (!settings.AnnouncementType.HasValue)
                 {
                     var ct = count != int.MaxValue ? count + 1 : count;
-                    var classAnns = ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate, feedEndDate, classId, complete, true, null, start, ct);
+                    var classAnns = ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate,
+                        feedEndDate, classId, complete, true, null, start, ct, settings.SortTypeEnum);
 
                     if (start > 0 && classAnns.Count == 0)
                         return anns;
@@ -79,19 +81,18 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                         anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(feedStartDate, feedEndDate, null, classId, complete, onlyOwners, start, count));
                         break;
                     case AnnouncementTypeEnum.Class:
-                        anns.AddRange(ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate, feedEndDate, classId, complete, onlyOwners, null, start, count));
+                        anns.AddRange(ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate, feedEndDate, classId, complete, onlyOwners, null, start, count, settings.SortTypeEnum));
                         break;
                 }
-               }
-
-            anns = SortAnnouncements(anns, (ActivitySearchSortOption?) settings.SortType).ToList();
+            }
+            anns = SortAnnouncements(anns, settings.SortTypeEnum).ToList();
             return anns;
         }
 
-        private IList<AnnouncementComplex> SortAnnouncements(IList<AnnouncementComplex> anns, ActivitySearchSortOption? sortType)
+        private IList<AnnouncementComplex> SortAnnouncements(IList<AnnouncementComplex> anns, AnnouncementSortOption? sortType)
         {
             //sort all items by expires date or start date
-            if (!sortType.HasValue || sortType.Value == ActivitySearchSortOption.DueDateAscending)
+            if (!sortType.HasValue || sortType.Value == AnnouncementSortOption.DueDateAscending)
                 anns = anns.OrderBy(x =>
                 {
                     if (x.AdminAnnouncementData != null) return x.AdminAnnouncementData.Expires;
@@ -220,4 +221,5 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public IList<ClassAnnouncement> ClassAnnouncements { get; set; }
         public IList<AdminAnnouncement> AdminAnnouncements { get; set; } 
     }
+    
 }

@@ -9,7 +9,7 @@
         #top-panel
             #avatar-photo-conainer.left-block.panel-block
                 .img-container
-                    +PersonImg(user, 140, true)
+                    +PersonImg(user, 140, !self.getUserRole().isStudent())
             #info-panel.central-block.panel-block
                 displayName =user.getDisplayName() || user.getFullName()
                 h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName

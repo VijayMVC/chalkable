@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.Master;
@@ -191,12 +192,12 @@ namespace Chalkable.Web.Controllers
                 var context = serviceLocator.UserService.Login(login, password);
                 if (context != null)
                 {
-                    var accessTokenUri = string.Format("https://{0}.accesscontrol.windows.net/v2/OAuth2-13/", Settings.WindowsAzureOAuthServiceNamespace);
+                    var accessTokenUri = $"https://{Settings.WindowsAzureOAuthServiceNamespace}.accesscontrol.windows.net/v2/OAuth2-13/";
                     var scope = Settings.WindowsAzureOAuthRelyingPartyRealm;
+                    var userInfo = OAuthUserIdentityInfo.Create(login, context.Role, context.SchoolYearId, ChalkableAuthentication.GetSessionKey());
                     return Json(new
                     {
-                        token = serviceLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId,
-                                                           clientSecret, login, context.SchoolYearId, context.Role, scope)
+                        token = serviceLocator.AccessControlService.GetAccessToken(accessTokenUri, redirectUri, clientId, clientSecret, userInfo, scope)
                     }, 5);
                 }
             }

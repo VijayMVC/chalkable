@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Data.School.Model;
@@ -56,7 +57,10 @@ namespace Chalkable.Web.Models.ClassesViewData
 
         public ClassSummaryViewData(ClassDetails classComplex) : base(classComplex)
         {
-            
+            if (classComplex.PrimaryTeacher != null)
+            {
+                Teacher.DisplayName = classComplex.PrimaryTeacher.FullName(false, true);
+            }
         }
 
         public static ClassSummaryViewData Create(ClassDetails classDetails, Room currentRoom)
