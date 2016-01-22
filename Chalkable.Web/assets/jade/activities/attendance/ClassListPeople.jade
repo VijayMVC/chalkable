@@ -11,7 +11,7 @@
     +Hidden('inProfile', self.isInProfile())
     items = self.getItems()
     .table
-        .l(class=self.getReadOnlyReason() ? "wide" : undefined)
+        .l(class="wide")
             +SummaryInfo(self.getPresentStudents().length, items.length)
             +ActionLink('attendance', 'attendanceProfileReport', selectedId).report-link
         if self.getItems().length > 0 && self.canPost()

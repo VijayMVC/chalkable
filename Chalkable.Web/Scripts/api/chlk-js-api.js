@@ -99,7 +99,6 @@ var CHLK_API = function (window, document, $) {
     $(function () {
         $(window)
             .on("message", function (e) {
-                console.log(e, e.originalEvent);
                 e = e.originalEvent;
 
                 switch (e.data.action) {
