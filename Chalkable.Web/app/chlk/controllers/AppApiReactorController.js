@@ -198,7 +198,7 @@ NAMESPACE('chlk.controllers', function (){
                 var res = ria.async.Future.$fromData(null)
                     .then(this._replayTo(data))
                     .then(function () {
-                        return chlk.activities.apps.AppShadeDialogModel.$fromData(data.__iframe);
+                        return chlk.activities.apps.AppShadeDialogModel.$fromData(data.__iframe, data.id);
                     });
 
                 return this.ShadeView(chlk.activities.apps.AppShadeDialog, res);
@@ -209,7 +209,7 @@ NAMESPACE('chlk.controllers', function (){
                 var res = ria.async.Future.$fromData(null)
                     .then(this._replayTo(data))
                     .then(function () {
-                        return chlk.activities.apps.AppShadeDialogModel.$fromData(data.__iframe);
+                        return chlk.activities.apps.AppShadeDialogModel.$fromData(data.__iframe, data.id);
                     });
 
                 return this.UpdateView(chlk.activities.apps.AppShadeDialog, res, 'pop-me');

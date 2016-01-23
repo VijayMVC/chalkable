@@ -12,10 +12,12 @@ NAMESPACE('chlk.activities.apps', function () {
     CLASS(
         'AppShadeDialogModel', [
             ria.dom.Dom, 'iframe',
+            String, 'id',
 
-            function $fromData(iframe) {
+            function $fromData(iframe, id) {
                 BASE();
                 this.iframe = iframe;
+                this.id = id || null;
             }
         ]);
 
@@ -36,11 +38,13 @@ NAMESPACE('chlk.activities.apps', function () {
                 BASE();
 
                 this._iframe = null;
+                this._id = null;
             },
 
             [ria.mvc.PartialUpdateRule(null, 'pop-me')],
             VOID, function doUpdateClasses(tpl, model, msg_) {
-                if (this._iframe.valueOf()[0] === model.getIframe().valueOf()[0])
+                if (this._iframe.valueOf()[0] === model.getIframe().valueOf()[0]
+                    && this._id === model.getId())
                     this.close();
             },
 
@@ -53,6 +57,7 @@ NAMESPACE('chlk.activities.apps', function () {
                     this._loaderTimer = null;
                 }
 
+                this._id = model.getId();
                 this._iframe = model.getIframe();
                 var $iframe = this._iframe.$;
 
