@@ -214,4 +214,4 @@ var CHLK_API = function (window, document, $) {
     Object.freeze(obj);
 
     return obj;
-}(window, document, jQuery);
+}(window, document, window.jQuery);
