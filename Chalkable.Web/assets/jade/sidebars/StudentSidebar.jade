@@ -2,6 +2,8 @@
 +ActionLink('grading', 'summaryAll').statistic.grades(title="View Grades") Grades
 if self.isAppStoreEnabled
     +ActionLink('appmarket', 'list').apps(title="View Apps") Apps
+if self.isAppStoreEnabled
+    +ActionLink('apps', 'assessment').assessment(title="Assessment") Assessment
 if !self.isMessagingDisabled
     +ActionLink('message', 'page', false, true).messages(title="View Messages") Messages
 +ActionLink('students', 'my').people(title="View People") People
@@ -12,6 +14,4 @@ if !self.isLEEnabled || self.isLEEnabled && self.isLinkEnabled
     a(href="/Home/LearningEarnings", target="blank").le(title="View Learning Earnings", target="blank") LE
 if self.isLEEnabled && !self.isLinkEnabled
     +ActionLink('error', 'learningEarningsDisabled').le(title="View Learning Earnings", target="blank") LE
-if self.isAppStoreEnabled
-    +ActionLink('apps', 'assessment').assessment(title="Assessment") Assessment
 +ActionLink('settings', 'dashboardStudent').settings(title="View Settings") Settings
