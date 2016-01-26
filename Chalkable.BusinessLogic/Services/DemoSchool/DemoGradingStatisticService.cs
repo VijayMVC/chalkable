@@ -161,12 +161,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Averages = stiGradeBook.StudentAverages.Select(ChalkableStudentAverage.Create).ToList(),
                 Students = students
             };
-            var stAvgs = stiGradeBook.StudentAverages.Where(x => x.IsGradingPeriodAverage
-                && gradingPeriod.Id == x.GradingPeriodId).ToList();
-            stAvgs = stAvgs.Where(x => x.CalculatedNumericAverage.HasValue || x.EnteredNumericAverage.HasValue).ToList();
-            if (stAvgs.Count > 0)
-                gradeBook.Avg = (int)stAvgs.Average(x => (x.CalculatedNumericAverage ?? x.EnteredNumericAverage) ?? 0);
-
             gradeBook.Announcements = PrepareAnnouncementDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students);
             if (!stiGradeBook.Options.IncludeWithdrawnStudents)
             {

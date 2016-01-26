@@ -68,30 +68,16 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 GradingPeriod = gradingPeriod,
                 Averages = stiGradeBook.StudentAverages.Select(ChalkableStudentAverage.Create).ToList(),
-                Students = students
+                Students = students,
+                Options = stiGradeBook.Options != null ? ChalkableClassOptions.Create(stiGradeBook.Options) : null
             };
-            if (stiGradeBook.Options != null)
-                gradeBook.Options = ChalkableClassOptions.Create(stiGradeBook.Options);
-            var stAvgs = stiGradeBook.StudentAverages.Where(x => x.IsGradingPeriodAverage
-                && gradingPeriod.Id == x.GradingPeriodId).ToList();
-            stAvgs = stAvgs.Where(x => x.CalculatedNumericAverage.HasValue || x.EnteredNumericAverage.HasValue).ToList();
-            if (stAvgs.Count > 0)
-                gradeBook.Avg = (int)stAvgs.Average(x => (x.CalculatedNumericAverage ?? x.EnteredNumericAverage) ?? 0);
-
-            var includeWithdrawnStudents = stiGradeBook.Options != null && stiGradeBook.Options.IncludeWithdrawnStudents;
+            var includeWithdrawnStudents = gradeBook.Options != null && gradeBook.Options.IncludeWithdrawnStudents;
+            
+            //Preapred List Of Announcement Info
             Trace.WriteLine("PrepareAnnounceemntDetailsForGradeBook " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             gradeBook.Announcements = PrepareAnnounceemntDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students, includeWithdrawnStudents);
-            //if (!includeWithdrawnStudents)
-            //{
-            //    Trace.WriteLine("includeWithdrawnStudents " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
-            //    gradeBook.Students = new List<StudentDetails>();
-            //    foreach (var student in students)
-            //    {
-            //       var score = stiGradeBook.Scores.FirstOrDefault(x => x.StudentId == student.Id);
-            //       if(score != null && !score.Withdrawn)
-            //           gradeBook.Students.Add(student);
-            //    }    
-            //}
+
+            //prepare students score
             var stiScores = stiGradeBook.Scores;
             if (!includeWithdrawnStudents)
                 stiScores = stiScores.Where(x => !x.Withdrawn).ToList();
@@ -102,6 +88,7 @@ namespace Chalkable.BusinessLogic.Services.School
             gradeBook.Students = gradeBook.Students
                                     .OrderBy(x => x.LastName, StringComparer.OrdinalIgnoreCase)
                                     .ThenBy(x => x.FirstName, StringComparer.OrdinalIgnoreCase).ToList();
+
             if (stiGradeBook.StudentTotalPoints != null)
             {
                 var totalPoints = stiGradeBook.StudentTotalPoints.Where(x => x.GradingPeriodId == gradingPeriod.Id).ToList();

@@ -11,7 +11,6 @@ namespace Chalkable.BusinessLogic.Model
     public class ChalkableGradeBook
     {
         public GradingPeriod GradingPeriod { get; set; }
-        public int Avg { get; set; }
         public IList<StudentDetails> Students { get; set; }
         public IList<AnnouncementDetails> Announcements { get; set; } 
         public IList<ChalkableStudentAverage> Averages { get; set; }
