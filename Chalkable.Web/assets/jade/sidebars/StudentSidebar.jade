@@ -12,4 +12,6 @@ if !self.isLEEnabled || self.isLEEnabled && self.isLinkEnabled
     a(href="/Home/LearningEarnings", target="blank").le(title="View Learning Earnings", target="blank") LE
 if self.isLEEnabled && !self.isLinkEnabled
     +ActionLink('error', 'learningEarningsDisabled').le(title="View Learning Earnings", target="blank") LE
+if self.isAppStoreEnabled
+    +ActionLink('apps', 'assessment').assessment(title="Assessment") Assessment
 +ActionLink('settings', 'dashboardStudent').settings(title="View Settings") Settings
