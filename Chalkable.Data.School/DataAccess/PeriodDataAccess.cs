@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
+using System.Text;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Data.School.DataAccess
 {
-    public class PeriodDataAccess : DataAccessBase<Period>
+    public class PeriodDataAccess : DataAccessBase<Period,int>
     {
         public PeriodDataAccess(UnitOfWork unitOfWork)
             : base(unitOfWork)

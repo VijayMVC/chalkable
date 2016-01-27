@@ -25,6 +25,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
 
         //TODO: rewrite this later
+        
         public override void Update(LessonPlan entity)
         {
             SimpleUpdate<Announcement>(entity);
@@ -91,17 +92,17 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 return res;
             }
         }
-
-        public override AnnouncementDetails GetDetails(int id, int callerId, int? roleId)
+        public override IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId, bool onlyOwner = true)
         {
             var parameters = new Dictionary<string, object>
                 {
-                    {"lessonPlanId", id},
+                    {"lessonPlanIds", ids},
                     {"callerId", callerId},
                     {"callerRole", roleId},
-                    {"schoolYearId", schoolYearId}
+                    {"schoolYearId", schoolYearId},
+                    {"onlyOwner", onlyOwner } 
                 };
-           return GetDetails("spGetLessonPlanDetails", parameters);
+            return GetDetailses("spGetListOfLessonPlansDetails", parameters);
         }
 
         protected override LessonPlan ReadAnnouncementData(AnnouncementComplex announcement, SqlDataReader reader)
@@ -340,6 +341,23 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             dbQuery.Sql.AppendFormat(" and ClassRef in (select ClassRef from ClassPerson where ClassPerson.PersonRef =@{0})", callerIdParam);
             dbQuery.Sql.AppendFormat(" and {0} = 1", LessonPlan.VISIBLE_FOR_STUDENT_FIELD);
             dbQuery.Parameters.Add(callerIdParam, callerId);
+            return dbQuery;
+        }
+    }
+
+    public class LessonPlanForAdminDataAccess : LessonPlanDataAccess
+    {
+        public LessonPlanForAdminDataAccess(UnitOfWork unitOfWork, int schoolYearId)
+            : base(unitOfWork, schoolYearId)
+        {
+        }
+
+        protected override DbQuery FilterLessonPlanByCallerId(DbQuery dbQuery, int callerId)
+        {
+            //var callerIdParam = "callerId";
+            //dbQuery.Sql.AppendFormat(" and ClassRef in (select ClassRef from ClassPerson where ClassPerson.PersonRef =@{0})", callerIdParam);
+            //dbQuery.Sql.AppendFormat(" and {0} = 1", LessonPlan.VISIBLE_FOR_STUDENT_FIELD);
+            //dbQuery.Parameters.Add(callerIdParam, callerId);
             return dbQuery;
         }
     }

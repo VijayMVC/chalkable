@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -66,15 +67,15 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
 
-        public override AnnouncementDetails GetDetails(int id, int callerId, int? roleId)
+        public override IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId, bool onlyOwner = true)
         {
             var parameters = new Dictionary<string, object>
                 {
-                    {"adminAnnouncementId", id},
-                    {"@callerId", callerId},
+                    {"adminAnnouncementIds", ids},
+                    {"callerId", callerId},
                     {"callerRole", roleId}
                 };
-            return GetDetails("spGetAdminAnnouncementDetails", parameters);
+            return GetDetailses("spGetAdminAnnouncementsDetailses", parameters);
         }
 
         protected override AdminAnnouncement ReadAnnouncementData(AnnouncementComplex announcement, System.Data.SqlClient.SqlDataReader reader)
@@ -82,12 +83,14 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return reader.Read<AdminAnnouncement>();
         }
 
-        protected override AnnouncementDetails ReadAnnouncementAdditionalData(AnnouncementDetails announcement, System.Data.SqlClient.SqlDataReader reader)
+        protected override IList<AnnouncementDetails> BuildGetDetailsesResult(SqlDataReader reader)
         {
-            var res = base.ReadAnnouncementAdditionalData(announcement, reader);
+            var anns = base.BuildGetDetailsesResult(reader);
             reader.NextResult();
-            res.AnnouncementGroups = reader.ReadList<AnnouncementGroup>(true);
-            return res;
+            var groups = reader.ReadList<AnnouncementGroup>(true);
+            foreach (var ann in anns)
+                ann.AnnouncementGroups = groups.Where(x => x.AnnouncementRef == ann.Id).ToList();
+            return anns;
         }
 
         public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)

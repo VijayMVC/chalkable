@@ -1,4 +1,6 @@
 REQUIRE('ria.mvc.Controller');
+REQUIRE('ria.async.Completer');
+
 REQUIRE('chlk.models.common.Role');
 REQUIRE('chlk.models.people.User');
 REQUIRE('chlk.models.people.Claim');
@@ -13,6 +15,7 @@ REQUIRE('chlk.lib.exception.NotAuthorizedException');
 REQUIRE('chlk.lib.exception.NoClassAnnouncementTypeException');
 REQUIRE('chlk.lib.exception.AppErrorException');
 REQUIRE('chlk.lib.exception.InvalidPictureException');
+REQUIRE('chlk.lib.exception.ChalkableSisNotSupportVersionException');
 
 REQUIRE('chlk.services.UserTrackingService');
 
@@ -20,6 +23,8 @@ REQUIRE('chlk.services.UserTrackingService');
 NAMESPACE('chlk.controllers', function (){
 
     var Raygun = window.Raygun || null;
+
+    var WidgetMap = {};
 
     if (Raygun) {
         Raygun.fetchRaygunError = function (error) {
@@ -115,8 +120,8 @@ NAMESPACE('chlk.controllers', function (){
     var SIDEBAR_CONTROLS_ID = '#sidebar';
 
     /** @class chlk.controllers.BaseController */
-   CLASS(ABSTRACT,
-       'BaseController', EXTENDS(ria.mvc.Controller), [
+    CLASS(ABSTRACT,
+        'BaseController', EXTENDS(ria.mvc.Controller), [
 
            [ria.mvc.Inject],
            chlk.services.UserTrackingService, 'userTrackingService',
@@ -130,6 +135,21 @@ NAMESPACE('chlk.controllers', function (){
 
            function closeCurrentActivity_(){
                return this.BackgroundCloseView(this.getView().getCurrent());
+           },
+
+           [[chlk.models.id.ClassId]],
+           Boolean, function isAssignedToClass_(classId){
+               return  !!this.classService.getClassById(classId);
+           },
+
+           function isPageReadonly_(teacherPermissionName, adminPermissionName, clazz_){
+               var currentUserId = this.getCurrentPerson().getId();
+               var teacherIds = clazz_ ? clazz_.getTeachersIds() : [currentUserId];
+               var permissionEnum = chlk.models.people.UserPermissionEnum;
+               var isLinksEnabled = this.hasUserPermission_(permissionEnum[adminPermissionName])
+                   || (this.hasUserPermission_(permissionEnum[teacherPermissionName])
+                   && teacherIds.filter(function(id){return id.valueOf() == currentUserId.valueOf();}).length > 0);
+               return !isLinksEnabled;
            },
 
            ria.async.Future, function validateResponse_() {
@@ -156,6 +176,14 @@ NAMESPACE('chlk.controllers', function (){
                        var msg = this.mapSisErrorMessage(exception.getMessage());
                        Raygun ? Raygun.send(Raygun.fetchRaygunError(exception.toString())) : console.error(exception.toString());
                        return this.ShowMsgBox(msg, 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
+                           .then(function(){
+                               this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
+                           }, this)
+                           .thenBreak();
+                   }, this)
+                   .catchException(chlk.lib.exception.ChalkableSisNotSupportVersionException, function(exception){
+                       var msg = this.mapSisErrorMessage(exception.getMessage());
+                       return this.ShowMsgBox(msg, 'oops', [{text: Msg.GOT_IT.toUpperCase()}])
                            .then(function(){
                                this.BackgroundCloseView(chlk.activities.lib.PendingActionDialog);
                            }, this)
@@ -519,7 +547,32 @@ NAMESPACE('chlk.controllers', function (){
                    }
                    throw e;
                }
-           }
-   ])
+           },
 
+            [[String, String, Object]],
+            ria.async.Future, function WidgetStart(controller, action, args) {
+                var completer = new ria.async.Completer;
+
+                var requestId = new Date().getTime().toString(36) + Math.random().toString(36);
+
+                this.BackgroundNavigate(controller, action + 'Widget', [requestId].concat(args));
+
+                Assert(WidgetMap[requestId] === undefined);
+                WidgetMap[requestId] = completer;
+
+                return completer.getFuture();
+            },
+
+            VOID, function WidgetComplete(requestId, response) {
+                Assert(WidgetMap[requestId]);
+                WidgetMap[requestId].complete(response);
+                delete WidgetMap[requestId];
+            },
+
+            VOID, function WidgetFail(requestId, error) {
+                Assert(WidgetMap[requestId]);
+                WidgetMap[requestId].fail(error);
+                delete WidgetMap[requestId];
+            }
+    ]);
 });

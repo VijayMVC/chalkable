@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Attendances;
+using Chalkable.Common.Web;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;
@@ -19,6 +20,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public StudentHoverBoxViewData<DisciplineTypeSummaryViewData> DisciplineBox { get; set; }
         public StudentHoverBoxViewData<StudentSummaryGradeViewData> GradesBox { get; set; }
         public StudentHoverBoxViewData<StudentSummeryRankViewData> RanksBox { get; set; }
+
+        //[SensitiveData]
         public IList<StudentHealthConditionViewData> HealthConditions { get; set; }
 
         private const string NO_CLASS_SCHEDULED = "No Class Scheduled";

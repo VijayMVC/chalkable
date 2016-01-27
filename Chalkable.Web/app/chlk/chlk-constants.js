@@ -1,6 +1,8 @@
 var ChlkSessionConstants = {
     ATTACH_OPTIONS: 'attachOptions',
     ATTRIBUTES_WITH_FILES: 'attributesWithFiles',
+    CHART_DATE_TYPE: 'chartDateType',
+    CLASS_PROFILE_ATTENDANCE_DATA: 'classProfileAttendanceData',
     FIRST_LOGIN: 'firstLogin',
     SCHOOL_YEAR:'schoolYear',
     USER_ROLE: 'role',
@@ -48,15 +50,15 @@ var ChlkSessionConstants = {
     CURRENT_MESSAGES: 'currentMessages',
     SETTINGS_MODEL: 'settingsModel',
     DB_LIST_BACKUPS: 'listBackups',
-    ATTENDANCE_PAGE_DATA: 'attendancePageData',
+    CLASS_LIST_DATA: 'classListData',
     DISCIPLINE_PAGE_DATA: 'disciplinePageData',
-    ATTENDANCE_DATA: 'attendanceData',
     ANNOUNCEMENT_APPLICATIONS: 'AnnoucementApplications',
     ANNOUNCEMENT_ATTACHMENTS: 'AnnouncementAttachments',
     ANNOUNCEMENT: 'announcement',
     ANNOUNCEMENT_ID: 'announcementId',
     ANNOUNCEMENT_TYPE: 'announcementType',
     STANDARD_IDS: 'StandardsIds',
+    STANDARDS: 'Standards',
     CC_STANDARD_CODES: 'StandardCodes',
     CC_STANDARDS: 'CCStandards',
     DONT_SAVE: 'noSave',
@@ -75,5 +77,6 @@ var ChlkSessionConstants = {
     ANNOUNCEMENT_ATTRIBUTES: 'announcementAttributes',
     ANNOUNCEMENT_ASSIGNED_ATTRIBUTES: 'announcementAssignedAttributes',
     MESSAGING_DISABLED: 'messagingDisabled',
-    YEARS: 'years'
+    YEARS: 'years',
+    SIS_API_VERSION: 'sisApiVersion'
 };

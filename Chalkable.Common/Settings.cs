@@ -160,5 +160,6 @@ namespace Chalkable.Common
         }
 
         public static string RaygunJsApiKey => "WV05DNwmIzBvTiSQ8pgNXQ==";
+        public static string MasterDbName => "ChalkableMaster";
     }
 }

@@ -55,46 +55,24 @@ NAMESPACE('chlk.activities.discipline', function(){
                 }.bind(this), 1000);
             },
 
+            function isAblePostDisciplines(model){
+                return model.isAblePostDiscipline();
+            },
+
             [[Object]],
             OVERRIDE, VOID, function onRender_(model){
                 BASE(model);
-                this._isAblePostDiscipline = model.isAblePostDiscipline();
+                this._isAblePostDiscipline = this.isAblePostDisciplines(model);
             },
 
             [[Object]],
             OVERRIDE, VOID, function onRefresh_(model){
                 BASE(model);
-                this._isAblePostDiscipline = model.isAblePostDiscipline();
+                this._isAblePostDiscipline = this.isAblePostDisciplines(model);
                 new ria.dom.Dom('.change-discipline').on('scroll', function(node, event){
                     node.parent().setCss('background-position', '0 ' +  (-jQuery(node.valueOf()).scrollTop()) + 'px')
                 });
             },
-
-//            [[ria.dom.Dom]],
-//            Array, function getDisciplines_(rowNode){
-//                var res = [];
-//                var disciplinesNodes = rowNode.find('[name="discipline"]').valueOf();
-//                var len = disciplinesNodes.length, i, node;
-//                for(i=0;i<len;i++){
-//                    node = new ria.dom.Dom(disciplinesNodes[i]);
-//                    if(node.find(':disabled').valueOf().length == 0) {
-//                        var descNode = node.find('[name="description"]');
-//                        var discTypesNode = node.find('[name="disciplineTypes"]');
-//                        res.push({
-//                            id: node.getData('id'),
-//                            studentId: node.getData('student-id'),
-//                            classId: node.getData('class-id'),
-//                            date: node.getData('date'),
-//                            description: descNode.getValue(),
-//                            disciplineTypeIds: discTypesNode.getValue(),
-//                            time: rowNode.find('[name="time"]').getValue()
-//                        });
-//                    }
-//                }
-//                this.prepareDisciplineTypeToolTip_(rowNode);
-//                return res;
-//            },
-
 
             [[ria.dom.Dom]],
             VOID, function prepareDisciplineTypeToolTip_(rowNode){

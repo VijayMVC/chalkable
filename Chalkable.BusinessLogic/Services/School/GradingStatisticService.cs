@@ -7,6 +7,7 @@ using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
@@ -38,7 +39,8 @@ namespace Chalkable.BusinessLogic.Services.School
         public async Task<ChalkableGradeBook> GetGradeBook(int classId, GradingPeriod gradingPeriod, int? standardId = null, int? classAnnouncementType = null, bool needsReCalculate = true)
         {
             Task<Gradebook> stiGradeBook;
-            if (needsReCalculate && GradebookSecurity.CanReCalculateGradebook(Context))
+            var isTeacherClass = DoRead(u => new ClassTeacherDataAccess(u).Exists(classId, Context.PersonId));
+            if (needsReCalculate && GradebookSecurity.CanReCalculateGradebook(Context, isTeacherClass))
                 stiGradeBook = ConnectorLocator.GradebookConnector.Calculate(classId, gradingPeriod.Id);
             else
             {
@@ -93,11 +95,13 @@ namespace Chalkable.BusinessLogic.Services.School
             var stiScores = stiGradeBook.Scores;
             if (!includeWithdrawnStudents)
                 stiScores = stiScores.Where(x => !x.Withdrawn).ToList();
-            gradeBook.Students = gradeBook.Students.Where(s => stiScores.Any(score => score.StudentId == s.Id)).ToList();
+
+            if (stiScores.Any())
+                gradeBook.Students = gradeBook.Students.Where(s => stiScores.Any(score => score.StudentId == s.Id)).ToList();
      
             gradeBook.Students = gradeBook.Students
-                                .OrderBy(x => x.LastName, StringComparer.OrdinalIgnoreCase)
-                                .ThenBy(x => x.FirstName, StringComparer.OrdinalIgnoreCase).ToList();
+                                    .OrderBy(x => x.LastName, StringComparer.OrdinalIgnoreCase)
+                                    .ThenBy(x => x.FirstName, StringComparer.OrdinalIgnoreCase).ToList();
             if (stiGradeBook.StudentTotalPoints != null)
             {
                 var totalPoints = stiGradeBook.StudentTotalPoints.Where(x => x.GradingPeriodId == gradingPeriod.Id).ToList();

@@ -57,12 +57,13 @@ namespace Chalkable.Data.School.DataAccess
             {
                 {SchoolYear.ARCHIVE_DATE, null, ConditionRelation.Equal},
                 {SchoolYear.START_DATE_FIELD, curentDate.Date, ConditionRelation.LessEqual },
-                {SchoolYear.END_DATE_FIELD, curentDate.Date, ConditionRelation.GreaterEqual }
+                {SchoolYear.END_DATE_FIELD, curentDate.AddDays(-1).Date, ConditionRelation.GreaterEqual }
             };
             syConds.BuildSqlWhere(syQuery, typeof(SchoolYear).Name);
 
             query.Sql.AppendFormat(" and {0} in ({1})", ApplicationInstall.SCHOOL_YEAR_REF_FIELD, syQuery.Sql);
             query.AddParameters(syQuery.Parameters);
+
             return ReadMany<ApplicationInstall>(query);
         } 
 
@@ -97,7 +98,9 @@ namespace Chalkable.Data.School.DataAccess
                 });
         }
 
-        public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, int callerId, int? personId, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
+        public IList<PersonsForApplicationInstall> GetPersonsForApplicationInstall(Guid applicationId, int callerId, int? personId, IList<int> classes
+            , int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool hasAdminExternalAttach
+            , bool hasStudentExternalAttach, bool hasTeacherExternalAttach, bool canAttach, int schoolYearId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
                 {
@@ -106,10 +109,12 @@ namespace Chalkable.Data.School.DataAccess
                     {"personId", personId},
                     {"classIds", classes ?? new List<int>()},
                     {"callerRoleId", callerRoleId},
-
                     {"hasAdminMyApps", hasAdminMyApps},
                     {"hasTeacherMyApps", hasTeacherMyApps},
                     {"hasStudentMyApps", hasStudentMyApps},
+                    {"hasStudentExternalAttach", hasStudentExternalAttach},
+                    {"hasTeacherExternalAttach", hasTeacherExternalAttach},
+                    {"hasAdminExternalAttach", hasAdminExternalAttach},
                     {"canAttach", canAttach},
                     {"schoolYearId", schoolYearId}
                 };
@@ -119,7 +124,9 @@ namespace Chalkable.Data.School.DataAccess
             }
         }
 
-        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int callerId, int? personId, IList<int> classes, int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool canAttach, int schoolYearId)
+        public IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int callerId, int? personId, IList<int> classes
+            , int callerRoleId, bool hasAdminMyApps, bool hasTeacherMyApps, bool hasStudentMyApps, bool hasAdminExternalAttach
+            , bool hasStudentExternalAttach, bool hasTeacherExternalAttach, bool canAttach, int schoolYearId)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
                 {
@@ -131,7 +138,10 @@ namespace Chalkable.Data.School.DataAccess
                     {"hasAdminMyApps", hasAdminMyApps},
                     {"hasTeacherMyApps", hasTeacherMyApps},
                     {"hasStudentMyApps", hasStudentMyApps},
-                    {"canAttach", canAttach},
+                    {"hasStudentExternalAttach", hasStudentExternalAttach},
+                    {"hasTeacherExternalAttach", hasTeacherExternalAttach},
+                    {"hasAdminExternalAttach", hasAdminExternalAttach},
+                    { "canAttach", canAttach},
                     {"schoolYearId", schoolYearId},
                     {"classIds", classes ?? new List<int>()  }
                 };

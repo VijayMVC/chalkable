@@ -32,9 +32,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         private const string CLASS_ID_PARAM = "classId";
         private const string SCHOOL_YEAR_ID_PARAM = "schoolYearId";
         
-        public abstract ClassAnnouncement GetLastDraft(int personId);
-
-
+        
         public override ClassAnnouncement GetById(int key)
         {
             var conds = new AndQueryCondition {{Announcement.ID_FIELD, key}};
@@ -97,11 +95,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 dbQuery.Sql.Append(" and (");
                 for (var i = 0; i < words.Length; i++)
                 {
-                    var filterName = string.Format("filter{0}", i);
+                    var filterName = $"filter{i}";
                     dbQuery.Parameters.Add(filterName, string.Format(FILTER_FORMAT, words[i]));
                     dbQuery.Sql.Append("( ")
-                               .AppendFormat("{0} like @{1} or ", ClassAnnouncement.FULL_CLASS_NAME, filterName)
-                               .AppendFormat("{0} like @{1} ", Announcement.TITLE_FIELD, filterName)
+                               .AppendFormat($"{ClassAnnouncement.FULL_CLASS_NAME} like @{filterName} or ")
+                               .AppendFormat($"{Announcement.TITLE_FIELD} like @{filterName} ")
                                .Append(" )");
                     if (i < words.Length - 1)
                         dbQuery.Sql.Append(" or ");
@@ -116,10 +114,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var conds = new AndQueryCondition {{Announcement.ID_FIELD, id}};
             return GetAnnouncements(conds, callerId).FirstOrDefault();
         }
-
-        protected abstract DbQuery SeletClassAnnouncements(string tableName, int callerId);
-        protected abstract DbQuery FilterClassAnnouncementByCaller(DbQuery dbQuery, int callerId);
-
         public override IList<ClassAnnouncement> GetAnnouncements(QueryCondition conds, int callerId)
         {
             var dbQuery = SeletClassAnnouncements(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, callerId);
@@ -127,6 +121,41 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             FilterClassAnnouncementByCaller(dbQuery, callerId);
             return ReadMany<ClassAnnouncement>(dbQuery);
         }
+
+
+        //common implementation for teacher or admin 
+        protected virtual DbQuery SeletClassAnnouncements(string tableName, int callerId)
+        {
+            var dbQuery = new DbQuery();
+            var classTeacherSql = string.Format(@"(select cast(case when count(*) > 0 then 1 else 0 end as bit)
+                                                     from [{0}] where [{0}].[{1}] = {2}  and [{0}].[{3}] = [{4}].[{5}])",
+                                          "ClassTeacher", ClassTeacher.PERSON_REF_FIELD, callerId, ClassTeacher.CLASS_REF_FIELD,
+                                          tableName, ClassAnnouncement.CLASS_REF_FIELD);
+            var selectSet = $"{tableName}.*, {classTeacherSql} as {nameof(Announcement.IsOwner)}";
+            dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, selectSet, tableName);
+            return dbQuery;
+        }
+        protected abstract DbQuery FilterClassAnnouncementByCaller(DbQuery dbQuery, int callerId);
+
+
+        //common implementation for teacher or admin 
+        public virtual ClassAnnouncement GetLastDraft(int personId)
+        {
+            var conds = new AndQueryCondition
+                {
+                    {Announcement.STATE_FIELD, AnnouncementState.Draft},
+                    {ClassAnnouncement.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
+                };
+            var dbQuery = SeletClassAnnouncements(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, personId);
+            conds.BuildSqlWhere(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME);
+            
+            dbQuery.Sql.Append(@" and (ClassRef in (select ClassTeacher.ClassRef from ClassTeacher where ClassTeacher.PersonRef = @callerId))");
+            dbQuery.Parameters.Add("callerId", personId);
+
+            Orm.OrderBy(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, Announcement.CREATED_FIELD, Orm.OrderType.Desc);
+            return ReadOneOrNull<ClassAnnouncement>(dbQuery);
+        }
+
 
         public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
         {
@@ -152,17 +181,18 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 return BuildGetDetailsResult(reader);
             }
         }
-
-        public override AnnouncementDetails GetDetails(int id, int callerId, int? roleId)
+        
+        public override IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId, bool onlyOwner = true)
         {
             var parameters = new Dictionary<string, object>
                 {
-                    {"classAnnouncementId", id},
+                    {"classAnnouncementIds", ids},
                     {"callerId", callerId},
                     {"callerRole", roleId},
-                    {"schoolYearId", schoolYearId}
+                    {"schoolYearId", schoolYearId},
+                    {"onlyOwner", onlyOwner }
                 };
-            return GetDetails("spGetClassAnnouncementDetails", parameters);
+            return GetDetailses("spGetListOfClassAnnouncementDetails", parameters);
         }
 
         protected override ClassAnnouncement ReadAnnouncementData(AnnouncementComplex announcement, SqlDataReader reader)
@@ -211,8 +241,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {ClassAnnouncement.CLASS_ANNOUNCEMENT_TYPE_REF_FIELD, classAnnouncementType},
                     {ClassAnnouncement.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
                 };
-            var dbQuery = Orm.OrderedSelect(AdminAnnouncement.VW_ADMIN_ANNOUNCEMENT_NAME, conds, Announcement.ID_FIELD, Orm.OrderType.Desc, count);
-            var anns = ReadMany<Announcement>(dbQuery);
+            var dbQuery = Orm.OrderedSelect(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, conds, Announcement.ID_FIELD, Orm.OrderType.Desc, count);
+            var anns = ReadMany<ClassAnnouncement>(dbQuery);
             return anns.Count == 0 ? new List<string>() : anns.Select(x => x.Content).Distinct().ToList();
         }
 

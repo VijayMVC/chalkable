@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Reflection;
+using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common.Orm;
 
@@ -406,6 +407,29 @@ namespace Chalkable.Data.Common
         {
             return SelectOne<TEntity>(BuildCondsByKey(key));
         }
+
+        public virtual IList<TEntity> GetByIds(IList<TParam> keys)
+        {
+            if(keys == null || keys.Count==0)
+                return new List<TEntity>();
+
+            StringBuilder sql = new StringBuilder();
+            sql.AppendFormat(Orm.Orm.SELECT_FORMAT, '*', typeof(TEntity).Name);
+
+            var primaryKeyFields = Orm.Orm.GetPrimaryKeyFields(typeof(TEntity));
+            sql.Append("Where ").Append($"{primaryKeyFields.First().Name} in( Select * From @keys ) ");
+
+            var param = new Dictionary<string, object>
+            {
+                ["keys"] = keys
+            };
+
+            using (var reader = ExecuteReaderParametrized(sql.ToString(), param))
+            {
+                return reader.ReadList<TEntity>();
+            }
+        }
+
         public virtual TEntity GetByIdOrNull(TParam key)
         {
             return SelectOneOrNull<TEntity>(BuildCondsByKey(key));

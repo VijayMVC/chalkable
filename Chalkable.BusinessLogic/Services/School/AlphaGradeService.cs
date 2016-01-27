@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -11,6 +13,9 @@ namespace Chalkable.BusinessLogic.Services.School
         void EditAlphaGrades(IList<AlphaGrade> alphaGrades);
         void Delete(IList<AlphaGrade> alphaGrades);
         IList<AlphaGrade> GetAlphaGrades();
+        IList<AlphaGrade> GetAlphaGradesByClassId(int classId);
+        IList<AlphaGrade> GetStandardsAlphaGradesByClassId(int classId);
+        IList<AlphaGrade> GetStandardsAlphaGradesForSchool(int schoolId);
     }
 
     public class AlphaGradeService : SchoolServiceBase, IAlphaGradeService
@@ -33,7 +38,25 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<AlphaGrade> GetAlphaGrades()
         {
-            throw new System.NotImplementedException();
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            return DoRead(u => new AlphaGradeDataAccess(u).GetAlphaGradesBySchoolId(Context.SchoolLocalId.Value));
+        }
+
+        public IList<AlphaGrade> GetAlphaGradesByClassId(int classId)
+        {
+            var res = DoRead(u => new AlphaGradeDataAccess(u).GetAlphaGradeForClasses(new List<int> {classId}));
+            return res[classId];
+        }
+        public IList<AlphaGrade> GetStandardsAlphaGradesByClassId(int classId)
+        {
+            var res = DoRead(u => new AlphaGradeDataAccess(u).GetAlphaGradesForClassStandards(new List<int> { classId }));
+            return res[classId];
+        }
+
+        public IList<AlphaGrade> GetStandardsAlphaGradesForSchool(int schoolId)
+        {
+            var res = DoRead(u => new AlphaGradeDataAccess(u).GetAlphaGradesForSchoolStandarts(new List<int> {schoolId}));
+            return res[schoolId];
         }
 
         public void EditAlphaGrades(IList<AlphaGrade> alphaGrades)

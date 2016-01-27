@@ -1,14 +1,14 @@
 ﻿
 
 CREATE Procedure [dbo].[spUpdateAnnouncementRecipientData] 
-@announcementId Int, 
-@personId Int,
-@roleId Int, 
-@complete Bit,
-@tillDate datetime2,
-@schoolYearId Int,
-@annType int,
-@classId int
+	@announcementId Int, 
+	@personId Int,
+	@roleId Int, 
+	@complete Bit,
+	@tillDate datetime2,
+	@schoolYearId Int,
+	@annType int,
+	@classId int
 As
 
 declare @annToMark table (Id int, Complete bit)

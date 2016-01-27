@@ -89,7 +89,7 @@ join StudentGroup on StudentGroup.GroupRef = ar.GroupRef
 where StudentGroup.StudentRef = @studentId and AnnouncementRef = vwAdminAnnouncement.Id
 )
 )
-order by Created desc
+order by Expires desc
 OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
 
 exec spSelectAdminAnnoucnement @adminAnnouncementT

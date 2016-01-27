@@ -2,7 +2,7 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ApplicationService');
 REQUIRE('chlk.models.common.Button');
 REQUIRE('chlk.activities.apps.AttachAppsDialog');
-
+REQUIRE('chlk.activities.apps.AppShadeDialog');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -101,9 +101,13 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('add-new')],
             [[Object]],
             function closeCurrentAppAction(data){
-                if (data.refresh_attached_files)
-                    this.BackgroundNavigate('announcement', 'refreshAttachments'
-                        , [data.announcementId, data.announcementType]);
+                if (data.attribute_id)
+                    this.BackgroundNavigate('announcement', 'refreshAttribute'
+                        , [data.announcementId, data.announcementType, data.attribute_id]);
+                else
+                    if (data.refresh_attached_files)
+                        this.BackgroundNavigate('announcement', 'refreshAttachments'
+                            , [data.announcementId, data.announcementType]);
 
                 this.getView().getCurrent().close();
                 return null;
@@ -139,6 +143,76 @@ NAMESPACE('chlk.controllers', function (){
             [[Object]],
             function appErrorAction(data){
                 return this.Redirect('error', 'appError', []);
+            },
+
+            [[Object]],
+            function showStandardPickerAction(data) {
+                this.WidgetStart('apps', 'showStandards', [data.excludeIds || []])
+                    .then(function (data) {
+                        return data.map(function (_) { return _.serialize(); });
+                    }, this)
+                    .then(this._replayTo(data));
+
+                return null;
+            },
+
+            function _replayTo(data) {
+                return function (value) {
+                    data.__source.postMessage({action: 'handleResponse', value: value, reqId: data.reqId}, data.__origin);
+                }
+            },
+
+            [[Object]],
+            function showAlertBoxAction(data) {
+                this.ShowAlertBox(data.text, data.header || null)
+                    .then(this._replayTo(data));
+
+                return null;
+            },
+
+            [[Object]],
+            function showPromptBoxAction(data) {
+                this.ShowPromptBox(data.text
+                    , data.header || null
+                    , data.inputValue || null
+                    , data.inputAttrs || null
+                    , data.inputType || null)
+                    .then(this._replayTo(data));
+
+                return null;
+            },
+
+            [[Object]],
+            function showConfirmBoxAction(data) {
+                this.ShowConfirmBox(data.text
+                    , data.header || null
+                    , data.buttonText || null
+                    , data.buttonClass || null)
+                    .then(this._replayTo(data));
+
+                return null;
+            },
+
+            [[Object]],
+            function shadeMeAction(data) {
+                var res = ria.async.Future.$fromData(null)
+                    .then(this._replayTo(data))
+                    .then(function () {
+                        return chlk.activities.apps.AppShadeDialogModel.$fromData(data.__iframe);
+                    });
+
+                return this.ShadeView(chlk.activities.apps.AppShadeDialog, res);
+            },
+
+            [[Object]],
+            function popMeAction(data) {
+                var res = ria.async.Future.$fromData(null)
+                    .then(this._replayTo(data))
+                    .then(function () {
+                        return chlk.activities.apps.AppShadeDialogModel.$fromData(data.__iframe);
+                    });
+
+                return this.UpdateView(chlk.activities.apps.AppShadeDialog, res, 'pop-me');
             }
         ]);
 });

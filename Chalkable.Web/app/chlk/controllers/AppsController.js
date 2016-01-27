@@ -189,11 +189,24 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AppId]],
         function showStandardsAction(applicationId){
             var standards = this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []);
+            var standardIds = standards.map(function (_) { return _.getId().valueOf() });
+
+            var res = this.WidgetStart('apps', 'showStandards', [standardIds])
+                .then(function (data) {
+                    var standards = [].concat(this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []), data);
+                    return this.addStandards_(standards, applicationId);
+                }, this);
+
+            return this.UpdateView(chlk.activities.apps.AppInfoPage, res);
+        },
+
+        //move cc_standards logic to StandardController
+        [[String, Array]],
+        function showStandardsWidgetAction(requestId, standardsIds){
             var res = this.standardService.getCCStandardCategories()
                 .attach(this.validateResponse_())
                 .then(function (data){
-                    var standardsIds = standards.map(function(s){return s.getId().valueOf()});
-                    return new chlk.models.standard.AddCCStandardViewData(applicationId, data, standardsIds);
+                    return new chlk.models.standard.AddCCStandardViewData(requestId, data, standardsIds);
                 }, this);
             return this.ShadeView(chlk.activities.apps.AddCCStandardDialog, res)
         },
@@ -209,20 +222,18 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [[chlk.models.standard.AddCCStandardsInputModel]],
-        function addStandardsAction(model){
+        function completeStandardsWidgetAction(model){
             var stIds = [model.getStandardId()];
-            var res = this.standardService.getCommonCoreStandardsByIds(stIds)
+            this.standardService.getCommonCoreStandardsByIds(stIds)
                 .then(function(data){
-                    this.BackgroundCloseView(chlk.activities.apps.AddCCStandardDialog);
-                    var standards = this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []);
-                    data.forEach(function(s){standards.push(s);});
-                    return this.addStandards_(standards, model.getApplicationId());
+                    this.WidgetComplete(model.getRequestId(), data);
                 }, this);
-            return this.UpdateView(chlk.activities.apps.AppInfoPage, res);
+
+            return this.CloseView(chlk.activities.apps.AddCCStandardDialog);
         },
 
         [[ArrayOf(chlk.models.standard.CommonCoreStandard), chlk.models.id.AppId]],
-            chlk.models.standard.ApplicationStandardsViewData, function addStandards_(standards, appId){
+        chlk.models.standard.ApplicationStandardsViewData, function addStandards_(standards, appId){
             this.getContext().getSession().set(ChlkSessionConstants.CC_STANDARDS, standards);
             return new chlk.models.standard.ApplicationStandardsViewData(appId, standards);
         },
@@ -520,10 +531,6 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.StudyCenterEnabled()],
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER,
-            chlk.models.common.RoleEnum.DISTRICTADMIN
-        ])],
         [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
         function viewExternalAttachAppAction(announcementId, appId, announcementType, appUrlAppend_) {
             if(!this.isStudyCenterEnabled())

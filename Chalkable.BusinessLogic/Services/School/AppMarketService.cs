@@ -54,7 +54,7 @@ namespace Chalkable.BusinessLogic.Services.School
             int? syId = Context.SchoolYearId;
             if (!syId.HasValue)
                 syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalled(personId, syId.Value));
+            return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalled(personId, syId.Value));     
         }
         
         public IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId)
@@ -80,7 +80,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 var da = new ApplicationInstallDataAccess(uow);
                 var res = RegisterInstallAction(uow, app, personId, classIds,  dateTime);
                 var persons = da.GetPersonsForApplicationInstall(app.Id, Context.PersonId.Value, personId, classIds, Context.Role.Id
-                        , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, Context.SchoolYearId.Value);
+                        , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.HasAdminExternalAttach
+                        , app.HasStudentExternalAttach, app.HasTeacherExternalAttach, app.CanAttach, Context.SchoolYearId.Value);
 
                 var appInstalls = new List<ApplicationInstall>();
                 var spIds = persons.Select(x => new Pair<int,int>(x.PersonId, x.SchoolYearId)).Distinct().ToList();
@@ -258,7 +259,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 throw new ChalkableSecurityException();
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
             var res = new List<StudentCountToAppInstallByClass>();
-            if (app.HasStudentMyApps || app.CanAttach)
+            if (app.HasStudentMyApps || app.CanAttach || app.HasStudentExternalAttach)
             {
                 using (var uow = Read())
                 {
@@ -329,9 +330,10 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                var sy = new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime.Date, Context.SchoolLocalId.Value);
+                var syId = Context.SchoolYearId.Value; //new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime.Date, Context.SchoolLocalId.Value);
                 return da.GetPersonsForApplicationInstall(app.Id, Context.PersonId.Value, personId, classIds, Context.Role.Id
-                                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
+                                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.HasAdminExternalAttach
+                                                   , app.HasStudentExternalAttach, app.HasTeacherExternalAttach, app.CanAttach, syId);
             }
         }
 
@@ -344,9 +346,10 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                var sy = new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime.Date, Context.SchoolLocalId.Value);
+                var syId = Context.SchoolYearId.Value; //new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime.Date, Context.SchoolLocalId.Value);
                 return da.GetPersonsForApplicationInstallCount(applicationId, Context.PersonId.Value, personId, classIds, Context.Role.Id
-                                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.CanAttach, sy.Id);
+                                                   , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.HasAdminExternalAttach
+                                                   , app.HasStudentExternalAttach, app.HasTeacherExternalAttach, app.CanAttach, syId);
             }
         }
 

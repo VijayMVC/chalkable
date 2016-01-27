@@ -54,6 +54,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 return new LessonPlanForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
             if (Context.Role == CoreRoles.STUDENT_ROLE)
                 return new LessonPlanForStudentDataAccess(unitOfWork, Context.SchoolYearId.Value);
+            if (BaseSecurity.IsDistrictAdmin(Context))
+                return new LessonPlanForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value);
 
             throw new ChalkableException("Not supported role for lesson plan");
         }
@@ -67,7 +69,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 var res = CreateLessonPlanDataAccess(u).Create(classId, Context.NowSchoolTime, startDate, endDate, Context.PersonId.Value, Context.SchoolYearId.Value);
                 u.Commit();
-                return PrepareStandardsWithCode(res);
+                res.AnnouncementStandards = ServiceLocator.StandardService.PrepareAnnouncementStandardsCodes(res.AnnouncementStandards);
+                return res;
             }
         }
 
@@ -98,7 +101,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 res.AnnouncementApplications = ApplicationSchoolService.CopyAnnApplications(annApps, new List<int> { res.Id }, u);
                 u.Commit();
             }
-            return PrepareStandardsWithCode(res); 
+            res.AnnouncementStandards = ServiceLocator.StandardService.PrepareAnnouncementStandardsCodes(res.AnnouncementStandards);
+            return res;
         }
 
         public void DuplicateLessonPlan(int lessonPlanId, IList<int> classIds)
@@ -163,7 +167,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     ValidateLessonPlan(lessonPlan, da);
                 da.Update(lessonPlan);
                 uow.Commit();
-                return GetDetails(da, lessonPlanId);
+                return InternalGetDetails(da, lessonPlanId);
             }                
         }
 
@@ -197,7 +201,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             using (var u = Update())
             {
                 var da = CreateLessonPlanDataAccess(u);
-                var res = da.GetDetails(announcementId, Context.PersonId.Value, Context.RoleId);
+                var res = InternalGetDetails(da, announcementId); // da.GetDetails(announcementId, Context.PersonId.Value, Context.RoleId);
                 var ln = res.LessonPlanData;
                 AnnouncementSecurity.EnsureInModifyAccess(res, Context);
                 ValidateLessonPlan(ln, da);
@@ -207,6 +211,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     ln.Created = Context.NowSchoolTime.Date;
                     da.Update(ln);
                 }
+                ServiceLocator.AnnouncementAssignedAttributeService.ValidateAttributes(res.AnnouncementAttributes);
                 u.Commit();
             }
         }
@@ -265,50 +270,22 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public LessonPlan GetLessonPlanById(int lessonPlanId)
         {
-            Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u =>
-                {
-                    var res = CreateLessonPlanDataAccess(u).GetAnnouncement(lessonPlanId, Context.PersonId.Value);
-                    if(res == null)
-                        throw new NoAnnouncementException();
-                    return res;
-                });
+            return InternalGetAnnouncementById(lessonPlanId);
         }
 
-        public override Announcement GetAnnouncementById(int id)
+        protected override AnnouncementDetails InternalGetDetails(BaseAnnouncementDataAccess<LessonPlan> dataAccess, int announcementId)
         {
-            return GetLessonPlanById(id);
-        }
-
-        public override AnnouncementDetails GetAnnouncementDetails(int announcementId)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u =>  GetDetails(CreateDataAccess(u), announcementId));
+            var onlyOwner = !Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);
+            return InternalGetDetails(dataAccess, announcementId, onlyOwner);
         }
 
         public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false)
         {
-            //TODO: rewrite this later 
             var lps = GetLessonPlansForFeed(startDate, toDate, null, classId, complete, ownerOnly);
-            return lps.Select(x => DoRead(u => GetDetails(CreateLessonPlanDataAccess(u), x.Id))).ToList();
+            return  DoRead(u => InternalGetDetailses(CreateLessonPlanDataAccess(u), lps.Select(lp=>lp.Id).ToList(), ownerOnly));
         }
 
-        private AnnouncementDetails GetDetails(BaseAnnouncementDataAccess<LessonPlan> dataAccess, int announcementId)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-            var ann = dataAccess.GetDetails(announcementId, Context.PersonId.Value, Context.Role.Id);
-            if (ann == null)
-                throw new NoAnnouncementException();
-            return PrepareStandardsWithCode(ann);
-        }
-
-        private AnnouncementDetails PrepareStandardsWithCode(AnnouncementDetails announcement)
-        {
-            var annStandards = ServiceLocator.StandardService.GetAnnouncementStandards(announcement.Id);
-            announcement.AnnouncementStandards = annStandards.Where(x => announcement.AnnouncementStandards.Any(y => y.StandardRef == x.StandardRef
-                                                                                                && y.AnnouncementRef == x.AnnouncementRef)).ToList();
-            return announcement;
-        }
+        //TODO: old method
 
         protected override void SetComplete(Announcement announcement, bool complete)
         {
@@ -411,17 +388,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateLessonPlanDataAccess(u).ExistsInGallery(title, exceludedLessonPlanId));
         }
 
-        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId)
+        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId)
         {
-            DoUpdate(
-                u =>
-                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int) AnnouncementTypeEnum.LessonPlan,schoolYearId,
-                        personId, roleId, true, tillDateToUpdate, classId));
+            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).CompleteAnnouncements(schoolYearId, personId, roleId,
+                        classId, (int) AnnouncementTypeEnum.LessonPlan, startDate, endDate));
         }
 
         public void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)
         {
-            BaseSecurity.EnsureStudyCenterEnabled(Context); // only study center custumers can use lesson plan gallery 
+            BaseSecurity.EnsureStudyCenterEnabled(Context); // only study center customers can use lesson plan gallery 
 
             var newLessonPlan = GetLessonPlanById(newLessonPlanId);
             DoUpdate(u =>
@@ -432,7 +407,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 if (!oldLessonPlan.GalleryCategoryRef.HasValue)
                     throw new ChalkableException($@"'{oldLessonPlan.Title}' was deleted from Gallery.");
 
-                if (!oldLessonPlan.IsOwner && !ClaimInfo.HasPermission(Context.Claims, ClaimInfo.CHALKABLE_ADMIN))
+                if (!oldLessonPlan.IsOwner && !Context.Claims.HasPermission(ClaimInfo.CHALKABLE_ADMIN))
                     throw new ChalkableSecurityException("Current user has no access to replace lesson plan in gallery!");
 
                 newLessonPlan.GalleryCategoryRef = oldLessonPlan.GalleryCategoryRef;
@@ -450,7 +425,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 var da = CreateLessonPlanDataAccess(u);
                 var lp = da.GetLessonPlanTemplate(lessonPlanId, Context.PersonId.Value);
-                if (!lp.IsOwner && !ClaimInfo.HasPermission(Context.Claims, ClaimInfo.CHALKABLE_ADMIN))
+                if (!lp.IsOwner && !Context.Claims.HasPermission(ClaimInfo.CHALKABLE_ADMIN))
                     throw new ChalkableSecurityException("Current user has no access to remove lesson plan from gallery!");
                 lp.GalleryCategoryRef = null;
                 da.Update(lp);

@@ -9,6 +9,16 @@ REQUIRE('chlk.models.classes.ClassInfo');
 REQUIRE('chlk.models.classes.ClassSchedule');
 REQUIRE('chlk.models.classes.ClassGradingViewData');
 REQUIRE('chlk.models.classes.AllSchoolsActiveClasses');
+REQUIRE('chlk.models.attendance.ClassAttendanceStatsViewData');
+REQUIRE('chlk.models.school.SchoolClassesStatisticViewData');
+REQUIRE('chlk.models.classes.ClassDisciplinesSummary');
+REQUIRE('chlk.models.classes.ClassAttendanceSummary');
+
+REQUIRE('chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData');
+REQUIRE('chlk.models.grading.GradingClassSummaryForCurrentPeriodViewData');
+REQUIRE('chlk.models.grading.GradingClassStandardsGridForCurrentPeriodViewData');
+REQUIRE('chlk.models.classes.ClassGradingSummary');
+REQUIRE('chlk.models.grading.FinalGradesViewData');
 
 REQUIRE('chlk.models.common.ChlkDate');
 
@@ -81,7 +91,72 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ClassId]],
             ria.async.Future, function getSummary(classId) {
-                return this.get('Class/ClassSummary.json', chlk.models.classes.ClassSummary, {
+                return this.get('Class/Summary.json', chlk.models.classes.ClassSummary, {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.classes.DateTypeEnum]],
+            ria.async.Future, function getDisciplinesStats(classId, dateType_){
+                return this.get('Class/DisciplineSummary.json', chlk.models.discipline.ClassDisciplineStatsViewData,{
+                    classId: classId.valueOf(),
+                    dateType: dateType_ && dateType_.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId, chlk.models.classes.DateTypeEnum]],
+            ria.async.Future, function getAttendanceStats(classId, dateType_){
+                return this.get('Class/AttendanceSummary.json', chlk.models.attendance.ClassAttendanceStatsViewData,{
+                    classId: classId.valueOf(),
+                    dateType: dateType_ && dateType_.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getDisciplinesSummary(classId) {
+                return this.get('Class/Summary.json', chlk.models.classes.ClassDisciplinesSummary, {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getAttendanceSummary(classId) {
+                return this.get('Class/Summary.json', chlk.models.classes.ClassAttendanceSummary, {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getGradingItemsGridSummary(classId) {
+                return this.get('Class/Grading.json', chlk.models.classes.ClassGradingSummary.OF(chlk.models.grading.GradingClassSummaryGridForCurrentPeriodViewData), {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getGradingItemsBoxesSummary(classId) {
+                return this.get('Class/Summary.json', chlk.models.classes.ClassGradingSummary.OF(chlk.models.grading.GradingClassSummaryForCurrentPeriodViewData), {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getGradingStandardsGridSummary(classId) {
+                return this.get('Class/Grading.json', chlk.models.classes.ClassGradingSummary.OF(chlk.models.grading.GradingClassStandardsGridForCurrentPeriodViewData), {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getGradingStandardsBoxesSummary(classId) {
+                return this.get('Class/Summary.json', chlk.models.classes.ClassGradingSummary.OF(chlk.models.grading.GradingClassSummary), {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
+            ria.async.Future, function getGradingFinalGradesSummary(classId) {
+                return this.get('Class/Grading.json', chlk.models.classes.ClassGradingSummary.OF(chlk.models.grading.FinalGradesViewData), {
                     classId: classId.valueOf()
                 });
             },
@@ -139,6 +214,17 @@ NAMESPACE('chlk.services', function () {
 
             ria.async.Future, function getAllSchoolsActiveClasses(){
                 return this.get('Class/AllSchoolsActiveClasses.json', chlk.models.classes.AllSchoolsActiveClasses, {})
+            },
+
+            [[chlk.models.id.SchoolYearId, Number, String, chlk.models.id.SchoolPersonId, Number]],
+            ria.async.Future, function getClassesStatistic(schoolYearId, start_, filter_, teacherId_, count_) {
+                return this.get('Class/ClassesStats.json', ArrayOf(chlk.models.school.SchoolClassesStatisticViewData.OF(chlk.models.id.SchoolId)), {
+                    schoolYearId: schoolYearId.valueOf(),
+                    start:start_ || 0,
+                    count: count_ || 10,
+                    teacherId: teacherId_ && teacherId_.valueOf(),
+                    filter: filter_
+                });
             }
         ])
 });

@@ -81,19 +81,22 @@ namespace Chalkable.StiConnector.Connectors
 
                 var endTime = DateTime.Now;
                 var time = endTime - startTime;
-                var timeString = string.Format("{0}:{1}.{2}", time.Minutes, time.Seconds, time.Milliseconds);
+                var timeString = $"{time.Minutes}:{time.Seconds}.{time.Milliseconds}";
                 Trace.TraceInformation(REQUEST_TIME_MSG_FORMAT, url, timeString);
                 return res;
 
             }
             catch (WebException ex)
             {
-                return HandleInowException<T>(ex); 
+                return HandleInowException<T>(ex);
+            }
+            catch (Exception e)
+            {
+                throw e;
             }
             finally
             {
-                if (stream != null)
-                    stream.Dispose();
+                stream?.Dispose();
             }
         }
 
@@ -266,14 +269,24 @@ namespace Chalkable.StiConnector.Connectors
             return new Dictionary<string, string>
                 {
                     {HttpRequestHeader.Authorization.ToString(), "Session " + locator.Token},
-                    {"ApplicationKey", string.Format("chalkable {0}", Settings.StiApplicationKey)}
+                    {"ApplicationKey", $"chalkable {Settings.StiApplicationKey}"}
                 };
         }
 
-        protected string BaseUrl
+        protected void EnsureApiVersion(string requiredApiVersion)
         {
-            get { return locator.BaseUrl; }
+            if(!IsSupportedApiVersion(requiredApiVersion))
+                throw new ChalkableSisNotSupportVersionException(requiredApiVersion, ApiVersion);
         }
+
+        protected bool IsSupportedApiVersion(string requiredApiVersion)
+        {
+            VersionHelper.ValidateVersionFormat(requiredApiVersion);
+            return VersionHelper.CompareVersionTo(requiredApiVersion, ApiVersion) != 1;
+        }
+
+        protected string BaseUrl => locator.BaseUrl;
+        public string ApiVersion => locator.ApiVersion;
     }
 
 
@@ -288,9 +301,6 @@ namespace Chalkable.StiConnector.Connectors
         public string ErrorMessage { get; set; }
         public InowErrorModelState ModelState { get; set; }
 
-        public IList<string> ModelStates
-        {
-            get { return ModelState != null ? ModelState.States : new List<string>(); }
-        }
+        public IList<string> ModelStates => ModelState != null ? ModelState.States : new List<string>();
     }
 }

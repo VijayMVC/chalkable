@@ -12,6 +12,32 @@ NAMESPACE('chlk.activities.announcement', function () {
         [ria.mvc.TemplateBind(chlk.templates.announcement.FileCabinetTpl)],
         'FileCabinetDialog', EXTENDS(chlk.activities.lib.TemplateDialog), [
 
+            OVERRIDE, VOID, function onStart_() {
+                BASE();
+                ria.dom.Dom().on('keydown.back', function(node, event){
+                    if(event.target.tagName.toLowerCase() != 'input' && event.which == ria.dom.Keys.BACKSPACE.valueOf())
+                        event.preventDefault();
+                });
+            },
+
+            OVERRIDE, VOID, function onStop_(){
+                BASE();
+                ria.dom.Dom().off('keydown.back');
+            },
+
+            OVERRIDE, function afterRefresh_() {
+                BASE();
+                var node = this.dom.find('.file-search');
+                node.trigger('focus');
+                var el = node.valueOf()[0];
+                var strLength = el.value.length;
+                if(el.setSelectionRange !== undefined) {
+                    el.setSelectionRange(strLength, strLength);
+                } else {
+                    $(el).val(el.value);
+                }
+            },
+
             [ria.mvc.DomEventBind('mouseover mouseleave', '.file-search-img')],
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function imgHover(node, event){
@@ -44,16 +70,18 @@ NAMESPACE('chlk.activities.announcement', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function filterKeyUp(node, event){
                 var value = node.getValue() || '';
-                clearTimeout(timeout);
-                if(value.length > 1){
-                    timeout = setTimeout(function(){
-                        this.submitFormWithStart(node);
-                    }.bind(this), 500);
-                    this.dom.find('.file-search-img').addClass('opacity0');
-                    this.dom.find('.file-search-close').removeClass('opacity0');
-                }else{
-                    if(!value.length)
-                        this.clearSearch();
+                if((value || node.getData('value')) && value != node.getData('value')){
+                    clearTimeout(timeout);
+                    if(value.length > 1){
+                        timeout = setTimeout(function(){
+                            this.submitFormWithStart(node);
+                        }.bind(this), 500);
+                        this.dom.find('.file-search-img').addClass('opacity0');
+                        this.dom.find('.file-search-close').removeClass('opacity0');
+                    }else{
+                        if(!value.length)
+                            this.clearSearch();
+                    }
                 }
             },
 

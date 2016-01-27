@@ -8,6 +8,8 @@ NAMESPACE('chlk.models.attendance', function () {
         'EditSeatingGridViewData', [
             Number, 'columns',
 
+            Boolean, 'inProfile',
+
             Number, 'rows',
 
             chlk.models.common.ChlkDate, 'date',
@@ -20,8 +22,10 @@ NAMESPACE('chlk.models.attendance', function () {
 
             chlk.models.id.ClassId, 'classId',
 
-            function $(classId_, rows_, columns_){
+            function $(classId_, rows_, columns_, inProfile_){
                 BASE();
+                if(inProfile_)
+                    this.setInProfile(inProfile_);
                 if(classId_)
                     this.setClassId(classId_);
                 if(rows_ || rows_ == 0)

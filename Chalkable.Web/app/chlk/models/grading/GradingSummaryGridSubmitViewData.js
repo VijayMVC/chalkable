@@ -26,6 +26,10 @@ NAMESPACE('chlk.models.grading', function () {
 
             Number, 'selectedIndex',
 
+            Boolean, 'ableEdit',
+
+            Boolean, 'gradable',
+
             [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId, Boolean, Boolean, chlk.models.id.StandardId, chlk.models.id.AnnouncementTypeGradingId]],
             function $(classId_, gradingPeriodId_, notCalculateGrid_, isAutoUpdate_, standardId_, categoryId_){
                 BASE();

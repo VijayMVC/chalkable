@@ -301,5 +301,21 @@
     <Build Include="Stored Procedures\spDeletePersons.sql" />
     <Build Include="Stored Procedures\spDeleteClasses.sql" />
     <Build Include="User Defined Types\TPrivateMessageRecipient.sql" />
+    <Build Include="Stored Procedures\spGetShortSchoolSummaries.sql" />
+    <Build Include="Stored Procedures\spGetClassesByTeachers.sql" />
+    <Build Include="Stored Procedures\spGetClassesBySchoolYear.sql" />
+    <Build Include="Stored Procedures\spGetClassesByIds.sql" />
+    <Build Include="Stored Procedures\spGetAdminAnnouncementsDetailses.sql" />
+    <Build Include="Stored Procedures\spGetAlphaGradesBySchool.sql" />
+    <Build Include="Stored Procedures\spGetAlphaGradesForClassStandards.sql" />
+    <Build Include="Stored Procedures\spGetAlphaGradesForClasses.sql" />
+    <Build Include="Stored Procedures\spGetListOfClassAnnouncementDetails.sql" />
+    <Build Include="Stored Procedures\spGetListOfLessonPlansDetails.sql" />
+    <Build Include="Stored Procedures\spCompleteAnnouncements.sql" />
+    <Build Include="Stored Procedures\spGetAlphaGradesForSchoolStandards.sql" />
+    <Build Include="Stored Procedures\spGetStandardParentsSubTree.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
   </ItemGroup>
 </Project>

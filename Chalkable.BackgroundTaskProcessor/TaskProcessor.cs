@@ -23,6 +23,7 @@ namespace Chalkable.BackgroundTaskProcessor
             handlers.Add(BackgroundTaskTypeEnum.PictureImport, new PictureImportTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.SisDataResync, new SisResyncTaskHandler());
             handlers.Add(BackgroundTaskTypeEnum.SisDataResyncAfterRestore, new SisResyncAfterRestoreTaskHandler());
+            handlers.Add(BackgroundTaskTypeEnum.DatabaseDacPacUpdate, new DatabaseDacPacUpdateTaskHandler());
         }
 
         public void Process()

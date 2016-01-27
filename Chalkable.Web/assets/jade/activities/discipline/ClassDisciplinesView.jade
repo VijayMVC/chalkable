@@ -1,8 +1,9 @@
-selectedId = self.getSelectedItemId()
-redirectData = self.getRedirectData()
-.students-list.loader-container
+-var selectedId = self.getClassId()
+-var redirectData = self.getRedirectData()
+.students-list.loader-container.class-disciplines-content
     h2.page-title Discipline
-    +ClassesToolBar(self.getTopData(), 'discipline', 'classList')
+    if !self.isInProfile()
+        +ClassesToolBar(self.getTopData(), 'discipline', 'classList')
     .loader
     .buttons
         .buttons-group
@@ -19,8 +20,8 @@ redirectData = self.getRedirectData()
                             showOtherMonths: true,
                             selectOtherMonths: true
                         },
-                        data-controller= "discipline",
-                        data-action="classList",
+                        data-controller= self.isInProfile() ? "class" : "discipline",
+                        data-action=self.isInProfile() ? "disciplineForDate" : "classList",
                         data-params=selectedId ? [selectedId.valueOf()] : null
                     )#discipline-date.tb-date-picker.tr
                 .r.total-count=self.getTotalText()

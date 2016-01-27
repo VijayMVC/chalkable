@@ -1,10 +1,15 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors.Model;
+using Chalkable.StiConnector.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -38,9 +43,11 @@ namespace Chalkable.BusinessLogic.Services.School
         Class GetById(int id);
         IList<Class> GetAll();
         IList<ClassDetails> GetAllSchoolsActiveClasses();
+
+        IList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId);
     }
 
-    public class ClassService : SchoolServiceBase, IClassService
+    public class ClassService : SisConnectedService, IClassService
     {
         public ClassService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
@@ -202,6 +209,26 @@ namespace Chalkable.BusinessLogic.Services.School
             if (teacherId.HasValue)
                 classes = GetTeacherClasses(schoolYearId, teacherId.Value, markingPeriodId);
             return classes;
+        }
+
+        public IList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId)
+        {
+            start = start ?? 0;
+            count = count ?? int.MaxValue;
+            IList<SectionSummary> iNowRes;
+            try
+            {
+                iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId, Context.NowSchoolYearTime, start.Value + 1, start.Value + count.Value, filter, teacherId);
+            }
+            catch (ChalkableSisNotSupportVersionException)
+            {
+                var chalkableRes = DoRead(u => new ClassDataAccess(u).GetClassesBySchoolYear(schoolYearId, start.Value, count.Value, filter, teacherId));
+                return chalkableRes.Select(ClassStatsInfo.Create).ToList();
+            }
+
+            var classes = DoRead(u => new ClassDataAccess(u).GetClassesByIds(iNowRes.Select(x => x.SectionId).ToList()));
+            var res = iNowRes.Select(x => ClassStatsInfo.Create(x, classes.FirstOrDefault(y => y.Id == x.SectionId))).ToList();
+            return res.OrderBy(x => x.Name).ToList();
         }
     }
 }

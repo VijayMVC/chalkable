@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common.Exceptions;
@@ -17,6 +18,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ClassDisciplineDetails SetClassDiscipline(ClassDiscipline classDiscipline);
         IList<ClassDisciplineDetails> GetDisciplineByDateRange(int studentId, DateTime start, DateTime end);
         IList<InfractionSummaryInfo> GetStudentInfractionSummary(int studentId, int? gradingPeriodId);
+        Task<IList<DisciplineDailySummaryInfo>> GetClassDisciplineDailySummary(int classId, DateTime startDate, DateTime endDate);
     }
 
     public class DisciplineService : SisConnectedService, IDisciplineService
@@ -48,8 +50,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         };
                     var discRefferal = disciplineRefferals.FirstOrDefault(x => x.StudentId == student.Id);
                     if (discRefferal != null)
-                        MapperFactory.GetMapper<ClassDiscipline, DisciplineReferral>()
-                                     .Map(discipline, discRefferal);
+                        MapperFactory.GetMapper<ClassDiscipline, DisciplineReferral>().Map(discipline, discRefferal);
                     else
                     {
                         discipline.Date = date;
@@ -143,6 +144,16 @@ namespace Chalkable.BusinessLogic.Services.School
             var stiDisciplineSummary = ConnectorLocator.StudentConnector.GetStudentDisciplineSummary(studentId, syId, gradingPeriodId);
             var infractions = ServiceLocator.InfractionService.GetInfractions(true);
             return InfractionSummaryInfo.Create(stiDisciplineSummary.Infractions.ToList(), infractions);
+        }
+
+        public async Task<IList<DisciplineDailySummaryInfo>> GetClassDisciplineDailySummary(int classId, DateTime startDate, DateTime endDate)
+        {
+            var inowRes = await ConnectorLocator.SectionDashboardConnector.GetDisciplineSummaryDashboard(classId, startDate, endDate);
+            return inowRes.Select(x=> new DisciplineDailySummaryInfo
+            {
+                Date = x.Date,
+                Occurrences = x.Infractions
+            }).ToList();
         }
     }
 }

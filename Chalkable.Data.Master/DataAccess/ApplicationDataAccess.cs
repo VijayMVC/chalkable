@@ -104,14 +104,14 @@ namespace Chalkable.Data.Master.DataAccess
             {
                 if (!query.IncludeInternal)
                 {
-                    res.Sql.Append(string.Format(" and [{0}] <> 1", Application.IS_INTERNAL_FIELD));
+                    res.Sql.Append($" and [{Application.IS_INTERNAL_FIELD}] <> 1");
                 }
                 if (query.OnlyForInstall)
                 {
                     if (query.Role == CoreRoles.TEACHER_ROLE.Id)
-                        res.Sql.Append(string.Format(" and ([{0}] = 1 or [{1}] = 1 or [{2}] = 1)", Application.HAS_STUDENT_MY_APPS_FIELD, Application.HAS_TEACHER_MY_APPS_FIELD, Application.CAN_ATTACH_FIELD));
+                        res.Sql.Append($" and ([{Application.HAS_STUDENT_MY_APPS_FIELD}] = 1 or [{Application.HAS_TEACHER_MY_APPS_FIELD}] = 1 or [{Application.CAN_ATTACH_FIELD}] = 1 or [{Application.HAS_TEACHER_EXTERNAL_ATTACH_FIELD}] = 1 or [{Application.HAS_STUDENT_EXTERNAL_ATTACH_FIELD}] = 1)");
                     if (query.Role == CoreRoles.STUDENT_ROLE.Id)
-                        res.Sql.Append(string.Format(" and [{0}] = 1", Application.HAS_STUDENT_MY_APPS_FIELD));
+                        res.Sql.Append($" and ([{Application.HAS_STUDENT_MY_APPS_FIELD}] = 1 or [{Application.HAS_STUDENT_EXTERNAL_ATTACH_FIELD}] = 1)");
                 }
             }
 

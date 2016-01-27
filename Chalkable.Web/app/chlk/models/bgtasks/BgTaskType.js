@@ -16,7 +16,9 @@ NAMESPACE('chlk.models.bgtasks', function () {
             ATTENDANCE_NOTIFICATION: 8,
             TEACHER_ATTENDANCE_NOTIFICATION: 9,
             PICTURE_IMPORT: 10,
-            RE_SYNC: 11
+            RE_SYNC: 11,
+            RE_SYNC_AR: 12,
+            DACPAC_UPDATE: 13
         });
 
 
@@ -41,6 +43,7 @@ NAMESPACE('chlk.models.bgtasks', function () {
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.TEACHER_ATTENDANCE_NOTIFICATION] = "Teacher Attendance Notification";
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.PICTURE_IMPORT] = "Picture Import";
               this._types[chlk.models.bgtasks.BgTaskTypeEnum.RE_SYNC] = "Re Sync";
+              this._types[chlk.models.bgtasks.BgTaskTypeEnum.DACPAC_UPDATE] = "DACPAC Deploy";
                if(typeId_)
                    this.setTypeId(typeId_);
             },

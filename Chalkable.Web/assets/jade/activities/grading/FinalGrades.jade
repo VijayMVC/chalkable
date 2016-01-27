@@ -1,21 +1,26 @@
 .grades-page.grading-summary-grid.final-page
-    -var topData = self.getTopData()
-    -var topItems = topData.getTopItems()
-    -var selectedId = topData.getSelectedItemId()
+    -var selectedId = self.getClassId()
     -var gp = self.getCurrentFinalGrade()
     -var selectedGradingPeriodId = gp.getGradingPeriod().getId()
-
-    h2.page-title=Msg.Final_Grade(true)
-
-    +ClassesToolBarWithAll(topData, 'grading', 'finalGrades', null, null, null)
     .autocomplete-list.final-grades
-    .action-bar
-        .items
-            +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
-            +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
-            +ActionLink('grading', "finalGrades", selectedId).pressed=Msg.Final_Grade(true)
-            if self.isLEIntegrated() && self.isHasAccessToLE()
-                +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
+
+    if self.isInProfile()
+        .buttons-group.right
+            +ActionButton('grading', "summaryGridClassProfile", selectedId)=Msg.Item(true)
+            +ActionButton('grading', "standardsGridClassProfile", selectedId)=Msg.Standard(true)
+            +ActionButton('grading', "finalGradesClassProfile", selectedId).pressed=Msg.Final_Grade(true)
+        .clear-fix
+    else
+        -var topData = self.getTopData()
+        +ClassesToolBarWithAll(topData, 'grading', 'finalGrades', null, null, null)
+        h2.page-title=Msg.Final_Grade(true)
+        .action-bar
+            .items
+                +ActionLink('grading', "summaryGrid", selectedId)=Msg.Item(true)
+                +ActionLink('grading', "standardsGrid", selectedId)=Msg.Standard(true)
+                +ActionLink('grading', "finalGrades", selectedId).pressed=Msg.Final_Grade(true)
+                if self.isLEIntegrated() && self.isHasAccessToLE()
+                    +ActionLink('teachers', 'giveLECredits', selectedId) Open Learning Earnings
     .mps-container
         each gradingPeriod,i in self.getGradingPeriods()
             -var ableEdit = self.isAbleEdit()

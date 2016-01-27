@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School;
@@ -178,6 +179,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                     ).ToList();
             res.RemoveAll(x => x.Infraction == null);
             return res;
+        }
+
+        public Task<IList<DisciplineDailySummaryInfo>> GetClassDisciplineDailySummary(int classId, DateTime startDate, DateTime endDate)
+        {
+            throw new NotImplementedException();
         }
     }
 }

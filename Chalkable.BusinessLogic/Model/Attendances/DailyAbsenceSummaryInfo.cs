@@ -2,6 +2,7 @@
 
 namespace Chalkable.BusinessLogic.Model.Attendances
 {
+    //TODO: duplicate to StudentDailyAttendnaceSummary ... invastiage and delete this useless class 
     public class DailyAbsenceSummaryInfo : SimpleAttendanceSummary
     {
         public int StudentId { get; set; }

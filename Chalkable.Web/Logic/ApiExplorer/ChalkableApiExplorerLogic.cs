@@ -85,7 +85,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
             RegisterApiMethodDefaults<DisciplineController>(x => x.ClassList(DateTime.Today, DemoSchoolConstants.AlgebraClassId, null, null, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<DisciplineController>(x => x.StudentDisciplineSummary(DemoSchoolConstants.Student1, DemoSchoolConstants.FirstMarkingPeriodId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<DisciplineTypeController>(x => x.List(null, null), ApiMethodCallType.Get);
-            RegisterApiMethodDefaults<FeedController>(x => x.List(null, null, null, DemoSchoolConstants.AlgebraClassId, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<FeedController>(x => x.List(null, null, null, DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<GradingController>(x => x.ClassSummary(DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<GradingController>(x => x.ItemGradingStat(1), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<GradingController>(x => x.ClassSummaryGrids(DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
@@ -101,7 +101,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
             RegisterApiMethodDefaults<PrivateMessageController>(x => x.Send(DemoSchoolConstants.Student2, null, "test msg", "test msg body"), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<StudentController>(x => x.Schedule(DemoSchoolConstants.Student1), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<SearchController>(x => x.Search("algebra"), ApiMethodCallType.Get);
-            RegisterApiMethodDefaults<SchoolYearController>(x => x.List(null, null), ApiMethodCallType.Get);
+            RegisterApiMethodDefaults<SchoolYearController>(x => x.List(null, null, null), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<SchoolYearController>(x => x.CurrentSchoolYear(), ApiMethodCallType.Get);
 
         }

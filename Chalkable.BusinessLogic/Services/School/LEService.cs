@@ -64,11 +64,27 @@ namespace Chalkable.BusinessLogic.Services.School
         public string BuildLESingOnUlr()
         {
             Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
             if (Context.LEEnabled && IsLELinkActive())
                 return BuildIntegratedSingOnUrl();
 
-            var person = ServiceLocator.PersonService.GetPerson(Context.PersonId.Value);
-            return BuildNonIntegratedSingOnUlr(person.SchoolRef, person.UserId.Value, person.FirstName, person.LastName);
+            if (Context.Role == CoreRoles.STUDENT_ROLE)
+            {
+                var person = ServiceLocator.StudentService.GetById(Context.PersonId.Value, Context.SchoolYearId.Value);
+                return BuildNonIntegratedSingOnUlr(Context.SchoolLocalId.Value, person.UserId, person.FirstName, person.LastName);
+            }
+            if (Context.Role == CoreRoles.TEACHER_ROLE || Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE)
+            {
+                var person = ServiceLocator.StaffService.GetStaff(Context.PersonId.Value);
+                return BuildNonIntegratedSingOnUlr(Context.SchoolLocalId.Value, person.UserId.Value, person.FirstName, person.LastName);
+            }
+            else
+            {
+                var person = ServiceLocator.PersonService.GetPerson(Context.PersonId.Value);
+                return BuildNonIntegratedSingOnUlr(Context.SchoolLocalId.Value, person.UserId.Value, person.FirstName, person.LastName);
+            }
         }
 
 
@@ -93,7 +109,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public string BuildNonIntegratedSingOnUlr(int schoolId, int userId, string firstName, string lastName)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return string.Format(GetBaseUrl() + "sti/auth?districtGUID={0}&schoolid={1}&userid={2}&firstname={3}&lastname={4}"
+            return string.Format(GetBaseUrl() + "sti/auth?districtGUID={0}&schoolId={1}&userid={2}&firstname={3}&lastname={4}"
                 , Context.DistrictId, schoolId, userId, firstName, lastName);
         }
 
@@ -131,12 +147,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private bool HasLECreditsPermission()
         {
-            return ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.AWARD_LE_CREDITS});
+            return Context.Claims.HasPermission(ClaimInfo.AWARD_LE_CREDITS);
         }
 
         private bool HasLECreditsClassroomPermission()
         {
-            return ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.AWARD_LE_CREDITS_CLASSROOM});
+            return Context.Claims.HasPermission(ClaimInfo.AWARD_LE_CREDITS_CLASSROOM);
         }
 
     }

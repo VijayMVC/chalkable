@@ -5,6 +5,7 @@ mixin ActionLink(controller, action)
     if !attributes['data-no-href']
         -attributes.href=attributes.href || self.getHref(ria.__API.clone(arguments))
     -attributes['data-link'] = link
+    -attributes = self.prepareAttributes(attributes)
     A.action-link(attributes)
         block
 
@@ -17,6 +18,7 @@ mixin ActionLinkWithPrepend(controller, action, prependParams)
     link = self.getLink(args)
     -attributes.href=attributes.href || self.getHref(ria.__API.clone(arguments))
     -attributes['data-link'] = link
+    -attributes = self.prepareAttributes(attributes)
     A.action-link(attributes)
         block
 
@@ -26,7 +28,7 @@ mixin ActionLinkWithModel(actionLinkModel)
     -var classesNames = actionLinkModel.getClassesNames() || [];
     -var title = (actionLinkModel.getTitle() || '');
     +ActionLinkWithPrepend(actionLinkModel.getControllerName(), actionLinkModel.getActionName(), actionLinkModel.getArgs()
-        )(class=classesNames)(attributes)=title
+        )(class=classesNames, data-sis-api-version = actionLinkModel.getSisApiVersion())(attributes)=title
             block
 
 // requires: actionLinksModel instanceOf ArrayOf(chlk.models.common.ActionLinkModel)
@@ -45,6 +47,7 @@ mixin ActionLinkButton(controller, action)
                 -attributes.href=attributes.href || self.getHref(ria.__API.clone(arguments))
                 -delete attributes['class']
                 -attributes['data-link'] = link
+                -attributes = self.prepareAttributes(attributes)
                 a.action-link(attributes).not-blue
                     block
 
@@ -54,6 +57,7 @@ mixin ActionButton(controller, action)
     -var link = self.getLink(ria.__API.clone(arguments))
     -attributes.href=attributes.href || self.getHref(ria.__API.clone(arguments))
     -attributes['data-link'] = link
+    -attributes = self.prepareAttributes(attributes)
     BUTTON.action-button(attributes)
         block
 
@@ -68,5 +72,6 @@ mixin ActionButtonWithPrepend(controller, action, prependParams)
     link = self.getLink(args)
     -attributes.href=attributes.href || self.getHref(ria.__API.clone(arguments))
     -attributes['data-link'] = link
+    -attributes = self.prepareAttributes(attributes)
     BUTTON.action-button(attributes)
         block

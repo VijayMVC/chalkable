@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -381,6 +382,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         public IList<ClassDetails> GetAllSchoolsActiveClasses()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId)
         {
             throw new NotImplementedException();
         }

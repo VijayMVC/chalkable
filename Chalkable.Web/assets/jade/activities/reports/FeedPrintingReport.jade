@@ -1,3 +1,5 @@
+-var classId = self.getClassId() && self.getClassId().valueOf()
+
 .dialog.report-window
     +ActionForm('feed', 'submitFeedPrintingReport').report-form.no-working
         .x-window-header
@@ -5,8 +7,8 @@
             h1=Msg.Print.valueOf().toUpperCase()
 
         .x-window-body
-            +Hidden('announcementType', self.getAnnouncementType() && self.getAnnouncementType().valueOf())
-            +Hidden('classid', self.getClassId() && self.getClassId().valueOf())
+            +Hidden('announcementtype', self.getAnnouncementType() && self.getAnnouncementType().valueOf())
+            +Hidden('classid', classId)
             +Hidden('importantonly', self.isImportantOnly())
             .report-content
                 TABLE.report-table
@@ -47,7 +49,7 @@
                             .print-item.print-list-of-activities
                                 input(type = "radio", id="include-list", name = "includedetails", value="false", data-value=false, checked = !self.isIncludeDetails())
                                 label(for="include-list") Print list of activities
-                    if self.getUserRole().isAdmin()
+                    if self.getUserRole().isAdmin() && !classId
                         TR
                             TD.item-2
                                 .check-title Print hidden attributes
@@ -56,7 +58,7 @@
                                 .check-title Print attachments
                                 +SlideCheckbox('includeattachments', self.isIncludeAttachments(), null, !self.isIncludeDetails())
                     else
-                        if self.getUserRole().isTeacher()
+                        if self.getUserRole().isTeacher() || self.getUserRole().isAdmin() && classId
                             TR
                                 TD.item-2
                                     .check-title Print hidden activities

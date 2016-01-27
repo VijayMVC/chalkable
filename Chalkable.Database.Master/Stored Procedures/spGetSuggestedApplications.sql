@@ -1,4 +1,8 @@
-﻿CREATE procedure [dbo].[spGetSuggestedApplications] @academicBenchmarkIds nvarchar(max), @installedAppsIds nvarchar(max), @start int, @count int
+﻿CREATE procedure [dbo].[spGetSuggestedApplications] 
+	@academicBenchmarkIds nvarchar(max),
+	@installedAppsIds nvarchar(max),
+	@start int,
+	@count int
 as
 
 declare @standardsIdsT table ([id] uniqueidentifier)
@@ -6,40 +10,45 @@ declare @installedAppsIdsT table ([id] uniqueidentifier)
 
 if @academicBenchmarkIds is not null and RTRIM(LTRIM(@academicBenchmarkIds)) <> ''
 begin
+	declare @standardId uniqueidentifier;
 
-declare @standardId uniqueidentifier;
+	DECLARE StandardCursor CURSOR FOR
+	select distinct ABToCCMapping.CCStandardRef
+	from 
+		(select cast(s as uniqueidentifier) as [id] from dbo.split(',', @academicBenchmarkIds)) x
+		join ABToCCMapping 
+			on ABToCCMapping.AcademicBenchmarkId = x.id
 
-DECLARE StandardCursor CURSOR FOR
-select distinct ABToCCMapping.CCStandardRef
-from (select cast(s as uniqueidentifier) as [id] from dbo.split(',', @academicBenchmarkIds)) x
-join ABToCCMapping on ABToCCMapping.AcademicBenchmarkId = x.id
+	Open StandardCursor
 
-Open StandardCursor
-
-fetch next from StandardCursor
-into @standardId
+	fetch next from StandardCursor
+	into @standardId
 
 
-WHILE @@FETCH_STATUS = 0
-begin
+	While @@FETCH_STATUS = 0
+	Begin
 
-declare @parentId uniqueidentifier = @standardId, @currentStandardId uniqueidentifier
-while @parentId is not null
-begin
-select @currentStandardId = Id,
-@parentId = ParentStandardRef
-from CommonCoreStandard
-where Id = @parentId
+		declare @parentId uniqueidentifier = @standardId, 
+				@currentStandardId uniqueidentifier
 
-insert into @standardsIdsT
-values (@currentStandardId)
-end
+		while @parentId is not null
+		begin
+			select 
+				@currentStandardId = Id,
+				@parentId = ParentStandardRef
+			from CommonCoreStandard
+			where Id = @parentId
 
-fetch next from StandardCursor
-into @standardId
-end
-CLOSE StandardCursor;
-DEALLOCATE StandardCursor;
+			insert into @standardsIdsT
+			values (@currentStandardId)
+		end
+
+		fetch next from StandardCursor
+		into @standardId
+	End
+
+	CLOSE StandardCursor;
+	DEALLOCATE StandardCursor;
 end
 
 
@@ -49,12 +58,17 @@ insert into @installedAppsIdsT
 select cast(s as uniqueidentifier) from dbo.split(',', @installedAppsIds)
 end
 
-declare @appT table (Id uniqueidentifier, name nvarchar(max), [rank] int)
+declare @appT table 
+(
+	Id uniqueidentifier, 
+	name nvarchar(max), 
+	[rank] int
+)
 
 insert into @appT
-select * from (
-select Application.Id, Application.Name,
-(case when Application.InternalScore is null then 0 else Application.InternalScore end)
+select * 
+from ( select [Application].Id, [Application].Name,
+(case when [Application].InternalScore is null then 0 else [Application].InternalScore end)
 + (count(StandardRef) * 100)
 + (count(appsIds.[Id]) * 100) as [Rank]
 

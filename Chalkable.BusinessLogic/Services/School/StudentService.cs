@@ -35,6 +35,7 @@ namespace Chalkable.BusinessLogic.Services.School
         StudentSummaryInfo GetStudentSummaryInfo(int studentId);
         StudentExplorerInfo GetStudentExplorerInfo(int studentId, int schoolYearId);
         //StudentAttendanceDetailsInfo GetStudentAttendanceInfo(int studentId, int markingPeriodId);
+        int GetEnrolledStudentsCount();
     }
 
     public class StudentService : SisConnectedService, IStudentService
@@ -145,8 +146,8 @@ namespace Chalkable.BusinessLogic.Services.School
         private bool CanGetHealthConditions()
         {
             return Context.Role != CoreRoles.STUDENT_ROLE
-                   && (ClaimInfo.HasPermissions(Context.Claims, new List<string> { ClaimInfo.VIEW_HEALTH_CONDITION })
-                       || ClaimInfo.HasPermissions(Context.Claims, new List<string> { ClaimInfo.VIEW_MEDICAL }));
+                   && (Context.Claims.HasPermission(ClaimInfo.VIEW_HEALTH_CONDITION)
+                       || Context.Claims.HasPermission(ClaimInfo.VIEW_MEDICAL));
         }
 
 
@@ -191,6 +192,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 }
             }
             return StudentExplorerInfo.Create(student, classes, mostRecentAverages, standardScores, announcements, standards);
+        }
+
+        public int GetEnrolledStudentsCount()
+        {
+            return DoRead(u => new StudentDataAccess(u).GetEnrolledStudentsCount());
         }
     }
 }

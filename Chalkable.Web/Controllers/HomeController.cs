@@ -96,7 +96,7 @@ namespace Chalkable.Web.Controllers
             return View();
         }
 
-
+        //TODO: refactor ... too many duplications with Teacher()
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult DistrictAdmin()
         {
@@ -109,12 +109,32 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(PersonViewData.Create(distictAdmin), ViewConstants.CURRENT_PERSON);
             var gradeLevel = SchoolLocator.GradeLevelService.GetGradeLevels();
             PrepareJsonData(GradeLevelViewData.Create(gradeLevel), ViewConstants.GRADE_LEVELS);
+            PrepareJsonData(AttendanceReasonDetailsViewData.Create(SchoolLocator.AttendanceReasonService.GetAll()), ViewConstants.ATTENDANCE_REASONS);
+
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);
+
             var announcementAttributes = SchoolLocator.AnnouncementAttributeService.GetList(true);
             PrepareJsonData(AnnouncementAttributeViewData.Create(announcementAttributes), ViewConstants.ANNOUNCEMENT_ATTRIBUTES);
+            
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(Context.SchoolYearId.Value);
+            var currentGradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(Context.SchoolYearId.Value, Context.NowSchoolYearTime.Date);
+
             PrepareJsonData(GradingPeriodViewData.Create(gradingPeriods), ViewConstants.GRADING_PERIODS);
+            PrepareJsonData(ShortGradingPeriodViewData.Create(currentGradingPeriod), ViewConstants.GRADING_PERIOD);
+
+            var mps = SchoolLocator.MarkingPeriodService.GetMarkingPeriods(sy.Id);
+            PrepareJsonData(MarkingPeriodViewData.Create(mps), ViewConstants.MARKING_PERIODS);
+
+            var schoolOption = SchoolLocator.SchoolService.GetSchoolOption();
+            PrepareJsonData(SchoolOptionViewData.Create(schoolOption), ViewConstants.SCHOOL_OPTIONS);
+
+            var alternateScore = SchoolLocator.AlternateScoreService.GetAlternateScores();
+            PrepareJsonData(AlternateScoreViewData.Create(alternateScore), ViewConstants.ALTERNATE_SCORES);
+
+            var gradingComments = SchoolLocator.GradingCommentService.GetGradingComments();
+            PrepareJsonData(GradingCommentViewData.Create(gradingComments), ViewConstants.GRADING_COMMMENTS);
+            
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyDistrictAdmin(distictAdmin.Email, "", "", 
                 district.Name, null, Context.DistrictTimeZone, Context.Role.Name, ip, Context.SCEnabled);
@@ -222,6 +242,7 @@ namespace Chalkable.Web.Controllers
             ViewData[ViewConstants.STUDY_CENTER_ENABLED] = Context.SCEnabled;
             ViewData[ViewConstants.MESSAGING_DISABLED] = Context.MessagingDisabled;
             ViewData[ViewConstants.ASSESSMENT_APLICATION_ID] = MasterLocator.ApplicationService.GetAssessmentId();
+            ViewData[ViewConstants.SIS_API_VERSION] = Context.SisApiVersion;
 
             var leParams = SchoolLocator.LeService.GetLEParams();
 
@@ -321,7 +342,7 @@ namespace Chalkable.Web.Controllers
             {
                 ViewData[ViewConstants.REDIRECT_URL_KEY] = string.Format(UrlsConstants.SETUP_URL_FORMAT, Context.PersonId);
                 var personEmail = SchoolLocator.PersonEmailService.GetPersonEmail(person.Id);
-                personView.Email = personEmail == null ? null : personEmail.EmailAddress;
+                personView.Email = personEmail?.EmailAddress;
             }
         }
         
@@ -333,30 +354,42 @@ namespace Chalkable.Web.Controllers
             foreach (var classDetails in startupData.Classes)
             {
                 var typesByClasses = classAnnouncementTypes.Where(x => x.ClassRef == classDetails.Id).ToList();
-                classesAdvancedData.Add(new
+
+                var alphaGradesForStandars = startupData.AlphaGradesForClassStandards[classDetails.Id];
+                if (alphaGradesForStandars.Count == 0 && Context.SchoolLocalId.HasValue)
+                    alphaGradesForStandars = startupData.AlphaGradesForSchoolStandards
+                        .Where( x => x.SchoolId == Context.SchoolLocalId.Value)
+                        .Select(x => x.AlphaGrade).ToList();
+
+                var classAdvanceData = new
                 {
                     ClassId = classDetails.Id,
                     TypesByClass = ClassAnnouncementTypeViewData.Create(typesByClasses),
-                    AlphaGrades = classDetails.GradingScaleRef.HasValue
-                                        ? startupData.AlphaGradesForClasses[classDetails.Id]
-                                        : allAlphaGrades,
-                    AlphaGradesForStandards = startupData.AlphaGradesForClassStandards[classDetails.Id]
-                });
+                    AlphaGrades =
+                        classDetails.GradingScaleRef.HasValue
+                            ? startupData.AlphaGradesForClasses[classDetails.Id]
+                            : allAlphaGrades,
+                    AlphaGradesForStandards = alphaGradesForStandars
+                };
+                classesAdvancedData.Add(classAdvanceData);
+
+                
             }
             PrepareJsonData(classesAdvancedData, ViewConstants.CLASSES_ADV_DATA);
         }
 
         private bool CanTeacherViewChalkable()
         {
-            return ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM})
-                   || ClaimInfo.HasPermissions(Context.Claims, new List<string> {ClaimInfo.VIEW_CLASSROOM_ADMIN});
+            return Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM)
+                   || Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);
         }
 
         
         [AuthorizationFilter("Teacher, Student")]
         public ActionResult LearningEarnings()
         {
-            return new RedirectResult(SchoolLocator.LeService.BuildLESingOnUlr());
+            var res = SchoolLocator.LeService.BuildLESingOnUlr();
+            return new RedirectResult(res);
         }
 
         [AuthorizationFilter("Teacher")]

@@ -29,4 +29,16 @@ namespace Chalkable.StiConnector.Exceptions
         public ChalkableSisNotFoundException() { }
         public ChalkableSisNotFoundException(string messsage) : base(messsage){}
     }
+
+    public class ChalkableSisNotSupportVersionException : ChalkableSisException
+    {
+        public ChalkableSisNotSupportVersionException() { }
+        public ChalkableSisNotSupportVersionException(string message) : base(message) { }
+
+        public ChalkableSisNotSupportVersionException(string requiredVersion, string currentVersion)
+            : base($"Your InformationNow doesn't support current API. This API requires InformationNow version {requiredVersion} or later.")
+        {
+            
+        }
+    }
 }

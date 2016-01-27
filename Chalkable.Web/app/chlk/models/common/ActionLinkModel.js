@@ -9,17 +9,20 @@ NAMESPACE('chlk.models.common', function(){
         Boolean, 'disabled',
         ArrayOf(Object), 'args',
         String, 'title',
+        String, 'sisApiVersion',
 
 
         ArrayOf(String), 'classesNames',
 
-        [[String, String, String, Boolean, ArrayOf(Object), ArrayOf(String), Boolean]],
-        function $(controllerName, actionName, title_, isPressed_, args_, classesNames_, disabled_){
+        [[String, String, String, Boolean, ArrayOf(Object), ArrayOf(String), Boolean, String]],
+        function $(controllerName, actionName, title_, isPressed_, args_, classesNames_, disabled_, sisApiVersion_){
             BASE();
             this.setControllerName(controllerName);
             this.setActionName(actionName);
             this.setPressed(false);
             this.setDisabled(false);
+            if(sisApiVersion_)
+                this.setSisApiVersion(sisApiVersion_);
             if(args_)
                 this.setArgs(args_);
             if(title_)

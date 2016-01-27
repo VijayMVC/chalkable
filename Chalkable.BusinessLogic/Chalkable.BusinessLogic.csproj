@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
     <RestorePackages>true</RestorePackages>
+    <SkipPostSharp>True</SkipPostSharp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -86,12 +87,12 @@
       <HintPath>..\packages\Microsoft.WindowsAzure.ConfigurationManager.3.1.0\lib\net40\Microsoft.WindowsAzure.Configuration.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.WindowsAzure.Storage, Version=6.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <HintPath>..\packages\WindowsAzure.Storage.6.1.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
+    <Reference Include="Microsoft.WindowsAzure.Storage, Version=6.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\WindowsAzure.Storage.6.2.0\lib\net40\Microsoft.WindowsAzure.Storage.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.7.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -150,11 +151,14 @@
     <Compile Include="Model\ClaimInfo.cs" />
     <Compile Include="Model\Attendances\ClassAttendance.cs" />
     <Compile Include="Model\AttributeAttachmentContentInfo.cs" />
+    <Compile Include="Model\ClassStatsInfo.cs" />
+    <Compile Include="Model\DisciplineDailySummaryInfo.cs" />
     <Compile Include="Model\EmailInfo.cs" />
     <Compile Include="Model\FeedSettingsInfo.cs" />
     <Compile Include="Model\FinalGradeInfo.cs" />
     <Compile Include="Model\GradingStandardInfo.cs" />
     <Compile Include="Model\LEParams.cs" />
+    <Compile Include="Model\OAuthUserIdentity.cs" />
     <Compile Include="Model\PracticeGradeDetailedInfo.cs" />
     <Compile Include="Model\RecipientInfo.cs" />
     <Compile Include="Model\Reports\AttendanceRegisterInputModel.cs" />
@@ -172,11 +176,14 @@
     <Compile Include="Model\Reports\SeatingChartReportInputModel.cs" />
     <Compile Include="Model\Reports\ShortFeedExportModel.cs" />
     <Compile Include="Model\Reports\WorksheetReportInputModel.cs" />
+    <Compile Include="Model\SchoolSummaryInfo.cs" />
     <Compile Include="Model\SeatingChartInfo.cs" />
+    <Compile Include="Model\ShortClassInfo.cs" />
     <Compile Include="Model\StudentCommentInfo.cs" />
     <Compile Include="Model\StudentExplorerInfo.cs" />
     <Compile Include="Model\StudentSummaryInfo.cs" />
     <Compile Include="Model\TeacherComment.cs" />
+    <Compile Include="Model\TeacherStatsInfo.cs" />
     <Compile Include="Model\UserInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\AnnouncementSecurity.cs" />
@@ -260,7 +267,9 @@
     <Compile Include="Services\Master\ServiceLocatorMaster.cs" />
     <Compile Include="Services\Master\BackgroundTaskService.cs" />
     <Compile Include="Services\Master\UserService.cs" />
+    <Compile Include="Services\Reporting\BaseFeedReportHandler.cs" />
     <Compile Include="Services\Reporting\DefaultRenderer.cs" />
+    <Compile Include="Services\Reporting\FeedDetailsReportHandler.cs" />
     <Compile Include="Services\Reporting\IReportRenderer.cs" />
     <Compile Include="Services\Reporting\ReportHandler.cs" />
     <Compile Include="Services\Reporting\ShortFeedReportHandler.cs" />

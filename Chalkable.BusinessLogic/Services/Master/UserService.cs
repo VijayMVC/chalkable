@@ -234,9 +234,12 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                     EnsureTeacherChalkableAccess(claimInfos);
                 }
-                
-                var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, null, personId, schoolYear);
-                res.Claims = ClaimInfo.Create(iNowUser.Claims);
+
+                var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, null, personId, schoolYear)
+                {
+                    Claims = ClaimInfo.Create(iNowUser.Claims),
+                    SisApiVersion = iNowConnector.ApiVersion
+                };
                 return res;
             }
             throw new UnknownRoleException();
@@ -278,20 +281,20 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         private void EnsureDistrictAdminAccess(IList<ClaimInfo> claimInfos)
         {
-            if (!ClaimInfo.HasPermission(claimInfos, ClaimInfo.CHALKABLE_ADMIN))
+            if (!claimInfos.HasPermission(ClaimInfo.CHALKABLE_ADMIN))
                 throw new ChalkableSecurityException(string.Format("User has no required ({0}) permission for using Chalkable {1} Portal", ClaimInfo.CHALKABLE_ADMIN));
         }
 
         private void EnsureTeacherChalkableAccess(IList<ClaimInfo> claimInfos)
         {
             if (!HasTeacherAccessToChalkable(claimInfos))
-                throw new ChalkableException(string.Format("User has no required ({0} , {1}) permission for using Chalkable {2} Portal"
-                           , ClaimInfo.MAINTAIN_CLASSROOM, ClaimInfo.MAINTAIN_CLASSROOM_ADMIN, CoreRoles.TEACHER_ROLE.Name));             
+                throw new ChalkableException($"User has no required ({ClaimInfo.MAINTAIN_CLASSROOM} , {ClaimInfo.MAINTAIN_CLASSROOM_ADMIN}) permission for using Chalkable {CoreRoles.TEACHER_ROLE.Name} Portal");             
         }
 
         private bool HasTeacherAccessToChalkable(IList<ClaimInfo> claimInfos)
         {
-            return claimInfos.Any(x => x.Values.Any(y => y == ClaimInfo.MAINTAIN_CLASSROOM || y == ClaimInfo.MAINTAIN_CLASSROOM_ADMIN));
+            return claimInfos.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM) ||
+                   claimInfos.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN);
         }
 
         private UserContext DemoUserLogin(User user, UnitOfWork uow, int? schoolYearId = null)
@@ -352,7 +355,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             var schoolId = schoolYear.SchoolRef;
             schoolUser = user.SchoolUsers.FirstOrDefault(x => x.School.LocalId == schoolId);
             if (schoolUser == null)
-                throw new ChalkableException(string.Format("There is no school in current District with such schoolYearId : {0}", schoolYear.Id));    
+                throw new ChalkableException($"There is no school in current District with such schoolYearId : {schoolYear.Id}");    
         }
         
         private void SaveSisToken(User user, UnitOfWork uow, ref ConnectorLocator iNowConnector)
@@ -487,7 +490,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     ServiceLocator.EmailService.SendResettedPasswordToDeveloper(developer, key);
                 }
                 else if (user.SisUserId.HasValue)
-                    throw new ChalkableException(string.Format(@"Please use <a href=""{0}"" target=""_blank"">InformationNOW</a> to reset your password", user.District.SisRedirectUrl));
+                    throw new ChalkableException($@"Please use <a href=""{user.District.SisRedirectUrl}"" target=""_blank"">InformationNOW</a> to reset your password");
                 else
                     throw new ChalkableException("Please contact system administrator to reset your password");
 

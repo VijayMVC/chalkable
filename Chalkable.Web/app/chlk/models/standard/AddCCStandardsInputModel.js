@@ -6,7 +6,7 @@ NAMESPACE('chlk.models.standard', function(){
     /**@class chlk.models.standard.AddCCStandardsInputModel*/
     CLASS('AddCCStandardsInputModel', [
 
-        chlk.models.id.AppId, 'applicationId',
+        String, 'requestId',
 
         READONLY, ArrayOf(chlk.models.id.CommonCoreStandardId), 'standardsIds',
 

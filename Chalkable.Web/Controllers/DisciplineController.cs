@@ -45,7 +45,7 @@ namespace Chalkable.Web.Controllers
             //return Json(new PaginatedList<StudentDisciplineSummaryViewData>(list, start.Value / count.Value, count.Value));
         }
 
-        [AuthorizationFilter("Teacher", true, new[] { AppPermissionType.Discipline })]
+        [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Discipline })]
         public ActionResult ClassList(DateTime? date, int classId, int? start, int? count, bool? byLastName)
         {
             start = start ?? 0;

@@ -14,6 +14,7 @@ NAMESPACE('chlk.models.feed', function () {
                 IMPLEMENTS(ria.serialize.IDeserializable), [
 
             VOID, function deserialize(raw) {
+                this.inProfile = SJX.fromValue(raw.inProfile, Boolean);
                 this.items = SJX.fromArrayOfDeserializables(raw.annoucementviewdatas, chlk.models.announcement.FeedAnnouncementViewData);
                 this.importantOnly = SJX.fromValue(raw.importantOnly, Boolean);
                 this.toSet = SJX.fromValue(raw.toSet, Boolean);
@@ -25,7 +26,7 @@ NAMESPACE('chlk.models.feed', function () {
                 this.endDate = SJX.fromDeserializable(raw.settingsforfeed ? raw.settingsforfeed.todate : raw.todate, chlk.models.common.ChlkDate);
                 this.annType = SJX.fromValue(raw.settingsforfeed ? raw.settingsforfeed.announcementtype : raw.announcementtype, chlk.models.announcement.AnnouncementTypeEnum);
                 this.gradingPeriodId = SJX.fromValue(raw.settingsforfeed ? raw.settingsforfeed.gradingperiodid : raw.gradingperiodid, chlk.models.id.GradingPeriodId);
-                this.latest = SJX.fromValue(raw.settingsforfeed ? raw.settingsforfeed.sorttype : raw.sorttype, Boolean);
+                this.sortType = SJX.fromValue(raw.settingsforfeed ? raw.settingsforfeed.sorttype : raw.sorttype, chlk.models.announcement.FeedSortTypeEnum);
                 this.submitType = SJX.fromValue(raw.submitType, String);
                 this.markDoneOption = SJX.fromValue(raw.markDoneOption, Number);
                 this.gradeLevels = SJX.fromValue(raw.gradeLevels, String);
@@ -66,12 +67,18 @@ NAMESPACE('chlk.models.feed', function () {
 
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
-            Boolean, 'latest',
+            chlk.models.announcement.FeedSortTypeEnum, 'sortType',
 
             String, 'submitType',
 
             String, 'gradeLevels',
 
-            Boolean, 'toSet'
+            Boolean, 'inProfile',
+
+            Boolean, 'toSet',
+
+            Boolean, 'staringDisabled',
+
+            Boolean, 'readonly'
         ]);
 });

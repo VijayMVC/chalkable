@@ -19,9 +19,6 @@ NAMESPACE('chlk.templates.attendance', function () {
             chlk.models.common.ChlkDate, 'date',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.schoolYear.GradingPeriod, 'gradingPeriod',
-
-            [ria.templates.ModelPropertyBind],
             Boolean, 'byLastName',
 
             [ria.templates.ModelPropertyBind],
@@ -30,15 +27,15 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'hasAccessToLE',
 
-            Boolean, function hasLeftRightToolBar(){
-                return true;
-            },
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'inProfile',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ClassId, 'classId',
 
             chlk.models.common.ActionLinkModel, function createActionLinkModel_(action, title, isPressed_, args_){
                 return new chlk.models.common.ActionLinkModel('attendance', action, title, isPressed_, args_);
             },
-
-            ArrayOf(Object), function getAdditionalParams(){return [];},
 
             Object, function getItemClassType(){return chlk.templates.attendance.ClassAttendanceTpl;},
 

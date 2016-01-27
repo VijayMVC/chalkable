@@ -27,10 +27,10 @@ namespace Chalkable.Data.School.DataAccess
             return ReadOne<ApplicationInstallAction>(q);
         }
 
-        public IList<ApplicationInstallAction> GetByIds(IList<int> Ids)
+        public override IList<ApplicationInstallAction> GetByIds(IList<int> ids)
         {
-            if(Ids.Count == 0) return new List<ApplicationInstallAction>();
-            var str = Ids.JoinString(",");
+            if(ids.Count == 0) return new List<ApplicationInstallAction>();
+            var str = ids.JoinString(",");
             var q = Orm.SimpleSelect<ApplicationInstallAction>(null);
             q.Sql.AppendFormat(" Where Id in ({0})", str);
             return ReadMany<ApplicationInstallAction>(q);

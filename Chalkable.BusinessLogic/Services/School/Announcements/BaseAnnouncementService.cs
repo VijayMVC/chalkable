@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
-using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -52,10 +51,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
         }
 
-        public abstract AnnouncementDetails GetAnnouncementDetails(int announcementId);
         public abstract IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false);
         public abstract void DeleteAnnouncement(int announcementId);
-        public abstract Announcement GetAnnouncementById(int id);
         public abstract Announcement EditTitle(int announcementId, string title);
         public abstract void Submit(int announcementId);
         public abstract void SetAnnouncementsAsComplete(DateTime? date, bool complete);
@@ -175,34 +172,86 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
 
-            DateTime? tillDateToUpdate;
+            DateTime toDate;
+            DateTime fromDate;
+            GetDateRangeForMarking(out fromDate, out toDate);
             switch (option)
             {
                 case MarkDoneOptions.Till30Days:
-                    tillDateToUpdate = Context.NowSchoolTime.AddMonths(-1);
+                    if(toDate > Context.NowSchoolTime.AddMonths(-1))
+                        toDate = Context.NowSchoolTime.AddMonths(-1);
                     break;
                 case MarkDoneOptions.TillToday:
-                    tillDateToUpdate = Context.NowSchoolTime.AddDays(-1);
+                    if (toDate > Context.NowSchoolTime.AddDays(-1))
+                        toDate = Context.NowSchoolTime.AddDays(-1);
                     break;
-                default:
-                    tillDateToUpdate = GetEndDateFromFeedSettings();
-                    break;
-
             }
-            SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, tillDateToUpdate, classId);
+            if(fromDate <= toDate)
+                SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, fromDate, toDate, classId);
         }
 
-        private DateTime? GetEndDateFromFeedSettings()
+        private void GetDateRangeForMarking(out DateTime startDate, out DateTime endDate)
         {
-            var feedEndDateSetting = ServiceLocator.AnnouncementFetchService.GetSettingsForFeed().ToDate;
-                //ServiceLocator.PersonSettingService.GetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value,
-                //new List<string> { PersonSetting.FEED_END_DATE });
-            if (feedEndDateSetting.HasValue)
-                return feedEndDateSetting;
+            var feedSettings = ServiceLocator.AnnouncementFetchService.GetSettingsForFeed();
 
-           return Context.SchoolYearEndDate;
+            if (feedSettings.FromDate.HasValue)
+                startDate = feedSettings.FromDate.Value;
+            else
+                startDate = Context.SchoolYearStartDate ?? DateTime.MinValue;
+
+            if (feedSettings.ToDate.HasValue)
+                endDate = feedSettings.ToDate.Value;
+            else
+                endDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
         }
 
-        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime? tillDateToUpdate, int? classId);
+        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId);
+
+
+        public Announcement GetAnnouncementById(int id)
+        {
+            return InternalGetAnnouncementById(id);
+        }
+
+        protected virtual TAnnouncement InternalGetAnnouncementById(int announcementId)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            return DoRead(u =>
+            {
+                var res = CreateDataAccess(u).GetAnnouncement(announcementId, Context.PersonId.Value);
+                if (res == null)
+                    throw new NoAnnouncementException();
+                return res;
+            });
+        }
+
+        public virtual AnnouncementDetails GetAnnouncementDetails(int announcementId)
+        {
+            return DoRead(u => InternalGetDetails(CreateDataAccess(u), announcementId));
+        }
+
+        protected virtual AnnouncementDetails InternalGetDetails(BaseAnnouncementDataAccess<TAnnouncement> dataAccess, int announcementId)
+        {
+            return InternalGetDetails(dataAccess, announcementId, true);
+        }
+
+        protected AnnouncementDetails InternalGetDetails(BaseAnnouncementDataAccess<TAnnouncement> dataAccess, int announcementId, bool onlyOwner)
+        {
+            var ann = InternalGetDetailses(dataAccess, new List<int> { announcementId }, onlyOwner).FirstOrDefault();
+            if (ann == null)
+                throw new NoAnnouncementException();
+            return ann;
+        }
+
+        protected virtual IList<AnnouncementDetails> InternalGetDetailses(BaseAnnouncementDataAccess<TAnnouncement> dataAccess, IList<int> announcementIds, bool onlyOnwer = true)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            var anns = dataAccess.GetDetailses(announcementIds, Context.PersonId.Value, Context.Role.Id, onlyOnwer);
+            foreach (var ann in anns)
+            {
+                ann.AnnouncementStandards = ServiceLocator.StandardService.PrepareAnnouncementStandardsCodes(ann.AnnouncementStandards);
+            }
+            return anns;
+        } 
     }
 }

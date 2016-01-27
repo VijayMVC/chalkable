@@ -7,6 +7,7 @@ using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models
 {
+
     public class PrivateMessageShortViewData
     {
         public int Id { get; set; }
@@ -21,10 +22,12 @@ namespace Chalkable.Web.Models
             Sent = message.Sent;
             Subject = message.Subject;
             Body = message.Body;
-            //Sender
         }
-    }
 
+    }
+    
+
+    
     public class IncomePrivateMessageViewData : PrivateMessageShortViewData
     {
 
