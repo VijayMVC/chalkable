@@ -167,7 +167,7 @@ NAMESPACE('chlk.controllers', function (){
                 )
                     .attach(this.validateResponse_())
                     .then(function(result){
-                        var model = result[2], attendances = result[0];
+                        var model = result[2], attendances = result[0] || new chlk.models.attendance.SeatingChart();
                         var date = date_ || new chlk.models.common.ChlkSchoolYearDate();
                         attendances.setClassId(classId);
                         attendances.setAbleRePost(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.REPOST_CLASSROOM_ATTENDANCE));
