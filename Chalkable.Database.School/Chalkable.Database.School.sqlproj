@@ -304,7 +304,6 @@
     <Build Include="Stored Procedures\spGetShortSchoolSummaries.sql" />
     <Build Include="Stored Procedures\spGetClassesByTeachers.sql" />
     <Build Include="Stored Procedures\spGetClassesBySchoolYear.sql" />
-    <Build Include="Stored Procedures\spGetClassesByIds.sql" />
     <Build Include="Stored Procedures\spGetAdminAnnouncementsDetailses.sql" />
     <Build Include="Stored Procedures\spGetAlphaGradesBySchool.sql" />
     <Build Include="Stored Procedures\spGetAlphaGradesForClassStandards.sql" />
@@ -314,6 +313,7 @@
     <Build Include="Stored Procedures\spCompleteAnnouncements.sql" />
     <Build Include="Stored Procedures\spGetAlphaGradesForSchoolStandards.sql" />
     <Build Include="Stored Procedures\spGetStandardParentsSubTree.sql" />
+    <Build Include="Stored Procedures\spGetShortStaffSummary.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />

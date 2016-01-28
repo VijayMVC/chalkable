@@ -187,7 +187,7 @@ namespace Chalkable.Data.Common
                     {
                         var fieldName = propertyInfo.Name;
                         if (fullFieldNames)
-                            fieldName = string.Format("{0}_{1}", abstractTypeName, fieldName);
+                            fieldName = $"{abstractTypeName}_{fieldName}";
                         value = Read(reader, fieldName, propertyInfo.PropertyType);    
                     }
                     if(value != null)    

@@ -20,7 +20,7 @@ namespace Chalkable.Web.Models.ClassesViewData
         public string ClassNumber { get; set; }
         public static ClassStatsViewData Create(ClassStatsInfo classDetails)
         {
-            return new ClassStatsViewData()
+            return new ClassStatsViewData
             {
                 Id = classDetails.Id,
                 Name = classDetails.Name,
@@ -35,12 +35,5 @@ namespace Chalkable.Web.Models.ClassesViewData
                 ClassNumber = classDetails.ClassNumber
             };
         }
-
-        public static PaginatedList<ClassStatsViewData> Create(PaginatedList<ClassStatsInfo> classesDetails)
-        {
-            return new PaginatedList<ClassStatsViewData>(classesDetails.Select(Create), classesDetails.PageIndex,
-                classesDetails.PageSize, classesDetails.TotalCount);
-        }
-
     }
 }
