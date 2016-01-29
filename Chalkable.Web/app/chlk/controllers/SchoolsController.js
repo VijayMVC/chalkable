@@ -276,6 +276,14 @@ NAMESPACE('chlk.controllers', function (){
             return currentSchoolYearId;
         },
 
+        function prepareClassForSummary(classes){
+            classes.forEach(function(clazz){
+                clazz.setAttendancesProfileEnabled(!this.isPageReadonly_('VIEW_CLASSROOM_ATTENDANCE', 'VIEW_CLASSROOM_ATTENDANCE_ADMIN', clazz));
+                clazz.setDisciplinesProfileEnabled(!this.isPageReadonly_('VIEW_CLASSROOM_DISCIPLINE', 'VIEW_CLASSROOM_DISCIPLINE_ADMIN', clazz));
+                clazz.setGradingProfileEnabled(!this.isPageReadonly_('VIEW_CLASSROOM', 'VIEW_CLASSROOM_ADMIN', clazz));
+            }, this);
+        },
+
         [chlk.controllers.SidebarButton('classes')],
         [[chlk.models.id.SchoolId, String, chlk.models.id.SchoolPersonId]],
         function classesSummaryAction(schoolId, schoolName, teacherId_){
@@ -284,8 +292,10 @@ NAMESPACE('chlk.controllers', function (){
                     var currentSchoolYearId = this.getCurrentYearId_(years);
                     return this.classService.getClassesStatistic(currentSchoolYearId, 0, null, teacherId_)
                         .then(function(classes){
+                            this.prepareClassForSummary(classes);
+
                             return new chlk.models.school.SchoolSummaryViewData(schoolName, schoolId, currentSchoolYearId, years, new chlk.models.admin.BaseStatisticGridViewData(classes));
-                        })
+                        }, this)
                 }, this)
                 .catchException(chlk.lib.exception.ChalkableException, function(exception) {
                     return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
@@ -307,8 +317,9 @@ NAMESPACE('chlk.controllers', function (){
             var start = isFilter ? 0 : model.getStart();
             var result = this.classService.getClassesStatistic(model.getSchoolYearId(), start, model.getFilter())
                 .then(function(model){
+                    this.prepareClassForSummary(model);
                     return new chlk.models.admin.BaseStatisticGridViewData(model);
-                })
+                }, this)
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.school.SchoolClassesSummaryPage, result, isFilter ? null : chlk.activities.lib.DontShowLoader());
         },

@@ -126,10 +126,17 @@ NAMESPACE('chlk.controls', function () {
                 lastClickedNode = node;
                 lastClickedNodeSelector = node.getSelector();
 
-                var link = node.getData('link');
-                var args = this.parseLink_(link);
-                var controller = args.shift(),
+                var disabledMessage = node.getData('disabled-message'), controller, action, args;
+                if(disabledMessage){
+                    controller = 'error';
+                    action = 'disabledLinkMsg';
+                    args = [disabledMessage];
+                }else{
+                    var link = node.getData('link');
+                    args = this.parseLink_(link);
+                    controller = args.shift();
                     action = args.shift();
+                }
 
                 if(node.hasClass('defer')){
                     setTimeout(function(){
