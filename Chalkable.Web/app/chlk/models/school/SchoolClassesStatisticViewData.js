@@ -36,7 +36,7 @@ NAMESPACE('chlk.models.school', function () {
                 this.departmentId = SJX.fromValue(raw.departmentref, chlk.models.id.DepartmentId);
                 this.primaryTeacherName = SJX.fromValue(raw.primaryteacherdisplayname, String);
                 this.classNumber = SJX.fromValue(raw.classnumber, String);
-                this.teachersIds = SJX.fromArrayOfValues(raw.teachersids || [], chlk.models.id.SchoolPersonId);
+                this.teachersIds = SJX.fromArrayOfValues(raw.teacherids || [], chlk.models.id.SchoolPersonId);
             }
         ]);
 });

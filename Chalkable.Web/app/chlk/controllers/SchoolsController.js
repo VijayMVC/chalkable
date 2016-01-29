@@ -278,9 +278,9 @@ NAMESPACE('chlk.controllers', function (){
 
         function prepareClassForSummary(classes){
             classes.forEach(function(clazz){
-                clazz.setAttendancesProfileEnabled(!this.isPageReadonly_('MAINTAIN_CLASSROOM_ATTENDANCE', 'MAINTAIN_CLASSROOM_ATTENDANCE_ADMIN', clazz));
-                clazz.setDisciplinesProfileEnabled(!this.isPageReadonly_('MAINTAIN_CLASSROOM_DISCIPLINE', 'MAINTAIN_CLASSROOM_DISCIPLINE_ADMIN', clazz));
-                clazz.setGradingProfileEnabled(!this.isPageReadonly_('MAINTAIN_CLASSROOM', 'MAINTAIN_CLASSROOM_ADMIN', clazz));
+                clazz.setAttendancesProfileEnabled(!this.isPageReadonly_('VIEW_CLASSROOM_ATTENDANCE', 'VIEW_CLASSROOM_ATTENDANCE_ADMIN', clazz));
+                clazz.setDisciplinesProfileEnabled(!this.isPageReadonly_('VIEW_CLASSROOM_DISCIPLINE', 'VIEW_CLASSROOM_DISCIPLINE_ADMIN', clazz));
+                clazz.setGradingProfileEnabled(!this.isPageReadonly_('VIEW_CLASSROOM', 'VIEW_CLASSROOM_ADMIN', clazz));
             }, this);
         },
 
