@@ -1,0 +1,20 @@
+.admin-summary-page
+    h2.page-title=self.getSchoolName()
+    .action-bar
+        .items
+            +ActionLink('schools', "classesSummary", self.getSchoolId(), self.getSchoolName())=Msg.Classes
+            +ActionLink('schools', "teachersSummary", self.getSchoolId(), self.getSchoolName()).pressed=Msg.Teachers
+    +ActionForm('schools', 'teachersStatistic').school-statistic-form
+        .form-container
+            +Select("schoolYearId")#school-year-select.flat
+                each year in self.getSchoolYears()
+                    +Option(year.getId(), year.getName(), self.getSchoolYearId() == year.getId())
+
+            Button(type="submit", name="submitType", value="schoolYear").x-hidden.year-submit
+            input(type="text", name="filter", placeholder="Search a Teacher...", value=self.getFilter(), data-value=self.getFilter()).statistic-filter.filter-input
+            Button(type="submit", name="submitType", value="filter").x-hidden.filter-submit
+            +Hidden('schoolId', self.getSchoolId().valueOf())
+            +Hidden('schoolName', self.getSchoolName())
+            .clear-fix
+        .grid-container
+            +RenderWith(self.getItemsStatistic(), chlk.templates.school.SchoolTeachersStatisticTpl)
