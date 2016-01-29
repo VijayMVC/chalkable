@@ -27,12 +27,12 @@ select * from
 			on (sy.Id = ssy.SchoolYearRef) and (ssy.EnrollmentStatus is null or ssy.EnrollmentStatus = 0)
 	Where
 		--s.IsChalkableEnabled = 1
-		--AND s.IsActive = 1
+		s.IsActive = 1
 		--AND sy.ArchiveDate is null
 		--AND sy.AcadYear = @acadYear
 		--AND sy.StartDate is not null
 		--AND sy.EndDate is not null
-		(@filter is null or s.Name like(@filter))
+		AND (@filter is null or s.Name like(@filter))
 	Group By
 		s.Id,
 		s.Name,
