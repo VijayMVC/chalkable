@@ -257,9 +257,14 @@ namespace Chalkable.BusinessLogic.Services.School
                 return chalkableRes.Select(ClassStatsInfo.Create).ToList();
             }
 
-            var classes = DoRead(u => new ClassDataAccess(u).GetByIds(iNowRes.Select(x => x.SectionId).ToList()));
-            var res = iNowRes.Select(x => ClassStatsInfo.Create(x, classes.FirstOrDefault(y => y.Id == x.SectionId))).ToList();
-            return res.ToList();
+            using (var u = Read())
+            {
+                var classesIds = iNowRes.Select(x => x.SectionId).ToList();
+                var classes = new ClassDataAccess(u).GetByIds(classesIds);
+                var classTeachers = new ClassTeacherDataAccess(u).GetClassTeachers(classesIds);
+
+                return ClassStatsInfo.Create(iNowRes, classes, classTeachers);
+            }           
         }
     }
 }
