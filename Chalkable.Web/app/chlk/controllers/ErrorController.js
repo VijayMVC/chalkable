@@ -73,6 +73,13 @@ NAMESPACE('chlk.controllers', function (){
             },
 
 
+            [chlk.controllers.NotChangedSidebarButton()],
+            [[String]],
+            function disabledLinkMsgAction(msg){
+                return this.ShowMsgBox(msg, 'oops'), null;
+            },
+
+
             function learningEarningsDisabledAction(){
                 return this.ShowMsgBox('Chalkable is not able to connect to the Learning Earnings website right now.  Please try again later.', 'Error'), null;
             }
