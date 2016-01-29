@@ -217,11 +217,12 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.SchoolYearId, Number, String, chlk.models.id.SchoolPersonId, Number]],
-            ria.async.Future, function getClassesStatistic(schoolYearId, start_, filter_, teacherId_, count_) {
+            ria.async.Future, function getClassesStatistic(schoolYearId, start_, filter_, teacherId_, sortType_) {
                 return this.get('Class/ClassesStats.json', ArrayOf(chlk.models.school.SchoolClassesStatisticViewData.OF(chlk.models.id.SchoolId)), {
                     schoolYearId: schoolYearId.valueOf(),
                     start:start_ || 0,
-                    count: count_ || 10,
+                    count: 10,
+                    sortType: sortType_,
                     teacherId: teacherId_ && teacherId_.valueOf(),
                     filter: filter_
                 });
