@@ -24,8 +24,8 @@ NAMESPACE('chlk.templates.grading', function () {
 
 
             String, function getToolTipText(){
-                var res = (this.getUserRole().isStudent() ? "My avg: " :"Avg: ")
-                    + (this.getAvg() ? this.getAvg().toFixed(2) : 0);
+                var res = this.getAvg() ? ((this.getUserRole().isStudent() ? "My avg: " :"Avg: ")
+                    + this.getAvg().toFixed(2)) : "Not graded yet";
                 var itemDescription = this.getItemDescription();
                 if(itemDescription && itemDescription.getName() && itemDescription.getName().length > 9)
                     return itemDescription.getName() + ' <hr> ' + res;
