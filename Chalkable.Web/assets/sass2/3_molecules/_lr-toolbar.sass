@@ -1,0 +1,46 @@
+.mp-10
+  .first-container
+    margin: -10px 0
+    padding: 10px 0
+
+.lr-toolbar
+  position: relative
+
+  .first-container
+    white-space: nowrap
+    overflow: hidden
+
+  .second-container
+    position: relative
+    left: 0
+
+    .third-container
+      display: table
+
+  &:not(.no-animation)
+    .second-container:not(.freezed)
+      +single-transition(all, 0.5s)
+
+
+  .arrow
+    position: absolute
+    width: 10px
+    height: 17px
+    background-position: 0 0
+    background-repeat: no-repeat
+    top: 50%
+    margin-top: -9px
+    cursor: pointer
+
+    &.disabled
+      //opacity: 0.5
+      //cursor: default
+      display: none
+
+  .next-button
+    right: -21px
+    background-image: inline-image("images2/common/classesbar-arrow-right.png")
+
+  .prev-button
+    left: -21px
+    background-image: inline-image("images2/common/classesbar-arrow-left.png")
