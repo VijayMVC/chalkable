@@ -95,6 +95,7 @@ namespace Chalkable.BackgroundTaskProcessor
                 var data = DatabaseDacPacUpdateTaskData.FromString(task.Data);
 
                 log.LogInfo("DACPAC: " + data.DacPacName);
+                log.Flush();
 
                 var azureJobsCreds = new AzureSqlJobCredentials
                 {
@@ -120,6 +121,7 @@ namespace Chalkable.BackgroundTaskProcessor
                     ex = ex.InnerException;
                 }
                 res = false;
+                log.Flush();
             }
             return res;
         }
@@ -142,17 +144,19 @@ namespace Chalkable.BackgroundTaskProcessor
 
             serviceLocator.DistrictService.GetDistricts().ForEach(_ =>
             {
-                schoolTargets.Add(new DatabaseTarget(_.ServerUrl, _.Name));
+                schoolTargets.Add(new DatabaseTarget(_.ServerUrl, _.Id.ToString()));
             });
 
             var elasticJobs = CreateAzureSqlJobClient(azureJobsCreds);
 
             log.LogInfo("DacPac deployment initated");
+            log.Flush();
 
             var masterJob = await DeployDacPac(elasticJobs, data.DacPacName + "-master", data.MasterDacPacUri, masterTargets);
             var schoolsJob = await DeployDacPac(elasticJobs, data.DacPacName + "-school", data.SchoolDacPacUri, schoolTargets);
 
             log.LogInfo("DacPac deployment started");
+            log.Flush();
 
             while (true)
             {
@@ -173,6 +177,7 @@ namespace Chalkable.BackgroundTaskProcessor
                     }
 
                     log.LogError("Deploy failed");
+                    log.Flush();
 
                     return false;
                 }
@@ -181,6 +186,7 @@ namespace Chalkable.BackgroundTaskProcessor
                     || schoolJobStatus.Lifecycle == JobExecutionLifecycle.Succeeded)
                 {
                     log.LogInfo("Deploy success");
+                    log.Flush();
 
                     return true;
                 }
