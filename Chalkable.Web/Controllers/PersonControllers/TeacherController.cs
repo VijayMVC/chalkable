@@ -57,10 +57,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult TeachersStats(int schoolYearId, string filter, int? start, int? count, int? sortType)
         {
-            sortType = 3;
-
             var teachers = SchoolLocator.StaffService.GetTeachersStats(schoolYearId, filter, start, count, (TeacherSortType?) sortType);
-
             return Json(teachers.Select(TeacherStatsViewData.Create));
         }
     }

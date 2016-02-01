@@ -196,7 +196,7 @@ namespace Chalkable.Web.Controllers
         public async Task<ActionResult> ClassStandardSummary(int classId)
         {
             var gradingStandardsTask = SchoolLocator.GradingStandardService.GetGradingStandards(classId, null);
-            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncements(null, null, classId);
+            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncements(null, null, classId, null, null);
             var schoolYearId = GetCurrentSchoolYearId();
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYearId, classId);
             var res = new List<GradingStandardClassSummaryViewData>();

@@ -25,7 +25,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         void SetVisibleForStudent(int lessonPlanId, bool visible);
         LessonPlan GetLessonPlanById(int lessonPlanId);
 
-        IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? galleryCategoryId);
+        IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId);
         IList<LessonPlan> GetLessonPlansbyFilter(string filter);
 
         IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue);
@@ -357,10 +357,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return new PaginatedList<LessonPlan>(res, start / count, count, totalCount);
         }
         
-        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? galleryCategoryId)
+        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlans(fromDate, toDate, classId, galleryCategoryId, Context.PersonId.Value));
+            return DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlans(fromDate, toDate, classId, null, Context.PersonId.Value, studentId, teacherId));
         }
 
         public IList<LessonPlan> GetLessonPlansbyFilter(string filter)
