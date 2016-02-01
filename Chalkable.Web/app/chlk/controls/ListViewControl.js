@@ -18,6 +18,11 @@ NAMESPACE('chlk.controls', function () {
         SELECT_PREV_ROW: 'selectprevrow'
     });
 
+    /** @class chlk.controls.FormEvents */
+    ENUM('FormEvents', {
+        DISABLE_SCROLLING: 'disablescrolling'
+    });
+
     /** @class chlk.controls.ListView */
     CLASS(
         'ListViewControl', EXTENDS(chlk.controls.Base), [
@@ -69,8 +74,8 @@ NAMESPACE('chlk.controls', function () {
                     }else{
                         if(!configs_.pageSize)
                             configs_.pageSize = data.length;
-                        if(data.length < configs_.pageSize)
-                            configs_.noScroll = true;
+                        //if(data.length < configs_.pageSize)
+                            //configs_.noScroll = true;
                     }
                     configs = Object.extend(configs, configs_);
                 }
@@ -93,7 +98,7 @@ NAMESPACE('chlk.controls', function () {
                                 var selectedRow = grid.find('.row:eq(' + configs.selectedIndex  + ')');
                                 grid.trigger(chlk.controls.GridEvents.SELECT_ROW.valueOf(), [selectedRow, parseInt(configs.selectedIndex, 10) || 0]);
                             }
-                            if(configs.infiniteScroll && !grid.hasClass('with-scroller') && !configs.noScroll)
+                            if(configs.infiniteScroll && !grid.hasClass('with-scroller'))// && !configs.noScroll)
                                 this.addInfiniteScroll(grid);
                             else
                                 this.clearInterval_(this.getGrid());
@@ -116,9 +121,12 @@ NAMESPACE('chlk.controls', function () {
                         if(isLastLoad){
                             this.hideLoadAllPopUp_(this.getGrid());
                         }
+                        var form = this.getGrid().parent('form');
+
                         this.getGrid().parent('form').addClass('no-working');
                     }.bind(this));
             },
+
             VOID, function initScrollAction_(){
                 jQuery(window).scroll(function () {
                     var grid = this.getGrid();
@@ -136,6 +144,12 @@ NAMESPACE('chlk.controls', function () {
                             this.hideLoadAllPopUp_(this.getGrid());
                     }
                 }.bind(this));
+            },
+
+            [ria.mvc.DomEventBind(chlk.controls.FormEvents.DISABLE_SCROLLING.valueOf(), 'form')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function disableScrolling(node, event) {
+                this.clearInterval_(node.find('.chlk-grid'));
             },
 
             [ria.mvc.DomEventBind(chlk.controls.GridEvents.SELECT_ROW.valueOf(), '.chlk-grid')],
@@ -301,7 +315,8 @@ NAMESPACE('chlk.controls', function () {
                         scrollPosition = window.pageYOffset;
                         configs = this.getConfigs();
                         if(!configs.isPaggingModel || configs.totalCount > configs.currentStart){
-                            if((contentHeight - pageHeight - scrollPosition) < 1000){
+                            if($(window).scrollTop() > $(document).height() - $(window).height() - 500){
+                            //if((contentHeight - pageHeight - scrollPosition) < 1000){
                                 this.scrollAction_(grid);
                                 this.removeLoaderWithInterval_(grid);
                                 configs.currentStart += size;

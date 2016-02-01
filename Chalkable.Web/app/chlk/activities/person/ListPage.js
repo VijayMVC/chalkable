@@ -36,6 +36,10 @@ NAMESPACE('chlk.activities.person', function () {
                     messagingDisabled: this.isMessagingDisabled()
                 });
                 ria.dom.Dom(tpl.render()).appendTo(this.dom.find('.people-list'));
+                setTimeout(function(){
+                    if(!model.getItems().length)
+                        this.dom.find('#people-list-form').trigger(chlk.controls.FormEvents.DISABLE_SCROLLING.valueOf());
+                }.bind(this), 1);
                 //this.dom.find('.people-list').appendChild(tpl.render());
             }
         ]);

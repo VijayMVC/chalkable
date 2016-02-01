@@ -131,6 +131,19 @@ NAMESPACE('chlk.controls', function () {
                 return attrs_;
             },
 
+            function updateValue(node, needChange_){
+                var options = node.getData('options'), value = node.getValue();
+                if(options.dateFormat && value){
+                    var dt = Date.parse(node.getValue());
+                    var newValue = $.datepicker.formatDate( options.dateFormat, dt );
+                    if(newValue != value){
+                        node.setValue(newValue);
+                        node.trigger('change');
+                    }
+
+                }
+            },
+
             function updateDatePicker(node, value_, options_, noClearValue_){
                 var options = options_ || node.getData('options'), that = this;
                 this.reanimate_(node, options, value_);
@@ -160,7 +173,18 @@ NAMESPACE('chlk.controls', function () {
                         node.setData('value', value.format('m/d/Y'));
                     }else
                         node.next().setValue('');
-                })
+                });
+
+                node.off('blur.datepiker');
+                node.on('blur.datepiker', function(node, event){
+                    that.updateValue(node);
+                });
+
+                node.off('keydown.datepiker');
+                node.on('keydown.datepiker', function(node, event){
+                    if(event.which == ria.dom.Keys.ENTER.valueOf())
+                        that.updateValue(node);
+                });
             },
 
             VOID, function queueReanimation_(id, options, value_) {
