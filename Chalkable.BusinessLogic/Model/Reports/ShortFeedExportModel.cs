@@ -80,9 +80,18 @@ namespace Chalkable.BusinessLogic.Model.Reports
             var adminAnn = announcement.AdminAnnouncementData;
             if (adminAnn != null)
             {
+                //TODO: Add to model first and last admin name
+                string adminFirstName = null, adminLastName = null;
+                if (adminAnn.AdminName != null)
+                {
+                    string[] words = adminAnn.AdminName.Split(new [] {' '}, StringSplitOptions.RemoveEmptyEntries);
+                    adminFirstName = words[0];
+                    if (words.Count() > 1)
+                        adminLastName = words[1];
+                }
                 EndDate = adminAnn.Expires;
                 IsAdminAnnouncement = true;
-                Owners =  NameHelper.FullName(adminAnn.AdminName, "", false, adminAnn.AdminGender);
+                Owners =  NameHelper.FullName(adminFirstName ?? "", adminLastName ?? "", false, adminAnn.AdminGender);
                 AdminId = announcement.AdminRef;
             }
         }

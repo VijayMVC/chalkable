@@ -127,18 +127,37 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return ReadMany<LessonPlan>(dbQuery);
         }
 
-        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? galleryCategoryId, int callerId)
+        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? galleryCategoryId, int callerId, int? studentId, int? teacherId)
         {
-            var conds = new AndQueryCondition {{Announcement.STATE_FIELD, AnnouncementState.Created}};
-            if(fromDate.HasValue)
+            //TODO: move this to the stored procedure later 
+
+            var conds = new AndQueryCondition
+            {
+                {Announcement.STATE_FIELD, AnnouncementState.Created},
+                {LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
+            };
+            if (fromDate.HasValue)
                 conds.Add(LessonPlan.START_DATE_FIELD, "fromDate", fromDate, ConditionRelation.GreaterEqual);
-            if(toDate.HasValue)
+            if (toDate.HasValue)
                 conds.Add(LessonPlan.START_DATE_FIELD, "toDate", toDate, ConditionRelation.LessEqual);
-            if(classId.HasValue)
+            if (classId.HasValue)
                 conds.Add(LessonPlan.CLASS_REF_FIELD, classId);
-            if(galleryCategoryId.HasValue)
+            if (galleryCategoryId.HasValue)
                 conds.Add(LessonPlan.GALERRY_CATEGORY_REF_FIELD, galleryCategoryId);
-            return GetAnnouncements(conds, callerId);
+
+            var dbQuery = SelectLessonPlan(conds, callerId);
+            dbQuery = FilterLessonPlanByCallerId(dbQuery, callerId);
+
+            if (studentId.HasValue)
+            {
+                dbQuery.Sql.Append($" and exists(select * from ClassPerson where PersonRef = {studentId} and ClassPerson.ClassRef = {LessonPlan.VW_LESSON_PLAN_NAME}.ClassRef)");
+            }
+
+            if (teacherId.HasValue)
+            {
+                dbQuery.Sql.Append($" and exists(select * from ClassTeacher where PersonRef = {teacherId} and ClassTeacher.ClassRef = {LessonPlan.VW_LESSON_PLAN_NAME}.ClassRef)");
+            }
+            return ReadMany<LessonPlan>(dbQuery);
         }
 
         public IList<LessonPlan> GetLessonPlansByFilter(string filter, int callerId)
