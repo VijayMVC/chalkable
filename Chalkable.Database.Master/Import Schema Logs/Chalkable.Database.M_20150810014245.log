@@ -1,0 +1,10 @@
+8/10/2015 4:42:45 PM	This log contains information about the import schema operation into project 'Chalkable.Database.Master' on computer 'C01T-PC' by user 'Volodymyr'.
+8/10/2015 4:42:45 PM	Deserializing model
+8/10/2015 4:42:45 PM	Resolving model
+8/10/2015 4:42:46 PM	Visiting imported model for types
+8/10/2015 4:42:46 PM	Scanning project for duplicate elements
+8/10/2015 4:42:46 PM	Finished duplicate element processing
+8/10/2015 4:42:46 PM	Processing extra files
+8/10/2015 4:42:46 PM	Finished importing Data-tier Application file.
+8/10/2015 4:42:46 PM	A summary of the import was saved to the following location: D:\projects\chalkable-v1-clone\Chalkable.Database.Master\Import Schema Logs\Chalkable.Database.M_20150810014245.log
+8/10/2015 4:42:46 PM	Click Finish to continue...
