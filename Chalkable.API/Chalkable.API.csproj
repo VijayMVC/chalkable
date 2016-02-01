@@ -75,6 +75,7 @@
     <Compile Include="Models\CoreRole.cs" />
     <Compile Include="Models\CoreRoles.cs" />
     <Compile Include="Models\IntList.cs" />
+    <Compile Include="Models\PersonClaim.cs" />
     <Compile Include="Models\SchoolPerson.cs" />
     <Compile Include="OnWebRequestIsCreated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

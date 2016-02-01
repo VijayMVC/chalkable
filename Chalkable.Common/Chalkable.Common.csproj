@@ -185,6 +185,7 @@
     <Compile Include="Exceptions\UnknownRoleException.cs" />
     <Compile Include="GlobalCache.cs" />
     <Compile Include="ImageUtils.cs" />
+    <Compile Include="ListTools.cs" />
     <Compile Include="PaginatedList.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />

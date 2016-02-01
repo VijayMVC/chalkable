@@ -29,7 +29,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              //var announcements = isAdmin
              //       ? SchoolLocator.AnnouncementService.GetAdminAnnouncements(null, null, start, end, 0, int.MaxValue, true, studentId)
              //       : SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, classId, true);
-             var announcementList = SchoolLocator.AnnouncementFetchService.GetAnnouncementComplexList(start, end, false, classId, studentId);
+             var announcementList = SchoolLocator.AnnouncementFetchService.GetAnnouncementComplexList(start, end, false, classId, studentId, teacherId);
              if (personId.HasValue)
              {
                  var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
@@ -60,7 +60,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          [AuthorizationFilter("Teacher, Student")]
          public ActionResult ListClassAnnsByDateRange(DateTime? startDate, DateTime? endDate, int? classId)
          {
-             var res = SchoolLocator.ClassAnnouncementService.GetClassAnnouncements(startDate, endDate, classId);
+             var res = SchoolLocator.ClassAnnouncementService.GetClassAnnouncements(startDate, endDate, classId, null, null);
              return Json(ClassAnnouncementViewData.Create(res));
          }
 

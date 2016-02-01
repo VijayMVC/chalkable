@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Reports;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model.Announcements;
@@ -23,7 +24,11 @@ namespace Chalkable.BusinessLogic.Services.Reporting
                 ToDate = inputModel.Settings.EndDate
             };
 
-            var anns = serviceLocator.AnnouncementFetchService.GetAnnouncementsForFeed(inputModel.Complete, null, inputModel.ClassId, feedSettings);
+            bool isForAdminPortal = BaseSecurity.IsDistrictAdmin(serviceLocator.Context) && !inputModel.ClassId.HasValue;
+
+            var anns = isForAdminPortal
+                ? serviceLocator.AnnouncementFetchService.GetAnnouncementsForAdminFeed(inputModel.Complete, null, feedSettings)
+                : serviceLocator.AnnouncementFetchService.GetAnnouncementsForFeed(inputModel.Complete, inputModel.ClassId, feedSettings);
 
             //hide hidden activities
             if (!inputModel.Settings.IncludeHiddenActivities)

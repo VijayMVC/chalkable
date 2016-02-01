@@ -77,6 +77,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             application.HasAdminExternalAttach = applicationInfo.ApplicationAccessInfo.HasAdminExternalAttach;
             application.HasTeacherExternalAttach = applicationInfo.ApplicationAccessInfo.HasTeacherExternalAttach;
             application.HasStudentExternalAttach = applicationInfo.ApplicationAccessInfo.HasStudentExternalAttach;
+            application.HasSysAdminSettings = applicationInfo.ApplicationAccessInfo.HasSysAdminSettings;
+            application.HasDistricAdminSettings = applicationInfo.ApplicationAccessInfo.HasDistricAdminSettings;
+            application.HasStudentProfile = applicationInfo.ApplicationAccessInfo.HasStudentProfile;
 
             application.State = state;
 

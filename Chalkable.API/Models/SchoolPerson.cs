@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Chalkable.API.Models
@@ -32,6 +33,9 @@ namespace Chalkable.API.Models
         [JsonProperty("schoollocalid")]
         public int SchoolLocalId { get; set; }
 
+        [JsonProperty("claims")]
+        public IEnumerable<PersonClaim> Claims { get; set; }
+        
         [JsonIgnore]
         public string UniquePersonId => GetUniquePersonId(Role, DistrictId, Id, CurrentSchoolYearId);
 

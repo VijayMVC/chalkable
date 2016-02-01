@@ -53,8 +53,11 @@ namespace Chalkable.Web.Models.GradingViewData
 
         public static GradingClassSummaryViewData Create(TeacherClassGrading gradingSummary)
         {
-            return Create(gradingSummary.Announcements, gradingSummary.GradingPeriod, 
-                            gradingSummary.AnnouncementTypes, gradingSummary.Avg);
+            if(gradingSummary == null)
+                return null;
+
+            return Create(gradingSummary.Announcements, gradingSummary.GradingPeriod,
+                gradingSummary.AnnouncementTypes, gradingSummary.Avg);
         }
 
         public static GradingClassSummaryViewData Create(IList<AnnouncementDetails> announcements,

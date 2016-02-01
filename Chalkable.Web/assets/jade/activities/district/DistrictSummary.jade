@@ -12,8 +12,10 @@
     +ActionForm('district', 'schoolsStatistic').school-statistic-form
         .form-container
             div
-                input(type="text", name="filter", placeholder="Search for a school...").statistic-filter.filter-input
+                input(type="text", name="filter", placeholder="Search for a school...", value=self.getFilter(), data-value=self.getFilter()).statistic-filter.filter-input
                 Button(type="submit", name="submitType", value="filter").x-hidden.filter-submit
                 .clear-fix
         .grid-container
-            +RenderWith(self.getSchoolsStatistic(), chlk.templates.district.BaseStatisticTpl)
+            +RenderWith(self.getSchoolsStatistic(), chlk.templates.district.BaseStatisticTpl)(
+                filter = self.getFilter()
+            )

@@ -11,6 +11,21 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
+        public IList<ClassTeacher> GetClassTeachers(IList<int> classIds)
+        {
+            string innerSelect = "select * from @classIds";
+            string sqlQuery = $"Select * from {nameof(ClassTeacher)} where {ClassTeacher.CLASS_REF_FIELD} in({innerSelect})";
+            var @params = new Dictionary<string, object>
+            {
+                ["classIds"] = classIds
+            };
+
+            using (var reader = ExecuteReaderParametrized(sqlQuery, @params))
+            {
+                return reader.ReadList<ClassTeacher>();
+            }
+        } 
+
         public IList<ClassTeacher> GetClassTeachers(int? classId, int? teacherId)
         {
             return GetAll(BuildConditioins(classId, teacherId));

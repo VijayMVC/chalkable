@@ -25,13 +25,24 @@ NAMESPACE('chlk.models.admin', function () {
 
             chlk.models.id.SchoolId, 'schoolId',
 
-            function $(items_){
+            Number, 'sortType',
+
+            function $(items_, sortType_, schoolId_, schoolName_, filter_){
                 BASE();
                 if(items_)
                     this.setItems(items_);
+                if(filter_)
+                    this.setFilter(filter_);
+                if(schoolId_)
+                    this.setSchoolId(schoolId_);
+                if(schoolName_)
+                    this.setSchoolName(schoolName_);
+                if(sortType_ || sortType_ == 0)
+                    this.setSortType(sortType_);
             },
 
             VOID, function deserialize(raw){
+                this.sortType = SJX.fromValue(raw.sortType, Number);
                 this.filter = SJX.fromValue(raw.filter, String);
                 this.submitType = SJX.fromValue(raw.submitType, String);
                 this.start = SJX.fromValue(raw.start, Number);

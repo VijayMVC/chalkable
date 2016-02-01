@@ -12,6 +12,9 @@ NAMESPACE('chlk.templates.district', function () {
             chlk.models.admin.BaseStatisticGridViewData, 'schoolsStatistic',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.district.DistrictShortSummaryViewData, 'shortSummary'
+            chlk.models.district.DistrictShortSummaryViewData, 'shortSummary',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'filter'
         ])
 });

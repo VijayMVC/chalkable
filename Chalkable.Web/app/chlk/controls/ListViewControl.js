@@ -116,6 +116,7 @@ NAMESPACE('chlk.controls', function () {
                         if(isLastLoad){
                             this.hideLoadAllPopUp_(this.getGrid());
                         }
+                        this.getGrid().parent('form').addClass('no-working');
                     }.bind(this));
             },
             VOID, function initScrollAction_(){

@@ -11,10 +11,29 @@ using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors;
+using Chalkable.StiConnector.Connectors.Model;
 using Chalkable.StiConnector.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
+    public enum SchoolSortType
+    {
+        SchoolAsc = 0,
+        SchoolDesc,
+
+        StudentsAsc,
+        StudentsDesc,
+
+        AttendanceAsc,
+        AttendanceDesc,
+
+        DisciplineAsc,
+        DisciplineDesc,
+
+        GradesAsc,
+        GradesDesc
+    }
+
     public interface ISchoolService
     {
         void Add(Data.School.Model.School school);
@@ -28,7 +47,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteSchoolOptions(IList<SchoolOption> schoolOptions);
         SchoolOption GetSchoolOption();
         StartupData GetStartupData();
-        IList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter);
+        IList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter, SchoolSortType? sortType);
         int GetSchoolsCount(string filter = null);
     }
 
@@ -146,7 +165,7 @@ namespace Chalkable.BusinessLogic.Services.School
             return res;
         }
 
-        public IList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter)
+        public IList<SchoolSummaryInfo> GetShortSchoolSummariesInfo(int? start, int? count, string filter, SchoolSortType? sortType)
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
@@ -158,16 +177,43 @@ namespace Chalkable.BusinessLogic.Services.School
                     filter = filter.ToLower();
                     iNowRes = iNowRes.Where(x => x.SchoolName.ToLower().Contains(filter)).ToList();
                 }
-                return iNowRes.Select(SchoolSummaryInfo.Create).Skip(start.Value).Take(count.Value).ToList();
+
+                iNowRes = SortSchools(iNowRes, sortType ?? SchoolSortType.SchoolAsc);
+                return iNowRes.Skip(start.Value).Take(count.Value).Select(SchoolSummaryInfo.Create).ToList();
             }
-            catch (ChalkableSisNotSupportVersionException ex)
+            catch (ChalkableSisNotSupportVersionException)
             {
-                var chalkableRes = DoRead(u => new SchoolDataAccess(u).GetShortSchoolSummaries(start.Value, count.Value, filter));
+                var chalkableRes = DoRead(u => new SchoolDataAccess(u).GetShortSchoolSummaries(start.Value, count.Value, filter, (int?) sortType));
                 return chalkableRes.Select(SchoolSummaryInfo.Create).ToList();
             }
-            catch (Exception e)
-            {               
-                throw e;
+        }
+
+        private IList<SchoolSummary> SortSchools(IList<SchoolSummary> schools, SchoolSortType sortType)
+        {
+            switch (sortType)
+            {
+                case SchoolSortType.SchoolAsc:
+                    return schools.OrderBy(x => x.SchoolName).ToList();
+                case SchoolSortType.SchoolDesc:
+                    return schools.OrderByDescending(x => x.SchoolName).ToList();
+                case SchoolSortType.StudentsAsc:
+                    return schools.OrderBy(x => x.EnrollmentCount).ToList();
+                case SchoolSortType.StudentsDesc:
+                    return schools.OrderByDescending(x => x.EnrollmentCount).ToList();
+                case SchoolSortType.AttendanceAsc:
+                    return schools.OrderBy(x => x.AbsenceCount).ToList();
+                case SchoolSortType.AttendanceDesc:
+                    return schools.OrderByDescending(x => x.AbsenceCount).ToList();
+                case SchoolSortType.DisciplineAsc:
+                    return schools.OrderBy(x => x.DisciplineCount).ToList();
+                case SchoolSortType.DisciplineDesc:
+                    return schools.OrderByDescending(x => x.DisciplineCount).ToList();
+                case SchoolSortType.GradesAsc:
+                    return schools.OrderBy(x => x.Average).ToList();
+                case SchoolSortType.GradesDesc:
+                    return schools.OrderByDescending(x => x.Average).ToList();
+                default:
+                    return schools;
             }
         }
 

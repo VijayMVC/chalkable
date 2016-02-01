@@ -964,7 +964,8 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.StudyCenterEnabled()],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DISTRICTADMIN,
-            chlk.models.common.RoleEnum.TEACHER
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.STUDENT
         ])],
         [chlk.controllers.SidebarButton('assessment')],
         [[String]],
@@ -997,6 +998,9 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('assessment')],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.SYSADMIN
+        ])],
         [[String]],
         function assessmentSettingsAction(appUrlAppend_) {
             var mode = 'sysadminview',

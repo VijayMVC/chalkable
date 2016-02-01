@@ -39,7 +39,7 @@ namespace Chalkable.Data.School.DataAccess
             return SelectMany<ApplicationInstall>(conds);
         }
 
-        public IList<ApplicationInstall> GetInstalledForAdmin(int personId, DateTime curentDate)
+        public IList<ApplicationInstall> GetInstalledForAdmin(int personId, int acadYear)
         {
             var conds = new AndQueryCondition
             {
@@ -52,14 +52,13 @@ namespace Chalkable.Data.School.DataAccess
             };
             var query = Orm.SimpleSelect<ApplicationInstall>(conds);
             var syQuery = new DbQuery();
-            syQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, SchoolYear.ID_FIELD, typeof (SchoolYear).Name);
+            syQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, SchoolYear.ID_FIELD, nameof(SchoolYear));
             var syConds = new AndQueryCondition
             {
                 {SchoolYear.ARCHIVE_DATE, null, ConditionRelation.Equal},
-                {SchoolYear.START_DATE_FIELD, curentDate.Date, ConditionRelation.LessEqual },
-                {SchoolYear.END_DATE_FIELD, curentDate.AddDays(-1).Date, ConditionRelation.GreaterEqual }
+                {SchoolYear.ACAD_YEAR_FIELD,  acadYear}
             };
-            syConds.BuildSqlWhere(syQuery, typeof(SchoolYear).Name);
+            syConds.BuildSqlWhere(syQuery, nameof(SchoolYear));
 
             query.Sql.AppendFormat(" and {0} in ({1})", ApplicationInstall.SCHOOL_YEAR_REF_FIELD, syQuery.Sql);
             query.AddParameters(syQuery.Parameters);
@@ -134,14 +133,13 @@ namespace Chalkable.Data.School.DataAccess
                     {"callerId", callerId},
                     {"personId", personId},
                     {"callerRoleId", callerRoleId},
-
                     {"hasAdminMyApps", hasAdminMyApps},
                     {"hasTeacherMyApps", hasTeacherMyApps},
                     {"hasStudentMyApps", hasStudentMyApps},
                     {"hasStudentExternalAttach", hasStudentExternalAttach},
                     {"hasTeacherExternalAttach", hasTeacherExternalAttach},
                     {"hasAdminExternalAttach", hasAdminExternalAttach},
-                    { "canAttach", canAttach},
+                    {"canAttach", canAttach},
                     {"schoolYearId", schoolYearId},
                     {"classIds", classes ?? new List<int>()  }
                 };

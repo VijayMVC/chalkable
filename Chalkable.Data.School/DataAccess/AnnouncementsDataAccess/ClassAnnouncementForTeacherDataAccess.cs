@@ -14,6 +14,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             dbQuery.Sql.Append(@" and (ClassRef in (select ClassTeacher.ClassRef from ClassTeacher where ClassTeacher.PersonRef = @callerId))");
             dbQuery.Parameters.Add("callerId", callerId);
             return dbQuery;
-        }     
+        }
+
+        protected override bool CanGetAllItems => false;
     }
 }

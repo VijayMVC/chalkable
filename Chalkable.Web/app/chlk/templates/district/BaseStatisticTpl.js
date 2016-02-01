@@ -17,6 +17,9 @@ NAMESPACE('chlk.templates.district', function () {
             [ria.templates.ModelPropertyBind],
             Number, 'start',
 
+            [ria.templates.ModelPropertyBind],
+            Number, 'sortType',
+
             Boolean, function isNotEmptyStatistic(){
                 return (this.getItems().filter(function(school){return school.getAvg() !== null}).length +
                     this.getItems().filter(function(school){return school.getInfractionsCount() !== null}).length +

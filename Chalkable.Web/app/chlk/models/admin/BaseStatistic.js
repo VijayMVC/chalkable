@@ -6,6 +6,50 @@ NAMESPACE('chlk.models.admin', function () {
 
     var SJX = ria.serialize.SJX;
 
+    /** @class chlk.models.admin.TeacherSortTypeEnum*/
+    ENUM('TeacherSortTypeEnum', {
+        TEACHER_ASC: 0,
+        TEACHER_DESC: 1,
+        STUDENTS_ASC: 2,
+        STUDENTS_DESC: 3,
+        ATTENDANCE_ASC: 4,
+        ATTENDANCE_DESC: 5,
+        DISCIPLINE_ASC: 6,
+        DISCIPLINE_DESC: 7,
+        GRADES_ASC: 8,
+        GRADES_DESC: 9
+    });
+
+    /** @class chlk.models.admin.ClassSortTypeEnum*/
+    ENUM('ClassSortTypeEnum', {
+        CLASS_ASC: 0,
+        CLASS_DESC: 1,
+        TEACHER_ASC: 2,
+        TEACHER_DESC: 3,
+        STUDENTS_ASC: 4,
+        STUDENTS_DESC: 5,
+        ATTENDANCE_ASC: 6,
+        ATTENDANCE_DESC: 7,
+        DISCIPLINE_ASC: 8,
+        DISCIPLINE_DESC: 9,
+        GRADES_ASC: 10,
+        GRADES_DESC: 11
+    });
+
+    /** @class chlk.models.admin.SchoolSortTypeEnum*/
+    ENUM('SchoolSortTypeEnum', {
+        SCHOOL_ASC: 0,
+        SCHOOL_DESC: 1,
+        STUDENTS_ASC: 2,
+        STUDENTS_DESC: 3,
+        ATTENDANCE_ASC: 4,
+        ATTENDANCE_DESC: 5,
+        DISCIPLINE_ASC: 6,
+        DISCIPLINE_DESC: 7,
+        GRADES_ASC: 8,
+        GRADES_DESC: 9
+    });
+
     /** @class chlk.models.admin.BaseStatistic*/
     CLASS(
         GENERIC('TId'),

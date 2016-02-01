@@ -63,7 +63,7 @@ mixin UpdateGridForm(text, rows, columns, minRows, minColumns, classId)
                         )#all-present-link=Msg.Mark_all_Present
                     .r
                         BUTTON(class=self.getModel().hasSeatingStudents() ? "" : "disabled")#submit-attendance-button.blue-button POST IT
-        if self.isScheduledInMp()
+        if self.isScheduledInMp() && self.isAblePost()
             .buttons
                 if self.getColumns() == 0 || self.getRows() == 0
                     +UpdateGridForm(Msg.Create_grid, self.getRows(), self.getColumns(), 0, 0, selectedId.valueOf())

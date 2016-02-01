@@ -8,12 +8,13 @@ declare @classes TClassDetails
 
 insert into @classes
 select 
-	vwClass.*, 
-	(select count(*) from ClassPerson where ClassRef = Class_Id) as Class_StudentsCount
+	vwClass.*,
+	(select count(*) from ClassPerson Where ClassRef = vwClass.Class_Id) as Class_StudentsCount 
 from 
-	vwClass
+	vwClass join ClassTeacher
+		on vwClass.Class_Id = ClassTeacher.ClassRef
 where 
 	Class_SchoolYearRef = @schoolYearId
-	And (@teacherIdsCount = 0 or exists(select * from ClassTeacher where ClassRef = Class_Id and PersonRef in(select * from @teacherIds)))
+	And (@teacherIdsCount = 0 or  ClassTeacher.PersonRef in(select * from @teacherIds))
 
 exec spSelectClassDetails @classes

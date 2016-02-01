@@ -83,7 +83,7 @@ NAMESPACE('chlk.models.grading', function () {
             Boolean, 'inProfile',
 
             function getTooltipText(){
-                return (this.getAvg() != null ? Msg.Avg + " " + this.getAvg() : 'No grades yet');
+                return (this.getAvg() ? Msg.Avg + " " + this.getAvg() : 'No grades yet');
             },
 
             [[chlk.models.grading.StudentAverageInfo]],
