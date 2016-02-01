@@ -1,0 +1,113 @@
+mixin Ticks_(devBalance)
+    .ticks
+        daysInMonth = devBalance.getDaysInMonth()
+        numbers = [1, 5, 10, 15, 20, 25, daysInMonth]
+           each i in numbers
+                span(class ="month-type-#{daysInMonth} tick tick#{i}") #{i}
+
+
+mixin CurrentBalance_(devBalance)
+    chartOptions = self.prepareBalanceChartOptions(devBalance)
+    suffix = devBalance.getDaysToPayout() == 1 ? "day" : "days"
+    .block.budget-block.relative
+        .panel-header Current Balance
+        .absolute
+            .budget-chart-container
+                .inside
+                    .big $#{devBalance.getBalance()}
+                    if devBalance.getDaysToPayout() > 0
+                       .small #{devBalance.getDaysToPayout() + " " + suffix} to payout
+                    +Ticks_(devBalance)
+                .outside
+                +Chart()(data-options = chartOptions)
+
+
+
+
+mixin AppInstallsChart_(data, header, chartId)
+    configs = self.prepareAppInstallsChartData(data)
+    appInstallChartOptions = self.prepareAppInstallsChartOptions(configs)
+    chartTitle = (data.getStats() ? data.getTotalCount() || "0" : "0")
+    .block(attributes)
+        .panel-header=header
+        .chart-block.relative
+            .chart-bg.app-install-chart-bg=chartTitle
+            +Chart()(id = chartId, data-showmarkeronhover = true, data-options = appInstallChartOptions)
+
+mixin AppViewsChart_(data, header, chartId)
+    configs = self.prepareAppViewsChartData(data)
+    appViewsChartOptions = self.prepareAppViewsChartOptions(configs)
+    .block(attributes)
+        .panel-header=header
+        .chart-block.relative
+            .chart-bg.app-views-chart-bg
+            +Chart()(id = chartId, data-showmarkeronhover = true, data-options = appViewsChartOptions)
+
+mixin AppStatus_(appState, appDraftId, liveAppId)
+    stateId = appState.getStateId()
+    isApproved = stateId == chlk.models.apps.AppStateEnum.APPROVED
+    isSubmitted = stateId == chlk.models.apps.AppStateEnum.SUBMITTED_FOR_APPROVAL
+    isRejected = stateId == chlk.models.apps.AppStateEnum.REJECTED
+    isAppLive = liveAppId != null && liveAppId.valueOf() != ""
+
+    -var appStatus= "You app is not submitted"
+    if isAppLive
+        appStatus = "You app is live in Chalkable app store"
+        if isApproved
+           appStatus = "Click to GO LIVE in the App Store!"
+        if isRejected
+           appStatus = "Your app update was not approved, please address any issues and resubmit."
+        if isSubmitted
+           appStatus = "Your app update has been submitted and is awaiting approval."
+    else
+        if isApproved
+            appStatus = "Click to GO LIVE in the App Store!"
+        if isRejected
+            appStatus = "Your app was not approved, please address any issues and resubmit."
+        if isSubmitted
+           appStatus = "Your app has been submitted and is awaiting approval."
+
+    h3.app-status(class = isRejected ? 'red' : '')= appStatus
+
+    if isApproved || isRejected
+        +ActionButton('apps', 'goLive', self.draftAppId).green-button.go-live-btn(disabled = !isApproved || isRejected ? "disabled" : undefined) Go Live
+
+.app-general-info
+    h2.page-title My Apps
+
+    -devApps = self.getDevApps()
+    if devApps.length > 10
+            +AppsList('apps-list', 'apps-list', devApps, self.draftAppId)
+    else
+        .action-bar
+            .items
+                each app in devApps
+                    -cls = "item"
+                    if app.getId() == self.draftAppId
+                        -cls+=" pressed"
+                    +ActionLink('apps', 'general', app.getId())(class=cls)=app.getName()
+
+
+
+
+    .table
+        .apps
+            .application
+                +ActionLink('apps', 'tryDeleteApplication', self.draftAppId, self.appName).close-btn
+                .wrapper
+                    +LoadingImage(src=self.appThumbnail, id="loading-image")
+                    .title= self.appName
+                    +ActionButton('apps', 'details', self.draftAppId) Details
+        .app-description
+            h2.title=self.appName
+            +AppStatus_(self.appState, self.draftAppId, self.liveAppId)
+
+
+    .app-reviews.reviews.developer
+        if self.liveAppId != null
+            +RenderWith(self.getModel(), chlk.templates.developer.AppReviewsTpl)
+        else
+            div Your app is not live in the app store
+
+
+
