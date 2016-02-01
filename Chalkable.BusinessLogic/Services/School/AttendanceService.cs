@@ -48,7 +48,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     Category = sca.Category,
                     Date = dataStr,
                     ClassroomLevel = LevelToClassRoomLevel(sca.Level),
-                    ReasonId = (short) (sca.AttendanceReasonId.HasValue ? sca.AttendanceReasonId.Value : 0),
+                    ReasonId = (short) (sca.AttendanceReasonId ?? 0),
                     SectionId = classId,
                     StudentId = sca.StudentId,
                 }).ToList();

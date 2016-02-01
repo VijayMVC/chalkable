@@ -439,6 +439,7 @@
     <Compile Include="Models\GroupsViewData\GroupViewData.cs" />
     <Compile Include="Models\LPGalleryCategoryViewData.cs" />
     <Compile Include="Models\MessagingSettingsViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\PersonClaimsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentAppsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentContactViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentExplorerViewData.cs" />

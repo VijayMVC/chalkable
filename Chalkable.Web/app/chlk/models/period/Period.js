@@ -32,7 +32,7 @@ NAMESPACE('chlk.models.period', function () {
                 this.teacherId = SJX.fromValue(raw.teacherid, chlk.models.id.SchoolPersonId);
                 this.teacherDisplayName = SJX.fromValue(raw.teacherdisplayname, String);
                 this.teaching = SJX.fromValue(raw.teaching, Boolean);
-                this.currentSection = SJX.fromValue(raw.currentsection, String);
+                this.currentSection = SJX.fromValue(raw.iscurrentsection, Boolean);
             },
 
             chlk.models.id.PeriodId, 'id',

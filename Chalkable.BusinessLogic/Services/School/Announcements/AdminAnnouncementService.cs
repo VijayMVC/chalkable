@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -26,7 +24,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         bool Exists(string title, int? excludedLessonPlaId);
         IList<AnnouncementComplex> GetAnnouncementsComplex(DateTime? startDate, DateTime? endDate, IList<int> gradeLevels, bool? complete, bool ownedOnly = true, int start = 0, int count = int.MaxValue); 
         IList<AdminAnnouncement> GetAdminAnnouncements(IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? studentId);
-        IList<AdminAnnouncement> GetAdminAnnouncementsByFilter(string filter); 
+        IList<AdminAnnouncement> GetAdminAnnouncementsByFilter(string filter);
+
+        IList<AnnouncementComplex> GetAdminAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, IList<int> gradeLevels, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false);
+        IList<AnnouncementComplex> GetAdminAnnouncementsSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, IList<int> gradeLevels, bool? complete, int start = 0, int count = int.MaxValue, bool sortAsc = false);
+        
         AdminAnnouncement GetLastDraft();
     }
 
@@ -207,18 +209,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public IList<AnnouncementComplex> GetAnnouncementsComplex(DateTime? startDate, DateTime? endDate, IList<int> gradeLevels, bool? complete, bool ownedOnly = true
             , int start = 0, int count = int.MaxValue)
         {
-            return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
-            {
-                Complete = complete,
-                FromDate = startDate,
-                ToDate = endDate,
-                Start = start,
-                Count = count,
-                PersonId = Context.PersonId,
-                RoleId = Context.RoleId,
-                GradeLevelsIds = gradeLevels,
-                OwnedOnly = ownedOnly
-            })).Announcements;
+            return GetAdminAnnouncementsSortedByDate(startDate, endDate, true, true, gradeLevels, complete, start, count);
         }
 
         public override void SetAnnouncementsAsComplete(DateTime? toDate, bool complete)
@@ -233,8 +224,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             DoUpdate(u =>
             {
                 var anns = CreateAdminAnnouncementDataAccess(u)
-                    .GetAnnouncements(new AnnouncementsQuery { PersonId = personId, ToDate = toDate })
-                    .Announcements;
+                    .GetAdminAnnouncementsOrderedByDate(new AdminAnnouncementsQuery
+                    {
+                        RoleId = Context.RoleId,
+                        PersonId = personId,
+                        ToDate = toDate
+                    }).Announcements;
                 var da = new AnnouncementRecipientDataDataAccess(u);
                 foreach (var ann in anns)
                     da.UpdateAnnouncementRecipientData(ann.Id, (int) AnnouncementTypeEnum.Admin ,null, personId, null, complete, null, null);
@@ -257,15 +252,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public IList<AdminAnnouncement> GetAdminAnnouncements(IList<int> gradeLevels, DateTime? fromDate, DateTime? toDate, int? studentId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAnnouncements(new AnnouncementsQuery
+            return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAdminAnnouncementsOrderedByDate(new AdminAnnouncementsQuery
                 {
                     FromDate = fromDate,
                     ToDate = toDate,
                     PersonId = Context.PersonId,
                     RoleId = Context.RoleId,
                     GradeLevelsIds = gradeLevels,
-                    StudentId = studentId,
-                    OwnedOnly = (Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE)
+                    StudentId = studentId
                 })).Announcements.Select(x => x.AdminAnnouncementData).ToList();
         }
 
@@ -274,7 +268,45 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.PersonId.HasValue);
             return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAdminAnnouncementsByFilter(filter, Context.PersonId.Value));
         }
-        
+
+        public IList<AnnouncementComplex> GetAdminAnnouncementsSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate,
+            IList<int> gradeLevels, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false)
+        {
+            return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAdminAnnouncementsOrderedByDate(new AdminAnnouncementsQuery
+            {
+                FromDate = fromDate,
+                ToDate = toDate,
+                IncludeFrom = includeFromDate,
+                IncludeTo = includeToDate,
+                Complete = complete,
+                Start = start,
+                Count = count,
+                PersonId = Context.PersonId,
+                RoleId = Context.RoleId,
+                Sort = sortDesc
+            })).Announcements;
+        }
+
+        public IList<AnnouncementComplex> GetAdminAnnouncementsSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle,
+            bool includeFromTitle, bool includeToTitle, IList<int> gradeLevels, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false)
+        {
+            return DoRead(u => CreateAdminAnnouncementDataAccess(u).GetAdminAnnouncementsOrderedByTitle(new AdminAnnouncementsQuery
+            {
+                Complete = complete,
+                Start = start,
+                Count = count,
+                PersonId = Context.PersonId,
+                RoleId = Context.RoleId,
+                FromDate = fromDate,
+                ToDate  = toDate,
+                FromTitle = fromTitle,
+                ToTitle = toTitle,
+                IncludeFrom = includeFromTitle,
+                IncludeTo = includeToTitle,
+                Sort = sortDesc
+            })).Announcements;
+        }
+
         public AdminAnnouncement GetLastDraft()
         {
             Trace.Assert(Context.PersonId.HasValue);

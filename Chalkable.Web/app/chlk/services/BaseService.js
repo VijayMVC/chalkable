@@ -68,7 +68,7 @@ NAMESPACE('chlk.services', function () {
 
                     dt = getDate().getTime();
                     res = Serializer.deserialize(response.data, clazz_);
-                    _DEBUG && console.info('deserialize time', getDate().getTime() - dt);
+                    //_DEBUG && console.info('deserialize time', getDate().getTime() - dt);
                     return res;
                 }
             },
@@ -183,7 +183,7 @@ NAMESPACE('chlk.services', function () {
                         var model = new chlk.models.common.PaginatedList(clazz);
                         var dt = getDate().getTime();
                         model.setItems(Serializer.deserialize(data.data, ArrayOf(clazz)));
-                        _DEBUG && console.info('deserialize time', getDate().getTime() - dt);
+                        //_DEBUG && console.info('deserialize time', getDate().getTime() - dt);
                         model.setPageIndex(Number(data.pageindex));
                         model.setPageSize(Number(data.pagesize));
                         model.setActualCount(Number((data.data || []).length));

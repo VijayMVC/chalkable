@@ -79,11 +79,12 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.SchoolYearId, Number, String, Number]],
-            ria.async.Future, function getTeachersStats(schoolYearId, start_, filter_, count_) {
+            ria.async.Future, function getTeachersStats(schoolYearId, start_, filter_, sortType_) {
                 return this.get('Teacher/TeachersStats.json', ArrayOf(chlk.models.school.SchoolTeachersStatisticViewData.OF(chlk.models.id.SchoolPersonId)), {
                     schoolYearId: schoolYearId.valueOf(),
                     start:start_ || 0,
-                    count: count_ || 10,
+                    count: 10,
+                    sortType: sortType_,
                     filter: filter_
                 });
             }

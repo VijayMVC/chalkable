@@ -5,7 +5,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 {
     public class ClassAnnouncementForAdminDataAccess : ClassAnnouncementDataAccess
     {
-        public ClassAnnouncementForAdminDataAccess(UnitOfWork unitOfWork, int schoolYearId) : base(unitOfWork, schoolYearId)
+        public ClassAnnouncementForAdminDataAccess(UnitOfWork unitOfWork, int schoolYearId)
+            : base(unitOfWork, schoolYearId)
         {
         }
 
@@ -13,5 +14,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             return dbQuery;
         }
+
+        protected override bool CanGetAllItems => true;
     }
 }

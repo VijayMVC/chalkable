@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
@@ -127,9 +128,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult ClassesStats(int schoolYearId, string filter, int? start, int? count, int? teacherId)
+        public ActionResult ClassesStats(int schoolYearId, string filter, int? start, int? count, int? teacherId, int? sortType)
         {
-            var classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYearId, start, count, filter, teacherId);
+            var classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYearId, start, count, filter, teacherId,(ClassSortType?) sortType);
             return Json(classes.Select(ClassStatsViewData.Create));
         }   
     }

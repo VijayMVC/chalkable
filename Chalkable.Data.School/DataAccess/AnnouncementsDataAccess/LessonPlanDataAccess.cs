@@ -31,7 +31,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             SimpleUpdate<Announcement>(entity);
             base.Update(entity);
         }
-
         public override void Update(IList<LessonPlan> entities)
         {
             foreach (var lessonPlan in entities)
@@ -39,7 +38,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 Update(lessonPlan);
             }
         }
-        
         public AnnouncementDetails Create(int classId, DateTime created, DateTime? startDate, DateTime? endDate, int personId, int schoolYearId)
         {
             var parameters = new Dictionary<string, object>
@@ -100,10 +98,12 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {"callerId", callerId},
                     {"callerRole", roleId},
                     {"schoolYearId", schoolYearId},
-                    {"onlyOwner", onlyOwner } 
+                    {"onlyOwner", !CanGetAllItems } 
                 };
             return GetDetailses("spGetListOfLessonPlansDetails", parameters);
         }
+
+        protected override bool CanGetAllItems => false;
 
         protected override LessonPlan ReadAnnouncementData(AnnouncementComplex announcement, SqlDataReader reader)
         {
@@ -127,18 +127,37 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return ReadMany<LessonPlan>(dbQuery);
         }
 
-        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? galleryCategoryId, int callerId)
+        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? galleryCategoryId, int callerId, int? studentId, int? teacherId)
         {
-            var conds = new AndQueryCondition {{Announcement.STATE_FIELD, AnnouncementState.Created}};
-            if(fromDate.HasValue)
+            //TODO: move this to the stored procedure later 
+
+            var conds = new AndQueryCondition
+            {
+                {Announcement.STATE_FIELD, AnnouncementState.Created},
+                {LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
+            };
+            if (fromDate.HasValue)
                 conds.Add(LessonPlan.START_DATE_FIELD, "fromDate", fromDate, ConditionRelation.GreaterEqual);
-            if(toDate.HasValue)
+            if (toDate.HasValue)
                 conds.Add(LessonPlan.START_DATE_FIELD, "toDate", toDate, ConditionRelation.LessEqual);
-            if(classId.HasValue)
+            if (classId.HasValue)
                 conds.Add(LessonPlan.CLASS_REF_FIELD, classId);
-            if(galleryCategoryId.HasValue)
+            if (galleryCategoryId.HasValue)
                 conds.Add(LessonPlan.GALERRY_CATEGORY_REF_FIELD, galleryCategoryId);
-            return GetAnnouncements(conds, callerId);
+
+            var dbQuery = SelectLessonPlan(conds, callerId);
+            dbQuery = FilterLessonPlanByCallerId(dbQuery, callerId);
+
+            if (studentId.HasValue)
+            {
+                dbQuery.Sql.Append($" and exists(select * from ClassPerson where PersonRef = {studentId} and ClassPerson.ClassRef = {LessonPlan.VW_LESSON_PLAN_NAME}.ClassRef)");
+            }
+
+            if (teacherId.HasValue)
+            {
+                dbQuery.Sql.Append($" and exists(select * from ClassTeacher where PersonRef = {teacherId} and ClassTeacher.ClassRef = {LessonPlan.VW_LESSON_PLAN_NAME}.ClassRef)");
+            }
+            return ReadMany<LessonPlan>(dbQuery);
         }
 
         public IList<LessonPlan> GetLessonPlansByFilter(string filter, int callerId)
@@ -152,7 +171,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 dbQuery.Sql.Append(" and (");
                 for (var i = 0; i < words.Length; i++)
                 {
-                    var filterName = string.Format("filter{0}", i);
+                    var filterName = $"filter{i}";
                     dbQuery.Parameters.Add(filterName, string.Format(FILTER_FORMAT, words[i]));
                     dbQuery.Sql.Append("( ")
                         .AppendFormat("{0} like @{1} or ", LessonPlan.FULL_CLASS_NAME, filterName)
@@ -203,7 +222,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                               "ClassTeacher", ClassTeacher.PERSON_REF_FIELD, callerId, ClassTeacher.CLASS_REF_FIELD,
                               LessonPlan.VW_LESSON_PLAN_NAME, LessonPlan.CLASS_REF_FIELD);
 
-            var selectSet = string.Format("{0}.*, {1} as IsOwner", LessonPlan.VW_LESSON_PLAN_NAME, classTeacherSql);
+            var selectSet = $"{LessonPlan.VW_LESSON_PLAN_NAME}.*, {classTeacherSql} as IsOwner";
             dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, selectSet, LessonPlan.VW_LESSON_PLAN_NAME);
             condition.BuildSqlWhere(dbQuery, LessonPlan.VW_LESSON_PLAN_NAME);
             return dbQuery;
@@ -214,28 +233,40 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return dbQuery;
         }
 
-        public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
+        protected virtual AnnouncementQueryResult InternalGetAnnouncements(string procedureName, LessonPlansQuery query, IDictionary<string, object> additionalParams)
         {
-            var parameter = new Dictionary<string, object>
-                {
-                    {"id", query.Id},
-                    {"schoolYearId", schoolYearId},
-                    {"personId", query.PersonId},
-                    {"classId", query.ClassId},
-                    {"roleId", query.RoleId},
-                    {"ownedOnly", query.OwnedOnly},
-                    {"fromDate", query.FromDate},
-                    {"toDate", query.ToDate},
-                    {"start", query.Start},
-                    {"count", query.Count},
-                    {"complete", query.Complete},
-                    {"galleryCategoryId", query.GalleryCategoryId}
-                };
-            using (var reader = ExecuteStoredProcedureReader("spGetLessonPlans", parameter))
-            {
-                return ReadAnnouncementsQueryResult(reader, query);
-            }
+            if(additionalParams == null)
+                additionalParams = new Dictionary<string, object>();
+
+            additionalParams.Add("galleryCategoryId", query.GalleryCategoryId);
+            additionalParams.Add("schoolYearId", schoolYearId);
+            additionalParams.Add("classId", query.ClassId);
+
+            return InternalGetAnnouncements<LessonPlansQuery>(procedureName, query, additionalParams);
         }
+        public AnnouncementQueryResult GetLessonPlansOrderedByDate(LessonPlansQuery query)
+        {
+            return InternalGetAnnouncements("spGetLessonPlansOrderedByDate", query, null);
+        }
+        public AnnouncementQueryResult GetLesonPlansOrderedByTitle(LessonPlansQuery query)
+        {
+            var ps = new Dictionary<string, object>
+            {
+                ["fromTitle"] = query.FromTitle,
+                ["toTitle"] = query.ToTitle
+            };
+            return InternalGetAnnouncements("spGetLessonPlansOrderedByTitle", query, ps);
+        }
+        public AnnouncementQueryResult GetLesonPlansOrderedByClassName(LessonPlansQuery query)
+        {
+            var ps = new Dictionary<string, object>
+            {
+                ["fromClassName"] = query.FromClassName,
+                ["toClassName"] = query.ToClassName
+            };
+            return InternalGetAnnouncements("spGetLessonPlansOrderedByClassName", query, ps);
+        }
+
 
         public LessonPlan GetLastDraft(int personId)
         {
@@ -260,7 +291,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                    .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, classTName, Class.ID_FIELD, LessonPlan.VW_LESSON_PLAN_NAME, LessonPlan.CLASS_REF_FIELD)
                    .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, classStandardTName, ClassStandard.CLASS_REF_FIELD, classTName, Class.ID_FIELD)
                    .Append(" or ")
-                   .AppendFormat("[{0}].{1} = [{2}].{3}", classStandardTName, ClassStandard.CLASS_REF_FIELD, classTName, Class.COURSE_REF_FIELD);
+                   .Append($"[{classStandardTName}].{ClassStandard.CLASS_REF_FIELD} = [{classTName}].{Class.COURSE_REF_FIELD}");
             
             var conds = new AndQueryCondition
                 {
@@ -308,57 +339,17 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var dbQuery = Orm.SimpleSelect(LessonPlan.VW_LESSON_PLAN_NAME, conds);
             return Exists(dbQuery);
         }
-
         
     }
 
-    public class LessonPlanForTeacherDataAccess : LessonPlanDataAccess
+
+    public class LessonPlansQuery : AnnouncementsQuery
     {
-        public LessonPlanForTeacherDataAccess(UnitOfWork unitOfWork, int schoolYearId)
-            : base(unitOfWork, schoolYearId)
-        {
-        }
-
-        protected override DbQuery FilterLessonPlanByCallerId(DbQuery dbQuery, int callerId)
-        {
-            var callerIdParam = "callerId";
-            dbQuery.Sql.AppendFormat(" and ClassRef in (select ClassRef from ClassTeacher where ClassTeacher.PersonRef =@{0})", callerIdParam);
-            dbQuery.Parameters.Add(callerIdParam, callerId);
-            return dbQuery;
-        }
-    }
-
-    public class LessonPlanForStudentDataAccess : LessonPlanDataAccess
-    {
-        public LessonPlanForStudentDataAccess(UnitOfWork unitOfWork, int schoolYearId)
-            : base(unitOfWork, schoolYearId)
-        {
-        }
-
-        protected override DbQuery FilterLessonPlanByCallerId(DbQuery dbQuery, int callerId)
-        {
-            var callerIdParam = "callerId";
-            dbQuery.Sql.AppendFormat(" and ClassRef in (select ClassRef from ClassPerson where ClassPerson.PersonRef =@{0})", callerIdParam);
-            dbQuery.Sql.AppendFormat(" and {0} = 1", LessonPlan.VISIBLE_FOR_STUDENT_FIELD);
-            dbQuery.Parameters.Add(callerIdParam, callerId);
-            return dbQuery;
-        }
-    }
-
-    public class LessonPlanForAdminDataAccess : LessonPlanDataAccess
-    {
-        public LessonPlanForAdminDataAccess(UnitOfWork unitOfWork, int schoolYearId)
-            : base(unitOfWork, schoolYearId)
-        {
-        }
-
-        protected override DbQuery FilterLessonPlanByCallerId(DbQuery dbQuery, int callerId)
-        {
-            //var callerIdParam = "callerId";
-            //dbQuery.Sql.AppendFormat(" and ClassRef in (select ClassRef from ClassPerson where ClassPerson.PersonRef =@{0})", callerIdParam);
-            //dbQuery.Sql.AppendFormat(" and {0} = 1", LessonPlan.VISIBLE_FOR_STUDENT_FIELD);
-            //dbQuery.Parameters.Add(callerIdParam, callerId);
-            return dbQuery;
-        }
+        public int? ClassId { get; set; }
+        public int? TeacherId { get; set; }
+        public int? StudentId { get; set; }
+        public int? GalleryCategoryId { get; set; }
+        public string FromClassName { get; set; }
+        public string ToClassName { get; set; }
     }
 }

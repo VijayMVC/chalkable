@@ -11,7 +11,7 @@
                     +Option(year.getId(), year.getName(), self.getSchoolYearId() == year.getId())
             Button(type="submit", name="submitType", value="schoolYear").x-hidden.year-submit
 
-            input(type="text", name="filter", placeholder="Search a Class...", value=self.getItemsStatistic().getFilter(), data-value=self.getItemsStatistic().getFilter()).statistic-filter.filter-input
+            input(type="text", name="filter", placeholder="Search a Class...", value=self.getFilter(), data-value=self.getFilter()).statistic-filter.filter-input
             Button(type="submit", name="submitType", value="filter").x-hidden.filter-submit
             +Hidden('schoolId', self.getSchoolId().valueOf())
             +Hidden('schoolName', self.getSchoolName())

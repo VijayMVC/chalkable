@@ -15,4 +15,9 @@ namespace Chalkable.Data.School.Model
         public string Gender { get; set; }
         public int? UserId { get; set; }
     }
+
+    public class ShortStaffSummary : Staff
+    {
+        public int StudentsCount { get; set; }
+    }
 }

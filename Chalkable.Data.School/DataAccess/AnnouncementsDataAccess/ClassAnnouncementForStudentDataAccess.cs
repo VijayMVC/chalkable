@@ -31,5 +31,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             dbQuery.Parameters.Add("callerId", callerId);
             return dbQuery;
         }
+
+        protected override bool CanGetAllItems => false;
     }
 }

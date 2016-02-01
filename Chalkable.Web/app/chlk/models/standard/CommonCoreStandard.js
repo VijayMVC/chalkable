@@ -30,7 +30,7 @@ NAMESPACE('chlk.models.standard', function () {
             Object, function serialize() {
                 return {
                     id: this.id.valueOf(),
-                    parentStandardId: this.parentStandardId.valueOf(),
+                    parentStandardId: this.parentStandardId && this.parentStandardId.valueOf(),
                     standardCode: this.standardCode.valueOf(),
                     description: this.description.valueOf()
                 }

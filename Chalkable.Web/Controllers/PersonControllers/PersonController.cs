@@ -6,7 +6,6 @@ using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.PersonViewDatas;
@@ -30,7 +29,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
             var school = MasterLocator.SchoolService.GetById(Context.DistrictId.Value, Context.SchoolLocalId.Value);
             var schoolYear = SchoolLocator.SchoolYearService.GetSchoolYearById(Context.SchoolYearId.Value);
-            return Json(CurrentPersonViewData.Create(person, district, school, schoolYear));
+            return Json(CurrentPersonViewData.Create(person, district, school, schoolYear, Context.Claims));
         }
 
         protected PersonScheduleViewData PrepareScheduleData(ShortPersonViewData person)

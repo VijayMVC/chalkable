@@ -18,6 +18,12 @@ namespace Chalkable.BusinessLogic.Model
             set { SortType = (int?) value; }
         }
 
+        public AnnouncementTypeEnum? AnnouncementTypeEnum
+        {
+            get { return (AnnouncementTypeEnum?) AnnouncementType; }
+            set { AnnouncementType = (int?) value; }
+        }
+
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public int? GradingPeriodId { get; set; }

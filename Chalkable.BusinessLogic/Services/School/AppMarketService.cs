@@ -48,13 +48,12 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<ApplicationInstall> ListInstalledAppInstalls(int personId)
         {
-            if (BaseSecurity.IsDistrictAdmin(Context))
-                return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalledForAdmin(personId, Context.NowSchoolTime));
+            var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
 
-            int? syId = Context.SchoolYearId;
-            if (!syId.HasValue)
-                syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;
-            return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalled(personId, syId.Value));     
+            if (BaseSecurity.IsDistrictAdmin(Context))             
+                return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalledForAdmin(personId, schoolYear.AcadYear));
+
+            return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalled(personId, schoolYear.Id));     
         }
         
         public IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId)
