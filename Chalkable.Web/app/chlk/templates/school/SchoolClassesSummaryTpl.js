@@ -24,6 +24,9 @@ NAMESPACE('chlk.templates.school', function () {
             String, 'schoolName',
 
             [ria.templates.ModelPropertyBind],
-            String, 'filter'
+            String, 'filter',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.SchoolPersonId, 'teacherId',
         ])
 });
