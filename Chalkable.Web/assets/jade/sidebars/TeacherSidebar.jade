@@ -5,7 +5,7 @@
 +ActionLink('discipline', 'list').discipline(title="View Discipline") Discipline
 if self.isAppStoreEnabled
     +ActionLink('appmarket', 'list').apps(title="View Apps") Apps
-if self.isAppStoreEnabled
+if self.isAppStoreEnabled && false
     +ActionLink('apps', 'assessment').assessment(title="Assessment") Assessment
 if !self.isLEEnabled || self.isLEEnabled && self.isLinkEnabled
     a(href="/Home/LearningEarnings", target="blank").le(title="View Learning Earnings", target="blank") LE
