@@ -238,7 +238,7 @@ namespace Chalkable.Web.Controllers
         {
             var st = start ?? 0;
             var cn = count ?? 10;
-            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(null, null, classId, null, false, true, st, cn);
+            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(null, null, classId, null, true, st, cn);
             return FeedController.PrepareAnnouncementsComplexViewData(SchoolLocator, anns);
         }
 
