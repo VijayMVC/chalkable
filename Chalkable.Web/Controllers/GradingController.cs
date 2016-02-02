@@ -315,7 +315,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
-        [AuthorizationFilter("Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult GradedItemsList(int gradingPeriodId)
         {
             var res = SchoolLocator.GradedItemService.GetGradedItems(gradingPeriodId);
