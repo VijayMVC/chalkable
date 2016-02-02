@@ -67,6 +67,7 @@
     <Compile Include="Endpoints\AnnouncementEndpoint.cs" />
     <Compile Include="Endpoints\Base.cs" />
     <Compile Include="Endpoints\PersonEndpoint.cs" />
+    <Compile Include="Endpoints\StudyCenterEndpoint.cs" />
     <Compile Include="Enums\AnnouncementType.cs" />
     <Compile Include="Exceptions\ChalkableApiException.cs" />
     <Compile Include="IConnector.cs" />

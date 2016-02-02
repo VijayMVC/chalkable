@@ -32,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         ClassAnnouncement SetVisibleForStudent(int classAnnouncementId, bool visible);
 
         //TOOD : make this method static 
-        IList<AnnouncementComplex> GetAnnouncementsComplex(ClassAnnouncementsQuery query, AnnouncementSortOption? sortOption = null, IList<Activity> activities = null);
+        IList<AnnouncementComplex> GetAnnouncementsComplex(ClassAnnouncementsQuery query, AnnouncementSortOption? sortOption = null);
 
         IList<ClassAnnouncement> GetClassAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId, bool onlyOwners = false, bool? graded = null);
         IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = false, bool? graded = null, int start = 0, int count = int.MaxValue, AnnouncementSortOption? sort = null);
@@ -55,16 +55,22 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected ClassAnnouncementDataAccess CreateClassAnnouncementDataAccess(UnitOfWork unitOfWork)
         {
-            Trace.Assert(Context.SchoolYearId.HasValue);
-            if (BaseSecurity.IsDistrictOrTeacher(Context))
+            return CreateClassAnnouncementDataAccess(ServiceLocator, unitOfWork);
+        }
+
+        protected static ClassAnnouncementDataAccess CreateClassAnnouncementDataAccess(IServiceLocatorSchool locator, UnitOfWork unitOfWork)
+        {
+            var context = locator.Context;
+            Trace.Assert(context.SchoolYearId.HasValue);
+            if (BaseSecurity.IsDistrictOrTeacher(locator.Context))
             {
-                if (Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN) || Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN))
-                    return new ClassAnnouncementForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value);
-                if (Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM) || Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM))
-                    return new ClassAnnouncementForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
+                if (context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN) || context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN))
+                    return new ClassAnnouncementForAdminDataAccess(unitOfWork, context.SchoolYearId.Value);
+                if (context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM) || context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM))
+                    return new ClassAnnouncementForTeacherDataAccess(unitOfWork, context.SchoolYearId.Value);
             }
-            if (Context.Role == CoreRoles.STUDENT_ROLE)
-                return new ClassAnnouncementForStudentDataAccess(unitOfWork, Context.SchoolYearId.Value);
+            if (context.Role == CoreRoles.STUDENT_ROLE)
+                return new ClassAnnouncementForStudentDataAccess(unitOfWork, context.SchoolYearId.Value);
                 
             throw new ChalkableSecurityException("Current user has no permission to view or edit activities");
         }
@@ -434,7 +440,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 using (var u = Update())
                 {
                     var da = CreateClassAnnouncementDataAccess(u);
-                    AddActivitiesToChalkable(activities, da);
+                    AddActivitiesToChalkable(ServiceLocator, activities, da);
                     var resAnnIds = da.GetByActivitiesIds(activities.Select(x => x.Id).ToList(), Context.PersonId.Value).Select(x=>x.Id).ToList();
 
                     var attOwners = new ClassTeacherDataAccess(u).GetClassTeachers(ann.ClassRef, null).Select(x => x.PersonRef).ToList();
@@ -543,30 +549,26 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 }, sort);
         }
 
-        public IList<AnnouncementComplex> GetAnnouncementsComplex(ClassAnnouncementsQuery query, AnnouncementSortOption? sortOption = null, IList<Activity> activities = null)
+        public IList<AnnouncementComplex> GetAnnouncementsComplex(ClassAnnouncementsQuery query, AnnouncementSortOption? sortOption = null)
         {
-            //TODO: Looks shity....think about this method and whole approach
-            if (activities == null)
-                activities = GetActivities(query.ClassId, query.StudentId, query.TeacherId, query.FromDate, query.ToDate, query.Start, query.Count, query.Complete, query.Graded, sortOption);
-            else
-            {
-                if (query.ClassId.HasValue)
-                    activities = activities.Where(x => x.SectionId == query.ClassId).ToList();
-                if (query.FromDate.HasValue)
-                    activities = activities.Where(x => x.Date >= query.FromDate).ToList();
-                if (query.ToDate.HasValue)
-                    activities = activities.Where(x => x.Date <= query.ToDate).ToList();
-                activities = activities.Skip(query.Start).Take(query.Count).ToList();
-            }
+            var activities = GetActivities(query.ClassId, query.StudentId, query.TeacherId, query.FromDate, query.ToDate, query.Start, query.Count, query.Complete, query.Graded, sortOption);
             var activitiesIds = activities.Select(x => x.Id).ToList();
             var anns = GetByActivitiesIds(activitiesIds);
-            if (anns.Count < activities.Count)
+            IList<AnnouncementComplex> res = null;
+            DoUpdate(u=> res = MergeAnnouncementsWithActivities(ServiceLocator, u, anns, activities));
+            return res ?? new List<AnnouncementComplex>();
+        }
+
+        public static IList<AnnouncementComplex> MergeAnnouncementsWithActivities(IServiceLocatorSchool locator, UnitOfWork unitOfWork, IList<AnnouncementComplex> announcements, IList<Activity> activities)
+        {
+            var activitiesIds = activities.Select(x => x.Id).ToList();
+            if (announcements.Count < activities.Count)
             {
-                var noInDbActivities = activities.Where(x => anns.All(y => y.ClassAnnouncementData.SisActivityId != x.Id)).ToList();
-                AddActivitiesToChalkable(noInDbActivities);
-                anns = GetByActivitiesIds(activitiesIds);
+                var noInDbActivities = activities.Where(x => announcements.All(y => y.ClassAnnouncementData.SisActivityId != x.Id)).ToList();
+                AddActivitiesToChalkable(locator, unitOfWork, noInDbActivities);
+                announcements = locator.ClassAnnouncementService.GetByActivitiesIds(activitiesIds);
             }
-            var res = MapActivitiesToAnnouncements(anns, activities);
+            var res = MapActivitiesToAnnouncements(locator, unitOfWork, announcements, activities);
             return res;
         }
 
@@ -578,21 +580,26 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         private void AddActivitiesToChalkable(IList<Activity> activities)
         {
-            DoUpdate(u => AddActivitiesToChalkable(activities, CreateClassAnnouncementDataAccess(u)));
+            DoUpdate(u => AddActivitiesToChalkable(ServiceLocator, u, activities));
         }
 
-        private void AddActivitiesToChalkable(IList<Activity> activities, BaseAnnouncementDataAccess<ClassAnnouncement> dataAccess)
+        private static void AddActivitiesToChalkable(IServiceLocatorSchool locator, UnitOfWork u, IList<Activity> activities)
+        {
+            AddActivitiesToChalkable(locator, activities, CreateClassAnnouncementDataAccess(locator, u));
+        }
+
+        private static void AddActivitiesToChalkable(IServiceLocatorSchool locator, IList<Activity> activities, ClassAnnouncementDataAccess dataAccess)
         {
             if (activities == null) return;
-            EnsureInAnnouncementsExisting(activities);
+            EnsureInAnnouncementsExisting(activities, dataAccess);
             IList<ClassAnnouncement> addToChlkAnns = new List<ClassAnnouncement>();
             foreach (var activity in activities)
             {
                 var ann = new ClassAnnouncement
                 {
-                    Created = Context.NowSchoolTime,
+                    Created = locator.Context.NowSchoolTime,
                     State = AnnouncementState.Created,
-                    SchoolYearRef = Context.SchoolYearId.Value,
+                    SchoolYearRef = locator.Context.SchoolYearId.Value,
                     SisActivityId = activity.Id,
                 };
                 MapperFactory.GetMapper<ClassAnnouncement, Activity>().Map(ann, activity);
@@ -602,14 +609,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 dataAccess.Insert(addToChlkAnns);
         }
 
-        private void EnsureInAnnouncementsExisting(IList<Activity> activities)
+        private static void EnsureInAnnouncementsExisting(IList<Activity> activities, ClassAnnouncementDataAccess dataAccess)
         {
-            using (var uow = Read())
-            {
                 var ids = activities.Select(x => x.Id).ToList();
-                if (CreateClassAnnouncementDataAccess(uow).Exists(ids))
-                    throw new ChalkableException(string.Format("Announcement with such activity Ids {0} already exists", ids.Select(x => x.ToString()).JoinString()));
-            }
+                if (dataAccess.Exists(ids))
+                    throw new ChalkableException($"Announcement with such activity Ids {ids.Select(x => x.ToString()).JoinString()} already exists");
         }
 
         private IList<Activity> GetActivities(int? classId, int? studentId, int? teacherId, DateTime? fromDate, DateTime? toDate, int start, int count, bool? complete = false, bool? graded = null, AnnouncementSortOption? sort = AnnouncementSortOption.DueDateAscending)
@@ -629,7 +633,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return new List<Activity>();
         }
 
-        private IList<AnnouncementComplex> MapActivitiesToAnnouncements(IList<AnnouncementComplex> anns, IEnumerable<Activity> activities)
+        private static IList<AnnouncementComplex> MapActivitiesToAnnouncements(IServiceLocatorSchool locator, UnitOfWork u, IList<AnnouncementComplex> anns, IEnumerable<Activity> activities)
         {
             var res = new List<AnnouncementComplex>();
             var needToUpdate = new List<ClassAnnouncement>();
@@ -642,13 +646,21 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     if (ann.ClassAnnouncementData.Expires != activity.Date || ann.ClassAnnouncementData.Title != activity.Name)
                         needToUpdate.Add(ann.ClassAnnouncementData);
                     MapperFactory.GetMapper<AnnouncementComplex, Activity>().Map(ann, activity);
-                    var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(ann.ClassAnnouncementData.ClassAnnouncementTypeName);
-                    ann.ClassAnnouncementData.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?)null;
+                    var chlkAnnType = locator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(ann.ClassAnnouncementData.ClassAnnouncementTypeName);
+                    ann.ClassAnnouncementData.ChalkableAnnouncementType = chlkAnnType?.Id;
                     res.Add(ann);
                 }
             }
+
             if (needToUpdate.Count > 0)
-                DoUpdate(u => CreateDataAccess(u).Update(needToUpdate));
+            {
+                //using (var u = locator.SchoolDbService.GetUowForUpdate())
+                //{
+                //    CreateDataAccess(u).Update(needToUpdate);
+                //    u.Commit();
+                //}
+                CreateClassAnnouncementDataAccess(locator, u).Update(needToUpdate);
+            }
             return res;
         }
 

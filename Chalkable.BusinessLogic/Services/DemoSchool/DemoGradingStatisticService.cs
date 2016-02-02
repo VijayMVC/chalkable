@@ -147,8 +147,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 FromDate = gradingPeriod.StartDate,
                 ToDate = gradingPeriod.EndDate
             };
-            var anns = ServiceLocator.ClassAnnouncementService.GetAnnouncementsComplex(annQuery, null, gradebook.Activities.ToList());
-            return BuildGradeBook(gradebook, gradingPeriod, anns, students);
+            //TODO : rewrite this 
+            throw new NotImplementedException();
+            //var anns = ServiceLocator.ClassAnnouncementService.GetAnnouncementsComplex(annQuery, null, gradebook.Activities.ToList());
+            //return BuildGradeBook(gradebook, gradingPeriod, anns, students);
         }
 
         private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod,
