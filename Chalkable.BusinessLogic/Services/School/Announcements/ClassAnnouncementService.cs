@@ -549,7 +549,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 var noInDbActivities = activities.Where(x => announcements.All(y => y.ClassAnnouncementData.SisActivityId != x.Id)).ToList();
                 AddActivitiesToChalkable(locator, unitOfWork, noInDbActivities);
-                announcements = locator.ClassAnnouncementService.GetByActivitiesIds(activitiesIds);
+                announcements = CreateClassAnnouncementDataAccess(locator, unitOfWork).GetByActivitiesIds(activitiesIds, locator.Context.PersonId.Value);
             }
             var res = MapActivitiesToAnnouncements(locator, unitOfWork, announcements, activities);
             return res;
