@@ -16,8 +16,8 @@ GO
 
 
 
-Create Trigger SchoolUserInsertTrigger
-On SchoolUser
+Create Trigger [dbo].[SchoolUserInsertTrigger]
+On [dbo].[SchoolUser]
 After Insert, Update
 as 
 	if not exists(
@@ -25,5 +25,9 @@ as
 			join inserted on [User].SisUserId = inserted.UserRef and [User].DistrictRef = inserted.DistrictRef
 		)
 	Begin
-		Throw 51000, 'You Can not update or insert SchoolUser. User is not exists with such SisUserId and DistrictRef', 1
+		declare @userId nvarchar(80) = (select top 1 cast(UserRef as nvarchar(80)) from inserted);
+		declare @districtId nvarchar(80) = (select top 1 cast(DistrictRef as nvarchar(80)) from inserted);
+		declare @msg nvarchar(1024) = 'You Can not update or insert SchoolUser. User is not exists with such SisUserId and DistrictRef ' + @userId + ' ' + @districtId;
+		Throw 51000, @msg, 1
 	End
+

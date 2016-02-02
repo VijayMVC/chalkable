@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
@@ -52,15 +53,22 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private ChalkableGradeBook GetGradeBooks(int classId, GradingPeriod gradingPeriod, Gradebook gradebook)
         {
-            var annQuery = new ClassAnnouncementsQuery {ClassId = classId};
             int mpId = gradingPeriod.MarkingPeriodRef;
-            annQuery.FromDate = gradingPeriod.StartDate;
-            annQuery.ToDate = gradingPeriod.EndDate;
             var classRoomOptions = gradebook.Options;
             var students = ServiceLocator.StudentService.GetClassStudents(classId, mpId, classRoomOptions == null || classRoomOptions.IncludeWithdrawnStudents ? (bool?)null : true);
-            var anns = ServiceLocator.ClassAnnouncementService.GetAnnouncementsComplex(annQuery, null, gradebook.Activities.ToList());
+
+            var activities = gradebook.Activities
+                     .Where(x => x.SectionId == classId)
+                     .Where(x => x.Date >= gradingPeriod.StartDate)
+                     .Where(x => x.Date <= gradingPeriod.EndDate).ToList();
+            var activitiesIds = activities.Select(x => x.Id).ToList();
+
+            var anns = ServiceLocator.ClassAnnouncementService.GetByActivitiesIds(activitiesIds);
+            DoUpdate(u=> anns = ClassAnnouncementService.MergeAnnouncementsWithActivities(ServiceLocator, u, anns, activities));
+
             return BuildGradeBook(gradebook, gradingPeriod, anns, students);
         }
+
 
         private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod, IList<AnnouncementComplex> anns, IList<StudentDetails> students)
         {
