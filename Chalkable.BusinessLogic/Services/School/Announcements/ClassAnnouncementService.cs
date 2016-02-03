@@ -14,7 +14,6 @@ using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
-using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
@@ -31,11 +30,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         void CopyAnnouncement(int classAnnouncementId, IList<int> classIds);
         ClassAnnouncement SetVisibleForStudent(int classAnnouncementId, bool visible);
 
-        //TOOD : make this method static 
-        IList<AnnouncementComplex> GetAnnouncementsComplex(ClassAnnouncementsQuery query, AnnouncementSortOption? sortOption = null);
-
-        IList<ClassAnnouncement> GetClassAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId, bool onlyOwners = false, bool? graded = null);
-        IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = false, bool? graded = null, int start = 0, int count = int.MaxValue, AnnouncementSortOption? sort = null);
+        IList<ClassAnnouncement> GetClassAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId, bool? graded = null);
+        IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete,  bool? graded = null, int start = 0, int count = int.MaxValue, AnnouncementSortOption? sort = null);
         IList<ClassAnnouncement> GetClassAnnouncementsByFilter(string filter); 
         ClassAnnouncement GetLastDraft();
         IList<AnnouncementComplex> GetByActivitiesIds(IList<int> activitiesIds);
@@ -514,17 +510,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
         
 
-        public IList<ClassAnnouncement> GetClassAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId, bool onlyOwners = false, bool? graded = null)
+        public IList<ClassAnnouncement> GetClassAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId, bool? graded = null)
         {
-            return GetAnnouncementsComplex(new ClassAnnouncementsQuery
-                {
-                    FromDate = fromDate,
-                    ToDate = toDate,
-                    ClassId = classId,
-                    Graded = graded,
-                    StudentId = studentId,
-                    TeacherId = teacherId
-                }).Select(x => x.ClassAnnouncementData).ToList();
+            return GetAnnouncementsComplex(classId, studentId, teacherId, fromDate, toDate, null, graded)
+                    .Select(x => x.ClassAnnouncementData)
+                    .ToList();
+
         }
 
         public IList<ClassAnnouncement> GetClassAnnouncementsByFilter(string filter)
@@ -534,24 +525,16 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateClassAnnouncementDataAccess(u).GetClassAnnouncementByFilter(filter, Context.PersonId.Value));
         }
 
-        public IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool onlyOwners = false
-            , bool? graded = null, int start = 0, int count = int.MaxValue, AnnouncementSortOption? sort = null)
+        public IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, 
+            bool? graded = null, int start = 0, int count = int.MaxValue, AnnouncementSortOption? sort = null)
         {
-            return GetAnnouncementsComplex(new ClassAnnouncementsQuery
-                {
-                    FromDate = fromDate,
-                    ToDate = toDate,
-                    ClassId = classId,
-                    Complete = complete,
-                    Graded = graded,
-                    Start = start,
-                    Count = count,
-                }, sort);
+            return GetAnnouncementsComplex(classId,  null, null, fromDate, toDate, complete, graded, start, count, sort);
         }
 
-        public IList<AnnouncementComplex> GetAnnouncementsComplex(ClassAnnouncementsQuery query, AnnouncementSortOption? sortOption = null)
+        private IList<AnnouncementComplex> GetAnnouncementsComplex(int? classId, int? studentId, int? teacherId, DateTime? fromDate, 
+            DateTime? toDate, bool? complete, bool? graded, int start = 0, int count = Int32.MaxValue, AnnouncementSortOption? sortOption = null)
         {
-            var activities = GetActivities(query.ClassId, query.StudentId, query.TeacherId, query.FromDate, query.ToDate, query.Start, query.Count, query.Complete, query.Graded, sortOption);
+            var activities = GetActivities(classId, studentId, teacherId, fromDate, toDate, start, count, complete, graded, sortOption);
             var activitiesIds = activities.Select(x => x.Id).ToList();
             var anns = GetByActivitiesIds(activitiesIds);
             IList<AnnouncementComplex> res = null;
@@ -566,7 +549,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 var noInDbActivities = activities.Where(x => announcements.All(y => y.ClassAnnouncementData.SisActivityId != x.Id)).ToList();
                 AddActivitiesToChalkable(locator, unitOfWork, noInDbActivities);
-                announcements = locator.ClassAnnouncementService.GetByActivitiesIds(activitiesIds);
+                announcements = CreateClassAnnouncementDataAccess(locator, unitOfWork).GetByActivitiesIds(activitiesIds, locator.Context.PersonId.Value);
             }
             var res = MapActivitiesToAnnouncements(locator, unitOfWork, announcements, activities);
             return res;
@@ -576,11 +559,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             Trace.Assert(Context.PersonId.HasValue);
             return DoRead(u => CreateClassAnnouncementDataAccess(u).GetByActivitiesIds(activitiesIds, Context.PersonId.Value));
-        }
-
-        private void AddActivitiesToChalkable(IList<Activity> activities)
-        {
-            DoUpdate(u => AddActivitiesToChalkable(ServiceLocator, u, activities));
         }
 
         private static void AddActivitiesToChalkable(IServiceLocatorSchool locator, UnitOfWork u, IList<Activity> activities)
@@ -654,11 +632,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             if (needToUpdate.Count > 0)
             {
-                //using (var u = locator.SchoolDbService.GetUowForUpdate())
-                //{
-                //    CreateDataAccess(u).Update(needToUpdate);
-                //    u.Commit();
-                //}
                 CreateClassAnnouncementDataAccess(locator, u).Update(needToUpdate);
             }
             return res;

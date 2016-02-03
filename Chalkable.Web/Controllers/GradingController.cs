@@ -238,7 +238,7 @@ namespace Chalkable.Web.Controllers
         {
             var st = start ?? 0;
             var cn = count ?? 10;
-            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(null, null, classId, null, false, true, st, cn);
+            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(null, null, classId, null, true, st, cn);
             return FeedController.PrepareAnnouncementsComplexViewData(SchoolLocator, anns);
         }
 
@@ -315,7 +315,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
-        [AuthorizationFilter("Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult GradedItemsList(int gradingPeriodId)
         {
             var res = SchoolLocator.GradedItemService.GetGradedItems(gradingPeriodId);

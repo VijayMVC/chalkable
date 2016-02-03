@@ -64,7 +64,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             switch (settings.AnnouncementTypeEnum.Value)
             {
                 case AnnouncementTypeEnum.Class:
-                    return ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate, feedEndDate, classId, complete, true, null, start, count, sortOption);
+                    return ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate, feedEndDate, classId, complete, null, start, count, sortOption);
                 case AnnouncementTypeEnum.LessonPlan:
                     return _handlers[sortOption].GetLessonPlansOnly(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count);
                 case AnnouncementTypeEnum.Admin:
@@ -144,7 +144,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if (classId.HasValue || studentId.HasValue || teacherId.HasValue || !BaseSecurity.IsDistrictAdmin(Context))
             {
                 res.LessonPlans = ServiceLocator.LessonPlanService.GetLessonPlans(fromDate, toDate, classId, studentId, teacherId);
-                res.ClassAnnouncements = ServiceLocator.ClassAnnouncementService.GetClassAnnouncements(fromDate, toDate, classId, studentId, teacherId, onlyOwners);
+                res.ClassAnnouncements = ServiceLocator.ClassAnnouncementService.GetClassAnnouncements(fromDate, toDate, classId, studentId, teacherId);
             }
             if(!classId.HasValue && !teacherId.HasValue && (BaseSecurity.IsDistrictAdmin(Context) || CoreRoles.STUDENT_ROLE == Context.Role))
                 res.AdminAnnouncements = ServiceLocator.AdminAnnouncementService.GetAdminAnnouncements(null, fromDate, toDate, studentId);
