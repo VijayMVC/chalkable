@@ -249,6 +249,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
         }
 
+        protected override bool CanGetAllItems => true;
+
         protected override DbQuery SelectAdminAnnouncement(int callerId)
         {
             var dbQuery = new DbQuery();
