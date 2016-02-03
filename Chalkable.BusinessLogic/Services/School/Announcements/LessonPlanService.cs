@@ -381,6 +381,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 ClassId = classId,
                 Complete = complete,
+                Start = start,
                 Count = count,
                 FromDate = fromDate,
                 ToDate = toDate,
@@ -399,6 +400,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 ClassId = classId,
                 Complete = complete,
+                Start = start,
                 Count = count,
                 FromDate = fromDate,
                 ToDate = toDate,
@@ -417,6 +419,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 ClassId = classId,
                 Complete = complete,
+                Start = start,
                 Count = count,
                 FromDate = fromDate,
                 ToDate = toDate,
