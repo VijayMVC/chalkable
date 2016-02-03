@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -14,6 +13,8 @@ namespace Chalkable.API
     {
         public PersonEndpoint Person => new PersonEndpoint(this);
         public AnnouncementEndpoint Announcement => new AnnouncementEndpoint(this);
+        public StudyCenterEndpoint StudeCenterEndpoint => new StudyCenterEndpoint(this);
+        public GradingEndpoint GradingEndpoint => new GradingEndpoint(this);
 
         public class ResponseDto<T>
         {
