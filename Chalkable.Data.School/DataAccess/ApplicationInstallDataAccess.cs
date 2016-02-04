@@ -15,15 +15,6 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public IList<ApplicationInstall> GetByIds(IList<int> applicationInstallIds)
-        {
-            var dbQuery = new DbQuery();
-            dbQuery.Sql.Append("select * from ApplicationInstall");
-            if (applicationInstallIds != null && applicationInstallIds.Count > 0)
-                dbQuery.Sql.AppendFormat(" where Id in ({0})", applicationInstallIds.JoinString(","));
-            return ReadMany<ApplicationInstall>(dbQuery);
-        } 
-
         public IList<ApplicationInstall> GetInstalled(int personId, int schoolYearId)
         {
             var conds = new AndQueryCondition

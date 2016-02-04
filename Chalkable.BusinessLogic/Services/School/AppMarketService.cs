@@ -345,10 +345,10 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new ApplicationInstallDataAccess(uow);
-                var syId = Context.SchoolYearId.Value; //new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime.Date, Context.SchoolLocalId.Value);
+                var syId = ServiceLocator.SchoolYearService.GetCurrentSchoolYear(); //new SchoolYearDataAccess(uow).GetByDate(Context.NowSchoolYearTime.Date, Context.SchoolLocalId.Value);
                 return da.GetPersonsForApplicationInstallCount(applicationId, Context.PersonId.Value, personId, classIds, Context.Role.Id
                                                    , app.HasAdminMyApps, app.HasTeacherMyApps, app.HasStudentMyApps, app.HasAdminExternalAttach
-                                                   , app.HasStudentExternalAttach, app.HasTeacherExternalAttach, app.CanAttach, syId);
+                                                   , app.HasStudentExternalAttach, app.HasTeacherExternalAttach, app.CanAttach, syId.Id);
             }
         }
 
