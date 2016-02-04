@@ -15,6 +15,8 @@
             Button(type="submit", name="submitType", value="filter").x-hidden.filter-submit
             +Hidden('schoolId', self.getSchoolId().valueOf())
             +Hidden('schoolName', self.getSchoolName())
+            +Hidden('teacherId', self.getTeacherId() && self.getTeacherId().valueOf())
+            -console.log(self.getTeacherId() && self.getTeacherId().valueOf())
             .clear-fix
         .grid-container
             +RenderWith(self.getItemsStatistic(), chlk.templates.school.SchoolClassesStatisticTpl)

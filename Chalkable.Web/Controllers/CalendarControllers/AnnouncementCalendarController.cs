@@ -57,7 +57,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              return Json(res);
          }
 
-         [AuthorizationFilter("Teacher, Student")]
+         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
          public ActionResult ListClassAnnsByDateRange(DateTime? startDate, DateTime? endDate, int? classId)
          {
              var res = SchoolLocator.ClassAnnouncementService.GetClassAnnouncements(startDate, endDate, classId, null, null);

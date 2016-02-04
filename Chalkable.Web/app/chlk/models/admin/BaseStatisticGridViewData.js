@@ -1,6 +1,7 @@
 REQUIRE('chlk.models.admin.BaseStatistic');
 REQUIRE('chlk.models.id.SchoolYearId');
 REQUIRE('chlk.models.id.SchoolId');
+REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('ria.serialize.SJX');
 
 NAMESPACE('chlk.models.admin', function () {
@@ -27,7 +28,9 @@ NAMESPACE('chlk.models.admin', function () {
 
             Number, 'sortType',
 
-            function $(items_, sortType_, schoolId_, schoolName_, filter_){
+            chlk.models.id.SchoolPersonId, 'teacherId',
+
+            function $(items_, sortType_, schoolId_, schoolName_, filter_, teacherId_){
                 BASE();
                 if(items_)
                     this.setItems(items_);
@@ -39,6 +42,8 @@ NAMESPACE('chlk.models.admin', function () {
                     this.setSchoolName(schoolName_);
                 if(sortType_ || sortType_ == 0)
                     this.setSortType(sortType_);
+                if(teacherId_)
+                    this.setTeacherId(teacherId_);
             },
 
             VOID, function deserialize(raw){
@@ -49,6 +54,7 @@ NAMESPACE('chlk.models.admin', function () {
                 this.schoolYearId = SJX.fromValue(raw.schoolYearId, chlk.models.id.SchoolYearId);
                 this.schoolName = SJX.fromValue(raw.schoolName, String);
                 this.schoolId = SJX.fromValue(raw.schoolId, chlk.models.id.SchoolId);
+                this.teacherId = SJX.fromValue(raw.teacherId, chlk.models.id.SchoolPersonId);
             }
         ]);
 });

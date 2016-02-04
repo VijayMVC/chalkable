@@ -66,6 +66,7 @@
     <Compile Include="Controllers\IBaseController.cs" />
     <Compile Include="Endpoints\AnnouncementEndpoint.cs" />
     <Compile Include="Endpoints\Base.cs" />
+    <Compile Include="Endpoints\GradingEndpoint.cs" />
     <Compile Include="Endpoints\PersonEndpoint.cs" />
     <Compile Include="Endpoints\StudyCenterEndpoint.cs" />
     <Compile Include="Enums\AnnouncementType.cs" />

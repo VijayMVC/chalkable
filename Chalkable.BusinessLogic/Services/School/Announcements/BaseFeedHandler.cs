@@ -38,20 +38,21 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             var ct = count != int.MaxValue ? count + 1 : count;
 
-            var classAnns = locator.ClassAnnouncementService.GetClassAnnouncementsForFeed(fromDate, toDate, classId, complete, true, null, start, ct, SortOption);
+            var classAnns = locator.ClassAnnouncementService.GetClassAnnouncementsForFeed(fromDate, toDate, classId, complete, null, start, ct, SortOption);
 
             if (start > 0 && classAnns.Count == 0)
                 return classAnns;
 
             TFilterBy from, to;
-            IdentifyFilterInterval(out from, out to, classAnns, start, count);
+            bool includeFrom, includeTo;
+
+            IdentifyFilterInterval(out from, out to, out includeFrom, out includeTo, classAnns, start, count);
 
             //remove(count + 1) - item
             if (classAnns.Count > count)
                 classAnns.RemoveAt(classAnns.Count - 1);
 
-            bool includeFrom = _sortDesc, includeTo = !_sortDesc;
-
+            
             var lps = InternalGetLessonPlans(locator, fromDate, toDate, classId, complete, 0, int.MaxValue, from, to, includeFrom, includeTo);
 
             var res = MerageItems(classAnns, lps);
@@ -62,22 +63,31 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return res.ToList();
         }
 
-        protected virtual void IdentifyFilterInterval(out TFilterBy from, out TFilterBy to, IList<AnnouncementComplex> anns, int start, int count)
+        protected virtual void IdentifyFilterInterval(out TFilterBy from, out TFilterBy to, out bool includeFrom, out bool includeTo, IList<AnnouncementComplex> anns, int start, int count)
         {
             //Change data range for other feed items
 
             from = default(TFilterBy);
             to = default(TFilterBy);
 
+            includeFrom = true;
+            includeTo = true;
+
             var classAnns = anns.Where(x=>x.ClassAnnouncementData != null).Select(x => x.ClassAnnouncementData).ToList();
             var isNotFistPage = start > 0 && classAnns.Count > 0;
             var isNotLastPage = classAnns.Count > count;
 
-            if (isNotFistPage || _sortDesc)
+            if (isNotFistPage && !_sortDesc || isNotLastPage && _sortDesc)
+            {
                 from = classAnns.Min(FilterSelector);
+                includeFrom = _sortDesc;
+            }
 
             if (isNotLastPage && !_sortDesc || isNotFistPage && _sortDesc)
+            {
                 to = classAnns.Max(FilterSelector);
+                includeTo = !_sortDesc;
+            }
         }
 
         protected virtual IList<AnnouncementComplex> MerageItems(IList<AnnouncementComplex> anns1, IList<AnnouncementComplex> anns2)

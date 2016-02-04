@@ -27,8 +27,8 @@ NAMESPACE('chlk.models.school', function () {
 
             ArrayOf(chlk.models.id.SchoolPersonId), 'teachersIds',
 
-            function getNoAccessMsg(){
-                return 'The current user does not have permission to access section \'' + this.getId().valueOf() + '\'';
+            function getNoAccessMsg(name){
+                return 'User does not have permission to access ' + name + ' for section \'' + this.getId().valueOf() + '\'';
             },
 
             OVERRIDE, VOID, function deserialize(raw){
