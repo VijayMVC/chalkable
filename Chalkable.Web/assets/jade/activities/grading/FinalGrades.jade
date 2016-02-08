@@ -1,7 +1,7 @@
 .grades-page.grading-summary-grid.final-page
     -var selectedId = self.getClassId()
     -var gp = self.getCurrentFinalGrade()
-    -var selectedGradingPeriodId = gp.getGradingPeriod().getId()
+    -var selectedGradingPeriodId = gp && gp.getGradingPeriod().getId()
     .autocomplete-list.final-grades
 
     if self.isInProfile()

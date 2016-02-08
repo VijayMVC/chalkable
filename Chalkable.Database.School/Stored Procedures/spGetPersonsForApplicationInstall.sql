@@ -27,8 +27,8 @@ PRINT(@callerRoleId);
 
 if exists (select * from @classIds)
 begin
-insert into @classIdsT(value)
-select value from @classIds
+	insert into @classIdsT(value)
+		select value from @classIds
 end
 
 
@@ -38,7 +38,7 @@ declare @canInstallForAdmin bit = @hasAdminMyApps | @hasAdminExternalAttach
 
 declare @canInstall bit = 0
 if (
-	(@callerRoleId = 3 and @hasStudentMyApps = 1)
+	(@callerRoleId = 3 and (@hasStudentMyApps = 1 or @hasStudentExternalAttach = 1))
 	or (@callerRoleId = 2 and (@canInstallForStudent = 1 or @canInstallForTeacher = 1))
 	or (@callerRoleId = 10 and (@canInstallForAdmin = 1 or @canInstallForStudent = 1 or @canInstallForTeacher = 1)))
 set @canInstall = 1

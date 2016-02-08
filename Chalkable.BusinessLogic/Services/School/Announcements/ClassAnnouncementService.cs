@@ -603,11 +603,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             start = start + 1;
             var intSort = (int?) sort;
             if (Context.Role == CoreRoles.STUDENT_ROLE || studentId.HasValue)
-                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, Context.PersonId.Value, intSort, start, end, toDate, fromDate, complete, graded, classId);
+                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, studentId ?? Context.PersonId.Value, intSort, start, end, toDate, fromDate, complete, graded, classId);
             if (classId.HasValue)
                 return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, intSort, toDate, fromDate, complete);
             if (Context.Role == CoreRoles.TEACHER_ROLE || teacherId.HasValue)
-                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, Context.PersonId.Value, intSort, start, end, toDate, fromDate, complete);
+                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, teacherId ?? Context.PersonId.Value, intSort, start, end, toDate, fromDate, complete);
             return new List<Activity>();
         }
 

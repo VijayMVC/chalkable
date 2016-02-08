@@ -132,7 +132,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return res;
         }
         
-        public AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null, int? teacherId = null)
+        public AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, 
+            int? studentId = null, int? teacherId = null)
         {
             var res = new AnnouncementComplexList
                 {

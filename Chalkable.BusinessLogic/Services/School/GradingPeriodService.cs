@@ -10,7 +10,8 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IGradingPeriodService
     {
-        IList<GradingPeriod> GetGradingPeriodsDetails(int schoolYearId, int? classId = null);
+        IList<GradingPeriod> GetGradingPeriodsDetailsByClassId(int classId);
+        IList<GradingPeriod> GetGradingPeriodsDetails(int schoolYearId);
         GradingPeriod GetGradingPeriodDetails(int schoolYearId, DateTime date);
         GradingPeriod GetGradingPeriodById(int id);
         void Add(IList<GradingPeriod> gradingPeriods);
@@ -24,18 +25,28 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public IList<GradingPeriod> GetGradingPeriodsDetails(int schoolYearId, int? classId = null)
+        public IList<GradingPeriod> GetGradingPeriodsDetails(int schoolYearId)
         {
             using (var uow = Read())
             {
                 return new GradingPeriodDataAccess(uow).GetGradingPeriodsDetails(new GradingPeriodQuery
                     {
-                        SchoolYearId = schoolYearId,
-                        ClassId = classId
+                        SchoolYearId = schoolYearId
                     });
             }
         }
-        
+
+        public IList<GradingPeriod> GetGradingPeriodsDetailsByClassId(int classId)
+        {
+            using (var uow = Read())
+            {
+                return new GradingPeriodDataAccess(uow).GetGradingPeriodsDetails(new GradingPeriodQuery
+                {
+                    ClassId = classId
+                });
+            }
+        }
+
         public void Add(IList<GradingPeriod> gradingPeriods)
         {
             if (!BaseSecurity.IsDistrictAdmin(Context))

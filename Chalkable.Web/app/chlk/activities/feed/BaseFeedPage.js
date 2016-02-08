@@ -21,6 +21,12 @@ NAMESPACE('chlk.activities.feed', function () {
             [ria.mvc.DomEventBind('submit', 'form')],
             [[ria.dom.Dom, ria.dom.Event]],
             function formSubmit(node, event){
+                var fromNode = node.find('[name="fromdate"]'),
+                    toNode = node.find('[name="todate"]');
+                if(!fromNode.getValue() && toNode.getValue() || fromNode.getValue() && !toNode.getValue()){
+                    node.find('.date-range').find('input').setValue('');
+                }
+
                 this.prepareSelect(this.dom.find('.gradingPeriodSelect'));
                 this.prepareSelect(this.dom.find('.annTypeSelect'));
             },
