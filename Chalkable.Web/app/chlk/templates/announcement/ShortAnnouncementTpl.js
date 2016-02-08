@@ -13,6 +13,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             String, 'announcementTypeName',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.AnnouncementTypeEnum, 'type',
+
+            [ria.templates.ModelPropertyBind],
             Number, 'order',
 
             [ria.templates.ModelPropertyBind],

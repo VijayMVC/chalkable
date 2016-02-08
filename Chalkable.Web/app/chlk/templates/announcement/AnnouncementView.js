@@ -39,9 +39,6 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.people.User, 'owner',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.announcement.AnnouncementTypeEnum, 'type',
-
-            [ria.templates.ModelPropertyBind],
             String, 'content',
 
             [ria.templates.ModelPropertyBind],
