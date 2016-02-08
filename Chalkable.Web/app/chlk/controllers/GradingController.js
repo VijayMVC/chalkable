@@ -231,6 +231,7 @@ NAMESPACE('chlk.controllers', function (){
                 var alternateScores = this.getContext().getSession().get(ChlkSessionConstants.ALTERNATE_SCORES, []);
                 var gradingComments = this.getContext().getSession().get(ChlkSessionConstants.GRADING_COMMENTS, []);
                 var gradingPeriod = this.getCurrentGradingPeriod();
+                var canEdit = false;
                 model.setClassId(classId);
                 model.setGradingPeriodId(gradingPeriod.getId());
                 model.setAlternateScores(alternateScores);
@@ -238,7 +239,7 @@ NAMESPACE('chlk.controllers', function (){
                 model.setHasAccessToLE(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.AWARD_LE_CREDITS_CLASSROOM));
                 var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
                 if(model.getCurrentGradingGrid()){
-                    var canEdit = !this.isPageReadonly_('MAINTAIN_CLASSROOM', 'MAINTAIN_CLASSROOM_ADMIN', clazz_);
+                    canEdit = !this.isPageReadonly_('MAINTAIN_CLASSROOM', 'MAINTAIN_CLASSROOM_ADMIN', clazz_);
                     var canEditAvg = canEdit ||  !this.isPageReadonly_('MAINTAIN_STUDENT_AVERAGES', 'MAINTAIN_CLASSROOM_ADMIN', clazz_);
                     model.getCurrentGradingGrid().setSchoolOptions(schoolOptions);
                     model.getCurrentGradingGrid().setAbleEdit(canEdit);
@@ -256,11 +257,12 @@ NAMESPACE('chlk.controllers', function (){
             function prepareStandardsGridModel(model, classId, clazz_){
                 var gradingPeriod = this.getCurrentGradingPeriod();
                 var alphaGrades = model.getAlphaGrades();
+                var canEdit = false;
                 model.setClassId(classId);
                 model.setGradingPeriodId(gradingPeriod.getId());
                 var schoolOptions = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_OPTIONS, null);
                 if(model.getCurrentGradingGrid()){
-                    var canEdit = !this.isPageReadonly_('MAINTAIN_CLASSROOM', 'MAINTAIN_CLASSROOM_ADMIN', clazz_);
+                    canEdit = !this.isPageReadonly_('MAINTAIN_CLASSROOM', 'MAINTAIN_CLASSROOM_ADMIN', clazz_);
                     model.getCurrentGradingGrid().setSchoolOptions(schoolOptions);
                     model.getCurrentGradingGrid().setAbleEdit(canEdit);
                     model.getCurrentGradingGrid().setGradable(alphaGrades && (alphaGrades.length || false) && canEdit);
