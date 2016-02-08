@@ -23,13 +23,26 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             GradingPeriodStorage = new DemoGradingPeriodStorage();
         }
 
-        public IList<GradingPeriod> GetGradingPeriodsDetails(int schoolYearId, int? classId = null)
+        public IList<GradingPeriod> GetGradingPeriodsDetails(int schoolYearId)
         {
-            return GetGradingPeriodsDetails(new GradingPeriodQuery
+            using (var uow = Read())
             {
-                SchoolYearId = schoolYearId,
-                ClassId = classId
-            });
+                return new GradingPeriodDataAccess(uow).GetGradingPeriodsDetails(new GradingPeriodQuery
+                {
+                    SchoolYearId = schoolYearId
+                });
+            }
+        }
+
+        public IList<GradingPeriod> GetGradingPeriodsDetailsByClassId(int classId)
+        {
+            using (var uow = Read())
+            {
+                return new GradingPeriodDataAccess(uow).GetGradingPeriodsDetails(new GradingPeriodQuery
+                {
+                    ClassId = classId
+                });
+            }
         }
 
         private static IList<GradingPeriod> Convert(IEnumerable<GradingPeriod> gps)
