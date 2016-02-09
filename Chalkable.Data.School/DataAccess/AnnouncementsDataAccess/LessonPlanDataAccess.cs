@@ -276,7 +276,9 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
                 };
             var dbQuery = SelectLessonPlan(conds);
-            FilterLessonPlanByCallerId(dbQuery, personId);
+            var callerIdParam = "callerId";
+            dbQuery.Sql.AppendFormat($" and ClassRef in (select ClassRef from ClassTeacher where ClassTeacher.PersonRef =@{callerIdParam})");
+            dbQuery.Parameters.Add(callerIdParam, personId);
             Orm.OrderBy(dbQuery, LessonPlan.VW_LESSON_PLAN_NAME, Announcement.CREATED_FIELD, Orm.OrderType.Desc);
             return ReadOneOrNull<LessonPlan>(dbQuery);
         }
