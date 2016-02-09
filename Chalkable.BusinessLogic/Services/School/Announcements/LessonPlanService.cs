@@ -10,6 +10,7 @@ using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model.Announcements;
+using Microsoft.ReportingServices.Interfaces;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
@@ -56,12 +57,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         protected LessonPlanDataAccess CreateLessonPlanDataAccess(UnitOfWork unitOfWork)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
-            if (BaseSecurity.IsTeacher(Context))
-                return new LessonPlanForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
+            if (BaseSecurity.IsDistrictOrTeacher(Context))
+            {
+                if (Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN) || Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN))
+                    return new LessonPlanForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value);
+                if (Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM) || Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM))
+                    return new LessonPlanForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
+            }
             if (Context.Role == CoreRoles.STUDENT_ROLE)
                 return new LessonPlanForStudentDataAccess(unitOfWork, Context.SchoolYearId.Value);
-            if (BaseSecurity.IsDistrictAdmin(Context))
-                return new LessonPlanForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value);
 
             throw new ChalkableException("Not supported role for lesson plan");
         }
@@ -304,26 +308,30 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public override void SetAnnouncementsAsComplete(DateTime? toDate, bool complete)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            CompleteAnnouncement(Context.PersonId.Value, complete, toDate);
-        }
-
-        private void CompleteAnnouncement(int personId, bool complete, DateTime? toDate)
-        {
             DoUpdate(u =>
             {
-                var anns = CreateLessonPlanDataAccess(u).GetLessonPlansOrderedByDate(new LessonPlansQuery
-                {
-                    RoleId = Context.RoleId,
-                    ToDate = toDate,
-                    PersonId = personId
-                }).Announcements;
-
-                var da = new AnnouncementRecipientDataDataAccess(u);
-                foreach (var ann in anns)
-                    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementTypeEnum.LessonPlan, null, personId, null, complete, null, null);
+                SetAnnouncementsAsComplete(u, ServiceLocator, toDate, complete);
             });
         }
 
+
+        public static void SetAnnouncementsAsComplete(UnitOfWork unitOfWork, IServiceLocatorSchool locator, DateTime? toDate, bool complete)
+        {
+
+            //TODO: remove this get method later 
+            //var anns = CreateLessonPlanDataAccess(unitOfWork, locator).GetLessonPlansOrderedByDate(new LessonPlansQuery
+            //{
+            //    RoleId = locator.Context.RoleId,
+            //    ToDate = toDate,
+            //    PersonId = locator.Context.PersonId,
+            //}).Announcements;
+
+            var da = new AnnouncementRecipientDataDataAccess(unitOfWork);
+            da.UpdateAnnouncementRecipientData(null, (int)AnnouncementTypeEnum.LessonPlan, locator.Context.SchoolYearId, locator.Context.PersonId, locator.Context.RoleId, complete, toDate, null);
+            //foreach (var ann in anns)
+            //    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementTypeEnum.LessonPlan, null, locator.Context.PersonId, null, complete, null, null);
+        }
+        
         public override bool CanAddStandard(int announcementId)
         {
             return DoRead(u => BaseSecurity.IsTeacher(Context) && CreateLessonPlanDataAccess(u).CanAddStandard(announcementId));
