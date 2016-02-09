@@ -25,7 +25,7 @@ NAMESPACE('chlk.models.grading', function () {
             Boolean, 'gradable',
 
             function getTooltipText(){
-                return (this.getAvg() ? Msg.Avg + " " + this.getAvg() : 'No grades yet');
+                return (this.getAvg() ? Msg.Avg + " " + this.getAvg().toFixed(2) : 'No grades yet');
             }
         ]);
 });
