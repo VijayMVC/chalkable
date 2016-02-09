@@ -599,15 +599,24 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if (!Context.SchoolYearId.HasValue)
                 throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
             Trace.Assert(Context.PersonId.HasValue);
+
+            var hasPermissions = Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);        
             var end = count + start;
             start = start + 1;
             var intSort = (int?) sort;
+
             if (Context.Role == CoreRoles.STUDENT_ROLE || studentId.HasValue)
                 return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, studentId ?? Context.PersonId.Value, intSort, start, end, toDate, fromDate, complete, graded, classId);
+
             if (classId.HasValue)
                 return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, intSort, toDate, fromDate, complete);
-            if (Context.Role == CoreRoles.TEACHER_ROLE || teacherId.HasValue)
-                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, teacherId ?? Context.PersonId.Value, intSort, start, end, toDate, fromDate, complete);
+
+            if (teacherId.HasValue && hasPermissions)
+                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, teacherId.Value, intSort, start, end, toDate, fromDate, complete);
+
+            if (Context.Role == CoreRoles.TEACHER_ROLE)
+                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, Context.PersonId.Value, intSort, start, end, toDate, fromDate, complete);
+
             return new List<Activity>();
         }
 
