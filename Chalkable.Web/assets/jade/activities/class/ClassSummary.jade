@@ -1,0 +1,20 @@
+-var clazz = self.getClazz()
+
+.profile-page.class-profile
+    h2.page-title=Msg.Class_profile
+    +ProfileTopBar(self, 'details')
+    .summary-view
+        #top-panel
+            #avatar-photo-conainer.left-block.panel-block
+                .class-image
+                    .img-container
+                        +ClassImg(clazz, 92, 164)
+            #info-panel.central-block.panel-block
+                -var displayName =clazz.getName()
+                h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
+                pre.status=clazz.getStatusText()
+        .feed-stats
+            +RenderWith(clazz.getFeed(), chlk.templates.feed.Feed)(
+                currentUser = self.getCurrentUser()
+                userRole = self.getUserRole()
+            )
