@@ -143,11 +143,14 @@ namespace Chalkable.BusinessLogic.Model
         public bool HasTeacherExternalAttach { get; set; }
         public bool HasStudentExternalAttach { get; set; }
         public bool HasAdminExternalAttach { get; set; }
-
+        public bool HasSysAdminSettings { get; set; }
+        public bool HasDistricAdminSettings { get; set; }
+        public bool HasStudentProfile { get; set; }
         public bool CanAttach { get; set; }
         public bool ShowInGradeView { get; set; }
         public static ApplicationAccessInfo Create(bool hasStudentMyApps, bool hasTeacherMyApps, bool hasAdminMyApps, bool hasParentMyApps
-            , bool canAttach, bool showInGradeView, bool hasTeacherExternalAttach, bool hasStudentExternalAttach, bool hasAdminExternalAttach)
+            , bool canAttach, bool showInGradeView, bool hasTeacherExternalAttach, bool hasStudentExternalAttach, bool hasAdminExternalAttach,
+            bool hasSysAdminSettings, bool hasDistricAdminSettings, bool hasStudentProfile)
         {
             return new ApplicationAccessInfo
             {
@@ -158,6 +161,9 @@ namespace Chalkable.BusinessLogic.Model
                 HasAdminExternalAttach = hasAdminExternalAttach,
                 HasTeacherExternalAttach = hasTeacherExternalAttach,
                 HasStudentExternalAttach = hasStudentExternalAttach,
+                HasSysAdminSettings = hasSysAdminSettings,
+                HasDistricAdminSettings = hasDistricAdminSettings,
+                HasStudentProfile = hasStudentProfile,
                 CanAttach = canAttach,
                 ShowInGradeView = showInGradeView
             };
@@ -175,6 +181,9 @@ namespace Chalkable.BusinessLogic.Model
                 HasAdminExternalAttach = application.HasAdminExternalAttach,
                 HasTeacherExternalAttach = application.HasTeacherExternalAttach,
                 HasStudentExternalAttach = application.HasStudentExternalAttach,
+                HasSysAdminSettings = application.HasSysAdminSettings,
+                HasDistricAdminSettings = application.HasDistricAdminSettings,
+                HasStudentProfile = application.HasStudentProfile,
                 ShowInGradeView = application.ShowInGradeView
             };
         }

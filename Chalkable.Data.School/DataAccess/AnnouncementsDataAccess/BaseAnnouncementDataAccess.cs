@@ -17,15 +17,16 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
         
         private const string GET_ANNOUNCEMENT_RECIPIENT_PERSON = "spGetAnnouncementRecipientPersons";
-        
         private const string CALLER_ID_PARAM = "callerId";
    
-        public abstract AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query);
+
+        //public abstract AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query);
         public abstract IList<TAnnouncement> GetAnnouncements(QueryCondition conds, int callerId); 
         public abstract TAnnouncement GetAnnouncement(int id, int callerId);
         public abstract bool CanAddStandard(int announcementId);
-        public abstract IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId, bool onlyOwner = true); 
+        public abstract IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId, bool onlyOwner = true);
 
+        protected abstract bool CanGetAllItems { get; }
 
         public override void Update(TAnnouncement announcement)
         {
@@ -55,6 +56,60 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             };
             ExecuteStoredProcedure("spDeleteAnnouncements", paraments);
         }
+
+        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int callerId)
+        {
+            var parameters = new Dictionary<string, object>
+                {
+                    {CALLER_ID_PARAM, callerId},
+                    {"announcementId", announcementId}
+                };
+            using (var reader = ExecuteStoredProcedureReader(GET_ANNOUNCEMENT_RECIPIENT_PERSON, parameters))
+            {
+                var res = new List<Person>();
+                while (reader.Read())
+                {
+                    res.Add(PersonDataAccess.ReadPersonData(reader));
+                }
+                return res;
+            }
+        }
+
+        //protected virtual AnnouncementQueryResult InternalGetAnnouncements<TAnnouncementsQuery>(string procedureName, TAnnouncementsQuery query) where TAnnouncementsQuery : AnnouncementsQuery
+        //{
+        //    return InternalGetAnnouncements(procedureName, query, null);
+        //}
+
+        protected AnnouncementQueryResult InternalGetAnnouncements<TAnnouncementsQuery>(string procedureName, TAnnouncementsQuery query, IDictionary<string, object> additionalParameters) where TAnnouncementsQuery : AnnouncementsQuery
+        {
+            var ps = new Dictionary<string, object>
+            {
+                ["Id"] = query.Id,
+                ["personId"] = query.PersonId,
+                ["roleId"] = query.RoleId,
+                ["fromDate"] = query.FromDate,
+                ["toDate"] = query.ToDate,
+                ["start"] = query.Start,
+                ["count"] = query.Count,
+                ["complete"] = query.Complete,
+                ["ownedOnly"] = !CanGetAllItems,
+                ["includeFrom"] = query.IncludeFrom,
+                ["includeTo"] = query.IncludeTo,
+                ["sort"] = query.Sort
+            };
+            if (additionalParameters != null)
+                foreach (var parameter in additionalParameters)
+                {
+                    if(ps.ContainsKey(parameter.Key)) continue;
+                    ps.Add(parameter.Key, parameter.Value);
+                }
+            using (var reader = ExecuteStoredProcedureReader(procedureName, ps))
+            {
+                return ReadAnnouncementsQueryResult(reader, query);
+            }
+        }
+
+
         protected IList<AnnouncementDetails> GetDetailses(string procedureName, IDictionary<string, object> parameters)
         {
             using (var reader = ExecuteStoredProcedureReader(procedureName, parameters))
@@ -63,7 +118,10 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
 
-
+        protected AnnouncementDetails BuildGetDetailsResult(SqlDataReader reader)
+        {
+            return BuildGetDetailsesResult(reader).FirstOrDefault();
+        }
         protected virtual IList<AnnouncementDetails> BuildGetDetailsesResult(SqlDataReader reader)
         {
             IList<AnnouncementDetails> res = new List<AnnouncementDetails>();
@@ -101,12 +159,10 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
 
         protected abstract TAnnouncement ReadAnnouncementData(AnnouncementComplex announcement, SqlDataReader reader);
-
-        protected AnnouncementDetails BuildGetDetailsResult(SqlDataReader reader)
-        {
-            return BuildGetDetailsesResult(reader).FirstOrDefault();
-        }
         
+
+        
+       
         protected AnnouncementQueryResult ReadAnnouncementsQueryResult(SqlDataReader reader, AnnouncementsQuery query)
         {
             var res = new AnnouncementQueryResult { Query = query };
@@ -125,89 +181,34 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return res;
         }
         
-        public IList<Person> GetAnnouncementRecipientPersons(int announcementId, int callerId)
-        {
-            var parameters = new Dictionary<string, object>
-                {
-                    {CALLER_ID_PARAM, callerId},
-                    {"announcementId", announcementId}
-                };
-            using (var reader = ExecuteStoredProcedureReader(GET_ANNOUNCEMENT_RECIPIENT_PERSON, parameters))
-            {
-                var res = new List<Person>();
-                while (reader.Read())
-                {
-                    res.Add(PersonDataAccess.ReadPersonData(reader));
-                }
-                return res;
-            }
-        }
+        
     }
-
-    public class AnnouncementDataAccess : DataAccessBase<Announcement>
-    {
-        public AnnouncementDataAccess(UnitOfWork unitOfWork) : base(unitOfWork)
-        {
-        }
-
-        public AnnouncementTypeEnum GetAnnouncementType(int announcementId)
-        {
-            var dbQuery = new DbQuery();
-            dbQuery.Sql.AppendFormat(@"select  LessonPlan.Id as LessonPlan_Id,
-		                                       AdminAnnouncement.Id as AdminAnnouncement_Id,
-		                                       ClassAnnouncement.Id as ClassAnnouncement_Id
-                                        from Announcement
-                                        left join LessonPlan on LessonPlan.Id = Announcement.Id
-                                        left join AdminAnnouncement on AdminAnnouncement.Id = Announcement.Id
-                                        left join ClassAnnouncement on ClassAnnouncement.Id = Announcement.Id
-                                    ");
-            new AndQueryCondition{{Announcement.ID_FIELD, announcementId}}.BuildSqlWhere(dbQuery, typeof(Announcement).Name);
-            return Read(dbQuery, reader =>
-                {
-                    reader.Read();
-                    if(!reader.IsDBNull(reader.GetOrdinal("LessonPlan_Id")))
-                        return AnnouncementTypeEnum.LessonPlan;
-                    if(!reader.IsDBNull(reader.GetOrdinal("AdminAnnouncement_Id")))
-                        return AnnouncementTypeEnum.Admin;
-                    if(!reader.IsDBNull(reader.GetOrdinal("ClassAnnouncement_Id")))
-                        return AnnouncementTypeEnum.Class;
-                    throw new NoAnnouncementException();
-                });
-        }
-    }
-
-
+    
     public class AnnouncementsQuery
     {
         public int Start { get; set; }
         public int Count { get; set; }
         public int? Id { get; set; }
         public int? RoleId { get; set; }
-        public int? ClassId { get; set; }
         public int? PersonId { get; set; }
-        public int? MarkingPeriodId { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public DateTime? Now { get; set; }
         public bool? Complete { get; set; }
-        public bool OwnedOnly { get; set; }
-        public bool GradedOnly { get; set; }
-        public bool AllSchoolItems { get; set; }
+       // public bool OwnedOnly { get; set; }
+        public bool Sort { get; set; }
+        public bool IncludeFrom { get; set; }
+        public bool IncludeTo { get; set; }
 
-        public IList<int> SisActivitiesIds { get; set; }
-
-        public bool? Graded { get; set; }
-        public IList<int> GradeLevelsIds { get; set; }
-        public int? StudentId { get; set; }
-
-        public int? GalleryCategoryId { get; set; }
-
-        public AnnouncementSortOption? Sort { get; set; }
+        public string FromTitle { get; set; }
+        public string ToTitle { get; set; }
 
         public AnnouncementsQuery()
         {
             Start = 0;
             Count = int.MaxValue;
+            IncludeFrom = true;
+            IncludeTo = true;
         }
     }
 

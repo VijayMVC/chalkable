@@ -64,6 +64,14 @@ namespace Chalkable.Data.Master.Model
         public const string HAS_ADMIN_EXTERNAL_ATTACH_FIELD = "HasAdminExternalAttach";
         public bool HasAdminExternalAttach { get; set; }
 
+        public const string HAS_SYS_ADMIN_SETTINGS_FIELD = "HasSysAdminSettings";
+        public bool HasSysAdminSettings { get; set; }
+
+        public const string HAS_DISTRICT_ADMIN_SETTINGS_FIELD = "HasDistricAdminSettings";
+        public bool HasDistricAdminSettings { get; set; }
+
+        public const string HAS_STUDENT_PROFILE_FIELD = "HasStudentProfile";
+        public bool HasStudentProfile { get; set; }
 
         [NotDbFieldAttr]
         public bool? Ban { get; set; }

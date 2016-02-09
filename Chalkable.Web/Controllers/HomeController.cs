@@ -9,9 +9,7 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
-using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
@@ -247,7 +245,7 @@ namespace Chalkable.Web.Controllers
             var leParams = SchoolLocator.LeService.GetLEParams();
 
             PrepareJsonData(leParams, ViewConstants.LE_PARAMS);
-            PrepareJsonData(Context.Claims, ViewConstants.USER_CLAIMS);
+            PrepareJsonData(PersonClaimViewData.Create(Context.Claims), ViewConstants.USER_CLAIMS);
             return district;
         }
 

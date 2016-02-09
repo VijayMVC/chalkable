@@ -25,5 +25,20 @@ namespace Chalkable.Data.School.DataAccess
             };
             return ExecuteStoredProcedurePaginated<Staff>("spSearchStaff", ps, start, count);
         }
+
+
+        public IList<ShortStaffSummary> GetShortStaffSummary(int schoolYearId, string filter, int start, int count, int? sortType)
+        {
+            var ps = new Dictionary<string, object>
+            {
+                ["schoolYearId"] = schoolYearId,
+                ["filter"] = string.IsNullOrWhiteSpace(filter) ? null : '%'+filter+'%',
+                ["start"] = start,
+                ["count"] = count,
+                ["sortType"] = sortType
+            };
+
+            return ExecuteStoredProcedureList<ShortStaffSummary>("spGetShortStaffSummary", ps);
+        } 
     }
 }

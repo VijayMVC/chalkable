@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Model;
@@ -18,9 +19,10 @@ namespace Chalkable.Web.Models.ClassesViewData
         public int? DisciplinesCount { get; set; }
         public decimal? Average { get; set; }
         public string ClassNumber { get; set; }
+        public IList<int> TeacherIds { get; set; } 
         public static ClassStatsViewData Create(ClassStatsInfo classDetails)
         {
-            return new ClassStatsViewData()
+            return new ClassStatsViewData
             {
                 Id = classDetails.Id,
                 Name = classDetails.Name,
@@ -32,15 +34,9 @@ namespace Chalkable.Web.Models.ClassesViewData
                 AttendancesCount = classDetails.AttendancesCount,
                 Average = classDetails.Average,
                 DisciplinesCount = classDetails.DisciplinesCount,
-                ClassNumber = classDetails.ClassNumber
+                ClassNumber = classDetails.ClassNumber,
+                TeacherIds = classDetails.TeacherIds
             };
         }
-
-        public static PaginatedList<ClassStatsViewData> Create(PaginatedList<ClassStatsInfo> classesDetails)
-        {
-            return new PaginatedList<ClassStatsViewData>(classesDetails.Select(Create), classesDetails.PageIndex,
-                classesDetails.PageSize, classesDetails.TotalCount);
-        }
-
     }
 }

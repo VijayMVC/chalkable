@@ -141,14 +141,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private ChalkableGradeBook GetGradeBooks(int classId, GradingPeriod gradingPeriod, Gradebook gradebook)
         {
             var students = ServiceLocator.StudentService.GetClassStudents(classId, gradingPeriod.MarkingPeriodRef);
-            var annQuery = new AnnouncementsQuery
+            var annQuery = new ClassAnnouncementsQuery
             {
                 ClassId = classId,
                 FromDate = gradingPeriod.StartDate,
                 ToDate = gradingPeriod.EndDate
             };
-            var anns = ServiceLocator.ClassAnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
-            return BuildGradeBook(gradebook, gradingPeriod, anns, students);
+            //TODO : rewrite this 
+            throw new NotImplementedException();
+            //var anns = ServiceLocator.ClassAnnouncementService.GetAnnouncementsComplex(annQuery, null, gradebook.Activities.ToList());
+            //return BuildGradeBook(gradebook, gradingPeriod, anns, students);
         }
 
         private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod,
@@ -159,15 +161,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 GradingPeriod = gradingPeriod,
                 Options = ChalkableClassOptions.Create(stiGradeBook.Options),
                 Averages = stiGradeBook.StudentAverages.Select(ChalkableStudentAverage.Create).ToList(),
-                Students = students
+                Students = students,
+                Announcements = PrepareAnnouncementDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students)
             };
-            var stAvgs = stiGradeBook.StudentAverages.Where(x => x.IsGradingPeriodAverage
-                && gradingPeriod.Id == x.GradingPeriodId).ToList();
-            stAvgs = stAvgs.Where(x => x.CalculatedNumericAverage.HasValue || x.EnteredNumericAverage.HasValue).ToList();
-            if (stAvgs.Count > 0)
-                gradeBook.Avg = (int)stAvgs.Average(x => (x.CalculatedNumericAverage ?? x.EnteredNumericAverage) ?? 0);
-
-            gradeBook.Announcements = PrepareAnnouncementDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students);
             if (!stiGradeBook.Options.IncludeWithdrawnStudents)
             {
                 gradeBook.Students = new List<StudentDetails>();

@@ -276,16 +276,29 @@ NAMESPACE('chlk.controllers', function (){
             return currentSchoolYearId;
         },
 
+        function prepareClassForSummary(classes){
+            classes.forEach(function(clazz){
+                clazz.setAttendancesProfileEnabled(!this.isPageReadonly_('VIEW_CLASSROOM_ATTENDANCE', 'VIEW_CLASSROOM_ATTENDANCE_ADMIN', clazz));
+                clazz.setDisciplinesProfileEnabled(!this.isPageReadonly_('VIEW_CLASSROOM_DISCIPLINE', 'VIEW_CLASSROOM_DISCIPLINE_ADMIN', clazz));
+                clazz.setGradingProfileEnabled(!this.isPageReadonly_('VIEW_CLASSROOM', 'VIEW_CLASSROOM_ADMIN', clazz));
+            }, this);
+        },
+
         [chlk.controllers.SidebarButton('classes')],
-        [[chlk.models.id.SchoolId, String, chlk.models.id.SchoolPersonId]],
-        function classesSummaryAction(schoolId, schoolName, teacherId_){
+        [[chlk.models.id.SchoolId, String, chlk.models.id.SchoolPersonId, Number, String]],
+        function classesSummaryAction(schoolId, schoolName, teacherId_, sortType_, filter_){
+            sortType_ = sortType_ || chlk.models.admin.ClassSortTypeEnum.CLASS_ASC.valueOf();
             var result = this.schoolYearService.list(schoolId)
                 .then(function(years){
                     var currentSchoolYearId = this.getCurrentYearId_(years);
-                    return this.classService.getClassesStatistic(currentSchoolYearId, 0, null, teacherId_)
+                    return this.classService.getClassesStatistic(currentSchoolYearId, 0, filter_, teacherId_, sortType_)
                         .then(function(classes){
-                            return new chlk.models.school.SchoolSummaryViewData(schoolName, schoolId, currentSchoolYearId, years, new chlk.models.admin.BaseStatisticGridViewData(classes));
-                        })
+                            this.prepareClassForSummary(classes);
+
+                            return new chlk.models.school.SchoolSummaryViewData(schoolName, schoolId, currentSchoolYearId, years,
+                                new chlk.models.admin.BaseStatisticGridViewData(classes, sortType_, schoolId, schoolName, filter_, teacherId_),
+                                filter_, teacherId_);
+                        }, this)
                 }, this)
                 .catchException(chlk.lib.exception.ChalkableException, function(exception) {
                     return this.ShowMsgBox(exception.getMessage(), 'oops',[{ text: Msg.GOT_IT.toUpperCase() }])
@@ -305,21 +318,23 @@ NAMESPACE('chlk.controllers', function (){
         function classesStatisticAction(model){
             var isFilter = model.getSubmitType() != 'scroll';
             var start = isFilter ? 0 : model.getStart();
-            var result = this.classService.getClassesStatistic(model.getSchoolYearId(), start, model.getFilter())
-                .then(function(model){
-                    return new chlk.models.admin.BaseStatisticGridViewData(model);
-                })
+            var result = this.classService.getClassesStatistic(model.getSchoolYearId(), start, model.getFilter(), model.getTeacherId(), model.getSortType())
+                .then(function(resModel){
+                    this.prepareClassForSummary(resModel);
+                    return new chlk.models.admin.BaseStatisticGridViewData(resModel, model.getSortType(), model.getSchoolId(), model.getSchoolName(), model.getFilter(), model.getTeacherId());
+                }, this)
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.school.SchoolClassesSummaryPage, result, isFilter ? null : chlk.activities.lib.DontShowLoader());
         },
 
         [chlk.controllers.SidebarButton('classes')],
-        [[chlk.models.id.SchoolId, String]],
-        function teachersSummaryAction(schoolId, schoolName){
+        [[chlk.models.id.SchoolId, String, Number, String]],
+        function teachersSummaryAction(schoolId, schoolName, sortType_, filter_){
+            sortType_ = sortType_ || chlk.models.admin.TeacherSortTypeEnum.TEACHER_ASC.valueOf();
             var result = this.schoolYearService.list(schoolId)
                 .then(function(years){
                     var currentSchoolYearId = this.getCurrentYearId_(years);
-                    return this.teacherService.getTeachersStats(currentSchoolYearId)
+                    return this.teacherService.getTeachersStats(currentSchoolYearId, null, filter_, sortType_)
                         .then(function(teachers){
                             var teacher = teachers[0];
                             if(teacher){
@@ -328,7 +343,9 @@ NAMESPACE('chlk.controllers', function (){
                                 teacher.setSchoolName(schoolName);
                             }
 
-                            return new chlk.models.school.SchoolSummaryViewData(schoolName, schoolId, currentSchoolYearId, years, new chlk.models.admin.BaseStatisticGridViewData(teachers));
+                            return new chlk.models.school.SchoolSummaryViewData(schoolName, schoolId, currentSchoolYearId, years,
+                                new chlk.models.admin.BaseStatisticGridViewData(teachers, sortType_, schoolId, schoolName, filter_),
+                                filter_);
                         })
                 }, this)
                 .attach(this.validateResponse_());
@@ -341,7 +358,7 @@ NAMESPACE('chlk.controllers', function (){
         function teachersStatisticAction(model){
             var isFilter = model.getSubmitType() != 'scroll';
             var start = isFilter ? 0 : model.getStart();
-            var result = this.teacherService.getTeachersStats(model.getSchoolYearId(), start, model.getFilter())
+            var result = this.teacherService.getTeachersStats(model.getSchoolYearId(), start, model.getFilter(), model.getSortType())
                 .then(function(items){
                     var teacher = items[0];
                     if(teacher){
@@ -350,7 +367,7 @@ NAMESPACE('chlk.controllers', function (){
                         teacher.setSchoolName(model.getSchoolName());
                     }
 
-                    return new chlk.models.admin.BaseStatisticGridViewData(items);
+                    return new chlk.models.admin.BaseStatisticGridViewData(items, model.getSortType(), model.getSchoolId(), model.getSchoolName(), model.getFilter());
                 })
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.school.SchoolTeachersSummaryPage, result, isFilter ? null : chlk.activities.lib.DontShowLoader());

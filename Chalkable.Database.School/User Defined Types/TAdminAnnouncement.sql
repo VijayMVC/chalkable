@@ -3,7 +3,7 @@
     [Created]      DATETIME2 (7)  NOT NULL,
     [State]        INT            NOT NULL,
     [Content]      NVARCHAR (MAX) NULL,
-    [Title]        NVARCHAR (MAX) NULL,
+    [Title]        NVARCHAR (30) NULL,
     [Expires]      DATETIME2 (7)  NOT NULL,
     [AdminRef]     INT            NOT NULL,
     [AdminName]    NVARCHAR (MAX) NULL,

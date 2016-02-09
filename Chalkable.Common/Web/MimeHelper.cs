@@ -55,8 +55,8 @@ namespace Chalkable.Common.Web
                                                                                   {"xml", new Pair<AttachmenType, string>(AttachmenType.Unknown, "text/xml")},
                                                                                   {"txt", new Pair<AttachmenType, string>(AttachmenType.Unknown, "text/plain")},
                                                                                   
-                                                                                  {"ppt", new Pair<AttachmenType, string>(AttachmenType.Unknown, "application/vnmimes.ms-powerpoint")},
-                                                                                  {"pptx", new Pair<AttachmenType, string>(AttachmenType.Unknown, "application/vnmimes.openxmlformats-officedocument.wordprocessingml.document")},
+                                                                                  {"ppt", new Pair<AttachmenType, string>(AttachmenType.Document, "application/vnmimes.ms-powerpoint")},
+                                                                                  {"pptx", new Pair<AttachmenType, string>(AttachmenType.Document, "application/vnmimes.openxmlformats-officedocument.wordprocessingml.document")},
                                                                               };
 
         public static string GetContentTypeByName(string fileName)

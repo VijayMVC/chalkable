@@ -101,16 +101,17 @@ namespace Chalkable.Data.School.DataAccess
 
         private const string SP_GET_SHORT_SCHOOL_SUMMARIES = "spGetShortSchoolSummaries";
 
-        public PaginatedList<ShortSchoolSummary> GetShortSchoolSummaries(int start, int count, string filter)
+        public IList<ShortSchoolSummary> GetShortSchoolSummaries(int start, int count, string filter, int? sortType)
         {
             var param = new Dictionary<string, object>()
             {
                 ["filter"] = "%" + filter + "%",
                 ["start"] = start,
-                ["count"] = count
+                ["count"] = count,
+                ["sortType"] = sortType
             };
 
-            var res = ExecuteStoredProcedurePaginated<ShortSchoolSummary>(SP_GET_SHORT_SCHOOL_SUMMARIES, param, start, count);
+            var res = ExecuteStoredProcedureList<ShortSchoolSummary>(SP_GET_SHORT_SCHOOL_SUMMARIES, param);
 
             return res;
         }

@@ -3,6 +3,7 @@ REQUIRE('chlk.models.admin.BaseStatistic');
 REQUIRE('chlk.models.id.SchoolId');
 REQUIRE('chlk.models.schoolYear.Year');
 REQUIRE('chlk.models.admin.BaseStatisticGridViewData');
+REQUIRE('chlk.models.id.SchoolPersonId');
 
 NAMESPACE('chlk.models.school', function () {
     "use strict";
@@ -17,8 +18,10 @@ NAMESPACE('chlk.models.school', function () {
             ArrayOf(chlk.models.schoolYear.Year), 'schoolYears',
             String, 'filter',
 
-            [[String, chlk.models.id.SchoolId, chlk.models.id.SchoolYearId, ArrayOf(chlk.models.schoolYear.Year), chlk.models.admin.BaseStatisticGridViewData, String]],
-            function $(schoolName_, schoolId_, schoolYearId_, schoolYears_, itemsStatistic_, filter_){
+            chlk.models.id.SchoolPersonId, 'teacherId',
+
+            [[String, chlk.models.id.SchoolId, chlk.models.id.SchoolYearId, ArrayOf(chlk.models.schoolYear.Year), chlk.models.admin.BaseStatisticGridViewData, String, chlk.models.id.SchoolPersonId]],
+            function $(schoolName_, schoolId_, schoolYearId_, schoolYears_, itemsStatistic_, filter_, teacherId_){
                 BASE();
                 if(schoolName_)
                     this.setSchoolName(schoolName_);
@@ -32,6 +35,8 @@ NAMESPACE('chlk.models.school', function () {
                     this.setItemsStatistic(itemsStatistic_);
                 if(filter_)
                     this.setFilter(filter_);
+                if(teacherId_)
+                    this.setTeacherId(teacherId_);
             }
         ]);
 });

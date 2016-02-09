@@ -156,12 +156,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return ReadOneOrNull<ClassAnnouncement>(dbQuery);
         }
 
-
-        public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
-        {
-            throw new NotImplementedException();
-        }
-
         public AnnouncementDetails Create(int? classAnnouncementTypeId, int classId, DateTime created, DateTime expiresDate, int personId)
         {
             var parameters = new Dictionary<string, object>
@@ -190,7 +184,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {"callerId", callerId},
                     {"callerRole", roleId},
                     {"schoolYearId", schoolYearId},
-                    {"onlyOwner", onlyOwner }
+                    {"onlyOwner", !CanGetAllItems }
                 };
             return GetDetailses("spGetListOfClassAnnouncementDetails", parameters);
         }
@@ -228,7 +222,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 };
             using (var reader = ExecuteStoredProcedureReader("spGetClassAnnouncementsBySisActivities", parameters))
             {
-                var query = new AnnouncementsQuery {SisActivitiesIds = activitiesIds, PersonId = personId};
+                var query = new ClassAnnouncementsQuery {SisActivitiesIds = activitiesIds, PersonId = personId};
                 return ReadAnnouncementsQueryResult(reader, query).Announcements;
             }
         }
@@ -297,5 +291,14 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             conds.BuildSqlWhere(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME);
             return Exists(dbQuery);
         }
+    }
+
+    public class ClassAnnouncementsQuery : AnnouncementsQuery
+    {
+        public int? ClassId { get; set; }
+        public IList<int> SisActivitiesIds { get; set; }
+        public bool? Graded { get; set; }
+        public int? StudentId { get; set; }
+        public int? TeacherId { get; set; }
     }
 }

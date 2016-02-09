@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -14,6 +13,8 @@ namespace Chalkable.API
     {
         public PersonEndpoint Person => new PersonEndpoint(this);
         public AnnouncementEndpoint Announcement => new AnnouncementEndpoint(this);
+        public StudyCenterEndpoint StudeCenterEndpoint => new StudyCenterEndpoint(this);
+        public GradingEndpoint GradingEndpoint => new GradingEndpoint(this);
 
         public class ResponseDto<T>
         {
@@ -24,7 +25,7 @@ namespace Chalkable.API
             public T Data { get; set; }
         }
 
-        public async Task<T> Call<T>(string endpoint, OnWebRequestIsCreated onCreated = null)
+        public async Task<T> Call<T>(string endpoint, OnWebRequestIsCreated onCreated = null, string method = null)
         {
             var url = ApiRoot + endpoint;
 
@@ -35,7 +36,7 @@ namespace Chalkable.API
                 {
                     Debug.WriteLine("Request on: " + url);
                     var webRequest = (HttpWebRequest) WebRequest.Create(url);
-                    webRequest.Method = WebRequestMethods.Http.Get;
+                    webRequest.Method = string.IsNullOrWhiteSpace(method) ? WebRequestMethods.Http.Get : method;
                     webRequest.Accept = "application/json";
                     OauthClient.AppendAccessTokenTo(webRequest);
                     onCreated?.Invoke(webRequest);

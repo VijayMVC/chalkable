@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
@@ -52,15 +53,22 @@ namespace Chalkable.BusinessLogic.Services.School
 
         private ChalkableGradeBook GetGradeBooks(int classId, GradingPeriod gradingPeriod, Gradebook gradebook)
         {
-            var annQuery = new AnnouncementsQuery {ClassId = classId};
             int mpId = gradingPeriod.MarkingPeriodRef;
-            annQuery.FromDate = gradingPeriod.StartDate;
-            annQuery.ToDate = gradingPeriod.EndDate;
             var classRoomOptions = gradebook.Options;
             var students = ServiceLocator.StudentService.GetClassStudents(classId, mpId, classRoomOptions == null || classRoomOptions.IncludeWithdrawnStudents ? (bool?)null : true);
-            var anns = ServiceLocator.ClassAnnouncementService.GetAnnouncementsComplex(annQuery, gradebook.Activities.ToList());
+
+            var activities = gradebook.Activities
+                     .Where(x => x.SectionId == classId)
+                     .Where(x => x.Date >= gradingPeriod.StartDate)
+                     .Where(x => x.Date <= gradingPeriod.EndDate).ToList();
+            var activitiesIds = activities.Select(x => x.Id).ToList();
+
+            var anns = ServiceLocator.ClassAnnouncementService.GetByActivitiesIds(activitiesIds);
+            DoUpdate(u=> anns = ClassAnnouncementService.MergeAnnouncementsWithActivities(ServiceLocator, u, anns, activities));
+
             return BuildGradeBook(gradebook, gradingPeriod, anns, students);
         }
+
 
         private ChalkableGradeBook BuildGradeBook(Gradebook stiGradeBook, GradingPeriod gradingPeriod, IList<AnnouncementComplex> anns, IList<StudentDetails> students)
         {
@@ -68,30 +76,16 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 GradingPeriod = gradingPeriod,
                 Averages = stiGradeBook.StudentAverages.Select(ChalkableStudentAverage.Create).ToList(),
-                Students = students
+                Students = students,
+                Options = stiGradeBook.Options != null ? ChalkableClassOptions.Create(stiGradeBook.Options) : null
             };
-            if (stiGradeBook.Options != null)
-                gradeBook.Options = ChalkableClassOptions.Create(stiGradeBook.Options);
-            var stAvgs = stiGradeBook.StudentAverages.Where(x => x.IsGradingPeriodAverage
-                && gradingPeriod.Id == x.GradingPeriodId).ToList();
-            stAvgs = stAvgs.Where(x => x.CalculatedNumericAverage.HasValue || x.EnteredNumericAverage.HasValue).ToList();
-            if (stAvgs.Count > 0)
-                gradeBook.Avg = (int)stAvgs.Average(x => (x.CalculatedNumericAverage ?? x.EnteredNumericAverage) ?? 0);
-
-            var includeWithdrawnStudents = stiGradeBook.Options != null && stiGradeBook.Options.IncludeWithdrawnStudents;
+            var includeWithdrawnStudents = gradeBook.Options != null && gradeBook.Options.IncludeWithdrawnStudents;
+            
+            //Preapred List Of Announcement Info
             Trace.WriteLine("PrepareAnnounceemntDetailsForGradeBook " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
             gradeBook.Announcements = PrepareAnnounceemntDetailsForGradeBook(stiGradeBook, gradingPeriod, anns, students, includeWithdrawnStudents);
-            //if (!includeWithdrawnStudents)
-            //{
-            //    Trace.WriteLine("includeWithdrawnStudents " + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
-            //    gradeBook.Students = new List<StudentDetails>();
-            //    foreach (var student in students)
-            //    {
-            //       var score = stiGradeBook.Scores.FirstOrDefault(x => x.StudentId == student.Id);
-            //       if(score != null && !score.Withdrawn)
-            //           gradeBook.Students.Add(student);
-            //    }    
-            //}
+
+            //prepare students score
             var stiScores = stiGradeBook.Scores;
             if (!includeWithdrawnStudents)
                 stiScores = stiScores.Where(x => !x.Withdrawn).ToList();
@@ -102,6 +96,7 @@ namespace Chalkable.BusinessLogic.Services.School
             gradeBook.Students = gradeBook.Students
                                     .OrderBy(x => x.LastName, StringComparer.OrdinalIgnoreCase)
                                     .ThenBy(x => x.FirstName, StringComparer.OrdinalIgnoreCase).ToList();
+
             if (stiGradeBook.StudentTotalPoints != null)
             {
                 var totalPoints = stiGradeBook.StudentTotalPoints.Where(x => x.GradingPeriodId == gradingPeriod.Id).ToList();

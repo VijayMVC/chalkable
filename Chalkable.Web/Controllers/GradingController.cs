@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
@@ -8,7 +7,6 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
@@ -196,7 +194,7 @@ namespace Chalkable.Web.Controllers
         public async Task<ActionResult> ClassStandardSummary(int classId)
         {
             var gradingStandardsTask = SchoolLocator.GradingStandardService.GetGradingStandards(classId, null);
-            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncements(null, null, classId);
+            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncements(null, null, classId, null, null);
             var schoolYearId = GetCurrentSchoolYearId();
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(schoolYearId, classId);
             var res = new List<GradingStandardClassSummaryViewData>();
@@ -238,7 +236,7 @@ namespace Chalkable.Web.Controllers
         {
             var st = start ?? 0;
             var cn = count ?? 10;
-            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(null, null, classId, null, false, true, st, cn);
+            var anns = SchoolLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(null, null, classId, null, true, st, cn);
             return FeedController.PrepareAnnouncementsComplexViewData(SchoolLocator, anns);
         }
 
@@ -315,7 +313,7 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
-        [AuthorizationFilter("Teacher, Student")]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult GradedItemsList(int gradingPeriodId)
         {
             var res = SchoolLocator.GradedItemService.GetGradedItems(gradingPeriodId);

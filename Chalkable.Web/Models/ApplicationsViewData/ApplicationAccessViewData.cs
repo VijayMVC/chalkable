@@ -11,6 +11,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public bool HasTeacherExternalAttach { get; set; }
         public bool HasStudentExternalAttach { get; set; }
         public bool HasAdminExternalAttach { get; set; }
+        public bool HasSysAdminSettings { get; set; }
+        public bool HasDistricAdminSettings { get; set; }
+        public bool HasStudentProfile { get; set; }
         public bool CanAttach { get; set; }
         public bool ShowInGradeView { get; set; }
      
@@ -25,6 +28,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                     HasAdminExternalAttach = application.HasAdminExternalAttach,
                     HasTeacherExternalAttach = application.HasTeacherExternalAttach,
                     HasStudentExternalAttach = application.HasStudentExternalAttach,
+                    HasSysAdminSettings = application.HasSysAdminSettings,
+                    HasDistricAdminSettings = application.HasDistricAdminSettings,
+                    HasStudentProfile = application.HasStudentProfile,
                     CanAttach = application.CanAttach,
                     ShowInGradeView = application.ShowInGradeView,
                 };

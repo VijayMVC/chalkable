@@ -32,6 +32,8 @@ namespace Chalkable.API
         public const string VIEW_MODE = "view";
         public const string MY_VIEW_MODE = "myview";
         public const string GRADING_VIEW_MODE = "gradingview";
+        public const string SETTINGS_MODE = "settingsview";
+        public const string STUDENT_PROFILE_MODE = "studentprofileview";
 
         public const string CALL_ID_PARAM = "callid";
 

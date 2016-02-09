@@ -152,6 +152,10 @@ NAMESPACE('chlk.activities.feed', function () {
             OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
                 BASE(model, msg_);
                 this.dom.find('select.prepared').removeClass('prepared');
+                if(model instanceof chlk.models.feed.FeedItems){
+                    if(!model.getItems().length)
+                        this.dom.find('.form-for-grid').trigger(chlk.controls.FormEvents.DISABLE_SCROLLING.valueOf());
+                }
             },
 
             OVERRIDE, VOID, function onRefresh_(model) {

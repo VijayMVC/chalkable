@@ -117,6 +117,10 @@
     <Compile Include="Common\AppTools.cs" />
     <Compile Include="Common\NameHelper.cs" />
     <Compile Include="Logic\Comperators\PracticeGradeScoreComperator.cs" />
+    <Compile Include="Mapping\EnumMappers\BaseEnumMapper.cs" />
+    <Compile Include="Mapping\EnumMappers\ClassSortTypeToSectionSummarySortOpt.cs" />
+    <Compile Include="Mapping\EnumMappers\EnumMapperFactory.cs" />
+    <Compile Include="Mapping\EnumMappers\TeacherSortTypeToSectionSummarySortOpt.cs" />
     <Compile Include="Mapping\GradingStyleMapper.cs" />
     <Compile Include="Mapping\ModelMappers\ActivityToAnnouncementMapper.cs" />
     <Compile Include="Mapping\ModelMappers\AnnouncementComplexToActivityMapper.cs" />
@@ -282,7 +286,11 @@
     <Compile Include="Services\School\Announcements\AdminAnnouncementService.cs" />
     <Compile Include="Services\School\Announcements\AnnouncementFetchService.cs" />
     <Compile Include="Services\School\Announcements\BaseAnnouncementService.cs" />
+    <Compile Include="Services\School\Announcements\BaseFeedHandler.cs" />
     <Compile Include="Services\School\Announcements\ClassAnnouncementService.cs" />
+    <Compile Include="Services\School\Announcements\FeedItemsSortByTitleHandler.cs" />
+    <Compile Include="Services\School\Announcements\FeedItemsSortedByClassNameHandler.cs" />
+    <Compile Include="Services\School\Announcements\FeedItemsSortedByDueDateHandler.cs" />
     <Compile Include="Services\School\Announcements\LessonPlanService.cs" />
     <Compile Include="Services\School\AttachmentService.cs" />
     <Compile Include="Services\School\AttendanceMonthService.cs" />
@@ -423,6 +431,7 @@
     </Content>
     <Content Include="SqlServerTypes\readme.htm" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

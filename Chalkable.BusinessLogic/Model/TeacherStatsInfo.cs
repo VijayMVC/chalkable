@@ -42,7 +42,9 @@ namespace Chalkable.BusinessLogic.Model
             
         }
 
-        public static TeacherStatsInfo Create(Staff teacher, IList<ClassDetails> classes)
+
+
+        public static TeacherStatsInfo Create(ShortStaffSummary teacher, IList<ClassDetails> classes)
         {
             return new TeacherStatsInfo
             {
@@ -54,12 +56,12 @@ namespace Chalkable.BusinessLogic.Model
 
                 Id = teacher.Id,
 
-                StudentsCount = classes.Sum(x => x.StudentsCount),
+                StudentsCount = teacher.StudentsCount,
                 Gender = teacher.Gender
             };
         }
 
-        public static IList<TeacherStatsInfo> Create(PaginatedList<Staff> teachers, IList<ClassDetails> classes)
+        public static IList<TeacherStatsInfo> Create(IList<ShortStaffSummary> teachers, IList<ClassDetails> classes)
         {
             var res = new List<TeacherStatsInfo>();
             foreach (var teacher in teachers)

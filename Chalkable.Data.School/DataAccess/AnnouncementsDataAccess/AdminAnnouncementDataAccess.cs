@@ -67,6 +67,8 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             }
         }
 
+        protected override bool CanGetAllItems => false;
+
         public override IList<AnnouncementDetails> GetDetailses(IList<int> ids, int callerId, int? roleId, bool onlyOwner = true)
         {
             var parameters = new Dictionary<string, object>
@@ -93,29 +95,55 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return anns;
         }
 
-        public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
+        //public override AnnouncementQueryResult GetAnnouncements(AnnouncementsQuery query)
+        //{
+        //    var parameters = new Dictionary<string, object>
+        //        {
+        //            {ID_PARAM, query.Id },
+        //            {ROLE_ID_PARAM, query.RoleId },
+        //            {OWNED_ONLY_PARAM, query.OwnedOnly },
+        //            {FROM_DATE_PARAM, query.FromDate },
+        //            {TO_DATE_PARAM, query.ToDate },
+        //            {START_PARAM, query.Start },
+        //            {COUNT_PARAM, query.Count },
+        //            {NOW_PARAM, query.Now },
+        //            {PERSON_ID_PARAM, query.PersonId},
+        //            {GRADE_LEVELS_IDS_PARAM, query.GradeLevelsIds ?? new List<int>()},
+        //            {COMPLETE, query.Complete},
+        //            {STUDENT_ID, query.StudentId}
+        //        };
+        //    using (var reader = ExecuteStoredProcedureReader(GET_ADMIN_ANNOUNCEMENT_PROCEDURE, parameters))
+        //    {
+        //        return ReadAnnouncementsQueryResult(reader, query);
+        //    }
+        //}
+
+        public AnnouncementQueryResult GetAdminAnnouncementsOrderedByDate(AdminAnnouncementsQuery query)
         {
-            var parameters = new Dictionary<string, object>
-                {
-                    {ID_PARAM, query.Id },
-                    {ROLE_ID_PARAM, query.RoleId },
-                    {OWNED_ONLY_PARAM, query.OwnedOnly },
-                    {FROM_DATE_PARAM, query.FromDate },
-                    {TO_DATE_PARAM, query.ToDate },
-                    {START_PARAM, query.Start },
-                    {COUNT_PARAM, query.Count },
-                    {NOW_PARAM, query.Now },
-                    {PERSON_ID_PARAM, query.PersonId},
-                    {GRADE_LEVELS_IDS_PARAM, query.GradeLevelsIds ?? new List<int>()},
-                    {COMPLETE, query.Complete},
-                    {STUDENT_ID, query.StudentId}
-                };
-            using (var reader = ExecuteStoredProcedureReader(GET_ADMIN_ANNOUNCEMENT_PROCEDURE, parameters))
+            return InternalGetAnnouncements("spGetAdminAnnouncementsOrderedByDate", query, null);
+        }
+        public AnnouncementQueryResult GetAdminAnnouncementsOrderedByTitle(AdminAnnouncementsQuery query)
+        {
+            var ps = new Dictionary<string, object>()
             {
-                return ReadAnnouncementsQueryResult(reader, query);
-            }
+                ["pFrom"] = query.FromTitle,
+                ["pTo"] = query.ToTitle
+            };
+            return InternalGetAnnouncements("spGetAdminAnnouncementsOrderedByTitle", query, ps);
         }
 
+        protected AnnouncementQueryResult InternalGetAnnouncements(string procedureName, AdminAnnouncementsQuery query, IDictionary<string, object> additionalParams)
+        {
+            if(additionalParams == null)
+                additionalParams = new Dictionary<string, object>();
+
+            additionalParams.Add(STUDENT_ID, query.StudentId);
+            additionalParams.Add(GRADE_LEVELS_IDS_PARAM, query.GradeLevelsIds ?? new List<int>());
+            additionalParams.Add(NOW_PARAM, query.Now);
+            return InternalGetAnnouncements<AnnouncementsQuery>(procedureName, query, additionalParams);
+        }
+
+        
         public IList<AdminAnnouncement> GetAdminAnnouncementsByFilter(string filter, int callerId)
         {
             var dbQuery = SelectAdminAnnouncement(callerId);
@@ -127,7 +155,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 dbQuery.Sql.Append(" and (");
                 for (var i = 0; i < words.Length; i++)
                 {
-                    var filterName = string.Format("filter{0}", i);
+                    var filterName = $"filter{i}";
                     dbQuery.Parameters.Add(filterName, string.Format(FILTER_FORMAT, words[i]));
                     dbQuery.Sql.Append(" ( ")
                         .AppendFormat("{0} like @{1} or ", AdminAnnouncement.ADMIN_NAME_FIELD, filterName)
@@ -143,10 +171,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         public override AdminAnnouncement GetAnnouncement(int adminAnnouncementId, int callerId)
         {
-            var conds = new AndQueryCondition
-                {
-                    {Announcement.ID_FIELD, adminAnnouncementId}
-                };
+            var conds = new AndQueryCondition {{Announcement.ID_FIELD, adminAnnouncementId}};
             return GetAnnouncements(conds, callerId).FirstOrDefault();
         }
         
@@ -198,7 +223,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         protected override DbQuery SelectAdminAnnouncement(int callerId)
         {
             var dbQuery = new DbQuery();
-            var selectSet = string.Format("[{0}].*, cast(1 as bit) as IsOwner", AdminAnnouncement.VW_ADMIN_ANNOUNCEMENT_NAME);
+            var selectSet = $"[{AdminAnnouncement.VW_ADMIN_ANNOUNCEMENT_NAME}].*, cast(1 as bit) as IsOwner";
             dbQuery.Sql.AppendFormat("select {0} from [{1}] ", selectSet, AdminAnnouncement.VW_ADMIN_ANNOUNCEMENT_NAME);
             return dbQuery;
         }
@@ -224,10 +249,12 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
         }
 
+        protected override bool CanGetAllItems => true;
+
         protected override DbQuery SelectAdminAnnouncement(int callerId)
         {
             var dbQuery = new DbQuery();
-            var selectSet = string.Format("[{0}].*, cast(0 as bit) as IsOwner", AdminAnnouncement.VW_ADMIN_ANNOUNCEMENT_NAME);
+            var selectSet = $"[{AdminAnnouncement.VW_ADMIN_ANNOUNCEMENT_NAME}].*, cast(0 as bit) as IsOwner";
             dbQuery.Sql.AppendFormat("select {0} from [{1}] ", selectSet, AdminAnnouncement.VW_ADMIN_ANNOUNCEMENT_NAME);
             return dbQuery;
         }
@@ -248,5 +275,12 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             throw new NotImplementedException();
         }
+    }
+
+
+    public class AdminAnnouncementsQuery : AnnouncementsQuery
+    {
+        public IList<int> GradeLevelsIds { get; set; }
+        public int? StudentId { get; set; }
     }
 }

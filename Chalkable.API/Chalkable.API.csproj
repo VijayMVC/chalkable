@@ -66,7 +66,9 @@
     <Compile Include="Controllers\IBaseController.cs" />
     <Compile Include="Endpoints\AnnouncementEndpoint.cs" />
     <Compile Include="Endpoints\Base.cs" />
+    <Compile Include="Endpoints\GradingEndpoint.cs" />
     <Compile Include="Endpoints\PersonEndpoint.cs" />
+    <Compile Include="Endpoints\StudyCenterEndpoint.cs" />
     <Compile Include="Enums\AnnouncementType.cs" />
     <Compile Include="Exceptions\ChalkableApiException.cs" />
     <Compile Include="IConnector.cs" />
@@ -75,6 +77,7 @@
     <Compile Include="Models\CoreRole.cs" />
     <Compile Include="Models\CoreRoles.cs" />
     <Compile Include="Models\IntList.cs" />
+    <Compile Include="Models\PersonClaim.cs" />
     <Compile Include="Models\SchoolPerson.cs" />
     <Compile Include="OnWebRequestIsCreated.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

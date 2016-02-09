@@ -88,13 +88,17 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('classes')],
-        function summaryAction(){
+        [[Number, String]],
+        function summaryAction(sortType_, filter_){
+            sortType_ = sortType_ || chlk.models.admin.SchoolSortTypeEnum.SCHOOL_ASC.valueOf();
             var result = ria.async.wait([
                     this.adminDistrictService.getDistrictSummary(),
-                    this.adminDistrictService.getSchoolStatistic()
+                    this.adminDistrictService.getSchoolStatistic(null, filter_, null, sortType_)
                 ])
                 .then(function(result){
-                    return new chlk.models.district.DistrictFullSummaryViewData(result[0], new chlk.models.admin.BaseStatisticGridViewData(result[1]));
+                    return new chlk.models.district.DistrictFullSummaryViewData(result[0],
+                        new chlk.models.admin.BaseStatisticGridViewData(result[1], sortType_, null, null, filter_),
+                        filter_);
                 })
                 .attach(this.validateResponse_());
             return this.PushView(chlk.activities.district.DistrictSummaryPage, result);
@@ -105,9 +109,9 @@ NAMESPACE('chlk.controllers', function (){
         function schoolsStatisticAction(model){
             var isFilter = model.getSubmitType() == 'filter';
             var start = isFilter ? 0 : model.getStart();
-            var result = this.adminDistrictService.getSchoolStatistic(start, model.getFilter())
-                .then(function(model){
-                    return new chlk.models.admin.BaseStatisticGridViewData(model);
+            var result = this.adminDistrictService.getSchoolStatistic(start, model.getFilter(), null, model.getSortType())
+                .then(function(resModel){
+                    return new chlk.models.admin.BaseStatisticGridViewData(resModel, model.getSortType(), null, null, model.getFilter());
                 })
                 .attach(this.validateResponse_());
             return this.UpdateView(chlk.activities.district.DistrictSummaryPage, result, isFilter ? null : chlk.activities.lib.DontShowLoader());

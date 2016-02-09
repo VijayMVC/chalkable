@@ -25,9 +25,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         void SetVisibleForStudent(int lessonPlanId, bool visible);
         LessonPlan GetLessonPlanById(int lessonPlanId);
 
-        IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? galleryCategoryId);
-        IList<LessonPlan> GetLessonPlansbyFilter(string filter); 
-        IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? galeryCategoryId, int? classId, bool? complete, bool onlyOwners = false, int start = 0, int count = int.MaxValue); 
+        IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId);
+        IList<LessonPlan> GetLessonPlansbyFilter(string filter);
+
+        IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue);
+
+        IList<AnnouncementComplex> GetLessonPlansSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false);
+        IList<AnnouncementComplex> GetLessonPlansSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false);
+        IList<AnnouncementComplex> GetLessonPlansSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false);
+
         LessonPlan GetLastDraft();
 
         void DuplicateLessonPlan(int lessonPlanId, IList<int> classIds);
@@ -281,7 +287,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public override IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? startDate, DateTime? toDate, int? classId, bool? complete, bool ownerOnly = false)
         {
-            var lps = GetLessonPlansForFeed(startDate, toDate, null, classId, complete, ownerOnly);
+            var lps = GetLessonPlansForFeed(startDate, toDate, classId, complete);
             return  DoRead(u => InternalGetDetailses(CreateLessonPlanDataAccess(u), lps.Select(lp=>lp.Id).ToList(), ownerOnly));
         }
 
@@ -305,9 +311,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             DoUpdate(u =>
             {
-                var anns = CreateLessonPlanDataAccess(u)
-                    .GetAnnouncements(new AnnouncementsQuery { PersonId = personId, ToDate = toDate })
-                    .Announcements;
+                var anns = CreateLessonPlanDataAccess(u).GetLessonPlansOrderedByDate(new LessonPlansQuery
+                {
+                    RoleId = Context.RoleId,
+                    ToDate = toDate,
+                    PersonId = personId
+                }).Announcements;
+
                 var da = new AnnouncementRecipientDataDataAccess(u);
                 foreach (var ann in anns)
                     da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementTypeEnum.LessonPlan, null, personId, null, complete, null, null);
@@ -347,10 +357,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return new PaginatedList<LessonPlan>(res, start / count, count, totalCount);
         }
         
-        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? galleryCategoryId)
+        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlans(fromDate, toDate, classId, galleryCategoryId, Context.PersonId.Value));
+            return DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlans(fromDate, toDate, classId, null, Context.PersonId.Value, studentId, teacherId));
         }
 
         public IList<LessonPlan> GetLessonPlansbyFilter(string filter)
@@ -359,23 +369,70 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlansByFilter(filter, Context.PersonId.Value));
         }
 
-        public IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? galleryCategoryId, int? classId, bool? complete, bool onlyOwners = false, int start = 0, int count = int.MaxValue)
+        public IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue)
         {
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetAnnouncements(new AnnouncementsQuery
-                {
-                    RoleId = Context.RoleId,
-                    PersonId = Context.PersonId,
-                    FromDate = fromDate,
-                    ToDate = toDate,
-                    GalleryCategoryId = galleryCategoryId,
-                    ClassId = classId,
-                    Complete = complete,
-                    OwnedOnly = onlyOwners,
-                    Start = start,
-                    Count = count
-                })).Announcements;
+            return GetLessonPlansSortedByDate(fromDate, toDate, true, true, classId, complete, start, count);
         }
 
+        public IList<AnnouncementComplex> GetLessonPlansSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate,
+            int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false)
+        {
+            return DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlansOrderedByDate(new LessonPlansQuery
+            {
+                ClassId = classId,
+                Complete = complete,
+                Start = start,
+                Count = count,
+                FromDate = fromDate,
+                ToDate = toDate,
+                PersonId = Context.PersonId,
+                RoleId = Context.RoleId,
+                IncludeFrom = includeFromDate,
+                IncludeTo = includeToDate,
+                Sort = sortDesc
+            })).Announcements;
+        }
+
+        public IList<AnnouncementComplex> GetLessonPlansSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle,
+            bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false)
+        {
+            return DoRead(u => CreateLessonPlanDataAccess(u).GetLesonPlansOrderedByTitle(new LessonPlansQuery
+            {
+                ClassId = classId,
+                Complete = complete,
+                Start = start,
+                Count = count,
+                FromDate = fromDate,
+                ToDate = toDate,
+                PersonId = Context.PersonId,
+                RoleId = Context.RoleId,
+                IncludeFrom = includeFromTitle,
+                IncludeTo = includeToTitle,
+                Sort = sortDesc
+            })).Announcements;
+        }
+
+        public IList<AnnouncementComplex> GetLessonPlansSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName,
+            bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false)
+        {
+            return DoRead(u => CreateLessonPlanDataAccess(u).GetLesonPlansOrderedByClassName(new LessonPlansQuery
+            {
+                ClassId = classId,
+                Complete = complete,
+                Start = start,
+                Count = count,
+                FromDate = fromDate,
+                ToDate = toDate,
+                PersonId = Context.PersonId,
+                RoleId = Context.RoleId,
+                IncludeFrom = includeFromClassName,
+                IncludeTo = includeToClassName,
+                FromClassName = fromClassName,
+                ToClassName = toClassName,
+                Sort = sortDesc
+            })).Announcements;
+        }
+        
         public LessonPlan GetLastDraft()
         {
             Trace.Assert(Context.PersonId.HasValue);

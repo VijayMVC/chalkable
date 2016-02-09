@@ -2,16 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Chalkable.BusinessLogic.Mapping.EnumMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
+using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.Exceptions;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
+    public enum TeacherSortType
+    {
+        TeacherAsc = 0,
+        TeacherDesc,
+        StudentsAsc,
+        StudentsDesc,
+        AttendanceAsc,
+        AttendanceDesc,
+        DisciplineAsc,
+        DisciplineDesc,
+        GradesAsc,
+        GradesDesc
+    }
     public interface IStaffService
     {
         void Add(IList<Staff> staffs);
@@ -24,7 +39,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteStaffSchools(IList<StaffSchool> staffSchools);
         IList<StaffSchool> GetStaffSchools();
         PaginatedList<Staff> SearchStaff(int? schoolYearId, int? classId, int? studentId, string filter, bool orderByFirstName, int start, int count);
-        IList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count);
+        IList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count, TeacherSortType? sortType);
     }
 
     public class StaffService : SisConnectedService, IStaffService
@@ -90,22 +105,28 @@ namespace Chalkable.BusinessLogic.Services.School
                             start, count));
         }
 
-        public IList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count)
+        public IList<TeacherStatsInfo> GetTeachersStats(int schoolYearId, string filter, int? start, int? count, TeacherSortType? sortType)
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
+            var iNowSortType = EnumMapperFactory.GetMapper<TeacherSortType, SectionSummarySortOption>()
+                    .Map(sortType ?? TeacherSortType.TeacherAsc);
 
             try
             {
                 var iNowRes = ConnectorLocator.ClassesDashboardConnector.GetTeachersSummaries(schoolYearId,
-                    Context.NowSchoolYearTime, start.Value + 1, start.Value + count.Value, filter);
+                    Context.NowSchoolYearTime, start.Value + 1, start.Value + count.Value, filter, iNowSortType);
+
                 return iNowRes.Select(TeacherStatsInfo.Create).ToList();
             }
             catch (ChalkableSisNotSupportVersionException)
             {
-                var teachers = SearchStaff(schoolYearId, null, null, filter, false, start.Value, count.Value);
-                var classes = DoRead(u => new ClassDataAccess(u).GetClassesByTeachers(schoolYearId, teachers.Select(x => x.Id).ToList()));
-                return TeacherStatsInfo.Create(teachers, classes);
+                using (var u = Read())
+                {
+                    var teachers = new StaffDataAccess(u).GetShortStaffSummary(schoolYearId, filter, start.Value, count.Value, (int?) sortType);
+                    var classes =new ClassDataAccess(u).GetClassesByTeachers(schoolYearId, teachers.Select(x => x.Id).ToList());
+                    return TeacherStatsInfo.Create(teachers, classes);
+                }               
             }
         }
 

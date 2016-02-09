@@ -12,17 +12,20 @@ each clazz in classes
         .cell.students=clazz.getStudentsCount()
         if isNotEmptyStatistic
             .cell.attendance
-                +ActionLink('class', 'attendanceList', clazz.getId()).circle(
+                +ActionLink('class', 'attendanceList', clazz.getId())(
                     data-tooltip = clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent',
+                    data-disabled-message = clazz.isAttendancesProfileEnabled() ? '' : clazz.getNoAccessMsg('attendance'),
                     class = clazz.getAbsencesClass()
-                )=clazz.getAbsences() && parseInt(clazz.getAbsences(), 10)
+                ).with-events.circle=clazz.getAbsences() && parseInt(clazz.getAbsences(), 10)
             .cell.discipline
-                +ActionLink('class', 'discipline', clazz.getId()).circle(
+                +ActionLink('class', 'discipline', clazz.getId())(
                     data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today',
+                    data-disabled-message = clazz.isDisciplinesProfileEnabled() ? '' : clazz.getNoAccessMsg('discipline'),
                     class = clazz.getInfractionsClass()
-                )=clazz.getInfractionsCount() && parseInt(clazz.getInfractionsCount(), 10)
+                ).with-events.circle=clazz.getInfractionsCount() && parseInt(clazz.getInfractionsCount(), 10)
             .cell.grades
-                +ActionLink('class', 'grading', clazz.getId()).circle(
+                +ActionLink('class', 'grading', clazz.getId())(
                     data-tooltip=clazz.getAvg() && (clazz.getAvg() + '% Average'),
+                    data-disabled-message = clazz.isGradingProfileEnabled() ? '' : clazz.getNoAccessMsg('grading'),
                     class = clazz.getAvgClass()
-                )=clazz.getAvg() && parseInt(clazz.getAvg(), 10)
+                ).with-events.circle=clazz.getAvg() && parseInt(clazz.getAvg(), 10)

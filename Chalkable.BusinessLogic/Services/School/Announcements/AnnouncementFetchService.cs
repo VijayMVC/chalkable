@@ -8,14 +8,14 @@ using Chalkable.Common;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
-using Chalkable.StiConnector.Connectors;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
     public interface IAnnouncementFetchService
     {
-        IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, int? classId, FeedSettingsInfo settings, int start = 0, int count = int.MaxValue);
-        AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null);
+        IList<AnnouncementComplex> GetAnnouncementsForAdminFeed(bool? complete, IList<int> gradeLevels, FeedSettingsInfo settings, int start = 0, int count = int.MaxValue);
+        IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, int? classId, FeedSettingsInfo settings, int start = 0, int count = int.MaxValue);
+        AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null, int?  teacherId = null);
         IList<Announcement> GetAnnouncementsByFilter(string filter);
         Announcement GetLastDraft();
         AnnouncementTypeEnum GetAnnouncementType(int announcementId);
@@ -23,94 +23,57 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         FeedSettingsInfo GetSettingsForFeed();
         IList<AnnouncementDetails> GetAnnouncementDetailses(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, AnnouncementTypeEnum? announcementType);
     }
-
+    
     public class AnnouncementFetchService : SchoolServiceBase, IAnnouncementFetchService
     {
         public AnnouncementFetchService(IServiceLocatorSchool serviceLocator)
             : base(serviceLocator)
         {
         }
+        
+        private static IDictionary<AnnouncementSortOption, IFeedItemHandler> _handlers
+            = new Dictionary<AnnouncementSortOption, IFeedItemHandler>
+            {
+                [AnnouncementSortOption.DueDateAscending] = new FeedItemsSortedByDueDateHandler(false),
+                [AnnouncementSortOption.DueDateDescending] = new FeedItemsSortedByDueDateHandler(true),
+                [AnnouncementSortOption.NameAscending] = new FeedItemsSortByTitleHandler(false),
+                [AnnouncementSortOption.NameDescending] = new FeedItemsSortByTitleHandler(true),
+                [AnnouncementSortOption.SectionNameAscending] = new FeedItemsSortedByClassNameHandler(false),
+                [AnnouncementSortOption.SectionNameDescending] = new FeedItemsSortedByClassNameHandler(true)
+            };
 
 
-        public IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, IList<int> gradeLevels, int? classId, FeedSettingsInfo settings, int start = 0, int count = int.MaxValue)
+        public IList<AnnouncementComplex> GetAnnouncementsForAdminFeed(bool? complete, IList<int> gradeLevels, FeedSettingsInfo settings, int start = 0, int count = int.MaxValue)
+        {
+            var feedStartDate = settings.FromDate ?? DateTime.MinValue;
+            var feedEndDate = settings.ToDate ?? DateTime.MaxValue;
+            var sortOption = settings.SortTypeEnum ?? AnnouncementSortOption.DueDateAscending;
+
+            return _handlers[sortOption].GetAdminAnnouncementsOnly(ServiceLocator, feedStartDate, feedEndDate, gradeLevels, complete, start, count);
+        }
+
+        public IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, int? classId, FeedSettingsInfo settings, int start = 0, int count = int.MaxValue)
         {
             var feedStartDate = settings.FromDate ??  DateTime.MinValue;
             var feedEndDate = settings.ToDate ??  DateTime.MaxValue;
-            
-            var anns = new List<AnnouncementComplex>();
-            if (BaseSecurity.IsDistrictAdmin(Context) && !classId.HasValue)
+            var sortOption = settings.SortTypeEnum ?? AnnouncementSortOption.DueDateAscending;
+
+            if (!settings.AnnouncementTypeEnum.HasValue)
+                return _handlers[sortOption].GetAllItems(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count);
+
+            switch (settings.AnnouncementTypeEnum.Value)
             {
-                anns.AddRange(ServiceLocator.AdminAnnouncementService.GetAnnouncementsComplex(feedStartDate, feedEndDate, gradeLevels, complete, true, start, count));
+                case AnnouncementTypeEnum.Class:
+                    return ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate, feedEndDate, classId, complete, null, start, count, sortOption);
+                case AnnouncementTypeEnum.LessonPlan:
+                    return _handlers[sortOption].GetLessonPlansOnly(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count);
+                case AnnouncementTypeEnum.Admin:
+                    return _handlers[sortOption].GetAdminAnnouncementsOnly(ServiceLocator, feedStartDate, feedEndDate, null, complete, start, count);
             }
-            var isStudent = CoreRoles.STUDENT_ROLE == Context.Role;
-            //TODO: Refactor this later . . . 
-            var onlyOwners = !isStudent && !(Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN) && classId.HasValue);
-
-            if (BaseSecurity.IsTeacher(Context) || Context.Role == CoreRoles.STUDENT_ROLE || classId.HasValue)
-            {
-                if (!settings.AnnouncementType.HasValue)
-                {
-                    var ct = count != int.MaxValue ? count + 1 : count;
-                    var classAnns = ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate,
-                        feedEndDate, classId, complete, true, null, start, ct, settings.SortTypeEnum);
-
-                    if (start > 0 && classAnns.Count == 0)
-                        return anns;
-
-                    //Change data range for other feed items
-                    if (start > 0 && classAnns.Count > 0)
-                        feedStartDate = classAnns.Min(x => x.ClassAnnouncementData.Expires);
-
-                    if (classAnns.Count > count)
-                        feedEndDate = classAnns.Max(x => x.ClassAnnouncementData.Expires);
-
-                    //remove (count + 1) - item 
-                    if (classAnns.Count > count)
-                        classAnns.RemoveAt(classAnns.Count - 1);
-
-                    anns.AddRange(classAnns);
-
-                    if (Context.Role == CoreRoles.STUDENT_ROLE)
-                        anns.AddRange(ServiceLocator.AdminAnnouncementService.GetAnnouncementsComplex(feedStartDate, feedEndDate, gradeLevels, complete, false));
-
-                    anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(feedStartDate, feedEndDate, null, classId, complete, onlyOwners));
-                }
-                else switch ((AnnouncementTypeEnum) settings.AnnouncementType.Value)
-                {
-                    case AnnouncementTypeEnum.LessonPlan:
-                        anns.AddRange(ServiceLocator.LessonPlanService.GetLessonPlansForFeed(feedStartDate, feedEndDate, null, classId, complete, onlyOwners, start, count));
-                        break;
-                    case AnnouncementTypeEnum.Class:
-                        anns.AddRange(ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate, feedEndDate, classId, complete, onlyOwners, null, start, count, settings.SortTypeEnum));
-                        break;
-                }
-            }
-            anns = SortAnnouncements(anns, settings.SortTypeEnum).ToList();
-            return anns;
+            return new List<AnnouncementComplex>();
         }
 
-        private IList<AnnouncementComplex> SortAnnouncements(IList<AnnouncementComplex> anns, AnnouncementSortOption? sortType)
-        {
-            //sort all items by expires date or start date
-            if (!sortType.HasValue || sortType.Value == AnnouncementSortOption.DueDateAscending)
-                anns = anns.OrderBy(x =>
-                {
-                    if (x.AdminAnnouncementData != null) return x.AdminAnnouncementData.Expires;
-                    if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
-                    return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
-                }).ToList();
-            else
-                anns = anns.OrderByDescending(x =>
-                {
-                    if (x.AdminAnnouncementData != null) return x.AdminAnnouncementData.Expires;
-                    if (x.ClassAnnouncementData != null) return x.ClassAnnouncementData.Expires;
-                    return x.LessonPlanData != null ? x.LessonPlanData.StartDate : x.Created;
-                }).ToList();
-
-            return anns;
-        } 
-
-        
+      
         public FeedSettingsInfo GetSettingsForFeed()
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -144,7 +107,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
-            
             ServiceLocator.PersonSettingService.SetSettingsForPerson(Context.PersonId.Value, Context.SchoolYearId.Value, settings.ToDictionary());
         }
 
@@ -170,7 +132,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return res;
         }
         
-        public AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null)
+        public AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null, int? teacherId = null)
         {
             var res = new AnnouncementComplexList
                 {
@@ -178,14 +140,14 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     ClassAnnouncements = new List<ClassAnnouncement>(),
                     LessonPlans = new List<LessonPlan>()
                 };
-            if (BaseSecurity.IsDistrictAdmin(Context) || CoreRoles.STUDENT_ROLE == Context.Role)
-                res.AdminAnnouncements = ServiceLocator.AdminAnnouncementService.GetAdminAnnouncements(null, fromDate, toDate, studentId);
 
-            if (classId.HasValue || !BaseSecurity.IsDistrictAdmin(Context))
+            if (classId.HasValue || studentId.HasValue || teacherId.HasValue || !BaseSecurity.IsDistrictAdmin(Context))
             {
-                res.LessonPlans = ServiceLocator.LessonPlanService.GetLessonPlans(fromDate, toDate, classId, null);
-                res.ClassAnnouncements = ServiceLocator.ClassAnnouncementService.GetClassAnnouncements(fromDate, toDate, classId, onlyOwners);
+                res.LessonPlans = ServiceLocator.LessonPlanService.GetLessonPlans(fromDate, toDate, classId, studentId, teacherId);
+                res.ClassAnnouncements = ServiceLocator.ClassAnnouncementService.GetClassAnnouncements(fromDate, toDate, classId, studentId, teacherId);
             }
+            if(!classId.HasValue && !teacherId.HasValue && (BaseSecurity.IsDistrictAdmin(Context) || CoreRoles.STUDENT_ROLE == Context.Role))
+                res.AdminAnnouncements = ServiceLocator.AdminAnnouncementService.GetAdminAnnouncements(null, fromDate, toDate, studentId);
             return res;
         }
 

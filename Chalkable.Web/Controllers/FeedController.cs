@@ -27,7 +27,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult DistrictAdminFeed(IntList gradeLevelIds, bool? complete, int? start, int? count)
         {
             var settings = SchoolLocator.AnnouncementFetchService.GetSettingsForFeed();
-            var announcements = SchoolLocator.AnnouncementFetchService.GetAnnouncementsForFeed(complete,  gradeLevelIds, null, settings, start ?? 0, count ?? 10);
+            var announcements = SchoolLocator.AnnouncementFetchService.GetAnnouncementsForAdminFeed(complete,  gradeLevelIds, settings, start ?? 0, count ?? 10);
             
             return Json(PrepareFeedComplexViewData(SchoolLocator, announcements, settings));
         }
@@ -44,7 +44,7 @@ namespace Chalkable.Web.Controllers
             start = start ?? 0;
             count = count ?? (DemoUserService.IsDemoUser(schoolL.Context) ? int.MaxValue : 10);
             
-            var list = schoolL.AnnouncementFetchService.GetAnnouncementsForFeed(complete, null, classId, settings, start.Value, count.Value);
+            var list = schoolL.AnnouncementFetchService.GetAnnouncementsForFeed(complete, classId, settings, start.Value, count.Value);
             return PrepareFeedComplexViewData(schoolL, list, settings);
         }
 
