@@ -122,7 +122,7 @@ var CHLK_API = function (window, document, $) {
 
 
         ~function (elm, callback){
-            var lastHeight = elm.clientHeight, newHeight;
+            var lastHeight = 0, newHeight;
             ~function run(){
                 var notify = lastHeight !== (lastHeight = newHeight = elm.clientHeight);
                 setTimeout(run, 200);
