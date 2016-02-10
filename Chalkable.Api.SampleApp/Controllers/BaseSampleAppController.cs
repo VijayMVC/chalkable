@@ -1,11 +1,8 @@
 ﻿using System.Net;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Chalkable.Api.SampleApp.Common;
 using Chalkable.API;
 using Chalkable.API.Controllers;
-using Newtonsoft.Json;
-using Formatting = System.Xml.Formatting;
 
 namespace Chalkable.Api.SampleApp.Controllers
 {
