@@ -11,50 +11,23 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        private const string SP_UPDATE_ANNOUNCEMENT_RECIPIENT_DATA = "spUpdateAnnouncementRecipientData";
-        private const string ANNOUNCEMENT_ID_PARAM = "announcementId";
-        private const string PERSON_ID_PARAM = "personId";
-        private const string COMPLETE_PARAM = "complete";
-        private const string DATE_PARAM = "tillDate";
-        private const string ROLE_ID_PARAM = "roleId";
-        private const string SCHOOL_YEAR_ID_PARAM = "schoolYearId";
-        private const string ANNOUCEMENT_TYPE = "annType";
-        private const string CLASS_ID = "classId";
-
-        public void UpdateAnnouncementRecipientData(int? announcementId, int annType, int?schoolYearId, int? personId, int? roleId, bool complete, DateTime? tillDate, int? classId)
-        {
-            var parameters = new Dictionary<string, object>
-                {
-                    {ANNOUNCEMENT_ID_PARAM, announcementId},
-                    {PERSON_ID_PARAM, personId},
-                    {ROLE_ID_PARAM, roleId },
-                    {COMPLETE_PARAM, complete},
-                    {DATE_PARAM, tillDate },
-                    {SCHOOL_YEAR_ID_PARAM, schoolYearId },
-                    {ANNOUCEMENT_TYPE, annType },
-                    {CLASS_ID, classId }
-                };
-            ExecuteStoredProcedure(SP_UPDATE_ANNOUNCEMENT_RECIPIENT_DATA, parameters);
-        }
-
-        private const string SP_COMPLETE_ANNOUNCEMENT = "spCompleteAnnouncements";
-
-        public void CompleteAnnouncements(int schoolYearId, int personId, int roleId, int? classId, int annType, DateTime fromDate, DateTime toDate)
+        public void UpdateAnnouncementRecipientData(int? announcementId, int announcementType, int?schoolYearId, int? personId, int? roleId, 
+            bool complete, int? classId, DateTime? fromDate, DateTime? toDate)
         {
             var param = new Dictionary<string, object>
             {
-                ["announcementId"] = null,
-                ["complete"] = true,
-                [PERSON_ID_PARAM] = personId,
-                [ROLE_ID_PARAM] = roleId,
-                [SCHOOL_YEAR_ID_PARAM] = schoolYearId,
-                [CLASS_ID] = classId,
-                ["announcementType"] = annType,
-                ["fromDate"] = fromDate,
-                ["toDate"] = toDate
+                [nameof(announcementId)] = announcementId,
+                [nameof(complete)] = complete,
+                [nameof(personId)] = personId,
+                [nameof(roleId)] = roleId,
+                [nameof(schoolYearId)] = schoolYearId,
+                [nameof(classId)] = classId,
+                [nameof(announcementType)] = announcementType,
+                [nameof(fromDate)] = fromDate,
+                [nameof(toDate)] = toDate
             };
 
-            ExecuteStoredProcedure("spUpdateAnnouncementRecipientData_test", param);
+            ExecuteStoredProcedure("spUpdateAnnouncementRecipientData", param);
         }
     }
 }

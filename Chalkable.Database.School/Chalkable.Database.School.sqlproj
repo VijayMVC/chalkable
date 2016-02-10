@@ -308,7 +308,6 @@
     <Build Include="Stored Procedures\spGetAlphaGradesForClasses.sql" />
     <Build Include="Stored Procedures\spGetListOfClassAnnouncementDetails.sql" />
     <Build Include="Stored Procedures\spGetListOfLessonPlansDetails.sql" />
-    <Build Include="Stored Procedures\spCompleteAnnouncements.sql" />
     <Build Include="Stored Procedures\spGetAlphaGradesForSchoolStandards.sql" />
     <Build Include="Stored Procedures\spGetStandardParentsSubTree.sql" />
     <Build Include="Stored Procedures\spGetShortStaffSummary.sql" />

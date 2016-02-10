@@ -299,10 +299,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected override void SetComplete(Announcement announcement, bool complete)
         {
-            DoUpdate(
-                u =>
-                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.LessonPlan, null,
-                        Context.PersonId.Value, null, complete, null, null));
+            Trace.Assert(Context.PersonId.HasValue);
+
+            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.LessonPlan,
+                null, Context.PersonId.Value, null, complete, null, null, null));
         }
 
         public override void SetAnnouncementsAsComplete(DateTime? toDate, bool complete)
@@ -327,7 +327,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             //}).Announcements;
 
             var da = new AnnouncementRecipientDataDataAccess(unitOfWork);
-            da.UpdateAnnouncementRecipientData(null, (int)AnnouncementTypeEnum.LessonPlan, locator.Context.SchoolYearId, locator.Context.PersonId, locator.Context.RoleId, complete, toDate, null);
+            da.UpdateAnnouncementRecipientData(null, (int)AnnouncementTypeEnum.LessonPlan, locator.Context.SchoolYearId, locator.Context.PersonId, 
+                locator.Context.RoleId, complete, null, null, toDate);
             //foreach (var ann in anns)
             //    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementTypeEnum.LessonPlan, null, locator.Context.PersonId, null, complete, null, null);
         }
@@ -455,8 +456,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId)
         {
-            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).CompleteAnnouncements(schoolYearId, personId, roleId,
-                        classId, (int) AnnouncementTypeEnum.LessonPlan, startDate, endDate));
+            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, schoolYearId, 
+                (int)AnnouncementTypeEnum.LessonPlan, personId, roleId, true, classId, startDate, endDate));
         }
 
         public void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)

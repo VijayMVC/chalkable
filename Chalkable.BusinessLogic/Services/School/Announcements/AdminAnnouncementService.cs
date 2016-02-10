@@ -240,17 +240,18 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             //var da = new AnnouncementRecipientDataDataAccess(unitOfWork);
             
             var da = new AnnouncementRecipientDataDataAccess(unitOfWork);
-            da.UpdateAnnouncementRecipientData(null, (int)AnnouncementTypeEnum.Admin, locator.Context.SchoolYearId, locator.Context.PersonId, locator.Context.RoleId, complete, toDate, null);
+            da.UpdateAnnouncementRecipientData(null, (int)AnnouncementTypeEnum.Admin, locator.Context.SchoolYearId, locator.Context.PersonId, 
+                locator.Context.RoleId, complete, null, null, toDate);
             //foreach (var ann in anns)
             //    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementTypeEnum.Admin, null, locator.Context.PersonId, null, complete, null, null);
         }
 
         protected override void SetComplete(Announcement announcement, bool complete)
         {
-            DoUpdate(
-                u =>
-                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.Admin, null,
-                        Context.PersonId.Value, null, complete, null, null));
+            Trace.Assert(Context.PersonId.HasValue);
+
+            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.Admin, 
+                null, Context.PersonId.Value, null, complete, null, null, null));
         }
 
         public override bool CanAddStandard(int announcementId)
@@ -324,8 +325,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId)
         {
-            DoUpdate(u => new AnnouncementRecipientDataDataAccess(u).CompleteAnnouncements(schoolYearId, personId, roleId, classId,
-                    (int) AnnouncementTypeEnum.Admin, startDate, endDate));
+            DoUpdate(u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int)AnnouncementTypeEnum.Admin, 
+                schoolYearId, personId, roleId, true, classId, startDate, endDate));
         }
     }
 }
