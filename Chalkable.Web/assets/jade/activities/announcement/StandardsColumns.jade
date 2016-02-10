@@ -1,0 +1,19 @@
+mixin StandardColumn(tplObj, standards, isLast)
+    if standards.length > 0
+        td.name-td
+            .standards-names.column
+                each standard in standards
+                    +ActionLink('standard', 'showStandardsByCategory', tplObj.getClassId(), tplObj.getSubjectId(), standard.getDescription(), standard.getStandardId())(
+                    data-id=standard.getStandardId(),
+                    class= standard.isSelected() ? 'active' : ''
+                    ).standard-name.column-cell
+                        .name(data-tooltip=standard.displayTitle(), data-tooltip-type="overflow")=standard.displayTitle()
+                        .right-triangle
+
+    if isLast
+        td
+           .standards-description=tplObj.getDescription()
+
+-var columns = self.getStandardsTable().getStandardsColumns()
+each standardsList, i in columns
+    +StandardColumn(self, standardsList, i == columns.length - 1)
