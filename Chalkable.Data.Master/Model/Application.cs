@@ -73,6 +73,9 @@ namespace Chalkable.Data.Master.Model
         public const string HAS_STUDENT_PROFILE_FIELD = "HasStudentProfile";
         public bool HasStudentProfile { get; set; }
 
+        public const string PROVIDES_RECOMENDED_CONTENT = "ProvidesRecomendedContent";
+        public bool ProvidesRecomendedContent { get; set; }
+
         [NotDbFieldAttr]
         public bool? Ban { get; set; }
         [NotDbFieldAttr]
