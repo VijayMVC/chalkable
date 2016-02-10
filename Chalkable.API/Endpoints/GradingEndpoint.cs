@@ -1,5 +1,5 @@
-﻿using System.Net;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using System.Web;
 
 namespace Chalkable.API.Endpoints
 {
@@ -12,8 +12,20 @@ namespace Chalkable.API.Endpoints
         public async Task<bool> SetAutoGrade(int announcementApplicationId, int studentId, string gradeValue)
         {
             var url = "/Grading/SetAutoGrade.json";
-            var endpoint = $"{url}?announcementApplicationId={announcementApplicationId}&studentId={studentId}&gradeValue={gradeValue}";
-            return await Connector.Call<bool>(endpoint, method: WebRequestMethods.Http.Post);
+            //var postData = new NameValueCollection
+            //{
+            //    ["announcementApplicationId"] = announcementApplicationId.ToString(),
+            //    ["studentId"] = studentId.ToString(),
+            //    ["gradeValue"] = gradeValue
+            //};
+
+            var postData = HttpUtility.ParseQueryString(string.Empty);
+
+            postData.Add("announcementApplicationId", announcementApplicationId.ToString());
+            postData.Add("studentId", studentId.ToString());
+            postData.Add("gradeValue", gradeValue);
+
+            return await Connector.Post<bool>(url, postData);
         } 
     }
 }

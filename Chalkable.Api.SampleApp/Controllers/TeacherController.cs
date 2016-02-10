@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using System.Web.Routing;
+using Chalkable.Api.SampleApp.Models;
 
 namespace Chalkable.Api.SampleApp.Controllers
 {
@@ -17,12 +19,15 @@ namespace Chalkable.Api.SampleApp.Controllers
             PrepareBaseData(announcementApplicationId);
             var annApp = await Connector.Announcement.GetAnnouncementApplicationById(announcementApplicationId);
             var ann = await Connector.Announcement.GetRead(annApp.AnnouncementId, annApp.AnnouncementType);
-            return View("Attach", ann);
+            return View("Attach", DefaultJsonViewData.Create(ann));
         }
 
         public ActionResult ViewMode(int announcementApplicationId)
         {
-            throw new NotImplementedException();
+            return RedirectToAction("Attach", new RouteValueDictionary
+            {
+                {"announcementApplicationId", announcementApplicationId}
+            });
         }
 
         public ActionResult GradingViewMode(int announcementApplicationId, int studentId)
