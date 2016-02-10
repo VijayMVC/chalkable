@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Chalkable.Api.SampleApp.Models;
 using Chalkable.API;
 using Chalkable.API.Controllers;
 
@@ -29,7 +30,7 @@ namespace Chalkable.Api.SampleApp.Controllers
         protected void PrepareBaseData(int? announcementApplicationId)
         {
             ViewBag.AnnouncementApplicationId = announcementApplicationId;
-            ViewBag.CurrentUser = CurrentUser; 
+            ViewBag.CurrentUser = DefaultJsonViewData.Create(CurrentUser); 
         }
     }
 }

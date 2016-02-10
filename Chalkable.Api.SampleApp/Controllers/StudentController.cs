@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using Chalkable.Api.SampleApp.Models;
 
 namespace Chalkable.Api.SampleApp.Controllers
 {
@@ -11,12 +13,20 @@ namespace Chalkable.Api.SampleApp.Controllers
             return View("App");
         }
 
-        public ActionResult ViewMode(int announcementApplicationId)
+        public async Task<ActionResult> ViewMode(int announcementApplicationId)
         {
-            //TODO: implement ViewMode for student later
-
             PrepareBaseData(announcementApplicationId);
-            return View("App");
+
+            const string defaultScore = "60";
+
+            await  Connector.GradingEndpoint.SetAutoGrade(announcementApplicationId, CurrentUser.Id, defaultScore);
+            
+            return View("ViewMode", DefaultJsonViewData.Create(new
+            {
+                AnnouncementApplicationId = announcementApplicationId,
+                StudentId = CurrentUser.Id,
+                Score = defaultScore
+            }));
 
         }
 
