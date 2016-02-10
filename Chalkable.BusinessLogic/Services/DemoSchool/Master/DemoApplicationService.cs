@@ -88,7 +88,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             switch (sortingMode)
             {
                 case AppSortingMode.Newest:
-                    query.OrderBy = Application.CREATE_DATE_TIME_FIELD;
+                    query.OrderBy = nameof(Application.CreateDateTime);
                     break;
                 case AppSortingMode.HighestRated:
                     query.OrderBy = Application.AVG_FIELD;

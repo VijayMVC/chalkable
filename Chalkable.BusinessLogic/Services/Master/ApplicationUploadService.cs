@@ -313,7 +313,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                 }
                 else
                 {
-                    draftApps = da.GetAll(new AndQueryCondition { { Application.ORIGINAL_REF_FIELD, id } });
+                    draftApps = da.GetAll(new AndQueryCondition { { nameof(Application.OriginalRef), id } });
                     foreach (var draftApp in draftApps)
                     {
                         draftApp.OriginalRef = null;
