@@ -80,6 +80,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             application.HasSysAdminSettings = applicationInfo.ApplicationAccessInfo.HasSysAdminSettings;
             application.HasDistricAdminSettings = applicationInfo.ApplicationAccessInfo.HasDistricAdminSettings;
             application.HasStudentProfile = applicationInfo.ApplicationAccessInfo.HasStudentProfile;
+            application.ProvidesRecomendedContent = applicationInfo.ApplicationAccessInfo.ProvidesRecomendedContent;
 
             application.State = state;
 
