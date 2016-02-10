@@ -13,7 +13,11 @@ namespace Chalkable.Api.SampleApp.Controllers
 
         public ActionResult ViewMode(int announcementApplicationId)
         {
-            throw new NotImplementedException();
+            //TODO: implement ViewMode for student later
+
+            PrepareBaseData(announcementApplicationId);
+            return View("App");
+
         }
 
         public ActionResult Practice(string standardId, string commonCoreStandard, string standardName)

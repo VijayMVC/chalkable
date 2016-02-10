@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 
 namespace Chalkable.Api.SampleApp.Controllers
@@ -11,10 +12,12 @@ namespace Chalkable.Api.SampleApp.Controllers
             return View("App");
         }
 
-        public ActionResult Attach(int announcementApplicationId)
+        public async Task<ActionResult> Attach(int announcementApplicationId)
         {
             PrepareBaseData(announcementApplicationId);
-            throw new NotImplementedException();
+            var annApp = await Connector.Announcement.GetAnnouncementApplicationById(announcementApplicationId);
+            var ann = await Connector.Announcement.GetRead(annApp.AnnouncementId, annApp.AnnouncementType);
+            return View("Attach", ann);
         }
 
         public ActionResult ViewMode(int announcementApplicationId)
