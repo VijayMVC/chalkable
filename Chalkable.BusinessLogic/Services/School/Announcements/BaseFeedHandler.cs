@@ -9,8 +9,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
     public interface IFeedItemHandler
     {
-        IList<AnnouncementComplex> GetAllItems(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start, int count);
-        IList<AnnouncementComplex> GetLessonPlansOnly(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start, int count);
+        IList<AnnouncementComplex> GetAllItems(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start, int count, bool? ownedOnly = null);
+        IList<AnnouncementComplex> GetLessonPlansOnly(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start, int count, bool? ownedOnly = null);
         IList<AnnouncementComplex> GetAdminAnnouncementsOnly(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, IList<int> gradeLevels, bool? complete, int start, int count);
 
     }
@@ -23,9 +23,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             _sortDesc = sortDesc;
         }
 
-        public virtual IList<AnnouncementComplex> GetLessonPlansOnly(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start, int count)
+        public virtual IList<AnnouncementComplex> GetLessonPlansOnly(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start, int count, bool? ownedOnly = null)
         {
-            return InternalGetLessonPlans(locator, fromDate, toDate, classId, complete, start, count, default(TFilterBy), default(TFilterBy), true, true);
+            return InternalGetLessonPlans(locator, fromDate, toDate, classId, complete, start, count, default(TFilterBy), default(TFilterBy), true, true, ownedOnly);
         }
 
         public virtual IList<AnnouncementComplex> GetAdminAnnouncementsOnly(IServiceLocatorSchool locator,
@@ -34,7 +34,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return InternalGetAdminAnns(locator, fromDate, toDate, gradeLevels, complete, start, count, default(TFilterBy), default(TFilterBy), true, true);
         }
 
-        public virtual IList<AnnouncementComplex> GetAllItems(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start, int count)
+        public virtual IList<AnnouncementComplex> GetAllItems(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId, 
+            bool? complete, int start, int count, bool? ownedOnly = null)
         {
             var ct = count != int.MaxValue ? count + 1 : count;
 
@@ -53,7 +54,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 classAnns.RemoveAt(classAnns.Count - 1);
 
             
-            var lps = InternalGetLessonPlans(locator, fromDate, toDate, classId, complete, 0, int.MaxValue, from, to, includeFrom, includeTo);
+            var lps = InternalGetLessonPlans(locator, fromDate, toDate, classId, complete, 0, int.MaxValue, from, to, includeFrom, includeTo, ownedOnly);
 
             var res = MerageItems(classAnns, lps);
 
@@ -96,7 +97,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         protected abstract IList<AnnouncementComplex> InternalGetLessonPlans(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId
-            , bool? complete, int start, int count, TFilterBy from, TFilterBy to, bool includeFrom, bool includeTo);
+            , bool? complete, int start, int count, TFilterBy from, TFilterBy to, bool includeFrom, bool includeTo, bool? ownedOnly = null);
         protected abstract IList<AnnouncementComplex> InternalGetAdminAnns(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, IList<int> gradeLevels
             , bool? complete, int start, int count, TFilterBy from, TFilterBy to, bool includeFrom, bool includeTo);
 

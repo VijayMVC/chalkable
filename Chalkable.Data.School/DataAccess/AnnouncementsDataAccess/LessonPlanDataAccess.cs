@@ -103,7 +103,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return GetDetailses("spGetListOfLessonPlansDetails", parameters);
         }
 
-        protected override bool CanGetAllItems => false;
+        protected override bool CanGetAllItems  => false;
 
         protected override LessonPlan ReadAnnouncementData(AnnouncementComplex announcement, SqlDataReader reader)
         {

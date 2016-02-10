@@ -43,6 +43,8 @@ namespace Chalkable.Data.School.DataAccess
         {
             var param = new Dictionary<string, object>
             {
+                ["announcementId"] = null,
+                ["complete"] = true,
                 [PERSON_ID_PARAM] = personId,
                 [ROLE_ID_PARAM] = roleId,
                 [SCHOOL_YEAR_ID_PARAM] = schoolYearId,
@@ -52,7 +54,7 @@ namespace Chalkable.Data.School.DataAccess
                 ["toDate"] = toDate
             };
 
-            ExecuteStoredProcedure(SP_COMPLETE_ANNOUNCEMENT, param);
+            ExecuteStoredProcedure("spUpdateAnnouncementRecipientData_test", param);
         }
     }
 }

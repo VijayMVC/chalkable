@@ -29,11 +29,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId);
         IList<LessonPlan> GetLessonPlansbyFilter(string filter);
 
-        IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue);
+        IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool? ownedOnly = null);
 
-        IList<AnnouncementComplex> GetLessonPlansSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false);
-        IList<AnnouncementComplex> GetLessonPlansSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false);
-        IList<AnnouncementComplex> GetLessonPlansSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false);
+        IList<AnnouncementComplex> GetLessonPlansSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
+        IList<AnnouncementComplex> GetLessonPlansSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
+        IList<AnnouncementComplex> GetLessonPlansSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
 
         LessonPlan GetLastDraft();
 
@@ -54,13 +54,13 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return CreateLessonPlanDataAccess(unitOfWork);
         }
 
-        protected LessonPlanDataAccess CreateLessonPlanDataAccess(UnitOfWork unitOfWork)
+        protected LessonPlanDataAccess CreateLessonPlanDataAccess(UnitOfWork unitOfWork, bool? ownedOnly = null)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);        
             if (BaseSecurity.IsDistrictOrTeacher(Context))
             {
                 if (Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN) || Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN))
-                    return new LessonPlanForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value);
+                    return new LessonPlanForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value, ownedOnly);
                 if (Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM) || Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM))
                     return new LessonPlanForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
             }
@@ -377,15 +377,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlansByFilter(filter, Context.PersonId.Value));
         }
 
-        public IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue)
+        public IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool? ownedOnly = null)
         {
-            return GetLessonPlansSortedByDate(fromDate, toDate, true, true, classId, complete, start, count);
+            return GetLessonPlansSortedByDate(fromDate, toDate, true, true, classId, complete, start, count, ownedOnly: ownedOnly);
         }
 
         public IList<AnnouncementComplex> GetLessonPlansSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate,
-            int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false)
+            int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null)
         {
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlansOrderedByDate(new LessonPlansQuery
+            return DoRead(u => CreateLessonPlanDataAccess(u, ownedOnly).GetLessonPlansOrderedByDate(new LessonPlansQuery
             {
                 ClassId = classId,
                 Complete = complete,
@@ -402,9 +402,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         public IList<AnnouncementComplex> GetLessonPlansSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle,
-            bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false)
+            bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null)
         {
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetLesonPlansOrderedByTitle(new LessonPlansQuery
+            return DoRead(u => CreateLessonPlanDataAccess(u, ownedOnly).GetLesonPlansOrderedByTitle(new LessonPlansQuery
             {
                 ClassId = classId,
                 Complete = complete,
@@ -421,9 +421,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         public IList<AnnouncementComplex> GetLessonPlansSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName,
-            bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false)
+            bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null)
         {
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetLesonPlansOrderedByClassName(new LessonPlansQuery
+            return DoRead(u => CreateLessonPlanDataAccess(u, ownedOnly).GetLesonPlansOrderedByClassName(new LessonPlansQuery
             {
                 ClassId = classId,
                 Complete = complete,

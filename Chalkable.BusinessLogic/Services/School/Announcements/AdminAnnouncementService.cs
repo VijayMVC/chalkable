@@ -49,7 +49,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return CreateAdminAnnouncementDataAccess(unitOfWork, ServiceLocator);
         }
 
-        private static AdminAnnouncementDataAccess CreateAdminAnnouncementDataAccess(UnitOfWork unitOfWork, IServiceLocatorSchool locator)
+        private static AdminAnnouncementDataAccess CreateAdminAnnouncementDataAccess(UnitOfWork unitOfWork, IServiceLocatorSchool locator, bool? ownedOnly = null)
         {
             var context = locator.Context;
             if (BaseSecurity.IsDistrictAdmin(context))
