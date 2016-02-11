@@ -7,8 +7,8 @@ namespace Chalkable.API
 {
     public interface IConnector
     {
-        Task<T> Call<T>(string endpoint, OnWebRequestIsCreated onCreated = null, string method = null);
-        Task<T> Call<T>(string endpoint, Stream stream, string method = null, string contentType = null);
+        Task<T> Get<T>(string endpoint); 
+        Task<T> Put<T>(string endpoint, Stream stream);
         Task<T> Post<T>(string endpoint, NameValueCollection postData);
     }
 }

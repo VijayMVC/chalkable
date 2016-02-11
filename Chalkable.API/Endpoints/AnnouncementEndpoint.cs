@@ -15,43 +15,25 @@ namespace Chalkable.API.Endpoints
         public async Task<AnnouncementApplication> GetAnnouncementApplicationById(int announcementApplicationId)
         {
             var url = "/Application/GetAnnouncementApplication.json";
-            return await Connector.Call<AnnouncementApplication>($"{url}?announcementApplicationId={announcementApplicationId}");
+            return await Connector.Get<AnnouncementApplication>($"{url}?announcementApplicationId={announcementApplicationId}");
         }
 
         public async Task<Announcement> GetRead(int announcementId, AnnouncementType announcementType)
         {
             var url = $"/{announcementType}/Read.json";
-            return await Connector.Call<Announcement>($"{url}?announcementId={announcementId}&announcementType={announcementType}");
+            return await Connector.Get<Announcement>($"{url}?announcementId={announcementId}&announcementType={announcementType}");
         }
 
         public async Task<Announcement> UploadAttributeAttachment(int announcementId, int announcementType, int attributeId, string fileName, Stream stream)
         {
             var url = $"/AnnouncementAttribute/UploadAttachment.json";
-            return await Connector.Call<Announcement>($"{url}?announcementId={announcementId}&announcementType={announcementType}" +
-                                                      $"&assignedAttributeId={attributeId}&filename={fileName}",
-                wr =>
-                {
-                    wr.Method = WebRequestMethods.Http.Put;
-                    wr.KeepAlive = true;
-                    wr.Credentials = CredentialCache.DefaultCredentials;
-                    wr.ContentLength = stream.Length;
-
-                    stream.CopyTo(wr.GetRequestStream());
-                });
+            return await Connector.Put<Announcement>($"{url}?announcementId={announcementId}&announcementType={announcementType}" +
+                                                      $"&assignedAttributeId={attributeId}&filename={fileName}", stream);
         }
         public async Task<Announcement> UploadAnnouncementAttachment(int announcementId, int announcementType, string fileName, Stream stream)
         {
             var url = $"/AnnouncementAttachment/UploadAnnouncementAttachment.json";
-            return await Connector.Call<Announcement>($"{url}?announcementId={announcementId}&announcementType={announcementType}&filename={fileName}",
-                wr =>
-                {
-                    wr.Method = WebRequestMethods.Http.Put;
-                    wr.KeepAlive = true;
-                    wr.Credentials = CredentialCache.DefaultCredentials;
-                    wr.ContentLength = stream.Length;
-
-                    stream.CopyTo(wr.GetRequestStream());
-                });
+            return await Connector.Put<Announcement>($"{url}?announcementId={announcementId}&announcementType={announcementType}&filename={fileName}", stream);
         }
     }
 }
