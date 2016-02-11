@@ -27,12 +27,22 @@ namespace Chalkable.Api.SampleApp.Controllers
                 StudentId = CurrentUser.Id,
                 Score = defaultScore
             }));
+         }
 
-        }
-
-        public ActionResult Practice(string standardId, string commonCoreStandard, string standardName)
+        public async Task<ActionResult> Practice(string standardId, string commonCoreStandard, string standardName)
         {
-            throw new NotImplementedException();
+            const string defaultScore = "60";
+
+            var res = await Connector.StudeCenterEndpoint.SetPracticeGrade(Guid.Parse(standardId), defaultScore);
+            
+            return View("ViewMode", DefaultJsonViewData.Create(new
+            {
+                Score = defaultScore,
+                StandardId = standardId,
+                CommonCoreStandard = commonCoreStandard,
+                StandardName = standardName,
+                Success = res
+            }));
         }
     }
 }
