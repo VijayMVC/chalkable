@@ -148,6 +148,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Common\ViewConstants.cs" />
     <Compile Include="Controllers\BaseSampleAppController.cs" />
+    <Compile Include="Controllers\DocumentController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\StudentController.cs" />
     <Compile Include="Controllers\SysAdminController.cs" />
@@ -171,6 +172,7 @@
     <Content Include="Views\Shared\App.cshtml" />
     <Content Include="scripts\jquery-2.2.0.min.map" />
     <Content Include="Views\Student\ViewMode.cshtml" />
+    <Content Include="Views\Document\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

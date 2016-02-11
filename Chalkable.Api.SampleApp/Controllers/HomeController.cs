@@ -27,6 +27,18 @@ namespace Chalkable.Api.SampleApp.Controllers
 
             switch (mode)
             {
+                case Settings.ATTACH_MODE:
+                    if (announcementId.HasValue && announcementType.HasValue)
+                    {
+                        return RedirectToAction("Index", "Document", new RouteValueDictionary
+                        {
+                            {"announcementId", announcementId.Value},
+                            {"announcementType", announcementType.Value},
+                            {"attributeId", attributeId }
+                        });
+                    }
+                    break;
+
                 case Settings.EDIT_MODE:
                     return RedirectToAction("Attach", "Teacher", new RouteValueDictionary
                     {
@@ -60,7 +72,7 @@ namespace Chalkable.Api.SampleApp.Controllers
                         return RedirectToAction("Index", "Teacher");
 
                     return RedirectToAction("Index", CurrentUser.Role.Name);
-
+                
                 //special private mode for miniquiz practice
                 case "practice":
 
