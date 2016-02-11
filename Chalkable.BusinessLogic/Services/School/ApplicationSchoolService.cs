@@ -96,9 +96,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
                 aa = da.GetAll(new AndQueryCondition
                     {
-                        {AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId},
-                        {AnnouncementApplication.APPLICATION_REF_FIELD, applicationId},
-                        {AnnouncementApplication.ACTIVE_FIELD, false}
+                        {nameof(AnnouncementApplication.AnnouncementRef), announcementId},
+                        {nameof(AnnouncementApplication.ApplicationRef), applicationId},
+                        {nameof(AnnouncementApplication.Active), false}
                     }).OrderByDescending(x=>x.Id).First();
                 return aa;
             }
@@ -143,9 +143,9 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new AnnouncementApplicationDataAccess(uow);
-                var ps = new AndQueryCondition {{AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId}};
+                var ps = new AndQueryCondition {{nameof(AnnouncementApplication.AnnouncementRef), announcementId}};
                 if (onlyActive)
-                    ps.Add(AnnouncementApplication.ACTIVE_FIELD, true);
+                    ps.Add(nameof(AnnouncementApplication.Active), true);
                 return da.GetAll(ps);
             }
         }

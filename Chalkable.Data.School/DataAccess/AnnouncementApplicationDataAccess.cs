@@ -23,7 +23,7 @@ namespace Chalkable.Data.School.DataAccess
                         }),
                     Orm.SimpleDelete<AnnouncementApplication>(new AndQueryCondition
                         {
-                            {AnnouncementApplication.ID_FIELD, key}
+                            {nameof(AnnouncementApplication.Id), key}
                         })
 
                 };
@@ -36,16 +36,16 @@ namespace Chalkable.Data.School.DataAccess
             var query1 = new DbQuery();
             query1.Sql.AppendFormat(Orm.DELETE_FORMAT, typeof (AutoGrade).Name).Append(" ")
                   .Append(" where ").AppendFormat(" [{0}] in (", AutoGrade.ANNOUNCEMENT_APPLICATION_REF_FIELD)
-                  .AppendFormat(Orm.SELECT_FORMAT, AnnouncementApplication.ID_FIELD, typeof(AnnouncementApplication).Name)
-                  .Append(" where ").AppendFormat(" [{0}] = @{0}", AnnouncementApplication.ANNOUNCEMENT_REF_FIELD)
+                  .AppendFormat(Orm.SELECT_FORMAT, nameof(AnnouncementApplication.Id), typeof(AnnouncementApplication).Name)
+                  .Append(" where ").AppendFormat(" [{0}] = @{0}", nameof(AnnouncementApplication.AnnouncementRef))
                   .Append(")");
-            query1.Parameters.Add(AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId);
+            query1.Parameters.Add(nameof(AnnouncementApplication.AnnouncementRef), announcementId);
             var queries = new List<DbQuery>
                 {   
                     query1,
                     Orm.SimpleDelete<AnnouncementApplication>(new AndQueryCondition
                         {
-                            {AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId}
+                            {nameof(AnnouncementApplication.AnnouncementRef), announcementId}
                         })
 
                 };
@@ -59,7 +59,7 @@ namespace Chalkable.Data.School.DataAccess
             var dbQuery = new DbQuery();
             dbQuery.Sql.AppendFormat(@"select * from [{0}]", tableName);
             if (announcementIds != null && announcementIds.Count > 0)
-                dbQuery.Sql.AppendFormat(" where [{0}].[{1}] in ({2})", tableName,AnnouncementApplication.ANNOUNCEMENT_REF_FIELD,
+                dbQuery.Sql.AppendFormat(" where [{0}].[{1}] in ({2})", tableName,nameof(AnnouncementApplication.AnnouncementRef),
                                          announcementIds.Select(x => x.ToString()).JoinString(","));
             return ReadMany<AnnouncementApplication>(dbQuery);
         } 

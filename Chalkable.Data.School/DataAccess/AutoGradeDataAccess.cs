@@ -43,7 +43,7 @@ namespace Chalkable.Data.School.DataAccess
         public IList<AutoGrade> GetAutoGradesByAnnouncementId(int announcementId)
         {
             var query = BuildAutoGradesSelect();
-            var conds = new AndQueryCondition {{AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId}};
+            var conds = new AndQueryCondition {{nameof(AnnouncementApplication.AnnouncementRef), announcementId}};
             conds.BuildSqlWhere(query, typeof (AnnouncementApplication).Name);
             return ReadMany<AutoGrade>(query, true);
         } 
@@ -53,7 +53,7 @@ namespace Chalkable.Data.School.DataAccess
             var query = new DbQuery();
             var types = new List<Type> { typeof(AutoGrade), typeof(AnnouncementApplication) };
             query.Sql.AppendFormat(Orm.SELECT_FORMAT, Orm.ComplexResultSetQuery(types), types[0].Name)
-                 .Append(" ").AppendFormat(Orm.SIMPLE_JOIN_FORMAT, types[1].Name, AnnouncementApplication.ID_FIELD
+                 .Append(" ").AppendFormat(Orm.SIMPLE_JOIN_FORMAT, types[1].Name, nameof(AnnouncementApplication.Id)
                                            , types[0].Name, AutoGrade.ANNOUNCEMENT_APPLICATION_REF_FIELD);
             query.Sql.Append(" ");
             return query;
