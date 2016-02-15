@@ -71,6 +71,17 @@ NAMESPACE('chlk.activities.apps', function () {
                     idsInput.setValue(JSON.stringify(ids));
                     idsInput.parent('form').trigger('submit');
                 }
+            },
+
+            [[Object]],
+            OVERRIDE, VOID, function onRefresh_(data) {
+                BASE(data);
+                this.dom.find('iframe').$
+                    .css({height: ria.dom.Dom('#main').$.parent().height() - 27*2 + 'px'})
+                    .load(function () {
+                        this.dom.find('iframe').parent()
+                            .removeClass('partial-update');
+                    }.bind(this))
             }
         ]);
 });
