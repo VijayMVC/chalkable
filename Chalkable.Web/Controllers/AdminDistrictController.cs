@@ -1,10 +1,12 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Common;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.ApplicationsViewData;
 using Chalkable.Web.Models.SchoolsViewData;
 
 namespace Chalkable.Web.Controllers
@@ -43,9 +45,17 @@ namespace Chalkable.Web.Controllers
 
             var messagingSettings = MessagingSettingsViewData.Create(MasterLocator.SchoolService.GetDistrictMessaginSettings(Context.DistrictId.Value));
             PrepareJsonData(messagingSettings, ViewConstants.MESSAGING_SETTINGS);
-
-            var installedApps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, Context.PersonId.Value, null, null, null, null).ToList();
+            
+            var installedApps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, Context.PersonId.Value, null, 0, int.MaxValue, null).ToList();
             installedApps = installedApps.Where(x => x.HasDistricAdminSettings).ToList();
+
+            var assessement = MasterLocator.ApplicationService.GetAssessmentApplication();
+            if (assessement.HasDistricAdminSettings && !installedApps.Exists(x => x.Id == assessement.Id))
+            {
+                var assAppInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
+                var hasMyApp = MasterLocator.ApplicationService.HasMyApps(assessement);
+                installedApps.Add(InstalledApplicationViewData.Create(assAppInstallations, Context.PersonId.Value, assessement, hasMyApp));
+            }
 
             return Json(DistrictAdminSettingsViewData.Create(messagingSettings, installedApps));
         }
