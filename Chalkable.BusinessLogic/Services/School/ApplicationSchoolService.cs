@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Services.School
         AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementTypeEnum type, Guid applicationId);
         AnnouncementApplication GetAnnouncementApplication(int announcementAppId);
         void AttachAppToAnnouncement(int announcementAppId, AnnouncementTypeEnum announcementType);
-        void SaveAppContent(int announcementAppId, AnnouncementTypeEnum announcementType, string text, string imageUrl);
+        void UpdateAnnouncementApplicationMeta(int announcementApplicationId, AnnouncementTypeEnum announcementType, string text, string imageUrl);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds, bool onlyActive = false);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false);
@@ -130,14 +130,14 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void SaveAppContent(int announcementAppId, AnnouncementTypeEnum announcementType, string text, string imageUrl)
+        public void UpdateAnnouncementApplicationMeta(int announcementApplicationId, AnnouncementTypeEnum announcementType, string text, string imageUrl)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
             Trace.Assert(Context.PersonId.HasValue);
             using (var uow = Update())
             {
                 var da = new AnnouncementApplicationDataAccess(uow);
-                var aa = da.GetById(announcementAppId);
+                var aa = da.GetById(announcementApplicationId);
                 if (!CanAddToAnnouncement(aa.ApplicationRef))
                     throw new ChalkableSecurityException("Application is not installed yet");
                 var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(aa.AnnouncementRef);
