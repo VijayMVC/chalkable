@@ -148,9 +148,10 @@ namespace Chalkable.BusinessLogic.Model
         public bool HasStudentProfile { get; set; }
         public bool CanAttach { get; set; }
         public bool ShowInGradeView { get; set; }
+        public bool ProvidesRecomendedContent { get; set; }
         public static ApplicationAccessInfo Create(bool hasStudentMyApps, bool hasTeacherMyApps, bool hasAdminMyApps, bool hasParentMyApps
             , bool canAttach, bool showInGradeView, bool hasTeacherExternalAttach, bool hasStudentExternalAttach, bool hasAdminExternalAttach,
-            bool hasSysAdminSettings, bool hasDistricAdminSettings, bool hasStudentProfile)
+            bool hasSysAdminSettings, bool hasDistricAdminSettings, bool hasStudentProfile, bool providesRecomendedContent)
         {
             return new ApplicationAccessInfo
             {
@@ -165,7 +166,8 @@ namespace Chalkable.BusinessLogic.Model
                 HasDistricAdminSettings = hasDistricAdminSettings,
                 HasStudentProfile = hasStudentProfile,
                 CanAttach = canAttach,
-                ShowInGradeView = showInGradeView
+                ShowInGradeView = showInGradeView,
+                ProvidesRecomendedContent =  providesRecomendedContent
             };
         }
 
@@ -184,7 +186,8 @@ namespace Chalkable.BusinessLogic.Model
                 HasSysAdminSettings = application.HasSysAdminSettings,
                 HasDistricAdminSettings = application.HasDistricAdminSettings,
                 HasStudentProfile = application.HasStudentProfile,
-                ShowInGradeView = application.ShowInGradeView
+                ShowInGradeView = application.ShowInGradeView,
+                ProvidesRecomendedContent = application.ProvidesRecomendedContent
             };
         }
 

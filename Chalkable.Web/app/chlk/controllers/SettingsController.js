@@ -4,11 +4,14 @@ REQUIRE('chlk.activities.settings.TeacherPage');
 REQUIRE('chlk.activities.settings.PreferencesPage');
 REQUIRE('chlk.activities.settings.StudentPage');
 REQUIRE('chlk.activities.settings.AdminPage');
+REQUIRE('chlk.activities.settings.AppSettingsPage');
 REQUIRE('chlk.models.settings.Dashboard');
 REQUIRE('chlk.models.settings.Preference');
 REQUIRE('chlk.models.settings.AdminMessaging');
 REQUIRE('chlk.services.PreferenceService');
 REQUIRE('chlk.services.SchoolService');
+REQUIRE('chlk.services.AdminDistrictService');
+
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -24,6 +27,9 @@ NAMESPACE('chlk.controllers', function (){
 
             [ria.mvc.Inject],
             chlk.services.SchoolService, 'schoolService',
+
+            [ria.mvc.Inject],
+            chlk.services.AdminDistrictService, 'adminDistrictService',
 
             [chlk.controllers.AccessForRoles([
                 chlk.models.common.RoleEnum.SYSADMIN
@@ -100,10 +106,46 @@ NAMESPACE('chlk.controllers', function (){
             ])],
             [chlk.controllers.SidebarButton('settings')],
             function dashboardAdminAction() {
-                var messagingSettings = this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_SETTINGS, null);
                 var hasPermission = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.MAINTAIN_CHALKABLE_DISTRICT_SETTINGS);
-                var res = new chlk.models.settings.MessagingSettingsViewData(messagingSettings, hasPermission);
-                return this.PushView(chlk.activities.settings.AdminPage, ria.async.DeferredData(res));
+                var res = this.adminDistrictService.getSettings()
+                    .then(function(data){
+                        var msgViewData = new chlk.models.settings.MessagingSettingsViewData(data.getMessagingSettings(), data.getInstalledApps(), hasPermission);
+                        return msgViewData
+                    })
+                    .attach(this.validateResponse_());
+
+                return this.PushView(chlk.activities.settings.AdminPage, res);
+            },
+
+            [chlk.controllers.AccessForRoles([
+                chlk.models.common.RoleEnum.DISTRICTADMIN
+            ])],
+            [chlk.controllers.SidebarButton('settings')],
+            [[chlk.models.id.AppId]],
+            function appSettingsAction(appId) {
+                if(!this.isStudyCenterEnabled())
+                    return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+
+                var mode = "settingsview";
+
+                var result = ria.async.wait([
+                    this.adminDistrictService.getSettings(),
+                    this.appsService.getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                ])
+                    .attach(this.validateResponse_())
+                    .then(function(result){
+                        var installedApps = result[0].getInstalledApps(),
+                            data = result[1],
+                            appData = data.getApplication();
+
+                        var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
+                            + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                            + '&code=' + data.getAuthorizationCode();
+
+                        return new chlk.models.settings.AppSettingsViewData(null, appData, viewUrl, '', installedApps);
+                    }, this);
+
+                return this.PushView(chlk.activities.settings.AppSettingsPage, result);
             },
 
             [chlk.controllers.AccessForRoles([

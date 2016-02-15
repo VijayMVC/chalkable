@@ -1,7 +1,10 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using WindowsAzure.Acs.Oauth2.Client;
 using Chalkable.API.Endpoints;
 using Chalkable.API.Exceptions;
@@ -16,6 +19,51 @@ namespace Chalkable.API
         public StudyCenterEndpoint StudeCenterEndpoint => new StudyCenterEndpoint(this);
         public GradingEndpoint GradingEndpoint => new GradingEndpoint(this);
 
+        
+        public async Task<T> Get<T>(string endpoint)
+        {
+            return await Call<T>(endpoint);
+        }
+
+        public async Task<T> Put<T>(string endpoint, Stream stream)
+        {
+            return await Call<T>(endpoint, stream, WebRequestMethods.Http.Put);
+        }
+
+        public async Task<T> Post<T>(string endpoint, NameValueCollection postData)
+        {
+            var stream = new MemoryStream();
+            if (postData != null)
+            {
+                foreach (var key in postData.AllKeys)
+                {
+                    var v = HttpUtility.UrlEncode(postData[key]);
+                    postData[key] = v;
+                }
+                var data = Encoding.ASCII.GetBytes(postData.ToString());
+                stream.Write(data, 0, data.Length);
+            }
+            stream.Seek(0, SeekOrigin.Begin);
+            return await Call<T>(endpoint, stream, WebRequestMethods.Http.Post, "application/x-www-form-urlencoded");
+
+        }
+
+        private async Task<T> Call<T>(string endpoint, Stream stream, string method = null, string contentType = null)
+        {
+            return await Call<T>(endpoint,
+                wr =>
+                {
+                    wr.Method = string.IsNullOrWhiteSpace(method) ? WebRequestMethods.Http.Get : method;
+                    wr.KeepAlive = true;
+                    wr.Credentials = CredentialCache.DefaultCredentials;
+                    wr.ContentLength = stream.Length;
+                    if (!string.IsNullOrWhiteSpace(contentType))
+                        wr.ContentType = contentType;
+                    stream.CopyTo(wr.GetRequestStream());
+                    stream.Dispose();
+                });
+        }
+
         public class ResponseDto<T>
         {
             [JsonProperty("success")]
@@ -25,7 +73,7 @@ namespace Chalkable.API
             public T Data { get; set; }
         }
 
-        public async Task<T> Call<T>(string endpoint, OnWebRequestIsCreated onCreated = null, string method = null)
+        protected async Task<T> Call<T>(string endpoint, OnWebRequestIsCreated onCreated = null, string method = null)
         {
             var url = ApiRoot + endpoint;
 

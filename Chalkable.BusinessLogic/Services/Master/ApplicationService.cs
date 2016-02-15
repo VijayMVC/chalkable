@@ -149,8 +149,8 @@ namespace Chalkable.BusinessLogic.Services.Master
                 var da = new ApplicationRatingDataAccess(uow);
                 var res = da.GetAll(new AndQueryCondition
                     {
-                        {ApplicationRating.APPLICATION_REF_FIELD, applicationId},
-                        {ApplicationRating.USER_REF_FIELD, Context.UserId}
+                        {nameof(ApplicationRating.ApplicationRef), applicationId},
+                        {nameof(ApplicationRating.UserRef), Context.UserId}
                     }).FirstOrDefault();
                 Action<ApplicationRating> modifyAction = da.Update;
                 if (res == null)
@@ -176,7 +176,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 var da = new ApplicationRatingDataAccess(uow);
-                return da.GetAll(new AndQueryCondition {{ApplicationRating.APPLICATION_REF_FIELD, applicationId}});
+                return da.GetAll(new AndQueryCondition {{nameof(ApplicationRating.ApplicationRef), applicationId}});
             }
         }
 
@@ -221,7 +221,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             switch (sortingMode)
             {
                 case AppSortingMode.Newest:
-                    query.OrderBy = Application.CREATE_DATE_TIME_FIELD;
+                    query.OrderBy = nameof(Application.CreateDateTime);
                     break;
                 case AppSortingMode.HighestRated:
                     query.OrderBy = Application.AVG_FIELD;

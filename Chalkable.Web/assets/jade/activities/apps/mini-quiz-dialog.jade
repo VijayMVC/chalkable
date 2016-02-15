@@ -28,10 +28,11 @@ mixin App_(app)
                     a(data-id= value.getStandardId().valueOf()).close-btn.standard-remove
     .x-window-body
         h2.practice: span Practice
-        .iframe-wrap
-            if self.getApplicationInfo() && self.getCurrentStandard().getAcademicBenchmarkId()
+        if self.getApplicationInfo() && self.getCurrentStandard().getAcademicBenchmarkId()
+            .iframe-wrap.partial-update
                 iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&code=' + encodeURIComponent(self.getAuthorizationCode()) + '&' + self.getCurrentStandard().getUrlComponents(null, true) + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin))
-            else
+        else
+            .iframe-wrap.partial-update
                 .banner Practice is not possible
 
         -var installedApps = self.getInstalledApplications() || []

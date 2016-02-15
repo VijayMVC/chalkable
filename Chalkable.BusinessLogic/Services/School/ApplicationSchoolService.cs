@@ -20,7 +20,8 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<int> GetAssignedUserIds(Guid appId, int? announcementAppId);
         AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementTypeEnum type, Guid applicationId);
         AnnouncementApplication GetAnnouncementApplication(int announcementAppId);
-        void AttachAppToAnnouncement(int announcementAppId, AnnouncementTypeEnum type);
+        void AttachAppToAnnouncement(int announcementAppId, AnnouncementTypeEnum announcementType);
+        void SaveAppContent(int announcementAppId, AnnouncementTypeEnum announcementType, string text, string imageUrl);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds, bool onlyActive = false);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false);
@@ -96,9 +97,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 uow.Commit();
                 aa = da.GetAll(new AndQueryCondition
                     {
-                        {AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId},
-                        {AnnouncementApplication.APPLICATION_REF_FIELD, applicationId},
-                        {AnnouncementApplication.ACTIVE_FIELD, false}
+                        {nameof(AnnouncementApplication.AnnouncementRef), announcementId},
+                        {nameof(AnnouncementApplication.ApplicationRef), applicationId},
+                        {nameof(AnnouncementApplication.Active), false}
                     }).OrderByDescending(x=>x.Id).First();
                 return aa;
             }
@@ -129,6 +130,26 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
+        public void SaveAppContent(int announcementAppId, AnnouncementTypeEnum announcementType, string text, string imageUrl)
+        {
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+            Trace.Assert(Context.PersonId.HasValue);
+            using (var uow = Update())
+            {
+                var da = new AnnouncementApplicationDataAccess(uow);
+                var aa = da.GetById(announcementAppId);
+                if (!CanAddToAnnouncement(aa.ApplicationRef))
+                    throw new ChalkableSecurityException("Application is not installed yet");
+                var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(aa.AnnouncementRef);
+                if (!ann.IsOwner)
+                    throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
+                aa.Text = text;
+                aa.ImageUrl = imageUrl;
+                da.Update(aa);
+                uow.Commit();
+            }
+        }
+
         private bool CanAddToAnnouncement(Guid appId)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -143,9 +164,9 @@ namespace Chalkable.BusinessLogic.Services.School
             using (var uow = Read())
             {
                 var da = new AnnouncementApplicationDataAccess(uow);
-                var ps = new AndQueryCondition {{AnnouncementApplication.ANNOUNCEMENT_REF_FIELD, announcementId}};
+                var ps = new AndQueryCondition {{nameof(AnnouncementApplication.AnnouncementRef), announcementId}};
                 if (onlyActive)
-                    ps.Add(AnnouncementApplication.ACTIVE_FIELD, true);
+                    ps.Add(nameof(AnnouncementApplication.Active), true);
                 return da.GetAll(ps);
             }
         }

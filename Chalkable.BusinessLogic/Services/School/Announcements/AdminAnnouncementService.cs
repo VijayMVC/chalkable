@@ -46,10 +46,17 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected AdminAnnouncementDataAccess CreateAdminAnnouncementDataAccess(UnitOfWork unitOfWork)
         {
-            if(BaseSecurity.IsDistrictAdmin(Context))
+            return CreateAdminAnnouncementDataAccess(unitOfWork, ServiceLocator);
+        }
+
+        private static AdminAnnouncementDataAccess CreateAdminAnnouncementDataAccess(UnitOfWork unitOfWork, IServiceLocatorSchool locator)
+        {
+            var context = locator.Context;
+            if (BaseSecurity.IsDistrictAdmin(context))
                 return new AdminAnnouncementForAdminDataAccess(unitOfWork);
-            if(Context.Role == CoreRoles.STUDENT_ROLE)
+            if (context.Role == CoreRoles.STUDENT_ROLE)
                 return new AdminAnnouncementForStudentDataAccess(unitOfWork);
+
             throw new ChalkableException("Not supported role for admin announcements");
         }
 
@@ -216,32 +223,35 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             Trace.Assert(Context.PersonId.HasValue);
             if (BaseSecurity.IsDistrictAdmin(Context))
-                CompleteAnnouncement(Context.PersonId.Value, complete, toDate);
+                DoUpdate(u=> SetAnnouncementsAsComplete(u, ServiceLocator, toDate, complete));
         }
 
-        private void CompleteAnnouncement(int personId, bool complete, DateTime? toDate)
+        public static void SetAnnouncementsAsComplete(UnitOfWork unitOfWork, IServiceLocatorSchool locator, DateTime? toDate, bool complete)
         {
-            DoUpdate(u =>
-            {
-                var anns = CreateAdminAnnouncementDataAccess(u)
-                    .GetAdminAnnouncementsOrderedByDate(new AdminAnnouncementsQuery
-                    {
-                        RoleId = Context.RoleId,
-                        PersonId = personId,
-                        ToDate = toDate
-                    }).Announcements;
-                var da = new AnnouncementRecipientDataDataAccess(u);
-                foreach (var ann in anns)
-                    da.UpdateAnnouncementRecipientData(ann.Id, (int) AnnouncementTypeEnum.Admin ,null, personId, null, complete, null, null);
-            });
+            //TODO: remove this get method later 
+            //var anns = CreateAdminAnnouncementDataAccess(unitOfWork, locator)
+            //    .GetAdminAnnouncementsOrderedByDate(new AdminAnnouncementsQuery
+            //    {
+            //        RoleId = locator.Context.RoleId,
+            //        PersonId = locator.Context.PersonId,
+            //        ToDate = toDate
+            //    }).Announcements;
+
+            //var da = new AnnouncementRecipientDataDataAccess(unitOfWork);
+            
+            var da = new AnnouncementRecipientDataDataAccess(unitOfWork);
+            da.UpdateAnnouncementRecipientData(null, (int)AnnouncementTypeEnum.Admin, locator.Context.SchoolYearId, locator.Context.PersonId, 
+                locator.Context.RoleId, complete, null, null, toDate);
+            //foreach (var ann in anns)
+            //    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementTypeEnum.Admin, null, locator.Context.PersonId, null, complete, null, null);
         }
 
         protected override void SetComplete(Announcement announcement, bool complete)
         {
-            DoUpdate(
-                u =>
-                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.Admin, null,
-                        Context.PersonId.Value, null, complete, null, null));
+            Trace.Assert(Context.PersonId.HasValue);
+
+            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.Admin, 
+                null, Context.PersonId.Value, null, complete, null, null, null));
         }
 
         public override bool CanAddStandard(int announcementId)
@@ -315,8 +325,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId)
         {
-            DoUpdate(u => new AnnouncementRecipientDataDataAccess(u).CompleteAnnouncements(schoolYearId, personId, roleId, classId,
-                    (int) AnnouncementTypeEnum.Admin, startDate, endDate));
+            DoUpdate(u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int)AnnouncementTypeEnum.Admin, 
+                schoolYearId, personId, roleId, true, classId, startDate, endDate));
         }
     }
 }

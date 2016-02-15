@@ -5,11 +5,6 @@ namespace Chalkable.Data.School.Model
 {
     public class AnnouncementApplication
     {
-        public const string ID_FIELD = "Id";
-        public const string ANNOUNCEMENT_REF_FIELD = "AnnouncementRef";
-        public const string APPLICATION_REF_FIELD = "ApplicationRef";
-        public const string ACTIVE_FIELD = "Active";
-    
         [IdentityFieldAttr]
         [PrimaryKeyFieldAttr]
         public int Id { get; set; }
@@ -17,5 +12,7 @@ namespace Chalkable.Data.School.Model
         public Guid ApplicationRef { get; set; }
         public bool Active { get; set; }
         public int Order { get; set; }
+        public string Text { get; set; }
+        public string ImageUrl { get; set; }
     }
 }

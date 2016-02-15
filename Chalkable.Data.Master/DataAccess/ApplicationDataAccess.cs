@@ -20,11 +20,11 @@ namespace Chalkable.Data.Master.DataAccess
         {
             var dvQuery = DeveloperDataAccess.BuildGetDeveloperQuery(new AndQueryCondition { { Developer.ID_FIELD, app.DeveloperRef } });
             app.Developer = ReadOne<Developer>(dvQuery, true);
-            app.Pictures = SelectMany<ApplicationPicture>(new AndQueryCondition { { ApplicationPicture.APPLICATION_REF_FIELD, app.Id } });
-            app.Permissions = SelectMany<ApplicationPermission>(new AndQueryCondition { { ApplicationPermission.APPLICATION_REF_FIELD, app.Id } });
-            app.Categories = SelectMany<ApplicationCategory>(new AndQueryCondition { { ApplicationCategory.APPLICATION_REF_FIELD, app.Id } });
-            app.GradeLevels = SelectMany<ApplicationGradeLevel>(new AndQueryCondition { { ApplicationGradeLevel.APPLICATION_REF_FIELD, app.Id } });
-            app.ApplicationStandards = SelectMany<ApplicationStandard>(new AndQueryCondition { {ApplicationStandard.APPLICATION_REF_FIELD, app.Id} });
+            app.Pictures = SelectMany<ApplicationPicture>(new AndQueryCondition { { nameof(ApplicationPicture.ApplicationRef), app.Id } });
+            app.Permissions = SelectMany<ApplicationPermission>(new AndQueryCondition { { nameof(ApplicationPermission.ApplicationRef), app.Id } });
+            app.Categories = SelectMany<ApplicationCategory>(new AndQueryCondition { { nameof(ApplicationCategory.ApplicationRef), app.Id } });
+            app.GradeLevels = SelectMany<ApplicationGradeLevel>(new AndQueryCondition { { nameof(ApplicationGradeLevel.ApplicationRef), app.Id } });
+            app.ApplicationStandards = SelectMany<ApplicationStandard>(new AndQueryCondition { {nameof(ApplicationStandard.ApplicationRef), app.Id} });
         }
 
         public Application GetApplicationById(Guid id)
@@ -38,8 +38,8 @@ namespace Chalkable.Data.Master.DataAccess
         {
             var res = SelectOne<Application>(new AndQueryCondition
                     {
-                        {Application.URL_FIELD, url},
-                        {Application.STATE_FIELD, ApplicationStateEnum.Live}
+                        {nameof(Application.Url), url},
+                        {nameof(Application.State), ApplicationStateEnum.Live}
                     });
 
             LoadApplicationData(res);
@@ -50,8 +50,8 @@ namespace Chalkable.Data.Master.DataAccess
         {
             var res = SelectOne<Application>(new AndQueryCondition
                     {
-                        {Application.URL_FIELD, url},
-                        {Application.STATE_FIELD, ApplicationStateEnum.Live, ConditionRelation.NotEqual}
+                        {nameof(Application.Url), url},
+                        {nameof(Application.State), ApplicationStateEnum.Live, ConditionRelation.NotEqual}
                     });
 
             LoadApplicationData(res);
@@ -104,26 +104,26 @@ namespace Chalkable.Data.Master.DataAccess
             {
                 if (!query.IncludeInternal)
                 {
-                    res.Sql.Append($" and [{Application.IS_INTERNAL_FIELD}] <> 1");
+                    res.Sql.Append($" and [{nameof(Application.IsInternal)}] <> 1");
                 }
                 if (query.OnlyForInstall)
                 {
                     if (query.Role == CoreRoles.TEACHER_ROLE.Id)
-                        res.Sql.Append($" and ([{Application.HAS_STUDENT_MY_APPS_FIELD}] = 1 or [{Application.HAS_TEACHER_MY_APPS_FIELD}] = 1 or [{Application.CAN_ATTACH_FIELD}] = 1 or [{Application.HAS_TEACHER_EXTERNAL_ATTACH_FIELD}] = 1 or [{Application.HAS_STUDENT_EXTERNAL_ATTACH_FIELD}] = 1)");
+                        res.Sql.Append($" and ([{nameof(Application.HasStudentMyApps)}] = 1 or [{nameof(Application.HasTeacherMyApps)}] = 1 or [{nameof(Application.CanAttach)}] = 1 or [{nameof(Application.HasTeacherExternalAttach)}] = 1 or [{nameof(Application.HasStudentExternalAttach)}] = 1)");
                     if (query.Role == CoreRoles.STUDENT_ROLE.Id)
-                        res.Sql.Append($" and ([{Application.HAS_STUDENT_MY_APPS_FIELD}] = 1 or [{Application.HAS_STUDENT_EXTERNAL_ATTACH_FIELD}] = 1)");
+                        res.Sql.Append($" and ([{nameof(Application.HasStudentMyApps)}] = 1 or [{nameof(Application.HasStudentExternalAttach)}] = 1)");
                 }
             }
 
             if (query.DeveloperId.HasValue)
             {
-                res.Sql.Append(string.Format(" and [{0}] = @{0}", Application.DEVELOPER_REF_FIELD));
-                res.Parameters.Add(Application.DEVELOPER_REF_FIELD, query.DeveloperId);
+                res.Sql.Append(string.Format(" and [{0}] = @{0}", nameof(Application.DeveloperRef)));
+                res.Parameters.Add(nameof(Application.DeveloperRef), query.DeveloperId);
             }
             if (query.Id.HasValue)
             {
-                res.Sql.AppendFormat(" and [{0}] = @{0}", Application.ID_FIELD);
-                res.Parameters.Add(Application.ID_FIELD, query.Id.Value);
+                res.Sql.AppendFormat(" and [{0}] = @{0}", nameof(Application.Id));
+                res.Parameters.Add(nameof(Application.Id), query.Id.Value);
             }
             if (query.Live.HasValue || query.State.HasValue)
             {
@@ -134,13 +134,13 @@ namespace Chalkable.Data.Master.DataAccess
                     if(!query.Live.Value) sqlOperator = " <> ";
                     state = (int?) ApplicationStateEnum.Live;
                 }
-                res.Sql.Append(string.Format(" and [{0}] {1} @{0}", Application.STATE_FIELD, sqlOperator));
-                res.Parameters.Add(Application.STATE_FIELD, state);
+                res.Sql.Append(string.Format(" and [{0}] {1} @{0}", nameof(Application.State), sqlOperator));
+                res.Parameters.Add(nameof(Application.State), state);
             }
             
             if (query.Free.HasValue)
             {
-                res.Sql.AppendFormat(" and [{0}] {1} 0", Application.PRICE_FIELD, query.Free.Value ? "=" : ">");
+                res.Sql.AppendFormat(" and [{0}] {1} 0", nameof(Application.Price), query.Free.Value ? "=" : ">");
             }
             
             if (query.GradeLevels != null && query.GradeLevels.Count > 0)
@@ -238,7 +238,7 @@ namespace Chalkable.Data.Master.DataAccess
 
         public IList<ApplicationCategory> UpdateCategories(Guid id, IList<Guid> categories)
         {
-            SimpleDelete<ApplicationCategory>(new AndQueryCondition { { ApplicationCategory.APPLICATION_REF_FIELD, id } });
+            SimpleDelete<ApplicationCategory>(new AndQueryCondition { { nameof(ApplicationCategory.ApplicationRef), id } });
             IList<ApplicationCategory> appCategories = new List<ApplicationCategory>();
             if (categories != null)
             {
@@ -248,12 +248,12 @@ namespace Chalkable.Data.Master.DataAccess
                 }
             }
             SimpleInsert(appCategories);
-            return SelectMany<ApplicationCategory>(new AndQueryCondition { { ApplicationCategory.APPLICATION_REF_FIELD, id } });
+            return SelectMany<ApplicationCategory>(new AndQueryCondition { { nameof(ApplicationCategory.ApplicationRef), id } });
         }
 
         public IList<ApplicationPicture> UpdatePictures(Guid id, IList<Guid> picturesId)
         {
-            SimpleDelete<ApplicationPicture>(new AndQueryCondition { { ApplicationPicture.APPLICATION_REF_FIELD, id } });
+            SimpleDelete<ApplicationPicture>(new AndQueryCondition { { nameof(ApplicationPicture.ApplicationRef), id } });
             IList<ApplicationPicture> appPictures = new List<ApplicationPicture>();
             if (picturesId != null)
             {
@@ -263,12 +263,12 @@ namespace Chalkable.Data.Master.DataAccess
                 }
             }
             SimpleInsert(appPictures);
-            return SelectMany<ApplicationPicture>(new AndQueryCondition { { ApplicationPicture.APPLICATION_REF_FIELD, id } });
+            return SelectMany<ApplicationPicture>(new AndQueryCondition { { nameof(ApplicationPicture.ApplicationRef), id } });
         }
 
         public IList<ApplicationGradeLevel> UpdateGradeLevels(Guid id, IList<int> gradeLevels)
         {
-            SimpleDelete<ApplicationGradeLevel>(new AndQueryCondition { { ApplicationGradeLevel.APPLICATION_REF_FIELD, id } });
+            SimpleDelete<ApplicationGradeLevel>(new AndQueryCondition { { nameof(ApplicationGradeLevel.ApplicationRef), id } });
             IList<ApplicationGradeLevel> appGradeLevels = new List<ApplicationGradeLevel>();
             if (gradeLevels != null)
             {
@@ -278,12 +278,12 @@ namespace Chalkable.Data.Master.DataAccess
                 }
             }
             SimpleInsert(appGradeLevels);
-            return SelectMany<ApplicationGradeLevel>(new AndQueryCondition { { ApplicationGradeLevel.APPLICATION_REF_FIELD, id } });
+            return SelectMany<ApplicationGradeLevel>(new AndQueryCondition { { nameof(ApplicationGradeLevel.ApplicationRef), id } });
         }
 
         public IList<ApplicationPermission> UpdatePermissions(Guid id, IList<AppPermissionType> permissionIds)
         {
-            SimpleDelete<ApplicationPermission>(new AndQueryCondition { { ApplicationPermission.APPLICATION_REF_FIELD, id } });
+            SimpleDelete<ApplicationPermission>(new AndQueryCondition { { nameof(ApplicationPermission.ApplicationRef), id } });
             IList<ApplicationPermission> applicationPermissions = new List<ApplicationPermission>();
             if (permissionIds != null)
             {
@@ -298,13 +298,13 @@ namespace Chalkable.Data.Master.DataAccess
                 }
             }
             SimpleInsert(applicationPermissions);
-            return SelectMany<ApplicationPermission>(new AndQueryCondition { { ApplicationPermission.APPLICATION_REF_FIELD, id } });
+            return SelectMany<ApplicationPermission>(new AndQueryCondition { { nameof(ApplicationPermission.ApplicationRef), id } });
         }
 
 
         public IList<ApplicationStandard> UpdateApplicationStandards(Guid id, IList<Guid> standardsIds)
         {
-            SimpleDelete<ApplicationStandard>(new AndQueryCondition{{ApplicationStandard.APPLICATION_REF_FIELD, id}});
+            SimpleDelete<ApplicationStandard>(new AndQueryCondition{{nameof(ApplicationStandard.ApplicationRef), id}});
             IList<ApplicationStandard> applicationStandards = new List<ApplicationStandard>();
             if (standardsIds != null)
             {
@@ -318,21 +318,21 @@ namespace Chalkable.Data.Master.DataAccess
                 }
             }
             SimpleInsert(applicationStandards);
-            return SelectMany<ApplicationStandard>(new AndQueryCondition { { ApplicationPermission.APPLICATION_REF_FIELD, id } });
+            return SelectMany<ApplicationStandard>(new AndQueryCondition { { nameof(ApplicationPermission.ApplicationRef), id } });
         } 
 
         public bool AppExists(Guid? currentApplicationId, string name, string url)
         {
             var query = new DbQuery();
             query.Sql.Append("Select * from Application a where ");
-            query.Sql.Append("(").Append(string.Format("[{0}] = @{0} or ([{1}] = @{1} and [{1}] is not null)", Application.NAME_FIELD, Application.URL_FIELD)).Append(")");
-            query.Sql.Append(" and (").Append(string.Format("[{0}] is null or [{0}] <> @{0}", Application.ORIGINAL_REF_FIELD)).Append(")");
-            query.Sql.AppendFormat(" and a.[Id] <> @{0}", Application.ID_FIELD);
-            query.Sql.Append(string.Format(" and not exists (select * from Application where [{0}] = a.[{1}] and [{1}] = @{1})", Application.ORIGINAL_REF_FIELD, Application.ID_FIELD));
-            query.Parameters.Add(Application.ID_FIELD, currentApplicationId);
-            query.Parameters.Add(Application.NAME_FIELD, name);
-            query.Parameters.Add(Application.URL_FIELD, url);
-            query.Parameters.Add(Application.ORIGINAL_REF_FIELD, currentApplicationId);
+            query.Sql.Append("(").Append(string.Format("[{0}] = @{0} or ([{1}] = @{1} and [{1}] is not null)", nameof(Application.Name), nameof(Application.Url))).Append(")");
+            query.Sql.Append(" and (").Append(string.Format("[{0}] is null or [{0}] <> @{0}", nameof(Application.OriginalRef))).Append(")");
+            query.Sql.AppendFormat(" and a.[Id] <> @{0}", nameof(Application.Id));
+            query.Sql.Append(string.Format(" and not exists (select * from Application where [{0}] = a.[{1}] and [{1}] = @{1})", nameof(Application.OriginalRef), nameof(Application.Id)));
+            query.Parameters.Add(nameof(Application.Id), currentApplicationId);
+            query.Parameters.Add(nameof(Application.Name), name);
+            query.Parameters.Add(nameof(Application.Url), url);
+            query.Parameters.Add(nameof(Application.OriginalRef), currentApplicationId);
             return Exists(query);
         }
 
@@ -341,13 +341,13 @@ namespace Chalkable.Data.Master.DataAccess
             var query = new DbQuery(new List<DbQuery>
                 {
                     Orm.SimpleDelete<ApplicationDistrictOption>(new AndQueryCondition { {ApplicationDistrictOption.APPLICATION_REF_FIELD, id} }),
-                    Orm.SimpleDelete<ApplicationPermission>(new AndQueryCondition { {ApplicationPermission.APPLICATION_REF_FIELD, id} }),
-                    Orm.SimpleDelete<ApplicationCategory>(new AndQueryCondition { {ApplicationCategory.APPLICATION_REF_FIELD, id} }),
-                    Orm.SimpleDelete<ApplicationPicture>(new AndQueryCondition { {ApplicationPicture.APPLICATION_REF_FIELD, id} }),
-                    Orm.SimpleDelete<ApplicationRating>(new AndQueryCondition { {ApplicationRating.APPLICATION_REF_FIELD, id} }),
-                    Orm.SimpleDelete<ApplicationGradeLevel>(new AndQueryCondition { {ApplicationGradeLevel.APPLICATION_REF_FIELD, id} }),
-                    Orm.SimpleDelete<ApplicationStandard>(new AndQueryCondition { {ApplicationStandard.APPLICATION_REF_FIELD, id} }),
-                    Orm.SimpleDelete<Application>(new AndQueryCondition { {Application.ID_FIELD, id} }),
+                    Orm.SimpleDelete<ApplicationPermission>(new AndQueryCondition { {nameof(ApplicationPermission.ApplicationRef), id} }),
+                    Orm.SimpleDelete<ApplicationCategory>(new AndQueryCondition { {nameof(ApplicationCategory.ApplicationRef), id} }),
+                    Orm.SimpleDelete<ApplicationPicture>(new AndQueryCondition { {nameof(ApplicationPicture.ApplicationRef), id} }),
+                    Orm.SimpleDelete<ApplicationRating>(new AndQueryCondition { {nameof(ApplicationRating.ApplicationRef), id} }),
+                    Orm.SimpleDelete<ApplicationGradeLevel>(new AndQueryCondition { {nameof(ApplicationGradeLevel.ApplicationRef), id} }),
+                    Orm.SimpleDelete<ApplicationStandard>(new AndQueryCondition { {nameof(ApplicationStandard.ApplicationRef), id} }),
+                    Orm.SimpleDelete<Application>(new AndQueryCondition { {nameof(Application.Id), id} }),
 
                 });
             ExecuteNonQueryParametrized(query.Sql.ToString(), query.Parameters);
@@ -360,7 +360,7 @@ namespace Chalkable.Data.Master.DataAccess
             var tableName = typeof(Application).Name;
             var dbQuery = new DbQuery();
             dbQuery.Sql.AppendFormat(@"select * from [{0}]", tableName);
-            dbQuery.Sql.AppendFormat(" where [{0}].[{1}] in ({2})", tableName, Application.ID_FIELD
+            dbQuery.Sql.AppendFormat(" where [{0}].[{1}] in ({2})", tableName, nameof(Application.Id)
                     , ids.Select(x => "'" + x.ToString() + "'").JoinString(","));
             var res = ReadMany<Application>(dbQuery);
             if (res.Count == 0) return res;
@@ -425,7 +425,7 @@ namespace Chalkable.Data.Master.DataAccess
         {
             Start = 0;
             Count = int.MaxValue;
-            OrderBy = Application.ID_FIELD;
+            OrderBy = nameof(Application.Id);
             IncludeInternal = false;
             Live = null;
             Free = null;
