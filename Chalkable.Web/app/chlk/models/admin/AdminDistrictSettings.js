@@ -12,6 +12,6 @@ NAMESPACE('chlk.models.admin', function () {
         chlk.models.settings.AdminMessaging, 'messagingSettings',
 
         [ria.serialize.SerializeProperty('installedapps')],
-        ArrayOf(chlk.models.apps.Application), 'InstalledApps'
+        ArrayOf(chlk.models.apps.Application), 'installedApps'
     ]);
 });
