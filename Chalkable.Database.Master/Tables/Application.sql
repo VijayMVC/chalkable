@@ -30,7 +30,7 @@
     [HasStudentExternalAttach]		BIT					NOT NULL,
     [HasAdminExternalAttach]		BIT					NOT NULL,
 	[HasSysAdminSettings]			BIT					NOT NULL DEFAULT (0),
-	[HasDistricAdminSettings]		BIT					NOT NULL DEFAULT (0), 
+	[HasDistrictAdminSettings]		BIT					NOT NULL DEFAULT (0), 
 	[HasStudentProfile]				BIT					NOT NULL DEFAULT (0),
 	[ProvidesRecomendedContent]		BIT					NOT NULL DEFAULT (0),
     [ExternalAttachPictureRef]		UNIQUEIDENTIFIER	NULL,

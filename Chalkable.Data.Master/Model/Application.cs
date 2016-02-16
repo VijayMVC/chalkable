@@ -41,7 +41,7 @@ namespace Chalkable.Data.Master.Model
         public bool HasStudentExternalAttach { get; set; }
         public bool HasAdminExternalAttach { get; set; }
         public bool HasSysAdminSettings { get; set; }
-        public bool HasDistricAdminSettings { get; set; }
+        public bool HasDistrictAdminSettings { get; set; }
         public bool HasStudentProfile { get; set; }
         public bool ProvidesRecomendedContent { get; set; }
 
