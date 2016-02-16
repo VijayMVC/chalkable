@@ -27,6 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteStudentSchools(IList<StudentSchool> studentSchools);
 
         IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId);
+        bool IsTeacherStudent(int teacherId, int studentId, int schoolYearId);
         IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null);
         PaginatedList<StudentDetails> SearchStudents(int schoolYearId, int? classId, int? teacherId, int? classmatesToId, string filter, bool orderByFirstName, int start, int count, int? markingPeriodId);
 
@@ -90,6 +91,12 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<StudentDetails> GetTeacherStudents(int teacherId, int schoolYearId)
         {
             return DoRead(u => new StudentDataAccess(u).GetTeacherStudents(teacherId, schoolYearId));
+        }
+
+        public bool IsTeacherStudent(int teacherId, int studentId, int schoolYearId)
+        {
+            var students = GetTeacherStudents(teacherId, schoolYearId);
+            return students.Any(s => s.Id == studentId);
         }
 
         public IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)

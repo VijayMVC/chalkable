@@ -2,6 +2,8 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model;
@@ -88,6 +90,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             return Json(res, 6);
         }
 
+        
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Schedule(int personId)
         {

@@ -16,6 +16,8 @@ NAMESPACE('chlk.models.people', function () {
 
             VOID, function deserialize(raw) {
                 this.displayName = SJX.fromValue(raw.displayname, String);
+                this.login = SJX.fromValue(raw.login, String);
+                this.ableEditLogin = SJX.fromValue(raw.caneditlogin, Boolean);
                 this.email = SJX.fromValue(raw.email, String);
                 this.firstName = SJX.fromValue(raw.firstname, String);
                 this.fullName = SJX.fromValue(raw.fullname, String);
@@ -41,6 +43,8 @@ NAMESPACE('chlk.models.people', function () {
             },
 
             String, 'displayName',
+            String, 'login',
+            Boolean, 'ableEditLogin',
             String, 'email',
             String, 'firstName',
             String, 'fullName',
