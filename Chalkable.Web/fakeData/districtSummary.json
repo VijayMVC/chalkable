@@ -1,0 +1,89 @@
+{
+    "data":[{
+        "id": 1,
+        "name": "Clarkson Elementary",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 2,
+        "name": "Clarkson Elementary",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 3,
+        "name": "Clarkson Elementary",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 4,
+        "name": "Clarkson Elementary",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 5,
+        "name": "Clarkson Elementary",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 6,
+        "name": "Clarkson Elementary",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 7,
+        "name": "Clarkson Elementary",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 8,
+        "name": "Clarkson Elementary",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 9,
+        "name": "Clarkson Elementary",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    },
+    {
+        "id": 10,
+        "name": "Clarkson Elementary",
+        "attendancescount": 12,
+        "disciplinescount": 12,
+        "average": 12,
+        "studentscount": 22
+    }],
+    "hasnextpage": true,
+    "haspreviouspage": false,
+    "pageindex": 0,
+    "pagesize": 10,
+    "success": true,
+    "totalcount": 470,
+    "totalpages": 47
+}
