@@ -68,6 +68,9 @@ NAMESPACE('chlk.controllers', function (){
     ANNOTATION(
         function MessagingEnabled(){});
 
+    /** @class chlk.controllers.AssessmentEnabled*/
+    ANNOTATION(
+        function AssessmentEnabled(){});
 
     function toCamelCase(str) {
         return str.replace(/(\-[a-z])/g, function($1){
