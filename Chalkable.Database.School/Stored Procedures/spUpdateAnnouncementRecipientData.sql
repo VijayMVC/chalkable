@@ -1,75 +1,100 @@
-﻿
-
-CREATE Procedure [dbo].[spUpdateAnnouncementRecipientData] 
+﻿CREATE PROCEDURE [dbo].spUpdateAnnouncementRecipientData
 	@announcementId Int, 
-	@personId Int,
-	@roleId Int, 
 	@complete Bit,
-	@tillDate datetime2,
-	@schoolYearId Int,
-	@annType int,
-	@classId int
-As
-
-declare @annToMark table (Id int, Complete bit)
+	@personId int,
+	@roleId int,
+	@schoolYearId int,
+	@classId int,
+	@announcementType int,
+	@fromDate datetime2,
+	@toDate datetime2
+AS
 
 Begin Transaction
-if @announcementId is null
+
+--Announcement types
+declare @LESSON_PLAN int = 3,
+		@ADMIN_ANNOUNCEMENT int = 2;
+--Roles ids
+declare @TEACHER_ROLE int = 2,
+		@STUDENT_ROLE int = 3,
+		@DISTRICT_ADMIN_ROLE int = 10;
+
+declare @announcementsToMark table (Id int, Complete bit)
+declare @adminAnnouncements TAdminAnnouncement,
+		@lessonPlans TLessonPlan,
+		@completeStateNeedsUpdate int=  1-@complete,
+		@gradeLev TInt32;
+
+if @announcementType = @ADMIN_ANNOUNCEMENT
 Begin
-	if @annType = 3
-	Begin
-		Insert Into @annToMark
-		Select 
-			Id, annRecData.Complete
-		From 
-			vwLessonPlan
-			left join (select * from AnnouncementRecipientData where PersonRef = @personId) as annRecData on Id = annRecData.AnnouncementRef
-		Where 
-			(@tillDate is null or EndDate <= @tillDate)
-			and ((@roleId = 2 
-				  and exists(select * from ClassTeacher where PersonRef = @personId and ClassTeacher.ClassRef = vwLessonPlan.ClassRef))
-				 or (@roleId = 3 
-					 and exists(select * from ClassPerson where PersonRef = @personId and ClassPerson.ClassRef = vwLessonPlan.ClassRef) and VisibleForStudent = 1))
-			and SchoolYearRef = @schoolYearId
-			and [State] = 1
-			and (@classId is null or vwLessonPlan.ClassRef = @classId)
-		Group by vwLessonPlan.Id, annRecData.Complete
-	End
-	
-	If @annType = 2
-	Begin
-		Insert Into @annToMark
-		Select 
-			Id, annRecData.Complete
-		From
-			vwAdminAnnouncement
-			left join(select * from AnnouncementRecipientData where PersonRef = @personId) as annRecData on Id = annRecData.AnnouncementRef
-		Where
-			(@tillDate is null or Expires<=@tillDate)
-			and ((@roleId = 3 
-				  and exists(select * from AnnouncementGroup ar
-			 				join StudentGroup on StudentGroup.GroupRef = ar.GroupRef
-			 				where StudentGroup.StudentRef = @personId and AnnouncementRef = vwAdminAnnouncement.Id))
-				 or (@roleId = 10 and vwAdminAnnouncement.AdminRef = @personId))
-			and [State] = 1
-		Group by vwAdminAnnouncement.Id, annRecData.Complete
-	End
-End
-Else
+	if @roleId = @STUDENT_ROLE
+		insert into @adminAnnouncements
+			exec spGetAdminAnnouncements @announcementId, @personId, @roleId, 0, 
+				@fromDate, @toDate, null, @gradeLev, @completeStateNeedsUpdate, @personId
+
+	if @roleId = @ADMIN_ANNOUNCEMENT
+		insert into @adminAnnouncements
+			exec spGetAdminAnnouncements @announcementId, @personId, @roleId, 1, 
+				@fromDate, @toDate, null, @gradeLev, @completeStateNeedsUpdate, @personId
+End 
+Else If @announcementType = @LESSON_PLAN
 Begin
-	insert into @annToMark 
-	values 
-	(
-		@announcementId,
-		(Select Top 1 Complete From AnnouncementRecipientData
-		 Where AnnouncementRef = @announcementId and PersonRef = @personId)
-	)
+	If @roleId = @TEACHER_ROLE
+		insert into @lessonPlans
+			exec spGetLessonPlans @announcementId, @schoolYearid, @personId, @classId, @roleId, 
+				@personId, null, 1, @fromDate, @toDate, @completeStateNeedsUpdate, null
+
+	If @roleId = @STUDENT_ROLE
+		insert into @lessonPlans
+			exec spGetLessonPlans @announcementId, @schoolYearid, @personId, @classId, @roleId, 
+				null, @personId, 0, @fromDate, @toDate, @completeStateNeedsUpdate, null 
 End
 
-Insert Into AnnouncementRecipientData(AnnouncementRef, PersonRef, Complete)
-		select Id, @personId, 1 from @annToMark where Complete is null
+declare @announcementsToUpdate table( Id int)
+declare @announcementsToInsert table( Id int)
+
+insert into @announcementsToUpdate
+	select Id
+	from 
+		@adminAnnouncements 
+		join AnnouncementRecipientData
+			on Id = AnnouncementRef
+	Where AnnouncementRecipientData.Complete is not null
+
+	Union
+
+	select id
+	from
+		@lessonPlans
+		join AnnouncementRecipientData
+			on Id = AnnouncementRef
+	Where AnnouncementRecipientData.Complete is not null
+
+insert into @announcementsToInsert
+	select Id
+	from 
+		@adminAnnouncements 
+		join AnnouncementRecipientData
+			on Id = AnnouncementRef
+	Where AnnouncementRecipientData.Complete is null
+
+	Union
+
+	select id
+	from
+		@lessonPlans
+		join AnnouncementRecipientData
+			on Id = AnnouncementRef
+	Where AnnouncementRecipientData.Complete is null
+
 Update AnnouncementRecipientData
-		Set Complete = @complete
-		Where AnnouncementRef in(select Id from @annToMark where Complete is not null) and PersonRef = @personId
+Set Complete = @complete 
+Where 
+	AnnouncementRecipientData.PersonRef = @personId
+	And AnnouncementRecipientData.AnnouncementRef in(select * from @announcementsToUpdate)
 
-Commit Transaction
+Insert Into AnnouncementRecipientData
+ Select Id, @personId, @complete From @announcementsToInsert
+
+ Commit Transaction

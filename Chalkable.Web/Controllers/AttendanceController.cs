@@ -141,7 +141,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult PostSeatingChart(DateTime? date, SeatingChartInfo seatingChartInfo, Boolean needInfo)
+        public ActionResult PostSeatingChart(DateTime? date, SeatingChartInfo seatingChartInfo, bool needInfo)
         {
             var d = (date ?? Context.NowSchoolYearTime).Date;
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(d, true);

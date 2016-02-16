@@ -18,9 +18,6 @@ namespace Chalkable.API
         public ChalkableAuthorization(string apiRoot, ApplicationEnvironment configuration = null)
         {
             ApiRoot = apiRoot;
-#if DEBUG
-            apiRoot = "https://localhost";
-#endif
             Configuration = configuration ?? Settings.GetConfiguration(apiRoot);
         }
 

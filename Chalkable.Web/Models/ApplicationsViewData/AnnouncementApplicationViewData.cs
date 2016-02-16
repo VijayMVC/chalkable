@@ -20,6 +20,8 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public string GradingViewUrl { get; set; }
         public int Order { get; set; }
         public bool IsInstalledForMe { get; set; }
+        public string Text { get; set; }
+        public string ImageUrl { get; set; }
 
         protected AnnouncementApplicationViewData(Application application) : base(application)
         {
@@ -41,6 +43,8 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                     GradingViewUrl = AppTools.BuildAppUrl(application, announcementApplication.Id, appInstallId, AppMode.GradingView),
                     CurrentPersonId = currentPersonId,
                     Order = announcementApplication.Order,
+                    Text = announcementApplication.Text,
+                    ImageUrl = announcementApplication.ImageUrl,
                     IsInstalledForMe = installs != null && currentPersonId.HasValue &&
                                        installs.Any(x => x.OwnerRef == currentPersonId && x.Active)
                 };

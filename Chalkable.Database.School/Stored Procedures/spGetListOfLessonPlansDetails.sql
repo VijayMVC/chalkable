@@ -28,6 +28,7 @@ Where
 	and SchoolYearRef = @schoolYearId
 	and (@callerRole=2 AND exists(Select * From ClassTeacher Where ClassTeacher.PersonRef = @callerId and ClassTeacher.ClassRef = vwLP.ClassRef)
 		 or @callerRole=3 And exists(Select * From ClassPerson Where ClassPerson.PersonRef = @callerId and ClassPerson.ClassRef = vwLP.ClassRef)
+			And vwLP.VisibleForStudent = 1
 		 or @callerRole=10 
 		 or @onlyOwner = 0)
 

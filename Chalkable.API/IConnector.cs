@@ -1,10 +1,13 @@
-using System.Net;
+using System.Collections.Specialized;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Chalkable.API
 {
     public interface IConnector
     {
-        Task<T> Call<T>(string endpoint, OnWebRequestIsCreated onCreated = null, string method = null);
+        Task<T> Get<T>(string endpoint); 
+        Task<T> Put<T>(string endpoint, Stream stream);
+        Task<T> Post<T>(string endpoint, NameValueCollection postData);
     }
 }

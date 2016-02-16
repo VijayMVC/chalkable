@@ -31,7 +31,7 @@ mixin Glue_()
         studentAnnouncements = studentAnnouncementsInfo.getItems()
 
     .buttons
-        if !self.getUserRole().isStudent()
+        if self.getUserRole().isTeacher() || self.getUserRole().isAdmin() && adminAnnouncement
             +ActionButton('announcement', 'edit', self.getId(), self.getType())(class = self.isAbleEdit() ? "" : "disabled").right Edit
         +ActionButton('feed', 'doToList').back-button Back
         .clear-fix
@@ -58,7 +58,8 @@ mixin Glue_()
             if self.getUserRole().isTeacher() && (lessonPlan && lessonPlan.isHiddenFromStudents() || classAnnouncement && classAnnouncement.isHiddenFromStudents())
                 +AnnouncementTooltip().make-visible-container
                     .comment This item is hidden from students.
-                    +ActionLink('announcement', 'makeVisible', self.getId(), self.getType()).make-visible-btn Make visible
+                    if self.isAnnOwner()
+                        +ActionLink('announcement', 'makeVisible', self.getId(), self.getType()).make-visible-btn Make visible
             br
             .table
                 .avatar-block-left

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.DataAccess;
@@ -157,8 +158,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 p.FirstLoginDate = Context.NowSchoolTime;
                 da.Update(p);
                 ServiceLocator.ClassAnnouncementService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
-                ServiceLocator.LessonPlanService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
-                ServiceLocator.AdminAnnouncementService.SetAnnouncementsAsComplete(Context.NowSchoolTime, true);
+                LessonPlanService.SetAnnouncementsAsComplete(uow, ServiceLocator, Context.NowSchoolTime, true);
+                AdminAnnouncementService.SetAnnouncementsAsComplete(uow, ServiceLocator, Context.NowSchoolTime, true);
             });
         }
 

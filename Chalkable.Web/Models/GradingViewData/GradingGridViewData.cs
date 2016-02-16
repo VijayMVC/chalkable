@@ -12,7 +12,7 @@ namespace Chalkable.Web.Models.GradingViewData
     public class GradingGridSummaryViewData
     {
         public GradingPeriodViewData GradingPeriod { get; set; }
-        public int? Avg { get; set; }
+        public decimal? Avg { get; set; }
 
         protected GradingGridSummaryViewData(GradingPeriod gradingPeriod, int? avg)
         {
@@ -84,7 +84,7 @@ namespace Chalkable.Web.Models.GradingViewData
 
             var gpAvg = res.TotalAverages.FirstOrDefault(x => x.IsGradingPeriodAverage);
             if (gpAvg != null)
-                res.Avg = (int?)gpAvg.TotalAverage;
+                res.Avg = gpAvg.TotalAverage;
 
             if (res.DisplayTotalPoints || res.DisplayAlphaGrades)
                 BuildTotalPoints(res, stIds, gradeBook.StudentTotalPoints);

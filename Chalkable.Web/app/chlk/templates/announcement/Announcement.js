@@ -16,6 +16,9 @@ NAMESPACE('chlk.templates.announcement', function () {
         'Announcement', EXTENDS(chlk.templates.announcement.ApplicationsAndAttachments), [
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.announcement.AnnouncementTypeEnum, 'type',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.id.AnnouncementId, 'id',
 
             [ria.templates.ModelPropertyBind],

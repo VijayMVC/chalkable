@@ -3,6 +3,8 @@
         .container.panel-bg
             .items
                 a.action-link.pressed Messaging
+                each app in self.getInstalledApps()
+                    +ActionLink('settings', 'appSettings', app.getId())=app.getName()
 
     -var canUpdate = self.isAbleToUpdate();
     -var messagingSettings = self.getMessagingSettings();

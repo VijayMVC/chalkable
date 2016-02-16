@@ -57,16 +57,17 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var feedStartDate = settings.FromDate ??  DateTime.MinValue;
             var feedEndDate = settings.ToDate ??  DateTime.MaxValue;
             var sortOption = settings.SortTypeEnum ?? AnnouncementSortOption.DueDateAscending;
+            var ownedOnly = !classId.HasValue ? (bool?)true : null;
 
             if (!settings.AnnouncementTypeEnum.HasValue)
-                return _handlers[sortOption].GetAllItems(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count);
+                return _handlers[sortOption].GetAllItems(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count, ownedOnly);
 
             switch (settings.AnnouncementTypeEnum.Value)
             {
                 case AnnouncementTypeEnum.Class:
                     return ServiceLocator.ClassAnnouncementService.GetClassAnnouncementsForFeed(feedStartDate, feedEndDate, classId, complete, null, start, count, sortOption);
                 case AnnouncementTypeEnum.LessonPlan:
-                    return _handlers[sortOption].GetLessonPlansOnly(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count);
+                    return _handlers[sortOption].GetLessonPlansOnly(ServiceLocator, feedStartDate, feedEndDate, classId, complete, start, count, ownedOnly);
                 case AnnouncementTypeEnum.Admin:
                     return _handlers[sortOption].GetAdminAnnouncementsOnly(ServiceLocator, feedStartDate, feedEndDate, null, complete, start, count);
             }
@@ -132,7 +133,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return res;
         }
         
-        public AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null, int? teacherId = null)
+        public AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, 
+            int? studentId = null, int? teacherId = null)
         {
             var res = new AnnouncementComplexList
                 {

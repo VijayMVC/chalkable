@@ -1299,8 +1299,8 @@ NAMESPACE('chlk.controllers', function (){
             }]), null;
         },
 
-        [[chlk.models.id.AnnouncementAttachmentId, chlk.models.id.AnnouncementId]],
-        function viewAttachmentAction(attachmentId, announcementId){
+        [[chlk.models.id.AnnouncementAttachmentId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function viewAttachmentAction(attachmentId, announcementId, announcementType_){
             var attachment = this.getCachedAnnouncementAttachments().filter(function(item){ return item.getId() == attachmentId; })[0];
             if (!attachment)
                 return null;
@@ -1322,9 +1322,10 @@ NAMESPACE('chlk.controllers', function (){
                 res = new ria.async.DeferredData(attachmentViewData);
             }else{
                 var buttons = [downloadAttachmentButton];
-                if(this.userInRole(chlk.models.common.RoleEnum.STUDENT) && attachment.isTeachersAttachment() && attachment.getAttachmentId())
-                    buttons.push(new chlk.models.common.attachments.ToolbarButton('mark-attachment', 'MARK UP', null, null,
-                        'announcement', 'cloneAttachment', [attachment.getAttachmentId().valueOf(), announcementId.valueOf()], true));
+                if(this.userInRole(chlk.models.common.RoleEnum.STUDENT) && attachment.isTeachersAttachment() && attachment.getAttachmentId() &&
+                    announcementType_ && announcementType_ == chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT)
+                        buttons.push(new chlk.models.common.attachments.ToolbarButton('mark-attachment', 'MARK UP', null, null,
+                            'announcement', 'cloneAttachment', [attachment.getAttachmentId().valueOf(), announcementId.valueOf()], true));
                 res = this.announcementAttachmentService
                     .startViewSession(attachmentId)
                     .then(function(session){

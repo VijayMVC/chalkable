@@ -12,11 +12,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         protected override IList<AnnouncementComplex> InternalGetLessonPlans(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, int? classId,
-            bool? complete, int start, int count, DateTime? @from, DateTime? to, bool includeFrom, bool includeTo)
+            bool? complete, int start, int count, DateTime? @from, DateTime? to, bool includeFrom, bool includeTo, bool? ownedOnly = null)
         {
             @from = @from ?? fromDate;
             @to = to ?? toDate;
-            return locator.LessonPlanService.GetLessonPlansSortedByDate(@from, to, includeFrom, includeTo, classId, complete, start, count, _sortDesc);
+            return locator.LessonPlanService.GetLessonPlansSortedByDate(@from, to, includeFrom, includeTo, classId, complete, start, count, _sortDesc, ownedOnly);
         }
 
         protected override IList<AnnouncementComplex> InternalGetAdminAnns(IServiceLocatorSchool locator, DateTime? fromDate, DateTime? toDate, IList<int> gradeLevels,

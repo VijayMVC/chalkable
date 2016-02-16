@@ -9,7 +9,7 @@ mixin AnnouncementFormAttachmentItem(attachment, i)
             else
                 +LoadingImage(src=attachment.getPictureHref(), id="loading-image-" + i)
                 .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
-                +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getId()) Open
+                +ActionButton('announcement', 'viewAttachment', attachment.getId(), self.getId(), self.getType()) Open
 
 mixin AnnouncementFormApplicationItem(app, i, assessmentAppId_)
     viewUrl = app.getViewUrl()

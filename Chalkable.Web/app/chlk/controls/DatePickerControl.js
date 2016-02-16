@@ -110,19 +110,44 @@ NAMESPACE('chlk.controls', function () {
 
                 if(options.endRangeSelector){
                     options.onClose = function( selectedDate ) {
-                        if(wasChange)
-                            $(options.endRangeSelector).datepicker( "option", "minDate", selectedDate );
+                        var node = $(this);
 
-                        wasChange = false;
+                        setTimeout(function(){
+                            if(node.data('wasChange')){
+                                if(options.dateFormat){
+                                    var dt = Date.parse(selectedDate) || $(options.endRangeSelector).data('options').minDate;
+                                    selectedDate = $.datepicker.formatDate( options.dateFormat, dt );
+                                }
+
+                                $(options.endRangeSelector).datepicker( "option", "minDate", selectedDate );
+                                $(options.endRangeSelector).trigger('blur');
+                            }
+
+                            node.data('wasChange', false);
+                        }, 1);
+
                     }
                 }
 
                 if(options.startRangeSelector){
                     options.onClose = function( selectedDate ) {
-                        if(wasChange)
-                            $(options.startRangeSelector).datepicker( "option", "maxDate", selectedDate );
+                        var node = $(this);
 
-                        wasChange = false;
+                        setTimeout(function(){
+                            if(node.data('wasChange')){
+                                if(options.dateFormat){
+                                    var dt = Date.parse(selectedDate) || $(options.startRangeSelector).data('options').maxDate;
+                                    selectedDate = $.datepicker.formatDate( options.dateFormat, dt );
+                                }
+
+                                $(options.startRangeSelector).datepicker( "option", "maxDate", selectedDate );
+                                $(options.startRangeSelector).trigger('blur');
+                            }
+
+                            node.data('wasChange', false);
+                        }.bind(this), 1);
+
+
                     }
                 }
 
@@ -151,7 +176,7 @@ NAMESPACE('chlk.controls', function () {
                     node.setValue('');
                 node.off('change.datepiker');
                 node.on('change.datepiker', function(node, event){
-                    wasChange = true;
+                    node.setData('wasChange', true);
                     var options = node.getData('options');
                     var value = jQuery(node.valueOf()).datepicker('getDate');
                     if(value){

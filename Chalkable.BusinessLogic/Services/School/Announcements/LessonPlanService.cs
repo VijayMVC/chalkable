@@ -10,6 +10,7 @@ using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model.Announcements;
+using Microsoft.ReportingServices.Interfaces;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
@@ -28,11 +29,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId);
         IList<LessonPlan> GetLessonPlansbyFilter(string filter);
 
-        IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue);
+        IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool? ownedOnly = null);
 
-        IList<AnnouncementComplex> GetLessonPlansSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false);
-        IList<AnnouncementComplex> GetLessonPlansSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false);
-        IList<AnnouncementComplex> GetLessonPlansSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false);
+        IList<AnnouncementComplex> GetLessonPlansSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
+        IList<AnnouncementComplex> GetLessonPlansSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
+        IList<AnnouncementComplex> GetLessonPlansSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName, bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null);
 
         LessonPlan GetLastDraft();
 
@@ -53,15 +54,18 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return CreateLessonPlanDataAccess(unitOfWork);
         }
 
-        protected LessonPlanDataAccess CreateLessonPlanDataAccess(UnitOfWork unitOfWork)
+        protected LessonPlanDataAccess CreateLessonPlanDataAccess(UnitOfWork unitOfWork, bool? ownedOnly = null)
         {
-            Trace.Assert(Context.SchoolYearId.HasValue);
-            if (BaseSecurity.IsTeacher(Context))
-                return new LessonPlanForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
+            Trace.Assert(Context.SchoolYearId.HasValue);        
+            if (BaseSecurity.IsDistrictOrTeacher(Context))
+            {
+                if (Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN) || Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN))
+                    return new LessonPlanForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value, ownedOnly);
+                if (Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM) || Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM))
+                    return new LessonPlanForTeacherDataAccess(unitOfWork, Context.SchoolYearId.Value);
+            }
             if (Context.Role == CoreRoles.STUDENT_ROLE)
                 return new LessonPlanForStudentDataAccess(unitOfWork, Context.SchoolYearId.Value);
-            if (BaseSecurity.IsDistrictAdmin(Context))
-                return new LessonPlanForAdminDataAccess(unitOfWork, Context.SchoolYearId.Value);
 
             throw new ChalkableException("Not supported role for lesson plan");
         }
@@ -295,35 +299,40 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected override void SetComplete(Announcement announcement, bool complete)
         {
-            DoUpdate(
-                u =>
-                    new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.LessonPlan, null,
-                        Context.PersonId.Value, null, complete, null, null));
+            Trace.Assert(Context.PersonId.HasValue);
+
+            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.LessonPlan,
+                null, Context.PersonId.Value, null, complete, null, null, null));
         }
 
         public override void SetAnnouncementsAsComplete(DateTime? toDate, bool complete)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            CompleteAnnouncement(Context.PersonId.Value, complete, toDate);
-        }
-
-        private void CompleteAnnouncement(int personId, bool complete, DateTime? toDate)
-        {
             DoUpdate(u =>
             {
-                var anns = CreateLessonPlanDataAccess(u).GetLessonPlansOrderedByDate(new LessonPlansQuery
-                {
-                    RoleId = Context.RoleId,
-                    ToDate = toDate,
-                    PersonId = personId
-                }).Announcements;
-
-                var da = new AnnouncementRecipientDataDataAccess(u);
-                foreach (var ann in anns)
-                    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementTypeEnum.LessonPlan, null, personId, null, complete, null, null);
+                SetAnnouncementsAsComplete(u, ServiceLocator, toDate, complete);
             });
         }
 
+
+        public static void SetAnnouncementsAsComplete(UnitOfWork unitOfWork, IServiceLocatorSchool locator, DateTime? toDate, bool complete)
+        {
+
+            //TODO: remove this get method later 
+            //var anns = CreateLessonPlanDataAccess(unitOfWork, locator).GetLessonPlansOrderedByDate(new LessonPlansQuery
+            //{
+            //    RoleId = locator.Context.RoleId,
+            //    ToDate = toDate,
+            //    PersonId = locator.Context.PersonId,
+            //}).Announcements;
+
+            var da = new AnnouncementRecipientDataDataAccess(unitOfWork);
+            da.UpdateAnnouncementRecipientData(null, (int)AnnouncementTypeEnum.LessonPlan, locator.Context.SchoolYearId, locator.Context.PersonId, 
+                locator.Context.RoleId, complete, null, null, toDate);
+            //foreach (var ann in anns)
+            //    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementTypeEnum.LessonPlan, null, locator.Context.PersonId, null, complete, null, null);
+        }
+        
         public override bool CanAddStandard(int announcementId)
         {
             return DoRead(u => BaseSecurity.IsTeacher(Context) && CreateLessonPlanDataAccess(u).CanAddStandard(announcementId));
@@ -369,15 +378,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlansByFilter(filter, Context.PersonId.Value));
         }
 
-        public IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue)
+        public IList<AnnouncementComplex> GetLessonPlansForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool? ownedOnly = null)
         {
-            return GetLessonPlansSortedByDate(fromDate, toDate, true, true, classId, complete, start, count);
+            return GetLessonPlansSortedByDate(fromDate, toDate, true, true, classId, complete, start, count, ownedOnly: ownedOnly);
         }
 
         public IList<AnnouncementComplex> GetLessonPlansSortedByDate(DateTime? fromDate, DateTime? toDate, bool includeFromDate, bool includeToDate,
-            int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false)
+            int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null)
         {
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetLessonPlansOrderedByDate(new LessonPlansQuery
+            return DoRead(u => CreateLessonPlanDataAccess(u, ownedOnly).GetLessonPlansOrderedByDate(new LessonPlansQuery
             {
                 ClassId = classId,
                 Complete = complete,
@@ -394,9 +403,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         public IList<AnnouncementComplex> GetLessonPlansSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle,
-            bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false)
+            bool includeFromTitle, bool includeToTitle, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null)
         {
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetLesonPlansOrderedByTitle(new LessonPlansQuery
+            return DoRead(u => CreateLessonPlanDataAccess(u, ownedOnly).GetLesonPlansOrderedByTitle(new LessonPlansQuery
             {
                 ClassId = classId,
                 Complete = complete,
@@ -413,9 +422,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         public IList<AnnouncementComplex> GetLessonPlansSortedByClassName(DateTime? fromDate, DateTime? toDate, string fromClassName, string toClassName,
-            bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false)
+            bool includeFromClassName, bool includeToClassName, int? classId, bool? complete, int start = 0, int count = int.MaxValue, bool sortDesc = false, bool? ownedOnly = null)
         {
-            return DoRead(u => CreateLessonPlanDataAccess(u).GetLesonPlansOrderedByClassName(new LessonPlansQuery
+            return DoRead(u => CreateLessonPlanDataAccess(u, ownedOnly).GetLesonPlansOrderedByClassName(new LessonPlansQuery
             {
                 ClassId = classId,
                 Complete = complete,
@@ -447,8 +456,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId)
         {
-            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).CompleteAnnouncements(schoolYearId, personId, roleId,
-                        classId, (int) AnnouncementTypeEnum.LessonPlan, startDate, endDate));
+            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, schoolYearId, 
+                (int)AnnouncementTypeEnum.LessonPlan, personId, roleId, true, classId, startDate, endDate));
         }
 
         public void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)

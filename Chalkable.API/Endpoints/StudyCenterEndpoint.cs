@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace Chalkable.API.Endpoints
 {
@@ -13,7 +13,12 @@ namespace Chalkable.API.Endpoints
         public async Task<bool> SetPracticeGrade(Guid standardId, string score)
         {
             var url = "/StudyCenter/SetPracticeGrade.json";
-            return await Connector.Call<bool>($"{url}?id={standardId}&score={score}", method: WebRequestMethods.Http.Post);
+            
+            var nvc = HttpUtility.ParseQueryString(string.Empty);
+            nvc.Add("id", standardId.ToString());
+            nvc.Add("score", score);
+
+            return await Connector.Post<bool>(url, nvc);
         }
     }
 }

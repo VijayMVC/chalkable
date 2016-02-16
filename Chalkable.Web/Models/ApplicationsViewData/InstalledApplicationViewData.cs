@@ -95,7 +95,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                 ApplicationInstallId = applicationInstall.Id,
                 InstallationOwnerId = applicationInstall.OwnerRef,
                 PersonId = applicationInstall.PersonRef,
-                IsOwner = personId.HasValue && personId.Value == applicationInstall.OwnerRef,
+                IsOwner = personId.HasValue && personId.Value == applicationInstall.OwnerRef
             };
         }
         public static IList<ApplicationInstallViewData> Create(IList<ApplicationInstall> applicationInstalls, int? personId)

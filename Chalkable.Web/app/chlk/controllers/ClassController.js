@@ -200,17 +200,16 @@ NAMESPACE('chlk.controllers', function (){
                 var res = this.attendanceService.getSeatingChartInfo(classId, date_)
                     .attach(this.validateResponse_())
                     .then(function(attendances){
-                        if(attendances){
-                            var model = this.getContext().getSession().get(ChlkSessionConstants.CLASS_PROFILE_ATTENDANCE_DATA, null).getClazz().getSeatingChart();
-                            date_ = date_ || new chlk.models.common.ChlkSchoolYearDate();
-                            attendances.setAbleRePost(model.isAbleRePost());
-                            attendances.setAbleChangeReasons(model.isAbleChangeReasons());
-                            attendances.setAblePost(model.isAblePost());
-                            attendances.setClassId(classId);
-                            attendances.setDate(date_);
-                            attendances.setReasons(this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []));
-                            attendances.setInProfile(true);
-                        }
+                        attendances = attendances || new chlk.models.attendance.SeatingChart();
+                        var model = this.getContext().getSession().get(ChlkSessionConstants.CLASS_PROFILE_ATTENDANCE_DATA, null).getClazz().getSeatingChart();
+                        date_ = date_ || new chlk.models.common.ChlkSchoolYearDate();
+                        attendances.setAbleRePost(model.isAbleRePost());
+                        attendances.setAbleChangeReasons(model.isAbleChangeReasons());
+                        attendances.setAblePost(model.isAblePost());
+                        attendances.setClassId(classId);
+                        attendances.setDate(date_);
+                        attendances.setReasons(this.getContext().getSession().get(ChlkSessionConstants.ATTENDANCE_REASONS, []));
+                        attendances.setInProfile(true);
 
                         return attendances;
                     }, this);

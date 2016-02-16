@@ -36,7 +36,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public ApplicationPriceViewData ApplicationPrice { get; set; }
         public IList<Guid> Picturesid { get; set; }
         public BaseApplicationViewData LiveApplication { get; set; }
-        
+        public bool HasDistrictAdminSettings { get; set; }
+
+
         protected BaseApplicationViewData(Application application)
         {
             Id = application.Id;
@@ -61,6 +63,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             if (application.LiveApplication != null)
                 LiveApplication = Create(application.LiveApplication);
             Ban = application.Ban;
+            HasDistrictAdminSettings = application.HasDistrictAdminSettings;
         }
 
         public static BaseApplicationViewData Create(Application application)
