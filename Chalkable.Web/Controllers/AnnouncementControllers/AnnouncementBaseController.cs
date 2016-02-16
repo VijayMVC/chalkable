@@ -71,10 +71,12 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                     throw new NoMarkingPeriodException();
                 var abIds = ann.AnnouncementStandards.Where(x => x.Standard.AcademicBenchmarkId.HasValue)
                     .Select(x => x.Standard.AcademicBenchmarkId.Value).ToList();
-                
-                if(ann.ClassRef.HasValue)
-                    annView.SuggestedApps = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
-                                                              Context.PersonId.Value, ann.ClassRef.Value, abIds, mp.Id);
+
+                if (ann.ClassRef.HasValue)
+                {
+                    annView.SuggestedApps = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, Context.PersonId.Value, ann.ClassRef.Value, abIds, mp.Id);
+                    annView.AppsWithContent = AppMarketController.GetInstalledWithContent(SchoolLocator, MasterLocator, Context.PersonId.Value, ann.ClassRef.Value, mp.Id);
+                }
             }
             return annView;
         }

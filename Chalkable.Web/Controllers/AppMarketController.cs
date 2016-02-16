@@ -85,11 +85,16 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult ListInstalledWithContent(int personId, int classId, int markingPeriodId)
         {
-            var studentCountPerApp = SchoolLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
-            var installedApp = GetApplications(MasterLocator, studentCountPerApp.Select(x => x.Key).Distinct().ToList(), true, null);
-            installedApp = installedApp.Where(x => x.ProvidesRecomendedContent).ToList();
-            var res = ApplicationForAttachViewData.Create(installedApp, studentCountPerApp, true);
+            var res = GetInstalledWithContent(SchoolLocator, MasterLocator, personId, classId, markingPeriodId);
             return Json(res);
+        }
+
+        public static IList<ApplicationForAttachViewData> GetInstalledWithContent(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster masterLocator, int personId, int classId, int markingPeriodId)
+        {
+            var studentCountPerApp = schoolLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
+            var installedApp = GetApplications(masterLocator, studentCountPerApp.Select(x => x.Key).Distinct().ToList(), true, null);
+            installedApp = installedApp.Where(x => x.ProvidesRecomendedContent).ToList();
+            return ApplicationForAttachViewData.Create(installedApp, studentCountPerApp, true);
         }
 
         public static PaginatedList<InstalledApplicationViewData> GetListInstalledApps(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster masterLocator
