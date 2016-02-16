@@ -1,0 +1,81 @@
+-var classId = self.getClassId() && self.getClassId().valueOf()
+
+.dialog.report-window
+    +ActionForm('feed', 'submitFeedPrintingReport').report-form.no-working
+        .x-window-header
+            .close.close-btn.dark
+            h1=Msg.Print.valueOf().toUpperCase()
+
+        .x-window-body
+            +Hidden('announcementtype', self.getAnnouncementType() && self.getAnnouncementType().valueOf())
+            +Hidden('classid', classId)
+            +Hidden('importantonly', self.isImportantOnly())
+            .report-content
+                TABLE.report-table
+                    TR
+                        -var minDate = self.getMinStart()
+                        -var maxDate = self.getMaxEnd()
+                        TD.item-2
+                            h3=Msg.From
+                            +DatePicker('startdate', self.getStartDate())(
+                                data-options={
+                                    showOtherMonths: true,
+                                    selectOtherMonths: true,
+                                    calendarCls: 'for-dialog',
+                                    minDate: minDate && minDate.getDate(),
+                                    maxDate: maxDate && maxDate.getDate()
+                                },
+                                class='validate[required]'
+                            )#start-printing-date
+
+                        TD.item-2
+                            h3=Msg.To
+                            +DatePicker('enddate', self.getEndDate())(
+                                data-options={
+                                    showOtherMonths: true,
+                                    selectOtherMonths: true,
+                                    calendarCls: 'for-dialog',
+                                    minDate: minDate && minDate.getDate(),
+                                    maxDate: maxDate && maxDate.getDate()
+                                },
+                                class='validate[required]'
+                            )#end-printing-date
+                    TR
+                        TD.item-2
+                            .print-item.print-activity-details
+                                input(type = "radio", id="include-details", name = "includedetails", value="true", data-value=true, checked = self.isIncludeDetails())
+                                label(for="include-details") Print activity details
+                        TD.item-2
+                            .print-item.print-list-of-activities
+                                input(type = "radio", id="include-list", name = "includedetails", value="false", data-value=false, checked = !self.isIncludeDetails())
+                                label(for="include-list") Print list of activities
+                    if self.getUserRole().isAdmin() && !classId
+                        TR
+                            TD.item-2
+                                .check-title Print hidden attributes
+                                +SlideCheckbox('includehiddenattributes', self.isIncludeHiddenAttributes(), null, !self.isIncludeDetails())
+                            TD.item-2
+                                .check-title Print attachments
+                                +SlideCheckbox('includeattachments', self.isIncludeAttachments(), null, !self.isIncludeDetails())
+                    else
+                        if self.getUserRole().isTeacher() || self.getUserRole().isAdmin() && classId
+                            TR
+                                TD.item-2
+                                    .check-title Print hidden activities
+                                    +SlideCheckbox('includehiddenactivities', self.isIncludeHiddenActivities())
+                                TD.item-2
+                                    .check-title Print hidden attributes
+                                    +SlideCheckbox('includehiddenattributes', self.isIncludeHiddenAttributes(), null, !self.isIncludeDetails())
+                        TR
+                            TD.item-2
+                                .check-title Lesson Plans Only
+                                +SlideCheckbox('lessonplanonly', self.isLessonPlanOnly(), !self.isEditableLPOption())(
+                                    class = self.isEditableLPOption() ? "" : "disabled",
+                                    data-tooltip=self.getTooltip()
+                                )
+                            TD.item-2
+                                .check-title Print attachments
+                                +SlideCheckbox('includeattachments', self.isIncludeAttachments(), null, !self.isIncludeDetails())
+        .x-window-footer.report-bottom
+            BUTTON(type="submit", name="submitType", value="submit").chlk-button.blue-button=Msg.Download_PDF
+            //BUTTON(type="button").chlk-button.blue-button=Msg.Print
