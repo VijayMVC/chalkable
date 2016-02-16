@@ -110,9 +110,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             AnnouncementApplicationStorage.Update(aa);
         }
 
-        public void SaveAppContent(int announcementAppId, AnnouncementTypeEnum announcementType, string text, string imageUrl)
+        public void UpdateAnnouncementApplicationMeta(int announcementApplicationId, AnnouncementTypeEnum announcementType, string text, string imageUrl)
         {
-            var aa = GetAnnouncementApplication(announcementAppId);
+            var aa = GetAnnouncementApplication(announcementApplicationId);
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(aa.AnnouncementRef);
             if (ann.IsOwner)
                 throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);

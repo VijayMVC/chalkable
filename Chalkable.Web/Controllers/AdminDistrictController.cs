@@ -47,10 +47,10 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(messagingSettings, ViewConstants.MESSAGING_SETTINGS);
             
             var installedApps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, Context.PersonId.Value, null, 0, int.MaxValue, null).ToList();
-            installedApps = installedApps.Where(x => x.HasDistricAdminSettings).ToList();
+            installedApps = installedApps.Where(x => x.HasDistrictAdminSettings).ToList();
 
             var assessement = MasterLocator.ApplicationService.GetAssessmentApplication();
-            if (assessement.HasDistricAdminSettings && !installedApps.Exists(x => x.Id == assessement.Id))
+            if (assessement.HasDistrictAdminSettings && !installedApps.Exists(x => x.Id == assessement.Id))
             {
                 var assAppInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
                 var hasMyApp = MasterLocator.ApplicationService.HasMyApps(assessement);

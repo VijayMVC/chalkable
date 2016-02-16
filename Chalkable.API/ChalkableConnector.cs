@@ -35,11 +35,6 @@ namespace Chalkable.API
             var stream = new MemoryStream();
             if (postData != null)
             {
-                foreach (var key in postData.AllKeys)
-                {
-                    var v = HttpUtility.UrlEncode(postData[key]);
-                    postData[key] = v;
-                }
                 var data = Encoding.ASCII.GetBytes(postData.ToString());
                 stream.Write(data, 0, data.Length);
             }
