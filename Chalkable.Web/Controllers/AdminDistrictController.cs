@@ -50,7 +50,7 @@ namespace Chalkable.Web.Controllers
             installedApps = installedApps.Where(x => x.HasDistrictAdminSettings).ToList();
 
             var assessement = MasterLocator.ApplicationService.GetAssessmentApplication();
-            if (assessement.HasDistrictAdminSettings && !installedApps.Exists(x => x.Id == assessement.Id))
+            if (assessement != null && assessement.HasDistrictAdminSettings && !installedApps.Exists(x => x.Id == assessement.Id))
             {
                 var assAppInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
                 var hasMyApp = MasterLocator.ApplicationService.HasMyApps(assessement);

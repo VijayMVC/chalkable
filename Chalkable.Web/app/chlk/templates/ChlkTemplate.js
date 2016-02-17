@@ -115,6 +115,8 @@ NAMESPACE('chlk.templates', function () {
 
             Boolean, 'LEIntegrated',
 
+            Boolean, 'assessmentEnabled',
+
             Date, function getServerDate(str_, a_, b_){
                 return chlk.models.common.ChlkDate.GET_SERVER_DATE(str_, a_, b_);
             },

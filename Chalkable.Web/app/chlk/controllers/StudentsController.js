@@ -155,7 +155,6 @@ NAMESPACE('chlk.controllers', function (){
                     .attach(this.validateResponse_())
                     .then(function(model){
                         var userData = this.prepareProfileData(model);
-                        userData.setAbleEdit(false);
                         var res = new chlk.models.student.StudentProfileInfoViewData(this.getCurrentRole(), userData, this.getUserClaims_());
                         this.setUserToSession(res);
                         return res;
@@ -165,7 +164,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[chlk.models.people.User]],
             function infoEditAction(model){
-                var res = this.infoEdit_(model, chlk.models.student.StudentProfileInfoViewData);
+                var result = this.infoEdit_(model, chlk.models.student.StudentProfileInfoViewData);
                 return this.UpdateView(chlk.activities.profile.StudentInfoPage, result);
             },
 

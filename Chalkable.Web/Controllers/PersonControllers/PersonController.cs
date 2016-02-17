@@ -54,7 +54,21 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 throw new ChalkableSecurityException(ChlkResources.ERR_VIEW_INFO_INVALID_RIGHTS);
             
             var person = SchoolLocator.PersonService.GetPersonDetails(id);
-            return vdCreator(person);
+            var res = vdCreator(person);
+            PrepareUserLoginData(res, person);
+            return res;
+        }
+
+        private void PrepareUserLoginData(PersonInfoViewData personVD, Person person)
+        {
+            if(!person.UserId.HasValue) return;
+
+            var user = MasterLocator.UserService.GetBySisUserId(person.UserId.Value, Context.DistrictId);
+            if (MasterLocator.UserService.CanChangeUserLogin(user.Id))
+            {
+                personVD.Login = user.Login;
+                personVD.CanEditLogin = true;
+            }
         }
 
         protected virtual bool CanGetInfo(int personId)
@@ -72,17 +86,13 @@ namespace Chalkable.Web.Controllers.PersonControllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult UpdateInfo(int personId, string email)
         {
-            if (personId != Context.PersonId)
-                throw new ChalkableSecurityException("User can change email just for himself");
             Trace.Assert(email != null);
             string errorMessage;
-            SchoolLocator.PersonService.EditEmailForCurrentUser(email, out errorMessage);
+            SchoolLocator.PersonService.EditEmailForCurrentUser(personId, email, out errorMessage);
             if (!string.IsNullOrEmpty(errorMessage))
                 return Json(new ChalkableException(errorMessage));
 
             var res = GetInfo(personId, PersonInfoViewData.Create);
-            if(Context.Role == CoreRoles.TEACHER_ROLE)
-                res.Email = MasterLocator.UserService.GetUserEmailById(Context.UserId);
             return Json(res);
         }
     }

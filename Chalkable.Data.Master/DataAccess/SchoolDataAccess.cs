@@ -74,6 +74,18 @@ namespace Chalkable.Data.Master.DataAccess
             ExecuteStoredProcedure("spUpdateStudyCenterEnabled", ps);
         }
 
+        public void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
+        {
+            Trace.Assert(districtId.HasValue != schoolId.HasValue);
+            IDictionary<string, object> ps = new Dictionary<string, object>
+            {
+                {"@districtId", districtId},
+                {"@schoolId", schoolId},
+                {"@enabled", enabled}
+            };
+            ExecuteStoredProcedure("spUpdateAssessmentEnabled", ps);
+        }
+
         public void UpdateMessagingDisabled(Guid? districtId, Guid? schoolId, bool disabled)
         {
             Trace.Assert(districtId.HasValue != schoolId.HasValue);

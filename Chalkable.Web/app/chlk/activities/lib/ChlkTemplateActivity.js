@@ -66,6 +66,8 @@ NAMESPACE('chlk.activities.lib', function () {
 
             Boolean, 'studyCenterEnabled',
 
+            Boolean, 'assessmentEnabled',
+
             Boolean, 'LEIntegrated',
 
             [[String]],
@@ -81,7 +83,8 @@ NAMESPACE('chlk.activities.lib', function () {
                     userRole: this.getRole(),
                     currentUser: this.getCurrentUser(),
                     studyCenterEnabled: this.isStudyCenterEnabled(),
-                    LEIntegrated: this.isLEIntegrated()
+                    LEIntegrated: this.isLEIntegrated(),
+                    assessmentEnabled: this.isAssessmentEnabled()
                 })
             }
             //todo think about moving methods from children to base class

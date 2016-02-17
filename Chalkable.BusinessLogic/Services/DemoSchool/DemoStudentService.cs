@@ -117,6 +117,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             };
         }
 
+        public bool IsTeacherStudent(int teacherId, int studentId, int schoolYearId)
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<StudentDetails> GetClassStudents(int classId, int markingPeriodId, bool? isEnrolled = null)
         {
             var students = StudentStorage.GetAll();

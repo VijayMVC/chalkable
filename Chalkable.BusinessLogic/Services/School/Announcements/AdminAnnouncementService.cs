@@ -251,7 +251,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.PersonId.HasValue);
 
             DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.Admin, 
-                null, Context.PersonId.Value, null, complete, null, null, null));
+                null, Context.PersonId.Value, Context.RoleId, complete, null, null, null));
         }
 
         public override bool CanAddStandard(int announcementId)

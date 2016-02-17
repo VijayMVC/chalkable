@@ -107,6 +107,15 @@ NAMESPACE('chlk.services', function () {
                     schoolId: schoolId_ && schoolId_.valueOf(),
                     enabledTill: enabledTill_ && enabledTill_.toStandardFormat()
                 });
+            },
+
+            [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
+            ria.async.Future, function updateAssessmentEnabled(districtId_, schoolId_, enabled){
+                return this.post('School/UpdateAssessmentEnabled.json', Boolean,{
+                    districtId: districtId_ && districtId_.valueOf(),
+                    schoolId: schoolId_ && schoolId_.valueOf(),
+                    enabled: enabled
+                });
             }
         ])
 });

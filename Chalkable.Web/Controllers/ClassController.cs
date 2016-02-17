@@ -127,7 +127,7 @@ namespace Chalkable.Web.Controllers
             return Json(res);
         }
 
-        [AuthorizationFilter("DistrictAdmin")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult ClassesStats(int schoolYearId, string filter, int? start, int? count, int? teacherId, int? sortType)
         {
             var classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYearId, start, count, filter, teacherId,(ClassSortType?) sortType);

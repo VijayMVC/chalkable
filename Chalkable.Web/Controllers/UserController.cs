@@ -99,7 +99,7 @@ namespace Chalkable.Web.Controllers
             if (!Context.PersonId.HasValue)
                 return Json(new UnassignedUserException());
             string error;
-            SchoolLocator.PersonService.EditEmailForCurrentUser(newUserEmail, out error);
+            SchoolLocator.PersonService.EditEmailForCurrentUser(Context.PersonId.Value, newUserEmail, out error);
             if (!string.IsNullOrEmpty(error))
                 return Json(new ChalkableException(error));
             SchoolLocator.PersonService.ActivatePerson(Context.PersonId.Value);

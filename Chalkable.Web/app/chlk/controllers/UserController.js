@@ -101,7 +101,7 @@ NAMESPACE('chlk.controllers', function (){
                 var roleId = currentPerson.getRole().getId();
 
                 //todo: rewrite
-                var isAbleToEdit = model.getId() == currentPerson.getId();
+                var isAbleToEdit = model.isAbleEditLogin();//model.getId() == currentPerson.getId();
                 model.setAbleEdit(isAbleToEdit);
                 if(bDate)
                     model.setBirthDateText(bDate.toString(res).replace(/&#100;/g, 'd'));
@@ -188,7 +188,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.personService
                     .updateInfo(
                         model.getId(),
-                        model.getEmail(),
+                        model.getLogin(),
                         model.getPhonesValue()
                     )
                     .attach(this.validateResponse_())
@@ -199,6 +199,7 @@ NAMESPACE('chlk.controllers', function (){
                            }], 'center'), null;
                         var user = this.getUserFromSession();
                         if(user){
+                            user.setLogin(data.getLogin())
                             user.setEmail(data.getEmail());
                             data = user;
                         }

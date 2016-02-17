@@ -123,8 +123,9 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('settings')],
             [[chlk.models.id.AppId]],
             function appSettingsAction(appId) {
-                if(!this.isStudyCenterEnabled())
-                    return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+
+                if(!this.isStudyCenterEnabled() && !this.isAssessmentEnabled())
+                    return this.ShowMsgBox('Current school doesn\'t support assessments, applications, study center, profile explorer', 'whoa.'), null;
 
                 var mode = "settingsview";
 

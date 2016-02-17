@@ -72,7 +72,7 @@ namespace Chalkable.Data.School.Model
                 var res =
                     PersonEmails.FirstOrDefault(x => x.IsPrimary) ??
                     PersonEmails.FirstOrDefault();
-                return res != null ? res.EmailAddress : null;
+                return res?.EmailAddress;
             }
             
         }
