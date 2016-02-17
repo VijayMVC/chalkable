@@ -318,7 +318,7 @@ NAMESPACE('chlk.controllers', function (){
         function classesSummaryTeacherAction(schoolId_, schoolName_, teacherId_, sortType_, filter_){
             sortType_ = sortType_ || chlk.models.admin.ClassSortTypeEnum.CLASS_ASC.valueOf();
             teacherId_ = teacherId_ || this.getCurrentPerson().getId();
-            schoolName_ = schoolName_ || 'School';
+            schoolName_ = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_NAME, null);
             var currentSchoolYearId = this.getCurrentSchoolYearId();
             var result = this.classService.getClassesStatistic(currentSchoolYearId, 0, filter_, teacherId_, sortType_)
                 .then(function(classes){

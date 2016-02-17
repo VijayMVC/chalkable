@@ -79,5 +79,6 @@ var ChlkSessionConstants = {
     MESSAGING_DISABLED: 'messagingDisabled',
     YEARS: 'years',
     SIS_API_VERSION: 'sisApiVersion',
-    ASSESSESMENT_ENABLED: 'assessmentEnabled'
+    ASSESSESMENT_ENABLED: 'assessmentEnabled',
+    SCHOOL_NAME: 'schoolName'
 };

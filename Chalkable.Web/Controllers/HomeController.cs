@@ -227,6 +227,10 @@ namespace Chalkable.Web.Controllers
 
                 var messagingSettings = MessagingSettingsViewData.Create(MasterLocator.SchoolService.GetDistrictMessaginSettings(Context.DistrictId.Value));
                 PrepareJsonData(messagingSettings, ViewConstants.MESSAGING_SETTINGS);
+
+                //TODO : maybe added this to startup data ... only needs for school persons 
+                var school = SchoolLocator.SchoolService.GetSchool(Context.SchoolLocalId.Value);
+                ViewData[ViewConstants.SCHOOL_NAME] = school.Name;
             }
             ViewData[ViewConstants.CURRENT_USER_ROLE_ID] = Context.RoleId;
             ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
@@ -271,6 +275,7 @@ namespace Chalkable.Web.Controllers
             var sy = SchoolLocator.SchoolYearService.GetCurrentSchoolYear();
             PrepareJsonData(SchoolYearViewData.Create(sy), ViewConstants.SCHOOL_YEAR);
             PrepareJsonData(SchoolLocator.SchoolYearService.GetYears(), ViewConstants.YEARS);
+
             return district;
         }
         

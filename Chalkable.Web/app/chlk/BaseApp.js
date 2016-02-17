@@ -149,8 +149,9 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.MESSAGING_DISABLED, Boolean);
                 this.saveInSession(session, ChlkSessionConstants.YEARS, ArrayOf(Number));
                 this.saveInSession(session, ChlkSessionConstants.SIS_API_VERSION, String);
-                this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
+                this.saveInSession(session, ChlkSessionConstants.SCHOOL_NAME, String);
 
+                this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
 
                 if(window.redirectUrl && window.redirectUrl.indexOf('setup/hello') > -1){
                     ria.dom.Dom('body').addClass('setup');

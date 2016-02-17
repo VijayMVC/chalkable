@@ -311,6 +311,7 @@
             var redirectUrl = @ViewData.GetJsConstantValueOrNull(ViewConstants.REDIRECT_URL_KEY) || '';
             var schoolYear = getObj(@ViewData.GetJsJsonObjectOrNull(ViewConstants.SCHOOL_YEAR));
             var years = getArray(@ViewData.GetJsJsonObjectOrNull(ViewConstants.YEARS));
+            var schoolName = @ViewData.GetJsConstantValueOrNull(ViewConstants.SCHOOL_NAME);
         </script>
     
     @if (Chalkable.Web.Tools.CompilerHelper.IsDebug)
