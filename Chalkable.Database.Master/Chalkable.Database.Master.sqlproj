@@ -141,6 +141,7 @@
     <Build Include="Stored Procedures\spUpdateAssessmentEnabled.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PreDeploy Include="Scripts\Pre-Deploy\addIsAssessmentEnabledToSchool.PreDeployment.sql" />
+    <PreDeploy Include="Scripts\Pre-Deploy\001_addIsAssessmentEnabledToSchool.PreDeployment.sql" />
+    <None Include="Scripts\Pre-Deploy\002_HasDistricAdminSettingsToHasDistrictAdminSettings.PreDeployment.sql" />
   </ItemGroup>
 </Project>

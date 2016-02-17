@@ -29,5 +29,10 @@ namespace Chalkable.BusinessLogic.Security
         {
             return context.PersonId == applicationInstall.OwnerRef;
         }
+
+        public static bool IsAssessmentEnabled(UserContext context)
+        {
+            return context.AssessmentEnabled || BaseSecurity.IsSysAdmin(context) || context.Role.Id == CoreRoles.DEVELOPER_ROLE.Id;
+        }
     }
 }

@@ -155,7 +155,7 @@ namespace Chalkable.BusinessLogic.Services.School
             Trace.Assert(Context.PersonId.HasValue);
             var assessmentId = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetAssessmentId();
             var appInstall = ServiceLocator.AppMarketService.GetInstallationForPerson(appId, Context.PersonId.Value);
-            return assessmentId == appId  || (appInstall != null && appInstall.Active);
+            return assessmentId == appId || (appInstall != null && appInstall.Active);
         }
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false)
