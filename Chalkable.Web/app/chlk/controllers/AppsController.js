@@ -752,7 +752,11 @@ NAMESPACE('chlk.controllers', function (){
                 null,
                 model.isStudentExternalAttachEnabled(),
                 model.isTeacherExternalAttachEnabled(),
-                model.isAdminExternalAttachEnabled()
+                model.isAdminExternalAttachEnabled(),
+                model.isSysAdminSettingsEnabled(),
+                model.isDistrictAdminSettingsEnabled(),
+                model.isStudentProfileEnabled(),
+                model.isProvidesRecommendedContent()
 
             ) : new chlk.models.apps.AppAccess(
                 true, true, true, true, true, false, false, false, false
