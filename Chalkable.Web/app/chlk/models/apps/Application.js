@@ -46,6 +46,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.screenshotPictures = SJX.fromDeserializable(raw.screenshotpictures, chlk.models.apps.AppScreenShots);
                 this.myAppsUrl = SJX.fromValue(raw.myappsurl, String);
                 this.secretKey = SJX.fromValue(raw.secretkey, String);
+                this.encodedSecretKey = SJX.fromValue(raw.encodedsecretkey, String);
                 this.state = SJX.fromDeserializable(raw.state, chlk.models.apps.AppState);
                 this.developerId = SJX.fromValue(raw.developerid, chlk.models.id.SchoolPersonId);
                 this.developerInfo = SJX.fromDeserializable(raw.developer, chlk.models.developer.DeveloperInfo);
@@ -88,6 +89,7 @@ NAMESPACE('chlk.models.apps', function () {
             chlk.models.apps.AppScreenShots,  'screenshotPictures',
             String, 'myAppsUrl',
             String, 'secretKey',
+            String, 'encodedSecretKey',
             chlk.models.apps.AppState, 'state',
             chlk.models.id.SchoolPersonId, 'developerId',
             chlk.models.developer.DeveloperInfo, 'developerInfo',
