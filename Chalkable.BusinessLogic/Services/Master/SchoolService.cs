@@ -121,6 +121,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             DoUpdate(uow => new SchoolDataAccess(uow).UpdateStudyCenterEnabled(districtId, schoolId, enabledTill));
         }
 
+        public void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
+        {
+            BaseSecurity.EnsureSysAdmin(Context);
+            DoUpdate(uow => new SchoolDataAccess(uow).UpdateAssessmentEnabled(districtId, schoolId, enabled));
+        }
+
 
         public void UpdateMessagingDisabled(Guid? districtId, Guid? schoolId, bool disbaled)
         {

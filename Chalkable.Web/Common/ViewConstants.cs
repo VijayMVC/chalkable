@@ -65,5 +65,6 @@
         public const string SCHOOL_YEAR = "SchoolYear";
 
         public const string SCHOOL_NAME = "schoolName";
+        public const string ASSESSMENT_ENABLED = "AssessmentEnabled";
     }
 }
