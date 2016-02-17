@@ -93,7 +93,7 @@ namespace Chalkable.Web.Controllers
         {
             var studentCountPerApp = schoolLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
             var installedApp = GetApplications(masterLocator, studentCountPerApp.Select(x => x.Key).Distinct().ToList(), true, null);
-            installedApp = installedApp.Where(x => x.ProvidesRecomendedContent).ToList();
+            installedApp = installedApp.Where(x => x.ProvidesRecommendedContent).ToList();
             return ApplicationForAttachViewData.Create(installedApp, studentCountPerApp, true);
         }
 

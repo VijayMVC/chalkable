@@ -143,5 +143,6 @@
   <ItemGroup>
     <PreDeploy Include="Scripts\Pre-Deploy\001_addIsAssessmentEnabledToSchool.PreDeployment.sql" />
     <None Include="Scripts\Pre-Deploy\002_HasDistricAdminSettingsToHasDistrictAdminSettings.PreDeployment.sql" />
+    <None Include="Scripts\Pre-Deploy\003_ApplicationChangeProvidesRecomendedContentToProvidesRecommendedContent.PreDeployment.sql" />
   </ItemGroup>
 </Project>
