@@ -99,6 +99,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             throw new NotImplementedException();
         }
+        public void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
+        {
+            throw new NotImplementedException();
+        }
 
         public void UpdateMessagingDisabled(Guid? districtId, Guid? schoolId, bool disbaled)
         {
