@@ -4,7 +4,7 @@
 +ActionLink('grading', 'summary').statistic.grades(title="View Grades") Grades
 if self.isAppStoreEnabled
     +ActionLink('appmarket', 'list').apps(title="View Apps") Apps
-if self.isAppStoreEnabled && self.isAssessmentEnabled
+if self.isAssessmentEnabled
     +ActionLink('apps', 'assessment').assessment(title="Assessment") Assessment
 +ActionLink('calendar', 'month').calendar(title="View Calendar") Calendar
 +ActionLink('schools', 'classesSummary').classes(title="View Classes") Classes

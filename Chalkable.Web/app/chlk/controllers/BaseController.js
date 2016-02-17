@@ -117,6 +117,16 @@ NAMESPACE('chlk.controllers', function (){
             }
         ]);
 
+    /** @class chlk.controllers.AssessmentEnabledException*/
+    EXCEPTION(
+        'AssessmentEnabledException', [
+            [[Object]],
+            function $(inner_) {
+                BASE('Assessment access is required', inner_);
+            }
+        ]);
+
+
 
     var PRESSED_CLS = 'active';
     var ACTION_SUFFIX = 'Action';
@@ -434,6 +444,10 @@ NAMESPACE('chlk.controllers', function (){
                if (!this.checkLEIntegrated_(method, leParams.isLEIntegrated()))
                    throw new chlk.controllers.LEIntegrationDisabledException();
 
+               var isAssessmentEnabled = this.isAssessmentEnabled();
+               if(!this.checkAssessmentEnabled_(method, isAssessmentEnabled))
+                   throw new chlk.controllers.AssessmentEnabledException();
+
                return method;
            },
 
@@ -444,6 +458,10 @@ NAMESPACE('chlk.controllers', function (){
 
            Boolean, function isMessagingDisabled(){
                return this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_DISABLED);
+           },
+
+           Boolean, function isAssessmentEnabled(){
+                return this.getContext().getSession().get(ChlkSessionConstants.ASSESSESMENT_ENABLED);
            },
 
            OVERRIDE, ria.serialize.ISerializer, function initSerializer_(){
@@ -491,6 +509,12 @@ NAMESPACE('chlk.controllers', function (){
            Boolean, function checkMessaginEnabled_(reflactor, isMessaginEnabled){
                var annotations = reflactor.findAnnotation(chlk.controllers.MessagingEnabled);
                return !annotations.length || isMessaginEnabled == true;
+           },
+
+           [[ria.reflection.Reflector, Boolean]],
+           Boolean, function checkAssessmentEnabled_(reflactor, isAssessmentEnabled){
+                var annotations = reflactor.findAnnotation(chlk.controllers.AssessmentEnabled);
+                return !annotations.length || isAssessmentEnabled == true;
            },
 
            OVERRIDE, VOID, function postDispatchAction_() {

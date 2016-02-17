@@ -140,10 +140,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.GRADE_LEVELS, ArrayOf(chlk.models.grading.GradeLevel));
                 this.saveInSession(session, ChlkSessionConstants.STUDY_CENTER_ENABLED, Boolean);
                 this.saveInSession(session, ChlkSessionConstants.LE_PARAMS, chlk.models.school.LEParams);
-
-                window[ChlkSessionConstants.ASSESSESMENT_ENABLED] = "true" // remove this after sever side will be done
                 this.saveInSession(session, ChlkSessionConstants.ASSESSESMENT_ENABLED, Boolean);
-
                 this.saveInSession(session, ChlkSessionConstants.GRADE_LEVELS, ArrayOf(chlk.models.grading.GradeLevel));
                 this.saveInSession(session, ChlkSessionConstants.ANNOUNCEMENT_ATTRIBUTES, ArrayOf(chlk.models.announcement.AnnouncementAttributeType));
                 this.saveInSession(session, ChlkSessionConstants.MESSAGING_DISABLED, Boolean);

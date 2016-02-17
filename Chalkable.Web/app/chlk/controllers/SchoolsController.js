@@ -264,6 +264,25 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
         },
 
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
+        function enableAssessmentAction(districtId, schoolId_){
+            return this.updateAssessmentEnabled_(districtId, schoolId_, true);
+        },
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
+        function disableAssessmentAction(districtId, schoolId_){
+            return this.updateAssessmentEnabled_(districtId, schoolId_, false);
+        },
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
+        function updateAssessmentEnabled_(districtId, schoolId_, enabled){
+            return this.schoolService.updateAssessmentEnabled(districtId, schoolId_, enabled)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);
+                }, this);
+        },
+
         function getCurrentYearId_(years){
             if(!years)
                 return null;

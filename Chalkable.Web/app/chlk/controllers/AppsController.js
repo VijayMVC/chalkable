@@ -562,15 +562,15 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.apps.ExternalAttachAppDialog, result);
         },
 
-        [chlk.controllers.StudyCenterEnabled()],
+        [chlk.controllers.AssessmentEnabled()],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
         function attachAssessmentAppAction(announcementId, appId, announcementType, appUrlAppend_) {
-            if(!this.isStudyCenterEnabled())
-                return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+            //if(!this.isStudyCenterEnabled())
+            //    return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
 
             var result = this.appsService
                 .addToAnnouncement(this.getCurrentPerson().getId(), appId, announcementId, announcementType)
@@ -961,7 +961,7 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
-        [chlk.controllers.StudyCenterEnabled()],
+        [chlk.controllers.AssessmentEnabled()],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.DISTRICTADMIN,
             chlk.models.common.RoleEnum.TEACHER,
@@ -970,8 +970,9 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('assessment')],
         [[String]],
         function assessmentAction(appUrlAppend_) {
-            if(!this.isStudyCenterEnabled())
-                return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+
+            //if(!this.isStudyCenterEnabled())
+            //    return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
 
             var mode = "myview",
                 // TODO: move to session
@@ -997,6 +998,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushOrUpdateView(chlk.activities.apps.AppWrapperPage, result);
         },
 
+        [chlk.controllers.AssessmentEnabled()],
         [chlk.controllers.SidebarButton('assessment')],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.SYSADMIN
