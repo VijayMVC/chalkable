@@ -244,7 +244,11 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Read())
             {
-                return new ApplicationDataAccess(uow).GetByIds(ids);
+                var res = new ApplicationDataAccess(uow).GetByIds(ids);
+                var assessmentId = InternalGetAssessmentId();
+                if (assessmentId != null)
+                    res = res.Where(x => x.Id != assessmentId).ToList();
+                return res;
                 //return res.Where(x=>x.State == ApplicationStateEnum.Live).ToList();
             }
         }
@@ -291,7 +295,12 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
         public Guid? GetAssessmentId()
         {
-            var id = ApplicationSecurity.IsAssessmentEnabled(Context) ? PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value : null;
+            return ApplicationSecurity.IsAssessmentEnabled(Context) ? InternalGetAssessmentId() : null;
+        }
+
+        private Guid? InternalGetAssessmentId()
+        {
+            var id = PreferenceService.Get(Preference.ASSESSMENT_APLICATION_ID).Value;
             Guid res;
             return Guid.TryParse(id, out res) ? res : (Guid?)null;
         }
