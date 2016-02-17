@@ -257,11 +257,12 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, chlk.models.common.ChlkDate]],
         function upgradeDownGradeSchools_(districtId, schoolId, tillDate){
-            return this.schoolService.updateStudyCenter(districtId, schoolId, tillDate)
+            this.schoolService.updateStudyCenter(districtId, schoolId, tillDate)
                 .attach(this.validateResponse_())
                 .then(function(data){
                     return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);
                 }, this);
+            return null;
         },
 
         [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
@@ -276,11 +277,12 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
         function updateAssessmentEnabled_(districtId, schoolId_, enabled){
-            return this.schoolService.updateAssessmentEnabled(districtId, schoolId_, enabled)
+            this.schoolService.updateAssessmentEnabled(districtId, schoolId_, enabled)
                 .attach(this.validateResponse_())
                 .then(function(data){
                     return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);
                 }, this);
+            return null;
         },
 
         function getCurrentYearId_(years){
