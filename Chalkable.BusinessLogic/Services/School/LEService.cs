@@ -14,8 +14,8 @@ namespace Chalkable.BusinessLogic.Services.School
         bool IsLELinkActive();
         string BuildLECreditsUrl(int? classId);
         string BuildIntegratedSingOnUrl();
-        string BuildNonIntegratedSingOnUlr(int schoolId, int userId, string firstName, string lastName);
-        string BuildLESingOnUlr();
+        string BuildNonIntegratedSingOnUrl(int schoolId, int userId, string firstName, string lastName);
+        string BuildLESingOnUrl();
         LEParams GetLEParams();
     }
 
@@ -30,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public string GetBaseUrl()
         {
             var leUrlSetting = ServiceLocator.SettingsService.GetSetting(LEARNING_EARNIGS_CATEGORY, "Url");
-            return leUrlSetting != null ? leUrlSetting.Value : null;
+            return leUrlSetting?.Value;
         }
 
         public bool IsLELinkActive()
@@ -56,12 +56,12 @@ namespace Chalkable.BusinessLogic.Services.School
                 studentIds = ServiceLocator.ClassService.GetClassPersons(null, classId.Value, null, null).Select(x => x.PersonRef).Distinct().ToList();
 
             var clsPersons = studentIds.JoinString(",");
-            var integratedSignOnUrl = string.Format(GetBaseUrl() + "sti/give_credits?districtGUID={0}&sti_session_variable={1}&studentIds={2}&sti_school_id={3}"
-                , Context.DistrictId, Context.SisToken, clsPersons, Context.SchoolLocalId.Value);
+            var integratedSignOnUrl = $"{GetBaseUrl()}sti/give_credits?districtGUID={Context.DistrictId}" +
+                                      $"&sti_session_variable={Context.SisToken}&studentIds={clsPersons}&sti_school_id={Context.SchoolLocalId.Value}";
             return integratedSignOnUrl;
         }
 
-        public string BuildLESingOnUlr()
+        public string BuildLESingOnUrl()
         {
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolLocalId.HasValue);
@@ -73,17 +73,17 @@ namespace Chalkable.BusinessLogic.Services.School
             if (Context.Role == CoreRoles.STUDENT_ROLE)
             {
                 var person = ServiceLocator.StudentService.GetById(Context.PersonId.Value, Context.SchoolYearId.Value);
-                return BuildNonIntegratedSingOnUlr(Context.SchoolLocalId.Value, person.UserId, person.FirstName, person.LastName);
+                return BuildNonIntegratedSingOnUrl(Context.SchoolLocalId.Value, person.UserId, person.FirstName, person.LastName);
             }
-            if (Context.Role == CoreRoles.TEACHER_ROLE || Context.Role == CoreRoles.DISTRICT_ADMIN_ROLE)
+            if (BaseSecurity.IsDistrictOrTeacher(Context))
             {
                 var person = ServiceLocator.StaffService.GetStaff(Context.PersonId.Value);
-                return BuildNonIntegratedSingOnUlr(Context.SchoolLocalId.Value, person.UserId.Value, person.FirstName, person.LastName);
+                return BuildNonIntegratedSingOnUrl(Context.SchoolLocalId.Value, person.UserId.Value, person.FirstName, person.LastName);
             }
             else
             {
                 var person = ServiceLocator.PersonService.GetPerson(Context.PersonId.Value);
-                return BuildNonIntegratedSingOnUlr(Context.SchoolLocalId.Value, person.UserId.Value, person.FirstName, person.LastName);
+                return BuildNonIntegratedSingOnUrl(Context.SchoolLocalId.Value, person.UserId.Value, person.FirstName, person.LastName);
             }
         }
 
@@ -102,20 +102,18 @@ namespace Chalkable.BusinessLogic.Services.School
             //    studentIds = ServiceLocator.StudentService.GetTeacherStudents(Context.PersonId.Value, syId).Select(x => x.Id).ToList();
             
             //else studentIds.Add(Context.PersonId.Value);
-            return string.Format(GetBaseUrl() + "sti/auth?districtGUID={0}&sti_session_variable={1}&sti_school_id={2}"
-                , Context.DistrictId, Context.SisToken, Context.SchoolLocalId.Value);
+            return $"{GetBaseUrl()}sti/auth?districtGUID={Context.DistrictId}&sti_session_variable={Context.SisToken}&sti_school_id={Context.SchoolLocalId.Value}";
         }
 
-        public string BuildNonIntegratedSingOnUlr(int schoolId, int userId, string firstName, string lastName)
+        public string BuildNonIntegratedSingOnUrl(int schoolId, int userId, string firstName, string lastName)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return string.Format(GetBaseUrl() + "sti/auth?districtGUID={0}&schoolId={1}&userid={2}&firstname={3}&lastname={4}"
-                , Context.DistrictId, schoolId, userId, firstName, lastName);
+            return $"{GetBaseUrl()}sti/auth?districtGUID={Context.DistrictId}&schoolId={schoolId}&userid={userId}&firstname={firstName}&lastname={lastName}";
         }
 
         public LEParams GetLEParams()
         {
-            bool hasLeAccess = HasLEAccess();
+            var hasLeAccess = HasLEAccess();
             return new LEParams
             {
                 LEEnabled = Context.LEEnabled,
