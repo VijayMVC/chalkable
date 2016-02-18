@@ -1002,7 +1002,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushOrUpdateView(chlk.activities.apps.AppWrapperPage, result);
         },
 
-        [chlk.controllers.AssessmentEnabled()],
         [chlk.controllers.SidebarButton('assessment')],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.SYSADMIN

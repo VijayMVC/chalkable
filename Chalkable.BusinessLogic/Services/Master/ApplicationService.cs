@@ -245,9 +245,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             using (var uow = Read())
             {
                 var res = new ApplicationDataAccess(uow).GetByIds(ids);
-                var assessmentId = InternalGetAssessmentId();
-                if (assessmentId != null)
-                    res = res.Where(x => x.Id != assessmentId).ToList();
+                if (!ApplicationSecurity.IsAssessmentEnabled(Context))
+                {
+                    var assessmentId = InternalGetAssessmentId();
+                    if (assessmentId != null)
+                        res = res.Where(x => x.Id != assessmentId).ToList();
+                }
                 return res;
                 //return res.Where(x=>x.State == ApplicationStateEnum.Live).ToList();
             }
