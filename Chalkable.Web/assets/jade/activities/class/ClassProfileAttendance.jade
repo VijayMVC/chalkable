@@ -1,0 +1,22 @@
+-var clazz = self.getClazz()
+.profile-page.class-profile
+    h2.page-title=clazz.getName()
+    +ProfileTopBar(self, 'attendance')
+    .summary-view
+        #top-panel.attendances-chart
+            +RenderWith(clazz.getStats(), chlk.templates.attendance.ClassAttendanceStatsTpl)(
+                currentUser = self.getCurrentUser()
+                userRole = self.getUserRole()
+            )
+        .attendances-container
+            if clazz.getSeatingChart()
+                +RenderWith(clazz.getSeatingChart(), chlk.templates.attendance.SeatingChartTpl)(
+                    currentUser = self.getCurrentUser()
+                    userRole = self.getUserRole()
+                )
+
+            if clazz.getClassList()
+                +RenderWith(clazz.getClassList(), chlk.templates.attendance.ClassList)(
+                    currentUser = self.getCurrentUser()
+                    userRole = self.getUserRole()
+                )
