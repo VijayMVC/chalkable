@@ -16,7 +16,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public bool HasStudentProfile { get; set; }
         public bool CanAttach { get; set; }
         public bool ShowInGradeView { get; set; }
-        public bool ProvidesRecomendedContent { get; set; }
+        public bool ProvidesRecommendedContent { get; set; }
 
         public static ApplicationAccessViewData Create(Application application)
         {
@@ -34,7 +34,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                     HasStudentProfile = application.HasStudentProfile,
                     CanAttach = application.CanAttach,
                     ShowInGradeView = application.ShowInGradeView,
-                    ProvidesRecomendedContent = application.ProvidesRecomendedContent
+                    ProvidesRecommendedContent = application.ProvidesRecommendedContent
                 };
         }
     }

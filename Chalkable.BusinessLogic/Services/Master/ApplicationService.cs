@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
@@ -32,7 +31,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         Application GetAssessmentApplication();
         Guid? GetPracticeGradeId();
         Guid? GetAssessmentId();
-
         IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count);
         void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban);
     }
@@ -46,11 +44,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         
         public IList<AppPermissionType> GetPermisions(string applicationUrl)
         {
-            using (var uow = Read())
-            {
-                var app = new ApplicationDataAccess(uow).GetLiveApplicationByUrl(applicationUrl);
-                return app.Permissions.Select(x => x.Permission).ToList();
-            }
+            var app = DoRead(u => new ApplicationDataAccess(u).GetLiveApplicationByUrl(applicationUrl));
+            return app.Permissions.Select(x => x.Permission).ToList();
         }
 
         public PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = Int32.MaxValue)
@@ -103,7 +98,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                     if (!BaseSecurity.IsDistrictAdmin(Context))
                         query.Ban = false;
                 }
-                    
                 return new ApplicationDataAccess(uow).GetPaginatedApplications(query);
             }
         }
@@ -111,10 +105,11 @@ namespace Chalkable.BusinessLogic.Services.Master
         
         public Application GetApplicationById(Guid id)
         {
+            if (id == InternalGetAssessmentId())
+                return GetAssessmentApplication();
+
             if (id == GetPracticeGradeId())
                 return GetPracticeGradesApplication();
-            if (id == GetAssessmentId())
-                return GetAssessmentApplication();
 
             var q = new ApplicationQuery
             {
@@ -136,10 +131,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         //TODO: security
         public Application GetApplicationByUrl(string url)
         {
-            using (var uow = Read())
-            {
-                return new ApplicationDataAccess(uow).GetLiveApplicationByUrl(url);
-            }
+            return DoRead(u => new ApplicationDataAccess(u).GetLiveApplicationByUrl(url));
         }
 
         public ApplicationRating WriteReview(Guid applicationId, int rating, string review)
@@ -173,11 +165,8 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public IList<ApplicationRating> GetRatings(Guid applicationId)
         {
-            using (var uow = Read())
-            {
-                var da = new ApplicationRatingDataAccess(uow);
-                return da.GetAll(new AndQueryCondition {{nameof(ApplicationRating.ApplicationRef), applicationId}});
-            }
+            var query = new AndQueryCondition {{nameof(ApplicationRating.ApplicationRef), applicationId}};
+            return DoRead(u => new ApplicationRatingDataAccess(u).GetAll(query));
         }
 
         //TODO: can we apply thin on service leyer get methods?
@@ -233,35 +222,16 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public bool ReviewExists(Guid applicationId)
         {
-            using (var uow = Read())
-            {
-                return new ApplicationRatingDataAccess(uow).Exists(applicationId, Context.UserId);
-            }
+            return DoRead(u => new ApplicationRatingDataAccess(u).Exists(applicationId, Context.UserId));
         }
-
-
         public IList<Application> GetApplicationsByIds(IList<Guid> ids)
         {
-            using (var uow = Read())
-            {
-                var res = new ApplicationDataAccess(uow).GetByIds(ids);
-                var assessmentId = InternalGetAssessmentId();
-                if (assessmentId != null)
-                    res = res.Where(x => x.Id != assessmentId).ToList();
-                return res;
-                //return res.Where(x=>x.State == ApplicationStateEnum.Live).ToList();
-            }
+            return DoRead(u => new ApplicationDataAccess(u).GetByIds(ids));
         }
-
-
         public IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count)
         {
-            using (var uow = Read())
-            {
-                return new ApplicationDataAccess(uow).GetSuggestedApplications(abIds, installedAppsIds, start, count);
-            }
+            return DoRead(u => new ApplicationDataAccess(u).GetSuggestedApplications(abIds, installedAppsIds, start, count));
         }
-
         public void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban)
         {
             BaseSecurity.EnsureDistrictAdmin(Context);
@@ -270,21 +240,15 @@ namespace Chalkable.BusinessLogic.Services.Master
                 new ApplicationDataAccess(uow).SetDistrictOption(applicationId, districtId, ban);
             });
         }
-
-
         public Application GetPracticeGradesApplication()
         {
             var id = GetPracticeGradeId();
-            if (!id.HasValue) return null;
-            return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(id.Value));
+            return !id.HasValue ? null : DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(id.Value));
         }
-        
         public Application GetAssessmentApplication()
         {
             var id = GetAssessmentId();
-            if (!id.HasValue) 
-                return null;
-            return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(id.Value));
+            return !id.HasValue ? null : DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(id.Value));
         }
 
         public Guid? GetPracticeGradeId()
@@ -295,7 +259,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
         public Guid? GetAssessmentId()
         {
-            return ApplicationSecurity.IsAssessmentEnabled(Context) ? InternalGetAssessmentId() : null;
+            return InternalGetAssessmentId();
         }
 
         private Guid? InternalGetAssessmentId()

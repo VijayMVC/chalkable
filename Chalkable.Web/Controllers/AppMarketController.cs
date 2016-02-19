@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using System.Web.Mvc;
+using Chalkable.API.Helpers;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
@@ -93,8 +96,12 @@ namespace Chalkable.Web.Controllers
         {
             var studentCountPerApp = schoolLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
             var installedApp = GetApplications(masterLocator, studentCountPerApp.Select(x => x.Key).Distinct().ToList(), true, null);
-            installedApp = installedApp.Where(x => x.ProvidesRecomendedContent).ToList();
-            return ApplicationForAttachViewData.Create(installedApp, studentCountPerApp, true);
+            installedApp = installedApp.Where(x => x.ProvidesRecommendedContent).ToList();
+            var apps = ApplicationForAttachViewData.Create(installedApp, studentCountPerApp, true);
+            foreach (var app in apps)
+                app.EncodedSecretKey = HashHelper.Hex(HashHelper.Hmac(installedApp.First(x => x.Id == app.Id).SecretKey));
+
+            return apps;
         }
 
         public static PaginatedList<InstalledApplicationViewData> GetListInstalledApps(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster masterLocator

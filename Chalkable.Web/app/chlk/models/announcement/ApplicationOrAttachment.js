@@ -1,3 +1,5 @@
+REQUIRE('chlk.models.id.AppId');
+
 
 NAMESPACE('chlk.models.announcement', function () {
     "use strict";
@@ -37,7 +39,9 @@ NAMESPACE('chlk.models.announcement', function () {
 
             String, 'viewUrl',
 
-            function $(id_, owner_, order_, type_, name_, pictureUrl_, url_, teachersAttachment_, editUrl_, gradingViewUrl_, viewUrl_, banInfo_, openOnStart_){
+            chlk.models.id.AppId, 'applicationId',
+
+            function $(id_, owner_, order_, type_, name_, pictureUrl_, url_, teachersAttachment_, editUrl_, gradingViewUrl_, viewUrl_, banInfo_, openOnStart_, applicationId_){
                 BASE();
                 if(id_)
                     this.setId(id_);
@@ -63,6 +67,8 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.setViewUrl(viewUrl_);
                 if (openOnStart_)
                     this.setOpenOnStart(openOnStart_);
+                if(applicationId_)
+                    this.setApplicationId(applicationId_);
             }
         ]);
 });

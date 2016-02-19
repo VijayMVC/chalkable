@@ -79,7 +79,7 @@ namespace Chalkable.Web.Logic
             var res = ApplicationForAttachViewData.Create(applications, studentCountPerApp, installedAppsIds);
             
             // get without content apps only 
-            return res.Where(x=>!x.ApplicationAccess.ProvidesRecomendedContent).ToList();
+            return res.Where(x=>!x.ApplicationAccess.ProvidesRecommendedContent).ToList();
         }
 
     }

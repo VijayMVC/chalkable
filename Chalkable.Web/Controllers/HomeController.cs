@@ -392,7 +392,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("Teacher, Student")]
         public ActionResult LearningEarnings()
         {
-            var res = SchoolLocator.LeService.BuildLESingOnUlr();
+            var res = SchoolLocator.LeService.BuildLESingOnUrl();
             return new RedirectResult(res);
         }
 

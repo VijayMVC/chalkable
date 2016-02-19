@@ -141,7 +141,7 @@ NAMESPACE('chlk.controllers', function (){
                 return this.ShadeView(chlk.activities.messages.AddDialog, res);
             },
 
-            [chlk.controllers.SidebarButton('people')],
+            [chlk.controllers.NotChangedSidebarButton()],
             [[Boolean, chlk.models.id.SchoolPersonId, String, String]],
             function sendToPersonAction(isInbox, personId, firstName, lastName)
             {

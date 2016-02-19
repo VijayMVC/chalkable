@@ -569,6 +569,10 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Chalkable.API\Chalkable.API.csproj">
+      <Project>{A7272B5D-DC95-4783-888D-3A36E8922226}</Project>
+      <Name>Chalkable.API</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chalkable.BusinessLogic\Chalkable.BusinessLogic.csproj">
       <Project>{B008FBC2-8AFB-48FF-BA85-97845DDF02D2}</Project>
       <Name>Chalkable.BusinessLogic</Name>
