@@ -55,6 +55,9 @@
       <HintPath>..\packages\Microsoft.Azure.KeyVault.Core.1.0.0\lib\net40\Microsoft.Azure.KeyVault.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.Azure.SqlDatabase.Jobs.Client">
+      <HintPath>..\packages\Microsoft.Azure.SqlDatabase.Jobs.0.8.3043.1\tools\ElasticDatabaseJobs\Microsoft.Azure.SqlDatabase.Jobs.Client.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Data.Edm, Version=5.7.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Data.Edm.5.7.0\lib\net40\Microsoft.Data.Edm.dll</HintPath>
       <Private>True</Private>
@@ -100,6 +103,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\SettingsTest.cs" />
+    <Compile Include="DacPacDeployTest.cs" />
     <Compile Include="DataAccess\Master\DataAccessTestBase.cs" />
     <Compile Include="DataAccess\Master\UserDataAccessTest.cs" />
     <Compile Include="DataAccess\OrmTest.cs" />
@@ -117,6 +121,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Chalkable.BackgroundTaskProcessor\Chalkable.BackgroundTaskProcessor.csproj">
+      <Project>{57307F26-31D4-4759-B22D-C60C7F02DEDB}</Project>
+      <Name>Chalkable.BackgroundTaskProcessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chalkable.BusinessLogic\Chalkable.BusinessLogic.csproj">
       <Project>{B008FBC2-8AFB-48FF-BA85-97845DDF02D2}</Project>
       <Name>Chalkable.BusinessLogic</Name>

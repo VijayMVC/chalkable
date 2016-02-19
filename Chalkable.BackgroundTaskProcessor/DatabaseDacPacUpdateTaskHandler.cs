@@ -11,7 +11,7 @@ using Microsoft.Azure.SqlDatabase.Jobs.Client;
 
 namespace Chalkable.BackgroundTaskProcessor
 {
-    class AzureSqlJobCredentials
+    public class AzureSqlJobCredentials
     {
         public string ServerName { get; set; }
         public string DatabaseName { get; set; }
@@ -53,19 +53,38 @@ namespace Chalkable.BackgroundTaskProcessor
             return new AzureSqlJobClient(connection);
         }
 
-        private static async Task<JobExecutionInfo> DeployDacPac(AzureSqlJobClient elasticJobs, string dacPacName, string dacPacUri, IEnumerable<DatabaseTarget> targets)
+        private static async Task<bool> DeployDacPac(AzureSqlJobClient elasticJobs, string dacPacName, string dacPacUri, 
+            IEnumerable<DatabaseTarget> targets, BackgroundTaskService.BackgroundTaskLog log)
         {
             var dacPackDef = await elasticJobs.Content.GetContentAsync(dacPacName) ??
                              await elasticJobs.Content.CreateDacpacAsync(dacPacName, new Uri(dacPacUri));
 
             var target = await elasticJobs.Targets.CreateCustomCollectionTargetAsync("Targets for DACPAC " + dacPacName + " " + Guid.NewGuid());
 
-            await Task.WhenAll(targets.Select(async _ =>
+            log.LogInfo("Job targets created as " + target.TargetId + " " + target.CustomCollectionName);
+
+            var databaseTargets = targets as IList<DatabaseTarget> ?? targets.ToList();
+
+            var count = databaseTargets.Count();
+            const int pageSize = 10;
+            for (var i = 0; i < count; i += pageSize)
             {
-                var dbTarget = await elasticJobs.Targets.GetDatabaseTargetAsync(_.Server, _.Name) ??
-                               await elasticJobs.Targets.CreateDatabaseTargetAsync(_.Server, _.Name);
-                return await elasticJobs.Targets.AddChildTargetAsync(target.TargetId, dbTarget.TargetId);
-            }).ToArray());
+                await Task.WhenAll(databaseTargets.Skip(i).Take(pageSize).Select(async _ =>
+                {
+                    try
+                    {
+                        var dbTarget = await elasticJobs.Targets.GetDatabaseTargetAsync(_.Server, _.Name) ??
+                                       await elasticJobs.Targets.CreateDatabaseTargetAsync(_.Server, _.Name);
+                        var result = await elasticJobs.Targets.AddChildTargetAsync(target.TargetId, dbTarget.TargetId);
+                        log.LogInfo("Targeting db " + _.Name + "@" + _.Server + " complete as " + dbTarget.TargetId);
+                        return result;
+                    }
+                    catch (Exception e)
+                    {
+                        throw new Exception("Targeting db " + _.Name + "@" + _.Server + " failed.", e);
+                    }
+                }).ToArray());
+            }
 
             var securePassword1 = new SecureString();
             foreach (var ch1 in Settings.ChalkableSchoolDbPassword)
@@ -84,7 +103,43 @@ namespace Chalkable.BackgroundTaskProcessor
                 CredentialName = credential.CredentialName
             });
 
-            return await elasticJobs.JobExecutions.StartJobExecutionAsync(job.JobName);
+            log.LogInfo("Job created as " + job.TargetId + " " + job.JobName);
+
+            var masterJob = await elasticJobs.JobExecutions.StartJobExecutionAsync(job.JobName);
+
+            log.LogInfo($"{dacPacName} execution job as " + masterJob.JobExecutionId);
+            log.Flush();
+
+            JobExecutionLifecycle masterJobStatusLifecycle = JobExecutionLifecycle.Created;
+            while (true)
+            {
+                var masterJobStatus = await elasticJobs.JobExecutions.GetJobExecutionAsync(masterJob.JobExecutionId);
+
+                if (masterJobStatus.Lifecycle != masterJobStatusLifecycle)
+                    log.LogInfo($"{dacPacName} job is " + masterJobStatus.Lifecycle);
+
+                masterJobStatusLifecycle = masterJobStatus.Lifecycle;
+
+                await LogErrors(log, elasticJobs, masterJobStatus);
+
+                if (masterJobStatus.Lifecycle == JobExecutionLifecycle.Failed)
+                {
+                    log.LogError("Deploy failed");
+                    log.Flush();
+
+                    return false;
+                }
+
+                if (masterJobStatus.Lifecycle == JobExecutionLifecycle.Succeeded)
+                {
+                    break;
+                }
+
+                log.Flush();
+                await Task.Delay(1000);
+            }
+
+            return true;
         }
 
         public bool Handle(BackgroundTask task, BackgroundTaskService.BackgroundTaskLog log)
@@ -135,6 +190,18 @@ namespace Chalkable.BackgroundTaskProcessor
                     new DatabaseTarget(Settings.ChalkableSchoolDbServers.First(), Settings.MasterDbName)
                 };
 
+
+            var elasticJobs = CreateAzureSqlJobClient(azureJobsCreds);
+
+            log.LogInfo("Master DacPac deployment initated");
+            log.Flush();
+
+            if (!(await DeployDacPac(elasticJobs, data.DacPacName + "-master", data.MasterDacPacUri, masterTargets, log)))
+                return false;            
+
+            log.LogInfo("Preparing schools DacPac targets");
+            log.Flush();
+
             var schoolTargets = new HashSet<DatabaseTarget>();
 
             Settings.ChalkableSchoolDbServers.ToList().ForEach(_ =>
@@ -147,75 +214,50 @@ namespace Chalkable.BackgroundTaskProcessor
                 schoolTargets.Add(new DatabaseTarget(_.ServerUrl, _.Id.ToString()));
             });
 
-            var elasticJobs = CreateAzureSqlJobClient(azureJobsCreds);
-
-            log.LogInfo("DacPac deployment initated");
+            log.LogInfo("Schools DacPac deployment initated");
             log.Flush();
 
-            var masterJob = await DeployDacPac(elasticJobs, data.DacPacName + "-master", data.MasterDacPacUri, masterTargets);
-            var schoolsJob = await DeployDacPac(elasticJobs, data.DacPacName + "-school", data.SchoolDacPacUri, schoolTargets);
+            if (!(await DeployDacPac(elasticJobs, data.DacPacName + "-school", data.SchoolDacPacUri, schoolTargets, log)))
+                return false;
 
-            log.LogInfo("DacPac deployment started");
+            log.LogInfo("Deploy success");
             log.Flush();
 
-            while (true)
+            return true;
+        }
+
+        private static async Task LogErrors(BackgroundTaskService.BackgroundTaskLog log, AzureSqlJobClient elasticJobs, JobExecutionInfo execution)
+        {            
+            var children = await elasticJobs.JobExecutions.ListJobExecutionsAsync(new JobExecutionFilter
             {
-                var masterJobStatus = await elasticJobs.JobExecutions.GetJobExecutionAsync(masterJob.JobExecutionId);
-                var schoolJobStatus = await elasticJobs.JobExecutions.GetJobExecutionAsync(schoolsJob.JobExecutionId);
+                ParentJobExecutionId = execution.JobExecutionId
+            });
 
-                if (masterJobStatus.Lifecycle == JobExecutionLifecycle.Failed
-                    || schoolJobStatus.Lifecycle == JobExecutionLifecycle.Failed)
+            foreach (var child in children)
+            {
+                var task = (await elasticJobs.JobTaskExecutions.ListJobTaskExecutions(child.JobExecutionId))
+                    .OrderByDescending(x => x.CreatedTime)
+                    .FirstOrDefault();
+
+                if (!string.IsNullOrWhiteSpace(task?.Message))
                 {
-                    if (masterJob.Lifecycle == JobExecutionLifecycle.Failed)
+                    log.LogError($"Execution task: {task}, target {child.TargetDescription} status {task.Lifecycle}, {task.Message}");
+
+                    var scripts =
+                        await
+                            elasticJobs.ScriptBatchExecutions.ListScriptBatchExecutions(task.JobTaskExecutionId);
+
+                    foreach (var script in scripts)
                     {
-                        await LogErrors(log, elasticJobs, masterJob);
+                        log.LogError($"Execution task script: {script}, status {script.Lifecycle}, {script.Message}");
                     }
-
-                    if (schoolJobStatus.Lifecycle == JobExecutionLifecycle.Failed)
-                    {
-                        await LogErrors(log, elasticJobs, schoolJobStatus);
-                    }
-
-                    log.LogError("Deploy failed");
-                    log.Flush();
-
-                    return false;
                 }
-
-                if (masterJob.Lifecycle == JobExecutionLifecycle.Succeeded
-                    || schoolJobStatus.Lifecycle == JobExecutionLifecycle.Succeeded)
-                {
-                    log.LogInfo("Deploy success");
-                    log.Flush();
-
-                    return true;
-                }
-
-                await Task.Delay(500);
             }
         }
 
-        private static async Task LogErrors(BackgroundTaskService.BackgroundTaskLog log, AzureSqlJobClient elasticJobs, JobExecutionInfo masterJob)
+        public static Task<bool> Test(AzureSqlJobCredentials creds, BackgroundTaskService.BackgroundTaskLog log, DatabaseDacPacUpdateTaskData data)
         {
-            var taskExecutions =
-                await elasticJobs.JobTaskExecutions.ListJobTaskExecutions(masterJob.JobExecutionId);
-
-            foreach (
-                var taskExtension in
-                    taskExecutions.Where(taskExtension => taskExtension.Lifecycle == JobTaskExecutionLifecycle.Failed))
-            {
-                var failedJob = await elasticJobs.ScriptBatchExecutions.ListScriptBatchExecutions(
-                    taskExtension.JobTaskExecutionId);
-
-                foreach (
-                    var scriptBatchExecutionInfo in
-                        failedJob.Where(
-                            scriptBatchExecutionInfo =>
-                                scriptBatchExecutionInfo.Lifecycle == ScriptBatchExecutionLifecycle.Failed))
-                {
-                    log.LogError(scriptBatchExecutionInfo.Message);
-                }
-            }
+            return Do(creds, log, data);
         }
     }
 }
