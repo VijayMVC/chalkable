@@ -340,6 +340,25 @@ NAMESPACE('chlk.services', function () {
                     internalScore: internalScore,
                     internalDescription: internalDescription
                 });
+            },
+
+            [[
+                String,
+                chlk.models.id.AppId,
+                chlk.models.id.AnnouncementId,
+                chlk.models.announcement.AnnouncementTypeEnum,
+                ArrayOf(chlk.models.standard.Standard),
+                String,
+            ]],
+            ria.async.Future, function getApplicationContents(appUrl, appId, announcementId, announcementType, standards, encodedKey){
+                var url = this.buildGetAppContentUrl_(appUrl, appId, announcementId, announcementType, standards);
+
+
+            },
+
+            [[String, chlk.models.id.AppId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, ArrayOf(chlk.models.standard.Standard)]],
+            ria.async.Future, function buildGetAppContentUrl_(appUrl, appId, announcementId, announcementType, standards){
+
             }
 
         ])

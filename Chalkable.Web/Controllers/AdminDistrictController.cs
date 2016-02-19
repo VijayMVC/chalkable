@@ -1,7 +1,7 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Common;
@@ -49,13 +49,23 @@ namespace Chalkable.Web.Controllers
             var installedApps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, Context.PersonId.Value, null, 0, int.MaxValue, null).ToList();
             installedApps = installedApps.Where(x => x.HasDistrictAdminSettings).ToList();
 
-            var assessement = MasterLocator.ApplicationService.GetAssessmentApplication();
-            if (assessement != null && assessement.HasDistrictAdminSettings && !installedApps.Exists(x => x.Id == assessement.Id))
+            if (ApplicationSecurity.HasAssessmentEnabled(Context))
             {
-                var assAppInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
-                var hasMyApp = MasterLocator.ApplicationService.HasMyApps(assessement);
-                installedApps.Add(InstalledApplicationViewData.Create(assAppInstallations, Context.PersonId.Value, assessement, hasMyApp));
+                var assessement = MasterLocator.ApplicationService.GetAssessmentApplication();
+                if (assessement != null && assessement.HasDistrictAdminSettings &&
+                    !installedApps.Exists(x => x.Id == assessement.Id))
+                {
+                    var assAppInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
+                    var hasMyApp = MasterLocator.ApplicationService.HasMyApps(assessement);
+                    installedApps.Add(InstalledApplicationViewData.Create(assAppInstallations, Context.PersonId.Value, assessement, hasMyApp));
+                }
             }
+            else
+            {
+                var assessmentId = SchoolLocator.ServiceLocatorMaster.ApplicationService.GetAssessmentId();
+                installedApps = installedApps.Where(x => x.Id != assessmentId).ToList();
+            }
+
 
             return Json(DistrictAdminSettingsViewData.Create(messagingSettings, installedApps));
         }

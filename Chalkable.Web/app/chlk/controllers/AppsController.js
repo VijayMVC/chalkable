@@ -607,8 +607,14 @@ NAMESPACE('chlk.controllers', function (){
 
         [[String, String, chlk.models.apps.AppModes, chlk.models.id.AnnouncementApplicationId, Boolean, chlk.models.id.SchoolPersonId, String, Boolean]],
         function viewAppAction(url, viewUrl, mode, announcementAppId_, isBanned, studentId_, appUrlSuffix_, isAssessment_) {
-            if(!this.isStudyCenterEnabled())
+
+            //TODO: write method ensureStudyCenterOrAssessment later
+            if(isAssessment_ && !this.isAssessmentEnabled())
+                return this.ShowMsgBox('Current school doesn\'t support assessments'), null;
+
+            if(!isAssessment_ && !this.isStudyCenterEnabled())
                 return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+
 
             var result = this.appsService
                 .getOauthCode(this.getCurrentPerson().getId(), url)

@@ -461,7 +461,7 @@ NAMESPACE('chlk.controllers', function (){
            },
 
            Boolean, function isAssessmentEnabled(){
-                return this.getContext().getSession().get(ChlkSessionConstants.ASSESSESMENT_ENABLED);
+                return this.getContext().getSession().get(ChlkSessionConstants.ASSESSMENT_ENABLED);
            },
 
            OVERRIDE, ria.serialize.ISerializer, function initSerializer_(){

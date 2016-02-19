@@ -75,11 +75,13 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementTypeEnum type, Guid applicationId)
         {
-            if (!Context.SCEnabled)
-                throw new StudyCenterDisabledException();
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
-            if(!CanAddToAnnouncement(app.Id))
+
+            EnsureApplicationPermission(app.Id);
+
+            if (!CanAddToAnnouncement(app.Id))
                 throw new ChalkableSecurityException("Application is not installed yet");
+
             using (var uow = Update())
             {
                 var ann = ServiceLocator.GetAnnouncementService(type).GetAnnouncementDetails(announcementId);
@@ -150,6 +152,18 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
+        //TODO: maybe move this to ApplicationService and make it public 
+        private void EnsureApplicationPermission(Guid appId)
+        {
+            if (appId == ServiceLocator.ServiceLocatorMaster.ApplicationService.GetAssessmentId())
+            {
+                if (!ApplicationSecurity.HasAssessmentEnabled(Context))
+                    throw new ChalkableSecurityException("Current user has disabled assessment access");
+            }
+            else if(!ApplicationSecurity.HasStudyCenterAccess(Context))
+                    throw new StudyCenterDisabledException();
+        }
+
         private bool CanAddToAnnouncement(Guid appId)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -173,11 +187,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false)
         {
-            using (var uow = Read())
-            {
-                var da = new AnnouncementApplicationDataAccess(uow);
-                return da.GetAnnouncementApplicationsByPerson(personId, onlyActive);
-            }
+            return DoRead(u => new AnnouncementApplicationDataAccess(u).GetAnnouncementApplicationsByPerson(personId, onlyActive));
         }
 
         public Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementTypeEnum type)
@@ -199,7 +209,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             catch
             {
-                throw new ChalkableException(String.Format(ChlkResources.ERR_CANT_DELETE_ANNOUNCEMENT_APPLICATION, announcementAppId));
+                throw new ChalkableException(string.Format(ChlkResources.ERR_CANT_DELETE_ANNOUNCEMENT_APPLICATION, announcementAppId));
             }
         }
 

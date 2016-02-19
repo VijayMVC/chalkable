@@ -35,7 +35,7 @@ NAMESPACE('chlk.lib.mvc', function () {
             },
 
             Boolean, function isAssessmentEnabled_(){
-                return this.getContext().getSession().get(ChlkSessionConstants.ASSESSESMENT_ENABLED);
+                return this.getContext().getSession().get(ChlkSessionConstants.ASSESSMENT_ENABLED);
             },
 
 
