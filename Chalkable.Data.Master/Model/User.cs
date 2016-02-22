@@ -73,7 +73,6 @@ namespace Chalkable.Data.Master.Model
         public DateTime? StudyCenterEnabledTill { get; set; }
         public bool IsMessagingDisabled { get; set; }
         public bool IsAssessmentEnabled { get; set; }
-        public bool IsNewAssessmentEnabled { get; set; }
 
         public bool StudentMessagingEnabled { get; set; }
         public bool StudentToClassMessagingOnly { get; set; }
