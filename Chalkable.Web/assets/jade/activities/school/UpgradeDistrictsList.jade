@@ -11,6 +11,9 @@
                         span Assessment Access
                         +ActionButton('schools', 'enableAssessment', item.getId()).special-button.blue-button.upgrade-district-btn Enable
                         +ActionButton('schools', 'disableAssessment', item.getId()).negative-button.special-button.red-button Disable
+                        +ActionButton('schools', 'enableNewAssessment', item.getId()).special-button.blue-button.upgrade-district-btn New
+                        +ActionButton('schools', 'disableNewAssessment', item.getId()).negative-button.special-button.red-button Old
+
                      span.upgraded-date
                      +ActionButton('schools', 'upgradeDistrict', item.getId()).special-button.blue-button.upgrade-district-btn Upgrade District
                      +ActionButton('schools', 'downgradeDistrict', item.getId()).negative-button.special-button.red-button Un-upgrade District

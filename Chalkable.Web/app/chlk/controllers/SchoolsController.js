@@ -275,9 +275,30 @@ NAMESPACE('chlk.controllers', function (){
             return this.updateAssessmentEnabled_(districtId, schoolId_, false);
         },
 
-        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean, Boolean]],
         function updateAssessmentEnabled_(districtId, schoolId_, enabled){
             this.schoolService.updateAssessmentEnabled(districtId, schoolId_, enabled)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);
+                }, this);
+            return null;
+        },
+
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId]],
+        function enableNewAssessmentAction(districtId, schoolId_){
+            return this.updateNewAssessmentEnabled_(districtId, schoolId_, true);
+        },
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId]],
+        function disableNewAssessmentAction(districtId, schoolId_){
+            return this.updateNewAssessmentEnabled_(districtId, schoolId_, false);
+        },
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
+        function updateNewAssessmentEnabled_(districtId, schoolId_, enabled){
+            this.schoolService.updateNewAssessmentEnabled(districtId, schoolId_, enabled)
                 .attach(this.validateResponse_())
                 .then(function(data){
                     return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);

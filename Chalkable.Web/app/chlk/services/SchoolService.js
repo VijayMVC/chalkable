@@ -110,9 +110,18 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
-            ria.async.Future, function updateAssessmentEnabled(districtId_, schoolId_, enabled){
+            ria.async.Future, function updateAssessmentEnabled(districtId, schoolId_, enabled){
                 return this.post('School/UpdateAssessmentEnabled.json', Boolean,{
-                    districtId: districtId_ && districtId_.valueOf(),
+                    districtId: districtId && districtId.valueOf(),
+                    schoolId: schoolId_ && schoolId_.valueOf(),
+                    enabled: enabled
+                });
+            },
+
+            [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
+            ria.async.Future, function updateNewAssessmentEnabled(districtId, schoolId_, enabled){
+                return this.post('School/UpdateNewAssessmentEnabled.json', Boolean,{
+                    districtId: districtId && districtId.valueOf(),
                     schoolId: schoolId_ && schoolId_.valueOf(),
                     enabled: enabled
                 });
