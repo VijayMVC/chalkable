@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.DemoSchool.Common;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
@@ -96,6 +95,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         }
 
         public void UpdateStudyCenterEnabled(Guid? districtId, Guid? schoolId, DateTime? enabledTill)
+        {
+            throw new NotImplementedException();
+        }
+        public void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
+        {
+            throw new NotImplementedException();
+        }
+        public void UpdateNewAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
         {
             throw new NotImplementedException();
         }

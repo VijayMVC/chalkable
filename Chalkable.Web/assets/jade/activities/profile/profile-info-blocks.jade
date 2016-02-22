@@ -18,6 +18,10 @@ mixin ProfileInfoView(tpl)
         .sections
             +CloseOpen(model.getRole().getName() + ' info').today-work-panel
                 .sections-info
+                    if model.getLogin()
+                        .section-data
+                            .info-title User Name
+                            .data-info=model.getLogin()
                     if model.getEmail()
                         .section-data
                             .info-title=Msg.Email
@@ -79,8 +83,11 @@ mixin ProfileInfoForm(controller, tpl)
                 +CloseOpen(model.getRole().getName() + ' info').today-work-panel
                     .sections-info
                         .section-data
+                            .info-title User Name
+                            input(name='login', value=model.getLogin(), class="validate[custom[email], required]").data-info
+                        .section-data
                             .info-title=Msg.Email
-                            input(name="email", value=model.getEmail(), class="validate[custom[email], required]").data-info
+                            .data-info=model.getEmail()
                         if primaryPhone
                             .section-data
                                 .info-title=Msg.Cell

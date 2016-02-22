@@ -38,7 +38,7 @@ mixin MyAppsPermissions(myAppsAccess, appName, readOnly)
             +SlideCheckbox("parentMyAppsEnabled", myAppsAccess.isParentMyAppsEnabled(), readOnly)
 
 mixin ExternalAttachPermissions(appsAccess, appName, readOnly)
-    .external-attach-apps
+    .external-attach-apps.my-apps
         .permission
             +MyAppsPermission("Can Teachers Launch", appName, "in External Attach Mode?")
             +SlideCheckbox("teacherExternalAttachEnabled", myAppsAccess.isTeacherExternalAttachEnabled(), readOnly)
@@ -48,6 +48,7 @@ mixin ExternalAttachPermissions(appsAccess, appName, readOnly)
         .permission
             +MyAppsPermission("Can Admins Launch", appName, "in External Attach Mode?")
             +SlideCheckbox("adminExternalAttachEnabled", myAppsAccess.isAdminExternalAttachEnabled(), readOnly)
+
 
 
 mixin AppPricing(appPrice, isReadOnly)
@@ -192,8 +193,31 @@ simpleApp = !app.isAdvancedApp()
                 label.hint Grading View:
                 .my-apps
                     .permission
-                        +MyAppsPermission("Will Teachers be", '', 'viewing student output?', "short-gd")
+                        +MyAppsPermission("Will Teachers be", ' ', 'viewing student output?', "short-gd")
                         +SlideCheckbox("showInGradingViewEnabled", myAppsAccess.isVisibleInGradingView(), self.isReadOnly())
+            .elem
+                lable.hint Settings:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Can SysAdmin Launch ", app.getName(), "in Settings?", "short")
+                        +SlideCheckbox("sysAdminSettingsEnabled", myAppsAccess.isSysAdminSettingsEnabled(), self.isReadOnly())
+                    .permission
+                        +MyAppsPermission("Can District Admin Launch ", app.getName(), "in Settings?", "short")
+                        +SlideCheckbox("districtAdminSettingsEnabled", myAppsAccess.isDistrictAdminSettingsEnabled(), self.isReadOnly())
+            .elem
+                lable.hint Profile:
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Can Student Launch ", app.getName(), "in Profile?", "short")
+                        +SlideCheckbox("studentProfileEnabled", myAppsAccess.isStudentProfileEnabled(), self.isReadOnly())
+
+        .section.small.advanced(class = simpleApp ?  "x-hidden" : undefined)
+            .elem
+                lable.hint Provides Recommended Content
+                .my-apps
+                    .permission
+                        +MyAppsPermission("Does ", app.getName(), ' Provide Recommended Content?', "short")
+                        +SlideCheckbox("providesRecommendedContent", myAppsAccess.isProvidesRecommendedContent(), self.isReadOnly())
         .section.small
             .elem.standarts
                 isAdjustToStandards = app.getStandards() && app.getStandards().length > 0

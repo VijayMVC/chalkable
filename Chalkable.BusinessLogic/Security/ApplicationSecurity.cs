@@ -1,7 +1,6 @@
 ﻿using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Data.School.Model.ApplicationInstall;
 
@@ -28,6 +27,16 @@ namespace Chalkable.BusinessLogic.Security
         public static bool CanUninstall(UserContext context, ApplicationInstall applicationInstall)
         {
             return context.PersonId == applicationInstall.OwnerRef;
+        }
+
+        public static bool HasAssessmentEnabled(UserContext context)
+        {
+            return context.AssessmentEnabled || BaseSecurity.IsSysAdmin(context) || context.Role.Id == CoreRoles.DEVELOPER_ROLE.Id;
+        }
+
+        public static bool HasStudyCenterAccess(UserContext context)
+        {
+            return context.SCEnabled || BaseSecurity.IsSysAdmin(context) || context.Role.Id == CoreRoles.DEVELOPER_ROLE.Id;
         }
     }
 }

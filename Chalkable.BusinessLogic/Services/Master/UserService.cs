@@ -41,7 +41,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         void AddSchoolUsers(IList<SchoolUser> schoolUsers);
         void DeleteSchoolUsers(IList<SchoolUser> schoolUsers);
         void ChangePassword(string login, string newPassword);
-        void ChangeUserLogin(Guid id, string login);
+        void ChangeUserLogin(Guid id, string login, out string error);
+        bool CanChangeUserLogin(Guid userId);
         bool ResetPassword(string email);
         User GetSysAdmin();
         void DeleteUsers(IList<int> localIds, Guid districtId);
@@ -448,19 +449,56 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public void ChangeUserLogin(Guid id, string login)
+        public void ChangeUserLogin(Guid userId, string login, out string error)
         {
             //todo : check login existing
-            var user = GetById(id);
-            if(!UserSecurity.CanModify(Context, user))
+            error = null;
+            var user = GetById(userId);
+
+            if(!CanChangeUserLogin(user))
                 throw new ChalkableSecurityException();
-            using (var uow = Update())
+
+            if (user.Login != login)
             {
-                user.Login = login;
-                new UserDataAccess(uow).Update(user);
-                uow.Commit();
+                var newUser = GetByLogin(login);
+                if (newUser != null && userId != newUser.Id)
+                {
+                    error = "User with such login already exists in chalkable";
+                    return;
+                }
+                
+                DoUpdate(u =>
+                {
+                    user.Login = login;
+                    new UserDataAccess(u).Update(user);
+                });
             }
         }
+
+        public bool CanChangeUserLogin(Guid userId)
+        {
+            var user = GetById(userId);
+            return CanChangeUserLogin(user);
+        }
+
+        private bool CanChangeUserLogin(User user)
+        {
+            var res = UserSecurity.CanModify(Context, user);
+            if (!res && Context.DistrictId.HasValue && user.SisUserId.HasValue && BaseSecurity.IsTeacher(Context))
+            {
+                int roleId;
+                var personId = PersonDataAccess.GetPersonDataForLogin(Context.DistrictServerUrl, Context.DistrictId.Value, user.SisUserId.Value, out roleId);
+                if (roleId == CoreRoles.STUDENT_ROLE.Id)
+                {
+                    var schooLocator = ServiceLocator.SchoolServiceLocator(Context.DistrictId.Value, Context.SchoolLocalId);
+                    res = (Context.PersonId.HasValue && Context.SchoolYearId.HasValue 
+                           && schooLocator.StudentService.IsTeacherStudent(Context.PersonId.Value, personId, Context.SchoolYearId.Value));
+                }
+
+            }
+            return res;
+        }
+
 
         public User GetSysAdmin()
         {

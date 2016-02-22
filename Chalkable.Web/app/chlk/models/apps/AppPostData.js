@@ -28,6 +28,11 @@ NAMESPACE('chlk.models.apps', function () {
             Boolean, 'teacherExternalAttachEnabled',
             Boolean, 'adminExternalAttachEnabled',
 
+            Boolean, 'sysAdminSettingsEnabled',
+            Boolean, 'districtAdminSettingsEnabled',
+            Boolean, 'studentProfileEnabled',
+            Boolean, 'providesRecommendedContent',
+
             Boolean, 'showInGradingViewEnabled',
             Boolean, 'advancedApp',
 

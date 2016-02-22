@@ -24,6 +24,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public Guid? ExternalAttachPictureId { get; set; }
         public string MyAppsUrl { get; set; }
         public string SecretKey { get; set; }
+        public string EncodedSecretKey { get; set; }
         public int State { get; set; }
         public Guid? DeveloperId { get; set; }
         public Guid? LiveAppId { get; set; }

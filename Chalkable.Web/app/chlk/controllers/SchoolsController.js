@@ -257,11 +257,53 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, chlk.models.common.ChlkDate]],
         function upgradeDownGradeSchools_(districtId, schoolId, tillDate){
-            return this.schoolService.updateStudyCenter(districtId, schoolId, tillDate)
+            this.schoolService.updateStudyCenter(districtId, schoolId, tillDate)
                 .attach(this.validateResponse_())
                 .then(function(data){
                     return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);
                 }, this);
+            return null;
+        },
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
+        function enableAssessmentAction(districtId, schoolId_){
+            return this.updateAssessmentEnabled_(districtId, schoolId_, true);
+        },
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
+        function disableAssessmentAction(districtId, schoolId_){
+            return this.updateAssessmentEnabled_(districtId, schoolId_, false);
+        },
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean, Boolean]],
+        function updateAssessmentEnabled_(districtId, schoolId_, enabled){
+            this.schoolService.updateAssessmentEnabled(districtId, schoolId_, enabled)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);
+                }, this);
+            return null;
+        },
+
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId]],
+        function enableNewAssessmentAction(districtId, schoolId_){
+            return this.updateNewAssessmentEnabled_(districtId, schoolId_, true);
+        },
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId]],
+        function disableNewAssessmentAction(districtId, schoolId_){
+            return this.updateNewAssessmentEnabled_(districtId, schoolId_, false);
+        },
+
+        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
+        function updateNewAssessmentEnabled_(districtId, schoolId_, enabled){
+            this.schoolService.updateNewAssessmentEnabled(districtId, schoolId_, enabled)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);
+                }, this);
+            return null;
         },
 
         function getCurrentYearId_(years){
@@ -307,6 +349,26 @@ NAMESPACE('chlk.controllers', function (){
                             this.redirectToPage_('district', 'summary', [])
                         }, this)
                         .thenBreak();
+                }, this)
+                .attach(this.validateResponse_());
+
+            return this.PushView(chlk.activities.school.SchoolClassesSummaryPage, result);
+        },
+
+        [chlk.controllers.SidebarButton('classes')],
+        [[chlk.models.id.SchoolId, String, chlk.models.id.SchoolPersonId, Number, String]],
+        function classesSummaryTeacherAction(schoolId_, schoolName_, teacherId_, sortType_, filter_){
+            sortType_ = sortType_ || chlk.models.admin.ClassSortTypeEnum.CLASS_ASC.valueOf();
+            teacherId_ = teacherId_ || this.getCurrentPerson().getId();
+            schoolName_ = this.getContext().getSession().get(ChlkSessionConstants.SCHOOL_NAME, null);
+            var currentSchoolYearId = this.getCurrentSchoolYearId();
+            var result = this.classService.getClassesStatistic(currentSchoolYearId, 0, filter_, teacherId_, sortType_)
+                .then(function(classes){
+                    this.prepareClassForSummary(classes);
+
+                    return new chlk.models.school.SchoolSummaryViewData(schoolName_, null, currentSchoolYearId, null,
+                        new chlk.models.admin.BaseStatisticGridViewData(classes, sortType_, null, schoolName_, filter_, teacherId_),
+                        filter_, teacherId_);
                 }, this)
                 .attach(this.validateResponse_());
 

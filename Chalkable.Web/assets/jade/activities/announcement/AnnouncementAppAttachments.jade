@@ -24,7 +24,7 @@ mixin AnnouncementFormApplicationItem(app, i, assessmentAppId_)
         .wrapper
             +LoadingImage(src=app.getPictureHref(), id="loading-image-" + i)
             .title(data-tooltip=app.getName(), data-tooltip-type="overflow")= app.getName()
-            -var isAssessment = assessmentAppId_ && assessmentAppId_ == app.getId()
+            -var isAssessment = assessmentAppId_ && assessmentAppId_ == app.getApplicationId()
             +ActionButton('apps', 'viewApp', appUrl, viewUrl, appMode, app.getId(), isBanned, null, self.getStandardsUrlComponents(), isAssessment) Open
 
 attachments = self.getAnnouncementAttachments() || []
@@ -53,7 +53,8 @@ if self.needButtons
 
 each item, i in items
     if item.getType() == chlk.models.announcement.ApplicationOrAttachmentEnum.APPLICATION
-        +AnnouncementFormApplicationItem(item, i)
+        -console.log(self.getAssessmentApplicationId())
+        +AnnouncementFormApplicationItem(item, i, self.getAssessmentApplicationId())
     else
         if item.isTeachersAttachment() || self.getUserRole().isAdmin()
-            +AnnouncementFormAttachmentItem(item, i, self.getAssessmentApplicationId())
+            +AnnouncementFormAttachmentItem(item, i)

@@ -281,10 +281,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return personDetails;
         }
 
-        public void EditEmailForCurrentUser(string email, out string error)
-        {
-            throw new NotImplementedException();
-        }
 
         public Person Edit(int localId, string email, string firstName,
             string lastName, string gender, string salutation, DateTime? birthDate, int? addressId)
@@ -300,6 +296,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var person = GetPerson(id);
             person.Active = true;
             PersonStorage.Update(person);
+        }
+
+        public void EditEmailForCurrentUser(int personId, string email, out string error)
+        {
+            throw new NotImplementedException();
         }
 
         public IList<Person> GetAll()

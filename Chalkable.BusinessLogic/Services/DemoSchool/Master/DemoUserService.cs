@@ -243,9 +243,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public void ChangeUserLogin(Guid id, string login)
+        public void ChangeUserLogin(Guid id, string login, out string error)
         {
-            
+            throw new NotImplementedException();
+        }
+
+        public bool CanChangeUserLogin(Guid userId)
+        {
+            throw new NotImplementedException();
         }
 
         public bool ResetPassword(string email)

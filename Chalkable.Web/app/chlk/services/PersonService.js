@@ -26,7 +26,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.SchoolPersonId, String, String]],
+            [[chlk.models.id.SchoolPersonId, String,  String]],
             ria.async.Future, function updateInfo(personId, email, phones) {
                 return this.post('Person/UpdateInfo.json', chlk.models.people.User, {
                     personId: personId.valueOf(),

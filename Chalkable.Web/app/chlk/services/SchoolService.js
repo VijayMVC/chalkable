@@ -107,6 +107,24 @@ NAMESPACE('chlk.services', function () {
                     schoolId: schoolId_ && schoolId_.valueOf(),
                     enabledTill: enabledTill_ && enabledTill_.toStandardFormat()
                 });
+            },
+
+            [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
+            ria.async.Future, function updateAssessmentEnabled(districtId, schoolId_, enabled){
+                return this.post('School/UpdateAssessmentEnabled.json', Boolean,{
+                    districtId: districtId && districtId.valueOf(),
+                    schoolId: schoolId_ && schoolId_.valueOf(),
+                    enabled: enabled
+                });
+            },
+
+            [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
+            ria.async.Future, function updateNewAssessmentEnabled(districtId, schoolId_, enabled){
+                return this.post('School/UpdateNewAssessmentEnabled.json', Boolean,{
+                    districtId: districtId && districtId.valueOf(),
+                    schoolId: schoolId_ && schoolId_.valueOf(),
+                    enabled: enabled
+                });
             }
         ])
 });

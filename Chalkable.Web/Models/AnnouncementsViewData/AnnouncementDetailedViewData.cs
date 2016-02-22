@@ -25,6 +25,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
 
         public IList<ApplicationForAttachViewData> SuggestedApps { get; set; }
 
+        public IList<ApplicationForAttachViewData> AppsWithContent { get; set; } 
+
         public IList<AdminAnnouncementGroupViewData> Recipients { get; set; } 
 
         private AnnouncementDetailedViewData(AnnouncementDetails announcementDetails, IList<StudentAnnouncement> studentAnnouncements)

@@ -34,6 +34,11 @@ NAMESPACE('chlk.lib.mvc', function () {
                 return leParams.isLEIntegrated();
             },
 
+            Boolean, function isAssessmentEnabled_(){
+                return this.getContext().getSession().get(ChlkSessionConstants.ASSESSMENT_ENABLED);
+            },
+
+
             [[String]],
             function submitToIFrame(src){
                 new ria.dom.Dom('.report-iframe').remove();
@@ -53,6 +58,8 @@ NAMESPACE('chlk.lib.mvc', function () {
                     activity.setStudyCenterEnabled(this.isStudyCenterEnabled_());
                 if (activity.setLEIntegrated)
                     activity.setLEIntegrated(this.isLEIntegrated_());
+                if (activity.setAssessmentEnabled)
+                    activity.setAssessmentEnabled(this.isAssessmentEnabled_());
                 return activity;
             },
 

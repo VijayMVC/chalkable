@@ -7,6 +7,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
 {
     public class PersonInfoViewData : PersonViewData
     {
+        public string Login { get; set; }
+        public bool CanEditLogin { get; set; }
         public string Email { get; set; }
         public int? Age { get; set; }
         [SensitiveData]

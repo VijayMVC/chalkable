@@ -32,7 +32,7 @@
 	[HasSysAdminSettings]			BIT					NOT NULL DEFAULT (0),
 	[HasDistrictAdminSettings]		BIT					NOT NULL DEFAULT (0), 
 	[HasStudentProfile]				BIT					NOT NULL DEFAULT (0),
-	[ProvidesRecomendedContent]		BIT					NOT NULL DEFAULT (0),
+	[ProvidesRecommendedContent]	BIT					NOT NULL DEFAULT (0),
     [ExternalAttachPictureRef]		UNIQUEIDENTIFIER	NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_Application_Developer] FOREIGN KEY ([DeveloperRef]) REFERENCES [dbo].[Developer] ([Id]),

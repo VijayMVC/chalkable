@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web.UI.WebControls;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -23,7 +22,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         void UpdateStudyCenterEnabled(Guid? districtId, Guid? schoolId, DateTime? enabledTill);
         void UpdateMessagingDisabled(Guid? districtId, Guid? schoolId, bool disbaled);
         void UpdateMessagingSettings(Guid? districtId, Guid? schoolId, bool studentMessaging, bool studentToClassOnly, bool teacherToStudentMessaging, bool teacherToClassOnly);
-
+        void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled);
+        void UpdateNewAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled);
         Data.Master.Model.MessagingSettings GetDistrictMessaginSettings(Guid districtId);
     }
 
@@ -121,6 +121,21 @@ namespace Chalkable.BusinessLogic.Services.Master
             DoUpdate(uow => new SchoolDataAccess(uow).UpdateStudyCenterEnabled(districtId, schoolId, enabledTill));
         }
 
+        public void UpdateAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
+        {
+            BaseSecurity.EnsureSysAdmin(Context);
+            if(districtId == null && schoolId == null)
+                throw new ChalkableException("Required districtId or schoolId!");
+            DoUpdate(uow => new SchoolDataAccess(uow).UpdateAssessmentEnabled(districtId, schoolId, enabled));
+        }
+
+        public void UpdateNewAssessmentEnabled(Guid? districtId, Guid? schoolId, bool enabled)
+        {
+            BaseSecurity.EnsureSysAdmin(Context);
+            if (districtId == null && schoolId == null)
+                throw new ChalkableException("Required districtId or schoolId!");
+            DoUpdate(uow => new SchoolDataAccess(uow).UpdateNewAssessmentEnabled(districtId, schoolId, enabled));
+        }
 
         public void UpdateMessagingDisabled(Guid? districtId, Guid? schoolId, bool disbaled)
         {

@@ -74,6 +74,8 @@
     <Folder Include="Functions\" />
     <Folder Include="Stored Procedures\" />
     <Folder Include="User Defined Types\" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\Pre-Deploy" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ABToCCMapping.sql" />
@@ -136,5 +138,13 @@
     <Build Include="User Defined Types\TUser.sql" />
     <Build Include="User Defined Types\TUserLoginInfo.sql" />
     <Build Include="Stored Procedures\spUpdateMessagingSettings.sql" />
+    <Build Include="Stored Procedures\spUpdateAssessmentEnabled.sql" />
+    <Build Include="Stored Procedures\spUpdateNewAssessmentEnabled.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Scripts\Pre-Deploy\001_addIsAssessmentEnabledToSchool.PreDeployment.sql" />
+    <None Include="Scripts\Pre-Deploy\002_HasDistricAdminSettingsToHasDistrictAdminSettings.PreDeployment.sql" />
+    <None Include="Scripts\Pre-Deploy\003_ApplicationChangeProvidesRecomendedContentToProvidesRecommendedContent.PreDeployment.sql" />
+    <None Include="Scripts\Pre-Deploy\004_addIsNewAssessmentEnabledToSchool.PreDeployment.PreDeployment.sql" />
   </ItemGroup>
 </Project>

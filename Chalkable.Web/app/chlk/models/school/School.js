@@ -34,7 +34,12 @@ NAMESPACE('chlk.models.school', function () {
 
             chlk.models.common.ChlkDate, 'studyCenterEnabledTill',
 
+            Boolean, 'assessmentEnabled',
+
+            Boolean, 'newAssessmentEnabled',
+
             READONLY, Boolean, 'upgraded',
+
             Boolean, function isUpgraded(){
                 var upgradedDate = this.getStudyCenterEnabledTill();
                 return upgradedDate && upgradedDate.toStandardFormat() >=  (new chlk.models.common.ChlkDate()).toStandardFormat();
@@ -53,6 +58,8 @@ NAMESPACE('chlk.models.school', function () {
                 this.districtId = SJX.fromValue(raw.districtid, chlk.models.id.DistrictId);
                 this.schoolYearId = SJX.fromValue(raw.schoolyearid, chlk.models.id.SchoolYearId);
                 this.studyCenterEnabledTill = SJX.fromDeserializable(raw.studycenterenabledtill, chlk.models.common.ChlkDate);
+                this.assessmentEnabled = SJX.fromValue(raw.isassessmentenabled, Boolean);
+                this.newAssessmentEnabled = SJX.fromValue(raw.isnewassessmentenabled, Boolean);
             }
         ]);
 });

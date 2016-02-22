@@ -59,7 +59,6 @@ namespace Chalkable.Web.Logic
             return res;
         }
 
-
         public static IList<ApplicationForAttachViewData> GetSuggestedAppsForAttach(IServiceLocatorMaster masterLocator, IServiceLocatorSchool schooLocator
             , int personId, int classId, IList<Guid> abIds, int markingPeriodId, int? start = null, int? count = null)
         {
@@ -77,7 +76,10 @@ namespace Chalkable.Web.Logic
                 if (!studentCountPerApp.ContainsKey(application.Id))
                     studentCountPerApp.Add(application.Id, classSize);
             }
-            return ApplicationForAttachViewData.Create(applications, studentCountPerApp, installedAppsIds);
+            var res = ApplicationForAttachViewData.Create(applications, studentCountPerApp, installedAppsIds);
+            
+            // get without content apps only 
+            return res.Where(x=>!x.ApplicationAccess.ProvidesRecommendedContent).ToList();
         }
 
     }

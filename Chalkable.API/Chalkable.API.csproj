@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Chalkable.API</RootNamespace>
     <AssemblyName>Chalkable.API</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -71,6 +71,7 @@
     <Compile Include="Endpoints\StudyCenterEndpoint.cs" />
     <Compile Include="Enums\AnnouncementType.cs" />
     <Compile Include="Exceptions\ChalkableApiException.cs" />
+    <Compile Include="Helpers\HashHelper.cs" />
     <Compile Include="IConnector.cs" />
     <Compile Include="Models\AnnouncementApplication.cs" />
     <Compile Include="Models\Announcement.cs" />
