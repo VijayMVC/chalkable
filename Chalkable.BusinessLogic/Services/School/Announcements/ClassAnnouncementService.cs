@@ -600,22 +600,30 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 throw new ChalkableException(ChlkResources.ERR_CANT_DETERMINE_SCHOOL_YEAR);
             Trace.Assert(Context.PersonId.HasValue);
 
-            var hasPermissions = Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);        
+            var hasViewAdminPermissions = Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN);        
             var end = count + start;
             start = start + 1;
             var intSort = (int?) sort;
 
-            if (Context.Role == CoreRoles.STUDENT_ROLE || studentId.HasValue)
-                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, studentId ?? Context.PersonId.Value, intSort, start, end, toDate, fromDate, complete, graded, classId);
+            //For teachers who has view classroom(admin permissions)
+            if (studentId.HasValue && hasViewAdminPermissions)
+                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, studentId.Value, 
+                    intSort, start, end, toDate, fromDate, complete, graded, classId);
+
+            if (Context.Role == CoreRoles.STUDENT_ROLE)
+                return ConnectorLocator.ActivityConnector.GetStudentAcivities(Context.SchoolYearId.Value, Context.PersonId.Value, 
+                    intSort, start, end, toDate, fromDate, complete, graded, classId);
 
             if (classId.HasValue)
                 return ConnectorLocator.ActivityConnector.GetActivities(classId.Value, start, end, intSort, toDate, fromDate, complete);
 
-            if (teacherId.HasValue && hasPermissions)
-                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, teacherId.Value, intSort, start, end, toDate, fromDate, complete);
+            if (teacherId.HasValue && hasViewAdminPermissions)
+                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, teacherId.Value, 
+                    intSort, start, end, toDate, fromDate, complete);
 
             if (Context.Role == CoreRoles.TEACHER_ROLE)
-                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, Context.PersonId.Value, intSort, start, end, toDate, fromDate, complete);
+                return ConnectorLocator.ActivityConnector.GetTeacherActivities(Context.SchoolYearId.Value, Context.PersonId.Value, 
+                    intSort, start, end, toDate, fromDate, complete);
 
             return new List<Activity>();
         }
