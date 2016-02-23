@@ -72,7 +72,7 @@ NAMESPACE('chlk.controllers', function (){
             if(postData_)
                 return this.getApplications_(
                     postData_.getStart(),
-                    postData_.getDeveloperId(),
+                    postData_.getDeevloperId(),
                     postData_.getState(),
                     postData_.getFilter()
                 );
@@ -735,7 +735,12 @@ NAMESPACE('chlk.controllers', function (){
                 buttons = [{text: 'DELETE', clazz: 'negative-button', value: 'ok'}, {text: 'Cancel'}];
             return this.ShowMsgBox(msgText, "whoa.", buttons, null, false, 'text', "")
                 .then(function (mrResult) {
-                    return appName == mrResult ? mrResult : ria.async.BREAK; })
+                    if (appName != mrResult)
+                        return this.ShowAlertBox("Incorrect application name provided", "Invalid application name")
+                            .thenBreak();
+
+                    return mrResult;
+                }, this)
                 .thenCall(this.appsService.deleteApp, [id])
                 .attach(this.validateResponse_());
         },
