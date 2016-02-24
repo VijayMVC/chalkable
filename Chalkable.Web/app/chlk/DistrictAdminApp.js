@@ -43,9 +43,15 @@ NAMESPACE('chlk', function (){
 
             //TODO: make sideBarOption model and template
             OVERRIDE, ria.async.Future, function onStart_() {
-                var isStudyCenterEnabled = this.getContext().getSession().get(ChlkSessionConstants.STUDY_CENTER_ENABLED, false);
+                var isStudyCenterEnabled = this.getContext().getSession().get(ChlkSessionConstants.STUDY_CENTER_ENABLED, false);                               
+                var isClassesEnabled = this.getContext().getSession().get(ChlkSessionConstants.USER_CLAIMS, []).filter(function(item){
+                    return item.hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN) 
+                        || item.hasPermission(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN);
+                }).length > 0;
+                
                 var sidebarOptions = {
-                    isAppStoreEnabled: isStudyCenterEnabled
+                    isAppStoreEnabled: isStudyCenterEnabled,
+                    isClassesEnabled: isClassesEnabled
                 };
                 return BASE()
                     .then(function(data){
