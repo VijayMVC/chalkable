@@ -4,5 +4,6 @@ if self.isAppStoreEnabled
     +ActionLink('appmarket', 'list').apps(title="View Apps") Apps
 if self.isAssessmentEnabled
     +ActionLink('apps', 'assessment').assessment(title="Assessment") Assessment
-+ActionLink('district', 'summary').classes(title="View Classes") Classes
+if self.isClassesEnabled
+    +ActionLink('district', 'summary').classes(title="View Classes") Classes
 +ActionLink('settings', 'dashboardAdmin').settings(title="View Settings") Settings

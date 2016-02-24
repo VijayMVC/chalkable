@@ -20,7 +20,7 @@ mixin ProfileInfoView(tpl)
                 .sections-info
                     if model.getLogin()
                         .section-data
-                            .info-title User Name
+                            .info-title Username
                             .data-info=model.getLogin()
                     if model.getEmail()
                         .section-data
@@ -83,7 +83,7 @@ mixin ProfileInfoForm(controller, tpl)
                 +CloseOpen(model.getRole().getName() + ' info').today-work-panel
                     .sections-info
                         .section-data
-                            .info-title User Name
+                            .info-title Usename
                             input(name='login', value=model.getLogin(), class="validate[custom[email], required]").data-info
                         .section-data
                             .info-title=Msg.Email
