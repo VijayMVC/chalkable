@@ -285,27 +285,6 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
-
-        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId]],
-        function enableNewAssessmentAction(districtId, schoolId_){
-            return this.updateNewAssessmentEnabled_(districtId, schoolId_, true);
-        },
-
-        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId]],
-        function disableNewAssessmentAction(districtId, schoolId_){
-            return this.updateNewAssessmentEnabled_(districtId, schoolId_, false);
-        },
-
-        [[chlk.models.id.DistrictId, chlk.models.id.SchoolId, Boolean]],
-        function updateNewAssessmentEnabled_(districtId, schoolId_, enabled){
-            this.schoolService.updateNewAssessmentEnabled(districtId, schoolId_, enabled)
-                .attach(this.validateResponse_())
-                .then(function(data){
-                    return this.BackgroundNavigate('schools', 'tryToUpgradeSchools', []);
-                }, this);
-            return null;
-        },
-
         function getCurrentYearId_(years){
             if(!years)
                 return null;

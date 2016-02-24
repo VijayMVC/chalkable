@@ -140,7 +140,9 @@
     <None Include="scripts\jquery-2.2.0.intellisense.js" />
     <Content Include="scripts\jquery-2.2.0.js" />
     <Content Include="scripts\jquery-2.2.0.min.js" />
-    <Content Include="Web.config" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Views\Teacher\Attach.cshtml" />
     <Content Include="Views\SysAdmin\Index.cshtml" />
   </ItemGroup>

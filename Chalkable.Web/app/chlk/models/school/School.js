@@ -36,8 +36,6 @@ NAMESPACE('chlk.models.school', function () {
 
             Boolean, 'assessmentEnabled',
 
-            Boolean, 'newAssessmentEnabled',
-
             READONLY, Boolean, 'upgraded',
 
             Boolean, function isUpgraded(){
@@ -59,7 +57,6 @@ NAMESPACE('chlk.models.school', function () {
                 this.schoolYearId = SJX.fromValue(raw.schoolyearid, chlk.models.id.SchoolYearId);
                 this.studyCenterEnabledTill = SJX.fromDeserializable(raw.studycenterenabledtill, chlk.models.common.ChlkDate);
                 this.assessmentEnabled = SJX.fromValue(raw.isassessmentenabled, Boolean);
-                this.newAssessmentEnabled = SJX.fromValue(raw.isnewassessmentenabled, Boolean);
             }
         ]);
 });
