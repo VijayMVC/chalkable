@@ -361,13 +361,20 @@ NAMESPACE('chlk', function (){
                 var isMessagingDisabled = this.getContext().getSession().get(ChlkSessionConstants.MESSAGING_DISABLED, false);
                 var leParams = this.getContext().getSession().get(ChlkSessionConstants.LE_PARAMS, new chlk.models.school.LEParams());
                 var isAssessmentEnabled = this.getContext().getSession().get(ChlkSessionConstants.ASSESSMENT_ENABLED, false);
+                
+                var isClassesEnabled = this.getContext().getSession().get(ChlkSessionConstants.USER_CLAIMS, []).filter(function(item){
+                    return item.hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN) 
+                        || item.hasPermission(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN);
+                }).length > 0;
+
 
                 var sidebarOptions = {
                     isAppStoreEnabled: isStudyCenterEnabled,
                     isLEEnabled: leParams.isLeEnabled(),
                     isLinkEnabled: leParams.isIntegratedSignOn(),
                     isMessagingDisabled: isMessagingDisabled,
-                    isAssessmentEnabled: isAssessmentEnabled
+                    isAssessmentEnabled: isAssessmentEnabled,
+                    isClassesEnabled: isClassesEnabled
                 };
 
                 return sidebarOptions;
