@@ -1,0 +1,19 @@
+.close-btn, .delete-btn
+  position: absolute
+  right: 0
+  top: 0
+  width: 32px
+  height: 32px
+  opacity: .5
+  //+transition(opacity, .1s, easy-in-out)
+  cursor: pointer
+  z-index: 99
+
+  &:hover
+    opacity: 1
+
+.close-btn
+  +icons-32-sprite(close)
+
+.delete-btn
+  +icons-32-sprite(delete)
