@@ -12,6 +12,8 @@ REQUIRE('chlk.models.apps.ShortAppInfo');
 REQUIRE('chlk.models.apps.AppPersonRating');
 REQUIRE('chlk.models.apps.ApplicationAuthorization');
 REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
+REQUIRE('chlk.models.standard.Standard');
+REQUIRE('chlk.models.apps.ApplicationContent');
 
 REQUIRE('chlk.models.id.GradeLevelId');
 REQUIRE('chlk.models.id.SchoolPersonId');
@@ -344,21 +346,37 @@ NAMESPACE('chlk.services', function () {
 
             [[
                 String,
-                chlk.models.id.AppId,
                 chlk.models.id.AnnouncementId,
                 chlk.models.announcement.AnnouncementTypeEnum,
                 ArrayOf(chlk.models.standard.Standard),
                 String,
             ]],
-            ria.async.Future, function getApplicationContents(appUrl, appId, announcementId, announcementType, standards, encodedKey){
-                var url = this.buildGetAppContentUrl_(appUrl, appId, announcementId, announcementType, standards);
+            ria.async.Future, function getApplicationContents(appUrl, announcementId, announcementType, standards, encodedKey){
+                var params = chlk.models.standard.Standard.BUILD_URL_PARAMS_FROM_STANDARDS(standards);
+                params.mode = 'content-query'; // added this mode to settings
+                params.announcementId = announcementId.valueOf();
+                params.announcementType = announcementType.valueOf();
 
-
+                var token = this.generateTokenForApiCall_(announcementId, announcementType, standards, encodedKey);
+                return this.makeGetPaginatedListApiCall(appUrl, chlk.models.apps.ApplicationContent, token, params);
             },
 
-            [[String, chlk.models.id.AppId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, ArrayOf(chlk.models.standard.Standard)]],
-            ria.async.Future, function buildGetAppContentUrl_(appUrl, appId, announcementId, announcementType, standards){
+            [[
+                chlk.models.id.AnnouncementId,
+                chlk.models.announcement.AnnouncementTypeEnum,
+                ArrayOf(chlk.models.standard.Standard),
+                String,
+            ]],
+            String, function generateTokenForApiCall_(announcementId, announcementType, standards, encodedKey){
+                var msg = announcementId.valueOf() + "|"
+                        + announcementType.valueOf() + "|";
+                if(standards.length > 0){
+                    standards.map(function(s){return s.getAcademicBenchmarkId().valueOf()})
+                                         .forEach(function(id){ msg += id + "|"});
+                }
 
+                msg += encodedKey;
+                return CryptoJS.SHA256(msg).toString();
             }
 
         ])

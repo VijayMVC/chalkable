@@ -99,6 +99,27 @@ NAMESPACE('chlk.services', function () {
                 }
             },
 
+            function getPaginatedResponseProcessor_(clazz){
+                var baseService = this;
+                return function (response) {
+
+                    response = baseService.getExceptionProcessor_()(response);
+
+                    var model = new chlk.models.common.PaginatedList(clazz);
+                    var dt = getDate().getTime();
+                    model.setItems(Serializer.deserialize(response.data, ArrayOf(clazz)));
+                    //_DEBUG && console.info('deserialize time', getDate().getTime() - dt);
+                    model.setPageIndex(Number(response.pageindex));
+                    model.setPageSize(Number(response.pagesize));
+                    model.setActualCount(Number((response.data || []).length));
+                    model.setTotalCount(Number(response.totalcount));
+                    model.setTotalPages(Number(response.totalpages));
+                    model.setHasNextPage(Boolean(response.hasnextpage));
+                    model.setHasPreviousPage(Boolean(response.haspreviouspage));
+                    return model;
+                }
+            },
+
             [[String, Object, Object, Boolean]],
             ria.async.Future, function get(uri, clazz_, gParams_, async_) {
                 return new chlk.lib.ajax.ChlkJsonGetTask(this.resolveUri(uri))
@@ -147,6 +168,17 @@ NAMESPACE('chlk.services', function () {
                     .run();
             },
 
+            [[String, Object, String, Object]],
+            ria.async.Future, function makeGetPaginatedListApiCall(url, clazz, token, gParams){
+                return  new chlk.lib.ajax.ChlkJsonGetTask(url)
+                    .params(gParams)
+                    .requestHeaders({
+                        "Authorization": "Bearer:" + token
+                    })
+                    .run()
+                    .then(this.getPaginatedResponseProcessor_(clazz));
+            },
+
             [[String, Object, Object]],
             ria.async.Future, function postArray(uri, clazz, gParams) {
                 return new chlk.lib.ajax.ChlkJsonPostTask(this.resolveUri(uri))
@@ -178,21 +210,7 @@ NAMESPACE('chlk.services', function () {
                     .requestHeaders(this.prepareDefaultHeaders({}))
                     .disableCache()
                     .run()
-                    .then(this.getExceptionProcessor_())
-                    .then(function (data) {
-                        var model = new chlk.models.common.PaginatedList(clazz);
-                        var dt = getDate().getTime();
-                        model.setItems(Serializer.deserialize(data.data, ArrayOf(clazz)));
-                        //_DEBUG && console.info('deserialize time', getDate().getTime() - dt);
-                        model.setPageIndex(Number(data.pageindex));
-                        model.setPageSize(Number(data.pagesize));
-                        model.setActualCount(Number((data.data || []).length));
-                        model.setTotalCount(Number(data.totalcount));
-                        model.setTotalPages(Number(data.totalpages));
-                        model.setHasNextPage(Boolean(data.hasnextpage));
-                        model.setHasPreviousPage(Boolean(data.haspreviouspage));
-                        return model;
-                    });
+                    .then(this.getPaginatedResponseProcessor_());
 //                        throw(new Exception(handler.getMessage()));
             }
         ]);

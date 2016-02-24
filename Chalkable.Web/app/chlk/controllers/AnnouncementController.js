@@ -16,6 +16,7 @@ REQUIRE('chlk.services.AnnouncementAssignedAttributeService');
 REQUIRE('chlk.services.AnnouncementAttachmentService');
 REQUIRE('chlk.services.AttachmentService');
 REQUIRE('chlk.services.AnnouncementQnAService');
+REQUIRE('chlk.services.ApplicationService');
 
 REQUIRE('chlk.activities.announcement.AnnouncementFormPage');
 REQUIRE('chlk.activities.announcement.LessonPlanFormPage');
@@ -110,6 +111,9 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.AnnouncementQnAService, 'announcementQnAService',
+
+        [ria.mvc.Inject],
+        chlk.services.ApplicationService, 'applicationService',
 
         ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
 
@@ -544,11 +548,39 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(model){
                     if(model && model.getAnnouncement()){
+
                         var resModel =  this.addEditAction(model, false);
                         var classAnnouncement = resModel.getAnnouncement().getClassAnnouncementData();
                         /*if(noDraft_){
                             item.setClassId(classId_ || null);
                         }*/
+
+                        //TODO: getApps Content
+                        //var ann = resModel.getAnnouncement();
+                        //ann.getAppsWithContent()
+                        //    .forEach(function(app){
+                        //
+                        //        this.applicationService.getApplicationContents(
+                        //                app.getUrl(),
+                        //                ann.getId(),
+                        //                ann.getType(),
+                        //                ann.getStandards(),
+                        //                app.getEncodedSecretKey())
+                        //            .attach(this.validateResponse_())
+                        //            .then(function(list){
+                        //
+                        //                if(list != null && list.length > 0){
+                        //                    list.forEach(function(appContent){
+                        //                        console.log(appContent.getText());
+                        //                        console.log(appContent.getImageUrl());
+                        //                        console.log(appContent.getContentId());
+                        //                    });
+                        //                }
+                        //            }, this)
+                        //
+                        //
+                        //}, this);
+
                         if(classAnnouncement && date_){
                             classAnnouncement.setExpiresDate(date_);
                         }
@@ -558,10 +590,14 @@ NAMESPACE('chlk.controllers', function (){
                         }else
                             return this.classAnnouncementFromModel_(resModel);
                             //return this.Redirect('announcement', 'classAnnouncementFromModel', [resModel]);
+
+
                     }
                     var classes = this.classService.getClassesForTopBarSync();
                     var classesBarData = new chlk.models.classes.ClassesForTopBar(classes);
-                    return this.classAnnouncementFromModel_(chlk.models.announcement.AnnouncementForm.$create(classesBarData, true));
+
+                    var res = this.classAnnouncementFromModel_(chlk.models.announcement.AnnouncementForm.$create(classesBarData, true));
+                    return res;
                     //return this.Redirect('announcement', 'classAnnouncementFromModel', [chlk.models.announcement.AnnouncementForm.$create(classesBarData, true)]);
                 },this);
         },
