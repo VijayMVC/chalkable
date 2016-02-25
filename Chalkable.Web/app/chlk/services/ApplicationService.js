@@ -349,13 +349,15 @@ NAMESPACE('chlk.services', function () {
                 chlk.models.id.AnnouncementId,
                 chlk.models.announcement.AnnouncementTypeEnum,
                 ArrayOf(chlk.models.standard.Standard),
-                String,
+                String, Number, Number
             ]],
-            ria.async.Future, function getApplicationContents(appUrl, announcementId, announcementType, standards, encodedKey){
+            ria.async.Future, function getApplicationContents(appUrl, announcementId, announcementType, standards, encodedKey, start_, count_){
                 var params = chlk.models.standard.Standard.BUILD_URL_PARAMS_FROM_STANDARDS(standards);
                 params.mode = 'content-query'; // added this mode to settings
                 params.announcementId = announcementId.valueOf();
                 params.announcementType = announcementType.valueOf();
+                params.start = start_;
+                params.count = count_;
 
                 var token = this.generateTokenForApiCall_(announcementId, announcementType, standards, encodedKey);
                 return this.makeGetPaginatedListApiCall(appUrl, chlk.models.apps.ApplicationContent, token, params);
@@ -371,8 +373,18 @@ NAMESPACE('chlk.services', function () {
                 var msg = announcementId.valueOf() + "|"
                         + announcementType.valueOf() + "|";
                 if(standards.length > 0){
-                    standards.map(function(s){return s.getAcademicBenchmarkId().valueOf()})
-                                         .forEach(function(id){ msg += id + "|"});
+                    standards.map(function(s){
+                        var res = '';
+                        if(s.getCommonCoreStandardCode() && s.getCommonCoreStandardCode() != '')
+                            res += s.getCommonCoreStandardCode() + '|';
+                        if(s.getAcademicBenchmarkId() && s.getAcademicBenchmarkId() != '')
+                            res += s.getAcademicBenchmarkId() + '|';
+                        if(s.getName() && s.getName() != '')
+                            res += s.getName() + '|';
+                        return res;
+                    })
+                    .filter(function(id){return id != ''; })
+                    .forEach(function(id){ msg += id});
                 }
 
                 msg += encodedKey;

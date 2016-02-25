@@ -176,6 +176,13 @@ NAMESPACE('chlk.services', function () {
                         "Authorization": "Bearer:" + token
                     })
                     .run()
+                    .then(function(response){
+                        if(response.success != true){
+                            _DEBUG && console.error("ChalkableApiException", response.data.Message, response.data.StackTrace);
+                            return ria.async.BREAK;
+                        }
+                        return response;
+                    })
                     .then(this.getPaginatedResponseProcessor_(clazz));
             },
 

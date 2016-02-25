@@ -14,9 +14,9 @@ NAMESPACE('chlk.models.apps', function () {
     CLASS(
         UNSAFE, FINAL,   'ApplicationContent',IMPLEMENTS(ria.serialize.IDeserializable), [
             VOID, function deserialize(raw){
-                this.text = SJX.fromValue(raw.text, String);
-                this.imageUrl = SJX.fromValue(raw.imageurl, String);
-                this.contentId = SJX.fromValue(raw.contentid, String);
+                this.text = SJX.fromValue(raw.Text, String);
+                this.imageUrl = SJX.fromValue(raw.ImageUrl, String);
+                this.contentId = SJX.fromValue(raw.ContentId, String);
             },
 
             String, 'text',
