@@ -12,6 +12,7 @@ using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Data.School.Model.ApplicationInstall;
+using Chalkable.Data.Master.DataAccess;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -30,6 +31,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         void BanUnBanApplication(Guid applicationId, bool ban);
         IList<ApplicationBanHistory> GetApplicationBanHistory(Guid applicationId);
+        IList<int> GetAnnouncementApplicationIsdByStudent(int studentId, Guid appId, int? schoolYear);
     }
 
     public class ApplicationSchoolService : SchoolServiceBase, IApplicationSchoolService
@@ -264,6 +266,19 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<ApplicationBanHistory> GetApplicationBanHistory(Guid applicationId)
         {
             return DoRead(u => new ApplicationBanHistoryDataAccess(u).GetApplicationBanHistory(applicationId));
+        }
+
+        public IList<int> GetAnnouncementApplicationIsdByStudent(int studentId, Guid appId, int? schoolYear)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+
+            if (Context.RoleId == CoreRoles.STUDENT_ROLE.Id && Context.PersonId != studentId)
+                    throw new ChalkableException("Incorrect student id!");
+
+            using (var uow = Read())
+            {
+                return new ApplicationDataAccess(uow).GetAnnouncementApplicationIdsByStudent(studentId, appId, schoolYear);
+            }
         }
     }
 }
