@@ -77,7 +77,7 @@ namespace Chalkable.StiConnector.Connectors
             return Call<IList<TeacherSummary>>($"{BaseUrl}chalkable/{acadSessionId}/classes/dashboard/teachers/{tillDate.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture)}", param);
         }
 
-        public IList<SectionSummary> GetSectionSummariesByTeacher(int acadSessionId, int teacherId, DateTime tillDate, int start, int end, SectionSummarySortOption sortType)
+        public IList<SectionSummary> GetSectionSummariesByTeacher(int acadSessionId, int teacherId, DateTime tillDate, int start, int end, string filter, SectionSummarySortOption sortType)
         {
             EnsureApiVersion("7.1.0.0");
 
@@ -87,6 +87,9 @@ namespace Chalkable.StiConnector.Connectors
                 ["start"] = start.ToString(),
                 ["end"] = end.ToString()
             };
+
+            if (!string.IsNullOrWhiteSpace(filter))
+                param.Add("filter", filter);
 
             return Call<IList<SectionSummary>>($"{BaseUrl}chalkable/{acadSessionId}/classes/dashboard/teachers/{teacherId}/sections/{tillDate.ToString(Constants.DATE_FORMAT, CultureInfo.InvariantCulture)}", param);
         }

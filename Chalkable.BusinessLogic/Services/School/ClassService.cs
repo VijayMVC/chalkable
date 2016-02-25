@@ -243,7 +243,7 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 if (teacherId.HasValue)
                     iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionSummariesByTeacher(schoolYearId,
-                        teacherId.Value, Context.NowSchoolYearTime, start.Value + 1, start.Value + count.Value, iNowSortType);
+                        teacherId.Value, Context.NowSchoolYearTime, start.Value + 1, start.Value + count.Value, filter, iNowSortType);
                 else
                     iNowRes = ConnectorLocator.ClassesDashboardConnector.GetSectionsSummaries(schoolYearId, 
                         Context.NowSchoolYearTime, start.Value + 1, start.Value + count.Value, filter, iNowSortType);
