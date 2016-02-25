@@ -16,17 +16,17 @@ namespace Chalkable.Api.SampleApp.Controllers
             ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) => true);
             base.Initialize(requestContext);
         }
-        
-        //protected override void OnActionExecuting(ActionExecutingContext filterContext)
-        //{
-        //    var chalkableAuthorization = ChalkableAuthorization;
-        //    if (chalkableAuthorization != null)
-        //    {
-        //        Connector = new ChalkableConnector(chalkableAuthorization);
-        //        ViewBag.ApiRoot = chalkableAuthorization.ApiRoot;
-        //    }
-        //    base.OnActionExecuting(filterContext);
-        //}
+
+        protected override void OnActionExecuting(ActionExecutingContext filterContext)
+        {
+            var chalkableAuthorization = ChalkableAuthorization;
+            if (chalkableAuthorization != null)
+            {
+                Connector = new ChalkableConnector(chalkableAuthorization);
+                ViewBag.ApiRoot = chalkableAuthorization.ApiRoot;
+            }
+            base.OnActionExecuting(filterContext);
+        }
 
         protected void PrepareBaseData(int? announcementApplicationId)
         {
