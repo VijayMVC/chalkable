@@ -27,7 +27,7 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public IList<LPGalleryCategory> GetList()
         {
-            return DoRead(u => new LPGalleryCategoryDataAccess(u).GetAll());
+            return DoRead(u => new LPGalleryCategoryDataAccess(u).GetAll()).OrderBy(x=>x.Name).ToList();
         }
 
         public LPGalleryCategory Add(string name)
