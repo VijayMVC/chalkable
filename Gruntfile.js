@@ -381,7 +381,16 @@ module.exports = function (grunt) {
       'deploy-db': {
         options: {
           url: 'https://' + vcsBranch + '.chalkable.com/DbMaintenance/DatabaseDeployCI',
-          body: 'key=' + sysAdminPrivateToken
+          method: 'POST',
+          body: 'key=' + sysAdminPrivateToken,
+          callback: function (error, response, body) {
+            if (error) throw error;
+            if (body) {
+              var json = JSON.parse(body);
+              if (!json.success)
+                throw new Error(body);
+            }
+          }
         }
       }
     }
