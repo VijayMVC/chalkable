@@ -2,13 +2,11 @@
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
-using System.Text;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Mvc;
 using Chalkable.API.ActionFilters;
 using Chalkable.API.Exceptions;
-using Chalkable.API.Helpers;
 using Chalkable.API.Models;
 
 namespace Chalkable.API.Controllers
@@ -27,19 +25,19 @@ namespace Chalkable.API.Controllers
             if (ChalkableAuthorization.ApiRoot != apiRoot)
                 ChalkableAuthorization = new ChalkableAuthorization(apiRoot);
 
+            var standards = StandardInfo.FromQuery(Request.Params, HttpContext.Server.UrlDecode).ToList();
+
             if (mode == Settings.CONTENT_QUERY)
             {
                 try
                 {
-                    var token = Request.Headers["Authorization"];
-                    if (string.IsNullOrWhiteSpace(token))
-                        return new EmptyResult();
-                    token = token.Replace("Bearer:", "").Trim();
-                    return ProcessApplicationContent(token, mode, announcementId, announcementType, start, count);
+                    AuthorizeQueryRequest();
+                    var res = GetApplicationContents(standards, start, count);
+                    return ChlkJsonResult(res, true);
                 }
                 catch (Exception ex)
                 {
-                    return ChlkJsonResult(ex, false);
+                    return ChlkExceptionJsonResult(ex);
                 }
             }
 
@@ -64,43 +62,29 @@ namespace Chalkable.API.Controllers
                 : await new ChalkableConnector(ChalkableAuthorization).Person.GetMe();
         }
 
-        private ActionResult ProcessApplicationContent(string token, string mode, int? announcementId, int? announcementType, int? start, int? count)
+        private void AuthorizeQueryRequest()
         {
-            var standards = StandardInfo.FromQuery(Request.Params, HttpContext.Server.UrlDecode).ToList();
-            var identityParams = PrepareContentQueryIdentityParams(announcementId, announcementType, standards);
+            var token = Request.Headers["Authorization"];
+            if (string.IsNullOrWhiteSpace(token))
+                throw new ChalkableApiException("Security error. Missing token");
+            token = token.Replace("Bearer:", "").Trim();
 
+            var identityParams = GetQueryIdentityParams();
             ChalkableAuthorization.AuthorizeQueryRequest(token, identityParams);
-
-            var res = GetApplicationContents(standards, start, count);
-            if (res == null)
-                throw new ChalkableApiException($"Empty Application Content Result in {mode} request to {ChalkableAuthorization.Configuration.ApplicationRoot}");
-
-            return PaginatedListJsonResult(res.ApplicationContents, res.TotalCount);  
         }
 
-        private IList<string> PrepareContentQueryIdentityParams(int? announcementId, int? announcementType, IList<StandardInfo> standards)
+        private IList<string> GetQueryIdentityParams()
         {
-            var identityParams = new List<string>();
-            if (announcementId.HasValue)
-                identityParams.Add(announcementId.Value.ToString());
-            if (announcementType.HasValue)
-                identityParams.Add(announcementType.Value.ToString());
-            foreach (var standard in standards)
-            {
-                if (!string.IsNullOrWhiteSpace(standard.CommonCoreStandard))
-                    identityParams.Add(standard.CommonCoreStandard);
-                if (!string.IsNullOrWhiteSpace(standard.StandardId))
-                    identityParams.Add(standard.StandardId);
-                if (!string.IsNullOrWhiteSpace(standard.StandardName))
-                    identityParams.Add(standard.StandardName);
-            }
-            return identityParams;
+            var orderedPrKeys = Request.QueryString.AllKeys.OrderBy(x => x).ToList();
+            return orderedPrKeys.Select(prKey => Request.Params[prKey])
+                                .Where(prValue => !string.IsNullOrWhiteSpace(prValue))
+                                .ToList();
         } 
         
-
         private JsonResult ChlkJsonResult(object data, bool success)
         {
-            return new JsonResult
+            var list = data as IPaginatedList;
+            var res = (list == null) ? new JsonResult
             {
                 Data = new
                 {
@@ -108,18 +92,27 @@ namespace Chalkable.API.Controllers
                     data
                 },
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            } : new JsonResult
+            {
+                Data = new
+                {
+                    success,
+                    data,
+                    totalcount = list.TotalCount
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
+            return res;
         }
 
-        private JsonResult PaginatedListJsonResult(object data, int totalCount)
+        private JsonResult ChlkExceptionJsonResult(Exception ex)
         {
             return new JsonResult
             {
                 Data = new
                 {
-                    data,
-                    totalcount = totalCount,
-                    success = true
+                    success = false,
+                    data = ExceptionViewData.Create(ex, ex.InnerException)
                 },
                 JsonRequestBehavior = JsonRequestBehavior.AllowGet
             };
@@ -160,7 +153,10 @@ namespace Chalkable.API.Controllers
 
         }
 
-        protected abstract PaginatedListOfApplicationContent GetApplicationContents(IList<StandardInfo> standardInfos, int? start, int? count);
+        protected virtual PaginatedList<ApplicationContent> GetApplicationContents(IList<StandardInfo> standardInfos, int? start, int? count)
+        {
+            throw new NotImplementedException();
+        }
 
         protected abstract Task<ActionResult> ResolveAction(string mode, int? announcementApplicationId,
             int? studentId, int? announcementId, int? announcementType, int? attributeId, int? applicationInstallId,

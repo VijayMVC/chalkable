@@ -98,20 +98,13 @@ namespace Chalkable.Api.SampleApp.Controllers
         }
 
 
-        protected override PaginatedListOfApplicationContent GetApplicationContents(IList<StandardInfo> standardInfos, int? start, int? count)
+        protected override PaginatedList<ApplicationContent> GetApplicationContents(IList<StandardInfo> standardInfos, int? start, int? count)
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
 
-            var res = ContentStorage.GetStorage().GetContents();
-            var totalCount = res.Count;
-            res = res.OrderBy(x => x.ContentId).Skip(start.Value).Take(count.Value).ToList();
-
-            return new PaginatedListOfApplicationContent
-            {
-                ApplicationContents = res,
-                TotalCount = totalCount
-            };
+            var res = ContentStorage.GetStorage().GetContents().OrderBy(x=>x.ContentId).ToList();
+            return new PaginatedList<ApplicationContent>(res, start.Value, count.Value);
         }
       
 

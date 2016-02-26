@@ -359,36 +359,27 @@ NAMESPACE('chlk.services', function () {
                 params.announcementType = announcementType.valueOf();
                 params.start = start_;
                 params.count = count_;
+                //disable Cache
+                params._= Math.random().toString(36).substr(2) + (new Date).getTime().toString(36);
 
-                var token = this.generateTokenForApiCall_(announcementId, announcementType, standards, encodedKey);
+                var token = this.generateTokenForApiCall_(params, encodedKey);
                 return this.makeGetPaginatedListApiCall(appUrl, chlk.models.apps.ApplicationContent, token, params);
             },
 
-            [[
-                chlk.models.id.AnnouncementId,
-                chlk.models.announcement.AnnouncementTypeEnum,
-                ArrayOf(chlk.models.standard.Standard),
-                String,
-            ]],
-            String, function generateTokenForApiCall_(announcementId, announcementType, standards, encodedKey){
-                var msg = announcementId.valueOf() + "|"
-                        + announcementType.valueOf() + "|";
-                if(standards.length > 0){
-                    standards.map(function(s){
-                        var res = '';
-                        if(s.getCommonCoreStandardCode() && s.getCommonCoreStandardCode() != '')
-                            res += s.getCommonCoreStandardCode() + '|';
-                        if(s.getAcademicBenchmarkId() && s.getAcademicBenchmarkId() != '')
-                            res += s.getAcademicBenchmarkId() + '|';
-                        if(s.getName() && s.getName() != '')
-                            res += s.getName() + '|';
-                        return res;
-                    })
-                    .filter(function(id){return id != ''; })
-                    .forEach(function(id){ msg += id});
-                }
+            [[Object, String]],
+            String, function generateTokenForApiCall_(params, encodedKey){
 
-                msg += encodedKey;
+                var nameValueArray = [];
+                for(var key in params){
+                    if(params.hasOwnProperty(key) && params[key] != null && params[key] != undefined && params[key] !== '')
+                        nameValueArray.push({ name : key, value : params[key]})
+                }
+                nameValueArray = nameValueArray.sort(function(a, b){
+                    return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0) ;
+                });
+                var msg = nameValueArray.map(function(_){return _.value;}).join('|');
+                msg += '|' + encodedKey;
+                //msg += 'test not valid token test';
                 return CryptoJS.SHA256(msg).toString();
             }
 

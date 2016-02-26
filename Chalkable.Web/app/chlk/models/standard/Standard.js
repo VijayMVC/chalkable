@@ -114,9 +114,9 @@ NAMESPACE('chlk.models.standard', function () {
 
             Object, function BUILD_URL_PARAMS_FROM_STANDARD(outParamsObj, standard, index_){
                 outParamsObj = outParamsObj || {};
-                outParamsObj['standardId[' + index_ + ']'] = encodeURIComponent(standard.getAcademicBenchmarkId() || '');
-                outParamsObj['ccStandardCode[' + index_ + ']'] = encodeURIComponent(standard.getCommonCoreStandardCode() || '');
-                outParamsObj['standardName[' + index_ + ']'] = encodeURIComponent(standard.getName() || '');
+                outParamsObj['standardId[' + index_ + ']'] = standard.getAcademicBenchmarkId() || '';
+                outParamsObj['ccStandardCode[' + index_ + ']'] = standard.getCommonCoreStandardCode() || '';
+                outParamsObj['standardName[' + index_ + ']'] = standard.getName() || '';
                 return outParamsObj;
             },
 
@@ -131,9 +131,7 @@ NAMESPACE('chlk.models.standard', function () {
                 (standards || []).forEach(function(s, index){
                     res = chlk.models.standard.Standard.BUILD_URL_PARAMS_FROM_STANDARD(res, s, index);
                 });
-
                 res.isAllStandardCodes = isAllStandardCodes;
-
                 return res;
             }
         ]);

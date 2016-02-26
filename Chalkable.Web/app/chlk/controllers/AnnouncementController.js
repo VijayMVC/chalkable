@@ -588,7 +588,7 @@ NAMESPACE('chlk.controllers', function (){
                         ann.getType(),
                         ann.getStandards(),
                         app.getEncodedSecretKey())
-                    .attach(this.validateResponse_())
+                    //.attach(this.validateResponse_())
                     .then(function(paginatedContents){
 
                         if(paginatedContents.getItems() && paginatedContents.getItems().length > 0){

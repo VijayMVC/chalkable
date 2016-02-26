@@ -77,7 +77,9 @@
     <Compile Include="IConnector.cs" />
     <Compile Include="Models\AnnouncementApplication.cs" />
     <Compile Include="Models\Announcement.cs" />
-    <Compile Include="Models\PaginatedListOfApplicationContent.cs" />
+    <Compile Include="Models\ApplicationContent.cs" />
+    <Compile Include="Models\ExceptionViewData.cs" />
+    <Compile Include="Models\PaginatedList.cs" />
     <Compile Include="Models\CoreRole.cs" />
     <Compile Include="Models\CoreRoles.cs" />
     <Compile Include="Models\IntList.cs" />
