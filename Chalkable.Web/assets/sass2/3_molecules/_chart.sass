@@ -39,6 +39,11 @@
 .chart-container.with-y-title
   .highcharts-container::before
     left: 65px
+    margin-bottom: 12px
+
+  &.empty
+    .highcharts-container::before
+      margin-left: -25px
 
 .highcharts-container::before
   content: ' '
