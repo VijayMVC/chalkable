@@ -6,12 +6,12 @@ namespace Chalkable.Api.SampleApp.Logic
 {
     public class ContentStorage
     {
-        private static IList<ApplicationContent> appContents_;
+        private static IList<ApplicationContent> _appContents;
 
         static ContentStorage()
         {
-            if(appContents_ == null)
-                appContents_ = GenerateDefaultAppContens();
+            if(_appContents == null)
+                _appContents = GenerateDefaultAppContens();
         }
 
         private static IList<ApplicationContent> GenerateDefaultAppContens()
@@ -24,7 +24,7 @@ namespace Chalkable.Api.SampleApp.Logic
                 {
                     ContentId = i.ToString(),
                     Text = $"Test text {i}",
-                    ImageUrl = $"http://defaultImageUrl{i}.png"
+                    ImageUrl = $"https://chalkable1.blob.core.windows.net/pictureconteiner/pictureconteiner_blob_dd7af2af-dc8d-4053-8225-ce01e2b06002-170x110"
                 });
             }
             return res;
@@ -37,12 +37,12 @@ namespace Chalkable.Api.SampleApp.Logic
 
         public IList<ApplicationContent> GetContents()
         {
-            return appContents_;
+            return _appContents;
         }
 
         public ApplicationContent GetContentById(string contentId)
         {
-            return appContents_.FirstOrDefault(x => x.ContentId == contentId);
+            return _appContents.FirstOrDefault(x => x.ContentId == contentId);
         }
     }
 }
