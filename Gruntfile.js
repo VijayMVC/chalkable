@@ -427,7 +427,7 @@ module.exports = function (grunt) {
   // branch specific tasks
   var postBuildTasks = ['imagemin', 'deploy-artifacts'];
   if (['staging', 'qa'].indexOf(vcsBranch) >= 0) {
-    postBuildTasks.push('deploy-to-azure', 'deploy-db', 'raygun-create-deployment');
+    postBuildTasks.push('deploy-to-azure', 'http:deploy-db', 'raygun-create-deployment');
   }
   
   if (['qa'].indexOf(vcsBranch) >= 0) {
