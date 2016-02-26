@@ -32,10 +32,12 @@ namespace Chalkable.Api.SampleApp.Controllers
             PrepareBaseData(announcementApplicationId);
             var annApp = await Connector.Announcement.GetAnnouncementApplicationById(announcementApplicationId);
             var ann = await Connector.Announcement.GetRead(annApp.AnnouncementId, annApp.AnnouncementType);
-
-       //   var studentAnnouncementAppicationIds = await Connector.Announcement.StudentAnnouncementAppicationIds(179);
-            var studentAnnouncementAppicationIdsForTeacher = await Connector.Announcement.StudentAnnouncementAppicationIdsForTeacher(3787, 179);
-            return View("Attach", DefaultJsonViewData.Create(ann));
+            var announcementAppIds = await Connector.Announcement.StudentAnnouncementAppicationIdsForTeacher(3787, 179);
+            return View("Attach", DefaultJsonViewData.Create(new
+            {
+                AnnouncementApplicationIds = announcementAppIds,
+                Announcement = ann
+            }));
         }
 
         public async Task<ActionResult> ContentAttach(int announcementApplicationId, string contentId)
@@ -51,11 +53,7 @@ namespace Chalkable.Api.SampleApp.Controllers
             return View("Attach", DefaultJsonViewData.Create(new {content}));
         }
 
-        private async Task<Announcement> GetAnnouncement(int announcementApplicationId)
-        {
-            var annApp = await Connector.Announcement.GetAnnouncementApplicationById(announcementApplicationId);
-            return await Connector.Announcement.GetRead(annApp.AnnouncementId, annApp.AnnouncementType);
-        }
+
 
 
         public ActionResult ViewMode(int announcementApplicationId)
