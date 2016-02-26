@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionFilters\AuthorizationFilter.cs" />
+    <Compile Include="ActionFilters\AllowCorsPolicyAttribute.cs" />
     <Compile Include="ChalkableAuthorization.cs" />
     <Compile Include="ChalkableConnector.cs" />
     <Compile Include="Configuration\ApplicationConfigurations.cs" />
@@ -72,9 +73,11 @@
     <Compile Include="Enums\AnnouncementType.cs" />
     <Compile Include="Exceptions\ChalkableApiException.cs" />
     <Compile Include="Helpers\HashHelper.cs" />
+    <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="IConnector.cs" />
     <Compile Include="Models\AnnouncementApplication.cs" />
     <Compile Include="Models\Announcement.cs" />
+    <Compile Include="Models\PaginatedListOfApplicationContent.cs" />
     <Compile Include="Models\CoreRole.cs" />
     <Compile Include="Models\CoreRoles.cs" />
     <Compile Include="Models\IntList.cs" />

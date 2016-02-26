@@ -1,5 +1,4 @@
 ﻿using System.Configuration;
-using System.Linq;
 using Chalkable.API.Configuration;
 
 namespace Chalkable.API
@@ -34,6 +33,7 @@ namespace Chalkable.API
         public const string GRADING_VIEW_MODE = "gradingview";
         public const string SETTINGS_MODE = "settingsview";
         public const string STUDENT_PROFILE_MODE = "studentprofileview";
+        public const string CONTENT_QUERY = "content-query";
 
         public const string CALL_ID_PARAM = "callid";
 
@@ -45,7 +45,7 @@ namespace Chalkable.API
 
         public static ApplicationEnvironment GetConfiguration(string environment)
         {
-            var items = (ConfigurationManager.GetSection(APPLICATION_CONFIG) as ApplicationConfigurations)?.Environments;
+            var items = GetApplicationEnvironments();
 
             for (var i = 0; i < items?.Count; ++i)
             {
@@ -57,6 +57,11 @@ namespace Chalkable.API
 
             return null;
         }
+
+        public static ApplicationEnvironments GetApplicationEnvironments()
+        {
+            return (ConfigurationManager.GetSection(APPLICATION_CONFIG) as ApplicationConfigurations)?.Environments;
+        } 
 
     }
 }

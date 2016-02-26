@@ -63,18 +63,18 @@ NAMESPACE('chlk.models.standard', function () {
                     this.setCommonCoreStandardCode(ccStandardCode_);
             },
 
-            String, function getUrlComponents(index_, nedIsAllStandardCodes_) {
-                index_ = index_ != undefined ? index_|0 : 0;
-                var resArr = [
-                    'standardId[' + index_ + ']=' + encodeURIComponent(this.getAcademicBenchmarkId() || ''),
-                    'ccStandardCode[' + index_ + ']=' + encodeURIComponent(this.getCommonCoreStandardCode() || ''),
-                    'standardName[' + index_ + ']=' + encodeURIComponent(this.getName() || '')
-                ]
-
-                if(nedIsAllStandardCodes_)
-                    resArr.push('isAllStandardCodes=' + (!this.commonCoreStandardCode || this.commonCoreStandardCode.length < 2))
-
-                return resArr.join('&');
+            String, function getUrlComponents(index_, needIsAllStandardCodes_) {
+                //index_ = index_ != undefined ? index_|0 : 0;
+                //var resArr = [
+                //    'standardId[' + index_ + ']=' + encodeURIComponent(this.getAcademicBenchmarkId() || ''),
+                //    'ccStandardCode[' + index_ + ']=' + encodeURIComponent(this.getCommonCoreStandardCode() || ''),
+                //    'standardName[' + index_ + ']=' + encodeURIComponent(this.getName() || '')
+                //]
+                //
+                //if(needIsAllStandardCodes_)
+                //    resArr.push('isAllStandardCodes=' + (!this.commonCoreStandardCode || this.commonCoreStandardCode.length < 2))
+                //
+                //return resArr.join('&');
 
                 /*index_ = index_ != undefined ? index_|0 : 0;
                 var codes = this.getCommonCoreStandardCode().split(',').map(function(item, i, array){
@@ -84,7 +84,57 @@ NAMESPACE('chlk.models.standard', function () {
                     'standardId[' + index_ + ']=' + encodeURIComponent(this.getAcademicBenchmarkId() || ''),
                     'standardName[' + index_ + ']=' + encodeURIComponent(this.getName() || '')
                 ]).join('&');*/
-            }
+                return SELF.GET_URL_COMPONENTS(this, index_, needIsAllStandardCodes_)
+            },
 
+            String, function GET_URL_COMPONENTS(standard, index_, needIsAllStandardCodes_){
+                index_ = index_ != undefined ? index_|0 : 0;
+                var resArr = [
+                    'standardId[' + index_ + ']=' + encodeURIComponent(standard.getAcademicBenchmarkId() || ''),
+                    'ccStandardCode[' + index_ + ']=' + encodeURIComponent(standard.getCommonCoreStandardCode() || ''),
+                    'standardName[' + index_ + ']=' + encodeURIComponent(standard.getName() || '')
+                ];
+
+                if(needIsAllStandardCodes_)
+                    resArr.push('isAllStandardCodes=' + (!standard.getCommonCoreStandardCode() || standard.getCommonCoreStandardCode().length < 2))
+
+                return resArr.join('&');
+            },
+
+            String, function GET_URL_COMPONENTS_FROM_STANDARDS(standards){
+                var standardsWithMoreCodes = (standards || []).filter(function(item){
+                    var codes = item.getCommonCoreStandardCodesArray();
+                    return codes && codes.length > 1;
+                });
+                var isAllStandardCodes = standardsWithMoreCodes.length > 0;
+                return (standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&')
+                    + '&isAllStandardCodes=' + isAllStandardCodes;
+            },
+
+
+            Object, function BUILD_URL_PARAMS_FROM_STANDARD(outParamsObj, standard, index_){
+                outParamsObj = outParamsObj || {};
+                outParamsObj['standardId[' + index_ + ']'] = encodeURIComponent(standard.getAcademicBenchmarkId() || '');
+                outParamsObj['ccStandardCode[' + index_ + ']'] = encodeURIComponent(standard.getCommonCoreStandardCode() || '');
+                outParamsObj['standardName[' + index_ + ']'] = encodeURIComponent(standard.getName() || '');
+                return outParamsObj;
+            },
+
+            Object, function BUILD_URL_PARAMS_FROM_STANDARDS(standards){
+                var standardsWithMoreCodes = (standards || []).filter(function(item){
+                    var codes = item.getCommonCoreStandardCodesArray();
+                    return codes && codes.length > 1;
+                });
+                var isAllStandardCodes = standardsWithMoreCodes.length > 0;
+
+                var res = {};
+                (standards || []).forEach(function(s, index){
+                    res = chlk.models.standard.Standard.BUILD_URL_PARAMS_FROM_STANDARD(res, s, index);
+                });
+
+                res.isAllStandardCodes = isAllStandardCodes;
+
+                return res;
+            }
         ]);
 });

@@ -26,6 +26,8 @@ NAMESPACE('chlk.models.apps', function () {
                 this.installedForMe = SJX.fromValue(raw.installedforme, Boolean);
                 this.oauthCode = SJX.fromValue(raw.oauthcode, String);
                 this.currentModeUrl = SJX.fromValue(raw.currentmodeurl, String);
+                this.imageUrl = SJX.fromValue(raw.imageurl, String);
+                this.text = SJX.fromValue(raw.text, String);
             },
             chlk.models.id.AnnouncementApplicationId, 'announcementApplicationId',
             chlk.models.id.AnnouncementId, 'announcementId',
@@ -38,6 +40,8 @@ NAMESPACE('chlk.models.apps', function () {
             Boolean, 'installedForMe',
             String, 'oauthCode',
             String, 'currentModeUrl',
+            String, 'imageUrl',
+            String, 'text',
 
             [[String, String, chlk.models.id.AnnouncementApplicationId, chlk.models.apps.AppMarketApplication]],
             function $create(currentModeUrl, oauthCode, announcementAppId_, appData_){

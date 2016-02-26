@@ -15,6 +15,6 @@ namespace Chalkable.API.Controllers
         {
             get { return Session["CurrentUser"] as SchoolPerson; }
             set { Session["CurrentUser"] = value; }
-        }        
+        }
     }
 }

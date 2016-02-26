@@ -9,6 +9,7 @@ REQUIRE('chlk.templates.announcement.AnnouncementAttributesTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementAttributesDropdownTpl');
 REQUIRE('chlk.templates.apps.SuggestedAppsListTpl');
 REQUIRE('chlk.templates.announcement.Announcement');
+REQUIRE('chlk.templates.apps.AppContentListTpl');
 
 NAMESPACE('chlk.activities.announcement', function () {
 
@@ -45,6 +46,49 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             },
 
+
+            ArrayOf(Object), 'waitingForAppContentListRender',
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppContentListTpl, 'update-app-contents', '')],
+            [[Object, Object, String]],
+            VOID, function updateAppContents(tpl, model, msg_){
+
+                this.onPrepareTemplate_(tpl, model, msg_);
+                tpl.assign(model);
+
+                var appsWithContentNode = this.dom.find('.apps-with-recommended-contents');
+                if(!appsWithContentNode.exists()) {
+                    if(!this.waitingForAppContentListRender)
+                        this.waitingForAppContentListRender = [];
+
+                    this.waitingForAppContentListRender.push({
+                        tpl: tpl,
+                        appId: model.getApplication().getId()
+                    })
+                }
+                else this.renderAppContentList_(tpl, model.getApplication().getId())
+
+
+            },
+
+
+            [[chlk.templates.apps.AppContentListTpl, chlk.models.id.AppId]],
+            VOID, function renderAppContentList_(tpl, appId){
+
+                var appsWithContentNode = this.dom.find('.apps-with-recommended-contents');
+                if(appsWithContentNode.exists()){
+                    var appId = appId.valueOf();
+                    var resNode = appsWithContentNode.find('.app-contents-block[data-appId=' + appId + ']');
+
+                    resNode = resNode.exists() ? resNode.empty() : appsWithContentNode;
+                    var dom = new ria.dom.Dom().fromHTML(tpl.render())
+                    dom.appendTo(resNode);
+                    //tpl.renderTo(resNode);
+                }
+            },
+
+
+
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAppAttachments, 'update-standards-and-suggested-apps', '', ria.mvc.PartialUpdateRuleActions.Replace)],
             [[Object, Object, String]],
             VOID, function updateStandardsAndSuggestedApps(tpl, model, msg_) {
@@ -70,21 +114,30 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 var suggestedAppsNode = this.dom.find('.suggested-apps').empty();
                 if(model.getStandards() && model.getStandards().length > 0 && this.isStudyCenterEnabled()){
-                    var suggestedApps = model.getSuggestedApps();
-                    var suggestedAppsListData = new chlk.models.apps.SuggestedAppsList(
-                        model.getClassId(),
-                        model.getId(),
-                        suggestedApps,
-                        model.getStandards(),
-                        null,
-                        model.getType()
-                    );
-                    var suggestedAppsTpl = new chlk.templates.apps.SuggestedAppsListTpl();
-                    this.onPrepareTemplate_(suggestedAppsTpl, model, msg_);
-                    suggestedAppsTpl.assign(suggestedAppsListData);
-                    suggestedAppsTpl.renderTo(suggestedAppsNode);
+                    this.suggestedAppsPartialUpdate_(model, suggestedAppsNode, msg_);
                     this.dom.find('.add-standards').find('.title').setText(Msg.Click_to_add_more);
                 }
+                else {
+                    //empty recommended contens section
+                    this.dom.find('.apps-with-recommended-contents').empty();
+                }
+            },
+
+            [[chlk.models.announcement.FeedAnnouncementViewData, ria.dom.Dom, String]],
+            VOID, function suggestedAppsPartialUpdate_(model, suggestedAppsNode, msg_){
+                var suggestedApps = model.getSuggestedApps();
+                var suggestedAppsListData = new chlk.models.apps.SuggestedAppsList(
+                    model.getClassId(),
+                    model.getId(),
+                    suggestedApps,
+                    model.getStandards(),
+                    null,
+                    model.getType()
+                );
+                var suggestedAppsTpl = new chlk.templates.apps.SuggestedAppsListTpl();
+                this.onPrepareTemplate_(suggestedAppsTpl, model, msg_);
+                suggestedAppsTpl.assign(suggestedAppsListData);
+                suggestedAppsTpl.renderTo(suggestedAppsNode);
             },
 
             [ria.mvc.DomEventBind('click', '#check-title-button')],
@@ -334,6 +387,20 @@ NAMESPACE('chlk.activities.announcement', function () {
                         $form.trigger('submit');
                     }
                 });
+            },
+
+            [[Object]],
+            OVERRIDE, VOID, function onRefresh_(model){
+                BASE(model);
+
+                if(this.waitingForAppContentListRender){
+                    this.waitingForAppContentListRender.forEach(function(_){
+                        this.renderAppContentList_(_.tpl, _.appId);
+                    }, this);
+
+                    this.waitingForAppContentListRender = [];
+                }
+
             },
 
             OVERRIDE, VOID, function onStop_() {

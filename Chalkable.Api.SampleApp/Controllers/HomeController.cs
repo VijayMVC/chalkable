@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel.Design.Serialization;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Chalkable.Api.SampleApp.Logic;
 using Chalkable.API;
 using Chalkable.API.Models;
 
@@ -17,7 +19,8 @@ namespace Chalkable.Api.SampleApp.Controllers
             , int? announcementType
             , int? attributeId
             , int? applicationInstallId
-            , IEnumerable<StandardInfo> standards)
+            , IEnumerable<StandardInfo> standards
+            , string contentId)
         {
             if (mode == Settings.SYSADMIN_MODE)
             {
@@ -42,7 +45,8 @@ namespace Chalkable.Api.SampleApp.Controllers
                 case Settings.EDIT_MODE:
                     return RedirectToAction("Attach", "Teacher", new RouteValueDictionary
                     {
-                        {"announcementApplicationId", announcementApplicationId}
+                        {"announcementApplicationId", announcementApplicationId},
+                        {"contentId", contentId }
                     });
 
                 case Settings.VIEW_MODE:
@@ -87,9 +91,29 @@ namespace Chalkable.Api.SampleApp.Controllers
                         });
                     }
                     break;
+
             }
 
             return View("NotSupported");
         }
+
+
+        protected override PaginatedListOfApplicationContent GetApplicationContents(IList<StandardInfo> standardInfos, int? start, int? count)
+        {
+            start = start ?? 0;
+            count = count ?? int.MaxValue;
+
+            var res = ContentStorage.GetStorage().GetContents();
+            var totalCount = res.Count;
+            res = res.OrderBy(x => x.ContentId).Skip(start.Value).Take(count.Value).ToList();
+
+            return new PaginatedListOfApplicationContent
+            {
+                ApplicationContents = res,
+                TotalCount = totalCount
+            };
+        }
+      
+
     }
 }

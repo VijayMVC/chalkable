@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Web;
 using WindowsAzure.Acs.Oauth2.Client;
 using WindowsAzure.Acs.Oauth2.Client.Protocol;
 using Chalkable.API.Configuration;
+using Chalkable.API.Exceptions;
+using Chalkable.API.Helpers;
 using Newtonsoft.Json;
 
 namespace Chalkable.API
@@ -40,6 +43,7 @@ namespace Chalkable.API
             Configuration = configuration ?? Settings.GetConfiguration(apiRoot);
         }
 
+
         public async Task AuthorizeAsync(string refreshToken)
         {
             if (RefreshToken == refreshToken)
@@ -57,7 +61,19 @@ namespace Chalkable.API
 
             RefreshToken = refreshToken;
         }
-        
+
+        public void AuthorizeQueryRequest(string token, IList<string> identityParams)
+        {
+            var signatureMsg = identityParams.JoinString("|");
+            var appSecret = Configuration.AppSecret;
+            signatureMsg += "|" + HashHelper.HexOfCumputedHash(appSecret);
+            var hash = HashHelper.HexOfCumputedHash(signatureMsg);
+            if (token != hash)
+                throw new ChalkableApiException($"Security error. Invalid token in query request to {Configuration.ApplicationRoot}");
+
+        }
+
+
         public class ChalkableAuthorizationSerialized
         {
             public string ApiRoot { get; set; }

@@ -7,9 +7,10 @@ namespace Chalkable.API.Helpers
 {
     public static class HashHelper
     {
-        public static IEnumerable<byte> Hmac(string s)
+        public static IEnumerable<byte> ComputeHash(string s)
         {
-            return new HMACSHA256().ComputeHash(Encoding.UTF8.GetBytes(s));
+            return SHA256.Create().ComputeHash(Encoding.UTF8.GetBytes(s));
+
         }
         public static string Hex(IEnumerable<byte> bytes)
         {
@@ -18,6 +19,11 @@ namespace Chalkable.API.Helpers
                 .Aggregate(new StringBuilder(), (sb, hex) => sb.Append(hex))
                 .ToString()
                 .ToLower();
+        }
+
+        public static string HexOfCumputedHash(string s)
+        {
+            return Hex(ComputeHash(s));
         }
     }
 }
