@@ -25,6 +25,11 @@ module.exports = function (grunt) {
   var pkg = grunt.file.readJSON('package.json');
   pkg.version = buildNumber || pkg.version;
 
+  var deploy_urls = {
+    'staging': 'https://dev.chalkable.com',
+    'qa': 'https://classroom.qa.chalkable.com'
+  };
+
   // Project configuration.
   grunt.initConfig({
     pkg: pkg,
@@ -380,7 +385,7 @@ module.exports = function (grunt) {
     http: {
       'deploy-db': {
         options: {
-          url: 'https://' + vcsBranch + '.chalkable.com/DbMaintenance/DatabaseDeployCI',
+          url: deploy_urls[vcsBranch] + '/DbMaintenance/DatabaseDeployCI',
           method: 'POST',
           body: 'key=' + sysAdminPrivateToken,
           callback: function (error, response, body) {
