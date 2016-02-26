@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Web;
 using WindowsAzure.Acs.Oauth2.Client;
 using WindowsAzure.Acs.Oauth2.Client.Protocol;
 using Chalkable.API.Configuration;

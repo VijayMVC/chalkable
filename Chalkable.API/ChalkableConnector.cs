@@ -4,7 +4,6 @@ using System.IO;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using System.Web;
 using WindowsAzure.Acs.Oauth2.Client;
 using Chalkable.API.Endpoints;
 using Chalkable.API.Exceptions;

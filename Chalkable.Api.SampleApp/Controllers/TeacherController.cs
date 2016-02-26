@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
 using Chalkable.Api.SampleApp.Logic;
 using Chalkable.Api.SampleApp.Models;
 using Chalkable.API.Exceptions;
-using Chalkable.API.Models;
 
 namespace Chalkable.Api.SampleApp.Controllers
 {
