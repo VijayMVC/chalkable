@@ -375,6 +375,15 @@ module.exports = function (grunt) {
               apiKey: nugetApiKey
             }
         }
+    },
+
+    http: {
+      'deploy-db': {
+        options: {
+          url: 'https://' + vcsBranch + '.chalkable.com/DbMaintenance/DatabaseDeployCI',
+          body: 'key=' + sysAdminPrivateToken
+        }
+      }
     }
   });
 
@@ -394,6 +403,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-nuget');
+  grunt.loadNpmTasks('grunt-http');
   
   // simple build task 
   grunt.registerTask('usemin-build', [
@@ -417,7 +427,7 @@ module.exports = function (grunt) {
   // branch specific tasks
   var postBuildTasks = ['imagemin', 'deploy-artifacts'];
   if (['staging', 'qa'].indexOf(vcsBranch) >= 0) {
-    postBuildTasks.push('deploy-to-azure', 'raygun-create-deployment');
+    postBuildTasks.push('deploy-to-azure', 'deploy-db', 'raygun-create-deployment');
   }
   
   if (['qa'].indexOf(vcsBranch) >= 0) {
