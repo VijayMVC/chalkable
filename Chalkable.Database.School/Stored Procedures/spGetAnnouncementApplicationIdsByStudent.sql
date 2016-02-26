@@ -61,8 +61,8 @@ select
 	AnnApp.annAppId
 from
 	@announcementApp as AnnApp
-	join (select Id from ClassAnnouncement join @studentClassRefs as SCR on ClassAnnouncement.ClassRef = SCR.studentClassRef) as LP
-	on AnnApp.announcementId = LP.Id
+	join (select Id from ClassAnnouncement join @studentClassRefs as SCR on ClassAnnouncement.ClassRef = SCR.studentClassRef) as CA
+	on AnnApp.announcementId = CA.Id
 
 --Get announcement ids for admin announcement
 insert into @resultTable
