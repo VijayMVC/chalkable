@@ -217,7 +217,7 @@ NAMESPACE('chlk.services', function () {
                     .requestHeaders(this.prepareDefaultHeaders({}))
                     .disableCache()
                     .run()
-                    .then(this.getPaginatedResponseProcessor_());
+                    .then(this.getPaginatedResponseProcessor_(clazz));
 //                        throw(new Exception(handler.getMessage()));
             }
         ]);
