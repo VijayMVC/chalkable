@@ -1,11 +1,15 @@
-module.exports = function(grunt) {
+var uuid = require('uuid');
+
+module.exports = function (grunt) {
 
   var encryptionSecret = process.env.PEM_ENCRYPTION_SECRET;
   var nugetApiKey = process.env.NUGET_API_KEY;
+  var sysAdminPrivateToken = uuid.v4();
 
   var buildNumber = grunt.option("build.number");
   var vcsRevision = grunt.option("vcs.revision");
   var vcsBranch = grunt.option("vcs.branch");
+  var nugetPre = grunt.option("nuget.pre") || '';
   if (buildNumber) {
     var buildCounter = buildNumber.split('-').pop();
     var semVer = function () {
@@ -20,6 +24,11 @@ module.exports = function(grunt) {
 
   var pkg = grunt.file.readJSON('package.json');
   pkg.version = buildNumber || pkg.version;
+
+  var deploy_urls = {
+    'staging': 'https://dev.chalkable.com',
+    'qa': 'https://classroom.qa.chalkable.com'
+  };
 
   // Project configuration.
   grunt.initConfig({
@@ -97,6 +106,9 @@ module.exports = function(grunt) {
         replacements: [{
           from: 'private-build',
           to: buildNumber
+        }, {
+          from: 'private-sysadmin-token',
+          to: sysAdminPrivateToken
         }]
       },
       chakable_database_master_version: {
@@ -137,7 +149,7 @@ module.exports = function(grunt) {
         dest: ['Chalkable.API/Chalkable.API.nuspec'],
         replacements: [{
           from: '$version$',
-          to: semVer
+          to: semVer + nugetPre
         }]
       }
     },
@@ -362,12 +374,30 @@ module.exports = function(grunt) {
     
     nugetpush: {
         dist: {
-            src: 'Chalkable.API/Chalkable.API.' + semVer + '.nupkg',
+            src: 'Chalkable.API/Chalkable.API.' + semVer + nugetPre + '.nupkg',
        
             options: {
               apiKey: nugetApiKey
             }
         }
+    },
+
+    http: {
+      'deploy-db': {
+        options: {
+          url: deploy_urls[vcsBranch] + '/DbMaintenance/DatabaseDeployCI',
+          method: 'POST',
+          body: 'key=' + sysAdminPrivateToken,
+          callback: function (error, response, body) {
+            if (error) throw error;
+            if (body) {
+              var json = JSON.parse(body);
+              if (!json.success)
+                throw new Error(body);
+            }
+          }
+        }
+      }
     }
   });
 
@@ -387,6 +417,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-nuget');
+  grunt.loadNpmTasks('grunt-http');
   
   // simple build task 
   grunt.registerTask('usemin-build', [
@@ -410,7 +441,7 @@ module.exports = function(grunt) {
   // branch specific tasks
   var postBuildTasks = ['imagemin', 'deploy-artifacts'];
   if (['staging', 'qa'].indexOf(vcsBranch) >= 0) {
-    postBuildTasks.push('deploy-to-azure', 'raygun-create-deployment');
+    postBuildTasks.push('deploy-to-azure', 'http:deploy-db', 'raygun-create-deployment');
   }
   
   if (['qa'].indexOf(vcsBranch) >= 0) {

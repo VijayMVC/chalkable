@@ -28,10 +28,6 @@ namespace Chalkable.API
         public SimpleOAuth2ClientInternal(Uri authorizeUri, Uri accessTokenUri, string clientId, string clientSecret, string scope, Uri redirectUri, ClientMode mode = ClientMode.ThreeLegged) : base(authorizeUri, accessTokenUri, clientId, clientSecret, scope, redirectUri, mode)
         {            
         }
-
-        public SimpleOAuth2ClientInternal(): base(null, null, string.Empty, string.Empty, string.Empty, null)
-        {            
-        }
     }
 
     public class ChalkableAuthorization
