@@ -68,7 +68,12 @@ NAMESPACE('chlk.templates.attendance', function () {
                 return {
                     chart: {
                         width: 800,
-                        height: 200
+                        height: 200,
+                        events: {
+                            load: function(){
+                                this && this.series && this.series[0] && this.series[0].update({});
+                            }
+                        }
                     },
                     xAxis: {
                         type: 'datetime',

@@ -19,6 +19,7 @@
       <param name="env.NUGET_API_KEY" value="zxx75fb5e2c5084ec89c3dd56e5159453ee1f10eaf56173e59497fb821c45f636c5c2ec30e8af0dff7c" spec="password display='hidden'" />
       <param name="env.PEM_ENCRYPTION_SECRET" value="zxxb518bd5a770ce9ee28a6b89b530d041bef9450c060986f1ca2df77aca73da318" spec="password display='hidden'" />
       <param name="env.RAYGUN_AUTHTOKEN" value="zxxdcfd4d7a5253c38f710f6e0d35995be18543f795223130a90ac54ee3bda21c69775d03cbe80d301b" spec="password display='hidden'" />
+      <param name="env.SYSADMIN_PRIVATE_TOKEN" value="zxx092e87f55b9b108c61ed21f6490fbf0751ed70b6094f94f1c67d8f99648321d07ab0cd994fac2107" spec="password display='normal'" />
     </parameters>
     <build-runners>
       <runner id="RUNNER_33" name="install nuget" type="jb.nuget.installer">

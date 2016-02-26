@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Web.ActionFilters;
@@ -49,7 +50,7 @@ namespace Chalkable.Web.Controllers
             var installedApps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, Context.PersonId.Value, null, 0, int.MaxValue, null).ToList();
             installedApps = installedApps.Where(x => x.HasDistrictAdminSettings).ToList();
 
-            if (ApplicationSecurity.HasAssessmentEnabled(Context))
+            if (ApplicationSecurity.HasAssessmentEnabled(Context) && Context.Claims.HasPermission(ClaimInfo.ASSESSMENT_ADMIN))
             {
                 var assessement = MasterLocator.ApplicationService.GetAssessmentApplication();
                 if (assessement != null && assessement.HasDistrictAdminSettings &&

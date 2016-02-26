@@ -7,9 +7,6 @@ if self.hasContent()
                +LeftRightToolbar()(fixedElementWidth = true)
                   each appContent, i in self.getAppContents().getItems()
                      .app-icon-link.announcement-item.application
-                        +ActionLink('apps', 'tryToAttachFromAnnouncement', self.getAnnouncementId(), app.getId(), self.getAnnouncementType(), 'contentId=' + appContent.getContentId())(
-                           data-tooltip='Attach', class= app.needToInstall() ? "x-hidden" : "", data-id=app.getId().valueOf()
-                           ).attach-icon +
                         .wrapper
                            -var pictureUrl = appContent.getImageUrl();
                            +LoadingImage(src=pictureUrl, id="loading-image-" + i)
