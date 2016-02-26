@@ -35,11 +35,21 @@ NAMESPACE('chlk.services', function () {
 
 
             String, function getUrl(uri, params){
+                var queryString = this.buildQueryStringFromParams_(params);
+                return this.resolveUri(uri) + '?' +  queryString;
+            },
+
+            String, function getApiUrl(url, params){
+                var queryString = this.buildQueryString_(params);
+                return url + '?' + queryString;
+            },
+
+            String, function buildQueryString_(params){
                 var p = params, r = [];
                 for(var key in p) if (p.hasOwnProperty(key)) {
                     r.push([key, p[key]].join('='));
                 }
-                return this.resolveUri(uri) + '?' +  r.join('&');
+                return r.join('&');
             },
 
             Array, function arrayToIds(obj){
@@ -185,6 +195,7 @@ NAMESPACE('chlk.services', function () {
                     })
                     .then(this.getPaginatedResponseProcessor_(clazz));
             },
+
 
             [[String, Object, Object]],
             ria.async.Future, function postArray(uri, clazz, gParams) {
