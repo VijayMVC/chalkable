@@ -19,26 +19,32 @@ namespace Chalkable.API.Controllers
         public virtual async Task<ActionResult> Index(string mode, string code, string apiRoot, int? announcementApplicationId,
             int? studentId, int? announcementId, int? announcementType, int? attributeId, int? applicationInstallId, int? start, int? count, string contentId)
         {
-            if (mode == Settings.CONTENT_QUERY)
-            {
-                if (!Request.Headers.AllKeys.Contains("Authorization"))
-                    return ChlkJsonResult(new ChalkableApiException("Security error. Missing token"), false);
 
-                var token = Request.Headers["Authorization"];
-                token = token.Replace("Bearer:", "").Trim();
-
-                if (string.IsNullOrWhiteSpace(apiRoot) && Request.UrlReferrer != null)
-                {
-                    apiRoot = $"{Request.UrlReferrer.Scheme}://{Request.UrlReferrer.Host}";
-                }
-                return ProcessApplicationContent(token, apiRoot, announcementId, announcementType, start, count);
-            }
-            if (string.IsNullOrWhiteSpace(code) || string.IsNullOrWhiteSpace(apiRoot))
+            if (string.IsNullOrWhiteSpace(apiRoot))
                 return new EmptyResult();
 
             ChalkableAuthorization = ChalkableAuthorization ?? new ChalkableAuthorization(apiRoot);
             if (ChalkableAuthorization.ApiRoot != apiRoot)
                 ChalkableAuthorization = new ChalkableAuthorization(apiRoot);
+
+            if (mode == Settings.CONTENT_QUERY)
+            {
+                try
+                {
+                    var token = Request.Headers["Authorization"];
+                    if (string.IsNullOrWhiteSpace(token))
+                        return new EmptyResult();
+                    token = token.Replace("Bearer:", "").Trim();
+                    return ProcessApplicationContent(token, mode, announcementId, announcementType, start, count);
+                }
+                catch (Exception ex)
+                {
+                    return ChlkJsonResult(ex, false);
+                }
+            }
+
+            if (string.IsNullOrWhiteSpace(code))
+                return new EmptyResult();
 
             await ChalkableAuthorization.AuthorizeAsync(code);
 
@@ -58,45 +64,39 @@ namespace Chalkable.API.Controllers
                 : await new ChalkableConnector(ChalkableAuthorization).Person.GetMe();
         }
 
-
-        private ActionResult ProcessApplicationContent(string token, string apiRoot, int? announcementId, int? announcementType, int? start, int? count)
+        private ActionResult ProcessApplicationContent(string token, string mode, int? announcementId, int? announcementType, int? start, int? count)
         {
             var standards = StandardInfo.FromQuery(Request.Params, HttpContext.Server.UrlDecode).ToList();
+            var identityParams = PrepareContentQueryIdentityParams(announcementId, announcementType, standards);
 
-            var builder = new StringBuilder();
-            builder.Append($"{announcementId}|{announcementType}|");
-            if (standards.Count > 0)
-                builder.Append(standards.Select(x => 
-                {
-                    var res = "";
-                    if (!string.IsNullOrWhiteSpace(x.CommonCoreStandard))
-                        res += x.CommonCoreStandard + "|";
-                    if (!string.IsNullOrWhiteSpace(x.StandardId))
-                        res += x.StandardId + "|";
-                    if (!string.IsNullOrWhiteSpace(x.StandardName))
-                        res += x.StandardName + "|";
-                    return res;
-                })
-                .JoinString(""));
+            ChalkableAuthorization.AuthorizeQueryRequest(token, identityParams);
 
-            var appKey = Settings.GetConfiguration(apiRoot).AppSecret;
-            var encodedKey = HashHelper.HexOfCumputedHash(appKey);
-            builder.Append(encodedKey);
-            var hash = HashHelper.HexOfCumputedHash(builder.ToString());
-            if (token != hash)
-                return ChlkJsonResult(new ChalkableApiException("Security error. Invalid token"), false);
-            try
-            {
-                var res = GetApplicationContents(standards, start, count);
-                return res == null 
-                    ? ChlkJsonResult(new ChalkableApiException("Empty Application Content Result"), false)
-                    : PaginatedListJsonResult(res.ApplicationContents, res.TotalCount);
-            }
-            catch (Exception ex)
-            {
-                return ChlkJsonResult(ex, false);
-            }
+            var res = GetApplicationContents(standards, start, count);
+            if (res == null)
+                throw new ChalkableApiException($"Empty Application Content Result in {mode} request to {ChalkableAuthorization.Configuration.ApplicationRoot}");
+
+            return PaginatedListJsonResult(res.ApplicationContents, res.TotalCount);  
         }
+
+        private IList<string> PrepareContentQueryIdentityParams(int? announcementId, int? announcementType, IList<StandardInfo> standards)
+        {
+            var identityParams = new List<string>();
+            if (announcementId.HasValue)
+                identityParams.Add(announcementId.Value.ToString());
+            if (announcementType.HasValue)
+                identityParams.Add(announcementType.Value.ToString());
+            foreach (var standard in standards)
+            {
+                if (!string.IsNullOrWhiteSpace(standard.CommonCoreStandard))
+                    identityParams.Add(standard.CommonCoreStandard);
+                if (!string.IsNullOrWhiteSpace(standard.StandardId))
+                    identityParams.Add(standard.StandardId);
+                if (!string.IsNullOrWhiteSpace(standard.StandardName))
+                    identityParams.Add(standard.StandardName);
+            }
+            return identityParams;
+        } 
+        
 
         private JsonResult ChlkJsonResult(object data, bool success)
         {
