@@ -353,6 +353,7 @@ NAMESPACE('chlk.services', function () {
             ]],
             ria.async.Future, function getApplicationContents(appUrl, announcementId, announcementType, standards, encodedKey, start_, count_){
                 var params = chlk.models.standard.Standard.BUILD_URL_PARAMS_FROM_STANDARDS(standards);
+                params.apiRoot = _GLOBAL.location.origin;
                 params.mode = 'content-query'; // added this mode to settings
                 params.announcementId = announcementId.valueOf();
                 params.announcementType = announcementType.valueOf();
