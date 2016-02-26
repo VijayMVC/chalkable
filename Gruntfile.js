@@ -1,10 +1,8 @@
-var uuid = require('uuid');
-
 module.exports = function (grunt) {
 
   var encryptionSecret = process.env.PEM_ENCRYPTION_SECRET;
   var nugetApiKey = process.env.NUGET_API_KEY;
-  var sysAdminPrivateToken = uuid.v4();
+  var sysAdminPrivateToken = process.env.SYSADMIN_PRIVATE_TOKEN;
 
   var buildNumber = grunt.option("build.number");
   var vcsRevision = grunt.option("vcs.revision");
