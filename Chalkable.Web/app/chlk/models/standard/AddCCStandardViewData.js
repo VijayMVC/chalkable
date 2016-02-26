@@ -13,8 +13,10 @@ NAMESPACE('chlk.models.standard', function(){
 
         Array, 'standardsIds',
 
-        [[String, ArrayOf(chlk.models.standard.CCStandardCategory), Array]],
-        function $(requestId,  itemStandards, standardsIds){
+        Boolean, 'onlyLeafs',
+
+        [[String, ArrayOf(chlk.models.standard.CCStandardCategory), Array, Boolean]],
+        function $(requestId,  itemStandards, standardsIds, onlyLeafs_){
             BASE();
             if(requestId)
                 this.setRequestId(requestId);
@@ -22,6 +24,8 @@ NAMESPACE('chlk.models.standard', function(){
                 this.setItems(itemStandards);
             if(standardsIds)
                 this.setStandardsIds(standardsIds);
+            if(onlyLeafs_)
+                this.setOnlyLeafs(onlyLeafs_);
         }
     ]);
 });

@@ -188,5 +188,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             var announcementApps = AnnouncementApplicationStorage.GetAll(announcementId, onlyActive);
             AnnouncementApplicationStorage.Delete(announcementApps);
         }
+
+        public IList<int> GetAnnouncementApplicationIsdByStudent(int studentId, Guid appId, int? schoolYear)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

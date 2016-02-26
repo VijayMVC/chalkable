@@ -186,12 +186,12 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         //move cc_standards logic to StandardController
-        [[chlk.models.id.AppId]],
-        function showStandardsAction(applicationId){
+        [[chlk.models.id.AppId, Boolean]],
+        function showStandardsAction(applicationId, onlyLeafs_){
             var standards = this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []);
             var standardIds = standards.map(function (_) { return _.getId().valueOf() });
 
-            var res = this.WidgetStart('apps', 'showStandards', [standardIds])
+            var res = this.WidgetStart('apps', 'showStandards', [standardIds, onlyLeafs_])
                 .then(function (data) {
                     var standards = [].concat(this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []), data);
                     return this.addStandards_(standards, applicationId);
@@ -201,12 +201,12 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         //move cc_standards logic to StandardController
-        [[String, Array]],
-        function showStandardsWidgetAction(requestId, standardsIds){
+        [[String, Array, Boolean]],
+        function showStandardsWidgetAction(requestId, standardsIds, onlyLeafs_){
             var res = this.standardService.getCCStandardCategories()
                 .attach(this.validateResponse_())
                 .then(function (data){
-                    return new chlk.models.standard.AddCCStandardViewData(requestId, data, standardsIds);
+                    return new chlk.models.standard.AddCCStandardViewData(requestId, data, standardsIds, onlyLeafs_);
                 }, this);
             return this.ShadeView(chlk.activities.apps.AddCCStandardDialog, res)
         },

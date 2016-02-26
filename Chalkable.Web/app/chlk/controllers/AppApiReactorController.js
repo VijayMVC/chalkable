@@ -147,7 +147,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[Object]],
             function showStandardPickerAction(data) {
-                this.WidgetStart('apps', 'showStandards', [data.excludeIds || []])
+                this.WidgetStart('apps', 'showStandards', [data.excludeIds || [], data.onlyLeafs])
                     .then(function (data) {
                         return data.map(function (_) { return _.serialize(); });
                     }, this)
