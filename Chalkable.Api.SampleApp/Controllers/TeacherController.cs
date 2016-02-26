@@ -32,6 +32,9 @@ namespace Chalkable.Api.SampleApp.Controllers
             PrepareBaseData(announcementApplicationId);
             var annApp = await Connector.Announcement.GetAnnouncementApplicationById(announcementApplicationId);
             var ann = await Connector.Announcement.GetRead(annApp.AnnouncementId, annApp.AnnouncementType);
+
+       //   var studentAnnouncementAppicationIds = await Connector.Announcement.StudentAnnouncementAppicationIds(179);
+            var studentAnnouncementAppicationIdsForTeacher = await Connector.Announcement.StudentAnnouncementAppicationIdsForTeacher(3787, 179);
             return View("Attach", DefaultJsonViewData.Create(ann));
         }
 

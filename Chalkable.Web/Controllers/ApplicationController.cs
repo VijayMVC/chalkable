@@ -311,5 +311,20 @@ namespace Chalkable.Web.Controllers
             }
             return res;
         }
+
+        [AuthorizationFilter("Student", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult StudentAnnouncementAppicationIds(int? schoolYear)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            return StudentAnnouncementAppicationIdsForTeacher(Context.PersonId.Value, schoolYear);
+        }
+
+        [AuthorizationFilter("Teacher", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult StudentAnnouncementAppicationIdsForTeacher(int studentId, int? schoolYear)
+        {
+            var app = MasterLocator.ApplicationService.GetApplicationByUrl(SchoolLocator.Context.OAuthApplication);
+            var announcementAppicationIds = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationIsdByStudent(studentId, app.Id, schoolYear);
+            return Json(announcementAppicationIds);
+        }
     }
 }

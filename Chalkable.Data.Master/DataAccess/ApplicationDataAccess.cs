@@ -394,6 +394,24 @@ namespace Chalkable.Data.Master.DataAccess
             };
             ExecuteStoredProcedure("spSetApplicationDistrictOption", ps);
         }
+
+        public IList<int> GetAnnouncementApplicationIdsByStudent(int studentId, Guid appId, int? schoolYear)
+        {
+            IDictionary<string, object> ps = new Dictionary<string, object>
+            {
+                {"@studentId", studentId},
+                {"@appId", appId},
+                {"@schoolYear", schoolYear},
+            };
+            var res = new List<int>();
+            using (var reader = ExecuteStoredProcedureReader("spGetAnnouncementApplicationIdsByStudent", ps))
+            {
+                var column = reader.GetOrdinal("annAppId");
+                while (reader.Read()) 
+                    res.Add(reader.GetInt32(column));
+            }
+            return res;
+        }
     }
 
     public class ApplicationQuery
