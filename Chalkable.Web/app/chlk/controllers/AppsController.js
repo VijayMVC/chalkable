@@ -29,6 +29,7 @@ REQUIRE('chlk.models.apps.AppWrapperViewData');
 REQUIRE('chlk.models.developer.HomeAnalytics');
 REQUIRE('chlk.models.apps.AppPersonReviewPostData');
 REQUIRE('chlk.models.apps.GetAppsPostData');
+REQUIRE('chlk.models.apps.AppModes');
 
 REQUIRE('chlk.models.apps.AppsListViewData');
 
@@ -565,12 +566,9 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(data){
                     var appData = data.getApplication();
 
-                    var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
-                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                        + '&code=' + data.getAuthorizationCode()
-                        + '&announcementId=' + encodeURIComponent(announcementId.valueOf())
-                        + '&announcementType=' + encodeURIComponent(announcementType.valueOf())
-                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
+                    var viewUrl = this.appsService.getAbsoluteAppUrl(appData.getUrl(), mode, data.getAuthorizationCode(), announcementId, announcementType);
+                    if(appUrlAppend_)
+                        viewUrl += '&' + appUrlAppend_;
 
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
 
@@ -597,6 +595,7 @@ NAMESPACE('chlk.controllers', function (){
                 }, this)
                 .attach(this.validateResponse_())
                 .then(function(app){
+
                     var viewUrl = app.getEditUrl()
                         + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
                         + '&code=' + app.getOauthCode()
@@ -1007,7 +1006,7 @@ NAMESPACE('chlk.controllers', function (){
             //if(!this.isStudyCenterEnabled())
             //    return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
 
-            var mode = "myview",
+            var mode = chlk.models.apps.AppModes.MY_VIEW;
                 // TODO: move to session
                 appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
 
@@ -1020,10 +1019,9 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(data){
                     var appData = data.getApplication();
 
-                    var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
-                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                        + '&code=' + data.getAuthorizationCode()
-                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
+                    var viewUrl = this.appsService.getAbsoluteUrl(appData.getUrl(), mode, data.getAuthorizationCode());
+                    if(appUrlAppend_)
+                        viewUrl += '&' + appUrlAppend_;
 
                     return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');
                 }, this);
@@ -1037,7 +1035,8 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[String]],
         function assessmentSettingsAction(appUrlAppend_) {
-            var mode = 'sysadminview',
+
+            var mode = chlk.models.apps.AppModes.SYSADMIN_VIEW;
                 // TODO: move to session
                 appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
 
@@ -1050,10 +1049,9 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(data){
                     var appData = data.getApplication();
 
-                    var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
-                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                        + '&code=' + data.getAuthorizationCode()
-                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
+                    var viewUrl = this.appsService.getAbsoluteUrl(appData.getUrl(), mode, data.getAuthorizationCode());
+                    if(appUrlAppend_)
+                        viewUrl += '&' + appUrlAppend_;
 
                     return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');
                 }, this);
