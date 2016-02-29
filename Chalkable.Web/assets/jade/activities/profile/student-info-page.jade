@@ -1,0 +1,42 @@
+mixin ParentProfileInfoView(contacts)
+    each contact in contacts
+        
+        -var person = contact.getPersonInfo()        
+        -var primaryPhone = person.getPrimaryPhone() ? person.getPrimaryPhone().getValue() : '';        
+        -var address = person.getAddress() ? person.getAddress().getValue() : ''
+                
+        +CloseOpen(contact.getRelationshipName()).today-work-panel
+            .sections-info
+                .section-data
+                    .info-title=contact.getRelationshipName() + ' Name'
+                    .data-info=person.getFullName()
+                if person.getEmail()
+                    .section-data
+                        .info-title=Msg.Email
+                        .data-info=person.getEmail()                
+                each phone in person.getPhones()                    
+                    if phone.isIsPrimary()
+                        .section-data
+                            .info-title=Msg.PrimaryPhone                    
+                            .data-info=phone.getValue()                            
+                if address
+                    .section-data
+                        .info-title=Msg.Address
+                        .data-info=address
+                -var readOnly = true;                                        ;
+                +LabeledCheckbox('Is Family Member', 'Family-Member', contact.isFamilyMember(), readOnly)
+                +LabeledCheckbox('Is Emergency Contact', 'Emergency-Contact', contact.isEmergencyContact(), readOnly)
+                +LabeledCheckbox('Is Responsible For Bill', 'Is Responsible For Bill', contact.isResponsibleForBill(), readOnly)
+                +LabeledCheckbox('Allowed to Pickup', 'Allowed-to-Pickup', contact.isAllowedToPickup(), readOnly)
+                +LabeledCheckbox('Custodian', 'Custodian', contact.isCustodian(), readOnly)
+                +LabeledCheckbox('Receives Mailings', 'Receives-Mailings', contact.isReceivesMailings(), readOnly)
+                +LabeledCheckbox('Receives Bill', 'Receives-Bill', contact.isReceivesBill(), readOnly)
+                        
+.profile-page.view-mode
+    h2.page-title=Msg.Student_profile
+    +ProfileTopBar(self, 'info')
+    +ProfileInfoView(self)
+        +ParentProfileInfoView(self.getUser().getStudentContacts())
+        //todo parent section
+    +ProfileInfoForm('students', self)
+
