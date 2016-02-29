@@ -385,7 +385,7 @@ module.exports = function (grunt) {
         options: {
           url: deploy_urls[vcsBranch] + '/DbMaintenance/DatabaseDeployCI',
           method: 'POST',
-          body: 'key=' + sysAdminPrivateToken,
+          form: { 'key': sysAdminPrivateToken },
           callback: function (error, response, body) {
             if (error) throw error;
             if (body) {
