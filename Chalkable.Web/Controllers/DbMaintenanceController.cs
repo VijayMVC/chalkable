@@ -67,7 +67,7 @@ namespace Chalkable.Web.Controllers
         public ActionResult DatabaseDeploy()
         {
             if (!CompilerHelper.IsProduction)
-                throw new Exception("This method only applies to production envs");
+                return Json(new ChalkableException("This method only applies to production envs"));
 
             var dacPacContainer = ConfigurationManager.AppSettings["DatabaseDacPacContainer"];
             var dacPacName = CompilerHelper.Version;
