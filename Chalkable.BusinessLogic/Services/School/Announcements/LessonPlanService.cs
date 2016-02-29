@@ -300,9 +300,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         protected override void SetComplete(Announcement announcement, bool complete)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
 
             DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.LessonPlan,
-                null, Context.PersonId.Value, null, complete, null, null, null));
+                Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, complete, null, null, null));
         }
 
         public override void SetAnnouncementsAsComplete(DateTime? toDate, bool complete)

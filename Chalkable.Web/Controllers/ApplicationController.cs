@@ -214,11 +214,14 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
-        public ActionResult UpdateAnnouncementApplicationMeta(int announcementApplicationId, int announcementType, string text, string imageUrl)
+        public ActionResult UpdateAnnouncementApplicationMeta(int announcementApplicationId, string text, string imageUrl)
         {
             if(!Uri.IsWellFormedUriString(imageUrl, UriKind.Absolute))
                 throw new ChalkableException("Invalid image Url!");
-            SchoolLocator.ApplicationSchoolService.UpdateAnnouncementApplicationMeta(announcementApplicationId, (AnnouncementTypeEnum)announcementType, text, imageUrl);
+
+            var res = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
+            var announcementType = SchoolLocator.AnnouncementFetchService.GetAnnouncementType(res.AnnouncementRef);
+            SchoolLocator.ApplicationSchoolService.UpdateAnnouncementApplicationMeta(announcementApplicationId, announcementType, text, imageUrl);
             return Json(true);
         }
 
@@ -307,6 +310,21 @@ namespace Chalkable.Web.Controllers
                 res.LiveApplication = ApplicationViewData.Create(liveApp, categories, standards, canGetSecretKey);
             }
             return res;
+        }
+
+        [AuthorizationFilter("Student", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult StudentAnnouncementAppicationIds(int? schoolYear)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            return StudentAnnouncementAppicationIds(Context.PersonId.Value, schoolYear);
+        }
+
+        [AuthorizationFilter("Teacher", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult StudentAnnouncementAppicationIds(int studentId, int? schoolYear)
+        {
+            var app = MasterLocator.ApplicationService.GetApplicationByUrl(SchoolLocator.Context.OAuthApplication);
+            var announcementAppicationIds = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationIsdByStudent(studentId, app.Id, schoolYear);
+            return Json(announcementAppicationIds);
         }
     }
 }

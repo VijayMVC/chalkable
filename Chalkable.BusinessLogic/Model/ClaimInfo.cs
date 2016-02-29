@@ -17,6 +17,7 @@ namespace Chalkable.BusinessLogic.Model
         public const string MAINTAIN_CHALKABLE_DISTRICT_SETTINGS = "Maintain Chalkable District Settings";
         public const string AWARD_LE_CREDITS_CLASSROOM = "Award LE Credits (Classroom)";
         public const string AWARD_LE_CREDITS = "Award LE Credits";
+        public const string ASSESSMENT_ADMIN = "Assessment Admin";
 
         public string Type { get; set; }
         public IEnumerable<string> Values { get; set; }

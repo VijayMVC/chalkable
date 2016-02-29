@@ -14,14 +14,12 @@ namespace Chalkable.Web.Models.SchoolsViewData
         public DateTime? StudyCenterEnabledTill { get; set; }
         public bool IsMessagingDisabled { get; set; }
         public bool IsAssessmentEnabled { get; set; }
-        public bool IsNewAssessmentEnabled { get; set; }
 
         protected SchoolViewData(School school) : base(school)
         {
             StudyCenterEnabledTill = school.StudyCenterEnabledTill;
             IsMessagingDisabled = school.IsMessagingDisabled;
             IsAssessmentEnabled = school.IsAssessmentEnabled;
-            IsNewAssessmentEnabled = school.IsNewAssessmentEnabled;
         }
 
         public static new SchoolViewData Create(School school)

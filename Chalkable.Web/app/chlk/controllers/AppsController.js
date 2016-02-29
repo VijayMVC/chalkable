@@ -72,7 +72,7 @@ NAMESPACE('chlk.controllers', function (){
             if(postData_)
                 return this.getApplications_(
                     postData_.getStart(),
-                    postData_.getDeveloperId(),
+                    postData_.getDeevloperId(),
                     postData_.getState(),
                     postData_.getFilter()
                 );
@@ -186,12 +186,12 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         //move cc_standards logic to StandardController
-        [[chlk.models.id.AppId]],
-        function showStandardsAction(applicationId){
+        [[chlk.models.id.AppId, Boolean]],
+        function showStandardsAction(applicationId, onlyLeafs_){
             var standards = this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []);
             var standardIds = standards.map(function (_) { return _.getId().valueOf() });
 
-            var res = this.WidgetStart('apps', 'showStandards', [standardIds])
+            var res = this.WidgetStart('apps', 'showStandards', [standardIds, onlyLeafs_])
                 .then(function (data) {
                     var standards = [].concat(this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []), data);
                     return this.addStandards_(standards, applicationId);
@@ -201,12 +201,12 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         //move cc_standards logic to StandardController
-        [[String, Array]],
-        function showStandardsWidgetAction(requestId, standardsIds){
+        [[String, Array, Boolean]],
+        function showStandardsWidgetAction(requestId, standardsIds, onlyLeafs_){
             var res = this.standardService.getCCStandardCategories()
                 .attach(this.validateResponse_())
                 .then(function (data){
-                    return new chlk.models.standard.AddCCStandardViewData(requestId, data, standardsIds);
+                    return new chlk.models.standard.AddCCStandardViewData(requestId, data, standardsIds, onlyLeafs_);
                 }, this);
             return this.ShadeView(chlk.activities.apps.AddCCStandardDialog, res)
         },
@@ -462,6 +462,24 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
+        [chlk.controllers.StudyCenterEnabled()],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.DISTRICTADMIN
+        ])],
+        [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, String]],
+        function openRecommendedContentAction(appId, classId, annId, announcementType, contentId){
+            var appUrlAppend_ = 'contentId=' + (contentId || '');
+            var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
+            this.appMarketService.getApplicationTotalPrice(appId, classIds, null)
+                .attach(this.validateResponse_())
+                .then(function(appTotalPrice){
+                    if(appTotalPrice.getTotalPersonsCount() > 0)
+                        return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, classId, annId]);
+                    return this.BackgroundNavigate('apps', 'tryToAttach', [annId, appId, announcementType, appUrlAppend_]);
+                }, this);
+            return null;
+        },
 
         [chlk.controllers.StudyCenterEnabled()],
         [chlk.controllers.AccessForRoles([
@@ -735,7 +753,12 @@ NAMESPACE('chlk.controllers', function (){
                 buttons = [{text: 'DELETE', clazz: 'negative-button', value: 'ok'}, {text: 'Cancel'}];
             return this.ShowMsgBox(msgText, "whoa.", buttons, null, false, 'text', "")
                 .then(function (mrResult) {
-                    return appName == mrResult ? mrResult : ria.async.BREAK; })
+                    if (appName != mrResult)
+                        return this.ShowAlertBox("Incorrect application name provided", "Invalid application name")
+                            .thenBreak();
+
+                    return mrResult;
+                }, this)
                 .thenCall(this.appsService.deleteApp, [id])
                 .attach(this.validateResponse_());
         },

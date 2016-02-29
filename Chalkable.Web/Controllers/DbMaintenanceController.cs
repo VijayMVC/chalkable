@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Security;
 using System.Web.Mvc;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Backup;
 using Chalkable.Data.Master.Model;
 using Chalkable.Web.ActionFilters;
@@ -51,11 +53,21 @@ namespace Chalkable.Web.Controllers
         }
 
         [HttpPost]
+        // ReSharper disable once InconsistentNaming
+        public ActionResult DatabaseDeployCI(string key)
+        {
+            if (string.IsNullOrWhiteSpace(key) || key != CompilerHelper.SysAdminAccessToken)
+                return Json(new ChalkableException("Not authorized"));
+
+            return DatabaseDeploy();
+        }
+
+        [HttpPost]
         [AuthorizationFilter("SysAdmin")]
-        public ActionResult DatabaseDeploy(string key)
+        public ActionResult DatabaseDeploy()
         {
             if (!CompilerHelper.IsProduction)
-                throw new Exception("This method only applies to production envs");
+                return Json(new ChalkableException("This method only applies to production envs"));
 
             var dacPacContainer = ConfigurationManager.AppSettings["DatabaseDacPacContainer"];
             var dacPacName = CompilerHelper.Version;

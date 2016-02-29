@@ -8,6 +8,29 @@ NAMESPACE('chlk.activities.common.standards', function(){
 
         'BaseStandardDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
 
+            Boolean, 'onlyLeafs',
+
+            [[Object]],
+            OVERRIDE, VOID, function onRefresh_(model){
+                BASE(model);
+                if(model.isOnlyLeafs && model.isOnlyLeafs())
+                    this.setOnlyLeafs(true);
+            },
+
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
+                BASE(model, msg_);
+                var btnAddContainer = this.dom.find('.add-standard-btn');
+                var btn = btnAddContainer.find('button');
+                if(this.isOnlyLeafs()){
+                    if(!((model instanceof chlk.models.standard.CCStandardListViewData) && model.getStandards().length == 0)){
+                        btnAddContainer.addClass('disabled');
+                        btnAddContainer.setAttr('disabled', true);
+                        btn.setAttr('disabled', true);
+                    }
+                }
+            },
+
             [[ria.dom.Dom, Array]],
             function removeColumnId_(column, standardIds){
                 var columnId = column.getData('id') || '';

@@ -16,7 +16,7 @@ namespace Chalkable.Api.SampleApp.Controllers
             ServicePointManager.ServerCertificateValidationCallback = ((sender, certificate, chain, sslPolicyErrors) => true);
             base.Initialize(requestContext);
         }
-        
+
         protected override void OnActionExecuting(ActionExecutingContext filterContext)
         {
             var chalkableAuthorization = ChalkableAuthorization;
@@ -25,12 +25,27 @@ namespace Chalkable.Api.SampleApp.Controllers
                 Connector = new ChalkableConnector(chalkableAuthorization);
                 ViewBag.ApiRoot = chalkableAuthorization.ApiRoot;
             }
+            base.OnActionExecuting(filterContext);
         }
 
         protected void PrepareBaseData(int? announcementApplicationId)
         {
             ViewBag.AnnouncementApplicationId = announcementApplicationId;
             ViewBag.CurrentUser = DefaultJsonViewData.Create(CurrentUser); 
+        }
+
+        protected ActionResult ChlkJson(object data)
+        {
+            var res = new JsonResult
+            {
+                Data = new
+                {
+                    Success = true,
+                    Data = data
+                },
+                JsonRequestBehavior = JsonRequestBehavior.AllowGet
+            };
+            return res;
         }
     }
 }

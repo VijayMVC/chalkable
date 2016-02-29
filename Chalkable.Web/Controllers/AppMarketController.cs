@@ -99,8 +99,7 @@ namespace Chalkable.Web.Controllers
             installedApp = installedApp.Where(x => x.ProvidesRecommendedContent).ToList();
             var apps = ApplicationForAttachViewData.Create(installedApp, studentCountPerApp, true);
             foreach (var app in apps)
-                app.EncodedSecretKey = HashHelper.Hex(HashHelper.Hmac(installedApp.First(x => x.Id == app.Id).SecretKey));
-
+                app.EncodedSecretKey = HashHelper.HexOfCumputedHash(installedApp.First(x => x.Id == app.Id).SecretKey);
             return apps;
         }
 

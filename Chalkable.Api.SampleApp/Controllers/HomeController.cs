@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
+using Chalkable.Api.SampleApp.Logic;
 using Chalkable.API;
 using Chalkable.API.Models;
 
@@ -17,7 +18,8 @@ namespace Chalkable.Api.SampleApp.Controllers
             , int? announcementType
             , int? attributeId
             , int? applicationInstallId
-            , IEnumerable<StandardInfo> standards)
+            , IEnumerable<StandardInfo> standards
+            , string contentId)
         {
             if (mode == Settings.SYSADMIN_MODE)
             {
@@ -42,7 +44,8 @@ namespace Chalkable.Api.SampleApp.Controllers
                 case Settings.EDIT_MODE:
                     return RedirectToAction("Attach", "Teacher", new RouteValueDictionary
                     {
-                        {"announcementApplicationId", announcementApplicationId}
+                        {"announcementApplicationId", announcementApplicationId},
+                        {"contentId", contentId }
                     });
 
                 case Settings.VIEW_MODE:
@@ -87,9 +90,22 @@ namespace Chalkable.Api.SampleApp.Controllers
                         });
                     }
                     break;
+
             }
 
             return View("NotSupported");
         }
+
+
+        protected override PaginatedList<ApplicationContent> GetApplicationContents(IList<StandardInfo> standardInfos, int? start, int? count)
+        {
+            start = start ?? 0;
+            count = count ?? int.MaxValue;
+
+            var res = ContentStorage.GetStorage().GetContents().OrderBy(x=>x.ContentId).ToList();
+            return new PaginatedList<ApplicationContent>(res, start.Value, count.Value);
+        }
+      
+
     }
 }

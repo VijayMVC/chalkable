@@ -60,9 +60,21 @@ NAMESPACE('chlk.activities.grading', function () {
                 BASE(form, value, model, isAvg_);
                 var gradeId;
                 this.getAllScores().forEach(function(score){
-                    if(score[0].toLowerCase() == value.toLowerCase())
-                        gradeId = score[1].valueOf()
+
+                    //Need if scores are int. And user input is like: 2.00
+                    var scoreInt = parseInt(score[0]);
+                    var valueInt = parseInt(value);
+
+                    if(!isNaN(scoreInt) && !isNaN(valueInt)) {
+                        if (scoreInt === valueInt)
+                            gradeId = score[1].valueOf();
+                    } else
+                    {
+                        if(score[0].toLowerCase() == value.toLowerCase())
+                            gradeId = score[1].valueOf();
+                    }
                 });
+
                 form.find('input[name=gradeid]').setValue(gradeId || '');
                 if(this._lastModel){
                     var items = this._lastModel.getCurrentGradingGrid().getGradingItems(),

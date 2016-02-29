@@ -1,5 +1,5 @@
--var categoryId = self.getId()
--var isNotAbleModify = self.getCurrentUser().getId() != self.getOwnerId();
+-var categoryId = self.getId();
+-var isNotAbleModify = self.getOwnerId() != null && self.getCurrentUser().getId() != self.getOwnerId();
 +ActionForm('lpgallerycategory', self.getId() ? 'editName' : 'create').group-container
     +Hidden('id', categoryId ? categoryId.valueOf() : null)
     if isNotAbleModify

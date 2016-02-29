@@ -222,6 +222,15 @@ NAMESPACE('chlk.controls', function () {
                 node.setData('chart', charts[id]);
                 setTimeout(function(node){
                     node.addClass('processed');
+                    if(options.series){
+                        var len = 0;
+                        options.series.forEach(function(serie){
+                            len += serie.data.length;
+                        });
+
+                        if(!len)
+                            node.addClass('empty');
+                    }
                 }.bind(this, node), 1);
             }
         ]);

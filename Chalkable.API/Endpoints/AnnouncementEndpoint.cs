@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -48,6 +50,18 @@ namespace Chalkable.API.Endpoints
             nvc.Add("imageUrl", imageUrl);
 
             return await Connector.Post<bool>(url, nvc);
+        }
+
+        public async Task<IList<int>> StudentAnnouncementAppicationIds(int? schoolYear)
+        {
+            var url = "/Application/StudentAnnouncementAppicationIds.json";
+            return await Connector.Get<IList<int>>($"{url}?schoolYear={schoolYear}");
+        }
+
+        public async Task<IList<int>> StudentAnnouncementAppicationIds(int studentId, int? schoolYear)
+        {
+            var url = "/Application/StudentAnnouncementAppicationIds.json";
+            return await Connector.Get<IList<int>>($"{url}?studentId={studentId}&schoolYear={schoolYear}");
         }
     }
 }

@@ -18,22 +18,9 @@ namespace Chalkable.Web.Tools
             }
         }
 
-        public static string ScriptsRoot
-        {
-            get
-            {
-                return string.Format(Settings.ScriptsRoot, Version);
-            }
-        }
-        
-        private const string VERSION = "private-build";
-        public static string Version
-        {
-            get
-            {
-                return VERSION;    
-            }
-        }
+        public static string ScriptsRoot => string.Format(Settings.ScriptsRoot, Version);
+
+        public static string Version { get; } = "private-build";
 
         public static string ScriptsRootDomain
         {
@@ -51,5 +38,7 @@ namespace Chalkable.Web.Tools
         }
 
         public static bool IsProduction => Version != "private" + "-" + "build"; // ensure no TC versioning
+
+        public static string SysAdminAccessToken { get; } = "private-sysadmin-token";
     }
 }

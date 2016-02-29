@@ -12,6 +12,8 @@ REQUIRE('chlk.models.apps.ShortAppInfo');
 REQUIRE('chlk.models.apps.AppPersonRating');
 REQUIRE('chlk.models.apps.ApplicationAuthorization');
 REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
+REQUIRE('chlk.models.standard.Standard');
+REQUIRE('chlk.models.apps.ApplicationContent');
 
 REQUIRE('chlk.models.id.GradeLevelId');
 REQUIRE('chlk.models.id.SchoolPersonId');
@@ -344,21 +346,41 @@ NAMESPACE('chlk.services', function () {
 
             [[
                 String,
-                chlk.models.id.AppId,
                 chlk.models.id.AnnouncementId,
                 chlk.models.announcement.AnnouncementTypeEnum,
                 ArrayOf(chlk.models.standard.Standard),
-                String,
+                String, Number, Number
             ]],
-            ria.async.Future, function getApplicationContents(appUrl, appId, announcementId, announcementType, standards, encodedKey){
-                var url = this.buildGetAppContentUrl_(appUrl, appId, announcementId, announcementType, standards);
+            ria.async.Future, function getApplicationContents(appUrl, announcementId, announcementType, standards, encodedKey, start_, count_){
+                var params = chlk.models.standard.Standard.BUILD_URL_PARAMS_FROM_STANDARDS(standards);
+                params.apiRoot = _GLOBAL.location.origin;
+                params.mode = 'content-query'; // added this mode to settings
+                params.announcementId = announcementId.valueOf();
+                params.announcementType = announcementType.valueOf();
+                params.start = start_;
+                params.count = count_;
+                //disable Cache
+                params._= Math.random().toString(36).substr(2) + (new Date).getTime().toString(36);
 
-
+                var token = this.generateTokenForApiCall_(params, encodedKey);
+                return this.makeGetPaginatedListApiCall(appUrl, chlk.models.apps.ApplicationContent, token, params);
             },
 
-            [[String, chlk.models.id.AppId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, ArrayOf(chlk.models.standard.Standard)]],
-            ria.async.Future, function buildGetAppContentUrl_(appUrl, appId, announcementId, announcementType, standards){
+            [[Object, String]],
+            String, function generateTokenForApiCall_(params, encodedKey){
 
+                var nameValueArray = [];
+                for(var key in params){
+                    if(params.hasOwnProperty(key) && params[key] != null && params[key] != undefined && params[key] !== '')
+                        nameValueArray.push({ name : key, value : params[key]})
+                }
+                nameValueArray = nameValueArray.sort(function(a, b){
+                    return a.name < b.name ? -1 : (a.name > b.name ? 1 : 0) ;
+                });
+                var msg = nameValueArray.map(function(_){return _.value;}).join('|');
+                msg += '|' + encodedKey;
+                //msg += 'test not valid token test';
+                return CryptoJS.SHA256(msg).toString();
             }
 
         ])
