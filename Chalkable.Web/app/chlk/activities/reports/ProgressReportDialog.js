@@ -30,7 +30,7 @@ NAMESPACE('chlk.activities.reports', function(){
                     commentsArray = [], comment, notSelectedCount = 0, id;
                 node.find('.student-chk').forEach(function(item){
                     comment = item.parent('.student-item').find('.student-comment').getValue();
-                    id = item.parent('.student-item').find('.student-chk').getValue();
+                    id = item.parent('.student-item').find('.student-chk').getData('id');
                     if(item.is(':checked'))
                         commentsArray.push({
                             studentId:id,
