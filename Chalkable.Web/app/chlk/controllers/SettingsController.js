@@ -8,6 +8,7 @@ REQUIRE('chlk.activities.settings.AppSettingsPage');
 REQUIRE('chlk.models.settings.Dashboard');
 REQUIRE('chlk.models.settings.Preference');
 REQUIRE('chlk.models.settings.AdminMessaging');
+REQUIRE('chlk.models.apps.AppModes');
 REQUIRE('chlk.services.PreferenceService');
 REQUIRE('chlk.services.SchoolService');
 REQUIRE('chlk.services.AdminDistrictService');
@@ -127,7 +128,7 @@ NAMESPACE('chlk.controllers', function (){
                 if(!this.isStudyCenterEnabled() && !this.isAssessmentEnabled())
                     return this.ShowMsgBox('Current school doesn\'t support assessments, applications, study center, profile explorer', 'whoa.'), null;
 
-                var mode = "settingsview";
+                var mode = chlk.models.apps.AppModes.SETTINGS_VIEW;
 
                 var result = ria.async.wait([
                     this.adminDistrictService.getSettings(),
@@ -139,9 +140,9 @@ NAMESPACE('chlk.controllers', function (){
                             data = result[1],
                             appData = data.getApplication();
 
-                        var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
-                            + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
-                            + '&code=' + data.getAuthorizationCode();
+                        var viewUrl = this.appsService.getAbsoluteUrl(appData.getUrl(), mode, data.getAuthorizationCode());
+                        if(appUrlAppend_)
+                            viewUrl += '&' + appUrlAppend_;
 
                         return new chlk.models.settings.AppSettingsViewData(null, appData, viewUrl, '', installedApps);
                     }, this);

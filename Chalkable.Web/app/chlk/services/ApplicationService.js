@@ -14,6 +14,7 @@ REQUIRE('chlk.models.apps.ApplicationAuthorization');
 REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 REQUIRE('chlk.models.standard.Standard');
 REQUIRE('chlk.models.apps.ApplicationContent');
+REQUIRE('chlk.models.apps.AppModes');
 
 REQUIRE('chlk.models.id.GradeLevelId');
 REQUIRE('chlk.models.id.SchoolPersonId');
@@ -354,7 +355,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getApplicationContents(appUrl, announcementId, announcementType, standards, encodedKey, start_, count_){
                 var params = chlk.models.standard.Standard.BUILD_URL_PARAMS_FROM_STANDARDS(standards);
                 params.apiRoot = _GLOBAL.location.origin;
-                params.mode = 'content-query'; // added this mode to settings
+                params.mode = chlk.models.apps.AppModes.CONTENT_QUERY.valueOf(); // added this mode to settings
                 params.announcementId = announcementId.valueOf();
                 params.announcementType = announcementType.valueOf();
                 params.start = start_;
@@ -364,6 +365,21 @@ NAMESPACE('chlk.services', function () {
 
                 var token = this.generateTokenForApiCall_(params, encodedKey);
                 return this.makeGetPaginatedListApiCall(appUrl, chlk.models.apps.ApplicationContent, token, params);
+            },
+
+            [[String, chlk.models.apps.AppModes, String, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+            ria.async.Future, function getAbsoluteAppUrl(appUrl, mode, code, announcementId_, announcementType_){
+                var ps = {
+                    apiRoot: encodeURIComponent(_GLOBAL.location.origin),
+                    mode: mode.valueOf(),
+                    code: code,
+                };
+                if(announcementId_)
+                    ps.announcementId = encodeURIComponent(announcementId.valueOf());
+                if(announcementType_)
+                    ps.announcementType = encodeURIComponent(announcementType.valueOf());
+
+                return this.getApiUrl(appUrl, ps);
             },
 
             [[Object, String]],

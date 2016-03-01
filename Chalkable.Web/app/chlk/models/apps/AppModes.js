@@ -5,7 +5,11 @@ NAMESPACE('chlk.models.apps', function(){
         VIEW: 'viewurl',
         MYAPPSVIEW: 'myappsurl',
         GRADINGVIEW: 'gradingviewurl',
-        ATTACH: 'attach'
+        ATTACH: 'attach',
+        SYSADMIN_VIEW: 'sysadminview',
+        MY_VIEW: 'myview',
+        SETTINGS_VIEW: 'settingsview',
+        CONTENT_QUERY: 'content-query',
     });
 })
 
