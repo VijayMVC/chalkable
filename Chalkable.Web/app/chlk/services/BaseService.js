@@ -35,7 +35,7 @@ NAMESPACE('chlk.services', function () {
 
 
             String, function getUrl(uri, params){
-                var queryString = this.buildQueryStringFromParams_(params);
+                var queryString = this.buildQueryString_(params);
                 return this.resolveUri(uri) + '?' +  queryString;
             },
 
