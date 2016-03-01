@@ -187,7 +187,7 @@ NAMESPACE('chlk.controllers', function (){
             if (!attributeAttachment) return;
 
             if(attributeAttachment.getType() == chlk.models.attachment.AttachmentTypeEnum.PICTURE){
-                attributeAttachment.setThumbnailUrl(this.assignedAttributeService.getAttributeAttachmentUri(attribute.getId(), attribute.getAnnouncementType(), false, width_ || 170, width_ || 110));
+                attributeAttachment.setThumbnailUrl(this.assignedAttributeService.getAttributeAttachmentUri(attribute.getId(), attribute.getAnnouncementType(), false, width_ || 170, height_ || 110));
                 attributeAttachment.setUrl(this.assignedAttributeService.getAttributeAttachmentUri(attribute.getId(), attribute.getAnnouncementType(), false, null, null));
             }
             if(attributeAttachment.getType() == chlk.models.attachment.AttachmentTypeEnum.OTHER){

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Security;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Backup;
@@ -58,6 +59,8 @@ namespace Chalkable.Web.Controllers
         {
             if (string.IsNullOrWhiteSpace(key) || key != CompilerHelper.SysAdminAccessToken)
                 return Json(new ChalkableException("Not authorized"));
+
+            MasterLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
 
             return DatabaseDeploy();
         }
