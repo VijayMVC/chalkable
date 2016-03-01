@@ -1,0 +1,21 @@
+.month-calendar-body
+    .day-names
+        div: p=Msg.Sunday
+        div: p=Msg.Monday
+        div: p=Msg.Tuesday
+        div: p=Msg.Wednesday
+        div: p=Msg.Thursday
+        div: p=Msg.Friday
+        div: p=Msg.Saturday
+    .items
+        each line in self.getItemsGroupped()
+            .row
+                each item in line
+                    span(class = [item.isSunday() ? 'sunday' : '', item.getClassName(), item.getTodayClassName(), item.getDisciplines().length ? 'with-anns' : ''])
+                        if item.getDisciplines().length
+                            +ActionLink('students', 'showStudentDiscipline', self.getStudentId(), item.getDate().toStandardFormat()
+                                , 'students', 'disciplineMonth', JSON.stringify([item.getDate().toStandardFormat()
+                                , self.getMaxDate().toStandardFormat(), self.getMinDate().toStandardFormat(), self.getStudentId().valueOf()])
+                            ).number.h2=item.getDay()
+                        else
+                            a.number.h2=item.getDay()
