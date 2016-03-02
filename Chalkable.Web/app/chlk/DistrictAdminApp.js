@@ -43,7 +43,8 @@ NAMESPACE('chlk', function (){
 
             //TODO: make sideBarOption model and template
             OVERRIDE, ria.async.Future, function onStart_() {
-                var isStudyCenterEnabled = this.getContext().getSession().get(ChlkSessionConstants.STUDY_CENTER_ENABLED, false);                               
+                var isStudyCenterEnabled = this.getContext().getSession().get(ChlkSessionConstants.STUDY_CENTER_ENABLED, false);
+                var isAssessmentEnabled = this.getContext().getSession().get(ChlkSessionConstants.ASSESSMENT_ENABLED, false);
                 var isClassesEnabled = this.getContext().getSession().get(ChlkSessionConstants.USER_CLAIMS, []).filter(function(item){
                     return item.hasPermission(chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN) 
                         || item.hasPermission(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ADMIN);
@@ -51,6 +52,7 @@ NAMESPACE('chlk', function (){
                 
                 var sidebarOptions = {
                     isAppStoreEnabled: isStudyCenterEnabled,
+                    isAssessmentEnabled: isAssessmentEnabled,
                     isClassesEnabled: isClassesEnabled
                 };
                 return BASE()
