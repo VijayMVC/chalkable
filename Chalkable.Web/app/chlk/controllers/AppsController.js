@@ -605,7 +605,7 @@ NAMESPACE('chlk.controllers', function (){
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
 
                     return new chlk.models.apps.ExternalAttachAppViewData(options, app
-                        , viewUrl, 'Attach ' + app.getName(), app.getAnnouncementApplicationId());
+                        , viewUrl, '', app.getAnnouncementApplicationId());
                 }, this);
 
             return this.ShadeView(chlk.activities.apps.ExternalAttachAppDialog, result);
@@ -1028,7 +1028,7 @@ NAMESPACE('chlk.controllers', function (){
                     return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');
                 }, this);
 
-            return this.PushOrUpdateView(chlk.activities.apps.AppWrapperPage, result);
+            return this.PushView(chlk.activities.apps.AppWrapperPage, result);
         },
 
         [chlk.controllers.SidebarButton('assessment')],

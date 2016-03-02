@@ -65,5 +65,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             throw new NotImplementedException();
         }
+
+        public BackgroundTask GetById(Guid id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
