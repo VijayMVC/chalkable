@@ -302,7 +302,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.PersonId.HasValue);
             Trace.Assert(Context.SchoolYearId.HasValue);
 
-            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, (int)AnnouncementTypeEnum.LessonPlan,
+            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, AnnouncementTypeEnum.LessonPlan,
                 Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, complete, null, null, null));
         }
 
@@ -328,7 +328,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             //}).Announcements;
 
             var da = new AnnouncementRecipientDataDataAccess(unitOfWork);
-            da.UpdateAnnouncementRecipientData(null, (int)AnnouncementTypeEnum.LessonPlan, locator.Context.SchoolYearId, locator.Context.PersonId, 
+            da.UpdateAnnouncementRecipientData(null, AnnouncementTypeEnum.LessonPlan, locator.Context.SchoolYearId, locator.Context.PersonId, 
                 locator.Context.RoleId, complete, null, null, toDate);
             //foreach (var ann in anns)
             //    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementTypeEnum.LessonPlan, null, locator.Context.PersonId, null, complete, null, null);
@@ -457,7 +457,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId)
         {
-            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, (int)AnnouncementTypeEnum.LessonPlan,
+            DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, AnnouncementTypeEnum.LessonPlan,
                schoolYearId, personId, roleId, true, classId, startDate, endDate));
         }
 
