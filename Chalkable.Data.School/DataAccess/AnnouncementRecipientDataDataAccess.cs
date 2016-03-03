@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.Announcements;
 
 namespace Chalkable.Data.School.DataAccess
 {
@@ -11,7 +12,7 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void UpdateAnnouncementRecipientData(int? announcementId, int announcementType, int?schoolYearId, int? personId, int? roleId, 
+        public void UpdateAnnouncementRecipientData(int? announcementId, AnnouncementTypeEnum announcementType, int? schoolYearId, int? personId, int? roleId, 
             bool complete, int? classId, DateTime? fromDate, DateTime? toDate)
         {
             var param = new Dictionary<string, object>
@@ -22,7 +23,7 @@ namespace Chalkable.Data.School.DataAccess
                 [nameof(roleId)] = roleId,
                 [nameof(schoolYearId)] = schoolYearId,
                 [nameof(classId)] = classId,
-                [nameof(announcementType)] = announcementType,
+                [nameof(announcementType)] = (int) announcementType,
                 [nameof(fromDate)] = fromDate,
                 [nameof(toDate)] = toDate
             };

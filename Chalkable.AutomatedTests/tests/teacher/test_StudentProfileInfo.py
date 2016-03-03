@@ -5,7 +5,8 @@ class TestStudentProfileInfo(BaseAuthedTestCase):
     dictionary_get_students_list = self.get('/Student/GetStudents.json?myStudentsOnly=true&byLastName=true&start=0&count=10')        
     self.assertGreater(len(dictionary_get_students_list['data']), 5, 'At least 5 students')
     
-    fifth_student = dictionary_get_students_list['data'][4]    
+    fifth_student = dictionary_get_students_list['data'][4]
+    print fifth_student  
     self.assertTrue('id' in fifth_student, 'id exists')
     self.assertTrue('firstname' in fifth_student, 'firstname exists')
     self.assertTrue('lastname' in fifth_student, 'lastname exists')

@@ -6,6 +6,8 @@ namespace Chalkable.StiConnector.SyncModel
     {
         public int AcadSessionID { get; set; }
         public DateTime Date { get; set; }
+
+        [NullableForeignKey]
         public int? DayTypeID { get; set; }
 
         [NullableForeignKey]

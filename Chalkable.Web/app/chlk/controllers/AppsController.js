@@ -578,6 +578,37 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.apps.ExternalAttachAppDialog, result);
         },
 
+        [chlk.controllers.AssessmentEnabled()],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.DISTRICTADMIN
+        ])],
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
+        function attachAssessmentAppAction(announcementId, appId, announcementType, appUrlAppend_) {
+            //if(!this.isStudyCenterEnabled())
+            //    return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+
+            var result = this.appsService
+                .addToAnnouncement(this.getCurrentPerson().getId(), appId, announcementId, announcementType)
+                .catchError(function(error_){
+                    throw new chlk.lib.exception.AppErrorException(error_);
+                }, this)
+                .attach(this.validateResponse_())
+                .then(function(app){
+                    var viewUrl = app.getEditUrl()
+                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                        + '&code=' + app.getOauthCode()
+                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
+
+                    var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
+
+                    return new chlk.models.apps.ExternalAttachAppViewData(options, app
+                        , viewUrl, '', app.getAnnouncementApplicationId());
+                }, this);
+
+            return this.ShadeView(chlk.activities.apps.ExternalAttachAppDialog, result);
+        },
+
         [chlk.controllers.SidebarButton('add-new')],
         [chlk.controllers.StudyCenterEnabled()],
         [chlk.controllers.AccessForRoles([
@@ -954,5 +985,71 @@ NAMESPACE('chlk.controllers', function (){
             return null;
         },
 
+        [chlk.controllers.AssessmentEnabled()],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.DISTRICTADMIN,
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.STUDENT
+        ])],
+        [chlk.controllers.SidebarButton('assessment')],
+        [[String]],
+        function assessmentAction(appUrlAppend_) {
+
+            //if(!this.isStudyCenterEnabled())
+            //    return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
+
+            var mode = "myview",
+                // TODO: move to session
+                appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
+
+            var result = this.appsService
+                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                .catchError(function(error_){
+                    throw new chlk.lib.exception.AppErrorException(error_);
+                })
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var appData = data.getApplication();
+
+                    var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
+                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                        + '&code=' + data.getAuthorizationCode()
+                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
+
+                    return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');
+                }, this);
+
+            return this.PushView(chlk.activities.apps.AppWrapperPage, result);
+        },
+
+        [chlk.controllers.SidebarButton('assessment')],
+        [chlk.controllers.AccessForRoles([
+            chlk.models.common.RoleEnum.SYSADMIN
+        ])],
+        [[String]],
+        function assessmentSettingsAction(appUrlAppend_) {
+            var mode = 'sysadminview',
+                // TODO: move to session
+                appId = chlk.models.id.AppId(_GLOBAL.assessmentApplicationId);
+
+            var result = this.appsService
+                .getOauthCode(this.getCurrentPerson().getId(), null, appId)
+                .catchError(function(error_){
+                    throw new chlk.lib.exception.AppErrorException(error_);
+                })
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var appData = data.getApplication();
+
+                    var viewUrl = appData.getUrl() + '?mode=' + mode.valueOf()
+                        + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin)
+                        + '&code=' + data.getAuthorizationCode()
+                        + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
+
+                    return new chlk.models.apps.ExternalAttachAppViewData(null, appData, viewUrl, '');
+                }, this);
+
+            return this.PushOrUpdateView(chlk.activities.apps.AppWrapperPage, result);
+        }
     ])
 });
