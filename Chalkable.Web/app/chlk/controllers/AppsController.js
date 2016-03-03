@@ -605,7 +605,7 @@ NAMESPACE('chlk.controllers', function (){
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
 
                     return new chlk.models.apps.ExternalAttachAppViewData(options, app
-                        , viewUrl, 'Attach ' + app.getName(), app.getAnnouncementApplicationId());
+                        , viewUrl, '', app.getAnnouncementApplicationId());
                 }, this);
 
             return this.ShadeView(chlk.activities.apps.ExternalAttachAppDialog, result);

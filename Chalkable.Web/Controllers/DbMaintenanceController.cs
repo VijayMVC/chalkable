@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Security;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -65,6 +66,17 @@ namespace Chalkable.Web.Controllers
             return DatabaseDeploy();
         }
 
+        [HttpGet]
+        public ActionResult TaskState(string key, Guid id)
+        {
+            if (string.IsNullOrWhiteSpace(key) || key != CompilerHelper.SysAdminAccessToken)
+                return Json(new ChalkableException("Not authorized"));
+
+            var taskState = MasterLocator.BackgroundTaskService.GetById(id).State;
+            return Json(taskState.ToString());
+        }
+
+
         [HttpPost]
         [AuthorizationFilter("SysAdmin")]
         public ActionResult DatabaseDeploy()
@@ -88,9 +100,9 @@ namespace Chalkable.Web.Controllers
                 SchoolDacPacUri = dacPacSchoolUri
             };
 
-            MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.DatabaseDacPacUpdate, DateTime.UtcNow, null, data.ToString(), BackgroundTask.GLOBAL_DOMAIN);
+            var deployTask = MasterLocator.BackgroundTaskService.ScheduleTask(BackgroundTaskTypeEnum.DatabaseDacPacUpdate, DateTime.UtcNow, null, data.ToString(), BackgroundTask.GLOBAL_DOMAIN);
 
-            return Json(true);
+            return Json(deployTask.Id);
         }
 
         [AuthorizationFilter("SysAdmin")]

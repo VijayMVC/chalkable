@@ -7,3 +7,12 @@
     CONSTRAINT [FK_DayType_SchoolYear] FOREIGN KEY ([SchoolYearRef]) REFERENCES [dbo].[SchoolYear] ([Id])
 );
 
+GO
+
+CREATE TRIGGER DayTypeDeleteTrigger
+ON DayType
+INSTEAD OF DELETE
+AS
+	Update [Date] Set DayTypeRef = null where DayTypeRef in (Select Id From Deleted)
+    Delete From DayType where Id in (Select Id From Deleted)
+

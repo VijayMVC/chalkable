@@ -198,9 +198,10 @@ namespace Chalkable.Web.Controllers
         }
 
         [HttpGet]
-        public ActionResult UiLibraryUrl()
+        public string UiLibraryUrl()
         {
-            return Redirect(Url.StaticContent("/Content/ui-library.css"));
+            Response.ContentType = "text/css";
+            return $"@import url(\"{Url.StaticContent("/Content/ui-library.css")}\")";
         }
 
         private District PrepareCommonViewData()
