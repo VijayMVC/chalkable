@@ -147,7 +147,7 @@ NAMESPACE('chlk', function (){
                 this.saveInSession(session, ChlkSessionConstants.YEARS, ArrayOf(Number));
                 this.saveInSession(session, ChlkSessionConstants.SIS_API_VERSION, String);
                 this.saveInSession(session, ChlkSessionConstants.SCHOOL_NAME, String);
-
+                this.saveInSession(session, ChlkSessionConstants.ASSESSMENT_APPLICATION_ID, chlk.models.id.AppId);
                 this.saveClassesInfoInSession(session, ChlkSessionConstants.CLASSES_INFO);
 
                 if(window.redirectUrl && window.redirectUrl.indexOf('setup/hello') > -1){

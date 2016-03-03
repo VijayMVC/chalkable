@@ -5,6 +5,7 @@ REQUIRE('chlk.controllers.LessonPlanGalleryController');
 REQUIRE('chlk.controllers.AnnouncementController');
 REQUIRE('chlk.controllers.AppMarketController');
 REQUIRE('chlk.controllers.AppsController');
+REQUIRE('chlk.controllers.AssessmentController');
 REQUIRE('chlk.controllers.FeedController');
 REQUIRE('chlk.controllers.AttendanceController');
 REQUIRE('chlk.controllers.AccountController');

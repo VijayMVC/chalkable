@@ -405,6 +405,11 @@ NAMESPACE('chlk.controllers', function (){
            ArrayOf(chlk.models.people.Claim), function getUserClaims_(){
                 return this.getContext().getSession().get(ChlkSessionConstants.USER_CLAIMS);
            },
+
+           chlk.models.id.AppId, function getAssessmentAppId(){
+                return this.getContext().getSession().get(ChlkSessionConstants.ASSESSMENT_APPLICATION_ID);
+           },
+
            [[chlk.models.people.UserPermissionEnum]],
            Boolean, function hasUserPermission_(userPermission){
                 var claims = this.getUserClaims_();

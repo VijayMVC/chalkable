@@ -26,7 +26,7 @@ mixin AttachDialogSidebar(tpl, name)
         if options.isAbleAttachApps()
             +ActionLink('announcement', 'attachApps')(class = name == 'apps' ? 'active pressed' : '').apps Apps
         if options.isAssessmentAttachEnabled()
-            +ActionLink('apps', 'attachAssessmentApp', options.getAnnouncementId()
+            +ActionLink('assessment', 'attach', options.getAnnouncementId()
                 , options.getAssessmentAppId(), options.getAnnouncementType()
                 , options.getAppUrlAppend())(class = name == options.getAssessmentAppId() ? 'active pressed' : '').assessment Assessment
         if tpl.isStudyCenterEnabled()

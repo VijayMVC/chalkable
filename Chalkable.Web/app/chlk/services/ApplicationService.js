@@ -367,21 +367,6 @@ NAMESPACE('chlk.services', function () {
                 return this.makeGetPaginatedListApiCall(appUrl, chlk.models.apps.ApplicationContent, token, params);
             },
 
-            [[String, chlk.models.apps.AppModes, String, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
-            ria.async.Future, function getAbsoluteAppUrl(appUrl, mode, code, announcementId_, announcementType_){
-                var ps = {
-                    apiRoot: encodeURIComponent(_GLOBAL.location.origin),
-                    mode: mode.valueOf(),
-                    code: code,
-                };
-                if(announcementId_)
-                    ps.announcementId = encodeURIComponent(announcementId.valueOf());
-                if(announcementType_)
-                    ps.announcementType = encodeURIComponent(announcementType.valueOf());
-
-                return this.getApiUrl(appUrl, ps);
-            },
-
             [[Object, String]],
             String, function generateTokenForApiCall_(params, encodedKey){
 
@@ -397,6 +382,48 @@ NAMESPACE('chlk.services', function () {
                 msg += '|' + encodedKey;
                 //msg += 'test not valid token test';
                 return CryptoJS.SHA256(msg).toString();
+            },
+
+
+            [[
+                String,
+                chlk.models.apps.AppModes,
+                String,
+                chlk.models.id.AnnouncementId,
+                chlk.models.announcement.AnnouncementTypeEnum,
+                chlk.models.id.AnnouncementApplicationId,
+                chlk.models.id.SchoolPersonId,
+                String
+            ]],
+            String, function getAbsoluteAppUrl(appUrl, mode, code, announcementId_, announcementType_, announcementApplicationId_, studentId_, standardsUrlComponents_){
+                var ps = {
+                    apiRoot: this.encodedApiRoot(),
+                    mode: mode.valueOf(),
+                    code: code,
+                };
+                if(announcementId_)
+                    ps.announcementId = announcementId.valueOf();
+                if(announcementType_)
+                    ps.announcementType = announcementType.valueOf();
+                if(announcementApplicationId_)
+                    ps.announcementApplicationId = announcementApplicationId_.valueOf();
+                if(studentId_)
+                    ps.studentId = studentId_.valueOf();
+
+                var res = this.getApiUrl(appUrl, ps);
+                if(standardsUrlComponents_)
+                    res += '&' + standardsUrlComponents_;
+                return res;
+            },
+
+
+
+            String, function getApiRoot(){
+                return _GLOBAL.location.origin;
+            },
+
+            String, function encodedApiRoot(){
+                return encodeURIComponent(this.getApiRoot());
             }
 
         ])
