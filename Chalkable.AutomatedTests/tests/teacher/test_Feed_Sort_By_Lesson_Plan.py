@@ -1,5 +1,6 @@
 from base_auth_test import *
 
+
 class TestFeed(BaseAuthedTestCase):
     def test_feed(self):
         self.data2 = {'type':'3'}
