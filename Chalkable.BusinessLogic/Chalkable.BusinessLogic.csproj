@@ -249,6 +249,7 @@
     <Compile Include="Services\DemoSchool\BaseDemoStorage.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingStandardService.cs" />
     <Compile Include="Services\DemoSchool\DemoStudentService.cs" />
+    <Compile Include="Services\Master\AcademicBenchmarkService.cs" />
     <Compile Include="Services\Master\AccessControlService.cs" />
     <Compile Include="Services\Master\ApplicationService.cs" />
     <Compile Include="Services\Master\ApplicationUploadService.cs" />

@@ -280,6 +280,7 @@
     <Compile Include="Authentication\OauthAuthenticate.cs" />
     <Compile Include="Common\UrlFormats.cs" />
     <Compile Include="Common\ViewConstants.cs" />
+    <Compile Include="Controllers\AcademicBenchmarkController.cs" />
     <Compile Include="Controllers\AdminDistrictController.cs" />
     <Compile Include="Controllers\AnnouncementAttachmentController.cs" />
     <Compile Include="Controllers\AnnouncementControllers\AdminAnnouncementController.cs" />
@@ -348,6 +349,8 @@
     <Compile Include="Logic\ClassLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AbToCCMappingViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarkRelatedStandardViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarkStandardViewData.cs" />
     <Compile Include="Models\AddressViewData.cs" />
     <Compile Include="Models\AlphaGradeViewData.cs" />
     <Compile Include="Models\AlternateScoreViewData.cs" />
