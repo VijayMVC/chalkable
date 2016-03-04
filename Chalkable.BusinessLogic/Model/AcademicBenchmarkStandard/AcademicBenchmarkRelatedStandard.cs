@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Chalkable.Data.Master.Model
+namespace Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard
 {
     public class AcademicBenchmarkRelatedStandard : AcademicBenchmarkStandard
     {

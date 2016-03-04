@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Chalkable.Data.Master.Model;
+using Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard;
 
 namespace Chalkable.Web.Models
 {
@@ -12,6 +12,7 @@ namespace Chalkable.Web.Models
             return new AcademicBenchmarkRelatedStandardViewData
             {
                 Id = academickBenchmarkRelatedStandard.Id,
+                Code = academickBenchmarkRelatedStandard.Code,
                 Description = academickBenchmarkRelatedStandard.Description,
                 IsDeepest = academickBenchmarkRelatedStandard.IsDeepest,
                 ParentId = academickBenchmarkRelatedStandard.ParentId,

@@ -1,11 +1,12 @@
-﻿using Chalkable.Data.Master.Model;
-using System;
+﻿using System;
+using Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard;
 
 namespace Chalkable.Web.Models
 {
     public class AcademicBenchmarkStandardViewData
     {
         public Guid Id { get; set; }
+        public string Code { get; set; }
         public string Description { get; set; }
         public bool IsDeepest { get; set; }
         public Guid ParentId { get; set; }
@@ -19,6 +20,7 @@ namespace Chalkable.Web.Models
             return new AcademicBenchmarkStandardViewData
             {
                 Id = academicBenchmarkStandard.Id,
+                Code = academicBenchmarkStandard.Code,
                 Description = academicBenchmarkStandard.Description,
                 IsDeepest = academicBenchmarkStandard.IsDeepest,
                 ParentId = academicBenchmarkStandard.ParentId,

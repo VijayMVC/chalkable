@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Chalkable.Data.Master.Model;
+using Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {

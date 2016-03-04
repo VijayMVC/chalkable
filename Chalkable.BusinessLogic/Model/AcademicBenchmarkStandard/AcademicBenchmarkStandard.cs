@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Chalkable.Data.Master.Model
+namespace Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard
 {
     public class AcademicBenchmarkStandard : AcademicBenchmarkShortStandard
     {

@@ -108,11 +108,6 @@
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
     <Compile Include="DataAccess\UserDataAccess.cs" />
     <Compile Include="DataAccess\UserLoginInfoDataAccess.cs" />
-    <Compile Include="Model\AcademicBenchmarkAuthority.cs" />
-    <Compile Include="Model\AcademicBenchmarkDocument.cs" />
-    <Compile Include="Model\AcademicBenchmarkShortStandard.cs" />
-    <Compile Include="Model\AcademicBenchmarkStandard.cs" />
-    <Compile Include="Model\AcademicBenchmarkRelatedStandard.cs" />
     <Compile Include="Model\Application.cs" />
     <Compile Include="Model\ApplicationDistrictOption.cs" />
     <Compile Include="Model\BackgroundTask.cs" />
