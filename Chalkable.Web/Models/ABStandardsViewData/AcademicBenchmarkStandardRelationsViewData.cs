@@ -15,9 +15,9 @@ namespace Chalkable.Web.Models.ABStandardsViewData
             return new AcademicBenchmarkStandardRelationsViewData
             {
                 CurrentStandard = AcademicBenchmarkStandardViewData.Create(standardRelations.CurrentStandard),
-                Origins = standardRelations.Origins.Select(AcademicBenchmarkStandardViewData.Create).ToList(),
-                Derivatives = standardRelations.Derivatives.Select(AcademicBenchmarkStandardViewData.Create).ToList(),
-                RelatedDerivatives = standardRelations.RelatedDerivatives.Select(AcademicBenchmarkStandardViewData.Create).ToList()
+                Origins = standardRelations.Origins?.Select(AcademicBenchmarkStandardViewData.Create).ToList(),
+                Derivatives = standardRelations.Derivatives?.Select(AcademicBenchmarkStandardViewData.Create).ToList(),
+                RelatedDerivatives = standardRelations.RelatedDerivatives?.Select(AcademicBenchmarkStandardViewData.Create).ToList()
             };
         }
     }

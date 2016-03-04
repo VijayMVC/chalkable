@@ -61,7 +61,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             where TResponse : BaseResponse
         {
             var startTime = DateTime.Now;
-            var url = ConnectorLocator.ApiRoot + relativeUrl;
+            var url = $"{ConnectorLocator.ApiRoot}/{relativeUrl}";
             var client = InitWebClient();
             PrepareRequestParams(client, requestParams);
             MemoryStream stream = null;

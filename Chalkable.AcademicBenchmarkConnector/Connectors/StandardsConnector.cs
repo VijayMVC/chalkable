@@ -18,7 +18,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
 
         public async Task<Standard> GetStandardById(Guid standardId)
         {
-            var url = $"standanrds/{standardId}";
+            var url = $"standards/{standardId}";
             var res = await GetOne<BaseResource<Standard>>(url, null);
             return res?.Data;
         }

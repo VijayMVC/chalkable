@@ -17,15 +17,10 @@ namespace Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard
                 CurrentStandard = AcademicBenchmarkStandard.Create(standard.CurrentStandard);
 
             if (standard.Relations == null) return;
-
-            if (standard.Relations.Origins != null)
-                Origins = standard.Relations.Origins.Select(x =>AcademicBenchmarkStandard.Create(x.CurrentStandard)).ToList();
-
-            if (standard.Relations.Derivatives != null)
-                Origins = standard.Relations.Derivatives.Select(x => AcademicBenchmarkStandard.Create(x.CurrentStandard)).ToList();
-
-            if (standard.Relations.RelatedDerivatives != null)
-                Origins = standard.Relations.RelatedDerivatives.Select(x => AcademicBenchmarkStandard.Create(x.CurrentStandard)).ToList();
+            
+            Origins = standard.Relations.Origins?.Select(x =>AcademicBenchmarkStandard.Create(x.Standard)).ToList();
+            Derivatives = standard.Relations.Derivatives?.Select(x => AcademicBenchmarkStandard.Create(x.Standard)).ToList();
+            RelatedDerivatives = standard.Relations.RelatedDerivatives?.Select(x => AcademicBenchmarkStandard.Create(x.Standard)).ToList();
         }
 
         public static AcademicBenchmarkStandardRelations Create(RelatedStandard standard)
