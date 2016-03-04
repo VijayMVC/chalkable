@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.Web.Models
 {
-    public class AcademicBenchmarkRelatedStandardViewData
+    public class AcademicBenchmarkRelatedStandardViewData : AcademicBenchmarkStandardViewData
     {
-        public Guid Id { get; set; }
-        public string Description { get; set; }
-        public AcademicBenchmarkAuthority Authority { get; set; }
-        public AcademicBenchmarkDocument Document { get; set; }
-        public Guid ParentId { get; set; }
         public IList<AcademicBenchmarkStandard> RelatedStandard { get; set; }
 
         public static AcademicBenchmarkRelatedStandardViewData Create(AcademicBenchmarkRelatedStandard academickBenchmarkRelatedStandard)
@@ -19,9 +13,12 @@ namespace Chalkable.Web.Models
             {
                 Id = academickBenchmarkRelatedStandard.Id,
                 Description = academickBenchmarkRelatedStandard.Description,
+                IsDeepest = academickBenchmarkRelatedStandard.IsDeepest,
+                ParentId = academickBenchmarkRelatedStandard.ParentId,
+                Level = academickBenchmarkRelatedStandard.Level,
+                IsActive = academickBenchmarkRelatedStandard.IsActive,
                 Authority = academickBenchmarkRelatedStandard.Authority,
                 Document = academickBenchmarkRelatedStandard.Document,
-                ParentId = academickBenchmarkRelatedStandard.ParentId,
                 RelatedStandard = academickBenchmarkRelatedStandard.RelatedStandard
             };
         }

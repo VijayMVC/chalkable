@@ -110,6 +110,7 @@
     <Compile Include="DataAccess\UserLoginInfoDataAccess.cs" />
     <Compile Include="Model\AcademicBenchmarkAuthority.cs" />
     <Compile Include="Model\AcademicBenchmarkDocument.cs" />
+    <Compile Include="Model\AcademicBenchmarkShortStandard.cs" />
     <Compile Include="Model\AcademicBenchmarkStandard.cs" />
     <Compile Include="Model\AcademicBenchmarkRelatedStandard.cs" />
     <Compile Include="Model\Application.cs" />
