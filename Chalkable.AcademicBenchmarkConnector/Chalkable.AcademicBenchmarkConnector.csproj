@@ -37,6 +37,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,6 +49,7 @@
     <Compile Include="Connectors\ConnectorBase.cs" />
     <Compile Include="Connectors\ConnectorLocator.cs" />
     <Compile Include="Connectors\StandardsConnector.cs" />
+    <Compile Include="Exceptions\ChalkableABUnauthorizedException.cs" />
     <Compile Include="Models\Authority.cs" />
     <Compile Include="Models\BaseResource.cs" />
     <Compile Include="Models\BaseResponse.cs" />

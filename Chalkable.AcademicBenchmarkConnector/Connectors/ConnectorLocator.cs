@@ -8,7 +8,6 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
     public interface IConnectorLocator
     {
         IStandardsConnector StandardsConnector { get; }
-
         string ApiRoot { get; }
         string AuthSignarute { get; }
         long AuthExpires { get; }
@@ -16,9 +15,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
 
     public class ConnectorLocator : IConnectorLocator
     {
-
         public IStandardsConnector StandardsConnector { get; private set; }
-
         public string ApiRoot { get; }
         public string AuthSignarute { get; private set; } 
         public long AuthExpires { get; private set; }
