@@ -5,7 +5,7 @@ namespace Chalkable.Web.Models
 {
     public class AcademicBenchmarkRelatedStandardViewData : AcademicBenchmarkStandardViewData
     {
-        public IList<AcademicBenchmarkStandard> RelatedStandard { get; set; }
+        public AcademicBenchmarkStandardRelations RelatedStandard { get; set; }
 
         public static AcademicBenchmarkRelatedStandardViewData Create(AcademicBenchmarkRelatedStandard academickBenchmarkRelatedStandard)
         {

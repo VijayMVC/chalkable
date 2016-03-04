@@ -138,6 +138,7 @@
     <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkRelatedStandard.cs" />
     <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkShortStandard.cs" />
     <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkStandard.cs" />
+    <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkStandardRelations.cs" />
     <Compile Include="Model\AnnouncementInfo.cs" />
     <Compile Include="Model\ApplicationInfo.cs" />
     <Compile Include="Model\ApplicationTotalPriceInfo.cs" />

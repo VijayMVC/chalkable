@@ -5,6 +5,6 @@ namespace Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard
 {
     public class AcademicBenchmarkRelatedStandard : AcademicBenchmarkStandard
     {
-        public IList<AcademicBenchmarkStandard> RelatedStandard { get; set; }
+        public AcademicBenchmarkStandardRelations RelatedStandard { get; set; }
     }
 }
