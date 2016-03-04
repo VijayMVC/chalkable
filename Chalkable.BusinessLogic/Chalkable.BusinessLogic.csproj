@@ -133,6 +133,11 @@
     <Compile Include="Mapping\ModelMappers\MapperFactory.cs" />
     <Compile Include="Mapping\ModelMappers\ScoreToStudentAnnMapper.cs" />
     <Compile Include="Mapping\ModelMappers\StudentAnnouncementToScoreMapper.cs" />
+    <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkAuthority.cs" />
+    <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkDocument.cs" />
+    <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkShortStandard.cs" />
+    <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkStandard.cs" />
+    <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkStandardRelations.cs" />
     <Compile Include="Model\AnnouncementInfo.cs" />
     <Compile Include="Model\ApplicationInfo.cs" />
     <Compile Include="Model\ApplicationTotalPriceInfo.cs" />
@@ -249,6 +254,7 @@
     <Compile Include="Services\DemoSchool\BaseDemoStorage.cs" />
     <Compile Include="Services\DemoSchool\DemoGradingStandardService.cs" />
     <Compile Include="Services\DemoSchool\DemoStudentService.cs" />
+    <Compile Include="Services\Master\AcademicBenchmarkService.cs" />
     <Compile Include="Services\Master\AccessControlService.cs" />
     <Compile Include="Services\Master\ApplicationService.cs" />
     <Compile Include="Services\Master\ApplicationUploadService.cs" />
@@ -375,6 +381,10 @@
     <Compile Include="SqlServerTypes\Loader.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Chalkable.AcademicBenchmarkConnector\Chalkable.AcademicBenchmarkConnector.csproj">
+      <Project>{a8f83b5e-129f-465e-b8ae-b37231c28df1}</Project>
+      <Name>Chalkable.AcademicBenchmarkConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
       <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
       <Name>Chalkable.Common</Name>

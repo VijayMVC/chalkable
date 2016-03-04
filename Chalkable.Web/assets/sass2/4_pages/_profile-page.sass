@@ -190,7 +190,7 @@
   .section-data
     >DIV
       display: inline-block
-      font-size: 18px
+      font-size: 14px
 
     .info-title
       font-weight: bold
@@ -202,6 +202,37 @@
         position: absolute
         content: ':'
         right: -6px
+
+    .info-title-large
+      color: #333
+      font-size: 18px
+      font-weight: bold
+      margin-right: 16px
+      position: relative
+
+    .info-title-secondary
+      color: #555
+      font-style: italic
+
+    .info-title-small
+      @extend .info-title
+      font-size: 14px
+      width: 135px
+
+    .data-info-small
+      margin-right: 16px
+      width: 35px
+
+
+
+
+  .section-buttons
+    margin: 0 10px 0 10px
+    float: right
+
+    button
+      margin: 0 10px 0 0
+
 
 .class-item
   white-space: normal

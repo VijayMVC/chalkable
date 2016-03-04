@@ -20,15 +20,18 @@ mixin ProfileInfoView(tpl)
                 .sections-info
                     if model.getLogin()
                         .section-data
-                            .info-title Username
+                            .info-title=Msg.Username
                             .data-info=model.getLogin()
+                            if model.isAbleEdit() && !model.isDemoUser()
+                                .section-buttons
+                                    +Button().special-button.blue-button#edit-info-button=Msg.Edit
                     if model.getEmail()
                         .section-data
                             .info-title=Msg.Email
                             .data-info=model.getEmail()
                     if primaryPhone
                         .section-data
-                            .info-title=Msg.Cell
+                            .info-title=Msg.PrimaryPhone
                             .data-info=primaryPhone
                     if model.getBirthDateText()
                         .section-data
@@ -53,8 +56,7 @@ mixin ProfileInfoView(tpl)
             block
         //.sections-info.other-section
             .section-title.pacifico=Msg.Other(true)
-        if model.isAbleEdit() && !model.isDemoUser()
-            +Button().special-button.blue-button#edit-info-button=Msg.Edit
+
 
 mixin ProfileInfoForm(controller, tpl)
     model = tpl.getUser()
@@ -83,11 +85,16 @@ mixin ProfileInfoForm(controller, tpl)
                 +CloseOpen(model.getRole().getName() + ' info').today-work-panel
                     .sections-info
                         .section-data
-                            .info-title Usename
-                            input(name='login', value=model.getLogin(), class="validate[custom[email], required]").data-info
-                        .section-data
-                            .info-title=Msg.Email
-                            .data-info=model.getEmail()
+                            .info-title=Msg.Username
+                            input(name='login', type='email', value=model.getLogin(), class="validate[custom[email], required]").data-info
+                            .section-buttons
+                                if model.isAbleEdit()
+                                    +Button()(type="submit").special-button.blue-button#submit-info-button=Msg.Save
+                                    +Button()(type="button").special-button.blue-button#cancell-edit-info-button=Msg.Cancel
+                        if model.getEmail()
+                            .section-data
+                                .info-title=Msg.Email
+                                .data-info=model.getEmail()
                         if primaryPhone
                             .section-data
                                 .info-title=Msg.Cell
@@ -98,7 +105,7 @@ mixin ProfileInfoForm(controller, tpl)
                                 .data-info=model.getBirthDateText()
                         if gradeLevelName
                             .section-data
-                                .info-title Grade
+                                .info-title=Msg.Grade_Level
                                 .data-info=gradeLevelName
 
                 if homePhone || address
@@ -114,7 +121,4 @@ mixin ProfileInfoForm(controller, tpl)
                                     .data-info=address.getValue()
                 block
 
-            .section-buttons
-                if model.isAbleEdit()
-                    +Button()(type="submit").special-button.blue-button#submit-info-button=Msg.Save
-                +Button()(type="button").special-button.blue-button#cancell-edit-info-button=Msg.Cancel
+
