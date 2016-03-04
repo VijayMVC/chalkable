@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard;
+using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
+using Chalkable.Web.Models.ABStandardsViewData;
 
 namespace Chalkable.Web.Controllers
 {
+    [RequireHttps, TraceControllerFilter]
     public class AcademicBenchmarkController : ChalkableController
     {
         public async Task<ActionResult> StandatdsIds(IList<Guid> standardsIds)
@@ -16,7 +18,7 @@ namespace Chalkable.Web.Controllers
             return Json(academicBenchmarkStandards.Select(AcademicBenchmarkStandardViewData.Create));
         }
 
-        public async Task<ActionResult> RelateStandardsByIds(IList<Guid> standardsIds)
+        public async Task<ActionResult> ListOfStandardRelationsByIds(IList<Guid> standardsIds)
         {
             var academicBenchmarkRelatedStandards = await MasterLocator.AcademicBenchmarkService.GetListOfStandardRelations((standardsIds));
             return Json(academicBenchmarkRelatedStandards.Select(AcademicBenchmarkStandardRelationsViewData.Create));

@@ -1,7 +1,7 @@
 ﻿using System;
 using Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard;
 
-namespace Chalkable.Web.Models
+namespace Chalkable.Web.Models.ABStandardsViewData
 {
     public class AcademicBenchmarkStandardViewData
     {
@@ -12,8 +12,8 @@ namespace Chalkable.Web.Models
         public Guid? ParentId { get; set; }
         public int Level { get; set; }
         public bool IsActive { get; set; }
-        public AcademicBenchmarkAuthority Authority { get; set; }
-        public AcademicBenchmarkDocument Document { get; set; }
+        public AcademicBenchmarkAuthorityViewData Authority { get; set; }
+        public AcademicBenchmarkDocumentViewData Document { get; set; }
 
         public static AcademicBenchmarkStandardViewData Create(AcademicBenchmarkStandard academicBenchmarkStandard)
         {
@@ -26,8 +26,8 @@ namespace Chalkable.Web.Models
                 ParentId = academicBenchmarkStandard.ParentId,
                 Level = academicBenchmarkStandard.Level,
                 IsActive = academicBenchmarkStandard.IsActive,
-                Authority = academicBenchmarkStandard.Authority,
-                Document = academicBenchmarkStandard.Document
+                Authority = AcademicBenchmarkAuthorityViewData.Create(academicBenchmarkStandard.Authority),
+                Document = AcademicBenchmarkDocumentViewData.Create(academicBenchmarkStandard.Document)
             };
         }
     }
