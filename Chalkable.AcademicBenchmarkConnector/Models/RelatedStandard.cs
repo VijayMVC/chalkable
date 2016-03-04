@@ -14,11 +14,11 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
     public class StandardRelations
     {
         [JsonProperty("origin")]
-        public IList<StandardRelations> Origins { get; set; }
+        public IList<RelatedStandard> Origins { get; set; }
         [JsonProperty("derivative")]
-        public IList<StandardRelations> Derivatives { get; set; }
+        public IList<RelatedStandard> Derivatives { get; set; }
         [JsonProperty("related_derivative")]
-        public IList<StandardRelations> RelatedDerivatives { get; set; }
+        public IList<RelatedStandard> RelatedDerivatives { get; set; }
     }
 
     public class StandardRelation
