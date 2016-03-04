@@ -348,9 +348,11 @@
     <Compile Include="Logic\ApplicationLogic.cs" />
     <Compile Include="Logic\ClassLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
+    <Compile Include="Models\ABStandardsViewData\AcademicBenchmarkAuthorityViewData.cs" />
+    <Compile Include="Models\ABStandardsViewData\AcademicBenchmarkDocumentViewData.cs" />
     <Compile Include="Models\AbToCCMappingViewData.cs" />
-    <Compile Include="Models\AcademicBenchmarkStandardRelationsViewData.cs" />
-    <Compile Include="Models\AcademicBenchmarkStandardViewData.cs" />
+    <Compile Include="Models\ABStandardsViewData\AcademicBenchmarkStandardRelationsViewData.cs" />
+    <Compile Include="Models\ABStandardsViewData\AcademicBenchmarkStandardViewData.cs" />
     <Compile Include="Models\AddressViewData.cs" />
     <Compile Include="Models\AlphaGradeViewData.cs" />
     <Compile Include="Models\AlternateScoreViewData.cs" />

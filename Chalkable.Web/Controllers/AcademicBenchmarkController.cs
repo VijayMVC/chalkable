@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Chalkable.Web.ActionFilters;
-using Chalkable.Web.Models;
 using Chalkable.Web.Models.ABStandardsViewData;
 
 namespace Chalkable.Web.Controllers
