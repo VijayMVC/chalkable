@@ -6,9 +6,9 @@ namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface IAcademicBenchmarkService
     {
-        IList<AcademicBenchmarkStandard> StandatdsIds(IList<Guid> standardsIds);
+        IList<AcademicBenchmarkStandard> GetStandatdsByIds(IList<Guid> standardsIds);
 
-        IList<AcademicBenchmarkRelatedStandard> RelatedStandardsByIds(IList<Guid> standardsIds);
+        IList<AcademicBenchmarkRelatedStandard> GetRelatedStandardsByIds(IList<Guid> standardsIds);
     }
 
     public class AcademicBenchmarkService : MasterServiceBase, IAcademicBenchmarkService
@@ -17,14 +17,15 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        public IList<AcademicBenchmarkRelatedStandard> RelatedStandardsByIds(IList<Guid> standardsIds)
+        public IList<AcademicBenchmarkStandard> GetStandatdsByIds(IList<Guid> standardsIds)
         {
             throw new NotImplementedException();
         }
 
-        public IList<AcademicBenchmarkStandard> StandatdsIds(IList<Guid> standardsIds)
+        public IList<AcademicBenchmarkRelatedStandard> GetRelatedStandardsByIds(IList<Guid> standardsIds)
         {
             throw new NotImplementedException();
         }
+        
     }
 }

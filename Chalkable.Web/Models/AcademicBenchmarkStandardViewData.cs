@@ -1,7 +1,5 @@
 ﻿using Chalkable.Data.Master.Model;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Chalkable.Web.Models
 {
@@ -9,9 +7,9 @@ namespace Chalkable.Web.Models
     {
         public Guid Id { get; set; }
         public string Description { get; set; }
-        public int AuthorityId { get; set; }
-        public int DocumentId { get; set; }
-        public int ParentId { get; set; }
+        public AcademicBenchmarkAuthority Authority { get; set; }
+        public AcademicBenchmarkDocument Document { get; set; }
+        public Guid ParentId { get; set; }
          
         public static AcademicBenchmarkStandardViewData Create(AcademicBenchmarkStandard academicBenchmarkStandard)
         {
@@ -19,8 +17,8 @@ namespace Chalkable.Web.Models
             {
                 Id = academicBenchmarkStandard.Id,
                 Description = academicBenchmarkStandard.Description,
-                AuthorityId = academicBenchmarkStandard.AuthorityId,
-                DocumentId = academicBenchmarkStandard.DocumentId,
+                Authority = academicBenchmarkStandard.Authority,
+                Document = academicBenchmarkStandard.Document,
                 ParentId = academicBenchmarkStandard.ParentId
             };
         }
