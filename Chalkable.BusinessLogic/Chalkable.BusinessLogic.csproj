@@ -382,6 +382,10 @@
     <Compile Include="SqlServerTypes\Loader.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Chalkable.AcademicBenchmarkConnector\Chalkable.AcademicBenchmarkConnector.csproj">
+      <Project>{a8f83b5e-129f-465e-b8ae-b37231c28df1}</Project>
+      <Name>Chalkable.AcademicBenchmarkConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
       <Project>{3615F16A-B37F-40B4-B58D-CC39FA8F6646}</Project>
       <Name>Chalkable.Common</Name>
