@@ -26,6 +26,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             IList<Task<Standard>> tasks = standardsIds.Select(stId => abConnectorLocator.StandardsConnector.GetStandardById(stId)).ToList();
             var standards = await Task.WhenAll(tasks);
+            standards = standards.Where(x => x != null).ToArray();
             return standards.Select(AcademicBenchmarkStandard.Create).ToList();
         }
 
@@ -33,6 +34,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             IList<Task<RelatedStandard>> tasks = standardsIds.Select(stId => abConnectorLocator.StandardsConnector.GetRelatedStandardById(stId)).ToList();
             var standards = await Task.WhenAll(tasks);
+            standards = standards.Where(x => x != null).ToArray();
             return standards.Select(AcademicBenchmarkStandardRelations.Create).ToList();
         }
         
