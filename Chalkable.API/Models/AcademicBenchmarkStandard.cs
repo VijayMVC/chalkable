@@ -34,8 +34,8 @@ namespace Chalkable.API.Models
     {
         public AcademicBenchmarkStandard CurrentStandard { get; set; }
         public IList<AcademicBenchmarkStandard> Origins { get; set; }
-        public IList<AcademicBenchmarkStandard> Derivative { get; set; }
-        public IList<AcademicBenchmarkStandard> RelatedDerivative { get; set; }
+        public IList<AcademicBenchmarkStandard> Derivatives { get; set; }
+        public IList<AcademicBenchmarkStandard> RelatedDerivatives { get; set; }
     }
 
 }

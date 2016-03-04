@@ -7,9 +7,9 @@ using Chalkable.API.Models;
 
 namespace Chalkable.API.Endpoints
 {
-    public class AcademicBenchmarkStandardEndpoint : Base
+    public class AcademicBenchmarkEndpoint : Base
     {
-        public AcademicBenchmarkStandardEndpoint(IConnector connector) : base(connector)
+        public AcademicBenchmarkEndpoint(IConnector connector) : base(connector)
         {
         }
 

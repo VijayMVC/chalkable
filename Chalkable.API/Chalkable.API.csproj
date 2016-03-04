@@ -65,7 +65,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IBaseController.cs" />
-    <Compile Include="Endpoints\AcademicBenchmarkStandardEndpoint.cs" />
+    <Compile Include="Endpoints\AcademicBenchmarkEndpoint.cs" />
     <Compile Include="Endpoints\AnnouncementEndpoint.cs" />
     <Compile Include="Endpoints\Base.cs" />
     <Compile Include="Endpoints\GradingEndpoint.cs" />
