@@ -18,17 +18,61 @@ module.exports = function (grunt) {
         var sysAdminToken = options.sysAdminToken,
             serverUrl = options.serverUrl;
 
-        request.post(serverUrl + '/DbMaintenance/DatabaseDeployCI', {form: {key: sysAdminToken}},
-            function (err, httpResponse, body) {
-                if (err) {
-                    grunt.log.error('Deployment failed: ' + err.message);
-                    done(false);
-                    return;
-                }
+        request.post(serverUrl + '/DbMaintenance/DatabaseDeployCI', {form: {key: sysAdminToken}}, processQueueTask);
 
-                var timer = setInterval(function () {
-                    request.post(serverUrl + '/DbMaintenance/DatabaseDeployCI')
-                }, 2000);
-            });
+        var timer;
+        function processQueueTask(err, httpResponse, body) {
+            if (err) {
+                grunt.log.error('Deployment failed: ' + err.message);
+                done(false);
+                return;
+            }
+
+            var response = JSON.parse(body);
+            if (!response.success) {
+                grunt.log.error('Deployment failed: ' + response.data.message);
+                done(false);
+                return;
+            }
+
+            var taskId = response.data;
+            timer = setInterval(function () {
+                request.post(serverUrl + '/DbMaintenance/GetTaskStateCI', {form: { key: sysAdminToken, id: taskId}}, handleTaskStatus);
+            }, 2000);
+        }
+
+        function handleTaskStatus(err, httpResponse, body) {
+            if (err) {
+                grunt.log.error('Deployment failed: ' + err.message);
+                done(false);
+                return;
+            }
+
+            var response = JSON.parse(body);
+            if (!response.success) {
+                grunt.log.error('Deployment failed: ' + response.data.message);
+                done(false);
+                return;
+            }
+
+            var taskStatus = response.data;
+            switch (taskStatus.toLowerCase()) {
+                case 'created':
+                case 'processing':
+                    grunt.log.info(taskStatus);
+                    return ;
+
+                case 'failed':
+                case 'canceled':
+                    grunt.log.error(taskStatus);
+                    clearInterval(timer);
+                    return done(false);
+
+                case 'processed':
+                    grunt.log.ok(taskStatus);
+                    clearInterval(timer);
+                    return done(true);
+            }
+        }
     });
 };
