@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Chalkable.AcademicBenchmarkConnector.Models
 {
@@ -13,11 +14,11 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
     public class StandardRelations
     {
         [JsonProperty("origin")]
-        public StandardRelations Origin { get; set; }
+        public IList<StandardRelations> Origins { get; set; }
         [JsonProperty("derivative")]
-        public StandardRelations Derivative { get; set; }
+        public IList<StandardRelations> Derivatives { get; set; }
         [JsonProperty("related_derivative")]
-        public StandardRelations RelatedDerivative { get; set; }
+        public IList<StandardRelations> RelatedDerivatives { get; set; }
     }
 
     public class StandardRelation
