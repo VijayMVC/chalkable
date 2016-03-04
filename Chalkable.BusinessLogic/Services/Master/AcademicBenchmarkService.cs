@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface IAcademicBenchmarkService
     {
-        IList<AcademicBenchmarkStandard> GetStandatdsByIds(IList<Guid> standardsIds);
+        Task<IList<AcademicBenchmarkStandard>> GetStandatdsByIds(IList<Guid> standardsIds);
 
-        IList<AcademicBenchmarkRelatedStandard> GetRelatedStandardsByIds(IList<Guid> standardsIds);
+        Task<IList<AcademicBenchmarkRelatedStandard>> GetRelatedStandardsByIds(IList<Guid> standardsIds);
     }
 
     public class AcademicBenchmarkService : MasterServiceBase, IAcademicBenchmarkService
@@ -17,12 +18,12 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
         }
 
-        public IList<AcademicBenchmarkStandard> GetStandatdsByIds(IList<Guid> standardsIds)
+        public async Task<IList<AcademicBenchmarkStandard>> GetStandatdsByIds(IList<Guid> standardsIds)
         {
             throw new NotImplementedException();
         }
 
-        public IList<AcademicBenchmarkRelatedStandard> GetRelatedStandardsByIds(IList<Guid> standardsIds)
+        public async Task<IList<AcademicBenchmarkRelatedStandard>> GetRelatedStandardsByIds(IList<Guid> standardsIds)
         {
             throw new NotImplementedException();
         }
