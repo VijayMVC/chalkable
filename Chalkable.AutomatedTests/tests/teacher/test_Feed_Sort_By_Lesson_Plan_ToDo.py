@@ -1,9 +1,10 @@
 from base_auth_test import *
 
+
 class TestFeed(BaseAuthedTestCase):
     def test_feed(self):
-        self.data2 = {'type':'1'}
-        self.settings_data = {'announcementType':'1', 'sortType':'0'}
+        self.data2 = {'type':'3'}
+        self.settings_data = {'announcementType':'3', 'sortType':'0'}
     
         self.post('/Feed/SetSettings.json?', self.settings_data)   
     

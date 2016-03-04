@@ -12,7 +12,7 @@ class TestFeed(BaseAuthedTestCase):
         self.do_feed_list_and_verify(20, 500) 
 
     def do_feed_list_and_verify(self, start, count=10):
-        dictionary_get_items = self.get('/Feed/List.json?start='+str(start)+'&classId=&complete=false&count='+str(count)) #1
+        dictionary_get_items = self.get('/Feed/List.json?start='+str(start)+'&classId=&count='+str(count)) #1
         dictionary_verify_settingsforfeed = dictionary_get_items['data']['settingsforfeed'] #2
         self.assertTrue('announcementtype' in dictionary_verify_settingsforfeed, 'announcementtype exists') #3
         self.assertTrue('sorttype' in dictionary_verify_settingsforfeed, 'sorttype exists') #4

@@ -66,11 +66,14 @@ namespace Chalkable.Web.Controllers
             return DatabaseDeploy();
         }
 
-        [HttpGet]
-        public ActionResult TaskState(string key, Guid id)
+        [HttpPost]
+        // ReSharper disable once InconsistentNaming
+        public ActionResult GetTaskStateCI(string key, Guid id)
         {
             if (string.IsNullOrWhiteSpace(key) || key != CompilerHelper.SysAdminAccessToken)
                 return Json(new ChalkableException("Not authorized"));
+
+            MasterLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
 
             var taskState = MasterLocator.BackgroundTaskService.GetById(id).State;
             return Json(taskState.ToString());

@@ -849,7 +849,7 @@ NAMESPACE('chlk.controllers', function (){
 
                     var isAssessmentEnabled = this.getContext().getSession().get(ChlkSessionConstants.ASSESSMENT_ENABLED, false);
 
-                    options.updateByValues(null, isAssessmentEnabled ? null : false, announcementId, null, null, announcementType);
+                    options.updateByValues(null, false, announcementId, null, null, announcementType);
                     this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
                     return new chlk.models.common.BaseAttachViewData(options);
                 }, this);
