@@ -349,7 +349,7 @@
     <Compile Include="Logic\ClassLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AbToCCMappingViewData.cs" />
-    <Compile Include="Models\AcademicBenchmarkRelatedStandardViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarkStandardRelationsViewData.cs" />
     <Compile Include="Models\AcademicBenchmarkStandardViewData.cs" />
     <Compile Include="Models\AddressViewData.cs" />
     <Compile Include="Models\AlphaGradeViewData.cs" />
@@ -572,6 +572,10 @@
     <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Chalkable.AcademicBenchmarkConnector\Chalkable.AcademicBenchmarkConnector.csproj">
+      <Project>{A8F83B5E-129F-465E-B8AE-B37231C28DF1}</Project>
+      <Name>Chalkable.AcademicBenchmarkConnector</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Chalkable.API\Chalkable.API.csproj">
       <Project>{A7272B5D-DC95-4783-888D-3A36E8922226}</Project>
       <Name>Chalkable.API</Name>

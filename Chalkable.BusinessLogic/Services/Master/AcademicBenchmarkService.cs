@@ -10,8 +10,8 @@ namespace Chalkable.BusinessLogic.Services.Master
 {
     public interface IAcademicBenchmarkService
     {
-        Task<IList<AcademicBenchmarkStandard>> GetListOfStandard(IList<Guid> standardsIds);
-        Task<IList<AcademicBenchmarkStandardRelations>> GetRelatedStandardsByIds(IList<Guid> standardsIds);
+        Task<IList<AcademicBenchmarkStandard>> GetStandardsByIds(IList<Guid> standardsIds);
+        Task<IList<AcademicBenchmarkStandardRelations>> GetListOfStandardRelations(IList<Guid> standardsIds);
     }
 
     public class AcademicBenchmarkService : MasterServiceBase, IAcademicBenchmarkService
@@ -22,14 +22,14 @@ namespace Chalkable.BusinessLogic.Services.Master
             abConnectorLocator = new ConnectorLocator();
         }
 
-        public async Task<IList<AcademicBenchmarkStandard>> GetListOfStandard(IList<Guid> standardsIds)
+        public async Task<IList<AcademicBenchmarkStandard>> GetStandardsByIds(IList<Guid> standardsIds)
         {
             IList<Task<Standard>> tasks = standardsIds.Select(stId => abConnectorLocator.StandardsConnector.GetStandardById(stId)).ToList();
             var standards = await Task.WhenAll(tasks);
             return standards.Select(AcademicBenchmarkStandard.Create).ToList();
         }
 
-        public async Task<IList<AcademicBenchmarkStandardRelations>> GetRelatedStandardsByIds(IList<Guid> standardsIds)
+        public async Task<IList<AcademicBenchmarkStandardRelations>> GetListOfStandardRelations(IList<Guid> standardsIds)
         {
             IList<Task<RelatedStandard>> tasks = standardsIds.Select(stId => abConnectorLocator.StandardsConnector.GetRelatedStandardById(stId)).ToList();
             var standards = await Task.WhenAll(tasks);
