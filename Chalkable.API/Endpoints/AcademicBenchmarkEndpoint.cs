@@ -12,7 +12,7 @@ namespace Chalkable.API.Endpoints
         public AcademicBenchmarkEndpoint(IConnector connector) : base(connector)
         {
         }
-
+        //TODO: remove Oauth from these endpoints  
         public async Task<IList<AcademicBenchmarkStandard>> GetStandardsByIds(IList<Guid> standardsIds)
         {
             var url = "/AcademicBenchmark/StandatdsIds.json";
