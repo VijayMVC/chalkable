@@ -38,6 +38,7 @@ class BaseAuthedTestCase(unittest.TestCase):
   def post(self, url, params, status=200, success=True):
     s = self.session
     r = s.post(chlk_server_url + url, params)
+    #print r.status_code
     self.assertEquals(r.status_code, status, 'Response status code')
     data = r.json()
     self.assertEquals(data['success'], success, 'API success')
