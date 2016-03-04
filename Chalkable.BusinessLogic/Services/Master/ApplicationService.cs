@@ -27,9 +27,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         bool CanGetSecretKey(IList<Application> applications);
         bool HasMyApps(Application application);
         bool HasExternalAttachMode(Application application);
-        Application GetPracticeGradesApplication();
+        Application GetMiniQuizAppication();
         Application GetAssessmentApplication();
-        Guid? GetPracticeGradeId();
+        Guid? GetMiniQuizAppicationId();
         Guid? GetAssessmentId();
         IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count);
         void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban);
@@ -108,8 +108,8 @@ namespace Chalkable.BusinessLogic.Services.Master
             if (id == InternalGetAssessmentId())
                 return GetAssessmentApplication();
 
-            if (id == GetPracticeGradeId())
-                return GetPracticeGradesApplication();
+            if (id == GetMiniQuizAppicationId())
+                return GetMiniQuizAppication();
 
             var q = new ApplicationQuery
             {
@@ -240,9 +240,9 @@ namespace Chalkable.BusinessLogic.Services.Master
                 new ApplicationDataAccess(uow).SetDistrictOption(applicationId, districtId, ban);
             });
         }
-        public Application GetPracticeGradesApplication()
+        public Application GetMiniQuizAppication()
         {
-            var id = GetPracticeGradeId();
+            var id = GetMiniQuizAppicationId();
             return !id.HasValue ? null : DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(id.Value));
         }
         public Application GetAssessmentApplication()
@@ -251,9 +251,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             return !id.HasValue ? null : DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(id.Value));
         }
 
-        public Guid? GetPracticeGradeId()
+        public Guid? GetMiniQuizAppicationId()
         {
-            var id = PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value;
+            var id = PreferenceService.Get(Context.AssessmentEnabled ? Preference.NEW_ASSESSMENT_APLICATION_ID : Preference.PRACTICE_APPLICATION_ID).Value;
             Guid res;
             return Guid.TryParse(id, out res) ? res : (Guid?)null;
         }

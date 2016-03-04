@@ -380,22 +380,18 @@ module.exports = function (grunt) {
         }
     },
 
-    http: {
-      'deploy-db': {
-        options: {
-          url: deploy_urls[vcsBranch] + '/DbMaintenance/DatabaseDeployCI',
-          method: 'POST',
-          form: { 'key': sysAdminPrivateToken },
-          callback: function (error, response, body) {
-            if (error) throw error;
-            if (body) {
-              var json = JSON.parse(body);
-              if (!json.success)
-                throw new Error(body);
-            }
-          }
-        }
+    'chlk-deploy-db': {
+      options: {
+        sysAdminToken: sysAdminPrivateToken,
+        serverUrl: deploy_urls[vcsBranch]
       }
+    },
+      
+    exec: {
+        'automated-tests': {
+            cwd: './Chalkable.AutomatedTests/',
+            cmd: 'run-all.cmd'
+        }
     }
   });
 
@@ -415,7 +411,7 @@ module.exports = function (grunt) {
   grunt.loadNpmTasks('grunt-contrib-clean');
   grunt.loadNpmTasks('grunt-contrib-imagemin');
   grunt.loadNpmTasks('grunt-nuget');
-  grunt.loadNpmTasks('grunt-http');
+  grunt.loadNpmTasks('grunt-exec');
   
   // simple build task 
   grunt.registerTask('usemin-build', [
@@ -439,9 +435,13 @@ module.exports = function (grunt) {
   // branch specific tasks
   var postBuildTasks = ['imagemin', 'deploy-artifacts'];
   if (['staging', 'qa'].indexOf(vcsBranch) >= 0) {
-    postBuildTasks.push('deploy-to-azure', 'http:deploy-db', 'raygun-create-deployment');
+    postBuildTasks.push('deploy-to-azure', 'chlk-deploy-db', 'raygun-create-deployment');
   }
   
+  if (['staging'].indexOf(vcsBranch) >= 0) {
+    postBuildTasks.push('exec:automated-tests');
+  }
+
   if (['qa'].indexOf(vcsBranch) >= 0) {
     postBuildTasks.push('nuget-publish');
   }

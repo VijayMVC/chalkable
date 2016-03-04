@@ -25,3 +25,4 @@ INSTEAD OF DELETE
 AS
 Update Person Set AddressRef = null where AddressRef in (Select Id From Deleted)
 Delete From Address where Id in (Select Id From Deleted)
+
