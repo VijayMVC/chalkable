@@ -28,7 +28,14 @@ module.exports = function (grunt) {
                 return;
             }
 
-            var response = JSON.parse(body);
+            try {
+                var response = JSON.parse(body);
+            } catch (e) {
+                grunt.log.error('Deployment failed: ' + body);
+                done(false);
+                return;
+            }
+
             if (!response.success) {
                 grunt.log.error('Deployment failed: ' + response.data.message);
                 done(false);
@@ -48,7 +55,14 @@ module.exports = function (grunt) {
                 return;
             }
 
-            var response = JSON.parse(body);
+            try {
+                var response = JSON.parse(body);
+            } catch (e) {
+                grunt.log.error('Deployment failed: ' + body);
+                done(false);
+                return;
+            }
+
             if (!response.success) {
                 grunt.log.error('Deployment failed: ' + response.data.message);
                 done(false);

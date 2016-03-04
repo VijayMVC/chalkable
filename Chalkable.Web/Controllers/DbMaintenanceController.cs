@@ -73,6 +73,8 @@ namespace Chalkable.Web.Controllers
             if (string.IsNullOrWhiteSpace(key) || key != CompilerHelper.SysAdminAccessToken)
                 return Json(new ChalkableException("Not authorized"));
 
+            MasterLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+
             var taskState = MasterLocator.BackgroundTaskService.GetById(id).State;
             return Json(taskState.ToString());
         }
