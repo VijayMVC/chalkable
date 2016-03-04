@@ -6,7 +6,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
     public class RelatedStandard
     {
         [JsonProperty("data")]
-        public Standard Data { get; set; }
+        public Standard CurrentStandard { get; set; }
         [JsonProperty("relations")]
         public StandardRelations Relations { get; set; }
     }
