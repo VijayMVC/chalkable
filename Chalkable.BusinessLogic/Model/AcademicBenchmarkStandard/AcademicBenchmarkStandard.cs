@@ -7,7 +7,7 @@ namespace Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard
         public AcademicBenchmarkAuthority Authority { get; set; }
         public AcademicBenchmarkDocument Document { get; set; }
 
-        public AcademicBenchmarkStandard(Standard standard) : base(standard)
+        protected AcademicBenchmarkStandard(Standard standard) : base(standard)
         {
             if (standard.Authority != null)
                 Authority = new AcademicBenchmarkAuthority
