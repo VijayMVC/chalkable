@@ -43,7 +43,7 @@ namespace Chalkable.BackgroundTaskProducer
                     }
                     catch (Exception) { }
 #else
-                    Debug.Fail(ex.Message);
+                    throw;
 #endif
                     
                     while (ex != null)
