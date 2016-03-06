@@ -139,7 +139,7 @@ namespace Chalkable.StiImport.Services
             context.GetSyncResult<StiConnector.SyncModel.User>().Deleted = null;
             Log.LogInfo("do initial sync");
             DoInitialSync();
-            Log.LogInfo("performing before restore preparation");
+            Log.LogInfo("performing after restore preparation");
             var logs = ServiceLocatorMaster.DbMaintenanceService.AfterSisRestore(d.Id);
             ServiceLocatorSchool.DbMaintenanceService.AfterSisRestore();
             foreach (var restoreLogItem in logs)
