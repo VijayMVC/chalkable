@@ -1,8 +1,8 @@
 ﻿using System;
-using Chalkable.AcademicBenchmarkConnector.Models;
-namespace Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard
+
+namespace Chalkable.BusinessLogic.Model.AcademicBenchmark
 {
-    public class AcademicBenchmarkShortStandard
+    public class ShortStandard
     {
         public Guid Id { get; set; }
         public string Code { get; set; }
@@ -12,8 +12,8 @@ namespace Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard
         public int Level { get; set; }
         public bool IsActive { get; set; }
 
-        public AcademicBenchmarkShortStandard() { }
-        protected AcademicBenchmarkShortStandard(ShortStandard standard)
+        public ShortStandard() { }
+        protected ShortStandard(AcademicBenchmarkConnector.Models.ShortStandard standard)
         {
             Id = standard.Id;
             Code = standard.Number;

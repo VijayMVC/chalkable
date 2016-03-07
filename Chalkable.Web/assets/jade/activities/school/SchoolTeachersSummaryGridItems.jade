@@ -22,7 +22,7 @@ each teacher in teachers
                 .circle(
                 data-tooltip = teacher.getStudentsCount() + ' Students, ' + teacher.getAbsences() + ' Absent',
                 class = teacher.getAbsencesClass()
-                )=teacher.getAbsences() && parseInt(teacher.getAbsences(), 10)
+                )=teacher.getPresence() && Math.round(teacher.getPresence() * 10)/10
             .cell.discipline
                 .circle(
                 data-tooltip=teacher.getInfractionsCount() + ' Discipline Infractions Today',

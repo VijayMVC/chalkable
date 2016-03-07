@@ -8,7 +8,8 @@ namespace Chalkable.Web.Models.SchoolsViewData
 {
     public class LocalSchoolSummaryViewData : LocalSchoolViewData
     {
-        public decimal? AttendancesCount { get; set; }
+        public decimal? AbsenceCount { get; set; }
+        public decimal? Presence { get; set; }
         public int StudentsCount { get; set; }
         public decimal? DisciplinesCount { get; set; }
         public decimal? Average { get; set; }
@@ -20,7 +21,8 @@ namespace Chalkable.Web.Models.SchoolsViewData
                 Id = school.SchoolDetails.Id,
                 Name = school.SchoolDetails.Name,
                 StudentsCount = school.SchoolDetails.StudentsCount,
-                AttendancesCount = school.AttendanceCount,
+                AbsenceCount = school.AbsenceCount,
+                Presence = school.Presence,
                 Average = school.Average,
                 DisciplinesCount = school.DisciplinCount,
             };

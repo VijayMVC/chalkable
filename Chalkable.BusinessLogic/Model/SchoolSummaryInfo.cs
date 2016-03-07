@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
@@ -12,7 +13,8 @@ namespace Chalkable.BusinessLogic.Model
     public class SchoolSummaryInfo
     {
         public ShortSchoolSummary SchoolDetails { get; set; }
-        public decimal? AttendanceCount { get; set; }
+        public decimal? AbsenceCount { get; set; }
+        public decimal? Presence { get; set; }
         public decimal? DisciplinCount { get; set; }
         public decimal? Average { get; set; }
 
@@ -20,7 +22,8 @@ namespace Chalkable.BusinessLogic.Model
         {
             return new SchoolSummaryInfo()
             {
-                AttendanceCount = null,
+                Presence = null,
+                AbsenceCount = null,
                 Average = null,
                 DisciplinCount = null,
                 SchoolDetails = schoolSummary
@@ -31,7 +34,10 @@ namespace Chalkable.BusinessLogic.Model
         {
             return new SchoolSummaryInfo()
             {
-                AttendanceCount = schoolSummary.AbsenceCount,
+                Presence = schoolSummary.EnrollmentCount != 0 ?
+                    AttendanceService.CalculatePresencePercent(schoolSummary.AbsenceCount, schoolSummary.EnrollmentCount) 
+                    : (decimal?)null,
+                AbsenceCount = schoolSummary.AbsenceCount,
                 Average = schoolSummary.Average,
                 DisciplinCount = schoolSummary.DisciplineCount,
                 SchoolDetails = new ShortSchoolSummary()

@@ -389,5 +389,10 @@ namespace Chalkable.BusinessLogic.Services.School
             var inowRes = await ConnectorLocator.SectionDashboardConnector.GetAttendanceDailySummaries(classId, startDate, endDate);
             return inowRes.Select(DailyAttendanceSummary.Create).ToList();
         }
+
+        public static decimal CalculatePresencePercent(decimal absenceCount, int studentsCount)
+        {
+            return (1 - absenceCount / studentsCount) * 100;
+        }
     }
 }

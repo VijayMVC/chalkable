@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Chalkable.API.Helpers;
-using Chalkable.API.Models;
+using Chalkable.API.Models.AcademicBenchmark;
 
 namespace Chalkable.API.Endpoints
 {
@@ -13,18 +13,18 @@ namespace Chalkable.API.Endpoints
         {
         }
         //TODO: remove Oauth from these endpoints  
-        public async Task<IList<AcademicBenchmarkStandard>> GetStandardsByIds(IList<Guid> standardsIds)
+        public async Task<IList<Standard>> GetStandardsByIds(IList<Guid> standardsIds)
         {
-            var url = "/AcademicBenchmark/StandatdsIds.json";
+            var url = "/AcademicBenchmark/StandardsByIds.json";
             var strIds = standardsIds.Select(x => x.ToString()).JoinString(",");
-            return await Connector.Get<IList<AcademicBenchmarkStandard>>($"{url}?standardsIds={strIds}");
+            return await Connector.Get<IList<Standard>>($"{url}?standardsIds={strIds}");
         }
 
-        public async Task<IList<AcademicBenchmarkStandardRelations>> GetListOfStandardRelastions(IList<Guid> standardsIds)
+        public async Task<IList<StandardRelations>> GetListOfStandardRelastions(IList<Guid> standardsIds)
         {
             var url = "/AcademicBenchmark/ListOfStandardRelationsByIds.json";
             var strIds = standardsIds.Select(x => x.ToString()).JoinString(",");
-            return await Connector.Get<IList<AcademicBenchmarkStandardRelations>>($"{url}?standardsIds={strIds}");
+            return await Connector.Get<IList<StandardRelations>>($"{url}?standardsIds={strIds}");
         }
     }
 }

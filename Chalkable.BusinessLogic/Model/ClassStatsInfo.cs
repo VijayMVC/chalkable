@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Common;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
@@ -17,7 +18,8 @@ namespace Chalkable.BusinessLogic.Model
         public Guid? DepartmentRef { get; set; }
         public string PrimaryTeacherDisplayName { get; set; }
         public int StudentsCount { get; set; }
-        public decimal? AttendancesCount { get; set; }
+        public decimal? AbsenceCount{ get; set; }
+        public decimal? Presence { get; set; }
         public int? DisciplinesCount { get; set; }
         public decimal? Average { get; set; }
         public string ClassNumber { get; set; }
@@ -34,10 +36,12 @@ namespace Chalkable.BusinessLogic.Model
                 StudentsCount = section.EnrollmentCount,
                 Average = section.Average,
                 DisciplinesCount = section.DisciplineCount,
-                AttendancesCount = section.AbsenceCount,
+                AbsenceCount = section.AbsenceCount,
+                Presence = section.EnrollmentCount != 0 ?
+                    AttendanceService.CalculatePresencePercent(section.AbsenceCount, section.EnrollmentCount) : (decimal?) null,
                 DepartmentRef = @class?.ChalkableDepartmentRef,
                 ClassNumber = @class?.ClassNumber,
-                TeacherIds = classTeachers?.Select(x=>x.PersonRef).ToList()
+                TeacherIds = classTeachers?.Select(x => x.PersonRef).ToList()
             };
         }
 
@@ -65,7 +69,8 @@ namespace Chalkable.BusinessLogic.Model
                 PrimaryTeacherDisplayName = classDetails.PrimaryTeacher?.FullName(false),
                 StudentsCount = classDetails.StudentsCount,
 
-                AttendancesCount = null,
+                AbsenceCount = null,
+                Presence = null,
                 Average = null,
                 DisciplinesCount = null,
                 ClassNumber = classDetails.ClassNumber,

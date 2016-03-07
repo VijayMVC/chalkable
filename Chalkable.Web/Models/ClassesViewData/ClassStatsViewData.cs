@@ -15,7 +15,8 @@ namespace Chalkable.Web.Models.ClassesViewData
         public Guid? DepartmentRef { get; set; }
         public string PrimaryTeacherDisplayName { get; set; }
         public int StudentsCount { get; set; }
-        public decimal? AttendancesCount { get; set; }
+        public decimal? AbsenceCount { get; set; }
+        public decimal? Presence { get; set; }
         public int? DisciplinesCount { get; set; }
         public decimal? Average { get; set; }
         public string ClassNumber { get; set; }
@@ -31,7 +32,8 @@ namespace Chalkable.Web.Models.ClassesViewData
                 PrimaryTeacherDisplayName = classDetails.PrimaryTeacherDisplayName,
                 StudentsCount = classDetails.StudentsCount,
 
-                AttendancesCount = classDetails.AttendancesCount,
+                AbsenceCount = classDetails.AbsenceCount,
+                Presence = classDetails.Presence,
                 Average = classDetails.Average,
                 DisciplinesCount = classDetails.DisciplinesCount,
                 ClassNumber = classDetails.ClassNumber,

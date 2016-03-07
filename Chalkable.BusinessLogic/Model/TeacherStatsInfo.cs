@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Common;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.StiConnector.Connectors.Model;
@@ -17,7 +18,8 @@ namespace Chalkable.BusinessLogic.Model
         public IList<ShortClassInfo> Classes { get; set; }
         public int StudentsCount { get; set; }
         public int? DisciplinesCount { get; set; }
-        public decimal? AttendancesCount { get; set; }
+        public decimal? AbsenceCount { get; set; }
+        public decimal? Presence { get; set; }
         public decimal? Average { get; set; }
         public string Gender { get; set; }
 
@@ -29,8 +31,10 @@ namespace Chalkable.BusinessLogic.Model
                 DisplayName = teacher.TeacherName,
 
                 Classes = teacher.Classes.Select(x => new ShortClassInfo { Id = x.Id, Name = x.Name }).ToList(),
-
-                AttendancesCount = teacher.AbsenceCount,
+                Presence = teacher.EnrollmentCount != 0 ?
+                    AttendanceService.CalculatePresencePercent(teacher.AbsenceCount, teacher.EnrollmentCount) 
+                    : (decimal?)null,
+                AbsenceCount = teacher.AbsenceCount,
                 Average = teacher.Average,
                 
                 DisciplinesCount = teacher.DisciplineCount,
@@ -48,7 +52,8 @@ namespace Chalkable.BusinessLogic.Model
         {
             return new TeacherStatsInfo
             {
-                AttendancesCount = null,
+                Presence = null,
+                AbsenceCount = null,
                 Average = null,
                 DisciplinesCount = null,
                 DisplayName = teacher.FullName(false, true),

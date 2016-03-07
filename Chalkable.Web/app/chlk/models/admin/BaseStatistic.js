@@ -72,6 +72,8 @@ NAMESPACE('chlk.models.admin', function () {
 
             Number, 'studentsCount',
 
+            Number, 'presence',
+
             function getAbsencesClass(){
                 if(this.getAbsences() !== null && (this.getAbsences() / this.getStudentsCount() > 0.1))
                     return 'red';
@@ -93,14 +95,15 @@ NAMESPACE('chlk.models.admin', function () {
                 return 'green';
             },
 
-            function toFixed_(raw_){
-                return raw_ && Math.round(raw_ * 100)/100;
+            function toFixed_(raw_) {
+                    return raw_ && parseFloat(raw_).toFixed(2);
             },
 
             VOID, function deserialize(raw){
                 this.id = SJX.fromValue(raw.id, this.getSpecsOf('TId'));
                 this.name = SJX.fromValue(raw.name, String);
-                this.absences = SJX.fromValue(raw.attendancescount, Number);
+                this.absences = SJX.fromValue(raw.absencecount, Number);
+                this.presence = SJX.fromValue(this.toFixed_(raw.presence), Number);
                 this.infractionsCount = SJX.fromValue(raw.disciplinescount, Number);
                 this.avg = SJX.fromValue(this.toFixed_(raw.average), Number);
                 this.absencesPassed = SJX.fromValue(raw.absencespassed, Boolean);

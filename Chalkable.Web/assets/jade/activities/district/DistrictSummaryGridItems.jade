@@ -13,7 +13,7 @@ each school in schools
                 .circle(
                 data-tooltip = school.getStudentsCount() + ' Students, ' + school.getAbsences() + ' Absent',
                 class = school.getAbsencesClass()
-                )=school.getAbsences() && parseInt(school.getAbsences(), 10)
+                )=school.getPresence() && Math.round(school.getPresence() * 10)/10
             .cell.discipline
                 .circle(
                 data-tooltip=school.getInfractionsCount() + ' Discipline Infractions Today',

@@ -21,7 +21,7 @@ input(type="hidden", name="sortType", value=sortType)
                         .cell.classes=Msg.Classes
                         +ActionLink('schools', 'teachersSummary', schoolId, schoolName, sortType == typesEnum.STUDENTS_ASC.valueOf() ? typesEnum.STUDENTS_DESC.valueOf() : typesEnum.STUDENTS_ASC.valueOf(), self.getFilter()).cell.students=Msg.Students
                         if isNotEmptyStatistic
-                            +ActionLink('schools', 'teachersSummary', schoolId, schoolName, sortType == typesEnum.ATTENDANCE_ASC.valueOf() ? typesEnum.ATTENDANCE_DESC.valueOf() : typesEnum.ATTENDANCE_ASC.valueOf(), self.getFilter()).cell.attendance=Msg.Attendance
+                            +ActionLink('schools', 'teachersSummary', schoolId, schoolName, sortType == typesEnum.ATTENDANCE_ASC.valueOf() ? typesEnum.ATTENDANCE_DESC.valueOf() : typesEnum.ATTENDANCE_ASC.valueOf(), self.getFilter()).cell.attendance=Msg.Attendance+' %'
                             +ActionLink('schools', 'teachersSummary', schoolId, schoolName, sortType == typesEnum.DISCIPLINE_ASC.valueOf() ? typesEnum.DISCIPLINE_DESC.valueOf() : typesEnum.DISCIPLINE_ASC.valueOf(), self.getFilter()).cell.discipline=Msg.Discipline
                             +ActionLink('schools', 'teachersSummary', schoolId, schoolName, sortType == typesEnum.GRADES_ASC.valueOf() ? typesEnum.GRADES_DESC.valueOf() : typesEnum.GRADES_ASC.valueOf(), self.getFilter()).cell.grades=Msg.Grade_Avg
                     +RenderWith(self.getModel(), chlk.templates.school.SchoolTeachersStatisticItemsTpl)

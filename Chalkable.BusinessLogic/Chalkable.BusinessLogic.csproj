@@ -133,11 +133,11 @@
     <Compile Include="Mapping\ModelMappers\MapperFactory.cs" />
     <Compile Include="Mapping\ModelMappers\ScoreToStudentAnnMapper.cs" />
     <Compile Include="Mapping\ModelMappers\StudentAnnouncementToScoreMapper.cs" />
-    <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkAuthority.cs" />
-    <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkDocument.cs" />
-    <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkShortStandard.cs" />
-    <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkStandard.cs" />
-    <Compile Include="Model\AcademicBenchmarkStandard\AcademicBenchmarkStandardRelations.cs" />
+    <Compile Include="Model\AcademicBenchmark\Authority.cs" />
+    <Compile Include="Model\AcademicBenchmark\Document.cs" />
+    <Compile Include="Model\AcademicBenchmark\ShortStandard.cs" />
+    <Compile Include="Model\AcademicBenchmark\Standard.cs" />
+    <Compile Include="Model\AcademicBenchmark\StandardRelations.cs" />
     <Compile Include="Model\AnnouncementInfo.cs" />
     <Compile Include="Model\ApplicationInfo.cs" />
     <Compile Include="Model\ApplicationTotalPriceInfo.cs" />

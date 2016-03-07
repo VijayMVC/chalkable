@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard
+namespace Chalkable.API.Models.AcademicBenchmark
 {
-    public class AcademicBenchmarkAuthority
+    public class Document
     {
         public Guid Id { get; set; }
         public string Code { get; set; }

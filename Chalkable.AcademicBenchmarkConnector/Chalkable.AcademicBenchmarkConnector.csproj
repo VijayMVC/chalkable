@@ -55,7 +55,7 @@
     <Compile Include="Models\BaseResponse.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\PaginatedResponse.cs" />
-    <Compile Include="Models\RelatedStandard.cs" />
+    <Compile Include="Models\StandardRelations.cs" />
     <Compile Include="Models\Standard.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
