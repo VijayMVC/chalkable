@@ -23,6 +23,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void Cancel(Guid taskId);
         void DeleteOlder(Guid? districtId, DateTime dateTime);
         void RerunTasks(IList<Guid> taskIds);
+        BackgroundTask GetById(Guid id);
     }
     
     public class BackgroundTaskService : MasterServiceBase, IBackgroundTaskService
@@ -208,6 +209,11 @@ namespace Chalkable.BusinessLogic.Services.Master
             if(taskIds.Count == 0) return;
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(u => new BackgroundTaskDataAccess(u).RerunTasks(taskIds));
+        }
+
+        public BackgroundTask GetById(Guid id)
+        {
+            return DoRead(u => new BackgroundTaskDataAccess(u).GetById(id));
         }
     }
 }

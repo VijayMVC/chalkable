@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Routing;
@@ -25,16 +27,29 @@ namespace Chalkable.Api.SampleApp.Controllers
             return RedirectToAction("ContentAttach", ps);
         }
 
+        private static IList<string> defaultAbIds = new List<string>
+        {
+            "7FCA0002-7440-11DF-93FA-01FD9CFF4B22",
+            "DB06A266-DE81-11E0-831A-85489DFF4B22",
+        };
+
         public async Task<ActionResult> SimpleAttach(int announcementApplicationId)
         {
             PrepareBaseData(announcementApplicationId);
             var annApp = await Connector.Announcement.GetAnnouncementApplicationById(announcementApplicationId);
-            var ann = await Connector.Announcement.GetRead(annApp.AnnouncementId, annApp.AnnouncementType);
-            var announcementAppIds = await Connector.Announcement.StudentAnnouncementAppicationIds(3787, 179);
+            var annTask = Connector.Announcement.GetRead(annApp.AnnouncementId, annApp.AnnouncementType);
+           // var announcementAppIdsTask = Connector.Announcement.StudentAnnouncementAppicationIds(3787, 179);
+
+            var ids = defaultAbIds.Select(Guid.Parse).ToList();
+            var standardsTask = Connector.AbEndpoint.GetStandardsByIds(ids);
+            var relationsTask = Connector.AbEndpoint.GetListOfStandardRelastions(ids);
+
             return View("Attach", DefaultJsonViewData.Create(new
             {
-                AnnouncementApplicationIds = announcementAppIds,
-                Announcement = ann
+               // AnnouncementApplicationIds = await announcementAppIdsTask,
+                Announcement = await annTask,
+                Standards = await standardsTask,
+                Relations = await relationsTask,
             }));
         }
 

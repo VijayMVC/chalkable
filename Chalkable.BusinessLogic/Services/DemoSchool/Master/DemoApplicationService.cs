@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Chalkable.BusinessLogic.Common;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
@@ -135,8 +134,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 
         public Application GetApplicationById(Guid id)
         {
-            if (id == GetPracticeGradeId())
-                return GetPracticeGradesApplication();
+            if (id == GetMiniQuizAppicationId())
+                return GetMiniQuizAppication();
             if (id == GetAssessmentId())
                 return GetAssessmentApplication();
             
@@ -219,9 +218,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             }
         }
 
-        public Application GetPracticeGradesApplication()
+        public Application GetMiniQuizAppication()
         {
-            var id = GetPracticeGradeId();
+            var id = GetMiniQuizAppicationId();
             if (!id.HasValue) return null;
             return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(id.Value));
         }
@@ -234,7 +233,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return DoRead(uow => new ApplicationDataAccess(uow).GetApplicationById(id.Value));
         }
 
-        public Guid? GetPracticeGradeId()
+        public Guid? GetMiniQuizAppicationId()
         {
             var id = PreferenceService.Get(Preference.PRACTICE_APPLICATION_ID).Value;
             Guid res;

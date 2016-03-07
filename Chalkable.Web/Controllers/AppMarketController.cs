@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Web.Mvc;
 using Chalkable.API.Helpers;
 using Chalkable.BusinessLogic.Services.Master;

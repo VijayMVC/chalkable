@@ -15,7 +15,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public IList<ShortClassViewData> Classes { get; set; }
         public int StudentsCount { get; set; }
         public int? DisciplinesCount { get; set; }
-        public decimal? AttendancesCount { get; set; }
+        public decimal? AbsenceCount { get; set; }
+        public decimal? Presence { get; set; }
         public decimal? Average { get; set; }
 
         public string Gender { get; set; }
@@ -26,7 +27,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
             {
                 Id = teacher.Id,
                 DisplayName = teacher.DisplayName,
-                AttendancesCount = teacher.AttendancesCount,
+                AbsenceCount = teacher.AbsenceCount,
+                Presence = teacher.Presence,
                 Average = teacher.Average,
                 StudentsCount = teacher.StudentsCount,
                 Classes = teacher.Classes.Select(ShortClassViewData.Create).ToList(),

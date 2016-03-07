@@ -16,7 +16,7 @@ each clazz in classes
                     data-tooltip = clazz.getStudentsCount() + ' Students, ' + clazz.getAbsences() + ' Absent',
                     data-disabled-message = clazz.isAttendancesProfileEnabled() ? '' : clazz.getNoAccessMsg('attendance'),
                     class = clazz.getAbsencesClass()
-                ).with-events.circle=clazz.getAbsences() && parseInt(clazz.getAbsences(), 10)
+                ).with-events.circle=clazz.getPresence() && Math.round(clazz.getPresence() * 10)/10
             .cell.discipline
                 +ActionLink('class', 'discipline', clazz.getId())(
                     data-tooltip=clazz.getInfractionsCount() + ' Discipline Infractions Today',

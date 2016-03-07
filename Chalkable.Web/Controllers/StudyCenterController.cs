@@ -41,7 +41,7 @@ namespace Chalkable.Web.Controllers
 
         private bool IsPracticeOrInstalledApp(Guid applicationId, int studentId)
         {
-            var practiceAppId = MasterLocator.ApplicationService.GetPracticeGradeId();
+            var practiceAppId = MasterLocator.ApplicationService.GetMiniQuizAppicationId();
             return practiceAppId == applicationId
                    || SchoolLocator.AppMarketService.GetInstallationForPerson(applicationId, studentId) != null;
         }
@@ -61,7 +61,7 @@ namespace Chalkable.Web.Controllers
             if(!Context.PersonId.HasValue)
                 throw new UnassignedUserException();
             var standard = SchoolLocator.StandardService.GetStandardById(standardId);
-            var miniQuizApp = MasterLocator.ApplicationService.GetPracticeGradesApplication();
+            var miniQuizApp = MasterLocator.ApplicationService.GetMiniQuizAppication();
             var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
             var installedAppsIds = appInstallations.Select(x => x.ApplicationRef).Distinct().ToList();
             var suggestedApps = standard.AcademicBenchmarkId.HasValue 

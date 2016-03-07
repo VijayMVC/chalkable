@@ -99,6 +99,12 @@ namespace Chalkable.Common
 
         public static string StiApplicationKey { get { return ConfigurationManager.AppSettings["sti.application.key"]; } }
 
+        /* Academic Benchmark */
+        public static string AcademicBenchmarkApiUrl => ConfigurationManager.AppSettings["AcademicBenchmark.ApiUrl"];
+        public static string AcademicBenchmarkPartnerId => ConfigurationManager.AppSettings["AcademicBenchmark.Partner.Id"];
+        public static string AcademicBenchmarkPartnerKey => ConfigurationManager.AppSettings["AcademicBenchmark.Partner.Key"];
+        
+
         /* BackgroundTasks settings */
 
         public static int TaskProcessorDelay { get { return Int32.Parse(Get("TaskProcessorDelay")); } }

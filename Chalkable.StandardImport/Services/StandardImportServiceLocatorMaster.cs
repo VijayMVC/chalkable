@@ -47,6 +47,7 @@ namespace Chalkable.StandardImport.Services
         public IUserTrackingService UserTrackingService { get; private set; }
         public ICommonCoreStandardService CommonCoreStandardService { get; private set; }
         public IDbMaintenanceService DbMaintenanceService { get; private set; }
+        public IAcademicBenchmarkService AcademicBenchmarkService { get; private set; }
     }
     
 }

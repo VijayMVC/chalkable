@@ -65,6 +65,7 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IBaseController.cs" />
+    <Compile Include="Endpoints\AcademicBenchmarkEndpoint.cs" />
     <Compile Include="Endpoints\AnnouncementEndpoint.cs" />
     <Compile Include="Endpoints\Base.cs" />
     <Compile Include="Endpoints\GradingEndpoint.cs" />
@@ -75,6 +76,10 @@
     <Compile Include="Helpers\HashHelper.cs" />
     <Compile Include="Helpers\StringHelper.cs" />
     <Compile Include="IConnector.cs" />
+    <Compile Include="Models\AcademicBenchmark\Authority.cs" />
+    <Compile Include="Models\AcademicBenchmark\Document.cs" />
+    <Compile Include="Models\AcademicBenchmark\Standard.cs" />
+    <Compile Include="Models\AcademicBenchmark\StandardRelations.cs" />
     <Compile Include="Models\AnnouncementApplication.cs" />
     <Compile Include="Models\Announcement.cs" />
     <Compile Include="Models\ApplicationContent.cs" />
