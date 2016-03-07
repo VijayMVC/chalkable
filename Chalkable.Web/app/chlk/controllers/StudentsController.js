@@ -186,6 +186,12 @@ NAMESPACE('chlk.controllers', function (){
                         var role = new chlk.models.people.Role();
                         role.setId(chlk.models.common.RoleEnum.STUDENT.valueOf());
                         data.setAbleViewTranscript(this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_TRANSCRIPT));
+                        if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE) &&
+                            !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN))
+                                data.setDisciplineBox(null);
+                        if(!this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE) &&
+                            !this.hasUserPermission_(chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_ATTENDANCE_ADMIN))
+                                data.setAttendanceBox(null);
                         data.setRole(role);
                         return new chlk.models.student.StudentProfileSummaryViewData(this.getCurrentRole(), data, this.getUserClaims_());
                     }, this);
