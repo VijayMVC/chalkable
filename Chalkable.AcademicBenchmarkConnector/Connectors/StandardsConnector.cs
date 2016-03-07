@@ -7,7 +7,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
     public interface IStandardsConnector
     {
         Task<Standard> GetStandardById(Guid standardId);
-        Task<RelatedStandard> GetRelatedStandardById(Guid standardId);
+        Task<StandardRelations> GetStandardRelationsById(Guid standardId);
     }
 
     public class StandardsConnector : ConnectorBase, IStandardsConnector
@@ -23,10 +23,10 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             return res?.Data;
         }
 
-        public async Task<RelatedStandard> GetRelatedStandardById(Guid standardId)
+        public async Task<StandardRelations> GetStandardRelationsById(Guid standardId)
         {
             var url = $"standards/{standardId}/_relate";
-            return await GetOne<RelatedStandard>(url, null);
+            return await GetOne<StandardRelations>(url, null);
         }
     }
 }

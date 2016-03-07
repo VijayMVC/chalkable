@@ -1,17 +1,17 @@
 ﻿using System;
-using Chalkable.BusinessLogic.Model.AcademicBenchmarkStandard;
+using Chalkable.BusinessLogic.Model.AcademicBenchmark;
 
-namespace Chalkable.Web.Models.ABStandardsViewData
+namespace Chalkable.Web.Models.AcademicBenchmarksViewData
 {
-    public class AcademicBenchmarkDocumentViewData
+    public class DocumentViewData
     {
         public Guid Id { get; set; }
         public string Code { get; set; }
         public string Description { get; set; }
 
-        public static AcademicBenchmarkDocumentViewData Create(AcademicBenchmarkDocument document)
+        public static DocumentViewData Create(Document document)
         {
-            return new AcademicBenchmarkDocumentViewData
+            return new DocumentViewData
             {
                 Id = document.Id,
                 Code = document.Code,
