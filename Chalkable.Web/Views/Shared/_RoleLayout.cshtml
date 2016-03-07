@@ -28,10 +28,12 @@
     <link href="@Url.StaticContent("/Content/demo.css")" rel="stylesheet" media="screen, projection" type="text/css" />
 }
 
-    <link href="@Url.StaticContent("/app/bower/chosen/chosen.min.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.StaticContent("/app/bower/jquery-ui/themes/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css"/>
-    <link href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet"/>
+    <!-- build:css /Content/role-layout.min.css -->
+    <link build:href="/app/bower/chosen/chosen.min.css" href="@Url.StaticContent("/app/bower/chosen/chosen.min.css")" rel="stylesheet" type="text/css"/>
+    <link build:href="/app/bower/jquery-ui/themes/smoothness/jquery-ui.css" href="@Url.StaticContent("/app/bower/jquery-ui/themes/smoothness/jquery-ui.css")" rel="stylesheet" type="text/css"/>
+    <link build:href="/app/jquery/snippet/jquery.snippet.min.css" href="@Url.StaticContent("/app/jquery/snippet/jquery.snippet.min.css")" rel="stylesheet" type="text/css"/>
+    <link build:href="/app/chlk/index/prettify.css" href="@Url.StaticContent("/app/chlk/index/prettify.css")" type="text/css" rel="stylesheet"/>
+    <!-- endbuild -->
 
 
     <!-- Page specific CSS -->
