@@ -73,7 +73,7 @@ module.exports = function (grunt) {
             switch (taskStatus.toLowerCase()) {
                 case 'created':
                 case 'processing':
-                    grunt.log.info(taskStatus);
+                    grunt.log.debug(taskStatus);
                     return ;
 
                 case 'failed':
