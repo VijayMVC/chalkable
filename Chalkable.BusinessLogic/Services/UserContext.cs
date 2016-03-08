@@ -88,7 +88,22 @@ namespace Chalkable.BusinessLogic.Services
         [Ignore]
         public string OAuthApplication{ get; set; }
         [Ignore]
-        public IList<ClaimInfo> Claims { get; set; } 
+        public IList<ClaimInfo> Claims { get; set; }
+
+        private const string PortalTemplate = "{0} Portal";
+        [Ignore]
+        public string CurrentPortal
+        {
+            get
+            {
+                if (Role == CoreRoles.DISTRICT_ADMIN_ROLE)
+                    return string.Format(PortalTemplate, "Admin");
+                if (Role != null)
+                    return string.Format(PortalTemplate, Role.Name); 
+                
+                return null;
+            }
+        }
 
         public UserContext()
         {

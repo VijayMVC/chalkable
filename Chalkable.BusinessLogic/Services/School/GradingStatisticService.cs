@@ -48,6 +48,9 @@ namespace Chalkable.BusinessLogic.Services.School
                 stiGradeBook = ConnectorLocator.GradebookConnector.GetBySectionAndGradingPeriod(classId, classAnnouncementType, gradingPeriod.Id, standardId);     
             }
             Trace.WriteLine("GetGradeBooks" + DateTime.Now.Ticks * 1.0 / TimeSpan.TicksPerSecond);
+
+            ServiceLocator.ServiceLocatorMaster.UserTrackingService.ViewedGradebook(Context.Login, classId, gradingPeriod.Id);
+
             return GetGradeBooks(classId, gradingPeriod, await stiGradeBook);
         }
 

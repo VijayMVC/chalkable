@@ -65,6 +65,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
 
         public PaginatedList<NotificationDetails> GetNotifications(int start, int count)
         {
+            ServiceLocator.ServiceLocatorMaster.UserTrackingService.OpenedNotification(Context.Login);
+
             return GetNotifications(new NotificationQuery
                 {
                     Start = start,
@@ -76,6 +78,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
             Trace.Assert(Context.PersonId.HasValue);
+            
 
             using (var uow = Read())
             {
@@ -90,7 +93,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
                 foreach (var notification in notifications)
                 {
                     var classAnn = notification.Announcement as ClassAnnouncement;
-                    if (classAnn != null && classAnn.ClassAnnouncementTypeRef.HasValue)
+                    if (classAnn?.ClassAnnouncementTypeRef != null)
                     {
                         var classAnnType = classAnnouncementTypes.First(x => x.Id == classAnn.ClassAnnouncementTypeRef);
                         notification.ClassAnnouncementType = classAnnType;
@@ -138,11 +141,7 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         {
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementDetails(announcementId);
             var persons = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementRecipientPersons(announcementId);
-            var notifications = new List<Notification>();
-            foreach (var person in persons)
-            {
-                notifications.Add(builder.BuildAnnouncementNewAttachmentNotification(Context.NowSchoolTime, ann, person));
-            }
+            var notifications = persons.Select(person => builder.BuildAnnouncementNewAttachmentNotification(Context.NowSchoolTime, ann, person)).ToList();
             AddNotifications(notifications);
         }
 
@@ -231,6 +230,8 @@ namespace Chalkable.BusinessLogic.Services.School.Notifications
         private void AddNotifications(IList<Notification> notifications)
         {
             DoUpdate(u=> new NotificationDataAccess(u).Insert(notifications));
+
+            ServiceLocator.ServiceLocatorMaster.UserTrackingService.SentNotification(Context.Login);
         }
 
         public void AddPrivateMessageNotification(int privateMessageId)

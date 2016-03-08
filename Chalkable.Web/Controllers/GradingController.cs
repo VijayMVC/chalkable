@@ -40,14 +40,13 @@ namespace Chalkable.Web.Controllers
 
         private async Task<ClassGradingBoxesViewData> PrepareClassGradingBoxes(int classId)
         {
-            var syId = GetCurrentSchoolYearId();
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetailsByClassId(classId);
             var currentGradingPeriod = CurrentGradingPeriodFromList(gradingPeriods, Context.NowSchoolYearTime.Date);
+            
             TeacherClassGrading gradingSummary = null;
             if (currentGradingPeriod != null)
-            {
                 gradingSummary = await SchoolLocator.GradingStatisticService.GetClassGradingSummary(classId, currentGradingPeriod);
-            }
+            
             return ClassGradingBoxesViewData.Create(gradingPeriods, gradingSummary);
         }
 
@@ -74,8 +73,9 @@ namespace Chalkable.Web.Controllers
             var date = Context.NowSchoolYearTime.Date;
             var currentGradingPeriod = CurrentGradingPeriodFromList(gradingPeriods, date);
             Task<ChalkableGradeBook> gradeBookTask = null;
-            if(currentGradingPeriod != null)
+            if (currentGradingPeriod != null)
                 gradeBookTask = SchoolLocator.GradingStatisticService.GetGradeBook(classId, currentGradingPeriod);
+            
             var standards = SchoolLocator.StandardService.GetStandards(classId, null, null);
             var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classId);
             return Json(GradingGridsViewData.Create(gradeBookTask != null ? await gradeBookTask : null, gradingPeriods, standards, classAnnouncementTypes));
@@ -94,7 +94,9 @@ namespace Chalkable.Web.Controllers
         public async Task<ActionResult> ClassGradingGrid(int classId, int gradingPeriodId, int? standardId, int? classAnnouncementTypeId, bool? notCalculateGrid)
         {
             var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
-            var gradeBookTask = SchoolLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriod, standardId, classAnnouncementTypeId, !(notCalculateGrid ?? false));
+            var gradeBookTask = SchoolLocator.GradingStatisticService.GetGradeBook(classId, gradingPeriod, standardId, classAnnouncementTypeId, 
+                !(notCalculateGrid ?? false));
+
             return Json(GradingGridViewData.Create(await gradeBookTask));
         }
         
@@ -137,6 +139,7 @@ namespace Chalkable.Web.Controllers
             GradingPeriodFinalGradeViewData gradingPeriodFinalGrade = null;
             if (currentGradingPeriod != null)
                 gradingPeriodFinalGrade = await GetGradingPeriodFinalGrade(classId, currentGradingPeriod, null);
+
             return Json(FinalGradesViewData.Create(gradingPeriods, gradingPeriodFinalGrade));
         }
 
@@ -178,6 +181,7 @@ namespace Chalkable.Web.Controllers
             var gradingPeriod = SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId);
             var students = GetStudentsForGrid(classId, gradingPeriod.MarkingPeriodRef);
             var gradingStandards = await gradingStandardsTask;
+
             return Json(StandardGradingGridViewData.Create(gradingPeriod, gradingStandards, students));
         }
 

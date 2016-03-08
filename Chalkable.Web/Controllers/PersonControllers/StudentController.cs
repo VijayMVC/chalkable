@@ -117,7 +117,6 @@ namespace Chalkable.Web.Controllers.PersonControllers
         {
             var syId = GetCurrentSchoolYearId();
             var studentExplorerInfo = SchoolLocator.StudentService.GetStudentExplorerInfo(personId, syId);
-            MasterLocator.UserTrackingService.UsedStandardsExplorer(Context.Login, "student explorer");
             return Json(StudentExplorerViewData.Create(studentExplorerInfo));
         }
 

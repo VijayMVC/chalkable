@@ -9,29 +9,21 @@ using Mixpanel.NET.Events;
 
 namespace Chalkable.UserTracking
 {
-    public class MixPanelService:IUserTrackingService
+    public class MixPanelService : IUserTrackingService
     {
-        
-
-
         private bool IsDisabled { get { return string.IsNullOrEmpty(MixPanelToken); } }
 
         private const string MIXPANEL_USER_PREFIX = "mixpanel-user-";
         private string MixPanelToken { get; set; }
-
-
         public MixPanelService(string mixToken)
         {
             MixPanelToken = mixToken;
         }
-
         private static double UnixTimeStamp(DateTime date) 
         {
             var unixTime = (date - new DateTime(1970, 1, 1, 0, 0, 0));
             return unixTime.TotalSeconds;
         }
-
-
         private IEventTracker GetEventTracker()
         {
             if (IsDisabled)
@@ -250,16 +242,16 @@ namespace Chalkable.UserTracking
             SendEvent(email, UserTrackingEvents.AttachedApp, properties);        
         }
 
-
-
         private const string TITLE = "title";
         private const string CREATED_BY = "created-by";
         public void OpenedAnnouncement(string email, string announcementType, string title, string createdBy)
         {
-            var properties = new Dictionary<string, object>();
-            properties[TYPE] = announcementType;
-            properties[TITLE] = title;
-            properties[CREATED_BY] = createdBy;
+            var properties = new Dictionary<string, object>
+            {
+                [TYPE] = announcementType,
+                [TITLE] = title,
+                [CREATED_BY] = createdBy
+            };
             SendEvent(email, UserTrackingEvents.OpenedAnnouncement, properties);      
         }
 
@@ -271,15 +263,13 @@ namespace Chalkable.UserTracking
 
         public void OpenedApp(string email, string appName)
         {
-            var properties = new Dictionary<string, object>();
-            properties[APP_NAME] = appName;
+            var properties = new Dictionary<string, object> {[APP_NAME] = appName};
             SendEvent(email, UserTrackingEvents.OpenedApp, properties);
         }
 
         public void SelectedLive(string email, string appName)
         {
-            var properties = new Dictionary<string, object>();
-            properties[APP_NAME] = appName;
+            var properties = new Dictionary<string, object> {[APP_NAME] = appName};
             SendEvent(email, UserTrackingEvents.SelectedLive, properties);
         }
 
@@ -323,25 +313,23 @@ namespace Chalkable.UserTracking
 
         public void CreatedApp(string email, string appName)
         {
-            var properties = new Dictionary<string, object>();
-            properties[APP_NAME] = appName;
+            var properties = new Dictionary<string, object> {[APP_NAME] = appName};
             SendEvent(email, UserTrackingEvents.CreatedApp, properties);
         }
 
         private const string CLASSES = "classes";
         public void BoughtApp(string email, string appName, List<string> classes)
         {
-            var properties = new Dictionary<string, object>();
-            properties[APP_NAME] = appName;
+            var properties = new Dictionary<string, object> {[APP_NAME] = appName};
             if (classes.Count > 0) properties[CLASSES] = classes;
             SendEvent(email, UserTrackingEvents.BoughtApp, properties);
         }
 
         private const string APP_NAME = "app-name";
+
         public void LaunchedApp(string email, string appName)
         {
-            var properties = new Dictionary<string, object>();
-            properties[APP_NAME] = appName;
+            var properties = new Dictionary<string, object> {[APP_NAME] = appName};
             SendEvent(email, UserTrackingEvents.LaunchedApp, properties);
         }
 
@@ -383,45 +371,53 @@ namespace Chalkable.UserTracking
         }
 
 
-        private const string TYPE = "type";
+        private const string TYPE = "Type";
         private const string CLASS = "class";
         private const string APPS_ATTACHED = "apps-attached";
         private const string DOCS_ATTACHED = "docs-attached";
         public void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached)
         {
-            var properties = new Dictionary<string, object>();
-            properties[TYPE] = type;
-            properties[CLASS] = sClass;
-            properties[APPS_ATTACHED] = appsAttached;
-            properties[DOCS_ATTACHED] = docsAttached;
-            SendEvent(email, UserTrackingEvents.CreatedNewItem, properties);
-        }
-
-        public void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached)
-        {
-            var properties = new Dictionary<string, object>();
-            properties[CLASS] = sClass;
-            properties[APPS_ATTACHED] = appsAttached;
-            properties[DOCS_ATTACHED] = docsAttached;
-            SendEvent(email, UserTrackingEvents.CreatedNewLessonPlan, properties);
+            var properties = new Dictionary<string, object>
+            {
+                [TYPE] = type,
+                [CLASS] = sClass,
+                [APPS_ATTACHED] = appsAttached,
+                [DOCS_ATTACHED] = docsAttached
+            };
+            SendEvent(email, UserTrackingEvents.CreatedItem, properties);
         }
 
         private const string ADMIN = "admin";
-        public void CreateNewAdminItem(string email, string adminName,  int appsAttached, int docsAttached)
+
+        public void CreatedNewAdminAnnouncement(string email, string type, string adminName, int appsAttached,
+            int docsAttached)
         {
-            var properties = new Dictionary<string, object>();
-            properties[ADMIN] = adminName;
-            properties[APPS_ATTACHED] = appsAttached;
-            properties[DOCS_ATTACHED] = docsAttached;
-            SendEvent(email, UserTrackingEvents.CreatedNewAdminItem, properties);       
+            var properties = new Dictionary<string, object>
+            {
+                [TYPE] = type,
+                [ADMIN] = adminName,
+                [APPS_ATTACHED] = appsAttached,
+                [DOCS_ATTACHED] = docsAttached
+            };
+            SendEvent(email, UserTrackingEvents.CreatedItem, properties);
         }
 
         private const string REPORT_TYPE = "report-type";
         public void CreatedReport(string email, string reportType)
         {
-            var properties = new Dictionary<string, object>();
-            properties[REPORT_TYPE] = reportType;
+            var properties = new Dictionary<string, object> {[REPORT_TYPE] = reportType};
             SendEvent(email, UserTrackingEvents.CreatedReport, properties);
+        }
+
+        private const string LOCATION = "Location";
+
+        public void ViewedClasses(string login, string location)
+        {
+            var prop = new Dictionary<string, object>
+            {
+                [LOCATION] = location
+            };
+            SendEvent(login, UserTrackingEvents.ViewedClasses, prop);
         }
 
         private const string DESCRIPTION = "description";
@@ -429,10 +425,12 @@ namespace Chalkable.UserTracking
 
         public void SetDiscipline(string login, int? classId, DateTime date, string description, int studentId)
         {
-            var properties = new Dictionary<string, object>();
-            properties[DESCRIPTION] = description;
-            properties[CLASS] = classId?.ToString(CultureInfo.InvariantCulture) ?? "";
-            properties[STUDENT_ID] = studentId.ToString(CultureInfo.InvariantCulture);
+            var properties = new Dictionary<string, object>
+            {
+                [DESCRIPTION] = description,
+                [CLASS] = classId?.ToString(CultureInfo.InvariantCulture) ?? "",
+                [STUDENT_ID] = studentId.ToString(CultureInfo.InvariantCulture)
+            };
             SendEvent(login, UserTrackingEvents.SetDiscipline, properties);
         }
 
@@ -444,13 +442,15 @@ namespace Chalkable.UserTracking
         public void SetFinalGrade(string login, int classId, int studentId, int gradingPeriodId, string averageValue, bool exempt,
             string note)
         {
-            var properties = new Dictionary<string, object>();
-            properties[CLASS] = classId;
-            properties[STUDENT_ID] = studentId;
-            properties[AVG_VALUE] = averageValue;
-            properties[GRADING_PERIOD_ID] = gradingPeriodId;
-            properties[NOTE] = note;
-            properties[IS_EXEMPT] = exempt;
+            var properties = new Dictionary<string, object>
+            {
+                [CLASS] = classId,
+                [STUDENT_ID] = studentId,
+                [AVG_VALUE] = averageValue,
+                [GRADING_PERIOD_ID] = gradingPeriodId,
+                [NOTE] = note,
+                [IS_EXEMPT] = exempt
+            };
             SendEvent(login, UserTrackingEvents.SetFinalGrade, properties);
         }
 
@@ -460,17 +460,28 @@ namespace Chalkable.UserTracking
 
         public void SetAttendance(string login, int classId)
         {
-            var properties = new Dictionary<string, object>();
-            properties[CLASS] = classId;
+            var properties = new Dictionary<string, object> {[CLASS] = classId};
             SendEvent(login, UserTrackingEvents.SetAttendance, properties);
         }
 
         public void PostedGrades(string login, int classId, int gradingPeriodId)
         {
-            var properties = new Dictionary<string, object>();
-            properties[CLASS] = classId;
-            properties[GRADING_PERIOD_ID] = gradingPeriodId;
+            var properties = new Dictionary<string, object>
+            {
+                [CLASS] = classId,
+                [GRADING_PERIOD_ID] = gradingPeriodId
+            };
             SendEvent(login, UserTrackingEvents.PostedGrades, properties);
+        }
+
+        public void ViewedGradebook(string login, int classId, int gradingPeriodId)
+        {
+            var prop = new Dictionary<string, object>
+            {
+                [CLASS] = classId,
+                [GRADING_PERIOD_ID] = gradingPeriodId
+            };
+            SendEvent(login, UserTrackingEvents.ViewedGradebook, prop);
         }
 
         public void LoggedIn(string login)
@@ -497,8 +508,7 @@ namespace Chalkable.UserTracking
         private const string STANDARD_EXPLORER_TYPE = "explorer-type";
         public void UsedStandardsExplorer(string login, string explorerType)
         {
-            var properties = new Dictionary<string, object>();
-            properties[STANDARD_EXPLORER_TYPE] = explorerType;
+            var properties = new Dictionary<string, object> {[STANDARD_EXPLORER_TYPE] = explorerType};
             SendEvent(login, UserTrackingEvents.UsedStandardsExplorer, properties);
         }
 
@@ -525,6 +535,16 @@ namespace Chalkable.UserTracking
         {
             var properties = new Dictionary<string, object> {[LESSON_PLAN_TITLE] = lessonPlanTitle};
             SendEvent(email, UserTrackingEvents.SavedLessonPlanToGallery, properties);
+        }
+
+        public void OpenedNotification(string login)
+        {
+            SendEvent(login, UserTrackingEvents.OpenedNotification, new Dictionary<string, object>());
+        }
+
+        public void SentNotification(string login)
+        {
+            SendEvent(login, UserTrackingEvents.SentNotification, new Dictionary<string, object>());
         }
 
         private const string DISTINCT_ID = "distinct_id";

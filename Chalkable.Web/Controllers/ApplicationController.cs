@@ -39,10 +39,11 @@ namespace Chalkable.Web.Controllers
             var appInfo = BaseApplicationInfo.Create(new ShortApplicationInfo {Name = name}, developerId);
             var application = MasterLocator.ApplicationUploadService.Create(appInfo);
            
-            if (application != null)
-            {
-                MasterLocator.UserTrackingService.CreatedApp(Context.Login, application.Name);
-            }
+            //todo: track when user creates app
+            //if (application != null)
+            //{
+            //    MasterLocator.UserTrackingService.CreatedApp(Context.Login, application.Name);
+            //}
             return Json(PrepareAppInfo(MasterLocator, application, true, true));
         }
 
@@ -67,21 +68,11 @@ namespace Chalkable.Web.Controllers
 
             var subjects = string.Join(",", app.Categories.Select(x => x.CategoryRef.ToString()));
 
-            if (applicationInputModel.ForSubmit) //TODO: mixpanel
-            {
-
-                MasterLocator.UserTrackingService.SubmittedForApprooval(Context.Login, app.Name, app.ShortDescription,
-                                                      subjects, applicationInputModel.ApplicationPrices.Price, 
-                                                      applicationInputModel.ApplicationPrices.PricePerSchool,
-                                                      applicationInputModel.ApplicationPrices.PricePerClass);
-            }
-            else
-            {
-                MasterLocator.UserTrackingService.UpdatedDraft(Context.Login, app.Name, app.ShortDescription,
-                                                      subjects, applicationInputModel.ApplicationPrices.Price, 
-                                                      applicationInputModel.ApplicationPrices.PricePerSchool, 
-                                                      applicationInputModel.ApplicationPrices.PricePerClass);
-            }
+            if (!applicationInputModel.ForSubmit) //TODO: mixpanel
+                MasterLocator.UserTrackingService.UpdatedDraft(Context.Login, app.Name, app.ShortDescription, subjects, 
+                    applicationInputModel.ApplicationPrices.Price, applicationInputModel.ApplicationPrices.PricePerSchool, 
+                    applicationInputModel.ApplicationPrices.PricePerClass);
+            
 
             return Json(PrepareAppInfo(MasterLocator, app, true, true), CONTENT_TYPE);
         }

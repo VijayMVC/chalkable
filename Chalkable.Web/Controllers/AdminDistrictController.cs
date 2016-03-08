@@ -35,6 +35,8 @@ namespace Chalkable.Web.Controllers
             Trace.Assert(Context.SchoolYearId.HasValue);
             var schools = SchoolLocator.SchoolService.GetShortSchoolSummariesInfo(start, count, filter, (SchoolSortType?) sortType);
 
+            MasterLocator.UserTrackingService.ViewedClasses(Context.Login, Context.CurrentPortal);
+
             return Json(schools.Select(LocalSchoolSummaryViewData.Create));
         }
 
