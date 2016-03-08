@@ -580,7 +580,6 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShadeView(chlk.activities.apps.ExternalAttachAppDialog, result);
         },
 
-        [chlk.controllers.AssessmentEnabled()],
         [chlk.controllers.AccessForRoles([
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.DISTRICTADMIN
