@@ -8,7 +8,7 @@ class TestFeed(BaseAuthedTestCase):
 
     def do_student_sorting_firstname(self, start, count = 1000):
         empty_list =[]
-        dictionary_get_students = self.get('/Student/GetStudents.json?myStudentsOnly=true&byLastName=false&start='+str(start)+'&count='+str(count))
+        dictionary_get_students = self.get('/Student/GetStudents.json?myStudentsOnly=false&byLastName=false&start='+str(start)+'&count='+str(count))
         get_student = dictionary_get_students['data']
         for item in get_student:
             p = item['firstname']
