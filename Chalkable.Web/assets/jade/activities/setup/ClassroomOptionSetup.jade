@@ -1,0 +1,74 @@
+.setup-page
+    -var topData = self.getTopData();
+    -var selectedId = topData.getSelectedItemId();
+
+    h2.page-title=Msg.Setup
+
+    +ClassesToolBar(topData, 'setup', 'classroomOptionSetup')
+
+    .action-bar
+        .items
+            +ActionLink('setup', 'categoriesSetup')=Msg.Category(true)
+            +ActionLink('setup', 'commentsSetup')=Msg.Comment(true)
+            +ActionLink('setup', 'classroomOptionSetup').pressed=Msg.Options
+
+    if !selectedId || !selectedId.valueOf()
+        .choose-class
+    else
+        -var options = self.getClassroomOptions()
+        +ActionForm('setup', 'submitClassroomOption').submit-form
+            TABLE.options-table
+                TR
+                    TD(colspan = 2)
+                        h2=Msg.Grade_book
+                TR
+                    TD
+                        h3
+                        +LabeledCheckbox(Msg.Round_displayed_averages, 'rounddisplayedaverages', options.isRoundDisplayedAverages())
+                        +LabeledCheckbox(Msg.Include_withdrawn_students, 'includewithdrawnstudents', options.isIncludeWithdrawnStudents())
+                        +LabeledCheckbox(Msg.Display_student_average, 'displaystudentaverage', options.isDisplayStudentAverage())
+                        +LabeledCheckbox(Msg.Display_letter_grade, 'displayalphagrade', options.isDisplayAlphaGrade())
+                    TD
+                        h3=Msg.Averaging_method
+                        fieldset.method.editable
+                            each item, i in ['Points', 'Average', 'Category Points', 'Category Average']
+                                -var id = item.replace(' ', '_').toLowerCase()
+                                div
+                                    input(
+                                        type = "radio",
+                                        id = id,
+                                        value = i,
+                                        name = 'averagingmethod',
+                                        checked = i == options.getAveragingMethod()
+                                    )
+                                    label(for=id)=item
+                TR
+                    TD(colspan = 2)
+                        h2=Msg.Standard(true)
+                TR
+                    TD
+                        h3
+                        +LabeledCheckbox(Msg.Standard_Calculate_Weight_Maximum_Values, 'standardscalculationweightmaximumvalues', options.isStandardsCalculationWeightMaximumValues())
+                    TD
+                        h3=Msg.Standards_scale
+                        +Select('standardsgradingscaleid').scales-select
+                            +Option('', '------------no scales-----------', !options.getStandardsGradingScaleId() )
+                            each scale in self.getScales()
+                                +Option(scale.getId().valueOf(), scale.getName(), scale.getId() == options.getStandardsGradingScaleId() )
+                TR
+                    TD
+                        h3=Msg.Standards_calculate_rule
+                        +Select('standardscalculationrule').rules-select
+                            each rule in ['Current Grading Period', 'Running Section', 'Running Term']
+                                -var ruleValue = rule.replace(/\s/g, '')
+                                +Option(ruleValue ,rule , ruleValue == options.getStandardsCalculationRule())
+                    TD
+                        h3=Msg.Standards_calculate_method
+                        +Select('standardscalculationmethod').method-select
+                            each method in ['Averaging', 'Points']
+                                +Option(method, method, method == options.getStandardsCalculationMethod())
+
+
+            +Hidden('classid', selectedId)
+            .buttons-block
+                BUTTON(type="submit").chlk-button.blue-button=Msg.OK
