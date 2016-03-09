@@ -2,21 +2,23 @@ from base_auth_test import *
 
 class TestFeed(BaseAuthedTestCase):
 
-    def test_people_student_sorting_by_first_name(self):
-           
-        self.do_student_sorting_firstname(0)    
+    def test_sorting_by_last_name(self):
+        self.do_student_sorting_lastname(0)    
 
-    def do_student_sorting_firstname(self, start, count = 1000):
+    def do_student_sorting_lastname(self, start, count = 1000):
         empty_list =[]
-        dictionary_get_students = self.get('/Student/GetStudents.json?myStudentsOnly=false&byLastName=false&start='+str(start)+'&count='+str(count))
-        get_student = dictionary_get_students['data']
+        get_needed_page = self.get('/Student/GetStudents.json?classId=&filter=&myStudentsOnly=false&byLastName=false&start='+str(start)+'&count='+str(count))
+        totalcount = get_needed_page['totalcount']
+        totalpages = get_needed_page['totalpages']
+        get_student = get_needed_page['data']
         for item in get_student:
             p = item['firstname']
             empty_list.append(p)
-            
-        totalcount = dictionary_get_students['totalcount']
-        totalpages = dictionary_get_students['totalpages']
-        self.assertEqual(empty_list, sorted(empty_list), 'Students sorted by Last Name')
-   
+         
+        decoded_list = [x.encode('utf-8') for x in empty_list]
+        lower_case_list = map(str.lower, decoded_list)
+        self.assertEqual(lower_case_list, sorted(lower_case_list), 'Students sorted by First Name')
+        
+        
 if __name__ == '__main__':
     unittest.main()    
