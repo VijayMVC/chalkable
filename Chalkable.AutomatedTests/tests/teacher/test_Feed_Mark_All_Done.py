@@ -2,7 +2,7 @@ from base_auth_test import *
 
 class TestFeed(BaseAuthedTestCase):
     def test_feed_mark_items(self):
-        #data that will be used for for "mark all done"
+        #data that will be used for "mark all done"
         self.settings_data2 = {'option':'3'}
         
         #data that will be used for for reset all filters on the feed
@@ -68,7 +68,7 @@ class TestFeed(BaseAuthedTestCase):
         
         self.assertFalse(dictionary_verify_annoucementviewdatas_all, 'dictionary of items exists')
         
-        return dictionary_get_items
+        #return dictionary_get_items  07.03.2016
         
 if __name__ == '__main__':
     unittest.main()

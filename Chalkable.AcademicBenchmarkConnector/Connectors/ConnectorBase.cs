@@ -33,8 +33,8 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
                 QueryString = new NameValueCollection
                 {
                     ["partner.id"] = Settings.AcademicBenchmarkPartnerId,
-                    ["auth.signature"] = ConnectorLocator.AuthSignarute,
-                    ["auth.expires"] = ConnectorLocator.AuthExpires.ToString()
+                    ["auth.signature"] = ConnectorLocator.AuthContext.AuthSignarute,
+                    ["auth.expires"] = ConnectorLocator.AuthContext.AuthExpires.ToString()
                 }
             };
             //client.Headers.Add("Content-Type", "application/json");

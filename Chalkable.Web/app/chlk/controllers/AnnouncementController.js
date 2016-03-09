@@ -724,9 +724,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(options){
                     //_DEBUG && options.setAssessmentAppId(chlk.models.id.AppId('56c14655-2897-4073-bb48-32dfd61264b5'));
 
-                    var isAssessmentEnabled = this.getContext().getSession().get(ChlkSessionConstants.ASSESSMENT_ENABLED, false);
-
-                    options.updateByValues(null, isAssessmentEnabled ? null : false, announcementId, classId, announcementTypeName,
+                    options.updateByValues(null, null, announcementId, classId, announcementTypeName,
                         announcementType, null, appUrlAppend_);
                     this.getContext().getSession().set(ChlkSessionConstants.ATTACH_OPTIONS, options);
                     return new chlk.models.common.BaseAttachViewData(options);
