@@ -61,7 +61,6 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         private static string GenerateAuthSignature(long authExpires)
         {
             var userID = ""; // Partner defined. May be an empty string.
-            // Seconds since epoch. Example is 24 hours.
             var message = $"{authExpires}\n{userID}";
             var keyBytes = Encoding.UTF8.GetBytes(Settings.AcademicBenchmarkPartnerKey);
             var messageBytes = Encoding.UTF8.GetBytes(message);

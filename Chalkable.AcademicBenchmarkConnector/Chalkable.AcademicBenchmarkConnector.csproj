@@ -49,15 +49,18 @@
     <Compile Include="Connectors\ConnectorBase.cs" />
     <Compile Include="Connectors\ConnectorLocator.cs" />
     <Compile Include="Connectors\StandardsConnector.cs" />
+    <Compile Include="Connectors\TopicsConnector.cs" />
     <Compile Include="Exceptions\ChalkableABUnauthorizedException.cs" />
     <Compile Include="Models\Authority.cs" />
     <Compile Include="Models\BaseResource.cs" />
     <Compile Include="Models\BaseResponse.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\PaginatedResponse.cs" />
+    <Compile Include="Models\GradeLevel.cs" />
     <Compile Include="Models\StandardRelations.cs" />
     <Compile Include="Models\Standard.cs" />
     <Compile Include="Models\Status.cs" />
+    <Compile Include="Models\Subject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

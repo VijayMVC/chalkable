@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
@@ -56,7 +57,14 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             var res = await CallAsync<PaginatedResponse<TModel>>(relativeUrl, requestParams);
             return res != null ? res.Resources.FirstOrDefault() : default(TModel);
         }
-        
+
+        public async Task<IList<TModel>> GetList<TModel>(string relativeUrl, NameValueCollection requestParams)
+        {
+            var res = await CallAsync<PaginatedResponse<TModel>>(relativeUrl, requestParams);
+            return res != null ? res.Resources : new List<TModel>();
+        }
+
+
         public async Task<TResponse> CallAsync<TResponse>(string relativeUrl, NameValueCollection requestParams)
             where TResponse : BaseResponse
         {
