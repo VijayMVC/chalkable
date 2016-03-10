@@ -45,11 +45,9 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             return await GetPage<Standard>(null, null, null, searchQuery: searchQuery, start: start, limit: count);
         }
 
-        public async Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, string subjectCode, string gradeLevelCode,
-            Guid? parentId)
+        public async Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, string subjectCode, string gradeLevelCode, Guid? parentId)
         {
-            return (await GetPage<Standard>(authorityId, documentId, subjectCode, parentId: parentId, gradeLevelCode: gradeLevelCode))
-                .ToList();
+            return await GetPage<Standard>(authorityId, documentId, subjectCode, parentId: parentId, gradeLevelCode: gradeLevelCode);
         }
 
         public async Task<IList<Authority>> GetAuthorities()
