@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Threading.Tasks;
-using System.Web.Management;
 using Chalkable.AcademicBenchmarkConnector.Models;
+using Chalkable.Common;
 
 namespace Chalkable.AcademicBenchmarkConnector.Connectors
 {
@@ -11,11 +12,12 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
     {
         Task<Standard> GetStandardById(Guid standardId);
         Task<StandardRelations> GetStandardRelationsById(Guid standardId);
-        Task<PaginatedResponse<BaseResource<Standard>>> SearchStandard(string searchQuery, int start, int count);
         Task<IList<Authority>> GetAuthorities();
         Task<IList<Document>> GetDocuments(Guid? authorityId);
         Task<IList<Subject>> GetSubjects(Guid? authorityId, Guid? documentId);
         Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, string subjectCode);
+        Task<PaginatedList<Standard>> SearchStandard(string searchQuery, int start, int count);
+        Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, string subjectCode, string gradeLevelCode, Guid? parentId);
 
     }
 
@@ -38,61 +40,64 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             return await GetOne<StandardRelations>(url, null);
         }
 
-        public async Task<PaginatedResponse<BaseResource<Standard>>> SearchStandard(string searchQuery, int start, int count)
+        public async Task<PaginatedList<Standard>> SearchStandard(string searchQuery, int start, int count)
         {
-            var url = $"standards";
-            var nvc = new NameValueCollection
-            {
-                ["query"] = searchQuery,
-                ["offest"] = start.ToString(),
-                ["limit"] = count.ToString()
-            };
-            return await CallAsync<PaginatedResponse<BaseResource<Standard>>>(url, nvc);
+            return await GetPage<Standard>(null, null, null, null, searchQuery, start, count);
+        }
+
+        public Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, string subjectCode, string gradeLevelCode, Guid? parentId)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<IList<Authority>> GetAuthorities()
         {
-            return await GetList<Authority>(null, null, null);
+            return (await GetPage<AuthorityWrapper>(null, null, null)).Select(x => x.Authority).ToList();
         }
         public async Task<IList<Document>> GetDocuments(Guid? authorityId)
         {
-            return await GetList<Document>(authorityId, null, null);
+            return (await GetPage<DocumentWrapper>(authorityId, null, null)).Select(x => x.Document).ToList();
         }
         public async Task<IList<Subject>> GetSubjects(Guid? authorityId, Guid? documentId)
         {
-            return await GetList<Subject>(authorityId, documentId, null);
+            return (await GetPage<SubjectWrapper>(authorityId, documentId, null)).Select(x => x.Subject).ToList();
         }
 
         public async Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, string subjectCode)
         {
-            return await GetList<GradeLevel>(authorityId, documentId, subjectCode);
+            return (await GetPage<GradeLevelWrapper>(authorityId, documentId, subjectCode)).Select(x=>x.GradeLevel).ToList();
         }
         
         private static IDictionary<Type, string> _typesDic = new Dictionary<Type, string>
         {
-            [typeof(Standard)] = null,
-            [typeof (Authority)] = "authority",
-            [typeof (Document)] = "document",
-            [typeof (Subject)] = "subject",
-            [typeof (GradeLevel)] = "grade",
-            [typeof(SubjectDocument)] = "subject_doc"
+            [typeof (Standard)] = null,
+            [typeof (AuthorityWrapper)] = "authority",
+            [typeof (DocumentWrapper)] = "document",
+            [typeof (SubjectWrapper)] = "subject",
+            [typeof (GradeLevelWrapper)] = "grade",
+            [typeof (SubjectDocumentWrapper)] = "subject_doc"
         };
-        protected async Task<IList<TModel>> GetList<TModel>(Guid? authorityId, Guid? documentId, string subjectCode, int start = 0, int limit = int.MaxValue)
+        protected async Task<PaginatedList<TModel>> GetPage<TModel>(Guid? authorityId, Guid? documentId
+            , string subjectCode, Guid? parentId = null
+            , string searchQuery = null, int start = 0, int limit = int.MaxValue)
         {
             var nvc = new NameValueCollection
             {
-                ["offset"] = start.ToString(),
-                ["limit"] = limit.ToString(),
                 ["list"] = _typesDic[typeof(TModel)]
             };
             if (authorityId.HasValue)
-                nvc.Add("authority", authorityId.ToString());
+                nvc.Add("authority", authorityId.Value.ToString());
             if (documentId.HasValue)
-                nvc.Add("document", documentId.ToString());
+                nvc.Add("document", documentId.Value.ToString());
             if (!string.IsNullOrWhiteSpace(subjectCode))
                 nvc.Add("subject", subjectCode);
+            if(parentId.HasValue)
+                nvc.Add("parent", parentId.Value.ToString());
+            if (!string.IsNullOrWhiteSpace(searchQuery))
+                nvc.Add("query", searchQuery);
 
-            return await GetList<TModel>("standards", nvc);
+            var res = await GetPage<BaseResource<TModel>>("standards", nvc);
+            return res.Transform(x => x.Data);
         }
     }
 }

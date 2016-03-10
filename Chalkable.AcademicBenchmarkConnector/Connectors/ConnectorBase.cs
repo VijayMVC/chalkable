@@ -52,20 +52,28 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
                 }
         }
 
-        public async Task<TModel> GetOne<TModel>(string relativeUrl, NameValueCollection requestParams)
+        protected async Task<TModel> GetOne<TModel>(string relativeUrl, NameValueCollection requestParams)
         {
+            var res = await GetPage<TModel>(relativeUrl, requestParams, 0, 1);
+            return res.FirstOrDefault();
+        }
+        protected async Task<IList<TModel>> GetList<TModel>(string relativeUrl, NameValueCollection requestParams)
+        {
+            return await GetPage<TModel>(relativeUrl, requestParams);
+        }
+        protected async Task<PaginatedList<TModel>> GetPage<TModel>(string relativeUrl, NameValueCollection requestParams, int offset = 0, int limit = int.MaxValue)
+        {
+            requestParams.Add("offset", offset.ToString());
+            requestParams.Add("limit", limit.ToString());
+
             var res = await CallAsync<PaginatedResponse<TModel>>(relativeUrl, requestParams);
-            return res != null ? res.Resources.FirstOrDefault() : default(TModel);
+            return res != null
+                ? new PaginatedList<TModel>(res.Resources, res.Offset/res.Limit, res.Limit, res.Count)
+                : new PaginatedList<TModel>(new List<TModel>(), offset/limit, limit);
+
         }
 
-        public async Task<IList<TModel>> GetList<TModel>(string relativeUrl, NameValueCollection requestParams)
-        {
-            var res = await CallAsync<PaginatedResponse<TModel>>(relativeUrl, requestParams);
-            return res != null ? res.Resources : new List<TModel>();
-        }
-
-
-        public async Task<TResponse> CallAsync<TResponse>(string relativeUrl, NameValueCollection requestParams)
+        protected async Task<TResponse> CallAsync<TResponse>(string relativeUrl, NameValueCollection requestParams)
             where TResponse : BaseResponse
         {
             var startTime = DateTime.Now;

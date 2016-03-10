@@ -52,10 +52,8 @@
     <Compile Include="Connectors\TopicsConnector.cs" />
     <Compile Include="Exceptions\ChalkableABUnauthorizedException.cs" />
     <Compile Include="Models\Authority.cs" />
-    <Compile Include="Models\BaseResource.cs" />
     <Compile Include="Models\BaseResponse.cs" />
     <Compile Include="Models\Document.cs" />
-    <Compile Include="Models\PaginatedResponse.cs" />
     <Compile Include="Models\GradeLevel.cs" />
     <Compile Include="Models\StandardRelations.cs" />
     <Compile Include="Models\Standard.cs" />
@@ -68,10 +66,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Chalkable.API\Chalkable.API.csproj">
-      <Project>{a7272b5d-dc95-4783-888d-3a36e8922226}</Project>
-      <Name>Chalkable.API</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Chalkable.Common\Chalkable.Common.csproj">
       <Project>{3615f16a-b37f-40b4-b58d-cc39fa8f6646}</Project>
       <Name>Chalkable.Common</Name>

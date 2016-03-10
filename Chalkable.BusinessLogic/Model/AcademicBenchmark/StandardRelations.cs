@@ -12,8 +12,8 @@ namespace Chalkable.BusinessLogic.Model.AcademicBenchmark
 
         protected StandardRelations(AcademicBenchmarkConnector.Models.StandardRelations standardRelations)
         {
-            if (standardRelations.CurrentStandard != null)
-                CurrentStandard = Standard.Create(standardRelations.CurrentStandard);
+            if (standardRelations.Data != null)
+                CurrentStandard = Standard.Create(standardRelations.Data);
 
             if (standardRelations.Relations == null) return;
             

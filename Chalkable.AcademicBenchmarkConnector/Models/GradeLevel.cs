@@ -2,6 +2,12 @@
 
 namespace Chalkable.AcademicBenchmarkConnector.Models
 {
+    public class GradeLevelWrapper
+    {
+        [JsonProperty("grade")]
+        public GradeLevel GradeLevel { get; set; }
+    }
+
     public class GradeLevel
     {
         [JsonProperty("code")]

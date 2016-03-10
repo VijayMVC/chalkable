@@ -3,6 +3,11 @@ using Newtonsoft.Json;
 
 namespace Chalkable.AcademicBenchmarkConnector.Models
 {
+    public class DocumentWrapper
+    {
+        [JsonProperty("document")]
+        public Document Document { get; set; }
+    }
     public class Document
     {
         [JsonProperty("guid")]

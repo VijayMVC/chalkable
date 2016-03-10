@@ -3,6 +3,12 @@ using Newtonsoft.Json;
 
 namespace Chalkable.AcademicBenchmarkConnector.Models
 {
+    public class AuthorityWrapper
+    {
+        [JsonProperty("authority")]
+        public Authority Authority { get; set; }
+    }
+
     public class Authority
     {
         [JsonProperty("guid")]
