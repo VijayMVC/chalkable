@@ -61,8 +61,7 @@ namespace Chalkable.Api.SampleApp.Controllers
             if(content == null)
                 throw new ChalkableApiException("Content not found");
             PrepareBaseData(announcementApplicationId);
-            var annApp = await Connector.Announcement.GetAnnouncementApplicationById(announcementApplicationId);
-            var updateAnnAppMeta = Connector.Announcement.UpdateAnnouncementApplicationMeta(announcementApplicationId, annApp.AnnouncementType, content.Text, content.ImageUrl);
+            var updateAnnAppMeta = Connector.Announcement.UpdateAnnouncementApplicationMeta(announcementApplicationId, content.Text, content.ImageUrl);
 
             var ids = defaultAbIds.Select(Guid.Parse).ToList();
             var standardsTask = Connector.Standards.GetStandardsByIds(ids);

@@ -213,10 +213,13 @@ namespace Chalkable.Web.Controllers
             return Json(PrepareFullAnnouncementViewData(aa.AnnouncementRef, (AnnouncementTypeEnum)announcementType));
         }
 
-        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
+        [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Announcement })]
         public ActionResult UpdateAnnouncementApplicationMeta(int announcementApplicationId, string text, string imageUrl)
         {
-            if(!Uri.IsWellFormedUriString(imageUrl, UriKind.Absolute))
+            if (string.IsNullOrWhiteSpace(imageUrl))
+                imageUrl = null;
+
+            if(imageUrl != null && !Uri.IsWellFormedUriString(imageUrl, UriKind.Absolute))
                 throw new ChalkableException("Invalid image Url!");
 
             var res = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);

@@ -3,13 +3,14 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
+using Chalkable.API.Enums;
 
 namespace Chalkable.Api.SampleApp.Controllers
 {
     public class DocumentController : BaseSampleAppController
     {
         [HttpPost]
-        public async Task<ActionResult> Upload(int announcementId, int announcementType, int? attributeId)
+        public async Task<ActionResult> Upload(int announcementId, AnnouncementType announcementType, int? attributeId)
         {
             try
             {
@@ -39,7 +40,7 @@ namespace Chalkable.Api.SampleApp.Controllers
             return Json(new { success = true }, "text/html", JsonRequestBehavior.AllowGet);
         }
 
-        public ActionResult Index(int announcementId, int announcementType, int? attributeId)
+        public ActionResult Index(int announcementId, AnnouncementType announcementType, int? attributeId)
         {
             ViewBag.AnnouncementId = announcementId;
             ViewBag.AnnouncementType = announcementType;
