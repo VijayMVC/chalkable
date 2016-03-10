@@ -62,8 +62,19 @@ namespace Chalkable.Api.SampleApp.Controllers
                 throw new ChalkableApiException("Content not found");
             PrepareBaseData(announcementApplicationId);
             var annApp = await Connector.Announcement.GetAnnouncementApplicationById(announcementApplicationId);
-            var updateAnnAppMeta = await Connector.Announcement.UpdateAnnouncementApplicationMeta(announcementApplicationId, annApp.AnnouncementType, content.Text, content.ImageUrl);
-            return View("Attach", DefaultJsonViewData.Create(new {content}));
+            var updateAnnAppMeta = Connector.Announcement.UpdateAnnouncementApplicationMeta(announcementApplicationId, annApp.AnnouncementType, content.Text, content.ImageUrl);
+
+            var ids = defaultAbIds.Select(Guid.Parse).ToList();
+            var standardsTask = Connector.AbEndpoint.GetStandardsByIds(ids);
+            var relationsTask = Connector.AbEndpoint.GetListOfStandardRelastions(ids);
+            
+            return View("Attach", DefaultJsonViewData.Create(new
+            {
+                Content = content,
+                Standards = await standardsTask,
+                Relations = await relationsTask,
+                UpdatedAnnAppMeate = await updateAnnAppMeta
+            }));
         }
 
 
