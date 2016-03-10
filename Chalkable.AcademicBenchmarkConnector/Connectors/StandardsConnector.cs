@@ -42,12 +42,14 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
 
         public async Task<PaginatedList<Standard>> SearchStandard(string searchQuery, int start, int count)
         {
-            return await GetPage<Standard>(null, null, null, null, searchQuery, start, count);
+            return await GetPage<Standard>(null, null, null, searchQuery: searchQuery, start: start, limit: count);
         }
 
-        public Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, string subjectCode, string gradeLevelCode, Guid? parentId)
+        public async Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, string subjectCode, string gradeLevelCode,
+            Guid? parentId)
         {
-            throw new NotImplementedException();
+            return (await GetPage<Standard>(authorityId, documentId, subjectCode, parentId: parentId, gradeLevelCode: gradeLevelCode))
+                .ToList();
         }
 
         public async Task<IList<Authority>> GetAuthorities()
@@ -77,9 +79,8 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             [typeof (GradeLevelWrapper)] = "grade",
             [typeof (SubjectDocumentWrapper)] = "subject_doc"
         };
-        protected async Task<PaginatedList<TModel>> GetPage<TModel>(Guid? authorityId, Guid? documentId
-            , string subjectCode, Guid? parentId = null
-            , string searchQuery = null, int start = 0, int limit = int.MaxValue)
+        protected async Task<PaginatedList<TModel>> GetPage<TModel>(Guid? authorityId, Guid? documentId, string subjectCode, 
+            Guid? parentId = null, string gradeLevelCode = null, string searchQuery = null, int start = 0, int limit = int.MaxValue)
         {
             var nvc = new NameValueCollection
             {
@@ -95,6 +96,8 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
                 nvc.Add("parent", parentId.Value.ToString());
             if (!string.IsNullOrWhiteSpace(searchQuery))
                 nvc.Add("query", searchQuery);
+            if(!string.IsNullOrWhiteSpace(gradeLevelCode))
+                nvc.Add("grade", gradeLevelCode);
 
             var res = await GetPage<BaseResource<TModel>>("standards", nvc);
             return res.Transform(x => x.Data);

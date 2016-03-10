@@ -135,9 +135,12 @@
     <Compile Include="Mapping\ModelMappers\StudentAnnouncementToScoreMapper.cs" />
     <Compile Include="Model\AcademicBenchmark\Authority.cs" />
     <Compile Include="Model\AcademicBenchmark\Document.cs" />
+    <Compile Include="Model\AcademicBenchmark\GradeLevel.cs" />
     <Compile Include="Model\AcademicBenchmark\ShortStandard.cs" />
     <Compile Include="Model\AcademicBenchmark\Standard.cs" />
     <Compile Include="Model\AcademicBenchmark\StandardRelations.cs" />
+    <Compile Include="Model\AcademicBenchmark\Subject.cs" />
+    <Compile Include="Model\AcademicBenchmark\Topic.cs" />
     <Compile Include="Model\AnnouncementInfo.cs" />
     <Compile Include="Model\ApplicationInfo.cs" />
     <Compile Include="Model\ApplicationTotalPriceInfo.cs" />
