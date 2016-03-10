@@ -41,8 +41,8 @@ namespace Chalkable.Api.SampleApp.Controllers
            // var announcementAppIdsTask = Connector.Announcement.StudentAnnouncementAppicationIds(3787, 179);
 
             var ids = defaultAbIds.Select(Guid.Parse).ToList();
-            var standardsTask = Connector.AbEndpoint.GetStandardsByIds(ids);
-            var relationsTask = Connector.AbEndpoint.GetListOfStandardRelastions(ids);
+            var standardsTask = Connector.Standards.GetStandardsByIds(ids);
+            var relationsTask = Connector.Standards.GetListOfStandardRelations(ids);
 
             return View("Attach", DefaultJsonViewData.Create(new
             {
@@ -65,8 +65,8 @@ namespace Chalkable.Api.SampleApp.Controllers
             var updateAnnAppMeta = Connector.Announcement.UpdateAnnouncementApplicationMeta(announcementApplicationId, annApp.AnnouncementType, content.Text, content.ImageUrl);
 
             var ids = defaultAbIds.Select(Guid.Parse).ToList();
-            var standardsTask = Connector.AbEndpoint.GetStandardsByIds(ids);
-            var relationsTask = Connector.AbEndpoint.GetListOfStandardRelastions(ids);
+            var standardsTask = Connector.Standards.GetStandardsByIds(ids);
+            var relationsTask = Connector.Standards.GetListOfStandardRelations(ids);
             
             return View("Attach", DefaultJsonViewData.Create(new
             {
