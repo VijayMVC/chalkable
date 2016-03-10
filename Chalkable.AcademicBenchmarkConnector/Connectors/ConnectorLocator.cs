@@ -8,6 +8,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
     public interface IConnectorLocator
     {
         IStandardsConnector StandardsConnector { get; }
+        ITopicsConnector TopicsConnector { get; }
         string ApiRoot { get; }
         AuthContext AuthContext { get; }
     }
@@ -15,6 +16,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
     public class ConnectorLocator : IConnectorLocator
     {
         public IStandardsConnector StandardsConnector { get; private set; }
+        public ITopicsConnector TopicsConnector { get; private set; }
         public string ApiRoot => Settings.AcademicBenchmarkApiUrl;
 
         private AuthContext _authContext;
@@ -31,12 +33,11 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         {
             InitConnectors();
         }
-
         private void InitConnectors()
         {
             StandardsConnector = new StandardsConnector(this);
+            TopicsConnector = new TopicsConnector(this);
         }
-        
     }
 
     public class AuthContext
