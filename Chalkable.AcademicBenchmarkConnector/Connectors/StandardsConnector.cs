@@ -16,7 +16,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         Task<IList<Document>> GetDocuments(Guid? authorityId);
         Task<IList<Subject>> GetSubjects(Guid? authorityId, Guid? documentId);
         Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, string subjectCode);
-        Task<PaginatedList<Standard>> SearchStandard(string searchQuery, int start, int count);
+        Task<PaginatedList<Standard>> SearchStandards(string searchQuery, int start, int count);
         Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, string subjectCode, string gradeLevelCode, Guid? parentId);
 
     }
@@ -40,7 +40,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             return await GetOne<StandardRelations>(url, null);
         }
 
-        public async Task<PaginatedList<Standard>> SearchStandard(string searchQuery, int start, int count)
+        public async Task<PaginatedList<Standard>> SearchStandards(string searchQuery, int start, int count)
         {
             return await GetPage<Standard>(null, null, null, searchQuery: searchQuery, start: start, limit: count);
         }
