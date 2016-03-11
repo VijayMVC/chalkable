@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using Chalkable.BusinessLogic.Services;
-using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Web.Models.CalendarsViewData;
 
 namespace Chalkable.Web.Controllers.CalendarControllers
@@ -60,5 +61,12 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             return res;
         }
 
+        public bool IsSchoolDay(DateTime? dateTime)
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            var day = dateTime ?? DateTime.Now;
+            var schoodDays = SchoolLocator.CalendarDateService.GetLastDays(Context.SchoolYearId.Value, true, day, day);
+            return schoodDays.Count > 0;
+        }
     }
 }
