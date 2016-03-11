@@ -139,7 +139,8 @@ namespace Chalkable.Web.Controllers
                 //todo: person payment
                 // MasterLocator.FundService.AppInstallPersonPayment(appinstallAction.Id, totalPrice, Context.NowSchoolTime, ChlkResources.APP_WAS_BOUGHT);   
                 var classes = classids.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList();
-                MasterLocator.UserTrackingService.BoughtApp(Context.Login, applicationId.ToString(), classes);
+                //todo: track when user buys apps
+                //MasterLocator.UserTrackingService.BoughtApp(Context.Login, applicationId.ToString(), classes);
             }
             catch (Exception)
             {

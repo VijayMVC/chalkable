@@ -40,7 +40,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             var res = SchoolLocator.AdminAnnouncementService.Edit(adminAnnouncementId, title, content, expiresDate);
             SchoolLocator.AdminAnnouncementService.Submit(adminAnnouncementId);
             SchoolLocator.AdminAnnouncementService.DeleteDrafts(Context.PersonId.Value);
-            TrackNewItemCreate(res, (s, appsCount, doscCount) => s.CreateNewAdminItem(Context.Login, res.AdminAnnouncementData.AdminName, appsCount, doscCount));
+            TrackNewItemCreate(res, (s, appsCount, doscCount) => s.CreatedNewAdminAnnouncement(Context.Login, "Admin Annoucement", 
+                res.AdminAnnouncementData.AdminName, appsCount, doscCount));
             return Json(true, 5);
         }
 

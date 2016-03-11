@@ -116,7 +116,27 @@ namespace Chalkable.UserTracking
         {
         }
 
+        public void CreatedNewAdminAnnouncement(string email, string type, string adminName, int appsAttached, int docsAttached)
+        {
+        }
+
         public void CreatedReport(string email, string reportType)
+        {
+        }
+
+        public void ViewedGradebook(string login, int classId, int gradingPeriodId)
+        {
+        }
+
+        public void ViewedClasses(string login, string location)
+        {
+        }
+
+        public void OpenedNotification(string login)
+        {
+        }
+
+        public void SentNotification(string login)
         {
         }
 
@@ -167,14 +187,6 @@ namespace Chalkable.UserTracking
         }
 
         public void SavedLessonPlanToGallery(string login, string lessonPlanTitle)
-        {
-        }
-
-        public void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached)
-        {
-        }
-
-        public void CreateNewAdminItem(string email, string adminName, int appsAttached, int docsAttached)
         {
         }
     }

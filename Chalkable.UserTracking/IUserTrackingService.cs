@@ -39,11 +39,18 @@ namespace Chalkable.UserTracking
         void UserLoggedInForFirstTime(string email, string firstName, string lastName, string schoolName, 
             DateTime? firstLoginDate, string timeZoneId, string role, bool isStudyCenterEnabled);
         void SentMessageTo(string email, string userName);
-
         void CreatedNewItem(string email, string type, string sClass, int appsAttached, int docsAttached);
-        void CreateNewLessonPlan(string email, string sClass, int appsAttached, int docsAttached);
-        void CreateNewAdminItem(string email, string adminName, int appsAttached, int docsAttached);
+        void CreatedNewAdminAnnouncement(string email, string type, string adminName, int appsAttached, int docsAttached);
         void CreatedReport(string email, string reportType);
+
+
+        void ViewedGradebook(string login, int classId, int gradingPeriodId);
+        /// <param name="location">property that indicates whether user is in "Admin Portal" or "Teacher Portal"</param>
+        void ViewedClasses(string login, string location);
+
+        void OpenedNotification(string login);
+        void SentNotification(string login);
+
         void SetDiscipline(string login, int? classId, DateTime date, string description, int studentId);
         void SetFinalGrade(string login, int classId, int studentId, int gradingPeriodId, string averageValue, bool exempt, string note);
         void SetAttendance(string login, int classId);

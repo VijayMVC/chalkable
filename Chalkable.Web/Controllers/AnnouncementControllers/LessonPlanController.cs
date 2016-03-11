@@ -63,7 +63,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             SchoolLocator.LessonPlanService.Submit(lessonPlanId);
             var lessonPlan = SchoolLocator.LessonPlanService.GetLessonPlanById(lessonPlanId);
             //TODO delete old drafts 
-            TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreateNewLessonPlan(Context.Login, lessonPlan.ClassName, appsCount, doscCount));
+            TrackNewItemCreate(ann, (s, appsCount, doscCount) => s.CreatedNewItem(Context.Login, "Lesson Plan", lessonPlan.ClassName, appsCount, doscCount));
             return Json(true, 5);
         }
 

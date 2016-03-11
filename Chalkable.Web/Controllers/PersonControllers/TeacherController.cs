@@ -56,6 +56,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
         public ActionResult TeachersStats(int schoolYearId, string filter, int? start, int? count, int? sortType)
         {
             var teachers = SchoolLocator.StaffService.GetTeachersStats(schoolYearId, filter, start, count, (TeacherSortType?) sortType);
+
+            MasterLocator.UserTrackingService.ViewedClasses(Context.Login, Context.CurrentPortal);
+
             return Json(teachers.Select(TeacherStatsViewData.Create));
         }
     }

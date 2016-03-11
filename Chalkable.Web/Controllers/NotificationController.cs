@@ -33,6 +33,7 @@ namespace Chalkable.Web.Controllers
             var groupedNotifications = personNotifications.GroupBy(x => x.Created.Date).ToList();
             var dictionary = groupedNotifications.Skip(str).Take(dayCount).ToDictionary(x => x.Key, t => t.ToList());
             var resCount = groupedNotifications.Count;
+
             return Json(new PaginatedList<NotificationsByDateViewData>(NotificationsByDateViewData.Create(dictionary), str / dayCount, dayCount, resCount));
         }
 

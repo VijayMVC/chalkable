@@ -105,7 +105,6 @@ namespace Chalkable.Web.Controllers
         {
             var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
             var gradingStandardsTask = SchoolLocator.GradingStandardService.GetGradingStandards(classId, null, false);
-            MasterLocator.UserTrackingService.UsedStandardsExplorer(Context.Login, "class explorer");
             return Json(ClassExpolorerViewData.Create(c, await gradingStandardsTask));
         }
 
@@ -131,6 +130,8 @@ namespace Chalkable.Web.Controllers
         public ActionResult ClassesStats(int schoolYearId, string filter, int? start, int? count, int? teacherId, int? sortType)
         {
             var classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYearId, start, count, filter, teacherId,(ClassSortType?) sortType);
+
+            MasterLocator.UserTrackingService.ViewedClasses(Context.Login, Context.CurrentPortal);
             return Json(classes.Select(ClassStatsViewData.Create));
         }   
     }
