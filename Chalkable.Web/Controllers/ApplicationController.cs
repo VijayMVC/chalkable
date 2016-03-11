@@ -315,26 +315,11 @@ namespace Chalkable.Web.Controllers
             return res;
         }
 
-        [AuthorizationFilter("Student", true, new[] { AppPermissionType.Announcement })]
-        public ActionResult StudentAnnouncementAppicationIds(int? schoolYear)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-            return StudentAnnouncementAppicationIds(Context.PersonId.Value, schoolYear);
-        }
-
-        [AuthorizationFilter("Teacher", true, new[] { AppPermissionType.Announcement })]
-        public ActionResult StudentAnnouncementAppicationIds(int studentId, int? schoolYear)
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult AnnouncementApplicationRecipients(int? studentId)
         {
             var app = MasterLocator.ApplicationService.GetApplicationByUrl(SchoolLocator.Context.OAuthApplication);
-            var announcementAppicationIds = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationIsdByStudent(studentId, app.Id, schoolYear);
-            return Json(announcementAppicationIds);
-        }
-
-        [AuthorizationFilter("Teacher, Student", true, new[] { AppPermissionType.Announcement })]
-        public ActionResult GetAnnouncementApplicationRecipients(int? studentId, int schoolYear)
-        {
-            var app = MasterLocator.ApplicationService.GetApplicationByUrl(SchoolLocator.Context.OAuthApplication);
-            var announcementApplicationRecipient = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationRecipients(studentId, app.Id, schoolYear);
+            var announcementApplicationRecipient = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationRecipients(studentId, app.Id);
             return Json(announcementApplicationRecipient);
         }
     }

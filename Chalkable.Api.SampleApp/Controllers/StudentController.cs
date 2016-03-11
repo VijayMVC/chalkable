@@ -9,7 +9,7 @@ namespace Chalkable.Api.SampleApp.Controllers
     {
         public async Task<ActionResult> Index()
         {
-            var announcementApplicationRecipients = await Connector.Announcement.GetAnnouncementApplicationRecipients(123, 179);
+            var announcementApplicationRecipients = await Connector.Announcement.GetAnnouncementApplicationRecipients(null);
             PrepareBaseData(null);
             return View("App");
         }
