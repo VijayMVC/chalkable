@@ -15,4 +15,11 @@ namespace Chalkable.Data.School.Model
         public string Text { get; set; }
         public string ImageUrl { get; set; }
     }
+
+    public class AnnouncementApplicationRecipient
+    {
+        public int AnnouncementAppicationId { get; set; }
+        public string ClassName { get; set; }
+        public int? StudentCount { get; set; }
+    }
 }

@@ -193,5 +193,10 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             throw new NotImplementedException();
         }
+
+        public IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, Guid appId, int schoolYear)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

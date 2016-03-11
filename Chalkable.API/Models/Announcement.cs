@@ -47,4 +47,14 @@ namespace Chalkable.API.Models
         [JsonProperty("studentannouncements")]
         public StudentAnnouncements StudentAnnouncements { get; set; }
     }
+
+    public class AnnouncementApplicationRecipient
+    {
+        [JsonProperty("announcementappicationid")]
+        public int AnnouncementAppicationId { get; set; }
+        [JsonProperty("classname")]
+        public string ClassName { get; set; }
+        [JsonProperty("studentcount")]
+        public int? StudentCount { get; set; }
+    }
 }

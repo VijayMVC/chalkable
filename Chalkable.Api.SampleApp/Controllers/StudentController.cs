@@ -7,8 +7,9 @@ namespace Chalkable.Api.SampleApp.Controllers
 {
     public class StudentController : BaseSampleAppController
     {
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+            var announcementApplicationRecipients = await Connector.Announcement.GetAnnouncementApplicationRecipients(123, 179);
             PrepareBaseData(null);
             return View("App");
         }

@@ -62,5 +62,11 @@ namespace Chalkable.API.Endpoints
             var url = "/Application/StudentAnnouncementAppicationIds.json";
             return await Connector.Get<IList<int>>($"{url}?studentId={studentId}&schoolYear={schoolYear}");
         }
+
+        public async Task<IList<AnnouncementApplicationRecipient>> GetAnnouncementApplicationRecipients(int? studentId, int schoolYear)
+        {
+            var url = "/Application/GetAnnouncementApplicationRecipients.json";
+            return await Connector.Get<IList<AnnouncementApplicationRecipient>>($"{url}?studentId={studentId}&schoolYear={schoolYear}");
+        }
     }
 }
