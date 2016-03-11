@@ -185,7 +185,12 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return res.Where(x => (x.StartDate <= fromDate && x.EndDate >= fromDate)
                                       || (x.StartDate <= toDate && x.EndDate >= toDate)).ToList();
         }
-        
+
+        public MarkingPeriod GetLastClassMarkingPeriod(int classId, DateTime? date)
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<MarkingPeriod> Add(IList<MarkingPeriod> markingPeriods)
         {
             return MarkingPeriodStorage.Add(markingPeriods);

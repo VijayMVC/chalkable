@@ -59,7 +59,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public ClassAttendanceDetails GetClassAttendance(DateTime date, int classId)
         {
-            var mp = ServiceLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
+            var mp = ServiceLocator.MarkingPeriodService.GetLastClassMarkingPeriod(classId, date);
             if (mp == null)
             {
                 //throw new ChalkableException("No marking period is scheduled on this date");
