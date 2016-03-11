@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -21,9 +22,9 @@ namespace Chalkable.API.Helpers
             return res.ToString();
         }
 
-        public static string JoinString(this IEnumerable<int> s, string separator = " ")
+        public static string JoinString<T>(this IEnumerable<T> s, string separator, Func<T, string> selector)
         {
-            return s?.Select(x => x.ToString()).JoinString(separator);
+            return s?.Select(selector).JoinString(separator);
         }
 
     }

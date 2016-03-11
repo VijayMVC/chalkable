@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Model.AcademicBenchmark
                 IsDeepest = topic.IsDeepest,
                 Level = topic.Level,
                 IsActive = topic.IsActive,
-                ParentId = topic.Parent?.Id,
+                ParentId = topic.Parent?.Id
             };
         }
     }

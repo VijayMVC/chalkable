@@ -20,6 +20,13 @@ namespace Chalkable.Web.Controllers
             return Json(academicBenchmarkStandards.Select(StandardViewData.Create));
         }
 
+        public async Task<ActionResult> TopicsByIds(GuidList topicsIds)
+        {
+            MasterLocator = ServiceLocatorFactory.CreateMasterSysAdmin();
+            var topics = await MasterLocator.AcademicBenchmarkService.GetTopicsByIds(topicsIds);
+            return Json(topics.Select(TopicViewData.Create));
+        }
+
         public async Task<ActionResult> ListOfStandardRelationsByIds(GuidList standardsIds)
         {
             MasterLocator = ServiceLocatorFactory.CreateMasterSysAdmin();

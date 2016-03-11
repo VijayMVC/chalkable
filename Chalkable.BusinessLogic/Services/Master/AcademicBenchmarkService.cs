@@ -26,6 +26,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         Task<PaginatedList<Standard>> SearchStandards(string searchQuery, int start = 0, int count = int.MaxValue);
         Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, string subjectCode, string gradeLevelCode, Guid? parentId);
         Task<PaginatedList<Topic>> GetTopics(string subjectCode, string gradeLevel, Guid? parentId, string searchQuery, int start = 0, int count = int.MaxValue);
+        Task<IList<Topic>> GetTopicsByIds(IList<Guid> topicsIds);
     }
 
     public class AcademicBenchmarkService : MasterServiceBase, IAcademicBenchmarkService
@@ -94,6 +95,13 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             var topics = await _abConnectorLocator.TopicsConnector.GetTopics(subjectCode, gradeLevel, parentId, searchQuery, start, count);
             return topics.Transform(Topic.Create);
+        }
+
+        public async Task<IList<Topic>> GetTopicsByIds(IList<Guid> topicsIds)
+        {
+            var tasks = topicsIds.Select(x => _abConnectorLocator.TopicsConnector.GetTopic(x));
+            var topics = await Task.WhenAll(tasks);
+            return topics.Select(Topic.Create).Where(x => x != null).ToList();
         }
     }
 }

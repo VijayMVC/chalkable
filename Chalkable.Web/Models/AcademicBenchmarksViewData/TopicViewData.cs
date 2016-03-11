@@ -21,7 +21,7 @@ namespace Chalkable.Web.Models.AcademicBenchmarksViewData
                 IsDeepest = topic.IsDeepest,
                 Level = topic.Level,
                 IsActive = topic.IsActive,
-                ParentId = topic.ParentId,
+                ParentId = topic.ParentId
             };
         }
     }

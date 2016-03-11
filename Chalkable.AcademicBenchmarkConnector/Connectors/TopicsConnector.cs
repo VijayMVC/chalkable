@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Specialized;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 using Chalkable.AcademicBenchmarkConnector.Models;
 using Chalkable.Common;
@@ -10,6 +11,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
     {
         Task<PaginatedList<Topic>> GetTopics(string subjectCode, string gradeLevel, Guid? parentId, string searchQuery, int start, int count);
         Task<TopicStandards> GetTopicStandards(Guid topicId);
+        Task<Topic> GetTopic(Guid id);
     }
 
     public class TopicsConnector : ConnectorBase, ITopicsConnector
@@ -18,6 +20,11 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         {
         }
 
+        public async Task<Topic> GetTopic(Guid id)
+        {
+            var responce = await GetOne<BaseResource<Topic>>($"topics/{id}", null);
+            return responce?.Data;
+        }
 
         public async Task<PaginatedList<Topic>> GetTopics(string subjectCode, string gradeLevel, Guid? parentId, string searchQuery, int start, int count)
         {

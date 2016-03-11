@@ -63,12 +63,14 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         }
         protected async Task<PaginatedList<TModel>> GetPage<TModel>(string relativeUrl, NameValueCollection requestParams, int offset = 0, int limit = int.MaxValue)
         {
+            requestParams = requestParams ?? new NameValueCollection();
             requestParams.Add("offset", offset.ToString());
             requestParams.Add("limit", limit.ToString());
 
             var res = await CallAsync<PaginatedResponse<TModel>>(relativeUrl, requestParams);
+
             return res != null
-                ? new PaginatedList<TModel>(res.Resources, res.Offset/res.Limit, res.Limit, res.Count)
+                ? new PaginatedList<TModel>(res.Resources, res.Offset/(res.Limit == 0 ? 1 : res.Limit), (res.Limit == 0 ? 1 : res.Limit), res.Count)
                 : new PaginatedList<TModel>(new List<TModel>(), offset/limit, limit);
 
         }
@@ -87,7 +89,8 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
                 var dataTask = client.DownloadDataTaskAsync(url);
                 stream = new MemoryStream(await dataTask);
                 reader = new StreamReader(stream);
-                var response = JsonConvert.DeserializeObject<TResponse>(reader.ReadToEnd());
+                var str = reader.ReadToEnd();
+                var response = JsonConvert.DeserializeObject<TResponse>(str);
 
                 var time = DateTime.Now - startTime;
                 var timeString = $"{time.Minutes}:{time.Seconds}.{time.Milliseconds}";
@@ -98,11 +101,11 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             }
             catch (WebException ex)
             {
-                return HandleWebExceprion<TResponse>(ex);
+                return HandleWebException<TResponse>(ex);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                throw ex;
+                throw e;
             }
             finally
             {
@@ -120,7 +123,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
                     throw new ChalkableABUnauthorizedException(status.ErrorMessage, status.InformationMessage);
             }
         }
-        private T HandleWebExceprion<T>(WebException ex)
+        private T HandleWebException<T>(WebException ex)
         {
             var reader = new StreamReader(ex.Response.GetResponseStream());
             var msg = reader.ReadToEnd();

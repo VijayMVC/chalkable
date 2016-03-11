@@ -16,15 +16,22 @@ namespace Chalkable.API.Endpoints
         public async Task<IList<Standard>> GetStandardsByIds(IList<Guid> standardsIds)
         {
             var url = "/AcademicBenchmark/StandardsByIds.json";
-            var strIds = standardsIds.Select(x => x.ToString()).JoinString(",");
+            var strIds = standardsIds.JoinString(",", x => x.ToString());
             return await Connector.Get<IList<Standard>>($"{url}?standardsIds={strIds}");
         }
 
         public async Task<IList<StandardRelations>> GetListOfStandardRelations(IList<Guid> standardsIds)
         {
             var url = "/AcademicBenchmark/ListOfStandardRelationsByIds.json";
-            var strIds = standardsIds.Select(x => x.ToString()).JoinString(",");
+            var strIds = standardsIds.JoinString(",", x => x.ToString());
             return await Connector.Get<IList<StandardRelations>>($"{url}?standardsIds={strIds}");
+        }
+
+        public async Task<IList<Topic>> GetTopicsByIds(IList<Guid> topicsIds)
+        {
+            var url = "/AcademicBenchmark/TopicsByIds.json";
+            var strIds = topicsIds.JoinString(",", x => x.ToString());
+            return await Connector.Get<IList<Topic>>($"{url}?topicsIds={strIds}");
         }
     }
 }
