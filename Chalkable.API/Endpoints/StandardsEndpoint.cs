@@ -7,9 +7,9 @@ using Chalkable.API.Models.AcademicBenchmark;
 
 namespace Chalkable.API.Endpoints
 {
-    public class AcademicBenchmarkEndpoint : Base
+    public class StandardsEndpoint : Base
     {
-        public AcademicBenchmarkEndpoint(IConnector connector) : base(connector)
+        public StandardsEndpoint(IConnector connector) : base(connector)
         {
         }
         //TODO: remove Oauth from these endpoints  
@@ -20,7 +20,7 @@ namespace Chalkable.API.Endpoints
             return await Connector.Get<IList<Standard>>($"{url}?standardsIds={strIds}");
         }
 
-        public async Task<IList<StandardRelations>> GetListOfStandardRelastions(IList<Guid> standardsIds)
+        public async Task<IList<StandardRelations>> GetListOfStandardRelations(IList<Guid> standardsIds)
         {
             var url = "/AcademicBenchmark/ListOfStandardRelationsByIds.json";
             var strIds = standardsIds.Select(x => x.ToString()).JoinString(",");

@@ -15,9 +15,9 @@ namespace Chalkable.API
     {
         public PersonEndpoint Person => new PersonEndpoint(this);
         public AnnouncementEndpoint Announcement => new AnnouncementEndpoint(this);
-        public StudyCenterEndpoint StudeCenterEndpoint => new StudyCenterEndpoint(this);
-        public GradingEndpoint GradingEndpoint => new GradingEndpoint(this);
-        public AcademicBenchmarkEndpoint AbEndpoint => new AcademicBenchmarkEndpoint(this);
+        public StudyCenterEndpoint StudyCenter => new StudyCenterEndpoint(this);
+        public GradingEndpoint Grading => new GradingEndpoint(this);
+        public StandardsEndpoint Standards => new StandardsEndpoint(this);
         
         public async Task<T> Get<T>(string endpoint)
         {

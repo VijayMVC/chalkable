@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -32,6 +33,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void BanUnBanApplication(Guid applicationId, bool ban);
         IList<ApplicationBanHistory> GetApplicationBanHistory(Guid applicationId);
         IList<int> GetAnnouncementApplicationIsdByStudent(int studentId, Guid appId, int? schoolYear);
+        IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, Guid appId, int schoolYear);
     }
 
     public class ApplicationSchoolService : SchoolServiceBase, IApplicationSchoolService
@@ -279,6 +281,22 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 return new ApplicationDataAccess(uow).GetAnnouncementApplicationIdsByStudent(studentId, appId, schoolYear);
             }
+        }
+
+        public IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, Guid appId, int schoolYear)
+        {
+            if (Context.Role == CoreRoles.STUDENT_ROLE)
+            {
+                if (studentId != null)
+                {
+                    if (Context.PersonId != studentId)
+                        return new List<AnnouncementApplicationRecipient>();
+                }
+                else
+                    studentId = Context.PersonId;
+            }
+            var teacherId = Context.Role == CoreRoles.TEACHER_ROLE ? Context.PersonId : null;
+            return DoRead(u => new AnnouncementApplicationDataAccess(u).GetAnnouncementApplicationRecipients(studentId, teacherId, appId, schoolYear));
         }
     }
 }

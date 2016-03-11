@@ -38,15 +38,17 @@ namespace Chalkable.Api.SampleApp.Controllers
             PrepareBaseData(announcementApplicationId);
             var annApp = await Connector.Announcement.GetAnnouncementApplicationById(announcementApplicationId);
             var annTask = Connector.Announcement.GetRead(annApp.AnnouncementId, annApp.AnnouncementType);
-           // var announcementAppIdsTask = Connector.Announcement.StudentAnnouncementAppicationIds(3787, 179);
+            // var announcementAppIdsTask = Connector.Announcement.StudentAnnouncementAppicationIds(3787, 179);
+            var announcementApplicationRecipients = Connector.Announcement.GetAnnouncementApplicationRecipients(3787, 179);
 
             var ids = defaultAbIds.Select(Guid.Parse).ToList();
-            var standardsTask = Connector.AbEndpoint.GetStandardsByIds(ids);
-            var relationsTask = Connector.AbEndpoint.GetListOfStandardRelastions(ids);
+            var standardsTask = Connector.Standards.GetStandardsByIds(ids);
+            var relationsTask = Connector.Standards.GetListOfStandardRelations(ids);
 
             return View("Attach", DefaultJsonViewData.Create(new
             {
-               // AnnouncementApplicationIds = await announcementAppIdsTask,
+                // AnnouncementApplicationIds = await announcementAppIdsTask,
+                ActionInvokernnouncementApplicationRecipients = await announcementApplicationRecipients,
                 Announcement = await annTask,
                 Standards = await standardsTask,
                 Relations = await relationsTask,
@@ -61,24 +63,23 @@ namespace Chalkable.Api.SampleApp.Controllers
             if(content == null)
                 throw new ChalkableApiException("Content not found");
             PrepareBaseData(announcementApplicationId);
-            var annApp = await Connector.Announcement.GetAnnouncementApplicationById(announcementApplicationId);
-            var updateAnnAppMeta = Connector.Announcement.UpdateAnnouncementApplicationMeta(announcementApplicationId, annApp.AnnouncementType, content.Text, content.ImageUrl);
+            var updateAnnAppMeta = Connector.Announcement.UpdateAnnouncementApplicationMeta(announcementApplicationId, content.Text, content.ImageUrl);
 
             var ids = defaultAbIds.Select(Guid.Parse).ToList();
-            var standardsTask = Connector.AbEndpoint.GetStandardsByIds(ids);
-            var relationsTask = Connector.AbEndpoint.GetListOfStandardRelastions(ids);
-            
+            var standardsTask = Connector.Standards.GetStandardsByIds(ids);
+            var relationsTask = Connector.Standards.GetListOfStandardRelations(ids);
+
+           
+
+
             return View("Attach", DefaultJsonViewData.Create(new
             {
                 Content = content,
                 Standards = await standardsTask,
                 Relations = await relationsTask,
-                UpdatedAnnAppMeate = await updateAnnAppMeta
+                UpdatedAnnAppMeate = await updateAnnAppMeta,
             }));
         }
-
-
-
 
         public ActionResult ViewMode(int announcementApplicationId)
         {
