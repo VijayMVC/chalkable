@@ -56,9 +56,11 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher, DistricAdmin")]
-        public async Task<ActionResult> SearchStandards(string searchQuery, int start, int count)
+        public async Task<ActionResult> SearchStandards(string searchQuery, int? start, int? count)
         {
-            var standards = await MasterLocator.AcademicBenchmarkService.SearchStandards(searchQuery, start, count);
+            start = start ?? 0;
+            count = count ?? 10;
+            var standards = await MasterLocator.AcademicBenchmarkService.SearchStandards(searchQuery, start.Value, count.Value);
             return Json(standards.Select(StandardViewData.Create));
         }
 
@@ -66,18 +68,25 @@ namespace Chalkable.Web.Controllers
         public async Task<ActionResult> Standards(Guid? authorityId, Guid? documentId, string subjectCode,
             string gradeLevelCode, Guid? parentId)
         {
-            var standards = await MasterLocator.AcademicBenchmarkService.GetStandards(authorityId, documentId, subjectCode, gradeLevelCode,
-                parentId);
+            var standards = await MasterLocator.AcademicBenchmarkService.GetStandards(authorityId, documentId, subjectCode, gradeLevelCode, parentId);
             return Json(standards.Select(StandardViewData.Create));
         }
 
         [AuthorizationFilter("Teacher, DistricAdmin")]
-        public async Task<ActionResult> Topics(Guid? subject, string gradeLevel, Guid? parentId, string searchQuery, int start, 
-            int count)
+        public async Task<ActionResult> Topics(string subjectCode, string gradeLevel, Guid? parentId)
         {
-            var topics = await MasterLocator.AcademicBenchmarkService.GetTopics(subject, gradeLevel, parentId, searchQuery,
-                start, count);
-            return Json(topics.Transform(TopicViewData.Create));
+            var topics = await MasterLocator.AcademicBenchmarkService.GetTopics(subjectCode, gradeLevel, parentId, null);
+            return Json(topics.Select(TopicViewData.Create).ToList());
         }
+
+
+        [AuthorizationFilter("Teacher, DistricAdmin")]
+        public async Task<ActionResult> SearchTopics(string searchQuery, int? start, int? count)
+        {
+            start = start ?? 0;
+            count = count ?? int.MaxValue;
+            var topics = await MasterLocator.AcademicBenchmarkService.GetTopics(null, null, null, searchQuery, start.Value, count.Value);
+            return Json(topics.Transform(TopicViewData.Create));
+        } 
     }
 }

@@ -8,7 +8,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
 {
     public interface ITopicsConnector
     {
-        Task<PaginatedList<Topic>> GetTopics(Guid? subject, string gradeLevel, Guid? parentId, string searchQuery, int start, int count);
+        Task<PaginatedList<Topic>> GetTopics(string subjectCode, string gradeLevel, Guid? parentId, string searchQuery, int start, int count);
         Task<TopicStandards> GetTopicStandards(Guid topicId);
     }
 
@@ -19,11 +19,11 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         }
 
 
-        public async Task<PaginatedList<Topic>> GetTopics(Guid? subject, string gradeLevel, Guid? parentId, string searchQuery, int start, int count)
+        public async Task<PaginatedList<Topic>> GetTopics(string subjectCode, string gradeLevel, Guid? parentId, string searchQuery, int start, int count)
         {
             var nvc = new NameValueCollection();
-            if(subject.HasValue)
-                nvc.Add("subject", subject.Value.ToString());
+            if(!string.IsNullOrWhiteSpace(subjectCode))
+                nvc.Add("subject", subjectCode);
             if(!string.IsNullOrWhiteSpace(gradeLevel))
                 nvc.Add("grade", gradeLevel);
             if(parentId.HasValue)

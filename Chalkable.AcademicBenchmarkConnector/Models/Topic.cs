@@ -8,8 +8,6 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
     {
         [JsonProperty("guid")]
         public Guid Id { get; set; }
-        [JsonProperty("number")]
-        public string Number { get; set; }
         [JsonProperty("descr")]
         public string Description { get; set; }
         [JsonProperty("deepest")]
@@ -19,13 +17,9 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
         [JsonProperty("status")]
         public string Status { get; set; }
         [JsonProperty("parent")]
-        public Parent Parent { get; set; }
+        public GuidIdDto Parent { get; set; }
         public bool IsDeepest => Deepest == "Y";
         public bool IsActive => Status == "Active";
-        [JsonProperty("authority")]
-        public Authority Authority { get; set; }
-        [JsonProperty("document")]
-        public Document Document { get; set; }
     }
 
     public class TopicStandards
