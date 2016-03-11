@@ -51,22 +51,10 @@ namespace Chalkable.API.Endpoints
             return await Connector.Post<bool>(url, nvc);
         }
 
-        public async Task<IList<int>> StudentAnnouncementAppicationIds(int? schoolYear)
+        public async Task<IList<AnnouncementApplicationRecipient>> GetAnnouncementApplicationRecipients(int? studentId)
         {
-            var url = "/Application/StudentAnnouncementAppicationIds.json";
-            return await Connector.Get<IList<int>>($"{url}?schoolYear={schoolYear}");
-        }
-
-        public async Task<IList<int>> StudentAnnouncementAppicationIds(int studentId, int? schoolYear)
-        {
-            var url = "/Application/StudentAnnouncementAppicationIds.json";
-            return await Connector.Get<IList<int>>($"{url}?studentId={studentId}&schoolYear={schoolYear}");
-        }
-
-        public async Task<IList<AnnouncementApplicationRecipient>> GetAnnouncementApplicationRecipients(int? studentId, int schoolYear)
-        {
-            var url = "/Application/GetAnnouncementApplicationRecipients.json";
-            return await Connector.Get<IList<AnnouncementApplicationRecipient>>($"{url}?studentId={studentId}&schoolYear={schoolYear}");
+            var url = "/Application/AnnouncementApplicationRecipients.json";
+            return await Connector.Get<IList<AnnouncementApplicationRecipient>>($"{url}?studentId={studentId}");
         }
     }
 }

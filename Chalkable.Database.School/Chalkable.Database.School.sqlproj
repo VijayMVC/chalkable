@@ -320,7 +320,6 @@
     <Build Include="Stored Procedures\Announcements Procedures\spGetLessonPlans.sql" />
     <Build Include="Stored Procedures\Announcements Procedures\spGetAdminAnnouncements.sql" />
     <Build Include="Stored Procedures\Announcements Procedures\spInternalSortAdminOrLp.sql" />
-    <Build Include="Stored Procedures\spGetAnnouncementApplicationIdsByStudent.sql" />
     <Build Include="Stored Procedures\spGetAnnouncementApplicationRecipients.sql" />
   </ItemGroup>
   <ItemGroup>

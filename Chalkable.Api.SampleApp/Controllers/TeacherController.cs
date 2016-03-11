@@ -39,7 +39,7 @@ namespace Chalkable.Api.SampleApp.Controllers
             var annApp = await Connector.Announcement.GetAnnouncementApplicationById(announcementApplicationId);
             var annTask = Connector.Announcement.GetRead(annApp.AnnouncementId, annApp.AnnouncementType);
             // var announcementAppIdsTask = Connector.Announcement.StudentAnnouncementAppicationIds(3787, 179);
-            var announcementApplicationRecipients = Connector.Announcement.GetAnnouncementApplicationRecipients(3787, 179);
+            var announcementApplicationRecipients = Connector.Announcement.GetAnnouncementApplicationRecipients(null);
 
             var ids = defaultAbIds.Select(Guid.Parse).ToList();
             var standardsTask = Connector.Standards.GetStandardsByIds(ids);
@@ -48,7 +48,7 @@ namespace Chalkable.Api.SampleApp.Controllers
             return View("Attach", DefaultJsonViewData.Create(new
             {
                 // AnnouncementApplicationIds = await announcementAppIdsTask,
-                ActionInvokernnouncementApplicationRecipients = await announcementApplicationRecipients,
+                AnnouncementApplicationRecipients = await announcementApplicationRecipients,
                 Announcement = await annTask,
                 Standards = await standardsTask,
                 Relations = await relationsTask,
