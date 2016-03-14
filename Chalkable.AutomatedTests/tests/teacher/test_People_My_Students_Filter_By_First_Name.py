@@ -3,9 +3,11 @@ from base_auth_test import *
 class TestFeed(BaseAuthedTestCase):
 
     def test_people_student_sorting_by_first_name(self):
-        self.do_student_sorting_firstname(0)    
+        self.do_student_sorting_firstname(0)
+        self.do_student_sorting_firstname(10)
+        self.do_student_sorting_firstname(20)         
 
-    def do_student_sorting_firstname(self, start, count = 1000):
+    def do_student_sorting_firstname(self, start, count = 999):
         empty_list =[]
         empty_list2 =[]
         
