@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <versionedSettings rootId="Chalkable_2" enabled="true" showChanges="false" buildSettings="PREFER_VCS" />
+  <issueTrackers>
+    <trackerConnection key="youtrack1" type="youtrack">
+      <param name="secure:password" value="zxx117f05ef10e46a2b6b9a18c2e589199c" />
+      <param name="name" value="Chalkable" />
+      <param name="host" value="https://emp.myjetbrains.com/youtrack" />
+      <param name="idPrefix" value="CHLK" />
+      <param name="username" value="viatsyshyn" />
+    </trackerConnection>
+  </issueTrackers>
+</settings>
+

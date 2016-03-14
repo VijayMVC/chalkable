@@ -1,0 +1,92 @@
+mixin RolesGroupButtonsForMsg(isInbox, keyword, role, classOnly, year)
+    -var isAllPressed = (!role || role == '') && !classOnly
+    +ActionButton('message', 'page', true, isInbox, '', keyword, false, year)(class= isAllPressed ? 'pressed' : '') All
+    +ActionButton('message', 'page', true, isInbox, 'parent', keyword, false, year)(class= role == 'parent' ? 'pressed' : '') Parent
+    +ActionButton('message', 'page', true, isInbox, 'student', keyword, false, year)(class= role == 'student' ? 'pressed' : '') Student
+    +ActionButton('message', 'page', true, isInbox, 'teacher', keyword, false, year)(class= role == 'teacher' ? 'pressed' : '') Teacher
+    +ActionButton('message', 'page', true, isInbox, 'districtadmin', keyword, false, year)(
+    class= role == 'districtadmin' ? 'pressed' : ''
+    ) Admin
+    if !isInbox && !self.getUserRole().isStudent()
+        +ActionButton('message', 'page', true, isInbox, '', keyword, true, year)(class= classOnly ? 'pressed' : '') Class
+
+
+items = self.getMessages().getItems()
+-var selectedYear = self.getYear()
+h2.page-title Messages
++ActionForm('message', 'do').message-filter-form
+    input(name="role", type="hidden", value=self.getRole())
+    input(name="classOnly", type="hidden", value=self.isClassOnly().toString())
+    input(name="inbox", type="hidden", value=self.isInbox().toString())
+
+    .right.wrapper
+        input(name="keyword", type="text", value=self.getKeyword(), placeholder="Filter list...")#keyword.search-input
+        .search-glass
+
+    .right.year-select-container
+        +Select('year').year-select
+            +Option(null, 'All Academic Years', !selectedYear)
+            each acadYear in self.getYears()
+                +Option(acadYear, acadYear, acadYear == selectedYear)
+.action-bar
+    .items
+        +ActionLink('message', 'page', true, true, self.getRole(), self.getKeyword())(class=self.isInbox() ? "pressed" : "") Inbox
+        +ActionLink('message', 'page', true, false, self.getRole(), self.getKeyword())(class=self.isInbox() ? "" : "pressed") Sent
+        if !self.isDisabledMessaging()
+            +ActionLink('message', 'sendPage', self.isInbox())#new-message-link New message
+
++ActionForm('message', 'do').message-action-form
+    input(name="role", type="hidden", value=self.getRole())
+    input(name="classOnly", type="hidden", value=self.isClassOnly().toString())
+    input(name="year", type="hidden", value=selectedYear)
+    input(name="inbox", type="hidden", value=self.isInbox().toString())
+
+    DIV(class=items.length ? '' : 'no-messages').grid-container
+        input(name="selectedIds", type="hidden")#selectedIds
+        +Hidden('start', self.getStart())
+        +Grid('message', 'page', self.getMessages(), [true, self.isInbox(), self.getRole(), self.getKeyword(), self.isClassOnly(), selectedYear])
+            +GridBody()
+                .buttons
+                    .left
+                        +Checkbox('checkboxall', false)#checkboxall
+                        +Button()(type="submit", , name="submitType", value="delete").plain-button.negative-button#delete-button Delete
+                    if self.isInbox()
+                        .left
+                            span Mark:
+                            +Button()(type="submit", name="submitType", value="markAsRead").plain-button#mark-read-button Read
+                            +Button()(type="submit", name="submitType", value="markAsUnread").plain-button#mark-unread-button Unread
+                    .right
+                        .buttons-group
+                            +RolesGroupButtonsForMsg(self.isInbox(), self.getKeyword(), self.getRole(), self.isClassOnly(), selectedYear)
+                    .clear-fix
+
+                if !items.length
+                    .no-messages-text=self.getNoMessagesText()
+                each item in items
+                    +GridRow()
+                        div(
+                            class= item.isRead() ? "read" : "unread",
+                            data-can-read = true
+                        ).item-container.table
+
+                            .chk
+                                +Checkbox('ch',false)(data-id=item.getId().valueOf())
+                            .av
+                                .avatar-container.no-overflow
+                                    if self.isInbox()
+                                        +PersonImg(item.getSender(), 47)
+                                    else
+                                        if item.getRecipientClass()
+                                            +ClassImg(item.getRecipientClass(), 45, 80)
+                                        else
+                                            +PersonImg(item.getRecipientPerson(), 47)
+
+                            +ActionLink('message', 'viewPage', item.getId(), self.isInbox()).msg-info
+                                .table.details
+                                    .title
+                                        if self.isInbox()
+                                            =item.getSender().getFirstName() + " " + item.getSender().getLastName()
+                                        else
+                                            =item.getRecipientClass() ? item.getRecipientClass().getClassNumber() + " " + item.getRecipientClass().getName() : item.getRecipientPerson().getFirstName()+ " "  + item.getRecipientPerson().getLastName()
+                                        .sent= item.getSent().toUSADateTimeFormat()
+                                    .content= item.getShortSubject() + ' - ' + item.getShortBody()
