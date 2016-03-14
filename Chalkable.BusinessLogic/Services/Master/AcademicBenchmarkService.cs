@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Chalkable.AcademicBenchmarkConnector.Connectors;
 using Chalkable.Common;
-
+using Chalkable.Data.School.Model;
 using Topic = Chalkable.BusinessLogic.Model.AcademicBenchmark.Topic;
 using Subject = Chalkable.BusinessLogic.Model.AcademicBenchmark.Subject;
 using Authority = Chalkable.BusinessLogic.Model.AcademicBenchmark.Authority;
@@ -12,6 +12,7 @@ using Document = Chalkable.BusinessLogic.Model.AcademicBenchmark.Document;
 using GradeLevel = Chalkable.BusinessLogic.Model.AcademicBenchmark.GradeLevel;
 using Standard = Chalkable.BusinessLogic.Model.AcademicBenchmark.Standard;
 using StandardRelations = Chalkable.BusinessLogic.Model.AcademicBenchmark.StandardRelations;
+using SubjectDocument = Chalkable.BusinessLogic.Model.AcademicBenchmark.SubjectDocument;
 
 namespace Chalkable.BusinessLogic.Services.Master
 {
@@ -27,6 +28,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId, bool firstLevelOnly = false);
         Task<PaginatedList<Topic>> GetTopics(string subjectCode, string gradeLevel, Guid? parentId, string searchQuery, bool firstLevelOnly = false, int start = 0, int count = int.MaxValue);
         Task<IList<Topic>> GetTopicsByIds(IList<Guid> topicsIds);
+        Task<IList<SubjectDocument>> GetSubjectDocuments(Guid? authorityId, Guid? documentId);
     }
 
     public class AcademicBenchmarkService : MasterServiceBase, IAcademicBenchmarkService
@@ -105,6 +107,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             var tasks = topicsIds.Select(x => _abConnectorLocator.TopicsConnector.GetTopic(x));
             var topics = await Task.WhenAll(tasks);
             return topics.Select(Topic.Create).Where(x => x != null).ToList();
+        }
+
+        public async Task<IList<SubjectDocument>> GetSubjectDocuments(Guid? authorityId, Guid? documentId)
+        {
+            var subDocs = await _abConnectorLocator.StandardsConnector.GetSubjectDocuments(authorityId, documentId);
+            return subDocs.Select(SubjectDocument.Create).ToList();
         }
     }
 }

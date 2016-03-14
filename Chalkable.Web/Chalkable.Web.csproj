@@ -354,6 +354,7 @@
     <Compile Include="Models\AcademicBenchmarksViewData\GradeLevelViewData.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\StandardRelationsViewData.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\StandardViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\SubjectDocumentViewData.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\SubjectViewData.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\TopicViewData.cs" />
     <Compile Include="Models\AddressViewData.cs" />

@@ -93,6 +93,13 @@ namespace Chalkable.Web.Controllers
             count = count ?? int.MaxValue;
             var topics = await MasterLocator.AcademicBenchmarkService.GetTopics(null, null, null, searchQuery, false, start.Value, count.Value);
             return Json(topics.Transform(TopicViewData.Create));
-        } 
+        }
+
+        [AuthorizationFilter("Teacher, DistricAdmin")]
+        public async Task<ActionResult> GetSubjectDocuments(Guid? authorityId, Guid? documentId)
+        {
+            var subDocs = await MasterLocator.AcademicBenchmarkService.GetSubjectDocuments(authorityId, documentId);
+            return Json(subDocs.Select(SubjectDocumentViewData.Create));
+        }
     }
 }
