@@ -17,12 +17,17 @@ NAMESPACE('chlk.controls', function () {
     }
 
     function isApiSupported_(sisApiVersion, linkApiVersion){
-        var supported = true;
+        var supported = false;
         var linkApiVersionArr = getParsedApiVersion_(linkApiVersion);
         var sisApiVersionArr = getParsedApiVersion_(sisApiVersion);
         sisApiVersionArr.forEach(function(item, i){
-            if(supported && linkApiVersionArr[i] > item)
+            if(linkApiVersionArr[i] < item) {
+                supported = true;
+                return;
+            } else if(linkApiVersionArr[i] > item) {
                 supported = false;
+                return;
+            }
         });
 
         return supported;

@@ -47,6 +47,8 @@ namespace Chalkable.Api.SampleApp.Controllers
             var standardsTask = Connector.Standards.GetStandardsByIds(ids);
             var relationsTask = Connector.Standards.GetListOfStandardRelations(ids);
 
+            var isSchoolDay = await Connector.Calendar.IsSchoolDay(null);
+
             return View("Attach", DefaultJsonViewData.Create(new
             {
                 // AnnouncementApplicationIds = await announcementAppIdsTask,
@@ -55,6 +57,7 @@ namespace Chalkable.Api.SampleApp.Controllers
                 Announcement = await annTask,
                 Standards = await standardsTask,
                 Relations = await relationsTask,
+                IsSchoolDay = isSchoolDay,
             }));
         }
 

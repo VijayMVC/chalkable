@@ -53,10 +53,9 @@ namespace Chalkable.Web.Controllers
             var currentDate = (date ?? SchoolLocator.Context.NowSchoolYearTime).Date;
             var disciplines = SchoolLocator.DisciplineService.GetClassDisciplineDetails(classId, currentDate);
             IList<DisciplineView> res = new List<DisciplineView>();
-            if (disciplines != null)
-            {
+            if (disciplines != null)         
                 res = DisciplineView.Create(disciplines, Context.PersonId ?? 0).ToList();   
-            }
+            
             if (!byLastName.HasValue || byLastName.Value)
                 res = res.OrderBy(x => x.Student.LastName).ThenBy(x => x.Student.FirstName).ToList();
             else

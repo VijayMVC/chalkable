@@ -72,7 +72,7 @@ NAMESPACE('chlk.controllers', function (){
             if(postData_)
                 return this.getApplications_(
                     postData_.getStart(),
-                    postData_.getDeevloperId(),
+                    postData_.getDeveloperId(),
                     postData_.getState(),
                     postData_.getFilter()
                 );
