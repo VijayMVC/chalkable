@@ -320,7 +320,8 @@
     <Build Include="Stored Procedures\Announcements Procedures\spGetLessonPlans.sql" />
     <Build Include="Stored Procedures\Announcements Procedures\spGetAdminAnnouncements.sql" />
     <Build Include="Stored Procedures\Announcements Procedures\spInternalSortAdminOrLp.sql" />
-    <Build Include="Stored Procedures\spGetAnnouncementApplicationIdsByStudent.sql" />
+    <Build Include="Stored Procedures\spGetAnnouncementApplicationRecipients.sql" />
+    <Build Include="Stored Procedures\spGetLastClassMarkingPeriod.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />

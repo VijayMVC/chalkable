@@ -21,6 +21,8 @@ namespace Chalkable.Api.SampleApp.Controllers
             , IEnumerable<StandardInfo> standards
             , string contentId)
         {
+            await Task.Delay(0);
+
             if (mode == Settings.SYSADMIN_MODE)
             {
                 CurrentUser = SchoolPerson.SYSADMIN;

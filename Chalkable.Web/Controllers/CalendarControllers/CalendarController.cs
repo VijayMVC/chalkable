@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services;
-using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Data.Common.Enums;
+using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models.CalendarsViewData;
 
 namespace Chalkable.Web.Controllers.CalendarControllers
@@ -60,5 +63,13 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             return res;
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement})]
+        public ActionResult IsSchoolDay(DateTime? dateTime)
+        {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+            var day = (dateTime ?? DateTime.Now).Date;
+            var schoodDays = SchoolLocator.CalendarDateService.GetLastDays(Context.SchoolYearId.Value, true, day, day);
+            return Json(schoodDays.Count > 0);
+        }
     }
 }

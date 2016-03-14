@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -31,7 +32,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         void BanUnBanApplication(Guid applicationId, bool ban);
         IList<ApplicationBanHistory> GetApplicationBanHistory(Guid applicationId);
-        IList<int> GetAnnouncementApplicationIsdByStudent(int studentId, Guid appId, int? schoolYear);
+        IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, Guid appId);
     }
 
     public class ApplicationSchoolService : SchoolServiceBase, IApplicationSchoolService
@@ -268,17 +269,21 @@ namespace Chalkable.BusinessLogic.Services.School
             return DoRead(u => new ApplicationBanHistoryDataAccess(u).GetApplicationBanHistory(applicationId));
         }
 
-        public IList<int> GetAnnouncementApplicationIsdByStudent(int studentId, Guid appId, int? schoolYear)
+        public IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, Guid appId)
         {
-            Trace.Assert(Context.PersonId.HasValue);
-
-            if (Context.RoleId == CoreRoles.STUDENT_ROLE.Id && Context.PersonId != studentId)
-                    throw new ChalkableException("Incorrect student id!");
-
-            using (var uow = Read())
+            if (Context.Role == CoreRoles.STUDENT_ROLE)
             {
-                return new ApplicationDataAccess(uow).GetAnnouncementApplicationIdsByStudent(studentId, appId, schoolYear);
+                if (studentId != null)
+                {
+                    if (Context.PersonId != studentId)
+                        return new List<AnnouncementApplicationRecipient>();
+                }
+                else
+                    studentId = Context.PersonId;
             }
+            var teacherId = Context.Role == CoreRoles.TEACHER_ROLE ? Context.PersonId : null;
+            var schoolYear = Context.SchoolYearId.Value;
+            return DoRead(u => new AnnouncementApplicationDataAccess(u).GetAnnouncementApplicationRecipients(studentId, teacherId, appId, schoolYear));
         }
     }
 }

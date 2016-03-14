@@ -7,8 +7,9 @@ namespace Chalkable.Api.SampleApp.Controllers
 {
     public class StudentController : BaseSampleAppController
     {
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
+            var announcementApplicationRecipients = await Connector.Announcement.GetAnnouncementApplicationRecipients(null);
             PrepareBaseData(null);
             return View("App");
         }
@@ -19,7 +20,7 @@ namespace Chalkable.Api.SampleApp.Controllers
 
             const string defaultScore = "60";
 
-            await  Connector.GradingEndpoint.SetAutoGrade(announcementApplicationId, CurrentUser.Id, defaultScore);
+            await  Connector.Grading.SetAutoGrade(announcementApplicationId, CurrentUser.Id, defaultScore);
             
             return View("ViewMode", DefaultJsonViewData.Create(new
             {
@@ -33,7 +34,7 @@ namespace Chalkable.Api.SampleApp.Controllers
         {
             const string defaultScore = "60";
 
-            var res = await Connector.StudeCenterEndpoint.SetPracticeGrade(Guid.Parse(standardId), defaultScore);
+            var res = await Connector.StudyCenter.SetPracticeGrade(Guid.Parse(standardId), defaultScore);
             
             return View("ViewMode", DefaultJsonViewData.Create(new
             {

@@ -27,41 +27,34 @@ namespace Chalkable.API.Endpoints
             return await Connector.Get<Announcement>($"{url}?announcementId={announcementId}&announcementType={announcementType}");
         }
 
-        public async Task<Announcement> UploadAttributeAttachment(int announcementId, int announcementType, int attributeId, string fileName, Stream stream)
+        public async Task<Announcement> UploadAttributeAttachment(int announcementId, AnnouncementType announcementType, int attributeId, string fileName, Stream stream)
         {
             var url = $"/AnnouncementAttribute/UploadAttachment.json";
             return await Connector.Put<Announcement>($"{url}?announcementId={announcementId}&announcementType={announcementType}" +
                                                       $"&assignedAttributeId={attributeId}&filename={fileName}", stream);
         }
-        public async Task<Announcement> UploadAnnouncementAttachment(int announcementId, int announcementType, string fileName, Stream stream)
+        public async Task<Announcement> UploadAnnouncementAttachment(int announcementId, AnnouncementType announcementType, string fileName, Stream stream)
         {
             var url = $"/AnnouncementAttachment/UploadAnnouncementAttachment.json";
             return await Connector.Put<Announcement>($"{url}?announcementId={announcementId}&announcementType={announcementType}&filename={fileName}", stream);
         }
 
-        public async Task<bool> UpdateAnnouncementApplicationMeta(int announcementApplicationId, AnnouncementType announcementType, string text, string imageUrl)
+        public async Task<bool> UpdateAnnouncementApplicationMeta(int announcementApplicationId, string text, string imageUrl)
         {
             var url = "/Application/UpdateAnnouncementApplicationMeta.json";
 
             var nvc = HttpUtility.ParseQueryString(string.Empty);
             nvc.Add("announcementApplicationId", announcementApplicationId.ToString());
-            nvc.Add("announcementType", ((int)announcementType).ToString());
             nvc.Add("text", text);
             nvc.Add("imageUrl", imageUrl);
 
             return await Connector.Post<bool>(url, nvc);
         }
 
-        public async Task<IList<int>> StudentAnnouncementAppicationIds(int? schoolYear)
+        public async Task<IList<AnnouncementApplicationRecipient>> GetAnnouncementApplicationRecipients(int? studentId)
         {
-            var url = "/Application/StudentAnnouncementAppicationIds.json";
-            return await Connector.Get<IList<int>>($"{url}?schoolYear={schoolYear}");
-        }
-
-        public async Task<IList<int>> StudentAnnouncementAppicationIds(int studentId, int? schoolYear)
-        {
-            var url = "/Application/StudentAnnouncementAppicationIds.json";
-            return await Connector.Get<IList<int>>($"{url}?studentId={studentId}&schoolYear={schoolYear}");
+            var url = "/Application/AnnouncementApplicationRecipients.json";
+            return await Connector.Get<IList<AnnouncementApplicationRecipient>>($"{url}?studentId={studentId}");
         }
     }
 }

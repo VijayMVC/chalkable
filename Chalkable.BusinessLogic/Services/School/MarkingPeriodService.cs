@@ -20,6 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<MarkingPeriod> GetMarkingPeriods(int? schoolYearId);
         MarkingPeriod GetMarkingPeriodByDate(DateTime date, bool useLastExisting = false);
         IList<MarkingPeriod> GetMarkingPeriodsByDateRange(DateTime fromDate, DateTime toDate, int? schoolYearId);
+        MarkingPeriod GetLastClassMarkingPeriod(int classId, DateTime? date);
     }
 
     public class MarkingPeriodService : SchoolServiceBase, IMarkingPeriodService
@@ -42,6 +43,11 @@ namespace Chalkable.BusinessLogic.Services.School
             var res = GetMarkingPeriods(schoolYearId);
             return res.Where(x =>(x.StartDate <= fromDate && x.EndDate >= fromDate)
                             || (x.StartDate <= toDate && x.EndDate >= toDate)).ToList();
+        }
+
+        public MarkingPeriod GetLastClassMarkingPeriod(int classId, DateTime? date)
+        {
+            return DoRead(u => new MarkingPeriodDataAccess(u).GetLastClassMarkingPeriod(classId, date));
         }
 
         public MarkingPeriod GetLastMarkingPeriod(DateTime? tillDate = null)

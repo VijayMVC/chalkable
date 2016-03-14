@@ -70,5 +70,17 @@ namespace Chalkable.Data.School.DataAccess
             SimpleDelete(ids.Select(x=>new MarkingPeriod{Id = x}).ToList());
         }
 
+        public MarkingPeriod GetLastClassMarkingPeriod(int classId, DateTime? date)
+        {
+            var @params = new Dictionary<string, object>
+            {
+                ["classId"] = classId,
+                ["date"] = date
+            };
+            using (var reader = ExecuteStoredProcedureReader("spGetLastClassMarkingPeriod", @params))
+            {
+                return reader.ReadOrNull<MarkingPeriod>();
+            }
+        }
     }
 }
