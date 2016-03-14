@@ -9,7 +9,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
 {
     public interface ITopicsConnector
     {
-        Task<PaginatedList<Topic>> GetTopics(string subjectCode, string gradeLevel, Guid? parentId, string searchQuery, int start, int count);
+        Task<PaginatedList<Topic>> GetTopics(string subjectCode, string gradeLevel, Guid? parentId, bool? deepest, string searchQuery, int start, int count);
         Task<TopicStandards> GetTopicStandards(Guid topicId);
         Task<Topic> GetTopic(Guid id);
     }
@@ -26,7 +26,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             return responce?.Data;
         }
 
-        public async Task<PaginatedList<Topic>> GetTopics(string subjectCode, string gradeLevel, Guid? parentId, string searchQuery, int start, int count)
+        public async Task<PaginatedList<Topic>> GetTopics(string subjectCode, string gradeLevel, Guid? parentId, bool? deepest, string searchQuery, int start, int count)
         {
             var nvc = new NameValueCollection();
             if(!string.IsNullOrWhiteSpace(subjectCode))
@@ -37,7 +37,9 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
                 nvc.Add("parent", parentId.Value.ToString());
             if(!string.IsNullOrWhiteSpace(searchQuery))
                 nvc.Add("query", searchQuery);
-
+            if(deepest.HasValue)
+                nvc.Add("deepest", deepest.Value ? "Y" : "N");
+            
             var res = await GetPage<BaseResource<Topic>>("topics", nvc, start, count);
             return res.Transform(x => x.Data);
         }

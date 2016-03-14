@@ -72,16 +72,16 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher, DistricAdmin")]
-        public async Task<ActionResult> Standards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId)
+        public async Task<ActionResult> Standards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId, bool? firstLevelOnly)
         {
-            var standards = await MasterLocator.AcademicBenchmarkService.GetStandards(authorityId, documentId, subjectDocId, gradeLevelCode, parentId);
+            var standards = await MasterLocator.AcademicBenchmarkService.GetStandards(authorityId, documentId, subjectDocId, gradeLevelCode, parentId, firstLevelOnly ?? false);
             return Json(standards.Select(StandardViewData.Create));
         }
 
         [AuthorizationFilter("Teacher, DistricAdmin")]
-        public async Task<ActionResult> Topics(string subjectCode, string gradeLevel, Guid? parentId)
+        public async Task<ActionResult> Topics(string subjectCode, string gradeLevel, Guid? parentId, bool? firstLevelOnly)
         {
-            var topics = await MasterLocator.AcademicBenchmarkService.GetTopics(subjectCode, gradeLevel, parentId, null);
+            var topics = await MasterLocator.AcademicBenchmarkService.GetTopics(subjectCode, gradeLevel, parentId, null, firstLevelOnly ?? false);
             return Json(topics.Select(TopicViewData.Create).ToList());
         }
 
@@ -91,7 +91,7 @@ namespace Chalkable.Web.Controllers
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
-            var topics = await MasterLocator.AcademicBenchmarkService.GetTopics(null, null, null, searchQuery, start.Value, count.Value);
+            var topics = await MasterLocator.AcademicBenchmarkService.GetTopics(null, null, null, searchQuery, false, start.Value, count.Value);
             return Json(topics.Transform(TopicViewData.Create));
         } 
     }
