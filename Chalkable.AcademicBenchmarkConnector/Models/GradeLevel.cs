@@ -20,6 +20,6 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
         [JsonProperty("lo")]
         public string Low { get; set; }
         [JsonProperty("hi")]
-        public string Hight { get; set; }
+        public string Height { get; set; }
     }
 }
