@@ -56,9 +56,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher, DistricAdmin")]
-        public async Task<ActionResult> GradeLevels(Guid? authorityId, Guid? documentId, string subjectCode)
+        public async Task<ActionResult> GradeLevels(Guid? authorityId, Guid? documentId, Guid? subjectDocId)
         {
-            var gradeLevels = await MasterLocator.AcademicBenchmarkService.GetGradeLevels(authorityId, documentId, subjectCode);
+            var gradeLevels = await MasterLocator.AcademicBenchmarkService.GetGradeLevels(authorityId, documentId, subjectDocId);
             return Json(gradeLevels.Select(GradeLevelViewData.Create));
         }
 
@@ -72,10 +72,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher, DistricAdmin")]
-        public async Task<ActionResult> Standards(Guid? authorityId, Guid? documentId, string subjectCode,
-            string gradeLevelCode, Guid? parentId)
+        public async Task<ActionResult> Standards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId)
         {
-            var standards = await MasterLocator.AcademicBenchmarkService.GetStandards(authorityId, documentId, subjectCode, gradeLevelCode, parentId);
+            var standards = await MasterLocator.AcademicBenchmarkService.GetStandards(authorityId, documentId, subjectDocId, gradeLevelCode, parentId);
             return Json(standards.Select(StandardViewData.Create));
         }
 

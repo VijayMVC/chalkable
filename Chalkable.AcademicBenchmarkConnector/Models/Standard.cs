@@ -29,6 +29,8 @@ namespace Chalkable.AcademicBenchmarkConnector.Models
         public Authority Authority { get; set; }
         [JsonProperty("document")]
         public Document Document { get; set; }
+        [JsonProperty("subject_doc")]
+        public SubjectDocument SubjectDocument { get; set; }
     }
 
     public class GuidIdDto

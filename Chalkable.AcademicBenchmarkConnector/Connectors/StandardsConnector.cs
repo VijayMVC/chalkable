@@ -15,9 +15,10 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         Task<IList<Authority>> GetAuthorities();
         Task<IList<Document>> GetDocuments(Guid? authorityId);
         Task<IList<Subject>> GetSubjects(Guid? authorityId, Guid? documentId);
-        Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, string subjectCode);
+        Task<IList<SubjectDocument>> GetSubjectDocuments(Guid? authorityId, Guid? documentId); 
+        Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, Guid? subjectDocId);
         Task<PaginatedList<Standard>> SearchStandards(string searchQuery, int start, int count);
-        Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, string subjectCode, string gradeLevelCode, Guid? parentId);
+        Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId);
 
     }
 
@@ -45,9 +46,9 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             return await GetPage<Standard>(null, null, null, searchQuery: searchQuery, start: start, limit: count);
         }
 
-        public async Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, string subjectCode, string gradeLevelCode, Guid? parentId)
+        public async Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId)
         {
-            return await GetPage<Standard>(authorityId, documentId, subjectCode, parentId: parentId, gradeLevelCode: gradeLevelCode);
+            return await GetPage<Standard>(authorityId, documentId, subjectDocId, parentId: parentId, gradeLevelCode: gradeLevelCode);
         }
 
         public async Task<IList<Authority>> GetAuthorities()
@@ -63,9 +64,14 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             return (await GetPage<SubjectWrapper>(authorityId, documentId, null)).Select(x => x.Subject).ToList();
         }
 
-        public async Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, string subjectCode)
+        public async Task<IList<SubjectDocument>> GetSubjectDocuments(Guid? authorityId, Guid? documentId)
         {
-            return (await GetPage<GradeLevelWrapper>(authorityId, documentId, subjectCode)).Select(x=>x.GradeLevel).ToList();
+            return (await GetPage<SubjectDocumentWrapper>(authorityId, documentId, null)).Select(x => x.SubjectDocument).ToList();
+        }
+        
+        public async Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, Guid? subjectDocId)
+        {
+            return (await GetPage<GradeLevelWrapper>(authorityId, documentId, subjectDocId)).Select(x=>x.GradeLevel).ToList();
         }
         
         private static IDictionary<Type, string> _typesDic = new Dictionary<Type, string>
@@ -77,7 +83,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             [typeof (GradeLevelWrapper)] = "grade",
             [typeof (SubjectDocumentWrapper)] = "subject_doc"
         };
-        protected async Task<PaginatedList<TModel>> GetPage<TModel>(Guid? authorityId, Guid? documentId, string subjectCode, 
+        protected async Task<PaginatedList<TModel>> GetPage<TModel>(Guid? authorityId, Guid? documentId, Guid? subjectDocId, 
             Guid? parentId = null, string gradeLevelCode = null, string searchQuery = null, int start = 0, int limit = int.MaxValue)
         {
             var nvc = new NameValueCollection
@@ -88,8 +94,8 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
                 nvc.Add("authority", authorityId.Value.ToString());
             if (documentId.HasValue)
                 nvc.Add("document", documentId.Value.ToString());
-            if (!string.IsNullOrWhiteSpace(subjectCode))
-                nvc.Add("subject", subjectCode);
+            if (subjectDocId.HasValue)
+                nvc.Add("subject_doc", subjectDocId.Value.ToString());
             if(parentId.HasValue)
                 nvc.Add("parent", parentId.Value.ToString());
             if (!string.IsNullOrWhiteSpace(searchQuery))

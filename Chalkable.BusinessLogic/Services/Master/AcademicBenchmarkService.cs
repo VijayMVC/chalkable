@@ -22,9 +22,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         Task<IList<Authority>> GetAuthorities();
         Task<IList<Document>> GetDocuments(Guid? authorityId);
         Task<IList<Subject>> GetSubjects(Guid? authorityId, Guid? documentId);
-        Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, string subjectCode);
+        Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, Guid? subjectDocId);
         Task<PaginatedList<Standard>> SearchStandards(string searchQuery, int start = 0, int count = int.MaxValue);
-        Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, string subjectCode, string gradeLevelCode, Guid? parentId);
+        Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId);
         Task<PaginatedList<Topic>> GetTopics(string subjectCode, string gradeLevel, Guid? parentId, string searchQuery, int start = 0, int count = int.MaxValue);
         Task<IList<Topic>> GetTopicsByIds(IList<Guid> topicsIds);
     }
@@ -71,9 +71,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             return subs.Select(Subject.Create).ToList();
         }
 
-        public async Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, string subjectCode)
+        public async Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, Guid? subjectDocId)
         {
-            var grLevels = await _abConnectorLocator.StandardsConnector.GetGradeLevels(authorityId, documentId, subjectCode);
+            var grLevels = await _abConnectorLocator.StandardsConnector.GetGradeLevels(authorityId, documentId, subjectDocId);
             return grLevels.Select(GradeLevel.Create).ToList();
         }
 
@@ -82,10 +82,11 @@ namespace Chalkable.BusinessLogic.Services.Master
             var standards = await _abConnectorLocator.StandardsConnector.SearchStandards(searchQuery, start, count);
             return standards.Transform(Standard.Create);
         }
+        
 
-        public async Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, string subjectCode, string gradeLevelCode, Guid? parentId)
+        public async Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId)
         {
-            var standards = await _abConnectorLocator.StandardsConnector.GetStandards(authorityId, documentId, subjectCode,
+            var standards = await _abConnectorLocator.StandardsConnector.GetStandards(authorityId, documentId, subjectDocId,
                         gradeLevelCode, parentId);
             return standards.Select(Standard.Create).ToList();
         }
