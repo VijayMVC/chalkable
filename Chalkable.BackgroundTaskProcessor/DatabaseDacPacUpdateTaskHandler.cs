@@ -121,8 +121,14 @@ namespace Chalkable.BackgroundTaskProcessor
                     log.LogInfo($"{dacPacName} job is " + masterJobStatus.Lifecycle);
 
                 masterJobStatusLifecycle = masterJobStatus.Lifecycle;
+                
+                var stats = await ProcessChildJobExcutions(log, elasticJobs, masterJobStatus);
 
-                await LogErrors(log, elasticJobs, masterJobStatus);
+                log.LogInfo("Task stats");
+                foreach (var k in stats)
+                {
+                    log.LogInfo($"${k.Key}: ${k.Value}");
+                }
 
                 switch (masterJobStatus.Lifecycle)
                 {
@@ -134,18 +140,15 @@ namespace Chalkable.BackgroundTaskProcessor
                         log.Flush();
 
                         return false;
-                }
 
-                if (masterJobStatus.Lifecycle == JobExecutionLifecycle.Succeeded)
-                {
-                    break;
+                    case JobExecutionLifecycle.Succeeded:
+                        log.Flush();
+                        return true;
                 }
 
                 log.Flush();
-                await Task.Delay(1000);
+                await Task.Delay(10000);
             }
-
-            return true;
         }
 
         public bool Handle(BackgroundTask task, BackgroundTaskService.BackgroundTaskLog log)
@@ -234,8 +237,10 @@ namespace Chalkable.BackgroundTaskProcessor
 
         private static readonly HashSet<string> Memoization = new HashSet<string>();
 
-        private static async Task LogErrors(BackgroundTaskService.BackgroundTaskLog log, AzureSqlJobClient elasticJobs, JobExecutionInfo execution)
+        private static async Task<Dictionary<JobTaskExecutionLifecycle, int>> ProcessChildJobExcutions(BackgroundTaskService.BackgroundTaskLog log, AzureSqlJobClient elasticJobs, JobExecutionInfo execution)
         {            
+            var stats = new Dictionary<JobTaskExecutionLifecycle, int>();
+
             var children = await elasticJobs.JobExecutions.ListJobExecutionsAsync(new JobExecutionFilter
             {
                 ParentJobExecutionId = execution.JobExecutionId
@@ -246,7 +251,10 @@ namespace Chalkable.BackgroundTaskProcessor
                 var tasks = (await elasticJobs.JobTaskExecutions.ListJobTaskExecutions(child.JobExecutionId))
                     .OrderByDescending(x => x.CreatedTime);
 
-                foreach(var task in tasks) { 
+                foreach(var task in tasks)
+                {
+                    stats[task.Lifecycle]++;
+
                     if (string.IsNullOrWhiteSpace(task?.Message))
                         continue;
                     
@@ -265,6 +273,8 @@ namespace Chalkable.BackgroundTaskProcessor
                     }
                 }
             }
+
+            return stats;
         }
 
         public static Task<bool> Test(AzureSqlJobCredentials creds, BackgroundTaskService.BackgroundTaskLog log, DatabaseDacPacUpdateTaskData data)
