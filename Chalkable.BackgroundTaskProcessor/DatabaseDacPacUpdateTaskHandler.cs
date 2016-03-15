@@ -253,6 +253,9 @@ namespace Chalkable.BackgroundTaskProcessor
 
                 foreach(var task in tasks)
                 {
+                    if (!stats.ContainsKey(task.Lifecycle))
+                        stats.Add(task.Lifecycle, 0);
+
                     stats[task.Lifecycle]++;
 
                     if (string.IsNullOrWhiteSpace(task?.Message))

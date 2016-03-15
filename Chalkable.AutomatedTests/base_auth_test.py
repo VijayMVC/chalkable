@@ -7,6 +7,7 @@ from base_config import *
 
 
 class BaseAuthedTestCase(unittest.TestCase):
+
     def setUp(self):
         s = requests.Session();
         payload = {'UserName': user_email, 'Password': user_pwd, 'remember': 'false'}
@@ -20,14 +21,26 @@ class BaseAuthedTestCase(unittest.TestCase):
         found_sting = re.findall('var districtId = .+', page_as_one_string)
         concatenated_str = ''.join(found_sting)
         self.districtId = concatenated_str[18:54]
-
+        
         # getting SchoolYearId
         found_sting2 = re.findall('var currentSchoolYearId = .+', page_as_one_string)
         concatenated_str2 = ''.join(found_sting2)
         self.schoolYearId = concatenated_str2[-5:-2]
 
+        # getting grading periods
+        found_sting3 = re.findall('var gradingPeriods = .+', page_as_one_string)
+        concatenated_str2 = ''.join(found_sting3)
+        found_sting4 = re.findall('"id":[0-9]+', concatenated_str2)
+        concatenated_str3 = ''.join(found_sting4)
+        self.found_sting5 = re.findall('[0-9]+', concatenated_str3)
+        #print self.found_sting5
         self.session = s
-
+        
+    def gr_periods(self):
+        k = self.found_sting5
+        return k
+            
+            
     def get(self, url, status=200, success=True):
         s = self.session
         r = s.get(chlk_server_url + url)
