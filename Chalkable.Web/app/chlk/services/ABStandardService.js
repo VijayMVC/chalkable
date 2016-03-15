@@ -51,7 +51,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABStandardId, Boolean]],
             ria.async.Future, function getStandards(authorityId_, documentId_, subjectDocId_, gradeLevelCode_, parentId_, firstLevelOnly_) {
-                return this.get('AcademicBenchmark/GetStandards.json', chlk.models.academicBenchmark.Standard, {
+                return this.get('AcademicBenchmark/Standards.json', ArrayOf(chlk.models.academicBenchmark.Standard), {
                     authorityId: authorityId_ && authorityId_.valueOf(),
                     documentId: documentId_ && documentId_.valueOf(),
                     subjectDocId: subjectDocId_ && subjectDocId_.valueOf(),
@@ -66,8 +66,19 @@ NAMESPACE('chlk.services', function () {
                 return this.getPaginatedList('AcademicBenchmark/SearchStandards.json', ArrayOf(chlk.models.academicBenchmark.Standard), {
                     searchQuery: searchQuery,
                     start: start_,
-                    count: count_,
+                    count: count_
                 });
+            },
+
+            [[String, String, chlk.models.id.AbParentId, Boolean]],
+            ria.async.Future, function getTopics(subjectCode, gradeLevel, parentId_, firstLevelOnly_){
+                return this.getPaginatedList('AcademicBenchmark/Topics.json', ArrayOf(chlk.models.academicBenchmark.Topic),
+                    {
+                        subjectCode: subjectCode,
+                        gradeLevel: gradeLevel,
+                        parentId: parentId_ && parentId_.valueOf(),
+                        firstLevelOnly: firstLevelOnly_ && firstLevelOnly_.valueOf()
+                    });
             }
         ]);
 });

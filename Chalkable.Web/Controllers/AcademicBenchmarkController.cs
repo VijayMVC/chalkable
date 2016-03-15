@@ -68,7 +68,7 @@ namespace Chalkable.Web.Controllers
             start = start ?? 0;
             count = count ?? 10;
             var standards = await MasterLocator.AcademicBenchmarkService.SearchStandards(searchQuery, start.Value, count.Value);
-            return Json(standards.Select(StandardViewData.Create));
+            return Json(standards.Transform(StandardViewData.Create));
         }
 
         [AuthorizationFilter("Teacher, DistricAdmin")]
@@ -82,7 +82,7 @@ namespace Chalkable.Web.Controllers
         public async Task<ActionResult> Topics(string subjectCode, string gradeLevel, Guid? parentId, bool? firstLevelOnly)
         {
             var topics = await MasterLocator.AcademicBenchmarkService.GetTopics(subjectCode, gradeLevel, parentId, null, firstLevelOnly ?? false);
-            return Json(topics.Select(TopicViewData.Create).ToList());
+            return Json(topics.Transform(TopicViewData.Create));
         }
 
 
