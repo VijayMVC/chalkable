@@ -227,6 +227,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         private AnnouncementDetails MergeEditAnnResultWithStiData(ClassAnnouncementDataAccess annDa, ClassAnnouncement ann)
         {
             var res = InternalGetDetails(annDa, ann.Id);
+            Trace.Assert(ann.SisActivityId.HasValue);
             if (ann.IsSubmitted)
             {
                 var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
@@ -452,6 +453,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         protected override void SetComplete(Announcement announcement, bool complete)
         {
             var classAnn = announcement as ClassAnnouncement;
+            Trace.Assert(classAnn?.SisActivityId != null);
             if (classAnn != null && !classAnn.SisActivityId.HasValue)
                 throw new ChalkableException("There are no such item in Inow");
             ConnectorLocator.ActivityConnector.CompleteActivity(classAnn.SisActivityId.Value, complete);
@@ -472,6 +474,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             //insert standard to inow 
             var classAnn = GetClassAnnouncemenById(announcement.Id);
+            Trace.Assert(classAnn.SisActivityId.HasValue);
             if (!classAnn.IsSubmitted) return;
             var activity = ConnectorLocator.ActivityConnector.GetActivity(classAnn.SisActivityId.Value);
             activity.Standards = activity.Standards.Concat(new[] { new ActivityStandard { Id = announcementStandard.StandardRef } });
@@ -482,6 +485,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         {
             // removing standard from inow
             var classAnn = GetClassAnnouncemenById(announcement.Id);
+            Trace.Assert(classAnn.SisActivityId.HasValue);
             if (!classAnn.IsSubmitted) return;
             var activity = ConnectorLocator.ActivityConnector.GetActivity(classAnn.SisActivityId.Value);
             activity.Standards = activity.Standards.Where(x => x.Id != standardId).ToList();
@@ -497,6 +501,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         public ClassAnnouncement SetVisibleForStudent(int classAnnouncementId, bool visible)
         {
             var ann = GetClassAnnouncemenById(classAnnouncementId);
+            Trace.Assert(ann.SisActivityId.HasValue);
             if (ann.IsSubmitted)
             {
                 var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
@@ -544,6 +549,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public static IList<AnnouncementComplex> MergeAnnouncementsWithActivities(IServiceLocatorSchool locator, UnitOfWork unitOfWork, IList<AnnouncementComplex> announcements, IList<Activity> activities)
         {
+            Trace.Assert(locator.Context.PersonId.HasValue);
             var activitiesIds = activities.Select(x => x.Id).ToList();
             if (announcements.Count < activities.Count)
             {
@@ -568,6 +574,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         private static void AddActivitiesToChalkable(IServiceLocatorSchool locator, IList<Activity> activities, ClassAnnouncementDataAccess dataAccess)
         {
+            Trace.Assert(locator.Context.SchoolYearId.HasValue);
             if (activities == null) return;
             EnsureInAnnouncementsExisting(activities, dataAccess);
             IList<ClassAnnouncement> addToChlkAnns = new List<ClassAnnouncement>();
@@ -661,7 +668,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateClassAnnouncementDataAccess(u).GetLastDraft(Context.PersonId.Value));
         }
 
-        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId)
+        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate)
         {
             Trace.Assert(Context.PersonId.HasValue);
             var syId = Context.SchoolYearId ?? ServiceLocator.SchoolYearService.GetCurrentSchoolYear().Id;

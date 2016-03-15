@@ -7,7 +7,8 @@
  @classId int,
  @announcementType int,
  @fromDate datetime2,
- @toDate datetime2
+ @toDate datetime2,
+ @filterByExpiryDate bit
 AS
 
 Begin Transaction
@@ -49,6 +50,10 @@ Begin
   insert into @lessonPlans
    exec spGetLessonPlans @announcementId, @schoolYearid, @personId, @classId, @roleId, 
     null, @personId, 0, @fromDate, @toDate, @completeStateNeedsUpdate, null 
+
+	if @filterByExpiryDate = 1
+	delete from @lessonPlans
+	where @toDate < EndDate
 End
 
 declare @announcementsToUpdate table( Id int)

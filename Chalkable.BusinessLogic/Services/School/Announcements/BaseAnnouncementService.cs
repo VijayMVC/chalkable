@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
@@ -174,6 +173,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             DateTime toDate;
             DateTime fromDate;
+            var filterByExpiryDate = false;
             GetDateRangeForMarking(out fromDate, out toDate);
             switch (option)
             {
@@ -184,10 +184,11 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 case MarkDoneOptions.TillToday:
                     if (toDate > Context.NowSchoolTime.AddDays(-1))
                         toDate = Context.NowSchoolTime.AddDays(-1);
+                    filterByExpiryDate = true;
                     break;
             }
             if(fromDate <= toDate)
-                SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, fromDate, toDate, classId);
+                SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, fromDate, toDate, classId, filterByExpiryDate);
         }
 
         private void GetDateRangeForMarking(out DateTime startDate, out DateTime endDate)
@@ -205,7 +206,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 endDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
         }
 
-        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId);
+        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate);
 
 
         public Announcement GetAnnouncementById(int id)
