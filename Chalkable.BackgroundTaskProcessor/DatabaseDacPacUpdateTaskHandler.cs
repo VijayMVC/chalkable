@@ -127,7 +127,7 @@ namespace Chalkable.BackgroundTaskProcessor
                 log.LogInfo("Task stats");
                 foreach (var k in stats)
                 {
-                    log.LogInfo($"${k.Key}: ${k.Value}");
+                    log.LogInfo($"{k.Key}: {k.Value}");
                 }
 
                 switch (masterJobStatus.Lifecycle)
@@ -237,9 +237,9 @@ namespace Chalkable.BackgroundTaskProcessor
 
         private static readonly HashSet<string> Memoization = new HashSet<string>();
 
-        private static async Task<Dictionary<JobTaskExecutionLifecycle, int>> ProcessChildJobExcutions(BackgroundTaskService.BackgroundTaskLog log, AzureSqlJobClient elasticJobs, JobExecutionInfo execution)
+        private static async Task<Dictionary<string, int>> ProcessChildJobExcutions(BackgroundTaskService.BackgroundTaskLog log, AzureSqlJobClient elasticJobs, JobExecutionInfo execution)
         {            
-            var stats = new Dictionary<JobTaskExecutionLifecycle, int>();
+            var stats = new Dictionary<string, int>();
 
             var children = await elasticJobs.JobExecutions.ListJobExecutionsAsync(new JobExecutionFilter
             {
@@ -253,10 +253,11 @@ namespace Chalkable.BackgroundTaskProcessor
 
                 foreach(var task in tasks)
                 {
-                    if (!stats.ContainsKey(task.Lifecycle))
-                        stats.Add(task.Lifecycle, 0);
-
-                    stats[task.Lifecycle]++;
+                    var key = task.Lifecycle.ToString();
+                    if (!stats.ContainsKey(key))
+                        stats.Add(key, 1);
+                    else 
+                        stats[key]++;
 
                     if (string.IsNullOrWhiteSpace(task?.Message))
                         continue;
