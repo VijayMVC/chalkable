@@ -65,11 +65,12 @@
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\IBaseController.cs" />
-    <Compile Include="Endpoints\AcademicBenchmarkEndpoint.cs" />
     <Compile Include="Endpoints\AnnouncementEndpoint.cs" />
     <Compile Include="Endpoints\Base.cs" />
+    <Compile Include="Endpoints\CalendarEndpoint.cs" />
     <Compile Include="Endpoints\GradingEndpoint.cs" />
     <Compile Include="Endpoints\PersonEndpoint.cs" />
+    <Compile Include="Endpoints\StandardsEndpoint.cs" />
     <Compile Include="Endpoints\StudyCenterEndpoint.cs" />
     <Compile Include="Enums\AnnouncementType.cs" />
     <Compile Include="Exceptions\ChalkableApiException.cs" />

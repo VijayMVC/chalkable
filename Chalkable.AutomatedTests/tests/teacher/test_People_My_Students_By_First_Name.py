@@ -4,7 +4,7 @@ class TestFeed(BaseAuthedTestCase):
 
     def test_people_student_sorting_by_first_name(self):
            
-        self.do_student_sorting_lastname(0)    
+        self.do_student_sorting_firstname(0)    
 
     def do_student_sorting_firstname(self, start, count = 1000):
         empty_list =[]

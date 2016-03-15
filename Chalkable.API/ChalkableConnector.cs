@@ -15,10 +15,11 @@ namespace Chalkable.API
     {
         public PersonEndpoint Person => new PersonEndpoint(this);
         public AnnouncementEndpoint Announcement => new AnnouncementEndpoint(this);
-        public StudyCenterEndpoint StudeCenterEndpoint => new StudyCenterEndpoint(this);
-        public GradingEndpoint GradingEndpoint => new GradingEndpoint(this);
-        public AcademicBenchmarkEndpoint AbEndpoint => new AcademicBenchmarkEndpoint(this);
-        
+        public StudyCenterEndpoint StudyCenter => new StudyCenterEndpoint(this);
+        public GradingEndpoint Grading => new GradingEndpoint(this);
+        public StandardsEndpoint Standards => new StandardsEndpoint(this);
+        public CalendarEndpoint Calendar => new CalendarEndpoint(this);
+
         public async Task<T> Get<T>(string endpoint)
         {
             return await Call<T>(endpoint);
@@ -74,30 +75,27 @@ namespace Chalkable.API
             try
             {
                 Debug.WriteLine("Request on: " + url);
-                if (OauthClient != null)
+                Debug.WriteLine("Request on: " + url);
+                var webRequest = (HttpWebRequest) WebRequest.Create(url);
+                webRequest.Method = string.IsNullOrWhiteSpace(method) ? WebRequestMethods.Http.Get : method;
+                webRequest.Accept = "application/json";
+                OauthClient?.AppendAccessTokenTo(webRequest);
+                onCreated?.Invoke(webRequest);
+                var response = await webRequest.GetResponseAsync();
+                using (var stream = response.GetResponseStream())
                 {
-                    Debug.WriteLine("Request on: " + url);
-                    var webRequest = (HttpWebRequest) WebRequest.Create(url);
-                    webRequest.Method = string.IsNullOrWhiteSpace(method) ? WebRequestMethods.Http.Get : method;
-                    webRequest.Accept = "application/json";
-                    OauthClient.AppendAccessTokenTo(webRequest);
-                    onCreated?.Invoke(webRequest);
-                    var response = await webRequest.GetResponseAsync();
-                    using (var stream = response.GetResponseStream())
-                    {
-                        if (stream == null)
-                            throw new ChalkableApiException("Error");
+                    if (stream == null)
+                        throw new ChalkableApiException("Error");
 
-                        using (var sr = new StreamReader(stream)) {
-                            var str = sr.ReadToEnd();
-                            Debug.WriteLine(str);
-                            var obj = JsonConvert.DeserializeObject<ResponseDto<T>>(str) ;
-                            if (!obj.Success)
-                                throw new ChalkableApiException(str);
+                    using (var sr = new StreamReader(stream)) {
+                        var str = sr.ReadToEnd();
+                        Debug.WriteLine(str);
+                        var obj = JsonConvert.DeserializeObject<ResponseDto<T>>(str) ;
+                        if (!obj.Success)
+                            throw new ChalkableApiException(str);
 
-                            return obj.Data;
-                        };
-                    }
+                        return obj.Data;
+                    };
                 }
             }
             catch (WebException e)
@@ -111,7 +109,7 @@ namespace Chalkable.API
 
                 throw;
             }
-            throw new ChalkableApiException("oauth client isn't initialized");
+            //throw new ChalkableApiException("oauth client isn't initialized");
         }
 
         private SimpleOAuth2Client OauthClient { get; }

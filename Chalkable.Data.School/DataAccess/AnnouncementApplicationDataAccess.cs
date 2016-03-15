@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -80,6 +81,23 @@ namespace Chalkable.Data.School.DataAccess
                 sql += " and AnnouncementApplication.Active = 1";
             var ps = new Dictionary<string, object> {{"personId", personId}};
             return ReadMany<AnnouncementApplication>(new DbQuery (sql, ps));
+        }
+
+        public IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, int? teacherId, Guid appId, int schoolYear)
+        {
+            IDictionary<string, object> ps = new Dictionary<string, object>
+            {
+                {"@teacherId", teacherId},
+                {"@studentId", studentId},
+                {"@schoolYearId", schoolYear},
+                {"@appId", appId}
+            };
+            IList<AnnouncementApplicationRecipient> res;
+            using (var reader = ExecuteStoredProcedureReader("spGetAnnouncementApplicationRecipients", ps))
+            {
+                res = reader.ReadList<AnnouncementApplicationRecipient>();
+            }
+            return res;
         }
     }
 }

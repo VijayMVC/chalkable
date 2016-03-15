@@ -77,7 +77,8 @@ namespace Chalkable.StiConnector.Connectors
 
                 var dataTask = client.DownloadDataTaskAsync(url);
                 stream = new MemoryStream(await dataTask);
-                var res = JsonConvert.DeserializeObject<T>((new StreamReader(stream)).ReadToEnd());
+                var jsonObj = new StreamReader(stream).ReadToEnd();
+                var res = JsonConvert.DeserializeObject<T>(jsonObj);
 
                 var endTime = DateTime.Now;
                 var time = endTime - startTime;
