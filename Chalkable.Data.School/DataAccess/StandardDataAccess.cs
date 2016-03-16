@@ -164,21 +164,15 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public void Delete(int announcementId, int standardId)
+        public void Delete(int? announcementId, int? standardId)
         {
-            SimpleDelete(new AndQueryCondition
-                {
-                    {AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, announcementId},
-                    {AnnouncementStandard.STANDARD_REF_FIELD, standardId}
-                });
-        }
+            var conds = new AndQueryCondition();
+            if (announcementId.HasValue)
+                conds.Add(nameof(AnnouncementStandard.AnnouncementRef), announcementId.Value);
+            if (standardId.HasValue)
+                conds.Add(nameof(AnnouncementStandard.StandardRef), standardId.Value);
 
-        public void DeleteAll(int standardId)
-        {
-            SimpleDelete(new AndQueryCondition
-                {
-                    {AnnouncementStandard.STANDARD_REF_FIELD, standardId}
-                });
+            SimpleDelete(conds);
         }
         
         public void DeleteNotAssignedToClass(int announcementId, int classId)

@@ -468,28 +468,35 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             if (CoreRoles.STUDENT_ROLE == Context.Role)
                 ConnectorLocator.ActivityConnector.CompleteStudentActivities(syId, Context.PersonId.Value, null, complete, toDate, DateTime.MinValue);
         }
-
-
-        protected override void AfterAddingStandard(Announcement announcement, AnnouncementStandard announcementStandard)
+        
+        protected override void AfterSubmitStandardsToAnnouncement(ClassAnnouncement classAnnouncement, IList<int> standardsIds)
         {
-            //insert standard to inow 
-            var classAnn = GetClassAnnouncemenById(announcement.Id);
-            Trace.Assert(classAnn.SisActivityId.HasValue);
-            if (!classAnn.IsSubmitted) return;
-            var activity = ConnectorLocator.ActivityConnector.GetActivity(classAnn.SisActivityId.Value);
-            activity.Standards = activity.Standards.Concat(new[] { new ActivityStandard { Id = announcementStandard.StandardRef } });
-            ConnectorLocator.ActivityConnector.UpdateActivity(classAnn.SisActivityId.Value, activity);
+            //submit standards to inow 
+            Trace.Assert(classAnnouncement.SisActivityId.HasValue);
+            if (!classAnnouncement.IsSubmitted) return;
+            var activity = ConnectorLocator.ActivityConnector.GetActivity(classAnnouncement.SisActivityId.Value);
+            activity.Standards = standardsIds.Select(sId => new ActivityStandard {Id = sId}).ToList();
+            ConnectorLocator.ActivityConnector.UpdateActivity(classAnnouncement.SisActivityId.Value, activity);
         }
 
-        protected override void AfterRemovingStandard(Announcement announcement, int standardId)
+        protected override void AfterAddingStandard(ClassAnnouncement announcement, AnnouncementStandard announcementStandard)
+        {
+            //insert standard to inow 
+            Trace.Assert(announcement.SisActivityId.HasValue);
+            if (!announcement.IsSubmitted) return;
+            var activity = ConnectorLocator.ActivityConnector.GetActivity(announcement.SisActivityId.Value);
+            activity.Standards = activity.Standards.Concat(new[] { new ActivityStandard { Id = announcementStandard.StandardRef } });
+            ConnectorLocator.ActivityConnector.UpdateActivity(announcement.SisActivityId.Value, activity);
+        }
+
+        protected override void AfterRemovingStandard(ClassAnnouncement announcement, int standardId)
         {
             // removing standard from inow
-            var classAnn = GetClassAnnouncemenById(announcement.Id);
-            Trace.Assert(classAnn.SisActivityId.HasValue);
-            if (!classAnn.IsSubmitted) return;
-            var activity = ConnectorLocator.ActivityConnector.GetActivity(classAnn.SisActivityId.Value);
+            Trace.Assert(announcement.SisActivityId.HasValue);
+            if (!announcement.IsSubmitted) return;
+            var activity = ConnectorLocator.ActivityConnector.GetActivity(announcement.SisActivityId.Value);
             activity.Standards = activity.Standards.Where(x => x.Id != standardId).ToList();
-            ConnectorLocator.ActivityConnector.UpdateActivity(classAnn.SisActivityId.Value, activity);
+            ConnectorLocator.ActivityConnector.UpdateActivity(announcement.SisActivityId.Value, activity);
         }
 
         public override bool CanAddStandard(int announcementId)

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -35,6 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         void SetAnnouncementsAsComplete(DateTime? date, bool complete);
         bool CanAddStandard(int announcementId);
 
+        IList<Standard> SubmitStandardsToAnnouncement(int announcementId, IList<int> standardsIds); 
         Standard AddAnnouncementStandard(int announcementId, int standardId);
         Standard RemoveStandard(int announcementId, int standardId);
         void RemoveAllAnnouncementStandards(int standardId);
@@ -118,18 +121,41 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         protected abstract void SetComplete(Announcement announcement, bool complete);
-        
-        public Standard AddAnnouncementStandard(int announcementId, int standardId)
+
+
+        public IList<Standard> SubmitStandardsToAnnouncement(int announcementId, IList<int> standardsIds)
         {
-            var ann = GetAnnouncementById(announcementId);
+            if(standardsIds.Count == 0) return new List<Standard>();
+            var ann = InternalGetAnnouncementById(announcementId);
             AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
+            var annStandards = standardsIds.Select(sId => new AnnouncementStandard
+            {
+                AnnouncementRef = announcementId,
+                StandardRef = sId
+            }).ToList();
             using (var uow = Update())
             {
-                var annStandard = new AnnouncementStandard
-                    {
-                        AnnouncementRef = announcementId,
-                        StandardRef = standardId
-                    };
+                var da = new AnnouncementStandardDataAccess(uow);
+                da.Delete(announcementId, null);
+                da.Insert(annStandards);
+                AfterSubmitStandardsToAnnouncement(ann, standardsIds);
+                uow.Commit();
+                return new StandardDataAccess(uow).GetStandardsByIds(standardsIds);
+            }
+        }
+
+        public Standard AddAnnouncementStandard(int announcementId, int standardId)
+        {
+            var ann = InternalGetAnnouncementById(announcementId);
+            AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
+            var annStandard = new AnnouncementStandard
+            {
+                AnnouncementRef = announcementId,
+                StandardRef = standardId
+            };
+            using (var uow = Update())
+            {
+
                 new AnnouncementStandardDataAccess(uow).Insert(annStandard);
                 AfterAddingStandard(ann, annStandard);
                 uow.Commit();
@@ -139,9 +165,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public Standard RemoveStandard(int announcementId, int standardId)
         {
-            var ann = GetAnnouncementById(announcementId);
-            if (!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
-                throw new ChalkableSecurityException();
+            var ann = InternalGetAnnouncementById(announcementId);
+            AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
+
             using (var uow = Update())
             {
                 new AnnouncementStandardDataAccess(uow).Delete(announcementId, standardId);
@@ -151,14 +177,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        protected virtual void AfterAddingStandard(Announcement announcement, AnnouncementStandard announcementStandard) {}
-        protected virtual void AfterRemovingStandard(Announcement announcement, int standardId){}
+        protected virtual void AfterSubmitStandardsToAnnouncement(TAnnouncement announcement,  IList<int> standardsIds) {}
+        protected virtual void AfterAddingStandard(TAnnouncement announcement, AnnouncementStandard announcementStandard) {}
+        protected virtual void AfterRemovingStandard(TAnnouncement announcement, int standardId){}
 
 
         public void RemoveAllAnnouncementStandards(int standardId)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new AnnouncementStandardDataAccess(u).DeleteAll(standardId));
+            DoUpdate(u => new AnnouncementStandardDataAccess(u).Delete(null, standardId));
         }
 
         public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
