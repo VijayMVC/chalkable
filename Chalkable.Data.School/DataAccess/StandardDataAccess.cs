@@ -57,6 +57,7 @@ namespace Chalkable.Data.School.DataAccess
 
             var dbQuery = new DbQuery();
 
+            //TODO make a view 
             dbQuery.Sql.Append($" Select [{nameof(Standard)}].*,  ")
                                 .Append($" cast((case when exists(Select * From  [{nameof(Standard)}]  innerSt ")
                                 .Append($" Where innerSt.{nameof(Standard.ParentStandardRef)} = [{nameof(Standard)}].{nameof(Standard.Id)}) ")
