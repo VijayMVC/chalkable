@@ -178,8 +178,8 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             switch (option)
             {
                 case MarkDoneOptions.Till30Days:
-                    if(toDate > Context.NowSchoolTime.AddMonths(-1))
-                        toDate = Context.NowSchoolTime.AddMonths(-1);
+                    if(toDate > Context.NowSchoolTime.AddDays(-30))
+                        toDate = Context.NowSchoolTime.AddDays(-30);
                     break;
                 case MarkDoneOptions.TillToday:
                     if (toDate > Context.NowSchoolTime.AddDays(-1))
