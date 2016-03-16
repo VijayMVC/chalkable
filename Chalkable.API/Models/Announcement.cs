@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Newtonsoft.Json;
 
 namespace Chalkable.API.Models
@@ -15,7 +16,7 @@ namespace Chalkable.API.Models
         public IEnumerable<StudentAnnouncement> Items { get; set; }
     }
 
-    public class Announcement
+    public class ShortAnnouncement
     {
         [JsonProperty("id")]
         public int Id { get; set; }
@@ -29,6 +30,9 @@ namespace Chalkable.API.Models
         [JsonProperty("personname")]
         public string PersonName { get; set; }
 
+        [JsonProperty("persongender")]
+        public string PersonGender { get; set; }
+
         [JsonProperty("title")]
         public string Title { get; set; }
 
@@ -38,15 +42,31 @@ namespace Chalkable.API.Models
         [JsonProperty("content")]
         public string Content { get; set; }
 
+        [JsonProperty("isowner")]
+        public bool IsOwner { get; set; }
+    }
+
+    public class Announcement : ShortAnnouncement
+    {
         [JsonProperty("classid")]
         public int? ClassId { get; set; }
 
         [JsonProperty("classname")]
         public string ClassName { get; set; }
+        
+        [JsonProperty("classannouncementdata")]
+        public ClassAnnouncement ClassAnnouncement { get; set; }
+
+        [JsonProperty("lessonplandata")]
+        public LessonPlan LessonPlan { get; set; }
+
+        [JsonProperty("adminannouncementdata")]
+        public AdminAnnouncement AdminAnnouncement { get; set; }
 
         [JsonProperty("studentannouncements")]
         public StudentAnnouncements StudentAnnouncements { get; set; }
     }
+
 
     public class AnnouncementApplicationRecipient
     {

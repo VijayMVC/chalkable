@@ -124,11 +124,7 @@ namespace Chalkable.BackgroundTaskProcessor
                 
                 var stats = await ProcessChildJobExcutions(log, elasticJobs, masterJobStatus);
 
-                log.LogInfo("Task stats");
-                foreach (var k in stats)
-                {
-                    log.LogInfo($"{k.Key}: {k.Value}");
-                }
+                log.LogInfo(stats.Aggregate("Task stats", (s, k) => s + $" {k.Key}: {k.Value}"));
 
                 switch (masterJobStatus.Lifecycle)
                 {

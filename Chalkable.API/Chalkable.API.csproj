@@ -81,11 +81,14 @@
     <Compile Include="Models\AcademicBenchmark\Document.cs" />
     <Compile Include="Models\AcademicBenchmark\Standard.cs" />
     <Compile Include="Models\AcademicBenchmark\StandardRelations.cs" />
+    <Compile Include="Models\AdminAnnouncement.cs" />
     <Compile Include="Models\AcademicBenchmark\Topic.cs" />
     <Compile Include="Models\AnnouncementApplication.cs" />
     <Compile Include="Models\Announcement.cs" />
     <Compile Include="Models\ApplicationContent.cs" />
+    <Compile Include="Models\ClassAnnouncement.cs" />
     <Compile Include="Models\ExceptionViewData.cs" />
+    <Compile Include="Models\LessonPlan.cs" />
     <Compile Include="Models\PaginatedList.cs" />
     <Compile Include="Models\CoreRole.cs" />
     <Compile Include="Models\CoreRoles.cs" />

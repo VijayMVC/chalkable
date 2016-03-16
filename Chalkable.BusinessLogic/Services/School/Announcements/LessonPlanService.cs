@@ -301,7 +301,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             Trace.Assert(Context.SchoolYearId.HasValue);
 
             DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(announcement.Id, AnnouncementTypeEnum.LessonPlan,
-                Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, complete, null, null, null));
+                Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, complete, null, null, null, false));
         }
 
         public override void SetAnnouncementsAsComplete(DateTime? toDate, bool complete)
@@ -327,7 +327,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             var da = new AnnouncementRecipientDataDataAccess(unitOfWork);
             da.UpdateAnnouncementRecipientData(null, AnnouncementTypeEnum.LessonPlan, locator.Context.SchoolYearId, locator.Context.PersonId, 
-                locator.Context.RoleId, complete, null, null, toDate);
+                locator.Context.RoleId, complete, null, null, toDate, false);
             //foreach (var ann in anns)
             //    da.UpdateAnnouncementRecipientData(ann.Id, (int)AnnouncementTypeEnum.LessonPlan, null, locator.Context.PersonId, null, complete, null, null);
         }
@@ -453,10 +453,10 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => CreateLessonPlanDataAccess(u).ExistsInGallery(title, exceludedLessonPlanId));
         }
 
-        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId)
+        protected override void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate)
         {
             DoUpdate( u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, AnnouncementTypeEnum.LessonPlan,
-               schoolYearId, personId, roleId, true, classId, startDate, endDate));
+               schoolYearId, personId, roleId, true, classId, startDate, endDate, filterByExpiryDate));
         }
 
         public void ReplaceLessonPlanInGallery(int oldLessonPlanId, int newLessonPlanId)

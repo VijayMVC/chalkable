@@ -146,18 +146,25 @@ namespace Chalkable.Web.Logic
             var res = new List<DailyStatsViewData>();
             var currentDate = startDate.Date;
             var week = 1;
+            var isWeekStarted = false;
             
             while (currentDate <= endDate.Date)
             {
+                isWeekStarted = true;
                 sum += dailyStats.ContainsKey(currentDate) ? dailyStats[currentDate] : 0;
                 if (currentDate.DayOfWeek == DayOfWeek.Saturday)
                 {
                     res.Add(new DailyStatsViewData {Date = currentDate, Number = sum, Summary = $"Week {week}"});
                     week++;
                     sum = 0;
+                    isWeekStarted = false;
                 }
                 currentDate = currentDate.AddDays(1).Date;
             }
+
+            if(isWeekStarted)
+                res.Add(new DailyStatsViewData { Date = currentDate, Number = sum, Summary = $"Week {week}" });
+
             return res;
         }
     }
