@@ -9,9 +9,11 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
 
     CLASS('Standard', [
 
-        chlk.models.id.ABStandardId, 'id',
+        [ria.serialize.SerializeProperty('id')],
+        chlk.models.id.ABStandardId, 'standardId',
         String, 'code',
         String, 'description',
+        String, 'tooltip',
 
         [ria.serialize.SerializeProperty('isdeepest')],
         Boolean, 'deepest',
@@ -24,6 +26,10 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
         chlk.models.academicBenchmark.Authority, 'authority',
         chlk.models.academicBenchmark.Document, 'document',
         chlk.models.academicBenchmark.SubjectDocument, 'subject',
+
+        function getName(){
+            return this.getCode();
+        }
 
 
     ]);

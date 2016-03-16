@@ -7,6 +7,10 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
     CLASS('Document', [
         chlk.models.id.ABDocumentId, 'id',
         String, 'code',
-        String, 'description'
+        String, 'description',
+
+        function getName(){
+            return this.getCode();
+        }
     ]);
 });

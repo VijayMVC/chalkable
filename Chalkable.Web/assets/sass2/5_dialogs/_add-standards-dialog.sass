@@ -1,14 +1,59 @@
+.standards-list-cnt
+  border: 1px solid #bfbfbf
+  font-size: 12px
+
+  .breadcrumbs-cnt
+    background: #f7f7f5
+    border-bottom: 1px solid #bfbfbf
+
+  .breadcrumb-item
+    display: inline-block
+    position: relative
+    padding: 6px 7px 8px 6px
+    color: #0d5e75
+    font-weight: 600
+
+    &:not(:last-child)::after
+      content: ' '
+      position: absolute
+      height: 13px
+      width: 1px
+      background: #0d5e75
+      right: 0
+      top: 9px
+
+  .item-block
+    padding: 6px 7px 8px 6px
+    display: block
+    cursor: pointer
+
+    &.pressed
+      background: #dbeef3
+
+    &:not(:last-child)
+      border-bottom: 1px solid #bfbfbf
+
+    .item-name
+      color: #0d5e75
+      font-weight: 600
+
+    .item-name, .item-description
+      display: inline-block
+      vertical-align: top
+      white-space: pre-wrap
+
 .add-standards-dialog
-  .chlk-attach-dialog
-    width: 1117px
+
+  .search-standard
+    float: right
+    margin-top: -15px
+
+
 
   .standards-list-container
     border: 1px solid #d7d7d7
     border-bottom: none
     margin: 20px 0
-
-  .search-standard
-    float: right
 
   .buttons-container
     text-align: right

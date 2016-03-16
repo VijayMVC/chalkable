@@ -140,11 +140,11 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         }
 
         [AuthorizationFilter("Teacher, DistrictAdmin")]
-        public ActionResult SubmitStandardsToAnnouncement(int announcementId, int? announcementType, IntList standardsIds)
+        public ActionResult SubmitStandardsToAnnouncement(int announcementId, int? announcementType, IntList standardIds)
         {
             var service = SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum?) announcementType);
-            var standards = service.SubmitStandardsToAnnouncement(announcementId, standardsIds);
-            return Json(standards.Select(StandardViewData.Create));
+            var standards = service.SubmitStandardsToAnnouncement(announcementId, standardIds);
+            return Json(PrepareFullAnnouncementViewData(announcementId, announcementType));
         }
 
         [AuthorizationFilter("Teacher, DistrictAdmin")]

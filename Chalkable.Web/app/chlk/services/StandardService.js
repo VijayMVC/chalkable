@@ -42,7 +42,7 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[ArrayOf(chlk.models.id.StandardId)]],
+            [[Array]],
             ria.async.Future, function getStandardsList(ids) {
                 return this.get('Standard/GetStandardsByIds.json', ArrayOf(chlk.models.standard.Standard), {
                     ids: this.arrayToIds(ids)

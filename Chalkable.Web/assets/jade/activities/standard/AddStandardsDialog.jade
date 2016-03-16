@@ -1,0 +1,50 @@
+-var options = self.getAttachOptions()
+-var announcementId = options.getAnnouncementId() && options.getAnnouncementId().valueOf()
+-var classId = options.getClassId() && options.getClassId().valueOf()
+-var announcementTypeName = options.getAnnouncementTypeName() || ''
+-var announcementType = options.getAnnouncementType()
+-var currentItemsType = self.getCurrentItemsType()
+-var standardIds = self.getStandardIds().map(function(item){return item.valueOf()}).join(',')
+-var selected = self.getSelectedStandards()
+.dialog.chlk-attach-dialog
+    .x-window-header
+        h1=announcementTypeName + ' STANDARDS'
+        a.close.close-btn
+    .attach-content
+        +AttachDialogSidebar(self, 'standard')
+        .attach-main
+            +ActionForm('announcement', 'addStandards').add-standards-form
+                +Hidden('standardIdsOnStart', standardIds).standard-ids-on-start
+                +Hidden('standardIds', standardIds).standard-ids
+                .action-bar
+                    .items
+                        a.top-link.browse-link.pressed(data-cnt=".browse-cnt") Browse
+                        a.top-link.selected-link(data-cnt=".selected-cnt")='Selected ' + (selected.length ? ('(' + selected.length + ')') : '')
+                    +SearchBox(chlk.services.StandardService, "searchStandardsByClassId", chlk.templates.standard.StandardAutoCompleteTpl, options.getClassId(), true)(
+                        name="filter", placeholder="Find a Standard"
+                    ).search-standard
+                .standards-list-cnt.browse-cnt
+                    .breadcrumbs-cnt
+                        each breadcrumb in self.getBreadcrumbs()
+                            +RenderWith(breadcrumb, chlk.templates.standard.StandardsBreadcrumbTpl)
+                    .items-cnt.browse-items-cnt
+                        +RenderWith(self.getModel(), chlk.templates.standard.ItemsListTpl)
+                .standards-list-cnt.selected-cnt.x-hidden
+                    .items-cnt.selected-items-cnt
+                        each item in selected
+                            .item-block.selected-item.pressed(
+                                data-tooltip=item.getTooltip()
+                                data-id=item.getStandardId().valueOf(),
+                            )
+                                .item-name=item.getName()
+                                if item.getDescription()
+                                    .item-description= '  -  ' + item.getDescription()
+                .buttons-container
+                    +Button.special-button2.cancel.close Cancel
+                    +Button()(type="submit", disabled).special-button2.blue-button.add.add-standard-btn Add
+
+
++ActionForm('standard', 'getStandardTree')#get-standardt-tree-form.x-hidden
+    +Hidden('announcementid', announcementId)
+    +Hidden('standardid', null)
+    +Hidden('classid', classId)

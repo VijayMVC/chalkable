@@ -20,7 +20,75 @@ NAMESPACE('chlk.controllers', function () {
             [ria.mvc.Inject],
             chlk.services.StandardService, 'standardService',
 
-            [chlk.controllers.NotChangedSidebarButton()],
+            function showStandardsAction(){
+                var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []);
+                var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
+
+                var res = ria.async.wait([
+                    standardIds.length ? this.standardService.getStandardsList(standardIds) : ria.async.Future.$fromData(null),
+                    this.standardService.getSubjects(options.getClassId())
+                ]).attach(this.validateResponse_())
+                    .then(function(result){
+                        var selected = result[0] || [];
+                        var subjects = result[1];
+                        var breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.MAIN, 'Subjects');
+                        return new chlk.models.standard.StandardItemsListViewData(subjects, chlk.models.standard.ItemType.SUBJECT, options, [breadcrumb], standardIds, selected);
+                    }, this);
+
+                return this.ShadeView(chlk.activities.announcement.AddStandardsDialog, res);
+            },
+
+            [[chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
+                chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABStandardId]],
+            function showChildItemsAction(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_){
+                return this.showItemsAction(false, type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_);
+            },
+
+            [[chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
+                chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABStandardId]],
+            function showForBreadcrumbAction(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_){
+                return this.showItemsAction(true, type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_);
+            },
+
+            [[Boolean, chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
+                chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABStandardId]],
+            function showItemsAction(isBreadcrumb, type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_){
+                var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []);
+                var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null), res;
+
+                if(!isBreadcrumb){
+                    var breadcrumb = new chlk.models.standard.Breadcrumb(type, name, subjectId_, standardId_);
+                    this.BackgroundUpdateView(chlk.activities.announcement.AddStandardsDialog, breadcrumb);
+                }
+
+                switch (type){
+                    case chlk.models.standard.ItemType.MAIN:
+                        res = this.getSubjectItems(options, standardIds);break;
+                    case chlk.models.standard.ItemType.SUBJECT:
+                    case chlk.models.standard.ItemType.STANDARD:
+                        res = this.getStandards(options, standardIds, subjectId_, standardId_);break;
+                }
+
+                return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res, 'list-update');
+            },
+
+            function getSubjectItems(options, standardIds){
+                return this.standardService.getSubjects(options.getClassId())
+                    .attach(this.validateResponse_())
+                    .then(function(subjects){
+                        return new chlk.models.standard.StandardItemsListViewData(subjects, chlk.models.standard.ItemType.SUBJECT, options);
+                    }, this);
+            },
+
+            function getStandards(options, standardIds, subjectId, standardId_){
+                return this.standardService.getStandards(options.getClassId(), subjectId, standardId_)
+                    .attach(this.validateResponse_())
+                    .then(function(subjects){
+                        return new chlk.models.standard.StandardItemsListViewData(subjects, chlk.models.standard.ItemType.STANDARD, options);
+                    }, this);
+            },
+
+            /*[chlk.controllers.NotChangedSidebarButton()],
             function showStandardsAction(){
                 var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []);
                 var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
@@ -30,7 +98,7 @@ NAMESPACE('chlk.controllers', function () {
                         return new chlk.models.announcement.AddStandardViewData(options, subjects, standardIds);
                     }, this);
                 return this.ShadeView(chlk.activities.announcement.AddStandardsDialog, res);
-            },
+            },*/
 
             [chlk.controllers.NotChangedSidebarButton()],
             [[chlk.models.id.ClassId, chlk.models.id.StandardSubjectId, String, chlk.models.id.StandardId]],

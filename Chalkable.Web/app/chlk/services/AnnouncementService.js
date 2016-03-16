@@ -191,6 +191,15 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.AnnouncementId, Array]],
+            ria.async.Future, function addStandards(announcementId, standardIds) {
+                return this.get('Announcement/SubmitStandardsToAnnouncement.json', chlk.models.announcement.FeedAnnouncementViewData, {
+                    announcementId: announcementId.valueOf(),
+                    standardIds: standardIds,
+                    announcementType: this.getContext().getSession().get(ChlkSessionConstants.ANNOUNCEMENT_TYPE, chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).valueOf()
+                });
+            },
+
             [[chlk.models.id.AnnouncementId, chlk.models.id.StandardId]],
             ria.async.Future, function removeStandard(announcementId, standardId) {
                 return this.get('Announcement/RemoveStandard.json', chlk.models.announcement.FeedAnnouncementViewData, {

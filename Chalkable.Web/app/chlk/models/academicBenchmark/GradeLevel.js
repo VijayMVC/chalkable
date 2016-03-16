@@ -9,6 +9,14 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
         String, 'code',
         String, 'description',
         String, 'low',
-        String, 'height'
+        String, 'height',
+
+        function getName(){
+            return this.getCode();
+        },
+
+        function getId(){
+            return this.getCode();
+        }
     ]);
 });

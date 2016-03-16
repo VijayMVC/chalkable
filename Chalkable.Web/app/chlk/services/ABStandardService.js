@@ -20,14 +20,14 @@ NAMESPACE('chlk.services', function () {
 
             },
 
-            ria.async.Future, function getAuthority(){
+            ria.async.Future, function getAuthorities(){
                 return this.get('AcademicBenchmark/Authorities.json', ArrayOf(chlk.models.academicBenchmark.Authority), {});
             },
 
             [[chlk.models.id.ABAuthorityId]],
-            ria.async.Future, function getDocument(authorityId_){
+            ria.async.Future, function getDocuments(authorityId_){
                 return this.get('AcademicBenchmark/Documents.json', ArrayOf(chlk.models.academicBenchmark.Document), {
-                    authorityId: authorityId_ && authorityId_.valueOf(),
+                    authorityId: authorityId_ && authorityId_.valueOf()
                 });
             },
 
@@ -35,7 +35,7 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getSubjectDocuments(authorityId_, documentId_){
                 return this.get('AcademicBenchmark/SubjectDocuments.json', ArrayOf(chlk.models.academicBenchmark.SubjectDocument), {
                     authorityId: authorityId_ && authorityId_.valueOf(),
-                    documentId: documentId_ && documentId_.valueOf(),
+                    documentId: documentId_ && documentId_.valueOf()
                 });
             },
 
@@ -44,7 +44,7 @@ NAMESPACE('chlk.services', function () {
                 return this.get('AcademicBenchmark/SubjectDocuments.json', ArrayOf(chlk.models.academicBenchmark.GradeLevel), {
                     authorityId: authorityId_ && authorityId_.valueOf(),
                     documentId: documentId_ && documentId_.valueOf(),
-                    subjectDocId: subjectDocId_ && subjectDocId_.valueOf(),
+                    subjectDocId: subjectDocId_ && subjectDocId_.valueOf()
                 });
             },
 

@@ -14,6 +14,7 @@ NAMESPACE('chlk.models.standard', function () {
         'Standard', IMPLEMENTS(ria.serialize.IDeserializable),  [
             VOID, function deserialize(raw) {
                 this.name = SJX.fromValue(raw.name, String);
+                this.tooltip = SJX.fromValue(raw.tooltip, String);
                 this.description = SJX.fromValue(raw.description, String);
                 this.announcementId = SJX.fromValue(raw.announcementid, chlk.models.id.AnnouncementId);
                 this.standardId = SJX.fromValue(raw.standardid, chlk.models.id.StandardId);
@@ -25,12 +26,17 @@ NAMESPACE('chlk.models.standard', function () {
 
             String, 'academicBenchmarkId',
             String, 'name',
+            String, 'tooltip',
             String, 'description',
             chlk.models.id.AnnouncementId, 'announcementId',
             chlk.models.id.StandardId, 'standardId',
             String, 'grade',
             String, 'commonCoreStandardCode',
             chlk.models.id.StandardSubjectId, 'subjectId',
+
+            function getId(){
+                return this.getStandardId();
+            },
 
             function getCommonCoreStandardCode(){
                 return this.commonCoreStandardCode && this.commonCoreStandardCode[0];
