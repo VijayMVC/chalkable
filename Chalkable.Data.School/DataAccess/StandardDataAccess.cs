@@ -20,15 +20,15 @@ namespace Chalkable.Data.School.DataAccess
         {
             return SelectOneOrNull<Standard>(new AndQueryCondition
             {
-                {Standard.ACADEMIC_BENCHMARK_ID_FIELD, id}
+                {nameof(Standard.AcademicBenchmarkId), id}
             });
         }
 
         public IList<Standard> GetStandardsByABIds(IList<Guid> ids)
         {
             var dbQuery = Orm.SimpleSelect<Standard>(new AndQueryCondition());
-            var idsStr = ids.Select(x => string.Format("'{0}'", x)).JoinString(",");
-            dbQuery.Sql.AppendFormat(" and [{0}] in ({1})", Standard.ACADEMIC_BENCHMARK_ID_FIELD, idsStr);
+            var idsStr = ids.Select(x => $"'{x}'").JoinString(",");
+            dbQuery.Sql.AppendFormat(" and [{0}] in ({1})", nameof(Standard.AcademicBenchmarkId), idsStr);
             return ReadMany<Standard>(dbQuery);
         }
 
@@ -36,34 +36,40 @@ namespace Chalkable.Data.School.DataAccess
         {
             var dbQuery = new DbQuery();
             dbQuery.Sql.AppendFormat("select * from [{0}] where [{0}].[{1}] in ({2})"
-                , typeof (Standard).Name, Standard.ID_FIELD, ids.JoinString(","));
+                , typeof (Standard).Name, nameof(Standard.Id), ids.JoinString(","));
             return ReadMany<Standard>(dbQuery);
         }
-
+        //TODO: move this to stored procedure
         public IList<Standard> GetStandards(StandardQuery query)
         {
             var condition = new AndQueryCondition();
             if (query.StandardSubjectId.HasValue)
-                condition.Add(Standard.STANDARD_SUBJECT_ID_FIELD, query.StandardSubjectId);
+                condition.Add(nameof(Standard.StandardSubjectRef), query.StandardSubjectId);
             if (query.GradeLavelId.HasValue)
             {
-                condition.Add(Standard.LOWER_GRADE_LEVEL_REF_FIELD, query.GradeLavelId, ConditionRelation.LessEqual);
-                condition.Add(Standard.UPPER_GRADE_LEVEL_REF_FIELD, query.GradeLavelId, ConditionRelation.GreaterEqual);
+                condition.Add(nameof(Standard.LowerGradeLevelRef), query.GradeLavelId, ConditionRelation.LessEqual);
+                condition.Add(nameof(Standard.UpperGradeLevelRef), query.GradeLavelId, ConditionRelation.GreaterEqual);
             }
             if (query.ParentStandardId.HasValue)
-                condition.Add(Standard.PARENT_STANDARD_REF_FIELD, query.ParentStandardId);
+                condition.Add(nameof(Standard.ParentStandardRef), query.ParentStandardId);
             if (query.ActiveOnly)
-                condition.Add(Standard.IS_ACTIVE_FIELD, true);
+                condition.Add(nameof(Standard.IsActive), true);
 
             var dbQuery = new DbQuery();
-            dbQuery.Sql.Append(@"select [Standard].* from [Standard]");
-            condition.BuildSqlWhere(dbQuery, "Standard");
+
+            dbQuery.Sql.Append($" Select [{nameof(Standard)}].*,  ")
+                                .Append($" cast((case when exists(Select * From  [{nameof(Standard)}]  innerSt ")
+                                .Append($" Where innerSt.{nameof(Standard.ParentStandardRef)} = [{nameof(Standard)}].{nameof(Standard.Id)}) ")
+                                .Append($" then 0 else 1 end) as bit) as [{nameof(Standard.IsDeepest)}] ")
+                       .Append($" From [{nameof(Standard)}] ");
+
+            condition.BuildSqlWhere(dbQuery, nameof(Standard));
 
             if (query.ClassId.HasValue)
             {
                 dbQuery.Parameters.Add("classId", query.ClassId);
 
-                dbQuery.Sql.AppendFormat("and [{0}].[{1}] in (", "Standard", Standard.ID_FIELD);
+                dbQuery.Sql.AppendFormat("and [{0}].[{1}] in (", "Standard", nameof(Standard.Id));
 
                 var subQuery = BuildClassStandardSubQuery("classId");
                 dbQuery.Sql.Append(subQuery).Append(")");
@@ -71,7 +77,7 @@ namespace Chalkable.Data.School.DataAccess
                 if (!query.ParentStandardId.HasValue && !query.AllStandards)
                 {
                     dbQuery.Sql.AppendFormat(" and ([{0}].[{1}] is null or [{0}].[{1}] not in (", "Standard",
-                        Standard.PARENT_STANDARD_REF_FIELD)
+                        nameof(Standard.ParentStandardRef))
                         .Append(subQuery).Append("))");
                 }
             }
@@ -87,15 +93,15 @@ namespace Chalkable.Data.School.DataAccess
 
             var conds = new AndQueryCondition();
             if (activeOnly)
-                conds.Add(Standard.IS_ACTIVE_FIELD, true);
+                conds.Add(nameof(Standard.IsActive), true);
             var dbQuery = Orm.SimpleSelect<Standard>(conds);
             dbQuery.Sql.Append(" and (");
             for (int i = 0; i < words.Length; i++)
             {
                 if (i > 0) dbQuery.Sql.Append(" or ");
-                var param = string.Format("@word{0}", i + 1);
-                dbQuery.Sql.AppendFormat(" [{0}] like {2} or [{1}] like {2}", Standard.NAME_FIELD,
-                    Standard.DESCRIPTION_FIELD, param);
+                var param = $"@word{i + 1}";
+                dbQuery.Sql.AppendFormat(" [{0}] like {2} or [{1}] like {2}", nameof(Standard.Name),
+                    nameof(Standard.Description), param);
                 dbQuery.Parameters.Add(param, "%" + words[i] + "%");
             }
             dbQuery.Sql.Append(")");
@@ -223,7 +229,7 @@ namespace Chalkable.Data.School.DataAccess
             var types = new List<Type> {typeof (AnnouncementStandard), typeof (Standard)};
             dbQuery.Sql
                    .AppendFormat(Orm.SELECT_FORMAT, Orm.ComplexResultSetQuery(types), types[0].Name).Append(" ")
-                   .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, types[1].Name, Standard.ID_FIELD,
+                   .AppendFormat(Orm.SIMPLE_JOIN_FORMAT, types[1].Name, nameof(Standard.Id),
                                  types[0].Name, AnnouncementStandard.STANDARD_REF_FIELD)
                    .Append(" ");
             var conds = new AndQueryCondition { { AnnouncementStandard.ANNOUNCEMENT_REF_FIELD, announcementId } };

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Data.School.Model;
-using Chalkable.Data.School.DataAccess;
 
 namespace Chalkable.Web.Models.AnnouncementsViewData
 {
@@ -14,10 +13,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public string Name { get; set; }
         public string Description { get; set; }
         public int StandardSubjectId { get; set; }
-        public IList<string> CCStandardCodes { get; set; }
         public Guid? AcademicBenchmarkId { get; set; }
         public bool IsActive { get; set; }
-
+        public bool IsDeepest { get; set; }
         protected StandardViewData(){}
 
         protected StandardViewData(Standard standard)
@@ -28,8 +26,8 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
             ParentStandardId = standard.ParentStandardRef;
             StandardSubjectId = standard.StandardSubjectRef;
             AcademicBenchmarkId = standard.AcademicBenchmarkId;
-            CCStandardCodes = standard.CCStandardCodes;
             IsActive = standard.IsActive;
+            IsDeepest = standard.IsDeepest;
         }
         
         public static StandardViewData Create(Standard standard)

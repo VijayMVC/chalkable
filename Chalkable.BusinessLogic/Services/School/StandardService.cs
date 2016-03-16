@@ -30,8 +30,7 @@ namespace Chalkable.BusinessLogic.Services.School
         void DeleteClassStandards(IList<ClassStandard> classStandards);
         IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId);
         IList<StandardTreeItem> GetStandardParentsSubTree(int standardId, int? classId);
-        IList<Standard> PrepareStandardsCodesData(IList<Standard> standardsTreeItem);
-        IList<AnnouncementStandardDetails> PrepareAnnouncementStandardsCodes(IList<AnnouncementStandardDetails> announcementStandards);
+
     }
     public class StandardService : SchoolServiceBase, IStandardService
     {
@@ -81,7 +80,7 @@ namespace Chalkable.BusinessLogic.Services.School
                         AllStandards = allStandards,
                         ActiveOnly = activeOnly
                     });
-                return PrepareStandardsCodesData(res);
+                return res.OrderBy(x=>x.Name).ToList();
             }
         }
 
@@ -153,7 +152,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 return new List<Standard>();
 
             var standards = DoRead(uow => new StandardDataAccess(uow).GetStandardsByIds(standardIds));
-            return PrepareStandardsCodesData(standards);
+            return standards.OrderBy(x => x.Name).ToList();
         }
 
         public IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false)
@@ -170,45 +169,18 @@ namespace Chalkable.BusinessLogic.Services.School
                     standards = standards.Where(s => standardsByClass.Any(s2 => s2.Id == s.Id)).ToList();
                 }
             }
-            return PrepareStandardsCodesData(standards);
-        }
-
-        public IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId)
-        {
-            using (var uow = Read())
-            {
-                var res = new AnnouncementStandardDataAccess(uow).GetAnnouncementStandardsByAnnId(announcementId);
-                return PrepareAnnouncementStandardsCodes(res);
-            }
+            return standards;
         }
         
-        public IList<AnnouncementStandardDetails> PrepareAnnouncementStandardsCodes(IList<AnnouncementStandardDetails> announcementStandards)
+        public IList<AnnouncementStandardDetails> GetAnnouncementStandards(int announcementId)
         {
-            var standards = PrepareStandardsCodesData(announcementStandards.Select(x => x.Standard).ToList());
-            foreach (var annStandard in announcementStandards)
-            {
-                annStandard.Standard = standards.First(s => s.Id == annStandard.StandardRef);
-            }
-            return announcementStandards;
-        } 
-
-        public IList<Standard> PrepareStandardsCodesData(IList<Standard> standards)
-        {
-            standards = standards.Select(PrepareStandardCodeData).ToList();
-            return standards.OrderBy(x => x.Name).ToList();
+            return DoRead(u => new AnnouncementStandardDataAccess(u)
+                    .GetAnnouncementStandardsByAnnId(announcementId).OrderBy(x => x.Standard.Name)).ToList();
         }
-
-        private Standard PrepareStandardCodeData(Standard standard)
-        {
-            //TODO: IMPLEMENT LATER WITH ACADEMIC BENCHMARK
-            return standard;
-        }
+        
         public IList<StandardTreeItem> GetStandardParentsSubTree(int standardId, int? classId)
         {
-            var res = DoRead(uow => new StandardDataAccess(uow).GetStandardParentsSubTree(standardId, classId));
-            foreach (var item in res)
-                item.Standard = PrepareStandardCodeData(item.Standard);
-            return res;
+            return DoRead(uow => new StandardDataAccess(uow).GetStandardParentsSubTree(standardId, classId));
         }
     }
 }

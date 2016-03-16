@@ -79,7 +79,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             {
                 var res = CreateLessonPlanDataAccess(u).Create(classId, Context.NowSchoolTime, startDate, endDate, Context.PersonId.Value, Context.SchoolYearId.Value);
                 u.Commit();
-                res.AnnouncementStandards = ServiceLocator.StandardService.PrepareAnnouncementStandardsCodes(res.AnnouncementStandards);
                 return res;
             }
         }
@@ -111,7 +110,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 res.AnnouncementApplications = ApplicationSchoolService.CopyAnnApplications(annApps, new List<int> { res.Id }, u);
                 u.Commit();
             }
-            res.AnnouncementStandards = ServiceLocator.StandardService.PrepareAnnouncementStandardsCodes(res.AnnouncementStandards);
             return res;
         }
 

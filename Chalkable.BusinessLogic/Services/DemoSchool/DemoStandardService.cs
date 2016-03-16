@@ -61,7 +61,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 var word = words[i];
                 res = res.Union(standards.Where(s => (!string.IsNullOrEmpty(s.Name) && s.Name.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
-                                           || (s?.CCStandardCodes.Count > 0  && s.CCStandardCodes.Any(x=> !string.IsNullOrWhiteSpace(x) && x.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0))
                                            || (!string.IsNullOrEmpty(s.Description) && s.Name.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
                                 ));
             }
