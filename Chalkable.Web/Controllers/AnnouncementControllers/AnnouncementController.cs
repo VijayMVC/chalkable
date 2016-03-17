@@ -143,7 +143,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult SubmitStandardsToAnnouncement(int announcementId, int? announcementType, IntList standardIds)
         {
             var service = SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum?) announcementType);
-            var standards = service.SubmitStandardsToAnnouncement(announcementId, standardIds);
+            service.SubmitStandardsToAnnouncement(announcementId, standardIds);
             return Json(PrepareFullAnnouncementViewData(announcementId, announcementType));
         }
 
