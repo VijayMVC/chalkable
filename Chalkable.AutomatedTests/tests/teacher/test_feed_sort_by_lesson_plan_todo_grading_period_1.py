@@ -1,6 +1,5 @@
 from base_auth_test import *
 
-
 class TestFeed(BaseAuthedTestCase):
     def test_feed(self):
         #data that needed for filtering by lesson plans for grading period 1
@@ -72,8 +71,8 @@ class TestFeed(BaseAuthedTestCase):
 
         ##########################################################################################
 
-        self.data2 = {'type':'1'}
-        self.settings_data = {'announcementType':'1', 'sortType':'0', 'gradingPeriodId': self.gr_periods()[0]}
+        self.data2 = {'type':'3'}
+        self.settings_data = {'announcementType':'3', 'sortType':'0', 'gradingPeriodId': self.gr_periods()[0]}
     
         self.post('/Feed/SetSettings.json?', self.settings_data)   
     
@@ -97,7 +96,7 @@ class TestFeed(BaseAuthedTestCase):
         for item in dictionary_verify_annoucementviewdatas_all:
             type = str(item['type'])
             self.assertDictContainsSubset(self.data2, {'type':type}, 'key/value pair exists')
-    
+            
     def tearDown(self):
         get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(1000)) 
         for_item_id = get_all_unmarket_items['data']['annoucementviewdatas'] 
@@ -106,6 +105,6 @@ class TestFeed(BaseAuthedTestCase):
             type = str(item['type'])
             #print id
             self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'true'})
-            
+
 if __name__ == '__main__':
     unittest.main()

@@ -69,6 +69,14 @@ class TestFeed(BaseAuthedTestCase):
         self.assertFalse(dictionary_verify_annoucementviewdatas_all, 'dictionary of items exists')
         
         #return dictionary_get_items  07.03.2016
-        
+    def tearDown(self):
+        get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(1000)) 
+        for_item_id = get_all_unmarket_items['data']['annoucementviewdatas'] 
+        for item in for_item_id:
+            id = str(item['id'])
+            type = str(item['type'])
+            #print id
+            self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'true'})
+            
 if __name__ == '__main__':
     unittest.main()

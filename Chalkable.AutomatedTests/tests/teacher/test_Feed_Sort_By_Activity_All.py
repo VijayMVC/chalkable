@@ -24,6 +24,15 @@ class TestFeed(BaseAuthedTestCase):
         for item in dictionary_verify_annoucementviewdatas_all: 
             type = str(item['type'])
             self.assertDictContainsSubset(self.data2, {'type':type}, 'key/value pair exists')
-        
+            
+    def tearDown(self):
+        get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(1000)) 
+        for_item_id = get_all_unmarket_items['data']['annoucementviewdatas'] 
+        for item in for_item_id:
+            id = str(item['id'])
+            type = str(item['type'])
+            #print id
+            self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'true'})
+            
 if __name__ == '__main__':
     unittest.main()
