@@ -1,21 +1,12 @@
-REQUIRE('chlk.templates.ChlkTemplate');
-REQUIRE('chlk.models.standard.AddCCStandardViewData');
+REQUIRE('chlk.templates.standard.AddStandardsTpl');
 
 NAMESPACE('chlk.templates.apps', function(){
 
     /**@class chlk.templates.apps.AddCommonCoreStandardsDialogTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/AddCommonCoreStandardsDialog.jade')],
-        [ria.templates.ModelBind(chlk.models.standard.AddCCStandardViewData)],
-        'AddCommonCoreStandardsDialogTpl', EXTENDS(chlk.templates.ChlkTemplate), [
+        [ria.templates.ModelBind(chlk.models.standard.StandardItemsListViewData)],
+        'AddCommonCoreStandardsDialogTpl', EXTENDS(chlk.templates.standard.AddStandardsTpl), [
 
-            [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.standard.CCStandardCategory), 'items',
-
-            [ria.templates.ModelPropertyBind],
-            String, 'requestId',
-
-            [ria.templates.ModelPropertyBind],
-            Array, 'standardsIds'
         ]);
 });

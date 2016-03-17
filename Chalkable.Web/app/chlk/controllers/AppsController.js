@@ -39,6 +39,7 @@ REQUIRE('chlk.models.id.AppPermissionId');
 REQUIRE('chlk.models.standard.AddCCStandardViewData');
 REQUIRE('chlk.models.standard.CCStandardListViewData');
 REQUIRE('chlk.models.standard.AddCCStandardsInputModel');
+REQUIRE('chlk.models.standard.GetStandardTreePostData');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -205,44 +206,14 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         //move cc_standards logic to StandardController
-        [[String, Array, Boolean]],
-        function showStandardsWidgetAction(requestId, standardsIds, onlyLeafs_){
-            var res = this.standardService.getCCStandardCategories()
-                .attach(this.validateResponse_())
-                .then(function (data){
-                    return new chlk.models.standard.AddCCStandardViewData(requestId, data, standardsIds, onlyLeafs_);
-                }, this);
-            return this.ShadeView(chlk.activities.apps.AddCCStandardDialog, res)
-        },
 
-        [[chlk.models.id.CCStandardCategoryId, String, chlk.models.id.CommonCoreStandardId]],
-        function showStandardsByCategoryAction(standardCategoryId, description, parentStandardId_){
-            var res = this.standardService.getCommonCoreStandards(standardCategoryId, parentStandardId_)
-                .attach(this.validateResponse_())
-                .then(function(items){
-                    return new  chlk.models.standard.CCStandardListViewData(description, standardCategoryId, null, items);
-                }, this);
-            return this.UpdateView(chlk.activities.apps.AddCCStandardDialog, res);
-        },
-
-        [[chlk.models.standard.AddCCStandardsInputModel]],
-        function completeStandardsWidgetAction(model){
-            var stIds = [model.getStandardId()];
-            this.standardService.getCommonCoreStandardsByIds(stIds)
-                .then(function(data){
-                    this.WidgetComplete(model.getRequestId(), data);
-                }, this);
-
-            return this.CloseView(chlk.activities.apps.AddCCStandardDialog);
-        },
-
-        [[ArrayOf(chlk.models.standard.CommonCoreStandard), chlk.models.id.AppId]],
+        [[ArrayOf(chlk.models.academicBenchmark.Standard), chlk.models.id.AppId]],
         chlk.models.standard.ApplicationStandardsViewData, function addStandards_(standards, appId){
             this.getContext().getSession().set(ChlkSessionConstants.CC_STANDARDS, standards);
             return new chlk.models.standard.ApplicationStandardsViewData(appId, standards);
         },
 
-        [[chlk.models.id.AppId, chlk.models.id.CommonCoreStandardId]],
+        [[chlk.models.id.AppId, chlk.models.id.ABStandardId]],
         function removeStandardAction(appId, standardId){
             var standards = this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []);
             if(standards)
@@ -823,7 +794,7 @@ NAMESPACE('chlk.controllers', function (){
             var appPermissions = this.getIdsList(model.getPermissions(), chlk.models.apps.AppPermissionTypeEnum);
             var appScreenShots = this.getIdsList(model.getAppScreenshots(), chlk.models.id.PictureId);
             var appPlatforms = this.getIdsList(model.getPlatforms(), chlk.models.apps.AppPlatformTypeEnum);
-            var standards = this.getIdsList(model.getStandards(), chlk.models.id.CommonCoreStandardId);
+            var standards = this.getIdsList(model.getStandards(), chlk.models.id.ABStandardId);
 
             if (!model.isDraft()){
                 var appIconId = null;
@@ -1064,7 +1035,34 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushOrUpdateView(chlk.activities.apps.AppWrapperPage, result);
         },
 
-        //STANDRDS
+        //STANDARDS
+
+        [[String, Array, Boolean]],
+        function showStandardsWidgetAction(requestId, standardIds, onlyLeafs_){
+            var res = ria.async.wait([
+                standardIds.length ? this.ABStandardService.getStandardsList(standardIds) : ria.async.Future.$fromData(null),
+                this.ABStandardService.getAuthorities()
+            ]).attach(this.validateResponse_())
+                .then(function(result){
+                    var selected = result[0] || [];
+                    var subjects = result[1];
+                    var breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.AB_MAIN, 'Source');
+                    return new chlk.models.standard.StandardItemsListViewData(subjects, chlk.models.standard.ItemType.AUTHORITY, null, [breadcrumb], standardIds, selected, requestId);
+                }, this);
+
+            return this.ShadeView(chlk.activities.apps.AddCCStandardDialog, res)
+        },
+
+        function completeStandardsWidgetAction(model){
+            var stIds = model.standardIds ? model.standardIds.split(',').filter(function(item){return item}) : [];
+            this.ABStandardService.getStandardsList(stIds)
+                .then(function(data){
+                    this.WidgetComplete(model.requestId, data);
+                }, this);
+
+            return this.CloseView(chlk.activities.apps.AddCCStandardDialog);
+        },
+
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.standard.GetStandardTreePostData]],
         function searchStandardsAction(data){
@@ -1074,7 +1072,7 @@ NAMESPACE('chlk.controllers', function (){
                 var result = this.ABStandardService.getAuthorities()
                     .attach(this.validateResponse_())
                     .then(function(subjects){
-                        breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.MAIN, 'Subjects');
+                        breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.AB_MAIN, 'Source');
                         return new chlk.models.standard.StandardItemsListViewData(subjects, chlk.models.standard.ItemType.AUTHORITY, null, [breadcrumb]);
                     }, this);
 

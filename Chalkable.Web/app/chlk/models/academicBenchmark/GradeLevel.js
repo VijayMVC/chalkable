@@ -1,4 +1,6 @@
+REQUIRE('chlk.models.id.ABSubjectDocumentId');
 REQUIRE('chlk.models.id.ABAuthorityId');
+REQUIRE('chlk.models.id.ABDocumentId');
 
 NAMESPACE('chlk.models.academicBenchmark', function(){
 
@@ -10,6 +12,9 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
         String, 'description',
         String, 'low',
         String, 'height',
+        chlk.models.id.ABAuthorityId, 'authorityId',
+        chlk.models.id.ABDocumentId, 'documentId',
+        chlk.models.id.ABSubjectDocumentId, 'subjectDocumentId',
 
         function getName(){
             return this.getCode();

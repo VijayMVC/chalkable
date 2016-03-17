@@ -1,6 +1,7 @@
 REQUIRE('chlk.controllers.BaseController');
 
 REQUIRE('chlk.services.StandardService');
+REQUIRE('chlk.services.ABStandardService');
 
 REQUIRE('chlk.models.announcement.AddStandardViewData');
 REQUIRE('chlk.models.standard.Standard');
@@ -18,6 +19,9 @@ NAMESPACE('chlk.controllers', function () {
 
             [ria.mvc.Inject],
             chlk.services.StandardService, 'standardService',
+
+            [ria.mvc.Inject],
+            chlk.services.ABStandardService, 'ABStandardService',
 
             function showStandardsAction(){
                 var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []);
@@ -56,22 +60,77 @@ NAMESPACE('chlk.controllers', function () {
                 var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null), res;
 
                 if(!isBreadcrumb){
-                    var breadcrumb = new chlk.models.standard.Breadcrumb(type, name, subjectId_, standardId_);
+                    var breadcrumb = new chlk.models.standard.Breadcrumb(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_);
                     this.BackgroundUpdateView(this.getView().getCurrent().getClass(), breadcrumb, 'add-breadcrumb');
                 }
 
                 switch (type){
                     case chlk.models.standard.ItemType.MAIN:
-                        res = this.getSubjectItems(options, standardIds);break;
+                        res = this.getSubjectItems(options);break;
                     case chlk.models.standard.ItemType.SUBJECT:
                     case chlk.models.standard.ItemType.STANDARD:
                         res = this.getStandards(options, standardIds, subjectId_, standardId_);break;
+                    case chlk.models.standard.ItemType.AB_MAIN:
+                        res = this.getAuthoritiesItems();break;
+                    case chlk.models.standard.ItemType.AUTHORITY:
+                        res = this.getDocumentsItems(authorityId_);break;
+                    case chlk.models.standard.ItemType.DOCUMENT:
+                        res = this.getSubjectDocumentsItems(authorityId_, documentId_);break;
+                    case chlk.models.standard.ItemType.SUBJECT_DOCUMENT:
+                        res = this.getGradeLevelsItems(authorityId_, documentId_, subjectDocumentId_);break;
+                    case chlk.models.standard.ItemType.GRADE_LEVEL:
+                    case chlk.models.standard.ItemType.AB_STANDARD:
+                        res = this.getABStandardsItems(authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_);break;
                 }
 
                 return this.UpdateView(this.getView().getCurrent().getClass(), res, 'list-update');
             },
 
-            function getSubjectItems(options, standardIds){
+            function getAuthoritiesItems(){
+                return this.ABStandardService.getAuthorities()
+                    .attach(this.validateResponse_())
+                    .then(function(items){
+                        return new chlk.models.standard.StandardItemsListViewData(items, chlk.models.standard.ItemType.AUTHORITY);
+                    }, this);
+            },
+
+            [[chlk.models.id.ABAuthorityId]],
+            function getDocumentsItems(authorityId){
+                return this.ABStandardService.getDocuments(authorityId)
+                    .attach(this.validateResponse_())
+                    .then(function(items){
+                        return new chlk.models.standard.StandardItemsListViewData(items, chlk.models.standard.ItemType.DOCUMENT);
+                    }, this);
+            },
+
+            [[chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId]],
+            function getSubjectDocumentsItems(authorityId, documentId){
+                return this.ABStandardService.getSubjectDocuments(authorityId, documentId)
+                    .attach(this.validateResponse_())
+                    .then(function(items){
+                        return new chlk.models.standard.StandardItemsListViewData(items, chlk.models.standard.ItemType.SUBJECT_DOCUMENT);
+                    }, this);
+            },
+
+            [[chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId]],
+            function getGradeLevelsItems(authorityId, documentId, subjectDocumentId){
+                return this.ABStandardService.getGradeLevels(authorityId, documentId, subjectDocumentId)
+                    .attach(this.validateResponse_())
+                    .then(function(items){
+                        return new chlk.models.standard.StandardItemsListViewData(items, chlk.models.standard.ItemType.GRADE_LEVEL);
+                    }, this);
+            },
+
+            [[chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABStandardId]],
+            function getABStandardsItems(authorityId, documentId, subjectDocumentId, gradeLevelCode_, ABStandardId_){
+                return this.ABStandardService.getStandards(authorityId, documentId, subjectDocumentId, gradeLevelCode_, ABStandardId_, true)
+                    .attach(this.validateResponse_())
+                    .then(function(items){
+                        return new chlk.models.standard.StandardItemsListViewData(items, chlk.models.standard.ItemType.AB_STANDARD);
+                    }, this);
+            },
+
+            function getSubjectItems(options){
                 return this.standardService.getSubjects(options.getClassId())
                     .attach(this.validateResponse_())
                     .then(function(subjects){

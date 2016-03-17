@@ -246,7 +246,7 @@ NAMESPACE('chlk.services', function () {
                 ArrayOf(chlk.models.id.GradeLevelId),
                 ArrayOf(chlk.models.apps.AppPlatformTypeEnum),
                 Boolean,
-                ArrayOf(chlk.models.id.CommonCoreStandardId)
+                ArrayOf(chlk.models.id.ABStandardId)
             ]],
             ria.async.Future, function updateApp(
                 appId, shortAppInfo, permissionIds, appPricesInfo, devId, appAccess, categories, pictures_,

@@ -103,7 +103,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             if(!string.IsNullOrWhiteSpace(gradeLevelCode))
                 nvc.Add("grade", gradeLevelCode);
 
-            var res = await GetPage<BaseResource<TModel>>("standards", nvc);
+            var res = await GetPage<BaseResource<TModel>>("standards", nvc, start, limit);
             return res.Transform(x => x.Data);
         }
     }

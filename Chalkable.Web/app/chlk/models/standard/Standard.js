@@ -20,7 +20,6 @@ NAMESPACE('chlk.models.standard', function () {
                 this.announcementId = SJX.fromValue(raw.announcementid, chlk.models.id.AnnouncementId);
                 this.standardId = SJX.fromValue(raw.standardid, chlk.models.id.StandardId);
                 this.grade = SJX.fromValue(raw.grade, String);
-                this.commonCoreStandardCode = SJX.fromArrayOfValues(raw.ccstandardcodes, String);
                 this.academicBenchmarkId = SJX.fromValue(raw.academicbenchmarkid, String);
                 this.subjectId = SJX.fromValue(raw.standardsubjectid, chlk.models.id.StandardSubjectId);
             },
@@ -33,23 +32,10 @@ NAMESPACE('chlk.models.standard', function () {
             chlk.models.id.AnnouncementId, 'announcementId',
             chlk.models.id.StandardId, 'standardId',
             String, 'grade',
-            String, 'commonCoreStandardCode',
             chlk.models.id.StandardSubjectId, 'subjectId',
 
             function getId(){
                 return this.getStandardId();
-            },
-
-            function getCommonCoreStandardCode(){
-                return this.commonCoreStandardCode && this.commonCoreStandardCode[0];
-            },
-
-            function getCommonCoreStandardCodes(){
-                return this.commonCoreStandardCode && this.commonCoreStandardCode.join(',');
-            },
-
-            function getCommonCoreStandardCodesArray(){
-                return this.commonCoreStandardCode;
             },
 
             String, function displayTitle(){
@@ -58,8 +44,8 @@ NAMESPACE('chlk.models.standard', function () {
                 return this.getDescription();
             },
 
-            [[chlk.models.id.StandardId, String, String, String]],
-            function $(standardId_, name_, grade_, ccStandardCode_){
+            [[chlk.models.id.StandardId, String, String]],
+            function $(standardId_, name_, grade_){
                 BASE();
                 if(standardId_)
                     this.setStandardId(standardId_);
@@ -67,11 +53,9 @@ NAMESPACE('chlk.models.standard', function () {
                     this.setName(name_);
                 if(grade_)
                     this.setGrade(grade_);
-                if(ccStandardCode_)
-                    this.setCommonCoreStandardCode(ccStandardCode_);
             },
 
-            String, function getUrlComponents(index_, needIsAllStandardCodes_) {
+            String, function getUrlComponents(index_) {
                 //index_ = index_ != undefined ? index_|0 : 0;
                 //var resArr = [
                 //    'standardId[' + index_ + ']=' + encodeURIComponent(this.getAcademicBenchmarkId() || ''),
@@ -92,54 +76,36 @@ NAMESPACE('chlk.models.standard', function () {
                     'standardId[' + index_ + ']=' + encodeURIComponent(this.getAcademicBenchmarkId() || ''),
                     'standardName[' + index_ + ']=' + encodeURIComponent(this.getName() || '')
                 ]).join('&');*/
-                return SELF.GET_URL_COMPONENTS(this, index_, needIsAllStandardCodes_)
+                return SELF.GET_URL_COMPONENTS(this, index_)
             },
 
-            String, function GET_URL_COMPONENTS(standard, index_, needIsAllStandardCodes_){
+            String, function GET_URL_COMPONENTS(standard, index_){
                 index_ = index_ != undefined ? index_|0 : 0;
                 var resArr = [
                     'standardId[' + index_ + ']=' + encodeURIComponent(standard.getAcademicBenchmarkId() || ''),
-                    'ccStandardCode[' + index_ + ']=' + encodeURIComponent(standard.getCommonCoreStandardCode() || ''),
                     'standardName[' + index_ + ']=' + encodeURIComponent(standard.getName() || '')
                 ];
-
-                if(needIsAllStandardCodes_)
-                    resArr.push('isAllStandardCodes=' + (!standard.getCommonCoreStandardCode() || standard.getCommonCoreStandardCode().length < 2))
 
                 return resArr.join('&');
             },
 
             String, function GET_URL_COMPONENTS_FROM_STANDARDS(standards){
-                var standardsWithMoreCodes = (standards || []).filter(function(item){
-                    var codes = item.getCommonCoreStandardCodesArray();
-                    return codes && codes.length > 1;
-                });
-                var isAllStandardCodes = standardsWithMoreCodes.length > 0;
                 return (standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&')
-                    + '&isAllStandardCodes=' + isAllStandardCodes;
             },
 
 
             Object, function BUILD_URL_PARAMS_FROM_STANDARD(outParamsObj, standard, index_){
                 outParamsObj = outParamsObj || {};
                 outParamsObj['standardId[' + index_ + ']'] = standard.getAcademicBenchmarkId() || '';
-                outParamsObj['ccStandardCode[' + index_ + ']'] = standard.getCommonCoreStandardCode() || '';
                 outParamsObj['standardName[' + index_ + ']'] = standard.getName() || '';
                 return outParamsObj;
             },
 
             Object, function BUILD_URL_PARAMS_FROM_STANDARDS(standards){
-                var standardsWithMoreCodes = (standards || []).filter(function(item){
-                    var codes = item.getCommonCoreStandardCodesArray();
-                    return codes && codes.length > 1;
-                });
-                var isAllStandardCodes = standardsWithMoreCodes.length > 0;
-
                 var res = {};
                 (standards || []).forEach(function(s, index){
                     res = chlk.models.standard.Standard.BUILD_URL_PARAMS_FROM_STANDARD(res, s, index);
                 });
-                res.isAllStandardCodes = isAllStandardCodes;
                 return res;
             }
         ]);

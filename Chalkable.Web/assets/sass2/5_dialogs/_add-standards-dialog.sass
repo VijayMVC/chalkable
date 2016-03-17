@@ -30,6 +30,22 @@
     padding: 6px 7px 8px 6px
     display: block
     cursor: pointer
+    position: relative
+
+    &:not(.able-add-item)
+      padding-left: 20px
+
+      &:before
+        content: ' '
+        left: 8px
+        top: 12px
+        position: absolute
+        width: 0
+        height: 0
+        border-style: solid
+        border-width: 3px 0 3px 6px
+        border-color: transparent transparent transparent #0d5e75
+
 
     &.pressed
       background: #dbeef3

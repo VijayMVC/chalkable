@@ -823,13 +823,7 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.announcementService.getAttachSettings(announcementId, announcementType)
                 .then(function(options){
                     var standards = this.getContext().getSession().get(ChlkSessionConstants.STANDARDS, []);
-                    var standardsWithMoreCodes = (standards || []).filter(function(item){
-                        var codes = item.getCommonCoreStandardCodesArray();
-                        return codes && codes.length > 1;
-                    });
-                    var isAllStandardCodes = standardsWithMoreCodes.length > 0;
-                    var appUrlAppend = (standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&')
-                        + '&isAllStandardCodes=' + isAllStandardCodes + '&attributeId=' + assignedAttributeId.valueOf();
+                    var appUrlAppend = (standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&');
 
                     options.updateByValues(false, false, announcementId, null, null,
                         announcementType, assignedAttributeId, appUrlAppend, false);

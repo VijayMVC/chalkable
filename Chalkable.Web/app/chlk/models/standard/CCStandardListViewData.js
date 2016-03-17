@@ -1,4 +1,4 @@
-REQUIRE('chlk.models.standard.CommonCoreStandard');
+REQUIRE('chlk.models.academicBenchmark.Standard');
 REQUIRE('chlk.models.standard.CCStandardCategory');
 REQUIRE('chlk.models.id.CCStandardCategoryId');
 
@@ -11,13 +11,13 @@ NAMESPACE('chlk.models.standard', function(){
 
         chlk.models.id.CCStandardCategoryId, 'categoryId',
 
-        ArrayOf(chlk.models.standard.CommonCoreStandard), 'standards',
+        ArrayOf(chlk.models.academicBenchmark.Standard), 'standards',
 
         String, 'description',
 
         [[String, chlk.models.id.CCStandardCategoryId
             , ArrayOf(chlk.models.standard.CCStandardCategory)
-            , ArrayOf(chlk.models.standard.CommonCoreStandard)]],
+            , ArrayOf(chlk.models.academicBenchmark.Standard)]],
         function $(description_, categoryId_, categories_, standards_){
             BASE();
             if(categories_)

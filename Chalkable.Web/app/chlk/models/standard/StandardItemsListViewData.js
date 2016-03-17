@@ -66,6 +66,8 @@ NAMESPACE('chlk.models.standard', function () {
 
             Array, 'standardIds',
 
+            String, 'requestId',
+
             chlk.models.common.AttachOptionsViewData, 'attachOptions',
 
             Array, 'items',
@@ -74,8 +76,8 @@ NAMESPACE('chlk.models.standard', function () {
 
             ArrayOf(chlk.models.standard.Breadcrumb), 'breadcrumbs',
 
-            [[Array, chlk.models.standard.ItemType, chlk.models.common.AttachOptionsViewData, ArrayOf(chlk.models.standard.Breadcrumb), Array, Array]],
-            function $(items, itemsType, attachOptions_, breadcrumbs_, standardIds_, selected_){
+            [[Array, chlk.models.standard.ItemType, chlk.models.common.AttachOptionsViewData, ArrayOf(chlk.models.standard.Breadcrumb), Array, Array, String]],
+            function $(items, itemsType, attachOptions_, breadcrumbs_, standardIds_, selected_, requestId_){
                 BASE();
                 attachOptions_ && this.setAttachOptions(attachOptions_);
                 this.setCurrentItemsType(itemsType);
@@ -83,6 +85,7 @@ NAMESPACE('chlk.models.standard', function () {
                 breadcrumbs_ && this.setBreadcrumbs(breadcrumbs_);
                 standardIds_ && this.setStandardIds(standardIds_);
                 selected_ && this.setSelectedStandards(selected_);
+                requestId_ && this.setRequestId(requestId_);
             }
         ]);
 });

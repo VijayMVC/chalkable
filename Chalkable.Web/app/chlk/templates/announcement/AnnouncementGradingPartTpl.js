@@ -39,12 +39,7 @@ NAMESPACE('chlk.templates.announcement', function () {
             },
 
             String, function getStandardsUrlComponents() {
-                var standardsWithMoreCodes = (this.standards || []).filter(function(item){
-                    var codes = item.getCommonCoreStandardCodesArray();
-                    return codes && codes.length > 1;
-                });
-                var isAllStandardCodes = standardsWithMoreCodes.length > 0;
-                return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&') + '&isAllStandardCodes=' + isAllStandardCodes;
+                return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&');
             },
 
             function getAppGrade(announcementApplicationId, studentId){

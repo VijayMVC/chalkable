@@ -1,5 +1,5 @@
 REQUIRE('chlk.models.id.AppId');
-REQUIRE('chlk.models.id.CommonCoreStandardId');
+REQUIRE('chlk.models.id.ABStandardId');
 
 NAMESPACE('chlk.models.standard', function(){
 
@@ -8,13 +8,13 @@ NAMESPACE('chlk.models.standard', function(){
 
         String, 'requestId',
 
-        READONLY, ArrayOf(chlk.models.id.CommonCoreStandardId), 'standardsIds',
+        READONLY, ArrayOf(chlk.models.id.ABStandardId), 'standardsIds',
 
-        ArrayOf(chlk.models.id.CommonCoreStandardId), function getStandardsIds(){
+        ArrayOf(chlk.models.id.ABStandardId), function getStandardsIds(){
             return this.getStandardsIdsStr()
                 ? this.getStandardsIdsStr().split(',')
                     .map(function(item){
-                        return new chlk.models.id.CommonCoreStandardId(item);
+                        return new chlk.models.id.ABStandardId(item);
                     })
                 : [];
         },
@@ -22,6 +22,6 @@ NAMESPACE('chlk.models.standard', function(){
         String, 'standardsIdsStr',
 
         [ria.serialize.SerializeProperty('standardid')],
-        chlk.models.id.CommonCoreStandardId, 'standardId'
+        chlk.models.id.ABStandardId, 'standardId'
     ]);
 });
