@@ -37,6 +37,12 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
             return this.getCode();
         },
 
+        String, function displayTitle(){
+            var name = this.getName();
+            if(name && (!name.trim || name.trim() != '')) return name;
+            return this.getDescription();
+        },
+
         Object, function serialize() {
             return {
                 id: this.standardId.valueOf(),

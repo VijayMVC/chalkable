@@ -26,13 +26,8 @@
     max-height: 415px
     overflow: auto
 
-  .item-block
-    padding: 6px 7px 8px 6px
-    display: block
-    cursor: pointer
-    position: relative
-
-    &:not(.able-add-item)
+  &.browse-cnt
+    .item-block:not(.able-add-item)
       padding-left: 20px
 
       &:before
@@ -46,6 +41,11 @@
         border-width: 3px 0 3px 6px
         border-color: transparent transparent transparent #0d5e75
 
+  .item-block
+    padding: 6px 7px 8px 6px
+    display: block
+    cursor: pointer
+    position: relative
 
     &.pressed
       background: #dbeef3

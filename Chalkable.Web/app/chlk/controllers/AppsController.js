@@ -194,11 +194,12 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.AppId, Boolean]],
         function showStandardsAction(applicationId, onlyLeafs_){
             var standards = this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []);
-            var standardIds = standards.map(function (_) { return _.getId().valueOf() });
+            var standardIds = standards.map(function (_) { return _.getStandardId().valueOf() });
 
             var res = this.WidgetStart('apps', 'showStandards', [standardIds, onlyLeafs_])
                 .then(function (data) {
-                    var standards = [].concat(this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []), data);
+                    var standards = data;
+                    this.getContext().getSession().set(ChlkSessionConstants.CC_STANDARDS, data);
                     return this.addStandards_(standards, applicationId);
                 }, this);
 

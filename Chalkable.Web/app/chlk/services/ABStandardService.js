@@ -20,7 +20,7 @@ NAMESPACE('chlk.services', function () {
             [[Array]],
             ria.async.Future, function getStandardsList(ids) {
                 return this.get('AcademicBenchmark/StandardsByIds.json', ArrayOf(chlk.models.academicBenchmark.Standard), {
-                    ids: this.arrayToIds(ids)
+                    standardsIds: this.arrayToIds(ids)
                 });
             },
 

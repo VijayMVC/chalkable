@@ -20,7 +20,7 @@ NAMESPACE('chlk.templates.standard', function(){
 
             Array, function getStandardsIds(){
                 var standards = this.getStandards();
-                return standards && standards.map(function(standard){return standard.getId().valueOf();});
+                return standards && standards.map(function(standard){return standard.getStandardId().valueOf();});
             }
         ]);
 });

@@ -85,7 +85,7 @@ NAMESPACE('chlk.activities.common.standards', function(){
                             arr.push(node.getText());
                         });
 
-                    var selected = new chlk.models.standard.SelectedStandard(currentId, node.getData('name'), node.getData('description'), arr.join(' | '));
+                    var selected = new chlk.models.standard.SelectedStandard(currentId, node.getData('name').toString(), node.getData('description').toString(), arr.join(' | '));
                     var tpl = new chlk.templates.standard.SelectedStandardTpl();
                     tpl.assign(selected);
                     var dom = new ria.dom.Dom().fromHTML(tpl.render());
