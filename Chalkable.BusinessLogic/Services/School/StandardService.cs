@@ -148,9 +148,6 @@ namespace Chalkable.BusinessLogic.Services.School
         
         public IList<Standard> GetStandards(IList<int> standardIds)
         {
-            if(standardIds == null || standardIds.Count == 0)
-                return new List<Standard>();
-
             var standards = DoRead(uow => new StandardDataAccess(uow).GetStandardsByIds(standardIds));
             return standards.OrderBy(x => x.Name).ToList();
         }

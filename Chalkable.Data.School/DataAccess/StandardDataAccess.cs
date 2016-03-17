@@ -34,6 +34,8 @@ namespace Chalkable.Data.School.DataAccess
 
         public IList<Standard> GetStandardsByIds(IList<int> ids)
         {
+            if(ids == null || ids.Count == 0)
+                return new List<Standard>();
             var dbQuery = new DbQuery();
             dbQuery.Sql.AppendFormat("select * from [{0}] where [{0}].[{1}] in ({2})"
                 , typeof (Standard).Name, nameof(Standard.Id), ids.JoinString(","));
@@ -55,17 +57,8 @@ namespace Chalkable.Data.School.DataAccess
             if (query.ActiveOnly)
                 condition.Add(nameof(Standard.IsActive), true);
 
-            var dbQuery = new DbQuery();
-
-            //TODO make a view 
-            dbQuery.Sql.Append($" Select [{nameof(Standard)}].*,  ")
-                                .Append($" cast((case when exists(Select * From  [{nameof(Standard)}]  innerSt ")
-                                .Append($" Where innerSt.{nameof(Standard.ParentStandardRef)} = [{nameof(Standard)}].{nameof(Standard.Id)}) ")
-                                .Append($" then 0 else 1 end) as bit) as [{nameof(Standard.IsDeepest)}] ")
-                       .Append($" From [{nameof(Standard)}] ");
-
-            condition.BuildSqlWhere(dbQuery, nameof(Standard));
-
+            var dbQuery = BuildSelectQuery(condition);
+            
             if (query.ClassId.HasValue)
             {
                 dbQuery.Parameters.Add("classId", query.ClassId);
@@ -85,6 +78,21 @@ namespace Chalkable.Data.School.DataAccess
             return ReadMany<Standard>(dbQuery);
         }
 
+        private DbQuery BuildSelectQuery(QueryCondition condition)
+        {
+            var dbQuery = new DbQuery();
+            condition = condition ?? new AndQueryCondition();
+            //TODO make a view later
+            dbQuery.Sql.Append($" Select [{nameof(Standard)}].*,  ")
+                                // calculating is deepest(or leaf) standard
+                                .Append($" cast((case when exists(Select * From  [{nameof(Standard)}]  innerSt ")
+                                .Append($" Where innerSt.{nameof(Standard.ParentStandardRef)} = [{nameof(Standard)}].{nameof(Standard.Id)}) ")
+                                .Append($" then 0 else 1 end) as bit) as [{nameof(Standard.IsDeepest)}] ")
+                       .Append($" From [{nameof(Standard)}] ");
+            condition.BuildSqlWhere(dbQuery, nameof(Standard));
+            return dbQuery;
+        }
+
         public IList<Standard> SearchStandards(string filter, bool activeOnly = false)
         {
             if (string.IsNullOrEmpty(filter)) return new List<Standard>();
@@ -95,7 +103,7 @@ namespace Chalkable.Data.School.DataAccess
             var conds = new AndQueryCondition();
             if (activeOnly)
                 conds.Add(nameof(Standard.IsActive), true);
-            var dbQuery = Orm.SimpleSelect<Standard>(conds);
+            var dbQuery = BuildSelectQuery(conds);
             dbQuery.Sql.Append(" and (");
             for (int i = 0; i < words.Length; i++)
             {

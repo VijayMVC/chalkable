@@ -125,9 +125,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public IList<Standard> SubmitStandardsToAnnouncement(int announcementId, IList<int> standardsIds)
         {
-            if(standardsIds.Count == 0) return new List<Standard>();
             var ann = InternalGetAnnouncementById(announcementId);
             AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
+            standardsIds = standardsIds ?? new List<int>();
             var annStandards = standardsIds.Select(sId => new AnnouncementStandard
             {
                 AnnouncementRef = announcementId,
