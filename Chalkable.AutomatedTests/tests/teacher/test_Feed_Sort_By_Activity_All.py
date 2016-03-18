@@ -7,7 +7,7 @@ class TestFeed(BaseAuthedTestCase):
     
         self.post('/Feed/SetSettings.json?', self.settings_data)   
     
-        print self.do_feed_list_and_verify(0)    
+        self.do_feed_list_and_verify(0)    
         self.do_feed_list_and_verify(10)
         self.do_feed_list_and_verify(20, 500) 
 
