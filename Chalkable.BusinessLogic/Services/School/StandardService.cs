@@ -19,7 +19,7 @@ namespace Chalkable.BusinessLogic.Services.School
         Standard GetStandardByABId(Guid id);
         IList<Standard> GetStandards(int? classId, int? gradeLevelId, int? subjectId, int? parentStandardId = null, bool allStandards = true, bool activeOnly = false);
         IList<Standard> GetStandards(IList<int> standardIds);
-        IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false); 
+        IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false, bool? deepest = null); 
 
 
         IList<ClassStandard> AddClassStandards(IList<ClassStandard> classStandards); 
@@ -152,19 +152,20 @@ namespace Chalkable.BusinessLogic.Services.School
             return standards.OrderBy(x => x.Name).ToList();
         }
 
-        public IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false)
+        public IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false, bool? deepest = null)
         {
             IList<Standard> standards;
             using (var uow = Read())
             {
                 var da = new StandardDataAccess(uow);
                 standards = da.SearchStandards(filter, activeOnly);
-
                 if (classId.HasValue)
                 {
                     var standardsByClass = da.GetStandards(new StandardQuery {ClassId = classId, ActiveOnly = activeOnly});
                     standards = standards.Where(s => standardsByClass.Any(s2 => s2.Id == s.Id)).ToList();
                 }
+                if (deepest.HasValue)
+                    standards = standards.Where(x => x.IsDeepest = deepest.Value).ToList();
             }
             return standards;
         }

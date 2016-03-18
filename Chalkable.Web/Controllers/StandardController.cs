@@ -15,9 +15,9 @@ namespace Chalkable.Web.Controllers
     {
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult SearchStandards(string filter, int? classId, bool? activeOnly)
+        public ActionResult SearchStandards(string filter, int? classId, bool? activeOnly, bool? deepest)
         {
-            var stadnards = SchoolLocator.StandardService.GetStandards(filter, classId, activeOnly ?? false);
+            var stadnards = SchoolLocator.StandardService.GetStandards(filter, classId, activeOnly ?? false, deepest);
             return Json(stadnards.Select(StandardViewData.Create).ToList());
         }
 

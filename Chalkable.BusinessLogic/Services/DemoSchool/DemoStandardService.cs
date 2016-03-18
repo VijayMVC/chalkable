@@ -368,7 +368,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return standards;
         }
 
-        public IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false)
+        public IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false, bool? deepest = null)
         {
             var standards = StandardStorage.SearchStandards(filter, activeOnly);
             if (classId.HasValue)
