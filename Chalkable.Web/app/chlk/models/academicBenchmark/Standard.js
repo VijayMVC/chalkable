@@ -46,8 +46,8 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
         Object, function serialize() {
             return {
                 id: this.standardId.valueOf(),
-                standardCode: this.code.valueOf(),
-                description: this.description.valueOf()
+                standardCode: this.code,
+                description: this.description
             }
         }
 

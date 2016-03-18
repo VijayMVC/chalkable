@@ -102,7 +102,7 @@ NAMESPACE('chlk.services', function () {
                     searchQuery: searchQuery,
                     start: start_ || 0,
                     count: count_ || 50,
-                    firstLevelOnly: true
+                    deepest: true
                 });
             },
 
