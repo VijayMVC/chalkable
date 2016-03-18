@@ -63,11 +63,11 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher, DistricAdmin, Developer")]
-        public async Task<ActionResult> SearchStandards(string searchQuery, int? start, int? count)
+        public async Task<ActionResult> SearchStandards(string searchQuery, bool? deepest, int? start, int? count)
         {
             start = start ?? 0;
             count = count ?? 10;
-            var standards = await MasterLocator.AcademicBenchmarkService.SearchStandards(searchQuery, start.Value, count.Value);
+            var standards = await MasterLocator.AcademicBenchmarkService.SearchStandards(searchQuery, deepest, start.Value, count.Value);
             return Json(standards.Transform(StandardViewData.Create));
         }
 
