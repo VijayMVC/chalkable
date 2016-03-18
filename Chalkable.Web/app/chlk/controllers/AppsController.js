@@ -1056,10 +1056,13 @@ NAMESPACE('chlk.controllers', function (){
 
         function completeStandardsWidgetAction(model){
             var stIds = model.standardIds ? model.standardIds.split(',').filter(function(item){return item}) : [];
-            this.ABStandardService.getStandardsList(stIds)
-                .then(function(data){
-                    this.WidgetComplete(model.requestId, data);
-                }, this);
+            if(stIds.length)
+                this.ABStandardService.getStandardsList(stIds)
+                    .then(function(data){
+                        this.WidgetComplete(model.requestId, data);
+                    }, this);
+            else
+                this.WidgetComplete(model.requestId, []);
 
             return this.CloseView(chlk.activities.apps.AddCCStandardDialog);
         },
