@@ -24,12 +24,14 @@
                 .items-cnt.selected-items-cnt
                     each item in selected
                         .item-block.selected-item.pressed(
-                            data-tooltip=item.getTooltip()
+                            data-tooltip=item.getTooltip(),
                             data-id=item.getStandardId().valueOf(),
+                            class = self.isOnlyOne() ? 'disabled' : ''
                         )
                             .item-name=item.getName()
                             if item.getDescription()
                                 .item-description= '  -  ' + item.getDescription()
-            .buttons-container
-                +Button.special-button2.cancel.close Cancel
-                +Button()(type="submit", disabled).special-button2.blue-button.add.add-standard-btn Add
+            if !self.isOnlyOne()
+                .buttons-container
+                    +Button.special-button2.cancel.close Cancel
+                    +Button()(type="submit", disabled).special-button2.blue-button.add.add-standard-btn Add

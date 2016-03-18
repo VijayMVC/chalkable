@@ -13,6 +13,14 @@ NAMESPACE('chlk.activities.common.standards', function(){
 
         'BaseStandardDialog', EXTENDS(chlk.activities.lib.TemplateDialog),[
 
+            Boolean, 'onlyOne',
+
+            OVERRIDE, VOID, function onRender_(model) {
+                BASE(model);
+                if(model.isOnlyOne())
+                    this.setOnlyOne(model.isOnlyOne());
+            },
+
             [ria.mvc.DomEventBind('keydown', '.search-standard')],
             [[ria.dom.Dom, ria.dom.Event]],
             function searchStandardKeydown(node, event){
@@ -64,7 +72,7 @@ NAMESPACE('chlk.activities.common.standards', function(){
                 node.find('~').removeSelf()
             },
 
-            [ria.mvc.DomEventBind('click', '.able-add-item')],
+            [ria.mvc.DomEventBind('click', '.able-add-item:not(.disabled)')],
             [[ria.dom.Dom, ria.dom.Event]],
             function standardClick(node, event){
                 var idsNode = this.dom.find('.standard-ids'), val = idsNode.getValue(),
@@ -76,8 +84,11 @@ NAMESPACE('chlk.activities.common.standards', function(){
                     this.dom.find('.selected-item[data-id=' + currentId + ']').removeSelf();
                 }
                 else{
-                    if(ids.indexOf(currentId) == -1)
-                        ids.push(currentId);
+                    if(this.isOnlyOne())
+                        ids = [currentId];
+                    else
+                        if(ids.indexOf(currentId) == -1)
+                            ids.push(currentId);
 
                     var arr = [];
                     if(!this.dom.find('.search-breadcrumb-item').exists())
@@ -90,7 +101,13 @@ NAMESPACE('chlk.activities.common.standards', function(){
                     tpl.assign(selected);
                     var dom = new ria.dom.Dom().fromHTML(tpl.render());
 
+                    this.isOnlyOne() && this.dom.find('.selected-items-cnt').empty();
+
                     dom.appendTo(this.dom.find('.selected-items-cnt'));
+
+                    this.isOnlyOne() && setTimeout(function(){
+                        node.parent('form').trigger('submit');
+                    }, 1);
                 }
 
                 idsNode.setValue(ids.join(','));
@@ -100,7 +117,7 @@ NAMESPACE('chlk.activities.common.standards', function(){
                 this.setSelectedText(ids);
             },
 
-            [ria.mvc.DomEventBind('click', '.selected-item')],
+            [ria.mvc.DomEventBind('click', '.selected-item:not(.disabled)')],
             [[ria.dom.Dom, ria.dom.Event]],
             function selectedStandardClick(node, event){
                 var idsNode = this.dom.find('.standard-ids'), val = idsNode.getValue(),
@@ -149,11 +166,15 @@ NAMESPACE('chlk.activities.common.standards', function(){
                 BASE(model, msg_);
                 if(msg_ == 'list-update'){
                     var idsNode = this.dom.find('.standard-ids'), val = idsNode.getValue(),
-                        ids = val ? val.split(',') : [];
+                        ids = val ? val.split(',') : [], onlyOne = this.isOnlyOne();
 
                     this.dom.find('.able-add-item').forEach(function(node){
-                        if(ids.indexOf(node.getData('id').toString()) > -1)
+                        if(ids.indexOf(node.getData('id').toString()) > -1){
                             node.addClass('pressed');
+                            if(onlyOne)
+                                node.addClass('disabled');
+                        }
+
                     });
                 }
             }

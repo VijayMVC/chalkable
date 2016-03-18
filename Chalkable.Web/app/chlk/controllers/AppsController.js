@@ -192,11 +192,11 @@ NAMESPACE('chlk.controllers', function (){
 
         //move cc_standards logic to StandardController
         [[chlk.models.id.AppId, Boolean]],
-        function showStandardsAction(applicationId, onlyLeafs_){
+        function showStandardsAction(applicationId, onlyOne_){
             var standards = this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []);
             var standardIds = standards.map(function (_) { return _.getStandardId().valueOf() });
 
-            var res = this.WidgetStart('apps', 'showStandards', [standardIds, onlyLeafs_])
+            var res = this.WidgetStart('apps', 'showStandards', [standardIds, onlyOne_])
                 .then(function (data) {
                     var standards = data;
                     this.getContext().getSession().set(ChlkSessionConstants.CC_STANDARDS, data);
@@ -1039,7 +1039,7 @@ NAMESPACE('chlk.controllers', function (){
         //STANDARDS
 
         [[String, Array, Boolean]],
-        function showStandardsWidgetAction(requestId, standardIds, onlyLeafs_){
+        function showStandardsWidgetAction(requestId, standardIds, onlyOne_){
             var res = ria.async.wait([
                 standardIds.length ? this.ABStandardService.getStandardsList(standardIds) : ria.async.Future.$fromData(null),
                 this.ABStandardService.getAuthorities()
@@ -1048,7 +1048,8 @@ NAMESPACE('chlk.controllers', function (){
                     var selected = result[0] || [];
                     var subjects = result[1];
                     var breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.AB_MAIN, 'Source');
-                    return new chlk.models.standard.StandardItemsListViewData(subjects, chlk.models.standard.ItemType.AUTHORITY, null, [breadcrumb], standardIds, selected, requestId);
+                    return new chlk.models.standard.StandardItemsListViewData(subjects, chlk.models.standard.ItemType.AUTHORITY,
+                        null, [breadcrumb], standardIds, selected, requestId, onlyOne_);
                 }, this);
 
             return this.ShadeView(chlk.activities.apps.AddCCStandardDialog, res)
