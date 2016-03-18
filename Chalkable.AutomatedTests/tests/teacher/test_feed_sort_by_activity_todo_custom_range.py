@@ -116,7 +116,7 @@ class TestFeed(BaseAuthedTestCase):
                         self.assertTrue(self.current_date_minus_5 <= expiresdate <= self.current_date_plus_5, 'Current date > expiresdate of an activity')
         else:
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
-    '''
+    
     def tearDown(self):
         get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(1000)) 
         for_item_id = get_all_unmarket_items['data']['annoucementviewdatas'] 
@@ -125,6 +125,6 @@ class TestFeed(BaseAuthedTestCase):
             type = str(item['type'])
             #print id
             self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'true'})
-    '''        
+            
 if __name__ == '__main__':
     unittest.main()
