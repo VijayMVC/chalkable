@@ -59,11 +59,6 @@ NAMESPACE('chlk.controllers', function () {
                 var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []);
                 var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null), res;
 
-                if(!isBreadcrumb){
-                    var breadcrumb = new chlk.models.standard.Breadcrumb(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_);
-                    this.BackgroundUpdateView(this.getView().getCurrent().getClass(), breadcrumb, 'add-breadcrumb');
-                }
-
                 switch (type){
                     case chlk.models.standard.ItemType.MAIN:
                         res = this.getSubjectItems(options);break;
@@ -82,6 +77,15 @@ NAMESPACE('chlk.controllers', function () {
                     case chlk.models.standard.ItemType.AB_STANDARD:
                         res = this.getABStandardsItems(authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_);break;
                 }
+
+                res = res.then(function(model){
+                    if(!isBreadcrumb){
+                        var breadcrumb = new chlk.models.standard.Breadcrumb(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_);
+                        this.BackgroundUpdateView(this.getView().getCurrent().getClass(), breadcrumb, 'add-breadcrumb');
+                    }
+
+                    return model;
+                }.bind(this));
 
                 return this.UpdateView(this.getView().getCurrent().getClass(), res, 'list-update');
             },
@@ -162,13 +166,14 @@ NAMESPACE('chlk.controllers', function () {
                     return this.UpdateView(this.getView().getCurrent().getClass(), result, 'clear-search');
                 }
 
-                breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.SEARCH, 'Standards');
-                this.BackgroundUpdateView(this.getView().getCurrent().getClass(), breadcrumb, 'replace-breadcrumbs');
+
 
 
                 var res = this.standardService.searchStandards(data.getFilter(), data.getClassId())
                     .attach(this.validateResponse_())
                     .then(function(standards){
+                        breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.SEARCH, 'Standards');
+                        this.BackgroundUpdateView(this.getView().getCurrent().getClass(), breadcrumb, 'replace-breadcrumbs');
                         return new chlk.models.standard.StandardItemsListViewData(standards, chlk.models.standard.ItemType.STANDARD, options);
                     }, this);
 

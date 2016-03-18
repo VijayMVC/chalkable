@@ -1080,13 +1080,12 @@ NAMESPACE('chlk.controllers', function (){
                 return this.UpdateView(this.getView().getCurrent().getClass(), result, 'clear-search');
             }
 
-            breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.SEARCH, 'Standards');
-            this.BackgroundUpdateView(this.getView().getCurrent().getClass(), breadcrumb, 'replace-breadcrumbs');
-
-
             var res = this.ABStandardService.searchStandards(data.getFilter())
                 .attach(this.validateResponse_())
                 .then(function(standards){
+                    breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.SEARCH, 'Standards');
+                    this.BackgroundUpdateView(this.getView().getCurrent().getClass(), breadcrumb, 'replace-breadcrumbs');
+
                     return new chlk.models.standard.StandardItemsListViewData(standards, chlk.models.standard.ItemType.AB_STANDARD);
                 }, this);
 

@@ -101,7 +101,8 @@ NAMESPACE('chlk.services', function () {
                 return this.get('AcademicBenchmark/SearchStandards.json', ArrayOf(chlk.models.academicBenchmark.Standard), {
                     searchQuery: searchQuery,
                     start: start_ || 0,
-                    count: count_ || 50
+                    count: count_ || 50,
+                    firstLevelOnly: true
                 });
             },
 

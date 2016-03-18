@@ -33,10 +33,10 @@ NAMESPACE('chlk.activities.common.standards', function(){
 
             },
 
-            [ria.mvc.DomEventBind('click', '#search-glass')],
+            [ria.mvc.DomEventBind('click', '#search-glass, .search-breadcrumb-item')],
             [[ria.dom.Dom, ria.dom.Event]],
             function searchIconClick(node, event){
-                node.parent('form').trigger('submit');
+                this.dom.find('form.search-standard-cnt').trigger('submit');
             },
 
             [ria.mvc.DomEventBind('click', '.clear-search')],
