@@ -1,13 +1,12 @@
 import re
 import unittest
-
 import requests
-
 from base_config import *
-
+from datetime import datetime
+from datetime import timedelta
+import time
 
 class BaseAuthedTestCase(unittest.TestCase):
-
     def setUp(self):
         s = requests.Session();
         payload = {'UserName': user_email, 'Password': user_pwd, 'remember': 'false'}
@@ -40,7 +39,6 @@ class BaseAuthedTestCase(unittest.TestCase):
         k = self.found_sting5
         return k
             
-            
     def get(self, url, status=200, success=True):
         s = self.session
         r = s.get(chlk_server_url + url)
@@ -57,7 +55,6 @@ class BaseAuthedTestCase(unittest.TestCase):
         data = r.json()
         self.assertEquals(data['success'], success, 'API success')
         return data
-
 
 if __name__ == '__main__':
     unittest.main()

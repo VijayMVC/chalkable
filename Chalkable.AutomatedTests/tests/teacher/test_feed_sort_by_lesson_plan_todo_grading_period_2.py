@@ -1,6 +1,5 @@
 from base_auth_test import *
 
-
 class TestFeed(BaseAuthedTestCase):
     def test_feed(self):
         #data that needed for filtering by lesson plans for grading period 1
@@ -10,7 +9,7 @@ class TestFeed(BaseAuthedTestCase):
         #get 9 'done' lesson plans of the grading period 1
         done_lesson_plans = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=true&count='+str(9))
         for_lesson_plan_id_1 = done_lesson_plans['data']['annoucementviewdatas']
-
+        
         self.lesson_plan_and_activities_id_for_grading_period_1 = []
         self.lesson_plan_and_activities_id_for_grading_period_2 = []
         
@@ -18,9 +17,9 @@ class TestFeed(BaseAuthedTestCase):
         for item in for_lesson_plan_id_1:
             id = str(item['id'])
             type = str(item['type'])
-            self.lesson_plan_and_activities_id_for_grading_period_1.append(id)  #id for lesson plans and activities - grading period 1     
+            self.lesson_plan_and_activities_id_for_grading_period_1.append(id)  #id for lesson plans and activities - grading period 1          
             self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'false'})
-        
+
         #data that needed for filtering by lesson plans for grading period 2
         self.settings_data_lesson_plan_2 = {'announcementType':'3', 'sortType':'0', 'gradingPeriodId':self.gr_periods()[1]}
         self.post('/Feed/SetSettings.json?', self.settings_data_lesson_plan_2)
@@ -34,7 +33,7 @@ class TestFeed(BaseAuthedTestCase):
             id = str(item['id'])
             type = str(item['type'])
             self.lesson_plan_and_activities_id_for_grading_period_2.append(id)
-            self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'false'})           
+            self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'false'})      
 
         #data that needed for filtering by activities for grading period 1
         self.settings_data_activity = {'announcementType':'1', 'sortType':'0','gradingPeriodId':self.gr_periods()[0]}
@@ -48,8 +47,9 @@ class TestFeed(BaseAuthedTestCase):
         for item in for_item_id_1:
             id = str(item['id'])
             type = str(item['type'])
-            self.lesson_plan_and_activities_id_for_grading_period_1.append(id) #id for lesson plans and activities - grading period 1
+            self.lesson_plan_and_activities_id_for_grading_period_1.append(id) #id for lesson plans and activities - grading period 1 
             self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'false'})    
+        
         
         #data that needed for filtering by activities for grading period 2
         self.settings_data_activity_2 = {'announcementType':'1', 'sortType':'0','gradingPeriodId':self.gr_periods()[1]}
@@ -72,8 +72,8 @@ class TestFeed(BaseAuthedTestCase):
 
         ##########################################################################################
 
-        self.data2 = {'type':'1'}
-        self.settings_data = {'announcementType':'1', 'sortType':'0', 'gradingPeriodId': self.gr_periods()[0]}
+        self.data2 = {'type':'3'}
+        self.settings_data = {'announcementType':'3', 'sortType':'0', 'gradingPeriodId': self.gr_periods()[1]}
     
         self.post('/Feed/SetSettings.json?', self.settings_data)   
     
@@ -90,9 +90,9 @@ class TestFeed(BaseAuthedTestCase):
         sorttype = str(dictionary_verify_settingsforfeed['sorttype'])
         gradingperiodid = str(dictionary_verify_settingsforfeed['gradingperiodid'])
         self.assertDictContainsSubset(self.settings_data, {'announcementType':announcementtype, 'sortType':sorttype, 'gradingPeriodId':gradingperiodid}, 'key/value pair exists')
-    
+
         self.assertFalse(set(self.lesson_plan_and_activities_id_for_grading_period_2) & set(self.lesson_plan_and_activities_id_for_grading_period_1), 'Items exits in different grading perios')
-    
+       
         dictionary_verify_annoucementviewdatas_all = dictionary_get_items['data']['annoucementviewdatas']  
         for item in dictionary_verify_annoucementviewdatas_all:
             type = str(item['type'])
@@ -106,6 +106,6 @@ class TestFeed(BaseAuthedTestCase):
             type = str(item['type'])
             #print id
             self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'true'})
-            
+
 if __name__ == '__main__':
     unittest.main()
