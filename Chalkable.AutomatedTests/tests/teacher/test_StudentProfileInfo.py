@@ -8,7 +8,7 @@ class TestStudentProfileInfo(BaseAuthedTestCase):
         self.assertGreater(len(dictionary_get_students_list['data']), 5, 'At least 5 students')
 
         fifth_student = dictionary_get_students_list['data'][4]
-        print fifth_student
+        #print fifth_student
         self.assertTrue('id' in fifth_student, 'id exists')
         self.assertTrue('firstname' in fifth_student, 'firstname exists')
         self.assertTrue('lastname' in fifth_student, 'lastname exists')

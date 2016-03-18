@@ -120,6 +120,6 @@ class TestFeed(BaseAuthedTestCase):
             type = str(item['type'])
             #print id
             self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'true'})
-        print self.current_time       
+        #print self.current_time       
 if __name__ == '__main__':
     unittest.main()
