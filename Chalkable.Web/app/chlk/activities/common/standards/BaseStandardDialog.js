@@ -47,6 +47,12 @@ NAMESPACE('chlk.activities.common.standards', function(){
                 this.dom.find('form.search-standard-cnt').trigger('submit');
             },
 
+            [ria.mvc.DomEventBind('submit', 'form.search-standard-cnt')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function searchFormSubmit(node, event){
+                this.dom.find('.browse-link').trigger('click');
+            },
+
             [ria.mvc.DomEventBind('click', '.clear-search')],
             [[ria.dom.Dom, ria.dom.Event]],
             function clearSearchClick(node, event){
