@@ -17,7 +17,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         Task<IList<Subject>> GetSubjects(Guid? authorityId, Guid? documentId);
         Task<IList<SubjectDocument>> GetSubjectDocuments(Guid? authorityId, Guid? documentId); 
         Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, Guid? subjectDocId);
-        Task<PaginatedList<Standard>> SearchStandards(string searchQuery, int start, int count);
+        Task<PaginatedList<Standard>> SearchStandards(string searchQuery, bool? deepest, int start, int count);
         Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId);
 
     }
@@ -41,9 +41,9 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             return await GetOne<StandardRelations>(url, null);
         }
 
-        public async Task<PaginatedList<Standard>> SearchStandards(string searchQuery, int start, int count)
+        public async Task<PaginatedList<Standard>> SearchStandards(string searchQuery, bool? deepest, int start, int count)
         {
-            return await GetPage<Standard>(null, null, null, searchQuery: searchQuery, start: start, limit: count);
+            return await GetPage<Standard>(null, null, null, searchQuery: searchQuery, start: start, limit: count, deepest: deepest);
         }
 
         public async Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId)
@@ -84,7 +84,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             [typeof (SubjectDocumentWrapper)] = "subject_doc"
         };
         protected async Task<PaginatedList<TModel>> GetPage<TModel>(Guid? authorityId, Guid? documentId, Guid? subjectDocId, 
-            Guid? parentId = null, string gradeLevelCode = null, string searchQuery = null, int start = 0, int limit = int.MaxValue)
+            Guid? parentId = null, string gradeLevelCode = null, string searchQuery = null, int start = 0, int limit = int.MaxValue, bool? deepest = null)
         {
             var nvc = new NameValueCollection
             {
@@ -102,7 +102,9 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
                 nvc.Add("query", searchQuery);
             if(!string.IsNullOrWhiteSpace(gradeLevelCode))
                 nvc.Add("grade", gradeLevelCode);
-
+            if(deepest.HasValue)
+                nvc.Add("deepest", deepest.Value ? "Y" : "N");
+            
             var res = await GetPage<BaseResource<TModel>>("standards", nvc, start, limit);
             return res.Transform(x => x.Data);
         }
