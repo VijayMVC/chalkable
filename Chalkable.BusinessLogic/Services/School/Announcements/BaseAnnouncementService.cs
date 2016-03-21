@@ -1,9 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
+using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
@@ -36,6 +37,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         void SetAnnouncementsAsComplete(DateTime? date, bool complete);
         bool CanAddStandard(int announcementId);
 
+        IList<Standard> SubmitStandardsToAnnouncement(int announcementId, IList<int> standardsIds); 
         Standard AddAnnouncementStandard(int announcementId, int standardId);
         Standard RemoveStandard(int announcementId, int standardId);
         void RemoveAllAnnouncementStandards(int standardId);
@@ -119,18 +121,41 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
 
         protected abstract void SetComplete(Announcement announcement, bool complete);
-        
-        public Standard AddAnnouncementStandard(int announcementId, int standardId)
+
+
+        public IList<Standard> SubmitStandardsToAnnouncement(int announcementId, IList<int> standardsIds)
         {
-            var ann = GetAnnouncementById(announcementId);
+            var ann = InternalGetAnnouncementById(announcementId);
             AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
+            standardsIds = standardsIds ?? new List<int>();
+            var annStandards = standardsIds.Select(sId => new AnnouncementStandard
+            {
+                AnnouncementRef = announcementId,
+                StandardRef = sId
+            }).ToList();
             using (var uow = Update())
             {
-                var annStandard = new AnnouncementStandard
-                    {
-                        AnnouncementRef = announcementId,
-                        StandardRef = standardId
-                    };
+                var da = new AnnouncementStandardDataAccess(uow);
+                da.Delete(announcementId, null);
+                da.Insert(annStandards);
+                AfterSubmitStandardsToAnnouncement(ann, standardsIds);
+                uow.Commit();
+                return new StandardDataAccess(uow).GetStandardsByIds(standardsIds);
+            }
+        }
+
+        public Standard AddAnnouncementStandard(int announcementId, int standardId)
+        {
+            var ann = InternalGetAnnouncementById(announcementId);
+            AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
+            var annStandard = new AnnouncementStandard
+            {
+                AnnouncementRef = announcementId,
+                StandardRef = standardId
+            };
+            using (var uow = Update())
+            {
+
                 new AnnouncementStandardDataAccess(uow).Insert(annStandard);
                 AfterAddingStandard(ann, annStandard);
                 uow.Commit();
@@ -140,9 +165,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public Standard RemoveStandard(int announcementId, int standardId)
         {
-            var ann = GetAnnouncementById(announcementId);
-            if (!AnnouncementSecurity.CanModifyAnnouncement(ann, Context))
-                throw new ChalkableSecurityException();
+            var ann = InternalGetAnnouncementById(announcementId);
+            AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
+
             using (var uow = Update())
             {
                 new AnnouncementStandardDataAccess(uow).Delete(announcementId, standardId);
@@ -152,14 +177,15 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        protected virtual void AfterAddingStandard(Announcement announcement, AnnouncementStandard announcementStandard) {}
-        protected virtual void AfterRemovingStandard(Announcement announcement, int standardId){}
+        protected virtual void AfterSubmitStandardsToAnnouncement(TAnnouncement announcement,  IList<int> standardsIds) {}
+        protected virtual void AfterAddingStandard(TAnnouncement announcement, AnnouncementStandard announcementStandard) {}
+        protected virtual void AfterRemovingStandard(TAnnouncement announcement, int standardId){}
 
 
         public void RemoveAllAnnouncementStandards(int standardId)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new AnnouncementStandardDataAccess(u).DeleteAll(standardId));
+            DoUpdate(u => new AnnouncementStandardDataAccess(u).Delete(null, standardId));
         }
 
         public IList<AnnouncementStandard> GetAnnouncementStandards(int classId)
@@ -174,20 +200,22 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             DateTime toDate;
             DateTime fromDate;
+            var filterByExpiryDate = false;
             GetDateRangeForMarking(out fromDate, out toDate);
             switch (option)
             {
                 case MarkDoneOptions.Till30Days:
-                    if(toDate > Context.NowSchoolTime.AddMonths(-1))
-                        toDate = Context.NowSchoolTime.AddMonths(-1);
+                    if(toDate > Context.NowSchoolTime.AddDays(-30))
+                        toDate = Context.NowSchoolTime.AddDays(-30);
                     break;
                 case MarkDoneOptions.TillToday:
                     if (toDate > Context.NowSchoolTime.AddDays(-1))
                         toDate = Context.NowSchoolTime.AddDays(-1);
+                    filterByExpiryDate = true;
                     break;
             }
             if(fromDate <= toDate)
-                SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, fromDate, toDate, classId);
+                SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, fromDate, toDate, classId, filterByExpiryDate);
         }
 
         private void GetDateRangeForMarking(out DateTime startDate, out DateTime endDate)
@@ -205,7 +233,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 endDate = Context.SchoolYearEndDate ?? DateTime.MaxValue;
         }
 
-        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId);
+        protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate);
 
 
         public Announcement GetAnnouncementById(int id)
@@ -246,12 +274,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         protected virtual IList<AnnouncementDetails> InternalGetDetailses(BaseAnnouncementDataAccess<TAnnouncement> dataAccess, IList<int> announcementIds, bool onlyOnwer = true)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            var anns = dataAccess.GetDetailses(announcementIds, Context.PersonId.Value, Context.Role.Id, onlyOnwer);
-            foreach (var ann in anns)
-            {
-                ann.AnnouncementStandards = ServiceLocator.StandardService.PrepareAnnouncementStandardsCodes(ann.AnnouncementStandards);
-            }
-            return anns;
+            return dataAccess.GetDetailses(announcementIds, Context.PersonId.Value, Context.Role.Id, onlyOnwer);
         } 
     }
 }

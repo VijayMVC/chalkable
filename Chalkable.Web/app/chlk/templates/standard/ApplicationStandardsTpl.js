@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.standard', function(){
         'ApplicationStandardsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.standard.CommonCoreStandard), 'standards',
+            ArrayOf(chlk.models.academicBenchmark.Standard), 'standards',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.id.AppId, 'applicationId',
@@ -20,7 +20,7 @@ NAMESPACE('chlk.templates.standard', function(){
 
             Array, function getStandardsIds(){
                 var standards = this.getStandards();
-                return standards && standards.map(function(standard){return standard.getId().valueOf();});
+                return standards && standards.map(function(standard){return standard.getStandardId().valueOf();});
             }
         ]);
 });

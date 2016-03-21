@@ -61,7 +61,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             {
                 var word = words[i];
                 res = res.Union(standards.Where(s => (!string.IsNullOrEmpty(s.Name) && s.Name.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
-                                           || (s?.CCStandardCodes.Count > 0  && s.CCStandardCodes.Any(x=> !string.IsNullOrWhiteSpace(x) && x.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0))
                                            || (!string.IsNullOrEmpty(s.Description) && s.Name.IndexOf(word, StringComparison.OrdinalIgnoreCase) >= 0)
                                 ));
             }
@@ -192,18 +191,20 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public void SetupDefaultData()
         {
-            var masterLocator = ServiceLocator.ServiceLocatorMaster;
-            var ccStandardCategories = masterLocator.CommonCoreStandardService.GetCCStandardCategories();
-            ClearStandardsData();
-            var subjectId = 1;
-            var subjectIdsDic = ccStandardCategories.ToDictionary(x => x.Id, x =>
-                {
-                    subjectId++;
-                    return subjectId;
-                });
-            InsertDefaultSubjects(subjectIdsDic, ccStandardCategories);
-            InsertDefaultStandards(subjectIdsDic);
-            InsertDefaultClassStandards();
+            //TODO: IMPLEMENT LATER
+
+            //var masterLocator = ServiceLocator.ServiceLocatorMaster;
+            //var ccStandardCategories = masterLocator.CommonCoreStandardService.GetCCStandardCategories();
+            //ClearStandardsData();
+            //var subjectId = 1;
+            //var subjectIdsDic = ccStandardCategories.ToDictionary(x => x.Id, x =>
+              //  {
+                //    subjectId++;
+                  //  return subjectId;
+                //});
+            //InsertDefaultSubjects(subjectIdsDic, ccStandardCategories);
+            //InsertDefaultStandards(subjectIdsDic);
+            //InsertDefaultClassStandards();
         }
 
         private void ClearStandardsData()
@@ -214,58 +215,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         }
 
         private void InsertDefaultSubjects(IDictionary<Guid, int> subjectIdsDic
-            , IEnumerable<CommonCoreStandardCategory> ccStandardCategories)
+            , IEnumerable<Guid> ccStandardCategories)
         {
-            var standardSubjects = ccStandardCategories.Select(standardCategory => new StandardSubject
-                {
-                    Id = subjectIdsDic[standardCategory.Id], 
-                    Name = standardCategory.Name, 
-                    IsActive = true
-                }).ToList();
-            if (standardSubjects.Count > 0)
-                StandardSubjectStorage.Add(standardSubjects);
+            throw new NotImplementedException();
         }
 
         private void InsertDefaultStandards(IDictionary<Guid, int> subjectIdsDic)
         {
-            var masterLocator = ServiceLocator.ServiceLocatorMaster;
-            var abToccMapper = masterLocator.CommonCoreStandardService.GetAbToCCMapper();
-            var standardId = 0; //GetStandards(null, null, null).Max(x => x.Id);
-            IDictionary<Guid, int> ccStandardsIdsDic = new Dictionary<Guid, int>();
-            var ccStandards = new List<CommonCoreStandard>();
-            foreach (var ccStandard in abToccMapper.Values.SelectMany(x=>x))
-            {
-                if (!ccStandardsIdsDic.ContainsKey(ccStandard.Id))
-                {
-                    standardId++;
-                    ccStandardsIdsDic.Add(ccStandard.Id, standardId);
-                    ccStandards.Add(ccStandard);
-                }
-            }
-            var standards = new List<Standard>();
-            foreach (var ccStandard in ccStandards)
-            {
-                if (ccStandard.AcademicBenchmarkId.HasValue && subjectIdsDic.ContainsKey(ccStandard.StandardCategoryRef)
-                    &&
-                    (!ccStandard.ParentStandardRef.HasValue ||
-                     ccStandardsIdsDic.ContainsKey(ccStandard.ParentStandardRef.Value)))
-                    standards.Add(new Standard
-                    {
-                        Id = ccStandardsIdsDic[ccStandard.Id],
-                        AcademicBenchmarkId = ccStandard.AcademicBenchmarkId,
-                        CCStandardCodes = abToccMapper[ccStandard.AcademicBenchmarkId.Value].Select(x=>x.Code).ToList(),
-                        Description = ccStandard.Description,
-                        IsActive = true,
-                        Name = ccStandard.Code,
-                        ParentStandardRef =
-                            ccStandard.ParentStandardRef.HasValue
-                                ? ccStandardsIdsDic[ccStandard.ParentStandardRef.Value]
-                                : (int?) null,
-                        StandardSubjectRef = subjectIdsDic[ccStandard.StandardCategoryRef]
-                    });
-            }
-            if (standards.Count > 0)
-                StandardStorage.Add(standards);
+            throw new NotImplementedException();
         }
         
         private void InsertDefaultClassStandards()
@@ -411,7 +368,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             return standards;
         }
 
-        public IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false)
+        public IList<Standard> GetStandards(string filter, int? classId, bool activeOnly = false, bool? deepest = null)
         {
             var standards = StandardStorage.SearchStandards(filter, activeOnly);
             if (classId.HasValue)

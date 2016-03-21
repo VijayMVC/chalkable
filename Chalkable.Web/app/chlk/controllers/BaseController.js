@@ -541,7 +541,6 @@ NAMESPACE('chlk.controllers', function (){
                }
 
                this.setNotAblePressSidebarButton(false);
-               this.userTrackingService.clickedAction(state.getController() + "/" + state.getAction());
                window.appInsights && window.appInsights.ChalkableTrackPageView(methodReflector.getName());
            },
 

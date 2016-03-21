@@ -85,9 +85,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public IList<int> GradeLevels { get; set; }
         public IList<RoleViewData> CanLaunchRoles { get; set; }
         public DeveloperViewData Developer { get; set; }
-        public IList<CommonCoreStandardViewData> Standards { get; set; } 
+        public IList<Guid> Standards { get; set; } 
 
-        protected ApplicationViewData(Application application, IList<Category> categories, bool canGetSecretKey, IList<CommonCoreStandard> standards)
+        protected ApplicationViewData(Application application, IList<Category> categories, bool canGetSecretKey, IList<Guid> standards)
             : base(application)
         {
             Developer = DeveloperViewData.Create(application.Developer);
@@ -97,12 +97,12 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             categories = categories.Where(x => application.Categories.Any(y => y.CategoryRef == x.Id)).ToList();
             Categories = CategoryViewData.Create(categories);
             GradeLevels = application.GradeLevels.Select(x => x.GradeLevel).ToList();
-            if (application.ApplicationStandards != null && standards != null)
-                Standards = CommonCoreStandardViewData.Create(
-                        standards.Where(x => application.ApplicationStandards.Any(y => y.StandardRef == x.Id))
-                                 .ToList());
+            //if (application.ApplicationStandards != null && standards != null)
+            //    Standards = CommonCoreStandardViewData.Create(
+            //            standards.Where(x => application.ApplicationStandards.Any(y => y.StandardRef == x.Id))
+            //                     .ToList());
         }
-        public static ApplicationViewData Create(Application application, IList<Category> categories, IList<CommonCoreStandard> standards, bool canGetSecretKey = false)
+        public static ApplicationViewData Create(Application application, IList<Category> categories, IList<Guid> standards, bool canGetSecretKey = false)
         {
             return new ApplicationViewData(application, categories, canGetSecretKey, standards);
         }

@@ -134,10 +134,15 @@
     <Compile Include="Mapping\ModelMappers\ScoreToStudentAnnMapper.cs" />
     <Compile Include="Mapping\ModelMappers\StudentAnnouncementToScoreMapper.cs" />
     <Compile Include="Model\AcademicBenchmark\Authority.cs" />
+    <Compile Include="Model\AcademicBenchmark\Course.cs" />
     <Compile Include="Model\AcademicBenchmark\Document.cs" />
+    <Compile Include="Model\AcademicBenchmark\GradeLevel.cs" />
     <Compile Include="Model\AcademicBenchmark\ShortStandard.cs" />
     <Compile Include="Model\AcademicBenchmark\Standard.cs" />
     <Compile Include="Model\AcademicBenchmark\StandardRelations.cs" />
+    <Compile Include="Model\AcademicBenchmark\Subject.cs" />
+    <Compile Include="Model\AcademicBenchmark\SubjectDocument.cs" />
+    <Compile Include="Model\AcademicBenchmark\Topic.cs" />
     <Compile Include="Model\AnnouncementInfo.cs" />
     <Compile Include="Model\ApplicationInfo.cs" />
     <Compile Include="Model\ApplicationTotalPriceInfo.cs" />
@@ -259,7 +264,6 @@
     <Compile Include="Services\Master\ApplicationService.cs" />
     <Compile Include="Services\Master\ApplicationUploadService.cs" />
     <Compile Include="Services\Master\CategoryService.cs" />
-    <Compile Include="Services\Master\CommonCoreStandardService.cs" />
     <Compile Include="Services\Master\DeveloperService.cs" />
     <Compile Include="Services\Master\DistrictService.cs" />
     <Compile Include="Services\Master\ChalkableDepartmentService.cs" />

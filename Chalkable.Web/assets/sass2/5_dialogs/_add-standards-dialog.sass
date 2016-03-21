@@ -1,14 +1,100 @@
-.add-standards-dialog
-  .chlk-attach-dialog
-    width: 1117px
+.standards-list-cnt
+  border: 1px solid #bfbfbf
+  font-size: 12px
+  margin: 15px
+
+  .breadcrumbs-cnt
+    background: #f7f7f5
+    border-bottom: 1px solid #bfbfbf
+
+  .breadcrumb-item
+    display: inline-block
+    position: relative
+    padding: 6px 7px 8px 6px
+    color: #0d5e75
+    font-weight: 600
+    cursor: pointer
+
+    &:not(:last-child)::after
+      content: ' '
+      position: absolute
+      height: 13px
+      width: 1px
+      background: #0d5e75
+      right: 0
+      top: 9px
+
+  .items-cnt
+    max-height: 415px
+    overflow: auto
+
+  &.browse-cnt
+    .item-block:not(.able-add-item)
+      padding-left: 20px
+
+      &:before
+        content: ' '
+        left: 8px
+        top: 12px
+        position: absolute
+        width: 0
+        height: 0
+        border-style: solid
+        border-width: 3px 0 3px 6px
+        border-color: transparent transparent transparent #0d5e75
+
+  .item-block
+    padding: 6px 7px 8px 6px
+    display: block
+    cursor: pointer
+    position: relative
+
+    &.pressed
+      background: #dbeef3
+
+      &.disabled
+        opacity: 0.6
+
+    &:not(:last-child)
+      border-bottom: 1px solid #bfbfbf
+
+    .item-name
+      color: #0d5e75
+      font-weight: 600
+
+    .item-name, .item-description
+      display: inline-block
+      vertical-align: top
+      white-space: pre-wrap
+
+.chlk-items-picker
+
+  .search-standard-cnt
+    float: right
+    margin-top: -15px
+    position: relative
+
+    INPUT
+      padding-right: 50px
+      padding-left: 5px
+      width: 200px
+
+    .clear-search
+      right: 50px
+      zoom: 0.6
+      top: 10px
+
+    #search-glass
+      right: 5px
+      left: auto
+      top: 50%
+      margin-top: -12px
+      cursor: pointer
 
   .standards-list-container
     border: 1px solid #d7d7d7
     border-bottom: none
     margin: 20px 0
-
-  .search-standard
-    float: right
 
   .buttons-container
     text-align: right
@@ -16,50 +102,13 @@
     button
       margin-right: 15px
 
-.add-standards-dialog, .add-ccstandard-dialog
-  .column-cell
-    border-bottom: 1px solid #d7d7d7
-    color: #9c9c9c
-    height: 33px
-    padding: 10px 30px 10px 13px
-
-  .right-triangle
-    border-left-color: #fff
-    right: 10px
-    top: 20px
-
-  .name
-    display: table-cell
-    height: 30px
-    vertical-align: middle
-    max-width: 210px
-    overflow: hidden
-    text-overflow: ellipsis
-
-  .saved-block
-    position: absolute
-    right: 20px
-    top: 20px
-
-  td
-    width: 238px
-
-  td.name-td
-    border-right: 1px solid #d7d7d7
-
-  .column
-    width: 243px
-
-.add-standards-dialog, .add-ccstandard-dialog, .announcement-groups-dialog
+.chlk-items-picker, .announcement-groups-dialog
   a
     text-decoration: none
 
   .add-standards
     min-height: 470px
     width: 1000px
-    
-  .add-standards-form
-    //margin-top: 20px
 
   .standards-list-container
     min-height: 340px
@@ -112,7 +161,7 @@
       padding-left: 6px
       padding-right: 6px
 
-.add-ccstandard-dialog, .announcement-groups-dialog
+.announcement-groups-dialog
   .buttons-container
     text-align: right
     padding: 10px 35px 10px 0

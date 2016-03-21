@@ -22,8 +22,7 @@ namespace Chalkable.BackgroundTaskProcessor
             Trace.WriteLine("Chalkable.BackgroundTaskProcessor entry point called", "Information");
             var processor = new TaskProcessor();
             var delay = Settings.TaskProcessorDelay;
-            var raygunClient = new RaygunClient();
-            raygunClient.ApplicationVersion = CompilerHelper.Version;
+            var raygunClient = new RaygunClient {ApplicationVersion = CompilerHelper.Version};
 
             if (delay <= 0)
             {

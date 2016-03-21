@@ -5,8 +5,7 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.StandardSubjectId');
 REQUIRE('chlk.models.id.StandardId');
 
-REQUIRE('chlk.models.standard.CommonCoreStandard');
-REQUIRE('chlk.models.standard.CCStandardCategory');
+REQUIRE('chlk.models.academicBenchmark.Standard');
 REQUIRE('chlk.models.id.CCStandardCategoryId');
 
 NAMESPACE('chlk.services', function () {
@@ -28,21 +27,12 @@ NAMESPACE('chlk.services', function () {
                 return this.get('Standard/GetStandards.json', ArrayOf(chlk.models.standard.Standard), {
                     classId: classId_ && classId_.valueOf(),
                     subjectId: subjectId_ && subjectId_.valueOf(),
-                    parentStandardId: standardId_ && standardId_.valueOf()
-                });
-            },
-
-            [[chlk.models.id.ClassId, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId]],
-            ria.async.Future, function getStandardColumn(classId_, subjectId_, standardId_){
-                return this.get('Standard/GetStandards.json', ArrayOf(chlk.models.standard.StandardTableItem), {
-                    classId: classId_ && classId_.valueOf(),
-                    subjectId: subjectId_ && subjectId_.valueOf(),
                     parentStandardId: standardId_ && standardId_.valueOf(),
-                    activeOnly : true
+                    activeOnly: true
                 });
             },
 
-            [[ArrayOf(chlk.models.id.StandardId)]],
+            [[Array]],
             ria.async.Future, function getStandardsList(ids) {
                 return this.get('Standard/GetStandardsByIds.json', ArrayOf(chlk.models.standard.Standard), {
                     ids: this.arrayToIds(ids)
@@ -64,40 +54,17 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String, Boolean]],
-            ria.async.Future, function searchStandards(filter, activeOnly_) {
+            [[String, chlk.models.id.ClassId]],
+            ria.async.Future, function searchStandards(filter, classId_) {
                 return this.get('Standard/SearchStandards.json', ArrayOf(chlk.models.standard.Standard), {
                     filter: filter,
-                    activeOnly: activeOnly_
-                });
-            },
-
-            [[chlk.models.id.StandardId, chlk.models.id.ClassId]],
-            ria.async.Future, function getStandardParentsSubTree(standardId, classId){
-                return this.get('Standard/GetStandardParentsSubTree', chlk.models.standard.StandardsTable  ,{
-                    standardId: standardId && standardId.valueOf(),
-                    classId: classId && classId.valueOf()
-                });
-            },
-
-            [[chlk.models.id.CCStandardCategoryId, chlk.models.id.CommonCoreStandardId, Boolean]],
-            ria.async.Future, function getCommonCoreStandards(standardCategoryId_, parentStandardId_, allStandards_) {
-                return this.get('Standard/GetCommonCoreStandards.json', ArrayOf(chlk.models.standard.CommonCoreStandard), {
-                    standardCategoryId: standardCategoryId_ && standardCategoryId_.valueOf(),
-                    parentStandardId: parentStandardId_ && parentStandardId_.valueOf(),
-                    allStandards: allStandards_
-                });
-            },
-
-
-            [[ArrayOf(chlk.models.id.CommonCoreStandardId)]],
-            ria.async.Future, function getCommonCoreStandardsByIds(ids) {
-                return this.get('Standard/GetCommonCoreStandardsByIds.json', ArrayOf(chlk.models.standard.CommonCoreStandard), {
-                    standardsIds : ids && this.arrayToCsv(ids)
-                });
-            },
-            ria.async.Future, function getCCStandardCategories(){
-                return this.get('Standard/GetCommonCoreStandardCategories.json', ArrayOf(chlk.models.standard.CCStandardCategory), {
+                    activeOnly: true,
+                    classId: classId_ && classId_.valueOf()
+                }).then(function(items){
+                    items.forEach(function(item){
+                        item.setDeepest(true);
+                    });
+                    return items;
                 });
             }
         ])

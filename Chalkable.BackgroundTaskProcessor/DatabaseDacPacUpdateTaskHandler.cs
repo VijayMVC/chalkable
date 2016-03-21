@@ -56,6 +56,8 @@ namespace Chalkable.BackgroundTaskProcessor
         private static async Task<bool> DeployDacPac(AzureSqlJobClient elasticJobs, string dacPacName, string dacPacUri, 
             IEnumerable<DatabaseTarget> targets, BackgroundTaskService.BackgroundTaskLog log)
         {
+            Memoization.Clear();
+
             var dacPackDef = await elasticJobs.Content.GetContentAsync(dacPacName) ??
                              await elasticJobs.Content.CreateDacpacAsync(dacPacName, new Uri(dacPacUri));
 
@@ -119,27 +121,30 @@ namespace Chalkable.BackgroundTaskProcessor
                     log.LogInfo($"{dacPacName} job is " + masterJobStatus.Lifecycle);
 
                 masterJobStatusLifecycle = masterJobStatus.Lifecycle;
+                
+                var stats = await ProcessChildJobExcutions(log, elasticJobs, masterJobStatus);
 
-                await LogErrors(log, elasticJobs, masterJobStatus);
+                log.LogInfo(stats.Aggregate("Task stats", (s, k) => s + $" {k.Key}: {k.Value}"));
 
-                if (masterJobStatus.Lifecycle == JobExecutionLifecycle.Failed)
+                switch (masterJobStatus.Lifecycle)
                 {
-                    log.LogError("Deploy failed");
-                    log.Flush();
+                    case JobExecutionLifecycle.Failed:
+                    case JobExecutionLifecycle.Canceled:
+                    case JobExecutionLifecycle.Skipped:
+                    case JobExecutionLifecycle.TimedOut:
+                        log.LogError("Deploy " + masterJobStatus.Lifecycle);
+                        log.Flush();
 
-                    return false;
-                }
+                        return false;
 
-                if (masterJobStatus.Lifecycle == JobExecutionLifecycle.Succeeded)
-                {
-                    break;
+                    case JobExecutionLifecycle.Succeeded:
+                        log.Flush();
+                        return true;
                 }
 
                 log.Flush();
-                await Task.Delay(1000);
+                await Task.Delay(10000);
             }
-
-            return true;
         }
 
         public bool Handle(BackgroundTask task, BackgroundTaskService.BackgroundTaskLog log)
@@ -226,8 +231,12 @@ namespace Chalkable.BackgroundTaskProcessor
             return true;
         }
 
-        private static async Task LogErrors(BackgroundTaskService.BackgroundTaskLog log, AzureSqlJobClient elasticJobs, JobExecutionInfo execution)
+        private static readonly HashSet<string> Memoization = new HashSet<string>();
+
+        private static async Task<Dictionary<string, int>> ProcessChildJobExcutions(BackgroundTaskService.BackgroundTaskLog log, AzureSqlJobClient elasticJobs, JobExecutionInfo execution)
         {            
+            var stats = new Dictionary<string, int>();
+
             var children = await elasticJobs.JobExecutions.ListJobExecutionsAsync(new JobExecutionFilter
             {
                 ParentJobExecutionId = execution.JobExecutionId
@@ -235,24 +244,37 @@ namespace Chalkable.BackgroundTaskProcessor
 
             foreach (var child in children)
             {
-                var task = (await elasticJobs.JobTaskExecutions.ListJobTaskExecutions(child.JobExecutionId))
-                    .OrderByDescending(x => x.CreatedTime)
-                    .FirstOrDefault();
+                var tasks = (await elasticJobs.JobTaskExecutions.ListJobTaskExecutions(child.JobExecutionId))
+                    .OrderByDescending(x => x.CreatedTime);
 
-                if (!string.IsNullOrWhiteSpace(task?.Message))
+                foreach(var task in tasks)
                 {
+                    var key = task.Lifecycle.ToString();
+                    if (!stats.ContainsKey(key))
+                        stats.Add(key, 1);
+                    else 
+                        stats[key]++;
+
+                    if (string.IsNullOrWhiteSpace(task?.Message))
+                        continue;
+                    
+                    var id = $"{task.JobTaskExecutionId}--{task.Lifecycle}";
+                    if (Memoization.Contains(id))
+                        continue;
+
+                    Memoization.Add(id);
+
                     log.LogError($"Execution task: {task}, target {child.TargetDescription} status {task.Lifecycle}, {task.Message}");
 
-                    var scripts =
-                        await
-                            elasticJobs.ScriptBatchExecutions.ListScriptBatchExecutions(task.JobTaskExecutionId);
-
+                    var scripts = await elasticJobs.ScriptBatchExecutions.ListScriptBatchExecutions(task.JobTaskExecutionId);
                     foreach (var script in scripts)
                     {
                         log.LogError($"Execution task script: {script}, status {script.Lifecycle}, {script.Message}");
                     }
                 }
             }
+
+            return stats;
         }
 
         public static Task<bool> Test(AzureSqlJobCredentials creds, BackgroundTaskService.BackgroundTaskLog log, DatabaseDacPacUpdateTaskData data)

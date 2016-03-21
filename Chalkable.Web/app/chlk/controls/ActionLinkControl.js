@@ -17,20 +17,13 @@ NAMESPACE('chlk.controls', function () {
     }
 
     function isApiSupported_(sisApiVersion, linkApiVersion){
-        var supported = false;
         var linkApiVersionArr = getParsedApiVersion_(linkApiVersion);
         var sisApiVersionArr = getParsedApiVersion_(sisApiVersion);
-        sisApiVersionArr.forEach(function(item, i){
-            if(linkApiVersionArr[i] < item) {
-                supported = true;
-                return;
-            } else if(linkApiVersionArr[i] > item) {
-                supported = false;
-                return;
-            }
-        });
-
-        return supported;
+        for(var i = 0; i < sisApiVersionArr.length; i++){
+            if(sisApiVersionArr[i] == linkApiVersionArr[i]) continue;
+            return sisApiVersionArr[i] > linkApiVersionArr[i];
+        }
+        return true;
     }
 
     function s_ (x) {

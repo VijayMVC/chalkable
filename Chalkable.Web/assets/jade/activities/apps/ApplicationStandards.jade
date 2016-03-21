@@ -7,7 +7,7 @@
                 button(data-tooltip = standard.getDescription(), type="button").grey-button.same-on-hover
                     = standard.displayTitle()
                     if !self.isReadOnly()
-                        +ActionLink('apps', 'removeStandard', self.getApplicationId(), standard.getId()).remove-standard
+                        +ActionLink('apps', 'removeStandard', self.getApplicationId(), standard.getStandardId()).remove-standard
         if !self.isReadOnly()
             +ActionLink('apps', 'removeAllStandards', self.getApplicationId()).remove-all-standards-btn.x-hidden
             .title.add-more-title CLICK TO ADD MORE

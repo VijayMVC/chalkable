@@ -1,6 +1,8 @@
 REQUIRE('chlk.templates.ChlkTemplate');
 REQUIRE('chlk.models.common.BaseAttachViewData');
 
+//TODO: DELETE
+
 NAMESPACE('chlk.templates.common', function () {
 
     /** @class chlk.templates.common.BaseAttachTpl*/

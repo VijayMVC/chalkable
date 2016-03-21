@@ -147,7 +147,18 @@ NAMESPACE('chlk.controllers', function (){
 
             [[Object]],
             function showStandardPickerAction(data) {
-                this.WidgetStart('apps', 'showStandards', [data.excludeIds || [], data.onlyLeafs])
+                this.WidgetStart('apps', 'showStandards', [data.excludeIds || [], data.onlyOne])
+                    .then(function (data) {
+                        return data.map(function (_) { return _.serialize(); });
+                    }, this)
+                    .then(this._replayTo(data));
+
+                return null;
+            },
+
+            [[Object]],
+            function showTopicsPickerAction(data) {
+                this.WidgetStart('standard', 'showTopics', [data.excludeIds || [], data.onlyOne])
                     .then(function (data) {
                         return data.map(function (_) { return _.serialize(); });
                     }, this)

@@ -1,6 +1,8 @@
 REQUIRE('chlk.models.standard.StandardSubject');
 REQUIRE('chlk.models.common.BaseAttachViewData');
 
+//TODO: DELETE
+
 NAMESPACE('chlk.models.announcement', function(){
     /**@class chlk.models.announcement.AddStandardViewData*/
     CLASS('AddStandardViewData', EXTENDS(chlk.models.common.BaseAttachViewData), [

@@ -15,7 +15,9 @@ NAMESPACE('chlk.models.standard', function () {
             [ria.serialize.SerializeProperty('standardid')],
             chlk.models.id.StandardId, 'standardId',
             [ria.serialize.SerializeProperty('announcementid')],
-            chlk.models.id.AnnouncementId, 'announcementId'
+            chlk.models.id.AnnouncementId, 'announcementId',
+
+            String, 'filter'
 
         ]);
 });

@@ -15,9 +15,9 @@ namespace Chalkable.Web.Controllers
     {
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult SearchStandards(string filter, int? classId, bool? activeOnly)
+        public ActionResult SearchStandards(string filter, int? classId, bool? activeOnly, bool? deepest)
         {
-            var stadnards = SchoolLocator.StandardService.GetStandards(filter, classId, activeOnly ?? false);
+            var stadnards = SchoolLocator.StandardService.GetStandards(filter, classId, activeOnly ?? false, deepest);
             return Json(stadnards.Select(StandardViewData.Create).ToList());
         }
 
@@ -51,35 +51,6 @@ namespace Chalkable.Web.Controllers
         {
             var subjects = SchoolLocator.StandardService.GetStandardSubjects(classId);
             return Json(StandardSubjectViewData.Create(subjects));
-        }
-
-        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher, Student")]
-        public ActionResult GetCommonCoreStandardCategories()
-        {
-            var standardCategories = MasterLocator.CommonCoreStandardService.GetCCStandardCategories();
-            return Json(CCStandardCategoryViewData.Create(standardCategories));
-        }
-
-        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher, Student")]
-        public ActionResult GetCommonCoreStandards(Guid? standardCategoryId, Guid? parentStandardId, bool? allStandards)
-        {
-            var standards = MasterLocator.CommonCoreStandardService.GetStandards(standardCategoryId, parentStandardId, allStandards ?? false);
-            return Json(CommonCoreStandardViewData.Create(standards));
-        }
-
-        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true)]
-        public ActionResult GetCommonCoreStandardsByAbIds(GuidList academicBenchmarkIds)
-        {
-            var abtoccMappings = MasterLocator.CommonCoreStandardService.GetAbtoCCMappingsByAbIds(academicBenchmarkIds);
-            return Json(AbToCCMappingViewData.Create(abtoccMappings));
-        }
-
-        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher, Student")]
-        public ActionResult GetCommonCoreStandardsByIds(GuidList standardsIds)
-        {
-            var standards = MasterLocator.CommonCoreStandardService.GetStandardsByIds(standardsIds ?? new List<Guid>());
-            return Json(CommonCoreStandardViewData.Create(standards));
-        }
-        
+        }      
     }
 }
