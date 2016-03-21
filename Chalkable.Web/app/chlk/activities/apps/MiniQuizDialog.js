@@ -76,12 +76,19 @@ NAMESPACE('chlk.activities.apps', function () {
             [[Object]],
             OVERRIDE, VOID, function onRefresh_(data) {
                 BASE(data);
-                this.dom.find('iframe').$
-                    .css({height: ria.dom.Dom('#main').$.parent().height() - 27*2 + 'px'})
-                    .load(function () {
-                        this.dom.find('iframe').parent()
-                            .removeClass('partial-update');
-                    }.bind(this))
+
+                var iframeExists = this.dom.find('iframe').exists();
+
+                if (iframeExists){
+                    this.dom.find('iframe').$
+                        .css({height: ria.dom.Dom('#main').$.parent().height() - 27*2 + 'px'})
+                        .load(function () {
+                            this.dom.find('iframe').parent()
+                                .removeClass('partial-update');
+                    }.bind(this));
+                }
+                else
+                    this.dom.find('.iframe-wrap').removeClass('partial-update');
             }
         ]);
 });
