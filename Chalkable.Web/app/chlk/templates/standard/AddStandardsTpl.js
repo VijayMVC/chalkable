@@ -10,7 +10,7 @@ NAMESPACE('chlk.templates.standard', function(){
         'AddStandardsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],
-            Array, 'standardIds',
+            Array, 'itemIds',
 
             [ria.templates.ModelPropertyBind],
             String, 'requestId',
@@ -22,7 +22,7 @@ NAMESPACE('chlk.templates.standard', function(){
             Boolean, 'onlyOne',
 
             [ria.templates.ModelPropertyBind],
-            Array, 'selectedStandards',
+            Array, 'selectedItems',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.common.AttachOptionsViewData, 'attachOptions',

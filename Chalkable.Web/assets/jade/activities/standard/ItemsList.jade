@@ -3,6 +3,15 @@ mixin StandardItemInner_(currentItemsType, item)
     if item.getDescription()
         .item-description= '  -  ' + item.getDescription()
 
+mixin DeepestItem_(item, id)
+    .item-block.able-add-item(
+        data-id=id.valueOf(),
+        data-name=item.getName(),
+        data-description=item.getDescription()
+    )
+        +StandardItemInner_(currentItemsType, item)
+
+
 mixin StandardItemByType_(currentItemsType, item)
     case currentItemsType
         when chlk.models.standard.ItemType.SUBJECT
@@ -10,12 +19,7 @@ mixin StandardItemByType_(currentItemsType, item)
                 +StandardItemInner_(currentItemsType, item)
         when chlk.models.standard.ItemType.STANDARD
             if item.isDeepest()
-                .item-block.able-add-item(
-                    data-id=item.getStandardId().valueOf(),
-                    data-name=item.getName(),
-                    data-description=item.getDescription()
-                )
-                    +StandardItemInner_(currentItemsType, item)
+                +DeepestItem_(item, item.getStandardId())
             else
                 +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), item.getSubjectId(), item.getStandardId()).item-block
                     +StandardItemInner_(currentItemsType, item)
@@ -33,14 +37,21 @@ mixin StandardItemByType_(currentItemsType, item)
                 +StandardItemInner_(currentItemsType, item)
         when chlk.models.standard.ItemType.AB_STANDARD
             if item.isDeepest()
-                .item-block.able-add-item(
-                    data-id=item.getStandardId().valueOf(),
-                    data-name=item.getName(),
-                    data-description=item.getDescription()
-                )
-                    +StandardItemInner_(currentItemsType, item)
+                +DeepestItem_(item, item.getStandardId())
             else
                 +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, item.getAuthorityId(), item.getDocumentId(), item.getSubjectDocumentId(), item.getGradeLevel(), item.getStandardId()).item-block
+                    +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.TOPIC_SUBJECT
+            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getId()).item-block
+                +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.TOPIC_COURSE
+            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, item.getId()).item-block
+                +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.TOPIC
+            if item.isDeepest()
+                +DeepestItem_(item, item.getId())
+            else
+                +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, item.getCourseId(), item.getTopicId()).item-block
                     +StandardItemInner_(currentItemsType, item)
 
 

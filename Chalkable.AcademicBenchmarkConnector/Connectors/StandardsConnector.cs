@@ -17,6 +17,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         Task<IList<Subject>> GetSubjects(Guid? authorityId, Guid? documentId);
         Task<IList<SubjectDocument>> GetSubjectDocuments(Guid? authorityId, Guid? documentId); 
         Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, Guid? subjectDocId);
+        Task<IList<Course>> GetCourses(Guid? subjectDocId);
         Task<PaginatedList<Standard>> SearchStandards(string searchQuery, bool? deepest, int start, int count);
         Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId);
 
@@ -39,6 +40,11 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         {
             var url = $"standards/{standardId}/_relate";
             return await GetOne<StandardRelations>(url, null);
+        }
+
+        public async Task<IList<Course>> GetCourses(Guid? subjectDocId)
+        {
+            return (await GetPage<CourseWrapper>(null, null, subjectDocId: subjectDocId)).Select(x=>x.Course).ToList();
         }
 
         public async Task<PaginatedList<Standard>> SearchStandards(string searchQuery, bool? deepest, int start, int count)
@@ -81,7 +87,8 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             [typeof (DocumentWrapper)] = "document",
             [typeof (SubjectWrapper)] = "subject",
             [typeof (GradeLevelWrapper)] = "grade",
-            [typeof (SubjectDocumentWrapper)] = "subject_doc"
+            [typeof (SubjectDocumentWrapper)] = "subject_doc",
+            [typeof(CourseWrapper)] = "course"
         };
         protected async Task<PaginatedList<TModel>> GetPage<TModel>(Guid? authorityId, Guid? documentId, Guid? subjectDocId, 
             Guid? parentId = null, string gradeLevelCode = null, string searchQuery = null, int start = 0, int limit = int.MaxValue, bool? deepest = null)

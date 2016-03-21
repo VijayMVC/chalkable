@@ -9,7 +9,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
 {
     public interface ITopicsConnector
     {
-        Task<PaginatedList<Topic>> GetTopics(string subjectCode, string gradeLevel, Guid? parentId, bool? deepest, string searchQuery, int start, int count);
+        Task<PaginatedList<Topic>> GetTopics(Guid? subjectDocId, Guid? courseId, Guid? parentId, bool? deepest, string searchQuery, int start, int count);
         Task<TopicStandards> GetTopicStandards(Guid topicId);
         Task<Topic> GetTopic(Guid id);
     }
@@ -26,13 +26,13 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             return responce?.Data;
         }
 
-        public async Task<PaginatedList<Topic>> GetTopics(string subjectCode, string gradeLevel, Guid? parentId, bool? deepest, string searchQuery, int start, int count)
+        public async Task<PaginatedList<Topic>> GetTopics(Guid? subjectDocId, Guid? courseId, Guid? parentId, bool? deepest, string searchQuery, int start, int count)
         {
             var nvc = new NameValueCollection();
-            if(!string.IsNullOrWhiteSpace(subjectCode))
-                nvc.Add("subject", subjectCode);
-            if(!string.IsNullOrWhiteSpace(gradeLevel))
-                nvc.Add("grade", gradeLevel);
+            if(subjectDocId.HasValue)
+                nvc.Add("subject_doc", subjectDocId.Value.ToString());
+            if(courseId.HasValue)
+                nvc.Add("course", courseId.Value.ToString());
             if(parentId.HasValue)
                 nvc.Add("parent", parentId.Value.ToString());
             if(!string.IsNullOrWhiteSpace(searchQuery))

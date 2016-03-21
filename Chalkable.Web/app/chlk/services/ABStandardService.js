@@ -7,8 +7,8 @@ REQUIRE('chlk.models.academicBenchmark.Document');
 REQUIRE('chlk.models.academicBenchmark.SubjectDocument');
 REQUIRE('chlk.models.academicBenchmark.GradeLevel');
 REQUIRE('chlk.models.academicBenchmark.Standard');
-
-
+REQUIRE('chlk.models.academicBenchmark.Course');
+REQUIRE('chlk.models.academicBenchmark.Topic');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -21,6 +21,13 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function getStandardsList(ids) {
                 return this.get('AcademicBenchmark/StandardsByIds.json', ArrayOf(chlk.models.academicBenchmark.Standard), {
                     standardsIds: this.arrayToIds(ids)
+                });
+            },
+
+            [[Array]],
+            ria.async.Future, function getTopicsList(ids) {
+                return this.get('AcademicBenchmark/TopicsByIds.json', ArrayOf(chlk.models.academicBenchmark.Topic), {
+                    topicsIds: this.arrayToIds(ids)
                 });
             },
 
@@ -43,13 +50,13 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId]],
             ria.async.Future, function getSubjectDocuments(authorityId_, documentId_){
-                return this.get('AcademicBenchmark/GetSubjectDocuments.json', ArrayOf(chlk.models.academicBenchmark.SubjectDocument), {
+                return this.get('AcademicBenchmark/SubjectDocuments.json', ArrayOf(chlk.models.academicBenchmark.SubjectDocument), {
                     authorityId: authorityId_ && authorityId_.valueOf(),
                     documentId: documentId_ && documentId_.valueOf()
                 }).then(function(items){
                     items.forEach(function(item){
-                        item.setAuthorityId(authorityId_);
-                        item.setDocumentId(documentId_);
+                        authorityId_ && item.setAuthorityId(authorityId_);
+                        documentId_ && item.setDocumentId(documentId_);
                     });
 
                     return items;
@@ -69,6 +76,19 @@ NAMESPACE('chlk.services', function () {
                         item.setSubjectDocumentId(subjectDocId_);
                     });
 
+                    return items;
+                });
+            },
+
+
+            [[chlk.models.id.ABSubjectDocumentId]],
+            ria.async.Future, function getCourses(subjectDocId_){
+                return this.get('AcademicBenchmark/Courses.json', ArrayOf(chlk.models.academicBenchmark.Course), {
+                    subjectDocId: subjectDocId_ && subjectDocId_.valueOf()
+                }).then(function(items){
+                    items.forEach(function(item){
+                        item.setSubjectDocumentId(subjectDocId_);
+                    });
                     return items;
                 });
             },
@@ -106,15 +126,25 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[String, String, chlk.models.id.ABTopicId, Boolean]],
-            ria.async.Future, function getTopics(subjectCode, gradeLevel, parentId_, firstLevelOnly_){
-                return this.getPaginatedList('AcademicBenchmark/Topics.json', ArrayOf(chlk.models.academicBenchmark.Topic),
+            [[chlk.models.id.ABSubjectDocumentId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId, Boolean]],
+            ria.async.Future, function getTopics(subjectDocId_, courseId_, parentId_, firstLevelOnly_){
+                return this.get('AcademicBenchmark/Topics.json', ArrayOf(chlk.models.academicBenchmark.Topic),
                     {
-                        subjectCode: subjectCode,
-                        gradeLevel: gradeLevel,
+                        subjectDocId: subjectDocId_ && subjectDocId_.valueOf(),
+                        courseId: courseId_ && courseId_.valueOf(),
                         parentId: parentId_ && parentId_.valueOf(),
-                        firstLevelOnly: firstLevelOnly_ && firstLevelOnly_.valueOf()
+                        firstLevelOnly: !parentId_
                     });
+            },
+
+            [[String, Number, Number]],
+            ria.async.Future, function searchTopics(searchQuery, start_, count_){
+                return this.get('AcademicBenchmark/SearchTopics.json', ArrayOf(chlk.models.academicBenchmark.Topic), {
+                    searchQuery: searchQuery,
+                    start: start_ || 0,
+                    count: count_ || 50,
+                    deepest: true
+                });
             }
         ]);
 });

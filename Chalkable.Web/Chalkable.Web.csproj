@@ -349,6 +349,7 @@
     <Compile Include="Logic\ClassLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\AuthorityViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\CourseViewData.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\DocumentViewData.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\GradeLevelViewData.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\StandardRelationsViewData.cs" />

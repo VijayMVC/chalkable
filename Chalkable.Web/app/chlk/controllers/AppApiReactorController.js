@@ -156,6 +156,17 @@ NAMESPACE('chlk.controllers', function (){
                 return null;
             },
 
+            [[Object]],
+            function showTopicsPickerAction(data) {
+                this.WidgetStart('standard', 'showTopics', [data.excludeIds || [], data.onlyOne])
+                    .then(function (data) {
+                        return data.map(function (_) { return _.serialize(); });
+                    }, this)
+                    .then(this._replayTo(data));
+
+                return null;
+            },
+
             function _replayTo(data) {
                 return function (value) {
                     data.__source.postMessage({action: 'handleResponse', value: value, reqId: data.reqId}, data.__origin);

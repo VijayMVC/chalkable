@@ -3,8 +3,8 @@
 -var classId = options.getClassId() && options.getClassId().valueOf()
 -var announcementTypeName = options.getAnnouncementTypeName() || ''
 -var announcementType = options.getAnnouncementType()
--var standardIds = self.getStandardIds().map(function(item){return item.valueOf()}).join(',')
--var selected = self.getSelectedStandards()
+-var standardIds = self.getItemIds().map(function(item){return item.valueOf()}).join(',')
+-var selected = self.getSelectedItems()
 
 .chlk-items-picker
     .dialog.chlk-attach-dialog

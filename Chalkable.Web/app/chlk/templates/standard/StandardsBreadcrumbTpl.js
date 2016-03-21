@@ -34,6 +34,12 @@ NAMESPACE('chlk.templates.standard', function(){
             String, 'gradeLevelCode',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.ABStandardId, 'ABStandardId'
+            chlk.models.id.ABStandardId, 'ABStandardId',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ABTopicId, 'topicId',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.ABCourseId, 'courseId'
     ]);
 });

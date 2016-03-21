@@ -4,6 +4,8 @@ REQUIRE('chlk.models.id.ABAuthorityId');
 REQUIRE('chlk.models.id.ABDocumentId');
 REQUIRE('chlk.models.id.ABSubjectDocumentId');
 REQUIRE('chlk.models.id.ABStandardId');
+REQUIRE('chlk.models.id.ABTopicId');
+REQUIRE('chlk.models.id.ABCourseId');
 
 NAMESPACE('chlk.models.standard', function () {
     "use strict";
@@ -19,7 +21,11 @@ NAMESPACE('chlk.models.standard', function () {
         GRADE_LEVEL: 6,
         AB_STANDARD: 7,
         AB_MAIN: 8,
-        SEARCH: 9
+        SEARCH: 9,
+        TOPIC: 10,
+        TOPIC_MAIN: 11,
+        TOPIC_SUBJECT: 12,
+        TOPIC_COURSE: 13
     });
 
     /** @class chlk.models.standard.Breadcrumb*/
@@ -43,9 +49,13 @@ NAMESPACE('chlk.models.standard', function () {
 
             chlk.models.id.ABStandardId, 'ABStandardId',
 
-            [[chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
-                chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABStandardId]],
-            function $(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_){
+            chlk.models.id.ABTopicId, 'topicId',
+
+            chlk.models.id.ABCourseId, 'courseId',
+
+            [[chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId,
+                chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
+            function $(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_, courseId_, topicId_){
                 BASE();
                 this.setType(type);
                 this.setName(name);
@@ -56,6 +66,8 @@ NAMESPACE('chlk.models.standard', function () {
                 subjectDocumentId_ && this.setSubjectDocumentId(subjectDocumentId_);
                 gradeLevelCode_ && this.setGradeLevelCode(gradeLevelCode_);
                 ABStandardId_ && this.setABStandardId(ABStandardId_);
+                courseId_ && this.setCourseId(courseId_);
+                topicId_ && this.setTopicId(topicId_);
             }
         ]);
 
@@ -64,7 +76,7 @@ NAMESPACE('chlk.models.standard', function () {
         'StandardItemsListViewData', [
             chlk.models.standard.ItemType, 'currentItemsType',
 
-            Array, 'standardIds',
+            Array, 'itemIds',
 
             String, 'requestId',
 
@@ -72,21 +84,21 @@ NAMESPACE('chlk.models.standard', function () {
 
             Array, 'items',
 
-            Array, 'selectedStandards',
+            Array, 'selectedItems',
 
             Boolean, 'onlyOne',
 
             ArrayOf(chlk.models.standard.Breadcrumb), 'breadcrumbs',
 
             [[Array, chlk.models.standard.ItemType, chlk.models.common.AttachOptionsViewData, ArrayOf(chlk.models.standard.Breadcrumb), Array, Array, String, Boolean]],
-            function $(items, itemsType, attachOptions_, breadcrumbs_, standardIds_, selected_, requestId_, onlyOne_){
+            function $(items, itemsType, attachOptions_, breadcrumbs_, itemIds_, selected_, requestId_, onlyOne_){
                 BASE();
                 attachOptions_ && this.setAttachOptions(attachOptions_);
                 this.setCurrentItemsType(itemsType);
                 this.setItems(items);
                 breadcrumbs_ && this.setBreadcrumbs(breadcrumbs_);
-                standardIds_ && this.setStandardIds(standardIds_);
-                selected_ && this.setSelectedStandards(selected_);
+                itemIds_ && this.setItemIds(itemIds_);
+                selected_ && this.setSelectedItems(selected_);
                 requestId_ && this.setRequestId(requestId_);
                 onlyOne_ && this.setOnlyOne(onlyOne_);
             }

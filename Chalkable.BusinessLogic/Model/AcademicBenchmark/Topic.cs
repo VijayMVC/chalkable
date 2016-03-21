@@ -10,6 +10,8 @@ namespace Chalkable.BusinessLogic.Model.AcademicBenchmark
         public Guid? ParentId { get; set; }
         public bool IsDeepest { get; set; } 
         public bool IsActive { get; set; }
+        public Course Course { get; set; }
+        public SubjectDocument SubjectDocument { get; set; }
         public static Topic Create(AcademicBenchmarkConnector.Models.Topic topic)
         {
             return new Topic
@@ -19,7 +21,9 @@ namespace Chalkable.BusinessLogic.Model.AcademicBenchmark
                 IsDeepest = topic.IsDeepest,
                 Level = topic.Level,
                 IsActive = topic.IsActive,
-                ParentId = topic.Parent?.Id
+                ParentId = topic.Parent?.Id,
+                SubjectDocument = SubjectDocument.Create(topic.SubjectDocument),
+                Course = Course.Create(topic.Course)
             };
         }
     }

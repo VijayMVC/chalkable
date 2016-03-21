@@ -134,6 +134,7 @@
     <Compile Include="Mapping\ModelMappers\ScoreToStudentAnnMapper.cs" />
     <Compile Include="Mapping\ModelMappers\StudentAnnouncementToScoreMapper.cs" />
     <Compile Include="Model\AcademicBenchmark\Authority.cs" />
+    <Compile Include="Model\AcademicBenchmark\Course.cs" />
     <Compile Include="Model\AcademicBenchmark\Document.cs" />
     <Compile Include="Model\AcademicBenchmark\GradeLevel.cs" />
     <Compile Include="Model\AcademicBenchmark\ShortStandard.cs" />
