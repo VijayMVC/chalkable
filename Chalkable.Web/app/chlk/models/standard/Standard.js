@@ -56,26 +56,6 @@ NAMESPACE('chlk.models.standard', function () {
             },
 
             String, function getUrlComponents(index_) {
-                //index_ = index_ != undefined ? index_|0 : 0;
-                //var resArr = [
-                //    'standardId[' + index_ + ']=' + encodeURIComponent(this.getAcademicBenchmarkId() || ''),
-                //    'ccStandardCode[' + index_ + ']=' + encodeURIComponent(this.getCommonCoreStandardCode() || ''),
-                //    'standardName[' + index_ + ']=' + encodeURIComponent(this.getName() || '')
-                //]
-                //
-                //if(needIsAllStandardCodes_)
-                //    resArr.push('isAllStandardCodes=' + (!this.commonCoreStandardCode || this.commonCoreStandardCode.length < 2))
-                //
-                //return resArr.join('&');
-
-                /*index_ = index_ != undefined ? index_|0 : 0;
-                var codes = this.getCommonCoreStandardCode().split(',').map(function(item, i, array){
-                    return 'ccStandardCode[' + i + ']=' + encodeURIComponent(array[i] || '')
-                });
-                return codes.concat([
-                    'standardId[' + index_ + ']=' + encodeURIComponent(this.getAcademicBenchmarkId() || ''),
-                    'standardName[' + index_ + ']=' + encodeURIComponent(this.getName() || '')
-                ]).join('&');*/
                 return SELF.GET_URL_COMPONENTS(this, index_)
             },
 

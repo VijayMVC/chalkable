@@ -6,7 +6,6 @@ REQUIRE('chlk.templates.standard.SelectedStandardTpl');
 REQUIRE('chlk.templates.standard.StandardsMainTableTpl');
 
 NAMESPACE('chlk.activities.common.standards', function(){
-    //ASSET('~/assets/jade/common/standards/BaseStandardDialog.jade')();
     /**@class chlk.activities.common.standards.BaseStandardDialog*/
     CLASS(
         [ria.mvc.DomAppendTo('#chlk-dialogs')],

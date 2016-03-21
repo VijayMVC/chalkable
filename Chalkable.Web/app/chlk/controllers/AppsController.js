@@ -14,7 +14,7 @@ REQUIRE('chlk.activities.apps.AppInfoPage');
 REQUIRE('chlk.activities.apps.AppGeneralInfoPage');
 REQUIRE('chlk.activities.apps.AddAppDialog');
 REQUIRE('chlk.activities.apps.AppWrapperDialog');
-REQUIRE('chlk.activities.apps.AddCCStandardDialog');
+REQUIRE('chlk.activities.apps.AddABStandardDialog');
 REQUIRE('chlk.activities.apps.ExternalAttachAppDialog');
 REQUIRE('chlk.activities.apps.AppWrapperPage');
 
@@ -36,9 +36,6 @@ REQUIRE('chlk.models.apps.AppsListViewData');
 REQUIRE('chlk.models.id.AppId');
 REQUIRE('chlk.models.id.AppPermissionId');
 
-REQUIRE('chlk.models.standard.AddCCStandardViewData');
-REQUIRE('chlk.models.standard.CCStandardListViewData');
-REQUIRE('chlk.models.standard.AddCCStandardsInputModel');
 REQUIRE('chlk.models.standard.GetStandardTreePostData');
 
 NAMESPACE('chlk.controllers', function (){
@@ -1052,7 +1049,7 @@ NAMESPACE('chlk.controllers', function (){
                         null, [breadcrumb], standardIds, selected, requestId, onlyOne_);
                 }, this);
 
-            return this.ShadeView(chlk.activities.apps.AddCCStandardDialog, res)
+            return this.ShadeView(chlk.activities.apps.AddABStandardDialog, res)
         },
 
         function completeStandardsWidgetAction(model){
@@ -1065,7 +1062,7 @@ NAMESPACE('chlk.controllers', function (){
             else
                 this.WidgetComplete(model.requestId, []);
 
-            return this.CloseView(chlk.activities.apps.AddCCStandardDialog);
+            return this.CloseView(chlk.activities.apps.AddABStandardDialog);
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
