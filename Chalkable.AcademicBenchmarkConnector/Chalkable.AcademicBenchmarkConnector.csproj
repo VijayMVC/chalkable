@@ -53,6 +53,7 @@
     <Compile Include="Exceptions\ChalkableABUnauthorizedException.cs" />
     <Compile Include="Models\Authority.cs" />
     <Compile Include="Models\BaseResponse.cs" />
+    <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Document.cs" />
     <Compile Include="Models\GradeLevel.cs" />
     <Compile Include="Models\StandardRelations.cs" />

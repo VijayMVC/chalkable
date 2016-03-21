@@ -11,6 +11,8 @@ namespace Chalkable.Web.Models.AcademicBenchmarksViewData
         public Guid? ParentId { get; set; }
         public bool IsDeepest { get; set; }
         public bool IsActive { get; set; }
+        public Guid SubjectDocumentId { get; set; }
+        public Guid CourseId { get; set; }
 
         public static TopicViewData Create(Topic topic)
         {
@@ -21,7 +23,9 @@ namespace Chalkable.Web.Models.AcademicBenchmarksViewData
                 IsDeepest = topic.IsDeepest,
                 Level = topic.Level,
                 IsActive = topic.IsActive,
-                ParentId = topic.ParentId
+                ParentId = topic.ParentId,
+                SubjectDocumentId = topic.SubjectDocument.Id,
+                CourseId = topic.Course.Id
             };
         }
     }

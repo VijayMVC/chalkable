@@ -19,5 +19,11 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
 
         [ria.serialize.SerializeProperty('isactive')],
         Boolean, 'active',
+
+        [ria.serialize.SerializeProperty('courseid')],
+        chlk.models.id.ABCourseId, 'courseId',
+
+        [ria.serialize.SerializeProperty('subjectdocumentid')],
+        chlk.models.id.ABSubjectDocumentId, 'subjectDocumentId'
     ]);
 });
