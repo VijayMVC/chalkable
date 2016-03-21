@@ -218,6 +218,7 @@
     <Compile Include="SyncModel\CourseStandard.cs" />
     <Compile Include="SyncModel\CourseType.cs" />
     <Compile Include="SyncModel\DayType.cs" />
+    <Compile Include="SyncModel\District.cs" />
     <Compile Include="SyncModel\Document.cs" />
     <Compile Include="SyncModel\Enrollment.cs" />
     <Compile Include="SyncModel\Ethnicity.cs" />
