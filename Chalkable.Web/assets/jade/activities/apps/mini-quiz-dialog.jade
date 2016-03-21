@@ -30,7 +30,7 @@ mixin App_(app)
         h2.practice: span Practice
         if self.getApplicationInfo() && self.getCurrentStandard().getAcademicBenchmarkId()
             .iframe-wrap.partial-update
-                iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&code=' + encodeURIComponent(self.getAuthorizationCode()) + '&' + self.getCurrentStandard().getUrlComponents(null, true) + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin))
+                iframe(src=self.getApplicationInfo().getUrl() + '?mode=practice&code=' + encodeURIComponent(self.getAuthorizationCode()) + '&' + self.getCurrentStandard().getUrlComponents() + '&apiRoot=' + encodeURIComponent(_GLOBAL.location.origin))
         else
             .iframe-wrap.partial-update
                 .banner Practice is not possible
@@ -46,7 +46,7 @@ mixin App_(app)
                         each app in installedApps
                             +App_(app)
                                 - var isBanned = false
-                                +ActionButton('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned, null, self.getCurrentStandard().getUrlComponents(null, true)) Open
+                                +ActionButton('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned, null, self.getCurrentStandard().getUrlComponents()) Open
             if recommendedApps.length
                 h3 Recommended
                 +LeftRightToolbar()(rightPadding = -20)
