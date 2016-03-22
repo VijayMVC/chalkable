@@ -41,7 +41,8 @@ namespace Chalkable.StiConnector.Connectors
 
                     var serializer = new JsonSerializer();
                     var jsonReader = new JsonTextReader(reader);
-                    
+
+                    //var d = reader.ReadToEnd();
                     
                     var resType = (typeof(SyncResult<>)).MakeGenericType(type);
                     var res = serializer.Deserialize(jsonReader, resType);
