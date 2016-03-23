@@ -12,6 +12,7 @@ REQUIRE('chlk.controllers.GradingController');
 REQUIRE('chlk.controllers.SettingsController');
 REQUIRE('chlk.controllers.SetupController');
 REQUIRE('chlk.controllers.StudentsController');
+REQUIRE('chlk.controllers.StandardController');
 REQUIRE('chlk.controllers.TeachersController');
 REQUIRE('chlk.controllers.DisciplineController');
 REQUIRE('chlk.controllers.GroupController');
