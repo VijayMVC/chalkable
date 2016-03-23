@@ -2,6 +2,7 @@
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
@@ -83,6 +84,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     ? null 
                     : ChalkableAnnouncementType.All.FirstOrDefault(x => x.Keywords.Split(',').Any(y => classAnnouncementTypeName.ToLower().Contains(y)));
         }
+        
 
         private ActivityCategory BuildActivityCategory(ClassAnnouncementType classAnnouncementType)
         {
@@ -91,8 +93,8 @@ namespace Chalkable.BusinessLogic.Services.School
                 Id = classAnnouncementType.Id,
                 Name = classAnnouncementType.Name,
                 Description = classAnnouncementType.Description,
-                HighScoresToDrop = (byte)classAnnouncementType.HighScoresToDrop,
-                LowScoresToDrop = (byte)classAnnouncementType.LowScoresToDrop,
+                HighScoresToDrop = classAnnouncementType.HighScoresToDrop,
+                LowScoresToDrop = classAnnouncementType.LowScoresToDrop,
                 Percentage = classAnnouncementType.Percentage,
                 SectionId = classAnnouncementType.ClassRef,
                 IsSystem = classAnnouncementType.IsSystem
