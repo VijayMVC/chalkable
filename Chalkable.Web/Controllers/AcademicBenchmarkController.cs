@@ -34,49 +34,49 @@ namespace Chalkable.Web.Controllers
             return Json(academicBenchmarkRelatedStandards.Select(StandardRelationsViewData.Create));
         }
 
-        [AuthorizationFilter("Teacher, DistricAdmin, Developer")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
         public async Task<ActionResult> Authorities()
         {
             var authorities = await MasterLocator.AcademicBenchmarkService.GetAuthorities();
             return Json(authorities.Select(AuthorityViewData.Create));
         }
 
-        [AuthorizationFilter("Teacher, DistricAdmin, Developer")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
         public async Task<ActionResult> Documents(Guid? authorityId)
         {
             var docs = await MasterLocator.AcademicBenchmarkService.GetDocuments(authorityId);
             return Json(docs.Select(DocumentViewData.Create));
         }
 
-        [AuthorizationFilter("Teacher, DistricAdmin, Developer")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
         public async Task<ActionResult> Subjects(Guid? authorityId, Guid? documentId)
         {
             var subjects = await MasterLocator.AcademicBenchmarkService.GetSubjects(authorityId, documentId);
             return Json(subjects.Select(SubjectViewData.Create));
         }
 
-        [AuthorizationFilter("Teacher, DistricAdmin, Developer")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
         public async Task<ActionResult> SubjectDocuments(Guid? authorityId, Guid? documentId)
         {
             var subDocs = await MasterLocator.AcademicBenchmarkService.GetSubjectDocuments(authorityId, documentId);
             return Json(subDocs.Select(SubjectDocumentViewData.Create));
         }
 
-        [AuthorizationFilter("Teacher, DistricAdmin, Developer")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
         public async Task<ActionResult> GradeLevels(Guid? authorityId, Guid? documentId, Guid? subjectDocId)
         {
             var gradeLevels = await MasterLocator.AcademicBenchmarkService.GetGradeLevels(authorityId, documentId, subjectDocId);
             return Json(gradeLevels.Select(GradeLevelViewData.Create));
         }
 
-        [AuthorizationFilter("Teacher, DistricAdmin, Developer")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
         public async Task<ActionResult> Courses(Guid? subjectDocId)
         {
             var courses = await MasterLocator.AcademicBenchmarkService.GetCourses(subjectDocId);
             return Json(courses.Select(CourseViewData.Create));
         }
 
-        [AuthorizationFilter("Teacher, DistricAdmin, Developer")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
         public async Task<ActionResult> SearchStandards(string searchQuery, bool? deepest, int? start, int? count)
         {
             start = start ?? 0;
@@ -85,14 +85,14 @@ namespace Chalkable.Web.Controllers
             return Json(standards.Transform(StandardViewData.Create));
         }
 
-        [AuthorizationFilter("Teacher, DistricAdmin, Developer")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
         public async Task<ActionResult> Standards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId, bool? firstLevelOnly)
         {
             var standards = await MasterLocator.AcademicBenchmarkService.GetStandards(authorityId, documentId, subjectDocId, gradeLevelCode, parentId, firstLevelOnly ?? false);
             return Json(standards.Select(StandardViewData.Create));
         }
 
-        [AuthorizationFilter("Teacher, DistricAdmin, Developer")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
         public async Task<ActionResult> Topics(Guid? subjectDocId, Guid? courseId, Guid? parentId, bool? firstLevelOnly)
         {
             var deepest = firstLevelOnly.HasValue && firstLevelOnly.Value ? true : (bool?) null;
@@ -102,8 +102,7 @@ namespace Chalkable.Web.Controllers
             return Json(topics.Select(TopicViewData.Create));
         }
 
-
-        [AuthorizationFilter("Teacher, DistricAdmin, Developer")]
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
         public async Task<ActionResult> SearchTopics(string searchQuery, bool? deepest, int? start, int? count)
         {
             start = start ?? 0;
