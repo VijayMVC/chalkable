@@ -1,0 +1,5 @@
+.breadcrumbs-cnt
+    each breadcrumb in self.getBreadcrumbs()
+        +RenderWith(breadcrumb, chlk.templates.standard.StandardsBreadcrumbTpl)
+.items-cnt.browse-items-cnt
+    +RenderWith(self.getModel(), chlk.templates.standard.ItemsListTpl)
