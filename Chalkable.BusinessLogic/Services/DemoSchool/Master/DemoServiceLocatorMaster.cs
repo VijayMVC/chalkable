@@ -28,7 +28,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         private IDeveloperService developerService;
         private IDbService dbService;
         private IUserTrackingService userTrackingService;
-        private ICommonCoreStandardService commonCoreStandardService;
 
         public DemoServiceLocatorMaster(UserContext context)
             : base(context)
@@ -51,7 +50,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             AccessControlService = new AccessControlService(this);
             fundRequestPictureService = new FundRequestPictureService(this);
             applicationPictureService = new ApplicationPictureService(this);
-            commonCoreStandardService = new CommonCoreStandardService(this);
             dbService = new DbService(Context != null ? Context.MasterConnectionString : null);
             userTrackingService = new NullTrackingService();
         }
@@ -97,7 +95,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         public IUserTrackingService UserTrackingService { get { return userTrackingService;} }
         public IPictureService FundRequestPictureService { get { return fundRequestPictureService; } }
         public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
-        public ICommonCoreStandardService CommonCoreStandardService { get { return commonCoreStandardService; } }
         public IDbMaintenanceService DbMaintenanceService { get{throw new NotImplementedException();} }
         public IAcademicBenchmarkService AcademicBenchmarkService { get{throw new NotImplementedException();} }
     }

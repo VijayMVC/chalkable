@@ -49,6 +49,7 @@ var CHLK_API = function (window, document, $) {
         SHADE_ME: 'shadeMe',
         POP_ME: 'popMe',
         STANDARD_PICKER: 'showStandardPicker',
+        TOPIC_PICKER: 'showTopicsPicker',
         ON_PAUSED: 'paused',
         ON_RESUME: 'resume',
         ALERT_BOX: 'showAlertBox',
@@ -184,6 +185,11 @@ var CHLK_API = function (window, document, $) {
         /* data: {} */
         showStandardPicker: function (data, cb) {
             postAction(data, ChlkActionTypes.STANDARD_PICKER, parentURL, cb);
+        },
+
+        /* data: {} */
+        showTopicsPicker: function (data, cb) {
+            postAction(data, ChlkActionTypes.TOPIC_PICKER, parentURL, cb);
         },
 
         /* data: {text: "", header: ""} */

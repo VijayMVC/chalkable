@@ -1,6 +1,4 @@
-REQUIRE('chlk.templates.standard.StandardsListTpl');
 REQUIRE('chlk.models.standard.StandardsListViewData');
-
 
 NAMESPACE('chlk.templates.standard', function(){
 

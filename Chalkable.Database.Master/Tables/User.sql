@@ -51,3 +51,26 @@ as
 	Begin
 		Throw 51001, 'User can not be deleted. SchoolUser has record with such SisUserId and DistrictRef', 1
 	End
+
+GO
+
+
+CREATE Trigger [dbo].[UserLogTrigger]
+On [dbo].[User]
+After Insert, Update, Delete
+as 
+
+	Insert into UserLog
+	(Id, SisUserId, DistrictRef, Added, Operation)
+	select 
+		newid(), SisUserId, DistrictRef, getdate(), 1
+	from Inserted
+
+	Insert into UserLog
+	(Id, SisUserId, DistrictRef, Added, Operation)
+	select 
+		newid(), SisUserId, DistrictRef, getdate(), 2
+	from Deleted
+
+
+GO

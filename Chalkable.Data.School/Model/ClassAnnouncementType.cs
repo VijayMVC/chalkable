@@ -7,7 +7,6 @@ namespace Chalkable.Data.School.Model
         public const string CLASS_REF_FIELD = "ClassRef";
         public const string PERCENTAGE_FIELD = "Percentage";
         
-        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
@@ -16,8 +15,8 @@ namespace Chalkable.Data.School.Model
         public int ClassRef { get; set; }
         public int? ChalkableAnnouncementTypeRef { get; set; }
 
-        public int HighScoresToDrop { get; set; }
-        public int LowScoresToDrop { get; set; }
+        public byte HighScoresToDrop { get; set; }
+        public byte LowScoresToDrop { get; set; }
         public bool IsSystem { get; set; }
     }
 

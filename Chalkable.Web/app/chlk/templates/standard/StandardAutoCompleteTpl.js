@@ -16,10 +16,7 @@ NAMESPACE('chlk.templates.standard', function () {
             chlk.models.id.StandardId, 'standardId',
 
             [ria.templates.ModelPropertyBind],
-            String, 'commonCoreStandardCode',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.StandardSubjectId, 'subjectId',
+            chlk.models.id.StandardSubjectId, 'subjectId'
         ])
 });
 

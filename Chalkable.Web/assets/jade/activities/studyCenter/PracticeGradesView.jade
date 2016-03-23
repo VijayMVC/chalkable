@@ -34,15 +34,13 @@ mixin GradebookScore_(numericSore, alphaGradeName)
                             each item in self.getStandards()
                                 +Option(item.getStandardId().valueOf(), item.getName(), standardId == item.getStandardId())
 
-                -var cCode = self.getCurrentStandardCodes()
+                -var cCode = self.getCurrentStandardIds()
                 +ActionButton('studycenter', 'startPractice', cCode).blue-button.start-practice Start Practice
             .mp-data
                 .grades-container
                     .row-item.title-row
                         .td-item.title-item.name-item
                             .title Standard
-                        .td-item.title-item.code-item
-                            .title Code
                         .td-item.title-item.description-item
                             .title Description
                         .td-item.title-item.grade-item
@@ -56,7 +54,6 @@ mixin GradebookScore_(numericSore, alphaGradeName)
                         -var standard = item.getStandard()
                         .row-item
                             .td-item.standard-name.name-item: +ActionLink('studycenter', 'startPractice', standard.getStandardId())= standard.getName()
-                            .td-item.code.code-item: +ActionLink('studycenter', 'startPractice', standard.getStandardId())= standard.getCommonCoreStandardCodes()
                             .td-item.description.description-item=standard.getDescription()
                             .td-item.score.practice.grade-item: +PracticeScoreWithPreviousScores_(item.getPracticeScore(), item.getPreviousScores())
                             -var grade = parseFloat(item.getGradeBookScore()).toFixed(2)

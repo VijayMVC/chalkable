@@ -139,6 +139,7 @@
     <Build Include="User Defined Types\TUserLoginInfo.sql" />
     <Build Include="Stored Procedures\spUpdateMessagingSettings.sql" />
     <Build Include="Stored Procedures\spUpdateAssessmentEnabled.sql" />
+    <Build Include="Tables\UserLog.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Scripts\Pre-Deploy\001_addIsAssessmentEnabledToSchool.PreDeployment.sql" />

@@ -304,13 +304,18 @@ namespace Chalkable.Web.Controllers
             bool canGetSecretKey = false;
             if (needsSecretKey)
                 canGetSecretKey = locator.ApplicationService.CanGetSecretKey(new List<Application> {application});
-            var standards = locator.CommonCoreStandardService.GetStandards();
+            
             var categories = locator.CategoryService.ListCategories();
-            var res = ApplicationViewData.Create(application, categories, standards, canGetSecretKey);
+
+
+            //TODO: IMPLEMENT STANDARTS LATER
+            var res = ApplicationViewData.Create(application, categories, null, canGetSecretKey);
             if (needsliveApp && application.OriginalRef.HasValue)
             {
                 var liveApp = locator.ApplicationService.GetApplicationById(application.Id);
-                res.LiveApplication = ApplicationViewData.Create(liveApp, categories, standards, canGetSecretKey);
+
+                //TODO: IMPLEMENT STANDARTS LATER
+                res.LiveApplication = ApplicationViewData.Create(liveApp, categories, null, canGetSecretKey);
             }
             return res;
         }

@@ -555,7 +555,7 @@ namespace FluentACS.ManagementService
                                         {
                                             IgnoreMissingProperties = true
                                         };
-            managementService.SendingRequest += this.AttachTokenWithWritePermissions;
+            managementService.SendingRequest += AttachTokenWithWritePermissions;
 
             return managementService;
         }

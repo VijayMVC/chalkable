@@ -43,7 +43,7 @@ NAMESPACE('chlk.templates.studyCenter', function(){
                 return res;
             },
 
-            function getCurrentStandardCodes(){
+            function getCurrentStandardIds(){
                 var standardId = this.getStandardId();
                 if (standardId && standardId.valueOf())
                     return [this.getStandardId()];

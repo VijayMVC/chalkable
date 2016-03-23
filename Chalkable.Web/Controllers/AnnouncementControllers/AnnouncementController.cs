@@ -139,7 +139,15 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return Json(true);
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
+        public ActionResult SubmitStandardsToAnnouncement(int announcementId, int? announcementType, IntList standardIds)
+        {
+            var service = SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum?) announcementType);
+            service.SubmitStandardsToAnnouncement(announcementId, standardIds);
+            return Json(PrepareFullAnnouncementViewData(announcementId, announcementType));
+        }
+
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult AddStandard(int announcementId, int standardId, int? announcementType)
         {
             var standard = SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum?)announcementType).AddAnnouncementStandard(announcementId, standardId);
@@ -147,7 +155,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return Json(PrepareFullAnnouncementViewData(announcementId, announcementType));
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult RemoveStandard(int announcementId, int standardId, int? announcementType)
         {
             SchoolLocator.GetAnnouncementService((AnnouncementTypeEnum?)announcementType).RemoveStandard(announcementId, standardId);

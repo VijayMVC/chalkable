@@ -3,10 +3,8 @@ using Newtonsoft.Json;
 
 namespace Chalkable.AcademicBenchmarkConnector.Models
 {
-    public class StandardRelations
+    public class StandardRelations : BaseResource<Standard>
     {
-        [JsonProperty("data")]
-        public Standard CurrentStandard { get; set; }
         [JsonProperty("relations")]
         public Relations Relations { get; set; }
     }

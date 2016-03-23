@@ -13,7 +13,7 @@ namespace Chalkable.Data.School.DataAccess
         }
 
         public void UpdateAnnouncementRecipientData(int? announcementId, AnnouncementTypeEnum announcementType, int? schoolYearId, int? personId, int? roleId, 
-            bool complete, int? classId, DateTime? fromDate, DateTime? toDate)
+            bool complete, int? classId, DateTime? fromDate, DateTime? toDate, bool filterByExpiryDate)
         {
             var param = new Dictionary<string, object>
             {
@@ -25,7 +25,8 @@ namespace Chalkable.Data.School.DataAccess
                 [nameof(classId)] = classId,
                 [nameof(announcementType)] = (int) announcementType,
                 [nameof(fromDate)] = fromDate,
-                [nameof(toDate)] = toDate
+                [nameof(toDate)] = toDate,
+                [nameof(filterByExpiryDate)] = filterByExpiryDate
             };
 
             ExecuteStoredProcedure("spUpdateAnnouncementRecipientData", param);

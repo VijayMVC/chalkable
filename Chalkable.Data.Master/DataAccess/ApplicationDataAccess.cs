@@ -353,7 +353,7 @@ namespace Chalkable.Data.Master.DataAccess
             ExecuteNonQueryParametrized(query.Sql.ToString(), query.Parameters);
         }
 
-        public IList<Application> GetByIds(IList<Guid> ids)
+        public override IList<Application> GetByIds(IList<Guid> ids)
         {
             if (ids == null || ids.Count == 0)
                 return new List<Application>();
@@ -373,8 +373,8 @@ namespace Chalkable.Data.Master.DataAccess
                 {
                     {"start", start},
                     {"count", count},
-                    {"installedAppsIds", installedAppsIds != null ? installedAppsIds.Select(x=> x.ToString()).JoinString(",") : null},
-                    {"academicBenchmarkIds", abIds != null ? abIds.JoinString(",") : null}
+                    {"installedAppsIds", installedAppsIds},
+                    {"academicBenchmarkIds", abIds}
                 };
             IList<Application> res;
             using (var reader = ExecuteStoredProcedureReader("spGetSuggestedApplications", parameters))

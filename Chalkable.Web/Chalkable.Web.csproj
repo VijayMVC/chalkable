@@ -349,10 +349,14 @@
     <Compile Include="Logic\ClassLogic.cs" />
     <Compile Include="Logic\StudentAnnouncementLogic.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\AuthorityViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\CourseViewData.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\DocumentViewData.cs" />
-    <Compile Include="Models\AbToCCMappingViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\GradeLevelViewData.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\StandardRelationsViewData.cs" />
     <Compile Include="Models\AcademicBenchmarksViewData\StandardViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\SubjectDocumentViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\SubjectViewData.cs" />
+    <Compile Include="Models\AcademicBenchmarksViewData\TopicViewData.cs" />
     <Compile Include="Models\AddressViewData.cs" />
     <Compile Include="Models\AlphaGradeViewData.cs" />
     <Compile Include="Models\AlternateScoreViewData.cs" />
@@ -379,7 +383,6 @@
     <Compile Include="Models\AttendancesViewData\StudentDateAttendanceViewData.cs" />
     <Compile Include="Models\AttendancesViewData\StudentPeriodAttendanceViewData.cs" />
     <Compile Include="Models\AutoGradeViewData.cs" />
-    <Compile Include="Models\CC_StandardCategoryViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassAlphaGradesViewData.cs" />
     <Compile Include="Models\ClassesViewData\ClassStatsViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineDailySummaryViewData.cs" />
@@ -430,7 +433,6 @@
     <Compile Include="Models\ClassesViewData\ClassViewData.cs" />
     <Compile Include="Models\ClassPeriodViewData.cs" />
     <Compile Include="Models\ClassroomOptionViewData.cs" />
-    <Compile Include="Models\CommonCoreStandardViewData.cs" />
     <Compile Include="Models\AppTesterViewData.cs" />
     <Compile Include="Models\DailyAttendanceViewData.cs" />
     <Compile Include="Models\DisciplinesViewData\DisciplineTypeSummaryViewData.cs" />

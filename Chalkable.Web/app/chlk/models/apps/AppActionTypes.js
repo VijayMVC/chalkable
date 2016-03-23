@@ -9,7 +9,8 @@ NAMESPACE('chlk.models.apps', function(){
         ALERT_BOX: 'showAlertBox',
         PROMPT_BOX: 'showPromptBox',
         CONFIRM_BOX: 'showConfirmBox',
-        STANDARD_PICKER: 'showStandardPicker'
+        STANDARD_PICKER: 'showStandardPicker',
+        TOPIC_PICKER: 'showTopicsPicker'
     });
 })
 

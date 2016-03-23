@@ -29,7 +29,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         IDeveloperService DeveloperService { get; }
         IDbService DbService { get; }
         IUserTrackingService UserTrackingService { get; }
-        ICommonCoreStandardService CommonCoreStandardService { get; }
         IDbMaintenanceService DbMaintenanceService { get; }
         IAcademicBenchmarkService AcademicBenchmarkService { get; }
     }
@@ -52,7 +51,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         private IFundService fundService;
         private IDeveloperService developerService;
         private IUserTrackingService userTrackingService;
-        private ICommonCoreStandardService commonCoreStandardService;
         private IDbMaintenanceService dbMaintenanceService;
         private IAcademicBenchmarkService academicBenchmarkService;
 
@@ -75,7 +73,6 @@ namespace Chalkable.BusinessLogic.Services.Master
             fundRequestPictureService = new FundRequestPictureService(this);
             developerService = new DeveloperService(this);
             applicationPictureService = new ApplicationPictureService(this);
-            commonCoreStandardService = new CommonCoreStandardService(this);
             DbService = new DbService(Context != null ? Context.MasterConnectionString : null);
             userTrackingService = new MixPanelService(Settings.MixPanelToken);
             dbMaintenanceService = new DbMaintenanceService(this);
@@ -101,7 +98,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         public IPictureService ApplicationPictureService { get { return applicationPictureService; } }
         public IDbService DbService { get; protected set; }
         public IUserTrackingService UserTrackingService { get { return userTrackingService; } }
-        public ICommonCoreStandardService CommonCoreStandardService { get { return commonCoreStandardService; } }
         public IDbMaintenanceService DbMaintenanceService {get { return dbMaintenanceService; }}
         public IAcademicBenchmarkService AcademicBenchmarkService { get { return academicBenchmarkService; } }
 

@@ -52,7 +52,9 @@ namespace Chalkable.BusinessLogic.Services.School
 
             if (res.Count == 0)
                 throw new ChalkableException("Current user does not have access to any of school acadSessions");
-            
+
+            res = res.OrderBy(x => x.StartDate).ToList();
+
             return new PaginatedList<SchoolYear>(res, start/count, count, res.Count);
         }
 

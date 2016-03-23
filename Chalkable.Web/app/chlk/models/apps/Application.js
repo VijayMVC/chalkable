@@ -16,7 +16,7 @@ REQUIRE('chlk.models.apps.AppState');
 REQUIRE('chlk.models.apps.AppScreenShots');
 REQUIRE('chlk.models.common.NameId');
 REQUIRE('chlk.models.developer.DeveloperInfo');
-REQUIRE('chlk.models.standard.CommonCoreStandard');
+REQUIRE('chlk.models.academicBenchmark.Standard');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
@@ -58,7 +58,7 @@ NAMESPACE('chlk.models.apps', function () {
                 this.validRoles = SJX.fromArrayOfDeserializables(raw.canlaunchroles, chlk.models.people.Role);
                 this.gradeLevels = SJX.fromArrayOfValues(raw.gradelevels, chlk.models.id.AppGradeLevelId);
                 this.standardsIds = SJX.fromArrayOfValues(raw.standardsids, String);
-                this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.standard.CommonCoreStandard);
+                this.standards = SJX.fromArrayOfDeserializables(raw.standards, chlk.models.academicBenchmark.Standard);
                 this.platforms = SJX.fromArrayOfDeserializables(raw.platforms, chlk.models.apps.AppPlatform);
                 this.banned = SJX.fromValue(raw.ban, Boolean);
                 this.categories = SJX.fromArrayOfDeserializables(raw.categories, chlk.models.apps.AppCategory);
@@ -102,8 +102,8 @@ NAMESPACE('chlk.models.apps', function () {
             ArrayOf(chlk.models.apps.AppCategory), 'categories',
             ArrayOf(chlk.models.id.AppGradeLevelId), 'gradeLevels',
             ArrayOf(chlk.models.apps.AppPlatform), 'platforms',
-            ArrayOf(chlk.models.id.CommonCoreStandardId), 'standardsIds',
-            ArrayOf(chlk.models.standard.CommonCoreStandard), 'standards',
+            ArrayOf(chlk.models.id.ABStandardId), 'standardsIds',
+            ArrayOf(chlk.models.academicBenchmark.Standard), 'standards',
             Boolean, 'banned',
             Number, 'internalScore',
             String, 'internalDescription',

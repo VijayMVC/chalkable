@@ -96,6 +96,7 @@ namespace Chalkable.StiImport.Services
                 else
                     DoInitialSync();
                 Log.LogInfo("updating district last sync");
+                d = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
                 UpdateDistrictLastSync(d, true);
             }
             catch (Exception)
@@ -139,6 +140,7 @@ namespace Chalkable.StiImport.Services
             context.GetSyncResult<StiConnector.SyncModel.User>().Deleted = null;
             Log.LogInfo("do initial sync");
             DoInitialSync();
+            d = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
             Log.LogInfo("performing after restore preparation");
             var logs = ServiceLocatorMaster.DbMaintenanceService.AfterSisRestore(d.Id);
             ServiceLocatorSchool.DbMaintenanceService.AfterSisRestore();
@@ -279,8 +281,11 @@ namespace Chalkable.StiImport.Services
         
         private void SyncDb(bool updateVersions)
         {
+            UpdateDistrictInfo();
+
             var adapterLocator = new AdapterLocator(ServiceLocatorMaster, ServiceLocatorSchool
-                , context.GetSyncResult<Gender>().All, context.GetSyncResult<SpEdStatus>().All);
+                , context.GetSyncResult<Gender>().All
+                , context.GetSyncResult<SpEdStatus>().All);
 
             List <SyncModelWrapper> models = new List<SyncModelWrapper>();
             foreach (var type in context.Types)
@@ -356,7 +361,7 @@ namespace Chalkable.StiImport.Services
             Telemetry.DispatchRequest(typeName, adapterName, requestStartTime, requestTimer.Elapsed, true, Verbosity.Info, districtId.ToString(), taskId.ToString());
         }
 
-        private void UpdateDistrictLastSync(District d, bool success)
+        private void UpdateDistrictLastSync(Data.Master.Model.District d, bool success)
         {
             if (success)
             {
@@ -365,6 +370,15 @@ namespace Chalkable.StiImport.Services
             }
             else
                 d.FailCounter = d.FailCounter + 1;
+            ServiceLocatorMaster.DistrictService.Update(d);
+        }
+
+        private void UpdateDistrictInfo()
+        {
+            var d = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
+            var inowDistrict = context.GetSyncResult<StiConnector.SyncModel.District>()
+                                      .All.FirstOrDefault(x=>x.DistrictGUID == d.Id);
+            d.Name = inowDistrict.Name;
             ServiceLocatorMaster.DistrictService.Update(d);
         }
 
@@ -403,6 +417,7 @@ namespace Chalkable.StiImport.Services
             //Tables we need all data
             context.TablesToSync[typeof(Gender).Name] = null;
             context.TablesToSync[typeof(SpEdStatus).Name] = null;
+            context.TablesToSync[typeof (StiConnector.SyncModel.District).Name] = null; 
             var toSync = context.TablesToSync;
             var results = new List<SyncResultBase<SyncModel>>();
             foreach (var table in toSync)

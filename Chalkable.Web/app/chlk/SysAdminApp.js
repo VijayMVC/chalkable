@@ -10,6 +10,7 @@ REQUIRE('chlk.controllers.SignUpController');
 REQUIRE('chlk.controllers.StorageController');
 REQUIRE('chlk.controllers.DepartmentsController');
 REQUIRE('chlk.controllers.DbMaintenanceController');
+REQUIRE('chlk.controllers.StandardController');
 
 
 NAMESPACE('chlk', function (){

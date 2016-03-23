@@ -823,13 +823,7 @@ NAMESPACE('chlk.controllers', function (){
             var result = this.announcementService.getAttachSettings(announcementId, announcementType)
                 .then(function(options){
                     var standards = this.getContext().getSession().get(ChlkSessionConstants.STANDARDS, []);
-                    var standardsWithMoreCodes = (standards || []).filter(function(item){
-                        var codes = item.getCommonCoreStandardCodesArray();
-                        return codes && codes.length > 1;
-                    });
-                    var isAllStandardCodes = standardsWithMoreCodes.length > 0;
-                    var appUrlAppend = (standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&')
-                        + '&isAllStandardCodes=' + isAllStandardCodes + '&attributeId=' + assignedAttributeId.valueOf();
+                    var appUrlAppend = (standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&');
 
                     options.updateByValues(false, false, announcementId, null, null,
                         announcementType, assignedAttributeId, appUrlAppend, false);
@@ -2247,21 +2241,21 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.standard.Standard]],
-        function addStandardsAction(model){
-            var res = this.announcementService.addStandard(model.getAnnouncementId(), model.getStandardId())
+        function addStandardsAction(data){
+            var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
+
+            var res = this.announcementService.addStandards(options.getAnnouncementId(), data.standardIds ? data.standardIds.split(',').filter(function(item){return item}) : [])
                 .then(function(announcement){
                     this.BackgroundCloseView(chlk.activities.announcement.AddStandardsDialog);
                     this.saveStandardIds(announcement);
-                    //return chlk.models.standard.StandardsListViewData(null, null, null, announcement.getStandards(), announcement.getId());
                     this.prepareAttachments(announcement);
-
                     this.getListOfAppRecommendedContents_(announcement);
+                    this.BackgroundUpdateView(this.getAnnouncementFormPageType_(), announcement, 'update-standards-and-suggested-apps');
 
-                    return announcement;
+                    return ria.async.BREAK;
                 }, this)
                 .attach(this.validateResponse_());
-            return this.UpdateView(this.getAnnouncementFormPageType_(), res, 'update-standards-and-suggested-apps');
+            return this.UpdateView(chlk.activities.announcement.AddStandardsDialog, res);
         },
 
         [chlk.controllers.NotChangedSidebarButton()],

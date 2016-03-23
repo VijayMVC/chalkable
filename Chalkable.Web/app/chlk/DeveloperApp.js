@@ -3,6 +3,7 @@ REQUIRE('chlk.controllers.SettingsController');
 REQUIRE('chlk.controllers.DeveloperController');
 REQUIRE('chlk.controllers.AccountController');
 REQUIRE('chlk.controllers.AppsController');
+REQUIRE('chlk.controllers.StandardController');
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.controls.developer.AppsListControl');
 REQUIRE('chlk.controls.developer.ApiCallListControl');
