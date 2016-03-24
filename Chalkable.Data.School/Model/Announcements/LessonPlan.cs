@@ -5,19 +5,17 @@ namespace Chalkable.Data.School.Model.Announcements
 {
     public class LessonPlan : Announcement
     {
-        private const string LESSON_PLAN = "Lesson Plan";
-
         public const string VW_LESSON_PLAN_NAME = "vwLessonPlan";
         public const string VW_LESSON_PLAN_COMPLEX = "vwLessonPlanComplex";
 
-        public const string CLASS_REF_FIELD = "ClassRef";
-        public const string SCHOOL_SCHOOLYEAR_REF_FIELD = "SchoolYearRef";
-        public const string GALERRY_CATEGORY_REF_FIELD = "GalleryCategoryRef";
-        public const string PRIMARY_TEACHER_REF_FIELD = "PrimaryTeacherRef";
-        public const string START_DATE_FIELD = "StartDate";
-        public const string END_DATE_FIELD = "EndDate";
-        public const string VISIBLE_FOR_STUDENT_FIELD = "VisibleForStudent";
-        public const string FULL_CLASS_NAME = "FullClassName";
+        public const string CLASS_REF_FIELD = nameof(ClassRef);
+        public const string SCHOOL_SCHOOLYEAR_REF_FIELD = nameof(SchoolYearRef);
+        public const string GALERRY_CATEGORY_REF_FIELD = nameof(GalleryCategoryRef);
+        public const string PRIMARY_TEACHER_REF_FIELD = nameof(PrimaryTeacherRef);
+        public const string START_DATE_FIELD = nameof(StartDate);
+        public const string END_DATE_FIELD = nameof(EndDate);
+        public const string VISIBLE_FOR_STUDENT_FIELD = nameof(VisibleForStudent);
+        public const string FULL_CLASS_NAME = nameof(FullClassName);
 
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -37,7 +35,7 @@ namespace Chalkable.Data.School.Model.Announcements
         [NotDbFieldAttr]
         public string FullClassName { get; set; }
         [NotDbFieldAttr]
-        public override string AnnouncementTypeName => LESSON_PLAN;
+        public override string AnnouncementTypeName => "Lesson Plan";
         [NotDbFieldAttr]
         public override AnnouncementTypeEnum Type => AnnouncementTypeEnum.LessonPlan;
         [NotDbFieldAttr]
