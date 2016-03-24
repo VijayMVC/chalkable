@@ -46,9 +46,9 @@ NAMESPACE('chlk.models.reports', function () {
         String, 'studentIds',
 
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId,
-            chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, ArrayOf(chlk.models.people.ShortUserInfo), Boolean]],
-        function $(classId_, gradingPeriodId_, startDate_, endDate_, students_, ableDownload_){
-            BASE(classId_, gradingPeriodId_, startDate_, endDate_, students_, ableDownload_);
+            chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, ArrayOf(chlk.models.people.ShortUserInfo), Boolean, Boolean]],
+        function $(classId_, gradingPeriodId_, startDate_, endDate_, students_, ableDownload_, isAbleToReadSSNumber_){
+            BASE(classId_, gradingPeriodId_, startDate_, endDate_, students_, ableDownload_, isAbleToReadSSNumber_);
         }
     ]);
 });

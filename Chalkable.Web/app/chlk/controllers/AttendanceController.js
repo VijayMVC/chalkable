@@ -91,8 +91,9 @@ NAMESPACE('chlk.controllers', function (){
             var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.ATTENDANCE_PROFILE_REPORT) ||
                     this.hasUserPermission_(chlk.models.people.UserPermissionEnum.ATTENDANCE_PROFILE_REPORT_CLASSROOM);
 
+            var isAbleToReadSSNumber = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.STUDENT_SOCIAL_SECURITY_NUMBER);
             var res = new ria.async.DeferredData(new chlk.models.reports.AttendanceProfileReportViewData(markingPeriods, reasons, students
-                , classId, gradingPeriodId, schoolYear.getStartDate(), schoolYear.getEndDate(), ableDownload));
+                , classId, gradingPeriodId, schoolYear.getStartDate(), schoolYear.getEndDate(), ableDownload, isAbleToReadSSNumber));
             return this.ShadeView(chlk.activities.reports.AttendanceProfileReportDialog, res);
         },
 
@@ -106,7 +107,8 @@ NAMESPACE('chlk.controllers', function (){
             var res = this.attendanceService.getAttendanceMonths()
                 .then(function(items){
                     var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.CLASSROOM_ATTENDANCE_REGISTER_REPORT);
-                    return new chlk.models.reports.AttendanceRegisterReportViewData(reasons, items, classId, gradingPeriodId, ableDownload)
+                    var isAbleToReadSSNumber = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.STUDENT_SOCIAL_SECURITY_NUMBER);
+                    return new chlk.models.reports.AttendanceRegisterReportViewData(reasons, items, classId, gradingPeriodId, ableDownload, isAbleToReadSSNumber)
                 }, this);
 
             return this.ShadeView(chlk.activities.reports.AttendanceRegisterReportDialog, res);
