@@ -29,7 +29,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              //var announcements = isAdmin
              //       ? SchoolLocator.AnnouncementService.GetAdminAnnouncements(null, null, start, end, 0, int.MaxValue, true, studentId)
              //       : SchoolLocator.AnnouncementService.GetAnnouncements(start, end, false, classId, true);
-             var announcementList = SchoolLocator.AnnouncementFetchService.GetAnnouncementComplexList(start, end, false, classId, studentId, teacherId);
+             var announcementList = SchoolLocator.AnnouncementFetchService.GetAnnouncementComplexList(start, end, false, classId, studentId, teacherId, false);
              if (personId.HasValue)
              {
                  var classes = SchoolLocator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
@@ -49,7 +49,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
          public ActionResult ListByDateRange(DateTime? startDate, DateTime? endDate, int? classId)
          {
              //todo : investigate where this method is used
-             var annList = SchoolLocator.AnnouncementFetchService.GetAnnouncementComplexList(startDate, endDate, false, classId);
+             var annList = SchoolLocator.AnnouncementFetchService.GetAnnouncementComplexList(startDate, endDate, false, classId, filterByStartDate: false);
              var res = new List<ShortAnnouncementViewData>();
              res.AddRange(annList.LessonPlans.Select(ShortAnnouncementViewData.Create));
              res.AddRange(annList.ClassAnnouncements.Select(ShortAnnouncementViewData.Create));
@@ -89,7 +89,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
              PrepareUsersIdsForCalendar(locator, personId, out teacherId, out studentId);
              var res = new List<AnnouncementCalendarWeekViewData>();
 
-             var announcementList = locator.AnnouncementFetchService.GetAnnouncementComplexList(start, end, true, classId, studentId);
+             var announcementList = locator.AnnouncementFetchService.GetAnnouncementComplexList(start, end, true, classId, studentId, filterByStartDate: false);
 
              var schedule = locator.ClassPeriodService.GetSchedule(teacherId, studentId, classId, start, end);
              var classes = locator.ClassService.GetClasses(schoolYearId, studentId, teacherId);
