@@ -440,9 +440,14 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
-        [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, String]],
-        function openRecommendedContentAction(appId, classId, annId, announcementType, contentId){
-            var appUrlAppend_ = 'contentId=' + (contentId || '');
+        [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, String, String]],
+        function openRecommendedContentsAction(appId, classId, annId, announcementType, contentId, standardsUrlComponents_){
+            var appUrlAppend_ = '';
+            if(contentId)
+                appUrlAppend_ += 'contentId=' + contentId;
+            if(standardsUrlComponents_)
+                appUrlAppend_ += '&' + standardsUrlComponents_;
+
             var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
             this.appMarketService.getApplicationTotalPrice(appId, classIds, null)
                 .attach(this.validateResponse_())
@@ -456,7 +461,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.StudyCenterEnabled()],
         [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.TEACHER
+            chlk.models.common.RoleEnum.TEACHER,
+            chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
         [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, String]],
         function openSuggestedAppTeacherAction(appId, classId, annId, announcementType, appUrlAppend_){
@@ -470,7 +476,6 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
             return null;
         },
-
 
 
         [chlk.controllers.StudyCenterEnabled()],

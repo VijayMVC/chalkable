@@ -604,7 +604,7 @@ NAMESPACE('chlk.controllers', function (){
                         if(paginatedContents.getItems() && paginatedContents.getItems().length > 0){
 
                            var res = chlk.models.apps.AppContentListViewData(app, ann.getId(), ann.getType()
-                               , ann.getClassId(), paginatedContents);
+                               , ann.getClassId(), paginatedContents, ann.getStandards());
 
                            this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType()), res, 'update-app-contents');
                         }
