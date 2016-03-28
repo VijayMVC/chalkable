@@ -322,6 +322,7 @@
     <Build Include="Stored Procedures\Announcements Procedures\spInternalSortAdminOrLp.sql" />
     <Build Include="Stored Procedures\spGetAnnouncementApplicationRecipients.sql" />
     <Build Include="Stored Procedures\spGetLastClassMarkingPeriod.sql" />
+    <Build Include="Stored Procedures\spGetAdminAnnouncementRecipients.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
