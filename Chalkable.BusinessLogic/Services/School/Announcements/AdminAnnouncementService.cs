@@ -30,7 +30,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         IList<AnnouncementComplex> GetAdminAnnouncementsSortedByTitle(DateTime? fromDate, DateTime? toDate, string fromTitle, string toTitle, bool includeFromTitle, bool includeToTitle, IList<int> gradeLevels, bool? complete, int start = 0, int count = int.MaxValue, bool sortAsc = false);
         
         AdminAnnouncement GetLastDraft();
-        IList<StudentDetails> GetGetAdminAnnouncementRecipients(int announcementId, int start = 0, int count = int.MaxValue);
+        IList<StudentDetails> GetAdminAnnouncementRecipients(int announcementId, int start = 0, int count = int.MaxValue);
     }
 
     public class AdminAnnouncementService : BaseAnnouncementService<AdminAnnouncement>, IAdminAnnouncementService
@@ -331,9 +331,9 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 schoolYearId, personId, roleId, true, classId, startDate, endDate, filterByExpiryDate));
         }
 
-        public IList<StudentDetails> GetGetAdminAnnouncementRecipients(int announcementId, int start = 0, int count = int.MaxValue)
+        public IList<StudentDetails> GetAdminAnnouncementRecipients(int announcementId, int start = 0, int count = int.MaxValue)
         {
-            return DoRead(u => new AdminAnnouncementForAdminDataAccess(u).GetGetAdminAnnouncementRecipients(announcementId, start, count));
+            return DoRead(u => new AdminAnnouncementForAdminDataAccess(u).GetAdminAnnouncementRecipients(announcementId, start, count));
         }
     }
 }

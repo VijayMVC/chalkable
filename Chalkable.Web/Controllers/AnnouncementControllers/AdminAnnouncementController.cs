@@ -68,7 +68,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult GetAdminAnnouncementRecipients(int announcementId, int start, int count)
         {
-            var res = SchoolLocator.AdminAnnouncementService.GetGetAdminAnnouncementRecipients(announcementId, start, count);
+            var res = SchoolLocator.AdminAnnouncementService.GetAdminAnnouncementRecipients(announcementId, start, count);
             return Json(res.Select(StudentViewData.Create));
         }
     }

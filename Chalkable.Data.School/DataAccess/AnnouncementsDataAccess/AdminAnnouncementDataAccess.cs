@@ -241,7 +241,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return GetAnnouncements(conds, personId).OrderByDescending(x=>x.Created).FirstOrDefault();
         }
 
-        public IList<StudentDetails> GetGetAdminAnnouncementRecipients(int announcementId, int start, int count)
+        public IList<StudentDetails> GetAdminAnnouncementRecipients(int announcementId, int start, int count)
         {
             IDictionary<string, object> ps = new Dictionary<string, object>
             {
