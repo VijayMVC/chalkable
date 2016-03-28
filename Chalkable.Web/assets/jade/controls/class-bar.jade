@@ -6,7 +6,7 @@ mixin doRender_(includeAll, topBarData, controller_, action_, prepend_, disabled
    -attributes.fixedElementMargin = true
    -attributes.fixedElementWidth = true
    -self.processAttrs(attributes)
-   +LeftRightToolbar()(attributes).classes-bar.with-groups
+   +LeftRightToolbar()(attributes).classes-bar.with-groups.main-classes-bar
       each group in data
          .group(data-id = group.id, data-name = group.title)
             each item in group.items
@@ -15,7 +15,8 @@ mixin doRender_(includeAll, topBarData, controller_, action_, prepend_, disabled
                if controller_
                   +ActionLinkWithPrepend(controller_, action_, params)(
                      class = id == currentClassId ? "pressed " : "",
-                     data-tooltip=id ? item.getFullClassName() : ''
+                     data-tooltip=id ? item.getFullClassName() : '',
+                     data-item-id = id
                   ).class-button.button-link.item
                      if showAlerts_
                         .alerts-icon.small(data-id=id)
@@ -29,7 +30,8 @@ mixin doRender_(includeAll, topBarData, controller_, action_, prepend_, disabled
                      data-default-announcement-type-id = item.getDefaultAnnouncementTypeId(),
                      name="submitType",
                      value="save",
-                     data-tooltip=id ? item.getFullClassName() : ''
+                     data-tooltip=id ? item.getFullClassName() : '',
+                     data-item-id = id
                   ).class-button.validate-skip.item
                      +ClassImg(item, 45, 80).avatar
                      SPAN.text-container= item.getName()

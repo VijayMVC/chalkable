@@ -34,7 +34,7 @@
                         +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.POSTAL_CODE.valueOf(), 'Postal code', false)
 
                   TD.item-3
-                     +IdToPriintSelect(true)
+                     +IdToPriintSelect(true, self.hideSSNumber())
                   TD.item-3
                      h3=Msg.Absence_reasons
                      +Select('absenceReason')(multiple).reasons-select

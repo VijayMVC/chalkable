@@ -3,15 +3,15 @@ if self.isAppStoreEnabled
     +ActionLink('appmarket', 'list').apps(title="View Apps") Apps
 if self.isAssessmentEnabled
     +ActionLink('apps', 'assessment').assessment(title="Assessment") Assessment
-+ActionLink('calendar', 'month').calendar(title="View Calendar") Calendar
-+ActionLink('grading', 'summaryAll').statistic.grades(title="View Grades") Grades
++ActionLink('calendar', 'index').calendar(title="View Calendar") Calendar
++ActionLink('grading', 'index').statistic.grades(title="View Grades") Grades
 if !self.isLEEnabled || self.isLEEnabled && self.isLinkEnabled
     a(href="/Home/LearningEarnings", target="blank").le(title="View Learning Earnings", target="blank") LE
 if self.isLEEnabled && !self.isLinkEnabled
     +ActionLink('error', 'learningEarningsDisabled').le(title="View Learning Earnings", target="blank") LE
 if !self.isMessagingDisabled
     +ActionLink('message', 'page', false, true).messages(title="View Messages") Messages
-+ActionLink('students', 'my').people(title="View People") People
++ActionLink('students', 'index').people(title="View People") People
 if self.isAppStoreEnabled
     +ActionLink('studycenter', 'explorer').study-center(title="Study Center") Study Center
 +ActionLink('settings', 'dashboardStudent').settings(title="View Settings") Settings

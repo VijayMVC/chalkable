@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
+using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Controllers.AnnouncementControllers
 {
@@ -61,6 +63,13 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         public ActionResult EditTitle(int announcementId, string title)
         {
             return EditTitle(announcementId, AnnouncementTypeEnum.Admin, title, t => SchoolLocator.AdminAnnouncementService.Exists(t, announcementId));
+        }
+
+        [AuthorizationFilter("DistrictAdmin")]
+        public ActionResult GetAdminAnnouncementRecipients(int announcementId, int start, int count)
+        {
+            var res = SchoolLocator.AdminAnnouncementService.GetAdminAnnouncementRecipients(announcementId, start, count);
+            return Json(res.Select(StudentViewData.Create));
         }
     }
 }

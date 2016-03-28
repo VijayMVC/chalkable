@@ -63,6 +63,9 @@ NAMESPACE('chlk.controls', function () {
                     }
                 }
 
+                var classId = currentClassId && currentClassId.valueOf() ? currentClassId : null;
+                this.getContext().getSession().set(ChlkSessionConstants.CURRENT_CLASSES_BAR_ITEM_ID, classId);
+
                 data.currentMPId = currentMPId;
 
                 return data;
@@ -84,6 +87,7 @@ NAMESPACE('chlk.controls', function () {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var classesBar = new ria.dom.Dom('.classes-bar');
+                        var mainClassesBar = new ria.dom.Dom('.main-classes-bar');
                         baseMargin = parseInt(classesBar.find('.group').find('>a').getCss('margin-right'), 10);
                         this.updateClassesBar();
                         var selectedGroupId = attributes.selectedGroupId || classesBar.find('.group:first-child').getData('id');
@@ -104,7 +108,12 @@ NAMESPACE('chlk.controls', function () {
                                     classesBar.setData('group-id', group.getData('id'));
                                 }
                             })
-                        })
+                        });
+
+                        /*mainClassesBar.on('click', '.class-button', function(node, event){
+                            var classId = JSON.parse(node.getData('item-id'));
+                            this.getContext().getSession().set(ChlkSessionConstants.CURRENT_CLASSES_BAR_ITEM_ID, classId ? new chlk.models.id.ClassId(classId.valueOf()) : null);
+                        }.bind(this))*/
 
                     }.bind(this));
             },

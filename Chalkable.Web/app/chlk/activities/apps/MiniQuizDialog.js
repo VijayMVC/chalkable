@@ -80,6 +80,12 @@ NAMESPACE('chlk.activities.apps', function () {
                 this.refreshIframe_();
             },
 
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
+                BASE(model, msg_);
+                this.refreshIframe_();
+            },
+
             function refreshIframe_(){
                 var iframeExists = this.dom.find('iframe').exists();
 

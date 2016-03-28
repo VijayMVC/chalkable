@@ -41,6 +41,19 @@ NAMESPACE('chlk.controllers', function(){
                 [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN]
             ])],
             [chlk.controllers.SidebarButton('discipline')],
+            function indexAction() {
+                var classId = this.getCurrentClassId();
+                if(classId && classId.valueOf())
+                    return this.Redirect('discipline', 'classList', [classId]);
+
+                return this.Redirect('discipline', 'list');
+            },
+
+
+            [chlk.controllers.Permissions([
+                [chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE, chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_DISCIPLINE_ADMIN]
+            ])],
+            [chlk.controllers.SidebarButton('discipline')],
             [[chlk.models.common.ChlkDate, Number, Number]],
             function listAction(date_, pageSize_, pageIndex_){
                 var res = this.disciplineList_(pageIndex_, pageSize_, date_);

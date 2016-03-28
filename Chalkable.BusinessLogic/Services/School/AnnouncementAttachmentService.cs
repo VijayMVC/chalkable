@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
@@ -192,7 +193,9 @@ namespace Chalkable.BusinessLogic.Services.School
         public AnnouncementAttachment GetAnnouncementAttachmentById(int announcementAttachmentId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            return DoRead(u => new AnnouncementAttachmentDataAccess(u).GetById(announcementAttachmentId, Context.PersonId.Value, Context.Role.Id));
+            var hadAdmiClassPermission = Context.Claims.HasPermission(ClaimInfo.VIEW_CLASSROOM_ADMIN)
+                                         || Context.Claims.HasPermission(ClaimInfo.MAINTAIN_CLASSROOM_ADMIN);
+            return DoRead(u => new AnnouncementAttachmentDataAccess(u).GetById(announcementAttachmentId, Context.PersonId.Value, Context.Role.Id, hadAdmiClassPermission));
         }
 
         public IList<AnnouncementAttachment> GetAnnouncementAttachments(string filter)

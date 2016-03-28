@@ -29,7 +29,7 @@ mixin ReportTypeSelect()
                         TD.item-3
                             +OrderBySelect(true)
                         TD.item-3
-                            +IdToPriintSelect(true)
+                            +IdToPriintSelect(true, self.hideSSNumber())
                     TR
                         TD.item-3
                             h3=Msg.Option(true)

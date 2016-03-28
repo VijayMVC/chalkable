@@ -358,7 +358,7 @@ NAMESPACE('chlk.services', function () {
                 params.announcementId = announcementId.valueOf();
                 params.announcementType = announcementType.valueOf();
                 params.start = start_;
-                params.count = count_;
+                params.count = count_ || 5;
                 //disable Cache
                 params._= Math.random().toString(36).substr(2) + (new Date).getTime().toString(36);
 

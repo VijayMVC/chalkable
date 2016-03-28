@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models
@@ -10,6 +8,7 @@ namespace Chalkable.Web.Models
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string DisplayName { get; set; }
         public string Description { get; set; }
 
         public static StandardSubjectViewData Create(StandardSubject standardSubject)
@@ -18,6 +17,7 @@ namespace Chalkable.Web.Models
                 {
                     Id = standardSubject.Id,
                     Name = standardSubject.Name,
+                    DisplayName = standardSubject.AdoptionYear == null ? standardSubject.Name : standardSubject.Name + " (" + standardSubject.AdoptionYear + ")",  
                     Description = standardSubject.Description
                 };
         }

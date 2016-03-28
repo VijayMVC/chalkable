@@ -127,7 +127,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return ReadMany<LessonPlan>(dbQuery);
         }
 
-        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? galleryCategoryId, int callerId, int? studentId, int? teacherId)
+        public IList<LessonPlan> GetLessonPlans(DateTime? fromDate, DateTime? toDate, int? classId, int? galleryCategoryId, int callerId, int? studentId, int? teacherId, bool filterByStartDate = true)
         {
             //TODO: move this to the stored procedure later 
 
@@ -137,9 +137,13 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                 {LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
             };
             if (fromDate.HasValue)
-                conds.Add(LessonPlan.START_DATE_FIELD, "fromDate", fromDate, ConditionRelation.GreaterEqual);
+                conds.Add(LessonPlan.END_DATE_FIELD, "fromDate", fromDate, ConditionRelation.GreaterEqual);
             if (toDate.HasValue)
                 conds.Add(LessonPlan.START_DATE_FIELD, "toDate", toDate, ConditionRelation.LessEqual);
+            
+            if(filterByStartDate)
+                conds.Add(LessonPlan.START_DATE_FIELD, "fromDate", fromDate, ConditionRelation.GreaterEqual);
+
             if (classId.HasValue)
                 conds.Add(LessonPlan.CLASS_REF_FIELD, classId);
             if (galleryCategoryId.HasValue)

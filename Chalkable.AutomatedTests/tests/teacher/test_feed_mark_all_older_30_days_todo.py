@@ -69,8 +69,9 @@ class TestFeed(BaseAuthedTestCase):
         self.dict = {}
         self.post('/Feed/SetSettings.json?', self.dict)
 
-        ##########################################################################################
-
+        self.assertFalse(set(self.lesson_plan_and_activities_id_for_grading_period_2) & set(self.lesson_plan_and_activities_id_for_grading_period_1), 'Items are in a correct grading period')
+        
+        #get items older than 30 days
         self.settings_data = {'option':'2'}
     
         self.post('/Announcement/Done.json?', self.settings_data)   
@@ -78,7 +79,10 @@ class TestFeed(BaseAuthedTestCase):
         self.do_feed_list_and_verify(0)    
 
     def do_feed_list_and_verify(self, start, count=1000):
-        current_time = time.strftime('%Y-%m-%d')     
+        #get a current time
+        current_time = time.strftime('%Y-%m-%d')  
+        
+        #get a date needed for filtering
         Date = datetime.strptime(current_time, "%Y-%m-%d")
         EndDate = Date.today()- timedelta(days=30)
         self.current_date_minus_30 = EndDate.strftime("%Y-%m-%d")
@@ -92,9 +96,6 @@ class TestFeed(BaseAuthedTestCase):
         announcementtype = str(dictionary_verify_settingsforfeed['announcementtype'])
         sorttype = str(dictionary_verify_settingsforfeed['sorttype'])
         gradingperiodid = str(dictionary_verify_settingsforfeed['gradingperiodid'])
-        #self.assertDictContainsSubset(self.settings_data, {'announcementType':announcementtype, 'sortType':sorttype, 'gradingPeriodId':gradingperiodid}, 'key/value pair exists')
-    
-        self.assertFalse(set(self.lesson_plan_and_activities_id_for_grading_period_2) & set(self.lesson_plan_and_activities_id_for_grading_period_1), 'Items exits in different grading perios')
     
         dictionary_verify_annoucementviewdatas_all = dictionary_get_items['data']['annoucementviewdatas']
         if len(dictionary_verify_annoucementviewdatas_all) > 0:
@@ -105,7 +106,7 @@ class TestFeed(BaseAuthedTestCase):
                     for key, value in lessonplandata.iteritems():
                         startdate = lessonplandata['startdate']
                         enddate = lessonplandata['enddate']
-                        #self.assertTrue(self.current_time > startdate, 'Current date > startdate of a lesson plan')
+                       
                         self.assertTrue(self.current_date_minus_30 <= enddate, 'Current date > enddate of a lesson plan')
                 if type == '1':
                     classannouncementdata = item ['classannouncementdata']
@@ -116,12 +117,12 @@ class TestFeed(BaseAuthedTestCase):
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
             
     def tearDown(self):
+        #marking all items as 'done'
         get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(1000)) 
         for_item_id = get_all_unmarket_items['data']['annoucementviewdatas'] 
         for item in for_item_id:
             id = str(item['id'])
             type = str(item['type'])
-            #print id
             self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'true'})
             
 if __name__ == '__main__':

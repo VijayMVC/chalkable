@@ -373,8 +373,8 @@ namespace Chalkable.Data.Master.DataAccess
                 {
                     {"start", start},
                     {"count", count},
-                    {"installedAppsIds", installedAppsIds},
-                    {"academicBenchmarkIds", abIds}
+                    {"installedAppsIds", installedAppsIds ?? new List<Guid>()},
+                    {"academicBenchmarkIds", abIds?? new List<Guid>()}
                 };
             IList<Application> res;
             using (var reader = ExecuteStoredProcedureReader("spGetSuggestedApplications", parameters))
