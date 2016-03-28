@@ -15,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
     {
         IList<AnnouncementComplex> GetAnnouncementsForAdminFeed(bool? complete, IList<int> gradeLevels, FeedSettingsInfo settings, int start = 0, int count = int.MaxValue);
         IList<AnnouncementComplex> GetAnnouncementsForFeed(bool? complete, int? classId, FeedSettingsInfo settings, int start = 0, int count = int.MaxValue);
-        AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null, int?  teacherId = null);
+        AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, int? studentId = null, int? teacherId = null, bool filterByStartDate = true);
         IList<Announcement> GetAnnouncementsByFilter(string filter);
         Announcement GetLastDraft();
         AnnouncementTypeEnum GetAnnouncementType(int announcementId);
@@ -134,7 +134,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         }
         
         public AnnouncementComplexList GetAnnouncementComplexList(DateTime? fromDate, DateTime? toDate, bool onlyOwners = false, int? classId = null, 
-            int? studentId = null, int? teacherId = null)
+            int? studentId = null, int? teacherId = null, bool filterByStartDate = true)
         {
             var res = new AnnouncementComplexList
                 {
@@ -145,7 +145,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
             if (classId.HasValue || studentId.HasValue || teacherId.HasValue || !BaseSecurity.IsDistrictAdmin(Context))
             {
-                res.LessonPlans = ServiceLocator.LessonPlanService.GetLessonPlans(fromDate, toDate, classId, studentId, teacherId);
+                res.LessonPlans = ServiceLocator.LessonPlanService.GetLessonPlans(fromDate, toDate, classId, studentId, teacherId, filterByStartDate);
                 res.ClassAnnouncements = ServiceLocator.ClassAnnouncementService.GetClassAnnouncements(fromDate, toDate, classId, studentId, teacherId);
             }
             if(!classId.HasValue && !teacherId.HasValue && (BaseSecurity.IsDistrictAdmin(Context) || CoreRoles.STUDENT_ROLE == Context.Role))

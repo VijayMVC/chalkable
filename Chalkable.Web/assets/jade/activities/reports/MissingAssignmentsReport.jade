@@ -25,7 +25,7 @@
                         +Option(chlk.models.reports.MissingAssignmentsOrderByMethod.STUDENT_IDENTIFIER.valueOf(), Msg.Student, true)
                         +Option(chlk.models.reports.MissingAssignmentsOrderByMethod.SECTION_NUMBER.valueOf(), 'Section Number', false)
                   TD.item-3
-                     +IdToPriintSelect(true)
+                     +IdToPriintSelect(true, self.hideSSNumber())
                   TD.item-3
                      h3=Msg.Alternate_Scores
                      +Select('alternateScore')(multiple).alternate-scores-select

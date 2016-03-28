@@ -2,7 +2,7 @@ REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppRecommendedContentViewData');
 REQUIRE('chlk.models.common.PaginatedList');
-
+REQUIRE('chlk.models.standard.Standard');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
@@ -19,14 +19,17 @@ NAMESPACE('chlk.models.apps', function () {
 
             chlk.models.common.PaginatedList, 'appContents',
 
+            ArrayOf(chlk.models.standard.Standard), 'standards',
+
             [[
                 chlk.models.apps.Application,
                 chlk.models.id.AnnouncementId,
                 chlk.models.announcement.AnnouncementTypeEnum,
                 chlk.models.id.ClassId,
-                chlk.models.common.PaginatedList
+                chlk.models.common.PaginatedList,
+                ArrayOf(chlk.models.standard.Standard)
             ]],
-            function $(app_, annId_, annType_, classId_, appContents_){
+            function $(app_, annId_, annType_, classId_, appContents_, stadnards_){
                 BASE();
                 if(app_)
                     this.setApplication(app_);
@@ -39,6 +42,8 @@ NAMESPACE('chlk.models.apps', function () {
 
                 if(appContents_)
                     this.setAppContents(appContents_);
+                if(stadnards_)
+                    this.setStandards(stadnards_);
             }
 
         ]);

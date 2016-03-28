@@ -16,9 +16,11 @@ NAMESPACE('chlk.models.reports', function () {
         ArrayOf(chlk.models.people.ShortUserInfo), 'students',
         Boolean, 'ableDownload',
 
+        Boolean, 'ableToReadSSNumber',
+
         [[chlk.models.id.ClassId, chlk.models.id.GradingPeriodId,
-            chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, ArrayOf(chlk.models.people.ShortUserInfo), Boolean]],
-        function $(classId_, gradingPeriodId_, startDate_, endDate_, students_, ableDownload_){
+            chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, ArrayOf(chlk.models.people.ShortUserInfo), Boolean, Boolean]],
+        function $(classId_, gradingPeriodId_, startDate_, endDate_, students_, ableDownload_, isAbleToReadSSNumber_){
             BASE();
             if(gradingPeriodId_)
                 this.setGradingPeriodId(gradingPeriodId_);
@@ -32,6 +34,8 @@ NAMESPACE('chlk.models.reports', function () {
                 this.setStudents(students_);
             if(ableDownload_)
                 this.setAbleDownload(ableDownload_);
+            if(isAbleToReadSSNumber_)
+                this.setAbleToReadSSNumber(isAbleToReadSSNumber_);
         }
     ]);
 });

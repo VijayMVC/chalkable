@@ -49,12 +49,7 @@
                         +Option(chlk.models.reports.StudentOrder.GRADE_LEVEL.valueOf(), Msg.Grade_Level, false)
                         +Option(chlk.models.reports.StudentOrder.ID_TO_PRINT.valueOf(), Msg.ID_to_print, false)
                   TD.item-3
-                     h3=Msg.ID_to_print
-                     +Select('idToPrint')
-                        +Option(chlk.models.reports.StudentIdentifierEnum.ALT_STUDENT_NUMBER.valueOf(), Msg.Alt_student_number, false)
-                        +Option(chlk.models.reports.StudentIdentifierEnum.SOCIAL_SECURITY_NUMBER.valueOf(), Msg.Social_Security_N, false)
-                        +Option(chlk.models.reports.StudentIdentifierEnum.STATE_ID_NUMBER.valueOf(), Msg.State_ID_number, false)
-                        +Option(chlk.models.reports.StudentIdentifierEnum.STUDENT_NUMBER.valueOf(), Msg.Student_Number, true)
+                     +IdToPriintSelect(true, self.hideSSNumber())
                   TD.item-3
                +StudentsBlock(self.getStudents())
 

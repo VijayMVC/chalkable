@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
 using Chalkable.Common;
 using Chalkable.Data.Common;
@@ -18,18 +17,18 @@ namespace Chalkable.Data.School.DataAccess
         {
         }
 
-        public AnnouncementAttachment GetById(int id, int callerId, int roleId)
+        public AnnouncementAttachment GetById(int id, int callerId, int roleId, bool hasAdminClassPermission = false)
         {
-            var idField = $"{typeof (AnnouncementAttachment).Name}_{AnnouncementAttachment.ID_FIELD}";
+            var idField = $"{nameof (AnnouncementAttachment)}_{nameof(AnnouncementAttachment.Id)}";
             var conds = new AndQueryCondition { { idField, id } };
-            return GetAnnouncementAttachments(conds, callerId, roleId).FirstOrDefault();
+            return GetAnnouncementAttachments(conds, callerId, roleId, hasAdminClassPermission : hasAdminClassPermission).FirstOrDefault();
         }
 
         public IList<AnnouncementAttachment> GetLastAttachments(IList<int> announcementIds, int count = int.MaxValue)
         {
             var annIdsStr = announcementIds.Select(x => x.ToString()).JoinString(",");
             var dbQuery = new DbQuery();
-            var annRefField = $"{typeof (AnnouncementAttachment).Name}_{AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD}";
+            var annRefField = $"{nameof (AnnouncementAttachment)}_{nameof(AnnouncementAttachment.AnnouncementRef)}";
             dbQuery.Sql.AppendFormat(Orm.SELECT_FORMAT, "*", AnnouncementAttachment.VW_ANNOUNCEMENT_ATTACHMENT)
                        .AppendFormat(" Where {0} in ({1})", annRefField, annIdsStr);
 
@@ -48,33 +47,32 @@ namespace Chalkable.Data.School.DataAccess
 
         public PaginatedList<AnnouncementAttachment> GetPaginatedList(int announcementId, int callerId, int roleId, int start, int count, bool needsAllAttachments = true)
         {
-            var annRefField = string.Format("{0}_{1}", typeof(AnnouncementAttachment).Name, AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD);
+            var annRefField = $"{nameof (AnnouncementAttachment)}_{nameof(AnnouncementAttachment.AnnouncementRef)}";
             var conds = new AndQueryCondition { { annRefField, announcementId } };
             var query = BuildGetAttachmentQuery(conds, callerId, roleId, needsAllAttachments);
             if (query == null)
             {
                 return new PaginatedList<AnnouncementAttachment>(new List<AnnouncementAttachment>(), start, count);
             }
-            return PaginatedSelect<AnnouncementAttachment>(query, AnnouncementAttachment.ID_FIELD, start, count, Orm.OrderType.Asc, true);
+            return PaginatedSelect<AnnouncementAttachment>(query, nameof(AnnouncementAttachment.Id), start, count, Orm.OrderType.Asc, true);
         }
 
         //private const string CALLER_ID = "@callerId"
-        private IList<AnnouncementAttachment> GetAnnouncementAttachments(QueryConditionSet conds, int callerId, int roleId, string filter = null)
+        private IList<AnnouncementAttachment> GetAnnouncementAttachments(QueryConditionSet conds, int callerId, int roleId, string filter = null, bool hasAdminClassPermission = false)
         {
-            var query = BuildGetAttachmentQuery(conds, callerId, roleId, true, filter);
+            var query = BuildGetAttachmentQuery(conds, callerId, roleId, true, filter, hasAdminClassPermission);
             return query == null ? new List<AnnouncementAttachment>() : ReadMany<AnnouncementAttachment>(query, true);
         }
 
         //TODO: refactor this ... probably move this to stored procedure
-        private DbQuery BuildGetAttachmentQuery(QueryConditionSet queryCondition, int callerId, int roleId, bool needsAllAttachments = true, string filter = null)
+        private DbQuery BuildGetAttachmentQuery(QueryConditionSet queryCondition, int callerId, int roleId, bool needsAllAttachments = true, string filter = null, bool hasAdminClassPermission = false)
         {
             var res = new DbQuery();
-            var type = typeof(AnnouncementAttachment);
-            var annRefField = string.Format("{0}_{1}", type.Name, AnnouncementAttachment.ANNOUNCEMENT_REF_FIELD);
+            var annRefField = $"{nameof(AnnouncementAttachment)}_{nameof(AnnouncementAttachment.AnnouncementRef)}";
             res.Sql.AppendFormat(@"select [{0}].* from [{0}] 
                                    join [{2}] on [{2}].[{3}] = [{0}].[{1}]"
                               , AnnouncementAttachment.VW_ANNOUNCEMENT_ATTACHMENT, annRefField
-                              , "Announcement", Announcement.ID_FIELD);
+                              , nameof(Announcement), nameof(Announcement.Id));
 
             res.Sql.AppendFormat(@"		
                                     left join LessonPlan on LessonPlan.Id = Announcement.Id
@@ -115,19 +113,26 @@ namespace Chalkable.Data.School.DataAccess
             {
                 return res;
             }
-            if (CoreRoles.DISTRICT_ADMIN_ROLE.Id == roleId)
+
+            if (CoreRoles.DISTRICT_ADMIN_ROLE.Id == roleId || CoreRoles.TEACHER_ROLE.Id == roleId)
             {
-                res.Sql.Append("and Attachment_PersonRef = @callerId and AdminAnnouncement.Id is not null");
-                return res;
-            }
-            if (CoreRoles.TEACHER_ROLE.Id == roleId)
-            {
-                res.Sql.Append(@" and exists(select * from ClassTeacher 
+                if (CoreRoles.DISTRICT_ADMIN_ROLE.Id == roleId)
+                {
+                    res.Sql.Append("and (AdminAnnouncement.Id is null or Attachment_PersonRef = @callerId)");
+                }
+                if (CoreRoles.TEACHER_ROLE.Id == roleId)
+                {
+                    res.Sql.Append(" and AdminAnnouncement.Id is null ");
+                }
+                if (!hasAdminClassPermission)
+                {
+                    res.Sql.Append(@" and exists(select * from ClassTeacher 
                                              where (ClassTeacher.PersonRef = @callerId or Attachment_PersonRef = ClassTeacher.PersonRef)
                                                     and (ClassTeacher.ClassRef = LessonPlan.ClassRef or ClassTeacher.ClassRef = ClassAnnouncement.ClassRef))");
+                }
                 return res;
-
             }
+            
             if (CoreRoles.STUDENT_ROLE.Id == roleId)
             {
                 res.Sql.Append(@" and (Attachment_PersonRef = @callerId 
