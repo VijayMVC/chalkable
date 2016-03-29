@@ -125,7 +125,10 @@ NAMESPACE('chlk.controllers', function (){
                     text: 'DON\'T ATTACH',
                     controller: 'appapireactor',
                     action: 'closeCurrentApp',
-                    params: [data],
+                    params: [{
+                        attribute_id: data.attribute_id,
+                        refresh_attached_files: data.refresh_attached_files
+                    }],
                     color: chlk.models.common.ButtonColor.RED.valueOf()
                 }], 'center'), null;
             },
