@@ -101,13 +101,14 @@ NAMESPACE('chlk.controllers', function (){
             [chlk.controllers.SidebarButton('add-new')],
             [[Object]],
             function closeCurrentAppAction(data){
-                if (data.attribute_id)
-                    this.BackgroundNavigate('announcement', 'refreshAttribute'
-                        , [data.announcementId, data.announcementType, data.attribute_id]);
-                else
-                    if (data.refresh_attached_files)
+                if (data.refresh_attached_files) {
+                    if (data.attribute_id)
+                        this.BackgroundNavigate('announcement', 'refreshAttribute'
+                            , [data.announcementId, data.announcementType, data.attribute_id]);
+                    else
                         this.BackgroundNavigate('announcement', 'refreshAttachments'
                             , [data.announcementId, data.announcementType]);
+                }
 
                 this.getView().getCurrent().close();
                 return null;
@@ -126,6 +127,8 @@ NAMESPACE('chlk.controllers', function (){
                     controller: 'appapireactor',
                     action: 'closeCurrentApp',
                     params: [{
+                        announcementId: data.announcementId,
+                        announcementType: data.announcementType,
                         attribute_id: data.attribute_id,
                         refresh_attached_files: data.refresh_attached_files
                     }],
