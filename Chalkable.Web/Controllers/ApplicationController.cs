@@ -214,7 +214,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Announcement })]
-        public ActionResult UpdateAnnouncementApplicationMeta(int announcementApplicationId, string text, string imageUrl)
+        public ActionResult UpdateAnnouncementApplicationMeta(int announcementApplicationId, string text, string imageUrl, string description)
         {
             if (string.IsNullOrWhiteSpace(imageUrl))
                 imageUrl = null;
@@ -224,7 +224,7 @@ namespace Chalkable.Web.Controllers
 
             var res = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
             var announcementType = SchoolLocator.AnnouncementFetchService.GetAnnouncementType(res.AnnouncementRef);
-            SchoolLocator.ApplicationSchoolService.UpdateAnnouncementApplicationMeta(announcementApplicationId, announcementType, text, imageUrl);
+            SchoolLocator.ApplicationSchoolService.UpdateAnnouncementApplicationMeta(announcementApplicationId, announcementType, text, imageUrl, description);
             return Json(true);
         }
 
