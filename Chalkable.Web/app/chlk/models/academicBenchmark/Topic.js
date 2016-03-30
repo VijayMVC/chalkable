@@ -13,6 +13,8 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
 
         Number, 'level',
 
+        String, 'tooltip',
+
         [ria.serialize.SerializeProperty('isdeepest')],
         Boolean, 'deepest',
 

@@ -63,7 +63,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             return res;
         }
 
-        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement})]
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Schedule})]
         public ActionResult IsSchoolDay(DateTime? dateTime)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);

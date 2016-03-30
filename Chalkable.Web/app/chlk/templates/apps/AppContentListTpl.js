@@ -27,8 +27,19 @@ NAMESPACE('chlk.templates.apps', function() {
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'appContents',
 
+            [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.standard.Standard), 'standards',
+
+            Boolean, function showMoreContents(){
+                return this.getAppContents().getTotalCount() > this.getAppContents().getItems().length;
+            },
+
             Boolean, function hasContent(){
                 return this.getAppContents() && this.getAppContents().getItems() && this.getAppContents().getItems().length > 0;
-            }
+            },
+
+            String, function getStandardsUrlComponents() {
+                return (this.standards || []).map(function (c, index) { return c.getUrlComponents(index); }).join('&');
+            },
         ]);
 });

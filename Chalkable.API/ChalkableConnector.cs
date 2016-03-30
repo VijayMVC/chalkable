@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System;
+using System.Collections.Specialized;
 using System.Diagnostics;
 using System.IO;
 using System.Net;
@@ -22,28 +23,48 @@ namespace Chalkable.API
 
         public async Task<T> Get<T>(string endpoint)
         {
-            return await Call<T>(endpoint);
+            try
+            {
+                return await Call<T>(endpoint);
+            }
+            catch (Exception e)
+            {
+                throw new ChalkableApiException($"Chalkable API GET {endpoint} failed", e);
+            }
         }
 
         public async Task<T> Put<T>(string endpoint, Stream stream)
         {
-            return await Call<T>(endpoint, stream, WebRequestMethods.Http.Put);
+            try
+            {
+                return await Call<T>(endpoint, stream, WebRequestMethods.Http.Put);
+            }
+            catch (Exception e)
+            {
+                throw new ChalkableApiException($"Chalkable API PUT {endpoint} failed", e);
+            }            
         }
 
         public async Task<T> Post<T>(string endpoint, NameValueCollection postData)
         {
-            var stream = new MemoryStream();
-            if (postData != null)
+            try
             {
-                var data = Encoding.ASCII.GetBytes(postData.ToString());
-                stream.Write(data, 0, data.Length);
+                var stream = new MemoryStream();
+                if (postData != null)
+                {
+                    var data = Encoding.ASCII.GetBytes(postData.ToString());
+                    stream.Write(data, 0, data.Length);
+                }
+                stream.Seek(0, SeekOrigin.Begin);
+                return await Call<T>(endpoint, stream, WebRequestMethods.Http.Post, "application/x-www-form-urlencoded");
             }
-            stream.Seek(0, SeekOrigin.Begin);
-            return await Call<T>(endpoint, stream, WebRequestMethods.Http.Post, "application/x-www-form-urlencoded");
-
+            catch (Exception e)
+            {
+                throw new ChalkableApiException($"Chalkable API POST {endpoint} failed", e);
+            }
         }
 
-        private async Task<T> Call<T>(string endpoint, Stream stream, string method = null, string contentType = null)
+        protected async Task<T> Call<T>(string endpoint, Stream stream, string method = null, string contentType = null)
         {
             return await Call<T>(endpoint,
                 wr =>

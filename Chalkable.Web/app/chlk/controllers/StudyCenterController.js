@@ -41,6 +41,9 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.id.ClassId, chlk.models.id.StandardId]],
         function practiceAction(classId_, standardId_){
             var personId = this.getCurrentPerson().getId(), res;
+            if(!classId_)
+                classId_ = this.getCurrentClassId();
+            
             if(!classId_ || !classId_.valueOf())
                 res = ria.async.DeferredData(new chlk.models.studyCenter.PracticeGradesViewData(new chlk.models.classes.ClassesForTopBar(null)));
             else

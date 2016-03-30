@@ -6,6 +6,7 @@
     [Order]				INT					NOT NULL,
 	[Text]				NVARCHAR(100)		NULL,
 	[ImageUrl]			NVARCHAR(MAX)		NULL,
+	[Description]		NVARCHAR(256)		NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_AnnouncementApplication_Announcement] FOREIGN KEY ([AnnouncementRef]) REFERENCES [dbo].[Announcement] ([Id])
 );

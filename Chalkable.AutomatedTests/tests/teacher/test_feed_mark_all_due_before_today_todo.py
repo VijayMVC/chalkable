@@ -6,7 +6,7 @@ class TestFeed(BaseAuthedTestCase):
         self.settings_data_lesson_plan = {'announcementType':'3', 'sortType':'0', 'gradingPeriodId':self.gr_periods()[0]}
         self.post('/Feed/SetSettings.json?', self.settings_data_lesson_plan)   
         
-        #get 9 'done' lesson plans of the grading period 1
+        #get 'done' lesson plans of the grading period 1
         done_lesson_plans = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=true&count='+str(500))
         for_lesson_plan_id_1 = done_lesson_plans['data']['annoucementviewdatas']
 
@@ -17,14 +17,14 @@ class TestFeed(BaseAuthedTestCase):
         for item in for_lesson_plan_id_1:
             id = str(item['id'])
             type = str(item['type'])
-            self.lesson_plan_and_activities_id_for_grading_period_1.append(id)  #id for lesson plans and activities - grading period 1     
+            self.lesson_plan_and_activities_id_for_grading_period_1.append(id) 
             self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'false'})
         
         #data that needed for filtering by lesson plans for grading period 2
         self.settings_data_lesson_plan_2 = {'announcementType':'3', 'sortType':'0', 'gradingPeriodId':self.gr_periods()[1]}
         self.post('/Feed/SetSettings.json?', self.settings_data_lesson_plan_2)
         
-        #get 9 'done' lesson plans of the grading period 2
+        #get 'done' lesson plans of the grading period 2
         done_lesson_plans_2 = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=true&count='+str(500))
         for_lesson_plan_id_2 = done_lesson_plans_2['data']['annoucementviewdatas']       
         
@@ -39,7 +39,7 @@ class TestFeed(BaseAuthedTestCase):
         self.settings_data_activity = {'announcementType':'1', 'sortType':'0','gradingPeriodId':self.gr_periods()[0]}
         self.post('/Feed/SetSettings.json?', self.settings_data_activity)   
         
-        #get 9 'done' activities of the grading period 1
+        #get 'done' activities of the grading period 1
         done_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=true&count='+str(500))
         for_item_id_1 = done_items['data']['annoucementviewdatas']        
         
@@ -54,7 +54,7 @@ class TestFeed(BaseAuthedTestCase):
         self.settings_data_activity_2 = {'announcementType':'1', 'sortType':'0','gradingPeriodId':self.gr_periods()[1]}
         self.post('/Feed/SetSettings.json?', self.settings_data_activity_2)   
         
-        #get 9 'done' activities of the grading period 2
+        #get 'done' activities of the grading period 2
         done_items_2 = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=true&count='+str(500))
         for_item_id_2 = done_items_2['data']['annoucementviewdatas']        
         
@@ -68,16 +68,17 @@ class TestFeed(BaseAuthedTestCase):
         #reset all filters on the feed
         self.dict = {}
         self.post('/Feed/SetSettings.json?', self.dict)
-
-        ##########################################################################################
-
+        
+        self.assertFalse(set(self.lesson_plan_and_activities_id_for_grading_period_2) & set(self.lesson_plan_and_activities_id_for_grading_period_1), 'Items are in a correct grading period')
+        
+        #get items 'Due before today'
         self.settings_data = {'option':'1'}
-    
         self.post('/Announcement/Done.json?', self.settings_data)   
   
         self.do_feed_list_and_verify(0)    
 
     def do_feed_list_and_verify(self, start, count=500):
+        #get a current time
         self.current_time = time.strftime('%Y-%m-%d')     
     
         dictionary_get_items = self.get('/Feed/List.json?start='+str(start)+'&classId=&complete=false&count='+str(count))
@@ -89,9 +90,8 @@ class TestFeed(BaseAuthedTestCase):
         announcementtype = str(dictionary_verify_settingsforfeed['announcementtype'])
         sorttype = str(dictionary_verify_settingsforfeed['sorttype'])
         gradingperiodid = str(dictionary_verify_settingsforfeed['gradingperiodid'])
-        #self.assertDictContainsSubset(self.settings_data, {'announcementType':announcementtype, 'sortType':sorttype, 'gradingPeriodId':gradingperiodid}, 'key/value pair exists')
-    
-        self.assertFalse(set(self.lesson_plan_and_activities_id_for_grading_period_2) & set(self.lesson_plan_and_activities_id_for_grading_period_1), 'Items exits in different grading perios')
+            
+        #self.assertFalse(set(self.lesson_plan_and_activities_id_for_grading_period_2) & set(self.lesson_plan_and_activities_id_for_grading_period_1), 'Items exits in different grading perios')
     
         dictionary_verify_annoucementviewdatas_all = dictionary_get_items['data']['annoucementviewdatas']
         if len(dictionary_verify_annoucementviewdatas_all) > 0:
@@ -102,7 +102,6 @@ class TestFeed(BaseAuthedTestCase):
                     for key, value in lessonplandata.iteritems():
                         startdate = lessonplandata['startdate']
                         enddate = lessonplandata['enddate']
-                        #self.assertTrue(self.current_time > startdate, 'Current date > startdate of a lesson plan')
                         self.assertTrue(self.current_time <= enddate, 'Current date > enddate of a lesson plan')
                 if type == '1':
                     classannouncementdata = item ['classannouncementdata']
@@ -113,13 +112,13 @@ class TestFeed(BaseAuthedTestCase):
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
             
     def tearDown(self):
+        #marking all items as 'done'
         get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(1000)) 
         for_item_id = get_all_unmarket_items['data']['annoucementviewdatas'] 
         for item in for_item_id:
             id = str(item['id'])
             type = str(item['type'])
-            #print id
             self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'true'})
-        #print self.current_time       
+    
 if __name__ == '__main__':
     unittest.main()

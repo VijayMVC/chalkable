@@ -16,6 +16,7 @@
                     #search-glass
             +ActionForm('standard', 'completeTopicsWidget').add-standards-form
                 +Hidden('requestId', self.getRequestId())
+                +Hidden('topicIdsOnStart', topicIds).standard-ids-on-start
                 +Hidden('itemIds', topicIds).standard-ids
                 .standards-list-cnt.browse-cnt
                     +RenderWith(self.getModel(), chlk.templates.standard.StandardsMainTableTpl)

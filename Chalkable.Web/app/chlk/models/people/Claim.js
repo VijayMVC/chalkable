@@ -96,7 +96,38 @@ NAMESPACE('chlk.models.people', function () {
         GRADE_BOOK_REPORT_CLASSROOM: 'Grade Book Report Classroom',
         MISSING_ASSIGNMENTS_REPORT: 'Missing Assignments Report',
         GRADE_VERIFICATION_REPORT: 'Grade Verification Report',
-        GRADE_VERIFICATION_REPORT_CLASSROOM: 'Grade Verification Report Classroom'
+        GRADE_VERIFICATION_REPORT_CLASSROOM: 'Grade Verification Report Classroom',
+
+
+        CONTACT_ADDRESS: 'Contact Address',
+        CONTACT_EMPLOYER_NAME: 'Contact EmployerName',
+        CONTACT_MARITAL_STATUS: 'Contact MaritalStatus',
+        CONTACT_SOCIAL_SECURITY_NUMBER: 'Contact SocialSecurityNumber',
+        CONTACT_TELEPHONE: 'Contact Telephone',
+        CONTACT_FIRST_NAME: 'Contact First Name',
+        CONTACT_LAST_NAME: 'Contact Last Name',
+        STAFF_ADDRESS: 'Staff Address',
+        STAFF_DISPLAY_NAME: 'Staff Display Name',
+        STAFF_FIRST_NAME: 'Staff First Name',
+        STAFF_LAST_NAME: 'Staff Last Name',
+        STUDENT_ADDRESS: 'Student Address',
+        STUDENT_CONTACT: 'Student Contact',
+        STUDENT_GRADE: 'Student Grade',
+        STUDENT_INTERNET_PASSWORD: 'Student InternetPassword',
+        STUDENT_IS_ALLOWED_INET_ACCESS: 'Student IsAllowedInetAccess',
+        STUDENT_PHOTOGRAPH: 'Student Photograph',
+        STUDENT_SCHOOL: 'Student School',
+        STUDENT_SOCIAL_SECURITY_NUMBER: 'Student SocialSecurityNumber',
+        STUDENT_STUDENT_NUMBER: 'Student Student Number',
+        STUDENT_STATE_ID_NUMBER: 'Student StateIDNumber',
+        STUDENT_ALT_STUDENT_NUMBER: 'Student AltStudentNumber',
+        STUDENT_TELEPHONE: 'Student Telephone',
+        STUDENT_TRANSPORT_METHOD: 'Student TransportMethod',
+        STUDENT_DATE_OF_BIRTH: 'Student Date Of Birth',
+        STUDENT_FIRST_NAME: 'Student First Name',
+        STUDENT_GENDER: 'Student Gender',
+        STUDENT_LAST_NAME: 'Student Last Name',
+
     });
 
     var UserPermissionMappeerInstance = null;
@@ -222,6 +253,40 @@ NAMESPACE('chlk.models.people', function () {
                 this.mapper_['000087'] = this.userPermissionEnum.MISSING_ASSIGNMENTS_REPORT;
                 this.mapper_['000090'] = this.userPermissionEnum.GRADE_VERIFICATION_REPORT;
                 this.mapper_['000090_Classroom'] = this.userPermissionEnum.GRADE_VERIFICATION_REPORT_CLASSROOM;
+
+
+
+                /*view field permission*/
+                this.mapper_['Contact.First Name'] = this.userPermissionEnum.CONTACT_FIRST_NAME;
+                this.mapper_['Contact.Last Name'] = this.userPermissionEnum.CONTACT_LAST_NAME;
+                this.mapper_['Contact.Address'] = this.userPermissionEnum.CONTACT_ADDRESS;
+                this.mapper_['Contact.EmployerName'] = this.userPermissionEnum.CONTACT_EMPLOYER_NAME;
+                this.mapper_['Contact.MaritalStatus'] = this.userPermissionEnum.CONTACT_MARITAL_STATUS;
+                this.mapper_['Contact.SocialSecurityNumber'] = this.userPermissionEnum.CONTACT_SOCIAL_SECURITY_NUMBER;
+                this.mapper_['Contact.Telephone'] = this.userPermissionEnum.CONTACT_TELEPHONE;
+
+                this.mapper_['Staff.Address'] = this.userPermissionEnum.STAFF_ADDRESS;
+                this.mapper_['Staff.Display Name'] = this.userPermissionEnum.STAFF_DISPLAY_NAME;
+                this.mapper_['Staff.First Name'] = this.userPermissionEnum.STAFF_FIRST_NAME;
+                this.mapper_['Staff.Last Name'] = this.userPermissionEnum.STAFF_LAST_NAME;
+
+                this.mapper_['Student.Address'] = this.userPermissionEnum.STUDENT_ADDRESS;
+                this.mapper_['Student.Contact'] = this.userPermissionEnum.STUDENT_CONTACT;
+                this.mapper_['Student.Grade'] = this.userPermissionEnum.STUDENT_GRADE;
+                this.mapper_['Student.InternetPassword'] = this.userPermissionEnum.STUDENT_INTERNET_PASSWORD;
+                this.mapper_['Student.IsAllowedInetAccess'] = this.userPermissionEnum.STUDENT_IS_ALLOWED_INET_ACCESS;
+                this.mapper_['Student.Photograph'] = this.userPermissionEnum.STUDENT_PHOTOGRAPH;
+                this.mapper_['Student.School'] = this.userPermissionEnum.STUDENT_SCHOOL;
+                this.mapper_['Student.Telephone'] = this.userPermissionEnum.STUDENT_TELEPHONE;
+                this.mapper_['Student.TransportMethod'] = this.userPermissionEnum.STUDENT_TRANSPORT_METHOD;
+                this.mapper_['Student.Date Of Birth'] = this.userPermissionEnum.STUDENT_DATE_OF_BIRTH;
+                this.mapper_['Student.First Name'] = this.userPermissionEnum.STUDENT_FIRST_NAME;
+                this.mapper_['Student.Gender'] = this.userPermissionEnum.STUDENT_GENDER;
+                this.mapper_['Student.Last Name'] = this.userPermissionEnum.STUDENT_LAST_NAME;
+                this.mapper_['Student.Student Number'] = this.userPermissionEnum.STUDENT_STUDENT_NUMBER;
+                this.mapper_['Student.SocialSecurityNumber'] = this.userPermissionEnum.STUDENT_SOCIAL_SECURITY_NUMBER;
+                this.mapper_['Student.StateIDNumber'] = this.userPermissionEnum.STUDENT_STATE_ID_NUMBER;
+
             }
         }
     ]);

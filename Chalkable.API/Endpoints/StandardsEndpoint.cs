@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using System.Web;
 using Chalkable.API.Helpers;
 using Chalkable.API.Models.AcademicBenchmark;
 
@@ -17,21 +17,27 @@ namespace Chalkable.API.Endpoints
         {
             var url = "/AcademicBenchmark/StandardsByIds.json";
             var strIds = standardsIds.JoinString(",", x => x.ToString());
-            return await Connector.Get<IList<Standard>>($"{url}?standardsIds={strIds}");
+            var postData = HttpUtility.ParseQueryString(string.Empty);
+            postData.Add("standardsIds", strIds);
+            return await Connector.Post<IList<Standard>>($"{url}", postData);
         }
 
         public async Task<IList<StandardRelations>> GetListOfStandardRelations(IList<Guid> standardsIds)
         {
             var url = "/AcademicBenchmark/ListOfStandardRelationsByIds.json";
             var strIds = standardsIds.JoinString(",", x => x.ToString());
-            return await Connector.Get<IList<StandardRelations>>($"{url}?standardsIds={strIds}");
+            var postData = HttpUtility.ParseQueryString(string.Empty);
+            postData.Add("standardsIds", strIds);
+            return await Connector.Post<IList<StandardRelations>>($"{url}", postData);
         }
 
         public async Task<IList<Topic>> GetTopicsByIds(IList<Guid> topicsIds)
         {
             var url = "/AcademicBenchmark/TopicsByIds.json";
             var strIds = topicsIds.JoinString(",", x => x.ToString());
-            return await Connector.Get<IList<Topic>>($"{url}?topicsIds={strIds}");
+            var postData = HttpUtility.ParseQueryString(string.Empty);
+            postData.Add("topicsIds", strIds);
+            return await Connector.Post<IList<Topic>>($"{url}", postData);
         }
     }
 }

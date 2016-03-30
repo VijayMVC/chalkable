@@ -30,6 +30,15 @@ NAMESPACE('chlk.controllers', function (){
         [ria.mvc.Inject],
         chlk.services.GradeLevelService, 'gradeLevelService',
 
+
+        [chlk.controllers.SidebarButton('calendar')],
+        [[chlk.models.common.ChlkDate]],
+        function indexAction(date_) {
+            var classId = this.getCurrentClassId();
+            return this.Redirect('calendar', 'month', [classId, date_]);
+        },
+
+
         [chlk.controllers.SidebarButton('calendar')],
         [[chlk.models.common.ChlkDate, chlk.models.id.ClassId]],
         function showMonthDayPopUpAction(date, classId_) {
@@ -84,7 +93,12 @@ NAMESPACE('chlk.controllers', function (){
         function dayAction(classId_, date_, gradeLevels_){
             var result = this.calendarService
                 .getDayWeekInfo(date_)
-                .attach(this.validateResponse_());
+                .attach(this.validateResponse_())
+                .then(function(model){
+                    var topModel = new chlk.models.classes.ClassesForTopBar(null, classId_);
+                    model.setTopData(topModel);
+                    return new ria.async.DeferredData(model);
+                }, this);
             return this.PushOrUpdateView(chlk.activities.calendar.announcement.DayPage, result);
         },
 

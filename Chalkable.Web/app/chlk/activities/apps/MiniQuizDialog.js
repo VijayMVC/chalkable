@@ -25,6 +25,7 @@ NAMESPACE('chlk.activities.apps', function () {
             VOID, function updateContent(tpl, model, msg_) {
                 var dom = new ria.dom.Dom(tpl.render());
                 this.dom.find('.x-window-body').setHTML(dom.find('.x-window-body').getHTML());
+                this.refreshIframe_();
             },
 
             [ria.mvc.DomEventBind('click', '.standard-link:not(.pressed)')],
@@ -76,19 +77,28 @@ NAMESPACE('chlk.activities.apps', function () {
             [[Object]],
             OVERRIDE, VOID, function onRefresh_(data) {
                 BASE(data);
+                this.refreshIframe_();
+            },
 
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
+                BASE(model, msg_);
+                this.refreshIframe_();
+            },
+
+            function refreshIframe_(){
                 var iframeExists = this.dom.find('iframe').exists();
 
                 if (iframeExists){
                     this.dom.find('iframe').$
-                        .css({height: ria.dom.Dom('#main').$.parent().height() - 27*2 + 'px'})
+                        .css({height: ria.dom.Dom('iframe').$.parent().height() - 27*2 + 'px'})
                         .load(function () {
                             this.dom.find('iframe').parent()
                                 .removeClass('partial-update');
-                    }.bind(this));
+                        }.bind(this));
                 }
                 else
                     this.dom.find('.iframe-wrap').removeClass('partial-update');
-            }
+            },
         ]);
 });

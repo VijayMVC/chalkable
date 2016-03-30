@@ -24,7 +24,8 @@ NAMESPACE('chlk.controllers', function (){
             var res = this.gradingPeriodService.getList()
                 .then(function(data){
                     var ableDownload = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.COMPREHENSIVE_PROGRESS_REPORT);
-                    return new chlk.models.reports.SubmitStudentReportViewData(data, this.getCurrentPerson().getId(), ableDownload);
+                    var isAbleToReadSSNumber = this.hasUserPermission_(chlk.models.people.UserPermissionEnum.STUDENT_SOCIAL_SECURITY_NUMBER);
+                    return new chlk.models.reports.SubmitStudentReportViewData(data, this.getCurrentPerson().getId(), ableDownload, isAbleToReadSSNumber);
                 }, this);
 
             return this.ShadeView(chlk.activities.reports.StudentReportDialog, res);

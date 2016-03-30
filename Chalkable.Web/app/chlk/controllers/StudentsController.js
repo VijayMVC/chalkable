@@ -60,6 +60,13 @@ NAMESPACE('chlk.controllers', function (){
             chlk.services.DisciplineCalendarService, 'disciplineCalendarService',
 
 
+            [chlk.controllers.SidebarButton('people')],
+            function indexAction() {
+                var classId = this.getCurrentClassId();
+                return this.Redirect('students', 'my', [classId]);
+            },
+
+
             function getInfoPageClass(){
                 return chlk.activities.profile.StudentInfoPage;
             },

@@ -117,6 +117,17 @@ NAMESPACE('chlk.controllers', function (){
 
         ArrayOf(chlk.models.attachment.AnnouncementAttachment), 'announcementAttachments',
 
+
+        [chlk.controllers.Permissions([
+            [chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM, chlk.models.people.UserPermissionEnum.MAINTAIN_CLASSROOM_ADMIN]
+        ])],
+        [chlk.controllers.SidebarButton('add-new')],
+        function indexAction() {
+            var classId = this.getCurrentClassId();
+            return this.Redirect('announcement', 'add', [classId]);
+        },
+
+
         VOID, function updateAttributesWithFilesList_(announcement){
             var res = [];
             announcement.getAnnouncementAttributes().forEach(function(attribute){
@@ -568,7 +579,6 @@ NAMESPACE('chlk.controllers', function (){
                             return this.classAnnouncementFromModel_(resModel);
                             //return this.Redirect('announcement', 'classAnnouncementFromModel', [resModel]);
 
-
                     }
                     var classes = this.classService.getClassesForTopBarSync();
                     var classesBarData = new chlk.models.classes.ClassesForTopBar(classes);
@@ -594,7 +604,7 @@ NAMESPACE('chlk.controllers', function (){
                         if(paginatedContents.getItems() && paginatedContents.getItems().length > 0){
 
                            var res = chlk.models.apps.AppContentListViewData(app, ann.getId(), ann.getType()
-                               , ann.getClassId(), paginatedContents);
+                               , ann.getClassId(), paginatedContents, ann.getStandards());
 
                            this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType()), res, 'update-app-contents');
                         }

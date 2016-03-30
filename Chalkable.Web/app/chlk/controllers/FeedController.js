@@ -49,7 +49,8 @@ NAMESPACE('chlk.controllers', function (){
 
         [chlk.controllers.SidebarButton('inbox')],
         function doToListAction(){
-            return this.listAction(null, null, true);
+            var classId = this.getCurrentClassId();
+            return this.Redirect('feed', 'list', [classId, null, true]);
         },
 
         [chlk.controllers.SidebarButton('inbox')],

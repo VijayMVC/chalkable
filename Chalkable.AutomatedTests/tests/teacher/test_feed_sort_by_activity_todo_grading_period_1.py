@@ -96,6 +96,7 @@ class TestFeed(BaseAuthedTestCase):
         dictionary_verify_annoucementviewdatas_all = dictionary_get_items['data']['annoucementviewdatas']  
         for item in dictionary_verify_annoucementviewdatas_all:
             type = str(item['type'])
+            
             self.assertDictContainsSubset(self.data2, {'type':type}, 'key/value pair exists')
     
     def tearDown(self):
