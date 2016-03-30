@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BackgroundTaskProcessor.Parallel
@@ -9,7 +10,6 @@ namespace Chalkable.BackgroundTaskProcessor.Parallel
     public class AllSchoolRunner<T>
     {
         private const int TIMEOUT = 10000;
-        private const int SCHOOLS_PER_THREAD = 2;
         public class Task
         {
             public T Data { get; set; }
@@ -39,7 +39,7 @@ namespace Chalkable.BackgroundTaskProcessor.Parallel
                     var tasks = (IList<Task>)o;
                     Run(tasks, f, checkStatus);
                 });
-
+            var districtPerThread = Settings.AllSchoolRunnerDistrictPerThread;
             foreach (var school in schools)
             {
                 var t = new Task
@@ -52,7 +52,7 @@ namespace Chalkable.BackgroundTaskProcessor.Parallel
                     };
                 allTasks.Add(t);
                 threadTasks.Add(t);
-                if (threadTasks.Count == SCHOOLS_PER_THREAD)
+                if (threadTasks.Count == districtPerThread)
                 {
                     var thread = new Thread(ts);
                     threads.Add(thread);

@@ -16,6 +16,7 @@ using Chalkable.StiConnector.SyncModel;
 using NUnit.Framework;
 using AttendanceMonth = Chalkable.StiConnector.SyncModel.AttendanceMonth;
 using ContactRelationship = Chalkable.StiConnector.SyncModel.ContactRelationship;
+using District = Chalkable.Data.Master.Model.District;
 using GradedItem = Chalkable.StiConnector.SyncModel.GradedItem;
 using Standard = Chalkable.StiConnector.SyncModel.Standard;
 using StudentContact = Chalkable.StiConnector.SyncModel.StudentContact;

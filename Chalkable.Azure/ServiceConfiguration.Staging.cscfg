@@ -71,6 +71,7 @@
       <Setting name="TaskProcessorDelay" value="10000" />
       <Setting name="DbBackupServiceUrl" value="https://bl2prod-dacsvc.azure.com/DACWebService.svc" />
       <Setting name="PictureProcessorCount" value="1" />
+      <Setting name="AllSchoolRunner.DistrictsPerThread" value="4" />
       <!--tracking-->
       <Setting name="mixpanel-token" value="" />
       <!--application insight-->
