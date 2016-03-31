@@ -150,6 +150,15 @@ NAMESPACE('chlk.controllers', function (){
                return this.BackgroundCloseView(this.getView().getCurrent());
            },
 
+            [[chlk.models.common.PaginatedList, Number]],
+            chlk.models.common.PaginatedList, function prepareUsers(usersData, start_){
+                var start = start_ || 0;
+                usersData.getItems().forEach(function(item, index){
+                    item.setIndex(start + index);
+                }, this);
+                return usersData;
+            },
+
             function getCurrentClassId(){
                 /*if(classId_ && classId_.valueOf()){
                     this.getContext().getSession().set(ChlkSessionConstants.CURRENT_CLASSES_BAR_ITEM_ID, classId_);
