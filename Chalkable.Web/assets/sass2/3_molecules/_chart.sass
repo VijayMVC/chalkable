@@ -1,0 +1,86 @@
+.chart-label-y
+  width: 20px
+  overflow: hidden
+  text-align: right
+
+.legend-item
+  display: inline-block
+  text-align: center
+  padding: 5px
+  margin-right: 30px
+  opacity: 0.5
+  cursor: pointer
+  margin-bottom: 5px
+
+  &:last-child
+    margin-right: 0
+
+  &:hover, &.hovered
+    background: #fff
+    opacity: 1
+    border-radius: 4px
+    @include box-shadow(0 2px 3px gray)
+
+  >DIV
+    display: inline-block
+    vertical-align: middle
+
+  .box
+    width: 12px
+    height: 12px
+    background: #2f7790
+    @include box-shadow(0 2px 1px gray)
+    margin-right: 8px
+
+  .name
+    font: bold 11px Arial
+    color: #3d3d3d
+
+.chart-container.with-y-title
+  .highcharts-container::before
+    left: 65px
+    margin-bottom: 12px
+
+  &.empty
+    .highcharts-container::before
+      margin-left: -25px
+
+.highcharts-container::before
+  content: ' '
+  position: absolute
+  top: 10px
+  bottom: 35px
+  left: 38px
+  right: 10px
+  border: 1px solid #c8c7c3
+  border-width: 0 0 1px 1px
+  z-index: -1
+
+.highcharts-tooltip>SPAN
+  background: white
+  padding: 3px
+  +box-shadow(rgba(0, 0, 0, 0.3) 0 2px 16px)
+  border-radius: 2px
+  border: 1px solid #c8c7c3
+  min-width: 16px
+  text-align: center
+
+  &::before
+    content: ' '
+    position: absolute
+    width: 6px
+    height: 6px
+    pointer-events: none
+    +rotate(135deg)
+    bottom: -4px
+    left: 50%
+    margin-left: -3px
+    background: #ffffff
+    border: 1px solid #c8c7c3
+    border-width: 1px 1px 0 0
+
+.highcharts-container
+  overflow: visible !important
+
+  SVG
+    position: absolute
