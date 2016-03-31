@@ -1,18 +1,19 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
-using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IStudentCustomAlertDetailService
     {
-        void AddStudentCustomAlertDetail(IList<StudentCustomAlertDetail> studentCustomAlertDetail);
-        void EditStudentCustomAlertDetail(IList<StudentCustomAlertDetail> studentCustomAlertDetail);
-        void DeleteStudentCustomAlertDetail(IList<StudentCustomAlertDetail> studentCustomAlertDetail);
-        IList<StudentCustomAlertDetail> GetStudentCustomAlertDetailById(int studentId, int schoolYear);
+        void Add(IList<StudentCustomAlertDetail> studentCustomAlertDetail);
+        void Edit(IList<StudentCustomAlertDetail> studentCustomAlertDetail);
+        void Delete(IList<StudentCustomAlertDetail> studentCustomAlertDetail);
+        IList<StudentCustomAlertDetail> GetList(int studentId);
     }
 
     class StudentCustomAlertDetailService : SchoolServiceBase, IStudentCustomAlertDetailService
@@ -21,31 +22,32 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public void AddStudentCustomAlertDetail(IList<StudentCustomAlertDetail> studentCustomAlertDetail)
+        public void Add(IList<StudentCustomAlertDetail> studentCustomAlertDetail)
         {
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(u => new DataAccessBase<StudentCustomAlertDetail>(u).Insert(studentCustomAlertDetail));
         }
 
-        public void EditStudentCustomAlertDetail(IList<StudentCustomAlertDetail> studentCustomAlertDetail)
+        public void Edit(IList<StudentCustomAlertDetail> studentCustomAlertDetail)
         {
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(u => new DataAccessBase<StudentCustomAlertDetail>(u).Update(studentCustomAlertDetail));
         }
 
-        public void DeleteStudentCustomAlertDetail(IList<StudentCustomAlertDetail> studentCustomAlertDetail)
+        public void Delete(IList<StudentCustomAlertDetail> studentCustomAlertDetail)
         {
             BaseSecurity.EnsureSysAdmin(Context);
             DoUpdate(u => new DataAccessBase<StudentCustomAlertDetail>(u).Delete(studentCustomAlertDetail));
         }
 
-        public IList<StudentCustomAlertDetail> GetStudentCustomAlertDetailById(int studentId, int schoolYear)
+        public IList<StudentCustomAlertDetail> GetList(int studentId)
         {
+            Trace.Assert(Context.SchoolYearId.HasValue);
             return DoRead(u => new DataAccessBase<StudentCustomAlertDetail>(u).GetAll(new AndQueryCondition
             {
                 {nameof(StudentCustomAlertDetail.StudentRef), studentId},
-                {nameof(StudentCustomAlertDetail.SchoolYearRef), schoolYear}
-            }));
+                {nameof(StudentCustomAlertDetail.SchoolYearRef), Context.SchoolYearId.Value}
+            }).OrderBy(x => x.AlertText).ToList());
         }
     }
 }

@@ -27,13 +27,13 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
         protected override void InsertInternal(IList<StudentCustomAlertDetail> entities)
         {
             var sts = entities.Select(Selector).ToList();
-            ServiceLocatorSchool.StudentCustomAlertDetailService.AddStudentCustomAlertDetail(sts);
+            ServiceLocatorSchool.StudentCustomAlertDetailService.Add(sts);
         }
 
         protected override void UpdateInternal(IList<StudentCustomAlertDetail> entities)
         {
             var sts = entities.Select(Selector).ToList();
-            ServiceLocatorSchool.StudentCustomAlertDetailService.EditStudentCustomAlertDetail(sts);
+            ServiceLocatorSchool.StudentCustomAlertDetailService.Edit(sts);
         }
         protected override void DeleteInternal(IList<StudentCustomAlertDetail> entities)
         {
@@ -41,7 +41,7 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
             {
                 Id = x.StudentCustomAlertDetailID
             }).ToList();
-            ServiceLocatorSchool.StudentCustomAlertDetailService.DeleteStudentCustomAlertDetail(toDelete);
+            ServiceLocatorSchool.StudentCustomAlertDetailService.Delete(toDelete);
         }
     }
 }

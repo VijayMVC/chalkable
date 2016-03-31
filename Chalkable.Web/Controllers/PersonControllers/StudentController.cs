@@ -65,7 +65,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
             }
 
-            res.StudentCustomAlertDetails = SchoolLocator.StudentCustomAlertDetailService.GetStudentCustomAlertDetailById(schoolPersonId, Context.SchoolYearId.Value);
+            res.StudentCustomAlertDetails = SchoolLocator.StudentCustomAlertDetailService.GetList(schoolPersonId);
 
             return Json(res);
         }
@@ -88,7 +88,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             //todo : clarify in Zoli ... do we need all contacts or just family members
             var studentContacts = SchoolLocator.ContactService.GetStudentContactDetails(personId);
             res.StudentContacts = StudentContactViewData.Create(studentContacts);
-            res.StudentCustomAlertDetails = SchoolLocator.StudentCustomAlertDetailService.GetStudentCustomAlertDetailById(personId, Context.SchoolYearId.Value);
+            res.StudentCustomAlertDetails = SchoolLocator.StudentCustomAlertDetailService.GetList(personId);
             return Json(res, 6);
         }
 
