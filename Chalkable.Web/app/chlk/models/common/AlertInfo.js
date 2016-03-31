@@ -7,7 +7,8 @@ NAMESPACE('chlk.models.common', function () {
             INTERNET_ACCESS_ALERT: 0,
             MEDICAL_ALERT: 1,
             SPECIAL_INSTRUCTIONS_ALERT: 2,
-            SPED_STATUS_ALERT: 3
+            SPED_STATUS_ALERT: 3,
+            CUSTOM_STUDENT_ALERT_DETAILS : 4
         });
 
     /** @class chlk.models.common.AlertInfo*/
