@@ -110,7 +110,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             AnnouncementApplicationStorage.Update(aa);
         }
 
-        public void UpdateAnnouncementApplicationMeta(int announcementApplicationId, AnnouncementTypeEnum announcementType, string text, string imageUrl)
+        public void UpdateAnnouncementApplicationMeta(int announcementApplicationId, AnnouncementTypeEnum announcementType, string text,
+            string imageUrl, string description)
         {
             var aa = GetAnnouncementApplication(announcementApplicationId);
             var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(aa.AnnouncementRef);
@@ -118,6 +119,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
             aa.Text = text;
             aa.ImageUrl = imageUrl;
+            aa.Description = description;
             AnnouncementApplicationStorage.Update(aa);
         }
 
