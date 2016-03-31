@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
-using Chalkable.BusinessLogic.Security;
-using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model;
@@ -68,12 +65,16 @@ namespace Chalkable.Web.Controllers.PersonControllers
                 res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
             }
 
+            res.StudentCustomAlertDetails = SchoolLocator.StudentCustomAlertDetailService.GetStudentCustomAlertDetailById(schoolPersonId, Context.SchoolYearId.Value);
+
             return Json(res);
         }
         
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User })]
         public ActionResult Info(int personId)
         {
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
             var syId = GetCurrentSchoolYearId();
             var res = (StudentInfoViewData)GetInfo(personId, personInfo=> StudentInfoViewData.Create(personInfo, syId));
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(personId);
@@ -87,6 +88,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             //todo : clarify in Zoli ... do we need all contacts or just family members
             var studentContacts = SchoolLocator.ContactService.GetStudentContactDetails(personId);
             res.StudentContacts = StudentContactViewData.Create(studentContacts);
+            res.StudentCustomAlertDetails = SchoolLocator.StudentCustomAlertDetailService.GetStudentCustomAlertDetailById(personId, Context.SchoolYearId.Value);
             return Json(res, 6);
         }
 

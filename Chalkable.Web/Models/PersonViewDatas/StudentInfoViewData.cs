@@ -19,6 +19,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string SpEdStatus { get; set; }
 
         public IList<StudentContactViewData> StudentContacts { get; set; }
+        public IList<StudentCustomAlertDetail> StudentCustomAlertDetails { get; set; }
 
         protected StudentInfoViewData(PersonDetails student):base(student)
         {
