@@ -16,7 +16,6 @@ NAMESPACE('chlk.templates.people', function () {
 
             Boolean, 'messagingDisabled',
 
-
             [[chlk.models.people.User]],
             Boolean, function canViewInfo(user){
                 var currentRole = this.getUserRole();

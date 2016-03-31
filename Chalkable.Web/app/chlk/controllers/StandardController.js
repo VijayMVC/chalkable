@@ -100,7 +100,7 @@ NAMESPACE('chlk.controllers', function () {
             },
 
             function getTopicCourses(subjectDocumentId_){
-                return this.ABStandardService.getCourses(subjectDocumentId_)
+                return this.ABStandardService.getTopicCourses(subjectDocumentId_)
                     .attach(this.validateResponse_())
                     .then(function(items){
                         return new chlk.models.standard.StandardItemsListViewData(items, chlk.models.standard.ItemType.TOPIC_COURSE);
@@ -135,7 +135,11 @@ NAMESPACE('chlk.controllers', function () {
 
             [[chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId, Boolean]],
             function getSubjectDocumentsItems(authorityId, documentId, forTopics_){
-                return this.ABStandardService.getSubjectDocuments(authorityId, documentId)
+                var res = forTopics_
+                    ? this.ABStandardService.getTopicSubjectDocuments()
+                    : this.ABStandardService.getSubjectDocuments(authorityId, documentId);
+
+                return res
                     .attach(this.validateResponse_())
                     .then(function(items){
                         return new chlk.models.standard.StandardItemsListViewData(items, forTopics_ ? chlk.models.standard.ItemType.TOPIC_SUBJECT :
@@ -210,12 +214,12 @@ NAMESPACE('chlk.controllers', function () {
             function showTopicsWidgetAction(requestId, topicsIds, onlyOne_){
                 var res = ria.async.wait([
                     topicsIds.length ? this.ABStandardService.getTopicsList(topicsIds) : ria.async.Future.$fromData(null),
-                    this.ABStandardService.getSubjectDocuments()
+                    this.ABStandardService.getTopicSubjectDocuments()
                 ]).attach(this.validateResponse_())
                     .then(function(result){
                         var selected = result[0] || [];
                         var subjects = result[1];
-                        var breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.TOPIC_MAIN, 'Subject');
+                        var breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.TOPIC_MAIN, 'Topic');
                         return new chlk.models.standard.StandardItemsListViewData(subjects, chlk.models.standard.ItemType.TOPIC_SUBJECT,
                             null, [breadcrumb], topicsIds, selected, requestId, onlyOne_);
                     }, this);
@@ -242,10 +246,10 @@ NAMESPACE('chlk.controllers', function () {
                 var breadcrumb;
 
                 if(!data.getFilter()){
-                    var result = this.ABStandardService.getSubjectDocuments()
+                    var result = this.ABStandardService.getTopicSubjectDocuments()
                         .attach(this.validateResponse_())
                         .then(function(subjects){
-                            breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.TOPIC_MAIN, 'Subject');
+                            breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.TOPIC_MAIN, 'Topic');
                             return new chlk.models.standard.StandardItemsListViewData(subjects, chlk.models.standard.ItemType.TOPIC_SUBJECT, null, [breadcrumb]);
                         }, this);
 

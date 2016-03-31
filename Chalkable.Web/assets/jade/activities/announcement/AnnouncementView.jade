@@ -3,6 +3,11 @@ mixin AppAttachmentBlock(item, pictureHref, i)
         .title
             div=item.getName()
 
+mixin AppAttachmentGradingBlock(item, pictureHref)
+    .wrapper
+        .title(data-tooltip=item.getName(), data-tooltip-type="overflow")= item.getName()
+        +LoadingImage(src=pictureHref)
+        block
 
 mixin AnnouncementTooltip()
     div(attributes).announcement-view-tooltip
@@ -172,3 +177,23 @@ mixin Glue_()
                             LEIntegrated = self.isLEIntegrated() && self.isHasAccessToLE(),
                             classId = classAnnouncement.getClassId()
                         )
+
+        if adminAnnouncement
+            -var students = self.getStudents()
+            if !self.getUserRole().isStudent() && students && students.getItems().length
+                +CloseOpen('Students')
+                    +ActionForm('announcement', 'loadStudents')#people-list-form
+                        +Hidden("start", 0)
+                        +Hidden("count", 10)
+                        +Hidden('announcementId', self.getId())
+                        Button(type="submit", class="scroll-start-button x-hidden", name="submitType", value="scroll")
+                        .people-list-container
+                            +ListView(students.getItems())(
+                                infiniteScroll = true
+                            )(data-has-access = true).people-list.grading.grades-individual
+                                +RenderWith(students, chlk.templates.announcement.admin.AdminAnnouncementGradingTpl)(
+                                    userRole = self.getUserRole(),
+                                    currentUser = self.getCurrentUser(),
+                                    applications = self.getApplications(),
+                                    standards = self.getStandards()
+                                )

@@ -71,6 +71,7 @@
       <Setting name="TaskProcessorDelay" value="1" />
       <Setting name="DbBackupServiceUrl" value="https://sn1prod-dacsvc.azure.com/DACWebService.svc" />
       <Setting name="PictureProcessorCount" value="1" />
+      <Setting name="AllSchoolRunner.DistrictsPerThread" value="4" />
       <!--tracking-->
       <Setting name="mixpanel-token" value="2f0bfa09aa5390f4aa43c423b1f080f9" />
       <!--application insight-->
@@ -109,8 +110,8 @@
       <Setting name="TaskProducer.CleanupManager.IntervalStart" value="0" />
       <Setting name="TaskProducer.CleanupManager.IntervalEnd" value="86400" />
       <Setting name="TaskProducer.DbBackupProducer.Interval" value="86400" />
-      <Setting name="TaskProducer.DbBackupProducer.IntervalStart" value="0" />
-      <Setting name="TaskProducer.DbBackupProducer.IntervalEnd" value="86400" />
+      <Setting name="TaskProducer.DbBackupProducer.IntervalStart" value="14400" />
+      <Setting name="TaskProducer.DbBackupProducer.IntervalEnd" value="21600" />
       <!--tracking-->
       <Setting name="mixpanel-token" value="2f0bfa09aa5390f4aa43c423b1f080f9" />
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkableschool;AccountKey=CA86C3J9Rn2XPm9mOr9A6QuNZQf6ldc+t3/z7djMSrtXQJRd/u7Tpb4N388nUMvczMhEHDQKtGqQXFMQksWL8Q==" />

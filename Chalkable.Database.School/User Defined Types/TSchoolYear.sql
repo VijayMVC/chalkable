@@ -5,5 +5,7 @@
     [StartDate]   DATETIME2 (7)   NULL,
     [EndDate]     DATETIME2 (7)   NULL,
     [ArchiveDate] DATETIME2 (7)   NULL,
-    [SchoolRef]   INT             NOT NULL);
+    [SchoolRef]   INT             NOT NULL,
+	[AcadYear]    INT             NOT NULL
+	);
 

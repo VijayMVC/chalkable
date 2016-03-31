@@ -322,6 +322,9 @@
     <Build Include="Stored Procedures\Announcements Procedures\spInternalSortAdminOrLp.sql" />
     <Build Include="Stored Procedures\spGetAnnouncementApplicationRecipients.sql" />
     <Build Include="Stored Procedures\spGetLastClassMarkingPeriod.sql" />
+    <Build Include="Stored Procedures\spGetAdminAnnouncementRecipients.sql" />
+    <Build Include="Tables\StudentCustomAlertDetail.sql" />
+    <Build Include="User Defined Types\TStudentCustomAlertDetail.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />

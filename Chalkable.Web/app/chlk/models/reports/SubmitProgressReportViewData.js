@@ -57,10 +57,10 @@ NAMESPACE('chlk.models.reports', function () {
         [[ArrayOf(chlk.models.attendance.AttendanceReason),
             ArrayOf(chlk.models.reports.UserForReport),
             chlk.models.id.GradingPeriodId, chlk.models.id.ClassId,
-            chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean
+            chlk.models.common.ChlkDate, chlk.models.common.ChlkDate, Boolean, Boolean
         ]],
-        function $(reasons_, students_, gradingPeriodId_, classId_, startDate_, endDate_, ableDownload_){
-            BASE(classId_, gradingPeriodId_, startDate_, endDate_, null, ableDownload_);
+        function $(reasons_, students_, gradingPeriodId_, classId_, startDate_, endDate_, ableDownload_, isAbleToReadSSNumber_){
+            BASE(classId_, gradingPeriodId_, startDate_, endDate_, null, ableDownload_, isAbleToReadSSNumber_);
             if(students_)
                 this.setStudentsWithComments(students_);
             if(reasons_)

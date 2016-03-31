@@ -27,6 +27,13 @@ NAMESPACE('chlk.templates.reports', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.people.ShortUserInfo), 'students',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'ableToReadSSNumber',
+
+            Boolean, function hideSSNumber(){
+                return !this.isAbleToReadSSNumber();
+            },
+
             [[String]],
             ArrayOf(chlk.models.common.ActionLinkModel), function buildReportLinksData(pressedAction){
                 var controllerName = 'grading';

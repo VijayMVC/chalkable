@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.School
         AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementTypeEnum type, Guid applicationId);
         AnnouncementApplication GetAnnouncementApplication(int announcementAppId);
         void AttachAppToAnnouncement(int announcementAppId, AnnouncementTypeEnum announcementType);
-        void UpdateAnnouncementApplicationMeta(int announcementApplicationId, AnnouncementTypeEnum announcementType, string text, string imageUrl);
+        void UpdateAnnouncementApplicationMeta(int announcementApplicationId, AnnouncementTypeEnum announcementType, string text, string imageUrl, string description);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnIds(IList<int> announcementIds, bool onlyActive = false);
         IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false);
@@ -135,7 +135,7 @@ namespace Chalkable.BusinessLogic.Services.School
             }
         }
 
-        public void UpdateAnnouncementApplicationMeta(int announcementApplicationId, AnnouncementTypeEnum announcementType, string text, string imageUrl)
+        public void UpdateAnnouncementApplicationMeta(int announcementApplicationId, AnnouncementTypeEnum announcementType, string text, string imageUrl, string description)
         {
             Trace.Assert(Context.SchoolLocalId.HasValue);
             Trace.Assert(Context.PersonId.HasValue);
@@ -150,6 +150,7 @@ namespace Chalkable.BusinessLogic.Services.School
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 aa.Text = text;
                 aa.ImageUrl = imageUrl;
+                aa.Description = description;
                 da.Update(aa);
                 uow.Commit();
             }
