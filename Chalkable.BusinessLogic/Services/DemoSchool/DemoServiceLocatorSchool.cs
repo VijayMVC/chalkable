@@ -1845,6 +1845,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IAttachementService AttachementService { get { throw new NotImplementedException(); } }
 
         public ILEService LeService { get { throw new NotImplementedException(); } }
+
+        public IStudentCustomAlertDetailService StudentCustomAlertDetailService { get { throw new NotImplementedException(); } }
     }
 
 }

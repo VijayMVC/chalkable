@@ -76,6 +76,7 @@ namespace Chalkable.StiConnector.SyncModel
             RegisterType(typeof(CourseType));
             RegisterType(typeof(SystemSetting));
             RegisterType(typeof(District));
+            RegisterType(typeof(StudentCustomAlertDetail));
         }
 
         public void SetCurrentVersions(IList<SyncVersion> tableVersions)

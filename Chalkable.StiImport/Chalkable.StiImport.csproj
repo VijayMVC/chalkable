@@ -196,6 +196,7 @@
     <Compile Include="Services\SyncModelAdapters\StudentAcadSessionAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StudentAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StudentContactAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\StudentCustomAlertDetailAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StudentScheduleTermAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\StudentSchoolAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\SyncModelAdapter.cs" />
