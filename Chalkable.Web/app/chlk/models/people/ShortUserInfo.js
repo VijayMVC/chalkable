@@ -31,6 +31,12 @@ NAMESPACE('chlk.models.people', function () {
                 this.withdrawn = SJX.fromValue(raw.iswithdrawn, Boolean);
                 this.withMedicalAlert = SJX.fromValue(raw.hasmedicalalert, Boolean);
                 this.allowedInetAccess = SJX.fromValue(raw.isallowedinetaccess, Boolean);
+
+                var studentCustomAlertDetails = raw.studentcustomalertdetails ? raw.studentcustomalertdetails.map(function (item) {
+                    return item.alerttext;
+                }) : [];
+
+                this.studentCustomAlertDetails = SJX.fromArrayOfValues(studentCustomAlertDetails, String);
                 this.specialInstructions = SJX.fromValue(raw.specialinstructions, String);
                 this.spedStatus = SJX.fromValue(raw.spedstatus, String);
                 this.healthConditions = SJX.fromArrayOfDeserializables(raw.healthconditions, chlk.models.people.HealthCondition);
@@ -63,6 +69,7 @@ NAMESPACE('chlk.models.people', function () {
             String, 'specialInstructions',
             String, 'spedStatus',
             ArrayOf(chlk.models.people.HealthCondition), 'healthConditions',
+            ArrayOf(String), 'studentCustomAlertDetails',
 
             [[Array]],
             VOID, function addMedicalAlerts_(alerts){
@@ -102,6 +109,9 @@ NAMESPACE('chlk.models.people', function () {
                     res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPECIAL_INSTRUCTIONS_ALERT, this.getSpecialInstructions()));
                 if(this.showSpedStatus())
                     res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.SPED_STATUS_ALERT, Msg.Alert_Sped_text));
+                this.studentCustomAlertDetails.forEach(function (item) {
+                    res.push(new commonNS.AlertInfo(commonNS.AlertTypeEnum.CUSTOM_STUDENT_ALERT_DETAILS, item));
+                })
                 return new chlk.models.common.Alerts(res);
             },
 
