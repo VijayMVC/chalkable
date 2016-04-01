@@ -20,6 +20,16 @@ NAMESPACE('chlk.activities.common.standards', function(){
                     this.setOnlyOne(model.isOnlyOne());
             },
 
+            [ria.mvc.DomEventBind('click', '.cancel-btn')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function cancelClick(node, event){
+                var idsNode = this.dom.find('.standard-ids');
+                idsNode.setValue('');
+                this.dom.find('.able-add-item.pressed').removeClass('pressed');
+                this.dom.find('.selected-item').removeSelf();
+                this.setSelectedText([]);
+            },
+
             [ria.mvc.DomEventBind('keydown', '.search-standard')],
             [[ria.dom.Dom, ria.dom.Event]],
             function searchStandardKeydown(node, event){

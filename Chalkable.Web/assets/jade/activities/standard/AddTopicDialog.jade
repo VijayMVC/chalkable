@@ -5,6 +5,7 @@
     .dialog.add-standards
         .x-window-header
             h1='Add Topics'
+            a.close.close-btn
         .standards-content
             .action-bar
                 .items
@@ -33,5 +34,5 @@
                                     .item-description= '  -  ' + item.getDescription()
                 if !self.isOnlyOne()
                     .buttons-container
-                        +Button.special-button2.cancel.close Cancel
+                        +Button()(type="button").special-button2.cancel-btn Cancel
                         +Button()(type="submit", disabled).special-button2.blue-button.add.add-standard-btn Add
