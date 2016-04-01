@@ -40,6 +40,7 @@ REQUIRE('chlk.models.announcement.StudentAnnouncement');
 REQUIRE('chlk.models.apps.InstalledAppsViewData');
 REQUIRE('chlk.models.announcement.ShowGradesToStudents');
 REQUIRE('chlk.models.announcement.FileAttachViewData');
+REQUIRE('chlk.models.people.UsersListSubmit');
 
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.AnnouncementId');
@@ -1131,6 +1132,36 @@ NAMESPACE('chlk.controllers', function (){
                     return this.prepareAnnouncementForView(announcement);
                 }, this);
             return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
+        },
+
+        [[chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum]],
+        function viewDistrictAdminAction(announcementId, announcementType_) {
+            this.getView().reset();
+
+            var result = ria.async.wait([
+                    this.announcementService.getAnnouncement(announcementId, announcementType_),
+                    this.adminAnnouncementService.getAdminAnnouncementRecipients(announcementId)
+                ])
+                .attach(this.validateResponse_())
+                .catchError(this.handleNoAnnouncementException_, this)
+                .then(function(res){
+                    var announcement = res[0], students = this.prepareUsers(res[1]);
+                    announcement.setStudents(students);
+                    this.cacheAnnouncementType(announcement.getType());
+                    return this.prepareAnnouncementForView(announcement);
+                }, this);
+
+            return this.PushView(chlk.activities.announcement.AnnouncementViewPage, result);
+        },
+
+        [[chlk.models.people.UsersListSubmit]],
+        function loadStudentsAction(model){
+            var start = model.getStart();
+            var result = this.adminAnnouncementService.getAdminAnnouncementRecipients(model.getAnnouncementId(), start, model.getCount())
+                .then(function(usersData){
+                    return this.prepareUsers(usersData, start);
+                }, this);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, result, chlk.activities.lib.DontShowLoader());
         },
 
         function handleNoAnnouncementException_(error){

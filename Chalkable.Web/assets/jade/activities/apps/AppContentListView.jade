@@ -12,6 +12,8 @@ if self.hasContent()
                            -var pictureUrl = appContent.getImageUrl();
                            +LoadingImage(src=pictureUrl, id="loading-image-" + i)
                            .title(data-tooltip=appContent.getText(), data-tooltip-type="overflow")= appContent.getText()
+                           .shortdesc-content
+                              pre=appContent.getDescription()
                            if app.needToInstall()
                               +ActionButton('appmarket', 'tryToInstall', app.getId(), true, true) Quick Install
                            else

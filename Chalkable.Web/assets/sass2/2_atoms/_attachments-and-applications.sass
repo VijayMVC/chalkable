@@ -93,7 +93,7 @@
     &:hover .title
       bottom: 155px - 36px - $padding
 
-    .shortdesc
+    .shortdesc, .shortdesc-content
       position: absolute
       top: 40px
       left: -$padding
@@ -110,6 +110,11 @@
 
     &:hover .shortdesc
       opacity: 1
+
+    .shortdesc-content
+      top: 15px
+      text-align: left
+      white-space: pre-wrap
 
     BUTTON, .download-link
       opacity: 0

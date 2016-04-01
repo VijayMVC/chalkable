@@ -34,7 +34,7 @@ mixin AttachmentDialog(url, buttons, announcementId, announcementAppId, type, ad
                         img(src=url)
         else
             .iframe-wrap
-                iframe.fixed-height(src=url)
+                iframe.fixed-height(src=url, allowfullscreen)
                     attributes.class
 
 

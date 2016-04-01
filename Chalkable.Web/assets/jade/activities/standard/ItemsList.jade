@@ -51,7 +51,7 @@ mixin StandardItemByType_(currentItemsType, item)
             if item.isDeepest()
                 +DeepestItem_(item, item.getId())
             else
-                +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, item.getCourseId(), item.getTopicId()).item-block
+                +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, item.getCourseId(), item.getId()).item-block
                     +StandardItemInner_(currentItemsType, item)
 
 

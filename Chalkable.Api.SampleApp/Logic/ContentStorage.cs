@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.API.Models;
 
@@ -23,6 +24,10 @@ namespace Chalkable.Api.SampleApp.Logic
                 res.Add(new ApplicationContent
                 {
                     ContentId = i.ToString(),
+                    Description = $"Create by Publisher{i}\n" +
+                                  $"Standards: st{i}, st{i+1}, st{i+2}\n" +
+                                  $"Grades: {i} - {i+1}\n" +
+                                  $"Rating: {i} Stars",
                     Text = $"Test text {i}",
                     ImageUrl = $"https://chalkable1.blob.core.windows.net/pictureconteiner/pictureconteiner_blob_dd7af2af-dc8d-4053-8225-ce01e2b06002-170x110"
                 });

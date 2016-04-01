@@ -35,11 +35,11 @@ namespace Chalkable.API.Endpoints
         }
         public async Task<Announcement> UploadAnnouncementAttachment(int announcementId, AnnouncementType announcementType, string fileName, Stream stream)
         {
-            var url = $"/AnnouncementAttachment/UploadAnnouncementAttachment.json";
+            var url = "/AnnouncementAttachment/UploadAnnouncementAttachment.json";
             return await Connector.Put<Announcement>($"{url}?announcementId={announcementId}&announcementType={announcementType}&filename={fileName}", stream);
         }
 
-        public async Task<bool> UpdateAnnouncementApplicationMeta(int announcementApplicationId, string text, string imageUrl)
+        public async Task<bool> UpdateAnnouncementApplicationMeta(int announcementApplicationId, string text, string imageUrl, string description)
         {
             var url = "/Application/UpdateAnnouncementApplicationMeta.json";
 
@@ -47,6 +47,7 @@ namespace Chalkable.API.Endpoints
             nvc.Add("announcementApplicationId", announcementApplicationId.ToString());
             nvc.Add("text", text);
             nvc.Add("imageUrl", imageUrl);
+            nvc.Add("description", description);
 
             return await Connector.Post<bool>(url, nvc);
         }

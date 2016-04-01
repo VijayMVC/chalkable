@@ -51,15 +51,6 @@ NAMESPACE('chlk.controllers', function (){
                     , byLastName, selectedIndex, filter_, null, this.getCurrentRole(), this.getCurrentPerson(), rolesText_, hasAccess, this.isMessagingDisabled() || disableMessaging);
             },
 
-            [[chlk.models.common.PaginatedList, Number]],
-            chlk.models.common.PaginatedList, function prepareUsers(usersData, start_){
-                var start = start_ || 0;
-                usersData.getItems().forEach(function(item, index){
-                    item.setIndex(start_ + index);
-                }, this);
-                return usersData;
-            },
-
             [[chlk.models.people.User]],
             function prepareProfileData(model){
                 var bDate = model.getBirthDate();

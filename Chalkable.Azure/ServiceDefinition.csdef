@@ -82,6 +82,7 @@
       <Setting name="TaskProcessorDelay" />
       <Setting name="DbBackupServiceUrl" />
       <Setting name="PictureProcessorCount" />
+      <Setting name="AllSchoolRunner.DistrictsPerThread" />
       <!--tracking-->
       <Setting name="mixpanel-token" />
       <!--application insight-->

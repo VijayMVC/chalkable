@@ -261,6 +261,7 @@
     <Compile Include="SyncModel\StudentAttendanceMinute.cs" />
     <Compile Include="SyncModel\StudentCheckInOut.cs" />
     <Compile Include="SyncModel\StudentContact.cs" />
+    <Compile Include="SyncModel\StudentCustomAlertDetail.cs" />
     <Compile Include="SyncModel\StudentDailyAbsence.cs" />
     <Compile Include="SyncModel\StudentGradeLevel.cs" />
     <Compile Include="SyncModel\StudentPeriodAbsence.cs" />

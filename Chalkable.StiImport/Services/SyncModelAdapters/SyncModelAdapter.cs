@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Chalkable.BusinessLogic.Services.Master;
@@ -123,7 +122,8 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 {typeof(ContactRelationship), new ContactRelationshipAdapter(this) },
                 {typeof(StudentContact), new StudentContactAdapter(this) },
                 {typeof(CourseType), new CourseTypeAdapter(this) },
-                {typeof(SystemSetting), new SystemSettingAdapter(this) }
+                {typeof(SystemSetting), new SystemSettingAdapter(this) },
+                {typeof(StudentCustomAlertDetail), new StudentCustomAlertDetailAdapter(this) }
             };
         }
 

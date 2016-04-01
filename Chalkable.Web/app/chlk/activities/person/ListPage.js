@@ -40,7 +40,6 @@ NAMESPACE('chlk.activities.person', function () {
                     if(!model.getItems().length)
                         this.dom.find('#people-list-form').trigger(chlk.controls.FormEvents.DISABLE_SCROLLING.valueOf());
                 }.bind(this), 1);
-                //this.dom.find('.people-list').appendChild(tpl.render());
             }
         ]);
 });
