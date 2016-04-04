@@ -10,7 +10,6 @@ Post-Deployment Script Template
 --------------------------------------------------------------------------------------
 */
 
-
 Declare @appAbStandard Table (AppId uniqueidentifier, StandardId uniqueidentifier)
 
 ---get all children for each appStandard
@@ -44,6 +43,7 @@ Where AppStandardRec.IsLeaf = 1
 
 ---Delete All App with CCStandards
 Delete From ApplicationStandard
+Where StandardRef in(Select Id From CommoncoreStandard)
 
 --- Insert Apps with ABstandards ids
 
