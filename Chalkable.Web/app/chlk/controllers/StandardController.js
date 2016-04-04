@@ -43,20 +43,20 @@ NAMESPACE('chlk.controllers', function () {
             },
 
             [[chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
-                chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
-            function showChildItemsAction(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_, courseId_, topicId_){
-                return this.showItemsAction(false, type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_, courseId_, topicId_);
+                chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABCourseId, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
+            function showChildItemsAction(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
+                return this.showItemsAction(false, type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_);
             },
 
             [[chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
-                chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
-            function showForBreadcrumbAction(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_, courseId_, topicId_){
-                return this.showItemsAction(true, type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_, courseId_, topicId_);
+                chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABCourseId, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
+            function showForBreadcrumbAction(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
+                return this.showItemsAction(true, type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_);
             },
 
             [[Boolean, chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId,
-                chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
-            function showItemsAction(isBreadcrumb, type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_, courseId_, topicId_){
+                chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABCourseId, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
+            function showItemsAction(isBreadcrumb, type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
                 var standardIds = this.getContext().getSession().get(ChlkSessionConstants.STANDARD_IDS, []);
                 var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null), res;
 
@@ -75,8 +75,10 @@ NAMESPACE('chlk.controllers', function () {
                     case chlk.models.standard.ItemType.SUBJECT_DOCUMENT:
                         res = this.getGradeLevelsItems(authorityId_, documentId_, subjectDocumentId_);break;
                     case chlk.models.standard.ItemType.GRADE_LEVEL:
+                        res = this.getStandardCourseItems(authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_);break;
+                    case chlk.models.standard.ItemType.STANDARD_COURSE:
                     case chlk.models.standard.ItemType.AB_STANDARD:
-                        res = this.getABStandardsItems(authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_);break;
+                        res = this.getABStandardsItems(authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_);break;
                     case chlk.models.standard.ItemType.TOPIC_MAIN:
                         res = this.getSubjectDocumentsItems(null, null, true);break;
                     case chlk.models.standard.ItemType.TOPIC_SUBJECT:
@@ -89,7 +91,7 @@ NAMESPACE('chlk.controllers', function () {
                 res = res.then(function(model){
                     if(!isBreadcrumb){
                         var breadcrumb = new chlk.models.standard.Breadcrumb(type, name, subjectId_, standardId_, authorityId_, documentId_,
-                            subjectDocumentId_, gradeLevelCode_, ABStandardId_, courseId_, topicId_);
+                            subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_);
                         this.BackgroundUpdateView(this.getView().getCurrent().getClass(), breadcrumb, 'add-breadcrumb');
                     }
 
@@ -156,9 +158,18 @@ NAMESPACE('chlk.controllers', function () {
                     }, this);
             },
 
-            [[chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABStandardId]],
-            function getABStandardsItems(authorityId, documentId, subjectDocumentId, gradeLevelCode_, ABStandardId_){
-                return this.ABStandardService.getStandards(authorityId, documentId, subjectDocumentId, gradeLevelCode_, ABStandardId_, true)
+            [[chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String]],
+            function getStandardCourseItems(authorityId, documentId, subjectDocumentId, gradeLevelCode_){
+                return this.ABStandardService.getStandardCourses(authorityId, documentId, subjectDocumentId, gradeLevelCode_)
+                    .attach(this.validateResponse_())
+                    .then(function(items){
+                        return new chlk.models.standard.StandardItemsListViewData(items, chlk.models.standard.ItemType.STANDARD_COURSE);
+                    }, this);
+            },
+
+            [[chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABCourseId, chlk.models.id.ABStandardId]],
+            function getABStandardsItems(authorityId, documentId, subjectDocumentId, gradeLevelCode_, standardCourseId_, ABStandardId_){
+                return this.ABStandardService.getStandards(authorityId, documentId, subjectDocumentId, gradeLevelCode_, standardCourseId_, ABStandardId_, true)
                     .attach(this.validateResponse_())
                     .then(function(items){
                         return new chlk.models.standard.StandardItemsListViewData(items, chlk.models.standard.ItemType.AB_STANDARD);
