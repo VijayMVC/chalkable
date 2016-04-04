@@ -140,7 +140,7 @@
         <parameters>
           <param name="dayOfWeek" value="Sunday" />
           <param name="hour" value="17" />
-          <param name="minute" value="5" />
+          <param name="minute" value="20" />
           <param name="promoteWatchedBuild" value="true" />
           <param name="revisionRule" value="lastSuccessful" />
           <param name="revisionRuleDependsOn" value="bt5" />
