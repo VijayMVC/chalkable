@@ -85,6 +85,9 @@ class TestFeed(BaseAuthedTestCase):
         #get items 'Items older than 30 days'
         self.settings_data = {'option':'2'}
         self.post('/Announcement/Done.json?', self.settings_data)   
+        
+        #set filter by activity
+        self.type_of_item = {'type':'1'}
  
         self.do_feed_list_and_verify(0)    
 
@@ -139,6 +142,7 @@ class TestFeed(BaseAuthedTestCase):
                     self.assertLessEqual(self.current_date_minus_30, expiresdate, 'Current date <= expiresdate of an activity ' + str(item["id"]))
                     self.assertLessEqual(decoded_list_1[0], expiresdate, 'Verify exprisesdate of activity ' + str(item["id"]))
                     self.assertGreaterEqual(decoded_list_2[0], expiresdate, 'Verify exprisesdate of activity ' + str(item["id"]))
+                    self.assertDictContainsSubset(self.type_of_item, {'type':type}, 'Only activities are shown')
             decoded_list = [x.encode('utf-8') for x in list_for_date]
             sorted_list_dates = sorted(decoded_list, key = lambda d: map(int, d.split('-')))
             self.assertTrue(decoded_list == sorted_list_dates, 'Items are sorted in earliest order')
@@ -146,13 +150,14 @@ class TestFeed(BaseAuthedTestCase):
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
            
     def tearDown(self):
+       #reset all filters on the feed
+        self.dict = {}
+        self.post('/Feed/SetSettings.json?', self.dict)
+        
         #marking all items as 'done'
-        get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(1000)) 
-        for_item_id = get_all_unmarket_items['data']['annoucementviewdatas'] 
-        for item in for_item_id:
-            id = str(item['id'])
-            type = str(item['type'])
-            self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'true'})
+        #get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(2000)) 
+        self.settings_data = {'option':'3'}
+        self.post('/Announcement/Done.json?', self.settings_data) 
     
 if __name__ == '__main__':
     unittest.main()

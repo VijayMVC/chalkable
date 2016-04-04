@@ -79,7 +79,7 @@ class TestFeed(BaseAuthedTestCase):
         self.assertFalse(set(self.id_of_lessonplan_and_activities_gradingperiod2) & set(self.id_of_lessonplan_and_activities_gradingperiod1), 'Items are in different grading periods')
  
         #set filter by activities
-        self.type_of_activity = {'type':'1'}
+        self.type_of_item = {'type':'1'}
 
         #get items 'Items older than 30 days'
         self.settings_data = {'option':'2'}
@@ -119,12 +119,11 @@ class TestFeed(BaseAuthedTestCase):
                 type = str(item['type'])
                 complete = item['complete']
                 self.assertTrue(complete == False, "Verify item's state on false")
-                self.assertDictContainsSubset(self.type_of_activity, {'type':type}, 'Only activities are shown')
                 classannouncementdata = item ['classannouncementdata']
-                for key2, value2 in classannouncementdata.iteritems():
-                    expiresdate = classannouncementdata['expiresdate']
-                    list_for_date.append(expiresdate)
-                    self.assertLessEqual(self.current_date_minus_30, expiresdate, 'Current date <= expiresdate of an activity ' + str(item["id"]))
+                expiresdate = classannouncementdata['expiresdate']
+                list_for_date.append(expiresdate)
+                self.assertLessEqual(self.current_date_minus_30, expiresdate, 'Current date <= expiresdate of an activity ' + str(item["id"]))
+                self.assertDictContainsSubset(self.type_of_item, {'type':type}, 'Only activities are shown')
             decoded_list = [x.encode('utf-8') for x in list_for_date]
             sorted_list_dates = sorted(decoded_list, reverse=True)
             self.assertTrue(decoded_list == sorted_list_dates, 'Items are sorted in earliest order')
@@ -132,13 +131,14 @@ class TestFeed(BaseAuthedTestCase):
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
            
     def tearDown(self):
+        #reset all filters on the feed
+        self.dict = {}
+        self.post('/Feed/SetSettings.json?', self.dict)
+        
         #marking all items as 'done'
-        get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(1000)) 
-        for_item_id = get_all_unmarket_items['data']['annoucementviewdatas'] 
-        for item in for_item_id:
-            id = str(item['id'])
-            type = str(item['type'])
-            self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'true'})
+        #get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(2000)) 
+        self.settings_data = {'option':'3'}
+        self.post('/Announcement/Done.json?', self.settings_data) 
     
 if __name__ == '__main__':
     unittest.main()

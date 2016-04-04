@@ -105,6 +105,9 @@ class TestFeed(BaseAuthedTestCase):
         sorttype = str(dictionary_verify_settingsforfeed['sorttype'])
         gradingperiodid = str(dictionary_verify_settingsforfeed['gradingperiodid'])
   
+  
+        dictionary_verify_annoucementviewdatas_all = list_items_json_unicode['data']['annoucementviewdatas']
+        
         #getting grading periods
         list_for_start_date = []
         list_for_end_date = []
@@ -123,7 +126,7 @@ class TestFeed(BaseAuthedTestCase):
 
         list_for_date = []
         
-        dictionary_verify_annoucementviewdatas_all = list_items_json_unicode['data']['annoucementviewdatas']
+
         if len(dictionary_verify_annoucementviewdatas_all) > 0:
             for item in dictionary_verify_annoucementviewdatas_all:
                 type = str(item['type'])
@@ -143,13 +146,14 @@ class TestFeed(BaseAuthedTestCase):
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
             
     def tearDown(self):
+        #reset all filters on the feed
+        self.dict = {}
+        self.post('/Feed/SetSettings.json?', self.dict)
+        
         #marking all items as 'done'
-        get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(1000)) 
-        for_item_id = get_all_unmarket_items['data']['annoucementviewdatas'] 
-        for item in for_item_id:
-            id = str(item['id'])
-            type = str(item['type'])
-            self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'true'})
+        #get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(2000)) 
+        self.settings_data = {'option':'3'}
+        self.post('/Announcement/Done.json?', self.settings_data) 
   
 if __name__ == '__main__':
     unittest.main()
