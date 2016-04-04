@@ -59,6 +59,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             [ria.templates.ModelPropertyBind],
             Boolean, 'hasAccessToLE',
 
+            [ria.templates.ModelPropertyBind],
+            chlk.models.common.PaginatedList, 'students',
+
             /*[ria.templates.ModelPropertyBind],
             Number, 'ownerAttachmentsCount',
 

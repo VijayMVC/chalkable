@@ -23,6 +23,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
 
         //[SensitiveData]
         public IList<StudentHealthConditionViewData> HealthConditions { get; set; }
+        public IList<StudentCustomAlertDetail> StudentCustomAlertDetails { get; set; }
 
         private const string NO_CLASS_SCHEDULED = "No Class Scheduled";
 

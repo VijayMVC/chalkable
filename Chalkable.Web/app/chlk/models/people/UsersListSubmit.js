@@ -1,3 +1,5 @@
+REQUIRE('chlk.models.id.AnnouncementId');
+
 NAMESPACE('chlk.models.people', function () {
     "use strict";
 
@@ -12,6 +14,7 @@ NAMESPACE('chlk.models.people', function () {
             String, 'submitType',
             String, 'rolesId',
             chlk.models.id.ClassId, 'classId',
+            chlk.models.id.AnnouncementId, 'announcementId',
 
             Boolean, function isScroll(){
                 return this.getSubmitType() == 'scroll';

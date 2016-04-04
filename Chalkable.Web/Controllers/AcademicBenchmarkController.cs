@@ -47,14 +47,7 @@ namespace Chalkable.Web.Controllers
             var docs = await MasterLocator.AcademicBenchmarkService.GetDocuments(authorityId);
             return Json(docs.Select(DocumentViewData.Create));
         }
-
-        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
-        public async Task<ActionResult> Subjects(Guid? authorityId, Guid? documentId)
-        {
-            var subjects = await MasterLocator.AcademicBenchmarkService.GetSubjects(authorityId, documentId);
-            return Json(subjects.Select(SubjectViewData.Create));
-        }
-
+        
         [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
         public async Task<ActionResult> SubjectDocuments(Guid? authorityId, Guid? documentId)
         {
@@ -70,9 +63,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
-        public async Task<ActionResult> Courses(Guid? subjectDocId)
+        public async Task<ActionResult> Courses(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode)
         {
-            var courses = await MasterLocator.AcademicBenchmarkService.GetCourses(subjectDocId);
+            var courses = await MasterLocator.AcademicBenchmarkService.GetCourses(authorityId, documentId, subjectDocId, gradeLevelCode);
             return Json(courses.Select(CourseViewData.Create));
         }
 
@@ -86,18 +79,32 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
-        public async Task<ActionResult> Standards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId, bool? firstLevelOnly)
+        public async Task<ActionResult> Standards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId, bool? firstLevelOnly, Guid? courseId)
         {
-            var standards = await MasterLocator.AcademicBenchmarkService.GetStandards(authorityId, documentId, subjectDocId, gradeLevelCode, parentId, firstLevelOnly ?? false);
+            var standards = await MasterLocator.AcademicBenchmarkService.GetStandards(authorityId, documentId, subjectDocId, gradeLevelCode, parentId, courseId, firstLevelOnly ?? false);
             return Json(standards.Select(StandardViewData.Create));
+        }
+
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
+        public async Task<ActionResult> TopicSubjectDocuments()
+        {
+            var res = await MasterLocator.AcademicBenchmarkService.GetTopicSubjectDocuments();
+            return Json(res.Select(SubjectDocumentViewData.Create));
+        }
+
+        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
+        public async Task<ActionResult> TopicCourses(Guid? subjectDocId)
+        {
+            var res = await MasterLocator.AcademicBenchmarkService.GetTopicCourses(subjectDocId);
+            return Json(res.Select(CourseViewData.Create));
         }
 
         [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
         public async Task<ActionResult> Topics(Guid? subjectDocId, Guid? courseId, Guid? parentId, bool? firstLevelOnly)
         {
-            var deepest = firstLevelOnly.HasValue && firstLevelOnly.Value ? true : (bool?) null;
+            var deepest = firstLevelOnly.HasValue && firstLevelOnly.Value ? false : (bool?) null;
             var topics = (await MasterLocator.AcademicBenchmarkService.GetTopics(subjectDocId, courseId, parentId, null, deepest)).ToList();
-            if (firstLevelOnly.HasValue)
+            if (firstLevelOnly.HasValue && firstLevelOnly.Value)
                 topics = topics.Where(x => x.Level == 1).ToList();
             return Json(topics.Select(TopicViewData.Create));
         }

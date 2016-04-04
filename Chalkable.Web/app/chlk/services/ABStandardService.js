@@ -145,6 +145,22 @@ NAMESPACE('chlk.services', function () {
                     count: count_ || 50,
                     deepest: true
                 });
-            }
+            },
+
+            ria.async.Future, function getTopicSubjectDocuments(){
+                return this.get('AcademicBenchmark/TopicSubjectDocuments.json', ArrayOf(chlk.models.academicBenchmark.SubjectDocument), { });
+            },
+
+            [[chlk.models.id.ABSubjectDocumentId]],
+            ria.async.Future, function getTopicCourses(subjectDocId_){
+                return this.get('AcademicBenchmark/TopicCourses.json', ArrayOf(chlk.models.academicBenchmark.Course), {
+                    subjectDocId: subjectDocId_ && subjectDocId_.valueOf()
+                }).then(function(items){
+                    items.forEach(function(item){
+                        item.setSubjectDocumentId(subjectDocId_);
+                    });
+                    return items;
+                });
+            },
         ]);
 });

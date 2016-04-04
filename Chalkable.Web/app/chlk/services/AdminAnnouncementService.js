@@ -12,6 +12,7 @@ REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.id.GalleryCategoryId');
 REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.announcement.AnnouncementTitleViewData');
+REQUIRE('chlk.models.people.User');
 
 
 NAMESPACE('chlk.services', function () {
@@ -25,6 +26,15 @@ NAMESPACE('chlk.services', function () {
             ria.async.Future, function addAdminAnnouncement(expiresDate_) {
                 return this.get('AdminAnnouncement/CreateAdminAnnouncement.json', chlk.models.announcement.AnnouncementCreate, {
                     expiresDate: expiresDate_ ? expiresDate_.valueOf() : null
+                });
+            },
+
+            [[chlk.models.id.AnnouncementId, Number, Number]],
+            ria.async.Future, function getAdminAnnouncementRecipients(id, start_, count_) {
+                return this.getPaginatedList('AdminAnnouncement/GetAdminAnnouncementRecipients.json', chlk.models.people.User, {
+                    announcementId:id.valueOf(),
+                    start: start_ || 0,
+                    count: count_ || 10
                 });
             },
 

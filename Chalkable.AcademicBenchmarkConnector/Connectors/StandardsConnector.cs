@@ -17,9 +17,9 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
         Task<IList<Subject>> GetSubjects(Guid? authorityId, Guid? documentId);
         Task<IList<SubjectDocument>> GetSubjectDocuments(Guid? authorityId, Guid? documentId); 
         Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, Guid? subjectDocId);
-        Task<IList<Course>> GetCourses(Guid? subjectDocId);
+        Task<IList<Course>> GetCourses(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode);
         Task<PaginatedList<Standard>> SearchStandards(string searchQuery, bool? deepest, int start, int count);
-        Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId);
+        Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId, Guid? courceId, bool? isDeepest);
 
     }
 
@@ -42,9 +42,9 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             return await GetOne<StandardRelations>(url, null);
         }
 
-        public async Task<IList<Course>> GetCourses(Guid? subjectDocId)
+        public async Task<IList<Course>> GetCourses(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode)
         {
-            return (await GetPage<CourseWrapper>(null, null, subjectDocId: subjectDocId)).Select(x=>x.Course).ToList();
+            return (await GetPage<CourseWrapper>(authorityId, documentId, subjectDocId: subjectDocId, gradeLevelCode: gradeLevelCode)).Select(x=>x.Course).ToList();
         }
 
         public async Task<PaginatedList<Standard>> SearchStandards(string searchQuery, bool? deepest, int start, int count)
@@ -52,9 +52,9 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             return await GetPage<Standard>(null, null, null, searchQuery: searchQuery, start: start, limit: count, deepest: deepest);
         }
 
-        public async Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId)
+        public async Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId, Guid? courceId, bool? isDeepest)
         {
-            return await GetPage<Standard>(authorityId, documentId, subjectDocId, parentId: parentId, gradeLevelCode: gradeLevelCode);
+            return await GetPage<Standard>(authorityId, documentId, subjectDocId, parentId: parentId, gradeLevelCode: gradeLevelCode, courseId: courceId, deepest: isDeepest);
         }
 
         public async Task<IList<Authority>> GetAuthorities()
@@ -91,7 +91,7 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
             [typeof(CourseWrapper)] = "course"
         };
         protected async Task<PaginatedList<TModel>> GetPage<TModel>(Guid? authorityId, Guid? documentId, Guid? subjectDocId, 
-            Guid? parentId = null, string gradeLevelCode = null, string searchQuery = null, int start = 0, int limit = int.MaxValue, bool? deepest = null)
+            Guid? parentId = null, string gradeLevelCode = null, Guid? courseId = null, string searchQuery = null, int start = 0, int limit = int.MaxValue, bool? deepest = null)
         {
             var nvc = new NameValueCollection
             {
@@ -109,7 +109,9 @@ namespace Chalkable.AcademicBenchmarkConnector.Connectors
                 nvc.Add("query", searchQuery);
             if(!string.IsNullOrWhiteSpace(gradeLevelCode))
                 nvc.Add("grade", gradeLevelCode);
-            if(deepest.HasValue)
+            if (courseId.HasValue)
+                nvc.Add("course", courseId.Value.ToString());
+            if (deepest.HasValue)
                 nvc.Add("deepest", deepest.Value ? "Y" : "N");
             
             var res = await GetPage<BaseResource<TModel>>("standards", nvc, start, limit);

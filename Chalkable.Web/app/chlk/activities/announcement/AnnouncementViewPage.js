@@ -8,6 +8,7 @@ REQUIRE('chlk.templates.announcement.AnnouncementQnAs');
 REQUIRE('chlk.templates.standard.AddStandardsTpl');
 REQUIRE('chlk.templates.announcement.AnnouncementViewStandardsTpl');
 REQUIRE('chlk.templates.grading.GradingCommentsTpl');
+REQUIRE('chlk.templates.announcement.admin.AdminAnnouncementGradingTpl');
 
 REQUIRE('chlk.models.grading.AlertsEnum');
 
@@ -56,6 +57,7 @@ NAMESPACE('chlk.activities.announcement', function () {
         'AnnouncementViewPage', EXTENDS(chlk.activities.lib.TemplatePage), [
             Array, 'applicationsInGradeView',
             Array, 'applications',
+            Array, 'standards',
             Array, 'autoGradeApps',
             chlk.models.people.User, 'owner',
             chlk.models.id.AnnouncementId, 'announcementId',
@@ -335,6 +337,7 @@ NAMESPACE('chlk.activities.announcement', function () {
                 BASE(model);
 
                 this.setMoreClicked(false);
+                this.setStandards(model.getStandards());
 
                 var allScores = [], zeroPercentageScores = [], classAnnouncement = model.getClassAnnouncementData();
                 var lessonPlan = model.getLessonPlanData();
@@ -975,6 +978,19 @@ NAMESPACE('chlk.activities.announcement', function () {
                 setTimeout(function(){
                     node.removeClass('open');
                 }, 500);
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.admin.AdminAnnouncementGradingTpl, chlk.activities.lib.DontShowLoader())],
+            VOID, function usersForGridAppend(tpl, model, msg_) {
+                tpl.options({
+                    applications: this.getApplications(),
+                    standards: this.getStandards()
+                });
+                ria.dom.Dom(tpl.render()).appendTo(this.dom.find('.people-list'));
+                setTimeout(function(){
+                    if(!model.getItems().length)
+                        this.dom.find('#people-list-form').trigger(chlk.controls.FormEvents.DISABLE_SCROLLING.valueOf());
+                }.bind(this), 1);
             }
         ]
     );
