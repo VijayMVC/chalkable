@@ -1,0 +1,61 @@
+mixin FileIcon_(announcementId, announcementType, assignedAttributeId, attachment)
+   .announcement-item.application
+      -console.log()
+      -console.log(!assignedAttributeId)
+      -console.log(!!assignedAttributeId)
+      .wrapper
+         +LoadingImage(src=attachment.getThumbnailUrl(), id="loading-image-" + attachment.getId().valueOf())
+         .title(data-tooltip=attachment.getName(), data-tooltip-type="overflow")= attachment.getName()
+         .shortdesc
+            .data='Uploaded: ' + attachment.getUploadedDate().format('m/dd/yy')
+            .data='Last Sent: ' + attachment.getLastAttachedDate().format('m/dd/yy')
+
+         if assignedAttributeId && assignedAttributeId.valueOf()
+            +ActionButton('announcement', 'attachFromCabinetToAttribute', announcementId, announcementType, attachment.getId(), assignedAttributeId) Attach
+            +ActionButton('announcement', 'cloneFromCabinetToAttribute', announcementId, announcementType,  attachment.getId(), assignedAttributeId) Duplicate
+         else
+            +ActionButton('announcement', 'attachFromCabinet', announcementId, announcementType, attachment.getId()) Attach
+            +ActionButton('announcement', 'cloneFromCabinet', announcementId, announcementType, attachment.getId()) Duplicate
+
+-var options = self.getAttachOptions()
+-var announcementId = options.getAnnouncementId()
+-var announcementType = options.getAnnouncementType()
+-var assignedAttributeId = options.getAssignedAttributeId()
+-var atts = self.getAttachments();
+.dialog.chlk-attach-dialog
+   .x-window-header
+      h1 Attach from FILE CABINET
+      a.close.close-btn
+   .attach-content
+      +AttachDialogSidebar(self, 'uploaded')
+      .attach-main
+         +ActionForm('announcement', 'listAttachments')#file-cabinet-filter
+            +Hidden('start', atts.getPageIndex() * atts.getPageSize())
+            +Hidden('count', atts.getPageSize())
+
+            .buttons.filter
+               .left
+                  .sort
+                     span Sorted by:&nbsp;
+                     +Select('sorttype')#file-sort-type
+                        -var sortTypeEnum = chlk.models.attachment.SortAttachmentType
+                        +Option(sortTypeEnum.RECENTLY_SENT.valueOf(), 'Recently Sent', sortTypeEnum.RECENTLY_SENT == self.getSortType())
+                        +Option(sortTypeEnum.NEWEST_UPLOADED.valueOf(), 'Newest Uploaded', sortTypeEnum.NEWEST_UPLOADED == self.getSortType())
+                        +Option(sortTypeEnum.OLDEST_UPLOADED.valueOf(), 'Oldest Uploaded', sortTypeEnum.OLDEST_UPLOADED == self.getSortType())
+               .right.wrapper
+                  .file-search-container
+                     input(type="text", placeholder='Filter list...', name="filter", value=self.getFilter(), data-value=self.getFilter()).file-search.search-input
+                     .search-glass
+                     .file-search-imgs
+                        label.file-search-img
+                        label.file-search-close.opacity0
+               .clear-fix
+
+            .attachments-and-applications
+               if atts.getItems().length > 0
+                  each att in atts.getItems()
+                     +FileIcon_(announcementId, announcementType, assignedAttributeId, att)
+               else
+                  .no-documents No Documents Uploaded
+            .paging
+               +Paginator2('announcement', 'pageAttachments', atts, [self.getFilter(), self.getSortType()])
