@@ -331,6 +331,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 schoolYearId, personId, roleId, true, classId, startDate, endDate, filterByExpiryDate));
         }
 
+        protected override void SetUnComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate)
+        {
+            DoUpdate(u => new AnnouncementRecipientDataDataAccess(u).UpdateAnnouncementRecipientData(null, AnnouncementTypeEnum.Admin,
+                schoolYearId, personId, roleId, false, classId, startDate, endDate, filterByExpiryDate));
+        }
+
         public IList<StudentDetails> GetAdminAnnouncementRecipients(int announcementId, int start = 0, int count = int.MaxValue)
         {
             return DoRead(u => new AdminAnnouncementForAdminDataAccess(u).GetAdminAnnouncementRecipients(announcementId, start, count));

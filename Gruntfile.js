@@ -439,7 +439,7 @@ module.exports = function (grunt) {
   }
   
   if (['staging'].indexOf(vcsBranch) >= 0) {
-    postBuildTasks.push('exec:automated-tests');
+    // SKIP: postBuildTasks.push('exec:automated-tests');
   }
 
   if (['qa'].indexOf(vcsBranch) >= 0) {

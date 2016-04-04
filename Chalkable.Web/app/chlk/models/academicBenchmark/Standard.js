@@ -1,4 +1,5 @@
 REQUIRE('chlk.models.id.ABStandardId');
+REQUIRE('chlk.models.id.ABCourseId');
 REQUIRE('chlk.models.academicBenchmark.Authority');
 REQUIRE('chlk.models.academicBenchmark.Document');
 REQUIRE('chlk.models.academicBenchmark.SubjectDocument');
@@ -13,6 +14,7 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
         chlk.models.id.ABDocumentId, 'documentId',
         chlk.models.id.ABSubjectDocumentId, 'subjectDocumentId',
         String, 'gradeLevel',
+        chlk.models.id.ABCourseId, 'standardCourseId',
 
         [ria.serialize.SerializeProperty('id')],
         chlk.models.id.ABStandardId, 'standardId',

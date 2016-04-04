@@ -80,28 +80,33 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-
-            [[chlk.models.id.ABSubjectDocumentId]],
-            ria.async.Future, function getCourses(subjectDocId_){
+            [[chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String]],
+            ria.async.Future, function getStandardCourses(authorityId_, documentId_, subjectDocId_, gradeLevelCode_){
                 return this.get('AcademicBenchmark/Courses.json', ArrayOf(chlk.models.academicBenchmark.Course), {
-                    subjectDocId: subjectDocId_ && subjectDocId_.valueOf()
+                    subjectDocId: subjectDocId_ && subjectDocId_.valueOf(),
+                    authorityId: authorityId_ && authorityId_.valueOf(),
+                    documentId: documentId_ && documentId_.valueOf(),
+                    gradeLevelCode: gradeLevelCode_
                 }).then(function(items){
                     items.forEach(function(item){
+                        item.setAuthorityId(authorityId_);
+                        item.setDocumentId(documentId_);
                         item.setSubjectDocumentId(subjectDocId_);
+                        item.setGradeLevel(gradeLevelCode_);
                     });
                     return items;
                 });
             },
 
-
-            [[chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABStandardId, Boolean]],
-            ria.async.Future, function getStandards(authorityId_, documentId_, subjectDocId_, gradeLevelCode_, parentId_, firstLevelOnly_) {
+            [[chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId, chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABCourseId, chlk.models.id.ABStandardId, Boolean]],
+            ria.async.Future, function getStandards(authorityId_, documentId_, subjectDocId_, gradeLevelCode_, courseId_, parentId_, firstLevelOnly_) {
                 return this.get('AcademicBenchmark/Standards.json', ArrayOf(chlk.models.academicBenchmark.Standard), {
                     authorityId: authorityId_ && authorityId_.valueOf(),
                     documentId: documentId_ && documentId_.valueOf(),
                     subjectDocId: subjectDocId_ && subjectDocId_.valueOf(),
                     gradeLevelCode: gradeLevelCode_,
                     parentId: parentId_ && parentId_.valueOf(),
+                    courseId: courseId_ && courseId_.valueOf(),
                     firstLevelOnly: !parentId_
                 }).then(function(items){
                     items.forEach(function(item){
@@ -109,6 +114,7 @@ NAMESPACE('chlk.services', function () {
                         item.setDocumentId(documentId_);
                         item.setSubjectDocumentId(subjectDocId_);
                         item.setGradeLevel(gradeLevelCode_);
+                        item.setStandardCourseId(courseId_);
                         parentId_ && item.setParentStandardId(parentId_);
                     });
 

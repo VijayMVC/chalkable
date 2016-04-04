@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.Master.DataAccess;
@@ -18,6 +19,7 @@ using AttendanceMonth = Chalkable.StiConnector.SyncModel.AttendanceMonth;
 using ContactRelationship = Chalkable.StiConnector.SyncModel.ContactRelationship;
 using District = Chalkable.Data.Master.Model.District;
 using GradedItem = Chalkable.StiConnector.SyncModel.GradedItem;
+using Person = Chalkable.StiConnector.SyncModel.Person;
 using Standard = Chalkable.StiConnector.SyncModel.Standard;
 using StudentContact = Chalkable.StiConnector.SyncModel.StudentContact;
 using StudentSchool = Chalkable.StiConnector.SyncModel.StudentSchool;
@@ -33,9 +35,10 @@ namespace Chalkable.Tests.Sis
         public void SyncTest()
         {
 
-            var cl = ConnectorLocator.Create("Chalkable", "1aC6wI3qQ", "https://inow.tcss.net/API/");
-            var items = (cl.SyncConnector.GetDiff(typeof(User), 58050246) as SyncResult<User>);
-            Print(items.Inserted.OrderBy(x=>x.UserID));
+            var cl = ConnectorLocator.Create("Chalkable", "rH6rP8dG7", "https://sis-clayco.chalkableinformationnow.com/api/");
+            var items = (cl.SyncConnector.GetDiff(typeof(PersonTelephone), 7009405) as SyncResult<PersonTelephone>);
+
+            Print(items.Inserted);
             Print(items.Updated);
             Print(items.Deleted);
         }
@@ -45,9 +48,14 @@ namespace Chalkable.Tests.Sis
         {
             var ids = new List<Guid>
             {
+                Guid.Parse("3BC472AE-0F57-48F7-BC76-8485B5EA157C"),
+                Guid.Parse("E523CD50-F52E-4862-BC03-EA7ACDFC071E"),
+                Guid.Parse("E02C0198-B69B-47F6-871E-C4DE3ECBBE1E"),
+                Guid.Parse("1C46F721-D79F-40C4-A0B6-68D3D0A73D82"),
                 Guid.Parse("F14ABF1C-102B-4B4E-ACC3-1367F6F31069"),
-                Guid.Parse("E02C0198-B69B-47F6-871E-C4DE3ECBBE1E")
-
+                Guid.Parse("5B20A3E2-BC48-48C6-AD47-A2DDA32EFF0C"),
+                Guid.Parse("CDB64B27-54E4-40B4-8807-C4037867E751"),
+                Guid.Parse("840D8256-2E12-4EDF-A5E4-F58ED7D71F63")
             };
             foreach (var guid in ids)
             {
@@ -114,6 +122,24 @@ namespace Chalkable.Tests.Sis
                 (new UserDataAccess(uow)).Insert(users);
                 uow.Commit();
             }
+        }
+
+        private void Print(IEnumerable<Standard> items)
+        {
+            foreach (var item in items)
+            {
+                Debug.WriteLine($"{item.StandardID} {item.ParentStandardID} {item.StandardSubjectID} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
+            }
+            Debug.WriteLine("---------------------------------");
+        }
+
+        private void Print(IEnumerable<Person> items)
+        {
+            foreach (var item in items)
+            {
+                Debug.WriteLine($"{item.PersonID}, {item.FirstName}, {item.LastName}, {item.DateOfBirth}, {item.GenderDescriptor}, {item.PhysicalAddressID}, {item.UserID} {item.SYS_CHANGE_VERSION} {item.SYS_CHANGE_CREATION_VERSION}");
+            }
+            Debug.WriteLine("---------------------------------");
         }
 
         private void Print(IEnumerable<StudentScheduleTerm> items)

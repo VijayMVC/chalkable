@@ -19,13 +19,14 @@ NAMESPACE('chlk.models.standard', function () {
         DOCUMENT: 4,
         SUBJECT_DOCUMENT: 5,
         GRADE_LEVEL: 6,
-        AB_STANDARD: 7,
-        AB_MAIN: 8,
-        SEARCH: 9,
-        TOPIC: 10,
-        TOPIC_MAIN: 11,
-        TOPIC_SUBJECT: 12,
-        TOPIC_COURSE: 13
+        STANDARD_COURSE: 7,
+        AB_STANDARD: 8,
+        AB_MAIN: 9,
+        SEARCH: 10,
+        TOPIC: 11,
+        TOPIC_MAIN: 12,
+        TOPIC_SUBJECT: 13,
+        TOPIC_COURSE: 14
     });
 
     /** @class chlk.models.standard.Breadcrumb*/
@@ -51,11 +52,13 @@ NAMESPACE('chlk.models.standard', function () {
 
             chlk.models.id.ABTopicId, 'topicId',
 
+            chlk.models.id.ABCourseId, 'standardCourseId',
+
             chlk.models.id.ABCourseId, 'courseId',
 
             [[chlk.models.standard.ItemType, String, chlk.models.id.StandardSubjectId, chlk.models.id.StandardId, chlk.models.id.ABAuthorityId, chlk.models.id.ABDocumentId,
-                chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
-            function $(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, ABStandardId_, courseId_, topicId_){
+                chlk.models.id.ABSubjectDocumentId, String, chlk.models.id.ABCourseId, chlk.models.id.ABStandardId, chlk.models.id.ABCourseId, chlk.models.id.ABTopicId]],
+            function $(type, name, subjectId_, standardId_, authorityId_, documentId_, subjectDocumentId_, gradeLevelCode_, standardCourseId_, ABStandardId_, courseId_, topicId_){
                 BASE();
                 this.setType(type);
                 this.setName(name);
@@ -65,6 +68,7 @@ NAMESPACE('chlk.models.standard', function () {
                 documentId_ && this.setDocumentId(documentId_);
                 subjectDocumentId_ && this.setSubjectDocumentId(subjectDocumentId_);
                 gradeLevelCode_ && this.setGradeLevelCode(gradeLevelCode_);
+                standardCourseId_ && this.setStandardCourseId(standardCourseId_);
                 ABStandardId_ && this.setABStandardId(ABStandardId_);
                 courseId_ && this.setCourseId(courseId_);
                 topicId_ && this.setTopicId(topicId_);

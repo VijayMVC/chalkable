@@ -4,6 +4,7 @@ namespace Chalkable.StiConnector.SyncModel
     public class Standard : SyncModel
     {
         public int StandardID { get; set; }
+        [NullableForeignKey]
         public int? ParentStandardID { get; set; }
         public int? AssessmentStandardID { get; set; }
         public int? AssessmentParentStandardID { get; set; }
