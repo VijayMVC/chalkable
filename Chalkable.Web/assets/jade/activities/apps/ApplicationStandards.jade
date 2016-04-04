@@ -1,0 +1,17 @@
+.standards-list
+    if self.getStandards() && self.getStandards().length > 0
+        .standards-list-container
+            standardsIdsStr = (self.getStandardsIds() || []).join(',')
+            +Hidden('standards', standardsIdsStr)
+            each standard in self.getStandards()
+                button(data-tooltip = standard.getDescription(), type="button").grey-button.same-on-hover
+                    = standard.displayTitle()
+                    if !self.isReadOnly()
+                        +ActionLink('apps', 'removeStandard', self.getApplicationId(), standard.getStandardId()).remove-standard
+        if !self.isReadOnly()
+            +ActionLink('apps', 'removeAllStandards', self.getApplicationId()).remove-all-standards-btn.x-hidden
+            .title.add-more-title CLICK TO ADD MORE
+    else
+        .title= !self.isReadOnly() ? "CLICK TO ADD STANDARD" : "NO STANDARDS"
+    if !self.isReadOnly()
+        +ActionLink('apps', 'showStandards', self.getApplicationId()).add-standards-btn.x-hidden
