@@ -1,0 +1,17 @@
+.attachment-file(data-index = self.getFileIndex(), class=self.getId() ? '' : 'pending')
+    .icon
+        +LoadingImage(src=self.getThumbnailUrl() ? self.getThumbnailUrl().replace('110x170', '33x51') : '')
+    .name(data-tooltip=self.getName(), data-tooltip-type="overflow")=self.getName()
+        span.size &#32;(#{self.getSize()})
+    .progress-wrapper
+        if self.getLoaded()
+            .progress(style="width:" + self.getLoaded() * 100 / self.getTotal() + "%")
+        else
+            .progress(style="width:" + (self.getId() ? "100%" : "0"))
+    .img-loader
+    if self.getId()
+        if self.isAttributeAttachment()
+            +ActionLink('announcement', 'removeAttributeAttachment', self.getAnnouncementType(), self.getAnnouncementId(), self.getId(), self.getFileIndex()).close-btn.delete-attachment
+        else
+            +ActionLink('announcement', 'deleteAttachment', self.getId(), self.getAnnouncementId(), self.getAnnouncementType(), self.getFileIndex()).close-btn.delete-attachment
+
