@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <build-type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" uuid="882e2df1-125a-4272-b410-0423559b828d" xsi:noNamespaceSchemaLocation="http://www.jetbrains.com/teamcity/schemas/9.0/project-config.xsd">
-  <name>Classroom Tests</name>
+  <name>Classroom Deploy</name>
   <description />
   <settings>
     <options>
-      <option name="allowPersonalBuildTriggering" value="false" />
       <option name="checkoutMode" value="ON_AGENT" />
       <option name="executionTimeoutMin" value="180" />
     </options>
