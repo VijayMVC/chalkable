@@ -116,7 +116,7 @@
       </runner>
     </build-runners>
     <vcs-settings>
-      <vcs-entry-ref root-id="Chalkable_1" />
+      <vcs-entry-ref root-id="Chalkable_ChalkableTestSourcesCi" />
     </vcs-settings>
     <requirements />
     <build-triggers>
