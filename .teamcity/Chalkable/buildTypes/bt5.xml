@@ -4,6 +4,7 @@
   <description />
   <settings>
     <options>
+      <option name="artifactRules" value="Chalkable.Database.Master\bin\Release\Chalkable.Database.Master.dacpac =&gt; /ReleasePackage.%build.number%.zip&#xA;Chalkable.Database.School\bin\Release\Chalkable.Database.School.dacpac =&gt; /ReleasePackage.%build.number%.zip&#xA;Chalkable.Azure\bin\Release\app.publish\Chalkable.Azure.cspkg =&gt; /ReleasePackage.%build.number%.zip&#xA;Chalkable.Azure\ServiceConfiguration.*.cscfg =&gt; /ReleasePackage.%build.number%.zip" />
       <option name="checkoutMode" value="ON_AGENT" />
       <option name="executionTimeoutMin" value="180" />
     </options>
