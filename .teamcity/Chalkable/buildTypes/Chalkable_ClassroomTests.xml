@@ -124,7 +124,7 @@
         <parameters>
           <param name="jonnyzzz.commandLine"><![CDATA[--vcs.revision=%build.vcs.number%
 --build.number=%build.number%
---vcs.branch=%teamcity.build.branch%]]></param>
+--vcs.branch=]]></param>
           <param name="jonnyzzz.grunt.mode" value="npm" />
           <param name="jonnyzzz.grunt.tasks" value="exec:automated-tests" />
           <param name="teamcity.step.mode" value="default" />

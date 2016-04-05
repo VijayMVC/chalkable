@@ -343,9 +343,9 @@ NAMESPACE('chlk.controllers', function (){
                return new chlk.models.common.InfoMsg(text_, header_, buttons, clazz_, isHtmlText_, inputType_, inputValue_, inputAttrs_);
            },
 
-           ria.async.Future, function ShowAlertBox(text, header_) {
-               return this.ShowMsgBox(text, header_)
-                   .then(function (activity) { return null; });
+           ria.async.Future, function ShowAlertBox(text, header_, isHtmlText_) {
+               return this.ShowMsgBox(text, header_, null, null, isHtmlText_)
+                   .then(function () { return null; });
            },
 
            ria.async.Future, function ShowPromptBox(text, header_, inputValue_, inputAttrs_, inputType_) {
