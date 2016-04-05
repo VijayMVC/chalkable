@@ -362,7 +362,7 @@ namespace Chalkable.StiImport.Services
             }
             catch (Exception)
             {
-                Log.LogError($"Error durring persisting by adapter {entities[0].GetType().Name}");
+                Log.LogError($"Error durring persisting {entities[0].GetType().Name}");
                 int cnt = 0;
                 foreach (var entity in entities)
                 {
