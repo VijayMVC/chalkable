@@ -139,10 +139,11 @@
       <build-trigger id="TRIGGER_7" type="schedulingTrigger">
         <parameters>
           <param name="dayOfWeek" value="Sunday" />
-          <param name="hour" value="17" />
-          <param name="minute" value="20" />
+          <param name="hour" value="4" />
+          <param name="minute" value="0" />
           <param name="promoteWatchedBuild" value="true" />
           <param name="revisionRule" value="lastSuccessful" />
+          <param name="revisionRuleBuildBranch" value="staging" />
           <param name="revisionRuleDependsOn" value="bt5" />
           <param name="schedulingPolicy" value="daily" />
           <param name="timezone" value="SERVER" />
