@@ -1,0 +1,28 @@
+.calendar-popup.popup-bubble.top
+    -var announcements = self.getAnnouncements();
+    -var adminAnnouncements = self.getAdminAnnouncements();
+    if adminAnnouncements.length > 0
+        h2=Msg.Admin_Announcements
+        .announcements-list
+            ul.day-announcements
+                each item in adminAnnouncements
+                    li.items
+                        +ActionLink('announcement', 'view', item.getId(), chlk.models.announcement.AnnouncementTypeEnum.ADMIN).pop-up-announcement
+                            div
+                                +TooltipWithOverflow(item.getTitle()).title
+                                +TooltipWithOverflow(item.getPersonName()).under
+    .items-list
+        if announcements.length > 0
+            h2=Msg.Item(true)
+            ul.day-items
+                each item in announcements
+                    li.items
+                        +ActionLink('announcement', 'view', item.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT).pop-up-item
+                            div
+                                +TooltipWithOverflow(item.getTitle()).item-title
+                                +TooltipWithOverflow(item.getClassName()).classname-under
+    if self.getUserRole().isTeacher() && !self.isNoPlusButton()
+        +ActionButton('announcement', 'addViaCalendar', self.getDate().format('mm-dd-yy'), true, self.getSelectedClassId() || '').ann-button.plus-ann New item
+
+
+
