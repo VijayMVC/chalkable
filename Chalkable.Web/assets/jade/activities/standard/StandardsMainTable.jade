@@ -1,0 +1,9 @@
+.breadcrumbs-cnt.breadcrumbs-cnt-main
+    each breadcrumb in self.getBreadcrumbs()
+        +RenderWith(breadcrumb, chlk.templates.standard.StandardsBreadcrumbTpl)
+.breadcrumbs-cnt.breadcrumbs-cnt-clone.x-hidden
+    each breadcrumb in self.getBreadcrumbs()
+        +RenderWith(breadcrumb, chlk.templates.standard.StandardsBreadcrumbTpl)
+.last-link-cnt.x-hidden
+.items-cnt.browse-items-cnt
+    +RenderWith(self.getModel(), chlk.templates.standard.ItemsListTpl)
