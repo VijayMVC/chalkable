@@ -127,13 +127,14 @@ class TestFeed(BaseAuthedTestCase):
         
             
     def tearDown(self):
+        #reset all filters on the feed
+        self.dict = {}
+        self.post('/Feed/SetSettings.json?', self.dict)
+        
         #marking all items as 'done'
-        get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(1000)) 
-        for_item_id = get_all_unmarket_items['data']['annoucementviewdatas'] 
-        for item in for_item_id:
-            id = str(item['id'])
-            type = str(item['type'])
-            self.post('/Announcement/Complete', {'announcementId':id, 'announcementType':type, 'complete':'true'})
+        #get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(2000)) 
+        self.settings_data = {'option':'3'}
+        self.post('/Announcement/Done.json?', self.settings_data) 
     
 if __name__ == '__main__':
     unittest.main()

@@ -34,6 +34,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         int GetNewAnnouncementItemOrder(AnnouncementDetails announcement);
         void SetComplete(int id, bool complete);
         void SetComplete(int? classId, MarkDoneOptions option);
+        void SetUnComplete(int? classId, MarkDoneOptions option);
         void SetAnnouncementsAsComplete(DateTime? date, bool complete);
         bool CanAddStandard(int announcementId);
 
@@ -218,6 +219,31 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 SetComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, fromDate, toDate, classId, filterByExpiryDate);
         }
 
+        public void SetUnComplete(int? classId, MarkDoneOptions option)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
+            DateTime toDate;
+            DateTime fromDate;
+            var filterByExpiryDate = false;
+            GetDateRangeForMarking(out fromDate, out toDate);
+            switch (option)
+            {
+                case MarkDoneOptions.Till30Days:
+                    if (toDate > Context.NowSchoolTime.AddDays(-30))
+                        toDate = Context.NowSchoolTime.AddDays(-30);
+                    break;
+                case MarkDoneOptions.TillToday:
+                    if (toDate > Context.NowSchoolTime.AddDays(-1))
+                        toDate = Context.NowSchoolTime.AddDays(-1);
+                    filterByExpiryDate = true;
+                    break;
+            }
+            if (fromDate <= toDate)
+                SetUnComplete(Context.SchoolYearId.Value, Context.PersonId.Value, Context.RoleId, fromDate, toDate, classId, filterByExpiryDate);
+        }
+
         private void GetDateRangeForMarking(out DateTime startDate, out DateTime endDate)
         {
             var feedSettings = ServiceLocator.AnnouncementFetchService.GetSettingsForFeed();
@@ -235,6 +261,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         protected abstract void SetComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate);
 
+        protected abstract void SetUnComplete(int schoolYearId, int personId, int roleId, DateTime startDate, DateTime endDate, int? classId, bool filterByExpiryDate);
 
         public Announcement GetAnnouncementById(int id)
         {

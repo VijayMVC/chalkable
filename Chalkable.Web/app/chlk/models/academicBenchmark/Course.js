@@ -9,10 +9,13 @@ NAMESPACE('chlk.models.academicBenchmark', function(){
 
         chlk.models.id.ABCourseId, 'id',
         String, 'description',
+        chlk.models.id.ABAuthorityId, 'authorityId',
+        chlk.models.id.ABDocumentId, 'documentId',
         chlk.models.id.ABSubjectDocumentId, 'subjectDocumentId',
+        String, 'gradeLevel',
 
         function getName(){
             return this.getDescription();
-        },
+        }
     ]);
 });

@@ -34,6 +34,9 @@ NAMESPACE('chlk.templates.standard', function(){
             String, 'gradeLevelCode',
 
             [ria.templates.ModelPropertyBind],
+            chlk.models.id.ABCourseId, 'standardCourseId',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.id.ABStandardId, 'ABStandardId',
 
             [ria.templates.ModelPropertyBind],

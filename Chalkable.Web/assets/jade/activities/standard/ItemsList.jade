@@ -35,11 +35,14 @@ mixin StandardItemByType_(currentItemsType, item)
         when chlk.models.standard.ItemType.GRADE_LEVEL
             +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, item.getAuthorityId(), item.getDocumentId(), item.getSubjectDocumentId(), item.getCode()).item-block
                 +StandardItemInner_(currentItemsType, item)
+        when chlk.models.standard.ItemType.STANDARD_COURSE
+            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, item.getAuthorityId(), item.getDocumentId(), item.getSubjectDocumentId(), item.getGradeLevel(), item.getId()).item-block
+                +StandardItemInner_(currentItemsType, item)
         when chlk.models.standard.ItemType.AB_STANDARD
             if item.isDeepest()
                 +DeepestItem_(item, item.getStandardId())
             else
-                +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, item.getAuthorityId(), item.getDocumentId(), item.getSubjectDocumentId(), item.getGradeLevel(), item.getStandardId()).item-block
+                +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, item.getAuthorityId(), item.getDocumentId(), item.getSubjectDocumentId(), item.getGradeLevel(), item.getStandardCourseId(), item.getStandardId()).item-block
                     +StandardItemInner_(currentItemsType, item)
         when chlk.models.standard.ItemType.TOPIC_SUBJECT
             +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getId()).item-block

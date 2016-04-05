@@ -139,6 +139,26 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return Json(true);
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult UnDone(int? classId, int option, int? annType)
+        {
+            MarkDoneOptions mdo = (MarkDoneOptions)option;
+            if (!annType.HasValue)
+            {
+                SchoolLocator.AdminAnnouncementService.SetUnComplete(classId, mdo);
+                SchoolLocator.LessonPlanService.SetUnComplete(classId, mdo);
+                SchoolLocator.ClassAnnouncementService.SetUnComplete(classId, mdo);
+            }
+            else
+            {
+                if ((AnnouncementTypeEnum)annType == AnnouncementTypeEnum.Class)
+                    SchoolLocator.ClassAnnouncementService.SetUnComplete(classId, mdo);
+                if ((AnnouncementTypeEnum)annType == AnnouncementTypeEnum.LessonPlan)
+                    SchoolLocator.LessonPlanService.SetUnComplete(classId, mdo);
+            }
+            return Json(true);
+        }
+
         [AuthorizationFilter("Teacher, DistrictAdmin")]
         public ActionResult SubmitStandardsToAnnouncement(int announcementId, int? announcementType, IntList standardIds)
         {

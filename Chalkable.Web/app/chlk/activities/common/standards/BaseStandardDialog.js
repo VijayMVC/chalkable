@@ -14,10 +14,40 @@ NAMESPACE('chlk.activities.common.standards', function(){
 
             Boolean, 'onlyOne',
 
+            Boolean, function isSearchEnabled(){
+                return this.dom.find('.search-breadcrumb-item').exists();
+            },
+
             OVERRIDE, VOID, function onRender_(model) {
                 BASE(model);
                 if(model.isOnlyOne())
                     this.setOnlyOne(model.isOnlyOne());
+            },
+
+            function cloneLastLink(node){
+                var clone = ria.__API.clone(node),
+                    linkCnt = this.dom.find('.last-link-cnt');
+
+                linkCnt.empty();
+                clone.appendTo(linkCnt);
+
+                this.dom.find('.breadcrumbs-cnt-clone').setHTML(this.dom.find('.breadcrumbs-cnt-main').getHTML());
+            },
+
+            [ria.mvc.DomEventBind('click', '.action-link.item-block')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function itemLinkClick(node, event){
+                this.cloneLastLink(node);
+            },
+
+            [ria.mvc.DomEventBind('click', '.breadcrumb-item')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function breadcrumbClick(node, event){
+                node.find('~').removeSelf();
+                this.dom.find('.breadcrumbs-cnt-clone').setHTML(this.dom.find('.breadcrumbs-cnt-main').getHTML());
+
+                if(!this.isSearchEnabled())
+                    this.cloneLastLink(node);
             },
 
             [ria.mvc.DomEventBind('click', '.cancel-btn')],
@@ -34,8 +64,21 @@ NAMESPACE('chlk.activities.common.standards', function(){
             [[ria.dom.Dom, ria.dom.Event]],
             function searchStandardKeydown(node, event){
                 if(event.which == ria.dom.Keys.ENTER.valueOf()){
-                    node.parent('form').trigger('submit');
+                    if(!this.dom.find('.search-standard').getValue())
+                        this.clearSearch();
+                    else
+                        node.parent('form').trigger('submit');
+                    return false;
                 }
+
+
+            },
+
+            [ria.mvc.DomEventBind('keypress', '.search-standard')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            function searchStandardKeypress(node, event){
+                if(event.which == ria.dom.Keys.ENTER.valueOf())
+                    return false;
             },
 
             [ria.mvc.DomEventBind('keyup', '.search-standard')],
@@ -53,7 +96,10 @@ NAMESPACE('chlk.activities.common.standards', function(){
             [ria.mvc.DomEventBind('click', '#search-glass, .search-breadcrumb-item')],
             [[ria.dom.Dom, ria.dom.Event]],
             function searchIconClick(node, event){
-                this.dom.find('form.search-standard-cnt').trigger('submit');
+                if(!this.dom.find('.search-standard').getValue())
+                    this.clearSearch();
+                else
+                    this.dom.find('form.search-standard-cnt').trigger('submit');
             },
 
             [ria.mvc.DomEventBind('submit', 'form.search-standard-cnt')],
@@ -67,8 +113,20 @@ NAMESPACE('chlk.activities.common.standards', function(){
             function clearSearchClick(node, event){
                 this.dom.find('.search-standard').setValue('');
                 this.dom.find('.clear-search').addClass('x-hidden');
-                if(this.dom.find('.search-breadcrumb-item').exists())
-                    node.parent('form').trigger('submit');
+
+                this.clearSearch();
+            },
+
+            function clearSearch(){
+                if(this.isSearchEnabled()){
+                    var lastLink = this.dom.find('.last-link-cnt').find('.action-link');
+                    if(lastLink.exists()){
+                        this.dom.find('.breadcrumbs-cnt-main').setHTML(this.dom.find('.breadcrumbs-cnt-clone').getHTML());
+                        lastLink.trigger('click');
+                    }else{
+                        this.dom.find('form.search-standard-cnt').trigger('submit');
+                    }
+                }
             },
 
             [ria.mvc.DomEventBind('click', '.top-link:not(.pressed)')],
@@ -79,12 +137,6 @@ NAMESPACE('chlk.activities.common.standards', function(){
                 this.dom.find(pressed.getData('cnt')).addClass('x-hidden');
                 node.addClass('pressed');
                 this.dom.find(node.getData('cnt')).removeClass('x-hidden');
-            },
-
-            [ria.mvc.DomEventBind('click', '.breadcrumb-item')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function breadcrumbClick(node, event){
-                node.find('~').removeSelf()
             },
 
             [ria.mvc.DomEventBind('click', '.able-add-item:not(.disabled)')],
@@ -106,7 +158,7 @@ NAMESPACE('chlk.activities.common.standards', function(){
                             ids.push(currentId);
 
                     var arr = [];
-                    if(!this.dom.find('.search-breadcrumb-item').exists())
+                    if(!this.isSearchEnabled())
                         this.dom.find('.breadcrumb-item').forEach(function(node){
                             arr.push(node.getText());
                         });
@@ -192,6 +244,9 @@ NAMESPACE('chlk.activities.common.standards', function(){
 
                     });
                 }
+
+                //if(msg_ == 'add-breadcrumb')
+                    //this.dom.find('.breadcrumbs-cnt-clone').setHTML(this.dom.find('.breadcrumbs-cnt-main').getHTML());
             }
         ]);
 });
