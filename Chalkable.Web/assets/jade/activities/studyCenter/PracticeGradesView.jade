@@ -1,0 +1,60 @@
+mixin PracticeScoreWithPreviousScores_(lastScore, previousScores)
+     -var res=previousScores && previousScores.length && previousScores.length > 0 ? previousScores.join(',') : '';
+     +PracticeScore_(lastScore)(data-tooltip=res)
+
+mixin PracticeScore_(score, percentage)
+    showPercent = percentage != undefined ?  percentage : true
+    div(attributes)= score != undefined ? (score.indexOf('%') == -1 && showPercent ? score + '%' : score) : '-'
+
+mixin GradebookScore_(numericSore, alphaGradeName)
+    -var score= numericSore && alphaGradeName ? alphaGradeName + ' (' + numericSore + ')' : (numericSore ? numericSore : alphaGradeName);
+    +PracticeScore_(score, false)
+
+.profile-page.grades-page
+    +ClassesToolBar(self.getTopData(), 'studycenter', 'practice')
+    -var classId = self.getTopData().getSelectedItemId()
+
+    if !classId
+        .choose-class
+
+    h2.page-title Study Center
+    +ProfileTopBar(self, 'practice')
+
+    if classId
+        .chlk-calendar.marking-period-container.open
+            .buttons-row
+                .grading-selects
+                    -var standardId = self.getStandardId()
+                    +ActionForm('studycenter', 'filterPracticeGradesByStandardId').filter-by-standard-form
+                        +Hidden('classId', classId)
+                        +Hidden('studentId', self.getCurrentUser().getId().valueOf())
+                        +Hidden('startPractice', false)
+                        +Select('standardId')(data-placeholder=Msg.All_standards).standards-select.grading-select
+                            +Option('', Msg.All_standards , !standardId)
+                            each item in self.getStandards()
+                                +Option(item.getStandardId().valueOf(), item.getName(), standardId == item.getStandardId())
+
+                -var cCode = self.getCurrentStandardIds()
+                +ActionButton('studycenter', 'startPractice', cCode).blue-button.start-practice Start Practice
+            .mp-data
+                .grades-container
+                    .row-item.title-row
+                        .td-item.title-item.name-item
+                            .title Standard
+                        .td-item.title-item.description-item
+                            .title Description
+                        .td-item.title-item.grade-item
+                            .title Score
+                            .sub-title Practice
+                        .td-item.title-item.grade-item
+                            .title Score
+                            .sub-title Gradebook
+
+                    each item in self.getPracticeGrades()
+                        -var standard = item.getStandard()
+                        .row-item
+                            .td-item.standard-name.name-item: +ActionLink('studycenter', 'startPractice', standard.getStandardId())= standard.getName()
+                            .td-item.description.description-item=standard.getDescription()
+                            .td-item.score.practice.grade-item: +PracticeScoreWithPreviousScores_(item.getPracticeScore(), item.getPreviousScores())
+                            -var grade = parseFloat(item.getGradeBookScore()).toFixed(2)
+                            .td-item.score.grade-book.grade-item: +GradebookScore_(isNaN(grade) ? item.getGradeBookScore() : grade, item.getGradeBookAlphaGrade())
