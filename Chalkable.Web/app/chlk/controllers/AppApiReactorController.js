@@ -181,7 +181,17 @@ NAMESPACE('chlk.controllers', function (){
 
             [[Object]],
             function showAlertBoxAction(data) {
-                this.ShowAlertBox(data.text, data.header || null)
+                var filtered_text = data.text || '',
+                    isHtml = data.isHtmlText === true;
+
+                if (isHtml) {
+                    filtered_text = filtered_text
+                        .replace('<script', '')
+                        .replace('<body', '')
+                        .replace('<link', '')
+                }
+
+                this.ShowAlertBox(filtered_text, data.header || null, isHtml)
                     .then(this._replayTo(data));
 
                 return null;
