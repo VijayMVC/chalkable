@@ -21,6 +21,7 @@ namespace Chalkable.Web.Controllers.CalendarControllers
             return Json(res, 6);
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult StudentAttendances(int studentId, DateTime? date)
         {
             date = date ?? Context.NowSchoolYearTime;

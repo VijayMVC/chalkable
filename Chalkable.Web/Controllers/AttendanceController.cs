@@ -8,7 +8,6 @@ using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
-using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
@@ -164,6 +163,15 @@ namespace Chalkable.Web.Controllers
             var syId = GetCurrentSchoolYearId();
             var res = SchoolLocator.AttendanceMonthService.GetAttendanceMonths(syId);
             return Json(AttendanceMonthViewData.Create(res));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Attendance })]
+        public ActionResult StudentAttendance(int studentId, DateTime? date)
+        {
+            date = date ?? Context.NowSchoolYearTime;
+            var attendanceReasons = SchoolLocator.AttendanceReasonService.GetAll();
+            var studentAttendances = SchoolLocator.AttendanceService.GetStudentAttendancesByDateRange(studentId, date.Value, date.Value).FirstOrDefault();
+            return Json(StudentDateAttendanceViewData.Create(studentAttendances, attendanceReasons), 6);
         }
     }
 }
