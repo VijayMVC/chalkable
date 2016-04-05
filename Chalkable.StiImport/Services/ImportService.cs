@@ -14,6 +14,7 @@ using Chalkable.Data.Master.Model;
 using Chalkable.StiConnector.Connectors;
 using Chalkable.StiConnector.SyncModel;
 using Chalkable.StiImport.Services.SyncModelAdapters;
+using Newtonsoft.Json;
 using School = Chalkable.StiConnector.SyncModel.School;
 using User = Chalkable.Data.Master.Model.User;
 
@@ -33,7 +34,8 @@ namespace Chalkable.StiImport.Services
         protected IServiceLocatorSchool ServiceLocatorSchool { get; set; }
         protected BackgroundTaskService.BackgroundTaskLog Log { get; }
         protected SisConnectionInfo ConnectionInfo { get; }
-        private IList<Guid> insertedUsers; 
+        private IList<Guid> insertedUsers;
+        private const int MAX_LOOGED_ENTITIES = 2000;
 
         public ImportService(Guid districtId, SisConnectionInfo connectionInfo, BackgroundTaskService.BackgroundTaskLog log)
         {
@@ -354,7 +356,27 @@ namespace Chalkable.StiImport.Services
             }
             var requestStartTime = DateTimeOffset.UtcNow;
             var requestTimer = Stopwatch.StartNew();
-            adapter.Persist(type, entities);
+            try
+            {
+                adapter.Persist(type, entities);
+            }
+            catch (Exception)
+            {
+                Log.LogError($"Error durring persisting by adapter {entities[0].GetType().Name}");
+                int cnt = 0;
+                foreach (var entity in entities)
+                {
+                    var s = JsonConvert.SerializeObject(entity);
+                    Log.LogError(s);
+                    cnt++;
+                    if (cnt >= MAX_LOOGED_ENTITIES)
+                        break;
+                }
+                if (cnt < entities.Count)
+                    Log.LogError($"only first {MAX_LOOGED_ENTITIES}  if {entities.Count} entities were logged");
+                throw;
+            }
+            
             string typeName = type.ToString();
             var adapterName = adapter.GetType().Name;
             Log.LogInfo($"persist {typeName} by {adapterName}" );
