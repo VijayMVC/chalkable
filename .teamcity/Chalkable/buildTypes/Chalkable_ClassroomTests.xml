@@ -6,7 +6,7 @@
     <options>
       <option name="allowPersonalBuildTriggering" value="false" />
       <option name="checkoutMode" value="ON_AGENT" />
-      <option name="executionTimeoutMin" value="180" />
+      <option name="executionTimeoutMin" value="240" />
     </options>
     <disabled-settings>
       <setting-ref ref="BUILD_EXT_20" />
