@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -20,6 +21,7 @@ namespace Chalkable.Web
     // visit http://go.microsoft.com/?LinkId=9394801
     public class MvcApplication : HttpApplication
     {
+        // ReSharper disable once UnusedMember.Local
         private static readonly RaygunClient RaygunClient = new RaygunClient();
 
         protected void Application_Start()
@@ -51,6 +53,22 @@ namespace Chalkable.Web
             TelemetryConfiguration.Active.InstrumentationKey = Settings.InstrumentationKey;
 
             SqlServerTypes.Utilities.LoadNativeAssemblies(Server.MapPath("~/bin"));
+
+            try
+            {
+                ThreadPool.SetMinThreads(Settings.DefaultMinWorkerThreads, Settings.DefaultMinIoThreads);
+            }
+            // ReSharper disable once RedundantCatchClause
+            // ReSharper disable once UnusedVariable
+            catch (Exception e)
+            {
+#if !DEBUG
+                RaygunClient.SendInBackground(e);
+#endif
+#if DEBUG
+                throw;
+#endif
+            }
         }
 
 
@@ -132,12 +150,13 @@ namespace Chalkable.Web
                 // ignore these here to simulate what would happen
                 // if a global.asax handler were not implemented.
                 if (exc.Message.Contains("NoCatch") || exc.Message.Contains("maxUrlLength"))
+                    // ReSharper disable once RedundantJumpStatement
                     return;
             }
 
 #if !DEBUG
                 RaygunClient.SendInBackground(exc);
-#endif            
+#endif
         }
     }
 

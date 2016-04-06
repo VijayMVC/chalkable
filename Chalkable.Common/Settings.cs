@@ -167,5 +167,8 @@ namespace Chalkable.Common
 
         public static string RaygunJsApiKey => "WV05DNwmIzBvTiSQ8pgNXQ==";
         public static string MasterDbName => "ChalkableMaster";
+
+        public static int DefaultMinWorkerThreads => int.Parse(Get("Threads.DefaultMinWorkerThreads"));
+        public static int DefaultMinIoThreads => int.Parse(Get("Threads.DefaultMinIoThreads"));
     }
 }

@@ -41,6 +41,9 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkableschool;AccountKey=CA86C3J9Rn2XPm9mOr9A6QuNZQf6ldc+t3/z7djMSrtXQJRd/u7Tpb4N388nUMvczMhEHDQKtGqQXFMQksWL8Q==" />
       <!--WebClient Timeout Settings-->
       <Setting name ="WebClientTimeout" value="300000"/>
+      <!--SetMinThreads params-->
+      <Setting name="Threads.DefaultMinWorkerThreads" value="25"/>
+      <Setting name="Threads.DefaultMinIoThreads" value="25"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />
