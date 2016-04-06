@@ -8,7 +8,7 @@ module.exports = function (grunt) {
   var vcsRevision = grunt.option("vcs.revision");
   var vcsBranch = grunt.option("vcs.branch");
   var nugetPre = grunt.option("nuget.pre") || '';
-  if (buildNumber) {
+  if (buildNumber && (typeof buildNumber.split == 'function')) {
     var buildCounter = buildNumber.split('-').pop();
     var semVer = function () {
       var x = buildNumber.split('-');

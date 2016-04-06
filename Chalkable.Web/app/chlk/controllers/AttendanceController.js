@@ -291,33 +291,27 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('attendance')],
         [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, Boolean]],
         function markAllAction(classId, date, isInProfile_, isSeatingChart_){
-            var res =  this.attendanceService
-                .markAllPresent(classId, date)
+            var activityClass = this.getView().getCurrent().getClass();
+            var res =  this.ShowConfirmBox('Are you sure you want to Mark All Present?', '')
+                .thenCall(this.attendanceService.markAllPresent, [classId, date])
                 .attach(this.validateResponse_())
                 .then(function(success){
+                    this.BackgroundUpdateView(activityClass, null, 'mark-all');
+
                     if(isSeatingChart_){
                         if(isInProfile_)
                             return this.redirectToPage_('class', 'attendanceSeatingChart', [classId, date, true]);
 
-                        return null;
+                        return ria.async.BREAK;
                     }
 
-
-                    return this.Redirect(isInProfile_ ? 'class' : 'attendance',
+                    return this.redirectToPage_(isInProfile_ ? 'class' : 'attendance',
                         isInProfile_ ? 'attendanceList' : 'classList',
                         [classId, date]);
+
                 }, this);
 
-            if(isSeatingChart_)
-                return null;
-
-            return res;
-        },
-
-        [chlk.controllers.SidebarButton('attendance')],
-        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean]],
-        function markAllFromSeatingAction(classId, date, isProfile_){
-
+            return this.UpdateView(activityClass, res);
         },
 
         [[Boolean, Boolean]],

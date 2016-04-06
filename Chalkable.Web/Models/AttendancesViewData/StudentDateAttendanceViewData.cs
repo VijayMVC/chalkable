@@ -32,22 +32,20 @@ namespace Chalkable.Web.Models.AttendancesViewData
     {
         public DateTime Date { get; set; }
         public StudentViewData Student { get; set; }
-       
-
+        public StudentDailyAttendanceViewData DailyAttendance { get; set; }
         public IList<StudentPeriodAttendanceViewData> PeriodAttendances { get; set; }
         public IList<CheckInCheckOutViewData>  CheckInCheckOuts { get; set; }
 
         public static StudentDateAttendanceViewData Create(StudentDateAttendance attendance, IList<AttendanceReason> reasons)
         {
-            var res = new StudentDateAttendanceViewData
+            return new StudentDateAttendanceViewData
             {
                 Date = attendance.Date,
                 Student = StudentViewData.Create(attendance.Student),
+                DailyAttendance = StudentDailyAttendanceViewData.Create(attendance.DailyAttendance, reasons),
                 PeriodAttendances = StudentPeriodAttendanceViewData.Create(attendance.StudentPeriodAttendances, reasons),
                 CheckInCheckOuts = CheckInCheckOutViewData.Create(attendance.CheckInCheckOuts)
             };
-            
-            return res;
         }
     }
 }

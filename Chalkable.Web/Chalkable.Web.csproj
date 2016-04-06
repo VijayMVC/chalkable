@@ -516,6 +516,7 @@
     <Compile Include="Models\StudentAnnouncementViewData.cs" />
     <Compile Include="Models\HoverBoxesViewData.cs" />
     <Compile Include="Models\GroupsViewData\StudentForGroupViewData.cs" />
+    <Compile Include="Models\StudentDailyAttendanceViewData.cs" />
     <Compile Include="Models\SysAdminViewData.cs" />
     <Compile Include="Models\TeacherCommentViewData.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -345,9 +345,9 @@ NAMESPACE('chlk.activities.attendance', function () {
                     buttons.addClass('disabled');
             },
 
-            [ria.mvc.DomEventBind('click', '#all-present-link')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            VOID, function setAllPresentByClick(node, event){
+            [ria.mvc.PartialUpdateRule(null, 'mark-all')],
+            OVERRIDE, VOID, function markAllUpdate(tpl, model, msg_){
+                BASE(tpl, model, msg_);
                 new ria.dom.Dom('.student-block').forEach(function(node){
                     var container = node.find('.not-empty');
                     if(container.exists()){

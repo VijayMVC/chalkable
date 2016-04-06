@@ -20,6 +20,7 @@ namespace Chalkable.API
         public GradingEndpoint Grading => new GradingEndpoint(this);
         public StandardsEndpoint Standards => new StandardsEndpoint(this);
         public CalendarEndpoint Calendar => new CalendarEndpoint(this);
+        public AttendanceEndpoint Attendance => new AttendanceEndpoint(this);
 
         public async Task<T> Get<T>(string endpoint)
         {
@@ -116,7 +117,7 @@ namespace Chalkable.API
                             throw new ChalkableApiException(str);
 
                         return obj.Data;
-                    };
+                    }
                 }
             }
             catch (WebException e)

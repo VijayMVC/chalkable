@@ -76,6 +76,7 @@
     <Folder Include="User Defined Types\" />
     <Folder Include="Scripts" />
     <Folder Include="Scripts\Pre-Deploy" />
+    <Folder Include="Scripts\Post-Deploy" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\ABToCCMapping.sql" />
@@ -147,6 +148,7 @@
     <None Include="Scripts\Pre-Deploy\003_ApplicationChangeProvidesRecomendedContentToProvidesRecommendedContent.PreDeployment.sql" />
   </ItemGroup>
   <ItemGroup>
-    <PostDeploy Include="Scripts\Pre-Deploy\004_drop_IsNewAssessmentEnabled_In_School.PostDeployment.sql" />
+    <PostDeploy Include="Scripts\Post-Deploy\Insert ABIds and Delete CCStIds in AppStand table.sql" />
+    <None Include="Scripts\Post-Deploy\004_drop_IsNewAssessmentEnabled_In_School.PostDeployment.sql" />
   </ItemGroup>
 </Project>

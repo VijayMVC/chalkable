@@ -47,6 +47,11 @@ namespace Chalkable.Api.SampleApp.Controllers
 
             var isSchoolDay = await Connector.Calendar.IsSchoolDay(null);
 
+            var studentAttendance = await Connector.Attendance.GetStudentAttendance(3688, new DateTime(2015,12,22,12,0,0));
+            studentAttendance = await Connector.Attendance.GetStudentAttendance(3688, new DateTime(2015, 12, 23, 12, 0, 0));
+            studentAttendance = await Connector.Attendance.GetStudentAttendance(3688, new DateTime(2015, 12, 24, 12, 0, 0));
+            studentAttendance = await Connector.Attendance.GetStudentAttendance(3688, null);
+
             return View("Attach", DefaultJsonViewData.Create(new
             {
                 // AnnouncementApplicationIds = await announcementAppIdsTask,
