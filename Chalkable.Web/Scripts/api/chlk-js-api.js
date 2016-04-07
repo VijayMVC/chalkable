@@ -170,8 +170,9 @@ var CHLK_API = function (window, document, $) {
             onBeforeAttachHandler = isReady;
         },
 
-        addMe: function () {
-            var data = {appReady: true};
+        addMe: function (data) {
+            data = data || {};
+            data.appReady = true;
             postAction(data, ChlkActionTypes.ADD_ME, parentURL);
         },
 
