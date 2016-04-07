@@ -102,12 +102,12 @@ class TestFeed(BaseAuthedTestCase):
                     for key, value in lessonplandata.iteritems():
                         startdate = lessonplandata['startdate']
                         enddate = lessonplandata['enddate']
-                        self.assertTrue(self.current_time <= enddate, 'Current date > enddate of a lesson plan')
+                        self.assertLessEqual(self.current_time, enddate, 'Current date <= enddate of a lesson plan ' + str(item["id"]))
                 if type == '1':
                     classannouncementdata = item ['classannouncementdata']
                     for key2, value2 in classannouncementdata.iteritems():
                         expiresdate = classannouncementdata['expiresdate']
-                        self.assertTrue(self.current_time <= expiresdate, 'Current date > expiresdate of an activity')
+                        self.assertLessEqual(self.current_time, expiresdate, 'Current date > expiresdate of an activity ' + str(item["id"]))
         else:
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
             

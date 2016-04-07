@@ -87,7 +87,6 @@ class TestFeed(BaseAuthedTestCase):
         sorttype = str(dictionary_verify_settingsforfeed['sorttype'])
         gradingperiodid = str(dictionary_verify_settingsforfeed['gradingperiodid'])
             
-        #self.assertFalse(set(self.id_of_lessonplan_and_activities_gradingperiod2) & set(self.id_of_lessonplan_and_activities_gradingperiod1), 'Items exits in different grading perios')
         list_for_date = []
         
         dictionary_verify_annoucementviewdatas_all = list_items_json_unicode['data']['annoucementviewdatas']
@@ -108,7 +107,7 @@ class TestFeed(BaseAuthedTestCase):
         else:
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
         
-            
+           
     def tearDown(self):
         #reset all filters on the feed
         self.dict = {}

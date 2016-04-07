@@ -17,6 +17,13 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             String, 'title',
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.AnnouncementApplicationId, 'announcementApplicationId'
+            chlk.models.id.AnnouncementApplicationId, 'announcementApplicationId',
+
+            function isAttachButtonVisible() {
+                var isAssessmentApp = this.getApp().getId().valueOf() == this.getAttachOptions().getAssessmentAppId().valueOf();
+                var isNewAssessmentEnabled = this.getSession().get(ChlkSessionConstants.ASSESSMENT_ENABLED, false);
+
+                return isAssessmentApp && !isNewAssessmentEnabled;
+            }
         ]);
 });
