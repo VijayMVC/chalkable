@@ -134,7 +134,9 @@
     <vcs-settings>
       <vcs-entry-ref root-id="Chalkable_ChalkableTestSourcesCi" />
     </vcs-settings>
-    <requirements />
+    <requirements>
+      <exists name="env.PYTHONHOME" />
+    </requirements>
     <build-triggers>
       <build-trigger id="TRIGGER_7" type="schedulingTrigger">
         <parameters>
