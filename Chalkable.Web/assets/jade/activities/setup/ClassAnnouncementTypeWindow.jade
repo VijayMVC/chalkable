@@ -1,0 +1,35 @@
+.dialog.report-window
+   +ActionForm('setup', 'submitClassAnnouncement').class-announcment-form.no-working.report-form
+      .x-window-header
+         .close.close-btn.dark
+         h1=self.getId() ? Msg.Edit_category + ': ' + self.getName() : Msg.Create_category
+
+      .x-window-body
+         +Hidden('classid', self.getClassId().valueOf())
+         +Hidden('id', self.getId() && self.getId().valueOf())
+         .report-content
+            TABLE.report-table
+               TR
+                  TD.item-2
+                     h3=Msg.Name
+                     input(name="name", type="text", value=self.getName(), readonly=self.isSystem() || !self.isAbleEdit())
+                  TD.item-2
+                     h3=Msg.Description
+                     input(name="description", type="text", value=self.getDescription(), readonly=self.isSystem() || !self.isAbleEdit())
+               TR
+                  TD.item-2
+                     h3=Msg.High_score_to_drop
+                     input(name="highscorestodrop", type="number", value=self.getHighScoresToDrop() || 0, readonly=!self.isAbleEdit(), max = 255, min=0)
+                  TD.item-2
+                     h3=Msg.Low_score_to_drop
+                     input(name="lowscorestodrop", type="number", value=self.getLowScoresToDrop() || 0, readonly=!self.isAbleEdit(), max = 255, min=0)
+               TR
+                  TD.item-2
+                     h3=Msg.Percentage
+                     input(name="percentage", type="text", value=self.getPercentage()|| "0.00", readonly=!self.isAbleEdit())
+                  TD.item-2
+
+
+      .x-window-footer.report-bottom
+         BUTTON(type="submit", disabled=!self.isAbleEdit()).chlk-button.blue-button=Msg.OK
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
