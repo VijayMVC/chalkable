@@ -27,6 +27,13 @@
           <param name="teamcity.step.mode" value="default" />
         </parameters>
       </runner>
+      <runner id="RUNNER_67" name="pip install" type="simpleRunner">
+        <parameters>
+          <param name="script.content" value="pip install requests" />
+          <param name="teamcity.step.mode" value="default" />
+          <param name="use.custom.script" value="true" />
+        </parameters>
+      </runner>
       <runner id="RUNNER_66" name="grunt auto-tests" type="jonnyzzz.grunt">
         <parameters>
           <param name="jonnyzzz.commandLine"><![CDATA[--vcs.revision=%build.vcs.number%
@@ -35,13 +42,6 @@
           <param name="jonnyzzz.grunt.mode" value="npm" />
           <param name="jonnyzzz.grunt.tasks" value="exec:automated-tests" />
           <param name="teamcity.step.mode" value="default" />
-        </parameters>
-      </runner>
-      <runner id="RUNNER_67" name="pip install" type="simpleRunner">
-        <parameters>
-          <param name="script.content" value="pip install requests" />
-          <param name="teamcity.step.mode" value="default" />
-          <param name="use.custom.script" value="true" />
         </parameters>
       </runner>
     </build-runners>
