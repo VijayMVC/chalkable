@@ -10,13 +10,6 @@
     </options>
     <disabled-settings>
       <setting-ref ref="BUILD_EXT_20" />
-      <setting-ref ref="RUNNER_58" />
-      <setting-ref ref="RUNNER_60" />
-      <setting-ref ref="RUNNER_61" />
-      <setting-ref ref="RUNNER_62" />
-      <setting-ref ref="RUNNER_63" />
-      <setting-ref ref="RUNNER_64" />
-      <setting-ref ref="RUNNER_65" />
     </disabled-settings>
     <parameters>
       <param name="env.AZURE_STORAGE_ACCESS_KEY" value="zxxda1db24a9e0854386ffb9225581b53b11e8068db01aac7fa326fea8c13c7d40c0c8a7535bb0801a9a16d0aa1c6d74044c021f9e34eb150819c6e8c3320f88eff36cd35d4c321162ec3192c5ba9431098e9520b6646dbdf75775d03cbe80d301b" spec="password display='hidden'" />
@@ -28,105 +21,17 @@
       <param name="env.SYSADMIN_PRIVATE_TOKEN" value="zxx092e87f55b9b108c61ed21f6490fbf0751ed70b6094f94f1c67d8f99648321d07ab0cd994fac2107" spec="password display='normal'" />
     </parameters>
     <build-runners>
-      <runner id="RUNNER_58" name="install nuget" type="jb.nuget.installer">
+      <runner id="RUNNER_67" name="pip install" type="simpleRunner">
         <parameters>
-          <param name="nuget.path" value="?NuGet.CommandLine.DEFAULT.nupkg" />
-          <param name="nuget.updatePackages.mode" value="sln" />
-          <param name="nuget.use.restore" value="restore" />
-          <param name="nugetCustomPath" value="?NuGet.CommandLine.DEFAULT.nupkg" />
-          <param name="nugetPathSelector" value="?NuGet.CommandLine.DEFAULT.nupkg" />
-          <param name="sln.path" value="Chalkable.sln" />
+          <param name="command.executable" value="python" />
+          <param name="command.parameters" value="-m pip install requests" />
           <param name="teamcity.step.mode" value="default" />
         </parameters>
       </runner>
-      <runner id="RUNNER_59" name="install npms" type="jonnyzzz.npm">
+      <runner id="RUNNER_66" name="run-all.cmd" type="simpleRunner">
         <parameters>
-          <param name="npm_commands" value="install" />
-          <param name="teamcity.step.mode" value="default" />
-        </parameters>
-      </runner>
-      <runner id="RUNNER_60" name="install bower" type="jonnyzzz.node">
-        <parameters>
-          <param name="node_execution_mode" value="file" />
-          <param name="node_file" value="node_modules/bower/bin/bower" />
-          <param name="node_script_args" value="install" />
-          <param name="teamcity.build.workingDir" value="Chalkable.Web" />
-          <param name="teamcity.step.mode" value="default" />
-        </parameters>
-      </runner>
-      <runner id="RUNNER_61" name="versioning" type="jonnyzzz.grunt">
-        <parameters>
-          <param name="jonnyzzz.commandLine"><![CDATA[--vcs.revision=%build.vcs.number%
---build.number=%build.number%
---vcs.branch=%teamcity.build.branch%]]></param>
-          <param name="jonnyzzz.grunt.mode" value="npm" />
-          <param name="jonnyzzz.grunt.tasks" value="version" />
-          <param name="teamcity.step.mode" value="default" />
-        </parameters>
-      </runner>
-      <runner id="RUNNER_62" name="client compile" type="jonnyzzz.grunt">
-        <parameters>
-          <param name="jonnyzzz.commandLine"><![CDATA[--vcs.revision=%build.vcs.number%
---build.number=%build.number%
---vcs.branch=%teamcity.build.branch%]]></param>
-          <param name="jonnyzzz.grunt.mode" value="npm" />
-          <param name="jonnyzzz.grunt.tasks" value="pre-release" />
-          <param name="teamcity.step.mode" value="default" />
-        </parameters>
-      </runner>
-      <runner id="RUNNER_63" name="server compile" type="VS.Solution">
-        <parameters>
-          <param name="build-file-path" value="Chalkable.sln" />
-          <param name="msbuild.prop.Configuration" value="Release" />
-          <param name="msbuild_version" value="14.0" />
-          <param name="run-platform" value="x86" />
-          <param name="targets" value="Rebuild" />
-          <param name="teamcity.step.mode" value="default" />
-          <param name="toolsVersion" value="14.0" />
-          <param name="vs.version" value="vs2015" />
-        </parameters>
-      </runner>
-      <runner id="RUNNER_64" name="azure package" type="MSBuild">
-        <parameters>
-          <param name="build-file-path" value="build.proj" />
-          <param name="dotNetCoverage.NCover.HTMLReport.File.Sort" value="0" />
-          <param name="dotNetCoverage.NCover.HTMLReport.File.Type" value="1" />
-          <param name="dotNetCoverage.NCover.Reg" value="selected" />
-          <param name="dotNetCoverage.NCover.platformBitness" value="x86" />
-          <param name="dotNetCoverage.NCover.platformVersion" value="v2.0" />
-          <param name="dotNetCoverage.NCover3.Reg" value="selected" />
-          <param name="dotNetCoverage.NCover3.args" value="//ias .*" />
-          <param name="dotNetCoverage.NCover3.platformBitness" value="x86" />
-          <param name="dotNetCoverage.NCover3.platformVersion" value="v2.0" />
-          <param name="dotNetCoverage.NCover3.reporter.executable.args" value="//or FullCoverageReport:Html:{teamcity.report.path}" />
-          <param name="dotNetCoverage.PartCover.Reg" value="selected" />
-          <param name="dotNetCoverage.PartCover.includes" value="[*]*" />
-          <param name="dotNetCoverage.PartCover.platformBitness" value="x86" />
-          <param name="dotNetCoverage.PartCover.platformVersion" value="v2.0" />
-          <param name="msbuild_version" value="14.0" />
-          <param name="run-platform" value="x86" />
-          <param name="targets" value="Staging,Production,Qa" />
-          <param name="teamcity.step.mode" value="default" />
-          <param name="toolsVersion" value="none" />
-        </parameters>
-      </runner>
-      <runner id="RUNNER_65" name="grunt post-build" type="jonnyzzz.grunt">
-        <parameters>
-          <param name="jonnyzzz.commandLine"><![CDATA[--vcs.revision=%build.vcs.number%
---build.number=%build.number%
---vcs.branch=%teamcity.build.branch%]]></param>
-          <param name="jonnyzzz.grunt.mode" value="npm" />
-          <param name="jonnyzzz.grunt.tasks" value="post-build" />
-          <param name="teamcity.step.mode" value="default" />
-        </parameters>
-      </runner>
-      <runner id="RUNNER_66" name="grunt auto-tests" type="jonnyzzz.grunt">
-        <parameters>
-          <param name="jonnyzzz.commandLine"><![CDATA[--vcs.revision=%build.vcs.number%
---build.number=%build.number%
---vcs.branch=]]></param>
-          <param name="jonnyzzz.grunt.mode" value="npm" />
-          <param name="jonnyzzz.grunt.tasks" value="exec:automated-tests" />
+          <param name="command.executable" value="run-all.cmd" />
+          <param name="teamcity.build.workingDir" value="Chalkable.AutomatedTests" />
           <param name="teamcity.step.mode" value="default" />
         </parameters>
       </runner>
@@ -150,6 +55,14 @@
           <param name="schedulingPolicy" value="daily" />
           <param name="timezone" value="SERVER" />
           <param name="triggerBuildIfWatchedBuildChanges" value="true" />
+        </parameters>
+      </build-trigger>
+      <build-trigger id="vcsTrigger" type="vcsTrigger">
+        <parameters>
+          <param name="quietPeriod" value="300" />
+          <param name="quietPeriodMode" value="USE_CUSTOM" />
+          <param name="triggerRules"><![CDATA[-:*
++:Chalkable.AutomatedTests\*]]></param>
         </parameters>
       </build-trigger>
     </build-triggers>

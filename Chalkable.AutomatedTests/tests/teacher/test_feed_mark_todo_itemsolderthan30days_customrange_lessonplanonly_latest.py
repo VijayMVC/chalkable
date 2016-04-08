@@ -5,7 +5,7 @@ from base_auth_test import *
 
 class TestFeed(BaseAuthedTestCase):
     def test_feed(self):
-        self.settings_data_for_undone = {'option':'3'}
+        self.settings_data_for_mark_undone = {'option':'3'}
         
         #data that will need for filtering by lesson plans for grading period 1
         self.settings_data_lesson_plan = {'announcementType':'3', 'sortType':'0', 'gradingPeriodId':self.gr_periods()[0]}

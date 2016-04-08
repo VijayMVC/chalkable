@@ -54,7 +54,6 @@ as
 
 GO
 
-
 CREATE Trigger [dbo].[UserLogTrigger]
 On [dbo].[User]
 After Insert, Update, Delete
@@ -65,12 +64,12 @@ as
 	select 
 		newid(), SisUserId, DistrictRef, getdate(), 1
 	from Inserted
+	Where SisUserId is not null
 
 	Insert into UserLog
 	(Id, SisUserId, DistrictRef, Added, Operation)
 	select 
 		newid(), SisUserId, DistrictRef, getdate(), 2
 	from Deleted
-
-
+		Where SisUserId is not null
 GO
