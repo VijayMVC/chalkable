@@ -30,6 +30,33 @@ namespace Chalkable.API.Models
         [JsonProperty("currentschoolyearid")]
         public int CurrentSchoolYearId { get; set; }
 
+        [JsonProperty("currentschoolyearname")]
+        public string CurrentSchoolYearName { get; set; }
+
+        [JsonProperty("schoolid")]
+        public int SchoolId { get; set; }
+
+        [JsonProperty("schoolname")]
+        public string SchoolName { get; set; }
+
+        [JsonProperty("districttimezone")]
+        public string DistrictTimeZone { get; set; }
+        
+        [JsonProperty("districtname")]
+        public string DistrictName { get; set; }
+
+        [JsonProperty("statecode")]
+        public string StateCode { get; set; }
+
+        [JsonProperty("birthdate")]
+        public DateTime? BirthDate { get; set; }
+
+        [JsonProperty("salutation")]
+        public string Salutation { get; set; }
+
+        [JsonProperty("active")]
+        public bool Active { get; set; }
+
         [JsonProperty("schoollocalid")]
         public int SchoolLocalId { get; set; }
 
