@@ -1,0 +1,60 @@
+mixin TasksFilterSelect_(name, items)
+    +Select(name)(attributes)
+        each item in items
+            +Option(item.value, item.displayValue, item.selected)
+
+mixin TasksFilterByDistrictsSelect_(name, items)
+    +Select(name)(attributes)
+        each item in items
+            +Option(item.value, item.displayValue, item.selected)(data-allDistricts=item.allDistricts)
+
+
+
+.bg-tasks
+    style(type="text/css", scoped) .bold { font-weight: 600; }
+
+    +ActionForm('backgroundtask', 'list')#bgTasks-list-form
+        +Hidden('start', self.bgTasks.getPageIndex())
+        +Hidden('totalCount', self.bgTasks.getTotalCount())
+        +Hidden('actualCount', self.bgTasks.getActualCount())
+        +Hidden('pageSize', self.bgTasks.getPageSize())
+        +Hidden('isalldistricts', self.isAllDistricts())
+        .x-form-field
+            label States:
+            +TasksFilterSelect_('state', self.prepareStatesSelectModel())#states-select
+        .x-form-field
+            label  Types:
+            +TasksFilterSelect_('type', self.prepareTypesSelectModel())#types-select
+        .x-form-field
+            label  Districts:
+            +TasksFilterByDistrictsSelect_('districtid', self.prepareDistrictsSelectModel())#districts-select
+    +ActionForm('backgroundtask', 'tryRerunAll')#rerunAll-form
+        +Hidden('tasksids', self.getTasksIds())
+        +Button()(type='submit').special-button2.submit-btn Rerun All
+
+    +Grid('backgroundtask', 'page', self.bgTasks, [self.getStateId(), self.getTypeId(), self.getDistrictId(), self.isAllDistricts()]).not-transparent
+        +GridHead()
+            .th Id
+            .th District Id
+            .th Created
+            .th Scheduled
+            .th Started
+            .th Completed
+            .th Task State
+            .th Task Type
+            .th
+        +GridBody()
+            each item in self.bgTasks.getItems()
+                +GridRow()
+                    .td= item.getId().valueOf()
+                    .td= item.getDistrictId() ? item.getDistrictId().valueOf() : "general"
+                    .td=item.getCreated().toString('dd/m/yy hh:min:ss')
+                    .td=item.getScheduled().toString('dd/m/yy hh:min:ss')
+                    .td=item.getStarted() ? item.getStarted().toString('dd/m/yy hh:min:ss') : ""
+                    .td=item.getCompleted() ? item.getCompleted().toString('dd/m/yy hh:min:ss') : ""
+                    .td= item.getTaskState().valueOf()
+                    .td= item.getTaskType().valueOf()
+                    .td.action-links
+                        +ActionLink('backgroundtask', 'logsPage', item.getId()).profile
+                        +ActionLink('backgroundtask', 'tryCancel', item.getId()).remove
+                        +ActionLink('backgroundtask', 'tryRerun', item.getId()) Rerun
