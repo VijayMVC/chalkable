@@ -22,12 +22,6 @@
       <param name="env.SYSADMIN_PRIVATE_TOKEN" value="zxx092e87f55b9b108c61ed21f6490fbf0751ed70b6094f94f1c67d8f99648321d07ab0cd994fac2107" spec="password display='normal'" />
     </parameters>
     <build-runners>
-      <runner id="RUNNER_59" name="install npms" type="jonnyzzz.npm">
-        <parameters>
-          <param name="npm_commands" value="install" />
-          <param name="teamcity.step.mode" value="default" />
-        </parameters>
-      </runner>
       <runner id="RUNNER_67" name="pip install" type="simpleRunner">
         <parameters>
           <param name="script.content" value="pip install requests" />
