@@ -66,6 +66,14 @@
           <param name="triggerBuildIfWatchedBuildChanges" value="true" />
         </parameters>
       </build-trigger>
+      <build-trigger id="vcsTrigger" type="vcsTrigger">
+        <parameters>
+          <param name="quietPeriod" value="300" />
+          <param name="quietPeriodMode" value="USE_CUSTOM" />
+          <param name="triggerRules"><![CDATA[-:*
++:Chalkable.AutomatedTests\*]]></param>
+        </parameters>
+      </build-trigger>
     </build-triggers>
     <build-extensions>
       <extension id="BUILD_EXT_18" type="BuildFailureOnMessage">
