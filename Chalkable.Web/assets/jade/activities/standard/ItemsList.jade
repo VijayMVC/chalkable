@@ -48,13 +48,13 @@ mixin StandardItemByType_(currentItemsType, item)
             +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getId()).item-block
                 +StandardItemInner_(currentItemsType, item)
         when chlk.models.standard.ItemType.TOPIC_COURSE
-            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, item.getId()).item-block
+            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, null, item.getId()).item-block
                 +StandardItemInner_(currentItemsType, item)
         when chlk.models.standard.ItemType.TOPIC
             if item.isDeepest()
                 +DeepestItem_(item, item.getId())
             else
-                +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, item.getCourseId(), item.getId()).item-block
+                +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, null, item.getCourseId(), item.getId()).item-block
                     +StandardItemInner_(currentItemsType, item)
 
 
