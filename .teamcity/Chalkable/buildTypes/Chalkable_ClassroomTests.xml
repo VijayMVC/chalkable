@@ -29,14 +29,12 @@
           <param name="use.custom.script" value="true" />
         </parameters>
       </runner>
-      <runner id="RUNNER_66" name="grunt auto-tests" type="jonnyzzz.grunt">
+      <runner id="RUNNER_66" name="grunt auto-tests" type="simpleRunner">
         <parameters>
-          <param name="jonnyzzz.commandLine"><![CDATA[--vcs.revision=%build.vcs.number%
---build.number=%build.number%
---vcs.branch=]]></param>
-          <param name="jonnyzzz.grunt.mode" value="npm" />
-          <param name="jonnyzzz.grunt.tasks" value="exec:automated-tests" />
+          <param name="script.content" value="call run-all.cmd" />
+          <param name="teamcity.build.workingDir" value="Chalkable.AutomatedTests" />
           <param name="teamcity.step.mode" value="default" />
+          <param name="use.custom.script" value="true" />
         </parameters>
       </runner>
     </build-runners>
