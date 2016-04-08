@@ -1,0 +1,16 @@
+.stats-container
+    .top-bar
+        .title Discipline Chart
+        -var type = self.getDateType()
+        +Select('dateType', 'class', 'changeDisciplineDateType', [self.getClassId().valueOf()]).date-type-select
+            +Option(chlk.models.classes.DateTypeEnum.YEAR.valueOf(), 'Yearly', type == chlk.models.classes.DateTypeEnum.YEAR)
+            +Option(chlk.models.classes.DateTypeEnum.GRADING_PERIOD.valueOf(), 'Grading Period', type == chlk.models.classes.DateTypeEnum.GRADING_PERIOD)
+            +Option(chlk.models.classes.DateTypeEnum.LAST_MONTH.valueOf(), 'Month', type == chlk.models.classes.DateTypeEnum.LAST_MONTH)
+            +Option(chlk.models.classes.DateTypeEnum.LAST_WEEK.valueOf(), 'Week', type == chlk.models.classes.DateTypeEnum.LAST_WEEK)
+        .chart-top-legend
+            .chart-legend-item.blue
+                .circle
+                span Infractions
+    +Chart()(
+        data-options = self.getChartOptions()
+    )

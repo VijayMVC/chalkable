@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Mixpanel.NET</id>
+    <version>0.2.0</version>
+    <title>Mixpanel API integration for .NET</title>
+    <authors>Chris Nicola</authors>
+    <owners>Chris Nicola</owners>
+    <licenseUrl>http://github.com/lucisferre/Mixpanel.Net/tree/master/licence.txt</licenseUrl>
+    <projectUrl>http://github.com/lucisferre/Mixpanel.NET</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Provides API hooks for the Mixpanel API</description>
+    <copyright>Copyright 2011 Chris Nicola</copyright>
+    <tags>Analytics Mixpanel</tags>
+    <references>
+      <reference file="Mixpanel.NET.dll" />
+      <reference file="Mixpanel.NET.pdb" />
+    </references>
+  </metadata>
+</package>
