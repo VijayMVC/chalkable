@@ -1,0 +1,85 @@
+﻿@{
+    ViewBag.Title = "Chalkable";
+}
+
+<!doctype html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <title>Chalkable Classroom</title>
+    <meta name="description" content="Web Apps for your school">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,500" rel="stylesheet" type="text/css" />
+    <link href="@Url.StaticContent("/Content/login.css")" rel="stylesheet" media="screen, projection" type="text/css" />
+</head>
+<body>
+<div class="wrapper">
+    <div class="login-page">
+        <div class="logo"></div>
+        <div class="body">
+            <div id="login-form" class="modal-form">
+                <h2>Welcome Back!</h2>
+                <div class="img-c-folder"></div>
+                <form action="/User/LogOn.aspx" method="post">
+                    <input type="hidden" name="remember" value="false" />
+                    <div class="banner"></div>
+                    <div class="form-group">
+                        <input type="email" name="UserName" required placeholder="Your email" />
+                    </div>
+                    <div class="form-group">
+                        <input type="password" name="Password" required placeholder="Your password" />
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">LOGIN</button>
+                    </div>
+                </form>
+                <small>
+                    Forgot your <a href="#forgot-password">password?</a>
+                </small>
+            </div>
+            <div id="forgot-password-form" class="modal-form" style="display: none">
+                <h2>Forgot password?</h2>
+                <div class="img-c-folder"></div>
+                <form action="" method="post">
+                    <div class="banner"></div>
+                    <div class="form-group">
+                        <input type="email" name="UserName" required placeholder="Your email"/>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit">RECOVER</button>
+                    </div>
+                </form>
+                <small>
+                    Login <a href="#login">here</a>
+                </small>
+            </div>
+        </div>
+        <hr/>
+        <div class="sub-footer">
+            <a href="http://www.chalkable.com/">Home</a>
+            <a href="http://www.chalkable.com/solutions/">Solutions</a>
+            <a href="http://www.chalkable.com/support/">Support</a>
+            <a href="http://www.chalkable.com/about/">About</a>
+            <a href="@Url.Content("~/Developer/Info")">Developers</a>
+            <a href="http://www.chalkable.com/contact/">Contact</a>
+        </div>
+        <div class="footer">@ChlkHelpers.RenderChlkCopyrightYear()</div>
+    </div>
+</div>
+
+
+@ChlkHelpers.RenderSiteRoot(Url)
+
+<!-- build:js /app/login.min.js -->
+<script build:src="/app/bower/jquery/dist/jquery.js" src="@Url.StaticContent("/app/bower/jquery/dist/jquery.js")"></script>
+<script build:src="/app/bower/jquery-validation/dist/jquery.validate.js" src="@Url.StaticContent("/app/bower/jquery-validation/dist/jquery.validate.js")"></script>
+<script build:src="/app/scripts/login.js" src="@Url.StaticContent("/app/scripts/login.js")"></script>
+<script build:src="/app/bower/raygun4js/dist/raygun.js"></script>
+<!-- endbuild -->
+
+@ChlkHelpers.RaygunInit()
+@ChlkHelpers.GoogleAnalytics()
+@ChlkHelpers.MixPanel()
+</body>
+</html>
