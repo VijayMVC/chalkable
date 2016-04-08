@@ -10,7 +10,6 @@
     </options>
     <disabled-settings>
       <setting-ref ref="BUILD_EXT_20" />
-      <setting-ref ref="RUNNER_58" />
       <setting-ref ref="RUNNER_60" />
       <setting-ref ref="RUNNER_61" />
       <setting-ref ref="RUNNER_62" />
@@ -28,17 +27,6 @@
       <param name="env.SYSADMIN_PRIVATE_TOKEN" value="zxx092e87f55b9b108c61ed21f6490fbf0751ed70b6094f94f1c67d8f99648321d07ab0cd994fac2107" spec="password display='normal'" />
     </parameters>
     <build-runners>
-      <runner id="RUNNER_58" name="install nuget" type="jb.nuget.installer">
-        <parameters>
-          <param name="nuget.path" value="?NuGet.CommandLine.DEFAULT.nupkg" />
-          <param name="nuget.updatePackages.mode" value="sln" />
-          <param name="nuget.use.restore" value="restore" />
-          <param name="nugetCustomPath" value="?NuGet.CommandLine.DEFAULT.nupkg" />
-          <param name="nugetPathSelector" value="?NuGet.CommandLine.DEFAULT.nupkg" />
-          <param name="sln.path" value="Chalkable.sln" />
-          <param name="teamcity.step.mode" value="default" />
-        </parameters>
-      </runner>
       <runner id="RUNNER_59" name="install npms" type="jonnyzzz.npm">
         <parameters>
           <param name="npm_commands" value="install" />
