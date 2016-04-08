@@ -153,7 +153,7 @@ NAMESPACE('chlk.controllers', function (){
 
             [[Object]],
             function showStandardPickerAction(data) {
-                this.WidgetStart('apps', 'showStandards', [data.excludeIds || [], data.onlyOne])
+                this.WidgetStart('standard', 'showABStandards', [data.excludeIds || [], data.onlyOne])
                     .then(function (data) {
                         return data.map(function (_) { return _.serialize(); });
                     }, this)

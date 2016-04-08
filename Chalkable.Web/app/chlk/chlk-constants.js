@@ -81,5 +81,11 @@ var ChlkSessionConstants = {
     YEARS: 'years',
     SIS_API_VERSION: 'sisApiVersion',
     ASSESSMENT_ENABLED: 'assessmentEnabled',
-    SCHOOL_NAME: 'schoolName'
+    SCHOOL_NAME: 'schoolName',
+    STANDARD_BREADCRUMBS: 'standardBreadcrumbs',
+    AB_STANDARD_BREADCRUMBS: 'ABStandardBreadcrumbs',
+    TOPIC_BREADCRUMBS: 'topicBreadcrumbs',
+    AB_STANDARD_LAST_ARGUMENTS: 'ABStandardLastArguments',
+    STANDARD_LAST_ARGUMENTS: 'standardLastArguments',
+    TOPIC_LAST_ARGUMENTS: 'topicLastArguments'
 };
