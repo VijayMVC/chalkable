@@ -28,12 +28,11 @@
           <param name="teamcity.step.mode" value="default" />
         </parameters>
       </runner>
-      <runner id="RUNNER_66" name="grunt auto-tests" type="simpleRunner">
+      <runner id="RUNNER_66" name="run-all.cmd" type="simpleRunner">
         <parameters>
-          <param name="script.content" value="call run-all.cmd" />
+          <param name="command.executable" value="run-all.cmd" />
           <param name="teamcity.build.workingDir" value="Chalkable.AutomatedTests" />
           <param name="teamcity.step.mode" value="default" />
-          <param name="use.custom.script" value="true" />
         </parameters>
       </runner>
     </build-runners>
