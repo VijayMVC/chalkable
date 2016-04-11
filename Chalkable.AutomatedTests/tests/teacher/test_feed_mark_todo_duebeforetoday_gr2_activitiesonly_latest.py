@@ -69,7 +69,7 @@ class TestFeed(BaseAuthedTestCase):
         #set filter by activity
         self.type_of_item = {'type':'1'}
         
-        self.settings_data = {'sortType':'0', 'announcementType':'1', 'gradingPeriodId': self.gr_periods()[1]}
+        self.settings_data = {'sortType':'1', 'announcementType':'1', 'gradingPeriodId': self.gr_periods()[1]}
         
         self.post('/Feed/SetSettings.json?', self.settings_data)
  
