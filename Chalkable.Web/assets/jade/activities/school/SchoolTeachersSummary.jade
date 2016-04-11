@@ -2,8 +2,8 @@
     h2.page-title=self.getSchoolName()
     .action-bar
         .items
-            +ActionLink('schools', "classesSummary", self.getSchoolId(), self.getSchoolName(), self.getSchoolYearId())=Msg.Classes
-            +ActionLink('schools', "teachersSummary", self.getSchoolId(), self.getSchoolName(), self.getSchoolYearId()).pressed=Msg.Teachers
+            +ActionLink('schools', "classesSummary", self.getSchoolId(), self.getSchoolName())=Msg.Classes
+            +ActionLink('schools', "teachersSummary", self.getSchoolId(), self.getSchoolName()).pressed=Msg.Teachers
     +ActionForm('schools', 'teachersStatistic').school-statistic-form
         .form-container
             +Select("schoolYearId")#school-year-select.flat

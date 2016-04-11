@@ -3,8 +3,8 @@
     if self.getUserRole().isAdmin()
         .action-bar
             .items
-                +ActionLink('schools', "classesSummary", self.getSchoolId(), self.getSchoolName(), self.getSchoolYearId()).pressed=Msg.Classes
-                +ActionLink('schools', "teachersSummary", self.getSchoolId(), self.getSchoolName(), self.getSchoolYearId())=Msg.Teachers
+                +ActionLink('schools', "classesSummary", self.getSchoolId(), self.getSchoolName()).pressed=Msg.Classes
+                +ActionLink('schools', "teachersSummary", self.getSchoolId(), self.getSchoolName())=Msg.Teachers
     +ActionForm('schools', 'classesStatistic').school-statistic-form
         .form-container
             if self.getUserRole().isAdmin()
