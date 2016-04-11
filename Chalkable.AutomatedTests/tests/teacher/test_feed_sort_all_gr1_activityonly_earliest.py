@@ -47,8 +47,6 @@ class TestFeed(BaseAuthedTestCase):
         #getting decoded list
         decoded_list_1 = [x.encode('utf-8') for x in list_for_start_date]
         decoded_list_2 = [x.encode('utf-8') for x in list_for_end_date]
-        print decoded_list_1
-        print decoded_list_2
         
         #verify that state of items is 'done' and only activities are shown
         for item in annoucementviewdatas_json_unicode:

@@ -37,8 +37,6 @@ class TestFeed(BaseAuthedTestCase):
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')    
         decoded_list_1 = [x.encode('utf-8') for x in list_for_start_date]
         decoded_list_2 = [x.encode('utf-8') for x in list_for_end_date]
-        print 'decoded_list_1', decoded_list_1
-        print 'decoded_list_2', decoded_list_2
         
         #verify that state of items is 'done'
         dictionary_verify_annoucementviewdatas_all = dictionary_get_items['data']['annoucementviewdatas']  
