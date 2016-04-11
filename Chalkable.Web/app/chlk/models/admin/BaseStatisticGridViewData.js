@@ -30,7 +30,15 @@ NAMESPACE('chlk.models.admin', function () {
 
             chlk.models.id.SchoolPersonId, 'teacherId',
 
-            function $(items_, sortType_, schoolId_, schoolName_, filter_, teacherId_){
+            [[
+                ArrayOf(chlk.models.admin.BaseStatistic),
+                Number,
+                chlk.models.id.SchoolId,
+                String,
+                String,
+                chlk.models.id.SchoolPersonId
+            ]],
+            function $(items_, sortType_, schoolId_, schoolName_, filter_, teacherId_, schoolYearId_){
                 BASE();
                 if(items_)
                     this.setItems(items_);
@@ -44,6 +52,8 @@ NAMESPACE('chlk.models.admin', function () {
                     this.setSortType(sortType_);
                 if(teacherId_)
                     this.setTeacherId(teacherId_);
+                if(schoolYearId_)
+                    this.setSchoolYearId(schoolYearId_);
             },
 
             VOID, function deserialize(raw){

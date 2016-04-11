@@ -23,6 +23,9 @@ NAMESPACE('chlk.templates.district', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.id.SchoolPersonId, 'teacherId',
 
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.SchoolYearId, 'schoolYearId',
+
             Boolean, function isNotEmptyStatistic(){
                 return (this.getItems().filter(function(school){return school.getAvg() !== null}).length +
                     this.getItems().filter(function(school){return school.getInfractionsCount() !== null}).length +
