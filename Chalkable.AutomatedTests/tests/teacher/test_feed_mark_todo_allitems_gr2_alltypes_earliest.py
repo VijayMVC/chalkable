@@ -12,7 +12,6 @@ class TestFeed(BaseAuthedTestCase):
         
         #get 'done' lesson plans of the grading period 1
         done_lesson_plans_json_unicode = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=true&count='+str(500))
-        annoucementviewdatas_json_unicode = done_lesson_plans_json_unicode['data']['annoucementviewdatas']
 
         self.id_of_lessonplan_and_activities_gradingperiod1 = []
         self.id_of_lessonplan_and_activities_gradingperiod2 = []

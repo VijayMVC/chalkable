@@ -43,6 +43,8 @@ class TestFeed(BaseAuthedTestCase):
         #making all of these activities 'unmark'
         self.post('/Announcement/UnDone.json?', self.settings_data_for_mark_undone)
         
+        
+        
         #data that needed for filtering by activities for grading period 2
         self.settings_data_activity_2 = {'announcementType':'1', 'sortType':'0','gradingPeriodId':self.gr_periods()[1]}
         self.post('/Feed/SetSettings.json?', self.settings_data_activity_2)   
