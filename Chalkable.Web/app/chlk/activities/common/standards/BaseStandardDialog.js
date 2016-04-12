@@ -159,7 +159,7 @@ NAMESPACE('chlk.activities.common.standards', function(){
 
                     var arr = [];
                     if(!this.isSearchEnabled())
-                        this.dom.find('.breadcrumb-item').forEach(function(node){
+                        this.dom.find('.breadcrumbs-cnt-main').find('.breadcrumb-item').forEach(function(node){
                             arr.push(node.getText());
                         });
 
