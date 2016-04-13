@@ -65,10 +65,11 @@
       </build-trigger>
       <build-trigger id="vcsTrigger" type="vcsTrigger">
         <parameters>
-          <param name="quietPeriod" value="300" />
-          <param name="quietPeriodMode" value="USE_CUSTOM" />
-          <param name="triggerRules"><![CDATA[-:*
-+:Chalkable.AutomatedTests\*]]></param>
+          <param name="groupCheckinsByCommitter" value="true" />
+          <param name="perCheckinTriggering" value="true" />
+          <param name="quietPeriodMode" value="DO_NOT_USE" />
+          <param name="triggerRules"><![CDATA[+:Chalkable.AutomatedTests\*
+-:*]]></param>
         </parameters>
       </build-trigger>
     </build-triggers>
