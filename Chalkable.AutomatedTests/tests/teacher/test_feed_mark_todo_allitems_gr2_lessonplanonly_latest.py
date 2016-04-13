@@ -121,8 +121,12 @@ class TestFeed(BaseAuthedTestCase):
                 list_for_date.append(startdate)
                 self.assertTrue((startdate < decoded_list_1[1]) or (startdate > decoded_list_2[1]), 'Verify startdate of lessonplan ' + str(item["id"]))
             decoded_list = [x.encode('utf-8') for x in list_for_date]
+            decoded_list_to_str = ', '.join(decoded_list)
+            
             sorted_list_dates = sorted(decoded_list, reverse=True)
-            self.assertTrue(decoded_list == sorted_list_dates, 'Items are sorted in earliest order')
+            reverse_list_to_str = ', '.join(sorted_list_dates)
+            
+            self.assertTrue(decoded_list == sorted_list_dates, 'Items are sorted not in latest order' + ": " + decoded_list_to_str + ' == ' + reverse_list_to_str)
         else:
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
     
