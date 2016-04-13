@@ -129,11 +129,15 @@ class TestFeed(BaseAuthedTestCase):
                 self.assertGreaterEqual(decoded_list_2[1], startdate, 'Verify startdate of lessonplan ' + str(item["id"]))
                 self.assertDictContainsSubset(self.type_of_item, {'type':type}, 'Only activities are shown')
             decoded_list = [x.encode('utf-8') for x in list_for_date]
+            decoded_list_to_str = ', '.join(decoded_list)
+            
             sorted_list_dates = sorted(decoded_list, reverse=True)
-            self.assertTrue(decoded_list == sorted_list_dates, 'Items are sorted in earliest order')
+            reverse_list_to_str = ', '.join(sorted_list_dates)
+            
+            self.assertTrue(decoded_list == sorted_list_dates, 'Items are sorted not in latest order' + ": " + decoded_list_to_str + ' == ' + reverse_list_to_str)
         else:
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
-'''            
+            
     def tearDown(self):
         #reset all filters on the feed
         self.dict = {}
@@ -143,6 +147,6 @@ class TestFeed(BaseAuthedTestCase):
         #get_all_unmarket_items = self.get('/Feed/List.json?start='+str(0)+'&classId=&complete=false&count='+str(2000)) 
         self.settings_data = {'option':'3'}
         self.post('/Announcement/Done.json?', self.settings_data) 
-'''        
+        
 if __name__ == '__main__':
     unittest.main()

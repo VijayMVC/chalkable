@@ -103,8 +103,12 @@ class TestFeed(BaseAuthedTestCase):
                 self.assertLessEqual(self.current_time, enddate, 'Current date <= enddate of lesson plan ' + str(item["id"]))
                 list_for_date.append(startdate)
             decoded_list = [x.encode('utf-8') for x in list_for_date]
+            decoded_list_to_str = ', '.join(decoded_list)
+            
             sorted_list_dates = sorted(decoded_list, key = lambda d: map(int, d.split('-')))
-            self.assertTrue(decoded_list == sorted_list_dates, 'Items are sorted in earliest order')
+            reverse_list_to_str = ', '.join(sorted_list_dates)
+            
+            self.assertTrue(decoded_list == sorted_list_dates, 'Items are sorted not in earliest order' + ": " + decoded_list_to_str + ' == ' + reverse_list_to_str)
         else:
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
             

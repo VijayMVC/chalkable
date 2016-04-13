@@ -136,8 +136,12 @@ class TestFeed(BaseAuthedTestCase):
                 self.assertLessEqual(self.current_date_minus_30, enddate, 'Current date <= enddate of a lesson plan ' + str(item["id"]))
                 self.assertDictContainsSubset(self.type_of_activity, {'type':type}, 'Only activities are shown')
             decoded_list = [x.encode('utf-8') for x in list_for_date]
+            decoded_list_to_str = ', '.join(decoded_list)
+            
             sorted_list_dates = sorted(decoded_list, reverse=True)
-            self.assertTrue(decoded_list == sorted_list_dates, 'Items are sorted in earliest order')
+            reverse_list_to_str = ', '.join(sorted_list_dates)
+            
+            self.assertTrue(decoded_list == sorted_list_dates, 'Items are sorted not in latest order' + ": " + decoded_list_to_str + ' == ' + reverse_list_to_str)
         else:
             self.assertTrue(len(dictionary_verify_annoucementviewdatas_all) == 0, 'There are no items!')
             
