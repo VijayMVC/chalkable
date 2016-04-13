@@ -81,13 +81,18 @@ namespace Chalkable.API
                 });
         }
 
-        public class ResponseDto<T>
+        public class ResponseDataDto<T>
+        {
+            [JsonProperty("data")]
+            public T Data { get; set; }
+        }
+
+        public class ResponseSuccessDto
         {
             [JsonProperty("success")]
             public bool Success { get; set; }
-
             [JsonProperty("data")]
-            public T Data { get; set; }
+            public object Data { get; set; }
         }
 
         protected async Task<T> Call<T>(string endpoint, OnWebRequestIsCreated onCreated = null, string method = null)
@@ -112,11 +117,13 @@ namespace Chalkable.API
                     using (var sr = new StreamReader(stream)) {
                         var str = sr.ReadToEnd();
                         Debug.WriteLine(str);
-                        var obj = JsonConvert.DeserializeObject<ResponseDto<T>>(str) ;
-                        if (!obj.Success)
-                            throw new ChalkableApiException(str);
+                        var status = JsonConvert.DeserializeObject<ResponseSuccessDto>(str) ;
+                        if (!status.Success)
+                            throw new ChalkableApiException(JsonConvert.SerializeObject(status.Data));
 
-                        return obj.Data;
+                        var data = JsonConvert.DeserializeObject<ResponseDataDto<T>>(str);
+
+                        return data.Data;
                     }
                 }
             }
