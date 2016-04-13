@@ -200,7 +200,7 @@ NAMESPACE('chlk.activities.common.standards', function(){
 
                 this.dom.find('.able-add-item[data-id=' + currentId + ']').removeClass('pressed');
 
-                //node.removeSelf();
+                node.removeSelf();
 
                 this.setSelectedText(ids);
             },
