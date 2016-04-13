@@ -55,9 +55,12 @@ NAMESPACE('chlk.activities.common.standards', function(){
             function cancelClick(node, event){
                 var idsNode = this.dom.find('.standard-ids');
                 idsNode.setValue('');
+                var selected = this.dom.find('.selected-item'), count = selected.count();
                 this.dom.find('.able-add-item.pressed').removeClass('pressed');
-                this.dom.find('.selected-item').removeSelf();
+                selected.removeSelf();
                 this.setSelectedText([]);
+                if(!count)
+                    this.close();
             },
 
             [ria.mvc.DomEventBind('keydown', '.search-standard')],
@@ -197,7 +200,7 @@ NAMESPACE('chlk.activities.common.standards', function(){
 
                 this.dom.find('.able-add-item[data-id=' + currentId + ']').removeClass('pressed');
 
-                node.removeSelf();
+                //node.removeSelf();
 
                 this.setSelectedText(ids);
             },
