@@ -3,7 +3,7 @@
 if self.hasContent()
    div(data-appId=app.getId().valueOf()).app-contents-block
       .separator-line
-         +CloseOpen(app.getName() + ' Recommended Contents').mp-50.mp-10
+         +CloseOpen(app.getName() + ' Recommended Content').mp-50.mp-10
             .suggested-apps-container.attachments-and-applications
                +LeftRightToolbar()(fixedElementWidth = true)
                   each appContent, i in self.getAppContents().getItems()
@@ -19,4 +19,4 @@ if self.hasContent()
                            else
                               +ActionButton('apps', 'openRecommendedContents', app.getId(), self.getClassId(), self.getAnnouncementId(), self.getAnnouncementType(), appContent.getContentId()) Open
                if self.showMoreContents()
-                  +ActionButton('apps', 'openRecommendedContents', app.getId(), self.getClassId(), self.getAnnouncementId(), self.getAnnouncementType(), null, self.getStandardsUrlComponents()) More Results  
+                  +ActionButton('apps', 'openRecommendedContents', app.getId(), self.getClassId(), self.getAnnouncementId(), self.getAnnouncementType(), null, self.getStandardsUrlComponents()).load-content-btn More Results
