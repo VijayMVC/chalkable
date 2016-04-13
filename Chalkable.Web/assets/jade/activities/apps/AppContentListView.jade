@@ -1,0 +1,22 @@
+-var app = self.getApplication()
+-var count = 5
+if self.hasContent()
+   div(data-appId=app.getId().valueOf()).app-contents-block
+      .separator-line
+         +CloseOpen(app.getName() + ' Recommended Content').mp-50.mp-10
+            .suggested-apps-container.attachments-and-applications
+               +LeftRightToolbar()(fixedElementWidth = true)
+                  each appContent, i in self.getAppContents().getItems()
+                     .app-icon-link.announcement-item.application
+                        .wrapper
+                           -var pictureUrl = appContent.getImageUrl();
+                           +LoadingImage(src=pictureUrl, id="loading-image-" + i)
+                           .title(data-tooltip=appContent.getText(), data-tooltip-type="overflow")= appContent.getText()
+                           .shortdesc-content
+                              pre=appContent.getDescription()
+                           if app.needToInstall()
+                              +ActionButton('appmarket', 'tryToInstall', app.getId(), true, true) Quick Install
+                           else
+                              +ActionButton('apps', 'openRecommendedContents', app.getId(), self.getClassId(), self.getAnnouncementId(), self.getAnnouncementType(), appContent.getContentId()) Open
+               if self.showMoreContents()
+                  +ActionButton('apps', 'openRecommendedContents', app.getId(), self.getClassId(), self.getAnnouncementId(), self.getAnnouncementType(), null, self.getStandardsUrlComponents()).load-content-btn More Results
