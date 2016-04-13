@@ -3,7 +3,5 @@
   <name>Chalkable Test Sources CI</name>
   <param name="hgCommandPath" value="hg" />
   <param name="repositoryPath" value="ssh://hg@bitbucket.org/chalkable/chalkable" />
-  <param name="secure:password" value="zxx117f05ef10e46a2b6b9a18c2e589199c" />
-  <param name="username" value="viatsyshyn" />
 </vcs-root>
 
