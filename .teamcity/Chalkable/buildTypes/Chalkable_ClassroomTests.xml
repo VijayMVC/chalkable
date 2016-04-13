@@ -65,8 +65,6 @@
       </build-trigger>
       <build-trigger id="vcsTrigger" type="vcsTrigger">
         <parameters>
-          <param name="groupCheckinsByCommitter" value="true" />
-          <param name="perCheckinTriggering" value="true" />
           <param name="quietPeriodMode" value="DO_NOT_USE" />
           <param name="triggerRules"><![CDATA[+:Chalkable.AutomatedTests\*
 -:*]]></param>
@@ -94,15 +92,6 @@
           <param name="buildFailureOnMessage.conditionType" value="contains" />
           <param name="buildFailureOnMessage.messagePattern" value="error" />
           <param name="buildFailureOnMessage.reverse" value="false" />
-        </parameters>
-      </extension>
-      <extension id="BUILD_EXT_21" type="VcsLabeling">
-        <parameters>
-          <param name="branchFilter"><![CDATA[+:staging
-+:qa]]></param>
-          <param name="labelingPattern" value="build-%system.build.number%" />
-          <param name="successfulOnly" value="true" />
-          <param name="vcsRootId" value="Chalkable_1" />
         </parameters>
       </extension>
     </build-extensions>
