@@ -50,19 +50,6 @@ NAMESPACE('chlk.activities.common.standards', function(){
                     this.cloneLastLink(node);
             },
 
-            [ria.mvc.DomEventBind('click', '.cancel-btn')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function cancelClick(node, event){
-                var idsNode = this.dom.find('.standard-ids');
-                idsNode.setValue('');
-                var selected = this.dom.find('.selected-item'), count = selected.count();
-                this.dom.find('.able-add-item.pressed').removeClass('pressed');
-                selected.removeSelf();
-                this.setSelectedText([]);
-                if(!count)
-                    this.close();
-            },
-
             [ria.mvc.DomEventBind('keydown', '.search-standard')],
             [[ria.dom.Dom, ria.dom.Event]],
             function searchStandardKeydown(node, event){
