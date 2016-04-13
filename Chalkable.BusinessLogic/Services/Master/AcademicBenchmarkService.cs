@@ -19,7 +19,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         Task<IList<Course>> GetCourses(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode);
         Task<PaginatedList<Standard>> SearchStandards(string searchQuery, bool? deepest, int start = 0, int count = int.MaxValue);
         Task<IList<Standard>> GetStandards(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode, Guid? parentId, Guid? courseId, bool firstLevelOnly = false);
-        Task<PaginatedList<Topic>> GetTopics(Guid? subjectDocId, Guid? courseId, Guid? parentId, string searchQuery, bool? deepest = null, int start = 0, int count = int.MaxValue);
+        Task<IList<Topic>> GetTopics(Guid? subjectDocId, Guid? courseId, Guid? parentId, bool firstLevelOnly = false);
+        Task<PaginatedList<Topic>> SearchTopics(string searchQuery, bool? deepest = null, int start = 0, int count = int.MaxValue);
         Task<IList<Topic>> GetTopicsByIds(IList<Guid> topicsIds);
 
         Task<IList<SubjectDocument>> GetTopicSubjectDocuments();
@@ -53,13 +54,13 @@ namespace Chalkable.BusinessLogic.Services.Master
         public async Task<IList<Authority>> GetAuthorities()
         {
             var authorities = await _abConnectorLocator.StandardsConnector.GetAuthorities();
-            return authorities.Select(Authority.Create).ToList();
+            return authorities.Select(Authority.Create).OrderBy(x => x.Code).ThenBy(x=>x.Description).ToList();
         }
 
         public async Task<IList<Document>> GetDocuments(Guid? authorityId)
         {
             var docs = await _abConnectorLocator.StandardsConnector.GetDocuments(authorityId);
-            return docs.Select(Document.Create).ToList();
+            return docs.Select(Document.Create).OrderBy(x => x.Description).ToList();
         }
         
         public async Task<IList<GradeLevel>> GetGradeLevels(Guid? authorityId, Guid? documentId, Guid? subjectDocId)
@@ -70,12 +71,12 @@ namespace Chalkable.BusinessLogic.Services.Master
         public async Task<IList<SubjectDocument>> GetSubjectDocuments(Guid? authorityId, Guid? documentId)
         {
             var subDocs = await _abConnectorLocator.StandardsConnector.GetSubjectDocuments(authorityId, documentId);
-            return subDocs.Select(SubjectDocument.Create).ToList();
+            return subDocs.Select(SubjectDocument.Create).OrderBy(x=>x.Description).ToList();
         }
         public async Task<IList<Course>> GetCourses(Guid? authorityId, Guid? documentId, Guid? subjectDocId, string gradeLevelCode)
         {
             var res = await _abConnectorLocator.StandardsConnector.GetCourses(authorityId, documentId, subjectDocId, gradeLevelCode);
-            return res.Select(Course.Create).ToList();
+            return res.Select(Course.Create).OrderBy(x=>x.Description).ToList();
         }
 
         public async Task<PaginatedList<Standard>> SearchStandards(string searchQuery, bool? deepest, int start = 0, int count = int.MaxValue)
@@ -91,13 +92,20 @@ namespace Chalkable.BusinessLogic.Services.Master
             var standards = await _abConnectorLocator.StandardsConnector.GetStandards(authorityId, documentId, subjectDocId, gradeLevelCode, parentId, courseId, deepest);
             if (firstLevelOnly)
                 standards = standards.Where(x => x.Level == 1).ToList();
-            return standards.Select(Standard.Create).ToList();
+            return standards.Select(Standard.Create).OrderBy(x=>x.Code).ThenBy(x=>x.Description).ToList();
         }
 
-        public async Task<PaginatedList<Topic>> GetTopics(Guid?  subjectDorcId, Guid? courseId, Guid? parentId, string searchQuery
-            , bool? deepest = null, int start = 0, int count = int.MaxValue)
+        public async Task<IList<Topic>> GetTopics(Guid? subjectDocId, Guid? courseId, Guid? parentId, bool firstLevelOnly = false)
         {
-            var topics = await _abConnectorLocator.TopicsConnector.GetTopics(subjectDorcId, courseId, parentId, deepest, searchQuery, start, count);
+            var deepest = firstLevelOnly ? false : (bool?)null;
+            var topics = await _abConnectorLocator.TopicsConnector.GetTopics(subjectDocId, courseId, parentId, deepest, null, 0, int.MaxValue);
+            var res = topics.Select(Topic.Create).OrderBy(x => x.Description).ToList();
+            return firstLevelOnly ? res.Where(x => x.Level == 1).ToList() : res;
+        }
+
+        public async Task<PaginatedList<Topic>> SearchTopics(string searchQuery, bool? deepest = null, int start = 0, int count = int.MaxValue)
+        {
+            var topics = await _abConnectorLocator.TopicsConnector.GetTopics(null, null, null, deepest, searchQuery, start, count);
             return topics.Transform(Topic.Create);
         }
 
@@ -111,13 +119,13 @@ namespace Chalkable.BusinessLogic.Services.Master
         public async Task<IList<SubjectDocument>> GetTopicSubjectDocuments()
         {
             var subDocs = await _abConnectorLocator.TopicsConnector.GetSubjectDocuments();
-            return subDocs.Select(SubjectDocument.Create).ToList();
+            return subDocs.Select(SubjectDocument.Create).OrderBy(x=>x.Description).ToList();
         }
 
         public async Task<IList<Course>> GetTopicCourses(Guid? subjectDoucmentId)
         {
             var res = await _abConnectorLocator.TopicsConnector.GetCourses(subjectDoucmentId);
-            return res.Select(Course.Create).ToList();
+            return res.Select(Course.Create).OrderBy(x=>x.Description).ToList();
         }
         
     }

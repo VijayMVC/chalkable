@@ -4,7 +4,7 @@ mixin StandardItemInner_(currentItemsType, item)
         .item-description= (item.getName() ? '  -  ' : '') + item.getDescription()
 
 mixin DeepestItem_(item, id)
-    .item-block.able-add-item(
+    .item-block.browse-item.able-add-item(
         data-id=id.valueOf(),
         data-name=item.getName(),
         data-description=item.getDescription()

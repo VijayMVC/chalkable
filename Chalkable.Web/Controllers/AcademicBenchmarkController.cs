@@ -102,10 +102,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher")]
         public async Task<ActionResult> Topics(Guid? subjectDocId, Guid? courseId, Guid? parentId, bool? firstLevelOnly)
         {
-            var deepest = firstLevelOnly.HasValue && firstLevelOnly.Value ? false : (bool?) null;
-            var topics = (await MasterLocator.AcademicBenchmarkService.GetTopics(subjectDocId, courseId, parentId, null, deepest)).ToList();
-            if (firstLevelOnly.HasValue && firstLevelOnly.Value)
-                topics = topics.Where(x => x.Level == 1).ToList();
+            var topics = await MasterLocator.AcademicBenchmarkService.GetTopics(subjectDocId, courseId, parentId, firstLevelOnly ?? false);
             return Json(topics.Select(TopicViewData.Create));
         }
 
@@ -115,7 +112,7 @@ namespace Chalkable.Web.Controllers
             start = start ?? 0;
             count = count ?? int.MaxValue;
             
-            var topics = await MasterLocator.AcademicBenchmarkService.GetTopics(null, null, null, searchQuery, deepest, start.Value, count.Value);
+            var topics = await MasterLocator.AcademicBenchmarkService.SearchTopics(searchQuery, deepest, start.Value, count.Value);
             return Json(topics.Transform(TopicViewData.Create));
         }
     }

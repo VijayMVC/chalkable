@@ -126,9 +126,11 @@ namespace Chalkable.Data.School.DataAccess
                 }
                 if (!hasAdminClassPermission)
                 {
-                    res.Sql.Append(@" and exists(select * from ClassTeacher 
+                    res.Sql.Append("and (AdminAnnouncement.Id is not null or ");
+                    res.Sql.Append(@" exists(select * from ClassTeacher 
                                              where (ClassTeacher.PersonRef = @callerId or Attachment_PersonRef = ClassTeacher.PersonRef)
                                                     and (ClassTeacher.ClassRef = LessonPlan.ClassRef or ClassTeacher.ClassRef = ClassAnnouncement.ClassRef))");
+                    res.Sql.Append(")");
                 }
                 return res;
             }
