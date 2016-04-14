@@ -25,19 +25,23 @@ namespace Chalkable.API.ActionFilters
         {
             var requestMethod = filterContext.HttpContext.Request.HttpMethod;
             var urlReferrer = filterContext.HttpContext.Request.UrlReferrer;
-           
-            if (IsSupportCurrentUri(urlReferrer))
+            var origin = filterContext.HttpContext.Request.Headers.Get("Origin");
+            var urlOrigin = string.IsNullOrWhiteSpace(origin) ? null : new Uri(origin);
+
+            if (requestMethod == HttpMethod.Options.Method)
+            {
+                filterContext.Result = new EmptyResult();
+            }
+
+            if (IsSupportCurrentUri(urlReferrer) || IsSupportCurrentUri(urlOrigin))
             {
                 filterContext.RequestContext.HttpContext.Response.AddHeader("Access-Control-Allow-Origin", "*");
                 filterContext.RequestContext.HttpContext.Response.AddHeader("Access-Control-Allow-Methods", _methods);
                 filterContext.RequestContext.HttpContext.Response.AddHeader("Access-Control-Allow-Headers", _headers);
                 filterContext.RequestContext.HttpContext.Response.AddHeader("Access-Control-Max-Age", "604800");
             }
-            if (requestMethod == HttpMethod.Options.Method)
-            {
-                filterContext.Result = new EmptyResult();
-            }
-            else base.OnActionExecuting(filterContext);
+
+            base.OnActionExecuting(filterContext);
         }
 
         private bool IsSupportCurrentUri(Uri uri)
