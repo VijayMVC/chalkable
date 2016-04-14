@@ -1,4 +1,5 @@
-﻿using Chalkable.Common;
+﻿using System.Collections.Generic;
+using Chalkable.Common;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ApplicationsViewData;
 
@@ -12,7 +13,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public int InstalledAppsCount { get; set; }
         public PaginatedList<InstalledApplicationViewData> InstalledApps { get; set; }
 
-        public static StudentAppsViewData Create(StudentDetails student, decimal currentBalance, PaginatedList<InstalledApplicationViewData> apps)
+        public static StudentAppsViewData Create(StudentDetails student, decimal currentBalance, PaginatedList<InstalledApplicationViewData> apps
+            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
         {
             return new StudentAppsViewData
             {
@@ -20,7 +22,7 @@ namespace Chalkable.Web.Models.PersonViewDatas
                 Reserve = 0, // todo : gets this from funds 
                 InstalledApps = apps,
                 InstalledAppsCount = apps.TotalCount,
-                Person = StudentViewData.Create(student)
+                Person = StudentProfileViewData.Create(student, customAlerts, healthConditions)
             };
         }
     }

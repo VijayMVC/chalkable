@@ -450,7 +450,9 @@
     <Compile Include="Models\PersonViewDatas\PersonClaimsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentAppsViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentContactViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentCustomAlertDetailViewData.cs" />
     <Compile Include="Models\PersonViewDatas\StudentExplorerViewData.cs" />
+    <Compile Include="Models\PersonViewDatas\StudentProfileViewData.cs" />
     <Compile Include="Models\PersonViewDatas\TeacherStatsViewData.cs" />
     <Compile Include="Models\PossibleMessageRecipientViewData.cs" />
     <Compile Include="Models\PracticeGradeViewData.cs" />

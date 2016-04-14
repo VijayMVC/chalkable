@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.Common;
@@ -49,24 +50,20 @@ namespace Chalkable.Web.Controllers.PersonControllers
                     currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
             }
             
-            var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList);
-            
-
+            IList<StudentHealthCondition> studentHealths = null;
             if (Context.Role == CoreRoles.STUDENT_ROLE)
             {
-                res.IsAllowedInetAccess = false;
-                res.SpecialInstructions = null;
-                res.HasMedicalAlert = false;
-                res.SpEdStatus = null;
+                studentSummaryInfo.StudentInfo.IsAllowedInetAccess = false;
+                studentSummaryInfo.StudentInfo.SpecialInstructions = null;
+                studentSummaryInfo.StudentInfo.HasMedicalAlert = false;
+                studentSummaryInfo.StudentInfo.SpEdStatus = null;
             }
             else
             {
-                var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(schoolPersonId);
-                res.HealthConditions = StudentHealthConditionViewData.Create(stHealsConditions);
+                studentHealths = SchoolLocator.StudentService.GetStudentHealthConditions(schoolPersonId);
             }
-
-            res.StudentCustomAlertDetails = SchoolLocator.StudentCustomAlertDetailService.GetList(schoolPersonId);
-
+            var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(schoolPersonId);
+            var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList, customAlerts, studentHealths);
             return Json(res);
         }
         
@@ -88,7 +85,7 @@ namespace Chalkable.Web.Controllers.PersonControllers
             //todo : clarify in Zoli ... do we need all contacts or just family members
             var studentContacts = SchoolLocator.ContactService.GetStudentContactDetails(personId);
             res.StudentContacts = StudentContactViewData.Create(studentContacts);
-            res.StudentCustomAlertDetails = SchoolLocator.StudentCustomAlertDetailService.GetList(personId);
+            res.StudentCustomAlertDetails = StudentCustomAlertDetailViewData.Create(SchoolLocator.StudentCustomAlertDetailService.GetList(personId));
             return Json(res, 6);
         }
 
@@ -97,7 +94,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
         public ActionResult Schedule(int personId)
         {
             var student = SchoolLocator.StudentService.GetById(personId, GetCurrentSchoolYearId());
-            return Json(PrepareScheduleData(StudentViewData.Create(student)));
+            var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(personId);
+            var studentHealths = SchoolLocator.StudentService.GetStudentHealthConditions(personId);
+            var res = PrepareScheduleData(StudentProfileViewData.Create(student, customAlerts, studentHealths));
+            return Json(res);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.User })]
@@ -119,8 +119,12 @@ namespace Chalkable.Web.Controllers.PersonControllers
         {
             var syId = GetCurrentSchoolYearId();
             var studentExplorerInfo = SchoolLocator.StudentService.GetStudentExplorerInfo(personId, syId);
+            var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(personId);
+            var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(personId);
+
             MasterLocator.UserTrackingService.UsedStandardsExplorer(Context.Login, "student explorer");
-            return Json(StudentExplorerViewData.Create(studentExplorerInfo));
+            var res = StudentExplorerViewData.Create(studentExplorerInfo, stHealsConditions, customAlerts);
+            return Json(res);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
@@ -132,7 +136,12 @@ namespace Chalkable.Web.Controllers.PersonControllers
                          ? SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value)
                          : SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syid, Context.NowSchoolYearTime.Date);
             var studentSummary = SchoolLocator.AttendanceService.GetStudentAttendanceSummary(studentId, gradingPeriodId);
-            return Json(StudentAttendanceSummaryViewData.Create(studentSummary, gp, gradingPeriods));
+
+            var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
+            var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
+            var res = StudentAttendanceSummaryViewData.Create(studentSummary, gp, gradingPeriods, customAlerts, stHealsConditions);
+            
+            return Json(res);
         }
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Apps(int studentId, int? start, int? count)
@@ -141,7 +150,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
             var currentBalance = FundController.GetPersonBalance(MasterLocator, studentId);
             var apps = AppMarketController.GetListInstalledApps(SchoolLocator, MasterLocator, studentId, null, start, count, null);
-            return Json(StudentAppsViewData.Create(student, currentBalance, apps));
+            var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
+            var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
+            return Json(StudentAppsViewData.Create(student, currentBalance, apps, customAlerts, stHealsConditions));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
@@ -154,7 +165,9 @@ namespace Chalkable.Web.Controllers.PersonControllers
                          ? SchoolLocator.GradingPeriodService.GetGradingPeriodById(gradingPeriodId.Value)
                          : SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime.Date);
             var infractionSummaries = SchoolLocator.DisciplineService.GetStudentInfractionSummary(studentId, gradingPeriodId);
-            var res = StudentDisciplineSummaryViewData.Create(student, infractionSummaries, gp, gradingPeriods);
+            var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
+            var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
+            var res = StudentDisciplineSummaryViewData.Create(student, infractionSummaries, gp, gradingPeriods, customAlerts, stHealsConditions);
             return Json(res);
         }
 
@@ -165,20 +178,17 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
             var gradingSummary = SchoolLocator.GradingStatisticService.GetStudentGradingSummary(syId, studentId);
 
-            
-
-
             var enrolledClassIds =
                 SchoolLocator.ClassService.GetClassPersons(studentId, null, true, null).Select(x => x.ClassRef);
 
-
-            var classes =
+            var classes = 
                 gradingSummary.StudentAverages.Select(x => SchoolLocator.ClassService.GetById(x.ClassId)).ToList();
-
 
             var gradingPeriods = SchoolLocator.GradingPeriodService.GetGradingPeriodsDetails(syId);
             var gp = SchoolLocator.GradingPeriodService.GetGradingPeriodDetails(syId, Context.NowSchoolYearTime.Date);
-            var res = StudentProfileGradingSummaryViewData.Create(student, gradingSummary, gp, gradingPeriods, classes, enrolledClassIds);
+            var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
+            var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
+            var res = StudentProfileGradingSummaryViewData.Create(student, gradingSummary, gp, gradingPeriods, classes, enrolledClassIds, customAlerts, stHealsConditions);
             return Json(res);
         }
 
@@ -196,8 +206,10 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var classIds = announcements.Select(x => x.ClassAnnouncementData.ClassRef).Distinct().ToList();
 
             var classAnnouncementTypes = SchoolLocator.ClassAnnouncementTypeService.GetClassAnnouncementTypes(classIds);
+            var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
+            var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
 
-            var res = StudentProfileGradingDetailViewData.Create(student, gradingDetails, gp, announcements, classAnnouncementTypes);
+            var res = StudentProfileGradingDetailViewData.Create(student, gradingDetails, gp, announcements, classAnnouncementTypes, customAlerts, stHealsConditions);
             return Json(res);
         }
 

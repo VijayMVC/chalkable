@@ -93,9 +93,9 @@ NAMESPACE('chlk.templates.profile', function(){
                 }
                 if(isStudentController){
                     res.push(this.createActionLinkModel_(controller, 'attendance', 'Attendance'
-                        , pressedLinkName, [null, userId], !isStudentController && !this.hasUserPermission_(permissionEnum.VIEW_ATTENDANCE)));
+                        , pressedLinkName, [null, userId], !this.hasUserPermission_(permissionEnum.VIEW_ATTENDANCE)));
                     res.push(this.createActionLinkModel_(controller, 'discipline', 'Discipline'
-                        , pressedLinkName, [null, userId], !isStudentController && !this.hasUserPermission_(permissionEnum.VIEW_DISCIPLINE)));
+                        , pressedLinkName, [null, userId], !this.hasUserPermission_(permissionEnum.VIEW_CLASSROOM_DISCIPLINE)));
                     res.push(this.createActionLinkModel_(controller, 'explorer', 'Explorer', pressedLinkName, [userId], !this.isStudyCenterEnabled() || this.getUserRole().isAdmin()));
 
                     res.push(this.createActionLinkModel_(controller, 'apps', 'Apps', pressedLinkName, [userId], false));
