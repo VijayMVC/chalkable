@@ -10,7 +10,7 @@ if self.hasContent()
                      .app-icon-link.announcement-item.application
                         .wrapper
                            -var pictureUrl = appContent.getImageUrl();
-                           +LoadingImage(src=pictureUrl, id="loading-image-" + i)
+                           +LoadingImage(src=pictureUrl, id="loading-image-" + i, visible=true)
                            .title(data-tooltip=appContent.getText(), data-tooltip-type="overflow")= appContent.getText()
                            .shortdesc-content
                               pre=appContent.getDescription()
