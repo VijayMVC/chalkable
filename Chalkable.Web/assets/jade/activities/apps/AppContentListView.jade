@@ -1,5 +1,4 @@
 -var app = self.getApplication()
--var count = 5
 if self.hasContent()
    div(data-appId=app.getId().valueOf()).app-contents-block
       .separator-line
@@ -10,7 +9,7 @@ if self.hasContent()
                      .app-icon-link.announcement-item.application
                         .wrapper
                            -var pictureUrl = appContent.getImageUrl();
-                           +LoadingImage(src=pictureUrl, id="loading-image-" + i)
+                           +LoadingImage(src=pictureUrl, id="loading-image-" + i, visible=true)
                            .title(data-tooltip=appContent.getText(), data-tooltip-type="overflow")= appContent.getText()
                            .shortdesc-content
                               pre=appContent.getDescription()
