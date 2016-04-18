@@ -344,7 +344,11 @@ NAMESPACE('chlk.controllers', function (){
            },
 
            ria.async.Future, function ShowAlertBox(text, header_, isHtmlText_) {
-               return this.ShowMsgBox(text, header_, null, null, isHtmlText_)
+               return this.ShowMsgBox(text, header_, [{
+                       text: 'OK',
+                       value: 'ok',
+                       clazz: 'blue-button'
+                   }], null, isHtmlText_)
                    .then(function () { return null; });
            },
 
