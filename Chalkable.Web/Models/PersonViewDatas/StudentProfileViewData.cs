@@ -11,8 +11,10 @@ namespace Chalkable.Web.Models.PersonViewDatas
         protected StudentProfileViewData(StudentDetails student, IList<StudentCustomAlertDetail> customAlerts,
             IList<StudentHealthCondition> healthConditions) : base(student)
         {
-            HealthConditions = StudentHealthConditionViewData.Create(healthConditions);
-            StudentCustomAlertDetails = StudentCustomAlertDetailViewData.Create(customAlerts);
+            if(healthConditions != null)
+                HealthConditions = StudentHealthConditionViewData.Create(healthConditions);
+            if(customAlerts != null)
+                StudentCustomAlertDetails = StudentCustomAlertDetailViewData.Create(customAlerts);
         }
 
         public static StudentProfileViewData Create(StudentDetails student, IList<StudentCustomAlertDetail> customAlerts,
