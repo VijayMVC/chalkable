@@ -7,14 +7,12 @@ REQUIRE('chlk.services.AppMarketService');
 REQUIRE('chlk.services.PictureService');
 REQUIRE('chlk.services.DeveloperService');
 REQUIRE('chlk.services.StandardService');
-REQUIRE('chlk.services.ABStandardService');
 
 REQUIRE('chlk.activities.apps.AppsListPage');
 REQUIRE('chlk.activities.apps.AppInfoPage');
 REQUIRE('chlk.activities.apps.AppGeneralInfoPage');
 REQUIRE('chlk.activities.apps.AddAppDialog');
 REQUIRE('chlk.activities.apps.AppWrapperDialog');
-REQUIRE('chlk.activities.apps.AddABStandardDialog');
 REQUIRE('chlk.activities.apps.ExternalAttachAppDialog');
 REQUIRE('chlk.activities.apps.AppWrapperPage');
 
@@ -46,9 +44,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.ApplicationService, 'appsService',
-
-        [ria.mvc.Inject],
-        chlk.services.ABStandardService, 'ABStandardService',
 
         [ria.mvc.Inject],
         chlk.services.AppMarketService, 'appMarketService',
@@ -193,7 +188,7 @@ NAMESPACE('chlk.controllers', function (){
             var standards = this.getContext().getSession().get(ChlkSessionConstants.CC_STANDARDS, []);
             var standardIds = standards.map(function (_) { return _.getStandardId().valueOf() });
 
-            var res = this.WidgetStart('apps', 'showStandards', [standardIds, onlyOne_])
+            var res = this.WidgetStart('standard', 'showABStandards', [standardIds, onlyOne_])
                 .then(function (data) {
                     var standards = data;
                     this.getContext().getSession().set(ChlkSessionConstants.CC_STANDARDS, data);
@@ -1036,66 +1031,6 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
 
             return this.PushOrUpdateView(chlk.activities.apps.AppWrapperPage, result);
-        },
-
-        //STANDARDS
-
-        [[String, Array, Boolean]],
-        function showStandardsWidgetAction(requestId, standardIds, onlyOne_){
-            var res = ria.async.wait([
-                standardIds.length ? this.ABStandardService.getStandardsList(standardIds) : ria.async.Future.$fromData(null),
-                this.ABStandardService.getAuthorities()
-            ]).attach(this.validateResponse_())
-                .then(function(result){
-                    var selected = result[0] || [];
-                    var subjects = result[1];
-                    var breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.AB_MAIN, 'Source');
-                    return new chlk.models.standard.StandardItemsListViewData(subjects, chlk.models.standard.ItemType.AUTHORITY,
-                        null, [breadcrumb], standardIds, selected, requestId, onlyOne_);
-                }, this);
-
-            return this.ShadeView(chlk.activities.apps.AddABStandardDialog, res)
-        },
-
-        function completeStandardsWidgetAction(model){
-            var stIds = model.standardIds ? model.standardIds.split(',').filter(function(item){return item}) : [];
-            if(stIds.length)
-                this.ABStandardService.getStandardsList(stIds)
-                    .then(function(data){
-                        this.WidgetComplete(model.requestId, data);
-                    }, this);
-            else
-                this.WidgetComplete(model.requestId, []);
-
-            return this.CloseView(chlk.activities.apps.AddABStandardDialog);
-        },
-
-        [chlk.controllers.NotChangedSidebarButton()],
-        [[chlk.models.standard.GetStandardTreePostData]],
-        function searchStandardsAction(data){
-            var breadcrumb;
-
-            if(!data.getFilter()){
-                var result = this.ABStandardService.getAuthorities()
-                    .attach(this.validateResponse_())
-                    .then(function(subjects){
-                        breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.AB_MAIN, 'Source');
-                        return new chlk.models.standard.StandardItemsListViewData(subjects, chlk.models.standard.ItemType.AUTHORITY, null, [breadcrumb]);
-                    }, this);
-
-                return this.UpdateView(this.getView().getCurrent().getClass(), result, 'clear-search');
-            }
-
-            var res = this.ABStandardService.searchStandards(data.getFilter())
-                .attach(this.validateResponse_())
-                .then(function(standards){
-                    breadcrumb = new chlk.models.standard.Breadcrumb(chlk.models.standard.ItemType.SEARCH, 'Standards');
-                    this.BackgroundUpdateView(this.getView().getCurrent().getClass(), breadcrumb, 'replace-breadcrumbs');
-
-                    return new chlk.models.standard.StandardItemsListViewData(standards, chlk.models.standard.ItemType.AB_STANDARD);
-                }, this);
-
-            return this.UpdateView(this.getView().getCurrent().getClass(), res, 'list-update');
         }
     ])
 });

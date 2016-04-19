@@ -4,4 +4,4 @@
 )
     .item-name=self.getName()
     if self.getDescription()
-        .item-description= '  -  ' + self.getDescription()
+        .item-description= (self.getName() ? '  -  ' : '') + self.getDescription()

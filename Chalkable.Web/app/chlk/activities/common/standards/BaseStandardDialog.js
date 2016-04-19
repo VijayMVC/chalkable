@@ -50,16 +50,6 @@ NAMESPACE('chlk.activities.common.standards', function(){
                     this.cloneLastLink(node);
             },
 
-            [ria.mvc.DomEventBind('click', '.cancel-btn')],
-            [[ria.dom.Dom, ria.dom.Event]],
-            function cancelClick(node, event){
-                var idsNode = this.dom.find('.standard-ids');
-                idsNode.setValue('');
-                this.dom.find('.able-add-item.pressed').removeClass('pressed');
-                this.dom.find('.selected-item').removeSelf();
-                this.setSelectedText([]);
-            },
-
             [ria.mvc.DomEventBind('keydown', '.search-standard')],
             [[ria.dom.Dom, ria.dom.Event]],
             function searchStandardKeydown(node, event){
@@ -137,6 +127,9 @@ NAMESPACE('chlk.activities.common.standards', function(){
                 this.dom.find(pressed.getData('cnt')).addClass('x-hidden');
                 node.addClass('pressed');
                 this.dom.find(node.getData('cnt')).removeClass('x-hidden');
+
+                if(node.hasClass('browse-link'))
+                    this.dom.find('.selected-item:not(.pressed)').removeSelf()
             },
 
             [ria.mvc.DomEventBind('click', '.able-add-item:not(.disabled)')],
@@ -159,7 +152,7 @@ NAMESPACE('chlk.activities.common.standards', function(){
 
                     var arr = [];
                     if(!this.isSearchEnabled())
-                        this.dom.find('.breadcrumb-item').forEach(function(node){
+                        this.dom.find('.breadcrumbs-cnt-main').find('.breadcrumb-item').forEach(function(node){
                             arr.push(node.getText());
                         });
 
@@ -189,15 +182,23 @@ NAMESPACE('chlk.activities.common.standards', function(){
             function selectedStandardClick(node, event){
                 var idsNode = this.dom.find('.standard-ids'), val = idsNode.getValue(),
                     ids = val ? val.split(',') : [],
-                    currentId = node.getData('id').toString();
+                    currentId = node.getData('id').toString(),
+                    isRemove = node.hasClass('pressed'),
+                    itemsWithCurrentId = this.dom.find('.item-block[data-id=' + currentId + ']');
 
-                ids = ids.filter(function(id){return id != currentId});
+                if(isRemove){
+                    ids = ids.filter(function(id){return id != currentId});
+                    itemsWithCurrentId.removeClass('pressed');
+                }
+                else{
+                    ids.push(currentId);
+                    itemsWithCurrentId.addClass('pressed');
+                }
+
 
                 idsNode.setValue(ids.join(','));
 
-                this.dom.find('.able-add-item[data-id=' + currentId + ']').removeClass('pressed');
-
-                node.removeSelf();
+                //node.removeSelf();
 
                 this.setSelectedText(ids);
             },

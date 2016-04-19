@@ -8,6 +8,5 @@ NAMESPACE('chlk.templates.school', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/school/SchoolTeachersSummaryGrid.jade')],
         [ria.templates.ModelBind(chlk.models.admin.BaseStatisticGridViewData)],
         'SchoolTeachersStatisticTpl', EXTENDS(chlk.templates.district.BaseStatisticTpl), [
-
         ])
 });

@@ -8,8 +8,7 @@
             .iframe-wrap.partial-update
                 iframe(src=self.getUrl(), width="100%", border=0, style="border: none; min-height: 500px")
 
-            - console.info(self.getApp().getId(), self.getAttachOptions().getAssessmentAppId())
-            if self.getApp().getId().valueOf() == self.getAttachOptions().getAssessmentAppId().valueOf()
+            if self.isAttachButtonVisible()
                 div(style="text-align:right;margin-right:18px;margin-top: 5px")
                     button.blue-button.mid-button#add-app(
                         data-announcement-app-id=self.getAnnouncementApplicationId().valueOf()

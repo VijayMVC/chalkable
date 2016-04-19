@@ -3,14 +3,13 @@ using System.Globalization;
 using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Attendances;
-using Chalkable.Common.Web;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.DisciplinesViewData;
 
 namespace Chalkable.Web.Models.PersonViewDatas
 {
-    public class StudentSummaryViewData : StudentViewData
+    public class StudentSummaryViewData : StudentProfileViewData
     {
         public string CurrentClassName { get; set; }
         public string CurrentAttendanceLevel { get; set; }
@@ -22,8 +21,6 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public StudentHoverBoxViewData<StudentSummeryRankViewData> RanksBox { get; set; }
 
         //[SensitiveData]
-        public IList<StudentHealthConditionViewData> HealthConditions { get; set; }
-        public IList<StudentCustomAlertDetail> StudentCustomAlertDetails { get; set; }
 
         private const string NO_CLASS_SCHEDULED = "No Class Scheduled";
 
@@ -32,7 +29,8 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public string RoomNumber { get; set; }
 
 
-        protected StudentSummaryViewData(StudentDetails student, Room room) : base(student)
+        protected StudentSummaryViewData(StudentDetails student, Room room, IList<StudentCustomAlertDetail> customAlerts,
+            IList<StudentHealthCondition> healthConditions) : base(student, customAlerts, healthConditions)
         {
             if (room == null) return;
             RoomId = room.Id;
@@ -40,9 +38,10 @@ namespace Chalkable.Web.Models.PersonViewDatas
             RoomNumber = room.RoomNumber;
         }
 
-        public static StudentSummaryViewData Create(StudentSummaryInfo studentSummary, Room room,  ClassDetails currentClass, IList<ClassDetails> classes)
+        public static StudentSummaryViewData Create(StudentSummaryInfo studentSummary, Room room,  ClassDetails currentClass, IList<ClassDetails> classes
+            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
         {
-            var res = new StudentSummaryViewData(studentSummary.StudentInfo, room)
+            var res = new StudentSummaryViewData(studentSummary.StudentInfo, room, customAlerts, healthConditions)
                 {
                     ClassesSection = ClassViewData.Create(classes),
                     AttendanceBox = StudentHoverBoxViewData<TotalAbsencesPerClassViewData>.Create(studentSummary.DailyAttendance, studentSummary.Attendances, classes),

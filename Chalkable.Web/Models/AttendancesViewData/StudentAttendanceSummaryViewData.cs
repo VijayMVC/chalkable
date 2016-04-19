@@ -8,7 +8,7 @@ using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.AttendancesViewData
 {
-    public class StudentAttendanceSummaryViewData : StudentViewData
+    public class StudentAttendanceSummaryViewData : StudentProfileViewData
     {
         public IList<GradingPeriodViewData> GradingPeriods { get; set; }
         public GradingPeriodViewData CurrentGradingPeriod { get; set; }
@@ -16,13 +16,17 @@ namespace Chalkable.Web.Models.AttendancesViewData
         public HoverBoxesViewData<StudentAttendnaceHoverBoxItemViewData> Lates { get; set; }
         public HoverBoxesViewData<StudentAttendnaceHoverBoxItemViewData> Presents { get; set; }
 
-        protected StudentAttendanceSummaryViewData(StudentDetails student) : base(student)
+        protected StudentAttendanceSummaryViewData(StudentDetails student, IList<StudentCustomAlertDetail> customAlerts,
+            IList<StudentHealthCondition> healthConditions) : base(student, customAlerts, healthConditions)
         {
         }
 
-        public static StudentAttendanceSummaryViewData Create(StudentAttendanceSummary attendanceSummary, GradingPeriod currentGradingPeriod, IList<GradingPeriod> gradingPeriods)
+
+
+        public static StudentAttendanceSummaryViewData Create(StudentAttendanceSummary attendanceSummary, GradingPeriod currentGradingPeriod, IList<GradingPeriod> gradingPeriods
+            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
         {
-            var res = new StudentAttendanceSummaryViewData(attendanceSummary.Student)
+            var res = new StudentAttendanceSummaryViewData(attendanceSummary.Student, customAlerts, healthConditions)
                 {
                     GradingPeriods = GradingPeriodViewData.Create(gradingPeriods)
                 };

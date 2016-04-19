@@ -168,7 +168,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Attendance })]
         public ActionResult StudentAttendance(int studentId, DateTime? date)
         {
-            date = date ?? Context.NowSchoolYearTime;
+            date = date ?? Context.NowSchoolTime;
             var attendanceReasons = SchoolLocator.AttendanceReasonService.GetAll();
             var studentAttendances = SchoolLocator.AttendanceService.GetStudentAttendancesByDateRange(studentId, date.Value, date.Value).FirstOrDefault();
             return Json(StudentDateAttendanceViewData.Create(studentAttendances, attendanceReasons), 6);

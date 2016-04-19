@@ -9,19 +9,21 @@ using Chalkable.Web.Models.PersonViewDatas;
 
 namespace Chalkable.Web.Models.GradingViewData
 {
-    public class StudentProfileGradingDetailViewData : StudentViewData
+    public class StudentProfileGradingDetailViewData : StudentProfileViewData
     {
         public GradingPeriodViewData CurrentGradingPeriod { get; set; }
         public List<ClassAvg> ClassAvgs { get; set; } 
 
-        protected StudentProfileGradingDetailViewData(StudentDetails person)
-            : base(person)
+        protected StudentProfileGradingDetailViewData(StudentDetails person, IList<StudentCustomAlertDetail> customAlerts,
+            IList<StudentHealthCondition> healthConditions)
+            : base(person, customAlerts, healthConditions)
         {
         }
 
 
         public static StudentProfileGradingDetailViewData Create(StudentDetails student, StudentGradingDetails gradingDetails, GradingPeriod gp,
-            IList<AnnouncementComplex> announcements, IEnumerable<ClassAnnouncementType> classAnnouncementTypes)
+            IList<AnnouncementComplex> announcements, IEnumerable<ClassAnnouncementType> classAnnouncementTypes
+            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
         {
             var classAnnouncementGroups = announcements.GroupBy(x => x.ClassRef).Select(y => new
             {
@@ -30,7 +32,7 @@ namespace Chalkable.Web.Models.GradingViewData
             });
 
 
-            var res = new StudentProfileGradingDetailViewData(student)
+            var res = new StudentProfileGradingDetailViewData(student, customAlerts, healthConditions)
             {
                 CurrentGradingPeriod = GradingPeriodViewData.Create(gp),
                 ClassAvgs = new List<ClassAvg>()

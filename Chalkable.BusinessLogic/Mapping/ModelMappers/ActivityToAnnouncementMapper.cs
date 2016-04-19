@@ -75,10 +75,12 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
                 }
             }
 
-            if (annDetails.AnnouncementStandards == null)
+            if (annDetails.AnnouncementStandards == null || activity.Standards == null || !activity.Standards.Any())
                 annDetails.AnnouncementStandards = new List<AnnouncementStandardDetails>();
+            
             if (activity.Standards != null && activity.Standards.Any())
             {
+                annDetails.AnnouncementStandards = annDetails.AnnouncementStandards.Where(a => activity.Standards.Any(s => s.Id == a.StandardRef)).ToList();
                 foreach (var activityStandard in activity.Standards)
                 {
                     var annStandard = annDetails.AnnouncementStandards.FirstOrDefault(x => x.StandardRef == activityStandard.Id);
@@ -96,5 +98,4 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             }
         }
     }
-    
 }

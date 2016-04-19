@@ -50,7 +50,17 @@
     position: relative
 
     &.pressed
-      background: image-url("images2/icons-24/check.png") right 10px center no-repeat, #dbeef3
+      background: #dbeef3
+
+      &::before
+        content: ' '
+        position: absolute
+        +icons-24-sprite(check)
+        right: 10px
+        top: 50%
+        margin-top: -12px
+        width: 24px
+        height: 24px
 
       &.disabled
         opacity: 0.6
@@ -69,7 +79,7 @@
 
 
     .item-description
-      margin-right: 25px
+      padding-right: 25px
       white-space: pre-wrap
 
 .chlk-items-picker
@@ -80,7 +90,6 @@
   .search-standard-cnt
     float: right
     margin-top: -15px
-    position: relative
 
     INPUT
       padding-right: 50px
@@ -88,14 +97,15 @@
       width: 200px
 
     .clear-search
-      right: 50px
-      zoom: 0.6
-      top: 10px
+      transform: scale(0.6)
+      right: 25px
+      left: auto
+      top: -45%
 
     #search-glass
       right: 5px
       left: auto
-      top: 50%
+      top: 10%
       margin-top: -12px
       cursor: pointer
 

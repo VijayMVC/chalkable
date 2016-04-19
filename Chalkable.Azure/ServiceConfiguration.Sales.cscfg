@@ -16,7 +16,7 @@
       <!-- Redis Cache -->
       <Setting name="RedisCache.ConnectionString" value="chlk-qa.redis.cache.windows.net,abortConnect=false,ssl=true,password=mOiq0phviZ0/SiUAuwCj/9hsWReh4YFzCYQWYln7uZw=" />
       <!-- CDN and content settings-->
-      <Setting name="Domain" value="" />
+      <Setting name="Domain" value="sales.chalkable.com" />
       <Setting name="ScriptsRoot" value="https://az374501.vo.msecnd.net/static-{0}" />
       <!-- OAuth -->
       <Setting name="WindowsAzure.OAuth.SwtSigningKey" value="BCaU7MfNP4S1R5rKcVA74lq3pfycP1/8Ol7pBwtoEYo=" />
@@ -41,6 +41,9 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" value="DefaultEndpointsProtocol=https;AccountName=chalkablesales;AccountKey=nvwRlYL0345AdCT75axxjvW7zbHZg18Fu2ouzVTIw7QUPG/OJyWt3MVt9xUkiDObiaF8J+UWngeBdOch+ammUA==" />
       <!--WebClient Timeout Settings-->
       <Setting name ="WebClientTimeout" value="300000"/>
+      <!--SetMinThreads params-->
+      <Setting name="Threads.DefaultMinWorkerThreads" value="25"/>
+      <Setting name="Threads.DefaultMinIoThreads" value="25"/>
     </ConfigurationSettings>
     <Certificates>
       <Certificate name="Certificate1" thumbprint="910E8C460A36186A5191ECABAC925F39C4551211" thumbprintAlgorithm="sha1" />

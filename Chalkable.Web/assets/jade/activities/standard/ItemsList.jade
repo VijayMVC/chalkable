@@ -1,10 +1,10 @@
 mixin StandardItemInner_(currentItemsType, item)
     .item-name=item.getName()
     if item.getDescription()
-        .item-description= '  -  ' + item.getDescription()
+        .item-description= (item.getName() ? '  -  ' : '') + item.getDescription()
 
 mixin DeepestItem_(item, id)
-    .item-block.able-add-item(
+    .item-block.browse-item.able-add-item(
         data-id=id.valueOf(),
         data-name=item.getName(),
         data-description=item.getDescription()
@@ -48,13 +48,13 @@ mixin StandardItemByType_(currentItemsType, item)
             +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getId()).item-block
                 +StandardItemInner_(currentItemsType, item)
         when chlk.models.standard.ItemType.TOPIC_COURSE
-            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, item.getId()).item-block
+            +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, null, item.getId()).item-block
                 +StandardItemInner_(currentItemsType, item)
         when chlk.models.standard.ItemType.TOPIC
             if item.isDeepest()
                 +DeepestItem_(item, item.getId())
             else
-                +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, item.getCourseId(), item.getId()).item-block
+                +ActionLink('standard', 'showChildItems', currentItemsType, item.getName(), null, null, null, null, item.getSubjectDocumentId(), null, null, null, item.getCourseId(), item.getId()).item-block
                     +StandardItemInner_(currentItemsType, item)
 
 

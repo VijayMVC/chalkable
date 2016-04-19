@@ -31,8 +31,8 @@
                             )
                                 .item-name=item.getName()
                                 if item.getDescription()
-                                    .item-description= '  -  ' + item.getDescription()
+                                    .item-description= (item.getName() ? '  -  ' : '') + item.getDescription()
                 if !self.isOnlyOne()
                     .buttons-container
-                        +Button()(type="button").special-button2.cancel-btn Cancel
+                        +Button()(type="button").special-button2.cancel-btn.close Cancel
                         +Button()(type="submit", disabled).special-button2.blue-button.add.add-standard-btn Add

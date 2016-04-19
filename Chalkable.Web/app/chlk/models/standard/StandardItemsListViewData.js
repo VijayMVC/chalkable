@@ -15,18 +15,18 @@ NAMESPACE('chlk.models.standard', function () {
         MAIN: 0,
         SUBJECT: 1,
         STANDARD: 2,
-        AUTHORITY: 3,
-        DOCUMENT: 4,
-        SUBJECT_DOCUMENT: 5,
-        GRADE_LEVEL: 6,
-        STANDARD_COURSE: 7,
-        AB_STANDARD: 8,
-        AB_MAIN: 9,
-        SEARCH: 10,
-        TOPIC: 11,
-        TOPIC_MAIN: 12,
-        TOPIC_SUBJECT: 13,
-        TOPIC_COURSE: 14
+        AB_MAIN: 3,
+        AUTHORITY: 4,
+        DOCUMENT: 5,
+        SUBJECT_DOCUMENT: 6,
+        GRADE_LEVEL: 7,
+        STANDARD_COURSE: 8,
+        AB_STANDARD: 9,
+        TOPIC_MAIN: 10,
+        TOPIC_SUBJECT: 11,
+        TOPIC_COURSE: 12,
+        TOPIC: 13,
+        SEARCH: 14
     });
 
     /** @class chlk.models.standard.Breadcrumb*/
@@ -97,9 +97,14 @@ NAMESPACE('chlk.models.standard', function () {
             [[Array, chlk.models.standard.ItemType, chlk.models.common.AttachOptionsViewData, ArrayOf(chlk.models.standard.Breadcrumb), Array, Array, String, Boolean]],
             function $(items, itemsType, attachOptions_, breadcrumbs_, itemIds_, selected_, requestId_, onlyOne_){
                 BASE();
+                this.updateByValues(items, itemsType, attachOptions_, breadcrumbs_, itemIds_, selected_, requestId_, onlyOne_);
+            },
+
+            [[Array, chlk.models.standard.ItemType, chlk.models.common.AttachOptionsViewData, ArrayOf(chlk.models.standard.Breadcrumb), Array, Array, String, Boolean]],
+            function updateByValues(items_, itemsType_, attachOptions_, breadcrumbs_, itemIds_, selected_, requestId_, onlyOne_){
                 attachOptions_ && this.setAttachOptions(attachOptions_);
-                this.setCurrentItemsType(itemsType);
-                this.setItems(items);
+                itemsType_ && this.setCurrentItemsType(itemsType_);
+                items_ && this.setItems(items_);
                 breadcrumbs_ && this.setBreadcrumbs(breadcrumbs_);
                 itemIds_ && this.setItemIds(itemIds_);
                 selected_ && this.setSelectedItems(selected_);

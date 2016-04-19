@@ -6,10 +6,12 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.DemoSchool.Master;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.Master.PictureServices;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
@@ -24,6 +26,9 @@ using Chalkable.Web.Models.GradingViewData;
 using Chalkable.Web.Models.PersonViewDatas;
 using Chalkable.Web.Models.SchoolsViewData;
 using Chalkable.Web.Tools;
+using Microsoft.ReportingServices.Interfaces;
+using Mindscape.Raygun4Net;
+using Mindscape.Raygun4Net.Messages;
 
 namespace Chalkable.Web.Controllers
 {
@@ -302,14 +307,30 @@ namespace Chalkable.Web.Controllers
 
         private void PrepareTeacherJsonData()
         {
+            var startTime = DateTime.Now;
+            var timeCallBuilder = new StringBuilder();
             Trace.Assert(Context.PersonId.HasValue);
             var startupData = SchoolLocator.SchoolService.GetStartupData();
-
+            var time = startTime - DateTime.Now;
+            timeCallBuilder.AppendLine($" Retrieving StartUpData {time.Minutes}:{time.Seconds} - {time.Milliseconds}");
+            
             var district = PrepareCommonViewDataForSchoolPerson(startupData);
+
+            time = startTime - DateTime.Now;
+            timeCallBuilder.AppendLine($" PrepareCommonSchoolPersonData {time.Minutes}:{time.Seconds} - {time.Milliseconds}");
+            
             var person = startupData.Person;
             var personView = PersonInfoViewData.Create(person);
+
             ProcessFirstLogin(person);
+            time = startTime - DateTime.Now;
+            timeCallBuilder.AppendLine($" ProcessFirstLogin {time.Minutes}:{time.Seconds} - {time.Milliseconds}");
+
             ProcessActive(person, personView);
+
+            time = startTime - DateTime.Now;
+            timeCallBuilder.AppendLine($" ProcessActive {time.Minutes}:{time.Seconds} - {time.Milliseconds}");
+
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
 
 
@@ -323,16 +344,47 @@ namespace Chalkable.Web.Controllers
             var classesList = classes.Select(ClassViewData.Create).ToList();
             PrepareJsonData(classesList, ViewConstants.CLASSES);
             PrepareClassesAdvancedData(startupData);
+
+            time = startTime - DateTime.Now;
+            timeCallBuilder.AppendLine($"Retrieving Activity Category from Inow {time.Minutes}:{time.Seconds} - {time.Milliseconds}");
+
             PrepareJsonData(GradingCommentViewData.Create(startupData.GradingComments), ViewConstants.GRADING_COMMMENTS);
 
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(startupData.AttendanceReasons), ViewConstants.ATTENDANCE_REASONS);
 
             var announcementAttributes = SchoolLocator.AnnouncementAttributeService.GetList(true);
+            time = startTime - DateTime.Now;
+            timeCallBuilder.AppendLine($"Retrieving AnnouncementAttribute {time.Minutes}:{time.Seconds} - {time.Milliseconds}");
+
             PrepareJsonData(AnnouncementAttributeViewData.Create(announcementAttributes), ViewConstants.ANNOUNCEMENT_ATTRIBUTES);
 
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, district.Name, 
                 classNames, person.FirstLoginDate, Context.DistrictTimeZone, ip, Context.SCEnabled);
+
+            time = startTime - DateTime.Now;
+            if (time.Seconds > 3)
+            {
+                var message = $"Timeout Error. Teacher.aspx performance time issue. Processing Time {time.Minutes}:{time.Seconds}-{time.Milliseconds} \n";
+                var ex = new ChalkableException(message + timeCallBuilder);
+                SendErrorToRaygun(ex, "Teacher SisUserLogin Performance Issue ", SchoolLocator.Context);
+            }
+        }
+
+        private static readonly RaygunClient RaygunClient = new RaygunClient();
+        private void SendErrorToRaygun(Exception ex, string tag, UserContext context)
+        {
+            var tags = new List<string> { Settings.Domain, context.Role.LoweredName, tag };
+            
+            RaygunClient.ApplicationVersion = CompilerHelper.Version;
+            RaygunClient.User = SchoolLocator.Context.Login;
+            RaygunClient.UserInfo = new RaygunIdentifierMessage(context.DistrictId + ":" + context.PersonId)
+            {
+                Email = context.Login,
+                UUID = context.UserId.ToString()
+            };
+            
+            RaygunClient.SendInBackground(ex, tags);
         }
 
         private void ProcessFirstLogin(PersonDetails person)

@@ -2284,6 +2284,8 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         function addStandardsAction(data){
             var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
+            this.getContext().getSession().remove(ChlkSessionConstants.STANDARD_BREADCRUMBS);
+            this.getContext().getSession().remove(ChlkSessionConstants.STANDARD_LAST_ARGUMENTS);
 
             var res = this.announcementService.addStandards(options.getAnnouncementId(), data.standardIds ? data.standardIds.split(',').filter(function(item){return item}) : [])
                 .then(function(announcement){

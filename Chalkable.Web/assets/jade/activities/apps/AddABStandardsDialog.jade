@@ -4,19 +4,18 @@
 .chlk-items-picker
     .dialog.add-standards
         .x-window-header
-            h1='STANDARDS'
+            h1 Standards
             a.close.close-btn
-            span Choose a standard that describes the item
         .standards-content
             .action-bar
                 .items
                     a.top-link.browse-link.pressed(data-cnt=".browse-cnt") Browse
                     a.top-link.selected-link(data-cnt=".selected-cnt")='Selected ' + (selected.length ? ('(' + selected.length + ')') : '')
-                +ActionForm('apps', 'searchStandards').search-standard-cnt
+                +ActionForm('standard', 'searchABStandards').search-standard-cnt
                     INPUT(type="text", name="filter", placeholder="Find a Standard").search-standard
                     .clear-search.close-btn.x-hidden
                     #search-glass
-            +ActionForm('apps', 'completeStandardsWidget').add-standards-form
+            +ActionForm('standard', 'completeABStandardsWidget').add-standards-form
                 +Hidden('requestId', self.getRequestId())
                 +Hidden('standardIdsOnStart', standardIds).standard-ids-on-start
                 +Hidden('standardIds', standardIds).standard-ids
@@ -32,8 +31,8 @@
                             )
                                 .item-name=item.getName()
                                 if item.getDescription()
-                                    .item-description= '  -  ' + item.getDescription()
+                                    .item-description= (item.getName() ? '  -  ' : '') + item.getDescription()
                 if !self.isOnlyOne()
                     .buttons-container
-                        +Button()(type="button").special-button2.cancel-btn Cancel
+                        +Button()(type="button").special-button2.cancel-btn.close Cancel
                         +Button()(type="submit", disabled).special-button2.blue-button.add.add-standard-btn Add

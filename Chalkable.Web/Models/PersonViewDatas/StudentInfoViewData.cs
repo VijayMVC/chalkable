@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using Chalkable.Common.Web;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.PersonViewDatas
@@ -17,10 +15,10 @@ namespace Chalkable.Web.Models.PersonViewDatas
         public bool IsAllowedInetAccess { get; set; }
         public string SpecialInstructions { get; set; }
         public string SpEdStatus { get; set; }
+        public IList<StudentCustomAlertDetailViewData> StudentCustomAlertDetails { get; set; }
 
         public IList<StudentContactViewData> StudentContacts { get; set; }
-        public IList<StudentCustomAlertDetail> StudentCustomAlertDetails { get; set; }
-
+        
         protected StudentInfoViewData(PersonDetails student):base(student)
         {
             GradeLevels = student.StudentSchoolYears.OrderBy(x=>x.SchoolYearRef).Select(x => IdNameViewData<int>.Create(x.GradeLevelRef, x.GradeLevel.Name)).ToList();

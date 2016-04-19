@@ -52,7 +52,12 @@ class BaseAuthedTestCase(unittest.TestCase):
         r = s.post(chlk_server_url + url, params)
         #print r.status_code
         self.assertEquals(r.status_code, status, 'Response status code')
-        data = r.json()
+        
+        try:
+            data = r.json()
+        except ValueError:
+            print 'Decoding JSON has failed'
+            
         self.assertEquals(data['success'], success, 'API success')
         return data
         

@@ -56,6 +56,9 @@
       <Setting name="Microsoft.WindowsAzure.Plugins.Diagnostics.ConnectionString" />
       <!--WebClient Timeout Setting-->
       <Setting name ="WebClientTimeout"/>
+      <!--SetMinThreads params-->
+      <Setting name="Threads.DefaultMinWorkerThreads"/>
+      <Setting name="Threads.DefaultMinIoThreads"/>
     </ConfigurationSettings>
   </WebRole>
   <WorkerRole name="Chalkable.BackgroundTaskProcessor" vmsize="Medium">
