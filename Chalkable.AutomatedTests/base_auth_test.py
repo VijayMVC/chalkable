@@ -5,7 +5,6 @@ from base_config import *
 from datetime import datetime
 from datetime import timedelta
 import time
-import jsonpickle
 
 class BaseAuthedTestCase(unittest.TestCase):
     def setUp(self):
@@ -49,20 +48,24 @@ class BaseAuthedTestCase(unittest.TestCase):
         return data
 
     def postJSON(self, url, obj, status=200, success=True):
-        data = jsonpickle.encode(obj)
-        return self.post(url, data, status, success, {'content-type': 'application/json'})
-
-    def post(self, url, params, status=200, success=True, headers=None):
         s = self.session
-        r = s.post(chlk_server_url + url, params, headers)
-        #print r.status_code
+        r = s.post(chlk_server_url + url, json=obj)
+        return self.verifyResponce(r, status, success)
+
+    def post(self, url, params, status=200, success=True):
+        s = self.session
+        r = s.post(chlk_server_url + url, data=params)
+        return self.verifyResponce(r, status, success)
+
+    def verifyResponce(self, r, status, success):
+        # print r.status_code
         self.assertEquals(r.status_code, status, 'Response status code')
-        
+
         try:
             data = r.json()
         except ValueError:
             print 'Decoding JSON has failed'
-            
+
         self.assertEquals(data['success'], success, 'API success')
         return data
         
