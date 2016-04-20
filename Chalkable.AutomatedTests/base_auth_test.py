@@ -42,10 +42,7 @@ class BaseAuthedTestCase(unittest.TestCase):
     def get(self, url, status=200, success=True):
         s = self.session
         r = s.get(chlk_server_url + url)
-        self.assertEquals(r.status_code, status, 'Response status code')
-        data = r.json()
-        self.assertEquals(data['success'], success, 'API success')
-        return data
+        return self.verifyResponce(r, status, success)
 
     def postJSON(self, url, obj, status=200, success=True):
         s = self.session
