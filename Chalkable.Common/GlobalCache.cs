@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using Newtonsoft.Json;
 using StackExchange.Redis;
 
@@ -7,13 +9,34 @@ namespace Chalkable.Common
 {
     public class GlobalCache
     {
-        private static readonly ConnectionMultiplexer Connection =
-            ConnectionMultiplexer.Connect(Settings.RedisCacheConnectionString);
+        private static ConnectionMultiplexer[] _connections;
 
-        private static IDatabase Cache
+        public static void InitGlobalCache(string connectionString, int numConnections = 1)
         {
-            get { return Connection.GetDatabase(); }
+            _connections = new ConnectionMultiplexer[numConnections];
+
+            for (var i = 0; i < numConnections; ++i)
+                _connections[i] = ConnectionMultiplexer.Connect(connectionString);
         }
+
+        private static ConnectionMultiplexer GetOneWithMinOps()
+        {
+            var connection = _connections[0];
+
+            for (var i = 1; i < _connections.Length; ++i)
+            {
+                if (connection.OperationCount > _connections[i].OperationCount)
+                    connection = _connections[i];
+            }
+
+#if DEBUG
+            Debug.WriteLine($"Using Redis.ConnectionMultiplexer {connection.ClientName} ops={connection.OperationCount}, tmo={connection.TimeoutMilliseconds}");
+#endif
+
+            return connection;
+        }
+
+        private static IDatabase Cache => GetOneWithMinOps().GetDatabase();
 
         public static void CleanSession(string sessionKey)
         {

@@ -15,6 +15,7 @@
       <Setting name="DbUpdateTimeout" value="3600" />
       <!-- Redis Cache -->
       <Setting name="RedisCache.ConnectionString" value="chlk-prod.redis.cache.windows.net,abortConnect=false,ssl=true,password=Szt054ruVN1Bo97xpGeeLlaB9imaSipgMEbOHHnOspk=" />
+      <Setting name="RedisCache.ConcurentConnections" value="25" />
       <!-- CDN and content settings-->
       <Setting name="Domain" value="classroom.chalkable.com" />
       <Setting name="ScriptsRoot" value="https://az374501.vo.msecnd.net/static-{0}" />
