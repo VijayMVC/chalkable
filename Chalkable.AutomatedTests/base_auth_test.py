@@ -5,6 +5,7 @@ from base_config import *
 from datetime import datetime
 from datetime import timedelta
 import time
+import jsonpickle
 
 class BaseAuthedTestCase(unittest.TestCase):
     def setUp(self):
@@ -47,9 +48,13 @@ class BaseAuthedTestCase(unittest.TestCase):
         self.assertEquals(data['success'], success, 'API success')
         return data
 
-    def post(self, url, params, status=200, success=True):
+    def postJSON(self, url, obj, status=200, success=True):
+        data = jsonpickle.encode(obj)
+        return self.post(url, data, status, success, {'content-type': 'application/json'})
+
+    def post(self, url, params, status=200, success=True, headers=None):
         s = self.session
-        r = s.post(chlk_server_url + url, params)
+        r = s.post(chlk_server_url + url, params, headers)
         #print r.status_code
         self.assertEquals(r.status_code, status, 'Response status code')
         
