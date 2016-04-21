@@ -6,6 +6,7 @@ from datetime import datetime
 from datetime import timedelta
 import time
 import json
+import random
 
 class BaseAuthedTestCase(unittest.TestCase):
     def setUp(self):
@@ -100,6 +101,5 @@ class BaseAuthedTestCase(unittest.TestCase):
         self.assertEquals(data['success'], success, 'API success')
         return data
         
-
 if __name__ == '__main__':
     unittest.main()
