@@ -69,6 +69,25 @@ namespace Chalkable.Web
                 throw;
 #endif
             }
+
+            var redisCacheConcurentConnections = 1;
+            try
+            {
+                redisCacheConcurentConnections = Settings.RedisCacheConcurentConnections;
+            }
+            // ReSharper disable once RedundantCatchClause
+            // ReSharper disable once UnusedVariable
+            catch (Exception e)
+            {
+#if !DEBUG
+                RaygunClient.SendInBackground(e);
+#endif
+#if DEBUG
+                throw;
+#endif
+            }
+
+            GlobalCache.InitGlobalCache(Settings.RedisCacheConnectionString, redisCacheConcurentConnections);
         }
 
 

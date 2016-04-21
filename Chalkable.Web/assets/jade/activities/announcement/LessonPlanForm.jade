@@ -53,7 +53,7 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                                         +ActionButton('lessonplangallery', 'lessonPlanTemplatesList', classId).special-button2.add + Import from new Item Gallery
                                 .add-category
                                     +ActionButton('lpgallerycategory', 'editCategories').special-button2.add + Add Category
-                            +TextArea(name="content", placeholder="Assignment")= announcement.getContent()
+                            +TextArea(name="content", placeholder="Assignment").item-content= announcement.getContent()
                             if needStandardsBlock
                                 .add-standards-container
                                     .add-standards

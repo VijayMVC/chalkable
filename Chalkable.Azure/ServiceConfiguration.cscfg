@@ -15,6 +15,7 @@
       <Setting name="DbUpdateTimeout" value="" />
       <!-- Redis Cache -->
       <Setting name="RedisCache.ConnectionString" value="" />
+      <Setting name="RedisCache.ConcurentConnections" value="1" />
       <!-- CDN and content settings-->
       <Setting name="Domain" value="" />
       <Setting name="ScriptsRoot" value="" />

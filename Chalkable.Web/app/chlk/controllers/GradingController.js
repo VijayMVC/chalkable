@@ -88,7 +88,7 @@ NAMESPACE('chlk.controllers', function (){
             function indexTeacherAction() {
                 var classId = this.getCurrentClassId();
                 if(classId && classId.valueOf())
-                    return this.Redirect('grading', 'summary', [classId]);
+                    return this.Redirect('grading', 'summaryGrid', [classId]);
 
                 return this.Redirect('grading', 'summaryAll');
             },

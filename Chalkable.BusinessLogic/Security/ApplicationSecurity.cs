@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Security
 
         public static bool HasAssessmentEnabled(UserContext context)
         {
-            return context.AssessmentEnabled || BaseSecurity.IsSysAdmin(context) || context.Role.Id == CoreRoles.DEVELOPER_ROLE.Id;
+            return context.AssessmentEnabled || BaseSecurity.IsSysAdmin(context) || context.Role.Id == CoreRoles.DEVELOPER_ROLE.Id || context.Role.Id == CoreRoles.APP_TESTER_ROLE.Id;
         }
 
         public static bool HasStudyCenterAccess(UserContext context)
