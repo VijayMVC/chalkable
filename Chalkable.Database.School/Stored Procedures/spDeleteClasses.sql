@@ -1,39 +1,38 @@
-﻿CREATE Procedure [dbo].[spDeleteClasses]
-@classIds TInt32 readonly
-as
+﻿CREATE PROCEDURE [dbo].[spDeleteClasses]
+	@classIds TInt32 READONLY
+AS
 
-Delete From ClassAnnouncement where ClassRef in (select value from @classIds as ids)
-Delete From LessonPlan where ClassRef in (select value from @classIds as ids)
+DELETE ca FROM dbo.ClassAnnouncement ca WHERE EXISTS (SELECT *  FROM @ClassIds ci WHERE ca.ClassRef= ci.Value)
+DELETE lp FROM dbo.LessonPlan lp WHERE EXISTS (SELECT *  FROM @ClassIds ci WHERE lp.ClassRef= ci.Value)
 
-Declare @annToDelete Table (id int)
-Insert Into 
-	@annToDelete
-	Select
-		Announcement.Id
-	From
-		Announcement
-		left join ClassAnnouncement on Announcement.Id = ClassAnnouncement.Id
-		left join LessonPlan on Announcement.Id = LessonPlan.Id
-		left join AdminAnnouncement on Announcement.Id = AdminAnnouncement.Id
-	Where
-		ClassAnnouncement.id is null
-		and LessonPlan.id is null
-		and AdminAnnouncement.id is null
-
+DECLARE @annToDelete Table (id int)
+INSERT INTO @annToDelete
+SELECT
+	Announcement.Id
+FROM
+	dbo.Announcement
+	LEFT JOIN dbo.ClassAnnouncement ON Announcement.Id = ClassAnnouncement.Id
+	LEFT JOIN dbo.LessonPlan ON Announcement.Id = LessonPlan.Id
+	LEFT JOIN dbo.AdminAnnouncement ON Announcement.Id = AdminAnnouncement.Id
+WHERE
+	ClassAnnouncement.id IS NULL
+	AND LessonPlan.id IS NULL
+	AND AdminAnnouncement.id IS NULL
 
 
-Delete From AnnouncementStandard where AnnouncementRef in (select id from @annToDelete)
-Delete From AnnouncementApplication where AnnouncementRef in (select id from @annToDelete)
-Delete From [Notification] where AnnouncementRef in (select id from @annToDelete)
-Delete From AnnouncementAttachment where AnnouncementRef in (select id from @annToDelete)
-Delete From AnnouncementQnA where AnnouncementRef in (select id from @annToDelete)
-Delete From AnnouncementRecipientData where AnnouncementRef in (select id from @annToDelete)
-Delete From AnnouncementAssignedAttribute where AnnouncementRef in (select id from @annToDelete)
-Delete From AnnouncementApplication where AnnouncementRef in (select id from @annToDelete)
+
+DELETE a FROM dbo.AnnouncementStandard a WHERE EXISTS(SELECT * FROM @annToDelete atd WHERE atd.id= a.AnnouncementRef)
+DELETE a FROM dbo.AnnouncementApplication a WHERE EXISTS(SELECT * FROM @annToDelete atd WHERE atd.id= a.AnnouncementRef)
+DELETE n FROM dbo.[Notification] n WHERE EXISTS(SELECT * FROM @annToDelete atd WHERE atd.id= n.AnnouncementRef)
+DELETE a FROM dbo.AnnouncementAttachment a WHERE EXISTS(SELECT * FROM @annToDelete atd WHERE atd.id= a.AnnouncementRef)
+DELETE a FROM dbo.AnnouncementQnA a WHERE EXISTS(SELECT * FROM @annToDelete atd WHERE atd.id= a.AnnouncementRef)
+DELETE a FROM dbo.AnnouncementRecipientData a WHERE EXISTS(SELECT * FROM @annToDelete atd WHERE atd.id= a.AnnouncementRef)
+DELETE a FROM dbo.AnnouncementAssignedAttribute a WHERE EXISTS(SELECT * FROM @annToDelete atd WHERE atd.id= a.AnnouncementRef)
+DELETE a FROM dbo.AnnouncementApplication a WHERE EXISTS(SELECT * FROM @annToDelete atd WHERE atd.id= a.AnnouncementRef)
 
 
-Delete From Announcement where Id in (select id from @annToDelete)
+DELETE a FROM dbo.Announcement a WHERE EXISTS(SELECT * FROM @annToDelete atd WHERE atd.id= a.Id)
 
 
-Delete From ApplicationInstallActionClasses where ClassRef in (select value from @classIds as ids)
-Delete From Class where Id in (select value from @classIds as ids)
+DELETE aiac FROM dbo.ApplicationInstallActionClasses aiac WHERE EXISTS (SELECT * FROM @ClassIds ci WHERE aiac.Id = ci.Value)
+DELETE c FROM dbo.Class c WHERE EXISTS (SELECT * FROM @ClassIds ci WHERE c.Id = ci.Value)
