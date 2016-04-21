@@ -1,2 +1,0 @@
-DROP PROCEDURE spGetTeacherAnnouncements 
-GO
