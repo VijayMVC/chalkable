@@ -60,10 +60,11 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
         public override void Insert(IList<ClassAnnouncement> entities)
         {
-            foreach (var classAnnouncement in entities)
-            {
-                Insert(classAnnouncement);
-            }
+            var parameters = new Dictionary<string, object>
+                {
+                    {"classAnnouncements", entities}
+                };
+            ExecuteStoredProcedure("spInsertClassAnnouncement", parameters);
         }
 
         public override void Update(IList<ClassAnnouncement> entities)

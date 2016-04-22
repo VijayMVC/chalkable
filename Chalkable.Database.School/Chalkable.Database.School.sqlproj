@@ -325,6 +325,8 @@
     <Build Include="Stored Procedures\spGetAdminAnnouncementRecipients.sql" />
     <Build Include="Tables\StudentCustomAlertDetail.sql" />
     <Build Include="User Defined Types\TStudentCustomAlertDetail.sql" />
+    <Build Include="User Defined Types\TClassAnnouncementComplex.sql" />
+    <Build Include="Stored Procedures\spInsertClassAnnouncement.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />

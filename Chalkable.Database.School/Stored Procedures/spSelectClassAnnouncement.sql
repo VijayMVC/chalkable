@@ -1,6 +1,6 @@
 ﻿
 
-CREATE procedure [dbo].[spSelectClassAnnouncement]  @classAnnT TClassAnnouncement readonly
+CREATE procedure [dbo].[spSelectClassAnnouncement]  @classAnnT TClassAnnouncementComplex readonly
 As
 Select 
 	t.*,
