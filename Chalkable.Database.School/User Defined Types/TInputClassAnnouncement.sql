@@ -1,4 +1,9 @@
-﻿CREATE TYPE [dbo].[TClassAnnouncement] AS TABLE(
+﻿CREATE TYPE [dbo].[TInputClassAnnouncement] AS TABLE(
+	[Id] [int] NULL,
+	[Content] [nvarchar](max) NULL,
+	[Created] [datetime2](7) NOT NULL,
+	[State] [int] NOT NULL,
+	[Title] [nvarchar](max) NULL,
 	[Expires] [datetime2](7) NOT NULL,
 	[ClassAnnouncementTypeRef] [int] NULL,
 	[ClassRef] [int] NOT NULL,
@@ -10,10 +15,6 @@
 	[WeightAddition] [decimal](9, 6) NULL,
 	[WeightMultiplier] [decimal](9, 6) NULL,
 	[VisibleForStudent] [bit] NULL,
-	[MayBeDropped] [bit] NULL,
-	[Title] [nvarchar](max) NULL,
-	[Content] [nvarchar](max) NULL,
-	[Created] [datetime2](7) NOT NULL,
-	[State] [int] NOT NULL
+	[MayBeDropped] [bit] NULL
 )
 GO

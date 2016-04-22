@@ -1,5 +1,5 @@
 ﻿CREATE Procedure [dbo].[spInsertClassAnnouncement]
-@classAnnouncements TClassAnnouncement readonly
+@classAnnouncements TInputClassAnnouncement readonly
 
 as
 

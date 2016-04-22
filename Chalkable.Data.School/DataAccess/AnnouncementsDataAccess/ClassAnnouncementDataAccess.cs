@@ -62,7 +62,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         {
             var parameters = new Dictionary<string, object>
                 {
-                    {"classAnnouncements", entities}
+                    {"classAnnouncements", InputClassAnnouncement.Create(entities)}
                 };
             ExecuteStoredProcedure("spInsertClassAnnouncement", parameters);
         }
