@@ -44,18 +44,10 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var dbQuery = Orm.SimpleSelect(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, conditions);
             return ReadMany<ClassAnnouncement>(dbQuery);
         }
-
-        //TODO : move this to stored procedure later
+        
         public override void Insert(ClassAnnouncement entity)
         {
-            SimpleInsert<Announcement>(entity);
-            var id = SelectMany<Announcement>(new AndQueryCondition()).OrderByDescending(x=>x.Id).First().Id;
-            entity.Id = id;
-            var t = typeof (ClassAnnouncement);
-            var fileds = Orm.Fields(t, true, true, true);
-            fileds.Add(Announcement.ID_FIELD);
-            var q = Orm.SimpleListInsert(t, new List<ClassAnnouncement> { entity }, fileds, false);
-            ExecuteNonQueryParametrized(q.Sql.ToString(), q.Parameters);
+            Insert(new List<ClassAnnouncement>{ entity });
         }
 
         public override void Insert(IList<ClassAnnouncement> entities)
