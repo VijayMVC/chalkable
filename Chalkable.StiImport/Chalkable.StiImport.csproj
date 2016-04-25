@@ -170,6 +170,7 @@
     <Compile Include="Services\SyncModelAdapters\CourseStandardAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\CourseTypeAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\DayTypeAdapter.cs" />
+    <Compile Include="Services\SyncModelAdapters\DistrictAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\GradedItemAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\GradeLevelAdapter.cs" />
     <Compile Include="Services\SyncModelAdapters\GradingCommentAdapter.cs" />
