@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using Chalkable.Data.School.Model;
+﻿using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models.SchoolsViewData
 {
@@ -12,10 +8,12 @@ namespace Chalkable.Web.Models.SchoolsViewData
 
         public static SchoolOptionViewData Create(SchoolOption schoolOption)
         {
-            return new SchoolOptionViewData
-                {
-                    AllowScoreEntryForUnexcused = schoolOption.AllowScoreEntryForUnexcused
-                };
+            var res = new SchoolOptionViewData();
+            if (schoolOption != null)
+            {
+                res.AllowScoreEntryForUnexcused = schoolOption.AllowScoreEntryForUnexcused;
+            }
+            return res;
         }
     }
 }

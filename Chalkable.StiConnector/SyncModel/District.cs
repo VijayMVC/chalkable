@@ -6,6 +6,6 @@ namespace Chalkable.StiConnector.SyncModel
     {
         public Guid DistrictGUID { get; set; }
         public string Name { get; set; }
-        public override int DefaultOrder => 0;
+        public override int DefaultOrder => 51;
     }
 }

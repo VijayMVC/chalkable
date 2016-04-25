@@ -74,7 +74,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public string FullClassName { get; set; }
         [NotDbFieldAttr]
         public Guid? DepartmentId { get; set; }
-        
+        [NotDbFieldAttr]
         public override string Title
         {
             get { return !string.IsNullOrEmpty(base.Title) ? base.Title : DefaultTitle; }

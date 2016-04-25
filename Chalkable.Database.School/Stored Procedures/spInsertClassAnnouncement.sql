@@ -3,7 +3,16 @@
 
 as
 
-declare @pointedClassAnnouncement table 
+declare
+	@classAnnouncementsFiltered TInputClassAnnouncement
+
+insert into @classAnnouncementsFiltered
+select * from @classAnnouncements
+
+delete from @classAnnouncementsFiltered
+where SisActivityId in (select CA.SisActivityId from ClassAnnouncement CA)
+
+declare @pointedClassAnnouncement table
 (
 	[Pointer] int NOT NULL identity(1,1),
 	[Created] [datetime2](7) NOT NULL,
@@ -67,9 +76,7 @@ select
 	[VisibleForStudent],
 	[ClassRef]
 from 
-	@classAnnouncements CA
-where 
-	exists(select * from ClassAnnouncement CA where CA.SisActivityId = SisActivityId)
+	@classAnnouncementsFiltered
 
 Insert into Announcement 
 (
@@ -123,5 +130,6 @@ from
 	@pointedClassAnnouncement PCA
 	join @pointedAnnouncementIds PAI 
 		on PCA.Pointer = PAI.Pointer
+
 
 GO
