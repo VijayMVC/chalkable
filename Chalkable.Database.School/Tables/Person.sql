@@ -15,3 +15,7 @@
     CONSTRAINT [FK_Person_Address] FOREIGN KEY ([AddressRef]) REFERENCES [dbo].[Address] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_Person_AddressRef
+	ON dbo.Person( AddressRef )
+GO

@@ -6,3 +6,7 @@
     CONSTRAINT [FK_AnnouncementStandard_Standard] FOREIGN KEY ([StandardRef]) REFERENCES [dbo].[Standard] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_AnnouncementStandard_AnnouncementRef
+	ON dbo.AnnouncementStandard( AnnouncementRef )
+GO

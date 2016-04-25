@@ -11,3 +11,7 @@ GO
 CREATE NONCLUSTERED INDEX [StudentSchool_Student]
     ON [dbo].[StudentSchool]([StudentRef] ASC);
 
+GO	
+CREATE NONCLUSTERED INDEX IX_StudentSchool_SchoolRef
+	ON dbo.StudentSchool( SchoolRef )
+GO

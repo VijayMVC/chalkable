@@ -7,3 +7,7 @@
     CONSTRAINT [UQ_Name] UNIQUE NONCLUSTERED ([Name] ASC)
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_LPGalleryCategory_OwnerRef
+	ON dbo.LPGalleryCategory( OwnerRef )
+GO

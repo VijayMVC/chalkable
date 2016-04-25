@@ -13,3 +13,7 @@ GO
 CREATE NONCLUSTERED INDEX [IX_ApplicationBanHistory_ApplicationRef]
     ON [dbo].[ApplicationBanHistory]([ApplicationRef] ASC);
 
+GO	
+CREATE NONCLUSTERED INDEX IX_ApplicationBanHistory_PersonRef
+	ON dbo.ApplicationBanHistory( PersonRef )
+GO

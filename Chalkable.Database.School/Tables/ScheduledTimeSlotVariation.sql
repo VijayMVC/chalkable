@@ -12,3 +12,7 @@
     CONSTRAINT [UQ_BellSchedule_TimeSlot_Name] UNIQUE NONCLUSTERED ([BellScheduleRef] ASC, [PeriodRef] ASC, [Name] ASC)
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_ScheduledTimeSlotVariation_PeriodRef
+	ON dbo.ScheduledTimeSlotVariation( PeriodRef )
+GO

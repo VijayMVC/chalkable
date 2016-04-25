@@ -8,4 +8,3 @@
     CONSTRAINT [FK_GradingScale_School] FOREIGN KEY ([SchoolRef]) REFERENCES [dbo].[School] ([Id]),
     CONSTRAINT [UQ_GradingScale_SchoolRef_Name] UNIQUE NONCLUSTERED ([SchoolRef] ASC, [Name] ASC)
 );
-

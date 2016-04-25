@@ -11,3 +11,8 @@
     CONSTRAINT [FK_GradingScaleRange_GradingScale] FOREIGN KEY ([GradingScaleRef]) REFERENCES [dbo].[GradingScale] ([Id])
 );
 
+
+GO	
+CREATE NONCLUSTERED INDEX IX_GradingScaleRange_AlphaGradeRef
+	ON dbo.GradingScaleRange( AlphaGradeRef )
+GO

@@ -15,4 +15,18 @@
 );
 
 
+GO
 
+CREATE NONCLUSTERED INDEX IX_AnnouncementAssignedAttribute_AnnouncementRef
+	ON dbo.AnnouncementAssignedAttribute( AnnouncementRef )
+GO
+
+
+CREATE NONCLUSTERED INDEX IX_AnnouncementAssignedAttribute_AttachmentRef
+	ON dbo.AnnouncementAssignedAttribute( AttachmentRef )
+GO
+
+
+CREATE NONCLUSTERED INDEX IX_AnnouncementAssignedAttribute_AttributeTypeId
+	ON dbo.AnnouncementAssignedAttribute( AttributeTypeId )
+GO

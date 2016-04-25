@@ -16,6 +16,17 @@
 
 
 GO
+
 CREATE NONCLUSTERED INDEX [IX_AnnouncementQnA_Announcement]
     ON [dbo].[AnnouncementQnA]([AnnouncementRef] ASC);
 
+GO
+
+CREATE NONCLUSTERED INDEX IX_AnnouncementQnA_AnswererRef
+	ON dbo.AnnouncementQnA( AnswererRef )
+GO
+
+
+CREATE NONCLUSTERED INDEX IX_AnnouncementQnA_AskerRef
+	ON dbo.AnnouncementQnA( AskerRef )
+GO

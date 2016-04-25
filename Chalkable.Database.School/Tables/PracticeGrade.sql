@@ -10,3 +10,11 @@
     CONSTRAINT [FK_PracticeGrade_Student] FOREIGN KEY ([StudentId]) REFERENCES [dbo].[Student] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_PracticeGrade_StandardId
+	ON dbo.PracticeGrade( StandardId )
+GO
+
+CREATE NONCLUSTERED INDEX IX_PracticeGrade_StudentId
+	ON dbo.PracticeGrade( StudentId )
+GO

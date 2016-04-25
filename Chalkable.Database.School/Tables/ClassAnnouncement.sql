@@ -23,3 +23,12 @@ GO
 CREATE UNIQUE NONCLUSTERED INDEX [UQ_ClassAnnouncement_SisActivityId]
     ON [dbo].[ClassAnnouncement]([SisActivityId] ASC) WHERE ([SisActivityId] IS NOT NULL);
 
+GO	
+
+CREATE NONCLUSTERED INDEX IX_ClassAnnouncement_ClassRef
+	ON dbo.ClassAnnouncement( ClassRef )
+GO
+
+CREATE NONCLUSTERED INDEX IX_ClassAnnouncement_SchoolYearRef
+	ON dbo.ClassAnnouncement( SchoolYearRef )
+GO

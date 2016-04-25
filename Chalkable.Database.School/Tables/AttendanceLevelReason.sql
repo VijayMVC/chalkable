@@ -7,3 +7,7 @@
     CONSTRAINT [FK_AttendanceLevelReason_AttendanceReason] FOREIGN KEY ([AttendanceReasonRef]) REFERENCES [dbo].[AttendanceReason] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_AttendanceLevelReason_AttendanceReasonRef
+	ON dbo.AttendanceLevelReason( AttendanceReasonRef )
+GO

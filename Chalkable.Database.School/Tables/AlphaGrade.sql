@@ -7,3 +7,8 @@
     CONSTRAINT [FK_AlphaGrade_School] FOREIGN KEY ([SchoolRef]) REFERENCES [dbo].[School] ([Id])
 );
 
+GO
+
+CREATE NONCLUSTERED INDEX IX_AlphaGrade_SchoolRef
+	ON dbo.AlphaGrade( SchoolRef )
+GO

@@ -20,5 +20,26 @@
     CONSTRAINT [FK_Notification_QuestionPerson] FOREIGN KEY ([QuestionPersonRef]) REFERENCES [dbo].[Person] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_Notification_AnnouncementRef
+	ON dbo.Notification( AnnouncementRef )
+GO
 
+
+CREATE NONCLUSTERED INDEX IX_Notification_MarkingPeriodRef
+	ON dbo.Notification( MarkingPeriodRef )
+GO
+
+
+CREATE NONCLUSTERED INDEX IX_Notification_PersonRef
+	ON dbo.Notification( PersonRef )
+GO
+
+CREATE NONCLUSTERED INDEX IX_Notification_PrivateMessageRef
+	ON dbo.Notification( PrivateMessageRef )
+GO
+
+CREATE NONCLUSTERED INDEX IX_Notification_QuestionPersonRef
+	ON dbo.Notification( QuestionPersonRef )
+GO
 

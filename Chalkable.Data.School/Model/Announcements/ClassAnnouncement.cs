@@ -41,6 +41,7 @@ namespace Chalkable.Data.School.Model.Announcements
 
         [NotDbFieldAttr]
         public override bool IsSubmitted => SisActivityId.HasValue && base.IsSubmitted;
+        [NotDbFieldAttr]
         public override int OwnereId => PrimaryTeacherRef;
 
         [NotDbFieldAttr]
@@ -48,7 +49,7 @@ namespace Chalkable.Data.School.Model.Announcements
 
         [NotDbFieldAttr]
         public override AnnouncementTypeEnum Type => AnnouncementTypeEnum.Class;
-
+        [NotDbFieldAttr]
         public bool Gradable => true;
 
         [NotDbFieldAttr]
@@ -73,7 +74,6 @@ namespace Chalkable.Data.School.Model.Announcements
         public string FullClassName { get; set; }
         [NotDbFieldAttr]
         public Guid? DepartmentId { get; set; }
-
         [NotDbFieldAttr]
         public override string Title
         {

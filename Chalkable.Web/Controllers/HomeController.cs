@@ -71,6 +71,7 @@ namespace Chalkable.Web.Controllers
             var serverTime = Context.NowSchoolTime.ToString(DATE_TIME_FORMAT);
             ViewData[ViewConstants.ROLE_NAME] = Context.Role.LoweredName;
             ViewData[ViewConstants.SERVER_TIME] = serverTime;
+            ViewData[ViewConstants.ASSESSMENT_APLICATION_ID] = MasterLocator.ApplicationService.GetAssessmentId();
             //var ip = RequestHelpers.GetClientIpAddress(Request);
             //MasterLocator.UserTrackingService.IdentifySysAdmin(sysUser.Login, "", "", null, ip);
             return View();

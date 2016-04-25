@@ -6,3 +6,7 @@
     CONSTRAINT [FK_SectionTimeSlotVariation_ScheduledTimeSlotVariation] FOREIGN KEY ([ScheduledTimeSlotVariationRef]) REFERENCES [dbo].[ScheduledTimeSlotVariation] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_SectionTimeSlotVariation_ScheduledTimeSlotVariationRef
+	ON dbo.SectionTimeSlotVariation( ScheduledTimeSlotVariationRef )
+GO

@@ -22,3 +22,20 @@ GO
 CREATE NONCLUSTERED INDEX [IX_Standard_AcademicBenchmarkId]
     ON [dbo].[Standard]([AcademicBenchmarkId] ASC);
 
+GO	
+
+CREATE NONCLUSTERED INDEX IX_Standard_LowerGradeLevelRef
+	ON dbo.Standard( LowerGradeLevelRef )
+GO
+
+CREATE NONCLUSTERED INDEX IX_Standard_ParentStandardRef
+	ON dbo.Standard( ParentStandardRef )
+GO
+
+CREATE NONCLUSTERED INDEX IX_Standard_StandardSubjectRef
+	ON dbo.Standard( StandardSubjectRef )
+GO
+
+CREATE NONCLUSTERED INDEX IX_Standard_UpperGradeLevelRef
+	ON dbo.Standard( UpperGradeLevelRef )
+GO

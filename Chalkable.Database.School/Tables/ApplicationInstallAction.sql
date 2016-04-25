@@ -12,5 +12,13 @@
     CONSTRAINT [FK_ApplicationInstallAction_Person] FOREIGN KEY ([PersonRef]) REFERENCES [dbo].[Person] ([Id])
 );
 
+GO	
 
+CREATE NONCLUSTERED INDEX IX_ApplicationInstallAction_OwnerRef
+	ON dbo.ApplicationInstallAction( OwnerRef )
+GO
+
+CREATE NONCLUSTERED INDEX IX_ApplicationInstallAction_PersonRef
+	ON dbo.ApplicationInstallAction( PersonRef )
+GO
 

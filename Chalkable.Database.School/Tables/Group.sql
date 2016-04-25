@@ -6,3 +6,7 @@
     CONSTRAINT [FK_Group_Person] FOREIGN KEY ([OwnerRef]) REFERENCES [dbo].[Person] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_Group_OwnerRef
+	ON dbo.[Group]( OwnerRef )
+GO

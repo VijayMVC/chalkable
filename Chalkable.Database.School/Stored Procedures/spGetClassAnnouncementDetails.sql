@@ -5,7 +5,7 @@
 CREATE Procedure [dbo].[spGetClassAnnouncementDetails] @classAnnouncementId int, @callerId int, @callerRole int, @schoolYearId int
 As
 
-Declare @classAnn TClassAnnouncement
+Declare @classAnn TClassAnnouncementComplex
 Declare @allCount int = 1
 Declare @isOwner bit = 1
 Declare @complete bit =  cast((Select Top 1 Complete from AnnouncementRecipientData where AnnouncementRef = @classAnnouncementId and PersonRef = @callerId) as bit)

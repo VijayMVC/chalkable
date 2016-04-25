@@ -1,2 +1,0 @@
-Drop Table SisUser
-GO

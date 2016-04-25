@@ -7,3 +7,12 @@
     CONSTRAINT [FK_ApplicationInstallActionClasses_Class] FOREIGN KEY ([ClassRef]) REFERENCES [dbo].[Class] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_ApplicationInstallActionClasses_AppInstallActionRef
+	ON dbo.ApplicationInstallActionClasses( AppInstallActionRef )
+GO
+
+
+CREATE NONCLUSTERED INDEX IX_ApplicationInstallActionClasses_ClassRef
+	ON dbo.ApplicationInstallActionClasses( ClassRef )
+GO

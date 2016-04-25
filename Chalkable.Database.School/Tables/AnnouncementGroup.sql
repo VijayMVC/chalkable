@@ -6,3 +6,7 @@
     CONSTRAINT [FK_AnnouncementGroup_Group] FOREIGN KEY ([GroupRef]) REFERENCES [dbo].[Group] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_AnnouncementGroup_GroupRef
+	ON dbo.AnnouncementGroup( GroupRef )
+GO

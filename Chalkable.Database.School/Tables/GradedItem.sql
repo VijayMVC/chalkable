@@ -17,3 +17,7 @@
     FOREIGN KEY ([GradingPeriodRef]) REFERENCES [dbo].[GradingPeriod] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_GradedItem_GradingPeriodRef
+	ON dbo.GradedItem( GradingPeriodRef )
+GO

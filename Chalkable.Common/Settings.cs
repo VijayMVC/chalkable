@@ -138,6 +138,7 @@ namespace Chalkable.Common
         /* Global Cache */
 
         public static string RedisCacheConnectionString => Get("RedisCache.ConnectionString");
+        public static int RedisCacheConcurentConnections => int.Parse(Get("RedisCache.ConcurentConnections"));
 
         private static Verbosity configuredVerbosity;
         private static bool verbositySet = false;

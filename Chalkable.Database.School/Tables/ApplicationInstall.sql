@@ -38,3 +38,16 @@ GO
 CREATE NONCLUSTERED INDEX [IX_ApplicationInstall_SchoolYear]
     ON [dbo].[ApplicationInstall]([SchoolYearRef] ASC);
 
+GO	
+CREATE NONCLUSTERED INDEX IX_ApplicationInstall_AppInstallActionRef
+	ON dbo.ApplicationInstall( AppInstallActionRef )
+GO
+
+
+CREATE NONCLUSTERED INDEX IX_ApplicationInstall_AppUninstallActionRef
+	ON dbo.ApplicationInstall( AppUninstallActionRef )
+GO
+
+CREATE NONCLUSTERED INDEX IX_ApplicationInstall_OwnerRef
+	ON dbo.ApplicationInstall( OwnerRef )
+GO

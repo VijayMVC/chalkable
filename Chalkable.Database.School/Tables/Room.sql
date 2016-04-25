@@ -10,3 +10,7 @@
     CONSTRAINT [FK_Room_School] FOREIGN KEY ([SchoolRef]) REFERENCES [dbo].[School] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_Room_SchoolRef
+	ON dbo.Room( SchoolRef )
+GO

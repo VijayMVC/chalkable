@@ -26,3 +26,7 @@
     CONSTRAINT [FK_SchoolOption_School] FOREIGN KEY ([Id]) REFERENCES [dbo].[School] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_SchoolOption_StandardsGradingScaleRef
+	ON dbo.SchoolOption( StandardsGradingScaleRef )
+GO

@@ -13,3 +13,15 @@
     CONSTRAINT [FK_LessonPlan_SchoolYear] FOREIGN KEY ([SchoolYearRef]) REFERENCES [dbo].[SchoolYear] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_LessonPlan_ClassRef
+	ON dbo.LessonPlan( ClassRef )
+GO
+
+CREATE NONCLUSTERED INDEX IX_LessonPlan_GalleryCategoryRef
+	ON dbo.LessonPlan( GalleryCategoryRef )
+GO
+
+CREATE NONCLUSTERED INDEX IX_LessonPlan_SchoolYearRef
+	ON dbo.LessonPlan( SchoolYearRef )
+GO

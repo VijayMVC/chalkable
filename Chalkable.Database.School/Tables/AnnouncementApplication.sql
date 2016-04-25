@@ -11,3 +11,8 @@
     CONSTRAINT [FK_AnnouncementApplication_Announcement] FOREIGN KEY ([AnnouncementRef]) REFERENCES [dbo].[Announcement] ([Id])
 );
 
+GO
+
+CREATE NONCLUSTERED INDEX IX_AnnouncementApplication_AnnouncementRef
+	ON dbo.AnnouncementApplication( AnnouncementRef )
+GO

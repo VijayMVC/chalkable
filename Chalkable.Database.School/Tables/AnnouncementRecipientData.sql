@@ -7,3 +7,7 @@
     CONSTRAINT [FK_AdminAnnouncementData_Person] FOREIGN KEY ([PersonRef]) REFERENCES [dbo].[Person] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_AnnouncementRecipientData_PersonRef
+	ON dbo.AnnouncementRecipientData( PersonRef )
+GO

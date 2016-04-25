@@ -12,4 +12,8 @@
 );
 
 
+GO	
+CREATE NONCLUSTERED INDEX IX_SchoolYear_SchoolRef
+	ON dbo.SchoolYear( SchoolRef )
+GO
 

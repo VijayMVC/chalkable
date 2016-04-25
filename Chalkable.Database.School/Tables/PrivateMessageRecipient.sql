@@ -10,3 +10,13 @@
     CONSTRAINT [FK_PrivateMessageRecipient_PrivateMessage] FOREIGN KEY ([PrivateMessageRef]) REFERENCES [dbo].[PrivateMessage] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_PrivateMessageRecipient_RecipientClassRef
+	ON dbo.PrivateMessageRecipient( RecipientClassRef )
+GO
+
+
+	
+CREATE NONCLUSTERED INDEX IX_PrivateMessageRecipient_RecipientRef
+	ON dbo.PrivateMessageRecipient( RecipientRef )
+GO

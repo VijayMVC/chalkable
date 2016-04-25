@@ -226,7 +226,6 @@
     <Build Include="User Defined Types\TAttendanceReason.sql" />
     <Build Include="User Defined Types\TBellSchedule.sql" />
     <Build Include="User Defined Types\TClass.sql" />
-    <Build Include="User Defined Types\TClassAnnouncement.sql" />
     <Build Include="User Defined Types\TClassDetails.sql" />
     <Build Include="User Defined Types\TClassPeriod.sql" />
     <Build Include="User Defined Types\TClassPerson.sql" />
@@ -325,6 +324,9 @@
     <Build Include="Stored Procedures\spGetAdminAnnouncementRecipients.sql" />
     <Build Include="Tables\StudentCustomAlertDetail.sql" />
     <Build Include="User Defined Types\TStudentCustomAlertDetail.sql" />
+    <Build Include="User Defined Types\TClassAnnouncementComplex.sql" />
+    <Build Include="Stored Procedures\spInsertClassAnnouncement.sql" />
+    <Build Include="User Defined Types\TInputClassAnnouncement.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />

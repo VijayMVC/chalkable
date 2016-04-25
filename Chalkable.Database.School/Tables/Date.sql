@@ -10,3 +10,15 @@
     CONSTRAINT [FK_Date_SchoolYear] FOREIGN KEY ([SchoolYearRef]) REFERENCES [dbo].[SchoolYear] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_Date_BellScheduleRef
+	ON dbo.Date( BellScheduleRef )
+GO
+CREATE NONCLUSTERED INDEX IX_Date_DayTypeRef
+	ON dbo.Date( DayTypeRef )
+GO
+
+
+CREATE NONCLUSTERED INDEX IX_Date_SchoolYearRef
+	ON dbo.Date( SchoolYearRef )
+GO

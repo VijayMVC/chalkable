@@ -241,7 +241,7 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter]
         public ActionResult GetOauthCode(string applicationUrl, Guid? applicationId)
         {
-            if (User.IsInRole("SysAdmin") && !Context.PersonId.HasValue)
+            if ((User.IsInRole("SysAdmin") && !Context.PersonId.HasValue) || User.IsInRole("AppTester"))
                 return GetOauthCodeForSysAdmin(applicationUrl, applicationId);
 
             //TODO: check if app is installed??

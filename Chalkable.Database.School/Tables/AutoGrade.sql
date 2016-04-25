@@ -9,3 +9,7 @@
     CONSTRAINT [FK_AutoGrade_Student] FOREIGN KEY ([StudentRef]) REFERENCES [dbo].[Student] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_AutoGrade_AnnouncementApplicationRef
+	ON dbo.AutoGrade( AnnouncementApplicationRef )
+GO

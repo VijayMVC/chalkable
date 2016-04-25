@@ -8,3 +8,7 @@
     CONSTRAINT [FK_PersonSetting_SchoolYear] FOREIGN KEY ([SchoolYearRef]) REFERENCES [dbo].[SchoolYear] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_PersonSetting_SchoolYearRef
+	ON dbo.PersonSetting( SchoolYearRef )
+GO

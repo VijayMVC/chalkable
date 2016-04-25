@@ -10,3 +10,7 @@
     CONSTRAINT [FK_MarkingPeriod_SchoolYear] FOREIGN KEY ([SchoolYearRef]) REFERENCES [dbo].[SchoolYear] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_MarkingPeriod_SchoolYearRef
+	ON dbo.MarkingPeriod( SchoolYearRef )
+GO

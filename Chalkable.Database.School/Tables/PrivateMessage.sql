@@ -9,5 +9,11 @@
     CONSTRAINT [FK_PrivateMessage_FromPerson] FOREIGN KEY ([FromPersonRef]) REFERENCES [dbo].[Person] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_PrivateMessage_FromPersonRef
+	ON dbo.PrivateMessage( FromPersonRef )
+GO
+
+
 
 

@@ -16,3 +16,7 @@ AS
 	Update [Date] Set DayTypeRef = null where DayTypeRef in (Select Id From Deleted)
     Delete From DayType where Id in (Select Id From Deleted)
 
+GO
+CREATE NONCLUSTERED INDEX IX_DayType_SchoolYearRef
+	ON dbo.DayType( SchoolYearRef )
+GO

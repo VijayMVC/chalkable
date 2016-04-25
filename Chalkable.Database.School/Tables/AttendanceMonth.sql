@@ -11,3 +11,7 @@
     CONSTRAINT [FK_AttendanceMonth_SchoolYear] FOREIGN KEY ([SchoolYearRef]) REFERENCES [dbo].[SchoolYear] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_AttendanceMonth_SchoolYearRef
+	ON dbo.AttendanceMonth( SchoolYearRef )
+GO

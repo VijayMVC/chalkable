@@ -19,3 +19,7 @@ GO
 CREATE NONCLUSTERED INDEX [IX_ClassPerson_Person]
     ON [dbo].[ClassPerson]([PersonRef] ASC);
 
+GO	
+CREATE NONCLUSTERED INDEX IX_ClassPerson_MarkingPeriodRef
+	ON dbo.ClassPerson( MarkingPeriodRef )
+GO

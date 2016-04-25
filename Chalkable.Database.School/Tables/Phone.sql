@@ -8,3 +8,8 @@
     CONSTRAINT [FK_Phone_Person] FOREIGN KEY ([PersonRef]) REFERENCES [dbo].[Person] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_Phone_PersonRef
+	ON dbo.Phone( PersonRef )
+GO
+

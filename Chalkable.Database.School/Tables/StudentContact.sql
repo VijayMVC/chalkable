@@ -17,3 +17,12 @@
     CONSTRAINT [FK_StudentContact_Student] FOREIGN KEY ([StudentRef]) REFERENCES [dbo].[Student] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_StudentContact_ContactRef
+	ON dbo.StudentContact( ContactRef )
+GO
+
+
+CREATE NONCLUSTERED INDEX IX_StudentContact_ContactRelationshipRef
+	ON dbo.StudentContact( ContactRelationshipRef )
+GO

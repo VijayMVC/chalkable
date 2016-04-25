@@ -6,3 +6,7 @@
     CONSTRAINT [FK_ClassStandard_Standard] FOREIGN KEY ([StandardRef]) REFERENCES [dbo].[Standard] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_ClassStandard_StandardRef
+	ON dbo.ClassStandard( StandardRef )
+GO

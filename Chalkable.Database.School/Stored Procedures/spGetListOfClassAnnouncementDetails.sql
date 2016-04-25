@@ -10,7 +10,7 @@ Declare @TEACHER_ROLE_ID int = 2,
 		@STUDENT_ROLE_ID int = 3,
 		@ADMIN_ROLE_ID int = 10
 
-Declare @classAnns TClassAnnouncement
+Declare @classAnns TClassAnnouncementComplex
 
 Insert Into @classAnns
 Select 

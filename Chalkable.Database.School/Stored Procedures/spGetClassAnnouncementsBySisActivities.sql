@@ -7,7 +7,7 @@ CREATE procedure [dbo].[spGetClassAnnouncementsBySisActivities]
 As
 
 Declare @sisActivityIdsT table(Id int)
-Declare @classAnnouncement TClassAnnouncement
+Declare @classAnnouncement TClassAnnouncementComplex
 
 
 If Exists(Select * From @sisActivityIds)

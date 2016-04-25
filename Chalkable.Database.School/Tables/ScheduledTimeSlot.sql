@@ -10,3 +10,7 @@
     CONSTRAINT [FK_ScheduledTimeSlot_Period] FOREIGN KEY ([PeriodRef]) REFERENCES [dbo].[Period] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_ScheduledTimeSlot_PeriodRef
+	ON dbo.ScheduledTimeSlot( PeriodRef )
+GO

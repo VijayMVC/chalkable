@@ -6,3 +6,7 @@
     CONSTRAINT [FK_StudentGroup_Student] FOREIGN KEY ([StudentRef]) REFERENCES [dbo].[Student] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_StudentGroup_StudentRef
+	ON dbo.StudentGroup( StudentRef )
+GO

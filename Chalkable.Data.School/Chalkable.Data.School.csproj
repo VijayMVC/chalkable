@@ -154,6 +154,7 @@
     <Compile Include="Model\AnnouncementQnA.cs" />
     <Compile Include="Model\AnnouncementGroup.cs" />
     <Compile Include="Model\AnnouncementStandard.cs" />
+    <Compile Include="Model\Announcements\InputClassAnnouncement.cs" />
     <Compile Include="Model\ApplicationBanHistory.cs" />
     <Compile Include="Model\ApplicationInstallHistory.cs" />
     <Compile Include="Model\Announcements\ClassAnnouncement.cs" />

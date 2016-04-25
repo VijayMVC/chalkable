@@ -16,6 +16,7 @@
       <Setting name="DbUpdateTimeout" value="3600" />
       <!-- Redis Cache -->
       <Setting name="RedisCache.ConnectionString" value="localhost,abortConnect=false,ssl=false" />
+      <Setting name="RedisCache.ConcurentConnections" value="1" />
       <!-- CDN and content settings-->
       <Setting name="Domain" value="local.chalkable.com" />
       <Setting name="ScriptsRoot" value="//local.chalkable.com:5001" />

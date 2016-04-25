@@ -9,3 +9,11 @@
     CONSTRAINT [FK_StudentSchoolYear_SchoolYear] FOREIGN KEY ([SchoolYearRef]) REFERENCES [dbo].[SchoolYear] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_StudentSchoolYear_GradeLevelRef
+	ON dbo.StudentSchoolYear( GradeLevelRef )
+GO
+	
+CREATE NONCLUSTERED INDEX IX_StudentSchoolYear_StudentRef
+	ON dbo.StudentSchoolYear( StudentRef )
+GO

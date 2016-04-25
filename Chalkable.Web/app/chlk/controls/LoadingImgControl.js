@@ -11,15 +11,15 @@ NAMESPACE('chlk.controls', function () {
             },
 
             [[Number, Object]],
-            VOID, function checkImage(timeOut, img){
+            VOID, function checkImage(timeOut, img, attrs){
                 var parent = img.parent();
                 setTimeout(function(){
-                    if(img.width() <= parent.width()/2 || img.height() <= parent.height()/2){
+                    if((img.width() <= parent.width()/2 || img.height() <= parent.height()/2) && attrs.visible !== true){
                         img.setCss('visibility', 'hidden');
                         parent.addClass('loading');
                         var src = img.getAttr('src');
                         img.setAttr('src', src);
-                        this.checkImage(timeOut > 10 ? 10 : timeOut * 2, img);
+                        this.checkImage(timeOut > 10 ? 10 : timeOut * 2, img, attrs);
                     }else{
                         img.setCss('visibility', 'visible');
                         parent.removeClass('loading');
@@ -33,7 +33,7 @@ NAMESPACE('chlk.controls', function () {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
                         var img = new ria.dom.Dom('#' + attrs.id);
-                        this.checkImage(1, img);
+                        this.checkImage(1, img, attrs);
                     }.bind(this));
                 return attrs;
             }

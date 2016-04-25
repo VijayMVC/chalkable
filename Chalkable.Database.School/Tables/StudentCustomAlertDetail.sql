@@ -7,3 +7,13 @@
     AlertText VARCHAR(500),
     CurrentValue VARCHAR(500)
 )
+
+GO	
+CREATE NONCLUSTERED INDEX IX_StudentCustomAlertDetail_SchoolYearRef
+	ON dbo.StudentCustomAlertDetail( SchoolYearRef )
+GO
+
+
+CREATE NONCLUSTERED INDEX IX_StudentCustomAlertDetail_StudentRef
+	ON dbo.StudentCustomAlertDetail( StudentRef )
+GO

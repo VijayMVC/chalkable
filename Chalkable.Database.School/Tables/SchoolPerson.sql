@@ -7,3 +7,7 @@
     CONSTRAINT [FK_SchoolStaff_School] FOREIGN KEY ([SchoolRef]) REFERENCES [dbo].[School] ([Id])
 );
 
+GO	
+CREATE NONCLUSTERED INDEX IX_SchoolPerson_PersonRef
+	ON dbo.SchoolPerson( PersonRef )
+GO

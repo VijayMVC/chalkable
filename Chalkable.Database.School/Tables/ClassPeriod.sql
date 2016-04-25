@@ -19,3 +19,7 @@ GO
 CREATE NONCLUSTERED INDEX [IX_ClassPeriod_Period]
     ON [dbo].[ClassPeriod]([PeriodRef] ASC);
 
+GO	
+CREATE NONCLUSTERED INDEX IX_ClassPeriod_DayTypeRef
+	ON dbo.ClassPeriod( DayTypeRef )
+GO
