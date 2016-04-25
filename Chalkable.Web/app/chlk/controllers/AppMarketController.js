@@ -376,8 +376,8 @@ NAMESPACE('chlk.controllers', function (){
             var title = result ? "Installation successful" : "Error while installing app.";
             return this.ShowMsgBox(title, '', [{
                 text: 'Ok',
-                controller: 'announcement',
-                action: 'add',
+                controller: 'appmarket',
+                action: 'afterInstallFromNewItem',
                 params: [],
                 color: chlk.models.common.ButtonColor.GREEN.valueOf()
             }], 'center'), null;
@@ -394,6 +394,13 @@ NAMESPACE('chlk.controllers', function (){
                 params: [],
                 color: chlk.models.common.ButtonColor.GREEN.valueOf()
             }], 'center'), null;
+        },
+
+        [chlk.controllers.SidebarButton('apps')],
+        [[chlk.models.apps.AppInstallPostData]],
+        function afterInstallFromNewItemAction(){
+            this.BackgroundCloseView(chlk.activities.apps.InstallAppDialog);
+            return this.Redirect('announcement', 'attachApps');
         },
 
         [chlk.controllers.SidebarButton('apps')],
