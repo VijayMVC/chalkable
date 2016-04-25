@@ -283,8 +283,6 @@ namespace Chalkable.StiImport.Services
         
         private void SyncDb(bool updateVersions)
         {
-            UpdateDistrictInfo();
-
             var adapterLocator = new AdapterLocator(ServiceLocatorMaster, ServiceLocatorSchool
                 , context.GetSyncResult<Gender>().All
                 , context.GetSyncResult<SpEdStatus>().All);
@@ -395,17 +393,6 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorMaster.DistrictService.Update(d);
         }
 
-        private void UpdateDistrictInfo()
-        {
-            var d = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
-            var inowDistrict = context.GetSyncResult<StiConnector.SyncModel.District>()
-                                      .All.FirstOrDefault(x=>x.DistrictGUID == d.Id);
-            if (inowDistrict != null)
-            {
-                d.Name = inowDistrict.Name;
-                ServiceLocatorMaster.DistrictService.Update(d);
-            }
-        }
 
         private void ProcessPictures()
         {
