@@ -73,17 +73,6 @@ class TestFeed(BaseAuthedTestCase):
                             attendance_level = info_about_one_student_second_time['level']
                             one_attendance_level = list_for_attendance_level[index]
                             if info_about_one_student_second_time['readonly'] == False:
-                                if one_attendance_level == 'A':
-                                    one_attendance_level = 'H'
-                                    self.assertTrue(str(one_attendance_level) == str(attendance_level), " " + str(one_attendance_level) + " " + str(attendance_level))
-                                    date_in_cycle = datetime.strptime(str(info_about_one_student_second_time['date']),
-                                                                      '%Y-%m-%d').strftime('%m-%d-%Y')
-                                    self.assertTrue(info_about_one_student_second_time['classid'] == 14436,
-                                                    'class_id is not equal')
-                                    self.assertTrue(info_about_one_student_second_time['isposted'] == True,
-                                                    'attendance is not posted ' + str(14436))
-                                    self.assertTrue(date_in_cycle == '09-22-2014', 'dates are equal ' + str(14436))
-                                else:
                                     self.assertTrue(str(one_attendance_level) == str(info_about_one_student_second_time['level'])," " + str(one_attendance_level) + " " + str(attendance_level))
                                     date_in_cycle = datetime.strptime(str(info_about_one_student_second_time['date']),
                                                                       '%Y-%m-%d').strftime('%m-%d-%Y')

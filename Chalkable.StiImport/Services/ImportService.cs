@@ -283,8 +283,6 @@ namespace Chalkable.StiImport.Services
         
         private void SyncDb(bool updateVersions)
         {
-            UpdateDistrictInfo();
-
             var adapterLocator = new AdapterLocator(ServiceLocatorMaster, ServiceLocatorSchool
                 , context.GetSyncResult<Gender>().All
                 , context.GetSyncResult<SpEdStatus>().All);
@@ -395,14 +393,6 @@ namespace Chalkable.StiImport.Services
             ServiceLocatorMaster.DistrictService.Update(d);
         }
 
-        private void UpdateDistrictInfo()
-        {
-            var d = ServiceLocatorMaster.DistrictService.GetByIdOrNull(ServiceLocatorSchool.Context.DistrictId.Value);
-            var inowDistrict = context.GetSyncResult<StiConnector.SyncModel.District>()
-                                      .All.FirstOrDefault(x=>x.DistrictGUID == d.Id);
-            d.Name = inowDistrict.Name;
-            ServiceLocatorMaster.DistrictService.Update(d);
-        }
 
         private void ProcessPictures()
         {
@@ -439,7 +429,6 @@ namespace Chalkable.StiImport.Services
             //Tables we need all data
             context.TablesToSync[typeof(Gender).Name] = null;
             context.TablesToSync[typeof(SpEdStatus).Name] = null;
-            context.TablesToSync[typeof (StiConnector.SyncModel.District).Name] = null; 
             var toSync = context.TablesToSync;
             var results = new List<SyncResultBase<SyncModel>>();
             foreach (var table in toSync)
