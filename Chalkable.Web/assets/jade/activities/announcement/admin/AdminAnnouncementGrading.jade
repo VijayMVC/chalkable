@@ -1,0 +1,20 @@
+each student in self.getItems()
+    -var index = student.getIndex()
+    -console.info(student, index)
+    .row(index=index)
+        +ProfileLink(student).left.image-container.white.shadow.person-img-container
+            +PersonImg(student, 47)
+        +ProfileLink(student)
+            .user-name-container.i-b.relative.left
+                p= student.getFullName()
+                if student.isWithdrawn()
+                    div(data-tooltip=Msg.Withdrawn).withdrawn
+        .clear-fix
+    .attachments-container.z-10.sub-row(class = (self.getApplications().length ? 'with-data' : '') )
+        .attachments-container-2
+            each app, i in self.getApplications()
+                -var isBanned = false
+                .announcement-item.attachment
+                    -var appPictureUrl = self.getPictureURL(app.getBigPictureId(), 170, 110)
+                    +AppAttachmentGradingBlock(app, appPictureUrl).announcement-item.application
+                        +ActionButton('apps', 'viewApp', app.getUrl(), app.getGradingViewUrl(), chlk.models.apps.AppModes.GRADINGVIEW, app.getId(), isBanned, student.getId(), self.getStandardsUrlComponents()) Open
