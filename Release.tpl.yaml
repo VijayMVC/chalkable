@@ -1,0 +1,5 @@
+version: private-build
+ownerName: TeamCity
+emailAddress: geka.zasoba@gmail.com
+notes: |
+  ${date} ${vcs.branch} deployment
