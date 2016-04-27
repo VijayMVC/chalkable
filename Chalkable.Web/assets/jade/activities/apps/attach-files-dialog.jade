@@ -35,7 +35,8 @@ mixin AttachDialogSidebar(tpl, name)
                      .#{prefix + app.getId().valueOf()}::before { background: url(#{app.getExternalAttachPictureUrl()}) 50% 50% no-repeat; background-size: 24px; }
                 +ActionLink('apps', 'viewExternalAttachApp', options.getAnnouncementId()
                     , app.getId(), options.getAnnouncementType()
-                    , options.getAppUrlAppend())(class = [name == app.getId() ? 'active pressed' : '', prefix + app.getId()])= app.getName()
+                    , options.getAppUrlAppend()
+                    , options.getAssignedAttributeId())(class = [name == app.getId() ? 'active pressed' : '', prefix + app.getId()])= app.getName()
 
 
 options = self.getAttachOptions()

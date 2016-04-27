@@ -35,6 +35,7 @@ REQUIRE('chlk.models.id.AppId');
 REQUIRE('chlk.models.id.AppPermissionId');
 
 REQUIRE('chlk.models.standard.GetStandardTreePostData');
+REQUIRE('chlk.models.id.AnnouncementAttributeId');
 
 NAMESPACE('chlk.controllers', function (){
 
@@ -522,8 +523,8 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.StudyCenterEnabled()],
-        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
-        function viewExternalAttachAppAction(announcementId, appId, announcementType, appUrlAppend_) {
+        [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String, chlk.models.id.AnnouncementAttributeId]],
+        function viewExternalAttachAppAction(announcementId, appId, announcementType, appUrlAppend_, attributeId_) {
             if(!this.isStudyCenterEnabled())
                 return this.ShowMsgBox('Current school doesn\'t support applications, study center, profile explorer', 'whoa.'), null;
 
@@ -543,6 +544,7 @@ NAMESPACE('chlk.controllers', function (){
                         + '&code=' + data.getAuthorizationCode()
                         + '&announcementId=' + encodeURIComponent(announcementId.valueOf())
                         + '&announcementType=' + encodeURIComponent(announcementType.valueOf())
+                        + '&attributeId=' + encodeURIComponent(attributeId_.valueOf())
                         + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
 
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
