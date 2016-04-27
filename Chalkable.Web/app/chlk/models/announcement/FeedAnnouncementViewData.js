@@ -79,8 +79,11 @@ NAMESPACE('chlk.models.announcement', function () {
                     this.autoGradeApps.forEach(function(item){
                         var app = autoGradeApps.filter(function(app){return app.id == item.announcementapplicationid})[0];
                         if(!app){
+
                             autoGradeApps.push({
-                                name: this.applications.filter(function(app){return app.getAnnouncementApplicationId().valueOf() == item.announcementapplicationid})[0].name,
+                                name: this.applications.filter(function(app){
+                                    return app.getAnnouncementApplicationId().valueOf() == item.announcementapplicationid
+                                })[0].name,
                                 id: item.announcementapplicationid,
                                 students: [{id:item.studentid, grade:item.grade}]
                             })
