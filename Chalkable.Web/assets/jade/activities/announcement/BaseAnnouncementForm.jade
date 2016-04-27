@@ -121,6 +121,7 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
 
     if !isAdmin
         .apps-with-recommended-contents
+
         .suggested-apps
             if announcement.getStandards() && announcement.getStandards().length > 0 && self.isStudyCenterEnabled()
                 +RenderWith(self.prepareSuggestedAppListData(), chlk.templates.apps.SuggestedAppsListTpl)

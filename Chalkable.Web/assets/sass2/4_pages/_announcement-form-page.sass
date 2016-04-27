@@ -267,6 +267,18 @@
       left: 30%
       margin-left: -7px
   .apps-with-recommended-contents
+    &.before-loading
+      position: relative
+      top: 0
+      left: 0
+      bottom: 0
+      right: 0
+      background: image-url("images2/loaders/circular-grey.gif") center center no-repeat transparentize(#fff, .5)
+      z-index: 999
+      content: ' '
+      display: block
+      height: 100px
+
     .load-content-btn
       float: right
       position: relative

@@ -39,6 +39,7 @@ namespace Chalkable.Common.Web
             wr.Method = httpMethod.Method;
             wr.KeepAlive = true;
             wr.Credentials = CredentialCache.DefaultCredentials;
+            wr.Timeout = 10*60*1000; // sets timeout 10 minutes 
             Stream rs = wr.GetRequestStream();
             if (nvc != null)
             {

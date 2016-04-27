@@ -46,13 +46,13 @@ values(@announcementId, @personId, @expires);
 
 
 /*GET CONTENT FROM PREV ANNOUNCEMENT*/
-declare @prevContent nvarchar(1024)
-select top 1
-@prevContent = Content from vwAdminAnnouncement
-where AdminRef = @personId and [State] = 1 and Content is not null
-order by Created desc
+--declare @prevContent nvarchar(1024)
+--select top 1
+--@prevContent = Content from vwAdminAnnouncement
+--where AdminRef = @personId and [State] = 1 and Content is not null
+--order by Created desc
 
-update Announcement set Content = @prevContent where Id = @announcementId
+--update Announcement set Content = @prevContent where Id = @announcementId
 end
 
 exec spGetAdminAnnouncementDetails @announcementId, @personId, @callerRole

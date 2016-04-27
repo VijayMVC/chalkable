@@ -5,7 +5,8 @@ mixin AppAttachmentBlock(item, pictureHref, i)
 
 mixin AppAttachmentGradingBlock(item, pictureHref)
     .wrapper
-        .title(data-tooltip=item.getName(), data-tooltip-type="overflow")= item.getName()
+        -var name = (item.getText && item.getText()) || item.getName()
+        .title(data-tooltip=name, data-tooltip-type="overflow")= name
         +LoadingImage(src=pictureHref)
         block
 

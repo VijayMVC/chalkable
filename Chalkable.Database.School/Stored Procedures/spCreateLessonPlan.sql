@@ -35,30 +35,30 @@ exec spDeleteAnnouncements @annIdT
 /*RESTORE STATE FOR DRAFT*/
 If @announcementId is not null
 Begin
-update Announcement Set [State] = 0 Where Id = @announcementId
-Set @isDraft = 1
-End
-Else Begin
+	update Announcement Set [State] = 0 Where Id = @announcementId
+	Set @isDraft = 1
+	End
+	Else Begin
 
-/*INSERT TO ANNOUNCEMENT*/
-Insert Into Announcement (Created, Title, Content, [State])
-Values(@created, null, null, @state)
+	/*INSERT TO ANNOUNCEMENT*/
+	Insert Into Announcement (Created, Title, Content, [State])
+	Values(@created, null, null, @state)
 
-Set @announcementId = SCOPE_IDENTITY()
+	Set @announcementId = SCOPE_IDENTITY()
 
-Insert Into LessonPlan (Id, ClassRef, StartDate, EndDate, GalleryCategoryRef, SchoolYearRef, VisibleForStudent)
-Values(@announcementId, @classId, @startDate, @endDate, null, @schoolYearId, 0);
+	Insert Into LessonPlan (Id, ClassRef, StartDate, EndDate, GalleryCategoryRef, SchoolYearRef, VisibleForStudent)
+	Values(@announcementId, @classId, @startDate, @endDate, null, @schoolYearId, 0);
 
 
-/*GET CONTENT FROM PREV ANNOUNCEMENT*/
-Declare @prevContent nvarchar(1024)
-Select top 1
-@prevContent = Content From vwLessonPlan
-Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId)
-and [State] = 1 and Content is not null
-Order By Created Desc
+	/*GET CONTENT FROM PREV ANNOUNCEMENT*/
+	--Declare @prevContent nvarchar(1024)
+	--Select top 1
+	--@prevContent = Content From vwLessonPlan
+	--Where ClassRef in (Select ClassTeacher.ClassRef From ClassTeacher Where PersonRef = @personId)
+	--and [State] = 1 and Content is not null
+	--Order By Created Desc
 
-update Announcement Set Content = @prevContent Where Id = @announcementId
+	--update Announcement Set Content = @prevContent Where Id = @announcementId
 End
 
 Exec spGetLessonPlanDetails @announcementId, @personId, @callerRole, @schoolYearId

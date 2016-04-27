@@ -49,6 +49,16 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             ArrayOf(Object), 'waitingForAppContentListRender',
 
+            [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppContentListTpl, 'before-app-contents-loaded', '')],
+            [[Object, Object, String]],
+            VOID, function beforeAppContentsLoaded(tpl, model, msg_){
+                this.onPrepareTemplate_(tpl, model, msg_);
+                var appsWithContentNode = this.dom.find('.apps-with-recommended-contents');
+                if(appsWithContentNode.exists() && !appsWithContentNode.hasClass('before-loading')){
+                    appsWithContentNode.addClass('before-loading');
+                }
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.apps.AppContentListTpl, 'update-app-contents', '')],
             [[Object, Object, String]],
             VOID, function updateAppContents(tpl, model, msg_){
@@ -66,9 +76,10 @@ NAMESPACE('chlk.activities.announcement', function () {
                         appId: model.getApplication().getId()
                     })
                 }
-                else this.renderAppContentList_(tpl, model.getApplication().getId())
+                else {
 
-
+                    this.renderAppContentList_(tpl, model.getApplication().getId())
+                }
             },
 
 
@@ -77,6 +88,7 @@ NAMESPACE('chlk.activities.announcement', function () {
 
                 var appsWithContentNode = this.dom.find('.apps-with-recommended-contents');
                 if(appsWithContentNode.exists()){
+                    appsWithContentNode.removeClass('before-loading');
                     var appId = appId.valueOf();
                     var resNode = appsWithContentNode.find('.app-contents-block[data-appId=' + appId + ']');
 

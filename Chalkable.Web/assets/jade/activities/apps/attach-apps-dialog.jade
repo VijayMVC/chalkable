@@ -6,7 +6,7 @@ mixin AppIconLink_(announcementId, app, needToInstall, iconTooltip, announcement
             .title(data-tooltip=app.getName(), data-tooltip-type="overflow")= app.getName()
             .shortdesc= app.getShortDescription()
             if needToInstall
-                +ActionButton('appmarket', 'details', app.getId(), true) Install
+                +ActionButton('appmarket', 'tryToInstall', app.getId(), true) Install
             else
                 +ActionButton('apps', 'tryToAttachFromAnnouncement', announcementId, appId, announcementType, appUrlAppend) Attach
 
