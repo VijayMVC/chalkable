@@ -377,7 +377,7 @@ NAMESPACE('chlk.controllers', function (){
             return this.ShowMsgBox(title, '', [{
                 text: 'Ok',
                 controller: 'appmarket',
-                action: 'back',
+                action: 'afterInstallFromNewItem',
                 params: [],
                 color: chlk.models.common.ButtonColor.GREEN.valueOf()
             }], 'center'), null;
@@ -396,10 +396,11 @@ NAMESPACE('chlk.controllers', function (){
             }], 'center'), null;
         },
 
-        [chlk.controllers.NotChangedSidebarButton()],
-        function backAction(){
-            window.history.back();
-            return null;
+        [chlk.controllers.SidebarButton('apps')],
+        [[chlk.models.apps.AppInstallPostData]],
+        function afterInstallFromNewItemAction(){
+            this.BackgroundCloseView(chlk.activities.apps.InstallAppDialog);
+            return this.Redirect('announcement', 'attachApps');
         },
 
         [chlk.controllers.SidebarButton('apps')],
@@ -459,8 +460,8 @@ NAMESPACE('chlk.controllers', function (){
                 case 'install':
                     var res = this.install_(appInstallData, appInstallData.isFromSuggestedApps() ? 'installCompleteFromSuggestedApps' :
                         (appInstallData.isFromNewItem() ? 'installCompleteFroNewItem' : 'installComplete'), null, 'installFail', null);
-                    if(appInstallData.isFromNewItem())
-                        return this.ShadeLoader();
+                    if(!appInstallData.isFromNewItem())
+                        return this.BackgroundCloseView(chlk.activities.apps.InstallAppDialog);
                     return this.UpdateView(chlk.activities.apps.InstallAppDialog, res);
 
                 case 'getAppPrice':

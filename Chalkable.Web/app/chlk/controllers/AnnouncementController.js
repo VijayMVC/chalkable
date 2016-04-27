@@ -593,6 +593,7 @@ NAMESPACE('chlk.controllers', function (){
         [[chlk.models.announcement.FeedAnnouncementViewData, chlk.models.apps.Application]],
         function getAppRecommendedContents_(ann, app){
             if(ann.getStandards().length > 0)
+                this.BackgroundUpdateView(this.getAnnouncementFormPageType_(ann.getType()), null,  'before-app-contents-loaded');
                 this.applicationService.getApplicationContents(
                         app.getUrl(),
                         ann.getId(),
