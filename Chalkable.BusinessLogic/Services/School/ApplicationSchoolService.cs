@@ -149,7 +149,11 @@ namespace Chalkable.BusinessLogic.Services.School
                 if (!ann.IsOwner)
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
                 aa.Text = text;
-                aa.ImageUrl = imageUrl;
+
+                if (string.IsNullOrWhiteSpace(imageUrl) || !Uri.IsWellFormedUriString(imageUrl, UriKind.Absolute))
+                    imageUrl = null;
+
+                aa.ImageUrl = imageUrl;   
                 aa.Description = description;
                 da.Update(aa);
                 uow.Commit();
