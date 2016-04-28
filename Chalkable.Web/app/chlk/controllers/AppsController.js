@@ -544,7 +544,7 @@ NAMESPACE('chlk.controllers', function (){
                         + '&code=' + data.getAuthorizationCode()
                         + '&announcementId=' + encodeURIComponent(announcementId.valueOf())
                         + '&announcementType=' + encodeURIComponent(announcementType.valueOf())
-                        + '&attributeId=' + encodeURIComponent(attributeId_.valueOf())
+                        + (attributeId_ ? '&attributeId=' + encodeURIComponent(attributeId_.valueOf()) : '')
                         + (appUrlAppend_ ? '&' + appUrlAppend_ : '');
 
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS);
