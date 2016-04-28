@@ -328,6 +328,7 @@
     <Build Include="Stored Procedures\spInsertClassAnnouncement.sql" />
     <Build Include="User Defined Types\TInputClassAnnouncement.sql" />
     <Build Include="Stored Procedures\spUpdateClassAnnouncement.sql" />
+    <Build Include="Stored Procedures\spDeleteAnnouncementAttribute.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />

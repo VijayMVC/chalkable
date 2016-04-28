@@ -3,6 +3,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
+using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.Model;
 
 namespace Chalkable.BusinessLogic.Services.School
@@ -37,7 +38,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public void Delete(IList<AnnouncementAttribute> announcementAttributes)
         {
             BaseSecurity.EnsureSysAdmin(Context);
-            DoUpdate(u => new DataAccessBase<AnnouncementAttribute>(u).Delete(announcementAttributes));
+            DoUpdate(u => new AnnouncementAttributeDataAccess(u).Delete(announcementAttributes));
         }
 
         public IList<AnnouncementAttribute> GetList(bool? activeOnly)
