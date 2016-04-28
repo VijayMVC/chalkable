@@ -2,15 +2,16 @@
     if !self.getGradingItems().length || !self.getStudents().length
         .no-items-text=Msg.No_grades_yet
     else
-        .dotted-container.name-container.with-horizontal-dots
-            .grading-grid-th
-                .type-name(data-sort-type="name", data-sort-order="asc")=Msg.Student(true)
-            each student,i in self.getStudents()
-                name = student.getStudentInfo().getDisplayName()
-                div(row-index=i).student-name
-                    div(data-tooltip=name, data-tooltip-type="overflow").dotted-h=name
-                    if student.isWithdrawn()
-                        div(data-tooltip="Withdrawn").withdrawn
+        .fixed-block
+            .dotted-container.name-container.with-horizontal-dots
+                .grading-grid-th
+                    .type-name(data-sort-type="name", data-sort-order="asc")=Msg.Student(true)
+                each student,i in self.getStudents()
+                    name = student.getStudentInfo().getDisplayName()
+                    div(row-index=i).student-name
+                        div(data-tooltip=name, data-tooltip-type="overflow").dotted-h=name
+                        if student.isWithdrawn()
+                            div(data-tooltip="Withdrawn").withdrawn
         +LeftRightToolbar()(
             style="width:" + self.getTbWidth() + "px",
             itemClass='grade-container',

@@ -110,10 +110,15 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.updateGradingPeriodPartRule_(tpl, model);
             },
 
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
+                BASE(model, msg_);
+                if(model instanceof chlk.models.grading.ShortGradingClassSummaryGridItems)
+                    this.preparePadding_(model);
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl, 'no-loading')],
             [[Object, Object, String]],
             VOID, function updateGradingPeriodAvgs(tpl, model, msg_) {
-                var calculateGradesAvg, that = this;
                 var container = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
                 var tooltipText = (model.getAvg() != null ? Msg.Avg + " " + model.getAvg() : 'No grades yet');
                 var dom = this.dom;

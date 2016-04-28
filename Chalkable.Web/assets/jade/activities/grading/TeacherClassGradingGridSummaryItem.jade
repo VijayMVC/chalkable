@@ -74,36 +74,37 @@ mixin DisplayTotalPoints(model)
     if !self.getGradingItems().length && !self.getStudentAverages() && !self.isAbleDisplayStudentAverage() && !self.isAbleDisplayAlphaGrades() || !self.getStudents().length
         .no-items-text=Msg.No_grades_yet
     else
-        .dotted-container.name-container.with-horizontal-dots
-            .grading-grid-th
-                .type-name(data-sort-type = "name", data-sort-order="asc", data-no-href=true)
-                    =Msg.Student(true)
-                +ActionLink('grading', 'gradeBookReport', self.getGradingPeriod().getId(), self.getClassId(), self.getGradingPeriod().getStartDate().toStandardFormat(), self.getGradingPeriod().getEndDate().toStandardFormat()).report-link
-                .time
+        .fixed-block
+            .dotted-container.name-container.with-horizontal-dots
+                .grading-grid-th
+                    .type-name(data-sort-type = "name", data-sort-order="asc", data-no-href=true)
+                        =Msg.Student(true)
+                    +ActionLink('grading', 'gradeBookReport', self.getGradingPeriod().getId(), self.getClassId(), self.getGradingPeriod().getStartDate().toStandardFormat(), self.getGradingPeriod().getEndDate().toStandardFormat()).report-link
+                    .time
+                    .student-name
+                        .max-score.dotted-h
+                each student,i in self.getStudents()
+                    name = student.getStudentInfo().getDisplayName()
+                    div(row-index=i).student-name
+                        div(data-tooltip=name, data-tooltip-type="overflow").dotted-h=name
+                        if student.isWithdrawn()
+                            div(data-tooltip="Withdrawn").withdrawn
                 .student-name
-                    .max-score.dotted-h
-            each student,i in self.getStudents()
-                name = student.getStudentInfo().getDisplayName()
-                div(row-index=i).student-name
-                    div(data-tooltip=name, data-tooltip-type="overflow").dotted-h=name
-                    if student.isWithdrawn()
-                        div(data-tooltip="Withdrawn").withdrawn
-            .student-name
-                .dotted-h=Msg.Avg
+                    .dotted-h=Msg.Avg
+            if self.isAbleDisplayStudentAverage() || self.isAbleDisplayAlphaGrades()
+                +StudentAverages(self)
         +LeftRightToolbar()(
             style="width:" + self.getTbWidth() + "px",
-            itemClass='grade-container',
+            itemClass='inner-grade-container',
             fixedElementMargin=true,
             fixedElementWidth=false,
             rightPadding=-1,
             elWidth=117
         ).grid-toolbar.i-b.big-arrows
-            if self.isAbleDisplayStudentAverage() || self.isAbleDisplayAlphaGrades()
-                +StudentAverages(self)
             +DisplayTotalPoints(self)
             each announcement in self.getGradingItems()
                 maxScore = announcement.getMaxScore()
-                div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.with-horizontal-dots.announcement-container
+                div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.inner-grade-container.with-horizontal-dots.announcement-container
                     .grading-grid-th
                         +ActionLink('announcement', 'view', announcement.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT)
                             div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()
