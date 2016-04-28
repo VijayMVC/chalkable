@@ -351,7 +351,7 @@ namespace Chalkable.Web.Controllers
                 classNames, person.FirstLoginDate, Context.DistrictTimeZone, ip, Context.SCEnabled);
 
             var time = DateTime.Now.TimeOfDay - startProcessingTime;
-            if (time.Seconds > 3)
+            if (time.Seconds > 5)
             {
                 var message = $"Timeout Error. Teacher.aspx performance time issue. Processing Time {time} \n";
                 var ex = new ChalkableException(message + timeCallBuilder);
