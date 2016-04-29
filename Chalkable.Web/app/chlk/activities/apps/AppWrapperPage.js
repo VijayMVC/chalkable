@@ -13,7 +13,7 @@ NAMESPACE('chlk.activities.apps', function () {
             OVERRIDE, VOID, function onRefresh_(data) {
                 BASE(data);
                 this.dom.find('iframe').$
-                    .css({height: ria.dom.Dom('#main').$.parent().height() - 27*2 + 'px'})
+                    //.css({height: ria.dom.Dom('#main').$.parent().height() - 27*2 + 'px'})
                     .load(function () {
                         this.dom.find('iframe').parent()
                             .removeClass('partial-update');
