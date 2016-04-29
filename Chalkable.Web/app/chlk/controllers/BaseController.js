@@ -16,6 +16,7 @@ REQUIRE('chlk.lib.exception.NoClassAnnouncementTypeException');
 REQUIRE('chlk.lib.exception.AppErrorException');
 REQUIRE('chlk.lib.exception.InvalidPictureException');
 REQUIRE('chlk.lib.exception.ChalkableSisNotSupportVersionException');
+REQUIRE('chlk.lib.exception.FileSizeExceedException');
 
 REQUIRE('chlk.services.UserTrackingService');
 
@@ -233,6 +234,9 @@ NAMESPACE('chlk.controllers', function (){
                        return this.ShowMsgBox('You need to upload valid picture for you app', 'Error', [{
                            text: 'Ok'
                        }], 'center'), null;
+                   }, this)
+                   .catchException(chlk.lib.exception.FileSizeExceedException, function(exception){
+                       return this.ShowMsgBox(exception.getMessage(), 'Error', [{text: 'Ok'}], 'center'), null;
                    }, this)
                    .catchError(this.handleServerError, this);
                return head;

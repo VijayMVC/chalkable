@@ -1335,10 +1335,14 @@ NAMESPACE('chlk.controllers', function (){
 
         function uploadAttachment_(announcementId, file, announcementType, fileIndex){
             var firstModel = new chlk.models.attachment.AnnouncementAttachment(fileIndex, file.size, null, file.name);
-            this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'attachment-progress');
 
-            return this.announcementAttachmentService
+            var res = this.announcementAttachmentService
                 .uploadAttachment(announcementId, [file], announcementType)
+                .catchException(chlk.lib.exception.FileSizeExceedException, function(exception){
+
+                    this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'cancel-attachment-upload');
+                    return this.ShowMsgBox(exception.getMessage(), 'Error', [{text: 'Ok'}], 'center'), null;
+                }, this)
                 .handleProgress(function(event){
                     var model = new chlk.models.attachment.AnnouncementAttachment(fileIndex, event.total, event.loaded, file.name);
                     this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, model, 'attachment-progress');
@@ -1353,6 +1357,9 @@ NAMESPACE('chlk.controllers', function (){
                     attachment.setTotal(file.size);
                     return attachment;
                 }, this);
+
+            this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'attachment-progress');
+            return res;
         },
 
         [[chlk.models.id.AnnouncementId]],
