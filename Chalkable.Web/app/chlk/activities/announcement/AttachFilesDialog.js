@@ -32,20 +32,29 @@ NAMESPACE('chlk.activities.announcement', function () {
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttachmentTpl, 'delete-attachment')],
             VOID, function attachmentDelete(tpl, model, msg_) {
-                this.dom.find('.attachment-file[data-index=' + model.getFileIndex() + ']').remove();
                 var btn = this.dom.find('#add-file-attachment');
 
+                this.removeAttachmentFromProgressBar_(model);
+                var countNode = this.dom.find('.files-count');
+                countNode.setHTML((parseInt(countNode.getText(), 10) - 1).toString());
+            },
+
+            [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttachmentTpl, 'cancel-attachment-upload')],
+            VOID, function cancelAttachmentUpload(tpl, model, msg_){
+               this.removeAttachmentFromProgressBar_(model);
+            },
+
+
+            VOID, function removeAttachmentFromProgressBar_(model){
+                this.dom.find('.attachment-file[data-index=' + model.getFileIndex() + ']').remove();
                 if(this.dom.find('#is-for-attribute').getValue()){
                     btn.removeAttr('disabled');
                     btn.setProp('disabled', false);
                     btn.parent('.for-attribute').removeClass('disabled-upload');
                     btn.parent('.upload-button').addClass('enabled');
                 }
-
                 btn.setValue('');
 
-                var countNode = this.dom.find('.files-count');
-                countNode.setHTML((parseInt(countNode.getText(), 10) - 1).toString());
             },
 
             [ria.mvc.PartialUpdateRule(chlk.templates.announcement.AnnouncementAttachmentTpl, chlk.activities.lib.DontShowLoader())],

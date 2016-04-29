@@ -10,6 +10,7 @@ REQUIRE('chlk.lib.exception.ChalkableSisException');
 REQUIRE('chlk.lib.exception.NoAnnouncementException');
 REQUIRE('chlk.lib.exception.NoClassAnnouncementTypeException');
 REQUIRE('chlk.lib.exception.ChalkableSisNotSupportVersionException');
+REQUIRE('chlk.lib.exception.FileSizeExceedException');
 
 NAMESPACE('chlk.services', function () {
     "use strict";
@@ -142,11 +143,23 @@ NAMESPACE('chlk.services', function () {
 
             [[String, Object, Object, Object]],
             ria.async.Future, function uploadFiles(uri, files, clazz_, gParams_) {
-                return new chlk.lib.ajax.UploadFileTask(this.resolveUri(uri), files)
+                var validateResult = this.validateFiles_(files)
+                return validateResult ||  new chlk.lib.ajax.UploadFileTask(this.resolveUri(uri), files)
                     .params(gParams_ || {})
                     .requestHeaders(this.prepareDefaultHeaders({}))
                     .run()
                     .then(this.getResponseProcessor_(clazz_));
+            },
+
+            ria.async.Future, function validateFiles_(files){
+                var maxFileMbSize = 50;
+                var maxFileSize = maxFileMbSize*1024*1024;
+                var filesCount = files.filter(function(file){return file.size > maxFileSize;}).length;
+                if(filesCount <= 0) return null;
+                return new ria.async.DeferredData(null)
+                        .then(function(data){
+                            throw chlk.lib.exception.FileSizeExceedException('File exceed size limit ' + maxFileMbSize + ' MB');
+                        })
             },
 
             [[String, Object, Object]],
