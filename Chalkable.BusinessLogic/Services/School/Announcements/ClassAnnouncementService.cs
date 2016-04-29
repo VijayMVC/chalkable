@@ -396,14 +396,22 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public ClassAnnouncement DropUnDropAnnouncement(int announcementId, bool drop)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             using (var uow = Update())
             {
                 var da = CreateClassAnnouncementDataAccess(uow);
-                var ann = da.GetById(announcementId);
+                var ann = da.GetAnnouncement(announcementId, Context.PersonId.Value);
+                if (ann.SisActivityId == null)
+                    return null;
+                var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
+                if (activity == null || !activity.MayBeDropped)
+                    return null;
                 AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
                 ann.Dropped = drop;
                 da.Update(ann);
                 uow.Commit();
+                activity.IsDropped = drop;
+                ConnectorLocator.ActivityConnector.UpdateActivity(ann.SisActivityId.Value, activity);
                 return ann;
             }
         }
