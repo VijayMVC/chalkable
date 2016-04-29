@@ -1341,7 +1341,7 @@ NAMESPACE('chlk.controllers', function (){
                 .catchException(chlk.lib.exception.FileSizeExceedException, function(exception){
 
                     this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'cancel-attachment-upload');
-                    return this.ShowMsgBox(exception.getMessage(), 'Error', [{text: 'Ok'}], 'center'), null;
+                    return this.ShowMsgBox(exception.getMessage(), 'Error', [{text: 'Ok'}], 'center').thenBreak();
                 }, this)
                 .handleProgress(function(event){
                     var model = new chlk.models.attachment.AnnouncementAttachment(fileIndex, event.total, event.loaded, file.name);

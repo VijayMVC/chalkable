@@ -236,7 +236,7 @@ NAMESPACE('chlk.controllers', function (){
                        }], 'center'), null;
                    }, this)
                    .catchException(chlk.lib.exception.FileSizeExceedException, function(exception){
-                       return this.ShowMsgBox(exception.getMessage(), 'Error', [{text: 'Ok'}], 'center'), null;
+                       return this.ShowMsgBox(exception.getMessage(), 'Error', [{text: 'Ok'}], 'center').thenBreak();
                    }, this)
                    .catchError(this.handleServerError, this);
                return head;
