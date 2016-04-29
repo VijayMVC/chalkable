@@ -402,16 +402,16 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 var da = CreateClassAnnouncementDataAccess(uow);
                 var ann = da.GetAnnouncement(announcementId, Context.PersonId.Value);
                 if (ann.SisActivityId == null)
-                    return null;
+                    return ann;
                 var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
                 if (activity == null || !activity.MayBeDropped)
-                    return null;
+                    return ann;
                 AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
                 ann.Dropped = drop;
                 da.Update(ann);
-                uow.Commit();
                 activity.IsDropped = drop;
                 ConnectorLocator.ActivityConnector.UpdateActivity(ann.SisActivityId.Value, activity);
+                uow.Commit();
                 return ann;
             }
         }
