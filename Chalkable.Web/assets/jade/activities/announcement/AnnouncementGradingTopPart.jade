@@ -16,6 +16,11 @@ autoCount = self.getAutoGradeCount()
                     +Hidden('showToStudents', self.isShowToStudents()).show-grades-input
                     +Hidden('announcementId', self.getAnnouncementId())
 
+.section
+    +ActionForm('announcement', 'setAnnouncementDropped')
+        +Hidden('announcementId', self.getAnnouncementId())
+        span Drop:
+        +SlideCheckbox("dropped", self.isDropped(), !self.isAbleDropStudentScore(), !self.isAbleDropStudentScore()).drop-unDrop-checkbox
 
 if self.isLEIntegrated()
     .section

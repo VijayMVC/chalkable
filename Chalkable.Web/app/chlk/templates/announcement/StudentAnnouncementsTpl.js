@@ -51,6 +51,9 @@ NAMESPACE('chlk.templates.announcement', function () {
 
             chlk.models.id.ClassId, 'classId',
 
+            Boolean, 'ableDropStudentScore',
+            Boolean, 'dropped',
+
             Number, function getAutoGradeCount(){
                 return (this.getItems() || []).filter(function(item){
                     return item.getState() == 0;
