@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Documant Upload";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@section bodyscripts
+{
+    <script type="text/javascript">
+        
+        $("#upload-sample-app-document").click(function (e) {
+            e.preventDefault();
+            $("#upload-sample-app-form").submit();
+        });
+
+        function displayUploadMsg(data) {
+            var rslt = $.parseJSON(data);
+            if (rslt.success) {
+                $("#upload-sample-app-form #upload-res").text("Upload successfuly complete");
+            }
+            else {
+                $("#upload-sample-app-form #upload-res").text("Upload faild : " + rslt.message);
+            }
+        }
+    </script>
+}
+
+
+<div class="upload-document">
+    @using (Ajax.BeginForm("Upload", "Document", new AjaxOptions {HttpMethod = "POST", OnComplete = "displayUploadMsg"}, new {enctype = "multipart/form-data", id = "upload-sample-app-form"}))
+    {
+        <input type="hidden" name="announcementId" value="@ViewBag.AnnouncementId">
+        <input type="hidden" name="announcementType" value="@ViewBag.AnnouncementType">
+        <input type="hidden" name="attributeId" value="@ViewBag.AttributeId">
+
+        <fieldset>
+            <legend>Upload Image</legend>
+
+            Upload File: <input type="file" multiple="multiple" name="Test file"/>
+            <p>
+                <input id="upload-sample-app-document" type="submit" value="Upload"/>
+            </p>
+            <div Id="upload-res"> </div>
+        </fieldset>
+    }
+</div>
+
+
+
