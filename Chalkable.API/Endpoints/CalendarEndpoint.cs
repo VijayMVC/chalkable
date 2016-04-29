@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Chalkable.API.Endpoints
@@ -16,6 +13,12 @@ namespace Chalkable.API.Endpoints
         {
             var url = "/Calendar/IsSchoolDay";
             return await Connector.Get<bool>($"{url}?dateTime={dateTime}");
+        }
+
+        public async Task<int> SchoolDaysCount(DateTime fromDate, DateTime toDate)
+        {
+            var url = "/Calendar/SchoolDaysCount";
+            return await Connector.Get<int>($"{url}?fromDate={fromDate}&toDate={toDate}");
         }
     } 
 }
