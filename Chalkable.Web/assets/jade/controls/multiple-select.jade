@@ -1,0 +1,8 @@
+mixin MultipleSelect(emptyText, name, prefix)
+    prefix = prefix || ''
+    div(attributes).chlk-multiple-select
+        a
+            div(data-placeholder=emptyText).chlk-multiple-select-text=emptyText
+            .chlk-multiple-triangle
+         +CheckboxList(name, prefix, '').chlk-multiple-select-list
+            block
