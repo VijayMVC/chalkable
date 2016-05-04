@@ -24,7 +24,7 @@ class TestFeed(BaseAuthedTestCase):
                     print "date_in_correct_format", date_in_correct_format
 
                     get_class_list = self.get('/Attendance/SeatingChart.json?' +
-                                              'classId=' + str(13915) +
+                                              'classId=' + str(13806) +
                                               '&date=' + '05-06-2015')
                     get_data = get_class_list['data']
 
@@ -41,9 +41,9 @@ class TestFeed(BaseAuthedTestCase):
                                 if one_student['personid'] != 0:
                                     list_for_students.append(one_student['personid'])
                         else:
-                            self.postJSON('/Attendance/PostSeatingChart.json', {"seatingChartInfo":{"rows":2,"columns":3,"classId":str(13915),"seatingList":[[{"row":1,"column":1,"index":1},{"row":1,"column":2,"index":2},{"row":1,"column":3,"index":3}],[{"row":2,"column":1,"index":3},{"row":2,"column":2,"index":4},{"row":2,"column":3,"index":5}]]},"date":'05-06-2015',"needInfo":True})
+                            self.postJSON('/Attendance/PostSeatingChart.json', {"seatingChartInfo":{"rows":2,"columns":3,"classId":str(13806),"seatingList":[[{"row":1,"column":1,"index":1},{"row":1,"column":2,"index":2},{"row":1,"column":3,"index":3}],[{"row":2,"column":1,"index":3},{"row":2,"column":2,"index":4},{"row":2,"column":3,"index":5}]]},"date":'05-06-2015',"needInfo":True})
                             get_class_list = self.get('/Attendance/SeatingChart.json?' +
-                                                                  'classId=' + str(13915) +
+                                                                  'classId=' + str(13806) +
                                                                   '&date=' + '05-06-2015')
                             get_data = get_class_list['data']
 
@@ -79,7 +79,7 @@ class TestFeed(BaseAuthedTestCase):
                                                       "studentId": None})
                             list_3.append(list_for_dict_2)
 
-                        seatingChartInfo = {"classId": str(13915), 'columns': columns, 'rows': rows, 'seatingList': list_3}
+                        seatingChartInfo = {"classId": str(13806), 'columns': columns, 'rows': rows, 'seatingList': list_3}
                         data = {"needInfo": False, "date": '05-06-2015', "seatingChartInfo": seatingChartInfo}
                         self.postJSON('/Attendance/PostSeatingChart.json', data)
 
@@ -98,13 +98,13 @@ class TestFeed(BaseAuthedTestCase):
 
                             list_2.append(list_for_dict)
 
-                        seatingChartInfo_2 = {"classId":str(13915), 'columns':columns, 'rows':rows, 'seatingList': list_2}
+                        seatingChartInfo_2 = {"classId":str(13806), 'columns':columns, 'rows':rows, 'seatingList': list_2}
                         data_2 = {"needInfo": False, "date": '05-06-2015', "seatingChartInfo": seatingChartInfo_2}
                         self.postJSON('/Attendance/PostSeatingChart.json', data_2)
 
 ### verify that data is correct
                     get_class_list_2 = self.get('/Attendance/SeatingChart.json?' +
-                                                  'classId=' + str(13915) +
+                                                  'classId=' + str(13806) +
                                                   '&date=' + '05-06-2015')
 
                     get_data_2 = get_class_list_2['data']
@@ -129,7 +129,7 @@ class TestFeed(BaseAuthedTestCase):
                                     date_in_cycle = datetime.strptime(str(j_columns_2['info']['date']),
                                                                       '%Y-%m-%d').strftime('%m-%d-%Y')
                                     print date_in_cycle
-                                    self.assertTrue (j_columns_2['info']['classid'] == 13915)
+                                    self.assertTrue (j_columns_2['info']['classid'] == 13806)
                                     print "j_columns_2['info']['date']", j_columns_2['info']['date']
                                     #self.assertTrue (j_columns_2['info']['date'] == date_in_cycle)
                                     self.assertTrue (date_in_cycle == '05-06-2015')
