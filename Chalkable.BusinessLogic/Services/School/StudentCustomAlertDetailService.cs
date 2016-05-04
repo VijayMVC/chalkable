@@ -43,6 +43,10 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<StudentCustomAlertDetail> GetList(int studentId)
         {
             Trace.Assert(Context.SchoolYearId.HasValue);
+
+            if (BaseSecurity.IsStudent(Context))
+                return new List<StudentCustomAlertDetail>();
+
             return DoRead(u => new DataAccessBase<StudentCustomAlertDetail>(u).GetAll(new AndQueryCondition
             {
                 {nameof(StudentCustomAlertDetail.StudentRef), studentId},

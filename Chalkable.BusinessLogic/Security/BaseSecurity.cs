@@ -53,6 +53,12 @@ namespace Chalkable.BusinessLogic.Security
         {
             return context.Role == CoreRoles.TEACHER_ROLE;
         }
+
+        public static bool IsStudent(UserContext context)
+        {
+            return context.Role == CoreRoles.STUDENT_ROLE;
+        }
+
         public static void EnsureTeacher(UserContext context)
         {
             if(!IsTeacher(context))

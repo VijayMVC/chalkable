@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.Remoting.Contexts;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Model.Attendances;
 using Chalkable.Data.School.Model;
@@ -39,22 +40,42 @@ namespace Chalkable.Web.Models.PersonViewDatas
         }
 
         public static StudentSummaryViewData Create(StudentSummaryInfo studentSummary, Room room,  ClassDetails currentClass, IList<ClassDetails> classes
-            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions)
+            , IList<StudentCustomAlertDetail> customAlerts, IList<StudentHealthCondition> healthConditions, bool isStudent = false)
         {
             var res = new StudentSummaryViewData(studentSummary.StudentInfo, room, customAlerts, healthConditions)
-                {
-                    ClassesSection = ClassViewData.Create(classes),
-                    AttendanceBox = StudentHoverBoxViewData<TotalAbsencesPerClassViewData>.Create(studentSummary.DailyAttendance, studentSummary.Attendances, classes),
-                    DisciplineBox = StudentHoverBoxViewData<DisciplineTypeSummaryViewData>.Create(studentSummary.InfractionSummaries, studentSummary.TotalDisciplineOccurrences),
-                    GradesBox = StudentHoverBoxViewData<StudentSummaryGradeViewData>.Create(studentSummary.StudentAnnouncements),
-                    RanksBox = studentSummary.ClassRank != null ? StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(studentSummary.ClassRank) : null,
-                };
-            res.CurrentClassName = NO_CLASS_SCHEDULED;
+            {
+                ClassesSection = ClassViewData.Create(classes),
+                AttendanceBox =
+                    StudentHoverBoxViewData<TotalAbsencesPerClassViewData>.Create(studentSummary.DailyAttendance,
+                        studentSummary.Attendances, classes),
+                DisciplineBox =
+                    StudentHoverBoxViewData<DisciplineTypeSummaryViewData>.Create(studentSummary.InfractionSummaries,
+                        studentSummary.TotalDisciplineOccurrences),
+                GradesBox =
+                    StudentHoverBoxViewData<StudentSummaryGradeViewData>.Create(studentSummary.StudentAnnouncements),
+                RanksBox =
+                    studentSummary.ClassRank != null
+                        ? StudentHoverBoxViewData<StudentSummeryRankViewData>.Create(studentSummary.ClassRank)
+                        : null,
+                CurrentClassName = NO_CLASS_SCHEDULED,
+            };
             if (currentClass != null)
                 res.CurrentClassName = currentClass.Name;
 
             res.CurrentAttendanceLevel = studentSummary.CurrentAttendanceLevel;
+
+            if(isStudent)
+                ClearAlertsForStudent(res);
+
             return res;
+        }
+
+        private static void ClearAlertsForStudent(StudentSummaryViewData vData)
+        {
+            vData.HasMedicalAlert = false;
+            vData.SpEdStatus = null;
+            vData.SpecialInstructions = null;
+            vData.IsAllowedInetAccess = false;
         }
     }
 

@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.School.Model;
@@ -46,24 +47,14 @@ namespace Chalkable.Web.Controllers.PersonControllers
             if (studentSummaryInfo.CurrentSectionId.HasValue)
             {
                 currentClass = classes.FirstOrDefault(x => x.Id == studentSummaryInfo.CurrentSectionId.Value);
-                if (currentClass != null && currentClass.RoomRef.HasValue)
+                if (currentClass?.RoomRef != null)
                     currentRoom = SchoolLocator.RoomService.GetRoomById(currentClass.RoomRef.Value);
             }
             
-            IList<StudentHealthCondition> studentHealths = null;
-            if (Context.Role == CoreRoles.STUDENT_ROLE)
-            {
-                studentSummaryInfo.StudentInfo.IsAllowedInetAccess = false;
-                studentSummaryInfo.StudentInfo.SpecialInstructions = null;
-                studentSummaryInfo.StudentInfo.HasMedicalAlert = false;
-                studentSummaryInfo.StudentInfo.SpEdStatus = null;
-            }
-            else
-            {
-                studentHealths = SchoolLocator.StudentService.GetStudentHealthConditions(schoolPersonId);
-            }
+            var studentHealths = SchoolLocator.StudentService.GetStudentHealthConditions(schoolPersonId);
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(schoolPersonId);
-            var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList, customAlerts, studentHealths);
+            
+            var res = StudentSummaryViewData.Create(studentSummaryInfo, currentRoom, currentClass, classList, customAlerts, studentHealths, BaseSecurity.IsStudent(Context));
             return Json(res);
         }
         
