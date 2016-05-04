@@ -37,11 +37,22 @@ namespace Chalkable.Tests
                 ServerName = "edjb0d1a0ab363747abbc2ee.database.windows.net",
                 Username = "chalkadmin@edjb0d1a0ab363747abbc2ee"
             };
-
             var elasticJobs = CreateAzureSqlJobClient(creds);
-
-            await elasticJobs.JobExecutions.CancelJobExecutionAsync(Guid.Parse("2434d48c-4a03-46b1-a104-5d9db1355453"));
-            await elasticJobs.JobExecutions.CancelJobExecutionAsync(Guid.Parse("62a7d8ac-3abd-49f4-bbaf-00efd6705769"));
+            var id = Guid.Parse("ADD673E6-E46F-4103-A5FD-BBCCD9D74AA0");
+            //var id = Guid.Parse("D79231A9-9F15-4B60-BC56-2F0B6D766890");
+            var children = await elasticJobs.JobExecutions
+                .ListJobExecutionsAsync(new JobExecutionFilter()
+                {
+                    ParentJobExecutionId = id
+                });
+            foreach (var jobExecutionInfo in children)
+            {
+                await elasticJobs.JobExecutions.CancelJobExecutionAsync(jobExecutionInfo.JobExecutionId);
+            }
+            
+            //            await elasticJobs.JobExecutions.CancelJobExecutionAsync(Guid.Parse("D79231A9-9F15-4B60-BC56-2F0B6D766890"));
+            await elasticJobs.JobExecutions.CancelJobExecutionAsync(id);
+            
         }
 
         [Test]
@@ -148,6 +159,35 @@ namespace Chalkable.Tests
             BackgroundTaskService.BackgroundTaskLog log = new BackgroundTaskService.BackgroundTaskLog(id, 10);
             var data = DatabaseDacPacUpdateTaskData.FromString("{\"DacPacName\":\"0-7-1d38ca879106-2321\",\"MasterDacPacUri\":\"https://chalkablestat.blob.core.windows.net/artifacts-db/0-7-1d38ca879106-2321/Chalkable.Database.Master.dacpac\",\"SchoolDacPacUri\":\"https://chalkablestat.blob.core.windows.net/artifacts-db/0-7-1d38ca879106-2321/Chalkable.Database.School.dacpac\",\"ServerName\":\"edjb0d1a0ab363747abbc2ee.database.windows.net\",\"DatabaseName\":\"edjb0d1a0ab363747abbc2ee\",\"Username\":\"chalkadmin@edjb0d1a0ab363747abbc2ee\",\"Password\":\"Hellowebapps1!\"}");
             DatabaseDacPacUpdateTaskHandler.Test(creds, log, data).Wait();
+        }
+
+        [Test]
+        public async void TestJobExecutionTaskList()
+        {
+            AzureSqlJobCredentials creds = new AzureSqlJobCredentials()
+            {
+                DatabaseName = "edjb0d1a0ab363747abbc2ee",
+                Password = "Hellowebapps1!",
+                ServerName = "edjb0d1a0ab363747abbc2ee.database.windows.net",
+                Username = "chalkadmin@edjb0d1a0ab363747abbc2ee"
+            };
+            var elasticJobs = CreateAzureSqlJobClient(creds);
+            var id = Guid.Parse("ADD673E6-E46F-4103-A5FD-BBCCD9D74AA0");
+            /*var children = await elasticJobs.JobExecutions
+                .ListJobExecutionsAsync(new JobExecutionFilter()
+                {
+                    ParentJobExecutionId = id
+                });*/
+            var te = await elasticJobs.JobTaskExecutions.ListJobTaskExecutions(id);
+            foreach (var info in te)
+            {
+                Debug.WriteLine($"{info.JobTaskExecutionId} {info.Lifecycle}");
+            }
+
+            /*foreach (var jobExecutionInfo in children)
+            {
+                
+            }*/
         }
     }
 }
