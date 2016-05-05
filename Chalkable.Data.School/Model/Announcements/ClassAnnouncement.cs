@@ -24,6 +24,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public const int DEFAULT_MAX_SCORE = 100;
         public const int DEFAULT_WEIGHT_ADDITION = 0;
         public const int DEFAULT_WEGIHT_MULTIPLIER = 1;
+        public const bool DEFAULT_IS_SCORED = true;
 
         public DateTime Expires { get; set; }
         public int? ClassAnnouncementTypeRef { get; set; }
@@ -38,6 +39,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public decimal? WeightMultiplier { get; set; }
         public bool VisibleForStudent { get; set; }
         public bool MayBeDropped { get; set; }
+        public bool IsScored { get; set; }
 
         [NotDbFieldAttr]
         public override bool IsSubmitted => SisActivityId.HasValue && base.IsSubmitted;
@@ -54,8 +56,6 @@ namespace Chalkable.Data.School.Model.Announcements
 
         [NotDbFieldAttr]
         public bool MayBeExempt { get; set; }
-        [NotDbFieldAttr]
-        public bool IsScored { get; set; }
         [NotDbFieldAttr]
         public int PrimaryTeacherRef { get; set; }
         [NotDbFieldAttr]

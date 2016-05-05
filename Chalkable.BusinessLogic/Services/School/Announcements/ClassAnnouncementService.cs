@@ -14,6 +14,7 @@ using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
+using ClassroomOption = Chalkable.Data.School.Model.ClassroomOption;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
@@ -202,7 +203,24 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     throw new ChalkableException("Invalid Class Announcement type id");
                 ann.ClassAnnouncementTypeRef = inputAnnData.ClassAnnouncementTypeId.Value;
                 ann.MaxScore = inputAnnData.MaxScore;
-                ann.IsScored = inputAnnData.MaxScore > 0;
+
+                //TODO:REMOVE
+                if (inputAnnData.MaxScore == null || inputAnnData.MaxScore == 0)
+                    inputAnnData.IsScored = false;
+                if(inputAnnData.MaxScore > 0)
+                    inputAnnData.IsScored = true;
+                //TODO:REMOVE
+
+                if ((inputAnnData.IsScored && inputAnnData.MaxScore == 0) || (!inputAnnData.IsScored && inputAnnData.MaxScore == null))
+                {
+                    var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
+                    if(classRoomOption.AveragingMethod != ClassroomOption.AVERAGE_METHOD_POINTS)
+                        throw new ChalkableException("Unable to set the data in the field and IsScored and MaxScore because you don't have appropriate averange method option!");
+                    ann.IsScored = inputAnnData.IsScored;
+                }
+                else
+                    ann.IsScored = ann.MaxScore > 0;
+                
                 ann.WeightAddition = inputAnnData.WeightAddition;
                 ann.WeightMultiplier = inputAnnData.WeightMultiplier;
                 ann.MayBeDropped = inputAnnData.CanDropStudentScore;
@@ -244,7 +262,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                             }
                         });
                 }
-
                 MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
                 ConnectorLocator.ActivityConnector.UpdateActivity(ann.SisActivityId.Value, activity);
 
@@ -388,7 +405,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 else
                 {
                     var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(classAnnouncement.ClassAnnouncementTypeName);
-                    classAnnouncement.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?)null;
+                    classAnnouncement.ChalkableAnnouncementType = chlkAnnType?.Id;
                 }
             }
             return classAnnouncement;

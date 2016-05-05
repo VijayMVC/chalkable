@@ -185,7 +185,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         protected override ClassAnnouncement ReadAnnouncementData(AnnouncementComplex announcement, SqlDataReader reader)
         {
             var res = reader.Read<ClassAnnouncement>();
-            res.IsScored = res.MaxScore > 0;
             return res;
         }
 

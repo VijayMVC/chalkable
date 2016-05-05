@@ -23,7 +23,7 @@ namespace Chalkable.BusinessLogic.Mapping.ModelMappers
             MapperFactory.GetMapper<Announcement, Activity>().Map(ann, activity);
             ann.MayBeExempt = activity.MayBeExempt;
             ann.IsScored = activity.IsScored;
-            ann.MaxScore = activity.MaxScore ?? 0;
+            ann.MaxScore = activity.MaxScore;
             ann.ClassRef = activity.SectionId;
             ann.Expires = activity.Date;
             ann.MayBeDropped = activity.MayBeDropped;

@@ -15,6 +15,7 @@
 	[WeightAddition] [decimal](9, 6) NULL,
 	[WeightMultiplier] [decimal](9, 6) NULL,
 	[VisibleForStudent] [bit] NULL,
-	[MayBeDropped] [bit] NULL
+	[MayBeDropped] [bit] NULL,
+	[IsScored] [bit] NOT NULL
 )
 GO
