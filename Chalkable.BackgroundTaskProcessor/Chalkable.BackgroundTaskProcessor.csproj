@@ -173,7 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AttendanceNotificationTaskHandler.cs" />
-    <Compile Include="DatabaseDacPacUpdateTaskHandler.cs" />
+    <Compile Include="DatabaseDacPacUpdate\DatabaseDacPacUpdateTaskHandler.cs" />
     <Compile Include="DeleteSchoolTaskHandler.cs" />
     <Compile Include="Parallel\AllSchoolRunner.cs" />
     <Compile Include="BackupTaskHandler.cs" />
