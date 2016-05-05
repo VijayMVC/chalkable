@@ -2,122 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
-using Chalkable.Data.Common;
 using Chalkable.Data.Master.Model;
 using Microsoft.Azure.SqlDatabase.Jobs.Client;
 
-namespace Chalkable.BackgroundTaskProcessor
+namespace Chalkable.BackgroundTaskProcessor.DatabaseDacPacUpdate
 {
-    public class AzureSqlJobCredentials
-    {
-        public string ServerName { get; set; }
-        public string DatabaseName { get; set; }
-        public string Username { get; set; }
-        public string Password { get; set; }
-    }
-
-    public class JobExecutionStat
-    {
-        public string Lifecycle { get; set; }
-
-        public int Count { get; set; }
-    }
-
-    public class JobTaskExecution
-    {
-        public Guid JobTaskExecutionId { get; set; }
-        public DateTime? EndTime { get; set; }
-        public string Message { get; set; }
-    }
-
-    public class JobStatHelper
-    {
-        private string dbName;
-        private string serverUrl;
-        private string userName;
-        private string password;
-
-        public JobStatHelper(AzureSqlJobCredentials creds)
-        {
-            dbName = creds.DatabaseName;
-            serverUrl = creds.ServerName;
-            userName = creds.Username;
-            password = creds.Password;
-        }
-
-        private string ConnectionString
-        {
-            get { return $"Data Source={serverUrl};Initial Catalog={dbName};UID={userName};Pwd={password}"; }
-        }
-        public IList<JobExecutionStat> GetChilderJobExecutionStat(string dacpackName)
-        {
-            string sql = $@"select 
-	__ElasticDatabaseJob.JobExecution.Lifecycle, count(*) as [Count] 
-from 
-	__ElasticDatabaseJob.Job 
-	join __ElasticDatabaseJob.JobExecution on __ElasticDatabaseJob.Job.LastJobExecution_JobExecutionId = __ElasticDatabaseJob.JobExecution.ParentJobExecutionId
-	--join __ElasticDatabaseJob.JobTaskExecution on __ElasticDatabaseJob.JobExecution.JobExecutionId = __ElasticDatabaseJob.JobTaskExecution.JobExecutionId
-where 
-	name = '{dacpackName}'
-group by
-	__ElasticDatabaseJob.JobExecution.Lifecycle
-";
-            using (var uow = new UnitOfWork(ConnectionString, false))
-            {
-                var cmd = uow.GetTextCommand(sql);
-                using (var reader = cmd.ExecuteReader())
-                {
-                    var result = reader.ReadList<JobExecutionStat>();
-                    return result;
-                }
-            }
-        }
-
-        public IList<JobTaskExecution> GetJobTaskExecutions(string dacpackName, DateTime? endAfter, DateTime? endBefore)
-        {
-            var sql = new StringBuilder();
-            sql.Append(@"select 
-	__ElasticDatabaseJob.JobTaskExecution.JobTaskExecutionId,
-	__ElasticDatabaseJob.JobTaskExecution.EndTime,
-	__ElasticDatabaseJob.JobTaskExecution.[Message]
-from 
-	__ElasticDatabaseJob.Job 
-	join __ElasticDatabaseJob.JobExecution on __ElasticDatabaseJob.Job.LastJobExecution_JobExecutionId = __ElasticDatabaseJob.JobExecution.ParentJobExecutionId
-	join __ElasticDatabaseJob.JobTaskExecution on __ElasticDatabaseJob.JobExecution.JobExecutionId = __ElasticDatabaseJob.JobTaskExecution.JobExecutionId
-where 
-	name = @name	
-	and __ElasticDatabaseJob.JobTaskExecution.[Message] is not null ");
-            if (endAfter.HasValue)
-                sql.Append("and __ElasticDatabaseJob.JobTaskExecution.EndTime > @endAfter ");
-            if (endBefore.HasValue)
-                sql.Append("and __ElasticDatabaseJob.JobTaskExecution.EndTime < @endBefore ");
-
-            IDictionary<string, object> ps = new Dictionary<string, object>
-            {
-                {"name", dacpackName},
-                {"endAfter", endAfter},
-                {"endBefore", endBefore} 
-            };
-            using (var uow = new UnitOfWork(ConnectionString, false))
-            {
-                var cmd = uow.GetTextCommandWithParams(sql.ToString(), ps);
-                using (var reader = cmd.ExecuteReader())
-                {
-                    var result = reader.ReadList<JobTaskExecution>();
-                    return result;
-                }
-            }
-        } 
-    }
-
-    
-
     public class DatabaseDacPacUpdateTaskHandler : ITaskHandler
     {
         class DatabaseTarget

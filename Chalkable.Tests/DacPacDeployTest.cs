@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security;
 using Chalkable.BackgroundTaskProcessor;
+using Chalkable.BackgroundTaskProcessor.DatabaseDacPacUpdate;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
