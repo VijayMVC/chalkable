@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security;
 using Chalkable.BackgroundTaskProcessor;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Microsoft.Azure.SqlDatabase.Jobs.Client;
 using NUnit.Framework;
@@ -171,23 +172,24 @@ namespace Chalkable.Tests
                 ServerName = "edjb0d1a0ab363747abbc2ee.database.windows.net",
                 Username = "chalkadmin@edjb0d1a0ab363747abbc2ee"
             };
-            var elasticJobs = CreateAzureSqlJobClient(creds);
-            var id = Guid.Parse("ADD673E6-E46F-4103-A5FD-BBCCD9D74AA0");
-            /*var children = await elasticJobs.JobExecutions
-                .ListJobExecutionsAsync(new JobExecutionFilter()
-                {
-                    ParentJobExecutionId = id
-                });*/
-            var te = await elasticJobs.JobTaskExecutions.ListJobTaskExecutions(id);
-            foreach (var info in te)
-            {
-                Debug.WriteLine($"{info.JobTaskExecutionId} {info.Lifecycle}");
-            }
+            
 
-            /*foreach (var jobExecutionInfo in children)
+
+            JobStatHelper helper = new JobStatHelper(creds);
+            var name = "Apply DACPAC 0-7-8298f0c72525-2414-school 9486d68d-3381-47e3-877d-2c36e63de9ff";
+            var l = helper.GetChilderJobExecutionStat(name);
+            var s = l.Select(x => x.Lifecycle + " " + x.Count).JoinString("\n");
+            Debug.WriteLine(s);
+
+            var from = new DateTime(2016, 05, 01, 18, 03, 39);
+            var to = new DateTime(2016, 05, 01, 18, 08, 44);
+            //2016-04-30 21:57:18.8255537
+            //2016-04-30 22:08:44.2705255
+            var te = helper.GetJobTaskExecutions(name, from, to);
+            foreach (var jobTaskExecution in te)
             {
-                
-            }*/
+                Debug.WriteLine(jobTaskExecution.EndTime.ToString() + " " + jobTaskExecution.Message);
+            }
         }
     }
 }

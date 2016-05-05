@@ -60,6 +60,23 @@ namespace Chalkable.BusinessLogic.Services.Master
             private const int MAX_MSG_LEN = (1 << 16) - 1;
             public void Log(int level, string message)
             {
+                LogWithoutFlush(level, message);
+                if (items.Count >= flushSize)
+                    Flush();
+            }
+
+            public void Log(int level, IEnumerable<string> messages)
+            {
+                foreach (var message in messages)
+                {
+                    LogWithoutFlush(level, message);
+                }
+                if (items.Count >= flushSize)
+                    Flush();
+            }
+
+            private void LogWithoutFlush(int level, string message)
+            {
                 if (message == null)
                     message = "[null]";
                 if (message.Length > MAX_MSG_LEN)
@@ -69,20 +86,23 @@ namespace Chalkable.BusinessLogic.Services.Master
                 }
                 var now = DateTime.UtcNow;
                 items.Add(new BackgroundTaskLogItem
-                    {
-                        BackgroundTaskId = backgroundTaskId,
-                        RowKey = now.Ticks + "-" + Guid.NewGuid(),
-                        Message = message,
-                        Level = level,
-                        Time = now
-                    });
-                if (items.Count >= flushSize)
-                    Flush();
+                {
+                    BackgroundTaskId = backgroundTaskId,
+                    RowKey = now.Ticks + "-" + Guid.NewGuid(),
+                    Message = message,
+                    Level = level,
+                    Time = now
+                });
             }
 
             public void LogInfo(string message)
             {                
                 Log(LEVEL_INFO, message);
+            }
+
+            public void LogInfo(IEnumerable<string> messages)
+            {
+                Log(LEVEL_INFO, messages);
             }
 
             public void LogWarning(string message)

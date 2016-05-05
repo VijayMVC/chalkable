@@ -2,11 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Services;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
+using Chalkable.Data.Common;
 using Chalkable.Data.Master.Model;
 using Microsoft.Azure.SqlDatabase.Jobs.Client;
 
@@ -18,6 +20,100 @@ namespace Chalkable.BackgroundTaskProcessor
         public string DatabaseName { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+    }
+
+    public class JobExecutionStat
+    {
+        public string Lifecycle { get; set; }
+
+        public int Count { get; set; }
+    }
+
+    public class JobTaskExecution
+    {
+        public Guid JobTaskExecutionId { get; set; }
+        public DateTime? EndTime { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class JobStatHelper
+    {
+        private string dbName;
+        private string serverUrl;
+        private string userName;
+        private string password;
+
+        public JobStatHelper(AzureSqlJobCredentials creds)
+        {
+            dbName = creds.DatabaseName;
+            serverUrl = creds.ServerName;
+            userName = creds.Username;
+            password = creds.Password;
+        }
+
+        private string ConnectionString
+        {
+            get { return $"Data Source={serverUrl};Initial Catalog={dbName};UID={userName};Pwd={password}"; }
+        }
+        public IList<JobExecutionStat> GetChilderJobExecutionStat(string dacpackName)
+        {
+            string sql = $@"select 
+	__ElasticDatabaseJob.JobExecution.Lifecycle, count(*) as [Count] 
+from 
+	__ElasticDatabaseJob.Job 
+	join __ElasticDatabaseJob.JobExecution on __ElasticDatabaseJob.Job.LastJobExecution_JobExecutionId = __ElasticDatabaseJob.JobExecution.ParentJobExecutionId
+	--join __ElasticDatabaseJob.JobTaskExecution on __ElasticDatabaseJob.JobExecution.JobExecutionId = __ElasticDatabaseJob.JobTaskExecution.JobExecutionId
+where 
+	name = '{dacpackName}'
+group by
+	__ElasticDatabaseJob.JobExecution.Lifecycle
+";
+            using (var uow = new UnitOfWork(ConnectionString, false))
+            {
+                var cmd = uow.GetTextCommand(sql);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    var result = reader.ReadList<JobExecutionStat>();
+                    return result;
+                }
+            }
+        }
+
+        public IList<JobTaskExecution> GetJobTaskExecutions(string dacpackName, DateTime? endAfter, DateTime? endBefore)
+        {
+            var sql = new StringBuilder();
+            sql.Append(@"select 
+	__ElasticDatabaseJob.JobTaskExecution.JobTaskExecutionId,
+	__ElasticDatabaseJob.JobTaskExecution.EndTime,
+	__ElasticDatabaseJob.JobTaskExecution.[Message]
+from 
+	__ElasticDatabaseJob.Job 
+	join __ElasticDatabaseJob.JobExecution on __ElasticDatabaseJob.Job.LastJobExecution_JobExecutionId = __ElasticDatabaseJob.JobExecution.ParentJobExecutionId
+	join __ElasticDatabaseJob.JobTaskExecution on __ElasticDatabaseJob.JobExecution.JobExecutionId = __ElasticDatabaseJob.JobTaskExecution.JobExecutionId
+where 
+	name = @name	
+	and __ElasticDatabaseJob.JobTaskExecution.[Message] is not null ");
+            if (endAfter.HasValue)
+                sql.Append("and __ElasticDatabaseJob.JobTaskExecution.EndTime > @endAfter ");
+            if (endBefore.HasValue)
+                sql.Append("and __ElasticDatabaseJob.JobTaskExecution.EndTime < @endBefore ");
+
+            IDictionary<string, object> ps = new Dictionary<string, object>
+            {
+                {"name", dacpackName},
+                {"endAfter", endAfter},
+                {"endBefore", endBefore} 
+            };
+            using (var uow = new UnitOfWork(ConnectionString, false))
+            {
+                var cmd = uow.GetTextCommandWithParams(sql.ToString(), ps);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    var result = reader.ReadList<JobTaskExecution>();
+                    return result;
+                }
+            }
+        } 
     }
 
     
@@ -106,29 +202,32 @@ namespace Chalkable.BackgroundTaskProcessor
             return jobExecution;
         }
 
-        private static async Task<bool> DeployDacPac(AzureSqlJobClient elasticJobs, string dacPacName, string dacPacUri, 
+        private static async Task<bool> DeployDacPac(AzureSqlJobCredentials azureJobsCreds, string dacPacName, string dacPacUri, 
             IList<DatabaseTarget> targets, BackgroundTaskService.BackgroundTaskLog log)
         {
-            Memoization.Clear();
-
-            
+            var elasticJobs = CreateAzureSqlJobClient(azureJobsCreds);
 
             var target = await elasticJobs.Targets.CreateCustomCollectionTargetAsync("Targets for DACPAC " + dacPacName + " " + Guid.NewGuid());
             log.LogInfo("Job targets created as " + target.TargetId + " " + target.CustomCollectionName);
             await CreateDbTargets(elasticJobs, target, log, targets, 20, 2000);
             var jobExecution = await StartJob(elasticJobs, target, log, dacPacName, dacPacUri);
+            JobStatHelper helper = new JobStatHelper(azureJobsCreds);
 
-            var masterJobStatusLifecycle = jobExecution.Lifecycle;
+            DateTime? since = null;
+            var lifecycle = jobExecution.Lifecycle;
             while (true)
             {
                 var status = await elasticJobs.JobExecutions.GetJobExecutionAsync(jobExecution.JobExecutionId);
-                if (status.Lifecycle != masterJobStatusLifecycle)
+                if (status.Lifecycle != lifecycle)
                     log.LogInfo($"{dacPacName} job is {status.Lifecycle}");
-                masterJobStatusLifecycle = status.Lifecycle;
-                
-                var stats = await ProcessChildJobExcutions(log, elasticJobs, status);
+                lifecycle = status.Lifecycle;
 
-                log.LogInfo(stats.Aggregate("Task stats", (s, k) => s + $" {k.Key}: {k.Value}"));
+                var stats = helper.GetChilderJobExecutionStat(dacPacName);
+                log.LogInfo("Task stats:\n" + stats.Select(x=>x.Lifecycle + ": " + x.Count).JoinString("\n"));
+
+                var taskExecutions = helper.GetJobTaskExecutions(dacPacName, since, null);
+                log.LogInfo(taskExecutions.Select(x => x.Message));
+                since = taskExecutions.Max(x => x.EndTime);
 
                 switch (status.Lifecycle)
                 {
@@ -137,17 +236,13 @@ namespace Chalkable.BackgroundTaskProcessor
                     case JobExecutionLifecycle.Skipped:
                     case JobExecutionLifecycle.TimedOut:
                         log.LogError("Deploy " + status.Lifecycle);
-                        log.Flush();
-
                         return false;
 
                     case JobExecutionLifecycle.Succeeded:
                         log.Flush();
                         return true;
                 }
-
-                log.Flush();
-                await Task.Delay(10000);
+                await Task.Delay(30000);
             }
         }
 
@@ -187,12 +282,9 @@ namespace Chalkable.BackgroundTaskProcessor
                 {
                     new DatabaseTarget(Settings.ChalkableSchoolDbServers.First(), Settings.MasterDbName)
                 };
-
-            var elasticJobs = CreateAzureSqlJobClient(azureJobsCreds);
-
             log.LogInfo("Master DacPac deployment initated");
 
-            if (!(await DeployDacPac(elasticJobs, data.DacPacName + "-master", data.MasterDacPacUri, masterTargets, log)))
+            if (!(await DeployDacPac(azureJobsCreds, data.DacPacName + "-master", data.MasterDacPacUri, masterTargets, log)))
                 return false;            
 
             log.LogInfo("Preparing schools DacPac targets");
@@ -204,60 +296,14 @@ namespace Chalkable.BackgroundTaskProcessor
 
             log.LogInfo("Schools DacPac deployment initated");
 
-            if (!(await DeployDacPac(elasticJobs, data.DacPacName + "-school", data.SchoolDacPacUri, schoolTargets, log)))
+            if (!(await DeployDacPac(azureJobsCreds, data.DacPacName + "-school", data.SchoolDacPacUri, schoolTargets, log)))
                 return false;
 
             log.LogInfo("Deploy success");
 
             return true;
         }
-
-        private static readonly HashSet<string> Memoization = new HashSet<string>();
-
-        private static async Task<Dictionary<string, int>> ProcessChildJobExcutions(BackgroundTaskService.BackgroundTaskLog log, AzureSqlJobClient elasticJobs, JobExecutionInfo execution)
-        {            
-            var stats = new Dictionary<string, int>();
-
-            var children = await elasticJobs.JobExecutions.ListJobExecutionsAsync(new JobExecutionFilter
-            {
-                ParentJobExecutionId = execution.JobExecutionId
-            });
-
-            foreach (var child in children)
-            {
-                var tasks = (await elasticJobs.JobTaskExecutions.ListJobTaskExecutions(child.JobExecutionId))
-                    .OrderByDescending(x => x.CreatedTime);
-
-                foreach(var task in tasks)
-                {
-                    var key = task.Lifecycle.ToString();
-                    if (!stats.ContainsKey(key))
-                        stats.Add(key, 1);
-                    else 
-                        stats[key]++;
-
-                    if (string.IsNullOrWhiteSpace(task.Message))
-                        continue;
-                    
-                    var id = $"{task.JobTaskExecutionId}--{task.Lifecycle}";
-                    if (Memoization.Contains(id))
-                        continue;
-
-                    Memoization.Add(id);
-
-                    log.LogError($"Execution task: {task}, target {child.TargetDescription} status {task.Lifecycle}, {task.Message}");
-
-                    var scripts = await elasticJobs.ScriptBatchExecutions.ListScriptBatchExecutions(task.JobTaskExecutionId);
-                    foreach (var script in scripts)
-                    {
-                        log.LogError($"Execution task script: {script}, status {script.Lifecycle}, {script.Message}");
-                    }
-                }
-            }
-
-            return stats;
-        }
-
+        
         public static Task<bool> Test(AzureSqlJobCredentials creds, BackgroundTaskService.BackgroundTaskLog log, DatabaseDacPacUpdateTaskData data)
         {
             return Do(creds, log, data);
