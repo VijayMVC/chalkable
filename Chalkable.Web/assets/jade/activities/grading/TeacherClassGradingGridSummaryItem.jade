@@ -104,7 +104,16 @@ mixin DisplayTotalPoints(model)
             +DisplayTotalPoints(self)
             each announcement in self.getGradingItems()
                 maxScore = announcement.getMaxScore()
-                div(data-max-score=announcement.getMaxScore()).dotted-container.grade-container.inner-grade-container.with-horizontal-dots.announcement-container
+                -console.log(self.getStandardId())
+                -console.log(self.getCategoryId())
+                div(
+                    data-max-score=announcement.getMaxScore(),
+                    data-announcement-id=announcement.getId().valueOf(),
+                    data-grading-period-id=self.getGradingPeriod().getId().valueOf(),
+                    data-standard-id=self.getStandardId() ? self.getStandardId().valueOf() : null,
+                    data-category-id=self.getCategoryId() ? self.getCategoryId().valueOf() : null,
+                    data-dropped=announcement.isDropped()
+                ).dotted-container.grade-container.inner-grade-container.with-horizontal-dots.announcement-container
                     .grading-grid-th
                         +ActionLink('announcement', 'view', announcement.getId(), chlk.models.announcement.AnnouncementTypeEnum.CLASS_ANNOUNCEMENT)
                             div(data-tooltip=announcement.getTitle(), data-tooltip-type="overflow").type-name=announcement.getTitle()

@@ -1,6 +1,7 @@
 studentAnnouncements = self.getItems()
 
 .silver-panel.student-announcements-top-panel
+    -console.log(self.isDropped())
     +RenderWith(self.getModel(), chlk.templates.announcement.StudentAnnouncementsTpl)(
         LEIntegrated = self.isLEIntegrated(),
         classId = self.getClassId(),

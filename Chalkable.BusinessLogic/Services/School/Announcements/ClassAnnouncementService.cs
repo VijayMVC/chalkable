@@ -423,8 +423,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
                 if (activity == null)
                     throw new NoAnnouncementException();
-                if (!activity.MayBeDropped)
-                    return ann;
+
                 AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
                 ann.Dropped = drop;
                 da.Update(ann);

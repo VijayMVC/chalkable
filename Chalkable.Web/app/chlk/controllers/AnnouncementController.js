@@ -328,7 +328,7 @@ NAMESPACE('chlk.controllers', function (){
                 .then(function(data){
                     var announcement = this.getCachedAnnouncement();
                     announcement.getStudentAnnouncements().getItems().forEach(function(item){
-                        item.setDropped(model.isDropped());
+                        item.setAutomaticalyDropped(model.isDropped());
                     });
                     announcement.calculateGradesAvg();
                     this.cacheAnnouncement(announcement);

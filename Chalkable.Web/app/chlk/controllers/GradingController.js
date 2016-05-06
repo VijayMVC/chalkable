@@ -80,6 +80,9 @@ NAMESPACE('chlk.controllers', function (){
             [ria.mvc.Inject],
             chlk.services.AttendanceService, 'attendanceService',
 
+            [ria.mvc.Inject],
+            chlk.services.ClassAnnouncementService, 'classAnnouncementService',
+
 
             [chlk.controllers.Permissions([
                 chlk.models.people.UserPermissionEnum.VIEW_CLASSROOM_GRADES
@@ -497,6 +500,20 @@ NAMESPACE('chlk.controllers', function (){
                         return model;
                     }, this);
                 return this.PushView(chlk.activities.grading.GradingClassSummaryGridPage, result);
+            },
+
+            [[chlk.models.announcement.SubmitDroppedAnnouncementViewData]],
+            function setAnnouncementDroppedAction(model){
+                (model.isDropped()
+                        ? this.classAnnouncementService.dropAnnouncement(model.getAnnouncementId())
+                        : this.classAnnouncementService.unDropAnnouncement(model.getAnnouncementId())
+                )
+                .attach(this.validateResponse_())
+                .then(function(data){
+                        var redirectModel = new chlk.models.grading.GradingSummaryGridSubmitViewData(model.getClassId(), model.getGradingPeriodId(), true, false, model.getStandardId(), model.getCategoryId());
+                        this.BackgroundNavigate('grading', 'loadGradingPeriodGridSummary', [redirectModel]);
+                }, this);
+               return null;
             },
 
             [chlk.controllers.NotChangedSidebarButton()],
