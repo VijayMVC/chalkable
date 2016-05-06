@@ -94,7 +94,7 @@ namespace Chalkable.Web.Controllers
             {
                 IList<AttendanceReason> attendanceReason = SchoolLocator.AttendanceReasonService.List();
                 listClassAttendance = StudentClassAttendanceOldViewData.Create(attendance, attendanceReason).ToList();
-                listClassAttendance.Sort((x, y) => string.CompareOrdinal(x.Student.LastName, y.Student.LastName));
+                listClassAttendance = listClassAttendance.OrderBy(x => x.Student.LastName).ThenBy(x => x.Student.FirstName).ToList();
             }
             return listClassAttendance;
         } 
