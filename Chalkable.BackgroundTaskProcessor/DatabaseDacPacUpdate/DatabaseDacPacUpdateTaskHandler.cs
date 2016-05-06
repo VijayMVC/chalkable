@@ -54,7 +54,8 @@ namespace Chalkable.BackgroundTaskProcessor.DatabaseDacPacUpdate
         {
             try
             {
-                var dbTargetInfo = await elasticJobs.Targets.CreateDatabaseTargetAsync(dbTarget.Server, dbTarget.Name);
+                var dbTargetInfo = await elasticJobs.Targets.GetDatabaseTargetAsync(dbTarget.Server, dbTarget.Name)
+                                   ?? await elasticJobs.Targets.CreateDatabaseTargetAsync(dbTarget.Server, dbTarget.Name);
                 var result = await elasticJobs.Targets.AddChildTargetAsync(rootTarget.TargetId, dbTargetInfo.TargetId);
                 if (!result)
                     throw new Exception("child target adding returns false");

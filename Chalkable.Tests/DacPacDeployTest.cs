@@ -177,20 +177,17 @@ namespace Chalkable.Tests
 
 
             JobStatHelper helper = new JobStatHelper(creds);
-            var name = "Apply DACPAC 0-7-8298f0c72525-2414-school 9486d68d-3381-47e3-877d-2c36e63de9ff";
+            var name = "Apply DACPAC 0-7-8298f0c72525-2414-master 42adfc7b-282e-4207-9470-80459c2e78d5";
             var l = helper.GetChilderJobExecutionStat(name);
             var s = l.Select(x => x.Lifecycle + " " + x.Count).JoinString("\n");
             Debug.WriteLine(s);
 
-            var from = new DateTime(2016, 05, 01, 18, 03, 39);
-            var to = new DateTime(2016, 05, 01, 18, 08, 44);
-            //2016-04-30 21:57:18.8255537
-            //2016-04-30 22:08:44.2705255
-            var te = helper.GetJobTaskExecutions(name, from, to);
+            
+            /*var te = helper.GetJobTaskExecutions(name, null, null);
             foreach (var jobTaskExecution in te)
             {
                 Debug.WriteLine(jobTaskExecution.EndTime.ToString() + " " + jobTaskExecution.Message);
-            }
+            }*/
         }
     }
 }
