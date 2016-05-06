@@ -48,6 +48,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.recipients = SJX.fromArrayOfDeserializables(raw.recipients, chlk.models.announcement.AdminAnnouncementRecipient);
                 this.grade = SJX.fromValue(raw.grade, Number);
                 this.comment = SJX.fromValue(raw.comment, String);
+                this.extraCreditEnabled = SJX.fromValue(raw.extracreditenabled, Boolean);
 
                 this.groupIds = SJX.fromValue(raw.groupIds, String);
                 this.attachments = SJX.fromValue(raw.attachments, String);
@@ -63,6 +64,7 @@ NAMESPACE('chlk.models.announcement', function () {
                 this.maxScore = SJX.fromValue(raw.maxscore, Number);
                 this.weightMultiplier = SJX.fromValue(raw.weightmultiplier, Number);
                 this.weightAddition = SJX.fromValue(raw.weightaddition, Number);
+                this.gradable = SJX.fromValue(raw.gradable, Boolean);
                 this.expiresDate = SJX.fromDeserializable(raw.expiresdate, chlk.models.common.ChlkDate);
                 this.startDate = SJX.fromDeserializable(raw.startdate, chlk.models.common.ChlkDate);
                 this.endDate = SJX.fromDeserializable(raw.enddate, chlk.models.common.ChlkDate);
@@ -135,8 +137,11 @@ NAMESPACE('chlk.models.announcement', function () {
             Number, 'weightMultiplier',
             Number, 'weightAddition',
             Boolean, 'ableDropStudentScore',
+            Boolean, 'gradable',
             chlk.models.id.ClassId, 'classId',
             chlk.models.id.AnnouncementId, 'announcementForTemplateId',
+
+            Boolean, 'extraCreditEnabled',
 
 
             [[Object]],

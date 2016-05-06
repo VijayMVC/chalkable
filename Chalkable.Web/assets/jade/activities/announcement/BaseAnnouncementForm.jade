@@ -96,7 +96,10 @@ mixin BaseAnnouncementFormContainer(self, announcement, classId, adminRecipientI
                             label(for="ann-candropstudentscore")=Msg.Can_drop_student_score
                             +SlideCheckbox('candropstudentscore', classAnnouncement.isAbleDropStudentScore(), false)
                             .question-mark(data-tooltip=Msg.Can_Drop_Student_Score_Tooltip_Message) ?
-
+                        .check-box-container
+                            label(for="ann-gradable")=Msg.Extra_Credit
+                            +SlideCheckbox('gradable', classAnnouncement.isGradable() && announcement.isExtraCreditEnabled(), !announcement.isExtraCreditEnabled(), !announcement.isExtraCreditEnabled())
+                            .question-mark(data-tooltip=Msg.Extra_Credit_Tooltip_Message) ?
 
 
 

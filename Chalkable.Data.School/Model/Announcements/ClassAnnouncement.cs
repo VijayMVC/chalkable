@@ -40,7 +40,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public bool VisibleForStudent { get; set; }
         public bool MayBeDropped { get; set; }
         public bool IsScored { get; set; }
-
+        
         [NotDbFieldAttr]
         public override bool IsSubmitted => SisActivityId.HasValue && base.IsSubmitted;
         [NotDbFieldAttr]
@@ -51,8 +51,6 @@ namespace Chalkable.Data.School.Model.Announcements
 
         [NotDbFieldAttr]
         public override AnnouncementTypeEnum Type => AnnouncementTypeEnum.Class;
-        [NotDbFieldAttr]
-        public bool Gradable => true;
 
         [NotDbFieldAttr]
         public bool MayBeExempt { get; set; }
@@ -82,15 +80,8 @@ namespace Chalkable.Data.School.Model.Announcements
         }
 
         [NotDbFieldAttr]
-        public string DefaultTitle
-        {
-            get
-            {
-                return !string.IsNullOrEmpty(ClassAnnouncementTypeName)
-                           ? $"{ClassAnnouncementTypeName} {Order}"
-                    : null;
-            }
-        }
-
+        public string DefaultTitle => !string.IsNullOrEmpty(ClassAnnouncementTypeName)
+            ? $"{ClassAnnouncementTypeName} {Order}"
+            : null;
     }
 }

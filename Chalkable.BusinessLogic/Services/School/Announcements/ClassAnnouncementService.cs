@@ -203,12 +203,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     throw new ChalkableException("Invalid Class Announcement type id");
                 ann.ClassAnnouncementTypeRef = inputAnnData.ClassAnnouncementTypeId.Value;
                 ann.MaxScore = inputAnnData.MaxScore;
-                ann.IsScored = ann.MaxScore.HasValue && (ann.MaxScore > 0 || inputAnnData.IsScored);
+                ann.IsScored = ann.MaxScore.HasValue && (ann.MaxScore > 0 || inputAnnData.Gradable);
 
-                if (ann.MaxScore == 0)
+                if (ann.MaxScore == 0 && !inputAnnData.Gradable)
                 {
                     var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
-                    if (classRoomOption?.AveragingMethod != ClassroomOption.AVERAGE_METHOD_POINTS)
+                    if (classRoomOption == null || !classRoomOption.IsAveragingMethodPoints)
                     {
                         ann.IsScored = false;
                     }

@@ -445,6 +445,7 @@ var Msg = {
     Enter_when_done: 'Enter when done',
     Error_message: 'Error message',
     Excused_from_a_class: 'Excused from a class',
+    Extra_Credit: 'Extra Credit',
     Family_member:'Family Member',
     Final_Grade: oneOrMany('Final Grade'),
     First_name: 'First name',
@@ -722,6 +723,7 @@ var Msg = {
     Weight_Addition_Tooltip_Message: 'Enter a number here if points are to be added to each student’s grade for this item.',
     Hide_From_Student_Tooltip_Message: 'This is will hide the item from students',
     Can_Drop_Student_Score_Tooltip_Message: 'Check this box if a score may be dropped for this item',
+    Extra_Credit_Tooltip_Message: '',
 
     Add_Credit_Transaction_Success: function(balance){
         return String.format("Success! Your new balance is ${0}", balance)

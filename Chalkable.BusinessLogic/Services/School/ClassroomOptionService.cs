@@ -52,6 +52,7 @@ namespace Chalkable.BusinessLogic.Services.School
         {
             var inowClassroomOption = CreateInowClassroomOption(classroomOption);
             ConnectorLocator.ClassroomOptionConnector.UpdateClassroomOption(inowClassroomOption.SectionId, inowClassroomOption);
+            inowClassroomOption = ConnectorLocator.ClassroomOptionConnector.GetClassroomOption(inowClassroomOption.SectionId);
             return classroomOption;
         }
 

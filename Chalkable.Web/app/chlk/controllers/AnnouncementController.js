@@ -2191,6 +2191,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.getWeightMultiplier(),
                         model.isHiddenFromStudents(),
                         model.isAbleDropStudentScore(),
+                        model.isGradable(),
                         model.getAssignedAttributesPostData()
                     )
                     .attach(this.validateResponse_());
