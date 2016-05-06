@@ -56,7 +56,7 @@ mixin AttributeBlock_(attribute)
                         span.attr-is-hidden This Attribute is Hidden from students
                 .mp-data
                     .attribute-details
-                        p.attribute-description=attribute.getText()
+                        p.attribute-description!=self.linkify(attribute.getText())
 
                         if attachment && attachment.getId() && attachment.getId() > 0
                             h3 Attachments
