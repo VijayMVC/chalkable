@@ -203,23 +203,16 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     throw new ChalkableException("Invalid Class Announcement type id");
                 ann.ClassAnnouncementTypeRef = inputAnnData.ClassAnnouncementTypeId.Value;
                 ann.MaxScore = inputAnnData.MaxScore;
+                ann.IsScored = ann.MaxScore.HasValue && (ann.MaxScore > 0 || inputAnnData.IsScored);
 
-                //TODO:REMOVE
-                if (inputAnnData.MaxScore == null || inputAnnData.MaxScore == 0)
-                    inputAnnData.IsScored = false;
-                if(inputAnnData.MaxScore > 0)
-                    inputAnnData.IsScored = true;
-                //TODO:REMOVE
-
-                if ((inputAnnData.IsScored && inputAnnData.MaxScore == 0) || (!inputAnnData.IsScored && inputAnnData.MaxScore == null))
+                if (ann.MaxScore == 0)
                 {
                     var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
-                    if(classRoomOption.AveragingMethod != ClassroomOption.AVERAGE_METHOD_POINTS)
-                        throw new ChalkableException("Unable to set the data in the field and IsScored and MaxScore because you don't have appropriate averange method option!");
-                    ann.IsScored = inputAnnData.IsScored;
+                    if (classRoomOption?.AveragingMethod != ClassroomOption.AVERAGE_METHOD_POINTS)
+                    {
+                        ann.IsScored = false;
+                    }
                 }
-                else
-                    ann.IsScored = ann.MaxScore > 0;
                 
                 ann.WeightAddition = inputAnnData.WeightAddition;
                 ann.WeightMultiplier = inputAnnData.WeightMultiplier;
