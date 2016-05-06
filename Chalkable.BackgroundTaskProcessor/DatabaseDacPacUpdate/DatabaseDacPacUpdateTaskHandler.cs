@@ -78,6 +78,36 @@ namespace Chalkable.BackgroundTaskProcessor.DatabaseDacPacUpdate
             }
         }
 
+        private static string BuildJobName(string jobNamePrefix, int number)
+        {
+            return jobNamePrefix + number;
+        }
+
+        private static async Task<int> FindLastUsedNumber(AzureSqlJobClient elasticJobs, string jobNamePrefix, BackgroundTaskService.BackgroundTaskLog log)
+        {
+            for (int i = 0; i < int.MaxValue; i++)
+            {
+                var jobName = BuildJobName(jobNamePrefix, i);
+                log.LogInfo($"checking if {jobName} exists");
+                var job = await elasticJobs.Jobs.GetJobAsync(jobName);
+                if (job == null)
+                    return i - 1;
+            }
+            throw new Exception($"we used {int.MaxValue} numbers for jobs ????");
+        }
+
+        private static async Task<bool> IsJobInProgress(AzureSqlJobClient elasticJobs, string lastJobName)
+        {
+            var executions = await elasticJobs.JobExecutions.ListJobExecutionsAsync(new JobExecutionFilter() { JobName = lastJobName });
+            if (executions != null)
+                return executions.Any(jobExecutionInfo => 
+                    jobExecutionInfo.Lifecycle == JobExecutionLifecycle.Created || 
+                    jobExecutionInfo.Lifecycle == JobExecutionLifecycle.InProgress || 
+                    jobExecutionInfo.Lifecycle == JobExecutionLifecycle.WaitingForChildJobExecutions || 
+                    jobExecutionInfo.Lifecycle == JobExecutionLifecycle.WaitingToRetry);
+            return false;
+        }
+
         private static async Task<JobExecutionInfo> StartJob(AzureSqlJobClient elasticJobs, CustomCollectionTargetInfo rootTarget
             , BackgroundTaskService.BackgroundTaskLog log, string dacPacName, string dacPacUri)
         {
@@ -85,7 +115,16 @@ namespace Chalkable.BackgroundTaskProcessor.DatabaseDacPacUpdate
                              await elasticJobs.Content.CreateDacpacAsync(dacPacName, new Uri(dacPacUri));
             var pwd = CreatePassword(Settings.ChalkableSchoolDbPassword);
             var credential = await elasticJobs.Credentials.CreateCredentialAsync(Guid.NewGuid().ToString(), Settings.ChalkableSchoolDbUser, pwd);
-            var job = await elasticJobs.Jobs.CreateJobAsync("Apply DACPAC " + dacPacName + " " + Guid.NewGuid(), new JobBuilder
+            string jobNamePrefix = "Apply DACPAC " + dacPacName + " ";
+            int lastNumber = await FindLastUsedNumber(elasticJobs, jobNamePrefix, log);
+            if (lastNumber >= 0)
+            {
+                bool inProgress = await IsJobInProgress(elasticJobs, BuildJobName(jobNamePrefix, lastNumber));
+                if (inProgress)
+                    throw new Exception("Previous job on this version is not end yet");
+            }
+            var jobName = BuildJobName(jobNamePrefix, lastNumber + 1);
+            var job = await elasticJobs.Jobs.CreateJobAsync(jobName, new JobBuilder
             {
                 ContentName = dacPackDef.ContentName,
                 TargetId = rootTarget.TargetId,
