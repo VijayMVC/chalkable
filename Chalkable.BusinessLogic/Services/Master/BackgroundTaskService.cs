@@ -134,15 +134,14 @@ namespace Chalkable.BusinessLogic.Services.Master
                 {
                     var helper = new TableHelper<BackgroundTaskLogItem>();
                     helper.Save(Items);
-                    items.Clear();
                 }
                 catch (Exception ex)
                 {
-                    Trace.TraceError("Exception durring the logging process");
+                    Trace.TraceError("Exception durring the logging process, All messages in buffer are lost");
                     Trace.TraceError(ex.Message);
                     Trace.TraceError(ex.StackTrace);
                 }
-                
+                items.Clear();
             }
 
             public void Dispose()
