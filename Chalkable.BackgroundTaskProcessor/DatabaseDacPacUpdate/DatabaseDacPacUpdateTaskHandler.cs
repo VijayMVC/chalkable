@@ -108,7 +108,7 @@ namespace Chalkable.BackgroundTaskProcessor.DatabaseDacPacUpdate
             return false;
         }
 
-        private static async Task<JobExecutionInfo> StartJob(AzureSqlJobClient elasticJobs, CustomCollectionTargetInfo rootTarget
+        private static async Task<JobExecutionInfo> StartJob(AzureSqlJobClient elasticJobs, IList<DatabaseTarget> targets
             , BackgroundTaskService.BackgroundTaskLog log, string dacPacName, string dacPacUri)
         {
             var dacPackDef = await elasticJobs.Content.GetContentAsync(dacPacName) ??
@@ -123,11 +123,16 @@ namespace Chalkable.BackgroundTaskProcessor.DatabaseDacPacUpdate
                 if (inProgress)
                     throw new Exception("Previous job on this version is not end yet");
             }
+
+            var rooTarget = await elasticJobs.Targets.CreateCustomCollectionTargetAsync("Targets for DACPAC " + dacPacName + " " + Guid.NewGuid());
+            log.LogInfo("Job targets created as " + rooTarget.TargetId + " " + rooTarget.CustomCollectionName);
+            await CreateDbTargets(elasticJobs, rooTarget, log, targets, 20, 2000);
+
             var jobName = BuildJobName(jobNamePrefix, lastNumber + 1);
             var job = await elasticJobs.Jobs.CreateJobAsync(jobName, new JobBuilder
             {
                 ContentName = dacPackDef.ContentName,
-                TargetId = rootTarget.TargetId,
+                TargetId = rooTarget.TargetId,
                 CredentialName = credential.CredentialName
             });
             log.LogInfo("Job created as " + job.TargetId + " " + job.JobName);
@@ -140,11 +145,8 @@ namespace Chalkable.BackgroundTaskProcessor.DatabaseDacPacUpdate
             IList<DatabaseTarget> targets, BackgroundTaskService.BackgroundTaskLog log)
         {
             var elasticJobs = CreateAzureSqlJobClient(azureJobsCreds);
-
-            var target = await elasticJobs.Targets.CreateCustomCollectionTargetAsync("Targets for DACPAC " + dacPacName + " " + Guid.NewGuid());
-            log.LogInfo("Job targets created as " + target.TargetId + " " + target.CustomCollectionName);
-            await CreateDbTargets(elasticJobs, target, log, targets, 20, 2000);
-            var jobExecution = await StartJob(elasticJobs, target, log, dacPacName, dacPacUri);
+            
+            var jobExecution = await StartJob(elasticJobs, targets, log, dacPacName, dacPacUri);
             JobStatHelper helper = new JobStatHelper(azureJobsCreds);
 
             DateTime? since = null;
@@ -156,10 +158,10 @@ namespace Chalkable.BackgroundTaskProcessor.DatabaseDacPacUpdate
                     log.LogInfo($"{dacPacName} job is {status.Lifecycle}");
                 lifecycle = status.Lifecycle;
 
-                var stats = helper.GetChilderJobExecutionStat(dacPacName);
+                var stats = helper.GetChilderJobExecutionStat(jobExecution.JobName);
                 log.LogInfo("Task stats:\n" + stats.Select(x=>x.Lifecycle + ": " + x.Count).JoinString("\n"));
 
-                var taskExecutions = helper.GetJobTaskExecutions(dacPacName, since, null);
+                var taskExecutions = helper.GetJobTaskExecutions(jobExecution.JobName, since, null);
                 log.LogInfo(taskExecutions.Select(x => x.Message));
                 since = taskExecutions.Max(x => x.EndTime);
 

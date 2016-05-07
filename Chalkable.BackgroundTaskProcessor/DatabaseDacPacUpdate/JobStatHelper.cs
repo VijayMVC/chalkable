@@ -24,7 +24,7 @@ namespace Chalkable.BackgroundTaskProcessor.DatabaseDacPacUpdate
         {
             get { return $"Data Source={serverUrl};Initial Catalog={dbName};UID={userName};Pwd={password}"; }
         }
-        public IList<JobExecutionStat> GetChilderJobExecutionStat(string dacpackName)
+        public IList<JobExecutionStat> GetChilderJobExecutionStat(string jobName)
         {
             string sql = $@"select 
 	__ElasticDatabaseJob.JobExecution.Lifecycle, count(*) as [Count] 
@@ -33,7 +33,7 @@ from
 	join __ElasticDatabaseJob.JobExecution on __ElasticDatabaseJob.Job.LastJobExecution_JobExecutionId = __ElasticDatabaseJob.JobExecution.ParentJobExecutionId
 	--join __ElasticDatabaseJob.JobTaskExecution on __ElasticDatabaseJob.JobExecution.JobExecutionId = __ElasticDatabaseJob.JobTaskExecution.JobExecutionId
 where 
-	name = '{dacpackName}'
+	name = '{jobName}'
 group by
 	__ElasticDatabaseJob.JobExecution.Lifecycle
 ";
@@ -48,7 +48,7 @@ group by
             }
         }
 
-        public IList<JobTaskExecution> GetJobTaskExecutions(string dacpackName, DateTime? endAfter, DateTime? endBefore)
+        public IList<JobTaskExecution> GetJobTaskExecutions(string jobName, DateTime? endAfter, DateTime? endBefore)
         {
             var sql = new StringBuilder();
             sql.Append(@"select 
@@ -69,7 +69,7 @@ where
 
             IDictionary<string, object> ps = new Dictionary<string, object>
             {
-                {"name", dacpackName},
+                {"name", jobName},
                 {"endAfter", endAfter},
                 {"endBefore", endBefore} 
             };
