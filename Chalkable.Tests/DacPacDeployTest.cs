@@ -40,8 +40,8 @@ namespace Chalkable.Tests
                 Username = "chalkadmin@edjb0d1a0ab363747abbc2ee"
             };
             var elasticJobs = CreateAzureSqlJobClient(creds);
-            var id = Guid.Parse("ADD673E6-E46F-4103-A5FD-BBCCD9D74AA0");
-            //var id = Guid.Parse("D79231A9-9F15-4B60-BC56-2F0B6D766890");
+            var id = Guid.Parse("549DF45D-112B-4998-9AB2-03DDD7BE1D96");
+            
             var children = await elasticJobs.JobExecutions
                 .ListJobExecutionsAsync(new JobExecutionFilter()
                 {
@@ -52,7 +52,6 @@ namespace Chalkable.Tests
                 await elasticJobs.JobExecutions.CancelJobExecutionAsync(jobExecutionInfo.JobExecutionId);
             }
             
-            //            await elasticJobs.JobExecutions.CancelJobExecutionAsync(Guid.Parse("D79231A9-9F15-4B60-BC56-2F0B6D766890"));
             await elasticJobs.JobExecutions.CancelJobExecutionAsync(id);
             
         }
