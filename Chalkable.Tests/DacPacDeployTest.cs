@@ -3,7 +3,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security;
 using Chalkable.BackgroundTaskProcessor;
+using Chalkable.BackgroundTaskProcessor.DatabaseDacPacUpdate;
 using Chalkable.BusinessLogic.Services.Master;
+using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Microsoft.Azure.SqlDatabase.Jobs.Client;
 using NUnit.Framework;
@@ -37,11 +39,21 @@ namespace Chalkable.Tests
                 ServerName = "edjb0d1a0ab363747abbc2ee.database.windows.net",
                 Username = "chalkadmin@edjb0d1a0ab363747abbc2ee"
             };
-
             var elasticJobs = CreateAzureSqlJobClient(creds);
-
-            await elasticJobs.JobExecutions.CancelJobExecutionAsync(Guid.Parse("2434d48c-4a03-46b1-a104-5d9db1355453"));
-            await elasticJobs.JobExecutions.CancelJobExecutionAsync(Guid.Parse("62a7d8ac-3abd-49f4-bbaf-00efd6705769"));
+            var id = Guid.Parse("549DF45D-112B-4998-9AB2-03DDD7BE1D96");
+            
+            var children = await elasticJobs.JobExecutions
+                .ListJobExecutionsAsync(new JobExecutionFilter()
+                {
+                    ParentJobExecutionId = id
+                });
+            foreach (var jobExecutionInfo in children)
+            {
+                await elasticJobs.JobExecutions.CancelJobExecutionAsync(jobExecutionInfo.JobExecutionId);
+            }
+            
+            await elasticJobs.JobExecutions.CancelJobExecutionAsync(id);
+            
         }
 
         [Test]
@@ -145,9 +157,36 @@ namespace Chalkable.Tests
 
             var id = Guid.NewGuid();
             Debug.WriteLine(id);
-            BackgroundTaskService.BackgroundTaskLog log = new BackgroundTaskService.BackgroundTaskLog(id, 10);
+            BackgroundTaskService.BackgroundTaskLog log = new BackgroundTaskService.BackgroundTaskLog(id, 1);
             var data = DatabaseDacPacUpdateTaskData.FromString("{\"DacPacName\":\"0-7-1d38ca879106-2321\",\"MasterDacPacUri\":\"https://chalkablestat.blob.core.windows.net/artifacts-db/0-7-1d38ca879106-2321/Chalkable.Database.Master.dacpac\",\"SchoolDacPacUri\":\"https://chalkablestat.blob.core.windows.net/artifacts-db/0-7-1d38ca879106-2321/Chalkable.Database.School.dacpac\",\"ServerName\":\"edjb0d1a0ab363747abbc2ee.database.windows.net\",\"DatabaseName\":\"edjb0d1a0ab363747abbc2ee\",\"Username\":\"chalkadmin@edjb0d1a0ab363747abbc2ee\",\"Password\":\"Hellowebapps1!\"}");
             DatabaseDacPacUpdateTaskHandler.Test(creds, log, data).Wait();
+        }
+
+        [Test]
+        public async void TestJobExecutionTaskList()
+        {
+            AzureSqlJobCredentials creds = new AzureSqlJobCredentials()
+            {
+                DatabaseName = "edjb0d1a0ab363747abbc2ee",
+                Password = "Hellowebapps1!",
+                ServerName = "edjb0d1a0ab363747abbc2ee.database.windows.net",
+                Username = "chalkadmin@edjb0d1a0ab363747abbc2ee"
+            };
+            
+
+
+            JobStatHelper helper = new JobStatHelper(creds);
+            var name = "Apply DACPAC 0-7-8298f0c72525-2414-master 42adfc7b-282e-4207-9470-80459c2e78d5";
+            var l = helper.GetChilderJobExecutionStat(name);
+            var s = l.Select(x => x.Lifecycle + " " + x.Count).JoinString("\n");
+            Debug.WriteLine(s);
+
+            
+            /*var te = helper.GetJobTaskExecutions(name, null, null);
+            foreach (var jobTaskExecution in te)
+            {
+                Debug.WriteLine(jobTaskExecution.EndTime.ToString() + " " + jobTaskExecution.Message);
+            }*/
         }
     }
 }
