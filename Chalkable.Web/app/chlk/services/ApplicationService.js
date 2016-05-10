@@ -9,7 +9,6 @@ REQUIRE('chlk.models.apps.AppPlatform');
 REQUIRE('chlk.models.apps.AppAccess');
 REQUIRE('chlk.models.apps.AppAttachment');
 REQUIRE('chlk.models.apps.ShortAppInfo');
-REQUIRE('chlk.models.apps.AppPersonRating');
 REQUIRE('chlk.models.apps.ApplicationAuthorization');
 REQUIRE('chlk.models.announcement.BaseAnnouncementViewData');
 REQUIRE('chlk.models.standard.Standard');
@@ -104,12 +103,6 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.AppId]],
-            ria.async.Future, function installApp(appId) {
-                return this
-                    .post('Application/Install.json', Boolean, {applicationId: appId.valueOf()});
-            },
-
             [[chlk.models.id.SchoolPersonId]],
             function testDevApps(devId) {
                 window.location.href = "/DemoSchool/TestApps.json?prefix=" + devId.valueOf();
@@ -179,23 +172,6 @@ NAMESPACE('chlk.services', function () {
                     applicationId: appId_ ? appId_.valueOf() : undefined
                 }).transform(function (applicationAuthorization) {
                     var app = applicationAuthorization.getApplication();
-                    var appInstalls = app.getApplicationInstalls() || [];
-                    app.setSelfInstalled(false);
-                    var uninstallAppIds = [];
-
-                    appInstalls.forEach(function(appInstall){
-                        if (appInstall.isOwner() && forEdit){
-                            uninstallAppIds.push(appInstall.getAppInstallId());
-                            app.setSelfInstalled(appInstall.getPersonId() == appInstall.getInstallationOwnerId());
-                        }
-                        app.setPersonal(appInstall.getPersonId() == personId);
-                    });
-                    app.setUninstallable(forEdit && uninstallAppIds.length > 0);
-                    var ids = uninstallAppIds.map(function(item){
-                        return item.valueOf()
-                    }).join(',');
-                    app.setApplicationInstallIds(ids);
-
                     return applicationAuthorization;
                 });
             },

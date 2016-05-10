@@ -10,18 +10,12 @@ REQUIRE('chlk.models.id.SchoolPersonId');
 REQUIRE('chlk.models.apps.AppGradeLevel');
 REQUIRE('chlk.models.developer.DeveloperInfo');
 REQUIRE('chlk.models.apps.AppCategory');
-REQUIRE('chlk.models.apps.AppMarketApplication');
-REQUIRE('chlk.models.apps.AppInstallPostData');
-REQUIRE('chlk.models.people.Role');
-REQUIRE('chlk.models.apps.AppTotalPrice');
-REQUIRE('chlk.models.apps.ApplicationForAttach');
 
+
+REQUIRE('chlk.models.people.Role');
 REQUIRE('chlk.models.apps.AppPriceType');
 REQUIRE('chlk.models.apps.AppSortingMode');
 REQUIRE('chlk.models.apps.InstalledApp');
-
-REQUIRE('chlk.models.funds.PersonBalance');
-
 
 
 NAMESPACE('chlk.services', function () {
@@ -69,7 +63,7 @@ NAMESPACE('chlk.services', function () {
 
 
                 return this
-                    .getPaginatedList('AppMarket/List.json', chlk.models.apps.AppMarketApplication, {
+                    .getPaginatedList('AppMarket/List.json', chlk.models.apps.Application, {
                         start: start_ | 0,
                         count: count_ || 20,
                         categoriesIds:  categoryIds,
@@ -100,7 +94,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId, Number, Number]],
             ria.async.Future, function getAppsForAttach(personId, classId_, markingPeriodId_,  start_, count_){
-                return this.getPaginatedList('AppMarket/ListInstalledForAttach', chlk.models.apps.ApplicationForAttach,{
+                return this.getPaginatedList('AppMarket/ListInstalledForAttach', chlk.models.apps.Application,{
                     personId: personId.valueOf(),
                     start: start_ || 0,
                     classId: classId_ && classId_.valueOf(),
@@ -112,48 +106,17 @@ NAMESPACE('chlk.services', function () {
             [[chlk.models.id.SchoolPersonId, Number, Number]],
             ria.async.Future, function getAppsForAttachToAdminAnn(personId, start_, count_){
                 return this
-                    .getPaginatedList('AppMarket/ListInstalledForAdminAttach.json', chlk.models.apps.AppMarketApplication, {
+                    .getPaginatedList('AppMarket/ListInstalledForAdminAttach.json', chlk.models.apps.Application, {
                         personId: personId.valueOf(),
                         start: start_ | 0,
                         count: count_,
-                    })
-                    .then(this.prepareAppsInstalledData_);
-            },
-
-            [[chlk.models.id.SchoolPersonId, Number, String, Number]],
-            ria.async.Future, function getInstalledApps(personId, start_, filter_, count_) {
-                return this
-                    .getPaginatedList('AppMarket/ListInstalled.json', chlk.models.apps.AppMarketApplication, {
-                        personId: personId.valueOf(),
-                        start: start_ | 0,
-                        filter: filter_ || "",
-                        count: count_
-                    })
-                    .then(this.prepareAppsInstalledData_);
-            },
-
-            [[chlk.models.common.PaginatedList]],
-            chlk.models.common.PaginatedList, function prepareAppsInstalledData_(data){
-                var apps = data.getItems() || [];
-                apps = apps.map(function(app){
-                    app.setInstalledOnlyForCurrentUser(false);
-                    var appInstalls = app.getApplicationInstalls() || [];
-
-                    if (appInstalls.length == 1){
-                        if(appInstalls[0].getPersonId() == appInstalls[0].getInstallationOwnerId()){
-                            app.setInstalledOnlyForCurrentUser(true);
-                        }
-                    }
-                    return app;
-                });
-                data.setItems(apps);
-                return data;
+                    });
             },
 
             [[chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId, String, String, Number, Boolean]],
             ria.async.Future, function getSuggestedApps(classId, markingPeriodId, academicBenchmarkIds, start_, count_, myAppsOnly_){
                 var mp = this.getContext().getSession().get('markingPeriod');
-                return this.get('AppMarket/SuggestedApps.json', ArrayOf(chlk.models.apps.ApplicationForAttach),{
+                return this.get('AppMarket/SuggestedApps.json', ArrayOf(chlk.models.apps.Application),{
                     classId : classId.valueOf(),
                     markingPeriodId: markingPeriodId ? markingPeriodId.valueOf() : (mp.getId() ? mp.getId().valueOf() : ''),
                     abIds : academicBenchmarkIds,
@@ -163,155 +126,12 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
-            [[chlk.models.id.SchoolPersonId, Boolean, Number, String, Number]],
-            ria.async.Future, function getMyApps(personId, forEdit, start_, filter_, count_) {
-                return this
-                    .getInstalledApps(personId, start_, filter_, count_)
-                    .then(function(data){
-
-                        var apps = data && data.getItems() || [];
-
-                        apps = apps.map(function(app){
-                            var appInstalls = app.getApplicationInstalls() || [];
-                            app.setSelfInstalled(false);
-                            var uninstallAppIds = [];
-
-                            appInstalls.forEach(function(appInstall){
-                                if (appInstall.isOwner() && forEdit){
-                                    uninstallAppIds.push(appInstall.getAppInstallId());
-                                    if(appInstall.getPersonId() == appInstall.getInstallationOwnerId()){
-                                        app.setSelfInstalled(true);
-                                    }
-                                }
-                                if (appInstall.getPersonId() == personId){
-                                    app.setPersonal(true);
-                                }
-
-                            });
-                            app.setUninstallable(forEdit && uninstallAppIds.length > 0);
-                            var ids = uninstallAppIds.map(function(item){
-                                return item.valueOf()
-                            }).join(',');
-                            app.setApplicationInstallIds(ids);
-                            return app;
-                        });
-
-                        data.setItems(apps);
-
-                        this.getContext().getSession().set(ChlkSessionConstants.MY_APPS_CACHED, apps);
-                        return data;
-                    }, this);
-            },
-
-            [[String]],
-            ria.async.Future, function getMyAppsByFilter(filter) {
-                var personId = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId();
-                return this.getMyApps(personId, false, 0, filter);
-            },
-
-            [[chlk.models.id.AppId]],
-            ria.async.Future, function getDetails(appId) {
-                return this
-                    .get('AppMarket/Read.json', chlk.models.apps.AppMarketApplication, {
-                        applicationId: appId.valueOf()
-                    })
-                    .then(function(app){
-                        //todo:remove this later
-                        var roles = [];
-
-                        var studentRole = new chlk.models.people.Role();
-                        studentRole.setName('Student');
-                        studentRole.setId(3);
-
-                        var teacherRole = new chlk.models.people.Role();
-                        teacherRole.setName('Teacher');
-                        teacherRole.setId(2);
-
-                        var adminRole = new chlk.models.people.Role();
-                        adminRole.setName('Admin');
-                        adminRole.setId(7);
-
-                        roles.push(studentRole);
-                        roles.push(adminRole);
-                        roles.push(teacherRole);
-
-                        app.setValidRoles(roles);
-
-                        var platforms = [];
-                        var web = new chlk.models.apps.AppPlatform(chlk.models.apps.AppPlatformTypeEnum.WEB, 'Web');
-                        var ios = new chlk.models.apps.AppPlatform(chlk.models.apps.AppPlatformTypeEnum.IOS, 'IOS');
-                        var android = new chlk.models.apps.AppPlatform(chlk.models.apps.AppPlatformTypeEnum.ANDROID, 'Android');
-
-                        platforms.push(web);
-                        platforms.push(ios);
-                        platforms.push(android);
-                        app.setPlatforms(platforms);
-
-                        return app;
+            [[Number, Number]],
+            ria.async.Future, function getMyApps(start_, count_) {
+                return this.getPaginatedList('AppMarket/List.json', chlk.models.apps.Application, {
+                        start: start_ | 0,
+                        count: count_ || 10000,
                     });
             },
-
-            [[
-                chlk.models.id.AppId,
-                ArrayOf(chlk.models.id.AppInstallGroupId),
-                chlk.models.id.AppInstallGroupId
-            ]],
-            ria.async.Future, function installApp(appId, classes, currentPerson_) {
-                return this
-                    .post('AppMarket/Install.json', Boolean, {
-                        applicationId: appId.valueOf(),
-                        personId: currentPerson_ && currentPerson_.valueOf(),
-                        classids: this.arrayToCsv(classes),
-                    })
-                    .then(function(data){
-                        this.getPersonBalance(this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON).getId(), true);
-                        return data;
-                    }, this)
-            },
-
-            [[
-                chlk.models.id.AppId,
-                ArrayOf(chlk.models.id.AppInstallGroupId),
-                chlk.models.id.AppInstallGroupId
-            ]],
-            ria.async.Future, function getApplicationTotalPrice(appId,  classes, currentPerson_) {
-                return this
-                    .post('AppMarket/GetApplicationTotalPrice.json', chlk.models.apps.AppTotalPrice, {
-                        applicationId: appId.valueOf(),
-                        personId: currentPerson_ && currentPerson_.valueOf(),
-                        classids: this.arrayToCsv(classes),
-                    });
-            },
-
-            [[chlk.models.id.SchoolPersonId]],
-            ria.async.Future, function getPersonBalance(personId, refresh_) {
-                var currentBalance = this.getContext().getSession().get(ChlkSessionConstants.CURRENT_PERSON_BALANCE);
-                return currentBalance == null || refresh_ ?
-                    this.get('Fund/GetPersonBudgetBalance.json', chlk.models.funds.PersonBalance, {
-                        personId: personId.valueOf()
-                    })
-                    .then(function(balance){
-                        this.getContext().getSession().set(ChlkSessionConstants.CURRENT_PERSON_BALANCE, balance);
-                        return balance;
-                    }, this) : ria.async.DeferredData(currentBalance);
-            },
-
-            [[String]],
-            ria.async.Future, function uninstallApps(ids) {
-                return this
-                    .post('AppMarket/Uninstall.json', Boolean, {
-                        applicationInstallIds: ids
-                    });
-            },
-
-            [[chlk.models.id.AppId, Number, String]],
-            ria.async.Future, function writeReview(appId, rating, review){
-                return this
-                    .post('AppMarket/WriteReview.json', chlk.models.apps.AppMarketApplication, {
-                        applicationId: appId.valueOf(),
-                        rating: rating,
-                        review: review
-                    });
-            }
         ])
 });

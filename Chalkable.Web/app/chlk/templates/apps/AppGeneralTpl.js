@@ -1,12 +1,11 @@
 REQUIRE('chlk.models.apps.AppGeneralInfoViewData');
 REQUIRE('chlk.models.apps.Application');
-REQUIRE('chlk.models.apps.AppRating');
+//REQUIRE('chlk.models.apps.AppRating');
 REQUIRE('chlk.models.apps.AppState');
 REQUIRE('chlk.models.developer.HomeAnalytics');
 
 NAMESPACE('chlk.templates.apps', function () {
 
-    ASSET('~/assets/jade/activities/apps/app-rating.jade')();
     /** @class chlk.templates.apps.AppGeneralTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/app-general-info.jade')],
@@ -39,8 +38,8 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.common.ChlkDate, 'reportDate',
 
-            [ria.templates.ModelPropertyBind],
-            chlk.models.apps.AppRating, 'appReviews',
+            //[ria.templates.ModelPropertyBind],
+            //chlk.models.apps.AppRating, 'appReviews',
 
             [ria.templates.ModelPropertyBind],
             chlk.models.developer.HomeAnalytics, 'appAnalytics',
@@ -123,30 +122,30 @@ NAMESPACE('chlk.templates.apps', function () {
                     }]
                 };
             },
-
-            [[chlk.models.apps.AppInstallStats]],
-            function prepareAppInstallsChartData(appInstallStats){
-                var categories = [],
-                    data = [];
-
-                var stats = appInstallStats.getStats() || [];
-
-                stats.forEach(function(item){
-                    categories.push(item.getSummary());
-                    data.push(item.getInstallCount());
-                });
-                var max0 = 500;
-                data.forEach(function(item, i){
-                    if(item > max0)
-                        max0 = item;
-                });
-                var max = Math.ceil(max0 / 10) * 10;
-                return {
-                    categories : categories,
-                    data : data,
-                    max : max
-                }
-            },
+            //
+            //[[chlk.models.apps.AppInstallStats]],
+            //function prepareAppInstallsChartData(appInstallStats){
+            //    var categories = [],
+            //        data = [];
+            //
+            //    var stats = appInstallStats.getStats() || [];
+            //
+            //    stats.forEach(function(item){
+            //        categories.push(item.getSummary());
+            //        data.push(item.getInstallCount());
+            //    });
+            //    var max0 = 500;
+            //    data.forEach(function(item, i){
+            //        if(item > max0)
+            //            max0 = item;
+            //    });
+            //    var max = Math.ceil(max0 / 10) * 10;
+            //    return {
+            //        categories : categories,
+            //        data : data,
+            //        max : max
+            //    }
+            //},
 
             [[Object]],
             function prepareAppInstallsChartOptions(configs){

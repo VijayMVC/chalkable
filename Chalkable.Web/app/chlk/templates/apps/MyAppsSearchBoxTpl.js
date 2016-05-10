@@ -1,5 +1,5 @@
 REQUIRE('chlk.templates.ChlkTemplate');
-REQUIRE('chlk.models.apps.AppMarketApplication');
+REQUIRE('chlk.models.apps.Application');
 
 
 NAMESPACE('chlk.templates.apps', function () {
@@ -7,7 +7,7 @@ NAMESPACE('chlk.templates.apps', function () {
     /** @class chlk.templates.apps.MyAppsSearchBoxTpl*/
     CLASS(
         [ria.templates.TemplateBind('~/assets/jade/activities/apps/MyAppsSearch.jade')],
-        [ria.templates.ModelBind(chlk.models.apps.AppMarketApplication)],
+        [ria.templates.ModelBind(chlk.models.apps.Application)],
         'MyAppsSearchBoxTpl', EXTENDS(chlk.templates.ChlkTemplate), [
 
             [ria.templates.ModelPropertyBind],

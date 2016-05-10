@@ -152,7 +152,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolPersonId, Number, Number]],
             ria.async.Future, function getAppsInfo(studentId, start_, count_){
-                return this.get('Student/Apps.json', chlk.models.people.PersonApps, {
+                return this.get('Student/Apps.json', chlk.models.people.ShortUserInfo, {
                     studentId: studentId.valueOf(),
                     start: start_ || 0,
                     count: count_

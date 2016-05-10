@@ -11,24 +11,7 @@ NAMESPACE('chlk.templates.apps', function () {
         'AttachAppsDialogTpl', EXTENDS(chlk.templates.common.BaseAttachTpl), [
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.common.PaginatedList, 'apps',
+            chlk.models.common.PaginatedList, 'apps'
 
-            [[chlk.models.apps.ApplicationForAttach]],
-            String, function getAppIconToolTip(app){
-                var res = null;
-
-                if(app){
-                    var notInstalledCount = app.getNotInstalledStudentsCount();
-                    if (notInstalledCount > 0){
-                        res = "This application isn't installed for " + notInstalledCount;
-                        res += notInstalledCount > 1 ? ' students' : ' student';
-                    }
-
-                    if (!app.isInstalled()){
-                        res = "This application isn't installed for current user";
-                    }
-                }
-                return res;
-            }
-        ])
+    ]);
 });

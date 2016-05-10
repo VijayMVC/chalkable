@@ -1,6 +1,5 @@
 REQUIRE('chlk.models.apps.MyAppsViewData');
 REQUIRE('chlk.models.common.PaginatedList');
-REQUIRE('chlk.models.id.SchoolPersonId');
 
 NAMESPACE('chlk.templates.apps', function () {
 
@@ -11,11 +10,5 @@ NAMESPACE('chlk.templates.apps', function () {
         'MyApps', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'apps',
-
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.SchoolPersonId, 'personId',
-
-            [ria.templates.ModelPropertyBind],
-            Boolean, 'editable'
         ])
 });

@@ -8,8 +8,7 @@ NAMESPACE('chlk.templates.developer', function () {
         [ria.templates.TemplateBind('~/assets/jade/activities/developer/appReviews.jade')],
         [ria.templates.ModelBind(chlk.models.apps.AppGeneralInfoViewData)],
         'AppReviewsTpl', EXTENDS(chlk.templates.ChlkTemplate), [
-            [ria.templates.ModelPropertyBind],
-            chlk.models.apps.AppRating, 'appReviews'
+
         ])
 });
 
