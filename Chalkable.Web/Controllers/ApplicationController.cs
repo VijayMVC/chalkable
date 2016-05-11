@@ -185,11 +185,25 @@ namespace Chalkable.Web.Controllers
         public ActionResult AddToAnnouncement(int announcementId, int announcementType, Guid applicationId)
         {
             Trace.Assert(Context.PersonId.HasValue);
+            Trace.Assert(Context.SchoolYearId.HasValue);
+
             var res = SchoolLocator.ApplicationSchoolService.AddToAnnouncement(announcementId, (AnnouncementTypeEnum) announcementType,applicationId);
-            var appInstalls = SchoolLocator.AppMarketService.GetInstallations(applicationId, Context.PersonId.Value, false);
+            //TODO: FAKE DATA
+            var appInstalls = MasterLocator.ApplicationService.GetApplications().Select(x => 
+            new ApplicationInstall
+            {
+                AppInstallActionRef = 0,
+                Active = true,
+                ApplicationRef = x.Id,
+                AppUninstallActionRef = null,
+                Id = 0,
+                PersonRef = Context.PersonId.Value,
+                InstallDate = DateTime.UtcNow,
+                OwnerRef = Context.PersonId.Value,
+                SchoolYearRef = Context.SchoolYearId.Value
+            }).ToList();//SchoolLocator.AppMarketService.GetInstallations(applicationId, Context.PersonId.Value, false);
             var app = MasterLocator.ApplicationService.GetApplicationById(applicationId);
-
-
+            
             var assessmentApp = MasterLocator.ApplicationService.GetAssessmentApplication();
             if (assessmentApp != null && applicationId == assessmentApp.Id)
                 MasterLocator.UserTrackingService.AttachedAssessment(Context.Login, announcementId);
@@ -254,17 +268,30 @@ namespace Chalkable.Web.Controllers
             var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, Context.SchoolYearId, ChalkableAuthentication.GetSessionKey());
             var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, userInfo);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
-            
-            var appInstall = SchoolLocator.AppMarketService.GetInstallationForPerson(app.Id, Context.PersonId.Value);
+
+            var appInstall = new ApplicationInstall
+            {
+                Active = true,
+                InstallDate = Context.NowSchoolTime,
+                OwnerRef = Context.PersonId.Value,
+                Id = 0,
+                SchoolYearRef = Context.SchoolYearId.Value,
+                PersonRef =Context.PersonId.Value,
+                ApplicationRef = app.Id,
+                AppUninstallActionRef = null,
+                AppInstallActionRef = 0
+            };
+                //SchoolLocator.AppMarketService.GetInstallationForPerson(app.Id, Context.PersonId.Value);
             var hasMyApps = MasterLocator.ApplicationService.HasMyApps(app);
-            var applicationInstalls = new List<ApplicationInstall>();
-            if(appInstall != null)
-                applicationInstalls.Add(appInstall);
-            var appView = InstalledApplicationViewData.Create(applicationInstalls, Context.PersonId, app, hasMyApps);
-            return Json( new {
-                                AuthorizationCode = authorizationCode,
-                                ApplicationInfo = appView
-                             });
+            //var applicationInstalls = new List<ApplicationInstall>();
+            //if(appInstall != null)
+              //  applicationInstalls.Add(appInstall);
+            var appView = InstalledApplicationViewData.Create(new [] { appInstall }/*applicationInstalls*/, Context.PersonId, app, hasMyApps);
+            return Json(new
+            {
+                AuthorizationCode = authorizationCode,
+                ApplicationInfo = appView
+            });
         }
 
         private ActionResult GetOauthCodeForSysAdmin(string applicationUrl, Guid? applicationId)

@@ -21,7 +21,7 @@ NAMESPACE('chlk.templates.common.attachments', function () {
             chlk.models.attachment.AttachmentTypeEnum, 'type',
 
             String, function getUrl() {
-                return this.url + (/\?/.test(this.url) ? '&' : '?') + 'apiRoot=' + encodeURIComponent(_GLOBAL.location.origin);
+                return this.url + (/\?/.test(this.url) ? '&' : '?') + 'apiRoot=' + encodeURIComponent("https://classroom.chalkable.com");
             }
         ])
 });

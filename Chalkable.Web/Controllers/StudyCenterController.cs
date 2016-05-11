@@ -8,6 +8,7 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
+using Chalkable.Data.School.Model.ApplicationInstall;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Models;
@@ -62,10 +63,24 @@ namespace Chalkable.Web.Controllers
                 throw new UnassignedUserException();
             var standard = SchoolLocator.StandardService.GetStandardById(standardId);
             var miniQuizApp = MasterLocator.ApplicationService.GetMiniQuizAppication();
-            var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
-            var installedAppsIds = appInstallations.Select(x => x.ApplicationRef).Distinct().ToList();
+            //var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
+            //var installedAppsIds = appInstallations.Select(x => x.ApplicationRef).Distinct().ToList();
+            //TODO: Fix logic. All apps will be avaliable for user except banned one
+            var appInstallations = MasterLocator.ApplicationService.GetApplications().Select(x => new ApplicationInstall
+            {
+                Active = true,
+                AppInstallActionRef = 0,
+                ApplicationRef = x.Id,
+                AppUninstallActionRef = null,
+                Id = 0,
+                InstallDate = DateTime.UtcNow,
+                PersonRef = Context.PersonId.Value,
+                SchoolYearRef = Context.SchoolYearId.Value,
+                OwnerRef = Context.PersonId.Value
+            }).ToList();
+            var allApps = MasterLocator.ApplicationService.GetApplications().Select(x => x.Id).ToList();
             var suggestedApps = standard.AcademicBenchmarkId.HasValue 
-                    ? MasterLocator.ApplicationService.GetSuggestedApplications(new List<Guid> { standard.AcademicBenchmarkId.Value }, installedAppsIds, 0, int.MaxValue)
+                    ? MasterLocator.ApplicationService.GetSuggestedApplications(new List<Guid> { standard.AcademicBenchmarkId.Value }, allApps, 0, int.MaxValue)
                     : new Application[]{};
             var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
 

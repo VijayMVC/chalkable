@@ -8,6 +8,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.ApplicationInstall;
 using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Logic
@@ -25,7 +26,18 @@ namespace Chalkable.Web.Logic
             var annApps = schoolLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId, true);
             var apps = masterLocator.ApplicationService.GetApplicationsByIds(annApps.Select(x=>x.ApplicationRef).ToList());
             var announcementType = schoolLocator.AnnouncementFetchService.GetAnnouncementType(announcementId);
-            var installs = schoolLocator.AppMarketService.ListInstalledAppInstalls(schoolLocator.Context.PersonId ?? 0);
+            var installs = masterLocator.ApplicationService.GetApplications().Select(x => new ApplicationInstall
+            {
+                Active = true,
+                OwnerRef = schoolLocator.Context.PersonId.Value,
+                PersonRef = schoolLocator.Context.PersonId.Value,
+                SchoolYearRef = schoolLocator.Context.SchoolYearId.Value,
+                Id = 0,
+                ApplicationRef = x.Id,
+                AppUninstallActionRef = null,
+                InstallDate = DateTime.UtcNow,
+                AppInstallActionRef = 0
+            }).ToList(); //TODO: FAKE DATA. Remove this block
             return AnnouncementApplicationViewData.Create(annApps, apps, installs, schoolLocator.Context.PersonId, announcementType);
         } 
 

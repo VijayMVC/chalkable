@@ -175,9 +175,11 @@ namespace Chalkable.BusinessLogic.Services.School
         private bool CanAddToAnnouncement(Guid appId)
         {
             Trace.Assert(Context.PersonId.HasValue);
-            var assessmentId = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetAssessmentId();
-            var appInstall = ServiceLocator.AppMarketService.GetInstallationForPerson(appId, Context.PersonId.Value);
-            return assessmentId == appId || (appInstall != null && appInstall.Active);
+            //TODO: Removing installations
+            //var assessmentId = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetAssessmentId();
+            //var appInstall = ServiceLocator.AppMarketService.GetInstallationForPerson(appId, Context.PersonId.Value);
+            //return assessmentId == appId || (appInstall != null && appInstall.Active);
+            return true;
         }
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false)

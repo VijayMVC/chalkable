@@ -1,9 +1,11 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Data.School.Model.ApplicationInstall;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Common;
 using Chalkable.Web.Models;
@@ -56,7 +58,19 @@ namespace Chalkable.Web.Controllers
                 if (assessement != null && assessement.HasDistrictAdminSettings &&
                     !installedApps.Exists(x => x.Id == assessement.Id))
                 {
-                    var assAppInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
+                    //TODO: FAKE DATA
+                    var assAppInstallations = MasterLocator.ApplicationService.GetApplications().Select(x => new ApplicationInstall
+                    {
+                        Active = true,
+                        AppInstallActionRef = 0,
+                        ApplicationRef = x.Id,
+                        AppUninstallActionRef = null,
+                        Id = 0,
+                        InstallDate = DateTime.UtcNow,
+                        PersonRef = Context.PersonId.Value,
+                        SchoolYearRef = Context.SchoolYearId.Value,
+                        OwnerRef = Context.PersonId.Value
+                    }).ToList();
                     var hasMyApp = MasterLocator.ApplicationService.HasMyApps(assessement);
                     installedApps.Add(InstalledApplicationViewData.Create(assAppInstallations, Context.PersonId.Value, assessement, hasMyApp));
                 }

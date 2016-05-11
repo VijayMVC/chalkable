@@ -10,6 +10,7 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
+using Chalkable.Data.School.Model.ApplicationInstall;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.ApplicationsViewData;
@@ -34,7 +35,9 @@ namespace Chalkable.Web.Controllers
             var st = start ?? 0;
             var cnt = count ?? ATTACH_DEFAULT_PAGE_SIZE;
 
-            var studentCountPerApp = SchoolLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
+            //TODO: FAKE DATA. ALL apps are avalilable for user.
+            var apps = MasterLocator.ApplicationService.GetApplications();
+            var studentCountPerApp = apps.ToDictionary(x => x.Id, y => 0);//SchoolLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
             var installedApp = GetApplications(MasterLocator, studentCountPerApp.Select(x => x.Key).Distinct().ToList(), true, null);
             var res = ApplicationForAttachViewData.Create(installedApp, studentCountPerApp, true);
             var totalCount = res.Count;
@@ -57,8 +60,9 @@ namespace Chalkable.Web.Controllers
                 throw new UnassignedUserException();
             var st = start ?? 0;
             var cnt = count ?? int.MaxValue;
-            var appInstalls = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
-            var installedAppsIds = appInstalls.GroupBy(x=>x.ApplicationRef).Select(x => x.Key).Distinct().ToList();
+            var appInstalls = new List<ApplicationInstall>();
+            //TODO: All apps are avaliable for user. FIX THIS!
+            var installedAppsIds = MasterLocator.ApplicationService.GetApplications().Select(x => x.Id).ToList();
             var applications = MasterLocator.ApplicationService.GetSuggestedApplications(abIds, installedAppsIds, 0, int.MaxValue);
             var hasMyAppsDic = applications.ToDictionary(app=> app.Id, app => MasterLocator.ApplicationService.HasMyApps(app));
             var res = InstalledApplicationViewData.Create(appInstalls, Context.PersonId.Value, applications, hasMyAppsDic);
@@ -106,10 +110,22 @@ namespace Chalkable.Web.Controllers
         {
             var st = start ?? 0;
             var cnt = count ?? 9;
-            var appInstallations = schoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
-            var installedApp = GetApplications(masterLocator, appInstallations.Select(x => x.ApplicationRef).Distinct().ToList(), forAttach, null);
+            var appsInstalls = masterLocator.ApplicationService.GetApplications().Select(x => new ApplicationInstall
+            {
+                Active = true,
+                AppInstallActionRef = 0,
+                ApplicationRef = x.Id,
+                AppUninstallActionRef = null,
+                Id = 0,
+                InstallDate = DateTime.UtcNow,
+                PersonRef = schoolLocator.Context.PersonId.Value,
+                SchoolYearRef = schoolLocator.Context.SchoolYearId.Value,
+                OwnerRef = schoolLocator.Context.PersonId.Value
+            }).ToList();
+            //var appInstallations = schoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
+            var installedApp = GetApplications(masterLocator, appsInstalls.Select(x => x.ApplicationRef).Distinct().ToList(), forAttach, null);
             var hasMyAppDic = installedApp.ToDictionary(x => x.Id, x => masterLocator.ApplicationService.HasMyApps(x));
-            var res = InstalledApplicationViewData.Create(appInstallations, personId, installedApp, hasMyAppDic);
+            var res = InstalledApplicationViewData.Create(appsInstalls, personId, installedApp, hasMyAppDic);
             var totalCount = res.Count;
             res = res.Skip(st).Take(cnt).ToList();
             return new PaginatedList<InstalledApplicationViewData>(res, st / cnt, cnt, totalCount);

@@ -97,10 +97,10 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             var isFileCabinetEnabled = Context.Role == CoreRoles.TEACHER_ROLE; //only teacher can use file cabinet for now
             //TODO: get external attach apps
 
-            var installedAppsIds = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value)
-                                                .GroupBy(x=>x.ApplicationRef).Select(x=>x.Key).ToList();
+            //var installedAppsIds = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value)
+            //                                    .GroupBy(x=>x.ApplicationRef).Select(x=>x.Key).ToList();
 
-            var apps = MasterLocator.ApplicationService.GetApplicationsByIds(installedAppsIds);
+            var apps = MasterLocator.ApplicationService.GetApplications().ToList();//.Select(x => x.Id).ToList();
             apps = apps.Where(app => MasterLocator.ApplicationService.HasExternalAttachMode(app)).ToList();
             return Json(AttachSettingsViewData.Create(assesmentId, canAddStandard, isAppEnabled, isFileCabinetEnabled, apps));
         }

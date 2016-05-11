@@ -90,9 +90,6 @@
     <Build Include="Tables\AnnouncementQnA.sql" />
     <Build Include="Tables\AnnouncementRecipientData.sql" />
     <Build Include="Tables\AnnouncementStandard.sql" />
-    <Build Include="Tables\ApplicationInstall.sql" />
-    <Build Include="Tables\ApplicationInstallAction.sql" />
-    <Build Include="Tables\ApplicationInstallActionClasses.sql" />
     <Build Include="Tables\AttendanceLevelReason.sql" />
     <Build Include="Tables\AttendanceMonth.sql" />
     <Build Include="Tables\AttendanceReason.sql" />
@@ -173,7 +170,6 @@
     <Build Include="Stored Procedures\spGetAllSchoolsActiveClasses.sql" />
     <Build Include="Stored Procedures\spGetAnnouncementRecipientPersons.sql" />
     <Build Include="Stored Procedures\spGetAnnouncementsQnA.sql" />
-    <Build Include="Stored Procedures\spGetApplicationInstallHistory.sql" />
     <Build Include="Stored Procedures\spGetAttendanceReasons.sql" />
     <Build Include="Stored Procedures\spGetClassAnnouncementDetails.sql" />
     <Build Include="Stored Procedures\spGetClassAnnouncementsBySisActivities.sql" />
@@ -181,16 +177,12 @@
     <Build Include="Stored Procedures\spGetGradingPeriods.sql" />
     <Build Include="Stored Procedures\spGetGroupExplorerData.sql" />
     <Build Include="Stored Procedures\spGetLessonPlanDetails.sql" />
-    <Build Include="Stored Procedures\spGetNotInstalledStudentsCountPerApplication.sql" />
     <Build Include="Stored Procedures\spGetPersonDetails.sql" />
-    <Build Include="Stored Procedures\spGetPersonsForApplicationInstall.sql" />
-    <Build Include="Stored Procedures\spGetPersonsForApplicationInstallCount.sql" />
     <Build Include="Stored Procedures\spGetSchedule.sql" />
     <Build Include="Stored Procedures\spGetStandardParentsWithChilds.sql" />
     <Build Include="Stored Procedures\spGetStartupData.sql" />
     <Build Include="Stored Procedures\spGetStudentAnnouncements.sql" />
     <Build Include="Stored Procedures\spGetStudentClasses.sql" />
-    <Build Include="Stored Procedures\spGetStudentCountToAppInstallByClass.sql" />
     <Build Include="Stored Procedures\spGetStudentDetails.sql" />
     <Build Include="Stored Procedures\spGetStudentsByClass.sql" />
     <Build Include="Stored Procedures\spGetStudentsByTeacher.sql" />

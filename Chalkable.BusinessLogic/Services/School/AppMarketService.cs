@@ -20,7 +20,7 @@ namespace Chalkable.BusinessLogic.Services.School
     {
         IDictionary<Guid, int> GetNotInstalledStudentCountPerApp(int staffId, int classId, int markingPeriodId);
  
-        IList<ApplicationInstall> ListInstalledAppInstalls(int personId);
+        //IList<ApplicationInstall> ListInstalledAppInstalls(int personId);
         IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId);
         ApplicationInstallAction Install(Guid applicationId, int? personId, IList<int> classIds, DateTime dateTime);
         IList<ApplicationInstall> GetInstallations(Guid applicationId, int personId, bool owners = true);
@@ -46,15 +46,15 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public IList<ApplicationInstall> ListInstalledAppInstalls(int personId)
-        {
-            var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
+        //public IList<ApplicationInstall> ListInstalledAppInstalls(int personId)
+        //{
+        //    var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
 
-            if (BaseSecurity.IsDistrictAdmin(Context))             
-                return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalledForAdmin(personId, schoolYear.AcadYear));
+        //    if (BaseSecurity.IsDistrictAdmin(Context))             
+        //        return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalledForAdmin(personId, schoolYear.AcadYear));
 
-            return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalled(personId, schoolYear.Id));     
-        }
+        //    return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalled(personId, schoolYear.Id));     
+        //}
         
         public IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId)
         {
