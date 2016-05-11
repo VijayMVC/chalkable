@@ -23,7 +23,6 @@ NAMESPACE('chlk.models.apps', function () {
                 this.editUrl = SJX.fromValue(raw.editurl, String);
                 this.gradingViewUrl = SJX.fromValue(raw.gradingviewurl, String);
                 this.order = SJX.fromValue(raw.order, Number);
-                this.installedForMe = SJX.fromValue(raw.installedforme, Boolean);
                 this.oauthCode = SJX.fromValue(raw.oauthcode, String);
                 this.currentModeUrl = SJX.fromValue(raw.currentmodeurl, String);
                 this.imageUrl = SJX.fromValue(raw.imageurl, String);
@@ -37,7 +36,6 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'editUrl',
             String, 'gradingViewUrl',
             Number, 'order',
-            Boolean, 'installedForMe',
             String, 'oauthCode',
             String, 'currentModeUrl',
             String, 'imageUrl',
@@ -55,7 +53,6 @@ NAMESPACE('chlk.models.apps', function () {
 
                 if (appData_){
                     this.setAdvancedApp(appData_.isAdvancedApp());
-                    this.setPersonal(appData_.isPersonal());
                     this.setAppAccess(appData_.getAppAccess());
                 }
             }

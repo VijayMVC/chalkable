@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.Common;
-using Chalkable.Data.School.Model;
-using Chalkable.StiConnector.Connectors.Model;
 
 namespace Chalkable.Web.Models.SchoolsViewData
 {

@@ -7,8 +7,9 @@ mixin MyAppsIconLink_(app)
     -var isBanned = false
         +ActionLink('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned).application
             .wrapper
-                +AppIcon(app)
+                +LoadingImage(src=app.getBannerPictureUrl())
                 .title=app.getName()
+                +ActionButton('apps', 'disableApp', appId).negative-button.disable-app-button Disable
                 BUTTON Open
 .my-apps
     h2.page-title Apps

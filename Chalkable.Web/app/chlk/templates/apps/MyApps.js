@@ -10,5 +10,12 @@ NAMESPACE('chlk.templates.apps', function () {
         'MyApps', EXTENDS(chlk.templates.ChlkTemplate), [
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'apps',
+
+
+            Boolean, function canDisableApp(){
+                var role = this.getUserRole();
+                return role.isSysAdmin() || role.isAdmin();
+            }
+
         ])
 });

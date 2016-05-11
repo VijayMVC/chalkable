@@ -16,6 +16,8 @@ REQUIRE('chlk.activities.apps.AppWrapperDialog');
 REQUIRE('chlk.activities.apps.ExternalAttachAppDialog');
 REQUIRE('chlk.activities.apps.AppWrapperPage');
 REQUIRE('chlk.activities.apps.MyAppsPage');
+REQUIRE('chlk.activities.apps.DisableAppDialog');
+
 
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppPostData');
@@ -885,7 +887,6 @@ NAMESPACE('chlk.controllers', function (){
                                 pictureUrl,
                                 5, //todo: pass rating,
                                 new chlk.models.common.ChlkDate(),
-                                appReviews,
                                 analytics || new chlk.models.developer.HomeAnalytics(),
                                 devApps
                            );
@@ -997,6 +998,49 @@ NAMESPACE('chlk.controllers', function (){
                 });
             return this.PushOrUpdateView(chlk.activities.apps.MyAppsPage, result);
         },
+
+        [[chlk.models.id.AppId]],
+        function disableAppAction(appId){
+            var schoolsIds = [];
+            schoolsIds.push(new chlk.models.id.SchoolId('736FFA83-7219-4F54-A4C2-837453863209'));
+            var res = this.WidgetStart('apps', 'disableApp', [appId, schoolsIds, false])
+                .then(function(data){
+
+                });
+            return this.UpdateView(chlk.activities.apps.MyAppsPage, res);
+        },
+
+        [[String, chlk.models.id.AppId, ArrayOf(chlk.models.id.SchoolId), Boolean]],
+        function disableAppWidgetAction(requestId, appId, bannedForSchools, appBanned){
+
+            var schools = []; //TODO get schools from server
+            var school = new chlk.models.school.School();
+            school.setId(chlk.models.id.SchoolId('736FFA83-7219-4F54-A4C2-837453863209'));
+            school.setName('SMITH');
+            schools.push(school);
+
+            var school = new chlk.models.school.School();
+            school.setId(chlk.models.id.SchoolId('94AAEBAF-4B35-4977-A29B-8F9FC3BE5DAE'));
+            school.setName('SCOTT');
+            schools.push(school);
+
+            var school = new chlk.models.school.School();
+            school.setId(chlk.models.id.SchoolId('8E39EFD9-1C31-4449-A67D-B8EF709E71E4'));
+            school.setName('WILSON');
+            schools.push(school);
+
+            var res = ria.async.DeferredData(new chlk.models.apps.ApplicationBanViewData(
+               appId, requestId, bannedForSchools, schools, appBanned
+            ));
+            return this.ShadeView(chlk.activities.apps.DisableAppDialog, res);
+        },
+
+
+        [[chlk.models.apps.ApplicationBanViewData]],
+        function submitDisableAppAction(model){
+            //TODO impl
+        },
+
 
         //TODO: rewrite BanUnBan functionality
         [chlk.controllers.AccessForRoles([
