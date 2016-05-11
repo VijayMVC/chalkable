@@ -21,7 +21,7 @@ namespace Chalkable.BusinessLogic.Common
         public const string ICON_17_FILE = "icon17.png";
         public const string ICON_47_FILE = "icon47.png";
 
-        public static string BuildAppUrl(Application application, int? announcementAppId, int? appInstallId, AppMode mode)
+        public static string BuildAppUrl(Application application, int? announcementAppId, AppMode mode)
         {
             string page;
             switch (mode)
@@ -46,9 +46,7 @@ namespace Chalkable.BusinessLogic.Common
             paramsBuilder.AppendFormat("{0}={1}&", MODE_PARAM, page);
             if (announcementAppId.HasValue)
                 paramsBuilder.AppendFormat("{0}={1}&", ANNOUNCEMENT_APPLICATION_ID_PARAM, announcementAppId.Value);
-            if (appInstallId.HasValue)
-                paramsBuilder.AppendFormat("{0}={1}", APPLICATION_INSTALL_ID_PARAM, appInstallId.Value);
-
+            
             var fmt = url.Contains("?") ? "{0}&{1}" : "{0}?{1}";
             return paramsBuilder.Length == 0 ? url : string.Format(fmt, url, paramsBuilder);
         }

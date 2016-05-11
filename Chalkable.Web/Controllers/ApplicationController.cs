@@ -188,27 +188,13 @@ namespace Chalkable.Web.Controllers
             Trace.Assert(Context.SchoolYearId.HasValue);
 
             var res = SchoolLocator.ApplicationSchoolService.AddToAnnouncement(announcementId, (AnnouncementTypeEnum) announcementType,applicationId);
-            //TODO: FAKE DATA
-            var appInstalls = MasterLocator.ApplicationService.GetApplications().Select(x => 
-            new ApplicationInstall
-            {
-                AppInstallActionRef = 0,
-                Active = true,
-                ApplicationRef = x.Id,
-                AppUninstallActionRef = null,
-                Id = 0,
-                PersonRef = Context.PersonId.Value,
-                InstallDate = DateTime.UtcNow,
-                OwnerRef = Context.PersonId.Value,
-                SchoolYearRef = Context.SchoolYearId.Value
-            }).ToList();//SchoolLocator.AppMarketService.GetInstallations(applicationId, Context.PersonId.Value, false);
             var app = MasterLocator.ApplicationService.GetApplicationById(applicationId);
             
             var assessmentApp = MasterLocator.ApplicationService.GetAssessmentApplication();
             if (assessmentApp != null && applicationId == assessmentApp.Id)
                 MasterLocator.UserTrackingService.AttachedAssessment(Context.Login, announcementId);
 
-            return Json(AnnouncementApplicationViewData.Create(res, app, appInstalls, Context.PersonId, (AnnouncementTypeEnum)announcementType));
+            return Json(AnnouncementApplicationViewData.Create(res, app, Context.PersonId, (AnnouncementTypeEnum)announcementType));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
@@ -242,7 +228,7 @@ namespace Chalkable.Web.Controllers
             var res = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplication(announcementApplicationId);
             var announcementType = SchoolLocator.AnnouncementFetchService.GetAnnouncementType(res.AnnouncementRef);
             var app = MasterLocator.ApplicationService.GetApplicationById(res.ApplicationRef);
-            return Json(AnnouncementApplicationViewData.Create(res, app, null, null, announcementType));
+            return Json(AnnouncementApplicationViewData.Create(res, app, null, announcementType));
         }
 
 

@@ -33,21 +33,11 @@ namespace Chalkable.Web.Controllers
                 throw new ChalkableException("Standard not found");
 
             var app = MasterLocator.ApplicationService.GetApplicationByUrl(Context.OAuthApplication);
-            if (!IsPracticeOrInstalledApp(app.Id, Context.PersonId.Value))
-                throw new ChalkableSecurityException("Application is not installed for current student");
 
             SchoolLocator.PracticeGradeService.Add(standard.Id, Context.PersonId.Value, app.Id, score);
             return Json(true);
         }
-
-        private bool IsPracticeOrInstalledApp(Guid applicationId, int studentId)
-        {
-            var practiceAppId = MasterLocator.ApplicationService.GetMiniQuizAppicationId();
-            return practiceAppId == applicationId
-                   || SchoolLocator.AppMarketService.GetInstallationForPerson(applicationId, studentId) != null;
-        }
-
-
+        
         [AuthorizationFilter("Student")]
         public ActionResult PracticeGrades(int studentId, int classId, int? standardId)
         {
@@ -63,31 +53,22 @@ namespace Chalkable.Web.Controllers
                 throw new UnassignedUserException();
             var standard = SchoolLocator.StandardService.GetStandardById(standardId);
             var miniQuizApp = MasterLocator.ApplicationService.GetMiniQuizAppication();
-            //var appInstallations = SchoolLocator.AppMarketService.ListInstalledAppInstalls(Context.PersonId.Value);
-            //var installedAppsIds = appInstallations.Select(x => x.ApplicationRef).Distinct().ToList();
-            //TODO: Fix logic. All apps will be avaliable for user except banned one
-            var appInstallations = MasterLocator.ApplicationService.GetApplications().Select(x => new ApplicationInstall
-            {
-                Active = true,
-                AppInstallActionRef = 0,
-                ApplicationRef = x.Id,
-                AppUninstallActionRef = null,
-                Id = 0,
-                InstallDate = DateTime.UtcNow,
-                PersonRef = Context.PersonId.Value,
-                SchoolYearRef = Context.SchoolYearId.Value,
-                OwnerRef = Context.PersonId.Value
-            }).ToList();
-            var allApps = MasterLocator.ApplicationService.GetApplications().Select(x => x.Id).ToList();
-            var suggestedApps = standard.AcademicBenchmarkId.HasValue 
-                    ? MasterLocator.ApplicationService.GetSuggestedApplications(new List<Guid> { standard.AcademicBenchmarkId.Value }, allApps, 0, int.MaxValue)
-                    : new Application[]{};
-            var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
+            
+            var allApps = MasterLocator.ApplicationService.GetApplications(live:true)
+                .Select(BaseApplicationViewData.Create).ToList();
+            
+            IList<Application> suggestedApps = new List<Application>();
 
+            if (standard.AcademicBenchmarkId.HasValue)
+                suggestedApps = MasterLocator.ApplicationService.GetSuggestedApplications(
+                        new[] {standard.AcademicBenchmarkId.Value}, allApps.Select(x => x.Id).ToList(), 0, int.MaxValue);
+
+            var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
             var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, Context.SchoolYearId, ChalkableAuthentication.GetSessionKey());
             var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(miniQuizApp.Url, userInfo);
-
-            return Json(MiniQuizAppInfoViewData.Create(miniQuizApp, suggestedApps, appInstallations, hasMyAppDic, Context.PersonId, authorizationCode));
+            
+            return Json(MiniQuizAppInfoViewData.Create(miniQuizApp, suggestedApps.Select(BaseApplicationViewData.Create).ToList(), allApps, 
+                hasMyAppDic, Context.PersonId, authorizationCode));
         }
     }
 }

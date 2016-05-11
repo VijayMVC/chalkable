@@ -9,31 +9,7 @@ using Chalkable.Data.School.Model.ApplicationInstall;
 
 namespace Chalkable.Web.Models.ApplicationsViewData
 {
-
-    public class ApplicationForAttachViewData : BaseApplicationViewData
-    {
-
-        public bool IsInstalled { get; set; }
-        public int NotInstalledStudentsCount { get; set; }
-        protected ApplicationForAttachViewData(Application application) : base(application)
-        {
-        }
-        
-        public static ApplicationForAttachViewData Create(Application application, int notInstalledStudentsCount, bool isInstalled)
-        {
-            return new ApplicationForAttachViewData(application) {NotInstalledStudentsCount = notInstalledStudentsCount, IsInstalled = isInstalled};
-        }
-        public static IList<ApplicationForAttachViewData> Create(IList<Application> applications, IDictionary<Guid, int> notInstalledStCountPerApp, bool isInstalled)
-        {
-            return applications.Select(app => Create(app, notInstalledStCountPerApp[app.Id], isInstalled)).ToList();
-        }
-        public static IList<ApplicationForAttachViewData> Create(IList<Application> applications, IDictionary<Guid, int> notInstalledStCountPerApp, List<Guid> installedApps)
-        {
-            var res = applications.Select(app => Create(app, notInstalledStCountPerApp[app.Id], installedApps?.Exists(x => x == app.Id) ?? false)).ToList();
-            return res;
-        }
-    }
-
+    
     public class InstalledApplicationViewData : BaseApplicationViewData
     {
         public bool HasMyApp { get; set; }
@@ -67,7 +43,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             res.ApplicationInstalls = ApplicationInstallViewData.Create(appInstalls, personId);
             if (appInstalls.Count > 0)
             {
-                res.MyAppsUrl = AppTools.BuildAppUrl(app, null, appInstalls.First().Id, AppMode.MyView);
+                res.MyAppsUrl = AppTools.BuildAppUrl(app, null, AppMode.MyView);
                 res.Installed = res.ApplicationInstalls.Any(x => personId.HasValue && x.PersonId == personId.Value);
             }
             return res;

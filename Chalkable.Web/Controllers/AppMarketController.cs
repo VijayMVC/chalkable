@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Web.Mvc;
@@ -34,143 +35,68 @@ namespace Chalkable.Web.Controllers
         {
             var st = start ?? 0;
             var cnt = count ?? ATTACH_DEFAULT_PAGE_SIZE;
-
-            //TODO: FAKE DATA. ALL apps are avalilable for user.
-            var apps = MasterLocator.ApplicationService.GetApplications();
-            var studentCountPerApp = apps.ToDictionary(x => x.Id, y => 0);//SchoolLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
-            var installedApp = GetApplications(MasterLocator, studentCountPerApp.Select(x => x.Key).Distinct().ToList(), true, null);
-            var res = ApplicationForAttachViewData.Create(installedApp, studentCountPerApp, true);
-            var totalCount = res.Count;
-            res = res.Skip(st).Take(cnt).ToList();
-            return Json(new PaginatedList<ApplicationForAttachViewData>(res, st / cnt, cnt, totalCount));
+            
+            var applications = MasterLocator.ApplicationService.GetApplications(st, cnt, true);
+            return Json(applications.Transform(BaseApplicationViewData.Create));
         }
 
         [AuthorizationFilter("DistrictAdmin")]
         public ActionResult ListInstalledForAdminAttach(int personId, IntList groupIds, int? start, int? count)
         {
-            var installedApps = GetListInstalledApps(SchoolLocator, MasterLocator, personId, null, start, count, true);
-            return Json(installedApps);
+            var st = start ?? 0;
+            var cnt = count ?? ATTACH_DEFAULT_PAGE_SIZE;
+
+            var apps = MasterLocator.ApplicationService.GetApplications(st, cnt, true);
+            return Json(apps.Transform(BaseApplicationViewData.Create));
         }
 
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult SuggestedApps(int classId, GuidList abIds, int markingPeriodId, int? start, int? count, bool? myAppsOnly)
         {
-            if(!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
+            Trace.Assert(Context.PersonId.HasValue);
+
             var st = start ?? 0;
             var cnt = count ?? int.MaxValue;
-            var appInstalls = new List<ApplicationInstall>();
-            //TODO: All apps are avaliable for user. FIX THIS!
-            var installedAppsIds = MasterLocator.ApplicationService.GetApplications().Select(x => x.Id).ToList();
-            var applications = MasterLocator.ApplicationService.GetSuggestedApplications(abIds, installedAppsIds, 0, int.MaxValue);
-            var hasMyAppsDic = applications.ToDictionary(app=> app.Id, app => MasterLocator.ApplicationService.HasMyApps(app));
-            var res = InstalledApplicationViewData.Create(appInstalls, Context.PersonId.Value, applications, hasMyAppsDic);
+
+            var allApps = MasterLocator.ApplicationService.GetApplications(live: true).Select(x => x.Id).ToList();
+            var suggestedApplications = MasterLocator.ApplicationService.GetSuggestedApplications(abIds, allApps, st, cnt);
+            
             if (myAppsOnly.HasValue && myAppsOnly.Value)
-                res = res.Where(x => x.HasMyApp).ToList();
-            res = res.Skip(st).Take(cnt).ToList();
-            return Json(res);
+                suggestedApplications = suggestedApplications.Where(x => MasterLocator.ApplicationService.HasMyApps(x)).ToList();
+
+            return Json(suggestedApplications.Select(BaseApplicationViewData.Create));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult SuggestedAppsForAttach(int classId, GuidList abIds, int markingPeriodId, int? start, int? count)
         {
-            if (!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
-            return Json(ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, Context.PersonId.Value, classId, abIds, markingPeriodId, start, count ?? 3));
+            Trace.Assert(Context.PersonId.HasValue);
+
+            var suggestedAppsForAttach = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
+                Context.PersonId.Value, classId, abIds, markingPeriodId, start, count ?? 3);
+
+            return Json(suggestedAppsForAttach);
         }
         
-        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult ListInstalled(int personId, string filter, int? start, int? count)
-        {
-            var installedApps = GetListInstalledApps(SchoolLocator, MasterLocator, personId, filter, start, count, null);
-            return Json(installedApps);
-        }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult ListInstalledWithContent(int personId, int classId, int markingPeriodId)
         {
-            var res = GetInstalledWithContent(SchoolLocator, MasterLocator, personId, classId, markingPeriodId);
+            var res = GetApplicationsWithContent(SchoolLocator, MasterLocator);
             return Json(res);
         }
 
-        public static IList<ApplicationForAttachViewData> GetInstalledWithContent(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster masterLocator, int personId, int classId, int markingPeriodId)
+        public static IList<BaseApplicationViewData> GetApplicationsWithContent(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster masterLocator)
         {
-            var studentCountPerApp = schoolLocator.AppMarketService.GetNotInstalledStudentCountPerApp(personId, classId, markingPeriodId);
-            var installedApp = GetApplications(masterLocator, studentCountPerApp.Select(x => x.Key).Distinct().ToList(), true, null);
-            installedApp = installedApp.Where(x => x.ProvidesRecommendedContent).ToList();
-            var apps = ApplicationForAttachViewData.Create(installedApp, studentCountPerApp, true);
-            foreach (var app in apps)
-                app.EncodedSecretKey = HashHelper.HexOfCumputedHash(installedApp.First(x => x.Id == app.Id).SecretKey);
-            return apps;
-        }
+            IList<Application> applications = masterLocator.ApplicationService.GetApplications(live: true);
+            applications = applications.Where(x => x.ProvidesRecommendedContent).ToList();
 
-        public static PaginatedList<InstalledApplicationViewData> GetListInstalledApps(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster masterLocator
-            , int personId, string filter, int? start, int? count, bool? forAttach)
-        {
-            var st = start ?? 0;
-            var cnt = count ?? 9;
-            var appsInstalls = masterLocator.ApplicationService.GetApplications().Select(x => new ApplicationInstall
-            {
-                Active = true,
-                AppInstallActionRef = 0,
-                ApplicationRef = x.Id,
-                AppUninstallActionRef = null,
-                Id = 0,
-                InstallDate = DateTime.UtcNow,
-                PersonRef = schoolLocator.Context.PersonId.Value,
-                SchoolYearRef = schoolLocator.Context.SchoolYearId.Value,
-                OwnerRef = schoolLocator.Context.PersonId.Value
-            }).ToList();
-            //var appInstallations = schoolLocator.AppMarketService.ListInstalledAppInstalls(personId);
-            var installedApp = GetApplications(masterLocator, appsInstalls.Select(x => x.ApplicationRef).Distinct().ToList(), forAttach, null);
-            var hasMyAppDic = installedApp.ToDictionary(x => x.Id, x => masterLocator.ApplicationService.HasMyApps(x));
-            var res = InstalledApplicationViewData.Create(appsInstalls, personId, installedApp, hasMyAppDic);
-            var totalCount = res.Count;
-            res = res.Skip(st).Take(cnt).ToList();
-            return new PaginatedList<InstalledApplicationViewData>(res, st / cnt, cnt, totalCount);
-        }
+            var res = BaseApplicationViewData.Create(applications);
+            foreach (var app in res)
+                app.EncodedSecretKey = HashHelper.HexOfCumputedHash(applications.First(x => x.Id == app.Id).SecretKey);
 
-        private static IList<Application> GetApplications(IServiceLocatorMaster masterLocator, IList<Guid> ids, bool? forAttach, string filter)
-        {
-            var res = masterLocator.ApplicationService.GetApplicationsByIds(ids);
-            if(forAttach.HasValue && forAttach.Value)
-                res = res.Where(x => x.CanAttach).ToList();
-            if (!string.IsNullOrEmpty(filter))
-                res = res.Where(x => x.Name.ToLower().Contains(filter)).ToList();
             return res;
-        }
-
-        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult Install(Guid applicationId, int? personId, IntList classids)
-        {
-            if (!SchoolLocator.AppMarketService.CanInstall(applicationId, personId, classids))
-                throw new ChalkableException(ChlkResources.ERR_APP_NOT_ENOUGH_MONEY_OR_ALREADY_INSTALLED);
-
-            var appinstallAction = SchoolLocator.AppMarketService.Install(applicationId, personId, classids, Context.NowSchoolYearTime);
-            try
-            {
-                if (classids == null) classids = new IntList();
-                
-                //todo: person payment
-                // MasterLocator.FundService.AppInstallPersonPayment(appinstallAction.Id, totalPrice, Context.NowSchoolTime, ChlkResources.APP_WAS_BOUGHT);   
-                var classes = classids.Select(x => x.ToString(CultureInfo.InvariantCulture)).ToList();
-                MasterLocator.UserTrackingService.BoughtApp(Context.Login, applicationId.ToString(), classes);
-            }
-            catch (Exception)
-            {
-                foreach (var appinstall in appinstallAction.ApplicationInstalls)
-                    SchoolLocator.AppMarketService.Uninstall(appinstall.Id);
-                throw;
-            }
-            return Json(true);
-        }
-        
-        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult Uninstall(IntList applicationInstallIds)
-        {
-            SchoolLocator.AppMarketService.Uninstall(applicationInstallIds);
-            return Json(true);
         }
 
         [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher, Student")]
@@ -180,17 +106,11 @@ namespace Chalkable.Web.Controllers
             var categories = MasterLocator.CategoryService.ListCategories();
             var appRatings = MasterLocator.ApplicationService.GetRatings(applicationId);
 
-            IList<ApplicationInstallHistory> history = null;
             IList<ApplicationBanHistory> banHistory = null;
             if (Context.Role.Id == CoreRoles.DISTRICT_ADMIN_ROLE.Id)
-            {
-                history = SchoolLocator.AppMarketService.GetApplicationInstallationHistory(applicationId);
                 banHistory = SchoolLocator.ApplicationSchoolService.GetApplicationBanHistory(applicationId);
-            }
-            var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings, history, banHistory);
-            var persons = SchoolLocator.AppMarketService.GetPersonsForApplicationInstallCount(application.Id, Context.PersonId, null);
-            res.InstalledForPersonsGroup = ApplicationLogic.PrepareInstalledForPersonGroupData(SchoolLocator, MasterLocator, application);
-            res.IsInstalledOnlyForMe = persons.First(x => x.Type == PersonsForAppInstallTypeEnum.Total).Count == 0;
+            
+            var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings, banHistory);
             return Json(res);
         }
         

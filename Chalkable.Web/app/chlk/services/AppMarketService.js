@@ -94,7 +94,7 @@ NAMESPACE('chlk.services', function () {
 
             [[chlk.models.id.SchoolPersonId, chlk.models.id.ClassId, chlk.models.id.MarkingPeriodId, Number, Number]],
             ria.async.Future, function getAppsForAttach(personId, classId_, markingPeriodId_,  start_, count_){
-                return this.getPaginatedList('AppMarket/ListInstalledForAttach', chlk.models.apps.Application,{
+                return this.getPaginatedList('AppMarket/ListInstalledForAttach.json', chlk.models.apps.Application,{
                     personId: personId.valueOf(),
                     start: start_ || 0,
                     classId: classId_ && classId_.valueOf(),

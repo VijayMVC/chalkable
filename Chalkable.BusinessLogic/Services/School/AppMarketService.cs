@@ -18,23 +18,21 @@ namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IAppMarketService
     {
-        IDictionary<Guid, int> GetNotInstalledStudentCountPerApp(int staffId, int classId, int markingPeriodId);
- 
-        //IList<ApplicationInstall> ListInstalledAppInstalls(int personId);
-        IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId);
-        ApplicationInstallAction Install(Guid applicationId, int? personId, IList<int> classIds, DateTime dateTime);
-        IList<ApplicationInstall> GetInstallations(Guid applicationId, int personId, bool owners = true);
-        ApplicationInstall GetInstallationForPerson(Guid applicationId, int personId);
-        ApplicationInstall GetInstallationById(int applicationInstallId);
-        void Uninstall(int applicationInstallationId);
-        void Uninstall(IList<int> applicationInstallIds);
-        bool CanInstall(Guid applicationId, int? schoolPersonId, IList<int> classIds);
+        //IDictionary<Guid, int> GetNotInstalledStudentCountPerApp(int staffId, int classId, int markingPeriodId);
+        //IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId);
+        //ApplicationInstallAction Install(Guid applicationId, int? personId, IList<int> classIds, DateTime dateTime);
+        //IList<ApplicationInstall> GetInstallations(Guid applicationId, int personId, bool owners = true);
+        //ApplicationInstall GetInstallationForPerson(Guid applicationId, int personId);
+        //ApplicationInstall GetInstallationById(int applicationInstallId);
+        //void Uninstall(int applicationInstallationId);
+        //void Uninstall(IList<int> applicationInstallIds);
+        //bool CanInstall(Guid applicationId, int? schoolPersonId, IList<int> classIds);
 
-        IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> classIds);
-        IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(int schoolYearId, Guid applicationId);
-        
+        //IList<PersonsForApplicationInstallCount> GetPersonsForApplicationInstallCount(Guid applicationId, int? personId, IList<int> classIds);
+        //IList<StudentCountToAppInstallByClass> GetStudentCountToAppInstallByClass(int schoolYearId, Guid applicationId);
+
         ApplicationTotalPriceInfo GetApplicationTotalPrice(Guid applicationId, int? schoolPerson, IList<int> classids);
-        IList<ApplicationInstallHistory> GetApplicationInstallationHistory(Guid applicationId);
+        //IList<ApplicationInstallHistory> GetApplicationInstallationHistory(Guid applicationId);
     }
 
     public class AppMarketService : SchoolServiceBase, IAppMarketService
@@ -45,16 +43,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public AppMarketService(IServiceLocatorSchool serviceLocator) : base(serviceLocator)
         {
         }
-
-        //public IList<ApplicationInstall> ListInstalledAppInstalls(int personId)
-        //{
-        //    var schoolYear = ServiceLocator.SchoolYearService.GetCurrentSchoolYear();
-
-        //    if (BaseSecurity.IsDistrictAdmin(Context))             
-        //        return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalledForAdmin(personId, schoolYear.AcadYear));
-
-        //    return DoRead(u => new ApplicationInstallDataAccess(u).GetInstalled(personId, schoolYear.Id));     
-        //}
+        
         
         public IList<ApplicationInstall> ListInstalledByAppId(Guid applicationId)
         {

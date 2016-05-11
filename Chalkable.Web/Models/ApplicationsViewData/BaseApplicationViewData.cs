@@ -115,23 +115,19 @@ namespace Chalkable.Web.Models.ApplicationsViewData
     public class ApplicationDetailsViewData : ApplicationViewData
     {
         public ApplicationRatingViewData ApplicationRating { get; set; }
-        public bool IsInstalledOnlyForMe { get; set; }
-        public IList<InstalledForPersonsGroupViewData> InstalledForPersonsGroup { get; set; } 
-        public IList<ApplicationActionHistoryViewData> ApplicationHistory { get; set; }
 
         protected ApplicationDetailsViewData(Application application,  IList<Category> categories, bool canGetSecretKey) 
             : base(application, categories, canGetSecretKey, null)
         {
         }
-        public static ApplicationDetailsViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories, IList<ApplicationRating> appRatings
-            , IList<ApplicationInstallHistory> applicationInstallHistory, IList<ApplicationBanHistory> applicationBanHistory)
+
+        public static ApplicationDetailsViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories, IList<ApplicationRating> appRatings,
+            IList<ApplicationBanHistory> applicationBanHistory)
         {
             var res = new ApplicationDetailsViewData(application, categories, false)
                 {
                     ApplicationRating = ApplicationRatingViewData.Create(appRatings),
                 };
-            if (applicationInstallHistory != null || applicationBanHistory != null)
-                res.ApplicationHistory = ApplicationActionHistoryViewData.Create(applicationInstallHistory, applicationBanHistory);
             return res;
         }
     }

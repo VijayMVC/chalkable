@@ -76,7 +76,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 if (ann.ClassRef.HasValue)
                 {
                     annView.SuggestedApps = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, Context.PersonId.Value, ann.ClassRef.Value, abIds, mp.Id);
-                    annView.AppsWithContent = AppMarketController.GetInstalledWithContent(SchoolLocator, MasterLocator, Context.PersonId.Value, ann.ClassRef.Value, mp.Id);
+                    annView.AppsWithContent = AppMarketController.GetApplicationsWithContent(SchoolLocator, MasterLocator);
                 }
             }
 
@@ -122,7 +122,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             return annViewData;
         }
         
-        protected IList<ApplicationForAttachViewData> PrepareSuggestedAppsForAnnouncementViewData(AnnouncementDetails announcementDetails)
+        protected IList<BaseApplicationViewData> PrepareSuggestedAppsForAnnouncementViewData(AnnouncementDetails announcementDetails)
         {
             if (announcementDetails.AnnouncementStandards != null && announcementDetails.AnnouncementStandards.Count > 0 && announcementDetails.ClassRef.HasValue)
             {
@@ -134,7 +134,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 return ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
                                                           Context.PersonId.Value, announcementDetails.ClassRef.Value, abIds, mp.Id);
             }
-            return new List<ApplicationForAttachViewData>();
+            return new List<BaseApplicationViewData>();
         }
 
         private IList<int> GetAnnouncementOwnersIds(AnnouncementDetails ann)
