@@ -72,6 +72,15 @@ REQUIRE('chlk.controllers.ErrorController');
 
 NAMESPACE('chlk', function (){
 
+    // FIX for IE
+    (function(win_loc) {
+        try {
+            if (!win_loc.origin) {
+                win_loc.origin = win_loc.protocol + "//" + win_loc.hostname + (win_loc.port ? ':' + win_loc.port : '');
+            }
+        } catch (ignored) {}
+    })(window.location);
+
     var Raygun = window.Raygun || null;
 
     /** @class chlk.ConvertersFactory */
