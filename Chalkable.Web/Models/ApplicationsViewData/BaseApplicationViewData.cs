@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Chalkable.BusinessLogic.Common;
 using Chalkable.Common;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
@@ -62,6 +63,7 @@ namespace Chalkable.Web.Models.ApplicationsViewData
                 LiveApplication = Create(application.LiveApplication);
             Ban = application.Ban;
             HasDistrictAdminSettings = application.HasDistrictAdminSettings;
+            MyAppsUrl = AppTools.BuildAppUrl(application, null, AppMode.MyView);
         }
 
         public static BaseApplicationViewData Create(Application application)

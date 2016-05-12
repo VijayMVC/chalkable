@@ -260,7 +260,7 @@ namespace Chalkable.Web.Controllers
             return Json(new
             {
                 AuthorizationCode = authorizationCode,
-                ApplicationInfo = app
+                ApplicationInfo = BaseApplicationViewData.Create(app)
             });
         }
 

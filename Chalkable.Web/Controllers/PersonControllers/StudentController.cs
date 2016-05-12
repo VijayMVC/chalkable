@@ -144,7 +144,8 @@ namespace Chalkable.Web.Controllers.PersonControllers
             var syId = GetCurrentSchoolYearId();
             var student = SchoolLocator.StudentService.GetById(studentId, syId);
             var apps = MasterLocator.ApplicationService.GetApplications(start.Value, count.Value, true)
-                .Transform(BaseApplicationViewData.Create);
+                .Where(x => MasterLocator.ApplicationService.HasMyApps(x))
+                .Select(BaseApplicationViewData.Create).ToList();
             var stHealsConditions = SchoolLocator.StudentService.GetStudentHealthConditions(studentId);
             var customAlerts = SchoolLocator.StudentCustomAlertDetailService.GetList(studentId);
             return Json(StudentAppsViewData.Create(student, apps, customAlerts, stHealsConditions));
