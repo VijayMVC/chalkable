@@ -5,7 +5,7 @@
         .close.close-btn
     +ActionForm('apps', 'submitDisableApp')
         +Hidden('applicationId', self.getApplicationId())
-        +Hidden('bannedForSchools', self.getBannedSchoolIds())
+        +Hidden('schoolIdsStr', self.getBannedSchoolIdsStr()).school-ids
         -var allSchoolsStage = self.getAllSchoolsStage()
         table
             tr
@@ -20,7 +20,7 @@
                         each school in self.getSchools()
                             .column-cell.school-name
                                 .box-checkbox
-                                    +Checkbox('school', self.isBannedSchool(school.getId()), false, true)(data-id=school.getId().valueOf())
+                                    +Checkbox('school', self.isBannedSchool(school.getId()), false, true)(data-id=school.getId().valueOf()).school-name-checkbox
                                 SPAN
                                     .text-container.right=school.getName()
 

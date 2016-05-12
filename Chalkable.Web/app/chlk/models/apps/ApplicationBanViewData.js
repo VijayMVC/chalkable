@@ -37,4 +37,15 @@ NAMESPACE('chlk.models.apps', function () {
                     this.setBanned(banned_);
             }
         ]);
+
+    CLASS('SubmitApplicationBan',[
+
+        chlk.models.id.AppId, 'applicationId',
+        String, 'schoolIdsStr',
+
+        ArrayOf(chlk.models.id.SchoolId), function getSchoolIds(){
+            var idsStr = this.getSchoolIdsStr();
+            return idsStr ? idsStr.split(',') : [];
+        }
+    ])
 });

@@ -34,6 +34,10 @@ NAMESPACE('chlk.templates.apps', function(){
             Number, function getAllSchoolsStage(){
                 var bannedSchoolIds = this.getBannedSchoolIds();
                 return bannedSchoolIds && bannedSchoolIds.length > 0 ? (this.isBanned() ? 2 : 1 ) : 0;
+            },
+
+            String, function getBannedSchoolIdsStr(){
+                return this.getBannedSchoolIds().map(function(_){return _.valueOf()}).join(',');
             }
         ]);
 });
