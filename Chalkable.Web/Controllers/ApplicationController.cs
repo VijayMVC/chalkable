@@ -14,6 +14,7 @@ using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Controllers.AnnouncementControllers;
+using Chalkable.Web.Logic;
 using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Controllers
@@ -203,7 +204,6 @@ namespace Chalkable.Web.Controllers
             return Json(PrepareFullAnnouncementViewData(ann.Id, (AnnouncementTypeEnum)announcementType), 6);
         }
 
-
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult Attach(int announcementApplicationId, int announcementType)
         {
@@ -229,7 +229,6 @@ namespace Chalkable.Web.Controllers
             var app = MasterLocator.ApplicationService.GetApplicationById(res.ApplicationRef);
             return Json(AnnouncementApplicationViewData.Create(res, app, null, announcementType));
         }
-
 
         [AuthorizationFilter]
         public ActionResult GetOauthCode(string applicationUrl, Guid? applicationId)
@@ -309,6 +308,52 @@ namespace Chalkable.Web.Controllers
             var app = MasterLocator.ApplicationService.GetApplicationByUrl(SchoolLocator.Context.OAuthApplication);
             var announcementApplicationRecipient = SchoolLocator.ApplicationSchoolService.GetAnnouncementApplicationRecipients(studentId, app.Id);
             return Json(announcementApplicationRecipient);
+        }
+
+        private const int ATTACH_DEFAULT_PAGE_SIZE = 12;
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult MyApps(GuidList categoriesIds, IntList gradeLevelsIds, string filter, int? filterMode, int? sortingMode, int? start, int? count)
+        {
+            var apps = MasterLocator.ApplicationService.GetApplications(categoriesIds, gradeLevelsIds, filter
+                          , (AppFilterMode?)filterMode, (AppSortingMode?)sortingMode, start ?? 0, count ?? DEFAULT_PAGE_SIZE);
+            return Json(apps.Transform(BaseApplicationViewData.Create));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult ListForAttach(int personId, int classId, int markingPeriodId, int? start, int? count)
+        {
+            var st = start ?? 0;
+            var cnt = count ?? ATTACH_DEFAULT_PAGE_SIZE;
+
+            var applications = MasterLocator.ApplicationService.GetApplications(st, cnt, true, canAttach: true);
+            return Json(applications.Transform(BaseApplicationViewData.Create));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult SuggestedApps(int classId, GuidList abIds, int markingPeriodId, int? start, int? count, bool? myAppsOnly)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+
+            var st = start ?? 0;
+            var cnt = count ?? int.MaxValue;
+
+            var suggestedApplications = MasterLocator.ApplicationService.GetSuggestedApplications(abIds, st, cnt);
+
+            if (myAppsOnly.HasValue && myAppsOnly.Value)
+                suggestedApplications = suggestedApplications.Where(x => MasterLocator.ApplicationService.HasMyApps(x)).ToList();
+
+            return Json(suggestedApplications.Select(BaseApplicationViewData.Create));
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
+        public ActionResult SuggestedAppsForAttach(int classId, GuidList abIds, int markingPeriodId, int? start, int? count)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+
+            var suggestedAppsForAttach = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
+                Context.PersonId.Value, classId, abIds, markingPeriodId, start, count ?? 3);
+
+            return Json(suggestedAppsForAttach);
         }
     }
 }

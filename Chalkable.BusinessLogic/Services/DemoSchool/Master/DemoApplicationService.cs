@@ -108,14 +108,15 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return app.Permissions.Select(x => x.Permission).ToList();
         }
 
-        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true)
+        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true, bool? canAttach = null)
         {
             var query = new ApplicationQuery
                 {
                     Start = start,
                     Count = count,
                     Live = live,
-                    OnlyForInstall = onlyForInstall
+                    OnlyForInstall = onlyForInstall,
+                    CanAttach = canAttach
                 };
             return GetApplications(query);
         }

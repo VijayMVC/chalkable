@@ -115,6 +115,12 @@ namespace Chalkable.Data.Master.DataAccess
                 }
             }
 
+            if (query.CanAttach.HasValue)
+            {
+                res.Sql.AppendFormat(" and [{0}] = @{0}", nameof(Application.CanAttach));
+                res.Parameters.Add(nameof(Application.CanAttach), query.CanAttach.Value);
+            }
+
             if (query.DeveloperId.HasValue)
             {
                 res.Sql.Append(string.Format(" and [{0}] = @{0}", nameof(Application.DeveloperRef)));
@@ -419,6 +425,8 @@ namespace Chalkable.Data.Master.DataAccess
 
         public bool OnlyForInstall { get; set; }
 
+        public bool? CanAttach { get; set; }
+
         public ApplicationQuery()
         {
             Start = 0;
@@ -428,6 +436,7 @@ namespace Chalkable.Data.Master.DataAccess
             Live = null;
             Free = null;
             OnlyForInstall = true;
+            CanAttach = null;
         }
 
     }

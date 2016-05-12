@@ -181,7 +181,6 @@
     <Build Include="Stored Procedures\spGetSchedule.sql" />
     <Build Include="Stored Procedures\spGetStandardParentsWithChilds.sql" />
     <Build Include="Stored Procedures\spGetStartupData.sql" />
-    <Build Include="Stored Procedures\spGetStudentAnnouncements.sql" />
     <Build Include="Stored Procedures\spGetStudentClasses.sql" />
     <Build Include="Stored Procedures\spGetStudentDetails.sql" />
     <Build Include="Stored Procedures\spGetStudentsByClass.sql" />

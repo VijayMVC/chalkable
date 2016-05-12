@@ -63,6 +63,8 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         protected AnnouncementViewData PrepareAnnouncmentViewDataForEdit(AnnouncementDetails ann)
         {
+            Trace.Assert(Context.PersonId.HasValue);
+
             var annView = (AnnouncementDetailedViewData)PrepareAnnouncmentViewData(ann);
             annView.CanAddStandard = SchoolLocator.GetAnnouncementService(ann.Type).CanAddStandard(ann.Id);
             if (annView.Standards != null && annView.Standards.Count > 0)
@@ -76,7 +78,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                 if (ann.ClassRef.HasValue)
                 {
                     annView.SuggestedApps = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, Context.PersonId.Value, ann.ClassRef.Value, abIds, mp.Id);
-                    annView.AppsWithContent = AppMarketController.GetApplicationsWithContent(SchoolLocator, MasterLocator);
+                    annView.AppsWithContent = ApplicationLogic.GetApplicationsWithContent(SchoolLocator, MasterLocator);
                 }
             }
 
@@ -101,6 +103,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
         protected AnnouncementViewData PrepareAnnouncmentViewData(AnnouncementDetails ann, IList<AnnouncementAttachmentInfo> attachments, IList<AttachmentInfo> attrAttachmentInfo)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             if (ann.ClassAnnouncementData?.SisActivityId != null)
             {
                 ann.StudentAnnouncements = SchoolLocator.StudentAnnouncementService.GetStudentAnnouncements(ann.Id);

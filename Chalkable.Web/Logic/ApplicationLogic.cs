@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Chalkable.API.Helpers;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
+using Chalkable.Data.Master.Model;
 using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Logic
@@ -34,6 +36,17 @@ namespace Chalkable.Web.Logic
             // get without content apps only 
             return res.Where(x => !x.ApplicationAccess.ProvidesRecommendedContent).ToList();
         }
+        
+        public static IList<BaseApplicationViewData> GetApplicationsWithContent(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster masterLocator)
+        {
+            IList<Application> applications = masterLocator.ApplicationService.GetApplications(live: true);
+            applications = applications.Where(x => x.ProvidesRecommendedContent).ToList();
 
+            var res = BaseApplicationViewData.Create(applications);
+            foreach (var app in res)
+                app.EncodedSecretKey = HashHelper.HexOfCumputedHash(applications.First(x => x.Id == app.Id).SecretKey);
+
+            return res;
+        }
     }
 }
