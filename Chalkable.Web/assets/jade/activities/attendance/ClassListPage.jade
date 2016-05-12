@@ -1,0 +1,63 @@
+mixin SummaryInfo(presentCount, allStudentsCount)
+    -presentPersent = Math.round((presentCount * 100) / allStudentsCount)
+    .summary-info
+        .title= presentCount + '/' + allStudentsCount + ' ' + Msg.Present
+        .slide-bar
+            div(style="width: " + presentPersent + "%").inner-bar
+
+.student-attendances-list
+    h2.page-title Attendance
+
+    -var valuesEnum = chlk.models.attendance.AttendanceTypeEnum
+    -var selectedId = self.getClassId()
+
+    .action-bar
+        .items
+            +ActionLink(self.isInProfile() ? 'class' : 'attendance', self.isInProfile() ? 'attendanceList' : 'classList', selectedId, self.getDate().toStandardFormat()).pressed=Msg.List
+            +ActionLink(self.isInProfile() ? 'class' : 'attendance', self.isInProfile() ? 'attendanceSeatingChart' : 'seatingChart', selectedId, self.getDate().toStandardFormat())=Msg.Seating_Chart
+    .loader
+    .students-list.loader-container
+        if !self.isInProfile()
+            -var topData = self.getTopData()
+            +ClassesToolBarWithAll(topData, 'attendance', 'classList', [self.getDate().format('mm-dd-yy')], false, true).attendance
+        if self.getItems().length == 0
+            .people-list-container
+                .header
+                    .table
+                        .title
+                            span.date-text= self.getDate().toString('MM dd, yy')
+                            -var params = selectedId ? [selectedId.valueOf()] : null
+                            +DatePicker('attendanceDate', self.getDate())(
+                                data-options={
+                                    showOtherMonths: true,
+                                    selectOtherMonths: true,
+                                    inCurrentGradingPeriods: true,
+                                    underOverlay: true
+                                },
+                            data-controller= self.isInProfile() ? "class" : "attendance",
+                            data-action=self.isInProfile() ? "classListForDate" : "classList",
+                            data-params=params
+                            )#attendance-date.tb-date-picker.tr
+                .grid-container.people-list
+                    .black-arrow.no-class-scheduled.row=Msg.No_class_scheduled(self.getDate().format('mm/dd/yy')) + ' or no students in this class'
+        if self.getItems().length > 0
+            .people-list-container.not-transparent(class=self.canPost() ? 'can-post' : '')
+                +RenderWith(self.getModel(), chlk.templates.attendance.ClassListPeopleTpl)(LEIntegrated = self.isLEIntegrated() && self.isHasAccessToLE())(
+                    userRole= self.getUserRole()
+                )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

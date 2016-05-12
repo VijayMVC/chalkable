@@ -1,0 +1,59 @@
+.dialog.report-window
+   +ActionForm('grading', 'submitGradeVerificationReport').grade-verification-report-form.no-working.report-form
+      .x-window-header
+         .close.close-btn.dark
+         h1=Msg.Create_Report
+
+      .x-window-body
+         .action-bar: .items: +ActionLinkList(self.buildReportLinksData('gradeVerificationReport'))
+         +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+         +Hidden('gradingPeriod', self.getGradingPeriodId().valueOf())
+         +Hidden('classId', self.getClassId().valueOf())
+         +Hidden('studentIds', '')#student-ids-value
+         +Hidden('studentAverageIds', '')#student-averages-ids
+         +Hidden('gradingPeriodIds', '')#grading-period-ids
+         .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
+            TABLE.report-table
+               TR
+                  TD.item-3
+                     h3=Msg.Grading_Period
+                     +Select('gradingPeriod1')(multiple, disabled = 'disabled')#grading-period-select
+                        each gp in self.getGradingPeriods()
+                           +Option(gp.getId().valueOf(), gp.getName(), gp.getId() == self.getGradingPeriodId())
+                  TD.item-3
+                     h3=Msg.Graded_Item(true)
+                     +Select('studentAverage')(multiple)#student-averages-select
+                        each sa in self.getStudentAverages()
+                           +Option(sa.getId().valueOf(), sa.getName(), true)
+                  TD.item-3
+               TR
+                  TD.item-3
+                     h3=Msg.Grade_Type
+                     +Select('gradeType')
+                        +Option(chlk.models.reports.GradeType.BOTH.valueOf(), Msg.Both, true)
+                        +Option(chlk.models.reports.GradeType.ALPHA.valueOf(), Msg.Alpha, false)
+                        +Option(chlk.models.reports.GradeType.NUMERIC.valueOf(), Msg.Numeric, false)
+                  TD.item-3
+                     h3=Msg.Include
+                     +LabeledCheckbox(Msg.Comment(true) + '/' + Msg.Legend, 'includeCommentsAndLegends', false)
+                     +LabeledCheckbox(Msg.Signature, 'includeSignature', true)
+                     +LabeledCheckbox(Msg.Withdrawn, 'includeWithdrawnCheckBox', self.isIncludeWithdrawnStudents(), true)
+                     +Hidden('includeWithdrawn', self.isIncludeWithdrawnStudents())
+               TR
+                  TD.item-3
+                     h3=Msg.Student_Order
+                     +Select('studentOrder')
+                        +Option(chlk.models.reports.StudentOrder.DISPLAY_NAME.valueOf(), Msg.Display_Name, true)
+                        +Option(chlk.models.reports.StudentOrder.GRADE_LEVEL.valueOf(), Msg.Grade_Level, false)
+                        +Option(chlk.models.reports.StudentOrder.ID_TO_PRINT.valueOf(), Msg.ID_to_print, false)
+                  TD.item-3
+                     +IdToPriintSelect(true, self.hideSSNumber())
+                  TD.item-3
+               +StudentsBlock(self.getStudents())
+
+      .x-window-footer.report-bottom
+         +ReportFormatSelect()
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
