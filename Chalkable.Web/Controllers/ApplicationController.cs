@@ -320,7 +320,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult ListForAttach(int personId, int classId, int markingPeriodId, int? start, int? count)
+        public ActionResult ListForAttach(int? start, int? count)
         {
             var st = start ?? 0;
             var cnt = count ?? ATTACH_DEFAULT_PAGE_SIZE;
@@ -330,7 +330,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult SuggestedApps(int classId, GuidList abIds, int markingPeriodId, int? start, int? count, bool? myAppsOnly)
+        public ActionResult SuggestedApps(GuidList abIds, int? start, int? count, bool? myAppsOnly)
         {
             Trace.Assert(Context.PersonId.HasValue);
 
@@ -343,17 +343,6 @@ namespace Chalkable.Web.Controllers
                 suggestedApplications = suggestedApplications.Where(x => MasterLocator.ApplicationService.HasMyApps(x)).ToList();
 
             return Json(suggestedApplications.Select(BaseApplicationViewData.Create));
-        }
-
-        [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult SuggestedAppsForAttach(int classId, GuidList abIds, int markingPeriodId, int? start, int? count)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-
-            var suggestedAppsForAttach = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
-                Context.PersonId.Value, classId, abIds, markingPeriodId, start, count ?? 3);
-
-            return Json(suggestedAppsForAttach);
         }
     }
 }

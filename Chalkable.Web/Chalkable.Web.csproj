@@ -287,7 +287,6 @@
     <Compile Include="Controllers\AnnouncementControllers\ClassAnnouncementController.cs" />
     <Compile Include="Controllers\AnnouncementControllers\LessonPlanController.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
-    <Compile Include="Controllers\AppMarketController.cs" />
     <Compile Include="Controllers\AttachmentController.cs" />
     <Compile Include="Controllers\AttendanceController.cs" />
     <Compile Include="Controllers\AttendanceReasonController.cs" />

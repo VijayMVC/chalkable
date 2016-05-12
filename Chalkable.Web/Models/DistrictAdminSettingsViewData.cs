@@ -6,7 +6,7 @@ namespace Chalkable.Web.Models
     public class DistrictAdminSettingsViewData
     {
         public MessagingSettingsViewData MessagingSettings { get; set; }
-        public IList<BaseApplicationViewData> InstalledApps { get; set; }
+        public IList<BaseApplicationViewData> Applications { get; set; }
 
         public static DistrictAdminSettingsViewData Create(MessagingSettingsViewData messagingSettings,
             IList<BaseApplicationViewData> apps)
@@ -14,7 +14,7 @@ namespace Chalkable.Web.Models
             return new DistrictAdminSettingsViewData
             {
                 MessagingSettings = messagingSettings,
-                InstalledApps = apps
+                Applications = apps
             };
         }
     }

@@ -23,7 +23,7 @@ namespace Chalkable.Web.Logic
         } 
         
         public static IList<BaseApplicationViewData> GetSuggestedAppsForAttach(IServiceLocatorMaster masterLocator, IServiceLocatorSchool schooLocator
-            , int personId, int classId, IList<Guid> abIds, int markingPeriodId, int? start = null, int? count = null)
+            , IList<Guid> abIds, int? start = null, int? count = null)
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
