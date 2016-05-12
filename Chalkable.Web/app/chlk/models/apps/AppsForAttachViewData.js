@@ -4,9 +4,9 @@ REQUIRE('chlk.models.common.BaseAttachViewData');
 NAMESPACE('chlk.models.apps', function () {
 
     "use strict";
-    /** @class chlk.models.apps.InstalledAppsViewData*/
+    /** @class chlk.models.apps.AppsForAttachViewData*/
     CLASS(
-        'InstalledAppsViewData', EXTENDS(chlk.models.common.BaseAttachViewData), [
+        'AppsForAttachViewData', EXTENDS(chlk.models.common.BaseAttachViewData), [
 
             chlk.models.common.PaginatedList, 'apps',
 

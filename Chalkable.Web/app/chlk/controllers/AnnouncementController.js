@@ -37,7 +37,7 @@ REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.LastMessages');
 REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
-REQUIRE('chlk.models.apps.InstalledAppsViewData');
+REQUIRE('chlk.models.apps.AppsForAttachViewData');
 REQUIRE('chlk.models.announcement.ShowGradesToStudents');
 REQUIRE('chlk.models.announcement.FileAttachViewData');
 REQUIRE('chlk.models.people.UsersListSubmit');
@@ -791,7 +791,7 @@ NAMESPACE('chlk.controllers', function (){
                 .attach(this.validateResponse_())
                 .then(function(data) {
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
-                    return new chlk.models.apps.InstalledAppsViewData(options, data);
+                    return new chlk.models.apps.AppsForAttachViewData(options, data);
                 }, this);
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, result);
         },
@@ -813,7 +813,7 @@ NAMESPACE('chlk.controllers', function (){
                 .getAppsForAttach(userId, options.getClassId(), mp.getId(), start, count)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return new chlk.models.apps.InstalledAppsViewData(options, data, start);
+                    return new chlk.models.apps.AppsForAttachViewData(options, data, start);
                 }, this);
 
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, result);

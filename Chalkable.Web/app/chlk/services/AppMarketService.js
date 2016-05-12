@@ -15,8 +15,6 @@ REQUIRE('chlk.models.apps.AppCategory');
 REQUIRE('chlk.models.people.Role');
 REQUIRE('chlk.models.apps.AppPriceType');
 REQUIRE('chlk.models.apps.AppSortingMode');
-REQUIRE('chlk.models.apps.InstalledApp');
-
 
 NAMESPACE('chlk.services', function () {
     "use strict";
