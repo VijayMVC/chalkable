@@ -128,6 +128,13 @@ namespace Chalkable.Web.Controllers
             return Json(true);
         }
 
+        [AuthorizationFilter("SysAdmin, DistrictAdmin")]
+        public ActionResult SubmitApplicationsBan(Guid applicationId, GuidList schoolIds)
+        {
+            MasterLocator.ApplicationSchoolOptionService.SubmitApplicationsBan(applicationId, schoolIds);
+            return Json(true);
+        }
+
         [AuthorizationFilter("SysAdmin, Developer")]
         public ActionResult Delete(Guid applicationId)
         {

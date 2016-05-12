@@ -135,6 +135,9 @@
     <Build Include="Stored Procedures\spUpdateMessagingSettings.sql" />
     <Build Include="Stored Procedures\spUpdateAssessmentEnabled.sql" />
     <Build Include="Tables\UserLog.sql" />
+    <Build Include="Tables\ApplicationSchoolOption.sql" />
+    <Build Include="Stored Procedures\spBanSchoolsByIds.sql" />
+    <Build Include="User Defined Types\TApplicationSchoolOption.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Scripts\Pre-Deploy\001_addIsAssessmentEnabledToSchool.PreDeployment.sql" />
@@ -144,5 +147,8 @@
   <ItemGroup>
     <PostDeploy Include="Scripts\Post-Deploy\Insert ABIds and Delete CCStIds in AppStand table.sql" />
     <None Include="Scripts\Post-Deploy\004_drop_IsNewAssessmentEnabled_In_School.PostDeployment.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <RefactorLog Include="Chalkable.Database.Master.refactorlog" />
   </ItemGroup>
 </Project>
