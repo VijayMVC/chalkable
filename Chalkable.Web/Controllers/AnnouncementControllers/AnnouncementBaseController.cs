@@ -77,7 +77,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
 
                 if (ann.ClassRef.HasValue)
                 {
-                    annView.SuggestedApps = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, Context.PersonId.Value, ann.ClassRef.Value, abIds, mp.Id);
+                    annView.SuggestedApps = ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, abIds);
                     annView.AppsWithContent = ApplicationLogic.GetApplicationsWithContent(SchoolLocator, MasterLocator);
                 }
             }
@@ -129,13 +129,9 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         {
             if (announcementDetails.AnnouncementStandards != null && announcementDetails.AnnouncementStandards.Count > 0 && announcementDetails.ClassRef.HasValue)
             {
-                var mp = SchoolLocator.MarkingPeriodService.GetLastMarkingPeriod(Context.NowSchoolYearTime.Date);
-                if (mp == null)
-                    throw new NoMarkingPeriodException();
                 var abIds = announcementDetails.AnnouncementStandards.Where(x => x.Standard.AcademicBenchmarkId.HasValue)
                     .Select(x => x.Standard.AcademicBenchmarkId.Value).ToList();
-                return ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator,
-                                                          Context.PersonId.Value, announcementDetails.ClassRef.Value, abIds, mp.Id);
+                return ApplicationLogic.GetSuggestedAppsForAttach(MasterLocator, SchoolLocator, abIds);
             }
             return new List<BaseApplicationViewData>();
         }
