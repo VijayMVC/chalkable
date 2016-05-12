@@ -4,11 +4,6 @@ using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.BusinessLogic.Services.School;
-using Chalkable.Common;
-using Chalkable.Common.Exceptions;
-using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.Model;
-using Chalkable.Data.School.Model.ApplicationInstall;
 using Chalkable.Web.Models.ApplicationsViewData;
 
 namespace Chalkable.Web.Logic
@@ -30,9 +25,8 @@ namespace Chalkable.Web.Logic
         {
             start = start ?? 0;
             count = count ?? int.MaxValue;
-
-            var installedAppsIds = masterLocator.ApplicationService.GetApplications(live: true).Select(x => x.Id).ToList();
-            var applications = masterLocator.ApplicationService.GetSuggestedApplications(abIds, installedAppsIds, start.Value, count.Value);           
+            
+            var applications = masterLocator.ApplicationService.GetSuggestedApplications(abIds, start.Value, count.Value);           
             applications = applications.Where(a => a.CanAttach).ToList();
 
             var res = applications.Select(BaseApplicationViewData.Create);

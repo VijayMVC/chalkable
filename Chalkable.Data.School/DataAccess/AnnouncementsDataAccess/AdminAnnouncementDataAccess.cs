@@ -80,7 +80,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             return GetDetailses("spGetAdminAnnouncementsDetailses", parameters);
         }
 
-        protected override AdminAnnouncement ReadAnnouncementData(AnnouncementComplex announcement, System.Data.SqlClient.SqlDataReader reader)
+        protected override AdminAnnouncement ReadAnnouncementData(AnnouncementComplex announcement, SqlDataReader reader)
         {
             return reader.Read<AdminAnnouncement>();
         }

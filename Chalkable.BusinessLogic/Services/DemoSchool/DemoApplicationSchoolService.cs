@@ -52,31 +52,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             AnnouncementApplicationStorage = new DemoAnnouncementApplicationStorage();
         }
 
-        public IList<int> GetAssignedUserIds(Guid appId, int? announcementAppId)
-        {
-            throw new NotImplementedException();
-            //TODO: impl this later
-            //var res = new List<int>();
-            //if (announcementAppId.HasValue)
-            //{
-
-            //    var anDa = ((DemoAnnouncementService)ServiceLocator.AnnouncementService).GetTeacherAnnouncementService();
-            //    var announcementApplication = GetAnnouncementApplication(announcementAppId.Value);
-            //    var ann = anDa.GetAnnouncementById(announcementApplication.AnnouncementRef);
-            //    var csp = ServiceLocator.ClassService.GetClassPersons(ann.ClassRef.Value, null);
-            //    res.AddRange(csp.Select(x => x.PersonRef));
-            //    var c = ServiceLocator.ClassService.GetById(ann.ClassRef.Value);
-            //    if (Context.PersonId != c.PrimaryTeacherRef)
-            //        if (c.PrimaryTeacherRef.HasValue) res.Add(c.PrimaryTeacherRef.Value);
-            //}
-            //else
-            //{
-            //    var inst = ((DemoAppMarketService)ServiceLocator.AppMarketService).GetAppInstalls(appId, true);
-            //    res.AddRange(inst.Select(x => x.PersonRef));
-            //}
-            //return res;
-        }
-
         public AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementTypeEnum announcementType, Guid applicationId)
         {
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
@@ -139,18 +114,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false)
         {
-            //implement this later
             throw new NotImplementedException();
-            //var announcementApplications = AnnouncementApplicationStorage.GetData().Select(x => x.Value);
-
-            //announcementApplications = announcementApplications.Where(x =>
-            //{
-            //    var announcement = ServiceLocator.AnnouncementService.GetAnnouncementById(x.AnnouncementRef);
-            //    return ((DemoAppMarketService)ServiceLocator.AppMarketService).AppInstallExists(x.ApplicationRef, personId)
-            //           && announcement.PrimaryTeacherRef == personId
-            //           || ((DemoClassService)ServiceLocator.ClassService).ClassPersonExists(announcement.ClassRef.Value, personId);
-            //});
-            //return announcementApplications.ToList();
         }
 
         public Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementTypeEnum announcementType)

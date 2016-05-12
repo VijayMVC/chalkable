@@ -87,7 +87,7 @@ as
 			from 
 			BackgroundTask 
 			where 
-				state = 3 and type = 1
+				[State] = 3 and type = 1
 			) X
 		where
 			R = 1

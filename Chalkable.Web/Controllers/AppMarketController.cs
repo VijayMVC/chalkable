@@ -11,7 +11,6 @@ using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model;
-using Chalkable.Data.School.Model.ApplicationInstall;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.ApplicationsViewData;
@@ -58,9 +57,8 @@ namespace Chalkable.Web.Controllers
 
             var st = start ?? 0;
             var cnt = count ?? int.MaxValue;
-
-            var allApps = MasterLocator.ApplicationService.GetApplications(live: true).Select(x => x.Id).ToList();
-            var suggestedApplications = MasterLocator.ApplicationService.GetSuggestedApplications(abIds, allApps, st, cnt);
+            
+            var suggestedApplications = MasterLocator.ApplicationService.GetSuggestedApplications(abIds, st, cnt);
             
             if (myAppsOnly.HasValue && myAppsOnly.Value)
                 suggestedApplications = suggestedApplications.Where(x => MasterLocator.ApplicationService.HasMyApps(x)).ToList();
@@ -112,14 +110,6 @@ namespace Chalkable.Web.Controllers
             
             var res = ApplicationDetailsViewData.Create(application, null, categories, appRatings, banHistory);
             return Json(res);
-        }
-        
-        [AuthorizationFilter("SysAdmin, Developer, DistrictAdmin, Teacher, Student")]
-        public ActionResult GetApplicationTotalPrice(Guid applicationid, int? personId, IntList classids)
-        {
-            var app = MasterLocator.ApplicationService.GetApplicationById(applicationid);
-            var totalPrice = SchoolLocator.AppMarketService.GetApplicationTotalPrice(applicationid, personId, classids);
-            return Json(ApplicationTotalPriceViewData.Create(app, totalPrice));
         }
 
         public ActionResult ExistsReview(Guid applicationId)

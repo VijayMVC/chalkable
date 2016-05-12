@@ -301,7 +301,6 @@ namespace Chalkable.Data.Master.DataAccess
             return SelectMany<ApplicationPermission>(new AndQueryCondition { { nameof(ApplicationPermission.ApplicationRef), id } });
         }
 
-
         public IList<ApplicationStandard> UpdateApplicationStandards(Guid id, IList<Guid> standardsIds)
         {
             SimpleDelete<ApplicationStandard>(new AndQueryCondition{{nameof(ApplicationStandard.ApplicationRef), id}});
@@ -367,13 +366,12 @@ namespace Chalkable.Data.Master.DataAccess
             return PreparePicturesData(res);
         }
 
-        public IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count)
+        public IList<Application> GetSuggestedApplications(IList<Guid> abIds, int start, int count)
         {
             IDictionary<string, object> parameters = new Dictionary<string, object>
                 {
                     {"start", start},
                     {"count", count},
-                    {"installedAppsIds", installedAppsIds ?? new List<Guid>()},
                     {"academicBenchmarkIds", abIds?? new List<Guid>()}
                 };
             IList<Application> res;

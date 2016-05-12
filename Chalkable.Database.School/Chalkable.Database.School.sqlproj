@@ -210,9 +210,6 @@
     <Build Include="User Defined Types\TAnnouncementQnA.sql" />
     <Build Include="User Defined Types\TAnnouncementRecipient.sql" />
     <Build Include="User Defined Types\TAnnouncementStandard.sql" />
-    <Build Include="User Defined Types\TApplicationInstall.sql" />
-    <Build Include="User Defined Types\TApplicationInstallAction.sql" />
-    <Build Include="User Defined Types\TApplicationInstallActionClasses.sql" />
     <Build Include="User Defined Types\TAttendanceLevelReason.sql" />
     <Build Include="User Defined Types\TAttendanceMonth.sql" />
     <Build Include="User Defined Types\TAttendanceReason.sql" />

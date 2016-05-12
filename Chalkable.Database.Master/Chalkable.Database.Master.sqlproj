@@ -95,9 +95,6 @@
     <Build Include="Tables\CommonCoreStandardCategory.sql" />
     <Build Include="Tables\Developer.sql" />
     <Build Include="Tables\District.sql" />
-    <Build Include="Tables\Fund.sql" />
-    <Build Include="Tables\FundRequest.sql" />
-    <Build Include="Tables\FundRequestRoleDistribution.sql" />
     <Build Include="Tables\Preference.sql" />
     <Build Include="Tables\School.sql" />
     <Build Include="Tables\SchoolUser.sql" />
@@ -127,9 +124,6 @@
     <Build Include="User Defined Types\TCommonCoreStandard.sql" />
     <Build Include="User Defined Types\TDeveloper.sql" />
     <Build Include="User Defined Types\TDistrict.sql" />
-    <Build Include="User Defined Types\TFund.sql" />
-    <Build Include="User Defined Types\TFundRequest.sql" />
-    <Build Include="User Defined Types\TFundRequestRoleDistribution.sql" />
     <Build Include="User Defined Types\TGUID.sql" />
     <Build Include="User Defined Types\TInt.sql" />
     <Build Include="User Defined Types\TPreference.sql" />

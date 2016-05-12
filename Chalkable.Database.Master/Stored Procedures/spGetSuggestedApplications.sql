@@ -1,6 +1,5 @@
 ﻿CREATE procedure [dbo].[spGetSuggestedApplications] 
 	@academicBenchmarkIds TGuid ReadOnly,
-	@installedAppsIds TGuid ReadOnly,
 	@start int,
 	@count int
 as
@@ -19,16 +18,13 @@ from (
 		[Application].Id, 
 		[Application].Name,
 		(case when [Application].InternalScore is null then 0 else [Application].InternalScore end)
-			+ (count(StandardRef) * 100)
-			+ (count(appsIds.Value) * 100) as [Rank]
+			+ (count(StandardRef) * 100) as [Rank]
 	from 
 	[Application]
 	join  ApplicationStandard 
 		on ApplicationStandard.ApplicationRef= Application.Id
 	join @academicBenchmarkIds abT
 		on abT.Value = ApplicationStandard.StandardRef
-	left join @installedAppsIds appsIds
-		on appsIds.Value = Application.Id
 	Where 
 		[State] = 5 
 		and IsInternal = 0
@@ -44,5 +40,5 @@ OFFSET @start ROWS FETCH NEXT @count ROWS ONLY
 select 
 	Application.* 
 from Application
-	join @appT as app on app.id = Application.id
+	join @appT as app on app.id = Application.Id
 order by app.[Rank] desc, app.Name asc

@@ -12,14 +12,12 @@ using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
-using Chalkable.Data.School.Model.ApplicationInstall;
 using Chalkable.Data.Master.DataAccess;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
     public interface IApplicationSchoolService
     {
-        IList<int> GetAssignedUserIds(Guid appId, int? announcementAppId);
         AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementTypeEnum type, Guid applicationId);
         AnnouncementApplication GetAnnouncementApplication(int announcementAppId);
         void AttachAppToAnnouncement(int announcementAppId, AnnouncementTypeEnum announcementType);
@@ -29,7 +27,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false);
         Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementTypeEnum type);
         IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying);
-
         void BanUnBanApplication(Guid applicationId, bool ban);
         IList<ApplicationBanHistory> GetApplicationBanHistory(Guid applicationId);
         IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, Guid appId);
@@ -41,49 +38,11 @@ namespace Chalkable.BusinessLogic.Services.School
         {
         }
 
-        public IList<int> GetAssignedUserIds(Guid appId, int? announcementAppId)
-        {
-            Trace.Assert(Context.SchoolYearId.HasValue);
-            var res = new List<int>();
-            using (var uow = Read())
-            {
-                if (announcementAppId.HasValue)
-                {
-                    var anDa = new ClassAnnouncementForTeacherDataAccess(uow, Context.SchoolYearId.Value);
-                    var da = new AnnouncementApplicationDataAccess(uow);
-                    var announcementApplication = da.GetById(announcementAppId.Value);
-                    var ann = anDa.GetById(announcementApplication.AnnouncementRef);
-
-                    var csp = new ClassPersonDataAccess(uow)
-                        .GetClassPersons(new ClassPersonQuery { ClassId = ann.ClassRef });
-                    res.AddRange(csp.Select(x => x.PersonRef));
-
-                    //TODO: think about this
-                    var teacherId = new ClassDataAccess(uow).GetById(ann.ClassRef).PrimaryTeacherRef;
-                    if (teacherId.HasValue) res.Add(teacherId.Value);   
-                    
-                }
-                else
-                {
-                    var inst = new ApplicationInstallDataAccess(uow).GetAll(new AndQueryCondition
-                        {
-                            {ApplicationInstall.ACTIVE_FIELD, true}, 
-                            {ApplicationInstall.APPLICATION_REF_FIELD, appId}
-                        });
-                    res.AddRange(inst.Select(x=>x.PersonRef));
-                }
-            }
-            return res;
-        }
-
         public AnnouncementApplication AddToAnnouncement(int announcementId, AnnouncementTypeEnum type, Guid applicationId)
         {
             var app = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationById(applicationId);
 
             EnsureApplicationPermission(app.Id);
-
-            if (!CanAddToAnnouncement(app.Id))
-                throw new ChalkableSecurityException("Application is not installed yet");
 
             using (var uow = Update())
             {
@@ -123,8 +82,6 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AnnouncementApplicationDataAccess(uow);
                 var aa = da.GetById(announcementAppId);
-                if(!CanAddToAnnouncement(aa.ApplicationRef))
-                    throw new ChalkableSecurityException("Application is not installed yet");
 
                 var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(aa.AnnouncementRef);
                 if (!ann.IsOwner)
@@ -143,8 +100,6 @@ namespace Chalkable.BusinessLogic.Services.School
             {
                 var da = new AnnouncementApplicationDataAccess(uow);
                 var aa = da.GetById(announcementApplicationId);
-                if (!CanAddToAnnouncement(aa.ApplicationRef))
-                    throw new ChalkableSecurityException("Application is not installed yet");
                 var ann = ServiceLocator.GetAnnouncementService(announcementType).GetAnnouncementById(aa.AnnouncementRef);
                 if (!ann.IsOwner)
                     throw new ChalkableSecurityException(ChlkResources.ERR_SECURITY_EXCEPTION);
@@ -170,16 +125,6 @@ namespace Chalkable.BusinessLogic.Services.School
             }
             else if(!ApplicationSecurity.HasStudyCenterAccess(Context))
                     throw new StudyCenterDisabledException();
-        }
-
-        private bool CanAddToAnnouncement(Guid appId)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-            //TODO: Removing installations
-            //var assessmentId = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetAssessmentId();
-            //var appInstall = ServiceLocator.AppMarketService.GetInstallationForPerson(appId, Context.PersonId.Value);
-            //return assessmentId == appId || (appInstall != null && appInstall.Active);
-            return true;
         }
 
         public IList<AnnouncementApplication> GetAnnouncementApplicationsByAnnId(int announcementId, bool onlyActive = false)

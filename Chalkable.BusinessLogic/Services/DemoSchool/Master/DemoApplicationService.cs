@@ -194,11 +194,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                     || Context.Role == CoreRoles.STUDENT_ROLE && application.HasStudentExternalAttach;
         }
 
-        public IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count)
+        public IList<Application> GetSuggestedApplications(IList<Guid> abIds, int start, int count)
         {
             using (var uow = Read())
             {
-                var apps =new  ApplicationDataAccess(uow).GetSuggestedApplications(abIds, installedAppsIds, start, count);
+                var apps =new  ApplicationDataAccess(uow).GetSuggestedApplications(abIds, start, count);
                 apps = apps.Where(x => x.DeveloperRef == Context.DeveloperId.Value).ToList();
                 return apps;
             }

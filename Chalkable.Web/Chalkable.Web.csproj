@@ -314,7 +314,6 @@
     <Compile Include="Controllers\DisciplineTypeController.cs" />
     <Compile Include="Controllers\DistrictController.cs" />
     <Compile Include="Controllers\FeedController.cs" />
-    <Compile Include="Controllers\FundController.cs" />
     <Compile Include="Controllers\GradingController.cs" />
     <Compile Include="Controllers\GradingPeriodController.cs" />
     <Compile Include="Controllers\GroupController.cs" />
@@ -391,16 +390,12 @@
     <Compile Include="Models\ClassAnnouncementTypeInputData.cs" />
     <Compile Include="Models\ClassAnnouncementTypeViewData.cs" />
     <Compile Include="Models\AnnouncementsViewData\AnnouncementViewData.cs" />
-    <Compile Include="Models\ApplicationsViewData\AppsBudgetViewData.cs" />
     <Compile Include="Models\BudgetBalanceViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\AnnouncementApplicationViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationAccessViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationPersmissionsViewData.cs" />
-    <Compile Include="Models\ApplicationsViewData\ApplicationPriceViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationRatingViewData.cs" />
-    <Compile Include="Models\ApplicationsViewData\ApplicationTotalPriceViewData.cs" />
     <Compile Include="Models\ApplicationsViewData\ApplicationUpdateInputModel.cs" />
-    <Compile Include="Models\ApplicationsViewData\InstalledApplicationViewData.cs" />
     <Compile Include="Models\AttendancesViewData\AttendanceReasonViewData.cs" />
     <Compile Include="Models\AttendancesViewData\AttendanceSummaryViewData.cs" />
     <Compile Include="Models\BackgroundTaskLogViewData.cs" />

@@ -7,7 +7,6 @@ using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.Model.ApplicationInstall;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Common;
 using Chalkable.Web.Models;

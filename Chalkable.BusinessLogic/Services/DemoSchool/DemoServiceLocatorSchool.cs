@@ -43,7 +43,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         private IApplicationSchoolService applicationSchoolService;
         private IDisciplineService disciplineService;
         private IGradingStatisticService gradingStatisticService;
-        private IAppMarketService appMarketService;
         private ISchoolService schoolService;
         private ISchoolPersonService schoolPersonService;
         private IStandardService standardService;
@@ -76,7 +75,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         {
             this.serviceLocatorMaster = serviceLocatorMaster;
             notificationService = new DemoNotificationService(this);
-            appMarketService = new DemoAppMarketService(this);
             //announcementService = new DemoAnnouncementService(this);
             personService = new DemoPersonService(this);
             schoolYearService = new DemoSchoolYearService(this);
@@ -174,7 +172,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public IApplicationSchoolService ApplicationSchoolService { get { return applicationSchoolService; } }
         public IDisciplineService DisciplineService { get { return disciplineService; } }
         public IGradingStatisticService GradingStatisticService { get { return gradingStatisticService; } }
-        public IAppMarketService AppMarketService { get { return appMarketService; } }
         public ISchoolService SchoolService { get { return schoolService; } }
         public ISchoolPersonService SchoolPersonService { get { return schoolPersonService; } }
         public IStandardService StandardService { get { return standardService; } }
@@ -366,12 +363,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 RoleRef = CoreRoles.TEACHER_ROLE.Id,
                 SchoolRef = DemoSchoolConstants.SchoolId
             });
-
-            ((DemoFundService)serviceLocatorMaster.FundService).AddPersonBalance(new DemoPersonBalance
-            {
-                Balance = 10000,
-                PersonId = DemoSchoolConstants.TeacherId
-            });
         }
 
         private void AddStudent(int id, string firstName, string lastName, string gender, int gradeLevelRef, DateTime birthDate)
@@ -421,13 +412,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
                 Date = DateTime.Now.Date,
                 //Infractions = InfractionService.GetInfractions(),
                 StudentId = id
-            });
-
-
-            ((DemoFundService)serviceLocatorMaster.FundService).AddPersonBalance(new DemoPersonBalance
-            {
-                Balance = 1000,
-                PersonId = id
             });
         }
 

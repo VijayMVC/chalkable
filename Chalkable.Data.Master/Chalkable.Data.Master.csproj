@@ -99,7 +99,6 @@
     <Compile Include="DataAccess\ChalkableDepartmentDataAccess.cs" />
     <Compile Include="DataAccess\DeveloperDataAccess.cs" />
     <Compile Include="DataAccess\DistrictDataAccess.cs" />
-    <Compile Include="DataAccess\FundDataAccess.cs" />
     <Compile Include="DataAccess\PreferenceDataAccess.cs" />
     <Compile Include="DataAccess\DbMaintenanceDataAccess.cs" />
     <Compile Include="DataAccess\SchoolDataAccess.cs" />
@@ -114,7 +113,6 @@
     <Compile Include="Model\DatabaseUpdateTaskData.cs" />
     <Compile Include="Model\Developer.cs" />
     <Compile Include="Model\District.cs" />
-    <Compile Include="Model\Fund.cs" />
     <Compile Include="Model\PictureImportTaskData.cs" />
     <Compile Include="Model\Preference.cs" />
     <Compile Include="Model\RestoreLogItem.cs" />

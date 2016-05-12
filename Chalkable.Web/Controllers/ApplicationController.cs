@@ -11,7 +11,6 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
 using Chalkable.Data.School.Model.Announcements;
-using Chalkable.Data.School.Model.ApplicationInstall;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Controllers.AnnouncementControllers;
@@ -238,10 +237,7 @@ namespace Chalkable.Web.Controllers
             if ((User.IsInRole("SysAdmin") && !Context.PersonId.HasValue) || User.IsInRole("AppTester"))
                 return GetOauthCodeForSysAdmin(applicationUrl, applicationId);
 
-            //TODO: check if app is installed??
-
-            if (!Context.PersonId.HasValue)
-                throw new UnassignedUserException();
+            Trace.Assert(Context.PersonId.HasValue);
 
             var app = !string.IsNullOrWhiteSpace(applicationUrl) 
                     ? MasterLocator.ApplicationService.GetApplicationByUrl(applicationUrl) : 
@@ -254,29 +250,11 @@ namespace Chalkable.Web.Controllers
             var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, Context.SchoolYearId, ChalkableAuthentication.GetSessionKey());
             var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, userInfo);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
-
-            var appInstall = new ApplicationInstall
-            {
-                Active = true,
-                InstallDate = Context.NowSchoolTime,
-                OwnerRef = Context.PersonId.Value,
-                Id = 0,
-                SchoolYearRef = Context.SchoolYearId.Value,
-                PersonRef =Context.PersonId.Value,
-                ApplicationRef = app.Id,
-                AppUninstallActionRef = null,
-                AppInstallActionRef = 0
-            };
-                //SchoolLocator.AppMarketService.GetInstallationForPerson(app.Id, Context.PersonId.Value);
-            var hasMyApps = MasterLocator.ApplicationService.HasMyApps(app);
-            //var applicationInstalls = new List<ApplicationInstall>();
-            //if(appInstall != null)
-              //  applicationInstalls.Add(appInstall);
-            var appView = InstalledApplicationViewData.Create(new [] { appInstall }/*applicationInstalls*/, Context.PersonId, app, hasMyApps);
+            
             return Json(new
             {
                 AuthorizationCode = authorizationCode,
-                ApplicationInfo = appView
+                ApplicationInfo = app
             });
         }
 
@@ -293,13 +271,11 @@ namespace Chalkable.Web.Controllers
             var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, null, ChalkableAuthentication.GetSessionKey());
             var authorizationCode = MasterLocator.AccessControlService.GetAuthorizationCode(app.Url, userInfo);
             authorizationCode = HttpUtility.UrlEncode(authorizationCode);
-
-            var hasMyApps = MasterLocator.ApplicationService.HasMyApps(app);
-            var appView = InstalledApplicationViewData.Create(new List<ApplicationInstall>(), null, app, hasMyApps);
+            
             return Json(new
             {
                 AuthorizationCode = authorizationCode,
-                ApplicationInfo = appView
+                ApplicationInfo = app
             });
         }
 

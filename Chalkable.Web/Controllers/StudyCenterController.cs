@@ -8,7 +8,6 @@ using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.Model;
-using Chalkable.Data.School.Model.ApplicationInstall;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Authentication;
 using Chalkable.Web.Models;
@@ -61,7 +60,7 @@ namespace Chalkable.Web.Controllers
 
             if (standard.AcademicBenchmarkId.HasValue)
                 suggestedApps = MasterLocator.ApplicationService.GetSuggestedApplications(
-                        new[] {standard.AcademicBenchmarkId.Value}, allApps.Select(x => x.Id).ToList(), 0, int.MaxValue);
+                        new[] {standard.AcademicBenchmarkId.Value}, 0, int.MaxValue);
 
             var hasMyAppDic = suggestedApps.ToDictionary(x => x.Id, x => MasterLocator.ApplicationService.HasMyApps(x));
             var userInfo = OAuthUserIdentityInfo.Create(Context.Login, Context.Role, Context.SchoolYearId, ChalkableAuthentication.GetSessionKey());
