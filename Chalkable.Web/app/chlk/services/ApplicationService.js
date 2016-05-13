@@ -392,6 +392,13 @@ NAMESPACE('chlk.services', function () {
                     applicationId: applicationId.valueOf(),
                     schoolIds: this.arrayToCsv(schoolIds)
                 });
+            },
+
+            [[chlk.models.id.AppId]],
+            function getApplicationBannedSchools(applicationId){
+                return this.get('Application/ApplicationBannedSchools', ArrayOf(chlk.models.apps.ApplicationSchoolBan), {
+                    applicationId: applicationId.valueOf()
+                });
             }
         ])
 });

@@ -130,7 +130,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, DistrictAdmin")]
-        public ActionResult SubmitApplicationsBan(Guid applicationId, GuidList schoolIds)
+        public ActionResult SubmitApplicationBan(Guid applicationId, GuidList schoolIds)
         {
             MasterLocator.ApplicationService.SubmitApplicationBan(applicationId, schoolIds);
             return Json(true);

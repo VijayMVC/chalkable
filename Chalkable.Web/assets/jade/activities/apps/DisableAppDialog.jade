@@ -21,9 +21,9 @@
                         each school in self.getSchools()
                             .column-cell.school-name
                                 .box-checkbox
-                                    +Checkbox('school', self.isBannedSchool(school.getId()), false, true)(data-id=school.getId().valueOf()).school-name-checkbox
+                                    +Checkbox('school', school.isBanned(), false, true)(data-id=school.getSchoolId().valueOf()).school-name-checkbox
                                 SPAN
-                                    .text-container.right=school.getName()
+                                    .text-container.right=school.getSchoolName()
 
         .buttons-container
             +Button.special-button2.cancel.close.negative-button Cancel

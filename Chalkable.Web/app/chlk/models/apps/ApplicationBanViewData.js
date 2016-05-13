@@ -1,7 +1,5 @@
 REQUIRE('chlk.models.id.AppId');
-REQUIRE('chlk.models.id.SchoolId');
-REQUIRE('chlk.models.school.School');
-
+REQUIRE('chlk.models.apps.ApplicationSchoolBan');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
@@ -12,29 +10,22 @@ NAMESPACE('chlk.models.apps', function () {
 
             chlk.models.id.AppId, 'applicationId',
             String, 'requestId',
-            ArrayOf(chlk.models.id.SchoolId), 'bannedSchoolIds',
-            ArrayOf(chlk.models.school.School), 'schools',
-            Boolean, 'banned',
+            ArrayOf(chlk.models.apps.ApplicationSchoolBan), 'schools',
 
             [[
-                chlk.models.id.AppId,
                 String,
-                ArrayOf(chlk.models.id.SchoolId),
-                ArrayOf(chlk.models.school.School),
-                Boolean
+                chlk.models.id.AppId,
+                ArrayOf(chlk.models.apps.ApplicationSchoolBan)
             ]],
-            function $(applicationId_, requestId_, bannedSchoolIds_, schools_, banned_){
+            function $(requestId_, applicationId_, schools_){
                 BASE();
-                if(applicationId_)
-                    this.setApplicationId(applicationId_);
                 if(requestId_)
                     this.setRequestId(requestId_);
-                if(bannedSchoolIds_)
-                    this.setBannedSchoolIds(bannedSchoolIds_);
+                if(applicationId_)
+                    this.setApplicationId(applicationId_);
                 if(schools_)
                     this.setSchools(schools_);
-                if(banned_)
-                    this.setBanned(banned_);
+
             }
         ]);
 

@@ -65,19 +65,14 @@ NAMESPACE('chlk.models.apps', function () {
                 this.internalScore = SJX.fromValue(raw.internalscore, Number);
                 this.internalDescription = SJX.fromValue(raw.internaldescription, String);
                 this.advancedApp = SJX.fromValue(raw.isadvanced, Boolean);
-                this.bannedSchoolIds = SJX.fromArrayOfValues(raw.bannedschoolids, chlk.models.id.SchoolId);
 
-                //TODO: remove this later
-                if(!this.bannedSchoolIds){
-                    this.bannedSchoolIds = [
-                        new chlk.models.id.SchoolId('736FFA83-7219-4F54-A4C2-837453863209'),
-                        new chlk.models.id.SchoolId('94AAEBAF-4B35-4977-A29B-8F9FC3BE5DAE')
-                    ];
-                }
 
                 if(raw.liveapplication)
                     this.liveApplication = SJX.fromDeserializable(raw.liveapplication, SELF);
 
+                this.bannedForCurrentSchool = SJX.fromValue(raw.isbannedforcurrentschool, Boolean);
+                this.bannedForDistrict = SJX.fromValue(raw.isbannedfordistrict, Boolean);
+                this.partiallyBanned = SJX.fromValue(raw.ispartiallybanned, Boolean);
             },
 
             chlk.models.id.AppId, 'id',
@@ -116,10 +111,14 @@ NAMESPACE('chlk.models.apps', function () {
             ArrayOf(chlk.models.id.ABStandardId), 'standardsIds',
             ArrayOf(chlk.models.academicBenchmark.Standard), 'standards',
             Boolean, 'banned',
+
+            Boolean, 'bannedForCurrentSchool',
+            Boolean, 'bannedForDistrict',
+            Boolean, 'partiallyBanned',
+
             Number, 'internalScore',
             String, 'internalDescription',
 
-            ArrayOf(chlk.models.id.SchoolId), 'bannedSchoolIds',
 
             SELF, 'liveApplication',
 

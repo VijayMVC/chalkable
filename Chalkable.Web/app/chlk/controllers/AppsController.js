@@ -995,41 +995,26 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushOrUpdateView(chlk.activities.apps.MyAppsPage, result);
         },
 
-        [[chlk.models.id.AppId, ArrayOf(chlk.models.id.SchoolId)]],
-        function disableAppAction(appId, schoolIds){
+        [[chlk.models.id.AppId]],
+        function disableAppAction(appId){
             //var schoolsIds = schoolIdsStr ? schoolIdsStr.split(',').map(function(_){
             //    return new chlk.models.id.SchoolId
             //}) : [];
             //schoolsIds.push(new chlk.models.id.SchoolId('736FFA83-7219-4F54-A4C2-837453863209'));
-            var res = this.WidgetStart('apps', 'disableApp', [appId, schoolIds, false])
+            var res = this.WidgetStart('apps', 'disableApp', [appId, false])
                 .then(function(data){
                     return this.BackgroundNavigate('apps', 'myApps', []);
                 }, this);
             return null;
         },
 
-        [[String, chlk.models.id.AppId, ArrayOf(chlk.models.id.SchoolId), Boolean]],
-        function disableAppWidgetAction(requestId, appId, bannedForSchools, appBanned){
-
-            var schools = []; //TODO get schools from server
-            var school = new chlk.models.school.School();
-            school.setId(chlk.models.id.SchoolId('736FFA83-7219-4F54-A4C2-837453863209'));
-            school.setName('SMITH');
-            schools.push(school);
-
-            var school = new chlk.models.school.School();
-            school.setId(chlk.models.id.SchoolId('94AAEBAF-4B35-4977-A29B-8F9FC3BE5DAE'));
-            school.setName('SCOTT');
-            schools.push(school);
-
-            var school = new chlk.models.school.School();
-            school.setId(chlk.models.id.SchoolId('8E39EFD9-1C31-4449-A67D-B8EF709E71E4'));
-            school.setName('WILSON');
-            schools.push(school);
-
-            var res = ria.async.DeferredData(new chlk.models.apps.ApplicationBanViewData(
-               appId, requestId, bannedForSchools, schools, appBanned
-            ));
+        [[String, chlk.models.id.AppId, Boolean]],
+        function disableAppWidgetAction(requestId, appId, appBanned){
+            var res = this.appsService.getApplicationBannedSchools(appId)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return new chlk.models.apps.ApplicationBanViewData(requestId, appId, data);
+                });
             return this.ShadeView(chlk.activities.apps.DisableAppDialog, res);
         },
 

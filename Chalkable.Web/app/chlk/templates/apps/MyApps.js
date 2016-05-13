@@ -18,23 +18,13 @@ NAMESPACE('chlk.templates.apps', function () {
                 return role.isSysAdmin() || role.isAdmin();
             },
 
-
-            [[chlk.models.apps.Application]],
-            Boolean, function isPartialBanned(app){
-               return (app.getBannedSchoolIds() || []).length > 0;
-            },
-
             [[chlk.models.apps.Application]],
             String, function bannedCssClass(app){
-                if(app.isBanned()) return 'banned';
-                if(this.isPartialBanned(app)) return 'partial-banned';
+                if(this.canDisableApp()){
+                    if(app.isBannedForDistrict()) return 'banned';
+                    if(app.isPartiallyBanned()) return 'partial-banned';
+                }
                 return '';
             },
-
-            [[chlk.models.apps.Application]],
-            Boolean, function isBannedFromCurrentSchool(app){
-                //TODO impl
-                return app.isBanned();
-            }
         ])
 });
