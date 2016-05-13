@@ -124,7 +124,7 @@ namespace Chalkable.Web.ActionFilters
 
             filterContext.HttpContext.Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(filterContext.HttpContext.Response.StatusCode);
 
-            var jsonResponse = new ChalkableJsonResponce(ExceptionViewData.Create(filterContext.Exception, filterContext.Exception.InnerException))
+            var jsonResponse = new ChalkableJsonResponce(ExceptionViewData.Create(filterContext.Exception))
             {
                 Success = false
             };

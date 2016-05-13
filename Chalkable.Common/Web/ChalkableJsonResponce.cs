@@ -5,17 +5,18 @@ namespace Chalkable.Common.Web
 {
     public class ChalkableJsonResponce
     {
-        public Object Data { get; set; }
-        public Boolean Success { get; set; }
+        public object Data { get; set; }
+        public bool Success { get; set; }
 
-        public ChalkableJsonResponce(Object data)
+        public ChalkableJsonResponce(object data)
         {
             Data = data;
             Success = true;
-            if (data is ChalkableException)
+
+            var exception = data as ChalkableException;
+            if (exception != null)
             {
-                var e = data as ChalkableException;
-                Data = ExceptionViewData.Create(e, e.InnerException);
+                Data = ExceptionViewData.Create(exception);
                 Success = false;
             }
         }
