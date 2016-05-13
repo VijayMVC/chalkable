@@ -31,10 +31,9 @@ namespace Chalkable.BusinessLogic.Services.Master
         Guid? GetMiniQuizAppicationId();
         Guid? GetAssessmentId();
         IList<Application> GetSuggestedApplications(IList<Guid> abIds, int start, int count);
-        void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban);
         IList<ApplicationBanInfo> GetApplicationBanInfos(Guid districtId, Guid? schoolId, IList<Guid> applicationIds);
         void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds);
-        IList<ApplicationSchoolOption> GetApplicationSchoolOptions(Guid districtId, Guid applicationId);
+        IList<ApplicationSchoolBan> GetApplicationSchoolBans(Guid districtId, Guid applicationId);
     }
 
 
@@ -235,14 +234,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             return DoRead(u => new ApplicationDataAccess(u).GetSuggestedApplications(abIds, start, count));
         }
-        public void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban)
-        {
-            BaseSecurity.EnsureDistrictAdmin(Context);
-            DoUpdate(uow =>
-            {
-                new ApplicationDataAccess(uow).SetDistrictOption(applicationId, districtId, ban);
-            });
-        }
 
         public IList<ApplicationBanInfo> GetApplicationBanInfos(Guid districtId, Guid? schoolId, IList<Guid> applicationIds)
         {
@@ -289,9 +280,9 @@ namespace Chalkable.BusinessLogic.Services.Master
             DoUpdate(u => new ApplicationSchoolOptionDataAccess(u).BanSchoolsByIds(applicationId, schoolIds));
         }
 
-        public IList<ApplicationSchoolOption> GetApplicationSchoolOptions(Guid districtId, Guid applicationId)
+        public IList<ApplicationSchoolBan> GetApplicationSchoolBans(Guid districtId, Guid applicationId)
         {
-            return DoRead(u => new ApplicationSchoolOptionDataAccess(u).GetApplicationSchoolOptions(districtId, applicationId));
+            return DoRead(u => new ApplicationSchoolOptionDataAccess(u).GetApplicationSchoolBans(districtId, applicationId));
         }
     }
 

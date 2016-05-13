@@ -11,20 +11,14 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public string SchoolName { get; set; }
         public bool Banned { get; set; }
 
-        protected static ApplicationSchoolOptionViewData Create(ApplicationSchoolOption appSchoolOpt, School school)
+        public static ApplicationSchoolOptionViewData Create(ApplicationSchoolBan appSchoolBan)
         {
             return new ApplicationSchoolOptionViewData
             {
-                SchoolId = school.Id,
-                Banned = appSchoolOpt != null && appSchoolOpt.Banned,
-                SchoolName = school.Name
+                SchoolId = appSchoolBan.SchoolRef,
+                Banned = appSchoolBan.Banned,
+                SchoolName = appSchoolBan.SchoolName
             };
         }
-
-        public static IList<ApplicationSchoolOptionViewData> Create(IList<ApplicationSchoolOption> appSchoolOptions,
-            IList<School> schools)
-        {
-            return schools.Select(x => Create(appSchoolOptions.FirstOrDefault(y => y.SchoolRef == x.Id), x)).ToList();
-        } 
     }
 }

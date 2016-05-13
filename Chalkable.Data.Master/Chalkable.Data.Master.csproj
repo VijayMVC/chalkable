@@ -119,6 +119,7 @@
     <Compile Include="Model\PictureImportTaskData.cs" />
     <Compile Include="Model\Preference.cs" />
     <Compile Include="Model\RestoreLogItem.cs" />
+    <Compile Include="Model\ApplicationSchoolBan.cs" />
     <Compile Include="Model\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

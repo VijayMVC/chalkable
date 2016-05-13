@@ -20,7 +20,7 @@ namespace Chalkable.Data.Master.DataAccess
             var @params = new Dictionary<string, object>
             {
                 ["@applicationId"] = applicationId,
-                ["@schoolIds"] = schoolIds
+                ["@schoolIds"] = schoolIds ?? new List<Guid>()
             };
             ExecuteStoredProcedure("spBanSchoolsByIds", @params);
         }
@@ -37,16 +37,20 @@ namespace Chalkable.Data.Master.DataAccess
             return ExecuteStoredProcedureList<ApplicationBanInfo>("spGetApplicationsBanInfo", @params);
         }
 
-        public IList<ApplicationSchoolOption> GetApplicationSchoolOptions(Guid districtId, Guid applicationId)
+        public IList<ApplicationSchoolBan> GetApplicationSchoolBans(Guid districtId, Guid applicationId)
         {
-            var sql = @"Select 
-	                        @applicationId As ApplicationRef, 
-	                        School.Id As SchoolRef, 
-	                        IsNull(Banned, 0) As Banned
+            var sql = $@"Select 
+	                        @applicationId    As {nameof(ApplicationSchoolBan.ApplicationRef)}, 
+	                        School.Id         As {nameof(ApplicationSchoolBan.SchoolRef)},
+                            School.Name       As {nameof(ApplicationSchoolBan.SchoolName)},
+	                        IsNull(Banned, 0) As {nameof(ApplicationSchoolBan.Banned)}
                         From 
-	                        School left join ApplicationSchoolOption 
-		                        on School.Id = SchoolRef 
-                        Where DistrictRef = @districtId And ApplicationRef = @applicationId";
+	                        {nameof(School)} left join {nameof(ApplicationSchoolOption)}
+		                        On {nameof(School.Id)} = {nameof(ApplicationSchoolOption.SchoolRef)}
+                        Where 
+                            {nameof(School.DistrictRef)} = @districtId 
+                            And ({nameof(ApplicationSchoolOption.ApplicationRef)} is null 
+                                 Or {nameof(ApplicationSchoolOption.ApplicationRef)} = @applicationId)";
 
             var @params = new Dictionary<string, object>
             {
@@ -56,7 +60,7 @@ namespace Chalkable.Data.Master.DataAccess
 
             using (var reader = ExecuteReaderParametrized(sql, @params))
             {
-                return reader.ReadList<ApplicationSchoolOption>();
+                return reader.ReadList<ApplicationSchoolBan>();
             }
         }
     }

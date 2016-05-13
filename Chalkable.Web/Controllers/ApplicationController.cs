@@ -344,10 +344,10 @@ namespace Chalkable.Web.Controllers
         public ActionResult ApplicationBannedSchools(Guid applicationId)
         {
             Trace.Assert(Context.DistrictId.HasValue);
-            var schools = MasterLocator.SchoolService.GetSchools(Context.DistrictId.Value, 0, int.MaxValue);
-            var appSchoolOptions = MasterLocator.ApplicationService.GetApplicationSchoolOptions(Context.DistrictId.Value, applicationId);
+            
+            var appSchoolOptions = MasterLocator.ApplicationService.GetApplicationSchoolBans(Context.DistrictId.Value, applicationId);
 
-            return Json(ApplicationSchoolOptionViewData.Create(appSchoolOptions, schools));
+            return Json(appSchoolOptions.Select(ApplicationSchoolOptionViewData.Create));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
