@@ -10,22 +10,26 @@ namespace Chalkable.Common.Exceptions
         public string InnerStackTrace { get; set; }
         public string ExceptionType { get; set; }
 
-        public static ExceptionViewData Create(Exception outer, Exception inner)
+        public ExceptionViewData Inner { get; set; }
+
+        public static ExceptionViewData Create(Exception outer)
         {
-            var exceptionViewData = new ExceptionViewData();
-            if (inner != null)
+            if (outer == null)
+                return null;
+
+            return new ExceptionViewData
             {
-                exceptionViewData.InnerMessage = inner.Message;
+                Message = outer.Message,
+                ExceptionType = outer.GetType().Name,
+
+                InnerMessage = outer.InnerException?.Message,
+                Inner = Create(outer.InnerException),
+
 #if DEBUG
-                exceptionViewData.InnerStackTrace = inner.StackTrace;
+                StackTrace = outer.StackTrace,
+                InnerStackTrace = outer.InnerException?.StackTrace,
 #endif
-            }
-            exceptionViewData.Message = outer.Message;
-#if DEBUG
-            exceptionViewData.StackTrace = outer.StackTrace;
-#endif
-            exceptionViewData.ExceptionType = outer.GetType().Name;
-            return exceptionViewData;
+            };
         }
     }
 }

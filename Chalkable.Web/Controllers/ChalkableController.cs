@@ -268,7 +268,7 @@ namespace Chalkable.Web.Controllers
             Response.StatusDescription = HttpWorkerRequest.GetStatusDescription(Response.StatusCode);
             return new ChalkableJsonResult(false)
             {
-                Data = new ChalkableJsonResponce(ExceptionViewData.Create(exception, exception.InnerException))
+                Data = new ChalkableJsonResponce(ExceptionViewData.Create(exception))
                 {
                     Success = false
                 },
