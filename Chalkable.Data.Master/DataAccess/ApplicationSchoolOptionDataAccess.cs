@@ -34,7 +34,7 @@ namespace Chalkable.Data.Master.DataAccess
                 ["schoolId"] = schoolId
             };
 
-            return ExecuteStoredProcedureList<ApplicationBanInfo>("spGetApplicationBanInfo", @params);
+            return ExecuteStoredProcedureList<ApplicationBanInfo>("spGetApplicationsBanInfo", @params);
         }
     }
 }
