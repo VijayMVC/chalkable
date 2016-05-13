@@ -95,11 +95,20 @@ namespace Chalkable.API
             public object Data { get; set; }
         }
 
+        public class ErrorInfo
+        {
+            [JsonProperty("message")]
+            public string Message { get; set; }
+            [JsonProperty("exceptiontype")]
+            public string ExceptionType { get; set; }
+        }
+
         protected async Task<T> Call<T>(string endpoint, OnWebRequestIsCreated onCreated = null, string method = null)
         {
             var url = ApiRoot + endpoint;
 
             var stopwatch = new Stopwatch();
+            stopwatch.Start();
             Debug.WriteLine("Request on: " + url);
             Debug.WriteLine("Request on: " + url);
             var webRequest = (HttpWebRequest)WebRequest.Create(url);
@@ -112,51 +121,69 @@ namespace Chalkable.API
                 var response = await webRequest.GetResponseAsync();
                 using (var stream = response.GetResponseStream())
                 {
+                    var statusCode = (response as HttpWebResponse)?.StatusCode;
                     if (stream == null)
-                        throw new ChalkableApiException("Error");
+                        throw new ChalkableApiException("Server failed to respond: " +
+                                                        $"Status: {statusCode}, " +
+                                                        $"Content-Type: {response.ContentType}, " +
+                                                        $"Timeout: {webRequest.Timeout}/{webRequest.ReadWriteTimeout}/{webRequest.ContinueTimeout}, " +
+                                                        $"Elasped: {stopwatch.ElapsedMilliseconds}, " +
+                                                        "Response: null");
 
-                    using (var sr = new StreamReader(stream)) {
+                    using (var sr = new StreamReader(stream))
+                    {
                         var str = sr.ReadToEnd();
-                        Debug.WriteLine(str);
-                        var statusCode = (response as HttpWebResponse)?.StatusCode;
                         if (str.TrimStart().StartsWith("<") ||
                             (statusCode != null && statusCode.Value != HttpStatusCode.OK))
                         {
                             throw new ChalkableApiException("Server failed to respond with JSON: " +
                                                             $"Status: {statusCode}, " +
                                                             $"Content-Type: {response.ContentType}, " +
-                                                            $"Timeout: {webRequest.Timeout}," +
-                                                            $"Elasped: {stopwatch.Elapsed}," +
-                                                            $"Body: {str.Substring(0, Math.Min(str.Length, 1024))}");
+                                                            $"Timeout: {webRequest.Timeout}/{webRequest.ReadWriteTimeout}/{webRequest.ContinueTimeout}, " +
+                                                            $"Elasped: {stopwatch.ElapsedMilliseconds}, " +
+                                                            $"Response: {str.Substring(0, Math.Min(str.Length, 512))}",
+                                body: str);
                         }
 
-                        var status = JsonConvert.DeserializeObject<ResponseSuccessDto>(str) ;
+                        var status = JsonConvert.DeserializeObject<ResponseSuccessDto>(str);
                         if (!status.Success)
-                            throw new ChalkableApiException(JsonConvert.SerializeObject(status.Data));
+                        {
+                            var details = JsonConvert.DeserializeObject<ResponseDataDto<ErrorInfo>>(str).Data;
+                            throw new ChalkableApiException($"{details.ExceptionType}: {details.Message}", body: str);
+                        }
 
-                        var data = JsonConvert.DeserializeObject<ResponseDataDto<T>>(str);
-
-                        return data.Data;
+                        return JsonConvert.DeserializeObject<ResponseDataDto<T>>(str).Data;
                     }
                 }
             }
+            catch (ChalkableApiException)
+            {
+                throw; // expected to go up
+            }
             catch (WebException e)
             {
-                if (e.Response != null)
-                {
-                    var strRe = new StreamReader(e.Response.GetResponseStream());
-                    var rsp = strRe.ReadToEnd();
-                    throw new ChalkableApiException("Call to remote server failed: " +
-                                                    $"Status: {e.Status}" +
-                                                    $"Message: {e.Message}," +
-                                                    $"Timeout: {webRequest.Timeout}," +
-                                                    $"Elasped: {stopwatch.Elapsed}," +
-                                                    $"Body: {rsp.Substring(0, Math.Min(rsp.Length, 1024))}", e);
-                }
+                var stream = e.Response?.GetResponseStream();
+                var rsp = stream != null ? new StreamReader(stream).ReadToEnd() : null;
 
-                throw;
+                throw new ChalkableApiException("Call to remote server failed: " +
+                                                $"Status: {e.Status}, " +
+                                                $"Message: {e.Message}, " +
+                                                $"Timeout: {webRequest.Timeout}/{webRequest.ReadWriteTimeout}/{webRequest.ContinueTimeout}, " +
+                                                $"Elasped: {stopwatch.ElapsedMilliseconds}, " +
+                                                $"Response: {rsp?.Substring(0, Math.Min(rsp.Length, 512)) ?? "null"}", e, body: rsp);
             }
-            //throw new ChalkableApiException("oauth client isn't initialized");
+            catch (Exception e)
+            {
+                throw new ChalkableApiException("Call to remote server failed: " +
+                                                $"Exception: {e.GetType().FullName}, " +
+                                                $"Message: {e.Message}," +
+                                                $"Elasped: {stopwatch.ElapsedMilliseconds}, " +
+                                                "Response: null", e);
+            }
+            finally
+            {
+                stopwatch.Stop();
+            }
         }
 
         private SimpleOAuth2Client OauthClient { get; }
