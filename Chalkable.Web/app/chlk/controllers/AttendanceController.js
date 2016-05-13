@@ -289,11 +289,11 @@ NAMESPACE('chlk.controllers', function (){
         },
 
         [chlk.controllers.SidebarButton('attendance')],
-        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, Boolean]],
-        function markAllAction(classId, date, isInProfile_, isSeatingChart_){
+        [[chlk.models.id.ClassId, chlk.models.common.ChlkDate, Boolean, Boolean, Boolean]],
+        function markAllAction(classId, date, isInProfile_, isDailyAttendancePeriod, isSeatingChart_){
             var activityClass = this.getView().getCurrent().getClass();
             var res =  this.ShowConfirmBox('Are you sure you want to Mark All Present?', '')
-                .thenCall(this.attendanceService.markAllPresent, [classId, date])
+                    .thenCall(this.attendanceService.markAllPresent, [classId, date, isDailyAttendancePeriod])
                 .attach(this.validateResponse_())
                 .then(function(success){
                     this.BackgroundUpdateView(activityClass, null, 'mark-all');

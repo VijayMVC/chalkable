@@ -12,6 +12,7 @@ NAMESPACE('chlk.models.attendance', function () {
         chlk.models.id.SchoolPersonId, 'personId',
         String, 'level',
         chlk.models.id.AttendanceReasonId, 'attendanceReasonId',
+        Boolean, "dailyAttendancePeriod",
 
         Number, 'type',
         /*[[Number]],
@@ -32,7 +33,8 @@ NAMESPACE('chlk.models.attendance', function () {
             return{
                 personid: this.getPersonId() && this.getPersonId().valueOf(),
                 level: this.getLevel(),
-                attendancereasonid: this.getAttendanceReasonId() && this.getAttendanceReasonId().valueOf()
+                attendancereasonid: this.getAttendanceReasonId() && this.getAttendanceReasonId().valueOf(),
+                isdailyattendanceperiod: this.isDailyAttendancePeriod()
             }
         }
 

@@ -99,11 +99,12 @@ namespace Chalkable.API
         {
             var url = ApiRoot + endpoint;
 
+            var stopwatch = new Stopwatch();
+            Debug.WriteLine("Request on: " + url);
+            Debug.WriteLine("Request on: " + url);
+            var webRequest = (HttpWebRequest)WebRequest.Create(url);
             try
             {
-                Debug.WriteLine("Request on: " + url);
-                Debug.WriteLine("Request on: " + url);
-                var webRequest = (HttpWebRequest) WebRequest.Create(url);
                 webRequest.Method = string.IsNullOrWhiteSpace(method) ? WebRequestMethods.Http.Get : method;
                 webRequest.Accept = "application/json";
                 OauthClient?.AppendAccessTokenTo(webRequest);
@@ -117,6 +118,18 @@ namespace Chalkable.API
                     using (var sr = new StreamReader(stream)) {
                         var str = sr.ReadToEnd();
                         Debug.WriteLine(str);
+                        var statusCode = (response as HttpWebResponse)?.StatusCode;
+                        if (str.TrimStart().StartsWith("<") ||
+                            (statusCode != null && statusCode.Value != HttpStatusCode.OK))
+                        {
+                            throw new ChalkableApiException("Server failed to respond with JSON: " +
+                                                            $"Status: {statusCode}, " +
+                                                            $"Content-Type: {response.ContentType}, " +
+                                                            $"Timeout: {webRequest.Timeout}," +
+                                                            $"Elasped: {stopwatch.Elapsed}," +
+                                                            $"Body: {str.Substring(0, Math.Min(str.Length, 1024))}");
+                        }
+
                         var status = JsonConvert.DeserializeObject<ResponseSuccessDto>(str) ;
                         if (!status.Success)
                             throw new ChalkableApiException(JsonConvert.SerializeObject(status.Data));
@@ -133,7 +146,12 @@ namespace Chalkable.API
                 {
                     var strRe = new StreamReader(e.Response.GetResponseStream());
                     var rsp = strRe.ReadToEnd();
-                    throw new ChalkableApiException($"call to remote server failed: {e.Message}\n{rsp}", e);
+                    throw new ChalkableApiException("Call to remote server failed: " +
+                                                    $"Status: {e.Status}" +
+                                                    $"Message: {e.Message}," +
+                                                    $"Timeout: {webRequest.Timeout}," +
+                                                    $"Elasped: {stopwatch.Elapsed}," +
+                                                    $"Body: {rsp.Substring(0, Math.Min(rsp.Length, 1024))}", e);
                 }
 
                 throw;

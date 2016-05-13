@@ -28,7 +28,8 @@ namespace Chalkable.Web.Controllers
                             ClassId = data.ClassId,
                             Date = data.Date,
                             StudentId = x.PersonId,
-                            Level = x.Level
+                            Level = x.Level,
+                            IsDailyAttendancePeriod = x.IsDailyAttendancePeriod
                         }).ToList());
             MasterLocator.UserTrackingService.SetAttendance(Context.Login, data.ClassId);
             return Json(true);
@@ -43,7 +44,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher", true, new[] { AppPermissionType.Attendance })]
-        public ActionResult SetAttendanceForClass(string level, int? attendanceReasonId, int classId, DateTime date)
+        public ActionResult SetAttendanceForClass(string level, int? attendanceReasonId, int classId, DateTime date, bool isDailyAttendancePeriod)
         {
             var mp = SchoolLocator.MarkingPeriodService.GetMarkingPeriodByDate(date, true);
             if (mp == null)
@@ -58,7 +59,8 @@ namespace Chalkable.Web.Controllers
                 ClassId = classId,
                 Date = date,
                 StudentId = x.Id,
-                Level = level
+                Level = level,
+                IsDailyAttendancePeriod = isDailyAttendancePeriod,
             }).ToList());
             return Json(true);
         }

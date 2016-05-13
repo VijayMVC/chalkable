@@ -278,21 +278,31 @@ NAMESPACE('chlk.activities.announcement', function () {
                         var attrAttachmentDom = new ria.dom.Dom().fromHTML(attachmentTpl.render());
                         attrAttachmentDom.appendTo('#file-attribute-attachment-area-' + model.getId());
 
+                        var parent = attrAttachmentDom.parent('.description');
+                        parent.addClass('with-file');
+
                         var attachDocBtnTpl = chlk.templates.announcement.AnnouncementAttributeAttachDocBtnTpl();
                         attachDocBtnTpl.assign(model);
                         var attachDocBtnDom = new ria.dom.Dom().fromHTML(attachDocBtnTpl.render());
                         new ria.dom.Dom('#file-attachment-button-'+ model.getId()).empty();
                         attachDocBtnDom.appendTo('#file-attachment-button-'+ model.getId());
+
+                        autosize.update(parent.find('textarea').valueOf()[0]);
                     }
 
                     if (msg_ == 'remove-attribute-attachment'){
                         if (model.getAttributeAttachment() == null){
-                            this.dom.find('#file-attribute-attachment-' + model.getId()).removeSelf();
+                            var el = this.dom.find('#file-attribute-attachment-' + model.getId()),
+                                parent = el.parent('.with-file');
+                            parent.removeClass('with-file');
+                            el.removeSelf();
                             var attachDocBtnTpl = chlk.templates.announcement.AnnouncementAttributeAttachDocBtnTpl();
                             attachDocBtnTpl.assign(model);
                             var attachDocBtnDom = new ria.dom.Dom().fromHTML(attachDocBtnTpl.render());
                             new ria.dom.Dom('#file-attachment-button-'+ model.getId()).empty();
                             attachDocBtnDom.appendTo('#file-attachment-button-'+ model.getId());
+                            
+                            autosize.update(parent.find('textarea').valueOf()[0]);
                         }
                     }
                 }

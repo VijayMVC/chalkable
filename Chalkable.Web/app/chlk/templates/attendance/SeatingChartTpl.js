@@ -44,6 +44,9 @@ NAMESPACE('chlk.templates.attendance', function () {
             [ria.templates.ModelPropertyBind],
             ArrayOf(chlk.models.attendance.AttendanceReason), 'reasons',
 
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'dailyAttendancePeriod',
+
             Boolean, function isScheduledInMp(){
                 return !!this.getSeatingList() && !!this.getNotSeatingStudents();
             },

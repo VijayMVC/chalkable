@@ -29,12 +29,11 @@ mixin AttributeBlock_(attribute)
                                 .question-mark(data-tooltip=Msg.Hide_From_Student_Tooltip_Message) ?
                                 +SlideCheckbox('attr-hidefromstudents-' + attribute.getId(), !attribute.isVisibleForStudents(), false).edit-attribute-visibility
                                 +ActionLink('announcement', 'removeAttribute', attribute.getAnnouncementId(), attribute.getId(), attribute.getAnnouncementType()).remove-attribute
-                    .description
-                        textarea(class="edit-attribute-text", id="text-" + attribute.getId())=attribute.getText()
-
-
+                    -var hasAttachment = attachment && attachment.getId() && attachment.getId() > 0
+                    .description(class = (hasAttachment ? "with-file" : ""))
+                        +TextArea(class="edit-attribute-text", id="text-" + attribute.getId())=attribute.getText()
                         .file-attribute-attachment-area(id ="file-attribute-attachment-area-" + attribute.getId())
-                            if attachment && attachment.getId() && attachment.getId() > 0
+                            if hasAttachment
                                 -attachment.setReadOnly(false)
                                 -attachment.setAnnouncementType(attribute.getAnnouncementType())
                                 -attachment.setAnnouncementId(attribute.getAnnouncementId())

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Chalkable.Common;
 using Microsoft.WindowsAzure.Storage.Table;
@@ -7,6 +8,7 @@ namespace Chalkable.Data.Common.Storage
 {
     public class TableHelper<T> : BaseStorageHelper where T : TableEntity, new()
     {
+        private const int MAX_BATCH_SIZE = 1000;
         private string tableName;
         private CloudTable table;
         
@@ -54,19 +56,27 @@ namespace Chalkable.Data.Common.Storage
             return (T)t.Execute(TableOperation.Retrieve<T>(partKey, key)).Result;
         }
 
+        private void SaveBatch(IEnumerable<T> rows)
+        {
+            var t = GetTable();
+            var batchOperation = new TableBatchOperation();
+            foreach (var row in rows)
+            {
+                batchOperation.Insert(row);
+            }
+            if (batchOperation.Count > MAX_BATCH_SIZE)
+                throw new Exception($"Batch size should be not greater than {MAX_BATCH_SIZE}");
+            t.ExecuteBatch(batchOperation);
+        }
+
         public void Save(IList<T> rows)
         {
-            if (rows.Count > 0)
+            int start = 0;
+            while (start < rows.Count)
             {
-                var t = GetTable();
-                var batchOperation = new TableBatchOperation();
-                foreach (var row in rows)
-                {
-                    batchOperation.Insert(row);
-                }
-                t.ExecuteBatch(batchOperation);    
+                SaveBatch(rows.Skip(start).Take(MAX_BATCH_SIZE));
+                start += MAX_BATCH_SIZE;
             }
-            
         }
     }
 }
