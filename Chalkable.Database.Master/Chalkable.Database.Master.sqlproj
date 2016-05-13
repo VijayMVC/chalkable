@@ -138,6 +138,7 @@
     <Build Include="Tables\ApplicationSchoolOption.sql" />
     <Build Include="Stored Procedures\spBanSchoolsByIds.sql" />
     <Build Include="User Defined Types\TApplicationSchoolOption.sql" />
+    <Build Include="Stored Procedures\spGetApplicationBanInfo.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Scripts\Pre-Deploy\001_addIsAssessmentEnabledToSchool.PreDeployment.sql" />

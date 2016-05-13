@@ -106,6 +106,7 @@
     <Compile Include="DataAccess\UserDataAccess.cs" />
     <Compile Include="DataAccess\UserLoginInfoDataAccess.cs" />
     <Compile Include="Model\Application.cs" />
+    <Compile Include="Model\ApplicationBanInfo.cs" />
     <Compile Include="Model\ApplicationDistrictOption.cs" />
     <Compile Include="Model\ApplicationSchoolOption.cs" />
     <Compile Include="Model\BackgroundTask.cs" />

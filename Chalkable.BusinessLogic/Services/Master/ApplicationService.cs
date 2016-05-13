@@ -33,6 +33,8 @@ namespace Chalkable.BusinessLogic.Services.Master
         Guid? GetAssessmentId();
         IList<Application> GetSuggestedApplications(IList<Guid> abIds, int start, int count);
         void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban);
+        IList<ApplicationBanInfo> GetApplicationBanInfos(Guid districtId, Guid? schoolId, IList<Guid> applicationIds);
+        void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds);
     }
 
 
@@ -241,6 +243,12 @@ namespace Chalkable.BusinessLogic.Services.Master
                 new ApplicationDataAccess(uow).SetDistrictOption(applicationId, districtId, ban);
             });
         }
+
+        public IList<ApplicationBanInfo> GetApplicationBanInfos(Guid districtId, Guid? schoolId, IList<Guid> applicationIds)
+        {
+            return DoRead(u => new ApplicationSchoolOptionDataAccess(u).GetApplicationBanInfos(districtId, schoolId, applicationIds));
+        }
+
         public Application GetMiniQuizAppication()
         {
             var id = GetMiniQuizAppicationId();
@@ -274,6 +282,11 @@ namespace Chalkable.BusinessLogic.Services.Master
 
             Guid res;
             return Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null;
+        }
+
+        public void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds)
+        {
+            DoUpdate(u => new ApplicationSchoolOptionDataAccess(u).BanSchoolsByIds(applicationId, schoolIds));
         }
     }
 

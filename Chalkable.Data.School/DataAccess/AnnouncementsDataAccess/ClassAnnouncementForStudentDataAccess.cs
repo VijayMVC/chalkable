@@ -16,7 +16,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             throw new ChalkableSecurityException("Student is not able to get drafts");
         }
 
-        protected override DbQuery SeletClassAnnouncements(string tableName, int callerId)
+        protected override DbQuery SelectClassAnnouncements(string tableName, int callerId)
         {
             var dbQuery = new DbQuery();
             var selectSet = $"{tableName}.*, cast(0 as bit) as IsOwner";

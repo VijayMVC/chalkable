@@ -24,5 +24,17 @@ namespace Chalkable.Data.Master.DataAccess
             };
             ExecuteStoredProcedure("spBanSchoolsByIds", @params);
         }
+
+        public IList<ApplicationBanInfo> GetApplicationBanInfos(Guid districtId, Guid? schoolId, IList<Guid> applicationIds)
+        {
+            var @params = new Dictionary<string, object>
+            {
+                ["applicationIds"] = applicationIds,
+                ["districtId"] = districtId,
+                ["schoolId"] = schoolId
+            };
+
+            return ExecuteStoredProcedureList<ApplicationBanInfo>("spGetApplicationBanInfo", @params);
+        }
     }
 }

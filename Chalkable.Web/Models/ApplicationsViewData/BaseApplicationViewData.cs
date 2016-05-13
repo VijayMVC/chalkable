@@ -38,6 +38,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
         public IList<Guid> Picturesid { get; set; }
         public BaseApplicationViewData LiveApplication { get; set; }
         public bool HasDistrictAdminSettings { get; set; }
+        public bool? IsBannedForDistrict { get; set; }
+        public bool? IsPartiallyBanned { get; set; }
+        public bool? IsBannedForCurrentSchool { get; set; }
         
         protected BaseApplicationViewData(Application application)
         {
@@ -64,6 +67,9 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             Ban = application.Ban;
             HasDistrictAdminSettings = application.HasDistrictAdminSettings;
             MyAppsUrl = AppTools.BuildAppUrl(application, null, AppMode.MyView);
+            IsBannedForCurrentSchool = null;
+            IsBannedForDistrict = null;
+            IsPartiallyBanned = null;
         }
 
         public static BaseApplicationViewData Create(Application application)
@@ -71,9 +77,26 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             return new BaseApplicationViewData(application);
         }
 
+        public static BaseApplicationViewData Create(Application application, ApplicationBanInfo appBan)
+        {
+            var model = new BaseApplicationViewData(application)
+            {
+                IsBannedForCurrentSchool = appBan?.BannedForCurrentSchool,
+                IsBannedForDistrict = appBan?.UnBannedSchoolCount == 0,
+                IsPartiallyBanned = appBan?.BannedSchoolCount != 0
+            };
+            return model;
+        }
+
         public static IList<BaseApplicationViewData> Create(IList<Application> applications)
         {
             return applications.Select(Create).ToList();
+        }
+
+        public static IList<BaseApplicationViewData> Create(IList<Application> applications, IList<ApplicationBanInfo> appBans)
+        {
+            var res = applications.Select(x => Create(x, appBans.FirstOrDefault(y => x.Id == y.ApplicationId))).ToList();
+            return res;
         }
     }
 

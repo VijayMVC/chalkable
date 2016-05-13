@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Model;
+using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
@@ -129,9 +130,9 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("SysAdmin, DistrictAdmin")]
-        public ActionResult SubmitApplicationBan(Guid applicationId, GuidList schoolIds)
+        public ActionResult SubmitApplicationsBan(Guid applicationId, GuidList schoolIds)
         {
-            MasterLocator.ApplicationSchoolOptionService.SubmitApplicationBan(applicationId, schoolIds);
+            MasterLocator.ApplicationService.SubmitApplicationBan(applicationId, schoolIds);
             return Json(true);
         }
 
@@ -323,7 +324,20 @@ namespace Chalkable.Web.Controllers
         {
             var apps = MasterLocator.ApplicationService.GetApplications(categoriesIds, gradeLevelsIds, filter
                           , (AppFilterMode?)filterMode, (AppSortingMode?)sortingMode, start ?? 0, count ?? DEFAULT_PAGE_SIZE);
-            return Json(apps.Transform(BaseApplicationViewData.Create));
+
+            if (!BaseSecurity.IsDistrictAdmin(Context))
+                return Json(apps.Transform(BaseApplicationViewData.Create));
+
+            Trace.Assert(Context.DistrictId.HasValue);
+            Trace.Assert(Context.SchoolLocalId.HasValue);
+
+            var school = MasterLocator.SchoolService.GetById(Context.DistrictId.Value, Context.SchoolLocalId.Value);
+            var appBanInfos = MasterLocator.ApplicationService
+                .GetApplicationBanInfos(Context.DistrictId.Value, school.Id, apps.Select(x => x.Id).ToList());
+
+            var viewData = apps.Transform(x => BaseApplicationViewData.Create(x, appBanInfos.FirstOrDefault(y => y.ApplicationId == x.Id)));
+
+            return Json(viewData);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]

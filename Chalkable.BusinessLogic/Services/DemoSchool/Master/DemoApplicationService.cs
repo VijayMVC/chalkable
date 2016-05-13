@@ -210,6 +210,16 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public IList<ApplicationBanInfo> GetApplicationBanInfos(Guid districtId, Guid? schoolId, IList<Guid> applicationIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public IList<Application> GetApplicationsByIds(IList<Guid> ids)
         {
