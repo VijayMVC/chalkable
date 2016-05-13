@@ -17,7 +17,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
         PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode
             , AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue);
-
         IList<Application> GetApplicationsByIds(IList<Guid> ids);
         Application GetApplicationById(Guid id);
         Application GetApplicationByUrl(string url);
@@ -35,6 +34,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban);
         IList<ApplicationBanInfo> GetApplicationBanInfos(Guid districtId, Guid? schoolId, IList<Guid> applicationIds);
         void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds);
+        IList<ApplicationSchoolOption> GetApplicationSchoolOptions(Guid districtId, Guid applicationId);
     }
 
 
@@ -287,6 +287,11 @@ namespace Chalkable.BusinessLogic.Services.Master
         public void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds)
         {
             DoUpdate(u => new ApplicationSchoolOptionDataAccess(u).BanSchoolsByIds(applicationId, schoolIds));
+        }
+
+        public IList<ApplicationSchoolOption> GetApplicationSchoolOptions(Guid districtId, Guid applicationId)
+        {
+            return DoRead(u => new ApplicationSchoolOptionDataAccess(u).GetApplicationSchoolOptions(districtId, applicationId));
         }
     }
 

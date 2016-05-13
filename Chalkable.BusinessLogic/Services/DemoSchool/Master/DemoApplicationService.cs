@@ -220,6 +220,11 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
+        public IList<ApplicationSchoolOption> GetApplicationSchoolOptions(Guid districtId, Guid applicationId)
+        {
+            throw new NotImplementedException();
+        }
+
 
         public IList<Application> GetApplicationsByIds(IList<Guid> ids)
         {

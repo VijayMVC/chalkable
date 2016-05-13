@@ -36,5 +36,28 @@ namespace Chalkable.Data.Master.DataAccess
 
             return ExecuteStoredProcedureList<ApplicationBanInfo>("spGetApplicationsBanInfo", @params);
         }
+
+        public IList<ApplicationSchoolOption> GetApplicationSchoolOptions(Guid districtId, Guid applicationId)
+        {
+            var sql = @"Select 
+	                        @applicationId As ApplicationRef, 
+	                        School.Id As SchoolRef, 
+	                        IsNull(Banned, 0) As Banned
+                        From 
+	                        School left join ApplicationSchoolOption 
+		                        on School.Id = SchoolRef 
+                        Where DistrictRef = @districtId And ApplicationRef = @applicationId";
+
+            var @params = new Dictionary<string, object>
+            {
+                ["districtId"] = districtId,
+                ["applicationId"] = applicationId
+            };
+
+            using (var reader = ExecuteReaderParametrized(sql, @params))
+            {
+                return reader.ReadList<ApplicationSchoolOption>();
+            }
+        }
     }
 }

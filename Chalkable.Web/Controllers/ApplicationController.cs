@@ -340,6 +340,14 @@ namespace Chalkable.Web.Controllers
             return Json(viewData);
         }
 
+        public ActionResult ApplicationBannedSchools(Guid districtId, Guid applicationId)
+        {
+            var schools = MasterLocator.SchoolService.GetSchools(districtId, 0, int.MaxValue);
+            var appSchoolOptions = MasterLocator.ApplicationService.GetApplicationSchoolOptions(districtId, applicationId);
+
+            return Json(ApplicationSchoolOptionViewData.Create(appSchoolOptions, schools));
+        }
+
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
         public ActionResult ListForAttach(int? start, int? count)
         {
