@@ -42,11 +42,12 @@ NAMESPACE('chlk.models.apps', function () {
     CLASS('SubmitApplicationBan',[
 
         chlk.models.id.AppId, 'applicationId',
+        String, 'requestId',
         String, 'schoolIdsStr',
 
         ArrayOf(chlk.models.id.SchoolId), function getSchoolIds(){
             var idsStr = this.getSchoolIdsStr();
-            return idsStr ? idsStr.split(',') : [];
+            return idsStr ? idsStr.split(',').map(function(_){return new chlk.models.id.SchoolId(_);}) : [];
         }
     ])
 });

@@ -385,5 +385,13 @@ NAMESPACE('chlk.services', function () {
                     count: count_ || 10000,
                 });
             },
+
+            [[chlk.models.id.AppId, ArrayOf(chlk.models.id.SchoolId)]],
+            function submitApplicationBan(applicationId, schoolIds){
+                return this.post('Application/SubmitApplicationBan.json', Boolean, {
+                    applicationId: applicationId.valueOf(),
+                    schoolIds: this.arrayToCsv(schoolIds)
+                });
+            }
         ])
 });

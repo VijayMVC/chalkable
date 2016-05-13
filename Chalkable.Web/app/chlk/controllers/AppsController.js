@@ -995,15 +995,17 @@ NAMESPACE('chlk.controllers', function (){
             return this.PushOrUpdateView(chlk.activities.apps.MyAppsPage, result);
         },
 
-        [[chlk.models.id.AppId]],
-        function disableAppAction(appId){
-            var schoolsIds = [];
-            schoolsIds.push(new chlk.models.id.SchoolId('736FFA83-7219-4F54-A4C2-837453863209'));
-            var res = this.WidgetStart('apps', 'disableApp', [appId, schoolsIds, false])
+        [[chlk.models.id.AppId, ArrayOf(chlk.models.id.SchoolId)]],
+        function disableAppAction(appId, schoolIds){
+            //var schoolsIds = schoolIdsStr ? schoolIdsStr.split(',').map(function(_){
+            //    return new chlk.models.id.SchoolId
+            //}) : [];
+            //schoolsIds.push(new chlk.models.id.SchoolId('736FFA83-7219-4F54-A4C2-837453863209'));
+            var res = this.WidgetStart('apps', 'disableApp', [appId, schoolIds, false])
                 .then(function(data){
-
-                });
-            return this.UpdateView(chlk.activities.apps.MyAppsPage, res);
+                    return this.BackgroundNavigate('apps', 'myApps', []);
+                }, this);
+            return null;
         },
 
         [[String, chlk.models.id.AppId, ArrayOf(chlk.models.id.SchoolId), Boolean]],
@@ -1034,9 +1036,17 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.apps.SubmitApplicationBan]],
         function submitDisableAppAction(model){
-            //TODO impl
+            var res = this.appsService
+                .submitApplicationBan(
+                    model.getApplicationId(),
+                    model.getSchoolIds()
+                )
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    this.WidgetComplete(model.getRequestId(), data);
+                }, this);
+            return this.CloseView(chlk.activities.apps.DisableAppDialog);
         },
-
 
         [[chlk.models.id.ClassId, String, String]],
         function getSuggestedAppsAction(classId, academicBenchmarkIds, standardUrlComponents_) {

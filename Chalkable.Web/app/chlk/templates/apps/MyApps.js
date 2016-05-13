@@ -1,3 +1,4 @@
+REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.MyAppsViewData');
 REQUIRE('chlk.models.common.PaginatedList');
 
@@ -15,7 +16,25 @@ NAMESPACE('chlk.templates.apps', function () {
             Boolean, function canDisableApp(){
                 var role = this.getUserRole();
                 return role.isSysAdmin() || role.isAdmin();
-            }
+            },
 
+
+            [[chlk.models.apps.Application]],
+            Boolean, function isPartialBanned(app){
+               return (app.getBannedSchoolIds() || []).length > 0;
+            },
+
+            [[chlk.models.apps.Application]],
+            String, function bannedCssClass(app){
+                if(app.isBanned()) return 'banned';
+                if(this.isPartialBanned(app)) return 'partial-banned';
+                return '';
+            },
+
+            [[chlk.models.apps.Application]],
+            Boolean, function isBannedFromCurrentSchool(app){
+                //TODO impl
+                return app.isBanned();
+            }
         ])
 });

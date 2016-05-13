@@ -5,6 +5,7 @@
         .close.close-btn
     +ActionForm('apps', 'submitDisableApp')
         +Hidden('applicationId', self.getApplicationId())
+        +Hidden('requestId', self.getRequestId())
         +Hidden('schoolIdsStr', self.getBannedSchoolIdsStr()).school-ids
         -var allSchoolsStage = self.getAllSchoolsStage()
         table
