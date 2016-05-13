@@ -1,6 +1,6 @@
 ﻿CREATE PROCEDURE [dbo].[spBanSchoolsByIds]
 	@applicationId uniqueidentifier,
-	@schoolIds TGuid ReadOnly
+	@schoolIds TGUID ReadOnly
 AS
 
 --UnBan all schools not in list

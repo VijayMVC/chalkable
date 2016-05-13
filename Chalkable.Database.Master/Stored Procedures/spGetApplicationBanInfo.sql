@@ -1,5 +1,5 @@
 ﻿CREATE PROCEDURE spGetApplicationsBanInfo
-	@applicationIds TGuid Readonly,
+	@applicationIds TGUID Readonly,
 	@districtId uniqueidentifier,
 	@schoolId uniqueidentifier
 As
@@ -12,10 +12,12 @@ Declare @ApplicationBanInfoT table
 	BannedForCurrentSchool bit
 )
 
+Declare @totalSchools int = (Select count(*) From School Where DistrictRef = @districtId)
+
 Insert Into @ApplicationBanInfoT
 	Select 
 		AppIds.value,
-		SUM(Case When Banned is null or Banned = 0 Then 1 Else 0 End) As UnBannedSchoolCount,
+		0 As UnBannedSchoolCount,
 		SUM(Case When Banned = 1 Then 1 Else 0 End) As BannedSchoolCount,
 		0 As BannedForCurrentSchool
 	From
@@ -28,6 +30,9 @@ Insert Into @ApplicationBanInfoT
 		School.DistrictRef is null or School.DistrictRef = @districtId
 	Group By
 		AppIds.value
+
+Update @ApplicationBanInfoT
+Set UnBannedSchoolCount = @totalSchools - BannedSchoolCount
 
 Update @ApplicationBanInfoT
 Set BannedForCurrentSchool = 1
