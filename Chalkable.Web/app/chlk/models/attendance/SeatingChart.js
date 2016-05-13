@@ -25,12 +25,13 @@ NAMESPACE('chlk.models.attendance', function () {
 
             Boolean, 'ableRePost',
 
-            [ria.serialize.SerializeProperty('isscheduled')],
             Boolean, 'scheduled',
 
             chlk.models.common.ChlkDate, 'date',
 
             Boolean, 'ableChangeReasons',
+            
+            Boolean, 'dailyAttendancePeriod',
 
             [ria.serialize.SerializeProperty('notseatingstudents')],
             ArrayOf(chlk.models.attendance.ClassAttendance), 'notSeatingStudents',
@@ -45,6 +46,7 @@ NAMESPACE('chlk.models.attendance', function () {
 //                this.setId(new chlk.models.apps.AppPermissionTypeEnum(raw.type));
 //                this.setName(raw.name);
                 var serializer = new chlk.lib.serialize.ChlkJsonSerializer();
+                this.setDailyAttendancePeriod(raw.isdailyattendanceperiod);
                 this.setRows(raw.rows);
                 this.setColumns(raw.columns);
                 this.setScheduled(raw.isscheduled);

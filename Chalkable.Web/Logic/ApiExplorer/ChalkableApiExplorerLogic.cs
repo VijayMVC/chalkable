@@ -70,7 +70,7 @@ namespace Chalkable.Web.Logic.ApiExplorer
             //do this once
             
             RegisterApiMethodDefaults<ApplicationController>(x => x.GetAnnouncementApplication(1), ApiMethodCallType.Post);
-            RegisterApiMethodDefaults<AttendanceController>(x => x.SetAttendanceForClass("A", null, DemoSchoolConstants.AlgebraClassId, DateTime.Today),ApiMethodCallType.Post);
+            RegisterApiMethodDefaults<AttendanceController>(x => x.SetAttendanceForClass("A", null, DemoSchoolConstants.AlgebraClassId, DateTime.Today, true),ApiMethodCallType.Post);
             RegisterApiMethodDefaults<AttendanceController>(x => x.ClassList(null, DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AttendanceController>(x => x.AttendanceSummary(DateTime.Today), ApiMethodCallType.Get);
             RegisterApiMethodDefaults<AttendanceController>(x => x.SeatingChart(null, DemoSchoolConstants.AlgebraClassId), ApiMethodCallType.Get);

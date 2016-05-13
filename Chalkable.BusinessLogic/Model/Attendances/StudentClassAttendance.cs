@@ -58,5 +58,6 @@ namespace Chalkable.BusinessLogic.Model.Attendances
         public bool ReadOnly { get; set; }
         public string ReadOnlyReason { get; set; }
         public StudentDetails Student { get; set; }
+        public bool IsDailyAttendancePeriod { get; set; }
     }
 }

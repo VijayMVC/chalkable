@@ -47,7 +47,7 @@ namespace Chalkable.BusinessLogic.Services.School
                 {
                     Category = sca.Category,
                     Date = dataStr,
-                    ClassroomLevel = LevelToClassRoomLevel(sca.Level),
+                    ClassroomLevel = LevelToClassRoomLevel(sca.Level, sca.IsDailyAttendancePeriod),
                     ReasonId = (short) (sca.AttendanceReasonId ?? 0),
                     SectionId = classId,
                     StudentId = sca.StudentId,
@@ -110,13 +110,13 @@ namespace Chalkable.BusinessLogic.Services.School
             return null;
         }
 
-        private string LevelToClassRoomLevel(string level)
+        private string LevelToClassRoomLevel(string level, bool? isDailyAttendancePeriod)
         {
             if (level == null)
                 return BaseAttendance.PRESENT;
             if (BaseAttendance.IsLateLevel(level))
                 return BaseAttendance.TARDY;
-            if (level == "A" || level == "AO")
+            if ((level == "A" || level == "AO") && isDailyAttendancePeriod.HasValue && isDailyAttendancePeriod.Value)
                 return BaseAttendance.ABSENT;
             return BaseAttendance.MISSING;
         }
