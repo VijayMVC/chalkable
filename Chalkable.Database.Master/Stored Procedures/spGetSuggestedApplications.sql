@@ -1,5 +1,5 @@
 ﻿CREATE procedure [dbo].[spGetSuggestedApplications] 
-	@academicBenchmarkIds TGuid ReadOnly,
+	@academicBenchmarkIds TGUID ReadOnly,
 	@start int,
 	@count int
 as

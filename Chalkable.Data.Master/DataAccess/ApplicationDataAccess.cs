@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
+using System.Text;
 using Chalkable.Common;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Enums;
@@ -76,128 +77,154 @@ namespace Chalkable.Data.Master.DataAccess
             return res;
         }
 
-        private DbQuery BuildGetApplicationsQuery(ApplicationQuery query)
+        private DbQuery BuildSelectApplicationQuery(ApplicationQuery query)
         {
-            var res = new DbQuery();
-            if (query.DistrictId.HasValue)
-            {
-                res.Sql.AppendFormat(
-                    @"select Application.*, 
-                        (select avg(rating) from ApplicationRating where ApplicationRef = Application.Id) as Avg,
-                        isnull(ApplicationDistrictOption.{1}, 0) as {1}
-                    from 
-                        Application 
-                        left join ApplicationDistrictOption on Application.Id = ApplicationDistrictOption.ApplicationRef and ApplicationDistrictOption.{0} = @{0}
-                    where 
-                        1 = 1", ApplicationDistrictOption.DISTRICT_REF_FIELD, ApplicationDistrictOption.BAN_FIELD);
-                res.Parameters.Add(ApplicationDistrictOption.DISTRICT_REF_FIELD, query.DistrictId);
-                if (query.Ban.HasValue)
-                {
-                    res.Sql.AppendFormat(" and isnull(ApplicationDistrictOption.{0}, 0) = @{0}", ApplicationDistrictOption.BAN_FIELD);
-                    res.Parameters.Add(ApplicationDistrictOption.BAN_FIELD, query.Ban);
-                }
-            }
-            else
-                res.Sql.Append(@"select Application.*, (select avg(rating) from ApplicationRating where ApplicationRef = Application.Id) as Avg, null as Ban from Application where 1 = 1");
-            
+            var q = new DbQuery();
+
+            var avgRatingColumn = $@"Select Avg({nameof(ApplicationRating.Rating)}) 
+                                     From  {nameof(ApplicationRating)} 
+                                     Where {nameof(ApplicationRating.ApplicationRef)} = {nameof(Application.Id)}";
+
+            var banColumn = $@"Case When @schoolId is not null 
+                               Then IsNull({nameof(ApplicationSchoolOption.Banned)}, 0) Else null End";
+
+            var mainSelect = $@"Select 
+	                                [{nameof(Application)}].*,
+	                                ({avgRatingColumn}) As [Avg],
+	                                ({banColumn})       As Ban
+                                From 
+	                                [{nameof(Application)}]
+	                                left join {nameof(ApplicationSchoolOption)}
+		                            On [{nameof(Application.Id)}] = {nameof(ApplicationSchoolOption.ApplicationRef)} 
+		                                And {nameof(ApplicationSchoolOption.SchoolRef)} = @schoolId";
+
+            q.Sql.Append(mainSelect);
+            q.Parameters.Add("schoolId", query.SchoolId);
+
+            return q;
+        }
+
+        private void AddSimpleParamsToApplicationQuery(DbQuery result, ApplicationQuery query)
+        {
+            var conditions = new AndQueryCondition();
+
+            if (query.SchoolId.HasValue && query.Ban.HasValue)
+                conditions.Add(nameof(ApplicationSchoolOption.Banned), query.Ban, ConditionRelation.Equal);
+
             if (query.Role != CoreRoles.SUPER_ADMIN_ROLE.Id && query.Role != CoreRoles.APP_TESTER_ROLE.Id)
             {
                 if (!query.IncludeInternal)
+                    conditions.Add(nameof(Application.IsInternal), 1, ConditionRelation.NotEqual);
+
+                if (query.MyApps.HasValue)
                 {
-                    res.Sql.Append($" and [{nameof(Application.IsInternal)}] <> 1");
-                }
-                if (query.OnlyForInstall)
-                {
-                    if (query.Role == CoreRoles.TEACHER_ROLE.Id)
-                        res.Sql.Append($" and ([{nameof(Application.HasStudentMyApps)}] = 1 or [{nameof(Application.HasTeacherMyApps)}] = 1 or [{nameof(Application.CanAttach)}] = 1 or [{nameof(Application.HasTeacherExternalAttach)}] = 1 or [{nameof(Application.HasStudentExternalAttach)}] = 1)");
                     if (query.Role == CoreRoles.STUDENT_ROLE.Id)
-                        res.Sql.Append($" and ([{nameof(Application.HasStudentMyApps)}] = 1 or [{nameof(Application.HasStudentExternalAttach)}] = 1)");
+                        conditions.Add(nameof(Application.HasStudentMyApps), query.MyApps, ConditionRelation.Equal);
+                    if (query.Role == CoreRoles.TEACHER_ROLE.Id)
+                        conditions.Add(nameof(Application.HasTeacherMyApps), query.MyApps, ConditionRelation.Equal);
                 }
             }
 
             if (query.CanAttach.HasValue)
-            {
-                res.Sql.AppendFormat(" and [{0}] = @{0}", nameof(Application.CanAttach));
-                res.Parameters.Add(nameof(Application.CanAttach), query.CanAttach.Value);
-            }
+                conditions.Add(nameof(Application.CanAttach), query.CanAttach, ConditionRelation.Equal);
 
             if (query.DeveloperId.HasValue)
-            {
-                res.Sql.Append(string.Format(" and [{0}] = @{0}", nameof(Application.DeveloperRef)));
-                res.Parameters.Add(nameof(Application.DeveloperRef), query.DeveloperId);
-            }
+                conditions.Add(nameof(Application.DeveloperRef), query.DeveloperId, ConditionRelation.Equal);
+
             if (query.Id.HasValue)
-            {
-                res.Sql.AppendFormat(" and [{0}] = @{0}", nameof(Application.Id));
-                res.Parameters.Add(nameof(Application.Id), query.Id.Value);
-            }
+                conditions.Add(nameof(Application.Id), query.Id, ConditionRelation.Equal);
+
             if (query.Live.HasValue || query.State.HasValue)
             {
-                string sqlOperator = " = ";
-                int? state = (int?) query.State;
+                var relation = ConditionRelation.Equal;
+                var state = (int?)query.State;
+
                 if (query.Live.HasValue)
                 {
-                    if(!query.Live.Value) sqlOperator = " <> ";
-                    state = (int?) ApplicationStateEnum.Live;
+                    if (!query.Live.Value)
+                        relation = ConditionRelation.NotEqual;
+
+                    state = (int?)ApplicationStateEnum.Live;
                 }
-                res.Sql.Append(string.Format(" and [{0}] {1} @{0}", nameof(Application.State), sqlOperator));
-                res.Parameters.Add(nameof(Application.State), state);
+
+                conditions.Add(nameof(Application.State), state, relation);
             }
+
             
-            if (query.Free.HasValue)
-            {
-                res.Sql.AppendFormat(" and [{0}] {1} 0", nameof(Application.Price), query.Free.Value ? "=" : ">");
-            }
+
+            conditions.BuildSqlWhere(result, nameof(Application));
+        }
+
+        private DbQuery BuildGetApplicationsQuery(ApplicationQuery query)
+        {
+            var res = BuildSelectApplicationQuery(query);
             
+            AddSimpleParamsToApplicationQuery(res, query);
+            
+            //Adding complex params to query
             if (query.GradeLevels != null && query.GradeLevels.Count > 0)
             {
-                res.Sql.AppendFormat(" and exists(select * from ApplicationGradeLevel where ApplicationRef = Application.Id and GradeLevel in ({0}))"
-                    , query.GradeLevels.Select(x => x.ToString()).JoinString(","));
+                var gradeLevelsPredicate = $@"Exists(
+                        Select * 
+                        From {nameof(ApplicationGradeLevel)} 
+                        Where 
+                            {nameof(ApplicationGradeLevel.ApplicationRef)} = Application.Id 
+                            And {nameof(ApplicationGradeLevel.GradeLevel)} in (Select * From @gradeLevels))";
+
+                res.Sql.Append($" And {gradeLevelsPredicate}");
+                res.Parameters.Add("gradeLevels", query.GradeLevels);
             }
+
             if (query.CategoryIds != null && query.CategoryIds.Count > 0)
             {
-                var categoriesParam = new List<string>();
-                for (int i = 0; i < query.CategoryIds.Count; i++)
-                {
-                    var categoryParam = "@categoryId_" + i;
-                    categoriesParam.Add(categoryParam);
-                    res.Parameters.Add(categoryParam, query.CategoryIds[i]);
-                }
-                res.Sql.AppendFormat(" and exists (select * from ApplicationCategory where ApplicationRef = Application.Id and CategoryRef in ({0}))"
-                    , categoriesParam.JoinString(","));
+                var categoryPredicate = $@"Exists(
+                        Select * 
+                        From {nameof(ApplicationCategory)} 
+                        Where 
+                            {nameof(ApplicationCategory.ApplicationRef)} = Application.Id 
+                            And {nameof(ApplicationCategory.CategoryRef)} in (Select * from @categoryIds))";
 
+                res.Sql.Append($"And {categoryPredicate}");
+                res.Parameters.Add("categoryIds", query.CategoryIds);
             }
-            if (!string.IsNullOrEmpty(query.Filter))
+
+            if (string.IsNullOrEmpty(query.Filter))
+                return res;
+
+            var keyWords = query.Filter.Split(new [] {' ', '.', ',', ';'}, StringSplitOptions.RemoveEmptyEntries);
+            var keyWordsParams = new List<string>();
+
+            for (var i = 0; i < keyWords.Length; ++i)
             {
-                var keyWords = query.Filter.Split(new [] {' ', '.', ','}, StringSplitOptions.RemoveEmptyEntries);
-                var keyWordsParams = new List<string>();
-                for (int i = 0; i < keyWords.Length; i++)
-                {
-                    if (!string.IsNullOrEmpty(keyWords[i]))
-                    {
-                        var keyWordParam = "@keyWord_" + i;
-                        res.Parameters.Add(keyWordParam, "%" + keyWords[i] + "%");
-                        keyWordsParams.Add(" like " + keyWordParam);
-                    }
-                }
-                if (keyWordsParams.Count > 0)
-                {
-                    res.Sql.Append(" and (");
-                    res.Sql.AppendFormat(" LOWER(Name) {0} ", keyWordsParams.JoinString(" or LOWER(Name) "));
-                    res.Sql.AppendFormat(" or LOWER(Description) {0} ", keyWordsParams.JoinString(" or LOWER(Description) "));
-                    res.Sql.AppendFormat(@" or exists(select ac.Id from ApplicationCategory ac
-                                                  join Category c on c.Id = ac.CategoryRef
-                                                  where ApplicationRef = [Application].Id and (LOWER(c.Name) {0})
-                                                 )", keyWordsParams.JoinString(" or LOWER(c.Name) "));
-                    res.Sql.Append(" or exists(select * from Developer where Id = [Application].DeveloperRef and (");
-                    res.Sql.AppendFormat(" LOWER(Name) {0}", keyWordsParams.JoinString(" or LOWER(Name) "));
-                    res.Sql.AppendFormat(" or LOWER(WebSite) {0} ", keyWordsParams.JoinString(" or LOWER(WebSite)"));
-                    res.Sql.Append(")))");
-                }
+                if (string.IsNullOrEmpty(keyWords[i]))
+                    continue;
+
+                var keyWordParam = "@keyWord_" + i;
+                res.Parameters.Add(keyWordParam, $"%{keyWords[i]}%");
+                keyWordsParams.Add(" like " + keyWordParam);
             }
+            if (keyWordsParams.Count <= 0)
+                return res;
+
+            var appCategory = $@"Select {nameof(ApplicationCategory.Id)}
+                                 From   {nameof(ApplicationCategory)} join {nameof(Category)}
+                                        On  {nameof(ApplicationCategory)}.CategoryRef = {nameof(Category)}.Id
+                                 Where  {nameof(ApplicationCategory.ApplicationRef)} = [Application].Id
+                                        And (Lower({nameof(Category)}.Name) {keyWordsParams.JoinString(" or LOWER(Category.Name) ")} )" ;
+
+            var devQuery = $@"Select * From {nameof(Developer)} 
+                              Where {nameof(Developer.Id)} = {nameof(Application.DeveloperRef)}
+                                    And (   Lower({nameof(Developer.Name)})    {keyWordsParams.JoinString(" or Lower(Name) ")}
+                                         or Lower({nameof(Developer.WebSite)}) {keyWordsParams.JoinString(" or Lower(WebSite) ")} )";
+            var searchQuery = 
+                $@" And (   Lower({nameof(Application.Name)})        {keyWordsParams.JoinString(" or Lower (Name) ")}
+                         or Lower({nameof(Application.Description)}) {keyWordsParams.JoinString(" or Lower (Description) ")}
+                         or Exists({appCategory})
+                         or Exists({devQuery}) )";
+
+            res.Sql.Append(searchQuery);
 
             return res;
-
         }
 
         private IList<Application> PreparePicturesData(IList<Application> applications)
@@ -345,14 +372,14 @@ namespace Chalkable.Data.Master.DataAccess
         {
             var query = new DbQuery(new List<DbQuery>
                 {
-                    Orm.SimpleDelete<ApplicationDistrictOption>(new AndQueryCondition { {ApplicationDistrictOption.APPLICATION_REF_FIELD, id} }),
-                    Orm.SimpleDelete<ApplicationPermission>(new AndQueryCondition { {nameof(ApplicationPermission.ApplicationRef), id} }),
-                    Orm.SimpleDelete<ApplicationCategory>(new AndQueryCondition { {nameof(ApplicationCategory.ApplicationRef), id} }),
-                    Orm.SimpleDelete<ApplicationPicture>(new AndQueryCondition { {nameof(ApplicationPicture.ApplicationRef), id} }),
-                    Orm.SimpleDelete<ApplicationRating>(new AndQueryCondition { {nameof(ApplicationRating.ApplicationRef), id} }),
-                    Orm.SimpleDelete<ApplicationGradeLevel>(new AndQueryCondition { {nameof(ApplicationGradeLevel.ApplicationRef), id} }),
-                    Orm.SimpleDelete<ApplicationStandard>(new AndQueryCondition { {nameof(ApplicationStandard.ApplicationRef), id} }),
-                    Orm.SimpleDelete<Application>(new AndQueryCondition { {nameof(Application.Id), id} }),
+                    Orm.SimpleDelete<ApplicationSchoolOption>(new AndQueryCondition { {nameof(ApplicationSchoolOption.ApplicationRef), id} }),
+                    Orm.SimpleDelete<ApplicationPermission>(  new AndQueryCondition { {nameof(ApplicationPermission.ApplicationRef), id} }),
+                    Orm.SimpleDelete<ApplicationCategory>(    new AndQueryCondition { {nameof(ApplicationCategory.ApplicationRef), id} }),
+                    Orm.SimpleDelete<ApplicationPicture>(     new AndQueryCondition { {nameof(ApplicationPicture.ApplicationRef), id} }),
+                    Orm.SimpleDelete<ApplicationRating>(      new AndQueryCondition { {nameof(ApplicationRating.ApplicationRef), id} }),
+                    Orm.SimpleDelete<ApplicationGradeLevel>(  new AndQueryCondition { {nameof(ApplicationGradeLevel.ApplicationRef), id} }),
+                    Orm.SimpleDelete<ApplicationStandard>(    new AndQueryCondition { {nameof(ApplicationStandard.ApplicationRef), id} }),
+                    Orm.SimpleDelete<Application>(            new AndQueryCondition { {nameof(Application.Id), id} }),
 
                 });
             ExecuteNonQueryParametrized(query.Sql.ToString(), query.Parameters);
@@ -387,31 +414,20 @@ namespace Chalkable.Data.Master.DataAccess
             }
             return PreparePicturesData(res);
         }
-
-        public void SetDistrictOption(Guid applicationId, Guid districtId, bool ban)
-        {
-            IDictionary<string, object> ps = new Dictionary<string, object>
-            {
-                {"@applicationId", applicationId},
-                {"@districtId", districtId},
-                {"@ban", ban},
-            };
-            ExecuteStoredProcedure("spSetApplicationDistrictOption", ps);
-        }
     }
 
     public class ApplicationQuery
     {
         public Guid? Id { get; set; }
-        public Guid UserId { get; set; }
         public int Role { get; set; }
         public bool IncludeInternal { get; set; }
         public IList<Guid> CategoryIds { get; set; }
         public IList<int> GradeLevels { get; set; }
         public Guid? DeveloperId { get; set; }
         public string OrderBy { get; set; }
-        public Guid? DistrictId { get; set; }
+        public Guid? SchoolId { get; set; }
         public bool? Ban { get; set; }
+        public bool? MyApps { get; set; }
 
         public int Start { get; set; }
         public int Count { get; set; }
@@ -419,12 +435,8 @@ namespace Chalkable.Data.Master.DataAccess
         public ApplicationStateEnum? State { get; set; }
 
         public bool? Live { get; set; }
-        public bool? Free { get; set; }
 
         public string Filter { get; set; }
-
-        public bool OnlyForInstall { get; set; }
-
         public bool? CanAttach { get; set; }
 
         public ApplicationQuery()
@@ -434,8 +446,6 @@ namespace Chalkable.Data.Master.DataAccess
             OrderBy = nameof(Application.Id);
             IncludeInternal = false;
             Live = null;
-            Free = null;
-            OnlyForInstall = true;
             CanAttach = null;
         }
 

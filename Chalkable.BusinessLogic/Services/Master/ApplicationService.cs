@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -13,10 +14,9 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IApplicationService
     {
         IList<AppPermissionType> GetPermisions(string applicationUrl);
-        PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true, bool? canAttach = null);
+        PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool? canAttach = null);
         PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
-        PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode
-            , AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue);
+        PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue, bool? myApps = null);
         IList<Application> GetApplicationsByIds(IList<Guid> ids);
         Application GetApplicationById(Guid id);
         Application GetApplicationByUrl(string url);
@@ -74,14 +74,13 @@ namespace Chalkable.BusinessLogic.Services.Master
             return new PaginatedList<Application>(apps, start / count, count);
         }
 
-        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true, bool? canAttach = null)
+        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool? canAttach = null)
         {
             var query = new ApplicationQuery
                 {
                     Start = start, 
                     Count = count, 
                     Live = live, 
-                    OnlyForInstall = onlyForInstall,
                     CanAttach = canAttach
                 };
             return GetApplications(query);
@@ -91,12 +90,12 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Read())
             {
-                query.UserId = Context.UserId;
                 query.Role = Context.Role.Id;
                 if (!BaseSecurity.IsSysAdmin(Context))
                 {
-                    query.DistrictId = Context.DistrictId;
+                    query.SchoolId = Context.SchoolId;
                     query.DeveloperId = Context.DeveloperId;
+
                     if (!BaseSecurity.IsDistrictAdmin(Context))
                         query.Ban = false;
                 }
@@ -116,12 +115,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             var q = new ApplicationQuery
             {
                 Id = id,
-                UserId = Context.UserId,
-                Role = Context.Role.Id,
-                OnlyForInstall = false
+                Role = Context.Role.Id
             };
             if (!BaseSecurity.IsSysAdmin(Context))
-                q.DistrictId = Context.DistrictId;
+            {
+                q.SchoolId = Context.SchoolId;
+            }
 
             using (var uow = Read())
             {
@@ -194,7 +193,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode, AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue)
+        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue, bool? myApps = null)
         {
             var query = new ApplicationQuery
                 {
@@ -205,10 +204,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     Count = count,
                     Live = true
                 };
-            filterMode = filterMode ?? AppFilterMode.All;
             sortingMode = sortingMode ?? AppSortingMode.Newest;
-            if (filterMode != AppFilterMode.All)
-                query.Free = filterMode == AppFilterMode.Free;
             switch (sortingMode)
             {
                 case AppSortingMode.Newest:
@@ -292,12 +288,4 @@ namespace Chalkable.BusinessLogic.Services.Master
         Newest = 2,
         HighestRated = 3
     }
-
-    public  enum AppFilterMode
-    {
-        All = 1,
-        Paid = 2,
-        Free = 3,
-    }
-
 }

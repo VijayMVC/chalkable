@@ -70,7 +70,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, Services.Master.AppFilterMode? filterMode, Services.Master.AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue)
+        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue, bool? myApps = null)
         {
             var query = new ApplicationQuery
             {
@@ -80,10 +80,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 Start = start,
                 Count = count
             };
-            filterMode = filterMode ?? AppFilterMode.All;
             sortingMode = sortingMode ?? AppSortingMode.Newest;
-            if (filterMode != AppFilterMode.All)
-                query.Free = filterMode == AppFilterMode.Free;
             switch (sortingMode)
             {
                 case AppSortingMode.Newest:
@@ -108,14 +105,13 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return app.Permissions.Select(x => x.Permission).ToList();
         }
 
-        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true, bool? canAttach = null)
+        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool? canAttach = null)
         {
             var query = new ApplicationQuery
                 {
                     Start = start,
                     Count = count,
                     Live = live,
-                    OnlyForInstall = onlyForInstall,
                     CanAttach = canAttach
                 };
             return GetApplications(query);
@@ -125,7 +121,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             using (var uow = Read())
             {
-                query.UserId = Context.UserId;
                 query.Role = Context.Role.Id;
                 query.DeveloperId = Context.DeveloperId;
                 return new ApplicationDataAccess(uow).GetPaginatedApplications(query);
@@ -146,10 +141,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                     .GetApplication(new ApplicationQuery
                     {
                         Id = id,
-                        UserId = Context.UserId,
                         Role = Context.Role.Id,
-                        DeveloperId = Context.DeveloperId,
-                        OnlyForInstall = false
+                        DeveloperId = Context.DeveloperId
                     });
             }
         }

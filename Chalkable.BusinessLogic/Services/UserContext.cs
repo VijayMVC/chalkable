@@ -51,6 +51,7 @@ namespace Chalkable.BusinessLogic.Services
         public bool TeacherClassMessagingOnly { get; set; }
 
         public int? SchoolLocalId { get; set; }
+        public Guid? SchoolId { get; set; }
         public Guid? DeveloperId { get; set; }
         public int? PersonId { get; set; }
         public int? SchoolYearId { get; set; }
@@ -89,6 +90,7 @@ namespace Chalkable.BusinessLogic.Services
         public string OAuthApplication{ get; set; }
         [Ignore]
         public IList<ClaimInfo> Claims { get; set; } 
+        
 
         public UserContext()
         {
@@ -115,6 +117,7 @@ namespace Chalkable.BusinessLogic.Services
                 if (school != null)
                 {
                     SchoolLocalId = school.LocalId;
+                    SchoolId = school.Id;
                     SCEnabled = district.IsDemoDistrict ||
                         school.StudyCenterEnabledTill.HasValue &&
                                 school.StudyCenterEnabledTill.Value > NowSchoolTime;
