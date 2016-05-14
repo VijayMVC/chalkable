@@ -3,7 +3,7 @@
         .container.panel-bg
             .items
                 +ActionLink('settings', 'dashboardAdmin') Messaging
-                each app in self.getInstalledApps()
+                each app in self.getApplications()
                     +ActionLink('settings', 'appSettings', app.getId())(class = app.getId() == self.getApp().getId() ? "pressed" : "" )=app.getName()
 
     .iframe-wrap.partial-update

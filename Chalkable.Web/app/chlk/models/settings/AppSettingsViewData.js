@@ -7,13 +7,13 @@ NAMESPACE('chlk.models.settings', function () {
     CLASS(
         'AppSettingsViewData', EXTENDS(chlk.models.apps.ExternalAttachAppViewData), [
 
-            ArrayOf(chlk.models.apps.Application), 'installedApps',
+            ArrayOf(chlk.models.apps.Application), 'applications',
 
             [[chlk.models.common.AttachOptionsViewData, chlk.models.apps.Application, String, String, ArrayOf(chlk.models.apps.Application)]],
-            function $(options, app, url, title, installedApps){
+            function $(options, app, url, title, applications){
                 BASE(options, app, url, title);
 
-                this.setInstalledApps(installedApps);
+                this.setApplications(applications);
             }
         ]);
 });
