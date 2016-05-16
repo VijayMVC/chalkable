@@ -103,9 +103,6 @@ namespace Chalkable.Data.Master.DataAccess
         {
             var conditions = new AndQueryCondition();
 
-            if (query.SchoolId.HasValue && query.Ban.HasValue)
-                conditions.Add(nameof(ApplicationSchoolOption.Banned), query.Ban, ConditionRelation.Equal);
-
             if (query.Role != CoreRoles.SUPER_ADMIN_ROLE.Id && query.Role != CoreRoles.APP_TESTER_ROLE.Id)
             {
                 if (!query.IncludeInternal)
@@ -155,9 +152,15 @@ namespace Chalkable.Data.Master.DataAccess
             var res = BuildSelectApplicationQuery(query);
             
             AddSimpleParamsToApplicationQuery(res, query);
-            
+
             //Adding complex params to query
-            if (query.GradeLevels != null && query.GradeLevels.Count > 0)
+            if (query.SchoolId.HasValue && query.Ban.HasValue)
+            {
+                res.Sql.Append($" And IsNull({nameof(ApplicationSchoolOption.Banned)},0) = @banned");
+                res.Parameters.Add("banned", query.Ban);
+            }
+
+                if (query.GradeLevels != null && query.GradeLevels.Count > 0)
             {
                 var gradeLevelsPredicate = $@"Exists(
                         Select * 

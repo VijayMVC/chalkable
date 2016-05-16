@@ -47,10 +47,9 @@ namespace Chalkable.Data.Master.DataAccess
                         From 
 	                        {nameof(School)} left join {nameof(ApplicationSchoolOption)}
 		                        On {nameof(School.Id)} = {nameof(ApplicationSchoolOption.SchoolRef)}
+                                    And {nameof(ApplicationSchoolOption.ApplicationRef)} = @applicationId
                         Where 
-                            {nameof(School.DistrictRef)} = @districtId 
-                            And ({nameof(ApplicationSchoolOption.ApplicationRef)} is null 
-                                 Or {nameof(ApplicationSchoolOption.ApplicationRef)} = @applicationId)";
+                            {nameof(School.DistrictRef)} = @districtId";
 
             var @params = new Dictionary<string, object>
             {
