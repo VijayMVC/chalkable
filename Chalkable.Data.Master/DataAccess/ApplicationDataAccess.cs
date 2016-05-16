@@ -81,16 +81,11 @@ namespace Chalkable.Data.Master.DataAccess
         {
             var q = new DbQuery();
 
-            var avgRatingColumn = $@"Select Avg({nameof(ApplicationRating.Rating)}) 
-                                     From  {nameof(ApplicationRating)} 
-                                     Where {nameof(ApplicationRating.ApplicationRef)} = {nameof(Application.Id)}";
-
             var banColumn = $@"Case When @schoolId is not null 
                                Then IsNull({nameof(ApplicationSchoolOption.Banned)}, 0) Else null End";
 
             var mainSelect = $@"Select 
 	                                [{nameof(Application)}].*,
-	                                ({avgRatingColumn}) As [Avg],
 	                                ({banColumn})       As Ban
                                 From 
 	                                [{nameof(Application)}]

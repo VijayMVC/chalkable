@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
@@ -16,7 +15,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         IList<AppPermissionType> GetPermisions(string applicationUrl);
         PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool? canAttach = null);
         PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
-        PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue, bool? myApps = null);
+        PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, int start = 0, int count = int.MaxValue, bool? myApps = null);
         IList<Application> GetApplicationsByIds(IList<Guid> ids);
         Application GetApplicationById(Guid id);
         Application GetApplicationByUrl(string url);
@@ -193,7 +192,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue, bool? myApps = null)
+        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, int start = 0, int count = int.MaxValue, bool? myApps = null)
         {
             var query = new ApplicationQuery
                 {
@@ -204,16 +203,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                     Count = count,
                     Live = true
                 };
-            sortingMode = sortingMode ?? AppSortingMode.Newest;
-            switch (sortingMode)
-            {
-                case AppSortingMode.Newest:
-                    query.OrderBy = nameof(Application.CreateDateTime);
-                    break;
-                case AppSortingMode.HighestRated:
-                    query.OrderBy = Application.AVG_FIELD;
-                    break;
-            }
             return GetApplications(query);
         }
 

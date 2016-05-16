@@ -70,7 +70,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue, bool? myApps = null)
+        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, int start = 0, int count = int.MaxValue, bool? myApps = null)
         {
             var query = new ApplicationQuery
             {
@@ -80,16 +80,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 Start = start,
                 Count = count
             };
-            sortingMode = sortingMode ?? AppSortingMode.Newest;
-            switch (sortingMode)
-            {
-                case AppSortingMode.Newest:
-                    query.OrderBy = nameof(Application.CreateDateTime);
-                    break;
-                case AppSortingMode.HighestRated:
-                    query.OrderBy = Application.AVG_FIELD;
-                    break;
-            }
             return GetApplications(query);
         }
 

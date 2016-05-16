@@ -2,17 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.Common.Orm;
 using Chalkable.Data.School.DataAccess;
-using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
-using Chalkable.Data.Master.DataAccess;
 
 namespace Chalkable.BusinessLogic.Services.School
 {
@@ -27,7 +24,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false);
         Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementTypeEnum type);
         IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying);
-        void BanUnBanApplication(Guid applicationId, bool ban);
         IList<ApplicationBanHistory> GetApplicationBanHistory(Guid applicationId);
         IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, Guid appId);
     }
@@ -171,20 +167,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying)
         {
             return DoRead(u => CopyAnnApplications(annAppsForCopying, new List<int> {toAnnouncementId}, u));
-        }
-
-        public void BanUnBanApplication(Guid applicationId, bool ban)
-        {
-            Trace.Assert(Context.PersonId.HasValue);
-            Trace.Assert(Context.DistrictId.HasValue);
-            ServiceLocator.ServiceLocatorMaster.ApplicationService.SetApplicationDistrictOptions(applicationId, Context.DistrictId.Value, ban);
-            DoUpdate(u=> new ApplicationBanHistoryDataAccess(u).Insert(new ApplicationBanHistory
-            {
-                ApplicationRef = applicationId,
-                Banned = ban,
-                Date = Context.NowSchoolTime,
-                PersonRef = Context.PersonId.Value,
-            }));
         }
 
         public static IList<AnnouncementApplication> CopyAnnApplications(IList<AnnouncementApplication> annAppsForCopying, IList<int> toAnnouncementIds, UnitOfWork unitOfWork)

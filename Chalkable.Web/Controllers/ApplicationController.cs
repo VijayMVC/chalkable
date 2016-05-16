@@ -113,22 +113,6 @@ namespace Chalkable.Web.Controllers
             return Json(ApplicationRatingViewData.Create(appRatings));
         }
 
-        [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult BanApp(Guid applicationId)
-        {
-            Trace.Assert(Context.DistrictId.HasValue);
-            SchoolLocator.ApplicationSchoolService.BanUnBanApplication(applicationId, true);
-            return Json(true);
-        }
-
-        [AuthorizationFilter("DistrictAdmin")]
-        public ActionResult UnbanApp(Guid applicationId)
-        {
-            Trace.Assert(Context.DistrictId.HasValue);
-            SchoolLocator.ApplicationSchoolService.BanUnBanApplication(applicationId, false);
-            return Json(true);
-        }
-
         [AuthorizationFilter("SysAdmin, DistrictAdmin")]
         public ActionResult SubmitApplicationBan(Guid applicationId, GuidList schoolIds)
         {
@@ -320,10 +304,9 @@ namespace Chalkable.Web.Controllers
 
         private const int ATTACH_DEFAULT_PAGE_SIZE = 12;
         [AuthorizationFilter("DistrictAdmin, Teacher, Student")]
-        public ActionResult MyApps(GuidList categoriesIds, IntList gradeLevelsIds, string filter, int? filterMode, int? sortingMode, int? start, int? count)
+        public ActionResult MyApps(GuidList categoriesIds, IntList gradeLevelsIds, string filter, int? start, int? count)
         {
-            var apps = MasterLocator.ApplicationService.GetApplications(categoriesIds, gradeLevelsIds, filter
-                          , (AppFilterMode?)filterMode, (AppSortingMode?)sortingMode, start ?? 0, count ?? DEFAULT_PAGE_SIZE);
+            var apps = MasterLocator.ApplicationService.GetApplications(categoriesIds, gradeLevelsIds, filter, start ?? 0, count ?? DEFAULT_PAGE_SIZE);
 
             if (!BaseSecurity.IsDistrictAdmin(Context))
                 return Json(apps.Transform(BaseApplicationViewData.Create));

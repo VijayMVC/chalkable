@@ -57,14 +57,12 @@ namespace Chalkable.Data.Master.Model
         public IList<ApplicationCategory> Categories { get; set; }
         [NotDbFieldAttr]
         public IList<ApplicationGradeLevel> GradeLevels { get; set; }
-        public const string AVG_FIELD = "Avg";
         [NotDbFieldAttr]
         public IList<ApplicationStandard> ApplicationStandards { get; set; }
         [NotDbFieldAttr]
         public Application LiveApplication { get; set; }
         [NotDbFieldAttr]
-        public bool IsLive { get { return State == ApplicationStateEnum.Live; } }
-        
+        public bool IsLive => State == ApplicationStateEnum.Live;
     }
 
     public enum ApplicationStateEnum
