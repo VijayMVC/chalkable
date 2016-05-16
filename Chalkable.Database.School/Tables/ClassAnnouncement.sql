@@ -7,7 +7,7 @@
     [VisibleForStudent]        BIT            NOT NULL,
     [Order]                    INT            NOT NULL,
     [Dropped]                  BIT            NOT NULL,
-    [MaxScore]                 DECIMAL (18)   NULL,
+    [MaxScore]                 DECIMAL (18, 2)   NULL,
     [WeightAddition]           DECIMAL (9, 6) NULL,
     [WeightMultiplier]         DECIMAL (9, 6) NULL,
     [SisActivityId]            INT            NULL,
