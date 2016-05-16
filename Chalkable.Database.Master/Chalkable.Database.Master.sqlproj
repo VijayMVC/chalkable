@@ -82,7 +82,6 @@
     <Build Include="Tables\ABToCCMapping.sql" />
     <Build Include="Tables\Application.sql" />
     <Build Include="Tables\ApplicationCategory.sql" />
-    <Build Include="Tables\ApplicationDistrictOption.sql" />
     <Build Include="Tables\ApplicationGradeLevel.sql" />
     <Build Include="Tables\ApplicationPermission.sql" />
     <Build Include="Tables\ApplicationPicture.sql" />
@@ -107,7 +106,6 @@
     <Build Include="Stored Procedures\spDeleteDistrictData.sql" />
     <Build Include="Stored Procedures\spGetBackgroundTaskForProcessing.sql" />
     <Build Include="Stored Procedures\spGetSuggestedApplications.sql" />
-    <Build Include="Stored Procedures\spSetApplicationDistrictOption.sql" />
     <Build Include="Stored Procedures\spUpdateMessagingDisabled.sql" />
     <Build Include="Stored Procedures\spUpdateStudyCenterEnabled.sql" />
     <Build Include="User Defined Types\TABToCCMapping.sql" />

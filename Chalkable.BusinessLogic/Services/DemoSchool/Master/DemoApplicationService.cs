@@ -135,12 +135,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 return apps;
             }
         }
-
-        public void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban)
-        {
-            throw new NotImplementedException();
-        }
-
         public IList<ApplicationBanInfo> GetApplicationBanInfos(Guid districtId, Guid? schoolId, IList<Guid> applicationIds)
         {
             throw new NotImplementedException();

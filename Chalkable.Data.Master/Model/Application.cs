@@ -7,6 +7,8 @@ namespace Chalkable.Data.Master.Model
 {
     public class Application
     {
+
+
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Name { get; set; }

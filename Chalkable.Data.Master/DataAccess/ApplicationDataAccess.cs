@@ -73,7 +73,7 @@ namespace Chalkable.Data.Master.DataAccess
         private Application ReadApplication(DbDataReader reader)
         {
             var res = reader.Read<Application>();
-            res.Ban = SqlTools.ReadBoolNull(reader, ApplicationDistrictOption.BAN_FIELD);
+            res.Ban = SqlTools.ReadBoolNull(reader, nameof(Application.Ban));
             return res;
         }
 
