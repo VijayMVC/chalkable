@@ -24,7 +24,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<AnnouncementApplication> GetAnnouncementApplicationsByPerson(int personId, bool onlyActive = false);
         Announcement RemoveFromAnnouncement(int announcementAppId, AnnouncementTypeEnum type);
         IList<AnnouncementApplication> CopyAnnApplications(int toAnnouncementId, IList<AnnouncementApplication> annAppsForCopying);
-        IList<ApplicationBanHistory> GetApplicationBanHistory(Guid applicationId);
         IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, Guid appId);
     }
 
@@ -196,11 +195,6 @@ namespace Chalkable.BusinessLogic.Services.School
                     res = res.Where(x => x.Active).ToList();
                 return res;
             }
-        }
-
-        public IList<ApplicationBanHistory> GetApplicationBanHistory(Guid applicationId)
-        {
-            return DoRead(u => new ApplicationBanHistoryDataAccess(u).GetApplicationBanHistory(applicationId));
         }
 
         public IList<AnnouncementApplicationRecipient> GetAnnouncementApplicationRecipients(int? studentId, Guid appId)

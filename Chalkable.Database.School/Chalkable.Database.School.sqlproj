@@ -271,7 +271,6 @@
     <Build Include="Tables\PrivateMessageRecipient.sql" />
     <Build Include="Tables\PersonSetting.sql" />
     <Build Include="Tables\Attachment.sql" />
-    <Build Include="Tables\ApplicationBanHistory.sql" />
     <Build Include="Views\vwIncomeMessage.sql" />
     <Build Include="Views\vwAnnouncementAttachment.sql" />
     <Build Include="Views\vwAnnouncementAssignedAttribute.sql" />
@@ -283,7 +282,6 @@
     <Build Include="Stored Procedures\spGetMessageRecipients.sql" />
     <Build Include="Stored Procedures\spGetIncomeMessages.sql" />
     <Build Include="Stored Procedures\spGetIncomeMessageById.sql" />
-    <Build Include="Stored Procedures\spGetApplicationBanHistory.sql" />
     <Build Include="Stored Procedures\spDeletePersons.sql" />
     <Build Include="Stored Procedures\spDeleteClasses.sql" />
     <Build Include="User Defined Types\TPrivateMessageRecipient.sql" />

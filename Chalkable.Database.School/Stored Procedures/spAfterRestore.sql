@@ -32,8 +32,7 @@ values
 ('AdminAnnouncement', 5),
 ('ClassAnnouncement', 4),
 ('LessonPlan', 3),
-('Announcement', 2),
-('ApplicationBanHistory', 1)
+('Announcement', 2)
 
 
 if exists(

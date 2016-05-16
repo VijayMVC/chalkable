@@ -33,8 +33,7 @@ values
 ('AdminAnnouncement'),
 ('ClassAnnouncement'),
 ('LessonPlan'),
-('Announcement'),
-('ApplicationBanHistory')
+('Announcement')
 
 --Disable all FKs
 declare @table nvarchar(2048)

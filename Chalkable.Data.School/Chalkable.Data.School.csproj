@@ -103,7 +103,6 @@
     <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanForAdminDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanForStudentDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanForTeacherDataAccess.cs" />
-    <Compile Include="DataAccess\ApplicationBanHistoryDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanDataAccess.cs" />
     <Compile Include="DataAccess\AttachmentDataAccess.cs" />
     <Compile Include="DataAccess\AutoGradeDataAccess.cs" />
@@ -154,7 +153,6 @@
     <Compile Include="Model\AnnouncementGroup.cs" />
     <Compile Include="Model\AnnouncementStandard.cs" />
     <Compile Include="Model\Announcements\InputClassAnnouncement.cs" />
-    <Compile Include="Model\ApplicationBanHistory.cs" />
     <Compile Include="Model\Announcements\ClassAnnouncement.cs" />
     <Compile Include="Model\Announcements\LessonPlan.cs" />
     <Compile Include="Model\Attachment.cs" />
