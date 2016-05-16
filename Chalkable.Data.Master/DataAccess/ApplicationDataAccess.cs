@@ -371,7 +371,6 @@ namespace Chalkable.Data.Master.DataAccess
                     Orm.SimpleDelete<ApplicationPermission>(  new AndQueryCondition { {nameof(ApplicationPermission.ApplicationRef), id} }),
                     Orm.SimpleDelete<ApplicationCategory>(    new AndQueryCondition { {nameof(ApplicationCategory.ApplicationRef), id} }),
                     Orm.SimpleDelete<ApplicationPicture>(     new AndQueryCondition { {nameof(ApplicationPicture.ApplicationRef), id} }),
-                    Orm.SimpleDelete<ApplicationRating>(      new AndQueryCondition { {nameof(ApplicationRating.ApplicationRef), id} }),
                     Orm.SimpleDelete<ApplicationGradeLevel>(  new AndQueryCondition { {nameof(ApplicationGradeLevel.ApplicationRef), id} }),
                     Orm.SimpleDelete<ApplicationStandard>(    new AndQueryCondition { {nameof(ApplicationStandard.ApplicationRef), id} }),
                     Orm.SimpleDelete<Application>(            new AndQueryCondition { {nameof(Application.Id), id} }),

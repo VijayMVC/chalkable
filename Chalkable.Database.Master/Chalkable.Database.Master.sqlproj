@@ -86,7 +86,6 @@
     <Build Include="Tables\ApplicationGradeLevel.sql" />
     <Build Include="Tables\ApplicationPermission.sql" />
     <Build Include="Tables\ApplicationPicture.sql" />
-    <Build Include="Tables\ApplicationRating.sql" />
     <Build Include="Tables\ApplicationStandard.sql" />
     <Build Include="Tables\BackgroundTask.sql" />
     <Build Include="Tables\Category.sql" />
@@ -117,7 +116,6 @@
     <Build Include="User Defined Types\TApplicationGradeLevel.sql" />
     <Build Include="User Defined Types\TApplicationPermission.sql" />
     <Build Include="User Defined Types\TApplicationPicture.sql" />
-    <Build Include="User Defined Types\TApplicationRating.sql" />
     <Build Include="User Defined Types\TBackgroundTask.sql" />
     <Build Include="User Defined Types\TCategory.sql" />
     <Build Include="User Defined Types\TChalkableDepartment.sql" />

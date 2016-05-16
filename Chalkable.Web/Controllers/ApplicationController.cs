@@ -106,12 +106,6 @@ namespace Chalkable.Web.Controllers
             return FakeJson("~/fakeData/appAnalytics.json");
         }
 
-        [AuthorizationFilter("Developer")]
-        public ActionResult GetAppReviews(Guid applicationId)
-        {
-            var appRatings = MasterLocator.ApplicationService.GetRatings(applicationId);
-            return Json(ApplicationRatingViewData.Create(appRatings));
-        }
 
         [AuthorizationFilter("SysAdmin, DistrictAdmin")]
         public ActionResult SubmitApplicationBan(Guid applicationId, GuidList schoolIds)

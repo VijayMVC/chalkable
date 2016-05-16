@@ -7,8 +7,4 @@ as
 		Msg nvarchar(2048)
 	)	
 	
-	Delete from ApplicationRating where UserRef not in (select id from [User])
-
-	ALTER TABLE ApplicationRating CHECK CONSTRAINT ALL
-	
 	select * from @log

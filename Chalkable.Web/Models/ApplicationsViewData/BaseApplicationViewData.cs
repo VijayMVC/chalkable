@@ -133,24 +133,4 @@ namespace Chalkable.Web.Models.ApplicationsViewData
             return applications.Select(x => Create(x, categories, null)).ToList();
         } 
     }
-
-    public class ApplicationDetailsViewData : ApplicationViewData
-    {
-        public ApplicationRatingViewData ApplicationRating { get; set; }
-
-        protected ApplicationDetailsViewData(Application application,  IList<Category> categories, bool canGetSecretKey) 
-            : base(application, categories, canGetSecretKey, null)
-        {
-        }
-
-        public static ApplicationDetailsViewData Create(Application application, IList<CoreRole> roles, IList<Category> categories, IList<ApplicationRating> appRatings,
-            IList<ApplicationBanHistory> applicationBanHistory)
-        {
-            var res = new ApplicationDetailsViewData(application, categories, false)
-                {
-                    ApplicationRating = ApplicationRatingViewData.Create(appRatings),
-                };
-            return res;
-        }
-    }
 }

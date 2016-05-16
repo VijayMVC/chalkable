@@ -159,7 +159,6 @@ namespace Chalkable.Tests
             //ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1016 - Remove sis connection columns from sissync table.sql"));
             //ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1017 - Added Demo related columns to school.sql"));
             //ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1018 - Added Completed column to bg task.sql"));
-            //ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1019 - rename column in ApplicationRating.sql"));
             //ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1020 - alter columns  in Fund.sql"));
 
             //ExecuteFile(chalkableMasterConnection, Path.Combine(masterSqlRoot, "1021 - increase Data column size in background task table.sql"));

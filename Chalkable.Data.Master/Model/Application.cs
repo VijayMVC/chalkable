@@ -82,20 +82,6 @@ namespace Chalkable.Data.Master.Model
         GradingView,
     }
 
-
-    public class ApplicationRating
-    {
-        [PrimaryKeyFieldAttr]
-        public Guid Id { get; set; }
-        public Guid ApplicationRef { get; set; }
-        public Guid UserRef { get; set; }
-        public int Rating { get; set; }
-        public string Review { get; set; }
-
-        [DataEntityAttr]
-        public User User { get; set; }
-    }
-
     public class ApplicationPicture
     {
         [PrimaryKeyFieldAttr]
