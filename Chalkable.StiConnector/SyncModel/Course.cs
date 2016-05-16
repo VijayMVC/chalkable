@@ -11,6 +11,7 @@ namespace Chalkable.StiConnector.SyncModel
         public string SectionNumber { get; set; }
         public string FullSectionNumber { get; set; }
         public int? AcadSessionID { get; set; }
+        [NullableForeignKey]
         public int? GradingScaleID { get; set; }
         public string AltCourseNumber { get; set; }
         public string StateCourseNumber { get; set; }
@@ -22,6 +23,7 @@ namespace Chalkable.StiConnector.SyncModel
         public short CourseTypeID { get; set; }
         [NullableForeignKey]
         public int? PrimaryTeacherID { get; set; }
+        [NullableForeignKey]
         public int? RoomID { get; set; }
         public string AllowedGenders { get; set; }
         public short? DefaultStudentCapacity { get; set; }

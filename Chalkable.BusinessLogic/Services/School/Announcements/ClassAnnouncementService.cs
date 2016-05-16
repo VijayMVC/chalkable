@@ -14,6 +14,7 @@ using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
+using ClassroomOption = Chalkable.Data.School.Model.ClassroomOption;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
@@ -202,7 +203,17 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     throw new ChalkableException("Invalid Class Announcement type id");
                 ann.ClassAnnouncementTypeRef = inputAnnData.ClassAnnouncementTypeId.Value;
                 ann.MaxScore = inputAnnData.MaxScore;
-                ann.IsScored = inputAnnData.MaxScore > 0;
+                ann.IsScored = ann.MaxScore.HasValue && (ann.MaxScore > 0 || inputAnnData.Gradable);
+
+                if (ann.MaxScore == 0 && !inputAnnData.Gradable)
+                {
+                    var classRoomOption = ServiceLocator.ClassroomOptionService.GetClassOption(classId);
+                    if (classRoomOption == null || !classRoomOption.IsAveragingMethodPoints)
+                    {
+                        ann.IsScored = false;
+                    }
+                }
+                
                 ann.WeightAddition = inputAnnData.WeightAddition;
                 ann.WeightMultiplier = inputAnnData.WeightMultiplier;
                 ann.MayBeDropped = inputAnnData.CanDropStudentScore;
@@ -244,7 +255,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                             }
                         });
                 }
-
                 MapperFactory.GetMapper<Activity, AnnouncementDetails>().Map(activity, res);
                 ConnectorLocator.ActivityConnector.UpdateActivity(ann.SisActivityId.Value, activity);
 
@@ -388,7 +398,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                 else
                 {
                     var chlkAnnType = ServiceLocator.ClassAnnouncementTypeService.GetChalkableAnnouncementTypeByAnnTypeName(classAnnouncement.ClassAnnouncementTypeName);
-                    classAnnouncement.ChalkableAnnouncementType = chlkAnnType != null ? chlkAnnType.Id : (int?)null;
+                    classAnnouncement.ChalkableAnnouncementType = chlkAnnType?.Id;
                 }
             }
             return classAnnouncement;
@@ -396,13 +406,22 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
 
         public ClassAnnouncement DropUnDropAnnouncement(int announcementId, bool drop)
         {
+            Trace.Assert(Context.PersonId.HasValue);
             using (var uow = Update())
             {
                 var da = CreateClassAnnouncementDataAccess(uow);
-                var ann = da.GetById(announcementId);
+                var ann = da.GetAnnouncement(announcementId, Context.PersonId.Value);
+                if (!ann.IsSubmitted || ann.SisActivityId == null)
+                    throw new ChalkableException("Announcement is not submitted yet!");
+                var activity = ConnectorLocator.ActivityConnector.GetActivity(ann.SisActivityId.Value);
+                if (activity == null)
+                    throw new NoAnnouncementException();
+
                 AnnouncementSecurity.EnsureInModifyAccess(ann, Context);
                 ann.Dropped = drop;
                 da.Update(ann);
+                activity.IsDropped = drop;
+                ConnectorLocator.ActivityConnector.UpdateActivity(ann.SisActivityId.Value, activity);
                 uow.Commit();
                 return ann;
             }

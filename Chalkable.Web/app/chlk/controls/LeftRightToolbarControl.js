@@ -31,7 +31,9 @@ NAMESPACE('chlk.controls', function () {
         //ria.dom.Dom arrow, Boolean isLeft, Number index
         ARROW_DISABLED: 'arrowdisabled',
 
-        AFTER_RENDER: 'afterrender'
+        AFTER_RENDER: 'afterrender',
+
+        CLEAR_LEFT: 'clearleft'
     });
 
     var self = null;
@@ -54,6 +56,40 @@ NAMESPACE('chlk.controls', function () {
             [[ria.dom.Dom, ria.dom.Event]],
             VOID, function updateTb(node, event) {
                 this.updateToolbar(node);
+            },
+
+            [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.CLEAR_LEFT.valueOf(), '.lr-toolbar')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function clearLeft(toolbar, event) {
+                var configs = toolbar.getData('configs'), isLeft = true, left = 0, that = this;
+                toolbar.find('.arrow').addClass(configs.disabledClass);
+                toolbar.setData('currentIndex', 0);
+
+                if (configs.needDots) {
+                    var dot = toolbar.find('.paginator A[index=0]');
+                    var current =  toolbar.find('.paginator .current');
+                    current.removeClass('current');
+                    dot.addClass('current');
+                }
+
+                toolbar.trigger(chlk.controls.LRToolbarEvents.BEFORE_ANIMATION.valueOf(), [isLeft, 0]);
+
+                var secondContainer = toolbar.find('.second-container');
+                if(toolbar.is(':visible')){
+                    secondContainer.setCss('left', left);
+
+                    var interval = setInterval(function(){
+                        var eps = 10, curLeft = parseInt(secondContainer.getCss('left'), 10);
+                        if(curLeft > left - eps && curLeft < left + eps){
+
+                            setTimeout(function(){
+                                that.updateArrows(toolbar);
+                                toolbar.trigger(chlk.controls.LRToolbarEvents.AFTER_ANIMATION.valueOf(), [isLeft, index]);
+                            }, 10);
+                            clearInterval(interval);
+                        }
+                    }, 10)
+                }
             },
 
             [ria.mvc.DomEventBind(chlk.controls.LRToolbarEvents.UPDATE_ARROWS.valueOf(), '.lr-toolbar')],

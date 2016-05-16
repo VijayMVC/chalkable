@@ -157,7 +157,8 @@ NAMESPACE('chlk.controls', function () {
             },
 
             function updateValue(node, needChange_){
-                var options = node.getData('options'), value = node.getValue();
+                var options = node.getData('options'),
+                    value = node.getValue();
                 if(options.dateFormat && value){
                     var dt = Date.parse(node.getValue());
                     var newValue = $.datepicker.formatDate( options.dateFormat, dt );
@@ -204,19 +205,29 @@ NAMESPACE('chlk.controls', function () {
                 node.on('blur.datepiker', function(node, event){
                     that.updateValue(node);
                 });
-
-                node.off('keydown.datepiker');
-                node.on('keydown.datepiker', function(node, event){
-                    if(event.which == ria.dom.Keys.ENTER.valueOf())
-                        that.updateValue(node);
-                });
             },
 
             VOID, function queueReanimation_(id, options, value_) {
                 this.context.getDefaultView()
                     .onActivityRefreshed(function (activity, model) {
+                        var that = this;
                         var node = ria.dom.Dom('#' + id);
                         node.setData('options', options);
+
+                        node.off('keydown.datepiker');
+                        node.on('keydown.datepiker', function(node, event){
+                            if (event.which == ria.dom.Keys.ENTER.valueOf()) {
+                                var input = node.getValue();
+                                var date = Date.parseExact(input, 'M/d/yy');
+                                if(date) {
+                                    node.setValue(date.toString("MMM d, yyyy"));
+                                    node.datepicker(options, date);
+                                }
+
+                                that.updateValue(node);
+                            }
+                        });
+
                         this.updateDatePicker(node, value_, options);
                     }.bind(this));
             },

@@ -308,30 +308,20 @@ namespace Chalkable.Web.Controllers
 
         private void PrepareTeacherJsonData()
         {
-            var startTime = DateTime.Now;
+            var startProcessingTime = DateTime.Now.TimeOfDay;
+            
             var timeCallBuilder = new StringBuilder();
             Trace.Assert(Context.PersonId.HasValue);
-            var startupData = SchoolLocator.SchoolService.GetStartupData();
-            var time = startTime - DateTime.Now;
-            timeCallBuilder.AppendLine($" Retrieving StartUpData {time.Minutes}:{time.Seconds} - {time.Milliseconds}");
             
-            var district = PrepareCommonViewDataForSchoolPerson(startupData);
+            var startupData = ProcessMethodAndCallTime(()=>SchoolLocator.SchoolService.GetStartupData(), timeCallBuilder, "Retrieving StartUpData ");
+            var district = ProcessMethodAndCallTime(()=> PrepareCommonViewDataForSchoolPerson(startupData), timeCallBuilder, "PrepareCommonSchoolPersonData");
 
-            time = startTime - DateTime.Now;
-            timeCallBuilder.AppendLine($" PrepareCommonSchoolPersonData {time.Minutes}:{time.Seconds} - {time.Milliseconds}");
-            
             var person = startupData.Person;
+            
+            ProcessMethodAndCallTime(() => ProcessFirstLogin(person), timeCallBuilder, "ProcessFirstLogin");
             var personView = PersonInfoViewData.Create(person);
 
-            ProcessFirstLogin(person);
-            time = startTime - DateTime.Now;
-            timeCallBuilder.AppendLine($" ProcessFirstLogin {time.Minutes}:{time.Seconds} - {time.Milliseconds}");
-
-            ProcessActive(person, personView);
-
-            time = startTime - DateTime.Now;
-            timeCallBuilder.AppendLine($" ProcessActive {time.Minutes}:{time.Seconds} - {time.Milliseconds}");
-
+            ProcessMethodAndCallTime(() => ProcessActive(person, personView), timeCallBuilder, "ProcessActive");
             PrepareJsonData(personView, ViewConstants.CURRENT_PERSON);
 
 
@@ -344,32 +334,44 @@ namespace Chalkable.Web.Controllers
             PrepareJsonData(SchoolOptionViewData.Create(schoolOption), ViewConstants.SCHOOL_OPTIONS);
             var classesList = classes.Select(ClassViewData.Create).ToList();
             PrepareJsonData(classesList, ViewConstants.CLASSES);
+
+            ProcessMethodAndCallTime(() => PrepareClassesAdvancedData(startupData), timeCallBuilder, "Retrieving Activity Category from Inow");
             PrepareClassesAdvancedData(startupData);
-
-            time = startTime - DateTime.Now;
-            timeCallBuilder.AppendLine($"Retrieving Activity Category from Inow {time.Minutes}:{time.Seconds} - {time.Milliseconds}");
-
+            
             PrepareJsonData(GradingCommentViewData.Create(startupData.GradingComments), ViewConstants.GRADING_COMMMENTS);
 
             PrepareJsonData(AttendanceReasonDetailsViewData.Create(startupData.AttendanceReasons), ViewConstants.ATTENDANCE_REASONS);
 
-            var announcementAttributes = SchoolLocator.AnnouncementAttributeService.GetList(true);
-            time = startTime - DateTime.Now;
-            timeCallBuilder.AppendLine($"Retrieving AnnouncementAttribute {time.Minutes}:{time.Seconds} - {time.Milliseconds}");
-
+            var announcementAttributes = ProcessMethodAndCallTime(()=>SchoolLocator.AnnouncementAttributeService.GetList(true), timeCallBuilder, "Retrieving AnnouncementAttribute");
+            
             PrepareJsonData(AnnouncementAttributeViewData.Create(announcementAttributes), ViewConstants.ANNOUNCEMENT_ATTRIBUTES);
 
             var ip = RequestHelpers.GetClientIpAddress(Request);
             MasterLocator.UserTrackingService.IdentifyTeacher(Context.Login, person.FirstName, person.LastName, district.Name, 
                 classNames, person.FirstLoginDate, Context.DistrictTimeZone, ip, Context.SCEnabled);
 
-            time = startTime - DateTime.Now;
-            if (time.Seconds > 3)
+            var time = DateTime.Now.TimeOfDay - startProcessingTime;
+            if (time.Seconds > 5)
             {
-                var message = $"Timeout Error. Teacher.aspx performance time issue. Processing Time {time.Minutes}:{time.Seconds}-{time.Milliseconds} \n";
+                var message = $"Timeout Error. Teacher.aspx performance time issue. Processing Time {time} \n";
                 var ex = new ChalkableException(message + timeCallBuilder);
                 SendErrorToRaygun(ex, "Teacher SisUserLogin Performance Issue ", SchoolLocator.Context);
             }
+        }
+
+
+        private T ProcessMethodAndCallTime<T>(Func<T> action, StringBuilder timeCallBuilder, string message)
+        {
+            var startTime = DateTime.Now.TimeOfDay;
+            var res = action();
+            timeCallBuilder.AppendLine($"{message} {DateTime.Now.TimeOfDay - startTime}");
+            return res;
+        }
+        private void ProcessMethodAndCallTime(Action action, StringBuilder timeCallBuilder, string message)
+        {
+            var startTime = DateTime.Now.TimeOfDay;
+            action();
+            timeCallBuilder.AppendLine($"{message} {DateTime.Now.TimeOfDay - startTime}");
         }
 
         private static readonly RaygunClient RaygunClient = new RaygunClient();

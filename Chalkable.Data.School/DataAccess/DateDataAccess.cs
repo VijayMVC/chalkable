@@ -51,9 +51,9 @@ namespace Chalkable.Data.School.DataAccess
             var q = new DbQuery();
             q.Sql.Append("select * from [Date]");
             q = BuildConditionQuery(q, query);
-            q.Sql.AppendFormat(" order by {1} desc OFFSET 0 ROWS FETCH NEXT {0} ROWS ONLY", query.Count, Date.DATE_TIME_FIELD);
+            q.Sql.Append($" order by {Date.DATE_TIME_FIELD} desc OFFSET 0 ROWS FETCH NEXT {query.Count} ROWS ONLY");
 
-            q = new DbQuery(string.Format("select * from ({0})x order by x.{1}", q.Sql, Date.DATE_TIME_FIELD), q.Parameters);
+            q = new DbQuery($"select * from ({q.Sql}) x order by x.{Date.DATE_TIME_FIELD}", q.Parameters);
             return ReadMany<Date>(q);
         }
     }

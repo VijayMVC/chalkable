@@ -56,6 +56,8 @@ REQUIRE('chlk.models.common.SimpleObject');
 REQUIRE('chlk.models.attachment.FileCabinetViewData');
 REQUIRE('chlk.models.attachment.FileCabinetPostData');
 
+REQUIRE('chlk.models.announcement.SubmitDroppedAnnouncementViewData');
+
 REQUIRE('chlk.lib.exception.AppErrorException');
 
 NAMESPACE('chlk.controllers', function (){
@@ -313,6 +315,26 @@ NAMESPACE('chlk.controllers', function (){
                     return new chlk.activities.announcement.UpdateAnnouncementItemViewModel(announcement, currentItem);
                 }, this);
             return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, result, chlk.activities.lib.DontShowLoader());
+        },
+
+
+        [[chlk.models.announcement.SubmitDroppedAnnouncementViewData]],
+        function setAnnouncementDroppedAction(model){
+            var res = (model.isDropped()
+                    ? this.classAnnouncementService.dropAnnouncement(model.getAnnouncementId())
+                    : this.classAnnouncementService.unDropAnnouncement(model.getAnnouncementId())
+            )
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    var announcement = this.getCachedAnnouncement();
+                    announcement.getStudentAnnouncements().getItems().forEach(function(item){
+                        item.setAutomaticalyDropped(model.isDropped());
+                    });
+                    announcement.calculateGradesAvg();
+                    this.cacheAnnouncement(announcement);
+                    return announcement.getStudentAnnouncements();
+                }, this);
+            return this.UpdateView(chlk.activities.announcement.AnnouncementViewPage, res, '');
         },
 
         [[Object, Boolean]],
@@ -1335,10 +1357,14 @@ NAMESPACE('chlk.controllers', function (){
 
         function uploadAttachment_(announcementId, file, announcementType, fileIndex){
             var firstModel = new chlk.models.attachment.AnnouncementAttachment(fileIndex, file.size, null, file.name);
-            this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'attachment-progress');
 
-            return this.announcementAttachmentService
+            var res = this.announcementAttachmentService
                 .uploadAttachment(announcementId, [file], announcementType)
+                .catchException(chlk.lib.exception.FileSizeExceedException, function(exception){
+
+                    this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'cancel-attachment-upload');
+                    return this.ShowMsgBox(exception.getMessage(), 'Error', [{text: 'Ok'}], 'center').thenBreak();
+                }, this)
                 .handleProgress(function(event){
                     var model = new chlk.models.attachment.AnnouncementAttachment(fileIndex, event.total, event.loaded, file.name);
                     this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, model, 'attachment-progress');
@@ -1353,6 +1379,9 @@ NAMESPACE('chlk.controllers', function (){
                     attachment.setTotal(file.size);
                     return attachment;
                 }, this);
+
+            this.BackgroundUpdateView(chlk.activities.announcement.AttachFilesDialog, firstModel, 'attachment-progress');
+            return res;
         },
 
         [[chlk.models.id.AnnouncementId]],
@@ -2162,6 +2191,7 @@ NAMESPACE('chlk.controllers', function (){
                         model.getWeightMultiplier(),
                         model.isHiddenFromStudents(),
                         model.isAbleDropStudentScore(),
+                        model.isGradable(),
                         model.getAssignedAttributesPostData()
                     )
                     .attach(this.validateResponse_());
@@ -2396,6 +2426,6 @@ NAMESPACE('chlk.controllers', function (){
         function attributeAttachmentExistsAction() {
             this.showAttributesFilesUploadMsg_();
             return null;
-        }
+        },
     ])
 });

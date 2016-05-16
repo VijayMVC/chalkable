@@ -39,6 +39,8 @@ NAMESPACE('chlk.templates.attendance', function () {
 
             Boolean, 'studentAttendanceReadOnly',
 
+            Boolean, 'dailyAttendancePeriod',
+
             OVERRIDE, VOID, function assign(model) {
                 this.model = model;
                 this.id = model.getId();
@@ -54,6 +56,7 @@ NAMESPACE('chlk.templates.attendance', function () {
                 this.reasons = model.getReasons();
                 this.attendanceReasonDescription = model.getAttendanceReasonDescription();
                 this.studentAttendanceReadOnly= model.isStudentAttendanceReadOnly();
+                this.dailyAttendancePeriod = model.isDailyAttendancePeriod();
                 console.log('is read only =' + this.studentAttendanceReadOnly);
             }
         ])

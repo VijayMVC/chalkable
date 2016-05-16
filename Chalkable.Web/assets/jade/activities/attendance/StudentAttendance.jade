@@ -1,6 +1,7 @@
 valuesEnum = chlk.models.attendance.AttendanceTypeEnum;
 value = self.getType();
 level = self.getLevel();
+isDailyAttendancePeriod = self.isDailyAttendancePeriod();
 -reasons = self.getAttendanceReasonsByType(value)
 needDropdown = (value > valuesEnum.PRESENT.valueOf()) && reasons.length;
 reason = needDropdown ? self.getAttendanceReason() : '';
@@ -14,7 +15,8 @@ div(
     data-person-id=self.getStudent().getId().valueOf(),
     data-type=value,
     data-level=level,
-    data-reason-id=reason && reason.getId().valueOf()
+    data-reason-id=reason && reason.getId().valueOf(),
+    data-is-daily-attendance-period=isDailyAttendancePeriod ? 1 : 0,
 )(class= self.isNeedPresent && self.isNeedPresent() ? 'need-present' : '').student-attendance-form
     //+Hidden('type', value)
     //+Hidden('classid', self.getClassId().valueOf())

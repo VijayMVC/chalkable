@@ -4,6 +4,7 @@ using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
 using Chalkable.Common.Exceptions;
+using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models;
@@ -78,6 +79,14 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
                     annView.AppsWithContent = AppMarketController.GetInstalledWithContent(SchoolLocator, MasterLocator, Context.PersonId.Value, ann.ClassRef.Value, mp.Id);
                 }
             }
+
+            if (annView.ClassAnnouncementData != null && annView.ClassId.HasValue)
+            {
+                var options = SchoolLocator.ClassroomOptionService.GetClassOption(annView.ClassId.Value);
+                annView.ExtraCreditEnabled = options != null && options.IsAveragingMethodPoints &&
+                                             (ann.ClassAnnouncementData.MaxScore == 0 || !ann.ClassAnnouncementData.MaxScore.HasValue);
+            }
+
             return annView;
         }
 

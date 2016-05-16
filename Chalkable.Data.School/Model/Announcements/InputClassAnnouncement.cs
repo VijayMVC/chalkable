@@ -23,6 +23,7 @@ namespace Chalkable.Data.School.Model.Announcements
         public decimal? WeightMultiplier { get; set; }
         public bool VisibleForStudent { get; set; }
         public bool MayBeDropped { get; set; }
+        public bool IsScored { get; set; }
 
 
         public static InputClassAnnouncement Create(ClassAnnouncement classAnnouncement)
@@ -45,7 +46,8 @@ namespace Chalkable.Data.School.Model.Announcements
                 WeightAddition = classAnnouncement.WeightAddition,
                 WeightMultiplier = classAnnouncement.WeightMultiplier,
                 VisibleForStudent = classAnnouncement.VisibleForStudent,
-                MayBeDropped = classAnnouncement.MayBeDropped
+                MayBeDropped = classAnnouncement.MayBeDropped,
+                IsScored = classAnnouncement.IsScored
             };
         }
 

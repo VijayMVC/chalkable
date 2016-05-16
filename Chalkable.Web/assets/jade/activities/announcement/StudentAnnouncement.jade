@@ -1,5 +1,8 @@
 normalValue = self.getNormalValue()
 itemCls = (self.isDropped() || self.isAutomaticalyDropped() ? 'dropped' :'')
+-console.log(self.isDropped())
+-console.log(itemCls)
+
 selectedCls = (!self.isReadonly() ? 'not-selected' : '')
 maxScore = self.getMaxScore()
 div(class=self.getModel().getAlertClass(maxScore, true), data-tooltip=self.getModel().getTooltipText(maxScore, true)).alert-flag

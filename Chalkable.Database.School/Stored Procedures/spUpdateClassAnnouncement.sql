@@ -27,7 +27,8 @@ set
 	[WeightAddition] = [CAs].[WeightAddition],
 	[WeightMultiplier] = [CAs].[WeightMultiplier],
 	[VisibleForStudent] = [CAs].[VisibleForStudent],
-	[MayBeDropped] = [CAs].[MayBeDropped]
+	[MayBeDropped] = [CAs].[MayBeDropped],
+	[IsScored] = [CAs].[IsScored]
 from
 	 @classAnnouncements [CAs]
 where 

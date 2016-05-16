@@ -8,6 +8,7 @@ REQUIRE('chlk.templates.grading.AvgCodesPopupTpl');
 REQUIRE('chlk.templates.grading.StudentAverageInputTpl');
 REQUIRE('chlk.templates.grading.GradingPopUpTpl');
 REQUIRE('chlk.templates.grading.GradingAvgPopUpTpl');
+REQUIRE('chlk.templates.grading.ColumnHeaderPopUpTpl');
 
 REQUIRE('chlk.activities.grading.BaseGridPage');
 
@@ -45,6 +46,44 @@ NAMESPACE('chlk.activities.grading', function () {
                     var input = node.parent('form').find('.grade-autocomplete');
                     input.setValue(input.getData('grade-value'));
                 }
+            },
+
+
+            [ria.mvc.DomEventBind('contextmenu', '.inner-grade-container.announcement-container .grading-grid-th')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function headerClick(node, event, options_){
+                var popUp = this.dom.find('#grading-popup');
+                var gradesPageOffset = this.dom.find('.grades-page').offset();
+                var cellOffset = node.offset();
+                var top = cellOffset.top - gradesPageOffset.top + node.height();
+                var left = cellOffset.left - gradesPageOffset.left;
+                popUp.setCss('top', top);
+                popUp.setCss('left', left);
+
+                var annNode = node.parent('.announcement-container');
+                var announcementId = new chlk.models.id.AnnouncementId(annNode.getData('announcement-id'));
+                console.log(annNode.getData('announcement-id'));
+                var dropped = !!annNode.getData('dropped');
+                console.log(dropped);
+                var gradingPeriodId = new chlk.models.id.GradingPeriodId(annNode.getData('grading-period-id'));
+                console.log(annNode.getData('grading-period-id'));
+                var standardId = new chlk.models.id.StandardId(annNode.getData('standard-id'));
+                var categoryId = new chlk.models.id.AnnouncementTypeGradingId(annNode.getData('category-id'));
+
+                var popUpTpl = new chlk.templates.grading.ColumnHeaderPopUpTpl();
+                popUpTpl.assign(new chlk.models.announcement.SubmitDroppedAnnouncementViewData(announcementId, dropped, gradingPeriodId, this.getClassId(), categoryId, standardId));
+                popUp.setHTML(popUpTpl.render());
+                setTimeout(function(){
+                    popUp.show();
+                }, 10);
+
+                this.hideDropDown();
+            },
+
+            [ria.mvc.DomEventBind('change', '.entire-dropped.dropped-checkbox')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function entireDroppedChange(node, event, options_){
+                node.parent('form').trigger('submit');
             },
 
             [ria.mvc.DomEventBind('change', '.codes-select')],
@@ -110,10 +149,15 @@ NAMESPACE('chlk.activities.grading', function () {
                 this.updateGradingPeriodPartRule_(tpl, model);
             },
 
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_) {
+                BASE(model, msg_);
+                if(model instanceof chlk.models.grading.ShortGradingClassSummaryGridItems)
+                    this.preparePadding_(model);
+            },
+
             [ria.mvc.PartialUpdateRule(chlk.templates.grading.ShortGradingClassSummaryGridItemsTpl, 'no-loading')],
             [[Object, Object, String]],
             VOID, function updateGradingPeriodAvgs(tpl, model, msg_) {
-                var calculateGradesAvg, that = this;
                 var container = this.dom.find('.mp-data[data-grading-period-id=' + model.getGradingPeriod().getId().valueOf() + ']');
                 var tooltipText = (model.getAvg() != null ? Msg.Avg + " " + model.getAvg() : 'No grades yet');
                 var dom = this.dom;

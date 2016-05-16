@@ -17,14 +17,16 @@ namespace Chalkable.Web.Logic
 
         public static IList<AnnouncementApplicationViewData> PrepareAnnouncementApplicationInfo(IServiceLocatorSchool schoolLocator, IServiceLocatorMaster masterLocator, int announcementId)
         {
-            var applications = masterLocator.ApplicationService.GetApplications(0, int.MaxValue, null, false);
-            var assessmentApp = masterLocator.ApplicationService.GetAssessmentApplication();
-            if(assessmentApp != null && applications.All(x=>x.Id != assessmentApp.Id))
-                applications.Add(assessmentApp);
+            //TODO: Old logic.
+            //var applications = masterLocator.ApplicationService.GetApplications(0, int.MaxValue, null, false);
+            //var assessmentApp = masterLocator.ApplicationService.GetAssessmentApplication();
+            //if(assessmentApp != null && applications.All(x=>x.Id != assessmentApp.Id))
+               // applications.Add(assessmentApp);
             var annApps = schoolLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(announcementId, true);
+            var apps = masterLocator.ApplicationService.GetApplicationsByIds(annApps.Select(x=>x.ApplicationRef).ToList());
             var announcementType = schoolLocator.AnnouncementFetchService.GetAnnouncementType(announcementId);
             var installs = schoolLocator.AppMarketService.ListInstalledAppInstalls(schoolLocator.Context.PersonId ?? 0);
-            return AnnouncementApplicationViewData.Create(annApps, applications, installs, schoolLocator.Context.PersonId, announcementType);
+            return AnnouncementApplicationViewData.Create(annApps, apps, installs, schoolLocator.Context.PersonId, announcementType);
         } 
 
         public static IList<InstalledForPersonsGroupViewData> PrepareInstalledForPersonGroupData(

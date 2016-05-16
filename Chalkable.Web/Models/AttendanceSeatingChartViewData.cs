@@ -22,6 +22,7 @@ namespace Chalkable.Web.Models
         public IList<IList<AttendanceSeatingChartItemViewData>> SeatingList { get; set; } 
         public IList<StudentClassAttendanceOldViewData> NotSeatingStudents { get; set; }
         public bool IsScheduled { get; set; }
+        public bool IsDailyAttendancePeriod { get; set; }
 
         public static AttendanceSeatingChartViewData Create(SeatingChartInfo seatingChart
             , IList<StudentClassAttendanceOldViewData> classAttendance, IList<StudentDetails> students)
@@ -32,8 +33,9 @@ namespace Chalkable.Web.Models
                     Rows = seatingChart.Rows,
                     SeatingList = new List<IList<AttendanceSeatingChartItemViewData>>(),
                     NotSeatingStudents = new List<StudentClassAttendanceOldViewData>(),
-                    IsScheduled = classAttendance.Count > 0
-                };
+                    IsScheduled = classAttendance.Count > 0,
+                    IsDailyAttendancePeriod = classAttendance.Count > 0 && classAttendance.First().IsDailyAttendancePeriod
+            };
             var notSeatingStudents = students.Where(x => seatingChart.SeatingList.All(y => y.All(z => x.Id != z.StudentId))).ToList();
             foreach (var notSeatingStudent in notSeatingStudents)
             {

@@ -185,6 +185,7 @@ namespace Chalkable.Web.Models.AttendancesViewData
             public string Level { get; set; }
             public int? AttendanceReasonId { get; set; }
             public string Category { get; set; }
+            public bool IsDailyAttendancePeriod { get; set; }
         }
 
         public int ClassId { get; set; }

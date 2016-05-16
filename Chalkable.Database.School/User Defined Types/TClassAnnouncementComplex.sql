@@ -10,6 +10,7 @@
 	[ClassAnnouncementTypeRef] [int] NULL,
 	[SchoolYearRef] [int] NULL,
 	[SisActivityId] [int] NULL,
+	[IsScored] [bit] NOT NULL,
 	[MaxScore] [decimal](18, 0) NULL,
 	[WeightAddition] [decimal](9, 6) NULL,
 	[WeightMultiplier] [decimal](9, 6) NULL,

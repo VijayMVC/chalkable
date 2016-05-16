@@ -12,6 +12,7 @@
     [WeightMultiplier]         DECIMAL (9, 6) NULL,
     [SisActivityId]            INT            NULL,
     [SchoolYearRef]            INT            NOT NULL,
+	[IsScored]				   BIT			  NOT NULL,
     PRIMARY KEY CLUSTERED ([Id] ASC),
     CONSTRAINT [FK_ClassAnnouncement_Announcement] FOREIGN KEY ([Id]) REFERENCES [dbo].[Announcement] ([Id]),
     CONSTRAINT [FK_ClassAnnouncement_Class] FOREIGN KEY ([ClassRef]) REFERENCES [dbo].[Class] ([Id]),
