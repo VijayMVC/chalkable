@@ -66,6 +66,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IList<ClassDetails> GetAllSchoolsActiveClasses();
 
         IList<ClassStatsInfo> GetClassesBySchoolYear(int schoolYearId, int? start, int? count, string filter, int? teacherId, ClassSortType? sortType);
+        IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId);
     }
 
     public class ClassService : SisConnectedService, IClassService
@@ -263,6 +264,11 @@ namespace Chalkable.BusinessLogic.Services.School
 
                 return ClassStatsInfo.Create(iNowRes, classes, classTeachers);
             }           
+        }
+
+        public IList<Class> GetClassesBySchoolYearIds(IList<int> schoolYearIds, int teacherId)
+        {
+            return DoRead(u => new ClassDataAccess(u).GetClassBySchoolYearIds(schoolYearIds, teacherId));
         }
     }
 }

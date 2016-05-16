@@ -142,8 +142,6 @@ namespace Chalkable.Data.Master.DataAccess
                 conditions.Add(nameof(Application.State), state, relation);
             }
 
-            
-
             conditions.BuildSqlWhere(result, nameof(Application));
         }
 
@@ -166,7 +164,7 @@ namespace Chalkable.Data.Master.DataAccess
                         Select * 
                         From {nameof(ApplicationGradeLevel)} 
                         Where 
-                            {nameof(ApplicationGradeLevel.ApplicationRef)} = Application.Id 
+                            {nameof(ApplicationGradeLevel.ApplicationRef)} = {nameof(Application)}.Id 
                             And {nameof(ApplicationGradeLevel.GradeLevel)} in (Select * From @gradeLevels))";
 
                 res.Sql.Append($" And {gradeLevelsPredicate}");

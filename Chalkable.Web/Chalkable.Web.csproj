@@ -504,6 +504,7 @@
     <Compile Include="Models\SchoolsViewData\SchoolOptionViewData.cs" />
     <Compile Include="Models\SchoolsViewData\SchoolViewData.cs" />
     <Compile Include="Models\SchoolsViewData\ShortSchoolViewData.cs" />
+    <Compile Include="Models\SchoolYearClassesViewData.cs" />
     <Compile Include="Models\SchoolYearViewData.cs" />
     <Compile Include="Models\SearchViewData.cs" />
     <Compile Include="Models\ShortDistrictSummaryViewData.cs" />
