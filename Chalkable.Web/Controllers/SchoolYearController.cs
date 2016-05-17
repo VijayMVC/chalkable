@@ -25,7 +25,7 @@ namespace Chalkable.Web.Controllers
         }
 
         [AuthorizationFilter("Teacher")]
-        public ActionResult UserSchoolYearsClasses()
+        public ActionResult ListOfSchoolYearClasses()
         {
             Trace.Assert(Context.PersonId.HasValue);
 
