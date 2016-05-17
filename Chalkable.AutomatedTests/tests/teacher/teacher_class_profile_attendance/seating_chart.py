@@ -6,6 +6,7 @@ class TestFeed(BaseAuthedTestCase):
         person_me = self.get('/Person/me')
         person_me_list_of_dictionaries = person_me['data']['claims']
 
+
         for item in person_me_list_of_dictionaries:
             empty_list.append(item['values'])
 
@@ -21,7 +22,6 @@ class TestFeed(BaseAuthedTestCase):
                     start_date = str(dict_for_marking_period_date_startdate_endate[mp][0])
                     end_date = str(dict_for_marking_period_date_startdate_endate[mp][1])
                     date_in_correct_format = self.random_date(start_date, end_date)
-                    print "date_in_correct_format", date_in_correct_format
 
                     get_class_list = self.get('/Attendance/SeatingChart.json?' +
                                               'classId=' + str(13806) +
@@ -128,9 +128,7 @@ class TestFeed(BaseAuthedTestCase):
                                 if j_columns_2['info'] != None:
                                     date_in_cycle = datetime.strptime(str(j_columns_2['info']['date']),
                                                                       '%Y-%m-%d').strftime('%m-%d-%Y')
-                                    print date_in_cycle
                                     self.assertTrue (j_columns_2['info']['classid'] == 13806)
-                                    print "j_columns_2['info']['date']", j_columns_2['info']['date']
                                     #self.assertTrue (j_columns_2['info']['date'] == date_in_cycle)
                                     self.assertTrue (date_in_cycle == '05-06-2015')
                                     self.assertTrue (list_for_students[j_columns_2['index']] == j_columns_2['info']['personid'])

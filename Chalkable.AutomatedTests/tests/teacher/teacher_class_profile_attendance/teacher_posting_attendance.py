@@ -12,6 +12,7 @@ class TestFeed(BaseAuthedTestCase):
 
         final_list = [item for sublist in empty_list for item in sublist]
         decoded_list = [x.encode('utf-8') for x in final_list]
+
         dict_for_clas_marking_period = self.dict_for_clas_marking_period
         dict_for_marking_period_date_startdate_endate = self.dict_for_marking_period_date_startdate_endate
 

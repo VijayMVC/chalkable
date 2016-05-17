@@ -23,7 +23,7 @@ class TestStudentProfileInfo(BaseAuthedTestCase):
 
         student_id_str = str(fifth_student['id'])
 
-        student_info = self.get('/Student/Info.json?personId=' + student_id_str + '')
+        student_info = self.get('/Student/Info.json?personId=' + student_id_str)
 
         for t in (
             'active', 'address', 'age', 'birthdate', 'caneditlogin', 'displayname', 'email', 'firstname', 'fullname',
