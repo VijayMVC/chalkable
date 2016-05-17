@@ -24,7 +24,7 @@ namespace Chalkable.Web.Controllers
             return Json(SchoolYearViewData.Create(res));
         }
 
-        [AuthorizationFilter("Teacher")]
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult ListOfSchoolYearClasses()
         {
             Trace.Assert(Context.PersonId.HasValue);
