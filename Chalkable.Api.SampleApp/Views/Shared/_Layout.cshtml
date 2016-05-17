@@ -1,0 +1,29 @@
+﻿@using System.Web.Optimization
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - Chalkable Api Sample App</title>
+
+
+
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,300,600,400,700" rel="stylesheet" type="text/css" />
+    <link href="@ViewBag.ApiRoot/Home/UiLibraryUrl" type="text/css" rel="stylesheet" />
+    <script src="/scripts/jquery-2.2.0.min.js"></script>
+    
+    @Scripts.Render(ViewBag.ApiRoot + "/scripts/api/chlk-js-api.js")
+    <!-- PUT ALL JavaScripts above this block -->
+    @RenderSection("headscripts", false)
+</head>
+<body style="background-color: white; overflow: scroll; max-height: 800px;">
+    <div>
+
+        @RenderSection("bodyscripts", false)
+        @RenderBody()
+    </div>
+</body>
+</html>
