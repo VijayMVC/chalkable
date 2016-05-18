@@ -34,7 +34,6 @@ namespace Chalkable.Web.Models
         private static void PreperingBuilderMapper(IDictionary<SearchTypeEnum, BaseSearchResultBuilder> mapper)
         {
             mapper.Add(SearchTypeEnum.Persons, new SearchPersonBuilder(SearchTypeEnum.Persons));
-            mapper.Add(SearchTypeEnum.Applications, new SearchApplicationBuilder(SearchTypeEnum.Applications));
             mapper.Add(SearchTypeEnum.Announcements, new SearchAnnouncementBuilder(SearchTypeEnum.Announcements));
             mapper.Add(SearchTypeEnum.Attachments, new SearchAttachmentBuilder(SearchTypeEnum.Attachments));
             mapper.Add(SearchTypeEnum.Classes, new SearchClassBuilder(SearchTypeEnum.Classes));
@@ -54,23 +53,6 @@ namespace Chalkable.Web.Models
                 Id = person.Id.ToString(),
                 SearchType = (int)SearchTypeEnum.Persons,
                 ShortPersonInfo = ShortPersonViewData.Create(person)
-            };
-        }
-    }
-    public class ApplicationSearchViewData : SearchViewData
-    {
-        public Guid? SmallPictureId { get; set; }
-        public Guid? BigPictureId { get; set; }
-
-        public static SearchViewData Create(Application application)
-        {
-            return new ApplicationSearchViewData
-            {
-                Id = application.Id.ToString(),
-                Description = application.Name,
-                SmallPictureId = application.SmallPictureRef,
-                BigPictureId = application.BigPictureRef,
-                SearchType = (int)SearchTypeEnum.Applications
             };
         }
     }
@@ -154,22 +136,6 @@ namespace Chalkable.Web.Models
                 throw new ChalkableException("Invalid search View Builder for such search type");
 
             return schoolPersons.Select(PersonSearchViewData.Create).ToList();
-        }
-    }
-    public class SearchApplicationBuilder : BaseSearchResultBuilder
-    {
-        public SearchApplicationBuilder(SearchTypeEnum searchTypeEnum)
-            : base(searchTypeEnum)
-        {
-        }
-
-        public override IList<SearchViewData> Build(Object searchRes)
-        {
-            var applications = searchRes as IList<Application>;
-            if (applications == null || (SearchTypeEnum)searchType != SearchTypeEnum.Applications)
-                throw new ChalkableException(ChlkResources.ERR_INVALID_SEARCH_VIEW_BUILDER);
-
-            return applications.Select(ApplicationSearchViewData.Create).ToList();
         }
     }
     public class SearchAnnouncementBuilder : BaseSearchResultBuilder

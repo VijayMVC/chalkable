@@ -5,7 +5,6 @@ REQUIRE('chlk.services.ClassService');
 REQUIRE('chlk.services.PersonService');
 REQUIRE('chlk.services.GradingService');
 REQUIRE('chlk.services.GradeLevelService');
-REQUIRE('chlk.services.AppMarketService');
 REQUIRE('chlk.services.MarkingPeriodService');
 REQUIRE('chlk.services.GroupService');
 REQUIRE('chlk.services.LessonPlanService');
@@ -37,7 +36,7 @@ REQUIRE('chlk.models.announcement.AnnouncementForm');
 REQUIRE('chlk.models.announcement.LastMessages');
 REQUIRE('chlk.models.attachment.Attachment');
 REQUIRE('chlk.models.announcement.StudentAnnouncement');
-REQUIRE('chlk.models.apps.InstalledAppsViewData');
+REQUIRE('chlk.models.apps.AppsForAttachViewData');
 REQUIRE('chlk.models.announcement.ShowGradesToStudents');
 REQUIRE('chlk.models.announcement.FileAttachViewData');
 REQUIRE('chlk.models.people.UsersListSubmit');
@@ -90,9 +89,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.GradingService, 'gradingService',
-
-        [ria.mvc.Inject],
-        chlk.services.AppMarketService, 'appMarketService',
 
         [ria.mvc.Inject],
         chlk.services.GradeLevelService, 'gradeLevelService',
@@ -781,17 +777,13 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.SidebarButton('add-new')],
         [[Number]],
         function attachAppsDistrictAdminAction(start_) {
-            var userId = this.getCurrentPerson().getId();
-            var mp = this.getCurrentMarkingPeriod();
-
             var start = start_ || 0, count = 12;
-
-            var result = this.appMarketService
-                .getAppsForAttachToAdminAnn(userId, start, count)
+            var result = this.applicationService
+                .getAppsForAttach(start, count)
                 .attach(this.validateResponse_())
                 .then(function(data) {
                     var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
-                    return new chlk.models.apps.InstalledAppsViewData(options, data);
+                    return new chlk.models.apps.AppsForAttachViewData(options, data);
                 }, this);
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, result);
         },
@@ -803,17 +795,14 @@ NAMESPACE('chlk.controllers', function (){
         [[Number]],
         function attachAppsTeacherAction(start_) {
 
-            var userId = this.getCurrentPerson().getId();
-            var mp = this.getCurrentMarkingPeriod();
-
             var start = start_ || 0, count = 12;
             var options = this.getContext().getSession().get(ChlkSessionConstants.ATTACH_OPTIONS, null);
 
-            var result = this.appMarketService
-                .getAppsForAttach(userId, options.getClassId(), mp.getId(), start, count)
+            var result = this.applicationService
+                .getAppsForAttach(start, count)
                 .attach(this.validateResponse_())
                 .then(function(data){
-                    return new chlk.models.apps.InstalledAppsViewData(options, data, start);
+                    return new chlk.models.apps.AppsForAttachViewData(options, data, start);
                 }, this);
 
             return this.ShadeOrUpdateView(chlk.activities.apps.AttachAppsDialog, result);

@@ -493,7 +493,6 @@ var Msg = {
     Include_withdrawn_students: 'Include withdrawn students',
     Info_this_app_uses: 'Info this app uses:',
     Insert_title: 'Insert title',
-    Install_App: 'Install App',
     Invite_users: 'Invite users',
     IsInternal: 'IsInternal',
     Is_system: 'Is system',
@@ -748,7 +747,7 @@ var Msg = {
     Chalkable_REST_API: "Chalkable REST API",
     Chalkable_REST_API_description: "The API allows you to access real-time data from schools. " +
         "All methods return JSON. There are user roles on the bar above. Choosing a role, for example teacher, " +
-        "displays all of the methods available to your app if a teacher had installed it.",
+        "displays all of the methods available to your app.",
     Close_without_attaching_the_app: 'Close without attaching the app?',
     Delete_announcement_btn_tooltip: 'You must delete the grades first to delete this item',
     Edit_Average_Text_1: 'This action overrides the calculated score.',
@@ -785,6 +784,5 @@ var Msg = {
         if (count == 1)
             return "Looks like you entered a comment for 1 student but did not select them. Do you want to continue?";
         return String.format('Looks like you entered a comment for {0} students but did not select them. Do you want to continue?', count);
-    },
-    Installed: 'Installed'
+    }
 };

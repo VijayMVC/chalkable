@@ -324,7 +324,6 @@ namespace Chalkable.BusinessLogic.Services.Master
                 uow.Commit();
             }
             return true;
-            //TODO: need to remove notifications and installations
         }
 
         public void ChangeApplicationType(Guid applicationId, bool isInternal)

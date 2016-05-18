@@ -103,8 +103,6 @@
     <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanForAdminDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanForStudentDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanForTeacherDataAccess.cs" />
-    <Compile Include="DataAccess\ApplicationBanHistoryDataAccess.cs" />
-    <Compile Include="DataAccess\ApplicationInstallActionDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\LessonPlanDataAccess.cs" />
     <Compile Include="DataAccess\AttachmentDataAccess.cs" />
     <Compile Include="DataAccess\AutoGradeDataAccess.cs" />
@@ -114,7 +112,6 @@
     <Compile Include="DataAccess\AnnouncementQnADataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\ClassAnnouncementForStudentDataAccess.cs" />
     <Compile Include="DataAccess\AnnouncementsDataAccess\ClassAnnouncementForTeacherDataAccess.cs" />
-    <Compile Include="DataAccess\ApplicationInstallDataAccess.cs" />
     <Compile Include="DataAccess\AttendanceReasonDataAccess.cs" />
     <Compile Include="DataAccess\ClassTeacherDataAccess.cs" />
     <Compile Include="DataAccess\GradingPeriodDataAccess.cs" />
@@ -156,13 +153,8 @@
     <Compile Include="Model\AnnouncementGroup.cs" />
     <Compile Include="Model\AnnouncementStandard.cs" />
     <Compile Include="Model\Announcements\InputClassAnnouncement.cs" />
-    <Compile Include="Model\ApplicationBanHistory.cs" />
-    <Compile Include="Model\ApplicationInstallHistory.cs" />
     <Compile Include="Model\Announcements\ClassAnnouncement.cs" />
     <Compile Include="Model\Announcements\LessonPlan.cs" />
-    <Compile Include="Model\ApplicationInstall\ApplicationInstall.cs" />
-    <Compile Include="Model\ApplicationInstall\ApplicationInstallAction.cs" />
-    <Compile Include="Model\ApplicationInstall\ApplicationInstallActionClasses.cs" />
     <Compile Include="Model\Attachment.cs" />
     <Compile Include="Model\AttendanceMonth.cs" />
     <Compile Include="Model\AttendanceReason.cs" />
@@ -200,7 +192,6 @@
     <Compile Include="Model\Period.cs" />
     <Compile Include="Model\Person.cs" />
     <Compile Include="Model\PersonEmail.cs" />
-    <Compile Include="Model\PersonsForApplicationInstall.cs" />
     <Compile Include="Model\Phone.cs" />
     <Compile Include="Model\PracticeGrade.cs" />
     <Compile Include="Model\PrivateMessage.cs" />

@@ -3,7 +3,6 @@ REQUIRE('chlk.controllers.BaseController');
 REQUIRE('chlk.services.ApplicationService');
 REQUIRE('chlk.services.AppCategoryService');
 REQUIRE('chlk.services.GradeLevelService');
-REQUIRE('chlk.services.AppMarketService');
 REQUIRE('chlk.services.PictureService');
 REQUIRE('chlk.services.DeveloperService');
 REQUIRE('chlk.services.StandardService');
@@ -15,6 +14,9 @@ REQUIRE('chlk.activities.apps.AddAppDialog');
 REQUIRE('chlk.activities.apps.AppWrapperDialog');
 REQUIRE('chlk.activities.apps.ExternalAttachAppDialog');
 REQUIRE('chlk.activities.apps.AppWrapperPage');
+REQUIRE('chlk.activities.apps.MyAppsPage');
+REQUIRE('chlk.activities.apps.DisableAppDialog');
+
 
 REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.AppPostData');
@@ -26,8 +28,10 @@ REQUIRE('chlk.models.apps.AppScreenShots');
 REQUIRE('chlk.models.apps.AppGeneralInfoViewData');
 REQUIRE('chlk.models.apps.AppWrapperViewData');
 REQUIRE('chlk.models.developer.HomeAnalytics');
-REQUIRE('chlk.models.apps.AppPersonReviewPostData');
 REQUIRE('chlk.models.apps.GetAppsPostData');
+
+REQUIRE('chlk.models.apps.MyAppsViewData');
+
 
 REQUIRE('chlk.models.apps.AppsListViewData');
 
@@ -45,9 +49,6 @@ NAMESPACE('chlk.controllers', function (){
 
         [ria.mvc.Inject],
         chlk.services.ApplicationService, 'appsService',
-
-        [ria.mvc.Inject],
-        chlk.services.AppMarketService, 'appMarketService',
 
         [ria.mvc.Inject],
         chlk.services.AppCategoryService, 'categoryService',
@@ -436,23 +437,14 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
-        [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, String, String]],
-        function openRecommendedContentsAction(appId, classId, annId, announcementType, contentId, standardsUrlComponents_){
+        [[chlk.models.id.AppId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, String, String]],
+        function openRecommendedContentsAction(appId, annId, announcementType, contentId, standardsUrlComponents_){
             var appUrlAppend_ = '';
             if(contentId)
                 appUrlAppend_ += 'contentId=' + contentId;
             if(standardsUrlComponents_)
                 appUrlAppend_ += '&' + standardsUrlComponents_;
-
-            var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
-            this.appMarketService.getApplicationTotalPrice(appId, classIds, null)
-                .attach(this.validateResponse_())
-                .then(function(appTotalPrice){
-                    if(appTotalPrice.getTotalPersonsCount() > 0)
-                        return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, classId, annId]);
-                    return this.BackgroundNavigate('apps', 'tryToAttach', [annId, appId, announcementType, appUrlAppend_]);
-                }, this);
-            return null;
+            return this.tryToAttachAction('apps', 'tryToAttach', [annId, appId, announcementType, appUrlAppend_]);
         },
 
         [chlk.controllers.StudyCenterEnabled()],
@@ -460,17 +452,9 @@ NAMESPACE('chlk.controllers', function (){
             chlk.models.common.RoleEnum.TEACHER,
             chlk.models.common.RoleEnum.DISTRICTADMIN
         ])],
-        [[chlk.models.id.AppId, chlk.models.id.ClassId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, String]],
-        function openSuggestedAppTeacherAction(appId, classId, annId, announcementType, appUrlAppend_){
-            var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
-            this.appMarketService.getApplicationTotalPrice(appId, classIds, null)
-                .attach(this.validateResponse_())
-                .then(function(appTotalPrice){
-                    if(appTotalPrice.getTotalPersonsCount() > 0)
-                        return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, classId, annId]);
-                    return this.BackgroundNavigate('apps', 'tryToAttach', [annId, appId, announcementType, appUrlAppend_]);
-                }, this);
-            return null;
+        [[chlk.models.id.AppId, chlk.models.id.AnnouncementId, chlk.models.announcement.AnnouncementTypeEnum, String]],
+        function openSuggestedAppTeacherAction(appId, annId, announcementType, appUrlAppend_){
+            return this.tryToAttachAction('apps', 'tryToAttach', [annId, appId, announcementType, appUrlAppend_]);
         },
 
 
@@ -481,24 +465,6 @@ NAMESPACE('chlk.controllers', function (){
                 this.userTrackingService.openedAppFrom(appUrl, "explorer");
                 return this.viewAppAction(appUrl, viewUrl, chlk.models.apps.AppModes.VIEW, new chlk.models.id.AnnouncementApplicationId(appId.valueOf()), isBanned, null, appUrlSuffix_);
             }
-            var classIds = classId ? [new chlk.models.id.AppInstallGroupId(classId.valueOf())] : [];
-            var personId = new chlk.models.id.AppInstallGroupId(this.getCurrentPerson().getId().valueOf());
-
-            if(this.getCurrentRole().isStudent()){
-                this.appMarketService.getApplicationTotalPrice(appId, [], personId)
-                    .attach(this.validateResponse_())
-                    .then(function(appTotalPrice){
-                        return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, null, null, this.getCurrentPerson().getId()]);
-                    }, this);
-            }
-            else {
-                this.appMarketService.getApplicationTotalPrice(appId, classIds, null)
-                    .attach(this.validateResponse_())
-                    .then(function(appTotalPrice){
-                        return this.BackgroundNavigate('appmarket', 'tryToQuickInstall', [appId, appTotalPrice, classId, null, null]);
-                    }, this);
-            }
-
             return null;
         },
 
@@ -593,7 +559,6 @@ NAMESPACE('chlk.controllers', function (){
         ])],
         [[chlk.models.id.AnnouncementId, chlk.models.id.AppId, chlk.models.announcement.AnnouncementTypeEnum, String]],
         function tryToAttachFromAnnouncementAction(announcementId, appId, announcementType, appUrlAppend_) {
-            //this.BackgroundCloseView(chlk.activities.apps.AttachDialog);
             return this.tryToAttachAction(announcementId, appId, announcementType, appUrlAppend_);
         },
 
@@ -861,21 +826,6 @@ NAMESPACE('chlk.controllers', function (){
         },
 
 
-        [chlk.controllers.AccessForRoles([
-            chlk.models.common.RoleEnum.DEVELOPER
-        ])],
-
-        [[chlk.models.apps.AppPersonReviewPostData]],
-        function getAppReviewsAction(data){
-            var scroll = data.isScroll();
-            var result = this.appsService
-                .getAppReviews(data.getAppId(), data.getStart())
-                .attach(this.validateResponse_())
-                .then(function(data){
-                    return new chlk.models.apps.AppGeneralInfoViewData.$createFromReviews(data);
-                });
-            return this.UpdateView(chlk.activities.apps.AppGeneralInfoPage, result, 'loadReviews');
-        },
 
         ria.async.Future, function createApp_(navigate_) {
             var devId = this.getCurrentPerson().getId();
@@ -933,7 +883,6 @@ NAMESPACE('chlk.controllers', function (){
                                 pictureUrl,
                                 5, //todo: pass rating,
                                 new chlk.models.common.ChlkDate(),
-                                appReviews,
                                 analytics || new chlk.models.developer.HomeAnalytics(),
                                 devApps
                            );
@@ -1033,6 +982,67 @@ NAMESPACE('chlk.controllers', function (){
                 }, this);
 
             return this.PushOrUpdateView(chlk.activities.apps.AppWrapperPage, result);
-        }
+        },
+
+        [chlk.controllers.SidebarButton('apps')],
+        function myAppsAction(){
+            var result = this.appsService
+                .getMyApps()
+                .attach(this.validateResponse_())
+                .then(function(apps){
+                    return new chlk.models.apps.MyAppsViewData(apps);
+                });
+            return this.PushOrUpdateView(chlk.activities.apps.MyAppsPage, result);
+        },
+
+        [[chlk.models.id.AppId]],
+        function disableAppAction(appId){
+            //var schoolsIds = schoolIdsStr ? schoolIdsStr.split(',').map(function(_){
+            //    return new chlk.models.id.SchoolId
+            //}) : [];
+            //schoolsIds.push(new chlk.models.id.SchoolId('736FFA83-7219-4F54-A4C2-837453863209'));
+            var res = this.WidgetStart('apps', 'disableApp', [appId, false])
+                .then(function(data){
+                    return this.BackgroundNavigate('apps', 'myApps', []);
+                }, this);
+            return null;
+        },
+
+        [[String, chlk.models.id.AppId, Boolean]],
+        function disableAppWidgetAction(requestId, appId, appBanned){
+            var res = this.appsService.getApplicationBannedSchools(appId)
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    return new chlk.models.apps.ApplicationBanViewData(requestId, appId, data);
+                });
+            return this.ShadeView(chlk.activities.apps.DisableAppDialog, res);
+        },
+
+
+        [[chlk.models.apps.SubmitApplicationBan]],
+        function submitDisableAppAction(model){
+            var res = this.appsService
+                .submitApplicationBan(
+                    model.getApplicationId(),
+                    model.getSchoolIds()
+                )
+                .attach(this.validateResponse_())
+                .then(function(data){
+                    this.WidgetComplete(model.getRequestId(), data);
+                }, this);
+            return this.CloseView(chlk.activities.apps.DisableAppDialog);
+        },
+
+        [[chlk.models.id.ClassId, String, String]],
+        function getSuggestedAppsAction(classId, academicBenchmarkIds, standardUrlComponents_) {
+            var result = this.appsService
+                .getSuggestedApps(academicBenchmarkIds, null, null, true)
+                .attach(this.validateResponse_())
+                .then(function(apps){
+                    return new chlk.models.apps.SuggestedAppsList(classId, null, apps, null, standardUrlComponents_)
+                });
+            return this.UpdateView(this.getView().getCurrent().getClass(), result, 'apps');
+        },
+
     ])
 });

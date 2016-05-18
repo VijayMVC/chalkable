@@ -5,5 +5,5 @@ Select
 From
 	AlphaGrade
 Where
-	Schoolref = @schoolId
+	SchoolRef = @schoolId
 	and exists(select * from GradingScaleRange where GradingScaleRange.AlphaGradeRef=AlphaGrade.Id)

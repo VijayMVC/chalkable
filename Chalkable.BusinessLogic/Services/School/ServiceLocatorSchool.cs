@@ -35,7 +35,6 @@ namespace Chalkable.BusinessLogic.Services.School
         IApplicationSchoolService ApplicationSchoolService { get; }
         IDisciplineService DisciplineService { get; }
         IGradingStatisticService GradingStatisticService { get; }
-        IAppMarketService AppMarketService { get; }
         ISchoolService SchoolService { get; }
         ISchoolPersonService SchoolPersonService { get; }
         IStandardService StandardService { get; }
@@ -108,7 +107,6 @@ namespace Chalkable.BusinessLogic.Services.School
         private IApplicationSchoolService applicationSchoolService;
         private IDisciplineService disciplineService;
         private IGradingStatisticService gradingStatisticService;
-        private IAppMarketService appMarketService;
         private ISchoolService schoolService;
         private ISchoolPersonService schoolPersonService;
         private IStandardService standardService;
@@ -180,7 +178,6 @@ namespace Chalkable.BusinessLogic.Services.School
             applicationSchoolService = new ApplicationSchoolService(this);
             disciplineService = new DisciplineService(this);
             gradingStatisticService = new GradingStatisticService(this);
-            appMarketService = new AppMarketService(this);
             schoolService = new SchoolService(this);
             schoolPersonService = new SchoolPersonService(this);
             standardService = new StandardService(this);
@@ -248,7 +245,6 @@ namespace Chalkable.BusinessLogic.Services.School
         public IApplicationSchoolService ApplicationSchoolService { get { return applicationSchoolService; } }
         public IDisciplineService DisciplineService { get { return disciplineService; } }
         public IGradingStatisticService GradingStatisticService { get { return gradingStatisticService; } }
-        public IAppMarketService AppMarketService { get { return appMarketService; } }
         public ISchoolService SchoolService { get { return schoolService; } }
         public ISchoolPersonService SchoolPersonService { get { return schoolPersonService; } }
         public IStandardService StandardService { get { return standardService; } }

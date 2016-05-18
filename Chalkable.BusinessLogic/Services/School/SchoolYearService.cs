@@ -45,7 +45,7 @@ namespace Chalkable.BusinessLogic.Services.School
             
             var conds = new AndQueryCondition();
             if(schoolId.HasValue)
-                conds.Add(SchoolYear.SCHOOL_REF_FIELD, schoolId.Value);
+                conds.Add(nameof(SchoolYear.SchoolRef), schoolId.Value);
 
             var res = DoRead(u => new SchoolYearDataAccess(u).GetAll(conds));
             res = res.Where(x => acadSessions.Contains(x.Id)).ToList();

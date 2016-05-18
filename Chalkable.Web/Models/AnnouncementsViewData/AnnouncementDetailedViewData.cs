@@ -23,9 +23,9 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
          
         public bool CanRemoveStandard { get; set; }
         public bool ExtraCreditEnabled { get; set; }
-        public IList<ApplicationForAttachViewData> SuggestedApps { get; set; }
+        public IList<BaseApplicationViewData> SuggestedApps { get; set; }
 
-        public IList<ApplicationForAttachViewData> AppsWithContent { get; set; } 
+        public IList<BaseApplicationViewData> AppsWithContent { get; set; } 
 
         public IList<AdminAnnouncementGroupViewData> Recipients { get; set; } 
 

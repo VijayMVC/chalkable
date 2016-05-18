@@ -16,7 +16,7 @@ NAMESPACE('chlk.templates.settings', function () {
             Boolean, 'ableToUpdate',
 
             [ria.templates.ModelPropertyBind],
-            ArrayOf(chlk.models.apps.Application), 'installedApps'
+            ArrayOf(chlk.models.apps.Application), 'applications'
 
             //[ria.templates.ModelPropertyBind],
             //Boolean, 'allowedForStudents',

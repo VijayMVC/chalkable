@@ -71,11 +71,9 @@ namespace Chalkable.Data.School.DataAccess
                                         AnnouncementApplication
                                         join Announcement on AnnouncementApplication.AnnouncementRef = Announcement.Id
                                         where 
-	                                        exists(select * from ApplicationInstall where ApplicationRef = AnnouncementApplication.ApplicationRef and PersonRef = @{0})
-	                                        and
-	                                        (Announcement.PersonRef = @{0}
+	                                        Announcement.PersonRef = @{0}
 	                                        or exists(select * from ClassPerson where PersonRef = @{0} and ClassRef = Announcement.ClassRef)
-	                                        )
+	                                        
                                         ", "personId");
             if (onlyActive)
                 sql += " and AnnouncementApplication.Active = 1";

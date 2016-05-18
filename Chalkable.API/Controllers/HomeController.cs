@@ -13,8 +13,8 @@ namespace Chalkable.API.Controllers
     public abstract class HomeController: BaseController
     {
         [AllowCorsPolicy]
-        public virtual async Task<ActionResult> Index(string mode, string code, string apiRoot, int? announcementApplicationId,
-            int? studentId, int? announcementId, int? announcementType, int? attributeId, int? applicationInstallId, int? start, int? count, string contentId)
+        public virtual async Task<ActionResult> Index(string mode, string code, string apiRoot, int? announcementApplicationId, Guid applicationId,
+            int? studentId, int? announcementId, int? announcementType, int? attributeId, int? start, int? count, string contentId)
         {
 
             if (string.IsNullOrWhiteSpace(apiRoot))
@@ -50,8 +50,8 @@ namespace Chalkable.API.Controllers
 
             CurrentUser = await GetCurrentUser(mode);
         
-            return await ResolveAction(mode, announcementApplicationId, studentId, announcementId, announcementType,
-                attributeId, applicationInstallId, StandardInfo.FromQuery(Request.Params, HttpContext.Server.UrlDecode), contentId);
+            return await ResolveAction(mode, announcementApplicationId, applicationId, studentId, announcementId, announcementType,
+                attributeId, StandardInfo.FromQuery(Request.Params, HttpContext.Server.UrlDecode), contentId);
         }
 
         protected virtual async Task<SchoolPerson> GetCurrentUser(string mode)
@@ -157,8 +157,8 @@ namespace Chalkable.API.Controllers
             throw new NotImplementedException();
         }
 
-        protected abstract Task<ActionResult> ResolveAction(string mode, int? announcementApplicationId,
-            int? studentId, int? announcementId, int? announcementType, int? attributeId, int? applicationInstallId,
+        protected abstract Task<ActionResult> ResolveAction(string mode, int? announcementApplicationId, Guid applicationId,
+            int? studentId, int? announcementId, int? announcementType, int? attributeId,
             IEnumerable<StandardInfo> standards, string contentId);
     }
 }

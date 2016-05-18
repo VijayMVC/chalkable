@@ -7,6 +7,8 @@ namespace Chalkable.Data.Master.Model
 {
     public class Application
     {
+
+
         [PrimaryKeyFieldAttr]
         public Guid Id { get; set; }
         public string Name { get; set; }
@@ -57,14 +59,12 @@ namespace Chalkable.Data.Master.Model
         public IList<ApplicationCategory> Categories { get; set; }
         [NotDbFieldAttr]
         public IList<ApplicationGradeLevel> GradeLevels { get; set; }
-        public const string AVG_FIELD = "Avg";
         [NotDbFieldAttr]
         public IList<ApplicationStandard> ApplicationStandards { get; set; }
         [NotDbFieldAttr]
         public Application LiveApplication { get; set; }
         [NotDbFieldAttr]
-        public bool IsLive { get { return State == ApplicationStateEnum.Live; } }
-        
+        public bool IsLive => State == ApplicationStateEnum.Live;
     }
 
     public enum ApplicationStateEnum
@@ -82,20 +82,6 @@ namespace Chalkable.Data.Master.Model
         View,
         Edit,
         GradingView,
-    }
-
-
-    public class ApplicationRating
-    {
-        [PrimaryKeyFieldAttr]
-        public Guid Id { get; set; }
-        public Guid ApplicationRef { get; set; }
-        public Guid UserRef { get; set; }
-        public int Rating { get; set; }
-        public string Review { get; set; }
-
-        [DataEntityAttr]
-        public User User { get; set; }
     }
 
     public class ApplicationPicture

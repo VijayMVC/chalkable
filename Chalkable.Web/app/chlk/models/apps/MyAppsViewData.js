@@ -6,17 +6,11 @@ NAMESPACE('chlk.models.apps', function () {
     CLASS(
         'MyAppsViewData', [
             chlk.models.common.PaginatedList, 'apps',
-            chlk.models.id.SchoolPersonId, 'personId',
-            Boolean, 'editable',
 
-            [[chlk.models.common.PaginatedList, Boolean, chlk.models.id.SchoolPersonId]],
-            function $(apps, editable, personId){
+            [[chlk.models.common.PaginatedList]],
+            function $(apps){
                 BASE();
                 this.setApps(apps);
-                this.setPersonId(personId);
-                this.setEditable(editable);
             }
         ]);
-
-
 });

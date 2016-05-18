@@ -3,7 +3,7 @@ REQUIRE('ria.serialize.IDeserializable');
 REQUIRE('chlk.models.id.AnnouncementId');
 REQUIRE('chlk.models.id.AnnouncementApplicationId');
 REQUIRE('chlk.models.id.SchoolPersonId');
-REQUIRE('chlk.models.apps.AppMarketApplication');
+REQUIRE('chlk.models.apps.Application');
 
 NAMESPACE('chlk.models.apps', function () {
     "use strict";
@@ -12,7 +12,7 @@ NAMESPACE('chlk.models.apps', function () {
 
     /** @class chlk.models.apps.AppAttachment*/
     CLASS(
-        UNSAFE, 'AppAttachment', EXTENDS(chlk.models.apps.AppMarketApplication), IMPLEMENTS(ria.serialize.IDeserializable), [
+        UNSAFE, 'AppAttachment', EXTENDS(chlk.models.apps.Application), IMPLEMENTS(ria.serialize.IDeserializable), [
             OVERRIDE, VOID, function deserialize(raw){
                 BASE(raw);
                 this.announcementApplicationId = SJX.fromValue(raw.announcementapplicationid, chlk.models.id.AnnouncementApplicationId);
@@ -23,7 +23,6 @@ NAMESPACE('chlk.models.apps', function () {
                 this.editUrl = SJX.fromValue(raw.editurl, String);
                 this.gradingViewUrl = SJX.fromValue(raw.gradingviewurl, String);
                 this.order = SJX.fromValue(raw.order, Number);
-                this.installedForMe = SJX.fromValue(raw.installedforme, Boolean);
                 this.oauthCode = SJX.fromValue(raw.oauthcode, String);
                 this.currentModeUrl = SJX.fromValue(raw.currentmodeurl, String);
                 this.imageUrl = SJX.fromValue(raw.imageurl, String);
@@ -37,13 +36,12 @@ NAMESPACE('chlk.models.apps', function () {
             String, 'editUrl',
             String, 'gradingViewUrl',
             Number, 'order',
-            Boolean, 'installedForMe',
             String, 'oauthCode',
             String, 'currentModeUrl',
             String, 'imageUrl',
             String, 'text',
 
-            [[String, String, chlk.models.id.AnnouncementApplicationId, chlk.models.apps.AppMarketApplication]],
+            [[String, String, chlk.models.id.AnnouncementApplicationId, chlk.models.apps.Application]],
             function $create(currentModeUrl, oauthCode, announcementAppId_, appData_){
                 BASE();
                 this.setCurrentModeUrl(currentModeUrl);
@@ -55,7 +53,6 @@ NAMESPACE('chlk.models.apps', function () {
 
                 if (appData_){
                     this.setAdvancedApp(appData_.isAdvancedApp());
-                    this.setPersonal(appData_.isPersonal());
                     this.setAppAccess(appData_.getAppAccess());
                 }
             }

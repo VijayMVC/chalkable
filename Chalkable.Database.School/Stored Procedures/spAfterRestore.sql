@@ -10,17 +10,14 @@ ord int)
 insert into @chalkableTables
 (name, ord)
 values
-('PersonSetting', 24),
-('Notification', 23),
-('AutoGrade', 23),
-('PracticeGrade', 22),
-('AnnouncementApplication', 21),
-('AnnouncementAttachment', 20),
-('Attachment', 19),
-('AnnouncementQnA', 18),
-('ApplicationInstall', 17),
-('ApplicationInstallActionClasses', 16),
-('ApplicationInstallAction', 15),
+('PersonSetting', 22),
+('Notification', 21),
+('AutoGrade', 20),
+('PracticeGrade', 19),
+('AnnouncementApplication', 18),
+('AnnouncementAttachment', 17),
+('Attachment', 16),
+('AnnouncementQnA', 15),
 ('PrivateMessageRecipient', 14),
 ('PrivateMessage', 13),
 ('LPGalleryCategory', 12),
@@ -35,8 +32,7 @@ values
 ('AdminAnnouncement', 5),
 ('ClassAnnouncement', 4),
 ('LessonPlan', 3),
-('Announcement', 2),
-('ApplicationBanHistory', 1)
+('Announcement', 2)
 
 
 if exists(

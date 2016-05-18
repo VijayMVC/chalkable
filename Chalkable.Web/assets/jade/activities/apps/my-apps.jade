@@ -1,47 +1,28 @@
-mixin AppIconEditable_(app, editable)
-    -var appPictureUrl = app.getBannerPictureUrl()
-    .icon(class=editable ? "jiggly" : undefined)
-        +LoadingImage(src=appPictureUrl)
+mixin AppIcon(app)
+    .icon
+        +LoadingImage(src=app.getBannerPictureUrl())
 
-mixin MyAppsIconLink_(app, editable)
+mixin MyAppsIconLink_(app)
     appId = app.getId().valueOf()
-    -var isBanned = false
-    if editable
-        +ActionForm('appmarket', 'tryToUninstall').my-app-icon-link.application
+    -var isBanned = app.isBanned()
+    if(!app.isBannedForCurrentSchool())
+        +ActionLink('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned)(class= self.bannedCssClass(app)).application
             .wrapper
-                +AppIconEditable_(app, editable)
+                +LoadingImage(src=app.getBannerPictureUrl())
                 .title=app.getName()
-            Button(type="submit").close-btn
-            +Hidden('appName', app.getName())
-            +Hidden('applicationInstallIds', app.getApplicationInstallIds())
-            +Hidden('personal', app.isPersonal())
-            +Hidden('selfInstalled', app.isSelfInstalled())
-            +Hidden('uninstallable', app.isUninstallable())
-    else
-        +ActionLink('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned).application
-            .wrapper
-                +AppIconEditable_(app, editable)
-                .title=app.getName()
+                if(self.canDisableApp())
+                    +ActionButton('apps', 'disableApp', appId).negative-button.disable-app-button Disable
                 BUTTON Open
+    else
+        div(class= self.bannedCssClass(app)).application
+            .wrapper
+                +LoadingImage(src=app.getBannerPictureUrl())
+                .title=app.getName()
+                if(self.canDisableApp())
+                    +ActionButton('apps', 'disableApp', appId).negative-button.disable-app-button Disable
+
 .my-apps
-    .buttons
-        if self.isEditable()
-            +ActionButton('appmarket', 'myApps', false).edit.right Done
-        else
-            +ActionButton('appmarket', 'myApps', true).edit.right Edit
-
-        //if balance
-            //BUTTON.user-balance= "$" + balance
-
     h2.page-title Apps
-    .action-bar
-        .items
-            +ActionLink('appmarket', 'myApps').my-apps.toolbar-btn.pressed My Apps
-            +ActionLink('appmarket', 'list').app-store.toolbar-btn App Store
-            //+ActionForm('', '')
-                +SearchBox(chlk.services.AppMarketService, "getMyAppsByFilter",
-                chlk.templates.apps.MyAppsSearchBoxTpl)#app-market-searchbox.market-search-box(name="appMarketSearch", triggerBtnId="app-market-search-btn")
-                button(type="submit").search-btn#app-market-search-btn
     .apps
         each app in self.apps.getItems()
-            +MyAppsIconLink_(app, self.isEditable())
+            +MyAppsIconLink_(app)

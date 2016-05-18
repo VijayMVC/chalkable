@@ -50,8 +50,7 @@ namespace Chalkable.Data.Common
 
         private SqlCommand GetStoredProcedureCommand(string name)
         {
-            var command = new SqlCommand();
-            command.Connection = Connection;
+            var command = new SqlCommand {Connection = Connection};
             if (Transaction != null)
                 command.Transaction = Transaction;
             command.CommandType = CommandType.StoredProcedure;

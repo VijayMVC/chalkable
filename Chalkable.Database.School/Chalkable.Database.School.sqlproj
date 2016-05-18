@@ -90,9 +90,6 @@
     <Build Include="Tables\AnnouncementQnA.sql" />
     <Build Include="Tables\AnnouncementRecipientData.sql" />
     <Build Include="Tables\AnnouncementStandard.sql" />
-    <Build Include="Tables\ApplicationInstall.sql" />
-    <Build Include="Tables\ApplicationInstallAction.sql" />
-    <Build Include="Tables\ApplicationInstallActionClasses.sql" />
     <Build Include="Tables\AttendanceLevelReason.sql" />
     <Build Include="Tables\AttendanceMonth.sql" />
     <Build Include="Tables\AttendanceReason.sql" />
@@ -173,7 +170,6 @@
     <Build Include="Stored Procedures\spGetAllSchoolsActiveClasses.sql" />
     <Build Include="Stored Procedures\spGetAnnouncementRecipientPersons.sql" />
     <Build Include="Stored Procedures\spGetAnnouncementsQnA.sql" />
-    <Build Include="Stored Procedures\spGetApplicationInstallHistory.sql" />
     <Build Include="Stored Procedures\spGetAttendanceReasons.sql" />
     <Build Include="Stored Procedures\spGetClassAnnouncementDetails.sql" />
     <Build Include="Stored Procedures\spGetClassAnnouncementsBySisActivities.sql" />
@@ -181,16 +177,11 @@
     <Build Include="Stored Procedures\spGetGradingPeriods.sql" />
     <Build Include="Stored Procedures\spGetGroupExplorerData.sql" />
     <Build Include="Stored Procedures\spGetLessonPlanDetails.sql" />
-    <Build Include="Stored Procedures\spGetNotInstalledStudentsCountPerApplication.sql" />
     <Build Include="Stored Procedures\spGetPersonDetails.sql" />
-    <Build Include="Stored Procedures\spGetPersonsForApplicationInstall.sql" />
-    <Build Include="Stored Procedures\spGetPersonsForApplicationInstallCount.sql" />
     <Build Include="Stored Procedures\spGetSchedule.sql" />
     <Build Include="Stored Procedures\spGetStandardParentsWithChilds.sql" />
     <Build Include="Stored Procedures\spGetStartupData.sql" />
-    <Build Include="Stored Procedures\spGetStudentAnnouncements.sql" />
     <Build Include="Stored Procedures\spGetStudentClasses.sql" />
-    <Build Include="Stored Procedures\spGetStudentCountToAppInstallByClass.sql" />
     <Build Include="Stored Procedures\spGetStudentDetails.sql" />
     <Build Include="Stored Procedures\spGetStudentsByClass.sql" />
     <Build Include="Stored Procedures\spGetStudentsByTeacher.sql" />
@@ -218,9 +209,6 @@
     <Build Include="User Defined Types\TAnnouncementQnA.sql" />
     <Build Include="User Defined Types\TAnnouncementRecipient.sql" />
     <Build Include="User Defined Types\TAnnouncementStandard.sql" />
-    <Build Include="User Defined Types\TApplicationInstall.sql" />
-    <Build Include="User Defined Types\TApplicationInstallAction.sql" />
-    <Build Include="User Defined Types\TApplicationInstallActionClasses.sql" />
     <Build Include="User Defined Types\TAttendanceLevelReason.sql" />
     <Build Include="User Defined Types\TAttendanceMonth.sql" />
     <Build Include="User Defined Types\TAttendanceReason.sql" />
@@ -283,7 +271,6 @@
     <Build Include="Tables\PrivateMessageRecipient.sql" />
     <Build Include="Tables\PersonSetting.sql" />
     <Build Include="Tables\Attachment.sql" />
-    <Build Include="Tables\ApplicationBanHistory.sql" />
     <Build Include="Views\vwIncomeMessage.sql" />
     <Build Include="Views\vwAnnouncementAttachment.sql" />
     <Build Include="Views\vwAnnouncementAssignedAttribute.sql" />
@@ -295,7 +282,6 @@
     <Build Include="Stored Procedures\spGetMessageRecipients.sql" />
     <Build Include="Stored Procedures\spGetIncomeMessages.sql" />
     <Build Include="Stored Procedures\spGetIncomeMessageById.sql" />
-    <Build Include="Stored Procedures\spGetApplicationBanHistory.sql" />
     <Build Include="Stored Procedures\spDeletePersons.sql" />
     <Build Include="Stored Procedures\spDeleteClasses.sql" />
     <Build Include="User Defined Types\TPrivateMessageRecipient.sql" />

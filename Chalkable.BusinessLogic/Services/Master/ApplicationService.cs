@@ -13,17 +13,12 @@ namespace Chalkable.BusinessLogic.Services.Master
     public interface IApplicationService
     {
         IList<AppPermissionType> GetPermisions(string applicationUrl);
-        PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true);
+        PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool? canAttach = null);
         PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0, int count = int.MaxValue);
-        PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode
-            , AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue);
-
+        PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, int start = 0, int count = int.MaxValue, bool? myApps = null);
         IList<Application> GetApplicationsByIds(IList<Guid> ids);
         Application GetApplicationById(Guid id);
         Application GetApplicationByUrl(string url);
-        ApplicationRating WriteReview(Guid applicationId, int rating, string review);
-        bool ReviewExists(Guid applicationId);
-        IList<ApplicationRating> GetRatings(Guid applicationId);
         bool CanGetSecretKey(IList<Application> applications);
         bool HasMyApps(Application application);
         bool HasExternalAttachMode(Application application);
@@ -31,8 +26,10 @@ namespace Chalkable.BusinessLogic.Services.Master
         Application GetAssessmentApplication();
         Guid? GetMiniQuizAppicationId();
         Guid? GetAssessmentId();
-        IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count);
-        void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban);
+        IList<Application> GetSuggestedApplications(IList<Guid> abIds, int start, int count);
+        IList<ApplicationBanInfo> GetApplicationBanInfos(Guid districtId, Guid? schoolId, IList<Guid> applicationIds);
+        void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds);
+        IList<ApplicationSchoolBan> GetApplicationSchoolBans(Guid districtId, Guid applicationId);
     }
 
 
@@ -73,14 +70,14 @@ namespace Chalkable.BusinessLogic.Services.Master
             return new PaginatedList<Application>(apps, start / count, count);
         }
 
-        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true)
+        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool? canAttach = null)
         {
             var query = new ApplicationQuery
                 {
                     Start = start, 
                     Count = count, 
                     Live = live, 
-                    OnlyForInstall = onlyForInstall,
+                    CanAttach = canAttach
                 };
             return GetApplications(query);
         }
@@ -89,12 +86,12 @@ namespace Chalkable.BusinessLogic.Services.Master
         {
             using (var uow = Read())
             {
-                query.UserId = Context.UserId;
                 query.Role = Context.Role.Id;
                 if (!BaseSecurity.IsSysAdmin(Context))
                 {
-                    query.DistrictId = Context.DistrictId;
+                    query.SchoolId = Context.SchoolId;
                     query.DeveloperId = Context.DeveloperId;
+
                     if (!BaseSecurity.IsDistrictAdmin(Context))
                         query.Ban = false;
                 }
@@ -114,12 +111,12 @@ namespace Chalkable.BusinessLogic.Services.Master
             var q = new ApplicationQuery
             {
                 Id = id,
-                UserId = Context.UserId,
-                Role = Context.Role.Id,
-                OnlyForInstall = false
+                Role = Context.Role.Id
             };
             if (!BaseSecurity.IsSysAdmin(Context))
-                q.DistrictId = Context.DistrictId;
+            {
+                q.SchoolId = Context.SchoolId;
+            }
 
             using (var uow = Read())
             {
@@ -132,41 +129,6 @@ namespace Chalkable.BusinessLogic.Services.Master
         public Application GetApplicationByUrl(string url)
         {
             return DoRead(u => new ApplicationDataAccess(u).GetLiveApplicationByUrl(url));
-        }
-
-        public ApplicationRating WriteReview(Guid applicationId, int rating, string review)
-        {
-            using (var uow = Update())
-            {
-                var da = new ApplicationRatingDataAccess(uow);
-                var res = da.GetAll(new AndQueryCondition
-                    {
-                        {nameof(ApplicationRating.ApplicationRef), applicationId},
-                        {nameof(ApplicationRating.UserRef), Context.UserId}
-                    }).FirstOrDefault();
-                Action<ApplicationRating> modifyAction = da.Update;
-                if (res == null)
-                {
-                    res = new ApplicationRating
-                        {
-                            Id = Guid.NewGuid(),
-                            ApplicationRef = applicationId,
-                            UserRef = Context.UserId 
-                        };
-                    modifyAction = da.Insert;
-                }
-                res.Rating = rating;
-                res.Review = review;
-                modifyAction(res);
-                uow.Commit();
-                return res;
-            }
-        }
-
-        public IList<ApplicationRating> GetRatings(Guid applicationId)
-        {
-            var query = new AndQueryCondition {{nameof(ApplicationRating.ApplicationRef), applicationId}};
-            return DoRead(u => new ApplicationRatingDataAccess(u).GetAll(query));
         }
 
         //TODO: can we apply thin on service leyer get methods?
@@ -192,7 +154,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         }
 
 
-        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, AppFilterMode? filterMode, AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue)
+        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, int start = 0, int count = int.MaxValue, bool? myApps = null)
         {
             var query = new ApplicationQuery
                 {
@@ -203,43 +165,24 @@ namespace Chalkable.BusinessLogic.Services.Master
                     Count = count,
                     Live = true
                 };
-            filterMode = filterMode ?? AppFilterMode.All;
-            sortingMode = sortingMode ?? AppSortingMode.Newest;
-            if (filterMode != AppFilterMode.All)
-                query.Free = filterMode == AppFilterMode.Free;
-            switch (sortingMode)
-            {
-                case AppSortingMode.Newest:
-                    query.OrderBy = nameof(Application.CreateDateTime);
-                    break;
-                case AppSortingMode.HighestRated:
-                    query.OrderBy = Application.AVG_FIELD;
-                    break;
-            }
             return GetApplications(query);
         }
 
 
-        public bool ReviewExists(Guid applicationId)
-        {
-            return DoRead(u => new ApplicationRatingDataAccess(u).Exists(applicationId, Context.UserId));
-        }
         public IList<Application> GetApplicationsByIds(IList<Guid> ids)
         {
             return DoRead(u => new ApplicationDataAccess(u).GetByIds(ids));
         }
-        public IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count)
+        public IList<Application> GetSuggestedApplications(IList<Guid> abIds, int start, int count)
         {
-            return DoRead(u => new ApplicationDataAccess(u).GetSuggestedApplications(abIds, installedAppsIds, start, count));
+            return DoRead(u => new ApplicationDataAccess(u).GetSuggestedApplications(abIds, start, count));
         }
-        public void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban)
+
+        public IList<ApplicationBanInfo> GetApplicationBanInfos(Guid districtId, Guid? schoolId, IList<Guid> applicationIds)
         {
-            BaseSecurity.EnsureDistrictAdmin(Context);
-            DoUpdate(uow =>
-            {
-                new ApplicationDataAccess(uow).SetDistrictOption(applicationId, districtId, ban);
-            });
+            return DoRead(u => new ApplicationSchoolOptionDataAccess(u).GetApplicationBanInfos(districtId, schoolId, applicationIds));
         }
+
         public Application GetMiniQuizAppication()
         {
             var id = GetMiniQuizAppicationId();
@@ -274,6 +217,16 @@ namespace Chalkable.BusinessLogic.Services.Master
             Guid res;
             return Guid.TryParse(PreferenceService.Get(key).Value, out res) ? res : (Guid?)null;
         }
+
+        public void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds)
+        {
+            DoUpdate(u => new ApplicationSchoolOptionDataAccess(u).BanSchoolsByIds(applicationId, schoolIds));
+        }
+
+        public IList<ApplicationSchoolBan> GetApplicationSchoolBans(Guid districtId, Guid applicationId)
+        {
+            return DoRead(u => new ApplicationSchoolOptionDataAccess(u).GetApplicationSchoolBans(districtId, applicationId));
+        }
     }
 
     public  enum AppSortingMode
@@ -282,12 +235,4 @@ namespace Chalkable.BusinessLogic.Services.Master
         Newest = 2,
         HighestRated = 3
     }
-
-    public  enum AppFilterMode
-    {
-        All = 1,
-        Paid = 2,
-        Free = 3,
-    }
-
 }

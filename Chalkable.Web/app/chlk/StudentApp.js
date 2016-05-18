@@ -2,7 +2,6 @@ REQUIRE('chlk.BaseApp');
 
 REQUIRE('chlk.controllers.AnnouncementController');
 REQUIRE('chlk.controllers.AppsController');
-REQUIRE('chlk.controllers.AppMarketController');
 REQUIRE('chlk.controllers.FeedController');
 REQUIRE('chlk.controllers.AttendanceController');
 REQUIRE('chlk.controllers.AccountController');

@@ -1,6 +1,6 @@
+REQUIRE('chlk.models.apps.Application');
 REQUIRE('chlk.models.apps.MyAppsViewData');
 REQUIRE('chlk.models.common.PaginatedList');
-REQUIRE('chlk.models.id.SchoolPersonId');
 
 NAMESPACE('chlk.templates.apps', function () {
 
@@ -12,10 +12,19 @@ NAMESPACE('chlk.templates.apps', function () {
             [ria.templates.ModelPropertyBind],
             chlk.models.common.PaginatedList, 'apps',
 
-            [ria.templates.ModelPropertyBind],
-            chlk.models.id.SchoolPersonId, 'personId',
 
-            [ria.templates.ModelPropertyBind],
-            Boolean, 'editable'
+            Boolean, function canDisableApp(){
+                var role = this.getUserRole();
+                return role.isSysAdmin() || role.isAdmin();
+            },
+
+            [[chlk.models.apps.Application]],
+            String, function bannedCssClass(app){
+                if(this.canDisableApp()){
+                    if(app.isBannedForDistrict()) return 'banned';
+                    if(app.isPartiallyBanned()) return 'partial-banned';
+                }
+                return '';
+            },
         ])
 });

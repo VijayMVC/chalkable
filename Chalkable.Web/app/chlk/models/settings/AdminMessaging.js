@@ -21,16 +21,16 @@ NAMESPACE('chlk.models.settings', function () {
     CLASS('MessagingSettingsViewData', [
 
         chlk.models.settings.AdminMessaging, 'messagingSettings',
-        ArrayOf(chlk.models.apps.Application), 'installedApps',
+        ArrayOf(chlk.models.apps.Application), 'applications',
         Boolean, 'ableToUpdate',
 
         [[chlk.models.settings.AdminMessaging, ArrayOf(chlk.models.apps.Application), Boolean]],
-        function $(messagingSettings_, installedApps_, ableToUpdate_){
+        function $(messagingSettings_, applications_, ableToUpdate_){
             BASE();
             if(messagingSettings_)
                 this.setMessagingSettings(messagingSettings_);
-            if(installedApps_)
-                this.setInstalledApps(installedApps_);
+            if(applications_)
+                this.setApplications(applications_);
             if(ableToUpdate_)
                 this.setAbleToUpdate(ableToUpdate_);
         }

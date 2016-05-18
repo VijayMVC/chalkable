@@ -78,7 +78,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         public IList<ClassAnnouncement> GetClassAnnouncementByFilter(string filter, int callerId)
         {
             var conds = new AndQueryCondition();
-            var dbQuery = SeletClassAnnouncements(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, callerId);
+            var dbQuery = SelectClassAnnouncements(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, callerId);
             conds.BuildSqlWhere(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME);
             FilterClassAnnouncementByCaller(dbQuery, callerId);
 
@@ -109,7 +109,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
         }
         public override IList<ClassAnnouncement> GetAnnouncements(QueryCondition conds, int callerId)
         {
-            var dbQuery = SeletClassAnnouncements(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, callerId);
+            var dbQuery = SelectClassAnnouncements(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, callerId);
             conds.BuildSqlWhere(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME);
             FilterClassAnnouncementByCaller(dbQuery, callerId);
             return ReadMany<ClassAnnouncement>(dbQuery);
@@ -117,7 +117,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
 
 
         //common implementation for teacher or admin 
-        protected virtual DbQuery SeletClassAnnouncements(string tableName, int callerId)
+        protected virtual DbQuery SelectClassAnnouncements(string tableName, int callerId)
         {
             var dbQuery = new DbQuery();
             var classTeacherSql = string.Format(@"(select cast(case when count(*) > 0 then 1 else 0 end as bit)
@@ -139,7 +139,7 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
                     {Announcement.STATE_FIELD, AnnouncementState.Draft},
                     {ClassAnnouncement.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
                 };
-            var dbQuery = SeletClassAnnouncements(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, personId);
+            var dbQuery = SelectClassAnnouncements(ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME, personId);
             conds.BuildSqlWhere(dbQuery, ClassAnnouncement.VW_CLASS_ANNOUNCEMENT_NAME);
             
             dbQuery.Sql.Append(@" and (ClassRef in (select ClassTeacher.ClassRef from ClassTeacher where ClassTeacher.PersonRef = @callerId))");

@@ -4,64 +4,17 @@ using System.Linq;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.Master;
 using Chalkable.Common;
-using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common.Enums;
 using Chalkable.Data.Master.DataAccess;
 using Chalkable.Data.Master.Model;
 
 namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
 {
-    public class DemoApplicationRatingStorage : BaseDemoGuidStorage<ApplicationRating>
-    {
-        public DemoApplicationRatingStorage()
-            : base(x => x.Id)
-        {
-        }
-
-        public bool Exists(Guid applicationId, Guid userId)
-        {
-            return data.Count(x => x.Value.ApplicationRef == applicationId && x.Value.UserRef == userId) == 1;
-        }
-
-        public IList<ApplicationRating> GetAll(Guid applicationId)
-        {
-            return data.Where(x => x.Value.ApplicationRef == applicationId).Select(x => x.Value).ToList();
-        }
-    }
-
     public class DemoApplicationService : DemoMasterServiceBase, IApplicationService
     {
-        private DemoApplicationRatingStorage ApplicationRatingStorage { get; set; }
+
         public DemoApplicationService(IServiceLocatorMaster serviceLocator) : base(serviceLocator)
         {
-            ApplicationRatingStorage = new DemoApplicationRatingStorage();
-        }
-
-        public ApplicationRating WriteReview(Guid applicationId, int rating, string review)
-        {
-            if (ReviewExists(applicationId))
-                throw new ChalkableException("User can send only one review per application");
-
-            var user = DemoUserService.CreateDemoUser(Context.DistrictId.Value, Context.UserId, Context.Login);
-            user.FullName = ""; //ServiceLocator.Personsc.GetPerson(Context.PersonId.Value).FullName();
-            ServiceLocator.UserService.Add(new List<User>{user});
-
-            var appRating = new ApplicationRating
-            {
-                Id = Guid.NewGuid(),
-                ApplicationRef = applicationId,
-                Rating = rating,
-                Review = review,
-                UserRef = Context.UserId,
-                User = user
-            };
-            ApplicationRatingStorage.Add(appRating);
-            return appRating;
-        }
-
-        public IList<ApplicationRating> GetRatings(Guid applicationId)
-        {
-            return ApplicationRatingStorage.GetAll(applicationId);
         }
 
         public PaginatedList<Application> GetApplicationsWithLive(Guid? developerId, ApplicationStateEnum? state, string filter, int start = 0,
@@ -70,7 +23,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             throw new NotImplementedException();
         }
 
-        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, Services.Master.AppFilterMode? filterMode, Services.Master.AppSortingMode? sortingMode, int start = 0, int count = int.MaxValue)
+        public PaginatedList<Application> GetApplications(IList<Guid> categoriesIds, IList<int> gradeLevels, string filterWords, int start = 0, int count = int.MaxValue, bool? myApps = null)
         {
             var query = new ApplicationQuery
             {
@@ -80,27 +33,9 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                 Start = start,
                 Count = count
             };
-            filterMode = filterMode ?? AppFilterMode.All;
-            sortingMode = sortingMode ?? AppSortingMode.Newest;
-            if (filterMode != AppFilterMode.All)
-                query.Free = filterMode == AppFilterMode.Free;
-            switch (sortingMode)
-            {
-                case AppSortingMode.Newest:
-                    query.OrderBy = nameof(Application.CreateDateTime);
-                    break;
-                case AppSortingMode.HighestRated:
-                    query.OrderBy = Application.AVG_FIELD;
-                    break;
-            }
             return GetApplications(query);
         }
 
-
-        public bool ReviewExists(Guid applicationId)
-        {
-            return ApplicationRatingStorage.Exists(applicationId, Context.UserId);
-        }
 
         public IList<AppPermissionType> GetPermisions(string applicationUrl)
         {
@@ -108,14 +43,14 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
             return app.Permissions.Select(x => x.Permission).ToList();
         }
 
-        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool onlyForInstall = true)
+        public PaginatedList<Application> GetApplications(int start = 0, int count = int.MaxValue, bool? live = null, bool? canAttach = null)
         {
             var query = new ApplicationQuery
                 {
                     Start = start,
                     Count = count,
                     Live = live,
-                    OnlyForInstall = onlyForInstall
+                    CanAttach = canAttach
                 };
             return GetApplications(query);
         }
@@ -124,7 +59,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
         {
             using (var uow = Read())
             {
-                query.UserId = Context.UserId;
                 query.Role = Context.Role.Id;
                 query.DeveloperId = Context.DeveloperId;
                 return new ApplicationDataAccess(uow).GetPaginatedApplications(query);
@@ -145,10 +79,8 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                     .GetApplication(new ApplicationQuery
                     {
                         Id = id,
-                        UserId = Context.UserId,
                         Role = Context.Role.Id,
-                        DeveloperId = Context.DeveloperId,
-                        OnlyForInstall = false
+                        DeveloperId = Context.DeveloperId
                     });
             }
         }
@@ -194,17 +126,26 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool.Master
                     || Context.Role == CoreRoles.STUDENT_ROLE && application.HasStudentExternalAttach;
         }
 
-        public IList<Application> GetSuggestedApplications(IList<Guid> abIds, IList<Guid> installedAppsIds, int start, int count)
+        public IList<Application> GetSuggestedApplications(IList<Guid> abIds, int start, int count)
         {
             using (var uow = Read())
             {
-                var apps =new  ApplicationDataAccess(uow).GetSuggestedApplications(abIds, installedAppsIds, start, count);
+                var apps =new  ApplicationDataAccess(uow).GetSuggestedApplications(abIds, start, count);
                 apps = apps.Where(x => x.DeveloperRef == Context.DeveloperId.Value).ToList();
                 return apps;
             }
         }
+        public IList<ApplicationBanInfo> GetApplicationBanInfos(Guid districtId, Guid? schoolId, IList<Guid> applicationIds)
+        {
+            throw new NotImplementedException();
+        }
 
-        public void SetApplicationDistrictOptions(Guid applicationId, Guid districtId, bool ban)
+        public void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds)
+        {
+            throw new NotImplementedException();
+        }
+
+        public IList<ApplicationSchoolBan> GetApplicationSchoolBans(Guid districtId, Guid applicationId)
         {
             throw new NotImplementedException();
         }

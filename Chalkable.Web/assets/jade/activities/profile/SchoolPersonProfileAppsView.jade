@@ -1,4 +1,5 @@
 -var user = self.getUser()
+-var apps = self.getApplications()
 -var isStudent = self.getUserRole().isStudent()
 .profile-page
     h2.page-title= isStudent ? Msg.Student_profile : Msg.Profile
@@ -11,22 +12,12 @@
         #student-info-panel.right-block.panel-block
             displayName =user.getDisplayName() || user.getFullName()
             h1.display-name(data-tooltip=displayName, data-tooltip-type="overflow")=displayName
-            .status=user.getAppsBudget().getInstalledAppsCount() + ' apps installed'
     .sections
-        if self.getUserRole().isAdmin()
-            +CloseOpen('Budget Balance')
-                .sections-info.budget-balance-section
-                    .section-data
-                        .info-title Balance
-                        .data-info=user.getAppsBudget().getBalance()
-                    .section-data
-                        .info-title School reserve
-                        .data-info=user.getAppsBudget().getReserve()
-        +CloseOpen('Installed Applications')
+        +CloseOpen('Applications')
             .sections-info.app-veiw-section
                 .my-apps
                     .apps
-                        each app in user.getAppsBudget().getInstalledApps()
+                        each app in apps
                             -var isBanned = false
                             +ActionLink('apps', 'viewApp', app.getUrl(), app.getMyAppsUrl(), chlk.models.apps.AppModes.MYAPPSVIEW, null, isBanned).application
                                 .wrapper
