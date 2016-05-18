@@ -75,6 +75,8 @@
     <Folder Include="Stored Procedures\" />
     <Folder Include="User Defined Types\" />
     <Folder Include="Stored Procedures\Announcements Procedures" />
+    <Folder Include="Scripts" />
+    <Folder Include="Scripts\Pre-Deploy" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Address.sql" />
@@ -318,5 +320,8 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PreDeploy Include="Scripts\Pre-Deploy\Paid_apps_cleaning.PreDeployment.sql" />
   </ItemGroup>
 </Project>

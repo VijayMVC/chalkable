@@ -31,7 +31,7 @@ namespace Chalkable.BusinessLogic.Services.Master
         UserContext Login(string confirmationKey);
         UserContext DemoLogin(string roleName, string demoPrefix);
         UserContext DeveloperTestLogin(Developer developer);
-        UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? acadSessionId = null);
+        UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? acadSessionId = null, string sisRedirectUrl = null);
         UserContext SwitchToRole(CoreRole role);
         User GetByLogin(string login);
         User GetById(Guid id);
@@ -154,7 +154,7 @@ namespace Chalkable.BusinessLogic.Services.Master
             }
         }
 
-        public UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? acadSessionId = null)
+        public UserContext SisLogIn(Guid sisDistrictId, string token, DateTime tokenExpiresTime, int? acadSessionId = null, string sisRedirectUrl = null)
         {
             using (var uow = Update(IsolationLevel.ReadUncommitted))
             {
@@ -170,7 +170,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                         {User.SIS_USER_ID_FIELD, iNowUser.Id},
                         {User.DISTRICT_REF_FIELD, district.Id}
                     });
-                    res = SisUserLogin(chlkUser, uow, iNowCl, iNowUser, acadSessionId);
+                    res = SisUserLogin(chlkUser, uow, iNowCl, iNowUser, acadSessionId, sisRedirectUrl);
                 }
                 uow.Commit();
                 return res;
@@ -201,7 +201,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
 
         private UserContext SisUserLogin(User user, UnitOfWork uow, ConnectorLocator iNowConnector = null
-                                         , StiConnector.Connectors.Model.User iNowUser = null, int? schoolYearId = null)
+                                         , StiConnector.Connectors.Model.User iNowUser = null, int? schoolYearId = null, string sisRedirectUrl = null)
         {
             if (user == null) return null;
             if (user.SisUserId.HasValue)
@@ -236,7 +236,7 @@ namespace Chalkable.BusinessLogic.Services.Master
                     EnsureTeacherChalkableAccess(claimInfos);
                 }
 
-                var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, null, personId, schoolYear)
+                var res = new UserContext(user, CoreRoles.GetById(roleId), user.District, schoolUser.School, null, personId, schoolYear, sisRedirectUrl)
                 {
                     Claims = ClaimInfo.Create(iNowUser.Claims),
                     SisApiVersion = iNowConnector.ApiVersion
