@@ -1,0 +1,48 @@
+REQUIRE('chlk.templates.ChlkTemplate');
+REQUIRE('chlk.models.search.SearchItem');
+
+NAMESPACE('chlk.templates.search', function () {
+
+    /** @class chlk.templates.search.SiteSearch*/
+    CLASS(
+        [ria.templates.TemplateBind('~/assets/jade/sidebars/SiteSearch.jade')],
+        [ria.templates.ModelBind(chlk.models.search.SearchItem)],
+        'SiteSearch', EXTENDS(chlk.templates.ChlkTemplate), [
+
+            [ria.templates.ModelPropertyBind],
+            String, 'id',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'announcementId',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'description',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.people.ShortUserInfo, 'personInfo',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.search.SearchTypeEnum, 'searchType',
+
+            [ria.templates.ModelPropertyBind],
+            Number, 'announcementType',
+
+            [ria.templates.ModelPropertyBind],
+            Boolean, 'adminAnnouncement',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'smallPictureId',
+
+            [ria.templates.ModelPropertyBind],
+            chlk.models.id.DepartmentId, 'departmentId',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'documentThumbnailUrl',
+
+            function getAttachmentUrl(){
+                return "/AnnouncementAttachment/DownloadAttachment.json?width=47&height=47&needsDownload=false&announcementAttachmentId=" + this.id
+            }
+
+        ])
+});
+
