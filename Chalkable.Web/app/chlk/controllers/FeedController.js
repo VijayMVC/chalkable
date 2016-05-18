@@ -168,6 +168,11 @@ NAMESPACE('chlk.controllers', function (){
         [chlk.controllers.NotChangedSidebarButton()],
         [[chlk.models.feed.Feed]],
         function getAnnouncementsAction(model) {
+            if(model.getSubmitType() == 'copy'){
+                var res = this.announcementService.copy(model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate());
+                return this.UpdateView(this.getView().getCurrent().getClass(), res, 'announcements-copy');
+            }
+
             if(model.getSubmitType() == 'markDone')
                 return this.announcementService.markDone(model.getMarkDoneOption(), model.getClassId(), model.getAnnType())
                     .then(function(isMarked){

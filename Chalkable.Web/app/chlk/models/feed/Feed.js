@@ -17,6 +17,9 @@ NAMESPACE('chlk.models.feed', function () {
                 IMPLEMENTS(ria.serialize.IDeserializable), [
 
             VOID, function deserialize(raw) {
+                this.announcementsToCopy = SJX.fromValue(raw.announcementsToCopy, String);
+                this.toClassId = SJX.fromValue(raw.toClassId, chlk.models.id.ClassId);
+                this.copyStartDate = SJX.fromDeserializable(raw.copyStartDate, chlk.models.common.ChlkDate);
                 this.inProfile = SJX.fromValue(raw.inProfile, Boolean);
                 this.items = SJX.fromArrayOfDeserializables(raw.annoucementviewdatas, chlk.models.announcement.FeedAnnouncementViewData);
                 this.importantOnly = SJX.fromValue(raw.importantOnly, Boolean);
@@ -53,6 +56,12 @@ NAMESPACE('chlk.models.feed', function () {
             ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'items',
 
             Boolean, 'readonly',
+
+            String, 'announcementsToCopy',
+
+            chlk.models.id.ClassId, 'toClassId',
+
+            chlk.models.common.ChlkDate, 'copyStartDate',
 
             Boolean, 'importantOnly',
 

@@ -4,15 +4,41 @@
     .copy-buttons-block
       display: none
 
+  &.copy-mode
+    .feed-item
+      .check-cnt
+        display: inline-block
+        position: absolute
+        left: 0
+        height: 80px
+        padding-top: 25px
+        width: 48px
+        text-align: center
+
+      >A
+        margin-left: 53px
+
   .copy-buttons-block
     white-space: nowrap
+
+    .copy-start-date
+      width: 192px
+
+    .right-block
+      BUTTON
+        width: 82px
+
+      &>*
+        margin-left: 15px
+
 
     >DIV, .copy-to-block
       display: inline-block
 
-    LABEL
+    LABEL.text
       font-weight: bold
       vertical-align: middle
+      margin: 0 5px 0 12px
 
     .box-checkbox
       vertical-align: middle
@@ -29,6 +55,9 @@
     left: 0
     top: -45px
     right: 0
+
+    .left-block
+      margin-left: 11px
 
     .chosen-container
       width: 140px !important

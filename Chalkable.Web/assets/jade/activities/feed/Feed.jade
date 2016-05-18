@@ -39,17 +39,18 @@ div(class = noComplete ? "no-complete" : "").feed-container
             //input(type="hidden", name="sorttype", value=self.isLatest()).latest-earliest-input
             input(type="submit", name="submitType", value="sort")#sort-submit.x-hidden
             +Hidden('toSet', '').to-set
+            +Hidden('announcementsToCopy').announcements-to-copy
             input(type="hidden", name=isAdmin && !self.isInProfile() ? "gradeLevels" : "classId", value=selected)
 
             .left-buttons-block.copy-buttons-block
                 .left-block.i-b
                     .box-checkbox.circle
                         +Checkbox('allTasks', false, false, true).all-tasks-check
-                    LABEL All tasks
+                    LABEL.text All tasks
                 .right-block.i-b.right
                     .i-b.copy-to-block
-                        LABEL Copy to:
-                        +Select('classId').copy-to-select
+                        LABEL.text Copy to:
+                        +Select('toClassId').copy-to-select
                             each item in self.getClassesByYears()
                                 -classes = item.getClasses()
                                 if classes && classes.length
@@ -62,8 +63,8 @@ div(class = noComplete ? "no-complete" : "").feed-container
                             selectOtherMonths: true
                         }
                     ).copy-start-date
-                    BUTTON(type="button").negative-button Cancel
-                    BUTTON(type="button").blue-button Copy
+                    BUTTON(type="button").negative-button.cancel-copy Cancel
+                    BUTTON(type="submit", name="submitType", value="copy", disabled="disabled").blue-button.copy-btn Copy
             .left-buttons-block.tools-buttons-block(class=self.hasFilters() ? '' : 'hidden')
                 if !self.isInProfile() && self.isImportantOnly() && self.items.length
                     input(type="submit", name="submitType", value="markDone")#mark-done-submit.x-hidden
