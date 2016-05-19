@@ -39,9 +39,33 @@ div(class = noComplete ? "no-complete" : "").feed-container
             //input(type="hidden", name="sorttype", value=self.isLatest()).latest-earliest-input
             input(type="submit", name="submitType", value="sort")#sort-submit.x-hidden
             +Hidden('toSet', '').to-set
+            +Hidden('announcementsToCopy').announcements-to-copy
             input(type="hidden", name=isAdmin && !self.isInProfile() ? "gradeLevels" : "classId", value=selected)
 
-            .left-buttons-block(class=self.hasFilters() ? '' : 'hidden')
+            .left-buttons-block.copy-buttons-block
+                .left-block.i-b
+                    .box-checkbox.circle
+                        +Checkbox('allTasks', false, false, true).all-tasks-check
+                    LABEL.text All tasks
+                .right-block.i-b.right
+                    .i-b.copy-to-block
+                        LABEL.text Copy to:
+                        +Select('toClassId').copy-to-select
+                            each item in self.getClassesByYears()
+                                -classes = item.getClasses()
+                                if classes && classes.length
+                                    OPTGROUP(label=item.getSchoolYear().getName())
+                                        each clazz in classes
+                                            +Option(clazz.getId().valueOf(), clazz.getFullClassName())
+                    +DatePicker('copyStartDate')(
+                        data-options={
+                            showOtherMonths: true,
+                            selectOtherMonths: true
+                        }
+                    ).copy-start-date
+                    BUTTON(type="button").negative-button.cancel-copy Cancel
+                    BUTTON(type="submit", name="submitType", value="copy", disabled="disabled").blue-button.copy-btn Copy
+            .left-buttons-block.tools-buttons-block(class=self.hasFilters() ? '' : 'hidden')
                 if !self.isInProfile() && self.isImportantOnly() && self.items.length
                     input(type="submit", name="submitType", value="markDone")#mark-done-submit.x-hidden
                     +Select('markDoneOption')(data-placeholder = 'Mark Done', value = 0).markDoneSelect
@@ -93,9 +117,9 @@ div(class = noComplete ? "no-complete" : "").feed-container
                 if self.hasFilters()
                     .clear-filters Clear Filters
             .right-buttons-block
-                +ActionButton('feed', 'feedPrinting', selected, self.importantOnly).report-btn
-                    .report-link
-                Button(type="button", class=self.hasFilters() ? 'active' : '').feed-tools Feed Tools
+                +ActionLink('feed', 'feedPrinting', selected, self.importantOnly).print-btn
+                a(href="javascript:").copy-btn.copy-activities
+                a(href="javascript:", class=self.hasFilters() ? 'active' : '').tools-btn.feed-tools
             +ListView(self.items)(
                 infiniteScroll = true,
                 needGoToButton = true,

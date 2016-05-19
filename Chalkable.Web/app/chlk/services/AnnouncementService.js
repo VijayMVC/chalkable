@@ -44,6 +44,15 @@ NAMESPACE('chlk.services', function () {
                 });
             },
 
+            [[chlk.models.id.ClassId, String, chlk.models.common.ChlkDate]],
+            ria.async.Future, function copy(toClassId, announcements, startDate_) {
+                return this.post('Announcement/Copy.json', ArrayOf(chlk.models.id.AnnouncementId), {
+                    toClassId: toClassId.valueOf(),
+                    announcements: JSON.parse(announcements),
+                    startDate: startDate_ && startDate_.toStandardFormat()
+                });
+            },
+
             [[Number, chlk.models.id.ClassId, Boolean]],
             ria.async.Future, function getAnnouncementsList_(start_, classId_, importantOnly_) {
                 return this.get('Feed/List.json', chlk.models.feed.Feed, {

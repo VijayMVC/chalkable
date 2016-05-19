@@ -226,6 +226,24 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             }
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult Copy(CopyAnnouncementInput inputModel)
+        {
+            return Json(inputModel.Announcements.Select(x => x.AnnouncementId));
+        }
+
+        public class AnnouncementTypeModel
+        {
+            public int AnnouncementId { get; set; }
+            public int AnnouncementType { get; set; }
+        }
+
+        public class CopyAnnouncementInput
+        {
+            public int ToClassId { get; set; }
+            public DateTime? StartDate { get; set; }
+            public IList<AnnouncementTypeModel> Announcements { get; set; }
+        }
     }
 
 }

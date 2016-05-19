@@ -1,4 +1,48 @@
 .feed-container
+
+  &:not(.copy-mode)
+    .copy-buttons-block
+      display: none
+
+  &.copy-mode
+    .feed-item
+      .check-cnt
+        display: inline-block
+        position: absolute
+        left: 0
+        height: 80px
+        padding-top: 25px
+        width: 48px
+        text-align: center
+
+      >A
+        margin-left: 53px
+
+  .copy-buttons-block
+    white-space: nowrap
+
+    .copy-start-date
+      width: 192px
+
+    .right-block
+      BUTTON
+        width: 82px
+
+      &>*
+        margin-left: 15px
+
+
+    >DIV, .copy-to-block
+      display: inline-block
+
+    LABEL.text
+      font-weight: bold
+      vertical-align: middle
+      margin: 0 5px 0 12px
+
+    .box-checkbox
+      vertical-align: middle
+
   .clear-filters
     display: inline-block
     color: grey
@@ -10,6 +54,10 @@
     position: absolute
     left: 0
     top: -45px
+    right: 0
+
+    .left-block
+      margin-left: 11px
 
     .chosen-container
       width: 140px !important
@@ -36,7 +84,19 @@
   .right-buttons-block
     position: absolute
     right: 0
-    top: -100px
+    top: -88px
+
+    .print-btn, .copy-btn, .tools-btn
+      opacity: 0.5
+
+      &.active
+        opacity: 1
+
+    .copy-btn
+      margin-left: 8px
+
+    .tools-btn
+      margin-left: 4px
 
     button
       vertical-align: middle

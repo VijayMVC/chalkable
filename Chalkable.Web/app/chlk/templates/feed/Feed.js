@@ -41,6 +41,9 @@ NAMESPACE('chlk.templates.feed', function () {
             ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
 
             [ria.templates.ModelPropertyBind],
+            ArrayOf(chlk.models.schoolYear.YearAndClasses), 'classesByYears',
+
+            [ria.templates.ModelPropertyBind],
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
             [ria.templates.ModelPropertyBind],
