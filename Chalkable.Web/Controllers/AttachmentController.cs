@@ -1,8 +1,13 @@
-﻿using System.Web;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Web;
 using System.Web.Mvc;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Common;
+using Chalkable.Common.Exceptions;
 using Chalkable.Common.Web;
+using Chalkable.Data.Common.Enums;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Models;
 
@@ -48,6 +53,43 @@ namespace Chalkable.Web.Controllers
             }
             return File(content, contentTypeName, attName);
         }
+        
+        [AcceptVerbs(HttpVerbs.Post), AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student")]
+        public ActionResult Upload()
+        {
+            try
+            {
+                byte[] bin;
+                string name;
+                if (!GetFileFromRequest(out bin, out name))
+                    return Json(new ChalkableException(ChlkResources.ERR_FILE_REQUIRED));
+                
+                return Json(UploadAttachment(name, bin), HTML_CONTENT_TYPE, 6);
+            }
+            catch (Exception exception)
+            {
+                return HandleAttachmentException(exception);
+            }
+        }
 
+        [AcceptVerbs(HttpVerbs.Put), AuthorizationFilter("SysAdmin, DistrictAdmin, Teacher, Student", true, new[] { AppPermissionType.Announcement })]
+        public ActionResult Upload(string fileName)
+        {
+            var length = Request.InputStream.Length;
+            if (length == 0)
+                return Json(new ChalkableException(ChlkResources.ERR_FILE_REQUIRED));
+
+            var bin = new byte[length];
+            Request.InputStream.Read(bin, 0, (int)length);
+            return Json(UploadAttachment(fileName, bin));
+        }
+
+        private AttachmentViewData UploadAttachment(string fileName, byte[] bin)
+        {
+            Trace.Assert(Context.PersonId.HasValue);
+            var attachment = SchoolLocator.AttachementService.Upload(fileName, bin);
+            var res = SchoolLocator.AttachementService.TransformToAttachmentInfo(attachment, new List<int> { Context.PersonId.Value });
+            return AttachmentViewData.Create(res, true);
+        }
     }
 }
