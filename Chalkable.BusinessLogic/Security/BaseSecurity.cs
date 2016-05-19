@@ -16,6 +16,11 @@ namespace Chalkable.BusinessLogic.Security
             return context.Role ==  CoreRoles.SUPER_ADMIN_ROLE;
         }
 
+        public static bool IsSysAdminOrDeveloper(UserContext context)
+        {
+            return IsSysAdmin(context) || context.Role == CoreRoles.DEVELOPER_ROLE;
+        }
+
         public static void EnsureSysAdmin(UserContext context)
         {
             if (!IsSysAdmin(context))
