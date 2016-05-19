@@ -18,6 +18,10 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
                     name="submitType",
                     value="save"
                 )#announcement-type-btn.validate-skip.x-hidden
+
+            if classId && classId.valueOf()
+                +ActionLink('announcement', 'showImportDialog', announcement.getClassId()).import-icon
+
     else
         .action-bar
             .items
@@ -33,6 +37,9 @@ mixin AnnouncementTypeToolBar(types, announcement, typeId)
                             value="save",
                             type="submit"
                         )= item.getName()
+
+            if classId && classId.valueOf()
+                +ActionLink('announcement', 'showImportDialog', announcement.getClassId()).import-icon
 
 -var topData = self.getTopData()
 -var announcement = self.getAnnouncement()
