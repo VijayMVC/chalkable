@@ -220,6 +220,7 @@ namespace Chalkable.BusinessLogic.Services.Master
 
         public void SubmitApplicationBan(Guid applicationId, IList<Guid> schoolIds)
         {
+            BaseSecurity.EnsureDistrictAdmin(Context);
             DoUpdate(u => new ApplicationSchoolOptionDataAccess(u).BanSchoolsByIds(applicationId, schoolIds));
         }
 
