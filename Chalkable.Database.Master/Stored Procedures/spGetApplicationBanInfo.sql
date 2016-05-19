@@ -36,6 +36,6 @@ Set UnBannedSchoolCount = @totalSchools - BannedSchoolCount
 
 Update @ApplicationBanInfoT
 Set BannedForCurrentSchool = 1
-Where Exists(Select * From ApplicationSchoolOption Where ApplicationRef = ApplicationId And SchoolRef = @schoolId)
+Where Exists(Select * From ApplicationSchoolOption Where ApplicationRef = ApplicationId And SchoolRef = @schoolId And Banned = 1)
 
 select * from @ApplicationBanInfoT
