@@ -1,0 +1,124 @@
+$blue: #4f92b0
+
+.admin-summary-page
+  .chlk-grid
+    display: table
+
+  .info-block
+    margin-top: -13px
+    padding-bottom: 22px
+
+  .form-container
+    margin-top: 20px
+
+    select
+      width: 235px
+
+  .filter-input
+    float: right
+    width: 165px
+    border-color: #e7e6e2
+    box-shadow: none
+    background: image-url("images2/icons-24/search-glass.png") 5px center no-repeat
+    padding-left: 30px
+
+  .cell
+    .circle
+      display: inline-block
+      width: 36px
+      height: 26px
+      line-height: 26px
+      border-radius: 13px
+      background: #41b768
+      color: white
+
+      &.red
+        background: #d45151
+
+.school-teachers-summary-page
+  .chlk-grid
+
+    .classes-container
+      margin: 0 10px
+
+    .cell
+      &.name
+        width: 33%
+
+      &.classes
+        width: 18%
+        white-space: nowrap
+
+.school-classes-summary-page
+  .chlk-grid
+    .cell
+      &.name
+        width: 33%
+
+      &.teacher-name
+        width: 18%
+
+      .icon
+        border-radius: 0
+
+      .pic
+        opacity: 0.5
+
+.district-summary-page
+  .info-item
+    display: inline-block
+    font-size: 16px
+    margin-right: 25px
+
+    .name
+      color: $blue
+      font-weight: 600
+
+    .value
+      color: #83827e
+
+  .chlk-grid
+    .pic
+      +icons-24-sprite(education)
+
+    .cell
+      &.name
+        width: 44%
+
+      &.students
+        width: 12%
+
+.chlk-grid
+  .cell:not(.name)
+    text-align: center
+
+  .cell
+    font-weight: 600
+    color: #56554f
+
+    &.name
+      text-indent: 18px
+
+    a
+      color: $blue
+      text-decoration: none
+      font-weight: 600
+
+    .icon
+      display: inline-block
+      width: 32px
+      height: 32px
+      line-height: 32px
+      background: #e7e6e2
+      border-radius: 16px
+      vertical-align: middle
+      margin-right: 15px
+
+    .pic
+      width: 24px
+      height: 24px
+      margin: 4px
+      text-indent: 0
+
+  .grid-arrow
+    vertical-align: middle
