@@ -18,6 +18,7 @@
   .action-checkbox.right
     float: right
 
+.group-students-filter-dialog, .announcement-edit-groups-dialog, .announcement-groups-dialog, .add-new-category-dialog, .announcement-import-dialog
   input[type=checkbox]
     cursor: pointer
 
@@ -87,6 +88,10 @@
     right: 6px
     top: 16px
 
+  .groups-container
+    overflow-x: auto
+    height: 366px
+
   .column-cell.grade-level-name, .students .column-cell
     >A, >SPAN
       background: inline-image('images2/explorer/group-default-item.png') 22px 0 no-repeat
@@ -100,10 +105,6 @@
 
         &.active, &:hover
           background: inline-image('images2/explorer/group-last-item.png') 22px 0 no-repeat, #f7f7f5
-
-  .groups-container
-    overflow-x: auto
-    height: 366px
 
   table
     color: #373634

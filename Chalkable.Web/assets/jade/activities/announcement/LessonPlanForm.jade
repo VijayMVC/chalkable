@@ -6,6 +6,9 @@ mixin LessonPlanAnnouncementTypeToolBar(types, announcement, lessonPlan)
                 each item in types
                     +ActionLink('announcement', 'addClassAnnouncement', lessonPlan.getClassId(), item.getId()).item.announcement-type-button.no-save=item.getName()
 
+        if lessonPlan.getClassId() && lessonPlan.getClassId().valueOf()
+            +ActionLink('announcement', 'showImportDialog', lessonPlan.getClassId()).import-icon
+
 -var topData = self.getTopData()
 -var announcement = self.getAnnouncement()
 -var topItems = topData.getTopItems()

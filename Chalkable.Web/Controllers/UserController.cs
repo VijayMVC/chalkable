@@ -15,10 +15,10 @@ namespace Chalkable.Web.Controllers
     [RequireHttps, TraceControllerFilter]
     public class UserController : ChalkableController
     {
-        public ActionResult SisLogIn(string token, Guid districtId, DateTime? tokenExpiresTime, int? acadSessionId)
+        public ActionResult SisLogIn(string token, Guid districtId, DateTime? tokenExpiresTime, int? acadSessionId, string returnUrl)
         {
             var expiresTime = tokenExpiresTime ?? DateTime.UtcNow.AddDays(2);
-            var context = LogOn(false, us => us.SisLogIn(districtId, token, expiresTime, acadSessionId));
+            var context = LogOn(false, us => us.SisLogIn(districtId, token, expiresTime, acadSessionId, returnUrl));
             if (context != null)
             {
                 MasterLocator.UserTrackingService.LoggedIn(context.Login);
@@ -33,9 +33,7 @@ namespace Chalkable.Web.Controllers
             if (!Context.DistrictId.HasValue)
                 throw new Exception("District id should be defined for redirect to SIS");
             var schoolYearId = GetCurrentSchoolYearId();
-            var district = MasterLocator.DistrictService.GetByIdOrNull(Context.DistrictId.Value);
-            var sisUrl = district.SisRedirectUrl;
-            var url = UrlTools.UrlCombine(sisUrl, string.Format("TokenLogin.aspx?Token={0}&AcadSessionId={1}", Context.SisToken, schoolYearId));
+            var url = UrlTools.UrlCombine(Context.SisRedirectUrl, $"TokenLogin.aspx?Token={Context.SisToken}&AcadSessionId={schoolYearId}");
             return Redirect(url);
         }
 

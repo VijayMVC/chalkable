@@ -5,7 +5,50 @@
   BUTTON.add
     margin-bottom: 15px
 
+.announcement-import-dialog
+  LABEL.text
+    font-weight: bold
+
+  .table-block
+    width: 100%
+    overflow-x: auto
+    height: 366px
+
+    .header-row
+      font-weight: bold
+
+    .name-td
+      display: inline-block
+      text-overflow: ellipsis
+      overflow: hidden
+      white-space: nowrap
+      width: 33%
+      text-align: left
+      vertical-align: middle
+
+      &.check
+        width: 10%
+        text-align: center
+
+      &.date
+        width: 24%
+
+  .dialog
+    width: 750px
+
+    .buttons-container
+      margin: 0
+
 .announcement-form-page, .admin-announcement-form-page, .lesson-plan-form-page
+
+  .action-bar
+    .items
+      width: 95%
+
+  .import-icon
+    float: right
+    margin-top: -6px
+
   .attach-btn-area
     margin-bottom: 20px
     border-bottom: 1px solid #e7e6e2
