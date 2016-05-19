@@ -1,0 +1,21 @@
+﻿CREATE TYPE [dbo].[TClassroomOption] AS TABLE (
+    [Id]                                      INT          NOT NULL,
+    [DefaultActivitySortOrder]                NVARCHAR (1) NOT NULL,
+    [GroupByCategory]                         BIT          NOT NULL,
+    [AveragingMethod]                         NVARCHAR (1) NOT NULL,
+    [CategoryAveraging]                       BIT          NOT NULL,
+    [IncludeWithdrawnStudents]                BIT          NOT NULL,
+    [DisplayStudentAverage]                   BIT          NOT NULL,
+    [DisplayTotalPoints]                      BIT          NOT NULL,
+    [RoundDisplayedAverages]                  BIT          NOT NULL,
+    [DisplayAlphaGrade]                       BIT          NOT NULL,
+    [DisplayStudentNames]                     BIT          NOT NULL,
+    [DisplayMaximumScore]                     BIT          NOT NULL,
+    [StandardsGradingScaleRef]                INT          NULL,
+    [StandardsCalculationMethod]              NVARCHAR (1) NOT NULL,
+    [StandardsCalculationRule]                NVARCHAR (1) NOT NULL,
+    [StandardsCalculationWeightMaximumValues] BIT          NOT NULL,
+    [DefaultStudentSortOrder]                 NVARCHAR (1) NOT NULL,
+    [SeatingChartRows]                        INT          NOT NULL,
+    [SeatingChartColumns]                     INT          NOT NULL);
+

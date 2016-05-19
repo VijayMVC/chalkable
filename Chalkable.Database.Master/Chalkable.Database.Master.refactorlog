@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="73011736-e594-4faf-bb40-98c05bb6996d" ChangeDateTime="05/12/2016 12:18:52">
+    <Property Name="ElementName" Value="[dbo].[ApplicationSchoolOption].[Banned]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ApplicationSchoolOption]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="SchoolRef" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="78a73960-f8da-491b-b160-e7703bf51749" ChangeDateTime="05/12/2016 12:19:14">
+    <Property Name="ElementName" Value="[dbo].[ApplicationSchoolOption].[Banned`]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[ApplicationSchoolOption]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="Banned" />
+  </Operation>
+</Operations>
