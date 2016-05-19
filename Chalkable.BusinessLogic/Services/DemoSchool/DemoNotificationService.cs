@@ -201,16 +201,6 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
             NotificationStorage.Add(notifications.ToList());
         }
 
-        public void AddApplicationNotification(IList<Person> toPerson, Person fromPerson, Guid applicationId)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void AddAppBudgetBalanceNotification(int recipientId, double budgetBalance)
-        {
-            throw new NotImplementedException();
-        }
-
         public void AddEndMarkingPeriodNotification(int toPersonId, int markingPeriodId, int endDays, bool isNextMpNotExist,
                                                     bool isNextMpNotAssignedToClass)
         {
