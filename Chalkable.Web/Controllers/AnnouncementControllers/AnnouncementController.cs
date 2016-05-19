@@ -229,7 +229,7 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Copy(CopyAnnouncementInput inputModel)
         {
-            return Json(inputModel.Announcements.Select(x => x.AnnouncementId));
+            return Json(inputModel.Announcements?.Select(x => x.AnnouncementId));
         }
 
         public class AnnouncementTypeModel

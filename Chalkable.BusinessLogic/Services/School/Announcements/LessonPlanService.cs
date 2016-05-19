@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -9,6 +10,7 @@ using Chalkable.Common.Exceptions;
 using Chalkable.Data.Common;
 using Chalkable.Data.School.DataAccess;
 using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
+using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Microsoft.ReportingServices.Interfaces;
 
@@ -120,7 +122,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             var lessonPlan = GetLessonPlanById(lessonPlanId); // security check
             BaseSecurity.EnsureTeacher(Context);
             if (lessonPlan.IsDraft)
-                throw new ChalkableException("Only submited lesson plan can be duplicate");
+                throw new ChalkableException("Only submited lesson plan can be duplicated");
             
             //get announcementApplications for copying
             var annApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnId(lessonPlanId, true);
@@ -140,6 +142,32 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
+        public void Copy(IList<int> lessonPlanIds, int toClassId)
+        {
+            BaseSecurity.EnsureTeacher(Context);
+            
+            var announcements = DoRead(u => CreateLessonPlanDataAccess(u, true).GetByIds(lessonPlanIds));
+            var announcementIdsToCopy = announcements.Where(x => !x.IsDraft).Select(x => new
+            {
+                AnnouncementId = x.Id,
+                ClassId = x.ClassRef
+            }).ToList();
+            
+            var announcementApps = ServiceLocator.ApplicationSchoolService
+                .GetAnnouncementApplicationsByAnnIds(announcementIdsToCopy.Select(x => x.AnnouncementId).ToList(), true);          
+            var applicationIds = announcementApps.Select(x => x.ApplicationRef).ToList();
+            var applications = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(applicationIds)
+                .Where(x => !x.IsAdvanced).ToList();
+            
+            //Filter simple apps
+            announcementApps = announcementApps.Where(x => applications.Any(y => y.Id == x.ApplicationRef)).ToList();
+
+            using (var unifOfWork = Update())
+            {
+                var teachers = new ClassTeacherDataAccess(unifOfWork).GetClassTeachers(announcementIdsToCopy.Select(x => x.ClassId).ToList());
+                //Here we copy lesson plans
+            }
+        }
 
         public AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content,
                                         DateTime? startDate, DateTime? endDate, bool visibleForStudent)

@@ -170,5 +170,17 @@ namespace Chalkable.StiConnector.Connectors
             }
             return Post<IList<ActivityCopyResult>>(url, null, nvc);
         }
+
+        public IList<ActivityCopyResult> CopyActivities(IList<int> sisIds, int toSectionId, DateTime? startDate)
+        {
+            var postObj = new ActivityCopyOptions
+            {
+                ActivityIds = sisIds,
+                StartDate = startDate,
+                CopyToSectionIds = new List<int> { toSectionId }
+            };
+
+            return Put<IList<ActivityCopyResult>, ActivityCopyOptions>($"{BaseUrl}chalkable/activities/copy", postObj);
+        } 
     }
 }
