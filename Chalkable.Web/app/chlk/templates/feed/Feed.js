@@ -66,6 +66,26 @@ NAMESPACE('chlk.templates.feed', function () {
 
             function hasFilters(){
                 return this.getAnnType() || this.getGradingPeriodId() || this.getStartDate() || this.getEndDate() || this.getSortType() && this.getSortType().valueOf()
+            },
+
+            function getClassesForSelect(){
+                var items = this.getClassesByYears(), res = [];
+                items.forEach(function(item){
+                    var classes = item.getClasses();
+                    if(classes.length){
+                        res.push({
+                            name: item.getSchoolYear().getName(),
+                            values: classes.map(function(clazz){
+                                return {
+                                    name: clazz.getFullClassName(),
+                                    id: clazz.getId().valueOf()
+                                }
+                            })
+                        })
+                    }
+                });
+                return res;
             }
+
         ])
 });

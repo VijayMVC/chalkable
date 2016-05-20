@@ -18,6 +18,25 @@ NAMESPACE('chlk.templates.announcement', function () {
             chlk.models.id.ClassId, 'classId',
 
             [ria.templates.ModelPropertyBind],
-            String, 'requestId'
+            String, 'requestId',
+
+            function getClassesForSelect(){
+                var items = this.getClassesByYears(), res = [];
+                items.forEach(function(item){
+                    var classes = item.getClasses();
+                    if(classes.length){
+                        res.push({
+                            name: item.getSchoolYear().getName(),
+                            values: classes.map(function(clazz){
+                                return {
+                                    name: clazz.getFullClassName(),
+                                    id: clazz.getId().valueOf()
+                                }
+                            })
+                        })
+                    }
+                });
+                return res;
+            }
         ])
 });
