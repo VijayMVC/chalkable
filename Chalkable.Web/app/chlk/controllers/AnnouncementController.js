@@ -129,13 +129,21 @@ NAMESPACE('chlk.controllers', function (){
 
         [[chlk.models.id.ClassId]],
         function showImportDialogAction(classId){
+            var res = this.WidgetStart('announcement', 'showImportDialog', [classId])
+                .then(function(data){
+
+                }, this);
+            return null;
+        },
+
+        [[String, chlk.models.id.ClassId]],
+        function showImportDialogWidgetAction(requestId, classId){
             var res = this.schoolYearService.listOfSchoolYearClasses()
                 .then(function(classesByYears){
-                    return new chlk.models.announcement.AnnouncementImportViewData(classId, classesByYears);
+                    return new chlk.models.announcement.AnnouncementImportViewData(classId, classesByYears, null, requestId);
                 });
             return this.ShadeView(chlk.activities.announcement.AnnouncementImportDialog, res);
         },
-
 
         [[chlk.models.announcement.post.AnnouncementImportPostViewData]],
         function importAction(model){
@@ -145,6 +153,14 @@ NAMESPACE('chlk.controllers', function (){
                     .then(function(announcements){
                         return new chlk.models.announcement.AnnouncementImportViewData(model.getClassId(), null, announcements);
                     });
+            else
+                res = this.announcementService.copy(model.getToClassId(), model.getAnnouncementsToCopy(), model.getCopyStartDate())
+                    .then(function(ids){
+                        this.WidgetComplete(model.getRequestId(), ids);
+                        this.BackgroundCloseView(chlk.activities.announcement.AnnouncementImportDialog);
+                        return ria.async.BREAK;
+                    }, this);
+
             return this.UpdateView(chlk.activities.announcement.AnnouncementImportDialog, res, 'list-update');
         },
 

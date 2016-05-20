@@ -15,6 +15,9 @@ NAMESPACE('chlk.templates.announcement', function () {
             ArrayOf(chlk.models.schoolYear.YearAndClasses), 'classesByYears',
 
             [ria.templates.ModelPropertyBind],
-            chlk.models.id.ClassId, 'classId'
+            chlk.models.id.ClassId, 'classId',
+
+            [ria.templates.ModelPropertyBind],
+            String, 'requestId'
         ])
 });

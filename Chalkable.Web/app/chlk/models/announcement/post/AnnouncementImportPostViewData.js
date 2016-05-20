@@ -17,6 +17,7 @@ NAMESPACE('chlk.models.announcement.post', function () {
                 this.classId = SJX.fromValue(raw.classId, chlk.models.id.ClassId);
                 this.copyStartDate = SJX.fromDeserializable(raw.copyStartDate, chlk.models.common.ChlkDate);
                 this.submitType = SJX.fromValue(raw.submitType, String);
+                this.requestId = SJX.fromValue(raw.requestId, String);
             },
 
             chlk.models.id.ClassId, 'toClassId',
@@ -26,6 +27,8 @@ NAMESPACE('chlk.models.announcement.post', function () {
             chlk.models.common.ChlkDate, 'copyStartDate',
 
             String, 'announcementsToCopy',
+
+            String, 'requestId',
 
             String, 'submitType'
         ]);

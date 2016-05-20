@@ -5,7 +5,9 @@
 
     +ActionForm('announcement', 'import')
         +Hidden('toClassId', self.getClassId())
+        +Hidden('requestId', self.getRequestId())
         +Button(type="submit", name="submitType", value="list").x-hidden.list-update-btn
+        +Hidden('announcementsToCopy').announcements-to-copy
 
         .top-container
             .i-b.copy-to-block
@@ -17,12 +19,13 @@
                             OPTGROUP(label=item.getSchoolYear().getName())
                                 each clazz in classes
                                     +Option(clazz.getId().valueOf(), clazz.getFullClassName())
-            +DatePicker('copyStartDate')(
-                data-options={
-                    showOtherMonths: true,
-                    selectOtherMonths: true
-                }
-            ).copy-start-date.right
+            .right-block.right
+                +DatePicker('copyStartDate')(
+                    data-options={
+                        showOtherMonths: true,
+                        selectOtherMonths: true
+                    }
+                ).copy-start-date
 
             .clear-fix
         .table-block.items-table
@@ -35,7 +38,7 @@
                 .name-td.name Name
             .items-container
 
-        .buttons-container
-            +Button.special-button2.cancel.close.negative-button Cancel
-            +Button()(type="submit", disabled="disabled").special-button2.blue-button.import-btn Import
+        .buttons-container.grey.right-align
+            Button.cancel.close.negative-button Cancel
+            Button(type="submit", disabled="disabled").blue-button.import-btn Import
 

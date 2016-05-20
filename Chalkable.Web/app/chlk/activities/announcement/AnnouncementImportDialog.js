@@ -44,7 +44,21 @@ NAMESPACE('chlk.activities.announcement', function(){
                     btn.setAttr('disabled', 'disabled');
                     btn.setProp('disabled', true);
                 }
-            }
+            },
 
+            [ria.mvc.DomEventBind('submit', 'form')],
+            [[ria.dom.Dom, ria.dom.Event]],
+            VOID, function formSubmit(node, event){
+                var announcements = [];
+                this.dom.find('.announcement-item-check:checked').forEach(function(node){
+                    announcements.push({
+                        announcementId: node.getData('id'),
+                        announcementType: node.getData('type')
+                    });
+                });
+
+                var value = announcements.length ? JSON.stringify(announcements) : '';
+                this.dom.find('.announcements-to-copy').setValue(value);
+            }
         ]);
 });

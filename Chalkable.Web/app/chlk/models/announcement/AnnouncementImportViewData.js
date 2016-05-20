@@ -5,18 +5,21 @@ NAMESPACE('chlk.models.announcement', function () {
 
     /** @class chlk.models.announcement.AnnouncementImportViewData*/
     CLASS('AnnouncementImportViewData', [
-            ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'announcements',
+        ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), 'announcements',
 
-            ArrayOf(chlk.models.schoolYear.YearAndClasses), 'classesByYears',
+        ArrayOf(chlk.models.schoolYear.YearAndClasses), 'classesByYears',
 
-            chlk.models.id.ClassId, 'classId',
+        chlk.models.id.ClassId, 'classId',
 
-            [[chlk.models.id.ClassId, ArrayOf(chlk.models.schoolYear.YearAndClasses), ArrayOf(chlk.models.announcement.FeedAnnouncementViewData)]],
-            function $(classId_, classesByYears_, announcements_){
-                BASE();
-                classId_ && this.setClassId(classId_);
-                classesByYears_ && this.setClassesByYears(classesByYears_);
-                announcements_ && this.setAnnouncements(announcements_);
-            }
-        ]);
+        String, 'requestId',
+
+        [[chlk.models.id.ClassId, ArrayOf(chlk.models.schoolYear.YearAndClasses), ArrayOf(chlk.models.announcement.FeedAnnouncementViewData), String]],
+        function $(classId_, classesByYears_, announcements_, requestId_){
+            BASE();
+            classId_ && this.setClassId(classId_);
+            requestId_ && this.setRequestId(requestId_);
+            classesByYears_ && this.setClassesByYears(classesByYears_);
+            announcements_ && this.setAnnouncements(announcements_);
+        }
+    ]);
 });
