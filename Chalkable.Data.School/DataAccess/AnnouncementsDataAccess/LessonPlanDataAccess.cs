@@ -134,7 +134,6 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var conds = new AndQueryCondition
             {
                 {Announcement.STATE_FIELD, AnnouncementState.Created},
-                {LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId}
             };
             if (fromDate.HasValue)
                 conds.Add(LessonPlan.END_DATE_FIELD, "fromDate", fromDate, ConditionRelation.GreaterEqual);
@@ -143,9 +142,14 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             
             if(filterByStartDate)
                 conds.Add(LessonPlan.START_DATE_FIELD, "fromDate", fromDate, ConditionRelation.GreaterEqual);
-
+            
+            //if classId was set there is no need to filter by schoolYear ... possible case when class is no in the current schoolYear.
             if (classId.HasValue)
                 conds.Add(LessonPlan.CLASS_REF_FIELD, classId);
+            else
+                conds.Add(LessonPlan.SCHOOL_SCHOOLYEAR_REF_FIELD, schoolYearId);
+            
+
             if (galleryCategoryId.HasValue)
                 conds.Add(LessonPlan.GALERRY_CATEGORY_REF_FIELD, galleryCategoryId);
 

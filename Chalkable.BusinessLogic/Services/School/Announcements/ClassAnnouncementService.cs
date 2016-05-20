@@ -427,6 +427,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
+        public void Copy(IList<int> classAnnouncementIds, int toClassId)
+        {
+            var announcements = DoRead(u => CreateClassAnnouncementDataAccess(u).GetByIds(classAnnouncementIds));
+            announcements = announcements.Where(x => !x.IsDraft && x.SisActivityId.HasValue).ToList();
+        }
+
         public void CopyAnnouncement(int classAnnouncementId, IList<int> classIds)
         {
             Trace.Assert(Context.PersonId.HasValue);

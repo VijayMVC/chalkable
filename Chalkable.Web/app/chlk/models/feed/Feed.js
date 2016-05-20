@@ -3,6 +3,7 @@ REQUIRE('chlk.models.announcement.FeedAnnouncementViewData');
 REQUIRE('chlk.models.common.ChlkDate');
 REQUIRE('chlk.models.id.ClassId');
 REQUIRE('chlk.models.schoolYear.GradingPeriod');
+REQUIRE('chlk.models.schoolYear.YearAndClasses');
 
 NAMESPACE('chlk.models.feed', function () {
     "use strict";
@@ -16,6 +17,9 @@ NAMESPACE('chlk.models.feed', function () {
                 IMPLEMENTS(ria.serialize.IDeserializable), [
 
             VOID, function deserialize(raw) {
+                this.announcementsToCopy = SJX.fromValue(raw.announcementsToCopy, String);
+                this.toClassId = SJX.fromValue(raw.toClassId, chlk.models.id.ClassId);
+                this.copyStartDate = SJX.fromDeserializable(raw.copyStartDate, chlk.models.common.ChlkDate);
                 this.inProfile = SJX.fromValue(raw.inProfile, Boolean);
                 this.items = SJX.fromArrayOfDeserializables(raw.annoucementviewdatas, chlk.models.announcement.FeedAnnouncementViewData);
                 this.importantOnly = SJX.fromValue(raw.importantOnly, Boolean);
@@ -53,6 +57,12 @@ NAMESPACE('chlk.models.feed', function () {
 
             Boolean, 'readonly',
 
+            String, 'announcementsToCopy',
+
+            chlk.models.id.ClassId, 'toClassId',
+
+            chlk.models.common.ChlkDate, 'copyStartDate',
+
             Boolean, 'importantOnly',
 
             Number, 'importantCount',
@@ -72,6 +82,8 @@ NAMESPACE('chlk.models.feed', function () {
             chlk.models.announcement.AnnouncementTypeEnum, 'annType',
 
             ArrayOf(chlk.models.schoolYear.GradingPeriod), 'gradingPeriods',
+
+            ArrayOf(chlk.models.schoolYear.YearAndClasses), 'classesByYears',
 
             chlk.models.id.GradingPeriodId, 'gradingPeriodId',
 
