@@ -1,3 +1,11 @@
+.double-select.chosen-container.chosen-with-drop
+  LI.active-result:hover
+    background: #f1f1f1
+    color: #56554f
+
+  .chosen-drop.second-drop
+    left: 100%
+
 .add-new-category-dialog
   input[name=value]
     margin: 10px 20px
@@ -6,6 +14,10 @@
     margin-bottom: 15px
 
 .announcement-import-dialog
+  .double-select
+    width: 150px
+    margin-left: 4px
+
   .top-container
     background: #f7f7f5
     line-height: 62px
@@ -33,8 +45,10 @@
 
   .table-block
     width: 100%
-    overflow-x: auto
-    height: 340px
+
+    .items-container
+      overflow-x: auto
+      height: 300px
 
     .header-row
       font-weight: bold
@@ -59,6 +73,9 @@
       &.category
         width: 209px
 
+      &.name
+        width: 190px
+
   .dialog
     width: 750px
 
@@ -66,6 +83,12 @@
       margin: 0
 
 .announcement-form-page, .admin-announcement-form-page, .lesson-plan-form-page
+
+  .import-icon
+    opacity: 0.5
+
+    &:hover
+      opacity: 1
 
   .action-bar
     .items

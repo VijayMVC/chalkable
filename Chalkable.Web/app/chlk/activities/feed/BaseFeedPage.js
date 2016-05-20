@@ -151,9 +151,15 @@ NAMESPACE('chlk.activities.feed', function () {
                 this.dom.find('.copy-activities').trigger('click');
             },
 
+            [ria.mvc.DomEventBind('change', '.copy-to-select')],
+            [[ria.dom.Dom, ria.dom.Event, Object]],
+            VOID, function classSelect(node, event, selected_){
+                this.updateCopySubmitBtn_();
+            },
+
             function updateCopySubmitBtn_(){
                 var btn = this.dom.find('.copy-btn');
-                if(this.dom.find('.feed-item-check:checked').count() > 0){
+                if(this.dom.find('.feed-item-check:checked').count() > 0 && this.dom.find('[name="toClassId"]').getValue()){
                     btn.removeAttr('disabled');
                     btn.setProp('disabled', false);
                 }else{

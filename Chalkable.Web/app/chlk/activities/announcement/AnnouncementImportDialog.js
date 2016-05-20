@@ -59,6 +59,13 @@ NAMESPACE('chlk.activities.announcement', function(){
 
                 var value = announcements.length ? JSON.stringify(announcements) : '';
                 this.dom.find('.announcements-to-copy').setValue(value);
+            },
+
+            [[Object, String]],
+            OVERRIDE, VOID, function onPartialRefresh_(model, msg_){
+                BASE(model, msg_);
+                ria.dom.Dom('.all-tasks-check').trigger(chlk.controls.CheckBoxEvents.CHANGE_VALUE.valueOf(), [false]);
+                this.updateSubmitBtn_();
             }
         ]);
 });
