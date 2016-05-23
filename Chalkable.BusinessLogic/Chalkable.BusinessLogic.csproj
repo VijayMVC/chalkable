@@ -165,6 +165,7 @@
     <Compile Include="Model\Attendances\ClassAttendance.cs" />
     <Compile Include="Model\AttributeAttachmentContentInfo.cs" />
     <Compile Include="Model\ClassStatsInfo.cs" />
+    <Compile Include="Model\CopyAnnouncementsInputModel.cs" />
     <Compile Include="Model\DisciplineDailySummaryInfo.cs" />
     <Compile Include="Model\EmailInfo.cs" />
     <Compile Include="Model\FeedSettingsInfo.cs" />

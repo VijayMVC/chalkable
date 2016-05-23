@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web.Mvc;
+using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
 using Chalkable.BusinessLogic.Services.School.Announcements;
 using Chalkable.Common;
@@ -226,6 +228,35 @@ namespace Chalkable.Web.Controllers.AnnouncementControllers
             }
         }
 
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public async Task<ActionResult> Copy(CopyAnnouncementsInputModel inputModel)
+        {
+            inputModel.Announcements = inputModel.Announcements ?? new List<AnnouncementToCopyInputModel>();
+
+            var lessonPlanCopyTask = Task.Factory.StartNew(() => {
+                var ids = inputModel.Announcements
+                    .Where(x => x.AnnouncementType == (int) AnnouncementTypeEnum.Class)
+                    .Select(x => x.AnnouncementId)
+                    .ToList();
+
+                return SchoolLocator.ClassAnnouncementService.Copy(ids, inputModel.FromClassId, inputModel.ToClassId, inputModel.StartDate);
+            });
+
+            var classAnnouncementCopyTask = Task.Factory.StartNew(() => {
+                var ids = inputModel.Announcements
+                        .Where(x => x.AnnouncementType == (int)AnnouncementTypeEnum.LessonPlan)
+                        .Select(x => x.AnnouncementId)
+                        .ToList();
+
+                return SchoolLocator.LessonPlanService.Copy(ids, inputModel.FromClassId, inputModel.ToClassId, inputModel.StartDate);
+            });
+
+            var res = new List<int>();
+            res.AddRange(await lessonPlanCopyTask);
+            res.AddRange(await classAnnouncementCopyTask);
+
+            return Json(res);
+        }
     }
 
 }

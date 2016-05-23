@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Net.Http;
+using System.Threading.Tasks;
 using Chalkable.Common;
 using Chalkable.StiConnector.Connectors.Model;
 
@@ -170,5 +171,10 @@ namespace Chalkable.StiConnector.Connectors
             }
             return Post<IList<ActivityCopyResult>>(url, null, nvc);
         }
+
+        public IList<ActivityCopyResult> CopyActivities(ActivityCopyOptions activityCopyOptions)
+        {
+            return Post<IList<ActivityCopyResult>, ActivityCopyOptions>($"{BaseUrl}chalkable/activities/copy", activityCopyOptions);
+        } 
     }
 }

@@ -155,6 +155,7 @@
     <Compile Include="Model\Announcements\InputClassAnnouncement.cs" />
     <Compile Include="Model\Announcements\ClassAnnouncement.cs" />
     <Compile Include="Model\Announcements\LessonPlan.cs" />
+    <Compile Include="Model\Announcements\SisActivityCopyResult.cs" />
     <Compile Include="Model\Attachment.cs" />
     <Compile Include="Model\AttendanceMonth.cs" />
     <Compile Include="Model\AttendanceReason.cs" />
