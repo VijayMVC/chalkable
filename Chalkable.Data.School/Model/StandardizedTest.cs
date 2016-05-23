@@ -1,4 +1,6 @@
-﻿namespace Chalkable.Data.School.Model
+﻿using System.Collections.Generic;
+
+namespace Chalkable.Data.School.Model
 {
     public class StandardizedTest
     {
@@ -36,5 +38,11 @@
         public string StateCode { get; set; }
         public string SifCode { get; set; }
         public string NcesCode { get; set; }
+    }
+
+    public class StandardizedTestDetails
+    {
+        public IList<StandardizedTestComponent> Components { get; set; }
+        public IList<StandardizedTestScoreType> ScoreTypes { get; set; } 
     }
 }
