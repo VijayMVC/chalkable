@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
+using Chalkable.Data.Common;
 
 namespace Chalkable.Data.School.Model
 {
     public class StandardizedTest
     {
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public string Code { get; set; }
         public string Name { get; set; }
@@ -18,6 +20,7 @@ namespace Chalkable.Data.School.Model
 
     public class StandardizedTestComponent
     {
+         [PrimaryKeyFieldAttr]
          public int Id { get; set; }
          public int StandardizedTestRef { get; set; }
          public string Name { get; set; }
@@ -30,6 +33,7 @@ namespace Chalkable.Data.School.Model
 
     public class StandardizedTestScoreType
     {
+        [PrimaryKeyFieldAttr]
         public int Id { get; set; }
         public int StandardizedTestRef { get; set; }
         public string Name { get; set; }
