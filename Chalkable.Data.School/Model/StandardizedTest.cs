@@ -40,7 +40,7 @@ namespace Chalkable.Data.School.Model
         public string NcesCode { get; set; }
     }
 
-    public class StandardizedTestDetails
+    public class StandardizedTestDetails : StandardizedTest
     {
         public IList<StandardizedTestComponent> Components { get; set; }
         public IList<StandardizedTestScoreType> ScoreTypes { get; set; } 
