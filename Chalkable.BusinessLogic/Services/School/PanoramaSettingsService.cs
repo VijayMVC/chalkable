@@ -25,10 +25,12 @@ namespace Chalkable.BusinessLogic.Services.School
         }
         public TSettings Get<TSettings>()
         {
+            return default(TSettings);
             throw new System.NotImplementedException();
         }
         public TSettings Restore<TSettings>()
         {
+            return default(TSettings);
             throw new System.NotImplementedException();
         }
         public void SaveDefault<TDefaultSettings>()
