@@ -11,8 +11,9 @@ namespace Chalkable.Web.Models
     public class ClassPanoramaViewData: ShortClassViewData
     {
         public ClassProfilePanoramaSettingsViewData FilterSettings { get; set; }
+        public IList<StandardizedTestViewData> StandardizedTests { get; set; }     
+        public ClassDistributionSectionViewData ClassDistributionSection { get; set; } 
         
-        public IList<StandardizedTestViewData> StandardizedTests { get; set; }
 
         protected ClassPanoramaViewData(Class cClass) : base(cClass)
         {
@@ -29,10 +30,32 @@ namespace Chalkable.Web.Models
 
     }
 
-    public class StandardizedTestStats
+    public class StandardizedTestStatsViewData
     {
         public int StandardizedTestId { get; set; }
         public string StandardizedTestName { get; set; }
         public IList<DailyStatsViewData> DailyStats { get; set; } 
+    }
+
+
+    public class ClassDistributionSectionViewData
+    {
+        public ClassDestributionStatsViewData GradeAverageDistribution { get; set; }
+        public ClassDestributionStatsViewData AbsencesDistribution { get; set; }
+        public ClassDestributionStatsViewData DisciplineDistribution { get; set; }
+    }
+
+    public class ClassDestributionStatsViewData
+    {
+        public decimal ClassAvg { get; set; }
+        public IList<DestributionItemViewData> DestributionStats { get; set; }
+    }
+
+    public class DestributionItemViewData
+    {
+        public decimal Count { get; set; }
+        public string Summery { get; set; }
+        public decimal StartInterval { get; set; }
+        public decimal EndInterval { get; set; }
     }
 }
