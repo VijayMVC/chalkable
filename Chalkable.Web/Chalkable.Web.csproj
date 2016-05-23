@@ -513,6 +513,7 @@
     <Compile Include="Models\Settings\PersonProfilePanoramaSettingsViewData.cs" />
     <Compile Include="Models\ShortDistrictSummaryViewData.cs" />
     <Compile Include="Models\Settings\StandardizedTestFilterViewData.cs" />
+    <Compile Include="Models\StandardizedTestViewData.cs" />
     <Compile Include="Models\StandardSubjectViewData.cs" />
     <Compile Include="Models\StorageMonitorViewData.cs" />
     <Compile Include="Models\StudentAnnouncementViewData.cs" />

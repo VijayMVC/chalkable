@@ -174,6 +174,7 @@
     <Compile Include="Model\Date.cs" />
     <Compile Include="Model\LPGalleryCategory.cs" />
     <Compile Include="Model\PersonSetting.cs" />
+    <Compile Include="Model\StandardizedTest.cs" />
     <Compile Include="Model\StudentCustomAlertDetail.cs" />
     <Compile Include="Model\SystemSetting.cs" />
     <Compile Include="Model\GradedItem.cs" />
