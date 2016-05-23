@@ -1,0 +1,79 @@
+.dialog.report-window
+   +ActionForm('grading', 'submitComprehensiveProgressReport').comprehensive-progress-report-form.no-working.report-form
+      .x-window-header
+         .close.close-btn.dark
+         h1=Msg.Create_Report
+
+      .x-window-body
+         .action-bar: .items: +ActionLinkList(self.buildReportLinksData('comprehensiveProgressReport'))
+         +Hidden('gradingPeriodId', self.getGradingPeriodId().valueOf())
+         +Hidden('classId', self.getClassId().valueOf())
+         +Hidden('absenceReasonIds', '')#absence-reasons
+         +Hidden('studentIds', '')#student-ids-value
+         +Hidden('gradingPeriodIds', self.getGradingPeriodId().valueOf().toString())#grading-periods
+         +Hidden('dailyAttendanceDisplayMethod', chlk.models.reports.AttendanceDisplayMethodEnum.NONE.valueOf())#daily-attendance-display-method
+         .report-content
+            if !self.isAbleDownload()
+               .error=Msg.Report_No_Access_Msg
+            TABLE.report-table
+               TR
+                  TD.item-3
+                     h3=Msg.Grading_Period
+                     +Select('gradingPeriod1')(multiple, disabled = 'disabled')#grading-period-select
+                        each gp in self.getGradingPeriods()
+                           +Option(gp.getId().valueOf(), gp.getName(), gp.getId() == self.getGradingPeriodId())
+                  +ReportDatePickers(self.getStartDate(), self.getEndDate())
+               TR
+                  TD.item-3
+                     h3=Msg.Order_by
+                     +Select('orderBy').order-by
+                        +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.STUDENT_DISPLAY_NAME.valueOf(), Msg.Student_display_name, true)
+                        +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.STUDNET_IDENTIFIER.valueOf(), Msg.Student_ID, false)
+                        +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.GRADE_LEVEL.valueOf(), Msg.Grade_Level, false)
+                        +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.HOME_ROOM.valueOf(), 'Homeroom', false)
+                        +Option(chlk.models.reports.ComprehensiveProgressOrderByMethod.POSTAL_CODE.valueOf(), 'Postal code', false)
+
+                  TD.item-3
+                     +IdToPriintSelect(true, self.hideSSNumber())
+                  TD.item-3
+                     h3=Msg.Absence_reasons
+                     +Select('absenceReason')(multiple).reasons-select
+                        each reason in self.getReasons()
+                           +Option(reason.getId().valueOf(), reason.getName(), true)
+               TR
+                  TD.item-3
+                     h3=Msg.Include
+                     +LabeledCheckbox(Msg.Class_average, 'displayClassAverages', false)
+                     +LabeledCheckbox(Msg.Class_Average_Only, 'classAverageOnly', false)
+                     +LabeledCheckbox(Msg.Category_averages, 'displayCategoryAverages', false)
+                     +LabeledCheckbox(Msg.Period_attendance, 'displayPeriodAttendance', false)
+                     +LabeledCheckbox(Msg.Total_points, 'displayTotalPoints', false)
+                     +LabeledCheckbox(Msg.Signal_line, 'displaySignatureLine', false)
+                  TD.item-3
+                     h3
+                     +LabeledCheckbox(Msg.Additional_mailings, 'additionalMailings', false)
+                     +LabeledCheckbox(Msg.Student_comment, 'displayStudentComment', false)
+                     +LabeledCheckbox(Msg.Student_mailing_address, 'displayStudentMailingAddress', false)
+                     +LabeledCheckbox(Msg.Student_Photo, 'includePicture', false)
+                     +LabeledCheckbox(Msg.Withdrawn_students, 'includeWithdrawnStudents', false)
+               TR
+                  TD.item-3
+                     h3=Msg.Include_students
+                     .min-max
+                        input(placeholder=Msg.Min_avg, name="minStandardAverage", type="number").min-max-input.min
+                        | -
+                        input(placeholder=Msg.Max_avg, name="maxStandardAverage", type="number").min-max-input.max
+                  TD.item-3
+                     h3=Msg.Daily_attendance
+                     +LabeledCheckbox(Msg.Year_to_date, 'yearToDate', false)#year-to-date-chk
+                     +LabeledCheckbox(Msg.Grading_period, 'gradingPeriod', false)#grading-period-chk
+                  TD.item-3
+                     h3=Msg.Other
+                     +LabeledCheckbox(Msg.Go_green, 'goGreen', false)
+                     +LabeledCheckbox(Msg.Window_Envelope, 'windowEnvelope', false)
+               +StudentsBlock(self.getStudents())
+
+      .x-window-footer.report-bottom
+         +ReportFormatSelect()
+         BUTTON(type="submit", disabled=!self.isAbleDownload()).chlk-button.blue-button=Msg.Download
+         BUTTON(type="button").close.chlk-button.grey-button=Msg.Cancel
