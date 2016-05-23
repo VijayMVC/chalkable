@@ -7,7 +7,7 @@
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public string Description { get; set; }
-        public int GradeLevelId { get; set; }
+        public int GradeLevelRef { get; set; }
         public string StateCode { get; set; }
         public bool DisplayOnTranscript { get; set; }
         public string SifCode { get; set; } 

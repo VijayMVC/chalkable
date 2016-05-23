@@ -1,6 +1,8 @@
-﻿using Chalkable.BusinessLogic.Services.School;
+﻿using System.Collections.Generic;
+using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
+using Chalkable.Web.Models.DisciplinesViewData;
 using Chalkable.Web.Models.Settings;
 
 namespace Chalkable.Web.Models
@@ -21,6 +23,12 @@ namespace Chalkable.Web.Models
             };
         }
 
+    }
 
+    public class StandardizedTestStats
+    {
+        public int StandardizedTestId { get; set; }
+        public string StandardizedTestName { get; set; }
+        public IList<DailyStatsViewData> DailyStats { get; set; } 
     }
 }
