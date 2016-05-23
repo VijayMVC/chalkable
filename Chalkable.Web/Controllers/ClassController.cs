@@ -12,6 +12,7 @@ using Chalkable.Data.School.Model;
 using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Controllers.CalendarControllers;
 using Chalkable.Web.Logic;
+using Chalkable.Web.Models;
 using Chalkable.Web.Models.ClassesViewData;
 using Chalkable.Web.Models.Settings;
 
@@ -138,7 +139,8 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Panorama(int classId)
         {
-            throw new NotImplementedException();
+            var settings = SchoolLocator.PanoramaSettingsService.Get<ClassProfilePanoramaSettings>();
+            return Json(ClassPanoramaViewData.Create(settings));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
