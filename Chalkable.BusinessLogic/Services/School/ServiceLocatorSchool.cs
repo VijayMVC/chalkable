@@ -77,6 +77,7 @@ namespace Chalkable.BusinessLogic.Services.School
         IAttachementService AttachementService { get; } 
         ILEService LeService { get; }
         IStudentCustomAlertDetailService StudentCustomAlertDetailService { get; }
+        IPanoramaSettingsService PanoramaSettingsService { get; }
     }
 
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -148,6 +149,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private ILEService leService;
         private IAttachementService attachementService;
         private IStudentCustomAlertDetailService studentCustomAlertDetailService;
+        private IPanoramaSettingsService panoramaSettingsService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -217,6 +219,7 @@ namespace Chalkable.BusinessLogic.Services.School
             attachementService = new AttachmentService(this);
             personSettingService = new PersonSettingService(this);
             studentCustomAlertDetailService = new StudentCustomAlertDetailService(this);
+            panoramaSettingsService = new PanoramaSettingsService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -291,6 +294,7 @@ namespace Chalkable.BusinessLogic.Services.School
         public IAnnouncementFetchService AnnouncementFetchService { get { return announcementFetchService; } }
 
         public IStudentCustomAlertDetailService StudentCustomAlertDetailService { get { return studentCustomAlertDetailService; } }
+        public IPanoramaSettingsService PanoramaSettingsService => panoramaSettingsService;
 
         public IBaseAnnouncementService GetAnnouncementService(AnnouncementTypeEnum? type)
         {

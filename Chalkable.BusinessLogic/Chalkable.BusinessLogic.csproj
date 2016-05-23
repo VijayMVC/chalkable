@@ -348,6 +348,7 @@
     <Compile Include="Services\School\Notifications\NotificationBuilder.cs" />
     <Compile Include="Services\School\Notifications\NotificationService.cs" />
     <Compile Include="Services\School\Notifications\NotificationTemplateProvider.cs" />
+    <Compile Include="Services\School\PanoramaSettingsService.cs" />
     <Compile Include="Services\School\PeriodService.cs" />
     <Compile Include="Services\School\PersonEmailService.cs" />
     <Compile Include="Services\School\PersonService.cs" />

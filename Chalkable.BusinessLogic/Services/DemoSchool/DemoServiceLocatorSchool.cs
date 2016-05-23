@@ -1831,6 +1831,7 @@ namespace Chalkable.BusinessLogic.Services.DemoSchool
         public ILEService LeService { get { throw new NotImplementedException(); } }
 
         public IStudentCustomAlertDetailService StudentCustomAlertDetailService { get { throw new NotImplementedException(); } }
+        public IPanoramaSettingsService PanoramaSettingsService { get {throw new NotImplementedException();} }
     }
 
 }
