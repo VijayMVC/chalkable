@@ -13,6 +13,7 @@ using Chalkable.Web.ActionFilters;
 using Chalkable.Web.Controllers.CalendarControllers;
 using Chalkable.Web.Logic;
 using Chalkable.Web.Models.ClassesViewData;
+using Chalkable.Web.Models.Settings;
 
 namespace Chalkable.Web.Controllers
 {
@@ -132,6 +133,27 @@ namespace Chalkable.Web.Controllers
         {
             var classes = SchoolLocator.ClassService.GetClassesBySchoolYear(schoolYearId, start, count, filter, teacherId,(ClassSortType?) sortType);
             return Json(classes.Select(ClassStatsViewData.Create));
-        }   
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult Panorama(int classId)
+        {
+            throw new NotImplementedException();
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult SavePanoramaSettings(ClassProfilePanoramaSettings settings)
+        {
+            SchoolLocator.PanoramaSettingsService.Save(settings);
+            return Json(true);
+        }
+
+        [AuthorizationFilter("DistrictAdmin, Teacher")]
+        public ActionResult RestorePanoramaSettings()
+        {
+            var settings = SchoolLocator.PanoramaSettingsService.Restore<ClassProfilePanoramaSettings>();
+            return Json(ClassProfilePanoramaSettingsViewData.Create(settings));
+        }
+
     }
 }
