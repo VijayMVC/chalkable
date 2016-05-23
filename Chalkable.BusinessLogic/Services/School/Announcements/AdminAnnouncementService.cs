@@ -161,7 +161,7 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             return DoRead(u => InternalGetDetailses(CreateDataAccess(u), anns.Select(x=>x.Id).ToList()));
         }
 
-        public override IList<int> Copy(IList<int> announcementsForCopy, int toClassId, DateTime? startDate)
+        public override IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate)
         {
             throw new NotImplementedException();
         }

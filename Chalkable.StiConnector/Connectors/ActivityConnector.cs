@@ -172,9 +172,9 @@ namespace Chalkable.StiConnector.Connectors
             return Post<IList<ActivityCopyResult>>(url, null, nvc);
         }
 
-        public async Task<IList<ActivityCopyResult>> CopyActivities(ActivityCopyOptions activityCopyOptions)
+        public IList<ActivityCopyResult> CopyActivities(ActivityCopyOptions activityCopyOptions)
         {
-            return await PostAsync<IList<ActivityCopyResult>, ActivityCopyOptions>($"{BaseUrl}chalkable/activities/copy", activityCopyOptions);
+            return Post<IList<ActivityCopyResult>, ActivityCopyOptions>($"{BaseUrl}chalkable/activities/copy", activityCopyOptions);
         } 
     }
 }

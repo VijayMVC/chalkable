@@ -142,24 +142,21 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
-        public override IList<int> Copy(IList<int> announcementsForCopy, int toClassId, DateTime? startDate)
-        {
-            throw new NotImplementedException();
-        }  
-
-        public void Copy(IList<int> lessonPlanIds, int toClassId)
+        /// <summary>
+        /// Copies lesson plans. Its attachments, attributes and 
+        /// announcement applications for simple apps
+        /// </summary>
+        /// <returns>Copied ids. Not new!</returns>
+        public override IList<int> Copy(IList<int> lessonPlanIds, int fromClassId, int toClassId, DateTime? startDate)
         {
             BaseSecurity.EnsureTeacher(Context);
-            
+
+            startDate = startDate ?? CalculateStartDateForCopying(toClassId);
+
             var announcements = DoRead(u => CreateLessonPlanDataAccess(u, true).GetByIds(lessonPlanIds));
-            var announcementIdsToCopy = announcements.Where(x => !x.IsDraft).Select(x => new
-            {
-                AnnouncementId = x.Id,
-                ClassId = x.ClassRef
-            }).ToList();
+            var announcementIdsToCopy = announcements.Where(x => !x.IsDraft).Select(x => x.Id).ToList();
             
-            var announcementApps = ServiceLocator.ApplicationSchoolService
-                .GetAnnouncementApplicationsByAnnIds(announcementIdsToCopy.Select(x => x.AnnouncementId).ToList(), true);          
+            var announcementApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(announcementIdsToCopy, true);          
             var applicationIds = announcementApps.Select(x => x.ApplicationRef).ToList();
             var applications = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(applicationIds)
                 .Where(x => !x.IsAdvanced).ToList();
@@ -167,11 +164,27 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             //Filter simple apps
             announcementApps = announcementApps.Where(x => applications.Any(y => y.Id == x.ApplicationRef)).ToList();
 
-            using (var unifOfWork = Update())
+            IDictionary<int, int> fromToAnnCopy;
+
+            using (var unitOfWork = Update())
             {
-                var teachers = new ClassTeacherDataAccess(unifOfWork).GetClassTeachers(announcementIdsToCopy.Select(x => x.ClassId).ToList());
+                var teachers = new ClassTeacherDataAccess(unitOfWork).GetClassTeachers(fromClassId, null)
+                    .Select(x => x.PersonRef).ToList();
                 //Here we copy lesson plans
+                fromToAnnCopy = CreateLessonPlanDataAccess(unitOfWork, true)
+                    .CopyLessonPlansToClass(lessonPlanIds, toClassId, startDate.Value, Context.NowSchoolTime);
+
+                AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnCopy, teachers, unitOfWork,
+                    ServiceLocator, ConnectorLocator);
+                AnnouncementAssignedAttributeService.CopyNonStiAttributes(fromToAnnCopy, unitOfWork, ServiceLocator,
+                    ConnectorLocator);
+                ApplicationSchoolService.CopyAnnApplications(announcementApps,
+                    fromToAnnCopy.Select(x => x.Value).ToList(), unitOfWork);
+
+                unitOfWork.Commit();
             }
+
+            return fromToAnnCopy.Select(x => x.Key).ToList();
         }
 
         public AnnouncementDetails Edit(int lessonPlanId, int classId, int? galleryCategoryId, string title, string content,

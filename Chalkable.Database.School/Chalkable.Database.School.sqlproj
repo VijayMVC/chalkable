@@ -318,6 +318,8 @@
     <Build Include="Stored Procedures\spUpdateClassAnnouncement.sql" />
     <Build Include="Stored Procedures\spDeleteAnnouncementAttribute.sql" />
     <Build Include="Stored Procedures\spCopyLessonPlansToClass.sql" />
+    <Build Include="User Defined Types\TSisActivityCopyResult.sql" />
+    <Build Include="Stored Procedures\spCopyClassAnnouncementsToClass.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />

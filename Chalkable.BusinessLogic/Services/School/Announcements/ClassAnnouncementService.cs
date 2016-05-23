@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Chalkable.BusinessLogic.Mapping.ModelMappers;
 using Chalkable.BusinessLogic.Model;
 using Chalkable.BusinessLogic.Security;
@@ -15,6 +14,7 @@ using Chalkable.Data.School.DataAccess.AnnouncementsDataAccess;
 using Chalkable.Data.School.Model;
 using Chalkable.Data.School.Model.Announcements;
 using Chalkable.StiConnector.Connectors.Model;
+using ClassroomOption = Chalkable.Data.School.Model.ClassroomOption;
 
 namespace Chalkable.BusinessLogic.Services.School.Announcements
 {
@@ -25,10 +25,12 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
         void DeleteAnnouncements(int classId, int? announcementType, AnnouncementState state);
         bool Exists(string title, int classId, DateTime expiresDate, int? excludeAnnouncementId);
         IList<string> GetLastFieldValues(int classId, int classAnnouncementType);
+
         ClassAnnouncement GetClassAnnouncemenById(int classAnnouncementId);
         ClassAnnouncement DropUnDropAnnouncement(int classAnnouncementId, bool drop);
         void CopyAnnouncement(int classAnnouncementId, IList<int> classIds);
         ClassAnnouncement SetVisibleForStudent(int classAnnouncementId, bool visible);
+
         IList<ClassAnnouncement> GetClassAnnouncements(DateTime? fromDate, DateTime? toDate, int? classId, int? studentId, int? teacherId, bool? graded = null);
         IList<AnnouncementComplex> GetClassAnnouncementsForFeed(DateTime? fromDate, DateTime? toDate, int? classId, bool? complete, bool? graded = null, int start = 0, int count = int.MaxValue, AnnouncementSortOption? sort = null);
         IList<ClassAnnouncement> GetClassAnnouncementsByFilter(string filter);
@@ -425,6 +427,61 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
             }
         }
 
+        /// <summary>
+        /// Copies class announcements. First sends sis activities ids to iNow
+        /// then copies data in our DB. Data in DB is default, because on feed we
+        /// merge data from iNow.
+        /// </summary>
+        /// <returns>Copied ids. NOT NEW!</returns>
+        public override IList<int> Copy(IList<int> classAnnouncementIds, int fromClassId, int toClassId, DateTime? startDate)
+        {
+            BaseSecurity.EnsureTeacher(Context);
+
+            startDate = startDate ?? CalculateStartDateForCopying(toClassId);
+            var annt = DoRead(u => CreateClassAnnouncementDataAccess(u).GetByIds(classAnnouncementIds));
+            var sisActivitiesIdsToCopy = annt
+                .Where(x => !x.IsDraft && x.SisActivityId.HasValue).Select(x => x.SisActivityId.Value).ToList();
+
+            var sisCopyResult = ConnectorLocator.ActivityConnector.CopyActivities(new ActivityCopyOptions
+            {
+                ActivityIds = sisActivitiesIdsToCopy,
+                StartDate = startDate,
+                CopyToSectionIds = new List<int> { toClassId }
+            });
+
+            if (sisCopyResult == null || !sisCopyResult.Any(x => x.NewActivityId.HasValue))
+                return new List<int>();
+
+            var sisFromToActivityIds = sisCopyResult
+                .Where(x => x.NewActivityId.HasValue)
+                .ToDictionary(x => x.SourceActivityId, y => y.NewActivityId.Value);
+
+            var announcementApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(classAnnouncementIds, true);
+            var applicationIds = announcementApps.Select(x => x.ApplicationRef).ToList();
+            //Only simple apps
+            var applications = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(applicationIds)
+                .Where(x => !x.IsAdvanced).ToList();
+            //Announcement apps. Only simple apps can be copied
+            announcementApps = announcementApps.Where(x => applications.Any(y => y.Id == x.ApplicationRef)).ToList();
+
+            IDictionary<int, int> fromToAnnouncementsIds;
+            using (var u = Update())
+            {
+                var attachmentsOwners = new ClassTeacherDataAccess(u).GetClassTeachers(fromClassId, null)
+                    .Select(x => x.PersonRef).ToList();
+
+                fromToAnnouncementsIds = CreateClassAnnouncementDataAccess(u)
+                    .CopyClassAnnouncementsToClass(sisFromToActivityIds, toClassId, Context.NowSchoolTime);
+
+                AnnouncementAttachmentService.CopyAnnouncementAttachments(fromToAnnouncementsIds, attachmentsOwners, u, ServiceLocator, ConnectorLocator);
+                ApplicationSchoolService.CopyAnnApplications(announcementApps, fromToAnnouncementsIds.Select(x => x.Value).ToList(), u);
+
+                u.Commit();
+            }
+
+            return fromToAnnouncementsIds.Select(x => x.Key).ToList();
+        }
+
         public void CopyAnnouncement(int classAnnouncementId, IList<int> classIds)
         {
             Trace.Assert(Context.PersonId.HasValue);
@@ -464,35 +521,6 @@ namespace Chalkable.BusinessLogic.Services.School.Announcements
                     u.Commit();
                 }
             }
-        }
-
-        public override IList<int> Copy(IList<int> announcementsForCopy, int toClassId, DateTime? startDate)
-        {
-            var listOfDetails = DoRead(u => InternalGetDetailses(CreateClassAnnouncementDataAccess(u), announcementsForCopy));
-            listOfDetails = listOfDetails.Where(x => x.ClassAnnouncementData.SisActivityId.HasValue && x.ClassAnnouncementData.IsSubmitted).ToList();
-
-            var activityCopyOptions = new ActivityCopyOptions
-            {
-                ActivityIds = listOfDetails.Select(x=>x.ClassAnnouncementData.SisActivityId.Value),
-                StartDate = startDate,
-                CopyToSectionIds = new List<int> { toClassId }
-            };
-            var taskRes = Task.Run(()=>ConnectorLocator.ActivityConnector.CopyActivities(activityCopyOptions));
-
-            var announcementApps = ServiceLocator.ApplicationSchoolService.GetAnnouncementApplicationsByAnnIds(announcementsForCopy, true);
-            var applicationIds = announcementApps.Select(x => x.ApplicationRef).ToList();
-            var applications = ServiceLocator.ServiceLocatorMaster.ApplicationService.GetApplicationsByIds(applicationIds).Where(x => !x.IsAdvanced).ToList();
-            //Filter simple apps
-            announcementApps = announcementApps.Where(x => applications.Any(y => y.Id == x.ApplicationRef)).ToList();
-
-            var activitiesCopyRes = taskRes.Result;
-
-            using (var uow= Update())
-            {
-                uow.Commit();
-            }
-
-            throw new NotImplementedException();
         }
 
         protected override void SetComplete(Announcement announcement, bool complete)

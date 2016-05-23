@@ -17,6 +17,15 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             this.schoolYearId = schoolYearId;
         }
 
+        public override IList<LessonPlan> GetByIds(IList<int> keys)
+        {
+            var dbQuery = new DbQuery();
+            dbQuery.Sql.Append($@"Select * From {LessonPlan.VW_LESSON_PLAN_NAME} Where Id in(Select * from @keys)");
+            dbQuery.Parameters.Add("keys", keys);
+
+            return ReadMany<LessonPlan>(dbQuery);
+        }
+
         public override void Insert(LessonPlan entity)
         {
             throw new NotImplementedException();
@@ -349,9 +358,39 @@ namespace Chalkable.Data.School.DataAccess.AnnouncementsDataAccess
             var dbQuery = Orm.SimpleSelect(LessonPlan.VW_LESSON_PLAN_NAME, conds);
             return Exists(dbQuery);
         }
+
+        /// <summary>
+        /// Copies lesson plans and announcement standards.
+        /// </summary>
+        /// <returns>Key is SOURCE announcement id. Value is NEW announcement id.</returns>
+        public IDictionary<int, int> CopyLessonPlansToClass(IList<int> lessonPlanIds, int toClassId, DateTime startDate,
+            DateTime created)
+        {
+            lessonPlanIds = lessonPlanIds ?? new List<int>();
+
+            var @params = new Dictionary<string, object>
+            {
+                ["lessonPlanIds"] = lessonPlanIds.Count == 0 ? new List<int>() : lessonPlanIds,
+                ["toClassId"] = toClassId,
+                ["startDate"] = startDate,
+                ["created"] = created
+            };
+
+            IList<AnnouncementCopyResult> result;
+
+            using (var reader = ExecuteStoredProcedureReader("spCopyLessonPlansToClass", @params))
+            {
+                result = reader.ReadList<AnnouncementCopyResult>();
+            }
+
+            return result.ToDictionary(x => x.FromAnnouncementId, y => y.ToAnnouncementId);
+        }
+
         
     }
 
+
+    
 
     public class LessonPlansQuery : AnnouncementsQuery
     {

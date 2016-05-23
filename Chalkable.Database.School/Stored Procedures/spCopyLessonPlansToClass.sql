@@ -51,8 +51,8 @@ Set EndDate = IsNull((Select Top(TotalSchoolDays) Max([Day]) From [Date]
 
 declare @newAnnIds table
 ( 
-	[NewAnnouncementId] int, 
-	[OldAnnouncementId] int
+	[ToAnnouncementId] int, 
+	[FromAnnouncementId] int
 );
 
 Merge Into Announcement
@@ -66,7 +66,7 @@ Output Inserted.Id, ToCopy.Id
 
 Insert Into LessonPlan
 	Select 
-		NewLp.[NewAnnouncementId],
+		NewLp.[ToAnnouncementId],
 		ToCopy.StartDate,
 		ToCopy.EndDate,
 		@toClassId,
@@ -75,19 +75,19 @@ Insert Into LessonPlan
 		@toSchoolYearId
 	From 
 		@toCopy as ToCopy join @newAnnIds as NewLp
-			on ToCopy.Id = NewLp.[OldAnnouncementId]
+			on ToCopy.Id = NewLp.[FromAnnouncementId]
 
 --------------------------Adding AnnouncementStandards------------------------------
 
 Insert Into AnnouncementStandard
-	Select StandardRef, [NewAnnouncementId]
+	Select StandardRef, [ToAnnouncementId]
 	From @newAnnIds join AnnouncementStandard
-		on [OldAnnouncementId] = AnnouncementStandard.AnnouncementRef
+		on [FromAnnouncementId] = AnnouncementStandard.AnnouncementRef
 
 --Returning copied LPs. Source ids and new ids.
 Select
-	[OldAnnouncementId],
-	[NewAnnouncementId]
+	[FromAnnouncementId],
+	[ToAnnouncementId]
 From @newAnnIds
 
 Commit
