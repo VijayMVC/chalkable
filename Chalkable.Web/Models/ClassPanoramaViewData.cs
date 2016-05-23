@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Chalkable.BusinessLogic.Services.School;
 using Chalkable.Data.School.Model;
 using Chalkable.Web.Models.ClassesViewData;
@@ -17,11 +18,12 @@ namespace Chalkable.Web.Models
         {
         }
         
-        public static ClassPanoramaViewData Create(Class cClass, ClassProfilePanoramaSettings filterSettings)
+        public static ClassPanoramaViewData Create(Class cClass, ClassProfilePanoramaSettings filterSettings, IList<StandardizedTestDetails> standardizedTests)
         {
             return new ClassPanoramaViewData(cClass)
             {
-                FilterSettings = filterSettings != null ? ClassProfilePanoramaSettingsViewData.Create(filterSettings) : null
+                FilterSettings = filterSettings != null ? ClassProfilePanoramaSettingsViewData.Create(filterSettings) : null,
+                StandardizedTests = standardizedTests.Select(x=>StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList()
             };
         }
 
