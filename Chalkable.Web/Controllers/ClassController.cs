@@ -139,8 +139,9 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Panorama(int classId)
         {
+            var c = SchoolLocator.ClassService.GetById(classId);
             var settings = SchoolLocator.PanoramaSettingsService.Get<ClassProfilePanoramaSettings>();
-            return Json(ClassPanoramaViewData.Create(settings));
+            return Json(ClassPanoramaViewData.Create(c, settings));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
