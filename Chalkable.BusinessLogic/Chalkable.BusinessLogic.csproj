@@ -367,6 +367,7 @@
     <Compile Include="Services\School\ServiceLocatorSchool.cs" />
     <Compile Include="Services\School\SettingsService.cs" />
     <Compile Include="Services\School\StaffService.cs" />
+    <Compile Include="Services\School\StandardizedTestService.cs" />
     <Compile Include="Services\School\StandardService.cs" />
     <Compile Include="Services\School\StudentAnnouncementService.cs" />
     <Compile Include="Services\School\StudentCustomAlertDetailService.cs" />

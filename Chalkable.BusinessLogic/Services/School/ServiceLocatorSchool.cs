@@ -78,6 +78,7 @@ namespace Chalkable.BusinessLogic.Services.School
         ILEService LeService { get; }
         IStudentCustomAlertDetailService StudentCustomAlertDetailService { get; }
         IPanoramaSettingsService PanoramaSettingsService { get; }
+        IStandardizedTestService StandardizedTestService { get; }
     }
 
     public class ServiceLocatorSchool : ServiceLocator, IServiceLocatorSchool
@@ -150,6 +151,7 @@ namespace Chalkable.BusinessLogic.Services.School
         private IAttachementService attachementService;
         private IStudentCustomAlertDetailService studentCustomAlertDetailService;
         private IPanoramaSettingsService panoramaSettingsService;
+        private IStandardizedTestService standardizedTestService;
 
         public ServiceLocatorSchool(IServiceLocatorMaster serviceLocatorMaster)
             : base(serviceLocatorMaster.Context)
@@ -220,6 +222,7 @@ namespace Chalkable.BusinessLogic.Services.School
             personSettingService = new PersonSettingService(this);
             studentCustomAlertDetailService = new StudentCustomAlertDetailService(this);
             panoramaSettingsService = new PanoramaSettingsService(this);
+            standardizedTestService = new StandardizedTestService(this);
         }
 
         public IPersonService PersonService { get { return personService; } }
@@ -295,6 +298,7 @@ namespace Chalkable.BusinessLogic.Services.School
 
         public IStudentCustomAlertDetailService StudentCustomAlertDetailService { get { return studentCustomAlertDetailService; } }
         public IPanoramaSettingsService PanoramaSettingsService => panoramaSettingsService;
+        public IStandardizedTestService StandardizedTestService => standardizedTestService;
 
         public IBaseAnnouncementService GetAnnouncementService(AnnouncementTypeEnum? type)
         {
