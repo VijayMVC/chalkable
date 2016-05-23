@@ -22,7 +22,7 @@ namespace Chalkable.Web.Models.AnnouncementsViewData
         public bool Exempt { get; set; }
          
         public bool CanRemoveStandard { get; set; }
-        public bool ExtraCreditEnabled { get; set; }
+        public bool IsAbleUseExtraCredit { get; set; }
         public IList<BaseApplicationViewData> SuggestedApps { get; set; }
 
         public IList<BaseApplicationViewData> AppsWithContent { get; set; } 
