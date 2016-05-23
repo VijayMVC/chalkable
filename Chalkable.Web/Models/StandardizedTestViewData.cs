@@ -1,4 +1,6 @@
-﻿using Chalkable.Data.School.Model;
+﻿using System.Collections.Generic;
+using System.Linq;
+using Chalkable.Data.School.Model;
 
 namespace Chalkable.Web.Models
 {
@@ -21,18 +23,18 @@ namespace Chalkable.Web.Models
     }
     public class StandardizedTestViewData : ShortStandardizedTestViewData
     {
-        public StandardizedTestComponentViewData Component { get; set; }
-        public StandardizedTestScoreTypeViewData ScoreType { get; set; }
+        public IList<StandardizedTestComponentViewData> Components { get; set; }
+        public IList<StandardizedTestScoreTypeViewData> ScoreTypes { get; set; }
 
-        protected StandardizedTestViewData(StandardizedTest standardizedTest, StandardizedTestComponent component, StandardizedTestScoreType scoreType)
+        protected StandardizedTestViewData(StandardizedTest standardizedTest, IList<StandardizedTestComponent> components, IList<StandardizedTestScoreType> scoreTypes)
             :base(standardizedTest)
         {
-            Component = StandardizedTestComponentViewData.Create(component);
-            ScoreType = StandardizedTestScoreTypeViewData.Create(scoreType);
+            Components = components.Select(StandardizedTestComponentViewData.Create).ToList();
+            ScoreTypes = scoreTypes.Select(StandardizedTestScoreTypeViewData.Create).ToList();
         }
-        public static StandardizedTestViewData Create(StandardizedTest standardizedTest, StandardizedTestComponent component, StandardizedTestScoreType scoreType)
+        public static StandardizedTestViewData Create(StandardizedTest standardizedTest, IList<StandardizedTestComponent> components, IList<StandardizedTestScoreType> scoreTypes)
         {
-            return new StandardizedTestViewData(standardizedTest, component, scoreType);
+            return new StandardizedTestViewData(standardizedTest, components, scoreTypes);
         }
     }
 

@@ -10,6 +10,8 @@ namespace Chalkable.Web.Models
     public class ClassPanoramaViewData: ShortClassViewData
     {
         public ClassProfilePanoramaSettingsViewData FilterSettings { get; set; }
+        
+        public IList<StandardizedTestViewData> StandardizedTests { get; set; }
 
         protected ClassPanoramaViewData(Class cClass) : base(cClass)
         {
