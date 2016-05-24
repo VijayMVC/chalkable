@@ -320,6 +320,9 @@
     <Build Include="Tables\StandardizedTest.sql" />
     <Build Include="Tables\StandardizedTestComponent.sql" />
     <Build Include="Tables\StandardizedTestScoreType.sql" />
+    <Build Include="User Defined Types\TStandardizedTest.sql" />
+    <Build Include="User Defined Types\TStandardizedTestComponent.sql" />
+    <Build Include="User Defined Types\TStandardizedTestScoreType.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Script.000.Update sort type in PersonSettings.sql" />
