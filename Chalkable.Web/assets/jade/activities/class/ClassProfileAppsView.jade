@@ -1,0 +1,10 @@
+clazz = self.getClazz()
+.class-apps-view.class-profile.loader-container
+    .loader
+    +ProfileTopBar(self, 'apps')
+    .info-view
+        .top-panel
+            h1.info.with-line
+                .class-icon-container
+                    +ClassImg(clazz, 45, 80)
+                =clazz.getName()
