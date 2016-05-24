@@ -90,6 +90,13 @@ NAMESPACE('chlk.services', function () {
             },
 
             [[chlk.models.id.ClassId]],
+            ria.async.Future, function getPanorama(classId) {
+                return this.get('Class/Panorama.json', chlk.models.profile.ClassPanoramaViewData, {
+                    classId: classId.valueOf()
+                });
+            },
+
+            [[chlk.models.id.ClassId]],
             ria.async.Future, function getSummary(classId) {
                 return this.get('Class/Summary.json', chlk.models.classes.ClassSummary, {
                     classId: classId.valueOf()
