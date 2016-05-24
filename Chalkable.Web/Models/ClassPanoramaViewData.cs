@@ -8,7 +8,7 @@ using Chalkable.Web.Models.Settings;
 
 namespace Chalkable.Web.Models
 {
-    public class ClassPanoramaViewData: ShortClassViewData
+    public class ClassPanoramaViewData: ClassViewData
     {
         public ClassProfilePanoramaSettingsViewData FilterSettings { get; set; }
         public IList<StandardizedTestViewData> StandardizedTests { get; set; }     
@@ -17,15 +17,15 @@ namespace Chalkable.Web.Models
         public IList<StandardizedTestStatsViewData> SelectStandardizedTestsStats { get; set; }
 
 
-        protected ClassPanoramaViewData(Class cClass) : base(cClass)
+        protected ClassPanoramaViewData(ClassDetails cClass) : base(cClass)
         {
         }
         
-        public static ClassPanoramaViewData Create(Class cClass, ClassProfilePanoramaSettings filterSettings, IList<StandardizedTestDetails> standardizedTests)
+        public static ClassPanoramaViewData Create(ClassDetails cClass, ClassProfilePanoramaSetting filterSetting, IList<StandardizedTestDetails> standardizedTests)
         {
             return new ClassPanoramaViewData(cClass)
             {
-                FilterSettings = filterSettings != null ? ClassProfilePanoramaSettingsViewData.Create(filterSettings) : null,
+                FilterSettings = filterSetting != null ? ClassProfilePanoramaSettingsViewData.Create(filterSetting) : null,
                 StandardizedTests = standardizedTests.Select(x=>StandardizedTestViewData.Create(x, x.Components, x.ScoreTypes)).ToList()
             };
         }

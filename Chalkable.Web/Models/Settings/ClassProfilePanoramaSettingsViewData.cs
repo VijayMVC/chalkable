@@ -4,12 +4,12 @@ namespace Chalkable.Web.Models.Settings
 {
     public class ClassProfilePanoramaSettingsViewData : BasePanoramaSettingsViewData
     {
-        protected ClassProfilePanoramaSettingsViewData(ClassProfilePanoramaSettings settings) : base(settings.SchoolYearIds, settings.StandardizedTestFilters)
+        protected ClassProfilePanoramaSettingsViewData(ClassProfilePanoramaSetting setting) : base(setting.SchoolYearIds, setting.StandardizedTestFilters)
         {
         }
-        public static ClassProfilePanoramaSettingsViewData Create(ClassProfilePanoramaSettings settings)
+        public static ClassProfilePanoramaSettingsViewData Create(ClassProfilePanoramaSetting setting)
         {
-            return new ClassProfilePanoramaSettingsViewData(settings);
+            return new ClassProfilePanoramaSettingsViewData(setting);
         }
 
     }

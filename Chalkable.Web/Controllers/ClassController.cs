@@ -139,24 +139,24 @@ namespace Chalkable.Web.Controllers
         [AuthorizationFilter("DistrictAdmin, Teacher")]
         public ActionResult Panorama(int classId)
         {
-            var c = SchoolLocator.ClassService.GetById(classId);
-            var settings = SchoolLocator.PanoramaSettingsService.Get<ClassProfilePanoramaSettings>();
+            var c = SchoolLocator.ClassService.GetClassDetailsById(classId);
+            var settings = SchoolLocator.PanoramaSettingsService.GetClassPanoramaSettings(classId);
             var standardizedTestDetails = SchoolLocator.StandardizedTestService.GetListOfStandardizedTestDetails();
             
             return Json(ClassPanoramaViewData.Create(c, settings, standardizedTestDetails));
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult SavePanoramaSettings(ClassProfilePanoramaSettings settings)
+        public ActionResult SavePanoramaSettings(ClassProfilePanoramaSetting setting)
         {
-            SchoolLocator.PanoramaSettingsService.Save(settings);
+            SchoolLocator.PanoramaSettingsService.Save(setting, setting.ClassId);
             return Json(true);
         }
 
         [AuthorizationFilter("DistrictAdmin, Teacher")]
-        public ActionResult RestorePanoramaSettings()
+        public ActionResult RestorePanoramaSettings(int classId)
         {
-            var settings = SchoolLocator.PanoramaSettingsService.Restore<ClassProfilePanoramaSettings>();
+            var settings = SchoolLocator.PanoramaSettingsService.Restore<ClassProfilePanoramaSetting>(classId);
             return Json(ClassProfilePanoramaSettingsViewData.Create(settings));
         }
 

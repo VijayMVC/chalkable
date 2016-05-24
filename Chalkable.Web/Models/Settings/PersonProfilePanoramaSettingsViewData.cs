@@ -2,15 +2,15 @@
 
 namespace Chalkable.Web.Models.Settings
 {
-    public class PersonProfilePanoramaSettingsViewData : BasePanoramaSettingsViewData
+    public class PersonProfilePanoramaSettingViewData : BasePanoramaSettingsViewData
     {
         public int? CourseType { get; set; }
-        protected PersonProfilePanoramaSettingsViewData(PersonProfilePanoramaSettings settings) : base(settings.SchoolYearIds, settings.StandardizedTestFilters)
+        protected PersonProfilePanoramaSettingViewData(StudentProfilePanoramaSetting settings) : base(settings.SchoolYearIds, settings.StandardizedTestFilters)
         {
         }
-        public static PersonProfilePanoramaSettingsViewData Create(PersonProfilePanoramaSettings settings)
+        public static PersonProfilePanoramaSettingViewData Create(StudentProfilePanoramaSetting settings)
         {
-            return new PersonProfilePanoramaSettingsViewData(settings)
+            return new PersonProfilePanoramaSettingViewData(settings)
             {
                 CourseType = settings.CourseTypeId
             };
