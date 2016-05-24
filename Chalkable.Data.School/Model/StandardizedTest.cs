@@ -11,7 +11,7 @@ namespace Chalkable.Data.School.Model
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public string Description { get; set; }
-        public int GradeLevelRef { get; set; }
+        public int? GradeLevelRef { get; set; }
         public string StateCode { get; set; }
         public bool DisplayOnTranscript { get; set; }
         public string SifCode { get; set; } 

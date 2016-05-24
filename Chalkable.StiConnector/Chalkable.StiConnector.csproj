@@ -255,6 +255,7 @@
     <Compile Include="SyncModel\StaffRole.cs" />
     <Compile Include="SyncModel\StaffSchool.cs" />
     <Compile Include="SyncModel\Standard.cs" />
+    <Compile Include="SyncModel\StandardizedTest.cs" />
     <Compile Include="SyncModel\StandardSubject.cs" />
     <Compile Include="SyncModel\Student.cs" />
     <Compile Include="SyncModel\StudentAcadSession.cs" />

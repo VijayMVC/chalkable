@@ -5,7 +5,7 @@
     [Name] NVARCHAR(30) NOT NULL, 
     [DisplayName] NVARCHAR(30) NULL, 
     [Description] NVARCHAR(MAX) NULL,
-    [GradeLevelRef] INT NOT NULL CONSTRAINT [FK_StandardizedTest_GradeLevel] FOREIGN KEY REFERENCES [GradeLevel] ([Id]), 
+    [GradeLevelRef] INT NULL CONSTRAINT [FK_StandardizedTest_GradeLevel] FOREIGN KEY REFERENCES [GradeLevel] ([Id]), 
     [StateCode] NVARCHAR(30) NULL, 
     [DisplayOnTranscript] BIT NULL, 
     [SifCode] NVARCHAR(30) NULL, 

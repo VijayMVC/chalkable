@@ -124,7 +124,10 @@ namespace Chalkable.StiImport.Services.SyncModelAdapters
                 {typeof(CourseType), new CourseTypeAdapter(this) },
                 {typeof(SystemSetting), new SystemSettingAdapter(this) },
                 {typeof(StudentCustomAlertDetail), new StudentCustomAlertDetailAdapter(this) },
-                {typeof(District), new DistrictAdapter(this) }
+                {typeof(District), new DistrictAdapter(this) },
+                {typeof(StandardizedTest), new StandardizedTestAdapter(this) },
+                {typeof(StandardizedTestComponent), new StandardizedTestComponentAdapter(this) },
+                {typeof(StandardizedTestScoreType), new StandardizedTestScoreTypeAdapter(this) }
             };
         }
 
